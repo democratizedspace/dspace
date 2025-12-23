@@ -27,7 +27,7 @@
         "duration": "5s",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 85,
             "emoji": "🌀",
             "history": [
                 {
@@ -67,7 +67,7 @@
         "duration": "5s",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -107,7 +107,7 @@
         "duration": "5s",
         "hardening": {
             "passes": 1,
-            "score": 65,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -168,7 +168,7 @@
         "duration": "3m",
         "hardening": {
             "passes": 2,
-            "score": 80,
+            "score": 90,
             "emoji": "✅",
             "history": [
                 {
@@ -216,7 +216,7 @@
         "duration": "1h 30m",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -251,7 +251,13 @@
                 "count": 1
             }
         ],
-        "duration": "30m"
+        "duration": "30m",
+        "hardening": {
+            "passes": 0,
+            "score": 70,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3dprint-blob-of-death",
@@ -277,7 +283,13 @@
                 "count": 1
             }
         ],
-        "duration": "45m"
+        "duration": "45m",
+        "hardening": {
+            "passes": 0,
+            "score": 70,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "repair-clogged-nozzle",
@@ -304,7 +316,13 @@
                 "count": 1
             }
         ],
-        "duration": "1h"
+        "duration": "1h",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "repair-blob-of-death",
@@ -335,7 +353,13 @@
                 "count": 1
             }
         ],
-        "duration": "1h 30m"
+        "duration": "1h 30m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "level-3d-printer-bed",
@@ -396,7 +420,7 @@
         "duration": "13h",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 95,
             "emoji": "🌀",
             "history": [
                 {
@@ -427,7 +451,7 @@
         "duration": "48h",
         "hardening": {
             "passes": 1,
-            "score": 65,
+            "score": 80,
             "emoji": "🌀",
             "history": [
                 {
@@ -467,7 +491,7 @@
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -503,7 +527,7 @@
         "duration": "30m",
         "hardening": {
             "passes": 1,
-            "score": 70,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -542,7 +566,7 @@
         "duration": "7d",
         "hardening": {
             "passes": 1,
-            "score": 65,
+            "score": 80,
             "emoji": "🌀",
             "history": [
                 {
@@ -581,7 +605,7 @@
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 75,
             "emoji": "🌀",
             "history": [
                 {
@@ -629,7 +653,7 @@
         "duration": "15m",
         "hardening": {
             "passes": 1,
-            "score": 65,
+            "score": 92,
             "emoji": "🌀",
             "history": [
                 {
@@ -707,7 +731,7 @@
         "duration": "28d",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -750,7 +774,7 @@
         "duration": "14d",
         "hardening": {
             "passes": 1,
-            "score": 65,
+            "score": 75,
             "emoji": "🌀",
             "history": [
                 {
@@ -785,7 +809,7 @@
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 70,
             "emoji": "🛠️",
             "history": []
         }
@@ -819,7 +843,7 @@
         "duration": "7d",
         "hardening": {
             "passes": 1,
-            "score": 65,
+            "score": 85,
             "emoji": "🌀",
             "history": [
                 {
@@ -867,7 +891,7 @@
         "duration": "28d",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 92,
             "emoji": "🌀",
             "history": [
                 {
@@ -910,7 +934,7 @@
         "duration": "14d",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 75,
             "emoji": "🌀",
             "history": [
                 {
@@ -945,7 +969,7 @@
         "duration": "3m",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 77,
             "emoji": "🌀",
             "history": [
                 {
@@ -976,7 +1000,7 @@
         "duration": "1h",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 82,
             "emoji": "🌀",
             "history": [
                 {
@@ -1003,7 +1027,13 @@
                 "count": 1
             }
         ],
-        "duration": "6h"
+        "duration": "6h",
+        "hardening": {
+            "passes": 0,
+            "score": 70,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "sink",
@@ -1016,7 +1046,13 @@
                 "count": 1
             }
         ],
-        "duration": "10s"
+        "duration": "10s",
+        "hardening": {
+            "passes": 0,
+            "score": 45,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3dprint-rocket-body-tube",
@@ -1050,7 +1086,13 @@
                 "count": 18.48
             }
         ],
-        "duration": "2h 8m 11s"
+        "duration": "2h 8m 11s",
+        "hardening": {
+            "passes": 0,
+            "score": 70,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3dprint-rocket-nosecone-coupler",
@@ -1084,7 +1126,13 @@
                 "count": 6.32
             }
         ],
-        "duration": "54m 12s"
+        "duration": "54m 12s",
+        "hardening": {
+            "passes": 0,
+            "score": 65,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3dprint-rocket-nosecone",
@@ -1118,7 +1166,13 @@
                 "count": 13.9
             }
         ],
-        "duration": "1h 47m 15s"
+        "duration": "1h 47m 15s",
+        "hardening": {
+            "passes": 0,
+            "score": 70,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3dprint-rocket-fincan",
@@ -1152,7 +1206,13 @@
                 "count": 52.3
             }
         ],
-        "duration": "8h 3m 13s"
+        "duration": "8h 3m 13s",
+        "hardening": {
+            "passes": 0,
+            "score": 70,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3dprint-guided-fincan",
@@ -1186,7 +1246,13 @@
                 "count": 58.4
             }
         ],
-        "duration": "8h 45m"
+        "duration": "8h 45m",
+        "hardening": {
+            "passes": 0,
+            "score": 70,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "3dprint-guidance-sled",
@@ -1220,7 +1286,13 @@
                 "count": 24.8
             }
         ],
-        "duration": "3h 20m"
+        "duration": "3h 20m",
+        "hardening": {
+            "passes": 0,
+            "score": 70,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "mask-rocket-body-tube",
@@ -1242,7 +1314,7 @@
         "duration": "3m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 70,
             "emoji": "🛠️",
             "history": []
         }
@@ -1287,7 +1359,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 65,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "launch-rocket",
@@ -1326,7 +1404,13 @@
                 "count": 1
             }
         ],
-        "duration": "30s"
+        "duration": "30s",
+        "hardening": {
+            "passes": 0,
+            "score": 80,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "repair-model-rocket",
@@ -1352,7 +1436,7 @@
         "duration": "10m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 75,
             "emoji": "🛠️",
             "history": []
         }
@@ -1394,7 +1478,13 @@
                 "count": 1
             }
         ],
-        "duration": "45s"
+        "duration": "45s",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "suborbital-hop",
@@ -1416,7 +1506,13 @@
                 "count": 1
             }
         ],
-        "duration": "12m"
+        "duration": "12m",
+        "hardening": {
+            "passes": 0,
+            "score": 60,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "assemble-guided-flight-stack",
@@ -1450,7 +1546,13 @@
                 "count": 1
             }
         ],
-        "duration": "35m"
+        "duration": "35m",
+        "hardening": {
+            "passes": 0,
+            "score": 65,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "calibrate-guided-flight-stack",
@@ -1472,7 +1574,13 @@
                 "count": 1
             }
         ],
-        "duration": "20m"
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 65,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "install-rocket-camera",
@@ -1499,7 +1607,13 @@
                 "count": 1
             }
         ],
-        "duration": "25m"
+        "duration": "25m",
+        "hardening": {
+            "passes": 0,
+            "score": 80,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "range-setup-guided-hop",
@@ -1542,7 +1656,13 @@
                 "count": 1
             }
         ],
-        "duration": "8m"
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 80,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "countdown-guided-hop",
@@ -1564,7 +1684,13 @@
                 "count": 1
             }
         ],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 60,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "launch-guided-hop",
@@ -1627,7 +1753,13 @@
                 "count": 1
             }
         ],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 80,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "assemble-rocket-parachute",
@@ -1661,7 +1793,13 @@
                 "count": 1
             }
         ],
-        "duration": "60s"
+        "duration": "60s",
+        "hardening": {
+            "passes": 0,
+            "score": 70,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "setup-solar-enclosure-200Wh",
@@ -1691,7 +1829,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 70,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "disassemble-enclosure-200Wh",
@@ -1721,7 +1865,13 @@
                 "count": 1
             }
         ],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 65,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "setup-solar-enclosure-1kWh",
@@ -1751,7 +1901,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 70,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "disassemble-enclosure-1kWh",
@@ -1781,7 +1937,13 @@
                 "count": 1
             }
         ],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 65,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "solar-200Wh",
@@ -1803,7 +1965,13 @@
                 "count": 200
             }
         ],
-        "duration": "1h"
+        "duration": "1h",
+        "hardening": {
+            "passes": 0,
+            "score": 70,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "solar-1000Wh",
@@ -1825,7 +1993,13 @@
                 "count": 1000
             }
         ],
-        "duration": "5h"
+        "duration": "5h",
+        "hardening": {
+            "passes": 0,
+            "score": 70,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "prepare-aquarium",
@@ -1871,7 +2045,13 @@
                 "count": 1
             }
         ],
-        "duration": "2h"
+        "duration": "2h",
+        "hardening": {
+            "passes": 0,
+            "score": 70,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "add-goldfish",
@@ -1902,7 +2082,7 @@
         "duration": "10m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 85,
             "emoji": "🛠️",
             "history": []
         }
@@ -1932,7 +2112,7 @@
         "duration": "8h",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 90,
             "emoji": "🛠️",
             "history": []
         }
@@ -1957,7 +2137,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 65,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "stock-guppies",
@@ -1979,7 +2165,13 @@
                 "count": 1
             }
         ],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 65,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "dCarbon-dOffset-1",
@@ -2001,7 +2193,13 @@
                 "count": 1
             }
         ],
-        "duration": "5s"
+        "duration": "5s",
+        "hardening": {
+            "passes": 0,
+            "score": 65,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "dCarbon-dOffset-10",
@@ -2023,7 +2221,13 @@
                 "count": 10
             }
         ],
-        "duration": "5s"
+        "duration": "5s",
+        "hardening": {
+            "passes": 0,
+            "score": 65,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "basic-income",
@@ -2040,7 +2244,13 @@
                 "count": 100
             }
         ],
-        "duration": "1d"
+        "duration": "1d",
+        "hardening": {
+            "passes": 0,
+            "score": 45,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "charge-hypercar",
@@ -2067,7 +2277,13 @@
                 "count": 1
             }
         ],
-        "duration": "2h"
+        "duration": "2h",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "flash-sd-card",
@@ -2094,7 +2310,7 @@
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 92,
             "emoji": "🌀",
             "history": [
                 {
@@ -2125,7 +2341,13 @@
                 "count": 1
             }
         ],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 65,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "assemble-pi-node",
@@ -2155,7 +2377,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 65,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "create-ci-workflow",
@@ -2173,7 +2401,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 60,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "run-docker-compose",
@@ -2186,7 +2420,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 40,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "create-cloudflare-tunnel",
@@ -2203,7 +2443,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 40,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "join-k3s-cluster",
@@ -2216,7 +2462,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 40,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "install-monitoring-stack",
@@ -2234,7 +2486,13 @@
                 "count": 1
             }
         ],
-        "duration": "10m"
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 60,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "configure-daily-backups",
@@ -2251,7 +2509,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 40,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "assemble-basic-telescope",
@@ -2285,7 +2549,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 60,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "measure-ph",
@@ -2311,7 +2581,7 @@
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 72,
             "emoji": "🌀",
             "history": [
                 {
@@ -2338,7 +2608,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 45,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "measure-battery-voltage",
@@ -2428,7 +2704,7 @@
         "duration": "2m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 50,
             "emoji": "🛠️",
             "history": []
         }
@@ -2543,7 +2819,13 @@
                 "count": 1
             }
         ],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "measure-photoresistor",
@@ -2651,7 +2933,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "1m"
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 50,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "calibrate-ec-meter",
@@ -2677,7 +2965,7 @@
         "duration": "2m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 70,
             "emoji": "🛠️",
             "history": []
         }
@@ -2705,7 +2993,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 40,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "wash-hands",
@@ -2731,7 +3025,7 @@
         "duration": "1m",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 70,
             "emoji": "🌀",
             "history": [
                 {
@@ -2762,7 +3056,7 @@
         "duration": "30s",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 65,
             "emoji": "🌀",
             "history": [
                 {
@@ -2801,7 +3095,13 @@
                 "count": 1
             }
         ],
-        "duration": "2m"
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 65,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "clean-minor-cut",
@@ -3286,7 +3586,7 @@
         "duration": "15m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 50,
             "emoji": "🛠️",
             "history": []
         }
@@ -3305,7 +3605,7 @@
         "duration": "2m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 40,
             "emoji": "🛠️",
             "history": []
         }
@@ -3438,7 +3738,7 @@
         "duration": "1h",
         "hardening": {
             "passes": 1,
-            "score": 65,
+            "score": 70,
             "emoji": "🌀",
             "history": [
                 {
@@ -3477,7 +3777,7 @@
         "duration": "5m",
         "hardening": {
             "passes": 1,
-            "score": 65,
+            "score": 72,
             "emoji": "🌀",
             "history": [
                 {
@@ -3516,7 +3816,7 @@
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 72,
             "emoji": "🌀",
             "history": [
                 {
@@ -3551,7 +3851,7 @@
         "duration": "10m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 70,
             "emoji": "🛠️",
             "history": []
         }
@@ -3580,7 +3880,7 @@
         "duration": "1h 30m",
         "hardening": {
             "passes": 1,
-            "score": 65,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -3623,7 +3923,7 @@
         "duration": "15m",
         "hardening": {
             "passes": 1,
-            "score": 70,
+            "score": 85,
             "emoji": "🌀",
             "history": [
                 {
@@ -3707,7 +4007,7 @@
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 65,
             "emoji": "🌀",
             "history": [
                 {
@@ -3772,7 +4072,7 @@
         "duration": "2h",
         "hardening": {
             "passes": 1,
-            "score": 70,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -3807,7 +4107,7 @@
         "duration": "4h",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -3842,7 +4142,7 @@
         "duration": "2h",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -3927,7 +4227,7 @@
         "duration": "5m",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 92,
             "emoji": "🌀",
             "history": [
                 {
@@ -4100,7 +4400,7 @@
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 65,
+            "score": 70,
             "emoji": "🌀",
             "history": [
                 {
@@ -4134,7 +4434,7 @@
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 65,
             "emoji": "🌀",
             "history": [
                 {
@@ -4173,7 +4473,7 @@
         "duration": "1h",
         "hardening": {
             "passes": 1,
-            "score": 65,
+            "score": 75,
             "emoji": "🌀",
             "history": [
                 {
@@ -4216,7 +4516,7 @@
         "duration": "1h",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 75,
             "emoji": "🌀",
             "history": [
                 {
@@ -4330,7 +4630,13 @@
                 "count": 1
             }
         ],
-        "duration": "35m"
+        "duration": "35m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "glue-birdhouse-shell",
@@ -4366,7 +4672,13 @@
                 "count": 1
             }
         ],
-        "duration": "45m"
+        "duration": "45m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "build-birdhouse",
@@ -4401,7 +4713,7 @@
         "duration": "30m",
         "hardening": {
             "passes": 1,
-            "score": 60,
+            "score": 85,
             "emoji": "🌀",
             "history": [
                 {
@@ -4446,7 +4758,13 @@
                 "count": 1
             }
         ],
-        "duration": "8h"
+        "duration": "8h",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "start-compost-bin",
@@ -4606,7 +4924,13 @@
         ],
         "consumeItems": [],
         "createItems": [],
-        "duration": "5m"
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 50,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "tin-soldering-iron-tip",
@@ -4857,7 +5181,7 @@
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 70,
             "emoji": "🛠️",
             "history": []
         }
@@ -4937,7 +5261,7 @@
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 50,
             "emoji": "🛠️",
             "history": []
         }
@@ -4961,7 +5285,7 @@
         "duration": "2m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 50,
             "emoji": "🛠️",
             "history": []
         }
@@ -4981,7 +5305,7 @@
         "duration": "3m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 50,
             "emoji": "🛠️",
             "history": []
         }
@@ -5065,7 +5389,7 @@
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 50,
             "emoji": "🛠️",
             "history": []
         }
@@ -5089,7 +5413,7 @@
         "duration": "2m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 50,
             "emoji": "🛠️",
             "history": []
         }
@@ -5114,7 +5438,7 @@
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 0,
+            "score": 70,
             "emoji": "🛠️",
             "history": []
         }

@@ -104,6 +104,7 @@
                 "required": ["id", "count"]
             }
         },
+        "hardening": { "$ref": "https://dspace.democratized.space/schemas/hardening.json" },
         "requiresQuests": {
             "type": "array",
             "items": {
@@ -111,5 +112,5 @@
             }
         }
     },
-    "required": ["id", "title", "description", "image", "npc", "start", "dialogue"]
+    "required": ["id", "title", "description", "image", "npc", "start", "dialogue", "hardening"]
 }

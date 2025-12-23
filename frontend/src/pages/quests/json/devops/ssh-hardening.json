@@ -4,7 +4,7 @@
     "description": "Use key-based authentication and disable password logins.",
     "hardening": {
         "passes": 1,
-        "score": 60,
+        "score": 68,
         "emoji": "🌀",
         "history": [
             {

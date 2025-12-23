@@ -26,8 +26,14 @@
                     "goto": "finish",
                     "text": "Flow restored.",
                     "requiresItems": [
-                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -35,9 +41,20 @@
         {
             "id": "finish",
             "text": "Smooth extrusion again! Keep the hotend clean for reliable prints.",
-            "options": [{ "type": "finish", "text": "Back to printing." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to printing."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinter/start"]
+    "requiresQuests": ["3dprinter/start"],
+    "hardening": {
+        "passes": 0,
+        "score": 42,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

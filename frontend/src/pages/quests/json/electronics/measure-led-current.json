@@ -26,12 +26,30 @@
                     "goto": "measure",
                     "text": "Meter in series.",
                     "requiresItems": [
-                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 },
-                        { "id": "d1105b87-8185-4a30-ba55-406384be169f", "count": 1 },
-                        { "id": "3cd82744-d2aa-414e-9f03-80024b624066", "count": 2 },
-                        { "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646", "count": 1 },
-                        { "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662", "count": 1 },
-                        { "id": "828d6c3b-66a5-4064-b221-97630274502b", "count": 1 }
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 2
+                        },
+                        {
+                            "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                            "count": 1
+                        },
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "828d6c3b-66a5-4064-b221-97630274502b",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -58,6 +76,17 @@
             ]
         }
     ],
-    "rewards": [{ "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73", "count": 1 }],
-    "requiresQuests": ["electronics/basic-circuit"]
+    "rewards": [
+        {
+            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["electronics/basic-circuit"],
+    "hardening": {
+        "passes": 0,
+        "score": 67,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

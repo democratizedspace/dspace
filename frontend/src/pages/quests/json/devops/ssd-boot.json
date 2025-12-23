@@ -73,5 +73,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/prepare-first-node"]
+    "requiresQuests": ["devops/prepare-first-node"],
+    "hardening": {
+        "passes": 0,
+        "score": 68,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

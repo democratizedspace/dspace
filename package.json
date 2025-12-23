@@ -23,6 +23,8 @@
     "test:ci": "cross-env SKIP_E2E=1 npm run test:pr",
     "check": "cd frontend && npm run check",
     "itemValidation": "cd frontend && npm run itemValidation",
+    "hardening:validate": "node scripts/hardening/validate-hardening.mjs",
+    "hardening:fix": "node scripts/hardening/normalize-hardening.mjs",
     "lint": "cd frontend && npm run lint",
     "lint:fix": "cd frontend && npm run lint:fix",
     "format": "cd frontend && npm run format",

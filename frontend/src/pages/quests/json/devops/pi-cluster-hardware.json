@@ -70,5 +70,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["sysadmin/basic-commands"]
+    "requiresQuests": ["sysadmin/basic-commands"],
+    "hardening": {
+        "passes": 0,
+        "score": 47,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

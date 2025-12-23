@@ -59,7 +59,7 @@
     "hardening": {
         "passes": 2,
         "score": 70,
-        "emoji": "✅",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-14",

@@ -72,17 +72,32 @@ FILES OF INTEREST
 REQUIREMENTS
 1. Follow the process schema.
 2. Use realistic durations and item relationships grounded in real-world timing.
+3. Include a `hardening` block `{ passes, score, emoji, history[{ task, date, score }] }`
+   with emoji chosen from 🛠️, 🌀, ✅, 💯. Keep `passes === history.length`,
+   clamp `score` to 0–100, and use `YYYY-MM-DD` dates.
 3. Ensure the process is referenced by at least one quest or item; create
    missing items or quest hooks as needed.
 4. Use only existing image assets; do not add new image files.
-5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
-6. Run `npm run test:ci -- processQuality` and fix any failures.
-7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
-8. Update docs or items if needed.
+5. Run `npm run hardening:fix` then `npm run hardening:validate` to normalize
+   scores and emoji.
+6. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
+7. Run `npm run test:ci -- processQuality` and fix any failures.
+8. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+9. Update docs or items if needed.
 
 OUTPUT
 A pull request with the completed process and passing checks.
 ```
+
+## Hardening quick reference
+- Emoji thresholds (passes + score):
+  - 0 passes → score 0 → 🛠️ Draft
+  - ≥1 pass & score ≥60 → 🌀 First polishing pass
+  - ≥2 passes & score ≥75 → ✅ Meets internal quality bar
+  - ≥3 passes & score ≥90 → 💯 Hardened
+- `passes` equals hardening history length; `score` is an integer 0–100.
+- Default block when backfilling: `passes: 0`, `score: 0`, `emoji: "🛠️"`,
+  `history: []`.
 
 ## Implementation Prompt
 

@@ -31,8 +31,14 @@
                     "goto": "finish",
                     "text": "Belt tightened and moving smoothly.",
                     "requiresItems": [
-                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
-                        { "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0", "count": 1 }
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
                     ]
                 }
             ]

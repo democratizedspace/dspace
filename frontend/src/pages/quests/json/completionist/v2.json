@@ -54,5 +54,11 @@
         "energy/solar-1kWh",
         "rocketry/parachute",
         "hydroponics/basil"
-    ]
+    ],
+    "hardening": {
+        "passes": 0,
+        "score": 45,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

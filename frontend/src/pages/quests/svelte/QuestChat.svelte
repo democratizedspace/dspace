@@ -30,7 +30,7 @@
             npc = quest.npc;
 
             // Create reward items map
-            rewardItems = quest.rewards.map((reward) => {
+            rewardItems = (quest.rewards || []).map((reward) => {
                 let item = items.find((item) => item.id === reward.id);
                 return {
                     id: reward.id,
@@ -122,6 +122,13 @@
         {:else}
             <p class="orange">In Progress</p>
         {/if}
+        <div class="hardening" data-testid="quest-hardening">
+            <h5>Hardening</h5>
+            <p>
+                <span class="emoji">{quest?.hardening?.emoji}</span>
+                Score {quest?.hardening?.score ?? 0} · {quest?.hardening?.passes ?? 0} passes
+            </p>
+        </div>
         <h5>Rewards:</h5>
         {#each rewardItems as item}
             <div class="horizontal">
@@ -188,6 +195,14 @@
         object-fit: cover;
         margin-left: -10%;
         margin-top: -10%;
+    }
+
+    .hardening {
+        margin-top: 10px;
+    }
+
+    .emoji {
+        margin-right: 4px;
     }
 
     @media only screen and (max-width: 600px) {

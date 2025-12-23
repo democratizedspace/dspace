@@ -46,5 +46,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/avg-temp"]
+    "requiresQuests": ["programming/avg-temp"],
+    "hardening": {
+        "passes": 0,
+        "score": 42,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

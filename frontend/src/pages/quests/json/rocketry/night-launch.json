@@ -89,5 +89,11 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["rocketry/recovery-run"]
+    "requiresQuests": ["rocketry/recovery-run"],
+    "hardening": {
+        "passes": 0,
+        "score": 81,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

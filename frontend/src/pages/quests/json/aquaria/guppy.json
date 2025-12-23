@@ -58,5 +58,11 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/water-testing", "aquaria/heater-install"]
+    "requiresQuests": ["aquaria/water-testing", "aquaria/heater-install"],
+    "hardening": {
+        "passes": 0,
+        "score": 69,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

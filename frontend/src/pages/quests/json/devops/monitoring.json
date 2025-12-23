@@ -51,5 +51,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/k3s-deploy"]
+    "requiresQuests": ["devops/k3s-deploy"],
+    "hardening": {
+        "passes": 0,
+        "score": 54,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

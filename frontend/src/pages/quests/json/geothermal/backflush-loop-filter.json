@@ -67,5 +67,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["geothermal/purge-loop-air"]
+    "requiresQuests": ["geothermal/purge-loop-air"],
+    "hardening": {
+        "passes": 0,
+        "score": 63,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

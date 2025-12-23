@@ -53,6 +53,7 @@ const TEST_GROUPS = [
             'inventory-items-bug.spec.ts',
             'profile-avatar-selection.spec.ts',
             'profile-page.spec.ts',
+            'quest-hardening.spec.ts',
             'service-worker-update.spec.ts',
             'mobile-process-form.spec.ts',
             'leaderboard.spec.ts',

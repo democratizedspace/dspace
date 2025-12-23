@@ -51,5 +51,11 @@
             "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
             "count": 1
         }
-    ]
+    ],
+    "hardening": {
+        "passes": 0,
+        "score": 57,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

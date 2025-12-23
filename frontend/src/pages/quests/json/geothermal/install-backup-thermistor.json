@@ -74,5 +74,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["geothermal/calibrate-ground-sensor"]
+    "requiresQuests": ["geothermal/calibrate-ground-sensor"],
+    "hardening": {
+        "passes": 0,
+        "score": 77,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

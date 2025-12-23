@@ -72,5 +72,11 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["geothermal/survey-ground-temperature"]
+    "requiresQuests": ["geothermal/survey-ground-temperature"],
+    "hardening": {
+        "passes": 0,
+        "score": 73,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

@@ -1,6 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+  computeEmoji,
+  defaultHardening,
+  normalizeHardening,
+} from '../../scripts/hardening/utils.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -14,6 +19,8 @@ for (const proc of processes) {
   if (fs.existsSync(hardPath)) {
     proc.hardening = JSON.parse(fs.readFileSync(hardPath, 'utf8'));
   }
+  proc.hardening = normalizeHardening(proc.hardening ?? defaultHardening);
+  proc.hardening.emoji = computeEmoji(proc.hardening.passes, proc.hardening.score);
 }
 fs.mkdirSync(path.dirname(outPath), { recursive: true });
 fs.writeFileSync(outPath, JSON.stringify(processes, null, 4) + '\n');
