@@ -2931,6 +2931,204 @@
         }
     },
     {
+        "id": "check-aurora-forecast",
+        "title": "Check aurora forecast and pick a dark-sky window",
+        "requireItems": [
+            {
+                "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "pack-dark-sky-kit",
+        "title": "Pack red light and layers for aurora watching",
+        "requireItems": [
+            {
+                "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                "count": 1
+            },
+            {
+                "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "0ce0d0d4-d734-4099-b903-92e9b1c52b05",
+                "count": 1
+            }
+        ],
+        "duration": "5m"
+    },
+    {
+        "id": "log-aurora-sighting",
+        "title": "Record aurora sighting in your mission logbook",
+        "requireItems": [
+            {
+                "id": "0ce0d0d4-d734-4099-b903-92e9b1c52b05",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            }
+        ],
+        "duration": "15m"
+    },
+    {
+        "id": "check-iss-pass",
+        "title": "Use a satellite-tracking app to find the next ISS pass",
+        "requireItems": [
+            {
+                "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 3,
+            "score": 85,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 60
+                },
+                {
+                    "task": "codex-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 80
+                },
+                {
+                    "task": "codex-process-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 85
+                }
+            ]
+        }
+    },
+    {
+        "id": "stage-iss-spotting-station",
+        "title": "Set up a safe ISS spotting station",
+        "requireItems": [
+            {
+                "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+                "count": 1
+            },
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                "count": 1
+            },
+            {
+                "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "bb97e755-4337-4e9d-8063-4a0cff4649b5",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "log-iss-pass",
+        "title": "Log the ISS flyover in your mission logbook",
+        "requireItems": [
+            {
+                "id": "bb97e755-4337-4e9d-8063-4a0cff4649b5",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "draft-seasonal-star-plan",
+        "title": "Draft a seasonal star hop plan in your logbook",
+        "requireItems": [
+            {
+                "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                "count": 1
+            },
+            {
+                "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                "count": 1
+            }
+        ],
+        "duration": "15m"
+    },
+    {
         "id": "identify-constellations",
         "title": "Identify constellations with a star chart",
         "requireItems": [
@@ -2944,7 +3142,12 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                "count": 1
+            }
+        ],
         "duration": "30m",
         "hardening": {
             "passes": 1,
@@ -2958,6 +3161,92 @@
                 }
             ]
         }
+    },
+    {
+        "id": "mark-polaris-alignment",
+        "title": "Trace Big Dipper pointers to Polaris and note azimuth",
+        "requireItems": [
+            {
+                "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                "count": 1
+            },
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                "count": 1
+            },
+            {
+                "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "6102f07b-384b-437f-b78f-d1e9b5431e97",
+                "count": 1
+            }
+        ],
+        "duration": "15m"
+    },
+    {
+        "id": "plan-venus-window",
+        "title": "Pick a Venus observing window",
+        "requireItems": [
+            {
+                "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                "count": 1
+            },
+            {
+                "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
+                "count": 1
+            }
+        ],
+        "duration": "10m"
+    },
+    {
+        "id": "sketch-venus-phase",
+        "title": "Sketch Venus's phase through a basic telescope",
+        "requireItems": [
+            {
+                "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
+                "count": 1
+            },
+            {
+                "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
+                "count": 1
+            }
+        ],
+        "duration": "20m"
     },
     {
         "id": "observe-meteor-shower",
@@ -3849,51 +4138,6 @@
                     "task": "codex-hardening-2025-08-06",
                     "date": "2025-08-06",
                     "score": 60
-                }
-            ]
-        }
-    },
-    {
-        "id": "check-iss-pass",
-        "title": "Find and log the next ISS flyover with a smartphone app and mission logbook",
-        "image": "/assets/changelog/20230630/smartphone.jpg",
-        "requireItems": [
-            {
-                "id": "82577af7-6724-4cb2-8922-f7140e550145",
-                "count": 1
-            },
-            {
-                "id": "70bb8d86-2c4e-4330-9705-371891934686",
-                "count": 1
-            }
-        ],
-        "consumeItems": [],
-        "createItems": [
-            {
-                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
-                "count": 1
-            }
-        ],
-        "duration": "5m",
-        "hardening": {
-            "passes": 3,
-            "score": 85,
-            "emoji": "✅",
-            "history": [
-                {
-                    "task": "codex-hardening-2025-08-05",
-                    "date": "2025-08-05",
-                    "score": 60
-                },
-                {
-                    "task": "codex-hardening-2025-08-06",
-                    "date": "2025-08-06",
-                    "score": 80
-                },
-                {
-                    "task": "codex-process-hardening-2025-08-14",
-                    "date": "2025-08-14",
-                    "score": 85
                 }
             ]
         }

@@ -13,7 +13,6 @@
     "rewards": [
       "woodworking/workbench",
       "woodworking/step-stool",
-      "woodworking/planter-box",
       "woodworking/coffee-table",
       "woodworking/bookshelf",
       "woodworking/birdhouse"
@@ -22,6 +21,7 @@
   "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399": {
     "requires": [
       "woodworking/workbench",
+      "woodworking/tool-rack",
       "woodworking/step-stool",
       "woodworking/planter-box",
       "woodworking/picture-frame",
@@ -31,11 +31,13 @@
     ],
     "rewards": [
       "woodworking/workbench",
+      "woodworking/tool-rack",
       "woodworking/step-stool",
-      "woodworking/planter-box",
+      "woodworking/picture-frame",
       "woodworking/coffee-table",
       "woodworking/bookshelf",
-      "woodworking/birdhouse"
+      "woodworking/birdhouse",
+      "woodworking/apply-finish"
     ]
   },
   "af77fbf2-30bc-499c-a95c-5daa47a47509": {
@@ -44,10 +46,26 @@
       "woodworking/workbench"
     ]
   },
+  "2770ee5d-f9a0-4dc8-9c79-4f031fefd093": {
+    "requires": [
+      "woodworking/tool-rack",
+      "woodworking/planter-box",
+      "woodworking/picture-frame",
+      "woodworking/finish-sanding",
+      "woodworking/birdhouse"
+    ],
+    "rewards": [
+      "woodworking/tool-rack",
+      "woodworking/finish-sanding",
+      "woodworking/birdhouse",
+      "woodworking/apply-finish"
+    ]
+  },
   "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e": {
     "requires": [
       "woodworking/tool-rack",
       "woodworking/step-stool",
+      "woodworking/planter-box",
       "woodworking/picture-frame",
       "woodworking/coffee-table",
       "woodworking/bookshelf",
@@ -66,30 +84,6 @@
     ],
     "rewards": []
   },
-  "2770ee5d-f9a0-4dc8-9c79-4f031fefd093": {
-    "requires": [
-      "woodworking/tool-rack",
-      "woodworking/picture-frame",
-      "woodworking/finish-sanding"
-    ],
-    "rewards": []
-  },
-  "0e6f2e1c-1e8a-4c05-b1db-38f1eec6f64a": {
-    "requires": [
-      "woodworking/birdhouse"
-    ],
-    "rewards": [
-      "woodworking/birdhouse"
-    ]
-  },
-  "c97f9b74-4d4f-4e83-993c-5df76e9d026e": {
-    "requires": [
-      "woodworking/birdhouse"
-    ],
-    "rewards": [
-      "woodworking/birdhouse"
-    ]
-  },
   "2dfe683c-56f6-4026-b9e9-2d01a03b1878": {
     "requires": [
       "woodworking/step-stool",
@@ -100,18 +94,35 @@
       "woodworking/birdhouse"
     ]
   },
-  "5a80f925-ec0a-4b08-b0e1-3b6b41ccace4": {
+  "c9b51052-4594-42d7-a723-82b815ab8cc2": {
     "requires": [
       "woodworking/step-stool",
+      "woodworking/birdhouse",
+      "robotics/wheel-encoders",
+      "hydroponics/nutrient-check",
+      "firstaid/dispose-expired",
+      "electronics/solder-wire",
+      "electronics/solder-led-harness",
+      "electronics/measure-resistance",
+      "electronics/light-sensor",
+      "electronics/led-polarity",
       "electronics/desolder-component",
+      "electronics/data-logger",
+      "electronics/continuity-test",
+      "electronics/check-battery-voltage",
       "electronics/arduino-blink",
+      "chemistry/ph-test",
+      "chemistry/acid-dilution",
+      "aquaria/water-testing",
+      "aquaria/water-change",
       "3dprinting/nozzle-clog",
       "3dprinting/nozzle-cleaning",
       "3dprinting/filament-change",
       "3dprinting/calibration-cube"
     ],
     "rewards": [
-      "woodworking/step-stool"
+      "woodworking/step-stool",
+      "woodworking/birdhouse"
     ]
   },
   "0d4a7b77-f241-4c19-9365-c74647066802": {
@@ -120,23 +131,25 @@
       "woodworking/step-stool"
     ]
   },
+  "ea830e47-5996-4886-b5ee-74bb2b932988": {
+    "requires": [],
+    "rewards": [
+      "woodworking/planter-box"
+    ]
+  },
+  "affa2f80-28f1-422e-a0c8-49e51ce65a1e": {
+    "requires": [],
+    "rewards": [
+      "woodworking/planter-box"
+    ]
+  },
   "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913": {
     "requires": [
-      "woodworking/planter-box"
+      "woodworking/planter-box",
+      "woodworking/birdhouse"
     ],
     "rewards": [
-      "woodworking/planter-box"
-    ]
-  },
-  "619d485d-803f-4875-a048-157ce28d31c4": {
-    "requires": [],
-    "rewards": [
-      "woodworking/bookshelf"
-    ]
-  },
-  "092fdddc-431a-40bd-a66c-f7ef878ae1f8": {
-    "requires": [],
-    "rewards": [
+      "woodworking/planter-box",
       "woodworking/birdhouse"
     ]
   },
@@ -145,8 +158,34 @@
       "woodworking/apply-finish"
     ],
     "rewards": [
+      "woodworking/picture-frame",
+      "woodworking/finish-sanding",
       "woodworking/apply-finish"
     ]
+  },
+  "619d485d-803f-4875-a048-157ce28d31c4": {
+    "requires": [],
+    "rewards": [
+      "woodworking/bookshelf"
+    ]
+  },
+  "0e6f2e1c-1e8a-4c05-b1db-38f1eec6f64a": {
+    "requires": [
+      "woodworking/birdhouse"
+    ],
+    "rewards": []
+  },
+  "c97f9b74-4d4f-4e83-993c-5df76e9d026e": {
+    "requires": [
+      "woodworking/birdhouse"
+    ],
+    "rewards": []
+  },
+  "092fdddc-431a-40bd-a66c-f7ef878ae1f8": {
+    "requires": [
+      "woodworking/birdhouse"
+    ],
+    "rewards": []
   },
   "7318a5ba-fac3-476e-a532-c813ed9b18e5": {
     "requires": [],
@@ -505,26 +544,6 @@
     "rewards": [
       "geothermal/install-backup-thermistor"
     ]
-  },
-  "c9b51052-4594-42d7-a723-82b815ab8cc2": {
-    "requires": [
-      "robotics/wheel-encoders",
-      "hydroponics/nutrient-check",
-      "firstaid/dispose-expired",
-      "electronics/solder-wire",
-      "electronics/solder-led-harness",
-      "electronics/measure-resistance",
-      "electronics/light-sensor",
-      "electronics/led-polarity",
-      "electronics/data-logger",
-      "electronics/continuity-test",
-      "electronics/check-battery-voltage",
-      "chemistry/ph-test",
-      "chemistry/acid-dilution",
-      "aquaria/water-testing",
-      "aquaria/water-change"
-    ],
-    "rewards": []
   },
   "9018feac-7213-4eef-9654-b06dbd9404ea": {
     "requires": [
@@ -951,7 +970,6 @@
       "astronomy/observe-moon",
       "astronomy/meteor-shower",
       "astronomy/light-pollution",
-      "astronomy/aurora-watch",
       "astronomy/andromeda"
     ],
     "rewards": []
@@ -1092,8 +1110,7 @@
   "82577af7-6724-4cb2-8922-f7140e550145": {
     "requires": [
       "energy/offgrid-charger",
-      "astronomy/iss-photo",
-      "astronomy/iss-flyover"
+      "astronomy/iss-photo"
     ],
     "rewards": []
   },
@@ -1239,7 +1256,8 @@
   },
   "dad7f853-ccc9-40be-b226-89272708db84": {
     "requires": [
-      "electronics/solder-wire"
+      "electronics/solder-wire",
+      "electronics/desolder-component"
     ],
     "rewards": []
   },
@@ -1315,12 +1333,6 @@
     "rewards": []
   },
   "526817d2-996a-4d80-b5fc-4a0a5eb9ca03": {
-    "requires": [
-      "electronics/desolder-component"
-    ],
-    "rewards": []
-  },
-  "06146006-5615-4c1a-98dd-ff1b107ec893": {
     "requires": [
       "electronics/desolder-component"
     ],
@@ -1499,12 +1511,9 @@
       "astronomy/planetary-alignment",
       "astronomy/orion-nebula",
       "astronomy/observe-moon",
-      "astronomy/north-star",
       "astronomy/meteor-shower",
       "astronomy/lunar-eclipse",
       "astronomy/jupiter-moons",
-      "astronomy/iss-flyover",
-      "astronomy/constellations",
       "astronomy/comet-tracking",
       "astronomy/binary-star",
       "astronomy/basic-telescope",
@@ -1514,14 +1523,25 @@
       "astronomy/planetary-alignment"
     ]
   },
+  "4b328572-69f2-4fa6-8005-dc64ac434cef": {
+    "requires": [
+      "astronomy/venus-phases"
+    ],
+    "rewards": []
+  },
+  "85d4fb76-9591-4b70-b88d-e74ff133215d": {
+    "requires": [
+      "astronomy/venus-phases"
+    ],
+    "rewards": []
+  },
   "70bb8d86-2c4e-4330-9705-371891934686": {
     "requires": [
       "astronomy/sunspot-sketch",
       "astronomy/observe-moon",
       "astronomy/meteor-shower",
       "astronomy/light-pollution",
-      "astronomy/iss-photo",
-      "astronomy/iss-flyover"
+      "astronomy/iss-photo"
     ],
     "rewards": []
   },
@@ -1537,10 +1557,47 @@
     ],
     "rewards": []
   },
+  "b73f795b-7abb-4a0c-950b-7f8ad82012b8": {
+    "requires": [
+      "astronomy/north-star",
+      "astronomy/constellations"
+    ],
+    "rewards": []
+  },
+  "6102f07b-384b-437f-b78f-d1e9b5431e97": {
+    "requires": [
+      "astronomy/north-star"
+    ],
+    "rewards": []
+  },
   "49fb255e-a4c3-48e4-bca7-4c3781fdb98b": {
     "requires": [
       "astronomy/iss-photo",
       "astronomy/basic-telescope"
+    ],
+    "rewards": []
+  },
+  "16478015-5213-4b3f-960c-c0fdaaa91297": {
+    "requires": [
+      "astronomy/iss-flyover"
+    ],
+    "rewards": []
+  },
+  "bb97e755-4337-4e9d-8063-4a0cff4649b5": {
+    "requires": [
+      "astronomy/iss-flyover"
+    ],
+    "rewards": []
+  },
+  "067aa8eb-b5a4-4bef-a307-7dde10e981f5": {
+    "requires": [
+      "astronomy/iss-flyover"
+    ],
+    "rewards": []
+  },
+  "60da6648-c22e-466e-9789-9e1d4635fd46": {
+    "requires": [
+      "astronomy/constellations"
     ],
     "rewards": []
   },
@@ -1565,6 +1622,24 @@
   "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed": {
     "requires": [
       "astronomy/basic-telescope"
+    ],
+    "rewards": []
+  },
+  "808f8298-ba98-43d6-907b-1b34a7daffb8": {
+    "requires": [
+      "astronomy/aurora-watch"
+    ],
+    "rewards": []
+  },
+  "0ce0d0d4-d734-4099-b903-92e9b1c52b05": {
+    "requires": [
+      "astronomy/aurora-watch"
+    ],
+    "rewards": []
+  },
+  "280ed361-ac70-4ab9-bcd9-aee481790faf": {
+    "requires": [
+      "astronomy/aurora-watch"
     ],
     "rewards": []
   },

@@ -12,14 +12,36 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "study",
+                    "goto": "plan",
                     "text": "I'm excited to learn!"
                 }
             ]
         },
         {
-            "id": "study",
-            "text": "Using your telescope, locate Orion, Ursa Major, and Cassiopeia. Sketch their brightest stars and note their orientation each night.",
+            "id": "plan",
+            "text": "Mark this season's guide stars on the planisphere and keep red light low for dark adaptation.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "draft-seasonal-star-plan",
+                    "text": "Sketching arrows from guide stars."
+                },
+                {
+                    "type": "goto",
+                    "goto": "chart",
+                    "text": "Plan is ready—let's star hop.",
+                    "requiresItems": [
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "chart",
+            "text": "Find Orion, Ursa Major, and Cassiopeia, then sketch their bright stars and orientation.",
             "options": [
                 {
                     "type": "process",
@@ -32,7 +54,7 @@
                     "text": "I can spot them easily now!",
                     "requiresItems": [
                         {
-                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
                             "count": 1
                         }
                     ]
@@ -41,7 +63,7 @@
         },
         {
             "id": "finish",
-            "text": "Excellent! Recognizing these patterns will help you orient spacecraft sightings and plan future observations.",
+            "text": "Excellent! These patterns guide spacecraft spotting and future sessions. Keep the sketches handy.",
             "options": [
                 {
                     "type": "finish",

@@ -8,26 +8,75 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Solar winds may trigger auroras tonight. Check the forecast and head to a dark, open view.",
+            "text": "Solar winds may trigger auroras tonight. Let's plan before we stomp out into the cold.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "forecast",
+                    "text": "I'll check the numbers before bundling up."
+                }
+            ]
+        },
+        {
+            "id": "forecast",
+            "text": "Check an aurora app for Kp, clouds, and a clear hour. Pick a dark spot with safe footing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-aurora-forecast",
+                    "text": "Forecast locked in and written down."
+                },
+                {
+                    "type": "goto",
+                    "goto": "kit",
+                    "text": "Window picked—what should I pack?",
+                    "requiresItems": [
+                        {
+                            "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "kit",
+            "text": "Layer up, clip the red flashlight, tell a buddy your spot, and keep the logbook dry.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "pack-dark-sky-kit",
+                    "text": "Packing the essentials."
+                },
+                {
+                    "type": "goto",
                     "goto": "observe",
-                    "text": "Forecast looks promising."
+                    "text": "Kit is ready—let's step outside.",
+                    "requiresItems": [
+                        {
+                            "id": "0ce0d0d4-d734-4099-b903-92e9b1c52b05",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "observe",
-            "text": "Bring a red flashlight to protect night vision and watch the northern horizon for shimmering curtains.",
+            "text": "Let eyes adjust, sweep the northern horizon for arcs or curtains, and note color and time.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "log-aurora-sighting",
+                    "text": "Logging the shimmering curtains."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "I logged dancing lights!",
+                    "text": "Entry written with colors and timestamps.",
                     "requiresItems": [
                         {
-                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
                             "count": 1
                         }
                     ]
@@ -36,7 +85,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice catch! Your notes help track geomagnetic storms. Stay warm and reuse dark sites.",
+            "text": "Nice catch! Your notes help track storms. Warm up, check in with your buddy, and reuse dark sites.",
             "options": [
                 {
                     "type": "finish",

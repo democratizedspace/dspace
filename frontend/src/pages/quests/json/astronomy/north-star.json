@@ -13,28 +13,29 @@
                 {
                     "type": "goto",
                     "goto": "locate",
-                    "text": "Show me the steps."
+                    "text": "Show me the steps.",
+                    "requiresItems": [
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "locate",
-            "text": "Find the Big Dipper and draw a line through its pointer stars to reach Polaris. Confirm with your telescope.",
+            "text": "Use sketches to find the Big Dipper, follow its pointers to Polaris, and keep the tripod steady.",
             "options": [
                 {
                     "type": "process",
-                    "process": "identify-constellations",
-                    "text": "Scanning the stars."
+                    "process": "mark-polaris-alignment",
+                    "text": "Tracing to Polaris and noting azimuth."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "requiresItems": [
-                        {
-                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
-                            "count": 1
-                        }
-                    ],
+                    "requiresItems": [{ "id": "6102f07b-384b-437f-b78f-d1e9b5431e97", "count": 1 }],
                     "text": "Polaris spotted."
                 }
             ]

@@ -1382,6 +1382,86 @@
         "category": "Astronomy & Observation"
     },
     {
+        "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
+        "name": "aurora viewing plan",
+        "description": "Forecast notes listing Kp index, cloud cover, and the hour you'll step outside.",
+        "image": "/assets/hardbound_mission_logbook.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "0ce0d0d4-d734-4099-b903-92e9b1c52b05",
+        "name": "dark-sky kit packed",
+        "description": "Red flashlight, layered clothing, and a charged phone bundled for safe aurora watching.",
+        "image": "/assets/red_flashlight_50_lumen.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+        "name": "seasonal star hop plan",
+        "description": "Plotted arrows from bright seasonal stars to the constellations you're practicing tonight.",
+        "image": "/assets/planisphere_star_chart.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+        "name": "constellation sketch set",
+        "description": "Logbook page of traced stick figures for Orion, Ursa Major, and Cassiopeia with orientation arrows.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+        "name": "ISS pass window",
+        "description": "Start time, direction, and elevation for the next visible ISS flyover from your location.",
+        "image": "/assets/hardbound_mission_logbook.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "bb97e755-4337-4e9d-8063-4a0cff4649b5",
+        "name": "ISS spotting station",
+        "description": "Tripod-mounted telescope leveled, red light clipped, and a cleared footpath toward the predicted pass.",
+        "image": "/assets/camera_tripod_astronomy.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
+        "name": "ISS pass log",
+        "description": "Mission log entry noting the ISS pass time, brightness, and horizon-to-horizon track.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "6102f07b-384b-437f-b78f-d1e9b5431e97",
+        "name": "Polaris alignment note",
+        "description": "A quick sketch of the Big Dipper's pointer stars leading to Polaris, plus azimuth from your observing spot.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
+        "name": "Venus observation window",
+        "description": "Planisphere and app check noting when Venus is high enough to show a clear crescent or gibbous phase.",
+        "image": "/assets/planisphere_star_chart.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
+        "name": "Venus phase sketch",
+        "description": "Pencil sketch of Venus's illuminated slice with date, time, and telescope magnification.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
         "name": "first aid kit",
         "description": "Adhesive bandages, sterile gauze pads, antiseptic wipes and nitrile gloves packed for emergencies.",

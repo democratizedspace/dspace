@@ -12,7 +12,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "view",
+                    "goto": "plan",
                     "text": "Ready to aim.",
                     "requiresItems": [
                         { "id": "98f6252e-95c2-468a-b110-69d47604df2c", "count": 1 },
@@ -22,9 +22,38 @@
             ]
         },
         {
+            "id": "plan",
+            "text": "Use the planisphere and an app to pick a time when Venus is high enough for a crisp view.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plan-venus-window",
+                    "text": "Window chosen and written down."
+                },
+                {
+                    "type": "goto",
+                    "goto": "view",
+                    "text": "Timing locked—let's observe.",
+                    "requiresItems": [{ "id": "4b328572-69f2-4fa6-8005-dc64ac434cef", "count": 1 }]
+                }
+            ]
+        },
+        {
             "id": "view",
-            "text": "Use the planisphere to find Venus near the horizon. Center it and note the illuminated portion.",
-            "options": [{ "type": "goto", "goto": "finish", "text": "Phase recorded." }]
+            "text": "Set up the telescope on stable ground, center Venus, and adjust focus until the phase edge is sharp.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sketch-venus-phase",
+                    "text": "Sketching the illuminated slice."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Phase recorded with date and time.",
+                    "requiresItems": [{ "id": "85d4fb76-9591-4b70-b88d-e74ff133215d", "count": 1 }]
+                }
+            ]
         },
         {
             "id": "finish",
