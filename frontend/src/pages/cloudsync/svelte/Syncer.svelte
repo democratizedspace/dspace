@@ -115,12 +115,7 @@
                     autocomplete="off"
                     placeholder="e.g. 0123456789abcdef..."
                 />
-                <Chip
-                    text="Clear"
-                    onClick={clearGistId}
-                    hazard={true}
-                    dataTestId="clear-gist-id"
-                />
+                <Chip text="Clear" onClick={clearGistId} hazard={true} dataTestId="clear-gist-id" />
             </div>
         </div>
         <div class="buttons">
