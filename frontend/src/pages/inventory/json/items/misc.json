@@ -1000,7 +1000,7 @@
         "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
         "name": "thermistor logging rig",
         "description": "An Arduino Uno wired with a 10k NTC thermistor voltage divider for continuous temperature logging.",
-        "image": "/assets/quests/geothermal_log_ground_temperature_arduino.jpg",
+        "image": "/assets/thermistor_logging_rig.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
     },
@@ -1656,7 +1656,7 @@
         "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
         "name": "temperature log CSV",
         "description": "Hourly temperature readings with timestamps exported from your thermistor logging rig.",
-        "image": "/assets/quests/programming_temperature_logger_script.jpg",
+        "image": "/assets/temperature_log_csv.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1664,7 +1664,7 @@
         "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
         "name": "temperature line chart",
         "description": "A simple Matplotlib graph showing your logged temperature readings over time.",
-        "image": "/assets/quests/programming_graph_temperature_data.jpg",
+        "image": "/assets/temperature_line_chart.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1672,7 +1672,7 @@
         "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
         "name": "annotated temperature graph",
         "description": "A cleaned plot with rolling averages and high/low annotations to make trends pop.",
-        "image": "/assets/quests/programming_graph_temperature_logs_script.jpg",
+        "image": "/assets/annotated_temperature_graph.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1680,7 +1680,7 @@
         "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
         "name": "live temperature JSON endpoint",
         "description": "A lightweight API route that serves the latest thermistor reading as JSON on your network.",
-        "image": "/assets/quests/programming_temperature_json_api.jpg",
+        "image": "/assets/live_temperature_json_endpoint.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1688,7 +1688,7 @@
         "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
         "name": "live temperature dashboard",
         "description": "An auto-refreshing web page that charts your live JSON endpoint for anyone on the LAN.",
-        "image": "/assets/quests/temperature_log_line_chart.jpg",
+        "image": "/assets/live_temperature_dashboard.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },

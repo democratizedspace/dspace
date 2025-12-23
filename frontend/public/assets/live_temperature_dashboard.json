@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/live_temperature_dashboard.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "live temperature dashboard",
+    "item_id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+    "entity_type": "item",
+    "prompt": "A browser-based dashboard displays a live-updating temperature chart and numerical readout sourced from a LAN JSON endpoint. The screen sits on a sleek laptop in a tidy solarpunk workspace with a microcontroller sensor rig nearby, warm lighting, and a small plant. The 512×512 image is photorealistic with gentle stylization and no brand logos.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

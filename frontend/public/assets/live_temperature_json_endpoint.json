@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/live_temperature_json_endpoint.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "live temperature JSON endpoint",
+    "item_id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+    "entity_type": "item",
+    "prompt": "A browser window on a laptop shows a simple JSON payload with a temperature value and timestamp from a local sensor endpoint. A microcontroller with a thermistor and USB cable sits beside the laptop on a neatly organized solarpunk desk with warm light and a small plant. The 512×512 scene is photorealistic with gentle stylization and minimal readable text beyond the JSON keys.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

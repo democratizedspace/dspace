@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/temperature_log_csv.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "temperature log CSV",
+    "item_id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+    "entity_type": "item",
+    "prompt": "A laptop screen shows a spreadsheet of timestamped temperature readings exported from an Arduino logger. Beside the laptop sits a coiled USB cable and a small thermistor rig, implying the data source. The solarpunk desk is neatly organized with soft, even lighting and subtle greenery. The 512×512 image is photorealistic with gentle stylization and no visible brand logos.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
