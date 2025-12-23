@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import Chip from '../../../components/svelte/Chip.svelte';
     import {
         clearCloudGistId,
@@ -45,11 +45,12 @@
     };
 
     const loadBackups = async (providedToken = token) => {
-        if (!providedToken) return;
+        const trimmedToken = providedToken?.trim?.();
+        if (!trimmedToken) return;
         refreshing = true;
         backupError = '';
         try {
-            backups = await fetchBackupList(providedToken);
+            backups = await fetchBackupList(trimmedToken);
         } catch (err) {
             console.error(err);
             backupError = 'Unable to load backups right now.';
@@ -71,19 +72,21 @@
     });
 
     const saveToken = async () => {
-        if (!isValidGitHubToken(token)) {
+        const trimmedToken = token.trim();
+        if (!isValidGitHubToken(trimmedToken)) {
             announce('GitHub token looks invalid', 'error');
             return;
         }
         savingToken = true;
         try {
-            await validateToken(token);
-            await saveGitHubToken(token.trim());
+            await validateToken(trimmedToken);
+            await saveGitHubToken(trimmedToken);
             announce('Token saved and validated', 'success');
-            await loadBackups(token);
+            await loadBackups(trimmedToken);
         } catch (err) {
             console.error(err);
             await clearGitHubToken();
+            token = '';
             announce('Token validation failed', 'error');
         } finally {
             savingToken = false;
@@ -97,13 +100,14 @@
     };
 
     const handleUpload = async () => {
-        if (!isValidGitHubToken(token)) {
+        const trimmedToken = token.trim();
+        if (!isValidGitHubToken(trimmedToken)) {
             announce('GitHub token looks invalid', 'error');
             return;
         }
         uploading = true;
         try {
-            const result = await uploadGameStateToGist(token);
+            const result = await uploadGameStateToGist(trimmedToken);
             gistId = '';
             await clearCloudGistId();
             announce('Upload successful', 'success');
@@ -145,8 +149,13 @@
             announce('Clipboard unavailable', 'error');
             return;
         }
-        await navigator.clipboard.writeText(id);
-        announce('Gist ID copied', 'success');
+        try {
+            await navigator.clipboard.writeText(id);
+            announce('Gist ID copied', 'success');
+        } catch (err) {
+            console.error(err);
+            announce('Failed to copy Gist ID', 'error');
+        }
     };
 
     const friendlyDate = (value) => {
@@ -159,6 +168,10 @@
             minute: '2-digit',
         });
     };
+
+    onDestroy(() => {
+        clearTimeout(toastTimer);
+    });
 </script>
 
 <div class="chip-container" bind:this={root} data-testid="cloud-sync-form">

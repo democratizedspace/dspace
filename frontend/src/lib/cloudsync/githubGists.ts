@@ -1,15 +1,15 @@
 export const BACKUP_DESCRIPTION = 'DSPACE Cloud Sync backup';
 export const BACKUP_FILE_PREFIX = 'dspace-save';
 
-const DEFAULT_FETCH = (typeof fetch !== 'undefined' && fetch) || undefined;
+const TOKEN_PATTERNS = [/^gh[pousr]_[A-Za-z0-9_]{36,}$/i, /^github_pat_[A-Za-z0-9_]{22,}$/i];
 
-const TOKEN_PATTERNS = [/^gh[pousr]_[A-Za-z0-9_]{20,}$/i, /^github_pat_[A-Za-z0-9_]{22,}$/i];
+const resolveFetch = (fetchImpl?: typeof fetch) => fetchImpl ?? (typeof fetch !== 'undefined' ? fetch : undefined);
 
 export const isLikelyGitHubToken = (token?: string) => {
     if (typeof token !== 'string') return false;
     const trimmed = token.trim();
     if (!trimmed) return false;
-    return TOKEN_PATTERNS.some((pattern) => pattern.test(trimmed)) || trimmed.length >= 8;
+    return TOKEN_PATTERNS.some((pattern) => pattern.test(trimmed));
 };
 
 export function formatBackupFilename(date = new Date()) {
@@ -44,15 +44,17 @@ export function sanitizeSaveForBackup(save: unknown) {
     return clone;
 }
 
-export async function validateToken(token: string, fetchImpl = DEFAULT_FETCH) {
-    if (!fetchImpl) throw new Error('Fetch implementation unavailable');
-    if (!isLikelyGitHubToken(token)) {
+export async function validateToken(token: string, fetchImpl?: typeof fetch) {
+    const activeFetch = resolveFetch(fetchImpl);
+    if (!activeFetch) throw new Error('Fetch implementation unavailable');
+    const trimmedToken = token?.trim?.() ?? '';
+    if (!isLikelyGitHubToken(trimmedToken)) {
         throw new Error('Token is missing or appears invalid');
     }
 
-    const response = await fetchImpl('https://api.github.com/gists?per_page=1', {
+    const response = await activeFetch('https://api.github.com/gists?per_page=1', {
         headers: {
-            Authorization: `token ${token.trim()}`,
+            Authorization: `token ${trimmedToken}`,
             Accept: 'application/vnd.github+json',
         },
     });
@@ -64,12 +66,14 @@ export async function validateToken(token: string, fetchImpl = DEFAULT_FETCH) {
     return true;
 }
 
-export async function listBackups(token: string, fetchImpl = DEFAULT_FETCH) {
-    if (!fetchImpl) throw new Error('Fetch implementation unavailable');
+export async function listBackups(token: string, fetchImpl?: typeof fetch) {
+    const activeFetch = resolveFetch(fetchImpl);
+    if (!activeFetch) throw new Error('Fetch implementation unavailable');
+    const trimmedToken = token?.trim?.() ?? '';
 
-    const response = await fetchImpl('https://api.github.com/gists?per_page=30', {
+    const response = await activeFetch('https://api.github.com/gists?per_page=30', {
         headers: {
-            Authorization: `token ${token.trim()}`,
+            Authorization: `token ${trimmedToken}`,
             Accept: 'application/vnd.github+json',
         },
     });
@@ -109,7 +113,7 @@ export async function createBackupGist({
     content,
     description = BACKUP_DESCRIPTION,
     date = new Date(),
-    fetchImpl = DEFAULT_FETCH,
+    fetchImpl,
 }: {
     token: string;
     content: string;
@@ -117,13 +121,15 @@ export async function createBackupGist({
     date?: Date;
     fetchImpl?: typeof fetch;
 }) {
-    if (!fetchImpl) throw new Error('Fetch implementation unavailable');
+    const activeFetch = resolveFetch(fetchImpl);
+    if (!activeFetch) throw new Error('Fetch implementation unavailable');
+    const trimmedToken = token?.trim?.() ?? '';
 
     const filename = formatBackupFilename(date);
-    const response = await fetchImpl('https://api.github.com/gists', {
+    const response = await activeFetch('https://api.github.com/gists', {
         method: 'POST',
         headers: {
-            Authorization: `token ${token.trim()}`,
+            Authorization: `token ${trimmedToken}`,
             'Content-Type': 'application/json',
             Accept: 'application/vnd.github+json',
         },
