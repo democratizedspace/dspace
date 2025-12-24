@@ -143,10 +143,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "aquaria/guppy",
-        "aquaria/floating-plants"
-    ],
+    "requiresQuests": ["aquaria/guppy", "aquaria/floating-plants"],
     "hardening": {
         "passes": 0,
         "score": 90,

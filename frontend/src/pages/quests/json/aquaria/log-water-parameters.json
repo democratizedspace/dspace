@@ -39,9 +39,7 @@
                     "type": "goto",
                     "goto": "log",
                     "text": "Readings are ready to log.",
-                    "requiresItems": [
-                        { "id": "9748fccc-ec16-4664-982e-c79b1c082e5e", "count": 1 }
-                    ]
+                    "requiresItems": [{ "id": "9748fccc-ec16-4664-982e-c79b1c082e5e", "count": 1 }]
                 }
             ]
         },

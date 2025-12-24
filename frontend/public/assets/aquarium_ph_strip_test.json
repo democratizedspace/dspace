@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/aquarium_ph_strip_test.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Aquarium pH reading",
+    "item_id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+    "entity_type": "item",
+    "prompt": "A close-up of an aquarium pH test strip being compared to a color chart, with the strip showing a distinct color and the matching color block on the chart highlighted. The background includes a clear freshwater aquarium with plants and gentle lighting, indicating the strip was dipped moments ago. The focus is on the strip and chart, emphasizing accurate reading within 30 seconds.\n\nThe setting is a clean, near-future solarpunk home lab with soft LED accents around the tank, glass surfaces reflecting light, and no visible people or text. The 512×512 photorealistic composition centers on the test strip and chart while the tank and equipment remain softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
