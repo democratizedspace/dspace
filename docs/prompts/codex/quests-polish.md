@@ -113,7 +113,7 @@ below.
 
 ## Merge compatibility prompt
 ```markdown
-I have multiple candidate PRs that came out of a Codex task, and I want to know which ones can be merged together safely (minimal merge conflicts, no duplicated edits).
+I have multiple candidate PRs that came out of a Codex task (`docs/prompts/codex/quests-polish.md`), and I want to know which ones can be merged together safely (minimal merge conflicts, no duplicated edits).
 
 Here are the PRs:
 - <PR URL 1>
