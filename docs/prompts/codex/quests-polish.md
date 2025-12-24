@@ -110,3 +110,31 @@ below.
   (no binary images added).
 - Note every command you ran and its result so reviewers can mirror the checks.
 ```
+
+## Merge compatibility prompt
+```markdown
+I have multiple candidate PRs that came out of a Codex task, and I want to know which ones can be merged together safely (minimal merge conflicts, no duplicated edits).
+
+Here are the PRs:
+- <PR URL 1>
+- <PR URL 2>
+- <PR URL 3>
+- <PR URL 4>
+
+Please use your GitHub connector to inspect each PR.
+
+What I need:
+- For each PR, summarize what it changes at a high level (quests/processes/items/generated/assets/docs).
+- List the files changed in each PR (grouped by category if helpful).
+- Compute overlaps between PRs:
+  - exact file-path overlaps (same file touched by multiple PRs)
+  - obvious content overlaps even if file paths differ (e.g., same quest/process IDs being edited in different files)
+- Call out overlaps that are likely to cause merge conflicts or redundant work (especially shared registries like `items/*.json`, shared process registries like `processes/base.json`, and `frontend/src/generated/*`).
+- Recommend the set(s) of PRs that can be merged together with minimal to no conflicts. If any conflicts are likely, say which file(s) they’ll be in.
+- For PR pairs that are not safe to merge as-is, briefly explain why.
+
+Output format:
+- A short “safe to merge together” list (pairs or groups)
+- A short “not safe without manual reconciliation” list, with the overlap called out
+- A compact overlap matrix or pairwise overlap summary (file paths are enough)
+```
