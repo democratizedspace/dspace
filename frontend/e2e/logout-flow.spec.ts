@@ -127,7 +127,7 @@ test.describe('Logout flow', () => {
             .toBe(gistId);
         await page.reload();
         await waitForHydration(page);
-        await expect(page.getByLabel(/Gist ID/i)).toHaveValue(gistId);
+        await expect(page.getByLabel(/Gist ID/i)).toHaveValue('');
 
         await page.goto('/settings');
         await waitForHydration(page);

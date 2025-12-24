@@ -15,6 +15,8 @@ test.describe('Cloud Sync', () => {
         }[] = [];
         const offlineRequests: string[] = [];
         let restoredId = '';
+        const gistFailures: string[] = [];
+        const gistResponses: Array<{ url: string; status: number }> = [];
 
         page.on('request', (request) => {
             const url = request.url();
@@ -26,15 +28,46 @@ test.describe('Cloud Sync', () => {
             }
         });
 
-        await page.route('**/gists?per_page=1', (route) =>
-            route.fulfill({ status: 200, contentType: 'application/json', body: '[]' })
-        );
+        page.on('requestfailed', (request) => {
+            const url = request.url();
+            if (url.includes('api.github.com/gists')) {
+                gistFailures.push(`${url} :: ${request.failure()?.errorText || 'failed'}`);
+            }
+        });
 
-        await page.route('**/gists', (route) => {
+        page.on('response', (response) => {
+            const url = response.url();
+            if (url.includes('api.github.com/gists')) {
+                gistResponses.push({ url, status: response.status() });
+            }
+        });
+
+        page.on('console', (message) => {
+            if (message.type() === 'error' || message.type() === 'warning') {
+                const location = message.location();
+                const locationHint = location?.url ? ` @ ${location.url}:${location.lineNumber}` : '';
+                console.log(`[console.${message.type()}] ${message.text()}${locationHint}`);
+            }
+        });
+
+        const corsHeaders = { 'Access-Control-Allow-Origin': '*' };
+
+        await page.route('**/gists*', (route) => {
             const request = route.request();
             const url = new URL(request.url());
+            if (request.method() === 'OPTIONS') {
+                return route.fulfill({
+                    status: 200,
+                    headers: {
+                        ...corsHeaders,
+                        'Access-Control-Allow-Headers': 'Authorization, Content-Type, Accept',
+                        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                    },
+                });
+            }
+
             if (url.searchParams.get('per_page') === '1' && request.method() === 'GET') {
-                return route.fulfill({ status: 200, body: '[]' });
+                return route.fulfill({ status: 200, headers: corsHeaders, body: '[]' });
             }
 
             if (request.method() === 'GET') {
@@ -45,7 +78,11 @@ test.describe('Cloud Sync', () => {
                     description: 'DSPACE Cloud Sync backup',
                     files: { [gist.filename]: { filename: gist.filename } },
                 }));
-                return route.fulfill({ status: 200, body: JSON.stringify(body) });
+                return route.fulfill({
+                    status: 200,
+                    headers: corsHeaders,
+                    body: JSON.stringify(body),
+                });
             }
 
             if (request.method() === 'POST') {
@@ -62,11 +99,14 @@ test.describe('Cloud Sync', () => {
                 const created_at = `2024-01-0${created.length + 1}T12:00:00Z`;
                 const html_url = `https://gist.github.com/${newId}`;
                 created.unshift({ id: newId, created_at, html_url, filename: fileName });
-                return route.fulfill({
-                    status: 201,
-                    contentType: 'application/json',
-                    body: JSON.stringify({ id: newId, created_at, html_url }),
-                });
+                return route.fulfill(
+                    {
+                        status: 201,
+                        headers: corsHeaders,
+                        contentType: 'application/json',
+                        body: JSON.stringify({ id: newId, created_at, html_url }),
+                    }
+                );
             }
 
             return route.continue();
@@ -95,6 +135,7 @@ test.describe('Cloud Sync', () => {
 
             route.fulfill({
                 status: 200,
+                headers: corsHeaders,
                 contentType: 'application/json',
                 body: JSON.stringify(body),
             });
@@ -116,6 +157,11 @@ test.describe('Cloud Sync', () => {
         await expect(page.getByTestId('sync-success')).toHaveText('Upload successful');
         await expect.poll(() => created.length).toBe(1);
         await expect(page.getByLabel(/Gist ID/i)).toHaveValue('');
+        await expect(gistFailures).toEqual([]);
+        if (gistResponses.some(({ status }) => status >= 400)) {
+            console.log('gistResponses', gistResponses);
+        }
+        await expect(gistResponses.map(({ status }) => status)).not.toContain(401);
         await expect(page.getByTestId('backup-list')).toContainText(created[0].id);
         await expect(page.getByTestId(`backup-link-${created[0].id}`)).toHaveAttribute(
             'href',

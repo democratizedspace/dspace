@@ -183,3 +183,7 @@ export function registerOfflineWorker() {
             });
     });
 }
+
+if (typeof window !== 'undefined') {
+    registerOfflineWorker();
+}

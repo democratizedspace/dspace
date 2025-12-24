@@ -48,7 +48,7 @@ function normalizeQuestIdentifiers(ids: QuestIdentifier[]): string[] {
 
 async function runQuestDatabaseOperation<T>(
     page: Page,
-    operation: 'lookupByTitle' | 'listIdsByTitle' | 'getById' | 'updateById',
+    operation: 'lookupByTitle' | 'listIdsByTitle' | 'getById' | 'updateById' | 'saveQuest',
     payload: Record<string, unknown>
 ): Promise<T> {
     return page.evaluate(
@@ -288,6 +288,35 @@ async function runQuestDatabaseOperation<T>(
                     });
                     return undefined as unknown as T;
                 }
+                case 'saveQuest': {
+                    const { quest } = payload as { quest: QuestRecord };
+                    await withTransaction('readwrite', async (transaction) => {
+                        const store = transaction.objectStore(storeName);
+                        await new Promise<void>((resolve, reject) => {
+                            transaction.onabort = () =>
+                                reject(
+                                    transaction.error ??
+                                        new Error(
+                                            'Quest save transaction was aborted unexpectedly'
+                                        )
+                                );
+                            transaction.onerror = () =>
+                                reject(
+                                    transaction.error ??
+                                        new Error('Quest save transaction failed to complete')
+                                );
+                            transaction.oncomplete = () => resolve();
+
+                            const putRequest = store.put(quest);
+                            putRequest.onerror = () =>
+                                reject(
+                                    putRequest.error ??
+                                        new Error('Failed to persist quest to IndexedDB')
+                                );
+                        });
+                    });
+                    return undefined as unknown as T;
+                }
                 default:
                     throw new Error(`Unsupported quest database operation: ${String(operation)}`);
             }
@@ -325,6 +354,17 @@ async function updateQuestInIndexedDB(
 
 async function getQuestFromIndexedDB<T>(page: Page, id: QuestIdentifier): Promise<T | null> {
     return runQuestDatabaseOperation<T | null>(page, 'getById', { id });
+}
+
+async function seedQuestIfMissing(page: Page, quest: QuestRecord): Promise<void> {
+    const existingId = await findQuestIdByTitle(page, quest.title ?? '');
+    if (existingId) {
+        return;
+    }
+
+    await runQuestDatabaseOperation<undefined>(page, 'saveQuest', {
+        quest,
+    });
 }
 
 /**
@@ -400,6 +440,16 @@ test.describe('Constellations Quest Creation', () => {
     });
 
     test('prevents creating a quest with a duplicate title', async ({ page }) => {
+        const now = new Date().toISOString();
+        await seedQuestIfMissing(page, {
+            ...(structuredClone ? structuredClone(questTemplate) : JSON.parse(JSON.stringify(questTemplate))),
+            id: 'constellations-template',
+            title: questTemplate.title,
+            type: 'quest',
+            createdAt: now,
+            updatedAt: now,
+        });
+
         await page.goto('/quests/create');
         await expect(page).toHaveURL(/\/quests\/create/);
 
