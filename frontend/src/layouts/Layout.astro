@@ -1,7 +1,7 @@
 ---
-import { SEO } from "astro-seo";
-import { OFFLINE_TOAST_PUBLIC_PATH } from "../utils/offlineToastPath";
-import offlineWorkerScript from "../scripts/offlineWorkerRegistration.js?url";
+import { SEO } from 'astro-seo';
+import { OFFLINE_TOAST_PUBLIC_PATH } from '../utils/offlineToastPath';
+import offlineWorkerScript from '../scripts/offlineWorkerRegistrationClient.js?url';
 
 export interface Props {
 	title: string;
@@ -16,27 +16,28 @@ const sitewideTitle = `DSPACE (democratized.space)`;
 <html lang="en" data-theme="dark">
         <head>
                 <SEO
-			title={sitewideTitle}
-			description="A space exploration idle game where you gradually build up your skillset and eventually proliferate throughout the solar system."
-			canonical="https://democratized.space"
-			openGraph={{
-			  basic: {
-				title: sitewideTitle,
-				type: "website",
-				image: "/assets/logo.png",
-			  }
-			}}
-			twitter={{
-			  creator: "@EspToTheFuture",
-			  title: sitewideTitle,
-			  image: "/assets/logo.png",
-			  description: "A space exploration idle game where you gradually build up your skillset and eventually proliferate throughout the solar system."
-			}}
-			extend={{
-			  // extending the default link tags
-			  link: [{ rel: "icon", href: "/favicon.ico" }],
-			}}
-		  />
+                        title={sitewideTitle}
+                        description="A space exploration idle game where you gradually build up your skillset and eventually proliferate throughout the solar system."
+                        canonical="https://democratized.space"
+                        openGraph={{
+                                basic: {
+                                        title: sitewideTitle,
+                                        type: 'website',
+                                        image: '/assets/logo.png',
+                                },
+                        }}
+                        twitter={{
+                                creator: '@EspToTheFuture',
+                                title: sitewideTitle,
+                                image: '/assets/logo.png',
+                                description:
+                                        'A space exploration idle game where you gradually build up your skillset and eventually proliferate throughout the solar system.',
+                        }}
+                        extend={{
+                                // extending the default link tags
+                                link: [{ rel: 'icon', href: '/favicon.ico' }],
+                        }}
+                />
 		<meta charset="UTF-8" />
                 <meta name="viewport" content="width=device-width" />
                 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -66,9 +67,10 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                                         const theme =
                                                 stored === 'light' || stored === 'dark'
                                                         ? stored
-                                                        : window.matchMedia?.('(prefers-color-scheme: light)').matches
-                                                        ? 'light'
-                                                        : DEFAULT_THEME;
+                                                        : window.matchMedia?.('(prefers-color-scheme: light)')
+                                                                  .matches
+                                                          ? 'light'
+                                                          : DEFAULT_THEME;
 
                                         apply(theme);
                                         localStorage.setItem(STORAGE_KEY, theme);

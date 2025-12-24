@@ -45,7 +45,9 @@ test.describe('Cloud Sync', () => {
         page.on('console', (message) => {
             if (message.type() === 'error' || message.type() === 'warning') {
                 const location = message.location();
-                const locationHint = location?.url ? ` @ ${location.url}:${location.lineNumber}` : '';
+                const locationHint = location?.url
+                    ? ` @ ${location.url}:${location.lineNumber}`
+                    : '';
                 console.log(`[console.${message.type()}] ${message.text()}${locationHint}`);
             }
         });
@@ -99,14 +101,12 @@ test.describe('Cloud Sync', () => {
                 const created_at = `2024-01-0${created.length + 1}T12:00:00Z`;
                 const html_url = `https://gist.github.com/${newId}`;
                 created.unshift({ id: newId, created_at, html_url, filename: fileName });
-                return route.fulfill(
-                    {
-                        status: 201,
-                        headers: corsHeaders,
-                        contentType: 'application/json',
-                        body: JSON.stringify({ id: newId, created_at, html_url }),
-                    }
-                );
+                return route.fulfill({
+                    status: 201,
+                    headers: corsHeaders,
+                    contentType: 'application/json',
+                    body: JSON.stringify({ id: newId, created_at, html_url }),
+                });
             }
 
             return route.continue();

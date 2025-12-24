@@ -296,9 +296,7 @@ async function runQuestDatabaseOperation<T>(
                             transaction.onabort = () =>
                                 reject(
                                     transaction.error ??
-                                        new Error(
-                                            'Quest save transaction was aborted unexpectedly'
-                                        )
+                                        new Error('Quest save transaction was aborted unexpectedly')
                                 );
                             transaction.onerror = () =>
                                 reject(
@@ -442,7 +440,9 @@ test.describe('Constellations Quest Creation', () => {
     test('prevents creating a quest with a duplicate title', async ({ page }) => {
         const now = new Date().toISOString();
         await seedQuestIfMissing(page, {
-            ...(structuredClone ? structuredClone(questTemplate) : JSON.parse(JSON.stringify(questTemplate))),
+            ...(structuredClone
+                ? structuredClone(questTemplate)
+                : JSON.parse(JSON.stringify(questTemplate))),
             id: 'constellations-template',
             title: questTemplate.title,
             type: 'quest',
