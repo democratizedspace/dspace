@@ -112,6 +112,105 @@
         "category": "Energy & Power"
     },
     {
+        "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+        "name": "portable solar kit (wired)",
+        "description": "200 W folding panel, 30 A PWM controller, and 200 Wh LiFePO4 pack wired with MC4 leads, ring terminals, and strain relief for quick off-grid deployment.",
+        "image": "/assets/solar_setup_200wh_portable_kit.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "Energy & Power"
+    },
+    {
+        "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+        "name": "8 AWG fused cable kit",
+        "description": "1 m 8 AWG red/black leads with crimped ring terminals and 60 A MIDI fuse holder for safely feeding 12 V systems, from charge controllers to inverters.",
+        "image": "/assets/outlet.jpg",
+        "price": "25 dUSD",
+        "hardening": {
+            "passes": 0,
+            "score": 80,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "Energy & Power"
+    },
+    {
+        "id": "082481a4-5e40-43e6-8542-0e64a3bd92d7",
+        "name": "300 W pure sine inverter",
+        "description": "12 V DC to 120 V AC inverter rated for 300 W continuous, with low-voltage cutoff, cooling fan, and grounded AC outlets.",
+        "image": "/assets/outlet.jpg",
+        "price": "90 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "Energy & Power"
+    },
+    {
+        "id": "466cb507-6beb-4c20-967b-4f1fda1d6463",
+        "name": "mounted 300 W inverter",
+        "description": "300 W pure sine inverter mounted within 30 cm of a 200 Wh battery pack using fused 8 AWG ring leads and torque-checked lugs.",
+        "image": "/assets/outlet.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 88,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "Energy & Power"
+    },
+    {
+        "id": "2e6f7453-6b8a-4e04-8ea6-1ddba490019f",
+        "name": "load-tested inverter",
+        "description": "Mounted 300 W inverter verified under a 150 W AC load with stable 120 V output and acceptable DC voltage sag.",
+        "image": "/assets/outlet.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "Energy & Power"
+    },
+    {
+        "id": "2a9083b7-8578-45e3-8d76-7a298462f847",
+        "name": "off-grid phone charge log",
+        "description": "Notebook entry confirming a full smartphone charge from the portable solar kit, cable strain relief, and cool-to-touch connectors.",
+        "image": "/assets/solar_setup_200wh_portable_kit.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 82,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "Energy & Power"
+    },
+    {
+        "id": "22a50cfd-4433-4ce7-bbed-e4038338191b",
+        "name": "charge controller profile set",
+        "description": "Documented LiFePO4 settings for a 30 A controller: battery type, 14.4 V absorb, 13.6 V float, and temperature-compensated wiring check.",
+        "image": "/assets/solar_charge_controller.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "Energy & Power"
+    },
+    {
         "id": "80d30825-a42b-4add-b715-322e1713952c",
         "name": "9 V battery",
         "description": "6F22 9 V alkaline battery (~550 mAh) for electronics projects and test equipment.",

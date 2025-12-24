@@ -8,18 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Want off-grid power on the go? I have a 200 W portable panel you can try.",
+            "text": "Want off-grid power on the go? I have a 200 W portable panel, charge controller, and 200 Wh pack—if you wire them right.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "loan",
+                    "goto": "kit",
                     "text": "I'd love to test it!"
                 }
             ]
         },
         {
-            "id": "loan",
-            "text": "I'll loan you this foldable 200 W panel. Set it up facing the sun.",
+            "id": "kit",
+            "text": "I'll loan you the panel, controller, pack, and a fused lead kit. Lay them out on a dry surface, keep ring terminals off the ground, and disconnect if anything gets hot.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -27,17 +27,41 @@
                         {
                             "id": "02b32152-a7b2-458e-9643-7b754c722165",
                             "count": 1
+                        },
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
                         }
                     ],
-                    "text": "Take the panel"
+                    "text": "Take the loaner kit"
                 },
                 {
                     "type": "goto",
-                    "goto": "charge",
-                    "text": "It's deployed!",
+                    "goto": "wire",
+                    "text": "Parts staged and safe.",
                     "requiresItems": [
                         {
                             "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        },
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
                             "count": 1
                         }
                     ]
@@ -45,18 +69,40 @@
             ]
         },
         {
-            "id": "charge",
-            "text": "Connect the panel to your battery and gather some power.",
+            "id": "wire",
+            "text": "Crimped lugs go battery-side, MC4s point to the panel. Fuse on the positive lead—red to positive, black to negative—torque to spec, and zip-tie strain relief so nothing yanks free.",
             "options": [
                 {
                     "type": "process",
-                    "process": "solar-200Wh",
-                    "text": "Start charging"
+                    "process": "wire-portable-solar-kit",
+                    "text": "Wire it carefully"
+                },
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "text": "Cable ends are tight and fused.",
+                    "requiresItems": [
+                        {
+                            "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "harvest",
+            "text": "Face the panel toward the sun, shade the battery, and start charging. Stop if connectors warm up or voltage dips below the controller’s low-cutoff.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "harvest-200Wh-portable",
+                    "text": "Let the photons flow"
                 },
                 {
                     "type": "goto",
                     "goto": "fin",
-                    "text": "Battery's full!",
+                    "text": "Harvested 200 Wh without any hot cables.",
                     "requiresItems": [
                         {
                             "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
@@ -68,7 +114,7 @@
         },
         {
             "id": "fin",
-            "text": "Nice work! Portable solar keeps your gear juiced wherever you roam.",
+            "text": "Nice work! Coil the MC4 leads, keep the fuse installed, and stash the kit dry for your next off-grid errand.",
             "options": [
                 {
                     "type": "finish",
