@@ -355,6 +355,32 @@
         }
     },
     {
+        "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
+        "name": "Rinsed sponge filter core",
+        "description": "Sponge filter media squeezed clean in dechlorinated tank water and kept wet to preserve bacteria.",
+        "image": "/assets/sponge_filter_for_small_aquarium.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+        "name": "Restored sponge filter flow",
+        "description": "Sponge filter reassembled, primed, and bubbling evenly after a rinse.",
+        "image": "/assets/rinse_sponge_filter_bucket.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
         "name": "Aquarium liquid test kit",
         "description": "Liquid reagent kit for aquariums. Four 15 mL bottles and test tubes provide ~130 tests for ammonia, nitrite and nitrate.",
@@ -434,6 +460,123 @@
                     "score": 60
                 }
             ]
+        }
+    },
+    {
+        "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
+        "name": "Rinsed guppy grass",
+        "description": "Guppy grass swished in dechlorinated water to shake off algae, snails, and eggs before placing.",
+        "image": "/assets/guppy_grass_starter.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+        "name": "Floating plant mat",
+        "description": "Cluster of rinsed guppy grass spread across the water surface to soak up nutrients and shade fry.",
+        "image": "/assets/floating_plants.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+        "name": "Aquarium pH reading",
+        "description": "Single pH strip result matched to the chart within 30 seconds of dipping.",
+        "image": "/assets/aquarium_ph_strip_test.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "9c392043-4067-4f49-8038-38eef00e0b24",
+        "name": "Logged pH entry",
+        "description": "Dated logbook entry capturing the most recent aquarium pH strip result.",
+        "image": "/assets/paperwork.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
+        "name": "Liquid test readings",
+        "description": "Fresh ammonia, nitrite, nitrate, and pH values gathered with a liquid kit and clean vials.",
+        "image": "/assets/aquarium_liquid_test_kit.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+        "name": "Logged water parameters",
+        "description": "Notebook entry with ammonia, nitrite, nitrate, and pH values plus date and time.",
+        "image": "/assets/paperwork.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "bda9e450-499d-41d6-ab32-df73528dc68f",
+        "name": "Dense fry cover",
+        "description": "Floating tangle of hornwort and guppy grass packed at the surface to shelter newborn guppy fry.",
+        "image": "/assets/aquaria_guppy_breeding_plants.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "eb0f7f00-98dc-44b0-bf7c-9c8d998cbbcb",
+        "name": "Fry food pinch",
+        "description": "Crushed flake powder sized for guppy fry; enough for a week of tiny feedings.",
+        "image": "/assets/goldfish_food.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "18a20f4e-a351-448e-837b-3caca90f71f4",
+        "name": "Juvenile guppy brood",
+        "description": "Home-bred guppy juveniles past the fry stage and ready to rehome or trade.",
+        "image": "/assets/guppy_group_breeding.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
         }
     }
 ]

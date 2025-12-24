@@ -2054,6 +2054,86 @@
         }
     },
     {
+        "id": "rinse-floating-plants",
+        "title": "Rinse floating plants in dechlorinated water to shake off algae, snails, and eggs",
+        "image": "/assets/quests/floating_plants.jpg",
+        "requireItems": [
+            {
+                "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "place-floating-plants",
+        "title": "Spread rinsed floating plants under the light without blocking the filter intake",
+        "image": "/assets/quests/floating_plants.jpg",
+        "requireItems": [
+            {
+                "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
+                "count": 1
+            },
+            {
+                "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "add-goldfish",
         "title": "Add a goldfish to your aquarium",
         "image": "/assets/aquarium_goldfish.jpg",
@@ -2169,6 +2249,120 @@
         "hardening": {
             "passes": 0,
             "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "prepare-guppy-fry-cover",
+        "title": "Pack floating plants into dense cover so guppy fry can hide from adults",
+        "image": "/assets/quests/aquaria_guppy_breeding_plants.jpg",
+        "requireItems": [
+            {
+                "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                "count": 1
+            },
+            {
+                "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                "count": 1
+            },
+            {
+                "id": "a7ba3f18-510d-47cb-b73f-91b8e2a72e73",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                "count": 1
+            },
+            {
+                "id": "a7ba3f18-510d-47cb-b73f-91b8e2a72e73",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "bda9e450-499d-41d6-ab32-df73528dc68f",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "portion-fry-food",
+        "title": "Crush flake food into a fine powder for guppy fry",
+        "image": "/assets/goldfish_food.jpg",
+        "requireItems": [
+            {
+                "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
+                "count": 0.5
+            }
+        ],
+        "createItems": [
+            {
+                "id": "eb0f7f00-98dc-44b0-bf7c-9c8d998cbbcb",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "raise-guppy-fry",
+        "title": "Feed guppy fry daily under dense plant cover until they reach juvenile size",
+        "image": "/assets/guppy_group_breeding.jpg",
+        "requireItems": [
+            {
+                "id": "bda9e450-499d-41d6-ab32-df73528dc68f",
+                "count": 1
+            },
+            {
+                "id": "eb0f7f00-98dc-44b0-bf7c-9c8d998cbbcb",
+                "count": 1
+            },
+            {
+                "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                "count": 1
+            },
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "eb0f7f00-98dc-44b0-bf7c-9c8d998cbbcb",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "18a20f4e-a351-448e-837b-3caca90f71f4",
+                "count": 1
+            }
+        ],
+        "duration": "14d",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
             "emoji": "🛠️",
             "history": []
         }
@@ -4277,6 +4471,14 @@
             {
                 "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
                 "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
             }
         ],
         "consumeItems": [
@@ -4285,11 +4487,16 @@
                 "count": 1
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
+                "count": 1
+            }
+        ],
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -4298,6 +4505,43 @@
                     "score": 70
                 }
             ]
+        }
+    },
+    {
+        "id": "restart-sponge-filter",
+        "title": "Reassemble and restart a sponge filter after rinsing the media",
+        "requireItems": [
+            {
+                "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
+                "count": 1
+            },
+            {
+                "id": "5d5e4e29-94b7-4a03-b73d-7420841ae686",
+                "count": 1
+            },
+            {
+                "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
         }
     },
     {
@@ -4818,11 +5062,15 @@
     },
     {
         "id": "measure-aquarium-ph",
-        "title": "Dip a pH strip into a 150 L freshwater aquarium and match the color to the chart",
+        "title": "Dip a pH strip into your freshwater aquarium and match the color to the chart",
         "image": "/assets/aquarium_filled.jpg",
         "requireItems": [
             {
-                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                 "count": 1
             }
         ],
@@ -4832,11 +5080,16 @@
                 "count": 1
             }
         ],
-        "createItems": [],
-        "duration": "2m",
+        "createItems": [
+            {
+                "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+                "count": 1
+            }
+        ],
+        "duration": "3m",
         "hardening": {
             "passes": 2,
-            "score": 90,
+            "score": 95,
             "emoji": "✅",
             "history": [
                 {
@@ -4850,6 +5103,44 @@
                     "score": 75
                 }
             ]
+        }
+    },
+    {
+        "id": "log-aquarium-ph-reading",
+        "title": "Log an aquarium pH strip result with date and time",
+        "image": "/assets/paperwork.jpg",
+        "requireItems": [
+            {
+                "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+                "count": 1
+            },
+            {
+                "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "9c392043-4067-4f49-8038-38eef00e0b24",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
         }
     },
     {
@@ -4917,29 +5208,77 @@
         }
     },
     {
-        "id": "log-aquarium-test-results",
-        "title": "Record aquarium water parameters in a logbook using a liquid test kit",
-        "image": "/assets/paperwork.jpg",
+        "id": "measure-liquid-parameters",
+        "title": "Run ammonia, nitrite, nitrate, and pH tests with a liquid kit and clean vials",
+        "image": "/assets/aquarium_liquid_test_kit.jpg",
         "requireItems": [
-            {
-                "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
-                "count": 1
-            },
             {
                 "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
                 "count": 1
             },
             {
-                "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                 "count": 1
             }
         ],
-        "consumeItems": [],
-        "createItems": [],
-        "duration": "10m",
+        "consumeItems": [
+            {
+                "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                "count": 0.05
+            }
+        ],
+        "createItems": [
+            {
+                "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "log-aquarium-test-results",
+        "title": "Record aquarium water parameters in a logbook using a liquid test kit",
+        "image": "/assets/paperwork.jpg",
+        "requireItems": [
+            {
+                "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                "count": 1
+            },
+            {
+                "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
+                "count": 1
+            },
+            {
+                "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 95,
             "emoji": "🌀",
             "history": [
                 {
