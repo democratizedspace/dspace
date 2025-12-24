@@ -8,12 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Phone low? Set up a 200 W panel, charge controller, 200 Wh LiFePO4 battery, fused lead kit, and USB cable on dry ground. Handle connectors by their insulation and stop if cables warm or weather turns.",
+            "text": "Phone low? Set up a 200 W panel, charge controller, 200 Wh LiFePO4 battery, fused lead kit, USB cable, and your smartphone on dry ground. Handle connectors by their insulation and stop if cables warm or weather turns.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "kit",
-                    "text": "Let's give it a try."
+                    "text": "Let's give it a try.",
+                    "requiresItems": [
+                        {
+                            "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -78,7 +84,7 @@
         },
         {
             "id": "wire",
-            "text": "Battery first, then panel—keep red to +, black to -, fuse in line, and controller off the ground. If anything sparks or heats up, pull the fuse.",
+            "text": "Battery first, then panel—keep red to positive, black to negative, fuse in line, and controller off the ground. If anything sparks or heats up, pull the fuse.",
             "options": [
                 {
                     "type": "process",
@@ -127,7 +133,7 @@
                 {
                     "type": "process",
                     "process": "harvest-200Wh-portable",
-                    "text": "Harvest some dSolar"
+                    "text": "Harvest some energy"
                 },
                 {
                     "type": "goto",

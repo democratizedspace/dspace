@@ -127,8 +127,8 @@
     },
     {
         "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
-        "name": "inverter cable kit",
-        "description": "1 m 8 AWG red/black leads with crimped ring terminals and 60 A MIDI fuse holder for safely feeding a 12 V inverter.",
+        "name": "8 AWG fused cable kit",
+        "description": "1 m 8 AWG red/black leads with crimped ring terminals and 60 A MIDI fuse holder for safely feeding 12 V systems, from charge controllers to inverters.",
         "image": "/assets/quests/power_inverter_installation.jpg",
         "price": "25 dUSD",
         "hardening": {

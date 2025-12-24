@@ -70,7 +70,7 @@
         },
         {
             "id": "wire",
-            "text": "Crimped lugs go battery-side, MC4s point to the panel. Fuse on the positive lead, torque to spec, and zip-tie strain relief so nothing yanks free.",
+            "text": "Crimped lugs go battery-side, MC4s point to the panel. Fuse on the positive lead—red to positive, black to negative—torque to spec, and zip-tie strain relief so nothing yanks free.",
             "options": [
                 {
                     "type": "process",

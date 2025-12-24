@@ -70,7 +70,7 @@
         },
         {
             "id": "wire",
-            "text": "Connect battery first, then panel MC4s, keeping red to + and black to -. Torque ring terminals, seat the fuse, and tuck the controller off the ground.",
+            "text": "Connect battery first, then panel MC4s, keeping red to positive (+) and black to negative (−). Torque ring terminals, seat the fuse, and tuck the controller off the ground.",
             "options": [
                 {
                     "type": "process",

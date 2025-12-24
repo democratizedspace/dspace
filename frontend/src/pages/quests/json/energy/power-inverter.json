@@ -24,7 +24,7 @@
                 {
                     "type": "goto",
                     "goto": "mount",
-                    "text": "Parts staged and vent fans clear.",
+                    "text": "Parts staged and vent fans are clear.",
                     "requiresItems": [
                         {
                             "id": "082481a4-5e40-43e6-8542-0e64a3bd92d7",
