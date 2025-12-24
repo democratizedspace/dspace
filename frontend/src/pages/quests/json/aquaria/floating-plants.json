@@ -127,9 +127,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "aquaria/shrimp"
-    ],
+    "requiresQuests": ["aquaria/shrimp"],
     "hardening": {
         "passes": 0,
         "score": 95,
