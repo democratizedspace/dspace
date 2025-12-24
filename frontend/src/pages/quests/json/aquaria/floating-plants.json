@@ -13,7 +13,8 @@
                 {
                     "type": "process",
                     "process": "bucket-water-dechlorinated",
-                    "text": "Prep a bucket of dechlorinated water for rinsing."
+                    "text": "Prep a bucket of dechlorinated water for rinsing.",
+                    "goto": "rinse"
                 },
                 {
                     "type": "goto",
@@ -60,6 +61,10 @@
                         },
                         {
                             "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
                         }
                     ]

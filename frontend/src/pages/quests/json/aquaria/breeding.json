@@ -86,6 +86,7 @@
                     "type": "process",
                     "process": "portion-fry-food",
                     "text": "Powder a week's worth of fry food.",
+                    "goto": "feed",
                     "requiresItems": [
                         {
                             "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",

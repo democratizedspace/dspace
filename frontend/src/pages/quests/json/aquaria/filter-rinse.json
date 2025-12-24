@@ -13,7 +13,8 @@
                 {
                     "type": "process",
                     "process": "bucket-water-dechlorinated",
-                    "text": "Leave out a 5 gal bucket to gas off chlorine first."
+                    "text": "Leave out a 5 gal bucket to gas off chlorine first.",
+                    "goto": "prep"
                 },
                 {
                     "type": "goto",
