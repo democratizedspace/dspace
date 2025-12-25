@@ -57,6 +57,11 @@ test.describe('Cloud Sync', () => {
         await page.route('**/gists*', (route) => {
             const request = route.request();
             const url = new URL(request.url());
+            const isListEndpoint = url.pathname.endsWith('/gists');
+
+            if (!isListEndpoint) {
+                return route.continue();
+            }
             if (request.method() === 'OPTIONS') {
                 return route.fulfill({
                     status: 200,
