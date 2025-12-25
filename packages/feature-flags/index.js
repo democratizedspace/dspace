@@ -30,6 +30,7 @@ export function parseFeatureFlags(rawFlags) {
  */
 export function readBooleanOverride(value) {
     if (value === undefined) return undefined;
+    if (typeof value !== 'string') return undefined;
 
     const normalized = value.trim().toLowerCase();
 

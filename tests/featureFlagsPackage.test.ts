@@ -28,5 +28,20 @@ describe('@dspace/feature-flags package', () => {
 
         expect(readBooleanOverride('sometimes')).toBeUndefined();
         expect(readBooleanOverride(undefined)).toBeUndefined();
+        expect(readBooleanOverride('')).toBeUndefined();
+        expect(readBooleanOverride(null as unknown as string)).toBeUndefined();
+        expect(readBooleanOverride(0 as unknown as string)).toBeUndefined();
+    });
+
+    it('handles edge cases and malformed tokens gracefully', () => {
+        expect(parseFeatureFlags('')).toEqual({ tokens: [], overrides: new Map() });
+        expect(parseFeatureFlags(undefined)).toEqual({ tokens: [], overrides: new Map() });
+
+        const edgeCases = parseFeatureFlags('=value,key=,key=val=ue');
+
+        expect(edgeCases.tokens).toEqual(['=value', 'key=', 'key=val=ue']);
+        expect(edgeCases.overrides.get('')).toBeUndefined();
+        expect(edgeCases.overrides.get('key')).toBe('val=ue');
+        expect(edgeCases.overrides.size).toBe(1);
     });
 });
