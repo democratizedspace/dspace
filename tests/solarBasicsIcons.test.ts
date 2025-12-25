@@ -11,7 +11,7 @@ describe('solar basics illustrations', () => {
         const svg = readFileSync(filePath, 'utf8');
 
         expect(svg).not.toMatch(/placeholder/i);
-        expect(svg).not.toMatch(/step\\d/i);
+        expect(svg).not.toMatch(/step\d/i);
         expect(svg).toMatch(/<path[^>]*>/i);
     });
 });
