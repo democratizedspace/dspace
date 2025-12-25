@@ -12,6 +12,9 @@ importers:
 
   .:
     dependencies:
+      '@dspace/feature-flags':
+        specifier: file:packages/feature-flags
+        version: link:packages/feature-flags
       openai:
         specifier: ^5.16.0
         version: 5.16.0(ws@8.18.3)(zod@3.25.76)
@@ -109,6 +112,9 @@ importers:
       '@astrojs/node':
         specifier: ^8.3.3
         version: 8.3.4(astro@4.16.19(@types/node@18.19.121)(rollup@4.46.1)(typescript@5.9.2))
+      '@dspace/feature-flags':
+        specifier: file:../packages/feature-flags
+        version: link:../packages/feature-flags
       '@types/node':
         specifier: ^18.0.0
         version: 18.19.121
@@ -280,6 +286,8 @@ importers:
         version: 5.9.2
 
   packages/cache-version: {}
+
+  packages/feature-flags: {}
 
 packages:
 

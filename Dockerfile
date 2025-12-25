@@ -32,6 +32,7 @@ ENV HUSKY=0
 COPY pnpm-workspace.yaml pnpm-lock.yaml pnpmfile.cjs package.json ./
 COPY frontend/package.json frontend/
 COPY packages/cache-version/package.json packages/cache-version/
+COPY packages/feature-flags/package.json packages/feature-flags/
 # Scripts are required for frontend postinstall hooks but we avoid copying build artifacts.
 COPY frontend/scripts frontend/scripts
 RUN --mount=type=cache,target=/root/.pnpm-store pnpm install --filter ./frontend... --frozen-lockfile
@@ -43,6 +44,7 @@ ARG DSPACE_VERSION
 # with builders that do not support COPY --exclude flags.
 COPY --link frontend/ frontend/
 COPY --link packages/cache-version/ packages/cache-version/
+COPY --link packages/feature-flags/ packages/feature-flags/
 RUN pnpm --filter ./frontend... run build
 
 FROM base AS prod-deps
@@ -52,6 +54,7 @@ ENV HUSKY=0
 COPY pnpm-workspace.yaml pnpm-lock.yaml pnpmfile.cjs package.json ./
 COPY frontend/package.json frontend/
 COPY packages/cache-version/package.json packages/cache-version/
+COPY packages/feature-flags/package.json packages/feature-flags/
 COPY frontend/scripts frontend/scripts
 RUN --mount=type=cache,target=/root/.pnpm-store pnpm install --filter ./frontend... --frozen-lockfile --prod
 
