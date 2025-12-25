@@ -11,8 +11,8 @@ test.describe('Stats page', () => {
         await expect(page.getByTestId('stats-total-quests')).toHaveText(/\d+/);
         await expect(page.getByTestId('stats-total-items')).toHaveText(/\d+/);
         const inventoryTable = page.getByRole('table', { name: /Inventory by category/i });
-        await expect(
-            inventoryTable.getByRole('row', { name: /Energy/i }).first()
-        ).toContainText('Energy');
+        await expect(inventoryTable.getByRole('row', { name: /Energy/i }).first()).toContainText(
+            'Energy'
+        );
     });
 });
