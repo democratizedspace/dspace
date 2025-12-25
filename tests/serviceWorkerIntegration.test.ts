@@ -6,33 +6,26 @@ describe('offline service worker integration', () => {
   const repoRoot = process.cwd();
 
   it('registers the service worker in the global layout', () => {
-    const layoutPath = join(
-      repoRoot,
-      'frontend',
-      'src',
-      'layouts',
-      'Layout.astro'
-    );
+    const layoutPath = join(repoRoot, 'frontend', 'src', 'layouts', 'Layout.astro');
     const layoutContents = readFileSync(layoutPath, 'utf8');
-    const registrationModulePath = join(
+    const registrationModulePath = join(repoRoot, 'frontend', 'src', 'scripts', 'offlineWorkerRegistration.js');
+    const registrationClientPath = join(
       repoRoot,
       'frontend',
       'src',
       'scripts',
-      'offlineWorkerRegistration.js'
+      'offlineWorkerRegistrationClient.js'
     );
-    const registrationModuleContents = readFileSync(
-      registrationModulePath,
-      'utf8'
-    );
+    const registrationModuleContents = readFileSync(registrationModulePath, 'utf8');
+    const registrationClientContents = readFileSync(registrationClientPath, 'utf8');
 
     expect(layoutContents).toMatch(
-      /import\s+\{\s*registerOfflineWorker\s*\}\s+from\s+['"]\.\.\/scripts\/offlineWorkerRegistration\.js['"]/
+      /import\s+offlineWorkerRegistrationClientUrl\s+from\s+['"]\.\.\/scripts\/offlineWorkerRegistrationClient\.js\?url['"]/
     );
     expect(layoutContents).toMatch(
-      /<script type="module">\s+import { registerOfflineWorker } from '..\/scripts\/offlineWorkerRegistration\.js';/
+      /<script\s+type="module"\s+src=\{offlineWorkerRegistrationClientUrl\}\s*>/
     );
-    expect(layoutContents).toMatch(/registerOfflineWorker\(\);/);
+    expect(registrationClientContents).toMatch(/registerOfflineWorker\(\);?/);
     expect(registrationModuleContents).toMatch(
       /navigator\.serviceWorker\s*\.\s*register\(['"]\/service-worker\.js['"]\)/
     );
