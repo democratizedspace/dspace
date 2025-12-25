@@ -115,4 +115,17 @@ describe("item quality", () => {
       PriceExemptionReason.BETA_PLACEHOLDER
     );
   });
+
+  it("prices the ISS spotting station instead of using a beta placeholder", () => {
+    const spottingStation = (items as Array<Record<string, any>>).find(
+      (item) => item.name === "ISS spotting station"
+    );
+
+    expect(spottingStation).toBeDefined();
+    expect(spottingStation?.price).toBeDefined();
+    expect(spottingStation?.price).toMatch(/[0-9]/);
+    expect(spottingStation?.priceExemptionReason ?? null).not.toBe(
+      PriceExemptionReason.BETA_PLACEHOLDER
+    );
+  });
 });

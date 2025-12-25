@@ -1541,7 +1541,7 @@
         "name": "ISS spotting station",
         "description": "Tripod-mounted telescope leveled, red light clipped, and a cleared footpath toward the predicted pass.",
         "image": "/assets/camera_tripod_astronomy.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "150 dUSD",
         "category": "Astronomy & Observation"
     },
     {
