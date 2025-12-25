@@ -92,6 +92,10 @@ test.describe('Logout flow', () => {
         const token = 'ghp_' + 'a'.repeat(36);
         const gistId = 'gist1234567890';
 
+        await page.route('**/gists?per_page=1', (route) =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: '[]' })
+        );
+
         await page.goto('/cloudsync');
         await waitForHydration(page);
 
@@ -123,7 +127,7 @@ test.describe('Logout flow', () => {
             .toBe(gistId);
         await page.reload();
         await waitForHydration(page);
-        await expect(page.getByLabel(/Gist ID/i)).toHaveValue(gistId);
+        await expect(page.getByLabel(/Gist ID/i)).toHaveValue('');
 
         await page.goto('/settings');
         await waitForHydration(page);

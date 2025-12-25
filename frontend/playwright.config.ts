@@ -20,6 +20,7 @@ declare const process: {
         PLAYWRIGHT_PROJECT?: string;
         PW_PROJECTS?: string;
         PW_PROJECT?: string;
+        PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH?: string;
     };
     argv: string[];
 };
@@ -77,11 +78,16 @@ type ProjectName = 'chromium' | 'firefox' | 'webkit';
 type PlaywrightConfig = Parameters<typeof defineConfig>[0];
 type PlaywrightProjectConfig = NonNullable<PlaywrightConfig['projects']>[number];
 
+const chromiumExecutable =
+    process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH &&
+    process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH.trim();
+
 const AVAILABLE_PROJECTS: PlaywrightProjectConfig[] = [
     {
         name: 'chromium',
         use: {
             launchOptions: {
+                executablePath: chromiumExecutable || undefined,
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',

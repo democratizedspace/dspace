@@ -170,79 +170,75 @@
     data-testid="manage-processes"
     data-hydrated={mounted ? 'true' : 'false'}
 >
-    {#if mounted}
-        <div class="controls">
-            <input type="text" bind:value={searchTerm} placeholder="Search processes..." />
-        </div>
+    <div class="controls">
+        <input type="text" bind:value={searchTerm} placeholder="Search processes..." />
+    </div>
 
-        <div
-            class="processes-list"
-            data-testid="processes-list"
-            data-preview-open={openPreviewProcessId || ''}
-            data-last-toggle={lastToggleProcessId || ''}
-        >
-            {#if filteredProcesses.length === 0}
-                <div class="no-processes">No processes found</div>
-            {:else}
-                {#each filteredProcesses as process (normalizeProcessId(process?.id))}
-                    {@const processId = normalizeProcessId(process?.id)}
-                    <div class="process-row" data-testid="process-row" data-process-id={processId}>
-                        <Process {processId} processData={process} />
-                        <div class="process-actions">
+    <div
+        class="processes-list"
+        data-testid="processes-list"
+        data-preview-open={openPreviewProcessId || ''}
+        data-last-toggle={lastToggleProcessId || ''}
+    >
+        {#if filteredProcesses.length === 0}
+            <div class="no-processes">No processes found</div>
+        {:else}
+            {#each filteredProcesses as process (normalizeProcessId(process?.id))}
+                {@const processId = normalizeProcessId(process?.id)}
+                <div class="process-row" data-testid="process-row" data-process-id={processId}>
+                    <Process {processId} processData={process} />
+                    <div class="process-actions">
+                        <button
+                            class="preview-button"
+                            type="button"
+                            data-testid="process-preview-toggle"
+                            data-process-id={processId}
+                            aria-expanded={openPreviewProcessId === processId ? 'true' : 'false'}
+                            aria-controls={`process-preview-${processId}`}
+                            aria-pressed={openPreviewProcessId === processId ? 'true' : 'false'}
+                            on:click|stopPropagation={() => {
+                                togglePreview(processId);
+                            }}
+                        >
+                            Preview
+                        </button>
+                        {#if process.custom}
                             <button
-                                class="preview-button"
+                                class="edit-button"
                                 type="button"
-                                data-testid="process-preview-toggle"
-                                data-process-id={processId}
-                                aria-expanded={openPreviewProcessId === processId
-                                    ? 'true'
-                                    : 'false'}
-                                aria-controls={`process-preview-${processId}`}
-                                aria-pressed={openPreviewProcessId === processId ? 'true' : 'false'}
-                                on:click|stopPropagation={() => {
-                                    togglePreview(processId);
-                                }}
+                                on:click={() => handleEdit(process.id)}
                             >
-                                Preview
+                                Edit
                             </button>
-                            {#if process.custom}
-                                <button
-                                    class="edit-button"
-                                    type="button"
-                                    on:click={() => handleEdit(process.id)}
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    class="delete-button"
-                                    type="button"
-                                    on:click={() => handleDelete(process.id)}
-                                >
-                                    Delete
-                                </button>
-                            {/if}
-                        </div>
-                        {#if openPreviewProcessId === processId}
-                            <div
-                                id={`process-preview-${processId}`}
-                                data-testid="process-preview"
-                                data-preview-id={openPreviewProcessId}
-                                data-process-id={processId}
+                            <button
+                                class="delete-button"
+                                type="button"
+                                on:click={() => handleDelete(process.id)}
                             >
-                                <ProcessPreview
-                                    title={getProcessTitle(process)}
-                                    duration={process.duration}
-                                    requireItems={process.requireItems || []}
-                                    consumeItems={process.consumeItems || []}
-                                    createItems={process.createItems || []}
-                                />
-                            </div>
+                                Delete
+                            </button>
                         {/if}
                     </div>
-                {/each}
-            {/if}
-        </div>
-    {/if}
+                    {#if openPreviewProcessId === processId}
+                        <div
+                            id={`process-preview-${processId}`}
+                            data-testid="process-preview"
+                            data-preview-id={openPreviewProcessId}
+                            data-process-id={processId}
+                        >
+                            <ProcessPreview
+                                title={getProcessTitle(process)}
+                                duration={process.duration}
+                                requireItems={process.requireItems || []}
+                                consumeItems={process.consumeItems || []}
+                                createItems={process.createItems || []}
+                            />
+                        </div>
+                    {/if}
+                </div>
+            {/each}
+        {/if}
+    </div>
 </div>
 
 <style>

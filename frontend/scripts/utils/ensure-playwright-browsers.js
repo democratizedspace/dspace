@@ -170,6 +170,11 @@ export async function ensurePlaywrightBrowsers(options = {}) {
     const sanitizedEnv = sanitizeProxyEnv(env);
     const browser = providedBrowser ?? (await getChromiumBrowser());
 
+    const executableOverride = env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
+    if (executableOverride && fs.existsSync(executableOverride)) {
+        return;
+    }
+
     if (process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD === '1') {
         if (browser && !hasChromiumExecutable(browser)) {
             console.warn(

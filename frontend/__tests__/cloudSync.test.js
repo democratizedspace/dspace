@@ -17,35 +17,34 @@ describe('cloudSync', () => {
         global.fetch = jest.fn();
     });
 
-    test('uploadGameStateToGist creates gist when none exists', async () => {
+    test('uploadGameStateToGist always creates new backup without secrets', async () => {
         await saveGitHubToken('ghp_x');
-        global.fetch.mockResolvedValueOnce({
-            ok: true,
-            json: () => Promise.resolve({ id: '1' }),
-        });
-        const id = await uploadGameStateToGist();
-        expect(id).toBe('1');
-        expect(await loadCloudGistId()).toBe('1');
-        expect(global.fetch).toHaveBeenCalledWith(
-            'https://api.github.com/gists',
-            expect.any(Object)
-        );
-    });
-
-    test('uploadGameStateToGist patches existing gist', async () => {
         const state = loadGameState();
-        state.cloudSync = { gistId: 'a' };
+        state.github = { token: 'ghp_secret' };
+        state.cloudSync = { gistId: 'existing' };
         await saveGameState(state);
-        await saveGitHubToken('ghp_x');
+
         global.fetch.mockResolvedValueOnce({
             ok: true,
-            json: () => Promise.resolve({ id: 'a' }),
+            json: () =>
+                Promise.resolve({
+                    id: 'new-id',
+                    created_at: '2024-01-02T03:04:05Z',
+                    html_url: 'https://gist.github.com/new-id',
+                }),
         });
-        await uploadGameStateToGist();
-        expect(global.fetch).toHaveBeenCalledWith(
-            'https://api.github.com/gists/a',
-            expect.any(Object)
-        );
+
+        const result = await uploadGameStateToGist();
+        const [, requestInit] = global.fetch.mock.calls[0];
+        const body = JSON.parse(requestInit.body);
+
+        expect(result.id).toBe('new-id');
+        expect(body.description).toBe('DSPACE Cloud Sync backup');
+        expect(body.files).toBeDefined();
+        const content = Object.values(body.files)[0].content;
+        const decoded = atob(content);
+        expect(decoded.includes('ghp_secret')).toBe(false);
+        expect(await loadCloudGistId()).toBe('');
     });
 
     test('downloadGameStateFromGist updates state', async () => {
@@ -57,7 +56,7 @@ describe('cloudSync', () => {
         });
         await downloadGameStateFromGist('ghp_x', '1');
         expect(loadGameState().quests.q).toBe(true);
-        expect(await loadCloudGistId()).toBe('1');
+        expect(await loadCloudGistId()).toBe('');
     });
 
     test('clearCloudGistId resets stored id', async () => {

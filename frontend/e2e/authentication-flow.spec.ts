@@ -4,6 +4,10 @@ import { registerClientStateHooks, waitForHydration } from './test-helpers';
 registerClientStateHooks(test);
 
 test('Authentication flow saves and clears token', async ({ page }) => {
+    await page.route('**/gists?per_page=1', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' })
+    );
+
     const token = 'ghp_' + 'a'.repeat(36);
     await page.goto('/cloudsync');
     await waitForHydration(page);

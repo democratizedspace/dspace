@@ -10,6 +10,9 @@ test.describe('Stats page', () => {
         await expect(page.getByRole('heading', { name: 'Game Stats' })).toBeVisible();
         await expect(page.getByTestId('stats-total-quests')).toHaveText(/\d+/);
         await expect(page.getByTestId('stats-total-items')).toHaveText(/\d+/);
-        await expect(page.getByRole('row', { name: /Energy/i })).toContainText('Energy');
+        const inventoryTable = page.getByRole('table', { name: /Inventory by category/i });
+        await expect(inventoryTable.getByRole('row', { name: /Energy/i }).first()).toContainText(
+            'Energy'
+        );
     });
 });

@@ -4,7 +4,20 @@ import AvatarPicker from '../../../components/svelte/AvatarPicker.svelte';
 
 const defaultPFPs = await Astro.glob('../../../../public/assets/pfp/*.jpg');
 
-const assetUrls = defaultPFPs.map((url) => url.default.replace('/public', ''));
+const assetUrls = defaultPFPs
+    .map((entry) => {
+        const src =
+            typeof entry === 'string'
+                ? entry
+                : typeof entry?.src === 'string'
+                  ? entry.src
+                  : typeof entry?.default === 'string'
+                    ? entry.default
+                    : entry?.default?.src;
+
+        return typeof src === 'string' ? src.replace('/public', '') : undefined;
+    })
+    .filter(Boolean);
 
 const randomizedPFPs = assetUrls.sort(() => Math.random() - 0.5);
 

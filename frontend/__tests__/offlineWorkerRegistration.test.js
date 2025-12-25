@@ -87,7 +87,7 @@ describe('registerOfflineWorker', () => {
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
 
         const { registerOfflineWorker } = await import(
-            '../src/scripts/offlineWorkerRegistration.js'
+            '../public/scripts/offlineWorkerRegistration.js'
         );
 
         registerOfflineWorker();
@@ -126,7 +126,7 @@ describe('registerOfflineWorker', () => {
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
 
         const { registerOfflineWorker } = await import(
-            '../src/scripts/offlineWorkerRegistration.js'
+            '../public/scripts/offlineWorkerRegistration.js'
         );
 
         registerOfflineWorker();
@@ -151,7 +151,7 @@ describe('registerOfflineWorker', () => {
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: false } }));
 
         const { registerOfflineWorker } = await import(
-            '../src/scripts/offlineWorkerRegistration.js'
+            '../public/scripts/offlineWorkerRegistration.js'
         );
 
         registerOfflineWorker();
@@ -166,7 +166,7 @@ describe('registerOfflineWorker', () => {
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
 
         const { registerOfflineWorker } = await import(
-            '../src/scripts/offlineWorkerRegistration.js'
+            '../public/scripts/offlineWorkerRegistration.js'
         );
 
         registerOfflineWorker();
@@ -190,7 +190,7 @@ describe('registerOfflineWorker', () => {
         });
 
         const { registerOfflineWorker } = await import(
-            '../src/scripts/offlineWorkerRegistration.js'
+            '../public/scripts/offlineWorkerRegistration.js'
         );
 
         registerOfflineWorker();
@@ -213,7 +213,7 @@ describe('registerOfflineWorker', () => {
         serviceWorker.register.mockRejectedValue(new Error('Registration failed'));
 
         const { registerOfflineWorker } = await import(
-            '../src/scripts/offlineWorkerRegistration.js'
+            '../public/scripts/offlineWorkerRegistration.js'
         );
 
         registerOfflineWorker();

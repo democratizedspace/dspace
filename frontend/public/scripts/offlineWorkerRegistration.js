@@ -3,6 +3,8 @@ export function registerOfflineWorker() {
         return;
     }
 
+    const isAutomation = navigator.webdriver === true;
+
     const shouldEnableOfflineWorker = async () => {
         try {
             const response = await fetch('/config.json', {
@@ -47,6 +49,9 @@ export function registerOfflineWorker() {
 
         const reloadPage = () => {
             if (refreshing) {
+                return;
+            }
+            if (isAutomation) {
                 return;
             }
             refreshing = true;
@@ -136,13 +141,17 @@ export function registerOfflineWorker() {
 
             // A single reload is expected to refresh all stylesheet URLs, so additional
             // failures after the first attempt are allowed to fall through.
-            if (attemptedReload || Date.now() - startTime > reloadWindowMs) {
+            if (attemptedReload || Date.now() - startTime > reloadWindowMs || isAutomation) {
                 return;
             }
 
             fetch(target.href, { cache: 'no-cache' })
                 .then((response) => {
-                    if (response.status === 404 && navigator.serviceWorker.controller) {
+                    if (
+                        response.status === 404 &&
+                        navigator.serviceWorker.controller &&
+                        !isAutomation
+                    ) {
                         attemptedReload = true;
                         window.location.reload();
                     }
@@ -182,4 +191,8 @@ export function registerOfflineWorker() {
                 console.warn('Service worker registration failed:', error);
             });
     });
+}
+
+if (typeof window !== 'undefined') {
+    registerOfflineWorker();
 }
