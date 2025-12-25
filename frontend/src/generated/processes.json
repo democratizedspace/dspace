@@ -1838,6 +1838,42 @@
         }
     },
     {
+        "id": "wire-portable-solar-kit",
+        "title": "Wire a 200 W portable panel, 30 A controller, and 200 Wh LiFePO4 pack with fused 8 AWG ring leads",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                "count": 1
+            },
+            {
+                "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                "count": 1
+            },
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            },
+            {
+                "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 88,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "disassemble-enclosure-200Wh",
         "title": "Disassemble a 200 Wh solar enclosure",
         "requireItems": [],
@@ -1946,6 +1982,30 @@
         }
     },
     {
+        "id": "configure-charge-controller-profile",
+        "title": "Configure a 30 A solar charge controller for LiFePO4 and record the profile",
+        "requireItems": [
+            {
+                "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "22a50cfd-4433-4ce7-bbed-e4038338191b",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "solar-200Wh",
         "title": "Generate 200 Wh of electricity using solar",
         "requireItems": [
@@ -1969,6 +2029,136 @@
         "hardening": {
             "passes": 0,
             "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "harvest-200Wh-portable",
+        "title": "Harvest 200 Wh from a wired 200 W portable kit into a LiFePO4 battery",
+        "requireItems": [
+            {
+                "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 200
+            },
+            {
+                "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                "count": 200
+            }
+        ],
+        "duration": "1h",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "mount-inverter-300w",
+        "title": "Mount and fuse a 300 W pure sine inverter within 30 cm of a 200 Wh pack",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "082481a4-5e40-43e6-8542-0e64a3bd92d7",
+                "count": 1
+            },
+            {
+                "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                "count": 1
+            },
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "466cb507-6beb-4c20-967b-4f1fda1d6463",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "load-test-inverter-300w",
+        "title": "Load test a mounted 300 W inverter with a 150 W AC appliance and verify voltage sag",
+        "requireItems": [
+            {
+                "id": "466cb507-6beb-4c20-967b-4f1fda1d6463",
+                "count": 1
+            },
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 150
+            }
+        ],
+        "createItems": [
+            {
+                "id": "2e6f7453-6b8a-4e04-8ea6-1ddba490019f",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 0,
+            "score": 92,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "charge-smartphone-offgrid",
+        "title": "Top up a smartphone from the wired 200 W portable kit over USB-C",
+        "requireItems": [
+            {
+                "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                "count": 1
+            },
+            {
+                "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                "count": 1
+            },
+            {
+                "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 10
+            }
+        ],
+        "createItems": [
+            {
+                "id": "2a9083b7-8578-45e3-8d76-7a298462f847",
+                "count": 1
+            }
+        ],
+        "duration": "45m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
             "emoji": "🛠️",
             "history": []
         }

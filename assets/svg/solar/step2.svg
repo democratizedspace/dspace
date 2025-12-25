@@ -1,5 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">
-  <!-- placeholder icon for solar basics step 2 -->
-  <rect width="64" height="64" fill="#ccc" />
-  <text x="8" y="32" font-size="12">step2</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+    <rect width="64" height="64" rx="10" fill="#0b1f34" />
+    <path
+        d="M14 44 40 38 49 25 23 31 14 44Z"
+        fill="#0ea5e9"
+        stroke="#e2f3fb"
+        stroke-width="2"
+        stroke-linejoin="round"
+    />
+    <path
+        d="M20 39l14.5-3.2M24 34.5l10-2.1"
+        stroke="#c7e6f7"
+        stroke-width="1.6"
+        stroke-linecap="round"
+    />
+    <circle cx="45" cy="18" r="9" fill="#0b1f34" stroke="#22d3ee" stroke-width="2" />
+    <path
+        d="M45 12a6 6 0 1 1 0 12 6 6 0 0 1 0-12Zm0 6 3 3"
+        stroke="#22d3ee"
+        stroke-width="2"
+        stroke-linecap="round"
+    />
+    <path
+        d="M44 46c0-4-3.4-7-9.5-7-3.5 0-6.5 1.2-8.1 3M44 46H24"
+        stroke="#22d3ee"
+        stroke-width="2.4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    />
 </svg>
