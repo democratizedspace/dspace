@@ -13,16 +13,14 @@ test.describe('Cloud Sync', () => {
             html_url: string;
             filename: string;
         }[] = [];
-        const offlineRequests: string[] = [];
+        const offlineResponses: Array<{ url: string; status: number }> = [];
+        const offlineFailures: string[] = [];
         let restoredId = '';
         const gistFailures: string[] = [];
         const gistResponses: Array<{ url: string; status: number }> = [];
 
         page.on('request', (request) => {
             const url = request.url();
-            if (url.includes('/scripts/offlineWorkerRegistration.js')) {
-                offlineRequests.push(url);
-            }
             if (/\/gists\/[^/?]+$/i.test(url) && request.method() === 'GET') {
                 restoredId = url.split('/').pop() || '';
             }
@@ -33,12 +31,18 @@ test.describe('Cloud Sync', () => {
             if (url.includes('api.github.com/gists')) {
                 gistFailures.push(`${url} :: ${request.failure()?.errorText || 'failed'}`);
             }
+            if (url.includes('/scripts/offlineWorkerRegistration.js')) {
+                offlineFailures.push(`${url} :: ${request.failure()?.errorText || 'failed'}`);
+            }
         });
 
         page.on('response', (response) => {
             const url = response.url();
             if (url.includes('api.github.com/gists')) {
                 gistResponses.push({ url, status: response.status() });
+            }
+            if (url.includes('/scripts/offlineWorkerRegistration.js')) {
+                offlineResponses.push({ url, status: response.status() });
             }
         });
 
@@ -182,6 +186,8 @@ test.describe('Cloud Sync', () => {
         await expect(page.getByTestId('sync-success')).toHaveText(/Restore successful/);
         await expect.poll(() => restoredId).toBe(created[0].id);
 
-        expect(offlineRequests).toHaveLength(0);
+        await expect.poll(() => offlineResponses.length).toBe(1);
+        expect(offlineFailures).toEqual([]);
+        expect(offlineResponses.map(({ status }) => status)).not.toContain(404);
     });
 });

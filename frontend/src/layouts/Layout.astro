@@ -1,7 +1,6 @@
 ---
 import { SEO } from 'astro-seo';
 import { OFFLINE_TOAST_PUBLIC_PATH } from '../utils/offlineToastPath';
-import offlineWorkerRegistrationClientUrl from '../scripts/offlineWorkerRegistrationClient.js?url';
 
 export interface Props {
 	title: string;
@@ -10,6 +9,7 @@ export interface Props {
 const { title } = Astro.props as Props;
 
 const sitewideTitle = `DSPACE (democratized.space)`;
+const offlineWorkerRegistrationUrl = '/scripts/offlineWorkerRegistration.js';
 ---
 
 <!DOCTYPE html>
@@ -158,7 +158,7 @@ const sitewideTitle = `DSPACE (democratized.space)`;
                         })();
                 </script>
 
-                <script type="module" src={offlineWorkerRegistrationClientUrl}></script>
+                <script type="module" src={offlineWorkerRegistrationUrl}></script>
         </body>
 </html>
 <style>
