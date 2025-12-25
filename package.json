@@ -73,6 +73,7 @@
     "zimmerframe": "^1.1.4"
   },
   "dependencies": {
+    "@dspace/feature-flags": "file:packages/feature-flags",
     "openai": "^5.16.0"
   },
   "overrides": {

@@ -1,5 +1,5 @@
-import type { FeatureFlagParseResult } from './featureFlags';
-import { parseFeatureFlags, readBooleanOverride } from './featureFlags';
+import type { FeatureFlagParseResult } from '@dspace/feature-flags';
+import { parseFeatureFlags, readBooleanOverride } from '@dspace/feature-flags';
 import { logServerError } from './serverLogger';
 
 function parseOfflineWorkerEnabled(flags: FeatureFlagParseResult): boolean {

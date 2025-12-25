@@ -9,15 +9,12 @@ active.
 
 ## Planned Actions
 
-1. **Shared code packages**: Introduce `packages/*` for reusable utilities (types, content schemas,
-   telemetry hooks). Existing shared modules under `scripts/`, `tests/`, or `backend/` will migrate
-   gradually.
-2. **Offline-first rigor**: Iterate on the offline UX now that a service worker precaches core
+1. **Offline-first rigor**: Iterate on the offline UX now that a service worker precaches core
    routes (`/`, `/play`, `/quests/*`) and versioned cache keys come from the shared
    `@dspace/cache-version` package. Offline toasts now announce when connectivity returns before
    auto-hiding; keep fixtures for legacy save data under `tests/fixtures/save-data/` so migrations
    stay reversible while upcoming work focuses on staged asset cleanup.
-3. **Testing & telemetry**: Establish contract tests between the frontend and backend via shared
+2. **Testing & telemetry**: Establish contract tests between the frontend and backend via shared
    JSON schemas, snapshot quest/NPC bios, and gate telemetry via explicit opt-in toggles.
 
 ### Current Iteration Focus (2025-09)
@@ -62,6 +59,8 @@ active.
 - Captured the service-worker cache strategy, save-data versioning, rollback flow, and
   `offlineWorker.enabled` flag expectations in `docs/ops/offline-first.md` so operators can follow
   the runbook that shipped with the live worker.
+- Introduced shared feature flag parsing via the `@dspace/feature-flags` package so runtime
+  endpoints and future backends can consume the same token handling without duplicating helpers.
 - Removed the abandoned `apps/*` relocation experiment to keep the workspace focused on
   `frontend/`, `backend/`, and shared packages.
 - Landed environment-specific kustomize overlays under `infra/k8s/environments/` with a production
