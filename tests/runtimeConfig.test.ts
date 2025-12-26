@@ -86,12 +86,31 @@ describe('runtime endpoints', () => {
     expect(body.featureFlags).toContain('telemetry.enabled=true');
   });
 
+  it('disables telemetry when the feature flag is explicitly opted out', async () => {
+    process.env.DSPACE_FEATURE_FLAGS = 'telemetry.enabled=false';
+    const response = await getRuntimeConfig();
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.telemetry?.enabled).toBe(false);
+    expect(body.featureFlags).toContain('telemetry.enabled=false');
+  });
+
   it('honors the explicit telemetry env override', async () => {
     process.env.DSPACE_TELEMETRY_ENABLED = '1';
     const response = await getRuntimeConfig();
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body.telemetry?.enabled).toBe(true);
+  });
+
+  it('prefers the telemetry env override over the feature flag', async () => {
+    process.env.DSPACE_FEATURE_FLAGS = 'telemetry.enabled=true';
+    process.env.DSPACE_TELEMETRY_ENABLED = '0';
+    const response = await getRuntimeConfig();
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.telemetry?.enabled).toBe(false);
+    expect(body.featureFlags).toContain('telemetry.enabled=true');
   });
 
   it('marks runtime config responses as non-cacheable', async () => {
