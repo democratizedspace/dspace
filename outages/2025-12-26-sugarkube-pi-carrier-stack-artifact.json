@@ -1,0 +1,14 @@
+{
+  "id": "2025-12-26-sugarkube-pi-carrier-stack-artifact",
+  "date": "2025-12-26",
+  "component": "sugarkube scad-to-stl workflow",
+  "rootCause": "stl-pi_cluster_stack stopped bundling cad/pi_cluster/pi_carrier.scad with stack mounts and left pi_carrier_stack_carrier_level_{mode}.stl renders under carriers/ as if they were printable parts. The packager only copies STL outputs from stl/pi_cluster, so the SCAD source and preview carrier_level renders are misplaced.",
+  "resolution": "Update scripts/package_stl_artifacts.py to copy cad/pi_cluster/pi_carrier.scad into stl-pi_cluster_stack/carriers/, move pi_carrier_stack_carrier_level_{mode}.stl into preview/, and keep only printable posts, fan adapters, fan walls, and carrier plates under carriers/.",
+  "references": [
+    "https://github.com/futuroptimist/sugarkube/actions/workflows/scad-to-stl.yml",
+    "scripts/package_stl_artifacts.py",
+    "scripts/render_pi_cluster_variants.py",
+    "cad/pi_cluster/pi_carrier_stack.scad",
+    "cad/pi_cluster/pi_carrier.scad"
+  ]
+}
