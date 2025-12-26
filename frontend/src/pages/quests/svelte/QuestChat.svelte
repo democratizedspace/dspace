@@ -5,6 +5,7 @@
     import QuestChatOption from './QuestChatOption.svelte';
     import { questFinished } from '../../../utils/gameState.js';
     import { state } from '../../../utils/gameState/common.js';
+    import { DEFAULT_HARDENING, normalizeHardening } from '../../../utils/hardening.js';
     import { isBrowser } from '../../../utils/ssr.js';
 
     export let quest;
@@ -18,6 +19,7 @@
     let npc;
     let rewardItems = [];
     let dialogueMap;
+    let normalizedHardening = DEFAULT_HARDENING;
 
     // Only access localStorage in browser environment to avoid SSR errors
     const avatar =
@@ -66,6 +68,8 @@
             }
         }
     }
+
+    $: normalizedHardening = normalizeHardening(quest?.hardening);
 </script>
 
 <div class="vertical">
@@ -123,14 +127,10 @@
             <p class="orange">In Progress</p>
         {/if}
         <h5>Hardening:</h5>
-        {#if quest?.hardening}
-            <p data-testid="quest-hardening-status">
-                {quest.hardening.emoji} Score {quest.hardening.score}/100
-            </p>
-            <p data-testid="quest-hardening-passes">Passes: {quest.hardening.passes}</p>
-        {:else}
-            <p data-testid="quest-hardening-status">Hardening pending</p>
-        {/if}
+        <p data-testid="quest-hardening-status">
+            {normalizedHardening.emoji} Score {normalizedHardening.score}/100
+        </p>
+        <p data-testid="quest-hardening-passes">Passes: {normalizedHardening.passes}</p>
         <h5>Rewards:</h5>
         {#each rewardItems as item}
             <div class="horizontal">
