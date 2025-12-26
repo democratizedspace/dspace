@@ -19,7 +19,8 @@
         "test-results/**/*",
         "coverage/**/*",
         "*.config.cjs",
-        "src/pages/inventory/json/items/index.js"
+        "src/pages/inventory/json/items/index.js",
+        "src/env.d.ts"
     ],
     "overrides": [
         {

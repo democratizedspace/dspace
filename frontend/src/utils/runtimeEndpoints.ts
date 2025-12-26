@@ -12,6 +12,16 @@ function parseOfflineWorkerEnabled(flags: FeatureFlagParseResult): boolean {
     return flagOverride ?? true;
 }
 
+function parseTelemetryEnabled(flags: FeatureFlagParseResult): boolean {
+    const envOverride = readBooleanOverride(process.env.DSPACE_TELEMETRY_ENABLED);
+    if (envOverride !== undefined) {
+        return envOverride;
+    }
+
+    const flagOverride = readBooleanOverride(flags.overrides.get('telemetry.enabled'));
+    return flagOverride ?? false;
+}
+
 function buildHeaders(): HeadersInit {
     return {
         'Content-Type': 'application/json; charset=utf-8',
@@ -23,10 +33,14 @@ export function buildRuntimeConfigResponse(): Response {
     try {
         const flags = parseFeatureFlags(process.env.DSPACE_FEATURE_FLAGS);
         const offlineWorkerEnabled = parseOfflineWorkerEnabled(flags);
+        const telemetryEnabled = parseTelemetryEnabled(flags);
 
         const body = {
             offlineWorker: {
                 enabled: offlineWorkerEnabled,
+            },
+            telemetry: {
+                enabled: telemetryEnabled,
             },
             featureFlags: flags.tokens,
         };

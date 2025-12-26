@@ -15,7 +15,7 @@ active.
    auto-hiding; keep fixtures for legacy save data under `tests/fixtures/save-data/` so migrations
    stay reversible while upcoming work focuses on staged asset cleanup.
 2. **Testing & telemetry**: Establish contract tests between the frontend and backend via shared
-   JSON schemas, snapshot quest/NPC bios, and gate telemetry via explicit opt-in toggles.
+   JSON schemas and snapshot quest/NPC bios.
 
 ### Current Iteration Focus (2025-09)
 
@@ -65,3 +65,6 @@ active.
   `frontend/`, `backend/`, and shared packages.
 - Landed environment-specific kustomize overlays under `infra/k8s/environments/` with a production
   entrypoint and deployment guide in `docs/ops/deploy/k8s-environments.md`.
+- Gated telemetry behind explicit opt-in toggles surfaced by `/config.json`, honoring both
+  `DSPACE_TELEMETRY_ENABLED` and the `telemetry.enabled` feature flag so client collection stays
+  off by default until operators opt in.
