@@ -28,6 +28,7 @@
         "id": "a42e441a-5569-490c-86e4-ce711117cd22",
         "name": "entry-level FDM 3D printer (leveled bed)",
         "description": "Printer with bed leveling completed cold using a sheet of paper; ready for a first-layer check.",
+        "image": "/assets/entry_level_fdm_printer_clean.jpg",
         "price": "220 dUSD",
         "type": "tool",
         "hardening": {
@@ -41,6 +42,7 @@
         "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
         "name": "entry-level FDM 3D printer (clean nozzle)",
         "description": "Printer with the hotend cleared or a fresh 0.4 mm nozzle installed and torqued at temp.",
+        "image": "/assets/entry_level_fdm_printer_clean.jpg",
         "price": "220 dUSD",
         "type": "tool",
         "hardening": {
@@ -54,6 +56,7 @@
         "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
         "name": "entry-level FDM 3D printer (green PLA loaded)",
         "description": "Printer with green PLA purged through the hotend and gears tensioned after a filament swap.",
+        "image": "/assets/3d_printing_kit_entry_level_printer_and_pla.jpg",
         "price": "230 dUSD",
         "type": "tool",
         "hardening": {
@@ -95,6 +98,7 @@
         "id": "141581bf-be69-4522-973b-3d22292a85fa",
         "name": "stringing-tuned Benchy",
         "description": "A Benchy printed after retraction tuning; hull and cabin show crisp edges with minimal stringing.",
+        "image": "/assets/3d_printed_benchy_calibration_model.jpg",
         "price": "0.35 dUSD",
         "type": "tool",
         "hardening": {
@@ -108,6 +112,7 @@
         "id": "efcf79a5-1616-490e-add7-40f7fdb628b4",
         "name": "temperature tower sample",
         "description": "Stacked calibration tower labeled by nozzle temperature, showing gloss, bridging, and stringing per band.",
+        "image": "/assets/quests/temperature_tower_calibration.jpg",
         "price": "0.60 dUSD",
         "type": "tool",
         "hardening": {
