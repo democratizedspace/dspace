@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/small_wind_turbine_install.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "wired 500 W wind turbine",
+    "item_id": "34540aad-4c25-4268-a158-a291283bc7a0",
+    "entity_type": "item",
+    "prompt": "A 500 W three-blade wind turbine stands on a short mast, guyed and bolted to a roof curb. Heavy DC cables run neatly into a weatherproof charge controller box mounted beside a 200 Wh battery pack, with a small brake switch labeled by a colored cap. A digital multimeter rests nearby showing healthy voltage, and all cables are strain-relieved and fused.\n\nDepict a bright, breezy, near-future solarpunk rooftop with planters and solar panels in soft focus. The composition should be 512\u00d7512, photorealistic, with no logos or readable text, keeping focus on the properly wired turbine, controller, and battery.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

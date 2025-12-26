@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/ultrasonic_distance_sensor_setup.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "ultrasonic distance sensor",
+    "item_id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
+    "entity_type": "item",
+    "prompt": "A compact ultrasonic distance sensor module with two round transducers is wired to a few jumper leads on a breadboard, ready to plug into a microcontroller. The pins are labeled only by color with no text, and a small calibration target sits a short distance in front of the sensor. The setup is tidy and ESD-safe.\n\nDepict a 512\u00d7512 photorealistic solarpunk lab bench with soft lighting, clean surfaces, and no logos or readable markings, keeping the focus on the ultrasonic module itself.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

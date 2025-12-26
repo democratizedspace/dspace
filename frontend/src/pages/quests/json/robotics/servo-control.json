@@ -8,15 +8,43 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Orion again! Ready to add some movement to your projects? Let's control a servo motor with your Arduino.",
+            "text": "Orion again! Ready to add some movement to your projects? We'll wire a servo test rig and sweep it safely—ESD strap on, and keep fingers clear of the horn.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "hookup",
-                    "text": "Yes! How do I hook it up?",
+                    "text": "Gear is ready—let's wire it.",
                     "requiresItems": [
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 4
+                        },
+                        {
+                            "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                            "count": 1
+                        },
+                        {
+                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                            "count": 1
+                        },
+                        {
+                            "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
                             "count": 1
                         }
                     ]
@@ -25,38 +53,62 @@
         },
         {
             "id": "hookup",
-            "text": "Connect the servo's control wire to pin 9, and power it from the 5V and ground pins. You'll need the Servo library in the Arduino IDE.",
+            "text": "Mount the servo so it can't twist loose. Connect signal to pin 9, power and ground to the rails, and strain-relieve the jumpers so the horn doesn't yank them.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "wire-servo-test-rig",
+                    "text": "Wire and secure the servo rig"
+                },
                 {
                     "type": "goto",
                     "goto": "code",
-                    "text": "Wired up. What code do I use?"
+                    "text": "Wiring is tidy and strain relief is done.",
+                    "requiresItems": [
+                        {
+                            "id": "b3857812-f50c-4880-810d-c929698599b3",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "code",
-            "text": "Use the Sweep example from the Servo library. Upload it and watch the arm swing back and forth.",
+            "text": "Load the Sweep example, set min/max to avoid stalling, and log one smooth cycle. Unplug if you hear chatter; adjust limits and rerun.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "log-servo-sweep",
+                    "text": "Log a clean sweep"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "It's moving!"
+                    "text": "Sweep logged and quiet.",
+                    "requiresItems": [
+                        {
+                            "id": "8a4ccbcf-ee7d-42ff-bfd8-2ed242379872",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! With servos you can build all sorts of small robots. Keep experimenting!",
+            "text": "Nice work! Label the rig, coil the USB cable, and park the horn at center so future tests start safe.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Orion!"
+                    "text": "Servo rig ready for action"
                 }
             ]
         }
     ],
-    "requiresQuests": ["electronics/arduino-blink"],
+    "requiresQuests": [
+        "electronics/arduino-blink"
+    ],
     "rewards": [
         {
             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
@@ -65,7 +117,7 @@
     ],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 100,
         "emoji": "🛠️",
         "history": []
     }

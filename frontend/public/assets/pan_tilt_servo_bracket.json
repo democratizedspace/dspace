@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/pan_tilt_sensor_mount.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "pan-tilt servo bracket",
+    "item_id": "f22293ab-0553-4f6f-8377-093f2a1351c8",
+    "entity_type": "item",
+    "prompt": "A small pan-tilt bracket built from two hobby servos is laid out on a bench with its mounting hardware. The lower servo provides pan, the upper servo is ready to tilt a lightweight sensor plate, and both horns are aligned neatly. Jumper wires and screws are organized beside the bracket, showing it's ready to accept a sensor module.\n\nRender a 512\u00d7512 photorealistic solarpunk workspace with clean lighting and no logos or readable text, focusing on the dual-servo bracket and tidy hardware.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

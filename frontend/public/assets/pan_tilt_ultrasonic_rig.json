@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/servo_ultrasonic_radar_scan.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "pan-tilt ultrasonic rig",
+    "item_id": "054d7c58-0e39-4f60-b072-e62cd5e879cf",
+    "entity_type": "item",
+    "prompt": "A completed pan-tilt rig shows an ultrasonic sensor mounted on top of two stacked servos, all wired cleanly back to a microcontroller board. Jumper wires are bundled for strain relief and a laptop nearby displays a simple radial sweep preview with no readable text. The servos have clearance to rotate without snagging cables.\n\nPlace the rig in a tidy solarpunk robotics lab, 512\u00d7512 photorealistic, with soft light and no logos, keeping focus on the assembled pan-tilt ultrasonic unit and its neat wiring.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

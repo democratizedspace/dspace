@@ -277,6 +277,14 @@
         "category": "Energy & Power"
     },
     {
+        "id": "34540aad-4c25-4268-a158-a291283bc7a0",
+        "name": "wired 500 W wind turbine",
+        "description": "Anchored 500 W turbine with brake tested and DC output wired through a charge controller to your DC bus.",
+        "image": "/assets/quests/small_wind_turbine_install.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
+    },
+    {
         "id": "5322b85e-b47d-4ea4-b515-318f91abc7df",
         "name": "3D printed model rocket",
         "description": "100 mm (10 cm) PLA model rocket, ~90 g, reaches ~30 m with A8-3 motor (not included).",
@@ -1120,6 +1128,78 @@
         "category": "Electronics & Robotics"
     },
     {
+        "id": "b3857812-f50c-4880-810d-c929698599b3",
+        "name": "servo test rig",
+        "description": "Breadboarded Arduino Uno, wired hobby servo, and strain relief ready for motion tests.",
+        "image": "/assets/quests/arduino_servo_control.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "8a4ccbcf-ee7d-42ff-bfd8-2ed242379872",
+        "name": "servo sweep log",
+        "description": "Baseline sweep recording that captures endstop positions and jitter for a tuned hobby servo.",
+        "image": "/assets/quests/electronics_servo_sweep_arduino.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
+        "name": "ultrasonic distance sensor",
+        "description": "5 V ultrasonic rangefinder module with trigger/echo pins and 2 cm–4 m sensing range.",
+        "image": "/assets/quests/ultrasonic_distance_sensor_setup.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "f22293ab-0553-4f6f-8377-093f2a1351c8",
+        "name": "pan-tilt servo bracket",
+        "description": "Stacked mini-servo bracket with hardware for sweeping lightweight sensors in two axes.",
+        "image": "/assets/quests/pan_tilt_sensor_mount.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "054d7c58-0e39-4f60-b072-e62cd5e879cf",
+        "name": "pan-tilt ultrasonic rig",
+        "description": "Two-servo pan-tilt assembly wired to an Arduino with an ultrasonic module mounted and centered.",
+        "image": "/assets/quests/servo_ultrasonic_radar_scan.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "9f2109f5-59c8-4309-8a6c-3c60be744985",
+        "name": "ultrasonic sweep map",
+        "description": "Logged point cloud from a 180° ultrasonic sweep showing obstacles and clear arcs.",
+        "image": "/assets/quests/servo_ultrasonic_radar_scan.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "f69a6eb1-3ef5-4f3e-97e8-5e5f395c2363",
+        "name": "two-servo arm kit",
+        "description": "Laser-cut links, hardware, and a micro gripper plate sized for two hobby servos.",
+        "image": "/assets/quests/simple_servo_robot_arm.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "8efbfdc9-3725-46b4-baaf-9b070ca99a5d",
+        "name": "assembled servo arm",
+        "description": "Two-servo arm with gripper assembled and wired, ready for motion tuning.",
+        "image": "/assets/quests/simple_servo_robot_arm.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "b73ddc8a-b0cf-43ee-8d1e-189e50ac3d96",
+        "name": "calibrated servo arm",
+        "description": "Two-servo arm with travel limits and gripper speeds tuned from a calibration sketch.",
+        "image": "/assets/quests/simple_servo_robot_arm.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Electronics & Robotics"
+    },
+    {
         "id": "6caa08d8-815c-4a0e-9297-0fda4516659d",
         "name": "12 V DC motor",
         "description": "Small brushed 12 V DC motor suited for hand-crank generators.",
@@ -1162,6 +1242,14 @@
         "image": "/assets/3d_printed_crank_handle_generator.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "3D Printing & Fabrication"
+    },
+    {
+        "id": "afb2b5a3-60e2-4863-b2db-e4d280145128",
+        "name": "hand crank generator assembly",
+        "description": "Printed housing, crank handle, fused DC lead, and a 12 V motor bolted together and ready to charge packs.",
+        "image": "/assets/quests/hand_crank_generator_200Wh.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
     },
     {
         "id": "2a767901-6d4d-4a90-b520-50f0076a9c7d",

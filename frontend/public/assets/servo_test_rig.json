@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/arduino_servo_control.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "servo test rig",
+    "item_id": "b3857812-f50c-4880-810d-c929698599b3",
+    "entity_type": "item",
+    "prompt": "On a silicone mat sits a tidy servo test rig: an Arduino Uno on a breadboard with a single hobby servo securely mounted beside it, jumper wires neatly strain-relieved, and a USB cable coiled toward a nearby laptop. A precision screwdriver and anti-static wrist strap rest off to the side, showing the rig was assembled carefully. The servo horn points forward with clearance to swing freely.\n\nRender a 512\u00d7512 photorealistic, solarpunk-tinged workbench with soft, even lighting and no brand logos or readable text, keeping focus on the wired servo rig and its clean cable management.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

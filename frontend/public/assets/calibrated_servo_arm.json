@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/simple_servo_robot_arm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "calibrated servo arm",
+    "item_id": "b73ddc8a-b0cf-43ee-8d1e-189e50ac3d96",
+    "entity_type": "item",
+    "prompt": "The two-servo robotic arm is powered and mid-motion over a mat, with a small note showing tuned angle limits and a light payload in the gripper. Cables are bundled and labeled, and the arm is clearly moving smoothly without strain. An open laptop nearby hints at a running calibration sketch without readable text.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}
