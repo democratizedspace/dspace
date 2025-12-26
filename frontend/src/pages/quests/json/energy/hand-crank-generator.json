@@ -37,9 +37,18 @@
                     "goto": "print",
                     "text": "I'll prep the printer and parts list.",
                     "requiresItems": [
-                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
-                        { "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6", "count": 60 },
-                        { "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778", "count": 1 }
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                            "count": 60
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -130,9 +139,18 @@
                     "goto": "charge",
                     "text": "Generator spins freely and leads are secure.",
                     "requiresItems": [
-                        { "id": "afb2b5a3-60e2-4863-b2db-e4d280145128", "count": 1 },
-                        { "id": "cfe87611-623a-45b0-9243-422cd8a73a16", "count": 1 },
-                        { "id": "5127e156-3009-4db4-85ac-e3ea070b68f2", "count": 1 }
+                        {
+                            "id": "afb2b5a3-60e2-4863-b2db-e4d280145128",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -149,7 +167,7 @@
                 {
                     "type": "goto",
                     "goto": "fin",
-                    "text": "Logged 50 dWatt without hot wires.",
+                    "text": "Logged 50 Wh without hot wires.",
                     "requiresItems": [
                         {
                             "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",

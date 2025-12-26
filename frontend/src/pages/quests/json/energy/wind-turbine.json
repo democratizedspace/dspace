@@ -89,7 +89,7 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Logged 200 dWatt and cables stayed cool.",
+                    "text": "Logged 200 Wh and cables stayed cool.",
                     "requiresItems": [
                         {
                             "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
