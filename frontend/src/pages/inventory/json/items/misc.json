@@ -1884,7 +1884,8 @@
         "name": "Photoresistor",
         "description": "A light-dependent resistor for measuring brightness.",
         "image": "/assets/photoresistor_ldr.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "0.60 dUSD",
+        "unit": "piece",
         "category": "Electronics & Robotics"
     },
     {

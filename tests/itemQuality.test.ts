@@ -128,4 +128,17 @@ describe("item quality", () => {
       PriceExemptionReason.BETA_PLACEHOLDER
     );
   });
+
+  it("prices the photoresistor instead of using a beta placeholder", () => {
+    const photoresistor = (items as Array<Record<string, any>>).find(
+      (item) => item.name === "Photoresistor"
+    );
+
+    expect(photoresistor).toBeDefined();
+    expect(photoresistor?.price).toBeDefined();
+    expect(photoresistor?.price).toMatch(/[0-9]/);
+    expect(photoresistor?.priceExemptionReason ?? null).not.toBe(
+      PriceExemptionReason.BETA_PLACEHOLDER
+    );
+  });
 });
