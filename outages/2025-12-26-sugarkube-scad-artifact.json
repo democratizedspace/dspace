@@ -1,0 +1,12 @@
+{
+  "id": "sugarkube-scad-artifact-regression",
+  "date": "2025-12-26",
+  "component": "sugarkube-scad-to-stl",
+  "longForm": "outages/2025-12-26-sugarkube-scad-artifact.md",
+  "rootCause": "Preview globs skipped carriers/pi_carrier.scad and left preview STLs in carriers.",
+  "resolution": "Restored carriers/pi_carrier.scad and moved preview STLs into preview/; reran.",
+  "references": [
+    "https://github.com/futuroptimist/sugarkube/actions/workflows/scad-to-stl.yml",
+    "https://github.com/futuroptimist/sugarkube/tree/main/docs/raspi_cluster_setup.md"
+  ]
+}
