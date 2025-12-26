@@ -9,12 +9,14 @@ import { GET as getLivez } from '../frontend/src/pages/livez.ts';
 
 const ORIGINAL_FLAGS = process.env.DSPACE_FEATURE_FLAGS;
 const ORIGINAL_OFFLINE = process.env.DSPACE_OFFLINE_WORKER_ENABLED;
+const ORIGINAL_TELEMETRY = process.env.DSPACE_TELEMETRY_ENABLED;
 const ORIGINAL_VERSION = process.env.DSPACE_VERSION;
 
 describe('runtime endpoints', () => {
   beforeEach(() => {
     delete process.env.DSPACE_FEATURE_FLAGS;
     delete process.env.DSPACE_OFFLINE_WORKER_ENABLED;
+    delete process.env.DSPACE_TELEMETRY_ENABLED;
     delete process.env.DSPACE_VERSION;
   });
 
@@ -29,6 +31,12 @@ describe('runtime endpoints', () => {
       delete process.env.DSPACE_OFFLINE_WORKER_ENABLED;
     } else {
       process.env.DSPACE_OFFLINE_WORKER_ENABLED = ORIGINAL_OFFLINE;
+    }
+
+    if (ORIGINAL_TELEMETRY === undefined) {
+      delete process.env.DSPACE_TELEMETRY_ENABLED;
+    } else {
+      process.env.DSPACE_TELEMETRY_ENABLED = ORIGINAL_TELEMETRY;
     }
 
     if (ORIGINAL_VERSION === undefined) {
@@ -60,6 +68,30 @@ describe('runtime endpoints', () => {
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body.offlineWorker?.enabled).toBe(false);
+  });
+
+  it('disables telemetry collection by default', async () => {
+    const response = await getRuntimeConfig();
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.telemetry?.enabled).toBe(false);
+  });
+
+  it('enables telemetry when the feature flag is opted in', async () => {
+    process.env.DSPACE_FEATURE_FLAGS = 'telemetry.enabled=true';
+    const response = await getRuntimeConfig();
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.telemetry?.enabled).toBe(true);
+    expect(body.featureFlags).toContain('telemetry.enabled=true');
+  });
+
+  it('honors the explicit telemetry env override', async () => {
+    process.env.DSPACE_TELEMETRY_ENABLED = '1';
+    const response = await getRuntimeConfig();
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.telemetry?.enabled).toBe(true);
   });
 
   it('marks runtime config responses as non-cacheable', async () => {

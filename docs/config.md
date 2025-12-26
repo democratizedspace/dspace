@@ -18,6 +18,7 @@ across `dev`, `int`, and `prod` clusters.
 | `HOST` | No (default `0.0.0.0`) | Interface for the listener. Leave at the default to accept traffic from the Service/Ingress. | `0.0.0.0` | ConfigMap / values.yaml |
 | `NODE_ENV` | No (default `production`) | Sets Node.js runtime mode. Keep `production` for optimized builds. | `production` | ConfigMap / values.yaml |
 | `DSPACE_FEATURE_FLAGS` | No | Comma-separated feature flag identifiers surfaced in readiness probes and startup logs. Supports `key=value` overrides consumed by `/config.json` (for example `offlineWorker.enabled=false`). | `beta-chat,balance-panel` | ConfigMap / values.yaml |
+| `DSPACE_TELEMETRY_ENABLED` | No (default `false`) | Opt-in switch for telemetry; `/config.json` mirrors it. The feature flag override `telemetry.enabled=true` also enables telemetry. | `true` | ConfigMap / values.yaml |
 | `METRICS_TOKEN` | Recommended | Bearer token that protects the `/metrics` endpoint. When set, Prometheus or other collectors must send `Authorization: Bearer <token>`. | *(generated)* | Kubernetes Secret (`dspace-secrets`, key `metricsToken` managed via SOPS) |
 | `SERVER_CERT_PATH` | Optional | Path to a TLS certificate inside the container. Provide along with `SERVER_KEY_PATH` to terminate TLS in-process instead of via Traefik. | `/app/tls/tls.crt` | Kubernetes Secret (mounted volume) |
 | `SERVER_KEY_PATH` | Optional | Private key paired with `SERVER_CERT_PATH`. | `/app/tls/tls.key` | Kubernetes Secret (mounted volume) |
@@ -74,9 +75,11 @@ Flux consumption details:
 ## Runtime configuration service
 
 - `GET /config.json` streams runtime toggles so operators can verify feature flags without
-  redeploying. The payload includes `featureFlags` (raw `DSPACE_FEATURE_FLAGS` tokens) and an
-  `offlineWorker.enabled` boolean. Setting `offlineWorker.enabled=false` disables service worker
-  registration while keeping the rest of the app online.
+  redeploying. The payload includes `featureFlags` (raw `DSPACE_FEATURE_FLAGS` tokens), an
+  `offlineWorker.enabled` boolean, and a `telemetry.enabled` boolean (default `false`). Setting
+  `offlineWorker.enabled=false` disables service worker registration while keeping the rest of the
+  app online, and opting into telemetry requires either `DSPACE_TELEMETRY_ENABLED=true` or the
+  feature flag override `telemetry.enabled=true`.
 
 ## Scaling & Resources
 
