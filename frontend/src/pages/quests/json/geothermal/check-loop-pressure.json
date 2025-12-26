@@ -8,43 +8,125 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Healthy pressure keeps flow steady. Want to check it?",
+            "text": "Healthy loop pressure keeps flow steady and air out. Ready to suit up and grab a gauge?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "measure",
+                    "goto": "kit",
                     "text": "Let's read the gauge."
                 }
             ]
         },
         {
-            "id": "measure",
-            "text": "Connect a pressure gauge and note the loop reading.",
+            "id": "kit",
+            "text": "Pull PPE, grab the gauge kit, and confirm hoses are tight before touching the loop.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "borrow-loop-pressure-gauge",
+                    "text": "Check out the gauge kit and o-rings."
+                },
+                {
+                    "type": "goto",
+                    "goto": "attach",
+                    "text": "Kit in hand and PPE on.",
+                    "requiresItems": [
+                        {
+                            "id": "c25c0ceb-ebb0-4377-a2d8-a0a2353d996f",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "attach",
+            "text": "Bleed a splash into a bucket, thread on the gauge, and let the loop circulate so the needle settles.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "attach-loop-pressure-gauge",
+                    "text": "Seat the gauge and watch for leaks.",
+                    "requiresItems": [
+                        {
+                            "id": "c25c0ceb-ebb0-4377-a2d8-a0a2353d996f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Gauge is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "c25c0ceb-ebb0-4377-a2d8-a0a2353d996f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Record the reading after the pump has run a few minutes. Note inlet/outlet psi and ambient temperature if you can.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "record-loop-pressure",
+                    "text": "Log the pressure and close the port.",
+                    "requiresItems": [
+                        {
+                            "id": "c25c0ceb-ebb0-4377-a2d8-a0a2353d996f",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Gauge reads steady.",
-                    "process": "pressure-gauge-read"
+                    "text": "Reading is recorded and the cap is back on.",
+                    "requiresItems": [
+                        {
+                            "id": "f1756736-afa6-4c48-ae0f-234e6a933c83",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Logging pressure helps spot leaks early.",
+            "text": "Gauge is off, cap is back, and you have a dated log to catch slow leaks before they become a shutdown.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll keep monitoring."
+                    "text": "I'll keep monitoring.",
+                    "requiresItems": [
+                        {
+                            "id": "f1756736-afa6-4c48-ae0f-234e6a933c83",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["geothermal/survey-ground-temperature"],
+    "requiresQuests": [
+        "geothermal/survey-ground-temperature"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

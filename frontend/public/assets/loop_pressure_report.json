@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hardbound_mission_logbook.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "loop pressure report",
+    "item_id": "f1756736-afa6-4c48-ae0f-234e6a933c83",
+    "entity_type": "item",
+    "prompt": "A mission logbook spread shows a neat table of inlet and outlet pressures with timestamps, alongside a small sketch of a geothermal loop. A capped pen and a coiled hose fitting sit nearby, all on a clean bench with no visible branding or text. Soft, natural light keeps the focus on the handwritten pressure record.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hardbound_mission_logbook.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "temperature tower notes",
+    "item_id": "05f47a22-d247-4ed7-b123-1a4d5f541a23",
+    "entity_type": "item",
+    "prompt": "An open mission logbook shows neatly written observations next to a small PLA calibration tower sketch, with temperatures circled beside notes like 'least stringing' and 'best bridge'. A pen rests across the page on a clean workbench, no logos or readable brand names in view. The scene is softly lit with a practical solarpunk lab vibe, focusing on the handwritten tuning notes.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

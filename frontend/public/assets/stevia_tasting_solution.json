@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/stevia_extract_bottle.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stevia tasting solution",
+    "item_id": "7a3c69a9-7c14-4f0d-b960-894f69ecaad5",
+    "entity_type": "item",
+    "prompt": "A small clear bottle of pale stevia solution sits beside a glass beaker half-filled with clear liquid and a measuring syringe. The label area is blank—no logos or readable text—keeping focus on the dilution prepared for tasting. The scene is a clean, softly lit lab counter with a plant in the background for a subtle solarpunk vibe.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

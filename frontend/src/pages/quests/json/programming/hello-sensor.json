@@ -8,42 +8,203 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Greetings! I'm dChat, your helpful AI assistant. Let's write a quick script that gathers temperature information from a sensor.",
+            "text": "Greetings from dChat! Let's build a thermistor logger, record a clean dataset, and publish a live dashboard.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "script",
-                    "text": "Sounds good"
+                    "goto": "wire",
+                    "text": "I'm in—show me the wiring."
                 }
             ]
         },
         {
-            "id": "script",
-            "text": "Connect a basic temperature sensor and run this short Python example. The program will guide you through logging the data to a file.",
+            "id": "wire",
+            "text": "Drop a thermistor and 10k resistor into a voltage divider on the breadboard, then flash the logging sketch to your Arduino.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-thermistor-logger",
+                    "text": "Wire it and flash the logger."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Rig is already built.",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Let the logger run for at least an hour. Capture a CSV while the thermistor keeps sampling.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Stream and export the CSV."
+                },
+                {
+                    "type": "goto",
+                    "goto": "plot",
+                    "text": "CSV saved and still logging.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "plot",
+            "text": "Convert that CSV into a quick plot to spot spikes or dead sensors before publishing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Chart the raw readings in Python.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "refine",
+                    "text": "Plot looks clean—time to polish.",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "refine",
+            "text": "Smooth the graph, annotate highs and lows, and stash a shareable image for reports.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Layer in rolling averages and labels.",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "deploy",
+                    "text": "Annotated graph exported.",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "deploy",
+            "text": "Push a lightweight JSON endpoint to a Raspberry Pi so the logger streams while your chart updates.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "deploy-temperature-json-endpoint",
+                    "text": "Serve the live API beside the rig.",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "publish",
+                    "text": "Endpoint is serving live data.",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "publish",
+            "text": "Wire the endpoint into an auto-refreshing dashboard so teammates can watch temps in real time.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "publish-live-temperature-graph",
+                    "text": "Ship the live dashboard.",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        },
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "The data is logging"
+                    "text": "Dashboard is live and logging.",
+                    "requiresItems": [
+                        {
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Excellent! This simple automation will assist you with larger projects down the road.",
+            "text": "Automation complete: you have hardware logging, CSVs archived, and a dashboard that proves the loop works.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Cool!"
+                    "text": "On to the next sensor!",
+                    "requiresItems": [
+                        {
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/arduino-blink"],
+    "requiresQuests": [
+        "electronics/arduino-blink"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

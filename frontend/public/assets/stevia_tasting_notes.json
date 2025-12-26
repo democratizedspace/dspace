@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hardbound_mission_logbook.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stevia tasting notes",
+    "item_id": "bb8831a3-9279-4973-8849-06a2266f8e70",
+    "entity_type": "item",
+    "prompt": "An open notebook shows tidy tasting notes with headings for sweetness, aftertaste, and preferred dilution ratio. A glass of clear stevia solution and a stirring rod sit nearby on a clean counter, with soft natural light and no logos or readable text. The composition keeps attention on the handwritten notes documenting the tasting session.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

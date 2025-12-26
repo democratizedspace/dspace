@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/temperature_tower_calibration.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "temperature tower print",
+    "item_id": "68a8004d-5af0-447d-aad9-22134f2e36ad",
+    "entity_type": "item",
+    "prompt": "A small PLA calibration tower sits on a print bed, each segment clearly labeled with temperature steps that change sheen and stringing between layers. The print is clean and upright with minor wisps, showing the comparison points you inspect for tuning an FDM nozzle. The background is a tidy 3D printer workspace with soft lighting and no visible logos or text, keeping focus on the stepped tower.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

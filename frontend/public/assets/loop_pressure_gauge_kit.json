@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_check_loop_pressure_gauge.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "loop pressure gauge kit",
+    "item_id": "c25c0ceb-ebb0-4377-a2d8-a0a2353d996f",
+    "entity_type": "item",
+    "prompt": "A glycerin-filled pressure gauge with a hose adapter and bleed tee rests beside coiled hoses and quick-connect fittings. A pair of work gloves sits nearby on a clean bench, hinting at safe hookup to a geothermal loop. The solarpunk workshop background is tidy and softly lit, with no logos or readable text, keeping attention on the gauge kit.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

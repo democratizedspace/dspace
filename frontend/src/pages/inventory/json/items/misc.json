@@ -1346,6 +1346,20 @@
         "category": "Biology & Lab"
     },
     {
+        "id": "7a3c69a9-7c14-4f0d-b960-894f69ecaad5",
+        "name": "stevia tasting solution",
+        "description": "Diluted stevia crystals in water at a standard tasting concentration for sensory tests.",
+        "image": "/assets/stevia_extract_bottle.jpg",
+        "price": "0.50 dUSD",
+        "category": "Biology & Lab",
+        "hardening": {
+            "passes": 0,
+            "score": 80,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
         "name": "Raspberry Pi 5 board",
         "description": "A compact single-board computer with plenty of power for small clusters.",
@@ -1999,6 +2013,48 @@
             ]
         },
         "category": "Digital & Records"
+    },
+    {
+        "id": "05f47a22-d247-4ed7-b123-1a4d5f541a23",
+        "name": "temperature tower notes",
+        "description": "Observations of sheen, bridging, and stringing for each step on your PLA temperature tower.",
+        "image": "/assets/hardbound_mission_logbook.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records",
+        "hardening": {
+            "passes": 0,
+            "score": 80,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "f1756736-afa6-4c48-ae0f-234e6a933c83",
+        "name": "loop pressure report",
+        "description": "Logged geothermal loop pressure with timestamp and notes on pump state and fluid temperature.",
+        "image": "/assets/hardbound_mission_logbook.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records",
+        "hardening": {
+            "passes": 0,
+            "score": 80,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "bb8831a3-9279-4973-8849-06a2266f8e70",
+        "name": "stevia tasting notes",
+        "description": "Sweetness, bitterness, and aftertaste notes for a measured stevia dilution with your preferred ratio highlighted.",
+        "image": "/assets/hardbound_mission_logbook.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records",
+        "hardening": {
+            "passes": 0,
+            "score": 80,
+            "emoji": "🛠️",
+            "history": []
+        }
     },
     {
         "id": "4729b96d-5057-40d8-83a4-25a4fa122d98",
