@@ -302,21 +302,70 @@
             {
                 "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
                 "count": 1
+            },
+            {
+                "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                "count": 1
             }
         ],
         "consumeItems": [
             {
                 "id": "564a76de-925b-4457-a548-d015168abe0c",
                 "count": 1
+            },
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 5
             }
         ],
         "createItems": [
             {
-                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
                 "count": 1
             }
         ],
         "duration": "1h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "replace-brass-nozzle",
+        "title": "Install a fresh 0.4 mm brass nozzle after a clog",
+        "requireItems": [
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                "count": 1
+            },
+            {
+                "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "564a76de-925b-4457-a548-d015168abe0c",
+                "count": 1
+            },
+            {
+                "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                "count": 1
+            }
+        ],
+        "duration": "45m",
         "hardening": {
             "passes": 0,
             "score": 100,
@@ -373,14 +422,23 @@
             {
                 "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
                 "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
             }
         ],
         "consumeItems": [],
-        "createItems": [],
-        "duration": "10m",
+        "createItems": [
+            {
+                "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -4851,7 +4909,7 @@
         "image": "/assets/pla_green.jpg",
         "requireItems": [
             {
-                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                "id": "a42e441a-5569-490c-86e4-ce711117cd22",
                 "count": 1
             },
             {
@@ -4861,6 +4919,10 @@
             {
                 "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
                 "count": 1
+            },
+            {
+                "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
+                "count": 1
             }
         ],
         "consumeItems": [
@@ -4869,11 +4931,16 @@
                 "count": 10
             }
         ],
-        "createItems": [],
-        "duration": "10m",
+        "createItems": [
+            {
+                "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
         "hardening": {
             "passes": 1,
-            "score": 90,
+            "score": 95,
             "emoji": "🌀",
             "history": [
                 {
@@ -4882,6 +4949,94 @@
                     "score": 60
                 }
             ]
+        }
+    },
+    {
+        "id": "tune-retraction-benchy",
+        "title": "Print a Benchy while stepping retraction to reduce stringing",
+        "image": "/assets/retraction_test_benchy.jpg",
+        "requireItems": [
+            {
+                "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                "count": 20
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 200
+            }
+        ],
+        "createItems": [
+            {
+                "id": "141581bf-be69-4522-973b-3d22292a85fa",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 20
+            }
+        ],
+        "duration": "2h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "print-temperature-tower",
+        "title": "Print and label a white PLA temperature tower",
+        "image": "/assets/temperature_tower_calibration.jpg",
+        "requireItems": [
+            {
+                "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 30
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 240
+            }
+        ],
+        "createItems": [
+            {
+                "id": "efcf79a5-1616-490e-add7-40f7fdb628b4",
+                "count": 1
+            },
+            {
+                "id": "071ba424-3940-4c80-a782-5d7ea4d829ff",
+                "count": 30
+            }
+        ],
+        "duration": "3h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
         }
     },
     {
