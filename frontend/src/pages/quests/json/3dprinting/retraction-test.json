@@ -22,7 +22,7 @@
         },
         {
             "id": "setup",
-            "text": "Slice the model with a 1–2 mm retraction step between slices. Keep goggles on and note the settings in your slicer comments.",
+            "text": "Slice the model with a 1–2 mm retraction distance step between test sections. Keep goggles on and note the settings in your slicer comments.",
             "options": [
                 {
                     "type": "process",

@@ -4919,10 +4919,6 @@
             {
                 "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
                 "count": 1
-            },
-            {
-                "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
-                "count": 1
             }
         ],
         "consumeItems": [
@@ -5003,7 +4999,7 @@
         "image": "/assets/temperature_tower_calibration.jpg",
         "requireItems": [
             {
-                "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                 "count": 1
             },
             {

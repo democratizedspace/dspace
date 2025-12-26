@@ -16,7 +16,7 @@
                     "text": "Benchy notes are ready; let's slice it.",
                     "requiresItems": [
                         {
-                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                             "count": 1
                         },
                         {
@@ -37,7 +37,7 @@
                     "text": "Print the temperature tower.",
                     "requiresItems": [
                         {
-                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                             "count": 1
                         },
                         {
@@ -65,7 +65,7 @@
         },
         {
             "id": "review",
-            "text": "Check bridging, sheen, and stringing on each band with calipers in hand. Circle the temp that holds corners without sagging.",
+            "text": "Check bridging, sheen, and stringing on each band with calipers in hand. Note the temp that holds corners without sagging.",
             "options": [
                 {
                     "type": "goto",

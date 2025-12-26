@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to swap colors? We'll unload the old spool, purge 10 g, and load green PLA—level bed first so the filament seats cleanly.",
+            "text": "Ready to swap colors? We'll unload the old spool, purge 10 g, and load green PLA—level the bed first so you can verify first-layer adhesion after the swap.",
             "options": [
                 {
                     "type": "goto",
@@ -30,8 +30,7 @@
                         { "id": "a42e441a-5569-490c-86e4-ce711117cd22", "count": 1 },
                         { "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 10 },
                         { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
-                        { "id": "ce92a1a9-c817-40f0-92b1-24aff053903d", "count": 1 },
-                        { "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c", "count": 1 }
+                        { "id": "ce92a1a9-c817-40f0-92b1-24aff053903d", "count": 1 }
                     ]
                 },
                 {
