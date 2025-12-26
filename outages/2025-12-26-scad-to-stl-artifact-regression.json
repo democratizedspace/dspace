@@ -1,0 +1,14 @@
+{
+  "id": "2025-12-26-scad-to-stl-artifact-regression",
+  "date": "2025-12-26",
+  "component": "sugarkube-scad-to-stl",
+  "longForm": "outages/2025-12-26-scad-to-stl-artifact-regression.md",
+  "rootCause": "package_stl_artifacts.py shipped the carrier-level preview plates inside carriers/ and skipped copying pi_carrier.scad into the stack artifact.",
+  "resolution": "Move the carrier-level plates into preview/ and copy cad/pi_cluster/pi_carrier.scad into carriers/ so the stack bundle includes the source with stack mounts.",
+  "references": [
+    "scripts/package_stl_artifacts.py",
+    "docs/ops/scad-to-stl-artifacts.md",
+    "https://github.com/futuroptimist/sugarkube/actions/workflows/scad-to-stl.yml",
+    "https://github.com/futuroptimist/sugarkube/blob/main/scripts/package_stl_artifacts.py"
+  ]
+}
