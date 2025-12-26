@@ -1,43 +1,111 @@
 {
     "id": "3dprinting/blob-of-death",
-    "title": "Witness a Blob of Death",
-    "description": "Skipping a first-layer check lets a failed Z homing extrude in mid-air, engulfing the nozzle in molten plastic.",
+    "title": "Witness and Recover a Blob of Death",
+    "description": "Skip first-layer checks, make a blob, then rebuild the hotend before printing.",
     "image": "/assets/quests/blob_of_death_nozzle_fail.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You start a print and walk away. Without verifying the first layer, the Z axis mis-homes and the printer extrudes in mid-air.",
+            "text": "Sydney here. Skip first-layer watch, see the blob, then recover the hotend.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "arm",
+                    "text": "Push a print without checking Z offset."
+                }
+            ]
+        },
+        {
+            "id": "arm",
+            "text": "Print un-leveled and watch the first layer float and coat the nozzle.",
             "options": [
                 {
                     "type": "process",
                     "process": "3dprint-blob-of-death",
-                    "text": "Watch the blob grow."
+                    "text": "Let the failure run and document the mess."
+                },
+                {
+                    "type": "goto",
+                    "goto": "contain",
+                    "text": "The hotend is engulfed; time to make it safe.",
+                    "requiresItems": [
+                        {
+                            "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "contain",
+            "text": "Kill power, cool the blob, glove up, then clip plastic clear of wiring.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "quench-blobbed-hotend",
+                    "text": "Cool, carve, and free the hotend wiring."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Blob is off; nozzle is clogged but accessible.",
+                    "requiresItems": [
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Clear the clog and re-home the gantry so the next first layer sticks cleanly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "repair-clogged-nozzle",
+                    "text": "Heat soak, swap the nozzle, and purge filament."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Kill power and note the damage."
+                    "text": "Extrusion test looks clean and the first layer grips.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "A molten glob encases the nozzle. Next time, watch the first layer to catch issues early.",
+            "text": "Lesson: babysit first layers and power down before digging into blobs.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Ugh."
+                    "text": "I'll watch the first layer next time."
                 }
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["3dprinter/start"],
+    "rewards": [
+        {
+            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "3dprinter/start"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 100,
         "emoji": "🛠️",
         "history": []
     }

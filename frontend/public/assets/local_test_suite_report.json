@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/run_tests_terminal_dashboard.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "local test suite report",
+    "item_id": "6af06039-2b27-4b82-892f-49f7946f5cc9",
+    "entity_type": "item",
+    "prompt": "A development laptop screen shows a colorful automated test dashboard with mostly green status rows and a few muted warnings, alongside a terminal pane with scrolling output. A mug and notebook with short checklists sit nearby, implying the report has been saved after a full suite run. No logos or readable text appear on the UI, just icons and bars indicating results.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

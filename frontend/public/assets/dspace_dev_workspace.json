@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/github_repository_item.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "DSPACE dev workspace",
+    "item_id": "36f06339-1fe5-46be-9e07-1719f3e99c5d",
+    "entity_type": "item",
+    "prompt": "A laptop on a tidy desk shows a code editor with a cloned repo tree beside a terminal window finishing dependency installs. A subtle Playwright browser install dialog sits minimized, hinting at end-to-end test setup. Nearby, a notebook with checklists and a mug reinforce that the environment is staged and ready for test runs.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

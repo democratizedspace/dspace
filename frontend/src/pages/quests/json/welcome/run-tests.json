@@ -1,36 +1,76 @@
 {
     "id": "welcome/run-tests",
-    "title": "Run the Test Suite",
-    "description": "Learn how to run DSPACE's automated tests to ensure your changes are correct.",
+    "title": "Run the DSPACE Test Suite",
+    "description": "Clone the repo, install deps, and drive the test suite while saving reports.",
     "image": "/assets/quests/run_tests_terminal_dashboard.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Testing your work is helpful to keep DSPACE reliable. I'll guide you through running the tests locally so you can assist future explorers.",
+            "text": "Testing keeps explorers safe. Prep, run the suite, then save the report.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Run tests"
+                    "goto": "setup",
+                    "text": "Prep my laptop and repo."
                 }
             ]
         },
         {
-            "id": "finish",
-            "text": "Great job! Running the test suite keeps DSPACE reliable. Enjoy a roll of coins as a bonus!",
+            "id": "setup",
+            "text": "Clone the repo, install deps, pull Playwright, and cache the workspace.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "setup-dspace-workspace",
+                    "text": "Install deps and prepare the workspace"
+                },
+                {
+                    "type": "goto",
+                    "goto": "suite",
+                    "text": "Workspace is ready and tools are installed.",
+                    "requiresItems": [
+                        {
+                            "id": "36f06339-1fe5-46be-9e07-1719f3e99c5d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "suite",
+            "text": "Run check, test:ci, and both Playwright shards. Save logs for review.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "run-dspace-tests-local",
+                    "text": "Run the full local checks"
+                },
+                {
+                    "type": "goto",
+                    "goto": "report",
+                    "text": "Logs are saved; what's next?",
+                    "requiresItems": [
+                        {
+                            "id": "6af06039-2b27-4b82-892f-49f7946f5cc9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "report",
+            "text": "Review the report, note flakes, and record a summary for future runs.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All tests passed",
-                    "grantsItems": [
+                    "text": "Report filed and failures triaged.",
+                    "requiresItems": [
                         {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
-                            "count": 1
-                        },
-                        {
-                            "id": "50ada74c-686d-4818-9421-e02d98444579",
+                            "id": "6af06039-2b27-4b82-892f-49f7946f5cc9",
                             "count": 1
                         }
                     ]
@@ -38,11 +78,18 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "rewards": [
+        {
+            "id": "6af06039-2b27-4b82-892f-49f7946f5cc9",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 65,
+        "score": 100,
         "emoji": "🛠️",
         "history": []
     }

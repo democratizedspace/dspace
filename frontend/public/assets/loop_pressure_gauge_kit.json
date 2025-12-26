@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_check_loop_pressure_gauge.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "loop pressure gauge kit",
+    "item_id": "4d558fb6-e01b-4e81-8fb4-d2782168217a",
+    "entity_type": "item",
+    "prompt": "A liquid-filled pressure gauge is threaded into a clean geothermal manifold with a short hose and shutoff valve visible. A gloved hand steadies the valve handle while pointing at the mid-scale needle, and a small bucket sits below the purge port to catch fluid. The setup is tidy, corrosion-free, and clearly intended for loop pressure checks with no readable labels or logos.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

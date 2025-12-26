@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/digital_camera_astrophotography.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "star trails frame stack",
+    "item_id": "1d4d3689-3453-4204-9709-4760077bf046",
+    "entity_type": "item",
+    "prompt": "A digital camera with a wide lens is set up at night, its rear screen showing a thumbnail grid of long-exposure frames with faint streaks, none readable. A laptop beside it displays a simple file-transfer progress bar, suggesting frames are being offloaded for stacking. The gear rests on a clean surface with no logos or legible text, under a clear, starry sky.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,33 +1,82 @@
 {
     "id": "astronomy/star-trails",
-    "title": "Capture Star Trails",
-    "description": "Use long-exposure photography to show the Earth's rotation.",
+    "title": "Capture and Stack Star Trails",
+    "description": "Polar-align the rig, shoot a sequence, then stack the frames into clean arcs.",
     "image": "/assets/quests/star_trails_long_exposure_tripod.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You've mapped constellations; now let's photograph their motion across the sky.",
+            "text": "You mapped constellations; now stack their motion. Ready to build the rig?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "expose",
-                    "text": "I'm excited!"
+                    "goto": "rig",
+                    "text": "Tripod and camera are ready."
                 }
             ]
         },
         {
-            "id": "expose",
-            "text": "Point your camera north and take a multi-minute exposure to capture circular star trails.",
+            "id": "rig",
+            "text": "Level the tripod, set a wide aperture, focus, and align on the pole.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "setup-star-trails-rig",
+                    "text": "Align the tripod and dial in exposure settings"
+                },
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Rig is aligned and stable.",
+                    "requiresItems": [
+                        {
+                            "id": "42b50237-4ad0-4a3e-9eeb-cb6636c47e03",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "capture",
+            "text": "Shoot 20–30s frames, spot-check histograms, and keep the intervalometer on.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-star-trails-sequence",
+                    "text": "Capture the star trails sequence"
+                },
+                {
+                    "type": "goto",
+                    "goto": "stack",
+                    "text": "Sequence saved; ready to stack.",
+                    "requiresItems": [
+                        {
+                            "id": "1d4d3689-3453-4204-9709-4760077bf046",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "stack",
+            "text": "Load frames on your laptop, align them, and blend smooth arcs.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "stack-star-trails-photo",
+                    "text": "Stack and export the trails photo"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Exposure complete",
+                    "text": "Final image exported and backed up.",
                     "requiresItems": [
                         {
-                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "id": "9debbff3-e5d0-45c1-81a9-d4e5a21dcdc5",
                             "count": 1
                         }
                     ]
@@ -36,7 +85,7 @@
         },
         {
             "id": "finish",
-            "text": "Beautiful! Those trails reveal our planet's steady spin.",
+            "text": "Stacked trails show Earth's spin and give you a repeatable astro workflow.",
             "options": [
                 {
                     "type": "finish",
@@ -45,11 +94,18 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["astronomy/constellations"],
+    "rewards": [
+        {
+            "id": "9debbff3-e5d0-45c1-81a9-d4e5a21dcdc5",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "astronomy/constellations"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 100,
         "emoji": "🛠️",
         "history": []
     }

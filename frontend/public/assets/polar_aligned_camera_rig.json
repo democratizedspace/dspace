@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/camera_tripod_astronomy.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "polar-aligned camera rig",
+    "item_id": "42b50237-4ad0-4a3e-9eeb-cb6636c47e03",
+    "entity_type": "item",
+    "prompt": "A mirrorless camera sits on a leveled aluminum tripod at night, aimed toward the pole star with a red flashlight clipped to a leg. A small intervalometer hangs from the camera strap, and a planisphere lies on a nearby rock, all softly lit with no readable markings. The scene is calm and ready for long exposures, with no logos or legible text visible.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

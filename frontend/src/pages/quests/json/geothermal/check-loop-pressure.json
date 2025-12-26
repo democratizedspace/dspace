@@ -1,37 +1,69 @@
 {
     "id": "geothermal/check-loop-pressure",
-    "title": "Check Loop Pressure",
-    "description": "Verify the ground loop is holding pressure with a quick gauge check.",
+    "title": "Check Geothermal Loop Pressure",
+    "description": "Isolate the manifold, add a gauge, then log a steady reading.",
     "image": "/assets/quests/geothermal_check_loop_pressure_gauge.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Healthy pressure keeps flow steady. Want to check it?",
+            "text": "Isolate the manifold, add a gauge, and watch for sag so flow stays steady.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "measure",
-                    "text": "Let's read the gauge."
+                    "goto": "isolate",
+                    "text": "Show me the manifold steps."
                 }
             ]
         },
         {
-            "id": "measure",
-            "text": "Connect a pressure gauge and note the loop reading.",
+            "id": "isolate",
+            "text": "Close valves, bleed fluid, then thread on the gauge with eye protection.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "attach-loop-pressure-gauge",
+                    "text": "Attach the gauge and purge the port"
+                },
+                {
+                    "type": "goto",
+                    "goto": "hold",
+                    "text": "Gauge is on and lines are tight.",
+                    "requiresItems": [
+                        {
+                            "id": "ed6a224c-7fe9-4a51-88b1-a7c0c8565b59",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "hold",
+            "text": "Hold the loop fifteen minutes, watch for drift, then log the number.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-loop-pressure",
+                    "text": "Record the loop pressure hold"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Gauge reads steady.",
-                    "process": "pressure-gauge-read"
+                    "text": "Log entry saved with timestamp.",
+                    "requiresItems": [
+                        {
+                            "id": "8f237ba9-814c-49c7-8ad7-8a333f3f9d79",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Logging pressure helps spot leaks early.",
+            "text": "Routine pressure logs catch slow leaks long before heat output tanks.",
             "options": [
                 {
                     "type": "finish",
@@ -40,11 +72,18 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["geothermal/survey-ground-temperature"],
+    "rewards": [
+        {
+            "id": "8f237ba9-814c-49c7-8ad7-8a333f3f9d79",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "geothermal/survey-ground-temperature"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 100,
         "emoji": "🛠️",
         "history": []
     }

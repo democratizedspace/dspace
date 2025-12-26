@@ -360,6 +360,30 @@
         "category": "Workshop & Construction"
     },
     {
+        "id": "4d558fb6-e01b-4e81-8fb4-d2782168217a",
+        "name": "loop pressure gauge kit",
+        "description": "0–100 psi liquid-filled gauge with hose, adapters, and shutoff rated for geothermal loop checks.",
+        "image": "/assets/quests/geothermal_check_loop_pressure_gauge.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
+    },
+    {
+        "id": "ed6a224c-7fe9-4a51-88b1-a7c0c8565b59",
+        "name": "loop gauge installed",
+        "description": "Geothermal manifold isolated with a pressure gauge threaded into the purge port and valves cracked for reading.",
+        "image": "/assets/quests/geothermal_check_loop_pressure_gauge.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
+    },
+    {
+        "id": "8f237ba9-814c-49c7-8ad7-8a333f3f9d79",
+        "name": "geothermal loop pressure log",
+        "description": "Timestamped loop pressure with ambient temperature and pump state documented after a 15-minute hold.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
+    },
+    {
         "id": "d88ef09c-9191-4c18-8628-a888bb9f926d",
         "name": "dCarbon",
         "description": "A token that is generated for every 1 kg of carbon dioxide generated in-game.",
@@ -1443,6 +1467,22 @@
         "category": "Digital & Records"
     },
     {
+        "id": "36f06339-1fe5-46be-9e07-1719f3e99c5d",
+        "name": "DSPACE dev workspace",
+        "description": "Local clone with dependencies installed, Playwright browsers cached, and scripts ready to run.",
+        "image": "/assets/github_repository_item.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "6af06039-2b27-4b82-892f-49f7946f5cc9",
+        "name": "local test suite report",
+        "description": "Saved output from `npm run check`, `npm run test:ci`, and Playwright shards with noted flakes.",
+        "image": "/assets/quests/run_tests_terminal_dashboard.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "306793ac-e420-4859-9742-9076fff6ab57",
         "name": "CI workflow file",
         "description": "A `.github/workflows/ci.yml` that runs tests on push.",
@@ -1466,6 +1506,30 @@
         "image": "/assets/planisphere_star_chart.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
+    },
+    {
+        "id": "42b50237-4ad0-4a3e-9eeb-cb6636c47e03",
+        "name": "polar-aligned camera rig",
+        "description": "Tripod-mounted camera aligned on Polaris or the celestial south pole with intervalometer and red light ready.",
+        "image": "/assets/camera_tripod_astronomy.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "1d4d3689-3453-4204-9709-4760077bf046",
+        "name": "star trails frame stack",
+        "description": "Calibrated set of long-exposure frames captured for star trails stacking without blown highlights.",
+        "image": "/assets/digital_camera_astrophotography.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "9debbff3-e5d0-45c1-81a9-d4e5a21dcdc5",
+        "name": "stacked star trails photo",
+        "description": "Stacked and aligned star trails export with circular arcs, noise reduction, and horizon masked cleanly.",
+        "image": "/assets/quests/star_trails_long_exposure_tripod.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
     },
     {
         "id": "9a72fb16-fc69-45c5-beca-f25c27028977",

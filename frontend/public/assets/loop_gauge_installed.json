@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_check_loop_pressure_gauge.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "loop gauge installed",
+    "item_id": "ed6a224c-7fe9-4a51-88b1-a7c0c8565b59",
+    "entity_type": "item",
+    "prompt": "A geothermal loop manifold sits isolated with a pressure gauge attached to the purge port, valves cracked open, and a small catch bucket beneath. A gloved hand balances the handle while the gauge needle rests in a steady mid-range, showing the system is ready for a hold test. The scene is clean and utilitarian with no logos or legible labels.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

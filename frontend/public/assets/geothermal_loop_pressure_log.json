@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/mission_log_entry_page.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "geothermal loop pressure log",
+    "item_id": "8f237ba9-814c-49c7-8ad7-8a333f3f9d79",
+    "entity_type": "item",
+    "prompt": "A handwritten logbook page notes a geothermal loop pressure reading with time, ambient temperature, and pump state, all abstracted into short lines and icons without readable text. A pen rests on the open notebook and a folded maintenance tag peeks from underneath, suggesting routine service. The workspace is softly lit and organized, with no logos or legible wording anywhere.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

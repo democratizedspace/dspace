@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/star_trails_long_exposure_tripod.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stacked star trails photo",
+    "item_id": "9debbff3-e5d0-45c1-81a9-d4e5a21dcdc5",
+    "entity_type": "item",
+    "prompt": "A tripod-mounted camera looks up at sweeping circular star trails arcing across the night sky. A small tablet beside the tripod shows an abstract preview of the stacked image with smooth arcs and no readable interface. A notebook and thermos rest nearby, hinting at a long session. The scene is logo-free and softly lit, focused on the finished star trails photo.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

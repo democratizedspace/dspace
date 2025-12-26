@@ -292,6 +292,47 @@
         }
     },
     {
+        "id": "quench-blobbed-hotend",
+        "title": "Cool and carve a blobbed hotend back to serviceable shape",
+        "requireItems": [
+            {
+                "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "564a76de-925b-4457-a548-d015168abe0c",
+                "count": 1
+            }
+        ],
+        "duration": "30m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "repair-clogged-nozzle",
         "title": "Disassemble and clear a clogged 3D printer nozzle",
         "requireItems": [
@@ -6546,6 +6587,210 @@
         "hardening": {
             "passes": 0,
             "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "setup-dspace-workspace",
+        "title": "Clone DSPACE and install dependencies for local test runs",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "52593d07-908b-4109-92cf-826b2184ef6f",
+                "count": 1
+            },
+            {
+                "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "36f06339-1fe5-46be-9e07-1719f3e99c5d",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "run-dspace-tests-local",
+        "title": "Run npm checks, unit tests, and Playwright shards locally",
+        "requireItems": [
+            {
+                "id": "36f06339-1fe5-46be-9e07-1719f3e99c5d",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "6af06039-2b27-4b82-892f-49f7946f5cc9",
+                "count": 1
+            }
+        ],
+        "duration": "30m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "attach-loop-pressure-gauge",
+        "title": "Isolate the geothermal manifold and attach a pressure gauge",
+        "requireItems": [
+            {
+                "id": "4d558fb6-e01b-4e81-8fb4-d2782168217a",
+                "count": 1
+            },
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "ed6a224c-7fe9-4a51-88b1-a7c0c8565b59",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "log-loop-pressure",
+        "title": "Hold loop pressure and record the stabilized reading",
+        "requireItems": [
+            {
+                "id": "ed6a224c-7fe9-4a51-88b1-a7c0c8565b59",
+                "count": 1
+            },
+            {
+                "id": "4d558fb6-e01b-4e81-8fb4-d2782168217a",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "8f237ba9-814c-49c7-8ad7-8a333f3f9d79",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "setup-star-trails-rig",
+        "title": "Level and polar-align a camera for star trails",
+        "requireItems": [
+            {
+                "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                "count": 1
+            },
+            {
+                "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                "count": 1
+            },
+            {
+                "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "42b50237-4ad0-4a3e-9eeb-cb6636c47e03",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "capture-star-trails-sequence",
+        "title": "Capture a star trails frame sequence",
+        "requireItems": [
+            {
+                "id": "42b50237-4ad0-4a3e-9eeb-cb6636c47e03",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "1d4d3689-3453-4204-9709-4760077bf046",
+                "count": 1
+            }
+        ],
+        "duration": "60m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "stack-star-trails-photo",
+        "title": "Align, stack, and export a star trails image",
+        "requireItems": [
+            {
+                "id": "1d4d3689-3453-4204-9709-4760077bf046",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "9debbff3-e5d0-45c1-81a9-d4e5a21dcdc5",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
             "emoji": "🛠️",
             "history": []
         }
