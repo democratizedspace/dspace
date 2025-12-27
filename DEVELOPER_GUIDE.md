@@ -817,23 +817,32 @@ These lists are sortable and filterable according to the specific capabilities o
 
 Through real-world testing and debugging sessions, we've gathered valuable insights that can help new developers avoid common pitfalls.
 
-### Duplicate Image Detector CLI
+### Image Issues CLI (Duplicates and Missing Assets)
 
-Use the duplicate image detector to find quests or inventory items that still share the same image
-asset (a v3 cleanup task). The tool runs locally and scans quest JSON under
-`frontend/src/pages/quests/json` and item JSON under `frontend/src/pages/inventory/json/items`.
+Use the image issues CLI to find quests or inventory items that reuse the same image asset **and**
+to surface image references that do not have a corresponding file in `frontend/public`. The tool
+runs locally and scans quest JSON under `frontend/src/pages/quests/json` and item JSON under
+`frontend/src/pages/inventory/json/items`.
 
 **Important**: This command must be run from the repository root directory (not from `frontend/`),
 as Python needs to resolve the `scripts` package from the root.
 
 ```bash
 # From the repository root directory
-python -m scripts.duplicate_images find-duplicate-images
+python -m scripts.duplicate_images find-image-issues
 ```
 
-The report lists each reused image URL, how many times it appears, and the quest or item entries
-that reference it. Treat the output as the backlog of image assets that still need unique
-replacements.
+The report lists:
+
+- Each reused image URL, how many times it appears, and the quest or item entries that reference
+  it (path-based duplicates)
+- Image files that are byte-identical even if referenced by different paths under
+  `frontend/public`
+- Missing image references where a quest or item JSON points to an asset that is not present in
+  `frontend/public`
+
+`find-duplicate-images` remains available as a backward-compatible alias if you already rely on
+the previous command name.
 
 **Windows/PowerShell**: The command works the same way on Windows. Ensure you're in the root
 directory (`C:\Users\...\dspace\`) before running the command, not in the `frontend` subdirectory.

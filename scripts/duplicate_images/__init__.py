@@ -2,8 +2,9 @@
 
 The module scans quest JSON under ``frontend/src/pages/quests/json`` and inventory item JSON
 under ``frontend/src/pages/inventory/json/items`` to locate ``image`` fields. It reports
-duplicate usages by the path strings in JSON and also groups images that are byte-identical on
-disk even when referenced by different paths under ``frontend/public``.
+duplicate usages by the path strings in JSON, groups images that are byte-identical on disk even
+when referenced by different paths under ``frontend/public``, and surfaces missing images
+referenced by quests or inventory items.
 """
 
 from __future__ import annotations
@@ -166,7 +167,31 @@ def find_duplicates(usages: ImageMap) -> ImageMap:
     return {image: refs for image, refs in usages.items() if len(refs) > 1}
 
 
-def find_identical_files(usages: Mapping[str, List[ImageReference]], repo_root: Path) -> IdenticalImageMap:
+def _is_remote_image(image: str) -> bool:
+    return image.startswith(("http://", "https://", "data:", "ipfs://"))
+
+
+def find_missing_images(usages: ImageMap, repo_root: Path) -> ImageMap:
+    """Return references that point to image paths missing from frontend/public."""
+    missing: ImageMap = {}
+    for image, references in usages.items():
+        if _is_remote_image(image):
+            continue
+
+        relative_path = image.lstrip("/")
+        if not relative_path:
+            continue
+
+        filesystem_path = repo_root / "frontend" / "public" / relative_path
+        if not filesystem_path.is_file():
+            missing[image] = references
+
+    return missing
+
+
+def find_identical_files(
+    usages: Mapping[str, List[ImageReference]], repo_root: Path
+) -> IdenticalImageMap:
     """Group image paths that point to identical files on disk.
 
     Paths that do not resolve to files under ``frontend/public`` are ignored to keep
@@ -208,15 +233,18 @@ def format_duplicates(
     duplicates: ImageMap,
     identical_files: IdenticalImageMap | None = None,
     all_references: ImageMap | None = None,
+    missing_images: ImageMap | None = None,
 ) -> str:
     duplicates = duplicates or {}
     identical_files = identical_files or {}
     all_references = all_references or {}
-    if not duplicates and not identical_files:
+    missing_images = missing_images or {}
+    if not duplicates and not identical_files and not missing_images:
         return ""
 
     path_duplicate_count = count_total_duplicates(duplicates)
     identical_duplicate_count = 0
+    missing_reference_count = sum(len(refs) for refs in missing_images.values())
     lines: List[str] = []
     for image in sorted(duplicates):
         references = sorted(
@@ -227,7 +255,8 @@ def format_duplicates(
         for reference in references:
             if reference.name:
                 lines.append(
-                    f"  - {reference.display_path()} :: {reference.name} - {reference.identifier} [{reference.source}]"
+                    f"  - {reference.display_path()} :: {reference.name} - "
+                    f"{reference.identifier} [{reference.source}]"
                 )
             else:
                 lines.append(
@@ -250,16 +279,40 @@ def format_duplicates(
                 for reference in references:
                     if reference.name:
                         lines.append(
-                            f"    - {reference.display_path()} :: {reference.name} - {reference.identifier} "
-                            f"[{reference.source}]"
+                            f"    - {reference.display_path()} :: {reference.name} - "
+                            f"{reference.identifier} [{reference.source}]"
                         )
                     else:
                         lines.append(
-                            f"    - {reference.display_path()} :: {reference.identifier} [{reference.source}]"
+                            f"    - {reference.display_path()} :: {reference.identifier} "
+                            f"[{reference.source}]"
                         )
                     if reference.description:
                         lines.append(f'      - "{reference.description}"')
             identical_duplicate_count += max(0, len(identical_files[digest]) - 1)
+
+    if missing_images:
+        lines.append("")
+        lines.append("Missing image files (referenced but not found under frontend/public):")
+        for image in sorted(missing_images):
+            references = sorted(
+                missing_images[image],
+                key=lambda ref: (ref.source, ref.display_path(), ref.identifier),
+            )
+            lines.append(f"{image} ({len(references)} uses)")
+            for reference in references:
+                if reference.name:
+                    lines.append(
+                        f"  - {reference.display_path()} :: {reference.name} - "
+                        f"{reference.identifier} [{reference.source}]"
+                    )
+                else:
+                    lines.append(
+                        f"  - {reference.display_path()} :: {reference.identifier} "
+                        f"[{reference.source}]"
+                    )
+                if reference.description:
+                    lines.append(f'    - "{reference.description}"')
 
     if duplicates:
         lines.append("")
@@ -269,10 +322,14 @@ def format_duplicates(
         lines.append("")
         lines.append(f"Total identical-file duplicates: {identical_duplicate_count}")
 
-    if duplicates or identical_files:
-        overall_total = path_duplicate_count + identical_duplicate_count
+    if missing_images:
         lines.append("")
-        lines.append(f"Total duplicates remaining: {overall_total}")
+        lines.append(f"Total missing images: {missing_reference_count}")
+
+    if duplicates or identical_files or missing_images:
+        overall_total = path_duplicate_count + identical_duplicate_count + missing_reference_count
+        lines.append("")
+        lines.append(f"Total issues remaining: {overall_total}")
 
     return "\n".join(lines)
 
@@ -297,11 +354,14 @@ def serialize_duplicates(
 
 
 def serialize_report(
-    duplicates: ImageMap, identical_files: Mapping[str, List[str]] | None = None
+    duplicates: ImageMap,
+    identical_files: Mapping[str, List[str]] | None = None,
+    missing_images: ImageMap | None = None,
 ) -> Dict[str, object]:
     return {
         "duplicates": serialize_duplicates(duplicates),
         "identicalFiles": {
             digest: list(paths) for digest, paths in (identical_files or {}).items()
         },
+        "missingImages": serialize_duplicates(missing_images or {}),
     }
