@@ -6,7 +6,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from scripts.duplicate_images import (
+from scripts.image_issues import (
     collect_image_references,
     find_duplicates,
     find_identical_files,
@@ -14,9 +14,9 @@ from scripts.duplicate_images import (
     format_duplicates,
     serialize_report,
 )
-from scripts.duplicate_images.__main__ import DEFAULT_ITEMS_DIR, DEFAULT_QUESTS_DIR
+from scripts.image_issues.__main__ import DEFAULT_ITEMS_DIR, DEFAULT_QUESTS_DIR
 
-FIXTURE_ROOT = Path(__file__).parents[2] / "data" / "duplicate_images"
+FIXTURE_ROOT = Path(__file__).parents[2] / "data" / "image_issues"
 
 
 def _write_json(path: Path, payload: object) -> None:
@@ -67,7 +67,7 @@ def test_cli_reports_duplicates(tmp_path: Path) -> None:
     command = [
         sys.executable,
         "-m",
-        "scripts.duplicate_images",
+        "scripts.image_issues",
         "find-image-issues",
         "--root",
         str(tmp_path),
@@ -114,7 +114,7 @@ def test_cli_json_output(tmp_path: Path) -> None:
     command = [
         sys.executable,
         "-m",
-        "scripts.duplicate_images",
+        "scripts.image_issues",
         "find-image-issues",
         "--root",
         str(repo_root),
@@ -259,7 +259,7 @@ def test_cli_reports_identical_file_usage_counts(tmp_path: Path) -> None:
     command = [
         sys.executable,
         "-m",
-        "scripts.duplicate_images",
+        "scripts.image_issues",
         "find-image-issues",
         "--root",
         str(repo_root),
@@ -305,7 +305,7 @@ def test_cli_reports_missing_images(tmp_path: Path) -> None:
     command = [
         sys.executable,
         "-m",
-        "scripts.duplicate_images",
+        "scripts.image_issues",
         "find-image-issues",
         "--root",
         str(tmp_path),
