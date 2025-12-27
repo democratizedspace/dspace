@@ -2902,6 +2902,48 @@
         }
     },
     {
+        "id": "run-dspace-tests",
+        "title": "Run the DSPACE CI suite locally and log results",
+        "image": "/assets/quests/run_tests_terminal_dashboard.jpg",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            },
+            {
+                "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 600
+            }
+        ],
+        "createItems": [
+            {
+                "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                "count": 1
+            },
+            {
+                "id": "50ada74c-686d-4818-9421-e02d98444579",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "assemble-basic-telescope",
         "title": "Assemble a basic telescope",
         "requireItems": [

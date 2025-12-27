@@ -8,25 +8,181 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Testing your work is helpful to keep DSPACE reliable. I'll guide you through running the tests locally so you can assist future explorers.",
+            "text": "Testing keeps DSPACE reliable. We'll prep your laptop, run the suite, and log what happened so the next explorer inherits a green build.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "What do I need?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "scope",
+                    "text": "Which tests are we running?"
+                }
+            ]
+        },
+        {
+            "id": "scope",
+            "text": "We aim for the same lane as CI: `npm run test:ci` to hit unit and integration checks without browsers. Keep SKIP_E2E=1 for now; if you want extra assurance, add `npm run check` after this flow.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Got it, let's gear up."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Plug in your laptop, sync the repo, and run `nvm use` so Node 20 matches CI. Open the mission logbook so you can note commands, failures, and timestamps.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Dependencies are installed and workspace is clean.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Walk me through the run anyway."
+                }
+            ]
+        },
+        {
+            "id": "install",
+            "text": "Close stray servers, export SKIP_E2E=1, then run `npm ci` from the repo root. When dependencies settle, clear caches (`rm -rf node_modules/.cache`) if Vitest ever complains.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "run",
+                    "text": "Ready to execute tests."
+                },
+                {
+                    "type": "goto",
+                    "goto": "run",
+                    "text": "I already cleaned up and want to run now.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "run",
+            "text": "Kick off `npm run test:ci` and watch for flake signatures: timeouts, missing Playwright deps, or outdated snapshots. Capture the command, duration, and exit status in the logbook before you rerun anything.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "run-dspace-tests",
+                    "text": "Run the suite and record results",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        },
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 600
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "triage",
+                    "text": "I have a fresh log entry to review.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "triage",
+            "text": "Skim the log entry. Green run? Note duration and coverage. Failures? Split by package with `npm run test:root -- --filter <suite>` and rerun to isolate. Keep notes so teammates can replay your path.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Run tests"
+                    "text": "Documented outcomes and ready to report.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "50ada74c-686d-4818-9421-e02d98444579",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "process",
+                    "process": "run-dspace-tests",
+                    "text": "Rerun the suite after a fix",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        },
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 600
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! Running the test suite keeps DSPACE reliable. Enjoy a roll of coins as a bonus!",
+            "text": "Great work. A logged run with green checks is the best gift you can hand the next contributor. Drop the summary in your notes and stash the coins for your next print run.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All tests passed",
-                    "grantsItems": [
+                    "text": "Tests logged and shared.",
+                    "requiresItems": [
                         {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
                             "count": 1
                         },
                         {
@@ -39,10 +195,12 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 65,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
