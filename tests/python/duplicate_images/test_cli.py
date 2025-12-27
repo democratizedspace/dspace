@@ -94,7 +94,7 @@ def test_cli_reports_duplicates(tmp_path: Path) -> None:
     # Verify summary appears (3 uses - 1 = 2 duplicates)
     assert "Total path-based duplicates: 2" in stdout
     assert "Total duplicates remaining: 2" in stdout
-    assert "Total image issues remaining: 2" in stdout
+    assert "Total image issue occurrences: 2" in stdout
 
 
 def test_default_paths_are_exposed() -> None:
@@ -246,7 +246,7 @@ def test_cli_output_matches_logic_layer(tmp_path: Path) -> None:
     # Verify summary appears (3 uses - 1 = 2 duplicates)
     assert "Total path-based duplicates: 2" in text_output
     assert "Total duplicates remaining: 2" in text_output
-    assert "Total image issues remaining: 2" in text_output
+    assert "Total image issue occurrences: 2" in text_output
 
 
 def test_cli_reports_identical_file_usage_counts(tmp_path: Path) -> None:
@@ -279,7 +279,7 @@ def test_cli_reports_identical_file_usage_counts(tmp_path: Path) -> None:
     assert "Total path-based duplicates: 1" in stdout
     assert "Total identical-file duplicates: 1" in stdout
     assert "Total duplicates remaining: 2" in stdout
-    assert "Total image issues remaining: 2" in stdout
+    assert "Total image issue occurrences: 2" in stdout
 
 
 def test_cli_reports_missing_images(tmp_path: Path) -> None:
@@ -325,4 +325,4 @@ def test_cli_reports_missing_images(tmp_path: Path) -> None:
     assert "gamma-tool" in stdout
     assert "/assets/existing.png" not in stdout
     assert "Total missing images: 2" in stdout
-    assert "Total image issues remaining: 3" in stdout
+    assert "Total image issue occurrences: 3" in stdout

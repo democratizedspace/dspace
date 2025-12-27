@@ -339,7 +339,7 @@ def format_duplicates(
             path_duplicate_count + identical_duplicate_count + missing_reference_count
         )
         lines.append("")
-        lines.append(f"Total image issues remaining: {overall_total}")
+        lines.append(f"Total image issue occurrences: {overall_total}")
 
     return "\n".join(lines)
 
