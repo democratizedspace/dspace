@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.duplicate_images import (
+from scripts.image_issues import (
     DuplicateImageError,
     collect_image_references,
     find_duplicates,
@@ -15,9 +15,7 @@ from scripts.duplicate_images import (
     format_duplicates,
     serialize_report,
 )
-
-
-FIXTURE_ROOT = Path(__file__).parents[2] / "data" / "duplicate_images"
+FIXTURE_ROOT = Path(__file__).parents[2] / "data" / "image_issues"
 
 
 def _write_json(path: Path, payload: object) -> None:
