@@ -1,13 +1,15 @@
 """Command line interface for duplicate image detection.
 
 The CLI scans quest and inventory JSON for ``image`` fields, reports duplicate references by
-path, and surfaces identical files that live at different paths under ``frontend/public``.
+path, surfaces identical files that live at different paths under ``frontend/public``, and lists
+missing assets referenced by quests or items.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 from typing import Sequence
 
@@ -16,6 +18,7 @@ from . import (
     collect_image_references,
     find_duplicates,
     find_identical_files,
+    find_missing_images,
     format_duplicates,
     serialize_report,
 )
@@ -30,47 +33,59 @@ DEFAULT_ITEMS_DIR = (
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Find quest and item entries that share image assets by path or identical file content."
+            "Analyze quest and item image usage for duplicates, identical files, and missing assets."
         ),
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
+    def add_common_arguments(subparser: argparse.ArgumentParser) -> None:
+        subparser.add_argument(
+            "--root",
+            type=Path,
+            default=DEFAULT_ROOT,
+            help=(
+                "Repository root used to make relative paths in the report and locate assets under "
+                "frontend/public"
+            ),
+        )
+        subparser.add_argument(
+            "--quests-dir",
+            type=Path,
+            default=DEFAULT_QUESTS_DIR,
+            help="Path to the quests JSON directory (default: frontend/src/pages/quests/json)",
+        )
+        subparser.add_argument(
+            "--items-dir",
+            type=Path,
+            default=DEFAULT_ITEMS_DIR,
+            help=(
+                "Path to the inventory items JSON directory (default: "
+                "frontend/src/pages/inventory/json/items)"
+            ),
+        )
+        subparser.add_argument(
+            "--json",
+            action="store_true",
+            help=(
+                "Output results in JSON format for scripting, including duplicate paths, "
+                "identical files, and missing assets"
+            ),
+        )
+
     find_parser = subparsers.add_parser(
         "find-duplicate-images",
-        help="List duplicate image URLs across quests and items",
-    )
-    find_parser.add_argument(
-        "--root",
-        type=Path,
-        default=DEFAULT_ROOT,
         help=(
-            "Repository root used to make relative paths in the report and locate assets under "
-            "frontend/public"
+            "List duplicate images, identical files, and missing assets (legacy alias for "
+            "find-image-issues)"
         ),
     )
-    find_parser.add_argument(
-        "--quests-dir",
-        type=Path,
-        default=DEFAULT_QUESTS_DIR,
-        help="Path to the quests JSON directory (default: frontend/src/pages/quests/json)",
+    add_common_arguments(find_parser)
+
+    analyze_parser = subparsers.add_parser(
+        "find-image-issues",
+        help="List duplicate images, identical files, and missing assets in one report",
     )
-    find_parser.add_argument(
-        "--items-dir",
-        type=Path,
-        default=DEFAULT_ITEMS_DIR,
-        help=(
-            "Path to the inventory items JSON directory (default: "
-            "frontend/src/pages/inventory/json/items)"
-        ),
-    )
-    find_parser.add_argument(
-        "--json",
-        action="store_true",
-        help=(
-            "Output results in JSON format for scripting, including duplicate paths and "
-            "identical files"
-        ),
-    )
+    add_common_arguments(analyze_parser)
 
     return parser
 
@@ -80,22 +95,26 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
+        if args.command == "find-duplicate-images":
+            print("warning: find-duplicate-images is deprecated; use find-image-issues", file=sys.stderr)
+
         usages = collect_image_references(args.quests_dir, args.items_dir, args.root)
         duplicates = find_duplicates(usages)
         identical_files = find_identical_files(usages, args.root)
+        missing_images = find_missing_images(usages, args.root)
 
         if args.json:
             output = json.dumps(
-                serialize_report(duplicates, identical_files),
+                serialize_report(duplicates, identical_files, missing_images),
                 indent=2,
             )
             print(output)
         else:
-            output = format_duplicates(duplicates, identical_files, usages)
+            output = format_duplicates(duplicates, identical_files, usages, missing_images)
             if output:
                 print(output)
             else:
-                print("No duplicate images found.")
+                print("No image issues found.")
     except DuplicateImageError as err:
         parser.exit(status=1, message=f"error: {err}\n")
 

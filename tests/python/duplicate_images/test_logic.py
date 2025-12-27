@@ -11,6 +11,7 @@ from scripts.duplicate_images import (
     collect_image_references,
     find_duplicates,
     find_identical_files,
+    find_missing_images,
     format_duplicates,
     serialize_report,
 )
@@ -73,6 +74,7 @@ def test_collects_duplicates_from_quests_and_items(tmp_path: Path) -> None:
     # Verify summary appears (3 uses - 1 = 2 duplicates)
     assert "Total path-based duplicates: 2" in formatted
     assert "Total duplicates remaining: 2" in formatted
+    assert "Total image issue occurrences: 2" in formatted
 
 
 def test_includes_descriptions_in_output_and_serialization(tmp_path: Path) -> None:
@@ -162,6 +164,44 @@ def test_reports_identical_files_by_content(tmp_path: Path) -> None:
     assert "Total path-based duplicates: 1" in formatted
     assert "Total identical-file duplicates: 1" in formatted
     assert "Total duplicates remaining: 2" in formatted
+    assert "Total image issue occurrences: 2" in formatted
+
+
+def test_reports_missing_images_and_skips_external_paths(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
+
+    _write_json(
+        quests_dir / "gamma" / "missing.json",
+        {"id": "gamma/missing", "title": "Missing Quest", "image": "/assets/missing-one.png"},
+    )
+    _write_json(
+        items_dir / "gamma.json",
+        [
+            {"id": "gamma-tool", "name": "Gamma Tool", "image": "/assets/missing-one.png"},
+            {
+                "id": "external",
+                "name": "External Ref",
+                "image": "https://example.com/external.png",
+            },
+        ],
+    )
+
+    existing_dir = repo_root / "frontend" / "public" / "assets"
+    existing_dir.mkdir(parents=True, exist_ok=True)
+    (existing_dir / "present.png").write_bytes(b"present")
+
+    usages = collect_image_references(quests_dir, items_dir, repo_root)
+    missing = find_missing_images(usages, repo_root)
+
+    assert set(missing.keys()) == {"/assets/missing-one.png"}
+    formatted = format_duplicates({}, {}, usages, missing)
+    assert "Missing image files" in formatted
+    assert "/assets/missing-one.png (2 references)" in formatted
+    assert "External Ref" not in formatted
+    assert "Total missing images: 2" in formatted
+    assert "Total image issue occurrences: 2" in formatted
 
 
 def test_collect_image_references_requires_valid_json(tmp_path: Path) -> None:
