@@ -8,24 +8,60 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's share data over the network. We'll create a simple server.",
+            "text": "Let's share your temperature log over the network with a friendly status page instead of raw files.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Sounds good."
+                    "goto": "prep",
+                    "text": "I'll prep the page assets",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Use Node's `http` module or Python's `http.server` to return a greeting.",
+            "id": "prep",
+            "text": "Drop the CSV next to a minimal HTML template. Add a short blurb that explains what the page shows and when the data was last updated.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Render the temperature chart"
+                },
+                {
+                    "type": "goto",
+                    "goto": "serve",
+                    "text": "Chart exported beside index.html",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "serve",
+            "text": "Start a small HTTP server (Python, Node, or BusyBox) from that folder. Confirm the page loads on another device and that refreshes pick up new CSV data without caching glitches.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Server running!",
+                    "text": "Page serves without console errors",
                     "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        },
                         {
                             "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
                             "count": 1
@@ -36,7 +72,7 @@
         },
         {
             "id": "finish",
-            "text": "Excellent! You can expand this into a full API later.",
+            "text": "Excellent! A clean landing page makes it easy to share logs and spot problems at a glance.",
             "options": [
                 {
                     "type": "finish",
@@ -46,10 +82,12 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/hello-sensor"],
+    "requiresQuests": [
+        "programming/hello-sensor"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

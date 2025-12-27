@@ -8,42 +8,123 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Greetings! I'm dChat, your helpful AI assistant. Let's write a quick script that gathers temperature information from a sensor.",
+            "text": "Greetings! I'm dChat, your helpful AI assistant. Let's wire a repeatable logger so every reading is trusted.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "script",
-                    "text": "Sounds good"
+                    "goto": "bench",
+                    "text": "Lay out the kit"
                 }
             ]
         },
         {
-            "id": "script",
-            "text": "Connect a basic temperature sensor and run this short Python example. The program will guide you through logging the data to a file.",
+            "id": "bench",
+            "text": "Set the Arduino, breadboard, thermistor, resistor, jumpers, and USB cable where you can see every pin. A tidy bench prevents crossed leads.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "text": "Run a quick serial read"
+                },
+                {
+                    "type": "goto",
+                    "goto": "rig",
+                    "text": "Parts are placed and powered",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 3
+                        },
+                        {
+                            "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+                            "count": 1
+                        },
+                        {
+                            "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
+                            "count": 1
+                        },
+                        {
+                            "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rig",
+            "text": "Keep the divider neat, add strain relief, and flash a stable logging sketch. A clean build keeps noise down when you later read data from other hosts.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-thermistor-logger",
+                    "text": "Build the logger"
+                },
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Logger is wired and blinking",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Let the rig collect a full day. When you export, keep timestamps in UTC and stash a copy of the CSV where future scripts can read it.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture and export the CSV"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "The data is logging"
+                    "text": "CSV archived for reuse",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Excellent! This simple automation will assist you with larger projects down the road.",
+            "text": "Excellent! With clean readings and a tidy export, you're ready to automate the rest of the pipeline.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Cool!"
+                    "text": "Onward"
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/arduino-blink"],
+    "requiresQuests": [
+        "electronics/arduino-blink"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

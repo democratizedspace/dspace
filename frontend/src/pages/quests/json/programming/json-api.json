@@ -8,26 +8,67 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your web server prints text. Let's make it return JSON.",
+            "text": "Your JSON route exists; now let's shape it into a small API with stats, history, and predictable fields.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Show me how"
+                    "goto": "stats",
+                    "text": "Design the payloads",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Add an endpoint like /data that replies with `{ message: 'Hello' }`.",
+            "id": "stats",
+            "text": "Add `/stats` and `/history` endpoints that reuse your log. Include mean, min/max, sample size, and a note about when the sensor was last seen.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Annotate averages on the plot"
+                },
+                {
+                    "type": "goto",
+                    "goto": "publish",
+                    "text": "Stats are returned with each response",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "publish",
+            "text": "Document the routes, wire basic input validation, and ship a tiny dashboard that fetches both the live reading and stats.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "publish-live-temperature-graph",
+                    "text": "Ship the live dashboard"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "JSON endpoint works!",
+                    "text": "Dashboard and docs are live",
                     "requiresItems": [
                         {
-                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+                            "count": 1
+                        },
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
                             "count": 1
                         }
                     ]
@@ -36,20 +77,24 @@
         },
         {
             "id": "finish",
-            "text": "Nice! Clients can now consume your structured data.",
+            "text": "Nice! Your API now has usable routes, clear documentation, and a front-end that proves everything works end-to-end.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "API online"
+                    "text": "API and UI shipped"
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/web-server"],
+    "requiresQuests": [
+        "programming/web-server",
+        "programming/json-endpoint",
+        "programming/avg-temp"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
