@@ -820,21 +820,16 @@ Through real-world testing and debugging sessions, we've gathered valuable insig
 ### Image Analysis CLI
 
 Use the image analysis CLI to find quests or inventory items that reuse image assets or reference
-images that do not yet exist (a v3 cleanup task). The tool runs locally and scans quest JSON
-under `frontend/src/pages/quests/json` and item JSON under
-`frontend/src/pages/inventory/json/items`.
+images that do not yet exist (a v3 cleanup task). The tool runs locally and scans quest JSON under
+`frontend/src/pages/quests/json` and item JSON under `frontend/src/pages/inventory/json/items`.
 
 **Important**: This command must be run from the repository root directory (not from `frontend/`),
 as Python needs to resolve the `scripts` package from the root.
 
 ```bash
 # From the repository root directory
-python -m scripts.duplicate_images find-image-issues
+python -m scripts.image_issues find-image-issues
 ```
-
-The legacy `find-duplicate-images` subcommand remains available as an alias for
-`find-image-issues`. Both subcommands emit the combined report of duplicate references, identical
-files, and missing image paths.
 
 The report lists each reused image URL, how many times it appears, the quest or item entries that
 reference it, identical files that live at different paths under `frontend/public`, and missing
