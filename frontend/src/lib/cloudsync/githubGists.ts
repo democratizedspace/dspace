@@ -18,6 +18,22 @@ export function formatBackupFilename(date = new Date()) {
     return `${BACKUP_FILE_PREFIX}-${timestamp}.txt`;
 }
 
+const SENSITIVE_KEYWORDS = [
+    'token',
+    'session',
+    'password',
+    'passphrase',
+    'secret',
+    'api-key',
+    'apikey',
+    'api_key',
+    'privatekey',
+    'private-key',
+    'private_key',
+    'authorization',
+    'credential',
+];
+
 function removeSensitiveFields(subject: unknown): void {
     if (!subject || typeof subject !== 'object') return;
     if (Array.isArray(subject)) {
@@ -27,7 +43,8 @@ function removeSensitiveFields(subject: unknown): void {
 
     for (const key of Object.keys(subject)) {
         const lowered = key.toLowerCase();
-        if (lowered.includes('token') || lowered.includes('session') || lowered === 'auth') {
+        const isSensitive = SENSITIVE_KEYWORDS.some((keyword) => lowered.includes(keyword));
+        if (isSensitive) {
             delete (subject as Record<string, unknown>)[key];
             continue;
         }

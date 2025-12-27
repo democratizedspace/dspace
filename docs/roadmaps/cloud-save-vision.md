@@ -70,7 +70,8 @@ Cloud Sync page supports a GitHub Gist flow:
 - Restore: pulls gist content and imports
 
 **Immediate hard requirements for MVP safety:**
-- backups must never include tokens or secrets
+- backups must never include tokens or secrets (sanitization now strips tokens, passwords, API
+  keys, authorization headers, and similar credential fields before upload)
 - token save must validate and provide visible feedback
 - “Upload” creates new backups (not overwrite) or makes overwrite explicit
 - multi-device should allow one PAT per device while discovering backups by listing gists
