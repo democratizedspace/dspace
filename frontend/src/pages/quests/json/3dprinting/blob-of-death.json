@@ -1,34 +1,109 @@
 {
     "id": "3dprinting/blob-of-death",
     "title": "Witness a Blob of Death",
-    "description": "Skipping a first-layer check lets a failed Z homing extrude in mid-air, engulfing the nozzle in molten plastic.",
+    "description": "Intentionally skip a first-layer check, let the hotend engulf itself, and document the recovery path.",
     "image": "/assets/quests/blob_of_death_nozzle_fail.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You start a print and walk away. Without verifying the first layer, the Z axis mis-homes and the printer extrudes in mid-air.",
+            "text": "Sydney wants to show why first layers matter. We'll stage PPE, log the risk, then deliberately let a print go feral.",
             "options": [
                 {
-                    "type": "process",
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Set up the failure demo."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Clear the bed, keep an extinguisher handy, and note you're skipping the first-layer check so you can study the fallout.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "sabotage",
+                    "process": "log-blob-precheck",
+                    "text": "Log the risky run and stage PPE.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "sabotage",
+            "text": "Disable first-layer babysitting, start the job, and watch molten PLA balloon around the hotend until it hardens into a glob.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cooldown",
                     "process": "3dprint-blob-of-death",
-                    "text": "Watch the blob grow."
-                },
+                    "text": "Let the blob form while you film it.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "cooldown",
+            "text": "Kill power, let the block cool, then chip plastic away until the hotend is merely clogged instead of entombed.",
+            "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Kill power and note the damage."
+                    "process": "stabilize-blobbed-hotend",
+                    "text": "Cool, scrape, and prep the nozzle for repair.",
+                    "requiresItems": [
+                        {
+                            "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                            "count": 1
+                        },
+                        {
+                            "id": "9b985439-3c19-4fa7-b864-34a3c5c33ac4",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "A molten glob encases the nozzle. Next time, watch the first layer to catch issues early.",
+            "text": "The lesson stings—literally. With the blob reduced to a clog, you're set up for the nozzle rescue and wiser about first layers.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Ugh."
+                    "text": "Ready to rehab the printer.",
+                    "requiresItems": [
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }

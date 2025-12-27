@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/dCarbon.jpg",
+    "entity": "frontend/src/pages/quests/json/chemistry/stevia-tasting.json",
+    "item_name": "Taste Test Stevia Crystals",
+    "item_id": "chemistry/stevia-tasting",
+    "entity_type": "quest",
+    "prompt": "A small laboratory tasting setup sits on a clean stainless table: a 250 mL glass beaker with a clear stevia solution, a glass stir rod resting across the rim, and a digital notepad or logbook open to a tasting notes page with illegible handwriting. Nearby, a tiny amber vial labeled only with an icon holds stevia crystals, with a scoop resting beside it. A gloved hand and safety goggles placed off to the side signal PPE without showing a person. In the blurred background, leafy stevia plants under grow lights hint at the source of the extract.\n\nPhotorealistic 512×512 solarpunk lab aesthetic with soft, cool lighting, no brand logos or readable text, and no faces. The composition centers the beaker and logbook, communicating that this quest is about dissolving stevia crystals and recording sweetness and aftertaste observations.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

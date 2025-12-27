@@ -1,46 +1,69 @@
 {
     "id": "firstaid/sanitize-pocket-mask",
     "title": "Sanitize Your CPR Pocket Mask",
-    "description": "Clean and disinfect your CPR mask so it's safe for the next emergency.",
+    "description": "Wash, disinfect, and log your CPR mask so it's ready for the next emergency.",
     "image": "/assets/quests/firstaid_sanitize_cpr_pocket_mask.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your CPR pocket mask hasn't been cleaned since the last practice session.\nLet's sanitize it so it's ready for the next use.",
+            "text": "Your CPR pocket mask came out during training. Let's decon it before it goes back in the kit.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "clean",
-                    "text": "How do I clean it?"
+                    "goto": "wash",
+                    "text": "Start cleaning it."
                 }
             ]
         },
         {
-            "id": "clean",
-            "text": "Wash the mask with warm soapy water, rinse and soak it in a 1:10 bleach solution for two minutes.\nLet it air dry completely before storing it in your first aid kit.",
+            "id": "wash",
+            "text": "Separate the valve, wash with warm soapy water, rinse, and log that the shell and valve are clean before disinfecting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "disinfect",
+                    "process": "wash-pocket-mask",
+                    "text": "Wash and rinse the mask.",
+                    "requiresItems": [
+                        { "id": "a1c7f153-5b2e-443d-936a-47f396a7d191", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
+                        { "id": "70bb8d86-2c4e-4330-9705-371891934686", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "disinfect",
+            "text": "Soak components in a 1:10 bleach solution for two minutes, air dry, and bag with the valve facing out.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Mask is sanitized",
+                    "process": "sanitize-pocket-mask",
+                    "text": "Disinfect and bag the mask.",
                     "requiresItems": [
-                        {
-                            "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
-                            "count": 1
-                        }
+                        { "id": "a1c7f153-5b2e-443d-936a-47f396a7d191", "count": 1 },
+                        { "id": "280ed361-ac70-4ab9-bcd9-aee481790faf", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
+                        { "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a", "count": 2 },
+                        { "id": "7a4b8892-365f-4a56-93ce-127aa989f50d", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "All clean! A sanitized mask protects both you and your patient during resuscitation.",
+            "text": "Mask is washed, disinfected, dried, and logged. Stash it back in the kit so rescue breaths stay safe.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Ready for emergencies"
+                    "text": "Seal it and close the kit.",
+                    "requiresItems": [
+                        { "id": "2d50a594-f519-4226-bc48-2d99d5ede1bb", "count": 1 },
+                        { "id": "a1c7f153-5b2e-443d-936a-47f396a7d191", "count": 1 }
+                    ]
                 }
             ]
         }

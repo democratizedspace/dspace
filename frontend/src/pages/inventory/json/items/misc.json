@@ -1749,6 +1749,14 @@
         "category": "Digital & Records"
     },
     {
+        "id": "75b798a2-8c08-4077-abcf-64db4dbdf024",
+        "name": "stacked star trail photo",
+        "description": "Circular star trails stacked around Polaris from a multi-minute exposure session.",
+        "image": "/assets/quests/star_trails_long_exposure_tripod.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
         "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
         "name": "first aid kit",
         "description": "Adhesive bandages, sterile gauze pads, antiseptic wipes and nitrile gloves packed for emergencies.",
@@ -1757,12 +1765,28 @@
         "category": "Safety & Medical"
     },
     {
+        "id": "99e2caf9-c3b0-4bc1-b7da-a920f03e0fb4",
+        "name": "cooled burn log",
+        "description": "Cooling start/end times, jewelry removal, and pain score noted while rinsing a minor burn.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
         "name": "CPR pocket mask",
         "description": "A reusable one-way valve mask for delivering rescue breaths safely.",
         "image": "/assets/cpr_pocket_mask_case_open.jpg",
         "price": "18 dUSD",
         "category": "Safety & Medical"
+    },
+    {
+        "id": "2d50a594-f519-4226-bc48-2d99d5ede1bb",
+        "name": "sanitized pocket mask log",
+        "description": "Timestamped record of washing, disinfecting, drying, and bagging your CPR mask.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
     },
     {
         "id": "b397aa70-3503-4e40-b84a-4d5609578d2b",
@@ -1779,6 +1803,14 @@
         "image": "/assets/stevia_crystals_jar.jpg",
         "price": "12 dUSD",
         "category": "Biology & Lab"
+    },
+    {
+        "id": "41509a68-4aaf-43aa-93f6-62d2ed6fa07d",
+        "name": "stevia tasting log",
+        "description": "Dilution ratio, sweetness score, and aftertaste notes for a stevia sample.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
     },
     {
         "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",
@@ -1805,6 +1837,14 @@
         "image": "/assets/antiseptic_wipes_packet_open.jpg",
         "price": "0.15 dUSD",
         "unit": "each",
+        "category": "Safety & Medical"
+    },
+    {
+        "id": "55d9b626-402e-4a12-8eb2-35037fdd20af",
+        "name": "minor burn dressed",
+        "description": "A cooled burn covered with antiseptic and a loose sterile gauze wrap for monitoring.",
+        "image": "/assets/quests/firstaid_treat_minor_burn.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Safety & Medical"
     },
     {

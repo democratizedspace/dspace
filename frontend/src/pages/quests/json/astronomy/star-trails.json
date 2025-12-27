@@ -1,33 +1,113 @@
 {
     "id": "astronomy/star-trails",
     "title": "Capture Star Trails",
-    "description": "Use long-exposure photography to show the Earth's rotation.",
+    "description": "Plan a dark-sky session, align your rig, and shoot a long exposure that reveals Earth's spin.",
     "image": "/assets/quests/star_trails_long_exposure_tripod.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You've mapped constellations; now let's photograph their motion across the sky.",
+            "text": "You've mapped constellations; now let's make the sky draw circles for you. We'll plan, align, and stack a clean trail shot.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Plot the session."
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Pick a clear night, center your plan near Polaris, and mark exposure time, ISO, and battery checks in the logbook.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "process": "draft-seasonal-star-plan",
+                    "text": "Draft the star trail plan.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Level the tripod, polar align, focus on a bright star, and secure extra batteries before you walk away from the shutter.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "expose",
-                    "text": "I'm excited!"
+                    "process": "align-tripod-for-star-trails",
+                    "text": "Align and focus the rig.",
+                    "requiresItems": [
+                        {
+                            "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                            "count": 1
+                        },
+                        {
+                            "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                            "count": 1
+                        },
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        },
+                        {
+                            "id": "0ce0d0d4-d734-4099-b903-92e9b1c52b05",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "expose",
-            "text": "Point your camera north and take a multi-minute exposure to capture circular star trails.",
+            "text": "Dial in a multi-minute exposure or interval stack, cover the viewfinder, and let the sensor collect arcs without touching the rig.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Exposure complete",
+                    "process": "capture-star-trails",
+                    "text": "Run the capture and stack the result.",
                     "requiresItems": [
                         {
-                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                            "count": 1
+                        },
+                        {
+                            "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                            "count": 1
+                        },
+                        {
+                            "id": "6102f07b-384b-437f-b78f-d1e9b5431e97",
+                            "count": 1
+                        },
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Re-level and refocus before shooting again.",
+                    "requiresItems": [
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
                             "count": 1
                         }
                     ]
@@ -36,20 +116,28 @@
         },
         {
             "id": "finish",
-            "text": "Beautiful! Those trails reveal our planet's steady spin.",
+            "text": "Trails locked! The spirals make Earth's spin obvious—and your log has the recipe for the next clear night.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Stunning!"
+                    "text": "Save the photo and break down.",
+                    "requiresItems": [
+                        {
+                            "id": "75b798a2-8c08-4077-abcf-64db4dbdf024",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/constellations"],
+    "requiresQuests": [
+        "astronomy/constellations"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
