@@ -1,33 +1,44 @@
 {
     "id": "completionist/polish",
     "title": "Polish Your Trophy",
-    "description": "Keep your Completionist Award II shiny and proud.",
+    "description": "Keep your Completionist Award II shiny and ready for close-up photos.",
     "image": "/assets/quests/completionist_trophy_polish.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "That award is looking a bit dusty. Want to give it a quick shine?",
+            "text": "That award is looking a bit dusty. Want to give it a quick shine that also clears fingerprints?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "polish",
-                    "text": "Absolutely, let's polish it"
+                    "goto": "prep",
+                    "text": "Absolutely, let's polish it",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "polish",
-            "text": "A soft cloth and some elbow grease will do the trick. Show me when it sparkles!",
+            "id": "prep",
+            "text": "Grab a paper towel and a dab of soap to lift smudges without scratching the finish.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "polish-completionist-award",
+                    "text": "Wipe down the trophy and buff it dry"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Here it is, sparkling",
                     "requiresItems": [
                         {
-                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
                             "count": 1
                         }
                     ]
@@ -46,10 +57,12 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["completionist/v2"],
+    "requiresQuests": [
+        "completionist/v2"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

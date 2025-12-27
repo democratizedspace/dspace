@@ -1,7 +1,7 @@
 {
     "id": "completionist/reminder",
     "title": "Check for New Quests",
-    "description": "Return regularly to see what fresh challenges await you.",
+    "description": "Set a weekly reminder so new quests never sneak past you.",
     "image": "/assets/quests/completionist_new_quests_reminder.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
@@ -13,21 +13,32 @@
                 {
                     "type": "goto",
                     "goto": "remind",
-                    "text": "I'll check back"
+                    "text": "I'll check back",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "remind",
-            "text": "Set a weekly reminder so you never miss new content and can claim it before anyone else.",
+            "text": "Use your phone or calendar app to nudge you every week. Capture the day and time so it sticks.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "schedule-quest-reminder",
+                    "text": "Create the weekly quest reminder"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Reminder set",
                     "requiresItems": [
                         {
-                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
                             "count": 1
                         }
                     ]
@@ -46,10 +57,12 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["completionist/v2"],
+    "requiresQuests": [
+        "completionist/v2"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

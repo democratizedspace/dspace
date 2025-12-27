@@ -1,51 +1,130 @@
 {
     "id": "completionist/v2",
     "title": "Congrats for finishing all the quests!!",
-    "description": "Here's a trophy for your efforts!",
+    "description": "Print, plate, and assemble a real Completionist Award II for your shelf.",
     "image": "/assets/quests/completionist_trophy_award.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Look who's back already!! My favorite human! You're a human, right? I'm pretty sure you are. Anyway, I'd love to present this prestigious award to you!",
+            "text": "You cleared every quest! Let's actually fabricate the Completionist Award II instead of just talking about it.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "thanks",
-                    "text": "Whoa, thanks, but why?"
+                    "goto": "prep-printer",
+                    "text": "Let's build the real trophy"
                 }
             ]
         },
         {
-            "id": "thanks",
-            "text": "Well, adventurer, because you've completed the first wave of quests!! There are certainly many more on the horizon, but you've reached a significant milestone. And for that, this Completionist Award II is all yours!!",
+            "id": "prep-printer",
+            "text": "We need a leveled printer and enough filament to chew through a solid core. Ready your green-light printer before we spin up a long print.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Re-level the print bed first"
+                },
+                {
                     "type": "goto",
-                    "goto": "mine",
-                    "text": "All mine???"
+                    "goto": "print-core",
+                    "text": "Printer is leveled and loaded",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                            "count": 150
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "mine",
-            "text": "You betcha! You've earned it. I'll see you around, friend!",
+            "id": "print-core",
+            "text": "Time to print the trophy core with beefy walls and clean layer lines. Babysit the first layer and keep the chamber at temp.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-completionist-core",
+                    "text": "Start the core print"
+                },
+                {
+                    "type": "goto",
+                    "goto": "print-plate",
+                    "text": "Core is printed and cool",
+                    "requiresItems": [
+                        {
+                            "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "print-plate",
+            "text": "Let's add a crisp nameplate with the completion date. Swap to a fine layer height for the lettering so it pops when you buff it.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-completionist-plate",
+                    "text": "Print the engraved plate"
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Plate fits the recess",
+                    "requiresItems": [
+                        {
+                            "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
+                            "count": 1
+                        },
+                        {
+                            "id": "a0fc23b6-3460-404f-bd16-dfb5700f7326",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Sand the edges, wick in a tiny bead of glue, and press the plate until it seats flush. Let it cure so the award feels like a single piece.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-completionist-award-ii",
+                    "text": "Seat the plate and cure the core"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Award is bonded and cured",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Fresh off the build table! That Completionist Award II is now a real artifact, not just a checkbox.",
             "options": [
                 {
                     "type": "finish",
-                    "goto": "delivery",
-                    "text": "See you, dChat!"
+                    "text": "Trophy fabricated and ready"
                 }
             ]
         }
     ],
-    "rewards": [
-        {
-            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
-            "count": 1
-        }
-    ],
+    "rewards": [],
     "requiresQuests": [
         "welcome/howtodoquests",
         "ubi/basicincome",
@@ -57,7 +136,7 @@
     ],
     "hardening": {
         "passes": 0,
-        "score": 70,
+        "score": 100,
         "emoji": "🛠️",
         "history": []
     }

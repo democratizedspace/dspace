@@ -2174,6 +2174,22 @@
         "category": "Digital & Records"
     },
     {
+        "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
+        "name": "completionist trophy log entry",
+        "description": "Logbook page noting the Completionist Award II serial, photo location, and display shelf.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+        "name": "weekly quest reminder",
+        "description": "Calendar reminder pointing to the quest board each week with your chosen day and time.",
+        "image": "/assets/changelog/20230630/smartphone.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "4729b96d-5057-40d8-83a4-25a4fa122d98",
         "name": "bottle of black ink",
         "description": "30 mL glass bottle of waterproof black ink for quill pens; screw cap prevents leaks; ~60 g.",
