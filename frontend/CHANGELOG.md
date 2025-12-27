@@ -36,6 +36,7 @@
 - Priced the soaked hydroponic starter plug so it no longer uses a beta placeholder
 - ISS spotting station now has a real price instead of a beta placeholder
 - Photoresistor now has a real price instead of shipping as a beta placeholder component
+- Hypercar (80% charge) now has a real price instead of a beta placeholder entry
 - Svelte 5 compatibility: vitest now properly resolves internal subpath imports (`svelte/internal/disclose-version`, `svelte/internal/flags/*`)
 - Vitest configuration uses client-side Svelte entry point for browser-like test behavior
 - ProcessForm test now provides complete valid form data and uses `waitFor` for async operations

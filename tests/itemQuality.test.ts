@@ -90,6 +90,19 @@ describe("item quality", () => {
     }
   });
 
+  it("prices the Hypercar (80% charge) instead of using a beta placeholder", () => {
+    const hypercar = (items as Array<Record<string, any>>).find(
+      (item) => item.name === "Hypercar (80% charge)"
+    );
+
+    expect(hypercar).toBeDefined();
+    expect(hypercar?.price).toBeDefined();
+    expect(hypercar?.price).toMatch(/[0-9]/);
+    expect(hypercar?.priceExemptionReason ?? null).not.toBe(
+      PriceExemptionReason.BETA_PLACEHOLDER
+    );
+  });
+
   it("prices antiseptic wipes instead of using a beta placeholder", () => {
     const antisepticWipes = (items as Array<Record<string, any>>).find(
       (item) => item.name === "antiseptic wipes"
