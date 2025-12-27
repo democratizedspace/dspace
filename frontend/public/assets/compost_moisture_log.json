@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/mission_log_entry_page.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "compost moisture log",
+    "item_id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
+    "entity_type": "item",
+    "prompt": "An open logbook page shows hand-written moisture readings, squeeze-test notes, and probe depths. A compost moisture meter rests on the notebook, angled toward the viewer.\n\nThe 512×512 photorealistic solarpunk scene keeps the notebook in focus with blurred garden tools behind it. There are no readable words, logos, or faces.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

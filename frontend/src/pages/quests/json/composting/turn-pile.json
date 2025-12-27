@@ -30,29 +30,46 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A stagnant bucket can smell. Wear nitrile gloves and let's give it fresh air.",
+            "text": "A stagnant bucket can smell. Suit up with gloves so we can fluff and vent it safely.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "mix",
-                    "text": "I'm ready to turn it."
+                    "requiresItems": [
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "025862b3-8377-4396-ab32-aa572bdc3260",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Gloves on; bucket needs air."
                 }
             ]
         },
         {
             "id": "mix",
-            "text": "Stir greens and browns with gloved hands until loose and damp. Avoid steam.",
+            "text": "Stir greens and browns with gloved hands until loose and damp, then cap with a brown layer. Watch for steam and move slowly.",
             "options": [
                 {
                     "type": "process",
                     "process": "turn-compost-bucket",
-                    "text": "Stir the bucket"
+                    "text": "Turn and fluff the mix"
                 },
                 {
                     "type": "goto",
                     "goto": "temp",
-                    "process": "measure-compost-temperature",
                     "requiresItems": [
+                        {
+                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
+                            "count": 1
+                        },
                         {
                             "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
                             "count": 1
@@ -63,8 +80,11 @@
                 {
                     "type": "goto",
                     "goto": "moisture",
-                    "process": "measure-compost-moisture",
                     "requiresItems": [
+                        {
+                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
+                            "count": 1
+                        },
                         {
                             "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
                             "count": 1
@@ -77,11 +97,11 @@
                     "goto": "finish",
                     "requiresItems": [
                         {
-                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
                             "count": 1
                         }
                     ],
-                    "text": "Looks aerated now"
+                    "text": "Mix is fluffy and capped"
                 }
             ]
         },
@@ -90,9 +110,9 @@
             "text": "Thermometer reads 55 °C—ideal. Remove the probe carefully; it may be hot.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Great, I'll keep turning"
+                    "type": "process",
+                    "process": "measure-compost-temperature",
+                    "text": "Log the temperature"
                 }
             ]
         },
@@ -101,19 +121,33 @@
             "text": "Meter shows 55% moisture—ideal for microbes. Rinse the probe after use.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Moisture looks good"
+                    "type": "process",
+                    "process": "measure-compost-moisture",
+                    "text": "Record the moisture"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great work! Turn every few days to speed decomposition. Wash hands after.",
+            "text": "Great work! With fresh air, capped browns, and logged readings, the bucket will heat evenly. Wash up and keep it covered.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Nova!"
+                    "requiresItems": [
+                        {
+                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
+                            "count": 1
+                        },
+                        {
+                            "id": "e034d081-a29e-4040-830f-a192304db50d",
+                            "count": 1
+                        },
+                        {
+                            "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Aerated and logged"
                 }
             ]
         }

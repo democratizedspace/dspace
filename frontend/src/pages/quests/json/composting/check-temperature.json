@@ -8,60 +8,139 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Wondering if your compost is cooking? Let's find out.",
+            "text": "Let's see if your bucket is moving from hot phase to curing.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "probe",
-                    "text": "How do I check?"
+                    "requiresItems": [
+                        {
+                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Ready to take readings."
                 }
             ]
         },
         {
             "id": "probe",
-            "text": "Insert a compost thermometer deep into the bucket to read the core heat.",
+            "text": "Insert the compost thermometer to the core, wait 30 seconds, then note the reading. Replace the brown cap when done.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "reading",
+                    "type": "process",
                     "process": "measure-compost-temperature",
                     "requiresItems": [
                         {
                             "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
                             "count": 1
+                        },
+                        {
+                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
+                            "count": 1
                         }
                     ],
-                    "text": "Take the temperature"
+                    "text": "Log the temperature"
+                },
+                {
+                    "type": "goto",
+                    "goto": "moisture",
+                    "requiresItems": [
+                        {
+                            "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+                            "count": 1
+                        },
+                        {
+                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Check moisture too"
                 }
             ]
         },
         {
-            "id": "reading",
-            "text": "The dial climbs to a toasty 60 °C—microbes are feasting happily!",
+            "id": "moisture",
+            "text": "Probe the core again. If it smears, wipe the probe and note if it feels wetter or drier than last time.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "measure-compost-moisture",
+                    "requiresItems": [
+                        {
+                            "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+                            "count": 1
+                        },
+                        {
+                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Record the moisture"
+                },
+                {
+                    "type": "goto",
+                    "goto": "cooldown",
+                    "requiresItems": [
+                        {
+                            "id": "e034d081-a29e-4040-830f-a192304db50d",
+                            "count": 1
+                        },
+                        {
+                            "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Readings logged"
+                }
+            ]
+        },
+        {
+            "id": "cooldown",
+            "text": "If temps hold steady or dip below 50 °C and moisture is balanced, let the bucket rest and cure.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "cure-compost-bucket",
+                    "text": "Start the cure rest"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Nice, it's hot!"
+                    "requiresItems": [
+                        {
+                            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Bucket has cooled and smells earthy"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Keep monitoring and turning to maintain that microbial frenzy.",
+            "text": "Great monitoring. A cured bucket is ready for screening or a quick refresh turn if it stalls.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do!"
+                    "requiresItems": [
+                        {
+                            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+                            "count": 1
+                        }
+                    ],
+                    "text": "On to sifting!"
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["composting/start"],
+    "requiresQuests": [
+        "composting/turn-pile"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
