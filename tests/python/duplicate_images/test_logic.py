@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.duplicate_images import (
+from scripts.image_issues import (
     DuplicateImageError,
     collect_image_references,
     find_duplicates,

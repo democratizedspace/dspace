@@ -829,7 +829,7 @@ as Python needs to resolve the `scripts` package from the root.
 
 ```bash
 # From the repository root directory
-python -m scripts.duplicate_images find-image-issues
+python -m scripts.image_issues find-image-issues
 ```
 
 The legacy `find-duplicate-images` subcommand remains available as an alias for
