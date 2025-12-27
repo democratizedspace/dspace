@@ -1,5 +1,5 @@
 {
-    "filename": "/assets/quests/simple_servo_robot_arm.jpg",
+    "filename": "/assets/micro_servo_pair_with_horns.jpg",
     "entity": "frontend/src/pages/inventory/json/items/misc.json",
     "item_name": "calibrated servo arm",
     "item_id": "b73ddc8a-b0cf-43ee-8d1e-189e50ac3d96",
