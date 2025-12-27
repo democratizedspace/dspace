@@ -1,5 +1,5 @@
 {
-    "filename": "/assets/quests/compost_start_bucket.jpg",
+    "filename": "/assets/layered_compost_bucket.jpg",
     "entity": "frontend/src/pages/inventory/json/items/misc.json",
     "item_name": "layered compost bucket",
     "item_id": "025862b3-8377-4396-ab32-aa572bdc3260",

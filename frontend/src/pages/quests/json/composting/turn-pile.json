@@ -83,6 +83,10 @@
                     "goto": "moisture",
                     "requiresItems": [
                         {
+                            "id": "e034d081-a29e-4040-830f-a192304db50d",
+                            "count": 1
+                        },
+                        {
                             "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
                             "count": 1
                         },
@@ -99,6 +103,14 @@
                     "requiresItems": [
                         {
                             "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
+                            "count": 1
+                        },
+                        {
+                            "id": "e034d081-a29e-4040-830f-a192304db50d",
+                            "count": 1
+                        },
+                        {
+                            "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
                             "count": 1
                         }
                     ],
