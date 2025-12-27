@@ -8,30 +8,155 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Filament won't flow? The nozzle might be clogged. Let's clear it.",
+            "text": "Extruder clicking or under-extruding? Sounds like a clog. Let's capture it, then clear the path.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "3dprint-nozzle-clog",
+                    "text": "Recreate the clog and log the symptoms"
+                },
+                {
                     "type": "goto",
-                    "goto": "clean",
-                    "text": "Show me how."
+                    "goto": "jammed",
+                    "text": "The nozzle is already clogged.",
+                    "requiresItems": [
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "clean",
-            "text": "Preheat to 200 °C, put on safety goggles, then gently push cleaning filament or a nozzle needle until the blockage is gone.",
+            "id": "jammed",
+            "text": "Preheat, unload filament, goggles on. Decide: heat-soak and clear the nozzle or swap in a fresh brass one.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "repair-clogged-nozzle",
+                    "text": "Heat soak and clear the clog with cleaning filament",
+                    "requiresItems": [
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "process",
+                    "process": "replace-brass-nozzle",
+                    "text": "Swap in a fresh 0.4 mm nozzle",
+                    "requiresItems": [
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                            "count": 1
+                        },
+                        {
+                            "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Flow restored.",
+                    "goto": "relevel",
+                    "text": "Flow is restored and the threads are sealed.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "relevel",
+            "text": "Clean the bed, recheck Z offset with paper, and make sure the hotend is purged without burnt residue.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Re-level and confirm the mesh",
                     "requiresItems": [
                         {
                             "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                             "count": 1
                         },
                         {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        },
+                        {
                             "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "test",
+                    "text": "Bed leveled, purge line smooth.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "test",
+            "text": "Run a tiny Benchy to prove extrusion is back, and watch the first layer for any remaining hiss or grind.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-benchy",
+                    "text": "Print a test Benchy to verify the fix",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "The test print is clean and the extruder is quiet.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
                             "count": 1
                         }
                     ]
@@ -40,7 +165,7 @@
         },
         {
             "id": "finish",
-            "text": "Smooth extrusion again! Keep the hotend clean for reliable prints.",
+            "text": "Extrusion is smooth again—bed leveled, purge line steady, and a clean Benchy on the bench. Keep watching that first layer.",
             "options": [
                 {
                     "type": "finish",
@@ -50,10 +175,12 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinter/start"],
+    "requiresQuests": [
+        "3dprinter/start"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

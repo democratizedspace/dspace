@@ -327,6 +327,36 @@
         "category": "3D Printing & Fabrication"
     },
     {
+        "id": "a5ac486e-57ad-4cc4-8a0a-ec0e5fac417e",
+        "name": "3D printed cable clip (pair)",
+        "description": "Two low-profile 3D printed cable clips with a springy jaw sized for USB and power leads; printed in PLA and ready to snap onto desk edges or shelf lips.",
+        "image": "/assets/quests/cable_clip_print.jpg",
+        "price": "0.25 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "3D Printing & Fabrication"
+    },
+    {
+        "id": "bff86f61-9da8-4670-991e-dd70fb5b91c8",
+        "name": "3D printed filament spool holder",
+        "description": "Printed base and arms that cradle a standard 1 kg filament spool so it unwinds smoothly toward the extruder; includes chamfers for easy support removal.",
+        "image": "/assets/quests/spool_holder_print_setup.jpg",
+        "price": "3.00 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        },
+        "category": "3D Printing & Fabrication"
+    },
+    {
         "id": "9605048d-ea62-4b70-9bbc-ea1ad4baaf3e",
         "name": "3D printing kit",
         "description": "Assembled FDM printer, 0.4 mm nozzle, 180×180×180 mm build with 500 g PLA.",

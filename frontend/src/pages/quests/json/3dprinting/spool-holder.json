@@ -8,44 +8,112 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your filament keeps unraveling. Let's print a holder to keep it in check.",
+            "text": "Filament spaghetti again? Let's print a holder so the spool feeds smoothly instead of rolling all over the bench.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "print",
-                    "text": "Great idea. What do I do?"
+                    "goto": "prep",
+                    "text": "Show me the prep."
                 }
             ]
         },
         {
-            "id": "print",
-            "text": "Clean the bed, load filament, slice the holder model and start the print.",
+            "id": "prep",
+            "text": "Brush the plate, check the nozzle for droop, and re-level so the tall arms don't wobble loose.",
             "options": [
                 {
                     "type": "process",
-                    "process": "3dprint-spool-holder",
-                    "text": "Starting the spool holder print"
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
+                    "process": "level-3d-printer-bed",
+                    "text": "Re-level before printing a tall part",
                     "requiresItems": [
                         {
                             "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                             "count": 1
                         },
                         {
-                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
-                            "count": 50
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
                         }
                     ],
-                    "text": "The print finished without a hitch."
+                    "text": "Bed is leveled and ready for a long print."
+                }
+            ]
+        },
+        {
+            "id": "print",
+            "text": "Slice the holder with thick walls, 30% infill, and a generous brim. Keep the spool of PLA tidy while the 6-hour print runs.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-spool-holder",
+                    "text": "Start the spool holder print",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 120
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Warping again—I'll clean and re-level."
+                },
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "requiresItems": [
+                        {
+                            "id": "bff86f61-9da8-4670-991e-dd70fb5b91c8",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Print cooled; time to put it to work."
+                }
+            ]
+        },
+        {
+            "id": "mount",
+            "text": "Deburr any stringing, seat the spool on the holder, and make sure it unwinds without tugging the extruder.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Spool spins smoothly and the filament path is clear.",
+                    "requiresItems": [
+                        {
+                            "id": "bff86f61-9da8-4670-991e-dd70fb5b91c8",
+                            "count": 1
+                        },
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Mount the spool and enjoy smoother prints.",
+            "text": "Holder printed, spool spinning, and your filament stays tame. Load the next print without babysitting tangles.",
             "options": [
                 {
                     "type": "finish",
@@ -56,8 +124,8 @@
     ],
     "rewards": [
         {
-            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-            "count": 10
+            "id": "bff86f61-9da8-4670-991e-dd70fb5b91c8",
+            "count": 1
         }
     ],
     "requiresQuests": ["3dprinter/start"],

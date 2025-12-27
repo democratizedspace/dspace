@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/cable_clip_print.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "3D printed cable clip (pair)",
+    "item_id": "a5ac486e-57ad-4cc4-8a0a-ec0e5fac417e",
+    "entity_type": "item",
+    "prompt": "Two freshly printed PLA cable clips sit on a build plate next to the nozzle, their springy jaws open just enough for USB and power leads. In the background, a printer cable bundle is already tamed by matching clips along the frame, showing how the design routes wires cleanly out of the way.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

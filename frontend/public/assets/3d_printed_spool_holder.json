@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/spool_holder_print_setup.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "3D printed filament spool holder",
+    "item_id": "bff86f61-9da8-4670-991e-dd70fb5b91c8",
+    "entity_type": "item",
+    "prompt": "A sturdy 3D printed filament spool holder rests on a workbench, its base and upright arms supporting a 1 kg spool that feeds smoothly toward a nearby printer. The print lines are visible but clean, and a small deburring tool and pliers sit off to the side from assembly. A second empty holder on the build plate hints at the print setup.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

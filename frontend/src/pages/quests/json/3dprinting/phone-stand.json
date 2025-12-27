@@ -8,55 +8,104 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey there, it's Sydney again! Ready for a quick project? We'll print a simple phone stand. Grab your 3D printer and some PLA.",
+            "text": "Hey, it's Sydney! Let's knock out a phone stand—good practice for first layers and bridging.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "print",
-                    "text": "Sounds good. What's next?"
+                    "goto": "prep",
+                    "text": "Sounds good. I'll prep the printer."
                 }
             ]
         },
         {
-            "id": "print",
-            "text": "Clean and level the build plate, load PLA filament, then slice the stand STL and begin printing. Keep hands away from the hot nozzle and ensure the area is ventilated.",
+            "id": "prep",
+            "text": "Clear the plate, re-level with paper, and purge a bit of PLA so the first layer isn't half-melted junk.",
             "options": [
                 {
-                    "type": "grantsItems",
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Re-level and warm up",
                     "requiresItems": [
                         {
                             "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                             "count": 1
                         },
                         {
-                            "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
-                            "count": 15
-                        }
-                    ],
-                    "grantsItems": [
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        },
                         {
-                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
                             "count": 1
                         }
-                    ],
-                    "text": "Print started!"
+                    ]
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "print",
+                    "text": "Bed is leveled and PLA is loaded.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "print",
+            "text": "Slice the stand with a 0.28 mm layer height, 20% gyroid infill, and a light brim. Keep hands clear and watch the first two layers for wobble.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-phone-stand",
+                    "text": "Start the phone stand print",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "First layer looks rough. Let me re-level."
+                },
+                {
+                    "type": "goto",
+                    "goto": "cleanup",
                     "requiresItems": [
                         {
                             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
                             "count": 1
                         }
                     ],
-                    "text": "The stand is finished and cooled!"
+                    "text": "Print finished and cooled."
+                }
+            ]
+        },
+        {
+            "id": "cleanup",
+            "text": "Pop the brim, lightly chamfer any sharp edges, and test that your phone sits stable without wobbling.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "The stand sits flat and the cable channel fits.",
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! Let the print cool before removing it, then enjoy a sturdy stand for your phone. Remember to turn off the printer.",
+            "text": "Nice work! You've got a reliable stand and a dialed-in profile for future prints. Power down the hotend while the plate is still clean.",
             "options": [
                 {
                     "type": "finish",
@@ -65,10 +114,18 @@
             ]
         }
     ],
-    "requiresQuests": ["3dprinter/start"],
+    "rewards": [
+        {
+            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "3dprinter/start"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

@@ -8,36 +8,195 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You start a print and walk away. Without verifying the first layer, the Z axis mis-homes and the printer extrudes in mid-air.",
+            "text": "You walked away after hitting print, and now the hotend is wrapped in molten plastic. Let's capture what happened and recover the machine safely.",
             "options": [
                 {
                     "type": "process",
                     "process": "3dprint-blob-of-death",
-                    "text": "Watch the blob grow."
+                    "text": "Document the blobbed hotend and kill the print"
+                },
+                {
+                    "type": "goto",
+                    "goto": "isolate",
+                    "text": "I'm staring at the glob right now.",
+                    "requiresItems": [
+                        {
+                            "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "isolate",
+            "text": "Power off, let the hotend cool until it's safe to touch, and lay out goggles, pliers, and a fresh nozzle before you dig the heater block free.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clear",
+                    "text": "Tools are out and the blob is solid.",
+                    "requiresItems": [
+                        {
+                            "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                            "count": 1
+                        },
+                        {
+                            "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Still cooling; I'll document the mess while I wait."
+                }
+            ]
+        },
+        {
+            "id": "clear",
+            "text": "Snip away the plastic without yanking thermistor or heater wires, then heat just enough to twist out the ruined nozzle and seat the replacement.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "repair-blob-of-death",
+                    "text": "Cut the blob free and install the new nozzle",
+                    "requiresItems": [
+                        {
+                            "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                            "count": 1
+                        },
+                        {
+                            "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "level",
+                    "text": "Hotend is clear and the new nozzle is torqued.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "level",
+            "text": "Inspect the carriage wiring, re-seat the Z couplers, and re-level the bed so the next first layer actually sticks.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Re-level after the teardown",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "test",
+                    "text": "Bed is trammed and Z offset is refreshed.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "test",
+            "text": "Run a quick Benchy to prove extrusion, watch the skirt, and confirm the heater block stays clean this time.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-benchy",
+                    "text": "Print a calibration Benchy to verify the fix",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Kill power and note the damage."
+                    "text": "Benchy printed clean with no drips.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "A molten glob encases the nozzle. Next time, watch the first layer to catch issues early.",
+            "text": "Blob removed, nozzle replaced, bed releveled, and a clean Benchy on the desk. Next time the first layer stays watched.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Ugh."
+                    "text": "Documented and lesson learned."
                 }
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["3dprinter/start"],
+    "rewards": [
+        {
+            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "3dprinter/start"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 100,
         "emoji": "🛠️",
         "history": []
     }

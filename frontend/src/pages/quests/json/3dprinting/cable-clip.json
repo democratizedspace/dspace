@@ -8,31 +8,79 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Need a quick print project? Let's make a cable clip to tame those loose cords.",
+            "text": "Loose cables snagging on the frame? Let's print a pair of clips and prove your first layer is dialed.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "print",
-                    "text": "Sounds good. What do I need?"
+                    "goto": "prep",
+                    "text": "Let's get the bed ready."
                 }
             ]
         },
         {
-            "id": "print",
-            "text": "Clean the bed, load some filament, slice the clip STL, and start the print. Keep the nozzle clear and watch the first layer stick.",
+            "id": "prep",
+            "text": "Brush crumbs off the bed, wipe with isopropyl, and run a quick paper check so the brim sticks cleanly.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "The clip printed great!",
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Re-level before printing",
                     "requiresItems": [
                         {
                             "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
                             "count": 1
                         },
                         {
-                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
-                            "count": 5
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "slice",
+                    "text": "Bed is leveled and nozzle is clean.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "slice",
+            "text": "Slice two clips with 0.2 mm layers, four perimeters, and a small brim. Watch the skirt: if it lifts, pause and tweak Z offset.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-cable-clip",
+                    "text": "Print the cable clips",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "First layer lifted—I'll re-level and try again."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Clips printed cleanly and cooled.",
+                    "requiresItems": [
+                        {
+                            "id": "a5ac486e-57ad-4cc4-8a0a-ec0e5fac417e",
+                            "count": 1
                         }
                     ]
                 }
@@ -40,25 +88,27 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Snap it onto a cable and enjoy the tidy workspace.",
+            "text": "Deburr the edges, snap the clips onto the gantry cables, and enjoy a tidy wiring run that won't snag a moving print head.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks for the tip!"
+                    "text": "Cable bundle is tidy!"
                 }
             ]
         }
     ],
     "rewards": [
         {
-            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-            "count": 5
+            "id": "a5ac486e-57ad-4cc4-8a0a-ec0e5fac417e",
+            "count": 1
         }
     ],
-    "requiresQuests": ["3dprinter/start"],
+    "requiresQuests": [
+        "3dprinter/start"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }
