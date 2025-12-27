@@ -16,7 +16,7 @@
                     "text": "Yes please, it's heavy.",
                     "requiresItems": [
                         {
-                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
                             "count": 1
                         },
                         {
@@ -63,7 +63,7 @@
                             "count": 1
                         },
                         {
-                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
                             "count": 1
                         }
                     ]
@@ -75,7 +75,7 @@
             ]
         }
     ],
-    "requiresQuests": ["aquaria/walstad"],
+    "requiresQuests": ["aquaria/walstad", "aquaria/thermometer"],
     "rewards": [
         {
             "id": "8c0f72a2-db79-4238-b80f-97721def169f",

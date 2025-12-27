@@ -2517,13 +2517,12 @@
     {
         "id": "heat-walstad",
         "title": "Install a heater in your Walstad tank",
-        "requireItems": [
+        "requireItems": [],
+        "consumeItems": [
             {
                 "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
                 "count": 1
-            }
-        ],
-        "consumeItems": [
+            },
             {
                 "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
                 "count": 1

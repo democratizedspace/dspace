@@ -67,7 +67,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/position-tank", "aquaria/walstad"],
+    "requiresQuests": ["aquaria/walstad"],
     "hardening": {
         "passes": 4,
         "score": 95,

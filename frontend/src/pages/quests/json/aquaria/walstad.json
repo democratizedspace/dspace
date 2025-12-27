@@ -97,20 +97,19 @@
         },
         {
             "id": "thermo",
-            "text": "Dry the outside glass near eye level. Attach the strip thermometer before cycling so you can track swing without dunking probes.",
+            "text": "Dry the outside glass near eye level and pick a spot for the strip thermometer so you can attach it in the next quest and track swings without dunking probes.",
             "options": [
-                {
-                    "type": "process",
-                    "process": "attach-aquarium-thermometer",
-                    "text": "Attach the strip thermometer"
-                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Thermometer is on and readable",
+                    "text": "Placement marked and glass is dry",
                     "requiresItems": [
                         {
-                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        },
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
                             "count": 1
                         }
                     ]

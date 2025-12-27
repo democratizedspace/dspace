@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Unplug heater and filter to prevent shocks. Wear safety goggles and nitrile gloves, then load a utility cart with a gravel vacuum, bucket, conditioner, and the dechlorinated tank you're about to service.",
+            "text": "Unplug heater and filter to prevent shocks. Wear safety goggles and nitrile gloves, then load a utility cart with a gravel vacuum, bucket, conditioner, and the tank you're about to service.",
             "options": [
                 {
                     "type": "goto",
@@ -20,7 +20,6 @@
                         { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
                         { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 1 },
                         { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
-                        { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 },
                         { "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0", "count": 1 }
                     ]
                 }
