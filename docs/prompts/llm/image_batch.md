@@ -10,12 +10,13 @@ Type: evergreen
 NOTE: You can paste the fenced prompt below directly into an LLM chat.
 Nested examples use `~~~` fences instead of ``` so they do not close the main block.
 
-Before using the prompt, generate duplicate-image snippets locally from the DSPACE repo root:
-1. Run the detector:
+Before using the prompt, generate image-analyzer snippets locally from the DSPACE repo root:
+1. Run the analyzer (it reports duplicates and missing assets):
    ```bash
    python -m scripts.duplicate_images find-duplicate-images
    ```
 2. Copy one duplicate block from the output (one image path and its bullet list of entities).
+   Skip the "Missing image assets" section; this prompt is only for duplicates.
 3. Paste that single block **after** the fenced prompt below when chatting with the LLM.
 4. After the LLM returns new assets for that block, paste the next block to process another batch.
 

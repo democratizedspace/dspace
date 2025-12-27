@@ -11,6 +11,7 @@ from scripts.duplicate_images import (
     collect_image_references,
     find_duplicates,
     find_identical_files,
+    find_missing_files,
     format_duplicates,
     serialize_report,
 )
@@ -38,7 +39,11 @@ def test_collects_duplicates_from_quests_and_items(tmp_path: Path) -> None:
 
     _write_json(
         quests_dir / "astronomy" / "andromeda.json",
-        {"id": "astronomy/andromeda", "title": "Andromeda Quest", "image": "/assets/quests/solar.jpg"},
+        {
+            "id": "astronomy/andromeda",
+            "title": "Andromeda Quest",
+            "image": "/assets/quests/solar.jpg",
+        },
     )
     _write_json(
         quests_dir / "astrobiology" / "origin.json",
@@ -72,7 +77,7 @@ def test_collects_duplicates_from_quests_and_items(tmp_path: Path) -> None:
     assert "tank-200" in formatted
     # Verify summary appears (3 uses - 1 = 2 duplicates)
     assert "Total path-based duplicates: 2" in formatted
-    assert "Total duplicates remaining: 2" in formatted
+    assert "Total image issues remaining: 2" in formatted
 
 
 def test_includes_descriptions_in_output_and_serialization(tmp_path: Path) -> None:
@@ -135,6 +140,9 @@ def test_reports_identical_files_by_content(tmp_path: Path) -> None:
     usages = collect_image_references(quests_dir, items_dir, repo_root)
     duplicates = find_duplicates(usages)
     identical = find_identical_files(usages, repo_root)
+    missing = find_missing_files(usages, repo_root)
+
+    assert missing == {}
 
     # Duplicate paths by string
     assert "/assets/shared-path.jpg" in duplicates
@@ -153,7 +161,7 @@ def test_reports_identical_files_by_content(tmp_path: Path) -> None:
     identical_paths = {path for paths in identical.values() for path in paths}
     assert conflict_paths.isdisjoint(identical_paths)
 
-    formatted = format_duplicates(duplicates, identical, usages)
+    formatted = format_duplicates(duplicates, identical, usages, missing)
     assert "Identical image files (same content, different paths):" in formatted
     assert "  - /assets/duplicate-content.jpg (1 uses)" in formatted
     assert "  - /assets/quests/duplicate-content.jpg (1 uses)" in formatted
@@ -161,7 +169,7 @@ def test_reports_identical_files_by_content(tmp_path: Path) -> None:
     assert "Item fixture description for duplicate content" in formatted
     assert "Total path-based duplicates: 1" in formatted
     assert "Total identical-file duplicates: 1" in formatted
-    assert "Total duplicates remaining: 2" in formatted
+    assert "Total image issues remaining: 2" in formatted
 
 
 def test_collect_image_references_requires_valid_json(tmp_path: Path) -> None:
@@ -176,3 +184,59 @@ def test_collect_image_references_requires_valid_json(tmp_path: Path) -> None:
 
     with pytest.raises(DuplicateImageError):
         collect_image_references(quests_dir, items_dir, repo_root)
+
+
+def test_reports_missing_images_with_references(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
+
+    existing_asset = repo_root / "frontend" / "public" / "assets" / "existing.jpg"
+    existing_asset.parent.mkdir(parents=True, exist_ok=True)
+    existing_asset.write_bytes(b"existing asset")
+
+    _write_json(
+        quests_dir / "ghosts" / "missing.json",
+        {
+            "id": "ghosts/missing",
+            "title": "Missing Quest Image",
+            "description": "Quest with no image asset yet.",
+            "image": "/assets/quests/missing.jpg",
+        },
+    )
+    _write_json(
+        quests_dir / "ghosts" / "existing.json",
+        {"id": "ghosts/existing", "title": "Existing Quest Image", "image": "/assets/existing.jpg"},
+    )
+    _write_json(
+        items_dir / "missing.json",
+        [
+            {
+                "id": "ghost-tool",
+                "name": "Ghost Tool",
+                "description": "Tool missing its image.",
+                "image": "/assets/missing.jpg",
+            }
+        ],
+    )
+
+    usages = collect_image_references(quests_dir, items_dir, repo_root)
+    missing = find_missing_files(usages, repo_root)
+    duplicates = find_duplicates(usages)
+
+    assert set(missing.keys()) == {"/assets/missing.jpg", "/assets/quests/missing.jpg"}
+    formatted = format_duplicates(duplicates, all_references=usages, missing_files=missing)
+
+    assert (
+        "Missing image assets (referenced but file not found under frontend/public):" in formatted
+    )
+    assert "/assets/missing.jpg (1 uses)" in formatted
+    assert "/assets/quests/missing.jpg (1 uses)" in formatted
+    assert "Tool missing its image." in formatted
+    assert "Quest with no image asset yet." in formatted
+    assert "Existing Quest Image" not in formatted
+    assert "Total missing image uses: 2 across 2 paths" in formatted
+    assert "Total image issues remaining: 2" in formatted
+
+    report = serialize_report(duplicates, missing_files=missing)
+    assert set(report["missing"].keys()) == {"/assets/missing.jpg", "/assets/quests/missing.jpg"}
