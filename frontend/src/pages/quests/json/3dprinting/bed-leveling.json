@@ -35,9 +35,7 @@
                     "type": "goto",
                     "goto": "first-layer",
                     "text": "Corners all tug the paper evenly.",
-                    "requiresItems": [
-                        { "id": "a42e441a-5569-490c-86e4-ce711117cd22", "count": 1 }
-                    ]
+                    "requiresItems": [{ "id": "a42e441a-5569-490c-86e4-ce711117cd22", "count": 1 }]
                 }
             ]
         },
@@ -54,9 +52,7 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Skirt looks even and glossy.",
-                    "requiresItems": [
-                        { "id": "a42e441a-5569-490c-86e4-ce711117cd22", "count": 1 }
-                    ]
+                    "requiresItems": [{ "id": "a42e441a-5569-490c-86e4-ce711117cd22", "count": 1 }]
                 }
             ]
         },

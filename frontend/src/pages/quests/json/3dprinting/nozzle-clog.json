@@ -24,9 +24,7 @@
                     "type": "goto",
                     "goto": "cooldown",
                     "text": "Printer is powered down and cool.",
-                    "requiresItems": [
-                        { "id": "564a76de-925b-4457-a548-d015168abe0c", "count": 1 }
-                    ]
+                    "requiresItems": [{ "id": "564a76de-925b-4457-a548-d015168abe0c", "count": 1 }]
                 }
             ]
         },
@@ -61,9 +59,7 @@
                     "type": "goto",
                     "goto": "purge",
                     "text": "Hotend is rebuilt and moves smoothly.",
-                    "requiresItems": [
-                        { "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd", "count": 1 }
-                    ]
+                    "requiresItems": [{ "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd", "count": 1 }]
                 }
             ]
         },

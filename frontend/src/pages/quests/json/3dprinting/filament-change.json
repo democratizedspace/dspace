@@ -37,9 +37,7 @@
                     "type": "goto",
                     "goto": "purge",
                     "text": "Green filament is flowing without bubbles.",
-                    "requiresItems": [
-                        { "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e", "count": 1 }
-                    ]
+                    "requiresItems": [{ "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e", "count": 1 }]
                 }
             ]
         },
@@ -51,9 +49,7 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Swap locked in and purge line is solid.",
-                    "requiresItems": [
-                        { "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e", "count": 1 }
-                    ]
+                    "requiresItems": [{ "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e", "count": 1 }]
                 }
             ]
         },
