@@ -100,12 +100,15 @@
         if (typeof indexedDB.databases === 'function') {
             try {
                 const databases = await indexedDB.databases();
-                const names = databases
-                    .map((database) => database?.name)
-                    .filter((name) => typeof name === 'string');
 
-                if (names.length > 0) {
-                    return names;
+                if (Array.isArray(databases)) {
+                    const names = databases
+                        .map((database) => database?.name)
+                        .filter((name) => typeof name === 'string');
+
+                    if (names.length > 0) {
+                        return names;
+                    }
                 }
             } catch (error) {
                 console.warn('Failed to enumerate IndexedDB databases', error);
