@@ -30,6 +30,7 @@ const SENSITIVE_KEYWORDS = [
     'privatekey',
     'private-key',
     'private_key',
+    'auth',
     'authorization',
     'credential',
 ];

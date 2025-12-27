@@ -35,7 +35,7 @@ describe('githubGists helpers', () => {
             },
             array: [
                 { secretKey: 'nope', keep: 'yep' }, // scan-secrets: ignore - test fixture
-                { credentialNotes: 'safe to keep' },
+                { credentialNotes: 'password123' }, // scan-secrets: ignore - test fixture
             ],
         };
 
