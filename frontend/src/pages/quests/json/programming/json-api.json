@@ -8,26 +8,53 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your web server prints text. Let's make it return JSON.",
+            "text": "Your web server prints text. Let's expose real sensor data as JSON so clients can reuse it.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Show me how"
+                    "goto": "collect",
+                    "text": "Ready to prep the data."
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Add an endpoint like /data that replies with `{ message: 'Hello' }`.",
+            "id": "collect",
+            "text": "Start with a trustworthy dataset: refresh your thermistor log so the API isn't serving stale or noisy values.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture a fresh temperature log."
+                },
+                {
+                    "type": "goto",
+                    "goto": "endpoint",
+                    "text": "Clean CSV ready to serve.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "endpoint",
+            "text": "Expose the latest reading at `/api/temp`, lock down CORS, and be sure the service keeps streaming without blocking the logger.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "deploy-temperature-json-endpoint",
+                    "text": "Deploy the JSON endpoint."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "JSON endpoint works!",
+                    "text": "Endpoint responds with live values.",
                     "requiresItems": [
                         {
-                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
                             "count": 1
                         }
                     ]
@@ -36,20 +63,28 @@
         },
         {
             "id": "finish",
-            "text": "Nice! Clients can now consume your structured data.",
+            "text": "Nice! Clients can now hit a stable JSON endpoint fed by your real sensor readings.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "API online"
+                    "text": "API online",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/web-server"],
+    "requiresQuests": [
+        "programming/web-server"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

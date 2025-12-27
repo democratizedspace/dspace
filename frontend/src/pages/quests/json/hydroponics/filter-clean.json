@@ -8,26 +8,78 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The filter's looking grimy. A quick rinse will keep the roots happy.",
+            "text": "Flow is slowing and the sponge is grimy. Let's clean it without killing the microbes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "I'll grab gloves and a rinse bucket."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Unplug the pump, lift the sponge filter gently, and set out dechlorinated water so the bacteria survive the rinse.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "rinse",
-                    "text": "I'll clean it now."
+                    "text": "Prep is done; filter is ready to rinse.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "rinse",
-            "text": "Remove the sponge and rinse it with a bucket of fresh dechlorinated water.",
+            "text": "Dunk and squeeze the sponge in the bucket, never under a faucet, until the water runs clear but the media stays wet.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "rinse-aquarium-filter",
+                    "text": "Rinse the sponge core in the bucket."
+                },
+                {
+                    "type": "goto",
+                    "goto": "restart",
+                    "text": "Media is rinsed and still wet.",
+                    "requiresItems": [
+                        {
+                            "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "restart",
+            "text": "Seat the sponge, reconnect the airline, and be sure the bubbles restart so flow stays oxygenated.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "restart-sponge-filter",
+                    "text": "Reassemble and restart the filter."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Filter's all clean!",
+                    "text": "Bubbles are steady and flow is restored.",
                     "requiresItems": [
                         {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
                             "count": 1
                         }
                     ]
@@ -36,20 +88,28 @@
         },
         {
             "id": "finish",
-            "text": "Nice work. Clean filters keep nutrient flow steady.",
+            "text": "Nice work. You kept the bacteria alive, cleared the debris, and brought the flow back up for the roots.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Back to growing."
+                    "text": "Back to growing.",
+                    "requiresItems": [
+                        {
+                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/top-off"],
+    "requiresQuests": [
+        "hydroponics/top-off"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

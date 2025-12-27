@@ -8,26 +8,103 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your API serves data. Now let's accept data from clients.",
+            "text": "Your API serves data. Now let's accept client POSTs and fold them into your stream.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "I'm ready"
+                    "goto": "ingest",
+                    "text": "Show me how to capture payloads.",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Modify your server to read JSON from POST requests to /submit and print it.",
+            "id": "ingest",
+            "text": "Add a POST route that validates JSON, rejects junk, and appends valid readings to your log.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "capture-http-posts",
+                    "text": "Handle incoming payloads and append them."
+                },
+                {
+                    "type": "goto",
+                    "goto": "chart",
+                    "text": "Payloads saved to CSV.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "chart",
+            "text": "Graph the posted data so you can spot bogus submissions before they pollute the live feed.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Render the updated time series."
+                },
+                {
+                    "type": "goto",
+                    "goto": "annotate",
+                    "text": "Chart renders and matches posted values.",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "annotate",
+            "text": "Mark the mean, flag outliers, and note which samples came from POST clients.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Annotate the POST dataset."
+                },
+                {
+                    "type": "goto",
+                    "goto": "dashboard",
+                    "text": "Annotated chart looks clean.",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "dashboard",
+            "text": "Publish the updated graph so POST senders can see their data land in real time.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "publish-live-temperature-graph",
+                    "text": "Deploy the live dashboard."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "POST endpoint working!",
+                    "text": "Dashboard refreshes with new posts.",
                     "requiresItems": [
                         {
-                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
                             "count": 1
                         }
                     ]
@@ -36,20 +113,28 @@
         },
         {
             "id": "finish",
-            "text": "Great! Your service can now ingest data from clients.",
+            "text": "Great! Your service validates POSTed JSON, folds it into the log, and shows contributors the results.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Nice!"
+                    "text": "Clients see their data land.",
+                    "requiresItems": [
+                        {
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/json-api"],
+    "requiresQuests": [
+        "programming/json-api"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
