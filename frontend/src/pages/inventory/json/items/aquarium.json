@@ -220,6 +220,19 @@
         "price": "80 dUSD"
     },
     {
+        "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+        "name": "Walstad aquarium with thermometer (80 L)",
+        "description": "An 80 L Walstad tank with a strip thermometer attached on the outside glass for quick checks.",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "98609b23-4811-4275-8d83-ad59a2797753",
         "name": "aquarium stand (80 L)",
         "description": "Sturdy wooden stand rated to hold a filled 80 L aquarium.",
@@ -532,6 +545,32 @@
         "name": "Logged water parameters",
         "description": "Notebook entry with ammonia, nitrite, nitrate, and pH values plus date and time.",
         "image": "/assets/paperwork.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+        "name": "Aquarium temperature reading",
+        "description": "Most recent strip thermometer reading recorded after the glass dried and stabilized.",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+        "name": "Freshly changed aquarium (80 L)",
+        "description": "Walstad tank refilled with temperature-matched dechlorinated water after a gravel-vac water change.",
+        "image": "/assets/walstad_80L.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,

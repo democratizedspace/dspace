@@ -39,6 +39,71 @@
         }
     },
     {
+        "id": "assemble-walstad-tank",
+        "title": "Layer soil, cap with gravel, plant, and fill an 80 L Walstad aquarium",
+        "requireItems": [
+            {
+                "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+                "count": 1
+            },
+            {
+                "id": "98609b23-4811-4275-8d83-ad59a2797753",
+                "count": 1
+            },
+            {
+                "id": "75cec98f-fcf0-4d73-8d31-5a53571317b2",
+                "count": 3
+            },
+            {
+                "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                "count": 1
+            },
+            {
+                "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                "count": 1
+            },
+            {
+                "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+                "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "75cec98f-fcf0-4d73-8d31-5a53571317b2",
+                "count": 3
+            },
+            {
+                "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                "count": 1
+            },
+            {
+                "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+                "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            }
+        ],
+        "duration": "40m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "outlet-dWatt-1e4",
         "title": "Use a smart plug to buy 10 kWh of electricity from a wall outlet",
         "image": "/assets/smart_plug.jpg",
@@ -525,6 +590,10 @@
         "title": "Add 5 mL of water conditioner to a 5 gal bucket to neutralize chlorine",
         "image": "/assets/bucket_water.jpg",
         "requireItems": [
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            },
             {
                 "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
                 "count": 1
@@ -2448,12 +2517,13 @@
     {
         "id": "heat-walstad",
         "title": "Install a heater in your Walstad tank",
-        "requireItems": [],
-        "consumeItems": [
+        "requireItems": [
             {
-                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
                 "count": 1
-            },
+            }
+        ],
+        "consumeItems": [
             {
                 "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
                 "count": 1
@@ -2468,7 +2538,7 @@
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 85,
+            "score": 90,
             "emoji": "🛠️",
             "history": []
         }
@@ -4883,7 +4953,7 @@
         "title": "Use gravel vacuum with 2 m hose and 19 L (5 gal) bucket to change 5% of water in 150 L aquarium",
         "requireItems": [
             {
-                "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+                "id": "8c0f72a2-db79-4238-b80f-97721def169f",
                 "count": 1
             },
             {
@@ -4895,21 +4965,30 @@
                 "count": 1
             },
             {
-                "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
                 "count": 1
             }
         ],
         "consumeItems": [
             {
-                "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
-                "count": 0.05
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 0.25
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                "count": 1
+            }
+        ],
         "duration": "30m",
         "hardening": {
             "passes": 1,
-            "score": 95,
+            "score": 100,
             "emoji": "🌀",
             "history": [
                 {
@@ -5617,24 +5696,38 @@
         "image": "/assets/aquarium_thermometer.jpg",
         "requireItems": [
             {
-                "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
-                "count": 1
-            },
-            {
-                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
                 "count": 1
             },
             {
                 "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
                 "count": 1
+            },
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 1
             }
         ],
-        "consumeItems": [],
-        "createItems": [],
+        "consumeItems": [
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            },
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 95,
             "emoji": "🌀",
             "history": [
                 {
@@ -5673,6 +5766,31 @@
                     "score": 60
                 }
             ]
+        }
+    },
+    {
+        "id": "log-walstad-temperature",
+        "title": "Note the Walstad tank temperature from the attached strip thermometer",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                "count": 1
+            }
+        ],
+        "duration": "30s",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
         }
     },
     {

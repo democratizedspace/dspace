@@ -8,78 +8,74 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Unplug heater and filter to prevent shocks. Wear safety goggles and nitrile gloves. Load a utility cart with a gravel vacuum, 5-gal bucket, water conditioner and an aquarium thermometer.",
+            "text": "Unplug heater and filter to prevent shocks. Wear safety goggles and nitrile gloves, then load a utility cart with a gravel vacuum, bucket, conditioner, and the dechlorinated tank you're about to service.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "remove",
-                    "text": "Got it. How do I start?",
+                    "goto": "prep",
+                    "text": "Gear gathered and tank is safe to work",
                     "requiresItems": [
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
-                            "count": 1
-                        },
-                        {
-                            "id": "0564d441-7367-412e-b709-dad770814a39",
-                            "count": 1
-                        },
-                        {
-                            "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
-                            "count": 1
-                        },
-                        {
-                            "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0",
-                            "count": 1
-                        },
-                        {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
-                            "count": 1
-                        }
+                        { "id": "8c0f72a2-db79-4238-b80f-97721def169f", "count": 1 },
+                        { "id": "97317bc3-507a-4e2c-912b-507d586cee87", "count": 1 },
+                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
+                        { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
+                        { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 },
+                        { "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Fill the bucket with tap water, add conditioner, and match the temperature within 2 °C before you touch the tank. Keep cords dripped below outlets.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "condition-bucket-water",
+                    "text": "Condition replacement water"
+                },
+                {
+                    "type": "goto",
+                    "goto": "remove",
+                    "text": "Replacement water is conditioned and matched",
+                    "requiresItems": [
+                        { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "remove",
-            "text": "Use the gravel vacuum to siphon water into the bucket. Keep fish and cords clear, draping cables so outlets stay dry, and stop when about 25% is out.",
+            "text": "Use the gravel vacuum to siphon into the bucket. Lift fish gear out of the way, keep outlets dry, and stop after ~25% of the volume is in the bucket.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "partial-water-change",
+                    "text": "Vacuum and refill with conditioned water"
+                },
+                {
                     "type": "goto",
-                    "goto": "refill",
-                    "text": "Water removed."
+                    "goto": "finish",
+                    "text": "Water swapped and heater restarted",
+                    "requiresItems": [
+                        { "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f", "count": 1 }
+                    ]
                 }
             ]
         },
         {
-            "id": "refill",
-            "text": "Fill the bucket with tap water, add conditioner, match temperature within 2 °C using the thermometer, then slowly refill the tank.",
+            "id": "finish",
+            "text": "Heater and filter are back on, fish are calm, and you logged the swap. Rinse the bucket so conditioner residue doesn't dry on the walls.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "condition-bucket-water",
-                    "text": "Condition the tap water"
-                },
-                {
                     "type": "finish",
-                    "text": "Water's in, gear on, fish happy!"
+                    "text": "Water change complete"
                 }
             ]
         }
     ],
-    "rewards": [
-        {
-            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
-            "count": 1
-        }
-    ],
+    "rewards": [],
     "requiresQuests": ["aquaria/guppy"],
     "hardening": {
         "passes": 4,
