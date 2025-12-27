@@ -621,6 +621,10 @@
             {
                 "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
                 "count": 0.1
+            },
+            {
+                "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                "count": 1
             }
         ],
         "createItems": [
@@ -650,7 +654,12 @@
                 "count": 1
             }
         ],
-        "consumeItems": [],
+        "consumeItems": [
+            {
+                "id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
+                "count": 1
+            }
+        ],
         "createItems": [
             {
                 "id": "a8120ce3-4a9d-4d49-b955-92bd9d7fbc07",

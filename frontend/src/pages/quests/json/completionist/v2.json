@@ -19,7 +19,7 @@
         },
         {
             "id": "prep-printer",
-            "text": "We need a leveled printer and enough filament to chew through a solid core. Ready your green-light printer before we spin up a long print.",
+            "text": "We need a leveled printer and enough filament to chew through a solid core. Ready your green-lit printer before we spin up a long print.",
             "options": [
                 {
                     "type": "process",
