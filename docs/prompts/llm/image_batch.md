@@ -13,7 +13,7 @@ Nested examples use `~~~` fences instead of ``` so they do not close the main bl
 Before using the prompt, generate duplicate-image snippets locally from the DSPACE repo root:
 1. Run the detector:
    ```bash
-   python -m scripts.duplicate_images find-image-issues
+   python -m scripts.image_issues find-image-issues
    ```
 2. Copy one duplicate block from the output (one image path and its bullet list of entities).
    Skip the missing-image section; this prompt expects only duplicate blocks.
@@ -21,7 +21,7 @@ Before using the prompt, generate duplicate-image snippets locally from the DSPA
 4. After the LLM returns new assets for that block, paste the next block to process another batch.
 
 ```text
-You will be given a snippet from the output of `scripts.duplicate_images find-image-issues`
+You will be given a snippet from the output of `scripts.image_issues find-image-issues`
 after the following prompt. Use that snippet to generate new image filenames, two-paragraph
 generation prompts, and JSON manifests for each duplicate listed under the shared image path at
 the top of the snippet.
@@ -221,7 +221,7 @@ correctness.
 
 After editing, run (from the repo root):
 - `pre-commit run --all-files`
-- `python -m scripts.duplicate_images find-image-issues`
+- `python -m scripts.image_issues find-image-issues`
 - `npm test` (for the frontend, if applicable)
 - `git diff --cached | ./scripts/scan-secrets.py`
 
