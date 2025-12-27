@@ -4166,7 +4166,7 @@
     {
         "id": "wire-servo-test-rig",
         "title": "Mount a servo to a breadboard clamp, wire it to an Arduino Uno, and strain-relieve the jumper wires",
-        "image": "/assets/quests/arduino_servo_control.jpg",
+        "image": "/assets/servo_motor_small_hobby.jpg",
         "requireItems": [
             {
                 "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
@@ -4219,7 +4219,7 @@
     {
         "id": "log-servo-sweep",
         "title": "Upload a sweep sketch, verify travel limits, and capture a baseline servo log",
-        "image": "/assets/quests/electronics_servo_sweep_arduino.jpg",
+        "image": "/assets/servo_motor_small_hobby.jpg",
         "requireItems": [
             {
                 "id": "b3857812-f50c-4880-810d-c929698599b3",
@@ -5299,7 +5299,7 @@
     {
         "id": "assemble-hand-crank-generator",
         "title": "Bolt a 12 V DC motor into a printed housing, add the crank handle, and terminate to a fused lead kit",
-        "image": "/assets/quests/hand_crank_generator_200Wh.jpg",
+        "image": "/assets/3d_printed_generator_housing_pla.jpg",
         "requireItems": [
             {
                 "id": "3326e89c-5883-473d-a68f-3ea560093966",
@@ -5802,7 +5802,7 @@
     {
         "id": "mount-wire-wind-turbine-500w",
         "title": "Anchor a 500 W wind turbine mast, wire it to a charge controller, and confirm brake function",
-        "image": "/assets/quests/small_wind_turbine_install.jpg",
+        "image": "/assets/turbine_500w_rooftop_kit.jpg",
         "requireItems": [
             {
                 "id": "743681a7-d2e7-465c-af07-43665079bf4d",
@@ -6431,7 +6431,7 @@
     {
         "id": "assemble-servo-arm-kit",
         "title": "Assemble a two-servo arm and gripper kit with a precision screwdriver set",
-        "image": "/assets/quests/simple_servo_robot_arm.jpg",
+        "image": "/assets/micro_servo_pair_with_horns.jpg",
         "requireItems": [
             {
                 "id": "f69a6eb1-3ef5-4f3e-97e8-5e5f395c2363",
@@ -6468,7 +6468,7 @@
     {
         "id": "calibrate-servo-arm",
         "title": "Upload a smooth motion sketch and tune limits on a two-servo arm",
-        "image": "/assets/quests/simple_servo_robot_arm.jpg",
+        "image": "/assets/micro_servo_pair_with_horns.jpg",
         "requireItems": [
             {
                 "id": "8efbfdc9-3725-46b4-baaf-9b070ca99a5d",
@@ -6513,7 +6513,7 @@
     {
         "id": "build-pan-tilt-ultrasonic",
         "title": "Stack two servos into a pan-tilt bracket, mount an ultrasonic sensor, and tidy wiring to an Arduino",
-        "image": "/assets/quests/pan_tilt_sensor_mount.jpg",
+        "image": "/assets/micro_servo_pair_with_horns.jpg",
         "requireItems": [
             {
                 "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
@@ -6574,7 +6574,7 @@
     {
         "id": "scan-room-ultrasonic",
         "title": "Sweep a pan-tilt ultrasonic rig through 180° and record a point map",
-        "image": "/assets/quests/servo_ultrasonic_radar_scan.jpg",
+        "image": "/assets/micro_servo_pair_with_horns.jpg",
         "requireItems": [
             {
                 "id": "054d7c58-0e39-4f60-b072-e62cd5e879cf",
