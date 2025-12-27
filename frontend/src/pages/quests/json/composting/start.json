@@ -8,71 +8,103 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Waste not, friend! Let's turn scraps into nutrient-rich compost.",
+            "text": "Waste not, friend! Let's turn scraps into nutrient-rich compost with a bucket starter.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "bucket",
-                    "text": "Sounds good!"
+                    "text": "What do I need?"
                 }
             ]
         },
         {
             "id": "bucket",
-            "text": "First grab a sturdy bucket to hold your scraps.",
+            "text": "Grab a 5 gal bucket, drill a few vent holes near the top, and set out gloves plus a scoop of dry browns.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "0564d441-7367-412e-b709-dad770814a39",
-                            "count": 1
-                        }
-                    ],
-                    "text": "I'll take the bucket."
-                },
-                {
                     "type": "goto",
-                    "goto": "fill",
+                    "goto": "layer",
                     "requiresItems": [
                         {
                             "id": "0564d441-7367-412e-b709-dad770814a39",
                             "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
                         }
                     ],
-                    "text": "Bucket ready!"
+                    "text": "Bucket drilled and gloves on."
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Remind me about greens vs browns."
                 }
             ]
         },
         {
-            "id": "fill",
-            "text": "Add plant trimmings and kitchen scraps, then cover with dry leaves.",
+            "id": "prep",
+            "text": "Greens = fresh scraps and coffee grounds; browns = shredded paper, dried leaves, or cardboard. Keep handfuls of each nearby.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "layer",
+                    "requiresItems": [
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Supplies staged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "I'll come back once I find a bucket."
+                }
+            ]
+        },
+        {
+            "id": "layer",
+            "text": "Add a brown base, mix in kitchen scraps, then cap with dry browns. Keep it damp like a wrung sponge and close the lid.",
             "options": [
                 {
                     "type": "process",
                     "process": "start-compost-bin",
-                    "text": "Adding scraps."
+                    "goto": "layer",
+                    "text": "Layer and vent the bucket"
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "requiresItems": [
                         {
-                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "id": "025862b3-8377-4396-ab32-aa572bdc3260",
                             "count": 1
                         }
                     ],
-                    "text": "The mix looks good!"
+                    "text": "Bucket is layered and capped"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! Keep layering greens and browns, and soon you'll have rich compost.",
+            "text": "Nice build! Keep adding scraps under that brown cap and you have your first active bucket.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait to see it turn."
+                    "requiresItems": [
+                        {
+                            "id": "025862b3-8377-4396-ab32-aa572bdc3260",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Ready to start collecting scraps"
                 }
             ]
         }

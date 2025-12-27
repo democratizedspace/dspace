@@ -8,26 +8,44 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to use your compost? Let's sift out the lumpy bits.",
+            "text": "Ready to use your compost? Let's sift the cured bucket into a fine mix.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "sift",
-                    "text": "How do I do that?"
+                    "goto": "setup",
+                    "requiresItems": [
+                        {
+                            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Cured bucket and gloves ready."
                 }
             ]
         },
         {
-            "id": "sift",
-            "text": "Place the sifter over a tub and shake compost through the mesh.",
+            "id": "setup",
+            "text": "Place the sifter over a tub, pour in small scoopfuls, and shake gently so fines fall through.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
+                    "type": "process",
                     "process": "sift-compost",
+                    "goto": "finish",
                     "requiresItems": [
                         {
                             "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
                             "count": 1
                         }
                     ],
@@ -37,20 +55,26 @@
         },
         {
             "id": "finish",
-            "text": "Nice! The fine compost is ready for your garden.",
+            "text": "Nice! The screened blend is perfect for seedlings, top-dressing, or mixing into beds.",
             "options": [
                 {
                     "type": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "5e165cbc-f4f2-4e9d-ac92-9588ff1ac9c1",
+                            "count": 1
+                        }
+                    ],
                     "text": "Can't wait to use it!"
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["composting/turn-pile"],
+    "requiresQuests": ["composting/check-temperature"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 80,
         "emoji": "🛠️",
         "history": []
     }

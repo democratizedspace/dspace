@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/screened_compost_blend.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "screened compost blend",
+    "item_id": "5e165cbc-f4f2-4e9d-ac92-9588ff1ac9c1",
+    "entity_type": "item",
+    "prompt": "A wooden compost sifter rests over a tub, with fine, dark compost piled below and larger bits left on the mesh. A cured compost bucket sits nearby, lid off, and a pair of gloves lies to the side.\n\nThe 512×512 photorealistic solarpunk image focuses on the sifted compost and mesh texture; background planters are softly blurred, and no logos, text, or faces appear.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

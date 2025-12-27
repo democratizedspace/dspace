@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/mission_log_entry_page.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "compost temperature log",
+    "item_id": "e034d081-a29e-4040-830f-a192304db50d",
+    "entity_type": "item",
+    "prompt": "A close-up of a logbook page with hand-written temperature readings, timestamps, and a short note about probe depth. A thermometer rests diagonally across the open notebook, hinting at compost monitoring.\n\nThe 512×512 photorealistic solarpunk workspace includes blurred plants and a tablet in the background. No readable text or logos appear, and no faces are shown.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
