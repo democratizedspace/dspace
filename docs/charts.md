@@ -28,7 +28,9 @@ settings.
   `runAsNonRoot: true`, dropped capabilities, read-only root filesystem, and `seccompProfile:
   RuntimeDefault`.
 - `ingress.annotations`: Map of annotations applied to the ingress object.
-- `resources.requests` / `resources.limits`: Placeholder CPU and memory requests/limits.
+- `resources.requests` / `resources.limits`: Default to `500m` CPU / `768Mi` memory requests and
+  `1` CPU / `1536Mi` memory limits, matching the production baseline. Override as needed for
+  smaller clusters.
 - `configMap.enabled` and `configMap.data`: Optional key-value pairs exposed as a ConfigMap.
 - `secret.enabled` and `secret.stringData`: Optional key-value pairs exposed as a Secret.
 - `probes.livenessPath` and `probes.readinessPath`: HTTP probe paths, defaulting to `/livez`
