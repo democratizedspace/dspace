@@ -79,9 +79,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "programming/temp-logger"
-    ],
+    "requiresQuests": ["programming/temp-logger"],
     "hardening": {
         "passes": 0,
         "score": 95,
