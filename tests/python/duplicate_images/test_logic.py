@@ -11,6 +11,7 @@ from scripts.duplicate_images import (
     collect_image_references,
     find_duplicates,
     find_identical_files,
+    find_missing_images,
     format_duplicates,
     serialize_report,
 )
@@ -22,6 +23,12 @@ FIXTURE_ROOT = Path(__file__).parents[2] / "data" / "duplicate_images"
 def _write_json(path: Path, payload: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+
+def _write_asset(repo_root: Path, image_path: str, content: bytes = b"x") -> None:
+    asset_path = repo_root / "frontend" / "public" / image_path.lstrip("/")
+    asset_path.parent.mkdir(parents=True, exist_ok=True)
+    asset_path.write_bytes(content)
 
 
 def _copy_fixture_repo(destination: Path) -> tuple[Path, Path, Path]:
@@ -72,7 +79,7 @@ def test_collects_duplicates_from_quests_and_items(tmp_path: Path) -> None:
     assert "tank-200" in formatted
     # Verify summary appears (3 uses - 1 = 2 duplicates)
     assert "Total path-based duplicates: 2" in formatted
-    assert "Total duplicates remaining: 2" in formatted
+    assert "Total image issues remaining: 2" in formatted
 
 
 def test_includes_descriptions_in_output_and_serialization(tmp_path: Path) -> None:
@@ -135,6 +142,7 @@ def test_reports_identical_files_by_content(tmp_path: Path) -> None:
     usages = collect_image_references(quests_dir, items_dir, repo_root)
     duplicates = find_duplicates(usages)
     identical = find_identical_files(usages, repo_root)
+    missing = find_missing_images(usages, repo_root)
 
     # Duplicate paths by string
     assert "/assets/shared-path.jpg" in duplicates
@@ -153,7 +161,7 @@ def test_reports_identical_files_by_content(tmp_path: Path) -> None:
     identical_paths = {path for paths in identical.values() for path in paths}
     assert conflict_paths.isdisjoint(identical_paths)
 
-    formatted = format_duplicates(duplicates, identical, usages)
+    formatted = format_duplicates(duplicates, identical, usages, missing)
     assert "Identical image files (same content, different paths):" in formatted
     assert "  - /assets/duplicate-content.jpg (1 uses)" in formatted
     assert "  - /assets/quests/duplicate-content.jpg (1 uses)" in formatted
@@ -161,7 +169,7 @@ def test_reports_identical_files_by_content(tmp_path: Path) -> None:
     assert "Item fixture description for duplicate content" in formatted
     assert "Total path-based duplicates: 1" in formatted
     assert "Total identical-file duplicates: 1" in formatted
-    assert "Total duplicates remaining: 2" in formatted
+    assert "Total image issues remaining: 2" in formatted
 
 
 def test_collect_image_references_requires_valid_json(tmp_path: Path) -> None:
@@ -176,3 +184,50 @@ def test_collect_image_references_requires_valid_json(tmp_path: Path) -> None:
 
     with pytest.raises(DuplicateImageError):
         collect_image_references(quests_dir, items_dir, repo_root)
+
+
+def test_reports_missing_images(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
+
+    _write_json(
+        quests_dir / "missing" / "quest.json",
+        {
+            "id": "missing/quest",
+            "title": "Quest Missing Image",
+            "description": "Quest references a non-existent image.",
+            "image": "/assets/quests/missing.png",
+        },
+    )
+
+    _write_json(
+        items_dir / "missing.json",
+        [
+            {
+                "id": "missing-item",
+                "name": "Missing Item",
+                "description": "Item references a non-existent image.",
+                "image": "/assets/missing.png",
+            }
+        ],
+    )
+
+    usages = collect_image_references(quests_dir, items_dir, repo_root)
+    missing = find_missing_images(usages, repo_root)
+
+    assert set(missing.keys()) == {"/assets/quests/missing.png", "/assets/missing.png"}
+    formatted = format_duplicates({}, {}, usages, missing)
+    assert "Missing image files (referenced but not found on disk):" in formatted
+    assert "/assets/quests/missing.png (1 uses)" in formatted
+    assert "/assets/missing.png (1 uses)" in formatted
+    assert "Quest Missing Image" in formatted
+    assert "Missing Item" in formatted
+    assert "Total missing image references: 2" in formatted
+    assert "Total image issues remaining: 2" in formatted
+
+    serialized = serialize_report({}, {}, missing)
+    assert set(serialized["missingImages"].keys()) == {
+        "/assets/quests/missing.png",
+        "/assets/missing.png",
+    }

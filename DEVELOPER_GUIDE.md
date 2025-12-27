@@ -817,10 +817,11 @@ These lists are sortable and filterable according to the specific capabilities o
 
 Through real-world testing and debugging sessions, we've gathered valuable insights that can help new developers avoid common pitfalls.
 
-### Duplicate Image Detector CLI
+### Image Asset Analyzer CLI
 
-Use the duplicate image detector to find quests or inventory items that still share the same image
-asset (a v3 cleanup task). The tool runs locally and scans quest JSON under
+Use the image asset analyzer to find quests or inventory items that share the same image asset,
+point to byte-identical files in different locations, or reference images that are missing from
+`frontend/public`. The tool runs locally and scans quest JSON under
 `frontend/src/pages/quests/json` and item JSON under `frontend/src/pages/inventory/json/items`.
 
 **Important**: This command must be run from the repository root directory (not from `frontend/`),
@@ -828,12 +829,13 @@ as Python needs to resolve the `scripts` package from the root.
 
 ```bash
 # From the repository root directory
-python -m scripts.duplicate_images find-duplicate-images
+python -m scripts.duplicate_images analyze-images
 ```
 
 The report lists each reused image URL, how many times it appears, and the quest or item entries
-that reference it. Treat the output as the backlog of image assets that still need unique
-replacements.
+that reference it. It also shows hashes for byte-identical files with different paths and surfaces
+missing image files so you can create the assets those quests or items expect. Treat the output as
+the backlog of image assets that still need unique replacements or need to be added to the repo.
 
 **Windows/PowerShell**: The command works the same way on Windows. Ensure you're in the root
 directory (`C:\Users\...\dspace\`) before running the command, not in the `frontend` subdirectory.

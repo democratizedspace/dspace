@@ -11,16 +11,16 @@ NOTE: You can paste the fenced prompt below directly into an LLM chat.
 Nested examples use `~~~` fences instead of ``` so they do not close the main block.
 
 Before using the prompt, generate duplicate-image snippets locally from the DSPACE repo root:
-1. Run the detector:
+1. Run the analyzer (the old ``find-duplicate-images`` alias still works):
    ```bash
-   python -m scripts.duplicate_images find-duplicate-images
+   python -m scripts.duplicate_images analyze-images
    ```
 2. Copy one duplicate block from the output (one image path and its bullet list of entities).
 3. Paste that single block **after** the fenced prompt below when chatting with the LLM.
 4. After the LLM returns new assets for that block, paste the next block to process another batch.
 
 ```text
-You will be given a snippet from the output of `scripts.duplicate_images find-duplicate-images`
+You will be given a snippet from the output of `scripts.duplicate_images analyze-images`
 after the following prompt. Use that snippet to generate new image filenames, two-paragraph
 generation prompts, and JSON manifests for each duplicate listed under the shared image path at
 the top of the snippet.
@@ -220,7 +220,7 @@ correctness.
 
 After editing, run (from the repo root):
 - `pre-commit run --all-files`
-- `python -m scripts.duplicate_images find-duplicate-images`
+- `python -m scripts.duplicate_images analyze-images`
 - `npm test` (for the frontend, if applicable)
 - `git diff --cached | ./scripts/scan-secrets.py`
 

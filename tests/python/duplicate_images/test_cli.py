@@ -10,6 +10,7 @@ from scripts.duplicate_images import (
     collect_image_references,
     find_duplicates,
     find_identical_files,
+    find_missing_images,
     format_duplicates,
     serialize_report,
 )
@@ -21,6 +22,12 @@ FIXTURE_ROOT = Path(__file__).parents[2] / "data" / "duplicate_images"
 def _write_json(path: Path, payload: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+
+def _write_asset(repo_root: Path, image_path: str, content: bytes = b"x") -> None:
+    asset_path = repo_root / "frontend" / "public" / image_path.lstrip("/")
+    asset_path.parent.mkdir(parents=True, exist_ok=True)
+    asset_path.write_bytes(content)
 
 
 def test_cli_reports_duplicates(tmp_path: Path) -> None:
@@ -58,11 +65,14 @@ def test_cli_reports_duplicates(tmp_path: Path) -> None:
         ],
     )
 
+    _write_asset(tmp_path, "/assets/shared.png", b"shared")
+    _write_asset(tmp_path, "/assets/unique.png", b"unique")
+
     command = [
         sys.executable,
         "-m",
         "scripts.duplicate_images",
-        "find-duplicate-images",
+        "analyze-images",
         "--root",
         str(tmp_path),
         "--quests-dir",
@@ -85,10 +95,10 @@ def test_cli_reports_duplicates(tmp_path: Path) -> None:
     assert '    - "Description for sample quest."' in stdout
     assert '    - "Description for secondary quest."' in stdout
     assert '    - "Description for toolkit item."' in stdout
-    assert "/assets/unique.png" not in stdout
+    assert "Missing image files" not in stdout
     # Verify summary appears (3 uses - 1 = 2 duplicates)
     assert "Total path-based duplicates: 2" in stdout
-    assert "Total duplicates remaining: 2" in stdout
+    assert "Total image issues remaining: 2" in stdout
 
 
 def test_default_paths_are_exposed() -> None:
@@ -109,7 +119,7 @@ def test_cli_json_output(tmp_path: Path) -> None:
         sys.executable,
         "-m",
         "scripts.duplicate_images",
-        "find-duplicate-images",
+        "analyze-images",
         "--root",
         str(repo_root),
         "--quests-dir",
@@ -124,7 +134,7 @@ def test_cli_json_output(tmp_path: Path) -> None:
     assert result.returncode == 0
     output = json.loads(result.stdout)
 
-    assert set(output.keys()) == {"duplicates", "identicalFiles"}
+    assert set(output.keys()) == {"duplicates", "identicalFiles", "missingImages"}
 
     duplicate_map = output["duplicates"]
     assert "/assets/shared-path.jpg" in duplicate_map
@@ -149,6 +159,7 @@ def test_cli_json_output(tmp_path: Path) -> None:
     digest, paths = next(iter(identical_files.items()))
     assert len(digest) == 64
     assert set(paths) == {"/assets/duplicate-content.jpg", "/assets/quests/duplicate-content.jpg"}
+    assert output["missingImages"] == {}
 
 
 def test_cli_output_matches_logic_layer(tmp_path: Path) -> None:
@@ -186,14 +197,17 @@ def test_cli_output_matches_logic_layer(tmp_path: Path) -> None:
         ],
     )
 
+    _write_asset(tmp_path, "/assets/shared.png")
+
     # Call logic layer directly
     usages = collect_image_references(quests_dir, items_dir, tmp_path)
     duplicates = find_duplicates(usages)
     identical = find_identical_files(usages, tmp_path)
+    missing = find_missing_images(usages, tmp_path)
 
     # Get both text and JSON representations
-    text_output = format_duplicates(duplicates, identical, usages)
-    json_data = serialize_report(duplicates, identical)
+    text_output = format_duplicates(duplicates, identical, usages, missing)
+    json_data = serialize_report(duplicates, identical, missing)
 
     # Verify text output contains all the data from logic layer
     assert "/assets/shared.png" in duplicates
@@ -231,7 +245,7 @@ def test_cli_output_matches_logic_layer(tmp_path: Path) -> None:
 
     # Verify summary appears (3 uses - 1 = 2 duplicates)
     assert "Total path-based duplicates: 2" in text_output
-    assert "Total duplicates remaining: 2" in text_output
+    assert "Total image issues remaining: 2" in text_output
 
 
 def test_cli_reports_identical_file_usage_counts(tmp_path: Path) -> None:
@@ -245,7 +259,7 @@ def test_cli_reports_identical_file_usage_counts(tmp_path: Path) -> None:
         sys.executable,
         "-m",
         "scripts.duplicate_images",
-        "find-duplicate-images",
+        "analyze-images",
         "--root",
         str(repo_root),
         "--quests-dir",
@@ -263,4 +277,55 @@ def test_cli_reports_identical_file_usage_counts(tmp_path: Path) -> None:
     assert "  - /assets/quests/duplicate-content.jpg (1 uses)" in stdout
     assert "Total path-based duplicates: 1" in stdout
     assert "Total identical-file duplicates: 1" in stdout
-    assert "Total duplicates remaining: 2" in stdout
+    assert "Total image issues remaining: 2" in stdout
+
+
+def test_cli_reports_missing_images(tmp_path: Path) -> None:
+    quests_dir = tmp_path / "quests"
+    items_dir = tmp_path / "items"
+
+    _write_json(
+        quests_dir / "science" / "missing.json",
+        {
+            "id": "science/missing",
+            "title": "Quest Missing Image",
+            "description": "Quest is missing an image asset.",
+            "image": "/assets/quests/missing.png",
+        },
+    )
+    _write_json(
+        items_dir / "tools.json",
+        [
+            {
+                "id": "tool-kit",
+                "name": "Tool Kit",
+                "description": "Item is missing an image asset.",
+                "image": "/assets/missing.png",
+            }
+        ],
+    )
+
+    command = [
+        sys.executable,
+        "-m",
+        "scripts.duplicate_images",
+        "analyze-images",
+        "--root",
+        str(tmp_path),
+        "--quests-dir",
+        str(quests_dir),
+        "--items-dir",
+        str(items_dir),
+    ]
+
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+
+    assert result.returncode == 0
+    stdout = result.stdout
+    assert "Missing image files (referenced but not found on disk):" in stdout
+    assert "/assets/quests/missing.png (1 uses)" in stdout
+    assert "/assets/missing.png (1 uses)" in stdout
+    assert "Quest Missing Image" in stdout
+    assert "Tool Kit" in stdout
+    assert "Total missing image references: 2" in stdout
+    assert "Total image issues remaining: 2" in stdout
