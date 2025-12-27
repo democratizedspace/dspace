@@ -832,14 +832,16 @@ as Python needs to resolve the `scripts` package from the root.
 python -m scripts.duplicate_images find-image-issues
 ```
 
-The legacy `find-duplicate-images` subcommand remains available for existing automation and uses
-the same output format.
+The legacy `find-duplicate-images` subcommand remains available as an alias for
+`find-image-issues`. Both subcommands emit the combined report of duplicate references, identical
+files, and missing image paths.
 
 The report lists each reused image URL, how many times it appears, the quest or item entries that
 reference it, identical files that live at different paths under `frontend/public`, and missing
 image paths referenced by quests or items. Treat the duplicate output as the backlog of image
 assets that still need unique replacements, and the missing output as the to-do list for new
-image assets to create.
+image assets to create. When using `--json`, the output fields are named `duplicates`,
+`identicalFiles`, and `missingImages`.
 
 **Windows/PowerShell**: The command works the same way on Windows. Ensure you're in the root
 directory (`C:\Users\...\dspace\`) before running the command, not in the `frontend` subdirectory.

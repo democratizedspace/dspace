@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 from typing import Sequence
 
@@ -73,7 +74,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     find_parser = subparsers.add_parser(
         "find-duplicate-images",
-        help="List duplicate image URLs across quests and items (includes missing asset scan)",
+        help=(
+            "List duplicate images, identical files, and missing assets (legacy alias for "
+            "find-image-issues)"
+        ),
     )
     add_common_arguments(find_parser)
 
@@ -91,6 +95,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
+        if args.command == "find-duplicate-images":
+            print("warning: find-duplicate-images is deprecated; use find-image-issues", file=sys.stderr)
+
         usages = collect_image_references(args.quests_dir, args.items_dir, args.root)
         duplicates = find_duplicates(usages)
         identical_files = find_identical_files(usages, args.root)
