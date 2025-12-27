@@ -8,75 +8,72 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Because the first layer wasn't checked, the Z axis mis-homes and filament piles around the hotend, clogging the nozzle.",
+            "text": "Skipping the first-layer check let filament pile around the hotend. We'll cool, clear the blob, and get flow back.",
             "options": [
                 {
                     "type": "process",
                     "process": "3dprint-nozzle-clog",
-                    "text": "Review the failed print."
+                    "text": "Document the failure and how it clogged.",
+                    "requiresItems": [
+                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+                        { "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 5 },
+                        { "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c", "count": 50 }
+                    ]
                 },
                 {
                     "type": "goto",
-                    "goto": "repair",
-                    "text": "Power down and prepare to fix it."
+                    "goto": "cooldown",
+                    "text": "Printer is powered down and cool.",
+                    "requiresItems": [{ "id": "564a76de-925b-4457-a548-d015168abe0c", "count": 1 }]
                 }
             ]
         },
         {
-            "id": "repair",
-            "text": "Let the hotend cool, remove the plastic blob, then loosen the nozzle.",
+            "id": "cooldown",
+            "text": "Ventilate the area, check heaters are off, and peel away loose plastic to expose the nozzle threads.",
             "options": [
                 {
                     "type": "process",
                     "process": "repair-clogged-nozzle",
-                    "text": "Unclog and reinstall the nozzle.",
+                    "text": "Clear the nozzle and reseat it.",
                     "requiresItems": [
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
-                            "count": 1
-                        },
-                        {
-                            "id": "564a76de-925b-4457-a548-d015168abe0c",
-                            "count": 1
-                        }
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
+                        { "id": "5029f7cb-3359-4153-b7ca-4b53988ac086", "count": 1 },
+                        { "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0", "count": 1 },
+                        { "id": "564a76de-925b-4457-a548-d015168abe0c", "count": 1 },
+                        { "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 5 }
                     ]
                 },
                 {
                     "type": "process",
-                    "process": "repair-clogged-nozzle",
+                    "process": "replace-brass-nozzle",
                     "text": "Swap in a new nozzle.",
                     "requiresItems": [
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
-                            "count": 1
-                        },
-                        {
-                            "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
-                            "count": 1
-                        },
-                        {
-                            "id": "564a76de-925b-4457-a548-d015168abe0c",
-                            "count": 1
-                        }
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
+                        { "id": "5029f7cb-3359-4153-b7ca-4b53988ac086", "count": 1 },
+                        { "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c", "count": 1 },
+                        { "id": "564a76de-925b-4457-a548-d015168abe0c", "count": 1 }
                     ]
                 },
                 {
                     "type": "goto",
+                    "goto": "purge",
+                    "text": "Hotend is rebuilt and moves smoothly.",
+                    "requiresItems": [{ "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "purge",
+            "text": "Heat to 200 °C, extrude 30 mm, and rerun a paper check at the center. Watch the next first layer and re-level if the skirt drifts.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Extrusion restored.",
+                    "text": "Flow is smooth and first layer is verified.",
                     "requiresItems": [
-                        {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
-                            "count": 1
-                        }
+                        { "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd", "count": 1 },
+                        { "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0", "count": 1 }
                     ]
                 }
             ]

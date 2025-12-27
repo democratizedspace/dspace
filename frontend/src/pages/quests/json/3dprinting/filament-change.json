@@ -8,40 +8,54 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to swap colors? We'll unload the old spool, purge 10 g, and load green PLA—grab goggles and wire cutters.",
+            "text": "Ready to swap colors? We'll unload the old spool, purge 10 g, and load green PLA—level the bed first so you can verify first-layer adhesion after the swap.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "swap",
-                    "text": "Let's do it."
+                    "goto": "heat",
+                    "text": "Leveled and ready to heat.",
+                    "requiresItems": [{ "id": "a42e441a-5569-490c-86e4-ce711117cd22", "count": 1 }]
                 }
             ]
         },
         {
-            "id": "swap",
-            "text": "Wear safety goggles and preheat the hotend to 200 °C. Press the extruder lever and pull out the old filament, keeping fingers clear of gears. Clip the green PLA at a 45° angle with wire cutters, feed until only green extrudes, and avoid touching the hot nozzle or molten plastic.",
+            "id": "heat",
+            "text": "Power on, preheat to 200 °C, and move the hotend away from the bed. Keep goggles on and fingers clear of the drive gears while you release the lever.",
             "options": [
                 {
                     "type": "process",
                     "process": "swap-green-pla-filament",
-                    "text": "Need detailed steps?"
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "New filament loaded.",
+                    "text": "Unload and load green PLA.",
                     "requiresItems": [
-                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+                        { "id": "a42e441a-5569-490c-86e4-ce711117cd22", "count": 1 },
                         { "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 10 },
                         { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
                         { "id": "ce92a1a9-c817-40f0-92b1-24aff053903d", "count": 1 }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "purge",
+                    "text": "Green filament is flowing without bubbles.",
+                    "requiresItems": [{ "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "purge",
+            "text": "Check that the extruder gears are gripping, clip the stringing, and extrude 20 mm to confirm the feed path is clear.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Swap locked in and purge line is solid.",
+                    "requiresItems": [{ "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e", "count": 1 }]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Your printer's ready to lay down that fresh green plastic.",
+            "text": "Great! Your printer is purged, tensioned, and ready to lay down that fresh green plastic.",
             "options": [
                 {
                     "type": "finish",
