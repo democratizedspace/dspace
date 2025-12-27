@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/servo_motor_small_hobby.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "servo sweep log",
+    "item_id": "8a4ccbcf-ee7d-42ff-bfd8-2ed242379872",
+    "entity_type": "item",
+    "prompt": "A short notebook page and laptop screen both show a simple plot of a servo sweeping smoothly between two angles, with handwritten notes about endstop angles and current draw. The tested servo rig sits nearby with its horn centered, USB cable coiled, and no loose wires. Everything looks documented and ready for reuse.\n\nSet this in a bright, organized solarpunk workspace; make the 512\u00d7512 photorealistic image free of logos or readable text while keeping the focus on the sweep log and the tidy servo setup.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

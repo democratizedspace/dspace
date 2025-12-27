@@ -30,18 +30,32 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Need power when sunlight fades? Let's 3D print a hand crank generator. Work on a stable surface and keep fingers clear of the hot nozzle and moving parts.",
+            "text": "Need power when sunlight fades? Let's 3D print a hand crank generator. Work on a stable surface, coil loose cords, and keep fingers clear of the nozzle and crank swing.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "print",
-                    "text": "Let's print the parts!"
+                    "text": "I'll prep the printer and parts list.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                            "count": 60
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "print",
-            "text": "Fire up the entry-level FDM 3D printer with white PLA. Print the crank handle and generator housing before gathering electronics.",
+            "text": "Fire up the entry-level FDM printer with white PLA. Print the crank handle and generator housing with clean beds and trimmed skirts before gathering electronics.",
             "options": [
                 {
                     "type": "process",
@@ -55,8 +69,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "materials",
-                    "text": "Printed parts ready",
+                    "goto": "prep",
+                    "text": "Prints cooled and cleaned.",
                     "requiresItems": [
                         {
                             "id": "d715cf3d-c616-47a6-b753-ae24c87714f3",
@@ -71,23 +85,13 @@
             ]
         },
         {
-            "id": "materials",
-            "text": "Gather a 12 V DC motor and the 200 Wh battery pack I'm lending you. Use the motor leads and double-check polarity before connecting.",
+            "id": "prep",
+            "text": "Lay out the 12 V DC motor, fused lead kit, 200 Wh pack, precision screwdriver, and multimeter. Label polarity, leave room for the crank swing, and unplug the pack until you're ready to test.",
             "options": [
-                {
-                    "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Take the 200 Wh battery pack"
-                },
                 {
                     "type": "goto",
                     "goto": "assemble",
-                    "text": "Parts ready—time to assemble",
+                    "text": "Bench is staged and parts checked.",
                     "requiresItems": [
                         {
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
@@ -104,6 +108,18 @@
                         {
                             "id": "3326e89c-5883-473d-a68f-3ea560093966",
                             "count": 1
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        },
+                        {
+                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
                         }
                     ]
                 }
@@ -111,28 +127,47 @@
         },
         {
             "id": "assemble",
-            "text": "Mount the motor in the printed housing, secure the crank handle, and keep wiring tidy to avoid shorts.",
+            "text": "Seat the motor in the printed housing, bolt on the crank, and land the fused leads with strain relief. Spin it by hand to confirm nothing rubs before wiring the pack.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "assemble-hand-crank-generator",
+                    "text": "Assemble and strain-relieve the generator"
+                },
+                {
                     "type": "goto",
-                    "goto": "generate",
-                    "text": "Generator assembled!"
+                    "goto": "charge",
+                    "text": "Generator spins freely and leads are secure.",
+                    "requiresItems": [
+                        {
+                            "id": "afb2b5a3-60e2-4863-b2db-e4d280145128",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "generate",
-            "text": "Connect the leads to the battery pack and crank to charge. Keep wires clear of the crank. Ready to spin up some power?",
+            "id": "charge",
+            "text": "Clip through the fuse, meter polarity, then crank steadily until you deliver 50 Wh. Stop if the fuse warms or voltage dips hard.",
             "options": [
                 {
                     "type": "process",
                     "process": "hand-crank-50Wh",
-                    "text": "Crank to generate 50 dWatts!"
+                    "text": "Crank until you hit 50 Wh"
                 },
                 {
                     "type": "goto",
                     "goto": "fin",
-                    "text": "Battery's charged with 50 dWatts!",
+                    "text": "Logged 50 Wh without hot wires.",
                     "requiresItems": [
                         {
                             "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
@@ -144,11 +179,11 @@
         },
         {
             "id": "fin",
-            "text": "Nice work! Muscle power is a solid backup. Disconnect the leads and store the battery in a cool, dry spot.",
+            "text": "Nice work! Wrap the leads, stow the crank, and recharge the pack with solar later so the fuse cools.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll keep cranking!"
+                    "text": "Backup power secured"
                 }
             ]
         }

@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/3d_printed_generator_housing_pla.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "hand crank generator assembly",
+    "item_id": "afb2b5a3-60e2-4863-b2db-e4d280145128",
+    "entity_type": "item",
+    "prompt": "A compact hand crank generator is fully assembled on a clean workbench: a 3D printed housing holds a small DC motor, a printed crank handle is bolted to the shaft, and a fused DC lead exits the rear with strain relief. A digital multimeter probe rests near the connector alongside a 200 Wh battery pack, highlighting that the rig is ready to charge. The parts look freshly printed and deburred with no loose strands.\n\nSet the scene in a tidy, near-future solarpunk maker space with even lighting, a coiled USB cable, and neatly organized tools in the background. The 512\u00d7512 photorealistic frame should keep focus on the crank, housing, and fused lead without any logos or readable text.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

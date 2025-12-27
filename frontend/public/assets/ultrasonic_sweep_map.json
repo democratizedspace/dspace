@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/micro_servo_pair_with_horns.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "ultrasonic sweep map",
+    "item_id": "9f2109f5-59c8-4309-8a6c-3c60be744985",
+    "entity_type": "item",
+    "prompt": "A laptop screen shows a clean radial plot of distance points from an ultrasonic sweep, with obstacles represented as arcs and gaps. The pan-tilt rig sits beside it, powered down with its cables neatly coiled, and a small notepad lists sweep angle limits. No axes labels or text are readable.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

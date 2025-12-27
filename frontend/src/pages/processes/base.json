@@ -4164,6 +4164,92 @@
         }
     },
     {
+        "id": "wire-servo-test-rig",
+        "title": "Mount a servo to a breadboard clamp, wire it to an Arduino Uno, and strain-relieve the jumper wires",
+        "image": "/assets/servo_motor_small_hobby.jpg",
+        "requireItems": [
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 1
+            },
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 4
+            },
+            {
+                "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                "count": 1
+            },
+            {
+                "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "b3857812-f50c-4880-810d-c929698599b3",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "log-servo-sweep",
+        "title": "Upload a sweep sketch, verify travel limits, and capture a baseline servo log",
+        "image": "/assets/servo_motor_small_hobby.jpg",
+        "requireItems": [
+            {
+                "id": "b3857812-f50c-4880-810d-c929698599b3",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "8a4ccbcf-ee7d-42ff-bfd8-2ed242379872",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "arduino-thermistor-read",
         "title": "Log temperature from a thermistor using an Arduino Uno",
         "requireItems": [
@@ -5211,6 +5297,47 @@
         }
     },
     {
+        "id": "assemble-hand-crank-generator",
+        "title": "Bolt a 12 V DC motor into a printed housing, add the crank handle, and terminate to a fused lead kit",
+        "image": "/assets/3d_printed_generator_housing_pla.jpg",
+        "requireItems": [
+            {
+                "id": "3326e89c-5883-473d-a68f-3ea560093966",
+                "count": 1
+            },
+            {
+                "id": "d715cf3d-c616-47a6-b753-ae24c87714f3",
+                "count": 1
+            },
+            {
+                "id": "6caa08d8-815c-4a0e-9297-0fda4516659d",
+                "count": 1
+            },
+            {
+                "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                "count": 1
+            },
+            {
+                "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "afb2b5a3-60e2-4863-b2db-e4d280145128",
+                "count": 1
+            }
+        ],
+        "duration": "25m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "write-mission-log-entry",
         "title": "Write a mission log entry with a feather quill and black ink",
         "image": "/assets/paperwork.jpg",
@@ -5523,11 +5650,15 @@
         "title": "Generate 50 Wh with a hand crank generator",
         "requireItems": [
             {
-                "id": "6caa08d8-815c-4a0e-9297-0fda4516659d",
+                "id": "afb2b5a3-60e2-4863-b2db-e4d280145128",
                 "count": 1
             },
             {
                 "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            },
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
                 "count": 1
             }
         ],
@@ -5669,12 +5800,61 @@
         }
     },
     {
+        "id": "mount-wire-wind-turbine-500w",
+        "title": "Anchor a 500 W wind turbine mast, wire it to a charge controller, and confirm brake function",
+        "image": "/assets/turbine_500w_rooftop_kit.jpg",
+        "requireItems": [
+            {
+                "id": "743681a7-d2e7-465c-af07-43665079bf4d",
+                "count": 1
+            },
+            {
+                "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                "count": 1
+            },
+            {
+                "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                "count": 1
+            },
+            {
+                "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                "count": 1
+            },
+            {
+                "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
+                "count": 1
+            },
+            {
+                "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                "count": 1
+            },
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "34540aad-4c25-4268-a158-a291283bc7a0",
+                "count": 1
+            }
+        ],
+        "duration": "1h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "charge-battery-pack-wind",
         "title": "Charge a 200 Wh battery pack with a 500 W wind turbine",
         "image": "/assets/turbine.jpg",
         "requireItems": [
             {
-                "id": "743681a7-d2e7-465c-af07-43665079bf4d",
+                "id": "34540aad-4c25-4268-a158-a291283bc7a0",
                 "count": 1
             },
             {
@@ -6246,6 +6426,182 @@
                     "score": 70
                 }
             ]
+        }
+    },
+    {
+        "id": "assemble-servo-arm-kit",
+        "title": "Assemble a two-servo arm and gripper kit with a precision screwdriver set",
+        "image": "/assets/micro_servo_pair_with_horns.jpg",
+        "requireItems": [
+            {
+                "id": "f69a6eb1-3ef5-4f3e-97e8-5e5f395c2363",
+                "count": 1
+            },
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 2
+            },
+            {
+                "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                "count": 1
+            },
+            {
+                "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "8efbfdc9-3725-46b4-baaf-9b070ca99a5d",
+                "count": 1
+            }
+        ],
+        "duration": "30m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "calibrate-servo-arm",
+        "title": "Upload a smooth motion sketch and tune limits on a two-servo arm",
+        "image": "/assets/micro_servo_pair_with_horns.jpg",
+        "requireItems": [
+            {
+                "id": "8efbfdc9-3725-46b4-baaf-9b070ca99a5d",
+                "count": 1
+            },
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 4
+            },
+            {
+                "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "b73ddc8a-b0cf-43ee-8d1e-189e50ac3d96",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "build-pan-tilt-ultrasonic",
+        "title": "Stack two servos into a pan-tilt bracket, mount an ultrasonic sensor, and tidy wiring to an Arduino",
+        "image": "/assets/micro_servo_pair_with_horns.jpg",
+        "requireItems": [
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 2
+            },
+            {
+                "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
+                "count": 1
+            },
+            {
+                "id": "f22293ab-0553-4f6f-8377-093f2a1351c8",
+                "count": 1
+            },
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 6
+            },
+            {
+                "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                "count": 1
+            },
+            {
+                "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "054d7c58-0e39-4f60-b072-e62cd5e879cf",
+                "count": 1
+            }
+        ],
+        "duration": "25m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "scan-room-ultrasonic",
+        "title": "Sweep a pan-tilt ultrasonic rig through 180° and record a point map",
+        "image": "/assets/micro_servo_pair_with_horns.jpg",
+        "requireItems": [
+            {
+                "id": "054d7c58-0e39-4f60-b072-e62cd5e879cf",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "9f2109f5-59c8-4309-8a6c-3c60be744985",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
         }
     },
     {

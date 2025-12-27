@@ -8,35 +8,71 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You're getting comfortable with servos. Let's take the next step and build a small robotic arm that can pick things up and set them down.",
+            "text": "You're getting comfortable with servos. Let's take the next step and build a small robotic arm with a gripper. Clear a stable bench, strap in for ESD, and keep cables away from the moving joints.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "build",
-                    "text": "Sounds challenging!"
+                    "text": "Kit and tools are ready.",
+                    "requiresItems": [
+                        {
+                            "id": "f69a6eb1-3ef5-4f3e-97e8-5e5f395c2363",
+                            "count": 1
+                        },
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        },
+                        {
+                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                            "count": 1
+                        },
+                        {
+                            "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "build",
-            "text": "Bolt the servo to a sturdy base with a precision screwdriver set, attach a short arm segment, and program it to move smoothly between positions. Test with light loads before trying anything heavier.",
+            "text": "Bolt the base servo, stack the second servo for the elbow, and fasten the gripper plate. Route wires so they won't snag when the arm sweeps.",
             "options": [
                 {
                     "type": "process",
-                    "process": "assemble-servo-arm",
-                    "text": "Bolt servo and arm"
+                    "process": "assemble-servo-arm-kit",
+                    "text": "Assemble the two-servo arm"
+                },
+                {
+                    "type": "goto",
+                    "goto": "tune",
+                    "text": "Arm swings freely and the gripper opens.",
+                    "requiresItems": [
+                        {
+                            "id": "8efbfdc9-3725-46b4-baaf-9b070ca99a5d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "tune",
+            "text": "Upload a smooth motion sketch, set soft limits so nothing binds, and test with a light payload before closing the loop.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "calibrate-servo-arm",
+                    "text": "Tune limits and gripper timing"
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Arm works well",
+                    "text": "Calibration saved and joints stay cool.",
                     "requiresItems": [
                         {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
-                            "count": 1
-                        },
-                        {
-                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                            "id": "b73ddc8a-b0cf-43ee-8d1e-189e50ac3d96",
                             "count": 1
                         }
                     ]
@@ -45,11 +81,11 @@
         },
         {
             "id": "finish",
-            "text": "Great job! With this arm you can experiment with more complex motions later on.",
+            "text": "Great job! Label the axes, park the arm at center, and coil the USB cable so you're ready for the next pick-and-place drill.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait!"
+                    "text": "Onward!"
                 }
             ]
         }

@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/micro_servo_pair_with_horns.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "assembled servo arm",
+    "item_id": "8efbfdc9-3725-46b4-baaf-9b070ca99a5d",
+    "entity_type": "item",
+    "prompt": "A compact two-servo robotic arm with a small gripper is fully assembled on a bench, its wiring bundled neatly down the base. The joints are aligned at neutral angles and the servos are secured with proper screws and horns. A USB cable and Arduino board sit nearby, ready for calibration.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

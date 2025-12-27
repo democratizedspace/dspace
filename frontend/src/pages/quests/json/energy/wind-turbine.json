@@ -8,36 +8,43 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your solar rig is humming. Let's capture wind energy too by mounting this 500 W turbine.",
+            "text": "Your solar rig is humming. Let's capture wind energy too by mounting this 500 W turbine with a charge controller and fused leads. Tie back hair, keep hands off the rotor, and stage gear on dry ground.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "setup",
-                    "text": "Sounds great!"
-                }
-            ]
-        },
-        {
-            "id": "setup",
-            "text": "Secure the turbine on a tall pole and wire it to your charge controller.",
-            "options": [
-                {
-                    "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "743681a7-d2e7-465c-af07-43665079bf4d",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Take the turbine"
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "All wired up",
+                    "text": "Site is clear and gear is staged.",
                     "requiresItems": [
                         {
                             "id": "743681a7-d2e7-465c-af07-43665079bf4d",
+                            "count": 1
+                        },
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
                             "count": 1
                         }
                     ]
@@ -45,12 +52,60 @@
             ]
         },
         {
+            "id": "setup",
+            "text": "Square the mast, torque the hardware, and route the DC leads down the tower. Wire the brake switch into the charge controller and confirm polarity with your meter before closing anything up.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "mount-wire-wind-turbine-500w",
+                    "text": "Mount, wire, and brake-test the turbine"
+                },
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "text": "Tower is anchored and the brake test passed.",
+                    "requiresItems": [
+                        {
+                            "id": "34540aad-4c25-4268-a158-a291283bc7a0",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "harvest",
+            "text": "Face the nacelle into the breeze, ease off the brake, and watch voltage under light load before sending power into the 200 Wh pack. Stop if the tower flexes or the cables heat up.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "charge-battery-pack-wind",
+                    "text": "Harvest wind and top the pack"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Logged 200 Wh and cables stayed cool.",
+                    "requiresItems": [
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 200
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Excellent! When the wind picks up you'll store power even faster.",
+            "text": "Excellent! Lock the brake when you leave, coil slack, and check mast hardware after the first gusty night.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait!"
+                    "text": "Can't wait for the next storm!"
                 }
             ]
         }
@@ -59,7 +114,7 @@
     "requiresQuests": ["energy/solar-1kWh"],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
