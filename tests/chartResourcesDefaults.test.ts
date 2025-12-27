@@ -9,7 +9,7 @@ describe('Helm chart resource defaults', () => {
         const values = parse(readFileSync(valuesPath, 'utf8')) as {
             resources?: {
                 requests?: { cpu?: string; memory?: string };
-                limits?: { cpu?: string | number; memory?: string };
+                limits?: { cpu?: string; memory?: string };
             };
         };
 
