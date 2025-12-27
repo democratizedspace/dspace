@@ -32,9 +32,9 @@
             "text": "Place the sifter over a tub, pour in small scoopfuls, and shake gently so fines fall through.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
+                    "type": "process",
                     "process": "sift-compost",
+                    "goto": "finish",
                     "requiresItems": [
                         {
                             "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb",

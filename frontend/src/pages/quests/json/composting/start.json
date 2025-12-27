@@ -76,6 +76,7 @@
                 {
                     "type": "process",
                     "process": "start-compost-bin",
+                    "goto": "layer",
                     "text": "Layer and vent the bucket"
                 },
                 {

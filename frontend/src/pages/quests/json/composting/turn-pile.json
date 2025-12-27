@@ -60,6 +60,7 @@
                 {
                     "type": "process",
                     "process": "turn-compost-bucket",
+                    "goto": "mix",
                     "text": "Turn and fluff the mix"
                 },
                 {
@@ -112,6 +113,7 @@
                 {
                     "type": "process",
                     "process": "measure-compost-temperature",
+                    "goto": "moisture",
                     "text": "Log the temperature"
                 }
             ]
@@ -123,6 +125,7 @@
                 {
                     "type": "process",
                     "process": "measure-compost-moisture",
+                    "goto": "finish",
                     "text": "Record the moisture"
                 }
             ]
