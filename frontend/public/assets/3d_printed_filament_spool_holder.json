@@ -1,5 +1,5 @@
 {
-    "filename": "/assets/quests/spool_holder_print_setup.jpg",
+    "filename": "/assets/3d_printed_filament_spool_holder.jpg",
     "entity": "frontend/src/pages/inventory/json/items/misc.json",
     "item_name": "3D printed filament spool holder",
     "item_id": "3721d5e0-a148-4f67-9150-55492873a576",

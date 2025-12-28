@@ -1315,7 +1315,7 @@
         "id": "269d2cfb-25de-417b-8e29-64e80aff934c",
         "name": "3D printed cable clip set",
         "description": "Pack of four PLA cable clips that snap over a desk edge to route USB and charging leads.",
-        "image": "/assets/quests/cable_clip_print.jpg",
+        "image": "/assets/3d_printed_cable_clip_set.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "3D Printing & Fabrication"
     },
@@ -1331,7 +1331,7 @@
         "id": "3721d5e0-a148-4f67-9150-55492873a576",
         "name": "3D printed filament spool holder",
         "description": "Printed base and upright arms that cradle a filament spool so it feeds smoothly toward the extruder.",
-        "image": "/assets/quests/spool_holder_print_setup.jpg",
+        "image": "/assets/3d_printed_filament_spool_holder.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "3D Printing & Fabrication"
     },
