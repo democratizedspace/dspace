@@ -36,13 +36,15 @@ const preferenceStore = writable(initialAvailability ? readStoredPreference() : 
 
 let currentAvailability = initialAvailability;
 
-availabilityStore.subscribe((available) => {
-    currentAvailability = available;
+if (isBrowser) {
+    availabilityStore.subscribe((available) => {
+        currentAvailability = available;
 
-    if (!available) {
-        preferenceStore.set(false);
-    }
-});
+        if (!available) {
+            preferenceStore.set(false);
+        }
+    });
+}
 
 export const qaCheatsAvailability = {
     subscribe: availabilityStore.subscribe,

@@ -91,8 +91,8 @@ vi.mock('../../lib/qaCheats', () => ({
 }));
 
 beforeEach(() => {
-    cheatsAvailabilityStore = writable(false);
-    cheatsEnabledStore = writable(false);
+    cheatsAvailabilityStore.set(false);
+    cheatsEnabledStore.set(false);
     finishProcessNow.mockClear();
 });
 

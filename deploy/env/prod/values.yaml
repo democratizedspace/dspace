@@ -1,5 +1,6 @@
 replicaCount: 3
 env: prod
+environment: production
 image:
   # Production must pin by digest; tags remain unset for immutability.
   digest: sha256:83d6ac7e2a6f8c3a21d9130b35f6a4d8c9b52f3e174d0a5c6b8e2f0a1c3d4e5f
