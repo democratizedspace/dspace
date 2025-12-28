@@ -186,6 +186,7 @@
             }
 
             successMessage = 'Process created successfully!';
+            showPreview = false;
 
             // Clear the form for next entry
             title = '';

@@ -13,8 +13,11 @@ const mockDb = {
     },
 };
 
+const createProcessMock = jest.fn((...args) => mockDb.processes.add(...args));
+
 jest.mock('../src/utils/customcontent.js', () => ({
     db: mockDb,
+    createProcess: (...args) => createProcessMock(...args),
 }));
 
 const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
@@ -26,6 +29,7 @@ describe('ProcessForm Component', () => {
         container = document.createElement('div');
         document.body.appendChild(container);
         mockDb.processes.add.mockClear();
+        createProcessMock.mockClear();
     });
 
     afterEach(() => {
@@ -394,6 +398,36 @@ describe('ProcessForm Component', () => {
         expect(message).toBeTruthy();
         expect(message.textContent).toContain('Process created successfully');
         expect(mockDb.processes.add).toHaveBeenCalledTimes(1);
+    });
+
+    test('clears the form and hides preview after successful submission', async () => {
+        const component = new ProcessForm({
+            target: container,
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        component.$$set({ requireItems: [{ id: 'item-1', count: 2 }] });
+
+        titleInput.value = 'Clearing Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        const previewButton = container.querySelector('button.preview-button');
+        previewButton.dispatchEvent(new Event('click'));
+        expect(container.querySelector('.process-preview')).toBeTruthy();
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(titleInput.value).toBe('');
+        expect(durationInput.value).toBe('');
+        expect(container.querySelectorAll('.item-row')).toHaveLength(0);
+        expect(container.querySelector('.process-preview')).toBeFalsy();
     });
 
     test('item count inputs enforce minimum of 1', () => {
