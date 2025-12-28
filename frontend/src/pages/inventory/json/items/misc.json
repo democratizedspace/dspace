@@ -1639,6 +1639,54 @@
         "category": "Digital & Records"
     },
     {
+        "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
+        "name": "local DSPACE checkout",
+        "description": "A synced DSPACE repository with dependencies installed and caches warmed for testing.",
+        "image": "/assets/github_repository_item.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
+        "name": "local test report",
+        "description": "Captured logs from lint, type-check, coverage, and Playwright shards on the current branch.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "d8346735-7f1c-4309-a400-6cf6801534f7",
+        "name": "unattended-upgrades config",
+        "description": "Pinned apt lists, reboot window, and log rotation settings deployed across the Pi cluster.",
+        "image": "/assets/pi_cluster_node_with_hat_and_ssd.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "afd6a926-bd21-4242-ba79-d25fc152de03",
+        "name": "auto-update health report",
+        "description": "Verification log showing unattended-upgrades dry run, held packages, and reboot status.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "fc89727c-8fd9-4b40-a186-40a0c56c6063",
+        "name": "TLS certificate bundle",
+        "description": "Fresh RSA and ECDSA certificates with renewal hooks configured for the cluster ingress.",
+        "image": "/assets/ci_workflow_file.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "d3d0a7bd-e338-48f1-86ab-ddcc3626cecc",
+        "name": "HTTPS service check",
+        "description": "Logged curl and OCSP results confirming the cluster is serving renewed certificates.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
         "name": "basic telescope",
         "description": "A simple refracting telescope for backyard astronomy.",
@@ -1674,6 +1722,22 @@
                 }
             ]
         },
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
+        "name": "polar-aligned camera rig",
+        "description": "A leveled tripod with a focused camera locked on Polaris and framed for star trails.",
+        "image": "/assets/camera_tripod_astronomy.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
+        "name": "stacked star trail photo",
+        "description": "A processed spiral of trails built from aligned long exposures and color-balanced foreground.",
+        "image": "/assets/hardbound_mission_logbook.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
     {
@@ -1795,6 +1859,22 @@
         "image": "/assets/stevia_crystals_jar.jpg",
         "price": "12 dUSD",
         "category": "Biology & Lab"
+    },
+    {
+        "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
+        "name": "stevia tasting solution",
+        "description": "A 1% dilution of stevia crystals prepared in clean glassware for sensory testing.",
+        "image": "/assets/beaker_250ml_glass.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "fe146f9d-d912-4841-bf1f-1675c3aa93f3",
+        "name": "stevia tasting notes",
+        "description": "Logged sweetness, onset, and aftertaste impressions from a blind stevia test.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
     },
     {
         "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",

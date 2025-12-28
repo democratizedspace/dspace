@@ -8,29 +8,112 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Testing your work is helpful to keep DSPACE reliable. I'll guide you through running the tests locally so you can assist future explorers.",
+            "text": "Testing keeps DSPACE cooperative for everyone. Want a quick tour before we hammer the suite?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "overview",
+                    "text": "Give me the map."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Skip to setup.",
+                    "process": "prepare-local-testbed",
+                    "requiresItems": [
+                        {
+                            "id": "52593d07-908b-4109-92cf-826b2184ef6f",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "overview",
+            "text": "We run lint, type checks, unit tests, and shard the Playwright suite. Keep the CI workflow close so your local run mirrors what ships.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Ready to prep the workspace.",
+                    "process": "prepare-local-testbed",
+                    "requiresItems": [
+                        {
+                            "id": "52593d07-908b-4109-92cf-826b2184ef6f",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Clone the repo, install dependencies, and warm the build cache. Keep the CI workflow file handy so the commands match what PRs run.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "suite",
+                    "text": "Workspace is primed.",
+                    "requiresItems": [
+                        {
+                            "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "overview",
+                    "text": "Review the plan again."
+                }
+            ]
+        },
+        {
+            "id": "suite",
+            "text": "Run lint, type checks, Vitest coverage, then both Playwright shards. Capture the log so we know what passed.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Run tests"
+                    "text": "Report captured and green.",
+                    "process": "execute-dspace-tests",
+                    "requiresItems": [
+                        {
+                            "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
+                            "count": 1
+                        },
+                        {
+                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Dependencies changed—reinstall and retry."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! Running the test suite keeps DSPACE reliable. Enjoy a roll of coins as a bonus!",
+            "text": "Nice work. With a clean report and CI parity, your changes are ready to share without surprising the fleet.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All tests passed",
-                    "grantsItems": [
+                    "text": "Ship the passing run.",
+                    "requiresItems": [
                         {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
-                            "count": 1
-                        },
-                        {
-                            "id": "50ada74c-686d-4818-9421-e02d98444579",
+                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
                             "count": 1
                         }
                     ]
@@ -42,7 +125,7 @@
     "requiresQuests": ["welcome/howtodoquests"],
     "hardening": {
         "passes": 0,
-        "score": 65,
+        "score": 85,
         "emoji": "🛠️",
         "history": []
     }

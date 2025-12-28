@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/ci_workflow_file.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "TLS certificate bundle",
+    "item_id": "fc89727c-8fd9-4b40-a186-40a0c56c6063",
+    "entity_type": "item",
+    "prompt": "A printed YAML-style configuration sheet with blurred certificate paths and renewal hooks rests on a clean desk, with a subtle lock doodle in the margin. Nearby, a laptop is slightly out of focus, reinforcing that this bundle is ready to deploy. The 512×512 photorealistic solarpunk scene is bright and logo-free.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -8,29 +8,68 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Software gets old fast. Let's configure unattended-upgrades on each node.",
+            "text": "Software gets old fast. Let's wire unattended-upgrades so your Pi fleet patches itself.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "configure",
-                    "text": "Let's do it."
+                    "goto": "stage",
+                    "text": "Prep the nodes.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "configure",
-            "text": "Edit the configuration file to enable security updates and schedule a weekly reboot.",
+            "id": "stage",
+            "text": "Point apt at the security repo, enable automatic reboots in the maintenance window, and pin a cache clean.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Updates enabled",
+                    "goto": "verify",
+                    "text": "Config pushed across the cluster.",
+                    "process": "configure-unattended-upgrades",
                     "requiresItems": [
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Pause to confirm maintenance hours."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Kick a dry run, watch logs for held packages, and confirm the reboot flag only trips after patches land.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Health check logged.",
+                    "process": "verify-unattended-upgrades",
+                    "requiresItems": [
+                        {
+                            "id": "d8346735-7f1c-4309-a400-6cf6801534f7",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stage",
+                    "text": "Adjust the reboot cadence."
                 }
             ]
         },
@@ -40,7 +79,13 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Orion."
+                    "text": "Queue the next maintenance window.",
+                    "requiresItems": [
+                        {
+                            "id": "afd6a926-bd21-4242-ba79-d25fc152de03",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -49,7 +94,7 @@
     "requiresQuests": ["devops/monitoring"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 85,
         "emoji": "🛠️",
         "history": []
     }

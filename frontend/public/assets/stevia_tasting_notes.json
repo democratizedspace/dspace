@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/mission_log_entry_page.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stevia tasting notes",
+    "item_id": "fe146f9d-d912-4841-bf1f-1675c3aa93f3",
+    "entity_type": "item",
+    "prompt": "An open notebook page shows blurred tasting notes with columns for sweetness, onset, and aftertaste, plus a tiny checkmark beside “blind sample.” A pen rests across the page, and the background hints at clean glassware without any readable text. The 512×512 solarpunk workspace is warmly lit, calm, and free of logos or faces.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

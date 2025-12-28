@@ -8,26 +8,19 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your services are running well. Let's protect them with HTTPS certificates.",
+            "text": "Your services are running well. Let's lock them down with certs and renewal checks.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "I'm ready."
-                }
-            ]
-        },
-        {
-            "id": "setup",
-            "text": "Install certbot and configure automatic renewal for your domain.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Certificates installed",
+                    "goto": "provision",
+                    "text": "Stage certbot.",
                     "requiresItems": [
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "afd6a926-bd21-4242-ba79-d25fc152de03",
                             "count": 1
                         }
                     ]
@@ -35,12 +28,64 @@
             ]
         },
         {
+            "id": "provision",
+            "text": "Open 80/443, prove DNS ownership, and fetch a certbot RSA + ECDSA pair with a post-renew hook.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Certificates minted.",
+                    "process": "request-letsencrypt-cert",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Need to double-check DNS TXT records."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Run a renewal dry-run, confirm the chain serves full trust, and log the upstream check result.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "TLS health verified.",
+                    "process": "verify-https-service",
+                    "requiresItems": [
+                        {
+                            "id": "fc89727c-8fd9-4b40-a186-40a0c56c6063",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "provision",
+                    "text": "Re-run ACME challenge."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Excellent! Traffic to your cluster is now encrypted.",
+            "text": "Excellent! Traffic to your cluster is now encrypted and on autopilot.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All set"
+                    "text": "Document the renewal schedule.",
+                    "requiresItems": [
+                        {
+                            "id": "d3d0a7bd-e338-48f1-86ab-ddcc3626cecc",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -49,7 +94,7 @@
     "requiresQuests": ["devops/daily-backups"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 88,
         "emoji": "🛠️",
         "history": []
     }

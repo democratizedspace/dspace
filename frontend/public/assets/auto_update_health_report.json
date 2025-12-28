@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/mission_log_entry_page.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "auto-update health report",
+    "item_id": "afd6a926-bd21-4242-ba79-d25fc152de03",
+    "entity_type": "item",
+    "prompt": "A mission log page lists a blurred unattended-upgrades dry-run summary, held package count, and reboot window with a bold checkmark. A Pi cluster and laptop sit out of focus nearby. The 512×512 photorealistic solarpunk desk is uncluttered and free of readable text or logos.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

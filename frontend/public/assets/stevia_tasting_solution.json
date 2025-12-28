@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/beaker_250ml_glass.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stevia tasting solution",
+    "item_id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
+    "entity_type": "item",
+    "prompt": "A rinsed 250 mL glass beaker holds a clear, lightly labeled stevia solution, with a clean stir rod resting beside it. A graduated cylinder and a pair of nitrile gloves sit in soft focus, emphasizing careful preparation for a sensory test. The solarpunk lab bench is tidy and bright, 512×512 photorealistic, with no logos or readable text.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hardbound_mission_logbook.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stacked star trail photo",
+    "item_id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
+    "entity_type": "item",
+    "prompt": "A hardbound logbook lies open to a glossy print of a circular star trail photo, with handwritten exposure settings blurred in the margin. A red flashlight and tripod silhouette are softly visible in the background. The 512×512 photorealistic solarpunk composition is calm and free of logos or readable text.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
