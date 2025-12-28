@@ -154,4 +154,17 @@ describe("item quality", () => {
       PriceExemptionReason.BETA_PLACEHOLDER
     );
   });
+
+  it("prices the 64GB microSD card instead of using a beta placeholder", () => {
+    const microSdCard = (items as Array<Record<string, any>>).find(
+      (item) => item.name === "64GB microSD card"
+    );
+
+    expect(microSdCard).toBeDefined();
+    expect(microSdCard?.price).toBeDefined();
+    expect(microSdCard?.price).toMatch(/[0-9]/);
+    expect(microSdCard?.priceExemptionReason ?? null).not.toBe(
+      PriceExemptionReason.BETA_PLACEHOLDER
+    );
+  });
 });

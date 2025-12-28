@@ -1546,7 +1546,7 @@
         "name": "64GB microSD card",
         "description": "Used to flash the operating system before cloning to the SSD.",
         "image": "/assets/microsd_card_64gb.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "10 dUSD",
         "category": "Electronics & Robotics"
     },
     {
