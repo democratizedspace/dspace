@@ -8,26 +8,67 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your average calculation is solid, but the median reveals outliers.",
+            "text": "Your averages look good. Let's lock in medians so spikes don't hide in the mean.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "I'll compute the median."
+                    "goto": "compute",
+                    "text": "Clean dataset loaded",
+                    "requiresItems": [
+                        {
+                            "id": "ed6a775b-e371-46c4-b84e-e30e6e2f4d36",
+                            "count": 1
+                        },
+                        {
+                            "id": "881228a9-e0cb-4b56-82d0-6f45bc1eb5d5",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Parse the temperature log and output the median value.",
+            "id": "compute",
+            "text": "Parse the log, keep an odd-numbered window, and capture the median alongside the raw slice for audits.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "compute-median-temperature",
+                    "text": "Compute medians"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Median snapshot captured",
+                    "requiresItems": [
+                        {
+                            "id": "e0a32875-6fbc-4f7f-a9ef-c0da447e7ff4",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Compare the medians to your mean values and note any drift that would justify tightening the window or cleaning sensors.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "compare-median-to-mean",
+                    "text": "Cross-check against the averages"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Median calculated!",
+                    "text": "Medians reconciled",
                     "requiresItems": [
                         {
-                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "id": "e0a32875-6fbc-4f7f-a9ef-c0da447e7ff4",
+                            "count": 1
+                        },
+                        {
+                            "id": "572a7f9f-4c2c-4aa6-b1f9-4f14a22ea0dc",
                             "count": 1
                         }
                     ]
@@ -46,10 +87,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/avg-temp"],
+    "requiresQuests": [
+        "programming/avg-temp",
+        "programming/moving-avg-temp"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

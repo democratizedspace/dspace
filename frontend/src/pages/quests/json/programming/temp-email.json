@@ -8,26 +8,71 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've set up a local alert. Let's send yourself an email when things get too warm.",
+            "text": "You've got local alerts. Let's add a mailer so remote you still hear about hot days.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Sounds useful."
+                    "goto": "configure",
+                    "text": "Alert log and service ready",
+                    "requiresItems": [
+                        {
+                            "id": "9f791b6f-0262-4654-8ce3-98aa39eee1c9",
+                            "count": 1
+                        },
+                        {
+                            "id": "705d12dd-3aad-4b71-ad2b-e41ca3e7ccca",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Use a mail API to send a message when the script detects high temperature.",
+            "id": "configure",
+            "text": "Load SMTP/API secrets from env vars, template the subject with the threshold and timestamp, and add a dry-run mode.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "configure-email-alerts",
+                    "text": "Configure the mail transport"
+                },
+                {
+                    "type": "goto",
+                    "goto": "trigger",
+                    "text": "Mailer configured",
+                    "requiresItems": [
+                        {
+                            "id": "2c7b0f53-7ad6-4cad-bf5d-b6e2f540a6b0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "trigger",
+            "text": "Replay your captured alert through the mailer, confirm the inbox copy, and archive the log for audits.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "send-temperature-email-alert",
+                    "text": "Send a test email"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Email sent!",
+                    "text": "Email landed with full context",
                     "requiresItems": [
                         {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "id": "2c7b0f53-7ad6-4cad-bf5d-b6e2f540a6b0",
+                            "count": 1
+                        },
+                        {
+                            "id": "604eaef0-30b7-4763-be53-9d73b7730fdb",
                             "count": 1
                         }
                     ]
@@ -46,10 +91,12 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/temp-alert"],
+    "requiresQuests": [
+        "programming/temp-alert"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

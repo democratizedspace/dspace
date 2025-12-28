@@ -2020,9 +2020,25 @@
         "category": "Digital & Records"
     },
     {
+        "id": "ed6a775b-e371-46c4-b84e-e30e6e2f4d36",
+        "name": "cleaned temperature dataset",
+        "description": "A deduped, timestamp-aligned CSV with outliers flagged after QA on the thermistor feed.",
+        "image": "/assets/temperature_log_csv.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
         "name": "temperature line chart",
         "description": "A simple Matplotlib graph showing your logged temperature readings over time.",
+        "image": "/assets/temperature_line_chart.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "572a7f9f-4c2c-4aa6-b1f9-4f14a22ea0dc",
+        "name": "daily temperature summary",
+        "description": "A daily rollup listing mean, min, max, and gaps for your last 24 hours of sensor logs.",
         "image": "/assets/temperature_line_chart.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
@@ -2036,9 +2052,65 @@
         "category": "Digital & Records"
     },
     {
+        "id": "881228a9-e0cb-4b56-82d0-6f45bc1eb5d5",
+        "name": "moving average dataset",
+        "description": "Rolling-window temperature values aligned to your timestamps for smoothing and overlays.",
+        "image": "/assets/annotated_temperature_graph.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "e0a32875-6fbc-4f7f-a9ef-c0da447e7ff4",
+        "name": "median temperature snapshot",
+        "description": "A snapshot that records the median reading per window plus the raw values it came from.",
+        "image": "/assets/live_temperature_dashboard.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
         "name": "live temperature JSON endpoint",
         "description": "A lightweight API route that serves the latest thermistor reading as JSON on your network.",
+        "image": "/assets/live_temperature_json_endpoint.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "30c11951-8bc6-4c38-9e3a-e787f1eca4ec",
+        "name": "temperature variance report",
+        "description": "A short report that pairs standard deviation with safe thresholds for your alerting stack.",
+        "image": "/assets/live_temperature_json_endpoint.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "9f791b6f-0262-4654-8ce3-98aa39eee1c9",
+        "name": "local temperature alert service",
+        "description": "A daemon watching the JSON endpoint and logging threshold crossings with timestamps.",
+        "image": "/assets/laptop_running_ide_on_desk.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "705d12dd-3aad-4b71-ad2b-e41ca3e7ccca",
+        "name": "temperature alert log",
+        "description": "A captured alert event with the raw reading, threshold, and acknowledgement notes.",
+        "image": "/assets/live_temperature_dashboard.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "2c7b0f53-7ad6-4cad-bf5d-b6e2f540a6b0",
+        "name": "email alert integration",
+        "description": "A configured mail transport and secret bundle ready to ship temperature alerts.",
+        "image": "/assets/live_temperature_dashboard.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "604eaef0-30b7-4763-be53-9d73b7730fdb",
+        "name": "temperature email receipt",
+        "description": "A saved copy of the dispatched alert email with headers and body for audits.",
         "image": "/assets/live_temperature_json_endpoint.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"

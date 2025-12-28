@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/live_temperature_dashboard.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "median temperature snapshot",
+    "item_id": "e0a32875-6fbc-4f7f-a9ef-c0da447e7ff4",
+    "entity_type": "item",
+    "prompt": "A live dashboard view highlights the median temperature for the current window alongside the raw series, with a small badge noting the source log slice. The screen sits on a sleek laptop in a tidy solarpunk workspace with a thermistor rig nearby, warm lighting, and a small plant. The 512×512 image is photorealistic with gentle stylization and no brand logos.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

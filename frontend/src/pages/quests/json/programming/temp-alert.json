@@ -8,26 +8,71 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've graphed your data, now let's add an alert for high temperatures.",
+            "text": "You've graphed your data, now let's wire an alert that watches the live JSON feed.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "script",
-                    "text": "I'm ready."
+                    "goto": "service",
+                    "text": "Endpoint and thresholds ready",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        },
+                        {
+                            "id": "30c11951-8bc6-4c38-9e3a-e787f1eca4ec",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "script",
-            "text": "Watch the sensor and trigger a notification if the reading goes above your limit.",
+            "id": "service",
+            "text": "Run the watcher as a service, log every poll, and fail closed if the sensor or network drops.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "deploy-temperature-alert-service",
+                    "text": "Deploy the alert service"
+                },
+                {
+                    "type": "goto",
+                    "goto": "trip",
+                    "text": "Service is running",
+                    "requiresItems": [
+                        {
+                            "id": "9f791b6f-0262-4654-8ce3-98aa39eee1c9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "trip",
+            "text": "Warm the probe safely, let the service cross the threshold, and capture the log with timestamps and response.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "record-temperature-alert-event",
+                    "text": "Trip and capture an alert"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Alert works!",
+                    "text": "Alert recorded with notes",
                     "requiresItems": [
                         {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "id": "705d12dd-3aad-4b71-ad2b-e41ca3e7ccca",
+                            "count": 1
+                        },
+                        {
+                            "id": "30c11951-8bc6-4c38-9e3a-e787f1eca4ec",
                             "count": 1
                         }
                     ]
@@ -46,10 +91,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/temp-graph"],
+    "requiresQuests": [
+        "programming/temp-graph",
+        "programming/stddev-temp"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

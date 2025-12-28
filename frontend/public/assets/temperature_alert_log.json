@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/live_temperature_dashboard.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "temperature alert log",
+    "item_id": "705d12dd-3aad-4b71-ad2b-e41ca3e7ccca",
+    "entity_type": "item",
+    "prompt": "A dashboard view shows a highlighted alert event with the threshold, actual reading, and acknowledgement note beside the live chart. The laptop sits on a neat solarpunk desk with a thermistor rig nearby, warm lighting, and a small plant. The 512×512 image is photorealistic with gentle stylization and minimal readable text.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

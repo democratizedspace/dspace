@@ -8,61 +8,79 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've been logging data. Let's crunch the numbers for an average you can trust.",
+            "text": "You've been logging data. Let's clean it, plot a baseline, and crunch trustworthy averages.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Plot a quick baseline from the CSV"
+                },
+                {
                     "type": "goto",
-                    "goto": "prep",
-                    "text": "Load the CSV",
+                    "goto": "clean",
+                    "text": "CSV exported and baseline saved",
                     "requiresItems": [
-                        {
-                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
-                        }
+                        { "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8", "count": 1 },
+                        { "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed", "count": 1 },
+                        { "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2", "count": 1 },
+                        { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
                     ]
                 }
             ]
         },
         {
-            "id": "prep",
-            "text": "Parse the CSV, drop any obvious outliers, and keep timestamps intact so you can slice by day or hour.",
+            "id": "clean",
+            "text": "Pass the CSV through a quick QA pass: trim duplicate timestamps, clip spikes, and keep notes on any dropped samples.",
             "options": [
                 {
                     "type": "process",
-                    "process": "plot-temperature-data",
-                    "text": "Plot a baseline chart"
+                    "process": "sanitize-temperature-log",
+                    "text": "Clean and align the log"
                 },
                 {
                     "type": "goto",
                     "goto": "compute",
-                    "text": "Data looks clean",
-                    "requiresItems": [
-                        {
-                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Clean dataset saved",
+                    "requiresItems": [{ "id": "ed6a775b-e371-46c4-b84e-e30e6e2f4d36", "count": 1 }]
                 }
             ]
         },
         {
             "id": "compute",
-            "text": "Calculate mean, median, and count. Add them to your graph so anyone can see how steady the room stayed.",
+            "text": "Calculate daily mean, min, max, and total samples so you can spot heater swings without rereading the whole file.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "compute-average-temperature",
+                    "text": "Generate the rollup"
+                },
+                {
+                    "type": "goto",
+                    "goto": "overlay",
+                    "text": "Rollup ready to overlay",
+                    "requiresItems": [
+                        { "id": "572a7f9f-4c2c-4aa6-b1f9-4f14a22ea0dc", "count": 1 },
+                        { "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "overlay",
+            "text": "Label the graph with your stats and keep the notebook updated so teammates know how you derived the numbers.",
             "options": [
                 {
                     "type": "process",
                     "process": "refine-temperature-graph",
-                    "text": "Annotate the averages"
+                    "text": "Annotate the chart"
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Averages plotted and saved",
+                    "text": "Summary chart published",
                     "requiresItems": [
-                        {
-                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
-                            "count": 1
-                        }
+                        { "id": "572a7f9f-4c2c-4aa6-b1f9-4f14a22ea0dc", "count": 1 },
+                        { "id": "50360fd0-e296-4ef8-a3a9-00e049318166", "count": 1 }
                     ]
                 }
             ]

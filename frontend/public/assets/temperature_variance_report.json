@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/live_temperature_json_endpoint.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "temperature variance report",
+    "item_id": "30c11951-8bc6-4c38-9e3a-e787f1eca4ec",
+    "entity_type": "item",
+    "prompt": "A laptop shows a concise report next to a JSON payload, summarizing variance, standard deviation, and alert thresholds for a thermistor feed. The microcontroller and USB cable rest beside the keyboard on a clean solarpunk desk with warm light and a small plant. The 512×512 image is photorealistic with gentle stylization and no sensitive text beyond simple metric labels.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

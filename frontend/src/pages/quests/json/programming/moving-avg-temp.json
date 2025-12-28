@@ -8,26 +8,67 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your average gives a big picture. Let's watch trends with a moving window.",
+            "text": "Your averages are solid. Let's smooth the feed with a moving window and publish it live.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Let's smooth it out."
+                    "goto": "window",
+                    "text": "Logs and rollups are ready",
+                    "requiresItems": [
+                        {
+                            "id": "ed6a775b-e371-46c4-b84e-e30e6e2f4d36",
+                            "count": 1
+                        },
+                        {
+                            "id": "572a7f9f-4c2c-4aa6-b1f9-4f14a22ea0dc",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Calculate a moving average over the last N readings in your log.",
+            "id": "window",
+            "text": "Pick a window (5–15 samples), pad missing timestamps, and keep the raw series alongside the smoothed one.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "compute-moving-average-series",
+                    "text": "Calculate rolling averages"
+                },
+                {
+                    "type": "goto",
+                    "goto": "overlay",
+                    "text": "Moving averages exported",
+                    "requiresItems": [
+                        {
+                            "id": "881228a9-e0cb-4b56-82d0-6f45bc1eb5d5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "overlay",
+            "text": "Layer the smoothed series onto the live dashboard so spikes and drifts stand out without noise.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "overlay-moving-average-dashboard",
+                    "text": "Publish the overlay"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Moving average computed!",
+                    "text": "Smoothed dashboard live",
                     "requiresItems": [
                         {
-                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "id": "881228a9-e0cb-4b56-82d0-6f45bc1eb5d5",
+                            "count": 1
+                        },
+                        {
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
                             "count": 1
                         }
                     ]
@@ -46,10 +87,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/avg-temp"],
+    "requiresQuests": [
+        "programming/avg-temp",
+        "programming/temp-graph"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

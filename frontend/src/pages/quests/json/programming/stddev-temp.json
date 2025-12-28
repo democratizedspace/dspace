@@ -8,26 +8,67 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've nailed the median. Let's measure how temperatures vary.",
+            "text": "You've nailed the medians. Now quantify the spread so alerts know what's normal.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "I'll crunch the numbers."
+                    "goto": "compute",
+                    "text": "Snapshots and medians ready",
+                    "requiresItems": [
+                        {
+                            "id": "ed6a775b-e371-46c4-b84e-e30e6e2f4d36",
+                            "count": 1
+                        },
+                        {
+                            "id": "e0a32875-6fbc-4f7f-a9ef-c0da447e7ff4",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Parse the log and compute the standard deviation.",
+            "id": "compute",
+            "text": "Compute variance and standard deviation, and record the z-score that should trigger cooling or alerts.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "compute-temperature-variance",
+                    "text": "Generate deviation report"
+                },
+                {
+                    "type": "goto",
+                    "goto": "calibrate",
+                    "text": "Variance report drafted",
+                    "requiresItems": [
+                        {
+                            "id": "30c11951-8bc6-4c38-9e3a-e787f1eca4ec",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "calibrate",
+            "text": "Translate the math into thresholds: warn at 2σ, page at 3σ, and document cooldown actions.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "calibrate-temperature-thresholds",
+                    "text": "Document alert thresholds"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Deviation computed!",
+                    "text": "Alert thresholds signed off",
                     "requiresItems": [
                         {
-                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "id": "30c11951-8bc6-4c38-9e3a-e787f1eca4ec",
+                            "count": 1
+                        },
+                        {
+                            "id": "572a7f9f-4c2c-4aa6-b1f9-4f14a22ea0dc",
                             "count": 1
                         }
                     ]
@@ -46,10 +87,12 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/median-temp"],
+    "requiresQuests": [
+        "programming/median-temp"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

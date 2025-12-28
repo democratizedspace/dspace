@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/live_temperature_dashboard.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "email alert integration",
+    "item_id": "2c7b0f53-7ad6-4cad-bf5d-b6e2f540a6b0",
+    "entity_type": "item",
+    "prompt": "A laptop shows a configuration screen pairing an alerting service with email credentials, next to a live temperature chart preview. A small sensor rig sits nearby on a tidy solarpunk desk with warm lighting and a plant. The 512×512 image is photorealistic with gentle stylization and no visible secrets or brand logos.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

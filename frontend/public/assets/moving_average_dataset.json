@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/annotated_temperature_graph.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "moving average dataset",
+    "item_id": "881228a9-e0cb-4b56-82d0-6f45bc1eb5d5",
+    "entity_type": "item",
+    "prompt": "A temperature chart overlays a smooth moving-average line atop the raw readings, with subtle markers calling out the window length. The graph glows on a laptop in a tidy solarpunk workspace with a sensor rig nearby, warm ambient lighting, and a small plant. The 512×512 image is photorealistic with gentle stylization and no extra text beyond chart labels.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

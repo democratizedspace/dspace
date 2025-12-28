@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/laptop_running_ide_on_desk.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "local temperature alert service",
+    "item_id": "9f791b6f-0262-4654-8ce3-98aa39eee1c9",
+    "entity_type": "item",
+    "prompt": "A terminal window on a laptop shows a temperature alert service running with timestamps, while a small sensor rig rests nearby on a tidy solarpunk desk. Warm lighting, a plant, and tidy cables keep the 512×512 scene photorealistic with gentle stylization and no brand logos or sensitive text.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

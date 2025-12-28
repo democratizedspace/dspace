@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/temperature_log_csv.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "cleaned temperature dataset",
+    "item_id": "ed6a775b-e371-46c4-b84e-e30e6e2f4d36",
+    "entity_type": "item",
+    "prompt": "A laptop screen shows a spreadsheet of temperature readings with highlighted cells marking trimmed outliers and aligned timestamps. A tidy thermistor rig and USB cable rest nearby on a solarpunk desk with warm light and a small plant. The 512×512 image is photorealistic with gentle stylization and no brand logos or legible personal data.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

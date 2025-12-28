@@ -555,6 +555,191 @@
         }
     },
     {
+        "id": "print-completionist-core",
+        "title": "3D print the Completionist Award II core on a leveled printer",
+        "requireItems": [
+            {
+                "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 150
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1200
+            }
+        ],
+        "createItems": [
+            {
+                "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
+                "count": 1
+            }
+        ],
+        "duration": "8h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "print-completionist-plate",
+        "title": "Print the engraved nameplate for the Completionist Award II",
+        "requireItems": [
+            {
+                "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 30
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 250
+            }
+        ],
+        "createItems": [
+            {
+                "id": "a0fc23b6-3460-404f-bd16-dfb5700f7326",
+                "count": 1
+            }
+        ],
+        "duration": "1h 30m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "assemble-completionist-award-ii",
+        "title": "Sand, glue, and press-fit the Completionist Award II core and nameplate",
+        "requireItems": [
+            {
+                "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
+                "count": 1
+            },
+            {
+                "id": "a0fc23b6-3460-404f-bd16-dfb5700f7326",
+                "count": 1
+            },
+            {
+                "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                "count": 0.1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                "count": 1
+            }
+        ],
+        "duration": "25m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "polish-completionist-award",
+        "title": "Wipe the Completionist Award II with soap and a soft towel until streak-free",
+        "requireItems": [
+            {
+                "id": "55ace400-79ee-4b24-b7da-0b0435ab7d72",
+                "count": 1
+            },
+            {
+                "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                "count": 1
+            },
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 0.1
+            },
+            {
+                "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "stage-completionist-award",
+        "title": "Place the polished Completionist Award II on a dusted bookshelf with accent lighting",
+        "requireItems": [
+            {
+                "id": "619d485d-803f-4875-a048-157ce28d31c4",
+                "count": 1
+            },
+            {
+                "id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "a8120ce3-4a9d-4d49-b955-92bd9d7fbc07",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "bucket-water-dechlorinated",
         "title": "Leave a 5 gal bucket of tap water uncovered for 48h so chlorine dissipates",
         "image": "/assets/bucket_water.jpg",
@@ -2802,6 +2987,10 @@
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
+                "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                "count": 1
+            },
+            {
                 "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
                 "count": 1
             }
@@ -4427,6 +4616,10 @@
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
+                "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                "count": 1
+            },
+            {
                 "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
                 "count": 1
             }
@@ -4551,6 +4744,462 @@
                     "task": "codex-process-hardening-2025-12-18",
                     "date": "2025-12-18",
                     "score": 98
+                }
+            ]
+        }
+    },
+    {
+        "id": "sanitize-temperature-log",
+        "title": "Clean and align the thermistor CSV before running stats",
+        "requireItems": [
+            {
+                "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                "count": 1
+            },
+            {
+                "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "ed6a775b-e371-46c4-b84e-e30e6e2f4d36",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-12-22",
+                    "date": "2025-12-22",
+                    "score": 85
+                }
+            ]
+        }
+    },
+    {
+        "id": "compute-average-temperature",
+        "title": "Calculate daily temperature averages with min/max and sample counts",
+        "requireItems": [
+            {
+                "id": "ed6a775b-e371-46c4-b84e-e30e6e2f4d36",
+                "count": 1
+            },
+            {
+                "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "572a7f9f-4c2c-4aa6-b1f9-4f14a22ea0dc",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-12-22",
+                    "date": "2025-12-22",
+                    "score": 85
+                }
+            ]
+        }
+    },
+    {
+        "id": "compute-moving-average-series",
+        "title": "Generate rolling averages alongside the raw thermistor readings",
+        "requireItems": [
+            {
+                "id": "ed6a775b-e371-46c4-b84e-e30e6e2f4d36",
+                "count": 1
+            },
+            {
+                "id": "572a7f9f-4c2c-4aa6-b1f9-4f14a22ea0dc",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "881228a9-e0cb-4b56-82d0-6f45bc1eb5d5",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-12-22",
+                    "date": "2025-12-22",
+                    "score": 85
+                }
+            ]
+        }
+    },
+    {
+        "id": "compute-median-temperature",
+        "title": "Compute median readings per window with traceable inputs",
+        "requireItems": [
+            {
+                "id": "881228a9-e0cb-4b56-82d0-6f45bc1eb5d5",
+                "count": 1
+            },
+            {
+                "id": "ed6a775b-e371-46c4-b84e-e30e6e2f4d36",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "e0a32875-6fbc-4f7f-a9ef-c0da447e7ff4",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-12-22",
+                    "date": "2025-12-22",
+                    "score": 85
+                }
+            ]
+        }
+    },
+    {
+        "id": "compare-median-to-mean",
+        "title": "Compare medians to mean values and flag drift",
+        "requireItems": [
+            {
+                "id": "e0a32875-6fbc-4f7f-a9ef-c0da447e7ff4",
+                "count": 1
+            },
+            {
+                "id": "572a7f9f-4c2c-4aa6-b1f9-4f14a22ea0dc",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "e0a32875-6fbc-4f7f-a9ef-c0da447e7ff4",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-12-22",
+                    "date": "2025-12-22",
+                    "score": 85
+                }
+            ]
+        }
+    },
+    {
+        "id": "compute-temperature-variance",
+        "title": "Calculate variance and standard deviation for the thermistor feed",
+        "requireItems": [
+            {
+                "id": "e0a32875-6fbc-4f7f-a9ef-c0da447e7ff4",
+                "count": 1
+            },
+            {
+                "id": "881228a9-e0cb-4b56-82d0-6f45bc1eb5d5",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "30c11951-8bc6-4c38-9e3a-e787f1eca4ec",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-12-22",
+                    "date": "2025-12-22",
+                    "score": 85
+                }
+            ]
+        }
+    },
+    {
+        "id": "calibrate-temperature-thresholds",
+        "title": "Turn variance math into alert thresholds and responses",
+        "requireItems": [
+            {
+                "id": "30c11951-8bc6-4c38-9e3a-e787f1eca4ec",
+                "count": 1
+            },
+            {
+                "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "30c11951-8bc6-4c38-9e3a-e787f1eca4ec",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-12-22",
+                    "date": "2025-12-22",
+                    "score": 85
+                }
+            ]
+        }
+    },
+    {
+        "id": "overlay-moving-average-dashboard",
+        "title": "Overlay the smoothed readings onto the live dashboard",
+        "requireItems": [
+            {
+                "id": "881228a9-e0cb-4b56-82d0-6f45bc1eb5d5",
+                "count": 1
+            },
+            {
+                "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-12-22",
+                    "date": "2025-12-22",
+                    "score": 85
+                }
+            ]
+        }
+    },
+    {
+        "id": "deploy-temperature-alert-service",
+        "title": "Run a service that watches the temperature endpoint and logs breaches",
+        "requireItems": [
+            {
+                "id": "30c11951-8bc6-4c38-9e3a-e787f1eca4ec",
+                "count": 1
+            },
+            {
+                "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "9f791b6f-0262-4654-8ce3-98aa39eee1c9",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-12-22",
+                    "date": "2025-12-22",
+                    "score": 85
+                }
+            ]
+        }
+    },
+    {
+        "id": "record-temperature-alert-event",
+        "title": "Force a safe over-temp and capture the alert log",
+        "requireItems": [
+            {
+                "id": "9f791b6f-0262-4654-8ce3-98aa39eee1c9",
+                "count": 1
+            },
+            {
+                "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                "count": 1
+            },
+            {
+                "id": "30c11951-8bc6-4c38-9e3a-e787f1eca4ec",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "705d12dd-3aad-4b71-ad2b-e41ca3e7ccca",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-12-22",
+                    "date": "2025-12-22",
+                    "score": 85
+                }
+            ]
+        }
+    },
+    {
+        "id": "configure-email-alerts",
+        "title": "Wire the alert service to an email transport with secrets stored safely",
+        "requireItems": [
+            {
+                "id": "9f791b6f-0262-4654-8ce3-98aa39eee1c9",
+                "count": 1
+            },
+            {
+                "id": "705d12dd-3aad-4b71-ad2b-e41ca3e7ccca",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "2c7b0f53-7ad6-4cad-bf5d-b6e2f540a6b0",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-12-22",
+                    "date": "2025-12-22",
+                    "score": 85
+                }
+            ]
+        }
+    },
+    {
+        "id": "send-temperature-email-alert",
+        "title": "Send a test email using the captured alert context",
+        "requireItems": [
+            {
+                "id": "2c7b0f53-7ad6-4cad-bf5d-b6e2f540a6b0",
+                "count": 1
+            },
+            {
+                "id": "705d12dd-3aad-4b71-ad2b-e41ca3e7ccca",
+                "count": 1
+            },
+            {
+                "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "604eaef0-30b7-4763-be53-9d73b7730fdb",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 1,
+            "score": 85,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-process-hardening-2025-12-22",
+                    "date": "2025-12-22",
+                    "score": 85
                 }
             ]
         }
@@ -5600,6 +6249,64 @@
                     "score": 60
                 }
             ]
+        }
+    },
+    {
+        "id": "record-completionist-award-entry",
+        "title": "Photograph the Completionist Award II and log its serial in the mission logbook",
+        "image": "/assets/completionist_trophy_award.jpg",
+        "requireItems": [
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            },
+            {
+                "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                "count": 1
+            },
+            {
+                "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "schedule-quest-reminder",
+        "title": "Set a weekly calendar reminder on your phone for the quest board",
+        "image": "/assets/changelog/20230630/smartphone.jpg",
+        "requireItems": [
+            {
+                "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                "count": 1
+            }
+        ],
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
         }
     },
     {

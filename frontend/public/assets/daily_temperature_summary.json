@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/temperature_line_chart.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "daily temperature summary",
+    "item_id": "572a7f9f-4c2c-4aa6-b1f9-4f14a22ea0dc",
+    "entity_type": "item",
+    "prompt": "A Matplotlib-style line chart highlights daily mean, min, and max temperatures with small callouts on key points. A microcontroller and notebook sit beside the laptop on a neat solarpunk desk with warm light and greenery. The 512×512 scene is photorealistic with gentle stylization and minimal readable text beyond chart labels.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

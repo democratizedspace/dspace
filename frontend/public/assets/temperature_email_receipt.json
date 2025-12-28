@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/live_temperature_json_endpoint.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "temperature email receipt",
+    "item_id": "604eaef0-30b7-4763-be53-9d73b7730fdb",
+    "entity_type": "item",
+    "prompt": "An email client window shows a delivered alert with the temperature reading, threshold, and timestamp, sitting beside a small JSON snippet for reference. The laptop rests on a tidy solarpunk desk with a sensor rig nearby, warm ambient lighting, and a small plant. The 512×512 image is photorealistic with gentle stylization and no personal data or brand logos.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
