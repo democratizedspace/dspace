@@ -1,9 +1,9 @@
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
-import { Plugin } from 'vitest/config';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { defineConfig } from 'vitest/config';
+import { createSvelteSubpathResolver } from './scripts/svelteSubpathResolver';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -23,63 +23,9 @@ const svelteInternalPath = (() => {
   }
 })();
 
-// Custom plugin to resolve Svelte subpath imports
-// This runs before vite:import-analysis and resolves the imports correctly
-function svelteSubpathResolver(): Plugin {
-  const svelteBase = path.resolve(__dirname, './node_modules/svelte/src');
-
-  return {
-    name: 'svelte-subpath-resolver',
-    enforce: 'pre',
-    resolveId(source, importer) {
-      // Map Svelte subpath imports to actual file locations
-      // Return the resolved path directly
-      const mapping: Record<string, string> = {
-        'svelte/compiler': path.join(svelteBase, 'compiler/index.js'),
-        'svelte/store': path.join(svelteBase, 'store/index-server.js'),
-        'svelte/animate': path.join(svelteBase, 'animate/index.js'),
-        'svelte/easing': path.join(svelteBase, 'easing/index.js'),
-        'svelte/internal': path.join(svelteBase, 'internal/index.js'),
-        'svelte/internal/client': path.join(
-          svelteBase,
-          'internal/client/index.js'
-        ),
-        'svelte/internal/server': path.join(
-          svelteBase,
-          'internal/server/index.js'
-        ),
-        'svelte/internal/disclose-version': path.join(
-          svelteBase,
-          'internal/disclose-version.js'
-        ),
-        'svelte/internal/flags/legacy': path.join(
-          svelteBase,
-          'internal/flags/legacy.js'
-        ),
-        'svelte/internal/flags/async': path.join(
-          svelteBase,
-          'internal/flags/async.js'
-        ),
-        'svelte/internal/flags/tracing': path.join(
-          svelteBase,
-          'internal/flags/tracing.js'
-        ),
-        'svelte/motion': path.join(svelteBase, 'motion/index.js'),
-        'svelte/transition': path.join(svelteBase, 'transition/index.js'),
-      };
-
-      if (mapping[source]) {
-        return { id: mapping[source], external: false };
-      }
-
-      return null;
-    },
-  };
-}
-
 export default defineConfig({
   plugins: [
-    svelteSubpathResolver(),
+    createSvelteSubpathResolver(),
     svelte({
       configFile: path.resolve(__dirname, './svelte.config.js'),
     }),
