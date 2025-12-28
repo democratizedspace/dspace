@@ -1,0 +1,9 @@
+# Use the frontend formatter for anything under frontend/
+# (run: cd frontend && npm run format)
+frontend/**
+
+# Common ignores
+node_modules/
+dist/
+coverage/
+*.log
