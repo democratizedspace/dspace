@@ -12,23 +12,56 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "progress",
-                    "text": "I have the 10 buckets ... that took awhile!"
+                    "goto": "haul",
+                    "text": "How many buckets are we talking?"
                 }
             ]
         },
         {
-            "id": "progress",
+            "id": "haul",
             "text": "Hauling water isn't glamorous, but it's great practice for future hydroponic adventures. Keep those buckets coming until you've collected ten of them.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "stage-ten-buckets",
+                    "text": "Stage the ten buckets"
+                },
+                {
                     "type": "goto",
-                    "goto": "congrats",
-                    "text": "I have enough!",
+                    "goto": "check",
+                    "text": "I stacked ten buckets!",
                     "requiresItems": [
                         {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
-                            "count": 10
+                            "id": "86b5d874-a04e-426f-be77-0f7047789faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "check",
+            "text": "Ten buckets lined up? That's serious commitment. Want your trophy?",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "award-hydro-haul",
+                    "text": "Claim the Hydro Award",
+                    "requiresItems": [
+                        {
+                            "id": "86b5d874-a04e-426f-be77-0f7047789faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "congrats",
+                    "text": "Award in hand!",
+                    "requiresItems": [
+                        {
+                            "id": "978ce094-f4fa-4b55-9e1a-2ea76531989d",
+                            "count": 1
                         }
                     ]
                 }
@@ -56,20 +89,14 @@
             ]
         }
     ],
-    "rewards": [
-        {
-            "id": "978ce094-f4fa-4b55-9e1a-2ea76531989d",
-            "count": 1
-        },
-        {
-            "id": "0564d441-7367-412e-b709-dad770814a39",
-            "count": 10
-        }
+    "rewards": [],
+    "requiresQuests": [
+        "hydroponics/basil",
+        "3dprinter/start"
     ],
-    "requiresQuests": ["hydroponics/basil", "3dprinter/start"],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

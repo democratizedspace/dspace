@@ -22,19 +22,42 @@
             "text": "Drop the stone in a bucket of dechlorinated water and wait ten minutes.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "soak-air-stone",
+                    "text": "Start the soak"
+                },
+                {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "prime",
+                    "text": "Stone is hydrated.",
                     "requiresItems": [
                         {
-                            "id": "9f91173d-2609-4127-896d-7578078135db",
-                            "count": 1
-                        },
-                        {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "id": "3b094479-ed97-46d6-8cab-ea91752972dd",
                             "count": 1
                         }
-                    ],
-                    "text": "It's soaked and ready."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "prime",
+            "text": "Hook it to a pump in a test bucket and run it for a minute. You want even bubbles across the face.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "prime-air-stone",
+                    "text": "Test the airflow"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Bubbles are even",
+                    "requiresItems": [
+                        {
+                            "id": "bd887124-605d-4268-8a6c-684cb48de1a6",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -50,10 +73,12 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/filter-clean"],
+    "requiresQuests": [
+        "hydroponics/filter-clean"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

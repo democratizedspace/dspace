@@ -33,11 +33,33 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "log",
                     "text": "Reading looks good",
                     "requiresItems": [
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Record the stable reading so you can spot drifts later.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-stable-ph",
+                    "text": "Log the pH and timestamp"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Logged and synced",
+                    "requiresItems": [
+                        {
+                            "id": "cad7d051-e3fb-4f1c-9d72-358076ee732e",
                             "count": 1
                         }
                     ]
@@ -51,7 +73,7 @@
                 {
                     "type": "process",
                     "process": "adjust-ph",
-                    "text": "Adjust pH"
+                    "text": "Dose and stir"
                 },
                 {
                     "type": "goto",

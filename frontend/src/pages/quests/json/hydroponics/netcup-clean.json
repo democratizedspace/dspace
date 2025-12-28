@@ -12,13 +12,13 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "soak",
+                    "goto": "mix",
                     "text": "Let's clean them."
                 }
             ]
         },
         {
-            "id": "soak",
+            "id": "mix",
             "text": "Fill a bucket with dechlorinated water and mix in 5 mL of 3% hydrogen peroxide.",
             "options": [
                 {
@@ -28,7 +28,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "scrub",
+                    "goto": "soak",
                     "text": "Water is ready",
                     "requiresItems": [
                         {
@@ -44,18 +44,73 @@
             ]
         },
         {
-            "id": "scrub",
-            "text": "Scrub each net cup with a brush, then rinse them clean.",
+            "id": "soak",
+            "text": "Combine the peroxide with the bucketed water and give it a quick stir.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "mix-peroxide-bath",
+                    "text": "Mix the peroxide rinse"
+                },
+                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Cups look clean"
+                    "goto": "scrub",
+                    "text": "Bath is mixed",
+                    "requiresItems": [
+                        {
+                            "id": "68e50400-fa25-4459-9633-2304a67096c9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "scrub",
+            "text": "Scrub each net cup, dip it through the peroxide bath, then rinse until no suds remain.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sanitize-net-cups",
+                    "text": "Scrub and soak"
+                },
+                {
+                    "type": "goto",
+                    "goto": "dry",
+                    "text": "Cups look clean",
+                    "requiresItems": [
+                        {
+                            "id": "6498967e-284e-46ff-bee7-10e3907f60fd",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "soak",
                     "text": "Need to soak again"
+                }
+            ]
+        },
+        {
+            "id": "dry",
+            "text": "Shake off the bath, set the net cups upside-down on a rack, and let them air dry.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "dry-net-cups",
+                    "text": "Let them dry"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Bone dry and ready",
+                    "requiresItems": [
+                        {
+                            "id": "d4a73557-e5a8-458a-80d9-6c1b46667428",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
