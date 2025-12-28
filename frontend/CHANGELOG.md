@@ -19,6 +19,7 @@
   low-contrast colour pairings
 - Svelte 5 internal import mappings in vitest configuration for proper module resolution
 - ProcessForm now clears all fields after successful submission for better UX
+- ProcessForm preview now closes after a successful submission so the cleared form shows accurately
 - Process creation Playwright coverage now runs end-to-end in CI with success assertions
 
 ### Fixed
