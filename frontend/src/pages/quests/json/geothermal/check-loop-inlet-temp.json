@@ -46,12 +46,12 @@
         },
         {
             "id": "build",
-            "text": "Seat the thermistor securely on the inlet barb and strain-relief the leads. Build the logger so the probe can't slip when the pump starts.",
+            "text": "Seat the thermistor securely on the inlet barb and add strain relief to the leads. Build the logger so the probe can't slip when the pump starts.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "log",
-                    "text": "Logger wired and strain-relieved",
+                    "text": "Logger wired and secured",
                     "process": "assemble-thermistor-logger"
                 },
                 {

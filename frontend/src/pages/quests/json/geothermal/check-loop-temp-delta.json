@@ -134,7 +134,7 @@
         },
         {
             "id": "publish",
-            "text": "Now pair your annotated inlet plot with the live outlet endpoint so you can watch ΔT as the heat pump cycles.",
+            "text": "Now pair your annotated inlet plot with the live outlet endpoint so you can watch the delta-T as the heat pump cycles.",
             "options": [
                 {
                     "type": "process",
@@ -170,7 +170,7 @@
         },
         {
             "id": "finish",
-            "text": "Pin that ΔT dashboard to your maintenance list. Trends will call out air in the loop or fouled exchangers long before you feel it indoors.",
+            "text": "Pin that delta-T dashboard to your maintenance list. Trends will call out air in the loop or fouled exchangers long before you feel it indoors.",
             "options": [
                 {
                     "type": "finish",
