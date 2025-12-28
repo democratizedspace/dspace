@@ -8,58 +8,126 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hi there! I'm Vega. Ready to try the Walstad method? It's a simple way to grow plants with minimal equipment.",
+            "text": "Hi there! I'm Vega. Ready to build a Walstad tank that can run lean? We'll layer soil, cap it, and plant before we ever reach for livestock.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "materials",
-                    "text": "Sure! What do I need?"
+                    "goto": "stage",
+                    "text": "Yes—show me the steps",
+                    "requiresItems": [
+                        {
+                            "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+                            "count": 1
+                        },
+                        {
+                            "id": "98609b23-4811-4275-8d83-ad59a2797753",
+                            "count": 1
+                        },
+                        {
+                            "id": "75cec98f-fcf0-4d73-8d31-5a53571317b2",
+                            "count": 3
+                        },
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        },
+                        {
+                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                            "count": 1
+                        },
+                        {
+                            "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "materials",
-            "text": "You'll want an 80 liter tank, some organic soil capped with gravel, and easy plants like hornwort, guppy grass, and duckweed. Grab a light and we'll get started.",
+            "id": "stage",
+            "text": "Roll the stand to level ground, place the tank, and lay out soil, gravel, plants, light, and your conditioner with a clean bucket. Keep the intake cords dry.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "condition-bucket-water",
+                    "text": "Prep dechlorinated fill water"
+                },
+                {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Got it. Let's set it up."
+                    "goto": "build",
+                    "text": "Bucket is dechlorinated and tools are staged",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "setup",
-            "text": "Spread the soil, add gravel, plant everything, then fill gently with dechlorinated water. Let it settle for a day or two.",
+            "id": "build",
+            "text": "Add the soil layer, cap with rinsed gravel, tuck in guppy grass and duckweed, then fill gently with the dechlorinated bucket so you don't blast the substrate. Aim the light for an 8-hour timer.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "assemble-walstad-tank",
+                    "text": "Layer and plant the Walstad tank"
+                },
+                {
                     "type": "goto",
-                    "goto": "cycle",
-                    "text": "Looks good so far."
+                    "goto": "thermo",
+                    "text": "Substrate settled and plants look secure",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "cycle",
-            "text": "Great! Give the tank a couple weeks to cycle before adding livestock. Keep the light on about eight hours a day.",
+            "id": "thermo",
+            "text": "Dry the outside glass near eye level and pick a spot for the strip thermometer so you can attach it in the next quest and track swings without dunking probes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Placement marked and glass is dry",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great start. Let the tank settle and test before stocking. Keep feeding the light daily and resist adding fish until ammonia and nitrite stay at zero.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll let it cycle. Thanks!"
+                    "text": "I'll let it cycle cleanly"
                 }
             ]
         }
     ],
-    "rewards": [
-        {
-            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
-            "count": 1
-        }
-    ],
+    "rewards": [],
     "requiresQuests": ["welcome/howtodoquests"],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

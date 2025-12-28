@@ -8,47 +8,89 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Tropical fish need 26°C. Mount the 150 W heater and strip thermometer?",
+            "text": "Tropical fish need 26°C. Make sure the Walstad tank already has the strip thermometer on and flow running before you mount the heater.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "mount",
-                    "text": "Gear ready, let's mount it."
-                }
-            ]
-        },
-        {
-            "id": "mount",
-            "text": "Unplug, dry hands. Clip heater, press thermometer. Wait unplugged 20 min.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "set",
-                    "text": "Heater mounted, still unplugged.",
+                    "text": "Tank is ready for heat",
                     "requiresItems": [
-                        { "id": "0b85f058-38f2-4e9a-93e9-d47441608619", "count": 1 },
-                        { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
+                        {
+                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "count": 1
+                        },
+                        {
+                            "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
+                            "count": 1
+                        },
+                        {
+                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                            "count": 1
+                        }
                     ]
                 }
             ]
         },
         {
-            "id": "set",
-            "text": "After 20 min and heater submerged, plug in, set 26°C, watch thermometer settle.",
+            "id": "mount",
+            "text": "Unplug other gear, submerge the heater near flow, and set it to 26°C. Leave it unplugged for 20 minutes so the glass temp matches the water.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "heat-walstad",
+                    "text": "Install and set the heater"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Heater installed and powered on",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Watch the strip for the next few minutes and log the temperature once it stabilizes. Aim for 26°C ±1°C before you add fish.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Log the stabilized reading"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading recorded and steady",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice control. Keep the heater cord dripped below the outlet and recheck daily for a week to confirm the thermostat holds.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Water stable at 26°C.",
-                    "process": "heat-walstad"
+                    "text": "Temperature locked in"
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/sponge-filter", "aquaria/thermometer"],
+    "requiresQuests": ["aquaria/sponge-filter", "aquaria/thermometer", "aquaria/walstad"],
     "hardening": {
         "passes": 3,
-        "score": 92,
+        "score": 95,
         "emoji": "💯",
         "history": [
             {

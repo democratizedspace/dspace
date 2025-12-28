@@ -8,44 +8,62 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Wash and dry your hands. Unplug the heater for 10 min to cool, then dry a 5 cm patch on the outside glass just below the waterline with a clean paper towel, keeping the power cord away from water.",
+            "text": "Wash and dry your hands. Unplug gear, wipe a 5 cm patch on the outside glass, and keep cords away from water while you work.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "attach",
-                    "text": "Area is clean and dry.",
+                    "text": "Glass is clean and dry",
                     "requiresItems": [
-                        { "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 },
-                        { "id": "0b85f058-38f2-4e9a-93e9-d47441608619", "count": 1 }
+                        { "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48", "count": 1 },
+                        { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 },
+                        { "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "attach",
-            "text": "Peel the backing without touching adhesive. Align the strip at eye level on the dried spot and press from top to bottom for 30 s to avoid bubbles. Keep it outside the tank and at least 5 cm from heaters or direct sunlight.",
+            "text": "Peel the backing without touching adhesive. Align the strip at eye level below the waterline and press top to bottom for 30 seconds so bubbles don't form.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "attach-aquarium-thermometer",
+                    "text": "Attach the strip thermometer"
+                },
+                {
+                    "type": "goto",
+                    "goto": "check",
+                    "text": "Strip is attached and seated",
+                    "requiresItems": [{ "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "check",
+            "text": "Wait a few minutes for the strip to stabilize. Read it straight on and log the temperature so you can catch swings while the tank cycles.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Capture the first reading"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Thermometer attached",
-                    "process": "attach-aquarium-thermometer",
-                    "requiresItems": [
-                        { "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60", "count": 1 },
-                        { "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 },
-                        { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
-                    ]
+                    "text": "Reading recorded",
+                    "requiresItems": [{ "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2", "count": 1 }]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Wait a few minutes for the numbers to steady. Plug the heater back in with dry hands and confirm the display shows a safe temperature.",
-            "options": [{ "type": "finish", "text": "All set!" }]
+            "text": "Plug equipment back in with dry hands. Keep the strip away from direct sun and check it daily until the heater is installed.",
+            "options": [{ "type": "finish", "text": "Temperature logged" }]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/position-tank"],
+    "requiresQuests": ["aquaria/walstad"],
     "hardening": {
         "passes": 4,
         "score": 95,

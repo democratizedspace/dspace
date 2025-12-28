@@ -8,23 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A sponge filter keeps water clean without too much flow. Let's set it up.",
+            "text": "A sponge filter keeps water clean without too much flow. We'll rinse it gently and restart it without shocking the bacteria.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "prepare",
-                    "text": "Sounds good, what's first?"
-                }
-            ]
-        },
-        {
-            "id": "prepare",
-            "text": "Rinse the sponge in tank water, then attach it to an air pump with tubing.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "install",
-                    "text": "Sponge rinsed and tubing attached.",
+                    "goto": "prep",
+                    "text": "Let's prep the rinse gear",
                     "requiresItems": [
                         {
                             "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
@@ -37,32 +26,105 @@
                         {
                             "id": "5d5e4e29-94b7-4a03-b73d-7420841ae686",
                             "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
                         }
                     ]
                 }
             ]
         },
         {
-            "id": "install",
-            "text": "Place the filter in a corner and plug in the pump. Bubbles show it's working.",
+            "id": "prep",
+            "text": "Unplug the pump and set the filter in a bucket. Dechlorinate the rinse water so the sponge bacteria stay alive.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "condition-bucket-water",
+                    "text": "Condition rinse water"
+                },
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Bucket is full of dechlorinated water",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rinse",
+            "text": "Squeeze the sponge in the dechlorinated bucket until the flow returns but the media stays wet. Keep tubing and the pump dry and upright.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "rinse-aquarium-filter",
+                    "text": "Rinse and clean the sponge core"
+                },
+                {
+                    "type": "goto",
+                    "goto": "restart",
+                    "text": "Sponge rinsed and still wet",
+                    "requiresItems": [
+                        {
+                            "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "restart",
+            "text": "Reassemble, reinstall, and prime the filter. Keep the outlet pointed at the surface for gas exchange, then check bubbles are even.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "restart-sponge-filter",
+                    "text": "Restart the bubbler"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Flow is restored without splashing",
+                    "requiresItems": [
+                        {
+                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Mark the date so you remember the next rinse, and keep a spare bucket nearby for emergencies.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Filter bubbling nicely!"
+                    "text": "Filter humming along"
                 }
             ]
         }
     ],
-    "rewards": [
-        {
-            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
-            "count": 1
-        }
-    ],
+    "rewards": [],
     "requiresQuests": ["aquaria/position-tank"],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
