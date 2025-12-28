@@ -8,27 +8,123 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Curious how cool the loop returns? Let's measure the inlet temperature.",
+            "text": "Lock out the pump, wipe the manifold dry, and keep your hands clear of live mains. Ready to clip a probe to the inlet?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Show me how."
+                    "goto": "build",
+                    "text": "Rig is on the bench.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 4
+                        },
+                        {
+                            "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+                            "count": 1
+                        },
+                        {
+                            "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Walk me through the steps."
                 }
             ]
         },
         {
-            "id": "setup",
-            "text": "Use an Arduino Uno, run arduino-thermistor-read, dip in inlet, log data.",
+            "id": "build",
+            "text": "Seat the thermistor securely on the inlet barb and strain-relief the leads. Build the logger so the probe can't slip when the pump starts.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Temperature recorded",
-                    "process": "arduino-thermistor-read",
+                    "goto": "log",
+                    "text": "Logger wired and strain-relieved",
+                    "process": "assemble-thermistor-logger"
+                },
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Rig is already built",
                     "requiresItems": [
                         {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Purged flow? Good. Clamp the probe, bleed any bubbles, then let the inlet run for ten minutes while you log a stable trace.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture the inlet trace",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "plot",
+                    "text": "Trace saved",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "plot",
+            "text": "Label the inlet curve and flag any spikes when the pump cycles. Let's make a quick chart you can compare to outlet data later.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Plot the inlet run",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Chart reviewed",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
                             "count": 1
                         }
                     ]
@@ -37,20 +133,28 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Logging inlet temps helps spot loop performance issues early.",
+            "text": "Save that inlet plot with the date and pump speed. It'll make spotting seasonal drift and clogged filters much easier.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait to analyze."
+                    "text": "Inlet trend logged",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["geothermal/survey-ground-temperature"],
+    "requiresQuests": [
+        "geothermal/survey-ground-temperature"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
