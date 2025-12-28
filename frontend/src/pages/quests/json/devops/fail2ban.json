@@ -12,22 +12,94 @@
             "options": [
                 {
                     "type": "goto",
+                    "goto": "collect",
+                    "text": "Let's see what's hitting SSH."
+                },
+                {
+                    "type": "goto",
                     "goto": "install",
-                    "text": "How do I stop them?"
+                    "text": "Logs already pulled.",
+                    "requiresItems": [
+                        {
+                            "id": "51f66689-e9fb-4af3-a5e5-8c2f17f9182d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "collect",
+            "text": "Export a slice of `auth.log`, note usernames hit, and pick ban thresholds.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "collect-auth-logs",
+                    "text": "Collect auth logs"
+                },
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Patterns ready.",
+                    "requiresItems": [
+                        {
+                            "id": "51f66689-e9fb-4af3-a5e5-8c2f17f9182d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "install",
-            "text": "Install Fail2ban and configure a jail for the SSH service.",
+            "text": "Install Fail2ban, create an SSH jail, and reload so bans start immediately.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "configure-fail2ban-jail",
+                    "text": "Deploy the jail",
+                    "requiresItems": [
+                        {
+                            "id": "51f66689-e9fb-4af3-a5e5-8c2f17f9182d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Jail active.",
+                    "requiresItems": [
+                        {
+                            "id": "5332c02a-4ae0-4230-8e07-361c34d1f07b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Trigger a burst of bad SSH attempts, then confirm bans, unbans, and alerts.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "simulate-fail2ban-ban",
+                    "text": "Run the drill",
+                    "requiresItems": [
+                        {
+                            "id": "5332c02a-4ae0-4230-8e07-361c34d1f07b",
+                            "count": 1
+                        }
+                    ]
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Bans configured",
+                    "text": "Telemetry captured.",
                     "requiresItems": [
                         {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "id": "25a5e759-227d-43ba-ab37-2c7d1f1975ef",
                             "count": 1
                         }
                     ]
@@ -36,7 +108,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Your node now blocks repeated SSH attempts automatically.",
+            "text": "Great! SSH brute force is blocked and you have evidence the bans work.",
             "options": [
                 {
                     "type": "finish",
@@ -46,10 +118,12 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/ssh-hardening"],
+    "requiresQuests": [
+        "devops/ssh-hardening"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

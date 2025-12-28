@@ -1639,6 +1639,104 @@
         "category": "Digital & Records"
     },
     {
+        "id": "abaea32a-f8d2-4688-b975-aef2f0276c20",
+        "name": "maintenance window plan",
+        "description": "Documented weekly patch window with reboot approval across the cluster.",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "4c807877-c73b-4b53-b3fc-c354b45c9759",
+        "name": "unattended-upgrades policy",
+        "description": "Configuration enabling security updates and auto-reboots during the maintenance window.",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "532e27d3-a70e-4c5e-b93b-99814bbd6274",
+        "name": "auto-update health report",
+        "description": "Log from an unattended-upgrades dry run showing package installs and reboot timing.",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "af648657-73cb-47ee-bedf-b94a85489760",
+        "name": "validated cluster domain",
+        "description": "DNS record validated for the cluster's public hostname.",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "69858574-cf03-4524-a50a-66e4af500282",
+        "name": "issued TLS certificate",
+        "description": "Let's Encrypt certificate and key pair deployed on the reverse proxy.",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "bec8f726-343e-46f3-9973-5866b42102bc",
+        "name": "renewal dry run log",
+        "description": "Systemd timer output showing certbot renewal succeeded without downtime.",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "51f66689-e9fb-4af3-a5e5-8c2f17f9182d",
+        "name": "auth log snapshot",
+        "description": "Recent SSH login attempts exported for Fail2ban tuning.",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "5332c02a-4ae0-4230-8e07-361c34d1f07b",
+        "name": "Fail2ban jail profile",
+        "description": "SSH jail configuration with ban thresholds and service restart hooks.",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "25a5e759-227d-43ba-ab37-2c7d1f1975ef",
+        "name": "ban telemetry report",
+        "description": "Report showing simulated brute-force attempts triggered Fail2ban bans.",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "b5c4f8dd-9e64-48ca-b6b0-213eb535caf9",
+        "name": "nightly backup job",
+        "description": "Cron or systemd task archiving database dumps to the external SSD.",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "2c688d29-26a5-4dbe-a7ca-0ef28a39fe43",
+        "name": "restore verification log",
+        "description": "Record of a test restore run from the latest nightly backup.",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "88601b1d-165b-49a6-b060-b7e281edf1b8",
+        "name": "logrotate policy",
+        "description": "Compression and retention plan for service logs coordinated with backups.",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "38dd9f0b-49cc-41a3-a93f-89adae44822a",
+        "name": "log archive check",
+        "description": "Verification that rotated archives sync to backup storage without filling the disk.",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "97fe2bbc-6dda-46a0-8ca3-2525d172146e",
+        "name": "monitoring dashboards online",
+        "description": "Grafana and Prometheus running with cluster scrape targets configured.",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
         "name": "basic telescope",
         "description": "A simple refracting telescope for backyard astronomy.",

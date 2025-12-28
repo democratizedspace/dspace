@@ -8,31 +8,102 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "As your services run they generate plenty of logs. Without rotation those files will eat up disk space.",
+            "text": "Services generate plenty of logs; without rotation they'll eat disk space.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "backups",
+                    "text": "Let's align with backups."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rotate",
+                    "text": "Nightly backups already set.",
+                    "requiresItems": [
+                        {
+                            "id": "b5c4f8dd-9e64-48ca-b6b0-213eb535caf9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "backups",
+            "text": "Check nightly dumps so logrotate doesn't collide with backup windows.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "rotate",
-                    "text": "How do I handle it?"
+                    "text": "Backups confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "b5c4f8dd-9e64-48ca-b6b0-213eb535caf9",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "I'll set up backups first."
                 }
             ]
         },
         {
             "id": "rotate",
-            "text": "Install logrotate and schedule it alongside your backup script. Compressed archives keep history without clutter.",
+            "text": "Install logrotate, set retention, and sync schedules before the SSD fills.",
             "options": [
                 {
                     "type": "process",
-                    "process": "configure-daily-backups",
-                    "text": "Scheduling rotation"
+                    "process": "configure-logrotate",
+                    "text": "Configure logrotate",
+                    "requiresItems": [
+                        {
+                            "id": "b5c4f8dd-9e64-48ca-b6b0-213eb535caf9",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "ship",
+                    "text": "Rotation configured.",
+                    "requiresItems": [
+                        {
+                            "id": "88601b1d-165b-49a6-b060-b7e281edf1b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ship",
+            "text": "Ship archives to the SSD and confirm disk use trends down after rotations.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "ship-log-archive",
+                    "text": "Sync archives",
+                    "requiresItems": [
+                        {
+                            "id": "88601b1d-165b-49a6-b060-b7e281edf1b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Rotation configured",
+                    "text": "Archives confirmed.",
                     "requiresItems": [
                         {
-                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "id": "38dd9f0b-49cc-41a3-a93f-89adae44822a",
                             "count": 1
                         }
                     ]
@@ -41,7 +112,7 @@
         },
         {
             "id": "finish",
-            "text": "Excellent! Your nodes will now keep tidy logs so the cluster stays healthy.",
+            "text": "Excellent! Logs compress cleanly, sync to backup storage, and stay tidy.",
             "options": [
                 {
                     "type": "finish",

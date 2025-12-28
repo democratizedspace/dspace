@@ -8,26 +8,98 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your services are running well. Let's protect them with HTTPS certificates.",
+            "text": "Services are running well. Lock them behind HTTPS with a clean cert flow.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "dns",
+                    "text": "Prep the domain."
+                },
+                {
+                    "type": "goto",
                     "goto": "setup",
-                    "text": "I'm ready."
+                    "text": "DNS already set.",
+                    "requiresItems": [
+                        {
+                            "id": "af648657-73cb-47ee-bedf-b94a85489760",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "dns",
+            "text": "Point DNS at the entrypoint and confirm the ACME HTTP challenge works.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "validate-cluster-domain-dns",
+                    "text": "Validate DNS"
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Domain verified.",
+                    "requiresItems": [
+                        {
+                            "id": "af648657-73cb-47ee-bedf-b94a85489760",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "setup",
-            "text": "Install certbot and configure automatic renewal for your domain.",
+            "text": "Use certbot or your ingress to request the cert, install it, and force HTTPS.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "obtain-lets-encrypt-cert",
+                    "text": "Request certificate",
+                    "requiresItems": [
+                        {
+                            "id": "af648657-73cb-47ee-bedf-b94a85489760",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "renew",
+                    "text": "TLS live.",
+                    "requiresItems": [
+                        {
+                            "id": "69858574-cf03-4524-a50a-66e4af500282",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "renew",
+            "text": "Add a timer to renew early and alert if renewal fails.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "configure-cert-renewal",
+                    "text": "Wire up renewal",
+                    "requiresItems": [
+                        {
+                            "id": "69858574-cf03-4524-a50a-66e4af500282",
+                            "count": 1
+                        }
+                    ]
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Certificates installed",
+                    "text": "Renewal tested.",
                     "requiresItems": [
                         {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "id": "bec8f726-343e-46f3-9973-5866b42102bc",
                             "count": 1
                         }
                     ]
@@ -36,7 +108,7 @@
         },
         {
             "id": "finish",
-            "text": "Excellent! Traffic to your cluster is now encrypted.",
+            "text": "Excellent! Traffic is encrypted and renewals run on autopilot.",
             "options": [
                 {
                     "type": "finish",
@@ -46,10 +118,12 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/daily-backups"],
+    "requiresQuests": [
+        "devops/daily-backups"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

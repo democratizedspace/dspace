@@ -12,27 +12,55 @@
             "options": [
                 {
                     "type": "goto",
+                    "goto": "ingest",
+                    "text": "Check scrape targets."
+                }
+            ]
+        },
+        {
+            "id": "ingest",
+            "text": "Confirm nodes export metrics, set scrapes, and reserve port 3000.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "install",
-                    "text": "Show me how."
+                    "text": "Targets mapped.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Need nodes first."
                 }
             ]
         },
         {
             "id": "install",
-            "text": "Use docker compose to run Prometheus and Grafana. Expose Grafana on port 3000.",
+            "text": "Deploy Prometheus and Grafana, load a dashboard, and alert on hot nodes.",
             "options": [
                 {
                     "type": "process",
                     "process": "install-monitoring-stack",
-                    "text": "Installing now."
+                    "text": "Launch the stack",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Dashboard up.",
+                    "text": "Dashboards live.",
                     "requiresItems": [
                         {
-                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "id": "97fe2bbc-6dda-46a0-8ca3-2525d172146e",
                             "count": 1
                         }
                     ]

@@ -12,24 +12,13 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "script",
-                    "text": "Good plan."
-                }
-            ]
-        },
-        {
-            "id": "script",
-            "text": "Plug an external SSD into the control plane and create a cron job that runs `docker exec dspace-postgres pg_dumpall > /mnt/backup/dspace.sql` each night.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "configure-daily-backups",
-                    "text": "Cron job added."
+                    "goto": "storage",
+                    "text": "Stage storage."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Backup script running.",
+                    "goto": "script",
+                    "text": "SSD already mounted.",
                     "requiresItems": [
                         {
                             "id": "849eb5e1-9f63-488b-80d3-913492049090",
@@ -40,8 +29,90 @@
             ]
         },
         {
+            "id": "storage",
+            "text": "Mount an external SSD at `/mnt/backup` and set perms.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "prepare-backup-ssd",
+                    "text": "Mount the SSD"
+                },
+                {
+                    "type": "goto",
+                    "goto": "script",
+                    "text": "Storage ready.",
+                    "requiresItems": [
+                        {
+                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "script",
+            "text": "Schedule nightly `pg_dumpall` to `/mnt/backup/dspace.sql` and keep 7 days.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "configure-daily-backups",
+                    "text": "Schedule backups",
+                    "requiresItems": [
+                        {
+                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "restore",
+                    "text": "Job scheduled.",
+                    "requiresItems": [
+                        {
+                            "id": "b5c4f8dd-9e64-48ca-b6b0-213eb535caf9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "restore",
+            "text": "Restore the latest dump in a disposable instance and log success.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "test-backup-restore",
+                    "text": "Test restore",
+                    "requiresItems": [
+                        {
+                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "count": 1
+                        },
+                        {
+                            "id": "b5c4f8dd-9e64-48ca-b6b0-213eb535caf9",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Restore verified.",
+                    "requiresItems": [
+                        {
+                            "id": "2c688d29-26a5-4dbe-a7ca-0ef28a39fe43",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Backups are running daily. Store them off-site for extra safety.",
+            "text": "Backups run daily, restores are proven, and a copy can head off-site.",
             "options": [
                 {
                     "type": "finish",

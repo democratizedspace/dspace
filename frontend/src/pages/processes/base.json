@@ -3304,11 +3304,275 @@
         "consumeItems": [],
         "createItems": [
             {
-                "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                "id": "97fe2bbc-6dda-46a0-8ca3-2525d172146e",
                 "count": 1
             }
         ],
         "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "plan-maintenance-window",
+        "title": "Schedule a weekly maintenance window",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "abaea32a-f8d2-4688-b975-aef2f0276c20",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "enable-unattended-upgrades",
+        "title": "Enable unattended-upgrades with a reboot window",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            },
+            {
+                "id": "abaea32a-f8d2-4688-b975-aef2f0276c20",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "4c807877-c73b-4b53-b3fc-c354b45c9759",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "verify-unattended-updates",
+        "title": "Run a dry-run update and confirm reboot automation",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            },
+            {
+                "id": "4c807877-c73b-4b53-b3fc-c354b45c9759",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "532e27d3-a70e-4c5e-b93b-99814bbd6274",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "validate-cluster-domain-dns",
+        "title": "Validate DNS for the cluster hostname",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "af648657-73cb-47ee-bedf-b94a85489760",
+                "count": 1
+            }
+        ],
+        "duration": "4m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "obtain-lets-encrypt-cert",
+        "title": "Request and install a Let's Encrypt certificate",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            },
+            {
+                "id": "af648657-73cb-47ee-bedf-b94a85489760",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "69858574-cf03-4524-a50a-66e4af500282",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "configure-cert-renewal",
+        "title": "Schedule certificate renewal with monitoring",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            },
+            {
+                "id": "69858574-cf03-4524-a50a-66e4af500282",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "bec8f726-343e-46f3-9973-5866b42102bc",
+                "count": 1
+            }
+        ],
+        "duration": "4m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "collect-auth-logs",
+        "title": "Export recent SSH authentication logs",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "51f66689-e9fb-4af3-a5e5-8c2f17f9182d",
+                "count": 1
+            }
+        ],
+        "duration": "4m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "configure-fail2ban-jail",
+        "title": "Create an SSH Fail2ban jail",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            },
+            {
+                "id": "51f66689-e9fb-4af3-a5e5-8c2f17f9182d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "5332c02a-4ae0-4230-8e07-361c34d1f07b",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "simulate-fail2ban-ban",
+        "title": "Trigger a simulated brute-force ban",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            },
+            {
+                "id": "5332c02a-4ae0-4230-8e07-361c34d1f07b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "25a5e759-227d-43ba-ab37-2c7d1f1975ef",
+                "count": 1
+            }
+        ],
+        "duration": "4m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "prepare-backup-ssd",
+        "title": "Format and mount the external backup SSD",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
         "hardening": {
             "passes": 0,
             "score": 85,
@@ -3330,11 +3594,108 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "b5c4f8dd-9e64-48ca-b6b0-213eb535caf9",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 80,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "test-backup-restore",
+        "title": "Restore from the latest nightly backup",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            },
+            {
+                "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                "count": 1
+            },
+            {
+                "id": "b5c4f8dd-9e64-48ca-b6b0-213eb535caf9",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "2c688d29-26a5-4dbe-a7ca-0ef28a39fe43",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "configure-logrotate",
+        "title": "Configure logrotate alongside database backups",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            },
+            {
+                "id": "b5c4f8dd-9e64-48ca-b6b0-213eb535caf9",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "88601b1d-165b-49a6-b060-b7e281edf1b8",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "ship-log-archive",
+        "title": "Sync rotated logs to backup storage",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            },
+            {
+                "id": "88601b1d-165b-49a6-b060-b7e281edf1b8",
+                "count": 1
+            },
+            {
+                "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "38dd9f0b-49cc-41a3-a93f-89adae44822a",
+                "count": 1
+            }
+        ],
+        "duration": "4m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
             "emoji": "🛠️",
             "history": []
         }
