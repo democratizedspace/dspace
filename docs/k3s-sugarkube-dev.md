@@ -249,6 +249,10 @@ Deploys from the Pis are run from `~/sugarkube` using `just helm-oci-install` wi
 `dspace.values.dev.yaml` and `dspace.values.staging.yaml` passed via the `values=` parameter. No
 manual creation of a values file is required.
 
+The Helm chart propagates the `environment` value to the application as `DSPACE_ENV` so SSR-only
+features (for example, QA cheats) stay disabled in production. Leave the base chart default of
+`production` and override to `dev` or `staging` in environment-specific values files.
+
 ## Step 5: Install or upgrade the Helm release
 
 Deploy via the sugarkube justfile wrapper (recommended so chart versions stay aligned with the

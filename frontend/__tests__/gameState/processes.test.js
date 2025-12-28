@@ -35,6 +35,7 @@ import {
     pauseProcess,
     resumeProcess,
     getProcessesForItem,
+    finishProcessImmediately,
     skipProcess,
 } from '../../src/utils/gameState/processes.js';
 
@@ -189,6 +190,23 @@ describe('gameState - processes', () => {
         mockGameState.processes['foo'].startedAt = Date.now() - 20000;
         finishProcess('foo');
         expect(getProcessState('foo').state).toBe(ProcessStates.NOT_STARTED);
+    });
+
+    test('finishProcessImmediately should finish an in-progress process and award outputs once', () => {
+        startProcess('foo');
+        const initialConsume = mockGameState.inventory['item-2'];
+
+        finishProcessImmediately('foo');
+
+        expect(getProcessState('foo').state).toBe(ProcessStates.NOT_STARTED);
+        expect(mockGameState.processes['foo']).toBeUndefined();
+        expect(mockGameState.inventory['item-3']).toBe(1);
+        expect(mockGameState.inventory['item-2']).toBe(initialConsume - 3);
+    });
+
+    test('finishProcessImmediately should noop when the process is not active', () => {
+        finishProcessImmediately('foo');
+        expect(mockGameState.processes['foo']).toBeUndefined();
     });
 
     test('cancelProcess should not do anything if the process is not started', () => {

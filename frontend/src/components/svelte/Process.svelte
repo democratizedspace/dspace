@@ -11,14 +11,17 @@
         getProcessState,
         ProcessStates,
         getProcessStartedAt,
+        finishProcessImmediately,
     } from '../../utils/gameState/processes.js';
     import processes from '../../generated/processes.json';
     import { durationInSeconds } from '../../utils.js';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
+    import { hydrateQaCheatsPreference, qaCheatsActive } from '../../stores/qaCheats.js';
 
     export let processId;
     export let processData = null;
+    export let cheatsAvailable = false;
 
     let process;
     let isCustomProcess = false;
@@ -27,6 +30,8 @@
     let intervalId;
     let mounted = false;
     let totalDurationSeconds;
+    let cheatEnabled = false;
+    let cheatSubscription;
 
     const updateState = () => {
         if (isCustomProcess || !process) {
@@ -91,16 +96,30 @@
         updateState();
     };
 
+    const onProcessCheatFinish = () => {
+        finishProcessImmediately(processId);
+        updateState();
+    };
+
     onMount(() => {
         mounted = true;
         updateState();
         if (!isCustomProcess) {
             intervalId = setInterval(updateState, 100);
         }
+
+        const available =
+            cheatsAvailable ||
+            (typeof window !== 'undefined' && window.__DSPACE_RUNTIME__?.cheatsAvailable);
+        hydrateQaCheatsPreference(Boolean(available));
+        cheatSubscription = qaCheatsActive.subscribe((value) => {
+            cheatEnabled = value;
+        });
     });
 
     onDestroy(() => {
         clearInterval(intervalId);
+        cheatSubscription?.();
     });
 
     beforeUpdate(updateState);
@@ -179,6 +198,16 @@
             {:else if state === ProcessStates.IN_PROGRESS}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
                 <Chip text="Pause" onClick={onProcessPause} inverted={true} />
+                {#if cheatEnabled}
+                    <Chip
+                        text="Instant finish"
+                        onClick={onProcessCheatFinish}
+                        hazard={true}
+                        dataTestId="qa-instant-finish-chip"
+                    >
+                        <span class="cheat-badge" aria-hidden="true">QA</span>
+                    </Chip>
+                {/if}
                 <ProgressBar startDate={processStartedAt} {totalDurationSeconds} />
                 <RemainingTime
                     endDate={processStartedAt + totalDurationSeconds * 1000}
@@ -187,6 +216,16 @@
             {:else if state === ProcessStates.PAUSED}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
                 <Chip text="Resume" onClick={onProcessResume} inverted={true} />
+                {#if cheatEnabled}
+                    <Chip
+                        text="Instant finish"
+                        onClick={onProcessCheatFinish}
+                        hazard={true}
+                        dataTestId="qa-instant-finish-chip"
+                    >
+                        <span class="cheat-badge" aria-hidden="true">QA</span>
+                    </Chip>
+                {/if}
                 <ProgressBar startDate={processStartedAt} {totalDurationSeconds} />
                 <RemainingTime
                     endDate={processStartedAt + totalDurationSeconds * 1000}
@@ -233,5 +272,29 @@
         background: #2c5837;
         color: white;
         text-align: center;
+    }
+
+    :global([data-testid='qa-instant-finish-chip']) {
+        border: 2px dashed #f59e0b;
+        background: #7c2d12;
+    }
+
+    :global([data-testid='qa-instant-finish-chip']:hover) {
+        background: #9a3412;
+    }
+
+    .cheat-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        margin-right: 6px;
+        background: #fbbf24;
+        color: #1f2937;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 0.5px;
     }
 </style>

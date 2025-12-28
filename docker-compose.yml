@@ -10,6 +10,7 @@ services:
             - '8080:8080'
         environment:
             - NODE_ENV=production
+            - DSPACE_ENV=dev
             - PORT=8080
             - HOST=0.0.0.0
         restart: unless-stopped

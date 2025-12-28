@@ -194,6 +194,29 @@ export const getProcessesForItem = (itemId) => {
     return processMap;
 };
 
+export const finishProcessImmediately = (processId) => {
+    const gameState = loadGameState();
+    const process = processes.find((p) => p.id === processId);
+    const processState = gameState.processes?.[processId];
+
+    if (!process || !processState) {
+        return;
+    }
+
+    const durationMs = Number(processState.duration) || durationInSeconds(process.duration) * 1000;
+
+    gameState.processes[processId] = {
+        ...processState,
+        startedAt: Date.now() - durationMs,
+        pausedAt: null,
+        elapsedBeforePause: 0,
+        duration: durationMs,
+    };
+
+    saveGameState(gameState);
+    finishProcess(processId);
+};
+
 export const skipProcess = (processId) => {
     const process = processes.find((p) => p.id === processId);
     if (!process) {
