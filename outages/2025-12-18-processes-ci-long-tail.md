@@ -70,7 +70,8 @@ clearing the path for a GHCR image publish and staging verification.
 - Process preview UI needs explicit waits and resilient toggles to handle reactive changes.
 
 ## Follow-ups
-- Keep Svelte import resolution helpers under test to catch upstream changes early.
+- Added vitest coverage for the Svelte import resolution helper
+  (`tests/svelteSubpathResolver.test.ts`) to catch upstream changes early.
 - Revisit coverage gating thresholds after stability holds for a release window.
 - Add a small staging smoke checklist for Manage Processes to detect toggle regressions before
   PR merges.

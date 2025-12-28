@@ -7,6 +7,7 @@ let serviceWorker;
 let originalLocation;
 let consoleWarnSpy;
 let consoleInfoSpy;
+const offlineWorkerScript = '../public/scripts/offlineWorkerRegistration.js';
 
 const mockFetchResponse = (data, ok = true, status = 200) =>
     Promise.resolve({
@@ -86,9 +87,7 @@ describe('registerOfflineWorker', () => {
         serviceWorker.register.mockResolvedValue({ waiting: waitingWorker });
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
 
-        const { registerOfflineWorker } = await import(
-            '../public/scripts/offlineWorkerRegistration.js'
-        );
+        const { registerOfflineWorker } = await import(offlineWorkerScript);
 
         registerOfflineWorker();
         await dispatchLoad();
@@ -125,9 +124,7 @@ describe('registerOfflineWorker', () => {
         serviceWorker.register.mockResolvedValue(registration);
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
 
-        const { registerOfflineWorker } = await import(
-            '../public/scripts/offlineWorkerRegistration.js'
-        );
+        const { registerOfflineWorker } = await import(offlineWorkerScript);
 
         registerOfflineWorker();
         await dispatchLoad();
@@ -150,9 +147,7 @@ describe('registerOfflineWorker', () => {
     it('skips registration when offline worker disabled via config', async () => {
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: false } }));
 
-        const { registerOfflineWorker } = await import(
-            '../public/scripts/offlineWorkerRegistration.js'
-        );
+        const { registerOfflineWorker } = await import(offlineWorkerScript);
 
         registerOfflineWorker();
         await dispatchLoad();
@@ -165,9 +160,7 @@ describe('registerOfflineWorker', () => {
         window.__DS_DISABLE_SW = true;
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
 
-        const { registerOfflineWorker } = await import(
-            '../public/scripts/offlineWorkerRegistration.js'
-        );
+        const { registerOfflineWorker } = await import(offlineWorkerScript);
 
         registerOfflineWorker();
         await dispatchLoad();
@@ -189,9 +182,7 @@ describe('registerOfflineWorker', () => {
             return mockFetchResponse({ offlineWorker: { enabled: true } });
         });
 
-        const { registerOfflineWorker } = await import(
-            '../public/scripts/offlineWorkerRegistration.js'
-        );
+        const { registerOfflineWorker } = await import(offlineWorkerScript);
 
         registerOfflineWorker();
         await dispatchLoad();
@@ -212,9 +203,8 @@ describe('registerOfflineWorker', () => {
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: {} }));
         serviceWorker.register.mockRejectedValue(new Error('Registration failed'));
 
-        const { registerOfflineWorker } = await import(
-            '../public/scripts/offlineWorkerRegistration.js'
-        );
+        const { registerOfflineWorker } =
+            await import('../public/scripts/offlineWorkerRegistration.js');
 
         registerOfflineWorker();
         await dispatchLoad();
