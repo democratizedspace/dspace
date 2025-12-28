@@ -34,6 +34,14 @@
                         {
                             "id": "a42e441a-5569-490c-86e4-ce711117cd22",
                             "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                            "count": 1
                         }
                     ]
                 },
@@ -43,10 +51,6 @@
                     "requiresItems": [
                         {
                             "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
-                            "count": 1
-                        },
-                        {
-                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
                             "count": 1
                         }
                     ],

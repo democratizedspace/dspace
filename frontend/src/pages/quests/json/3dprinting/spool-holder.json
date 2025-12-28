@@ -40,10 +40,18 @@
                 {
                     "type": "process",
                     "process": "swap-white-pla-filament",
-                    "text": "Load white PLA and purge 10 g.",
+                    "text": "Load white PLA and purge 10 grams of filament.",
                     "requiresItems": [
                         {
-                            "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
                             "count": 1
                         }
                     ]
@@ -59,17 +67,6 @@
                         },
                         {
                             "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Belts tensioned and holder printed.",
-                    "requiresItems": [
-                        {
-                            "id": "3721d5e0-a148-4f67-9150-55492873a576",
                             "count": 1
                         }
                     ]
