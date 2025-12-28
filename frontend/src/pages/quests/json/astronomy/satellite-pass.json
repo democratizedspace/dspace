@@ -8,34 +8,77 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A bright satellite is passing tonight. Let's try to track it across the sky.",
+            "text": "A bright satellite is passing tonight. Let's grab the timing, set up safely, and log the track.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "check-iss-pass",
+                    "text": "Check the pass time."
+                },
+                {
                     "type": "goto",
-                    "goto": "observe",
-                    "text": "I'll set up."
+                    "goto": "stage",
+                    "text": "Pass window ready.",
+                    "requiresItems": [
+                        {
+                            "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "observe",
-            "text": "Point your telescope at the predicted path and use slow movements to keep it in view.",
+            "id": "stage",
+            "text": "Clear trip hazards, level the tripod, and mount the telescope facing the start azimuth. Keep the red light clipped low.",
             "options": [
                 {
                     "type": "process",
-                    "process": "identify-constellations",
-                    "text": "Following now"
+                    "process": "stage-iss-spotting-station",
+                    "text": "Stage the spotting station."
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Need a fresh pass window."
+                },
+                {
+                    "type": "goto",
+                    "goto": "track",
+                    "text": "Station staged and ready.",
+                    "requiresItems": [
+                        {
+                            "id": "bb97e755-4337-4e9d-8063-4a0cff4649b5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "track",
+            "text": "Follow the satellite with slow sweeps, note the horizon-to-horizon path, and keep feet planted while panning.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-satellite-pass",
+                    "text": "Log the pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "stage",
+                    "text": "Restage before the next pass."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "I kept it in sight",
                     "requiresItems": [
                         {
-                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "id": "8bdddd43-3c9c-487a-bed1-20b4ff2a1c66",
                             "count": 1
                         }
-                    ]
+                    ],
+                    "text": "Track logged cleanly."
                 }
             ]
         },

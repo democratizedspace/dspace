@@ -1741,9 +1741,65 @@
         "category": "Digital & Records"
     },
     {
+        "id": "8bdddd43-3c9c-487a-bed1-20b4ff2a1c66",
+        "name": "satellite track log",
+        "description": "Logbook sketch of a satellite pass with start/end azimuth, elevation peak, and any tumbling.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "6102f07b-384b-437f-b78f-d1e9b5431e97",
         "name": "Polaris alignment note",
         "description": "A quick sketch of the Big Dipper's pointer stars leading to Polaris, plus azimuth from your observing spot.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "f20fe701-4380-4769-aeb8-2674b2f4a37b",
+        "name": "Andromeda core sketch",
+        "description": "Pencil sketch of M31's bright core and dust lane notes, logged after a clean Cassiopeia star hop.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "d7c735ea-832a-46e2-b790-439d1d78a656",
+        "name": "Galilean moon log",
+        "description": "Nightly entry noting Io, Europa, Ganymede and Callisto offsets with timestamp and seeing conditions.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "7fed13b2-414b-4037-9434-17b6bc7be19f",
+        "name": "Galilean orbit chart",
+        "description": "Week-long plot stacking your Galilean moon logs into curved tracks around Jupiter.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "6f124d7e-5ee1-46ce-a815-4bfa213f8fa0",
+        "name": "meteor shower log",
+        "description": "Tally sheet listing meteor counts, brightness estimates, and radiant checks through the session.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "63008fad-631b-4559-93b1-df22efacc1ea",
+        "name": "meteor rate report",
+        "description": "Calculated hourly rate with cloud cover notes and radiant altitude, ready to compare with observers.",
+        "image": "/assets/mission_log_entry_page.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "79df7b33-c1ac-4bbc-aa0b-265a1ffd3104",
+        "name": "planetary alignment sketch",
+        "description": "Scaled sketch of the night's multi-planet lineup with horizon markers and time-stamped labels.",
         "image": "/assets/mission_log_entry_page.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
