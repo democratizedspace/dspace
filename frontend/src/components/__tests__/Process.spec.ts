@@ -93,6 +93,7 @@ vi.mock('../../lib/qaCheats', () => ({
 beforeEach(() => {
     cheatsAvailabilityStore.set(false);
     cheatsEnabledStore.set(false);
+    stateInfo.state = ProcessStates.IN_PROGRESS;
     finishProcessNow.mockClear();
 });
 
@@ -142,4 +143,50 @@ test('renders instant finish chip when cheats are enabled', async () => {
 
     await fireEvent.click(chip);
     expect(finishProcessNow).toHaveBeenCalledWith('p1');
+});
+
+test('renders instant finish chip for paused processes', async () => {
+    cheatsAvailabilityStore.set(true);
+    cheatsEnabledStore.set(true);
+    stateInfo.state = ProcessStates.PAUSED;
+
+    const { getByTestId } = render(Process, { processId: 'p1' });
+
+    await tick();
+    const chip = getByTestId('qa-instant-finish-chip');
+    expect(chip).toBeTruthy();
+
+    await fireEvent.click(chip);
+    expect(finishProcessNow).toHaveBeenCalledWith('p1');
+});
+
+test('shows custom process note when rendering a custom process', async () => {
+    const customProcess = {
+        id: 'custom-1',
+        title: 'Custom Process',
+        duration: '5s',
+        requireItems: [],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByText, queryByTestId } = render(Process, {
+        processId: 'custom-1',
+        processData: customProcess,
+    });
+
+    await tick();
+    expect(getByText('Duration: 5s')).toBeTruthy();
+    expect(
+        getByText('Custom processes are displayed for reference and managed separately.')
+    ).toBeTruthy();
+    expect(queryByTestId('qa-instant-finish-chip')).toBeNull();
+});
+
+test('renders fallback message when process details are unavailable', async () => {
+    const { getByText } = render(Process, { processId: 'missing-process' });
+
+    await tick();
+    expect(getByText('Process details unavailable.')).toBeTruthy();
 });
