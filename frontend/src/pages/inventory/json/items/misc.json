@@ -1642,7 +1642,7 @@
         "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
         "name": "local DSPACE checkout",
         "description": "A synced DSPACE repository with dependencies installed and caches warmed for testing.",
-        "image": "/assets/github_repository_item.jpg",
+        "image": "/assets/local_dspace_checkout.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1674,7 +1674,7 @@
         "id": "fc89727c-8fd9-4b40-a186-40a0c56c6063",
         "name": "TLS certificate bundle",
         "description": "Fresh RSA and ECDSA certificates with renewal hooks configured for the cluster ingress.",
-        "image": "/assets/ci_workflow_file.jpg",
+        "image": "/assets/tls_certificate_bundle.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1736,7 +1736,7 @@
         "id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
         "name": "stacked star trail photo",
         "description": "A processed spiral of trails built from aligned long exposures and color-balanced foreground.",
-        "image": "/assets/hardbound_mission_logbook.jpg",
+        "image": "/assets/stacked_star_trail_photo.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -1864,7 +1864,7 @@
         "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
         "name": "stevia tasting solution",
         "description": "A 1% dilution of stevia crystals prepared in clean glassware for sensory testing.",
-        "image": "/assets/beaker_250ml_glass.jpg",
+        "image": "/assets/stevia_tasting_solution.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },

@@ -40,18 +40,7 @@
                 {
                     "type": "goto",
                     "goto": "setup",
-                    "text": "Ready to prep the workspace.",
-                    "process": "prepare-local-testbed",
-                    "requiresItems": [
-                        {
-                            "id": "52593d07-908b-4109-92cf-826b2184ef6f",
-                            "count": 1
-                        },
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Ready to prep the workspace."
                 }
             ]
         },
