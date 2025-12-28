@@ -5,7 +5,9 @@ import type { Plugin } from 'vitest/config';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const defaultSvelteBasePath = path.resolve(__dirname, '../node_modules/svelte/src');
 
-const svelteSubpathMap = (basePath: string) => ({
+type SvelteSubpathMap = Record<string, string>;
+
+const svelteSubpathMap = (basePath: string): SvelteSubpathMap => ({
   'svelte/compiler': path.join(basePath, 'compiler/index.js'),
   'svelte/store': path.join(basePath, 'store/index-server.js'),
   'svelte/animate': path.join(basePath, 'animate/index.js'),
@@ -36,14 +38,18 @@ const svelteSubpathMap = (basePath: string) => ({
 export function resolveSvelteSubpath(
   source: string,
   basePath: string = defaultSvelteBasePath
-) {
+): string | null {
   const mapping = svelteSubpathMap(basePath);
   return mapping[source] ?? null;
 }
 
+type SvelteSubpathResolverPlugin = Plugin & {
+  resolveId: NonNullable<Plugin['resolveId']>;
+};
+
 export function createSvelteSubpathResolver(
   basePath: string = defaultSvelteBasePath
-): Plugin {
+): SvelteSubpathResolverPlugin {
   const mapping = svelteSubpathMap(basePath);
 
   return {

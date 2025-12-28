@@ -11,7 +11,7 @@ const svelteSrcRoot = path.join(repoRoot, 'node_modules', 'svelte', 'src');
 
 describe('svelteSubpathResolver', () => {
   const resolver = createSvelteSubpathResolver();
-  const resolveId = resolver.resolveId as any;
+  const resolveId = resolver.resolveId;
 
   it('maps known Svelte internal subpaths to concrete files', () => {
     const asyncFlag = resolveSvelteSubpath('svelte/internal/flags/async');
