@@ -15,7 +15,7 @@
 
 <Chip text="">
     <div class="vertical">
-        <p>Paste the string representation of your game state here:</p>
+        <p>Paste a game state backup string (envelope or raw state) here:</p>
 
         <!-- input block -->
         <div class="input-block">
