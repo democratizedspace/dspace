@@ -44,8 +44,8 @@
         <div class="heading">
             <h2>QA Cheats</h2>
             <p>
-                Shows testing-only options like “Instant finish” for long-running processes. Settings
-                are stored on this device.
+                Shows testing-only options like “Instant finish” for long-running processes.
+                Settings are stored on this device.
             </p>
         </div>
 
@@ -56,7 +56,7 @@
             </div>
             <button
                 type="button"
-                class:enabled={enabled}
+                class:enabled
                 class="cheat-toggle__control"
                 aria-pressed={enabled}
                 on:click={handleToggle}
@@ -154,7 +154,9 @@
     .cheat-toggle__control.enabled {
         background: linear-gradient(90deg, rgba(56, 189, 248, 0.4), rgba(14, 165, 233, 0.25));
         border-color: #a855f7;
-        box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.4), 0 8px 16px rgba(0, 0, 0, 0.35);
+        box-shadow:
+            0 0 0 1px rgba(168, 85, 247, 0.4),
+            0 8px 16px rgba(0, 0, 0, 0.35);
     }
 
     .cheat-toggle__thumb {

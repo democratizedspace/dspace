@@ -13,8 +13,8 @@ const ProcessStates = vi.hoisted(() => ({
 
 const stateInfo = vi.hoisted(() => ({ state: ProcessStates.IN_PROGRESS, progress: 0 }));
 const getItemCountsMock = vi.hoisted(() => vi.fn(() => ({ 'item-1': 0 })));
-let cheatsAvailabilityStore = writable(false);
-let cheatsEnabledStore = writable(false);
+const cheatsAvailabilityStore = writable(false);
+const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
 
 vi.mock('../../pages/inventory/json/items', () => ({

@@ -114,7 +114,9 @@
         background-color: transparent;
         border: 2px dashed #f97316;
         color: #f97316;
-        box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.35), 0 8px 16px rgba(0, 0, 0, 0.25);
+        box-shadow:
+            0 0 0 1px rgba(249, 115, 22, 0.35),
+            0 8px 16px rgba(0, 0, 0, 0.25);
         opacity: 1;
     }
 
@@ -122,7 +124,9 @@
         background-color: rgba(249, 115, 22, 0.12);
         color: #fff7ed;
         border-color: #fb923c;
-        box-shadow: 0 0 0 1px rgba(251, 146, 60, 0.55), 0 10px 18px rgba(0, 0, 0, 0.28);
+        box-shadow:
+            0 0 0 1px rgba(251, 146, 60, 0.55),
+            0 10px 18px rgba(0, 0, 0, 0.28);
     }
 
     .disabled {

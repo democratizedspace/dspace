@@ -17,11 +17,7 @@
     import { durationInSeconds } from '../../utils.js';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
-    import {
-        initializeQaCheats,
-        qaCheatsAvailability,
-        qaCheatsEnabled,
-    } from '../../lib/qaCheats';
+    import { initializeQaCheats, qaCheatsAvailability, qaCheatsEnabled } from '../../lib/qaCheats';
 
     export let processId;
     export let processData = null;
