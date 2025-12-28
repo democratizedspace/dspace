@@ -178,6 +178,11 @@ The internal game save format evolves. The backup envelope adds consistent metad
 }
 ```
 
+Status: The shipped game save export/import flow now emits and accepts the core of this envelope
+(schemaVersion, createdAt, providerHint, payload), so backups carry timestamps and provider hints
+alongside a sanitized payload. `appVersion` and `deviceLabel` are part of the target format and
+may be added to the implementation in a future iteration.
+
 Notes:
 - `payload` must be sanitized game state only.
 - `deviceLabel` is optional but hugely helpful for humans.

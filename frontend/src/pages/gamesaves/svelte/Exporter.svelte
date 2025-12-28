@@ -21,7 +21,10 @@
 {#if loaded}
     <Chip text="">
         <div class="vertical">
-            <p>Here is a string representation of your game state:</p>
+            <p>
+                Here is a portable backup envelope for your game state (with metadata). You can copy
+                and paste it to another device or keep it for safekeeping.
+            </p>
 
             <!-- code block -->
             <div class="code-block">

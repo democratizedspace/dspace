@@ -1,23 +1,17 @@
-import { importGameStateString, loadGameState, saveGameState, ready } from './gameState/common.js';
+import {
+    importGameStateString,
+    loadGameState,
+    saveGameState,
+    ready,
+    exportGameStateString,
+} from './gameState/common.js';
 import { loadGitHubToken } from './githubToken.js';
 import {
     BACKUP_DESCRIPTION,
     BACKUP_FILE_PREFIX,
     createBackupGist,
     listBackups,
-    sanitizeSaveForBackup,
 } from '../lib/cloudsync/githubGists';
-
-const encodeGameState = (state) => {
-    const jsonStr = JSON.stringify(state);
-    if (typeof btoa === 'function') {
-        return btoa(jsonStr);
-    }
-    if (typeof Buffer !== 'undefined') {
-        return Buffer.from(jsonStr, 'utf8').toString('base64');
-    }
-    throw new Error('Base64 encoding is not supported in this environment');
-};
 
 async function loadCloudGistId() {
     await ready;
@@ -40,8 +34,10 @@ async function uploadGameStateToGist(token) {
     }
     await ready;
     const state = loadGameState();
-    const safeState = sanitizeSaveForBackup(state);
-    const content = encodeGameState(safeState);
+    const content = exportGameStateString({
+        providerHint: 'github-gist',
+        stateOverride: state,
+    });
     const result = await createBackupGist({
         token,
         content,

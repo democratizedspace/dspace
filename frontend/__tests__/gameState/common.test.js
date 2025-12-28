@@ -25,26 +25,37 @@ describe('gameState - common utilities', () => {
         expect(typeof fresh._meta?.lastUpdated).toBe('number');
     });
 
+    const decodeBase64Json = (value) => JSON.parse(Buffer.from(value, 'base64').toString('utf8'));
+
     test('exportGameStateString should reflect latest saved state', async () => {
         const state = loadGameState();
         state.inventory['1'] = 5;
         await saveGameState(state);
 
         const exported = exportGameStateString();
-        const decoded = JSON.parse(Buffer.from(exported, 'base64').toString('utf8'));
-        expect(decoded.inventory['1']).toBe(5);
+        const decoded = decodeBase64Json(exported);
+        expect(decoded.payload.inventory['1']).toBe(5);
+        expect(decoded.schemaVersion).toBe(1);
+        expect(decoded.providerHint).toBe('local-export');
     });
 
     test('exportGameStateString returns base64 string', () => {
         const exported = exportGameStateString();
         expect(typeof exported).toBe('string');
-        expect(() => Buffer.from(exported, 'base64').toString('utf8')).not.toThrow();
+        expect(() => decodeBase64Json(exported)).not.toThrow();
     });
 
     test('exportGameStateString uses stable schema', () => {
         const exported = exportGameStateString();
-        const decoded = JSON.parse(Buffer.from(exported, 'base64').toString('utf8'));
-        expect(Object.keys(decoded).sort()).toEqual(['_meta', 'inventory', 'processes', 'quests']);
+        const decoded = decodeBase64Json(exported);
+        expect(decoded.schemaVersion).toBe(1);
+        expect(typeof decoded.createdAt).toBe('string');
+        expect(Object.keys(decoded.payload).sort()).toEqual([
+            '_meta',
+            'inventory',
+            'processes',
+            'quests',
+        ]);
     });
 
     test('importGameStateString should replace current state', async () => {
@@ -53,6 +64,21 @@ describe('gameState - common utilities', () => {
         await importGameStateString(encoded);
         const loaded = loadGameState();
         expect(loaded).toMatchObject(newState);
+        expect(typeof loaded._meta?.lastUpdated).toBe('number');
+    });
+
+    test('importGameStateString accepts backup envelopes', async () => {
+        const envelope = {
+            schemaVersion: 1,
+            createdAt: '2024-01-01T00:00:00.000Z',
+            providerHint: 'test',
+            payload: { quests: { bar: true }, inventory: { 5: 1 }, processes: {} },
+        };
+
+        const encoded = Buffer.from(JSON.stringify(envelope)).toString('base64');
+        await importGameStateString(encoded);
+        const loaded = loadGameState();
+        expect(loaded).toMatchObject(envelope.payload);
         expect(typeof loaded._meta?.lastUpdated).toBe('number');
     });
 

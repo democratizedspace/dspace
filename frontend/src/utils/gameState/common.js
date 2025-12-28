@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import { sanitizeSaveForBackup } from '../../lib/cloudsync/githubGists';
 import { isBrowser } from '../ssr.js';
 
 const DB_NAME = 'dspaceGameState';
@@ -9,6 +10,8 @@ const ROOT_KEY = 'root';
 const LS_STATE_KEY = 'gameState';
 const LS_BACKUP_KEY = 'gameStateBackup';
 const META_KEY = '_meta';
+const BACKUP_SCHEMA_VERSION = 1;
+const LOCAL_EXPORT_PROVIDER = 'local-export';
 
 let dbPromise;
 let dbInstance;
@@ -305,8 +308,18 @@ export const closeGameStateDatabaseForTesting = async () => {
     }
 };
 
-export const exportGameStateString = () => {
-    const jsonStr = JSON.stringify(gameState);
+const buildBackupEnvelope = (state, providerHint = LOCAL_EXPORT_PROVIDER) => ({
+    schemaVersion: BACKUP_SCHEMA_VERSION,
+    createdAt: new Date().toISOString(),
+    providerHint,
+    payload: sanitizeSaveForBackup(state),
+});
+
+export const exportGameStateString = (options = {}) => {
+    const { providerHint = LOCAL_EXPORT_PROVIDER, stateOverride } = options;
+    const sourceState = stateOverride ?? gameState;
+    const envelope = buildBackupEnvelope(sourceState, providerHint);
+    const jsonStr = JSON.stringify(envelope);
     if (typeof btoa === 'function') {
         return btoa(jsonStr);
     }
@@ -348,7 +361,22 @@ export const importGameStateString = async (gameStateString) => {
         }
     }
 
-    await saveGameState(imported);
+    let payload = imported;
+
+    if (imported && typeof imported === 'object' && 'payload' in imported) {
+        if (
+            Object.prototype.hasOwnProperty.call(imported, 'schemaVersion') &&
+            imported.schemaVersion !== BACKUP_SCHEMA_VERSION
+        ) {
+            throw new Error(
+                `Unsupported backup schema version: ${imported.schemaVersion}, expected ${BACKUP_SCHEMA_VERSION}`
+            );
+        }
+
+        payload = imported.payload;
+    }
+
+    await saveGameState(payload);
 };
 
 export const resetGameState = async () => {
