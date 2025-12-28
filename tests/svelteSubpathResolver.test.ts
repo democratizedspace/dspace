@@ -16,7 +16,7 @@ describe('svelteSubpathResolver', () => {
   it('maps known Svelte internal subpaths to concrete files', () => {
     const asyncFlag = resolveSvelteSubpath('svelte/internal/flags/async');
     const clientInternal = resolveSvelteSubpath('svelte/internal/client');
-    const resolveHookResult = resolveId?.('svelte/internal/flags/async');
+    const resolveHookResult = resolveId('svelte/internal/flags/async');
 
     expect(asyncFlag).toBe(path.join(svelteSrcRoot, 'internal/flags/async.js'));
     expect(clientInternal).toBe(
@@ -30,7 +30,7 @@ describe('svelteSubpathResolver', () => {
 
   it('leaves unknown subpaths unresolved', () => {
     const helperResult = resolveSvelteSubpath('svelte/internal/nonexistent');
-    const resolveHookResult = resolveId?.('svelte/internal/nonexistent');
+    const resolveHookResult = resolveId('svelte/internal/nonexistent');
 
     expect(helperResult).toBeNull();
     expect(resolveHookResult).toBeNull();

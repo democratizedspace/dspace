@@ -36,6 +36,7 @@
         "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false npx eslint . --fix",
         "format": "prettier --write \"**/*.{js,ts,svelte,json,md}\"",
         "format:check": "prettier --check \"**/*.{js,ts,svelte,json,md}\"",
+        "format:check:canary": "prettier --check __tests__/offlineWorkerRegistration.test.js",
         "generate-quest": "node scripts/generate-quest.mjs",
         "seed:custom": "node scripts/seed-custom-content.js",
         "benchmark:db": "node scripts/db-benchmark.js",

@@ -39,7 +39,7 @@ export function resolveSvelteSubpath(
   source: string,
   basePath: string = defaultSvelteBasePath
 ): string | null {
-  const mapping = svelteSubpathMap(basePath);
+  const mapping: SvelteSubpathMap = svelteSubpathMap(basePath);
   return mapping[source] ?? null;
 }
 
