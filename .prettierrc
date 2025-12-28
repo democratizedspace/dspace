@@ -1,5 +1,14 @@
 {
   "singleQuote": true,
   "trailingComma": "es5",
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "overrides": [
+    {
+      "files": "frontend/**/*.{js,ts,json,md}",
+      "options": {
+        "tabWidth": 4,
+        "printWidth": 100
+      }
+    }
+  ]
 }
