@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/3d_printed_cable_clip_set.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "3D printed cable clip set",
+    "item_id": "269d2cfb-25de-417b-8e29-64e80aff934c",
+    "entity_type": "item",
+    "prompt": "A tidy set of four 3D printed PLA cable clips resting on a clean workbench. Each clip is sized to snap over a desk edge, with smooth inner channels and slightly flexible jaws ready to guide USB and charging cables. A caliper and a small pile of white PLA purge line sit nearby, showing the print was recently completed and measured. The scene is a near-future solarpunk workspace with soft, even lighting, organized tools, and a plant on a shelf; no brand logos or readable text are visible.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

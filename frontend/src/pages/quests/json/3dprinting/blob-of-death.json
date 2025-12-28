@@ -8,27 +8,55 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You start a print and walk away. Without verifying the first layer, the Z axis mis-homes and the printer extrudes in mid-air.",
+            "text": "Sydney here. You skip the first-layer check, the Z axis mis-homes, and molten PLA begins wrapping the hotend. Goggles on, stay clear of moving axes, and keep a fire extinguisher within reach.",
             "options": [
                 {
                     "type": "process",
                     "process": "3dprint-blob-of-death",
-                    "text": "Watch the blob grow."
+                    "text": "Let it run and document the failure."
+                },
+                {
+                    "type": "goto",
+                    "goto": "cooldown",
+                    "text": "Kill power, let the blob cool, and list the damage.",
+                    "requiresItems": [
+                        {
+                            "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "cooldown",
+            "text": "Unplug the printer, wait for the hotend to reach room temp, then move the gantry by hand to confirm it's free. Lay out goggles, pliers, a spare nozzle, and paper towels.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "repair-blob-of-death",
+                    "text": "Peel away plastic, swap the nozzle, re-seat wiring."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Kill power and note the damage."
+                    "text": "Printer cleaned and reassembled.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "A molten glob encases the nozzle. Next time, watch the first layer to catch issues early.",
+            "text": "Blob removed, new nozzle installed. Next time, stay for the first layer, check Z offset, and keep the bed clean so you don't repeat the mess.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Ugh."
+                    "text": "Lesson learned."
                 }
             ]
         }
@@ -37,7 +65,7 @@
     "requiresQuests": ["3dprinter/start"],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }
