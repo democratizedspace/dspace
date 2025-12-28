@@ -12,7 +12,7 @@ robotics: 13 quests, 959 lines
 chemistry: 10 quests, 664 lines
 rocketry: 10 quests, 1186 lines
 woodworking: 10 quests, 1378 lines
-completionist: 5 quests, 293 lines
+completionist: 5 quests, 442 lines
 welcome: 5 quests, 441 lines
 composting: 4 quests, 525 lines
 ubi: 4 quests, 330 lines
