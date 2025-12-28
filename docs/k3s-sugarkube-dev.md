@@ -275,6 +275,11 @@ helm upgrade --install dspace oci://ghcr.io/democratizedspace/charts/dspace \
   --values docs/examples/dspace.values.staging.yaml
 ```
 
+> **Runtime environment flag:** The Astro server reads `DSPACE_ENV` to decide whether QA-only UI
+> (such as cheat toggles) should render. The Helm chart now defaults this to `production`; staging
+> values should set `DSPACE_ENV=staging` and dev values to `DSPACE_ENV=dev` to enable the cheats
+> surface safely outside production.
+
 ### Force a rollout restart when using mutable tags (e.g., `v3-latest`)
 
 When redeploying with a mutable tag such as `v3-latest`, Helm may report an upgrade without

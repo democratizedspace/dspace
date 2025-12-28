@@ -33,7 +33,7 @@ spec:
             - name: DSPACE_VERSION
               value: {{ .Values.image.tag | default .Chart.AppVersion | quote }}
             - name: DSPACE_ENV
-              value: {{ .Values.environment | default "unknown" | quote }}
+              value: {{ .Values.environment | default "production" | quote }}
           {{- if .Values.env }}
             {{- toYaml .Values.env | nindent 12 }}
           {{- end }}

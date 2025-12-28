@@ -90,16 +90,21 @@ export const getProcessProgress = (processId) => {
 };
 
 export const finishProcess = (processId) => {
-    if (getProcessState(processId).state === ProcessStates.FINISHED) {
-        const process = processes.find((p) => p.id === processId);
-        const createItems = process.createItems;
-
-        addItems(createItems);
-
-        const gameState = loadGameState();
-        gameState.processes[processId] = undefined;
-        saveGameState(gameState);
+    if (getProcessState(processId).state !== ProcessStates.FINISHED) {
+        return;
     }
+
+    const process = processes.find((p) => p.id === processId);
+    if (!process) {
+        return;
+    }
+    const createItems = process.createItems;
+
+    addItems(createItems);
+
+    const gameState = loadGameState();
+    gameState.processes[processId] = undefined;
+    saveGameState(gameState);
 };
 
 export const cancelProcess = (processId) => {
@@ -148,6 +153,42 @@ export const resumeProcess = (processId) => {
     process.startedAt = Date.now();
     process.pausedAt = null;
     saveGameState(gameState);
+};
+
+export const finishProcessNow = (processId) => {
+    const state = getProcessState(processId).state;
+    if (state === ProcessStates.NOT_STARTED) {
+        return;
+    }
+
+    if (state === ProcessStates.FINISHED) {
+        finishProcess(processId);
+        return;
+    }
+
+    const gameState = loadGameState();
+    const process = gameState.processes[processId];
+    const definition = processes.find((p) => p.id === processId);
+
+    if (!process || !definition) {
+        return;
+    }
+
+    const durationMs =
+        typeof process.duration === 'number'
+            ? process.duration
+            : durationInSeconds(definition.duration) * 1000;
+
+    gameState.processes[processId] = {
+        ...process,
+        startedAt: Date.now() - durationMs,
+        duration: durationMs,
+        pausedAt: null,
+        elapsedBeforePause: durationMs,
+    };
+
+    saveGameState(gameState);
+    finishProcess(processId);
 };
 
 export const ProcessItemTypes = {

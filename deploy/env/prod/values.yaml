@@ -24,6 +24,8 @@ alerts:
   enabled: true
 
 runtimeEnv:
+  standard:
+    DSPACE_ENV: production
   extra:
     - name: DSPACE_ENABLE_METRICS
       value: "1"

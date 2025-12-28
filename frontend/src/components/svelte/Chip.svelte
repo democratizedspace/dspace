@@ -8,6 +8,7 @@
         inverted = false,
         red = false,
         hazard = false,
+        cheat = false,
         pressed = undefined,
         dataTestId = undefined;
 
@@ -31,6 +32,7 @@
             class:inverted={inverted === true}
             class:red={red === true}
             class:hazard={hazard === true}
+            class:cheat={cheat === true}
             on:click={handleClick}
             {disabled}
             aria-disabled={disabled}
@@ -106,6 +108,21 @@
     .inverted {
         background-color: #68d46d;
         color: black;
+    }
+
+    .cheat {
+        background-color: transparent;
+        border: 2px dashed #f97316;
+        color: #f97316;
+        box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.35), 0 8px 16px rgba(0, 0, 0, 0.25);
+        opacity: 1;
+    }
+
+    .cheat:not(.disabled):hover {
+        background-color: rgba(249, 115, 22, 0.12);
+        color: #fff7ed;
+        border-color: #fb923c;
+        box-shadow: 0 0 0 1px rgba(251, 146, 60, 0.55), 0 10px 18px rgba(0, 0, 0, 0.28);
     }
 
     .disabled {

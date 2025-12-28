@@ -21,6 +21,8 @@ metrics:
   enabled: true
 
 runtimeEnv:
+  standard:
+    DSPACE_ENV: staging
   extra:
     - name: DSPACE_ENABLE_METRICS
       value: "1"

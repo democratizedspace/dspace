@@ -6,6 +6,7 @@
         startProcess,
         cancelProcess,
         finishProcess,
+        finishProcessNow,
         pauseProcess,
         resumeProcess,
         getProcessState,
@@ -16,6 +17,11 @@
     import { durationInSeconds } from '../../utils.js';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
+    import {
+        initializeQaCheats,
+        qaCheatsAvailability,
+        qaCheatsEnabled,
+    } from '../../lib/qaCheats';
 
     export let processId;
     export let processData = null;
@@ -27,6 +33,10 @@
     let intervalId;
     let mounted = false;
     let totalDurationSeconds;
+    let cheatsAvailable = false;
+    let cheatsEnabled = false;
+    let unsubscribeCheatsAvailability;
+    let unsubscribeCheatsEnabled;
 
     const updateState = () => {
         if (isCustomProcess || !process) {
@@ -91,19 +101,44 @@
         updateState();
     };
 
+    const onProcessInstantFinish = () => {
+        if (isCustomProcess) {
+            return;
+        }
+
+        finishProcessNow(processId);
+        clearInterval(intervalId);
+        updateState();
+    };
+
     onMount(() => {
         mounted = true;
         updateState();
         if (!isCustomProcess) {
             intervalId = setInterval(updateState, 100);
         }
+
+        initializeQaCheats();
+        unsubscribeCheatsAvailability = qaCheatsAvailability.subscribe((available) => {
+            cheatsAvailable = available;
+        });
+        unsubscribeCheatsEnabled = qaCheatsEnabled.subscribe((enabled) => {
+            cheatsEnabled = enabled;
+        });
     });
 
     onDestroy(() => {
         clearInterval(intervalId);
+        unsubscribeCheatsAvailability?.();
+        unsubscribeCheatsEnabled?.();
     });
 
     beforeUpdate(updateState);
+
+    $: canInstantFinish =
+        cheatsAvailable &&
+        cheatsEnabled &&
+        (state === ProcessStates.IN_PROGRESS || state === ProcessStates.PAUSED);
 
     $: {
         const builtInProcess = processes.find((p) => p.id === processId);
@@ -179,6 +214,18 @@
             {:else if state === ProcessStates.IN_PROGRESS}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
                 <Chip text="Pause" onClick={onProcessPause} inverted={true} />
+                {#if canInstantFinish}
+                    <Chip
+                        text="Instant finish"
+                        onClick={onProcessInstantFinish}
+                        cheat={true}
+                        dataTestId="qa-instant-finish-chip"
+                    >
+                        <span class="qa-chip-label">
+                            <span class="qa-chip-pill">QA</span>
+                        </span>
+                    </Chip>
+                {/if}
                 <ProgressBar startDate={processStartedAt} {totalDurationSeconds} />
                 <RemainingTime
                     endDate={processStartedAt + totalDurationSeconds * 1000}
@@ -187,6 +234,18 @@
             {:else if state === ProcessStates.PAUSED}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
                 <Chip text="Resume" onClick={onProcessResume} inverted={true} />
+                {#if canInstantFinish}
+                    <Chip
+                        text="Instant finish"
+                        onClick={onProcessInstantFinish}
+                        cheat={true}
+                        dataTestId="qa-instant-finish-chip"
+                    >
+                        <span class="qa-chip-label">
+                            <span class="qa-chip-pill">QA</span>
+                        </span>
+                    </Chip>
+                {/if}
                 <ProgressBar startDate={processStartedAt} {totalDurationSeconds} />
                 <RemainingTime
                     endDate={processStartedAt + totalDurationSeconds * 1000}
@@ -218,6 +277,23 @@
     h6 {
         color: white;
         margin: 0px;
+    }
+
+    .qa-chip-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+    }
+
+    .qa-chip-pill {
+        background: rgba(168, 85, 247, 0.18);
+        border: 1px solid rgba(168, 85, 247, 0.55);
+        color: #f5f3ff;
+        border-radius: 10px;
+        padding: 2px 7px;
+        font-size: 0.75rem;
     }
 
     .custom-process-note {
