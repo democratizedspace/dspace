@@ -12,6 +12,7 @@ services:
             - NODE_ENV=production
             - PORT=8080
             - HOST=0.0.0.0
+            - DSPACE_ENV=dev
         restart: unless-stopped
         healthcheck:
             test: ["CMD", "curl", "-fsS", "http://localhost:8080/healthz"]

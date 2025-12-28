@@ -1,6 +1,7 @@
 ---
 import { SEO } from 'astro-seo';
 import { OFFLINE_TOAST_PUBLIC_PATH } from '../utils/offlineToastPath';
+import { getCheatsAvailabilityFlag } from '../utils/cheatsAvailability';
 
 export interface Props {
 	title: string;
@@ -10,10 +11,15 @@ const { title } = Astro.props as Props;
 
 const sitewideTitle = `DSPACE (democratized.space)`;
 const offlineWorkerRegistrationUrl = '/scripts/offlineWorkerRegistration.js';
+const cheatsAvailable = getCheatsAvailabilityFlag();
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html
+        lang="en"
+        data-theme="dark"
+        data-cheats-available={cheatsAvailable ? 'true' : 'false'}
+>
         <head>
                 <SEO
                         title={sitewideTitle}

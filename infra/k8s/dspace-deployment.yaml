@@ -26,6 +26,8 @@ spec:
           value: "8080"
         - name: HOST
           value: "0.0.0.0"
+        - name: DSPACE_ENV
+          value: "production"
         livenessProbe:
           httpGet:
             path: /livez
