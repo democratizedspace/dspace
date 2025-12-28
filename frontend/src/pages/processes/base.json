@@ -734,7 +734,7 @@
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 85,
+            "score": 90,
             "emoji": "🛠️",
             "history": []
         }
@@ -3148,6 +3148,100 @@
         }
     },
     {
+        "id": "flush-root-zone",
+        "title": "Rinse hydroponic grow media to clear salts",
+        "image": "/assets/quests/hydroponics_root_rinse.jpg",
+        "requireItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "15ff1896-7a19-4060-bfb3-77b62ec4fd5a",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "stage-ten-buckets",
+        "title": "Stage ten dechlorinated buckets for a hydro push",
+        "image": "/assets/5_gallon_hdpe_bucket.jpg",
+        "requireItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 10
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 10
+            }
+        ],
+        "createItems": [
+            {
+                "id": "86b5d874-a04e-426f-be77-0f7047789faf",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "award-hydro-haul",
+        "title": "Present ten-bucket haul to dChat for the Hydro Award",
+        "image": "/assets/hydro_award.jpg",
+        "requireItems": [
+            {
+                "id": "86b5d874-a04e-426f-be77-0f7047789faf",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "86b5d874-a04e-426f-be77-0f7047789faf",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "978ce094-f4fa-4b55-9e1a-2ea76531989d",
+                "count": 1
+            }
+        ],
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "join-k3s-cluster",
         "title": "Join nodes to a k3s cluster",
         "requireItems": [
@@ -3263,6 +3357,14 @@
                 "count": 1
             },
             {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
                 "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
                 "count": 1
             }
@@ -3273,11 +3375,16 @@
                 "count": 1
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 90,
+            "score": 95,
             "emoji": "🌀",
             "history": [
                 {
@@ -3286,6 +3393,192 @@
                     "score": 60
                 }
             ]
+        }
+    },
+    {
+        "id": "mix-peroxide-bath",
+        "title": "Mix a dilute peroxide rinse for hydro gear",
+        "image": "/assets/quests/hydroponics_netcup_cleaning.jpg",
+        "requireItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "50f2080e-7dd5-4c8d-a764-dfaa02ca59c3",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "50f2080e-7dd5-4c8d-a764-dfaa02ca59c3",
+                "count": 0.02
+            }
+        ],
+        "createItems": [
+            {
+                "id": "68e50400-fa25-4459-9633-2304a67096c9",
+                "count": 1
+            }
+        ],
+        "duration": "3m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sanitize-net-cups",
+        "title": "Scrub and peroxide-rinse hydroponic net cups",
+        "image": "/assets/quests/hydroponics_netcup_cleaning.jpg",
+        "requireItems": [
+            {
+                "id": "68e50400-fa25-4459-9633-2304a67096c9",
+                "count": 1
+            },
+            {
+                "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "68e50400-fa25-4459-9633-2304a67096c9",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "6498967e-284e-46ff-bee7-10e3907f60fd",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "dry-net-cups",
+        "title": "Air-dry sanitized net cups on a rack",
+        "image": "/assets/quests/hydroponics_netcup_cleaning.jpg",
+        "requireItems": [
+            {
+                "id": "6498967e-284e-46ff-bee7-10e3907f60fd",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "6498967e-284e-46ff-bee7-10e3907f60fd",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "d4a73557-e5a8-458a-80d9-6c1b46667428",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "soak-air-stone",
+        "title": "Soak a porous air stone in dechlorinated water",
+        "image": "/assets/quests/hydroponics_air_stone_soak.jpg",
+        "requireItems": [
+            {
+                "id": "9f91173d-2609-4127-896d-7578078135db",
+                "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 0.5
+            }
+        ],
+        "createItems": [
+            {
+                "id": "3b094479-ed97-46d6-8cab-ea91752972dd",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "prime-air-stone",
+        "title": "Test soak an air stone with a pump and airline",
+        "image": "/assets/quests/hydroponics_air_stone_soak.jpg",
+        "requireItems": [
+            {
+                "id": "3b094479-ed97-46d6-8cab-ea91752972dd",
+                "count": 1
+            },
+            {
+                "id": "5d5e4e29-94b7-4a03-b73d-7420841ae686",
+                "count": 1
+            },
+            {
+                "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "3b094479-ed97-46d6-8cab-ea91752972dd",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "bd887124-605d-4268-8a6c-684cb48de1a6",
+                "count": 1
+            }
+        ],
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
         }
     },
     {
@@ -3669,6 +3962,7 @@
     {
         "id": "adjust-ph",
         "title": "Adjust solution pH",
+        "image": "/assets/quests/hydroponics_solution_ph_check.jpg",
         "requireItems": [
             {
                 "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
@@ -3676,6 +3970,10 @@
             },
             {
                 "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
                 "count": 1
             },
             {
@@ -3687,12 +3985,55 @@
                 "count": 1
             }
         ],
-        "consumeItems": [],
+        "consumeItems": [
+            {
+                "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+                "count": 0.05
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 0.05
+            }
+        ],
         "createItems": [],
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 80,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "log-stable-ph",
+        "title": "Log a stable 5.5–6.5 pH reading for the reservoir",
+        "image": "/assets/quests/hydroponics_solution_ph_check.jpg",
+        "requireItems": [
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "cad7d051-e3fb-4f1c-9d72-358076ee732e",
+                "count": 1
+            }
+        ],
+        "duration": "1m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
             "emoji": "🛠️",
             "history": []
         }

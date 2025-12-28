@@ -129,6 +129,69 @@
         }
     },
     {
+        "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+        "name": "hydroponic pH reading",
+        "description": "Latest pH strip reading for the nutrient reservoir, logged with sample notes.",
+        "image": "/assets/digital_ph_meter_pocket.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "cad7d051-e3fb-4f1c-9d72-358076ee732e",
+        "name": "hydroponic pH log",
+        "description": "Timestamped entry showing the reservoir at 5.5–6.5 pH after adjustment and verification.",
+        "image": "/assets/hydroponic_ph_test_strip_pack.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "15ff1896-7a19-4060-bfb3-77b62ec4fd5a",
+        "name": "rinsed hydroponic root zone",
+        "description": "Grow media thoroughly flushed with fresh water to clear salts before recharging nutrients.",
+        "image": "/assets/hydroponics_tub_healthy_ready_plants.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "86b5d874-a04e-426f-be77-0f7047789faf",
+        "name": "ten-bucket water haul",
+        "description": "Ten dechlorinated 5 gal buckets staged together for a big hydroponics push.",
+        "image": "/assets/5_gallon_hdpe_bucket.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "3b094479-ed97-46d6-8cab-ea91752972dd",
+        "name": "soaked air stone",
+        "description": "Porous air stone fully soaked in dechlorinated water and purged of ceramic dust.",
+        "image": "/assets/porous_ceramic_air_stone_5cm.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "bd887124-605d-4268-8a6c-684cb48de1a6",
+        "name": "primed air stone",
+        "description": "Air stone tested on a pump with even bubbles across the face, ready for reservoir duty.",
+        "image": "/assets/porous_ceramic_air_stone_5cm.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "68e50400-fa25-4459-9633-2304a67096c9",
+        "name": "peroxide rinse bath",
+        "description": "Diluted 3% hydrogen peroxide solution in a clean bucket for sanitizing hydro gear.",
+        "image": "/assets/hydrogen_peroxide_3pct_amber_bottle.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "6498967e-284e-46ff-bee7-10e3907f60fd",
+        "name": "sanitized net cups",
+        "description": "Net cups scrubbed and rinsed in peroxide solution to knock back algae and biofilm.",
+        "image": "/assets/beginner_hydroponics_tub_6_net_pots.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "d4a73557-e5a8-458a-80d9-6c1b46667428",
+        "name": "dried net cups",
+        "description": "Net cups fully air-dried after sanitizing, ready for fresh plugs and seedlings.",
+        "image": "/assets/beginner_hydroponics_tub_6_net_pots.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
         "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
         "name": "soaked hydroponic starter plug",
         "description": "A hydroponic starter plug soaked in water. Used to germinate seeds.",
