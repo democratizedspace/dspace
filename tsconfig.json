@@ -4,6 +4,7 @@
     "module": "ESNext",
     "baseUrl": ".",
     "moduleResolution": "node",
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "isolatedModules": true,

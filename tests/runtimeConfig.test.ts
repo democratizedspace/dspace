@@ -1,10 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-// @ts-expect-error Allow importing the Astro endpoint with its `.ts` extension for testing
 import { GET as getRuntimeConfig } from '../frontend/src/pages/config.json.ts';
-// @ts-expect-error Allow importing the Astro endpoint with its `.ts` extension for testing
 import { GET as getHealthz } from '../frontend/src/pages/healthz.ts';
-// @ts-expect-error Allow importing the Astro endpoint with its `.ts` extension for testing
 import { GET as getLivez } from '../frontend/src/pages/livez.ts';
 
 const ORIGINAL_FLAGS = process.env.DSPACE_FEATURE_FLAGS;
