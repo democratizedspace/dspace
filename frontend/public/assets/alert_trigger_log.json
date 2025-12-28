@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/temperature_log_csv.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "alert trigger log",
+    "item_id": "9d23795e-f2bd-4b82-9067-fa37eadbb84d",
+    "entity_type": "item",
+    "prompt": "A short log view lists simulated over-temperature events with timestamps and alert statuses, but the lines are too small to read. A laptop and thermistor rig sit nearby on a neat desk with a leafy plant, warm lighting, and no logos. The 512×512 image is photorealistic with light stylization.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

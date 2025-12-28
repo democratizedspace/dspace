@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/live_temperature_dashboard.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "email alert delivery log",
+    "item_id": "d6e3fd3a-6844-41a8-91c3-42783453007c",
+    "entity_type": "item",
+    "prompt": "A monitoring dashboard shows a confirmation card for a sent email alert alongside the live temperature chart, with the message text intentionally blurred. The laptop sits in a bright, plant-filled workspace with warm tones and no visible branding. The 512×512 image is photorealistic with gentle stylization.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

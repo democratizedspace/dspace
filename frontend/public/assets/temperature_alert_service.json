@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/live_temperature_dashboard.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "temperature alert service",
+    "item_id": "d9d6a921-2d4b-4ea3-be5b-e101ac0ede9d",
+    "entity_type": "item",
+    "prompt": "A monitoring dashboard shows a live temperature line with a bold alert banner indicating the service is armed, while a small status widget reads healthy. The display sits on a laptop in a tidy solarpunk workspace with plants and warm light, no visible logos or readable fine text. The 512×512 image is photorealistic with gentle stylization.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

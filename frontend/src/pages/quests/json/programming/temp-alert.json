@@ -8,35 +8,75 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've graphed your data, now let's add an alert for high temperatures.",
+            "text": "Your graph looks great—now let's make the stack scream when the room heats up.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "script",
-                    "text": "I'm ready."
-                }
-            ]
-        },
-        {
-            "id": "script",
-            "text": "Watch the sensor and trigger a notification if the reading goes above your limit.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Alert works!",
+                    "goto": "thresholds",
+                    "text": "Set the guardrails",
                     "requiresItems": [
-                        {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
-                            "count": 1
-                        }
+                        { "id": "c377a2ff-1391-4ad8-a150-1e4531067406", "count": 1 },
+                        { "id": "99692727-4949-4950-8123-30a57abfa065", "count": 1 },
+                        { "id": "b3a07c4d-36ad-427b-803a-dd531c62f5a2", "count": 1 },
+                        { "id": "9607e03a-606a-4226-baf3-fa662d9ced01", "count": 1 }
                     ]
                 }
             ]
         },
         {
+            "id": "thresholds",
+            "text": "Pick thresholds, hysteresis, and cooldown timers from your smoothed and deviation stats so alerts don't flap.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "draft-temperature-alert-thresholds",
+                    "text": "Document thresholds and debounce"
+                },
+                {
+                    "type": "goto",
+                    "goto": "deploy",
+                    "text": "Thresholds locked in",
+                    "requiresItems": [{ "id": "b27f7cd8-c90f-4e4d-9ecd-fa8f3a716e7d", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "deploy",
+            "text": "Run a watchdog service on the Pi that polls the live endpoint, caches state, and posts a status page for quick checks.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "deploy-temperature-alert-service",
+                    "text": "Deploy the alert service"
+                },
+                {
+                    "type": "goto",
+                    "goto": "test",
+                    "text": "Service is running",
+                    "requiresItems": [{ "id": "d9d6a921-2d4b-4ea3-be5b-e101ac0ede9d", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "test",
+            "text": "Simulate slow climbs and sudden spikes to make sure the alert fires once, logs its work, and then quiets down.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "simulate-temperature-alert",
+                    "text": "Run alert simulations"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Alert works and is logged",
+                    "requiresItems": [{ "id": "9d23795e-f2bd-4b82-9067-fa37eadbb84d", "count": 1 }]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great job! Now your system can warn you before things overheat.",
+            "text": "Great job! Your system now shouts when it should and stays quiet when it must.",
             "options": [
                 {
                     "type": "finish",
@@ -46,11 +86,32 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/temp-graph"],
+    "requiresQuests": [
+        "programming/temp-graph",
+        "programming/http-post",
+        "programming/moving-avg-temp",
+        "programming/stddev-temp"
+    ],
     "hardening": {
-        "passes": 0,
-        "score": 75,
-        "emoji": "🛠️",
-        "history": []
+        "passes": 3,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2026-01-05",
+                "date": "2026-01-05",
+                "score": 88
+            },
+            {
+                "task": "codex-hardening-2026-01-07",
+                "date": "2026-01-07",
+                "score": 92
+            },
+            {
+                "task": "codex-hardening-2026-01-08",
+                "date": "2026-01-08",
+                "score": 95
+            }
+        ]
     }
 }

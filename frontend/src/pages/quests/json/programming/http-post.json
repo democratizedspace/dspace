@@ -8,26 +8,53 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your API serves data. Now let's accept data from clients.",
+            "text": "Your API serves data. Now let's let clients push readings back safely.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "I'm ready"
+                    "goto": "plan",
+                    "text": "Sketch the POST route",
+                    "requiresItems": [
+                        { "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86", "count": 1 },
+                        { "id": "c377a2ff-1391-4ad8-a150-1e4531067406", "count": 1 },
+                        { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
+                    ]
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Modify your server to read JSON from POST requests to /submit and print it.",
+            "id": "plan",
+            "text": "Define the `/submit` payload, enforce rate limits, and reject malformed JSON before it ever touches disk.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "build-post-temperature-intake",
+                    "text": "Wire the POST handler"
+                },
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Handler validates and responds",
+                    "requiresItems": [{ "id": "39a1d9c3-fcfc-4083-9445-4fb835f76d52", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Persist the payloads, echo a confirmation with request IDs, and prove your JSON makes it to the rest of the pipeline.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "record-post-temperature-events",
+                    "text": "Log and replay sample payloads"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "POST endpoint working!",
+                    "text": "POST intake stays stable",
                     "requiresItems": [
                         {
-                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "id": "99692727-4949-4950-8123-30a57abfa065",
                             "count": 1
                         }
                     ]
@@ -36,7 +63,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Your service can now ingest data from clients.",
+            "text": "Great! Your service ingests payloads with guardrails and logs to prove it.",
             "options": [
                 {
                     "type": "finish",
@@ -48,9 +75,20 @@
     "rewards": [],
     "requiresQuests": ["programming/json-api"],
     "hardening": {
-        "passes": 0,
-        "score": 75,
-        "emoji": "🛠️",
-        "history": []
+        "passes": 2,
+        "score": 90,
+        "emoji": "✅",
+        "history": [
+            {
+                "task": "codex-hardening-2026-01-04",
+                "date": "2026-01-04",
+                "score": 88
+            },
+            {
+                "task": "codex-hardening-2026-01-06",
+                "date": "2026-01-06",
+                "score": 90
+            }
+        ]
     }
 }

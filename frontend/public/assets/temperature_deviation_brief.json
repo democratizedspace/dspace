@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/temperature_log_csv.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "temperature deviation brief",
+    "item_id": "9607e03a-606a-4226-baf3-fa662d9ced01",
+    "entity_type": "item",
+    "prompt": "A printed CSV-style log sits beside a notebook note reading variance and deviation ranges, though no specific numbers are legible. A pen rests nearby on a clean desk with warm lighting and a leafy plant in the background. The 512×512 image is photorealistic, text intentionally unreadable, and contains no logos.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

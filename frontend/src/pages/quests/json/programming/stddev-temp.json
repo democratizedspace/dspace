@@ -12,22 +12,58 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "I'll crunch the numbers."
+                    "goto": "analyze",
+                    "text": "I'll crunch the numbers.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "88b138bc-995f-4c52-9bef-b80e980db5b",
+                            "count": 1
+                        },
+                        {
+                            "id": "b3a07c4d-36ad-427b-803a-dd531c62f5a2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Parse the log and compute the standard deviation.",
+            "id": "analyze",
+            "text": "Center the data, compute variance and standard deviation, and flag whether the environment stays within your acceptable band.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "calculate-temperature-stddev",
+                    "text": "Calculate deviation and stability notes"
+                },
+                {
+                    "type": "goto",
+                    "goto": "publish",
+                    "text": "Deviation computed!",
+                    "requiresItems": [
+                        {
+                            "id": "9607e03a-606a-4226-baf3-fa662d9ced01",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "publish",
+            "text": "Expose the deviation in your stats payload and add a quick legend on the dashboard so people can tell how steady the space is.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Deviation computed!",
+                    "text": "Variance shipped",
                     "requiresItems": [
                         {
-                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "id": "9607e03a-606a-4226-baf3-fa662d9ced01",
                             "count": 1
                         }
                     ]
@@ -46,11 +82,22 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/median-temp"],
+    "requiresQuests": ["programming/median-temp", "programming/moving-avg-temp"],
     "hardening": {
-        "passes": 0,
-        "score": 80,
-        "emoji": "🛠️",
-        "history": []
+        "passes": 2,
+        "score": 95,
+        "emoji": "✅",
+        "history": [
+            {
+                "task": "codex-hardening-2026-01-04",
+                "date": "2026-01-04",
+                "score": 88
+            },
+            {
+                "task": "codex-hardening-2026-01-07",
+                "date": "2026-01-07",
+                "score": 92
+            }
+        ]
     }
 }

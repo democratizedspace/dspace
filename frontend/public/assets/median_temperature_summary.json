@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/temperature_line_chart.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "median temperature summary",
+    "item_id": "88b138bc-995f-4c52-9bef-b80e980db5b",
+    "entity_type": "item",
+    "prompt": "A clean line chart shows temperature readings over time with a highlighted median band and a few annotated outliers in the corners. The graph is on a laptop screen in a solarpunk workspace with soft light and a small plant nearby, no visible logos or text. The 512×512 image is photorealistic with gentle stylization, focusing on the chart clarity.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

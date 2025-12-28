@@ -2052,6 +2052,86 @@
         "category": "Digital & Records"
     },
     {
+        "id": "88b138bc-995f-4c52-9bef-b80e980db5b",
+        "name": "median temperature summary",
+        "description": "A short write-up of the day’s temperature medians with percentile bands and a note on any outliers you clipped.",
+        "image": "/assets/temperature_line_chart.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "b3a07c4d-36ad-427b-803a-dd531c62f5a2",
+        "name": "moving-average temperature series",
+        "description": "A rolling-window CSV of smoothed temperatures that dampens spikes while keeping timestamp alignment for your dashboard.",
+        "image": "/assets/annotated_temperature_graph.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "9607e03a-606a-4226-baf3-fa662d9ced01",
+        "name": "temperature deviation brief",
+        "description": "A quick report showing standard deviation, variance, and a stability note for the latest logging window.",
+        "image": "/assets/temperature_log_csv.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "39a1d9c3-fcfc-4083-9445-4fb835f76d52",
+        "name": "POST intake handler",
+        "description": "A `/submit` route wired with JSON schema validation, rate limiting, and durable logging hooks for incoming sensor posts.",
+        "image": "/assets/live_temperature_json_endpoint.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "99692727-4949-4950-8123-30a57abfa065",
+        "name": "POST payload archive",
+        "description": "A tailed log file confirming recent POST submissions with timestamps, status codes, and validated payload samples.",
+        "image": "/assets/temperature_log_csv.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "b27f7cd8-c90f-4e4d-9ecd-fa8f3a716e7d",
+        "name": "alert threshold plan",
+        "description": "Documented temperature bands, cooldown timers, and hysteresis choices based on your smoothed series and deviation brief.",
+        "image": "/assets/annotated_temperature_graph.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "d9d6a921-2d4b-4ea3-be5b-e101ac0ede9d",
+        "name": "temperature alert service",
+        "description": "A background service that polls the live endpoint, applies your thresholds, and exposes a local status page.",
+        "image": "/assets/live_temperature_dashboard.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "9d23795e-f2bd-4b82-9067-fa37eadbb84d",
+        "name": "alert trigger log",
+        "description": "A short log showing simulated over-temperature events, the debounce window, and the alert status for each run.",
+        "image": "/assets/temperature_log_csv.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "d2c8bacb-aabe-4cd1-a2f4-ced3749312fb",
+        "name": "email alert credentials",
+        "description": "An `.env` entry with API key, from/to addresses, and TLS settings for your temperature alert mailer.",
+        "image": "/assets/live_temperature_json_endpoint.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "d6e3fd3a-6844-41a8-91c3-42783453007c",
+        "name": "email alert delivery log",
+        "description": "A delivery report showing a test over-temp email with subject, timestamp, and provider response ID.",
+        "image": "/assets/live_temperature_dashboard.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3",
         "name": "Photoresistor",
         "description": "A light-dependent resistor for measuring brightness.",

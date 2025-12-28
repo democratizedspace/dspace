@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/annotated_temperature_graph.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "alert threshold plan",
+    "item_id": "b27f7cd8-c90f-4e4d-9ecd-fa8f3a716e7d",
+    "entity_type": "item",
+    "prompt": "A temperature chart is annotated with colored threshold bands and hysteresis notes, showing where alerts will trigger. The graph appears on a laptop in a bright workspace with greenery, softly blurred background, and no legible UI text or branding. The 512×512 image is photorealistic with a subtle solarpunk feel.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

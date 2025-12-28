@@ -8,29 +8,51 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've set up a local alert. Let's send yourself an email when things get too warm.",
+            "text": "Local alerts are firing—let's send yourself an email when things get too warm.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Sounds useful."
+                    "goto": "prep",
+                    "text": "Sounds useful.",
+                    "requiresItems": [
+                        { "id": "d9d6a921-2d4b-4ea3-be5b-e101ac0ede9d", "count": 1 },
+                        { "id": "9d23795e-f2bd-4b82-9067-fa37eadbb84d", "count": 1 },
+                        { "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d", "count": 1 }
+                    ]
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Use a mail API to send a message when the script detects high temperature.",
+            "id": "prep",
+            "text": "Store your SMTP or API credentials in an `.env`, lock down permissions, and script a dry-run call.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "configure-email-alert-credentials",
+                    "text": "Save mail credentials safely"
+                },
+                {
+                    "type": "goto",
+                    "goto": "send",
+                    "text": "Credentials loaded",
+                    "requiresItems": [{ "id": "d2c8bacb-aabe-4cd1-a2f4-ced3749312fb", "count": 1 }]
+                }
+            ]
+        },
+        {
+            "id": "send",
+            "text": "Hook the alert service to your mailer, trigger a high-temp simulation, and confirm the email lands with context.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "send-email-temperature-alert",
+                    "text": "Send a test alert email"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Email sent!",
-                    "requiresItems": [
-                        {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
-                            "count": 1
-                        }
-                    ]
+                    "requiresItems": [{ "id": "d6e3fd3a-6844-41a8-91c3-42783453007c", "count": 1 }]
                 }
             ]
         },
@@ -48,9 +70,25 @@
     "rewards": [],
     "requiresQuests": ["programming/temp-alert"],
     "hardening": {
-        "passes": 0,
-        "score": 75,
-        "emoji": "🛠️",
-        "history": []
+        "passes": 3,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2026-01-05",
+                "date": "2026-01-05",
+                "score": 88
+            },
+            {
+                "task": "codex-hardening-2026-01-07",
+                "date": "2026-01-07",
+                "score": 92
+            },
+            {
+                "task": "codex-hardening-2026-01-09",
+                "date": "2026-01-09",
+                "score": 95
+            }
+        ]
     }
 }

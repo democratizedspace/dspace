@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/live_temperature_json_endpoint.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "POST intake handler",
+    "item_id": "39a1d9c3-fcfc-4083-9445-4fb835f76d52",
+    "entity_type": "item",
+    "prompt": "A single-board computer and laptop display a JSON API test page confirming a POST route is online, with status lights glowing and no readable payload text. Ethernet and USB cables run neatly across a tidy solarpunk desk with plants in the background. The 512×512 image is photorealistic, softly stylized, and free of logos.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

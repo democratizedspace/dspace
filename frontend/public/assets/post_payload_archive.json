@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/temperature_log_csv.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "POST payload archive",
+    "item_id": "99692727-4949-4950-8123-30a57abfa065",
+    "entity_type": "item",
+    "prompt": "A terminal window and printed log show recent POST request entries with timestamps and response codes, though the text is too small to read. The scene sits on a wooden desk with a laptop, tidy cables, and a small potted plant under warm light. The 512×512 image is photorealistic and free of logos or legible credentials.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

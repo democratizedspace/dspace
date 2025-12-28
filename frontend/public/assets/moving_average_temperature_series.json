@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/annotated_temperature_graph.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "moving-average temperature series",
+    "item_id": "b3a07c4d-36ad-427b-803a-dd531c62f5a2",
+    "entity_type": "item",
+    "prompt": "An annotated temperature chart shows both the raw line and a smoother moving-average trace, with small markers calling out the window size. It appears on a laptop in a bright, plant-filled workspace with muted tones and no readable UI text or brand marks. The 512×512 image is photorealistic with a light solarpunk vibe.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
