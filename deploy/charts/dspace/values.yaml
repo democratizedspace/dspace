@@ -93,6 +93,7 @@ runtimeEnv:
     NODE_ENV: production
     HOST: 0.0.0.0
     PORT: "8080"
+    DSPACE_ENV: production
   extra: []
 
 secretEnv:

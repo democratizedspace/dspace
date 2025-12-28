@@ -1,6 +1,7 @@
 ---
 import { SEO } from 'astro-seo';
 import { OFFLINE_TOAST_PUBLIC_PATH } from '../utils/offlineToastPath';
+import { isCheatsAvailable } from '../utils/cheats';
 
 export interface Props {
 	title: string;
@@ -10,6 +11,7 @@ const { title } = Astro.props as Props;
 
 const sitewideTitle = `DSPACE (democratized.space)`;
 const offlineWorkerRegistrationUrl = '/scripts/offlineWorkerRegistration.js';
+const cheatsAvailable = isCheatsAvailable(process.env.DSPACE_ENV);
 ---
 
 <!DOCTYPE html>
@@ -42,6 +44,14 @@ const offlineWorkerRegistrationUrl = '/scripts/offlineWorkerRegistration.js';
                 <meta name="viewport" content="width=device-width" />
                 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
                 <meta name="generator" content={Astro.generator} />
+                <script is:inline define:vars={{ cheatsAvailable }}>
+                        (function bootstrapRuntimeConfig() {
+                                const runtime =
+                                        (window.__DSPACE_RUNTIME__ =
+                                                window.__DSPACE_RUNTIME__ || {});
+                                runtime.cheatsAvailable = Boolean(cheatsAvailable);
+                        })();
+                </script>
                 <script is:inline>
                         (function bootstrapTheme() {
                                 const STORAGE_KEY = 'dspace-theme';

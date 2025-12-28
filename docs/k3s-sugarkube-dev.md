@@ -39,6 +39,16 @@ prerequisites. If you need a raw `kubectl` / `kustomize` fallback outside sugark
   [`docs/apps/dspace.version`](./apps/dspace.version) for sugarkube automation and is currently
   `3.0.0`.
 
+## Runtime environment flag
+
+- The SSR runtime reads `DSPACE_ENV` to decide whether QA-only UI (like the QA cheats toggle)
+  should render. The Helm chart defaults to `production`, which keeps these features hidden.
+- Set `DSPACE_ENV=dev` in `deploy/env/dev/values.yaml` and
+  `DSPACE_ENV=staging` in `deploy/env/int/values.yaml` so non-production clusters expose QA
+  controls.
+- Keep `DSPACE_ENV=production` in `deploy/env/prod/values.yaml` (or omit the override) to
+  prevent QA-only UI from surfacing in production.
+
 ## Assumptions and prerequisites
 
 Prerequisites:

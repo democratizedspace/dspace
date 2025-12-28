@@ -11,11 +11,14 @@
         getProcessState,
         ProcessStates,
         getProcessStartedAt,
+        finishProcessNow,
     } from '../../utils/gameState/processes.js';
     import processes from '../../generated/processes.json';
     import { durationInSeconds } from '../../utils.js';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
+    import { effectiveCheatsEnabled, setCheatsAvailable } from '../../stores/qaCheats';
+    import { getRuntimeCheatsAvailability } from '../../utils/cheats';
 
     export let processId;
     export let processData = null;
@@ -27,6 +30,11 @@
     let intervalId;
     let mounted = false;
     let totalDurationSeconds;
+    let qaCheatsEnabled = false;
+
+    const unsubscribeCheats = effectiveCheatsEnabled.subscribe((value) => {
+        qaCheatsEnabled = value;
+    });
 
     const updateState = () => {
         if (isCustomProcess || !process) {
@@ -91,8 +99,20 @@
         updateState();
     };
 
+    const onProcessInstantFinish = () => {
+        if (isCustomProcess || !qaCheatsEnabled || state !== ProcessStates.IN_PROGRESS) {
+            return;
+        }
+
+        finishProcessNow(processId);
+        updateState();
+    };
+
+    $: showCheatChip = qaCheatsEnabled && state === ProcessStates.IN_PROGRESS;
+
     onMount(() => {
         mounted = true;
+        setCheatsAvailable(getRuntimeCheatsAvailability());
         updateState();
         if (!isCustomProcess) {
             intervalId = setInterval(updateState, 100);
@@ -101,6 +121,7 @@
 
     onDestroy(() => {
         clearInterval(intervalId);
+        unsubscribeCheats();
     });
 
     beforeUpdate(updateState);
@@ -177,6 +198,18 @@
             {:else if state === ProcessStates.NOT_STARTED}
                 <Chip text="Start" onClick={onProcessStart} inverted={true} />
             {:else if state === ProcessStates.IN_PROGRESS}
+                {#if showCheatChip}
+                    <div class="qa-cheat-chip">
+                        <Chip
+                            text="Instant finish"
+                            onClick={onProcessInstantFinish}
+                            hazard={true}
+                            dataTestId="qa-instant-finish-chip"
+                        >
+                            <span class="qa-label">QA</span>
+                        </Chip>
+                    </div>
+                {/if}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
                 <Chip text="Pause" onClick={onProcessPause} inverted={true} />
                 <ProgressBar startDate={processStartedAt} {totalDurationSeconds} />
@@ -224,6 +257,36 @@
         margin-top: 12px;
         color: #d0f0d0;
         font-size: 0.9rem;
+    }
+
+    .qa-cheat-chip {
+        display: inline-flex;
+        margin-bottom: 4px;
+    }
+
+    .qa-cheat-chip :global(button) {
+        background: transparent;
+        color: #fcd34d;
+        border: 2px dashed #fcd34d;
+        box-shadow: inset 0 0 0 1px rgba(252, 211, 77, 0.35);
+    }
+
+    .qa-cheat-chip :global(button:hover) {
+        background: rgba(252, 211, 77, 0.12);
+        color: #fff7ed;
+    }
+
+    .qa-cheat-chip :global(button:focus-visible) {
+        outline-color: #fcd34d;
+    }
+
+    .qa-label {
+        font-size: 0.8rem;
+        padding: 0 6px;
+        border-radius: 6px;
+        background: rgba(252, 211, 77, 0.18);
+        border: 1px solid rgba(252, 211, 77, 0.65);
+        color: #fef3c7;
     }
 
     .process-error {

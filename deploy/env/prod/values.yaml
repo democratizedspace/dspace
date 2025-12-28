@@ -24,6 +24,11 @@ alerts:
   enabled: true
 
 runtimeEnv:
+  standard:
+    NODE_ENV: production
+    HOST: 0.0.0.0
+    PORT: "8080"
+    DSPACE_ENV: production
   extra:
     - name: DSPACE_ENABLE_METRICS
       value: "1"

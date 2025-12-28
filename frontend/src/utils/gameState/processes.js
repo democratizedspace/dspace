@@ -89,17 +89,32 @@ export const getProcessProgress = (processId) => {
     return progress * 100;
 };
 
-export const finishProcess = (processId) => {
-    if (getProcessState(processId).state === ProcessStates.FINISHED) {
-        const process = processes.find((p) => p.id === processId);
-        const createItems = process.createItems;
-
-        addItems(createItems);
-
-        const gameState = loadGameState();
-        gameState.processes[processId] = undefined;
-        saveGameState(gameState);
+const finalizeProcess = (processId) => {
+    const process = processes.find((p) => p.id === processId);
+    if (!process) {
+        return false;
     }
+
+    const gameState = loadGameState();
+
+    if (!gameState.processes[processId]) {
+        return false;
+    }
+
+    addItems(process.createItems);
+
+    gameState.processes[processId] = undefined;
+    saveGameState(gameState);
+
+    return true;
+};
+
+export const finishProcess = (processId) => {
+    if (getProcessState(processId).state !== ProcessStates.FINISHED) {
+        return;
+    }
+
+    finalizeProcess(processId);
 };
 
 export const cancelProcess = (processId) => {
@@ -148,6 +163,31 @@ export const resumeProcess = (processId) => {
     process.startedAt = Date.now();
     process.pausedAt = null;
     saveGameState(gameState);
+};
+
+export const finishProcessNow = (processId) => {
+    const processState = getProcessState(processId);
+    if (processState.state === ProcessStates.NOT_STARTED) {
+        return;
+    }
+
+    if (processState.state === ProcessStates.FINISHED) {
+        finalizeProcess(processId);
+        return;
+    }
+
+    const gameState = loadGameState();
+    const process = gameState.processes[processId];
+    if (!process) {
+        return;
+    }
+
+    process.elapsedBeforePause = process.duration;
+    process.pausedAt = null;
+    process.startedAt = Date.now() - process.duration;
+
+    saveGameState(gameState);
+    finishProcess(processId);
 };
 
 export const ProcessItemTypes = {

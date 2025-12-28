@@ -21,6 +21,11 @@ metrics:
   enabled: false
 
 runtimeEnv:
+  standard:
+    NODE_ENV: production
+    HOST: 0.0.0.0
+    PORT: "8080"
+    DSPACE_ENV: dev
   extra:
     - name: DSPACE_ENABLE_METRICS
       value: "0"
