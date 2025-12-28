@@ -11,7 +11,13 @@
         getProcessState,
         ProcessStates,
         getProcessStartedAt,
+        finishProcessNow,
     } from '../../utils/gameState/processes.js';
+    import {
+        getRuntimeCheatsAvailability,
+        initializeQaCheats,
+        qaCheatsEnabled,
+    } from '../../lib/qaCheats';
     import processes from '../../generated/processes.json';
     import { durationInSeconds } from '../../utils.js';
     import Chip from './Chip.svelte';
@@ -27,6 +33,11 @@
     let intervalId;
     let mounted = false;
     let totalDurationSeconds;
+    let cheatsAvailable = getRuntimeCheatsAvailability();
+    let cheatsEnabled = false;
+    let showCheatAction = false;
+    let cleanupCheats;
+    let unsubscribeCheats;
 
     const updateState = () => {
         if (isCustomProcess || !process) {
@@ -71,6 +82,15 @@
         updateState();
     };
 
+    const onProcessFinishNow = () => {
+        if (isCustomProcess) {
+            return;
+        }
+
+        finishProcessNow(processId);
+        updateState();
+    };
+
     const onProcessPause = () => {
         if (isCustomProcess) {
             return;
@@ -93,6 +113,11 @@
 
     onMount(() => {
         mounted = true;
+        cheatsAvailable = getRuntimeCheatsAvailability();
+        cleanupCheats = initializeQaCheats(cheatsAvailable);
+        unsubscribeCheats = qaCheatsEnabled.subscribe((enabled) => {
+            cheatsEnabled = enabled && cheatsAvailable;
+        });
         updateState();
         if (!isCustomProcess) {
             intervalId = setInterval(updateState, 100);
@@ -101,6 +126,8 @@
 
     onDestroy(() => {
         clearInterval(intervalId);
+        cleanupCheats?.();
+        unsubscribeCheats?.();
     });
 
     beforeUpdate(updateState);
@@ -139,6 +166,12 @@
 
         updateState();
     }
+
+    $: showCheatAction =
+        cheatsAvailable &&
+        cheatsEnabled &&
+        !isCustomProcess &&
+        (state === ProcessStates.IN_PROGRESS || state === ProcessStates.PAUSED);
 </script>
 
 {#if mounted && process}
@@ -179,6 +212,16 @@
             {:else if state === ProcessStates.IN_PROGRESS}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
                 <Chip text="Pause" onClick={onProcessPause} inverted={true} />
+                {#if showCheatAction}
+                    <Chip
+                        text="Instant finish"
+                        onClick={onProcessFinishNow}
+                        dataTestId="qa-instant-finish-chip"
+                        inverted={true}
+                    >
+                        <span class="qa-label">QA</span>
+                    </Chip>
+                {/if}
                 <ProgressBar startDate={processStartedAt} {totalDurationSeconds} />
                 <RemainingTime
                     endDate={processStartedAt + totalDurationSeconds * 1000}
@@ -187,6 +230,16 @@
             {:else if state === ProcessStates.PAUSED}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
                 <Chip text="Resume" onClick={onProcessResume} inverted={true} />
+                {#if showCheatAction}
+                    <Chip
+                        text="Instant finish"
+                        onClick={onProcessFinishNow}
+                        dataTestId="qa-instant-finish-chip"
+                        inverted={true}
+                    >
+                        <span class="qa-label">QA</span>
+                    </Chip>
+                {/if}
                 <ProgressBar startDate={processStartedAt} {totalDurationSeconds} />
                 <RemainingTime
                     endDate={processStartedAt + totalDurationSeconds * 1000}
@@ -233,5 +286,27 @@
         background: #2c5837;
         color: white;
         text-align: center;
+    }
+
+    .qa-label {
+        background: #111827;
+        color: #f9fafb;
+        border: 1px dashed rgba(255, 255, 255, 0.6);
+        border-radius: 999px;
+        padding: 2px 8px;
+        font-size: 0.75rem;
+        margin-right: 6px;
+        letter-spacing: 0.04em;
+    }
+
+    :global(button[data-testid='qa-instant-finish-chip']) {
+        background: linear-gradient(120deg, #ecfeff, #fde68a);
+        color: #1f2937;
+        border: 1px dashed #f59e0b;
+        box-shadow: 0 8px 18px rgba(245, 158, 11, 0.25);
+    }
+
+    :global(button[data-testid='qa-instant-finish-chip']:hover) {
+        background: linear-gradient(120deg, #fef9c3, #ffedd5);
     }
 </style>

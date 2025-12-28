@@ -2,11 +2,18 @@
 import Page from '../components/Page.astro';
 import LogoutPanel from '../components/svelte/LogoutPanel.svelte';
 import DataReset from '../components/svelte/DataReset.svelte';
+import QaCheatsSettings from '../components/svelte/QaCheatsSettings.svelte';
+import { isCheatsAvailable } from '../utils/cheatsAvailability';
+
+const cheatsAvailable = isCheatsAvailable();
 ---
 
 <Page title="Settings" message="Manage your DSPACE session" columns="1">
     <div class="settings-content">
         <LogoutPanel client:idle />
+        {#if cheatsAvailable}
+            <QaCheatsSettings cheatsAvailable={cheatsAvailable} client:idle />
+        {/if}
         <DataReset client:idle />
     </div>
 </Page>

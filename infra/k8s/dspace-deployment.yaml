@@ -22,6 +22,8 @@ spec:
         env:
         - name: NODE_ENV
           value: "production"
+        - name: DSPACE_ENV
+          value: "production"
         - name: PORT
           value: "8080"
         - name: HOST

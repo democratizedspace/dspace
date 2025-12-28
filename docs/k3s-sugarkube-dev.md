@@ -72,6 +72,14 @@ ready to run on the Raspberry Pi cluster without modification.
 - You can substitute a different domain or subdomain, but examples below assume
   `staging.democratized.space`.
 
+### Runtime environment flag
+
+- Set the Helm `environment` value so the pod receives `DSPACE_ENV`.
+- Recommended values: `dev` for sugarkube/local, `staging` for `v3-latest`, and
+  `production` for the public cluster.
+- Server-side toggles (for example, QA-only cheats) are gated by `DSPACE_ENV`, so production
+  stays locked down even if a client cached a dev/staging preference.
+
 ### Required access and tooling
 
 - You have sugarkube's three-server HA cluster online following the Raspberry Pi setup guide

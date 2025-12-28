@@ -102,6 +102,45 @@ export const finishProcess = (processId) => {
     }
 };
 
+export const finishProcessNow = (processId) => {
+    const process = processes.find((p) => p.id === processId);
+
+    if (!process) {
+        return;
+    }
+
+    const processState = getProcessState(processId).state;
+
+    if (processState === ProcessStates.NOT_STARTED) {
+        return;
+    }
+
+    if (processState === ProcessStates.FINISHED) {
+        finishProcess(processId);
+        return;
+    }
+
+    const gameState = loadGameState();
+    const current = gameState.processes[processId];
+
+    if (!current) {
+        return;
+    }
+
+    const durationMs = durationInSeconds(process.duration) * 1000;
+
+    gameState.processes[processId] = {
+        ...current,
+        startedAt: Date.now() - durationMs,
+        duration: durationMs,
+        pausedAt: null,
+        elapsedBeforePause: 0,
+    };
+
+    saveGameState(gameState);
+    finishProcess(processId);
+};
+
 export const cancelProcess = (processId) => {
     const gameState = loadGameState();
     const process = processes.find((p) => p.id === processId);
