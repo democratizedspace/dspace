@@ -38,9 +38,7 @@
                     "type": "goto",
                     "goto": "remove",
                     "text": "Replacement water is conditioned and matched",
-                    "requiresItems": [
-                        { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }
-                    ]
+                    "requiresItems": [{ "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }]
                 }
             ]
         },
@@ -57,9 +55,7 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Water swapped and heater restarted",
-                    "requiresItems": [
-                        { "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f", "count": 1 }
-                    ]
+                    "requiresItems": [{ "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f", "count": 1 }]
                 }
             ]
         },

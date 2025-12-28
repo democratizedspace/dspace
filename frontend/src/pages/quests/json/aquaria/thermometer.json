@@ -35,9 +35,7 @@
                     "type": "goto",
                     "goto": "check",
                     "text": "Strip is attached and seated",
-                    "requiresItems": [
-                        { "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7", "count": 1 }
-                    ]
+                    "requiresItems": [{ "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7", "count": 1 }]
                 }
             ]
         },
@@ -54,9 +52,7 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Reading recorded",
-                    "requiresItems": [
-                        { "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2", "count": 1 }
-                    ]
+                    "requiresItems": [{ "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2", "count": 1 }]
                 }
             ]
         },

@@ -107,10 +107,6 @@
                         {
                             "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
                             "count": 1
-                        },
-                        {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
-                            "count": 1
                         }
                     ]
                 }
@@ -128,9 +124,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "welcome/howtodoquests"
-    ],
+    "requiresQuests": ["welcome/howtodoquests"],
     "hardening": {
         "passes": 0,
         "score": 90,
