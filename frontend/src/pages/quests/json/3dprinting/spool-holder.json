@@ -8,44 +8,99 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your filament keeps unraveling. Let's print a holder to keep it in check.",
+            "text": "Sydney here. Filament keeps wandering? Let's print a sturdy spool holder. Clear the bench, wear goggles, and keep the hotend area clear.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "prep",
+                    "text": "Guide me through prep."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Level the bed, purge to white PLA, and check belt tension so tall parts stay square. Slice with 4 walls and 30% infill for the uprights.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Level the bed first."
+                },
+                {
+                    "type": "process",
+                    "process": "tighten-x-belt",
+                    "text": "Tension the belts so layers stack straight.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "process",
+                    "process": "swap-white-pla-filament",
+                    "text": "Load white PLA and purge 10 g.",
+                    "requiresItems": [
+                        {
+                            "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
                     "goto": "print",
-                    "text": "Great idea. What do I do?"
+                    "text": "Ready to print the spool holder.",
+                    "requiresItems": [
+                        {
+                            "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Belts tensioned and holder printed.",
+                    "requiresItems": [
+                        {
+                            "id": "3721d5e0-a148-4f67-9150-55492873a576",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "print",
-            "text": "Clean the bed, load filament, slice the holder model and start the print.",
+            "text": "Preheat, run a skirt to confirm flow, then start the holder. Check the arms stay flat and pause if any wobble appears.",
             "options": [
                 {
                     "type": "process",
                     "process": "3dprint-spool-holder",
-                    "text": "Starting the spool holder print"
+                    "text": "Print the spool holder."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
+                    "text": "Holder cooled and fits the spool axle.",
                     "requiresItems": [
                         {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "id": "3721d5e0-a148-4f67-9150-55492873a576",
                             "count": 1
-                        },
-                        {
-                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
-                            "count": 50
                         }
-                    ],
-                    "text": "The print finished without a hitch."
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Mount the spool and enjoy smoother prints.",
+            "text": "Mount the spool, check it unwinds smoothly, and log belt tension so you can retighten after a few heavy rolls.",
             "options": [
                 {
                     "type": "finish",
@@ -54,12 +109,7 @@
             ]
         }
     ],
-    "rewards": [
-        {
-            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-            "count": 10
-        }
-    ],
+    "rewards": [],
     "requiresQuests": ["3dprinter/start"],
     "hardening": {
         "passes": 0,

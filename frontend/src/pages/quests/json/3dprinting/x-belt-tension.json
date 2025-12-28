@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Noticing layer shifts? Let's dial in that X-axis belt tension.",
+            "text": "Noticing layer shifts? Let's tension and square both belts. Power off, unplug, and keep goggles on while you work around sharp hardware.",
             "options": [
                 {
                     "type": "goto",
@@ -19,12 +19,17 @@
         },
         {
             "id": "tension",
-            "text": "Power off the printer, loosen the belt clamp, pull the belt snug, and retighten. Keep fingers clear of sharp edges.",
+            "text": "Release belt clamps, tension until firm with a gentle twang, then re-square the gantry before locking hardware. Avoid overtightening so bearings don't bind.",
             "options": [
                 {
                     "type": "process",
                     "process": "tighten-x-belt",
-                    "text": "Walk me through each step."
+                    "text": "Walk me through each step.",
+                    "requiresItems": [
+                        { "id": "a42e441a-5569-490c-86e4-ce711117cd22", "count": 1 },
+                        { "id": "8299ac3f-c232-46d4-a007-2ad86ec70361", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -32,7 +37,7 @@
                     "text": "Belt tightened and moving smoothly.",
                     "requiresItems": [
                         {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
                             "count": 1
                         },
                         {

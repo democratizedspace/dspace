@@ -8,31 +8,73 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Need a quick print project? Let's make a cable clip to tame those loose cords.",
+            "text": "Sydney here. Let's print tidy cable clips, but we'll prep the printer first so they snap cleanly. Goggles on and keep fingers away from the hotend.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "prep",
+                    "text": "Walk me through the setup."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Level the bed with paper, swap to white PLA, and wipe the plate with isopropyl. Slice four clips with 0.2 mm layers and a small brim for grip.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Dial in the bed with a paper shim."
+                },
+                {
+                    "type": "process",
+                    "process": "swap-white-pla-filament",
+                    "text": "Purge to white PLA.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
                     "goto": "print",
-                    "text": "Sounds good. What do I need?"
+                    "text": "Bed leveled and white PLA loaded.",
+                    "requiresItems": [
+                        {
+                            "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                            "count": 20
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "print",
-            "text": "Clean the bed, load some filament, slice the clip STL, and start the print. Keep the nozzle clear and watch the first layer stick.",
+            "text": "Preheat, lay down a first-layer test line, then start the clip print. Watch for clean perimeters and pause if stringing appears so you can adjust retraction later.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-cable-clips",
+                    "text": "Print four cable clips."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "The clip printed great!",
+                    "text": "Clips cooled and edges deburred.",
                     "requiresItems": [
                         {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "id": "269d2cfb-25de-417b-8e29-64e80aff934c",
                             "count": 1
-                        },
-                        {
-                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
-                            "count": 5
                         }
                     ]
                 }
@@ -40,25 +82,22 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Snap it onto a cable and enjoy the tidy workspace.",
+            "text": "Snap the clips on a desk edge, route USB cables, and note any elephant's foot to tweak Z offset before the next print.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks for the tip!"
+                    "text": "Workspace tidy!"
                 }
             ]
         }
     ],
-    "rewards": [
-        {
-            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-            "count": 5
-        }
+    "rewards": [],
+    "requiresQuests": [
+        "3dprinter/start"
     ],
-    "requiresQuests": ["3dprinter/start"],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
