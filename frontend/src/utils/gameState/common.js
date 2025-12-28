@@ -361,10 +361,20 @@ export const importGameStateString = async (gameStateString) => {
         }
     }
 
-    const payload =
-        imported && typeof imported === 'object' && 'payload' in imported
-            ? imported.payload
-            : imported;
+    let payload = imported;
+
+    if (imported && typeof imported === 'object' && 'payload' in imported) {
+        if (
+            Object.prototype.hasOwnProperty.call(imported, 'schemaVersion') &&
+            imported.schemaVersion !== BACKUP_SCHEMA_VERSION
+        ) {
+            throw new Error(
+                `Unsupported backup schema version: ${imported.schemaVersion}, expected ${BACKUP_SCHEMA_VERSION}`
+            );
+        }
+
+        payload = imported.payload;
+    }
 
     await saveGameState(payload);
 };

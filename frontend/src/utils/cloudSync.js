@@ -11,7 +11,6 @@ import {
     BACKUP_FILE_PREFIX,
     createBackupGist,
     listBackups,
-    sanitizeSaveForBackup,
 } from '../lib/cloudsync/githubGists';
 
 async function loadCloudGistId() {
@@ -35,10 +34,9 @@ async function uploadGameStateToGist(token) {
     }
     await ready;
     const state = loadGameState();
-    const safeState = sanitizeSaveForBackup(state);
     const content = exportGameStateString({
         providerHint: 'github-gist',
-        stateOverride: safeState,
+        stateOverride: state,
     });
     const result = await createBackupGist({
         token,
