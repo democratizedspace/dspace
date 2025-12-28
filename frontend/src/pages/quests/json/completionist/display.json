@@ -1,33 +1,66 @@
 {
     "id": "completionist/display",
     "title": "Show Off Your Trophy",
-    "description": "Give your Completionist Award II a dedicated spot on the shelf.",
+    "description": "Dust the shelf, polish the award, and mount it where everyone can see.",
     "image": "/assets/quests/completionist_trophy_display_shelf.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "That award deserves the center of your shelf. Want to set it up?",
+            "text": "That award deserves the center of your shelf. Want to set it up with lighting and a dust-free ledge?",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "dust",
+                    "text": "Let's find the perfect spot",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "dust",
+            "text": "Clear a shelf and wipe away dust so the trophy doesn't sit on grit. The light bounce will look better too.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "polish-completionist-award",
+                    "text": "Clean and buff the trophy"
+                },
+                {
+                    "type": "goto",
                     "goto": "place",
-                    "text": "Let's find the perfect spot"
+                    "text": "Shelf is dusted and trophy gleams",
+                    "requiresItems": [
+                        {
+                            "id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "place",
-            "text": "Grab a microfiber cloth to dust it off before putting it on display.",
+            "text": "Let's stage it center-right so it's visible at eye height. Add a small backlight or plant for contrast.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "stage-completionist-award",
+                    "text": "Mount it on the shelf"
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "It's proudly displayed",
+                    "text": "Award is staged with lighting",
                     "requiresItems": [
                         {
-                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "id": "a8120ce3-4a9d-4d49-b955-92bd9d7fbc07",
                             "count": 1
                         }
                     ]
@@ -49,7 +82,7 @@
     "requiresQuests": ["completionist/v2"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
