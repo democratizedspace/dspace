@@ -224,7 +224,7 @@
         "name": "hydroponics tub (nutrient deficient)",
         "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
         "image": "/assets/hydroponics_tub_nutrient_deficient_plants.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "38 dUSD"
     },
     {
         "id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",

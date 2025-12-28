@@ -63,6 +63,19 @@ describe("item quality", () => {
     );
   });
 
+  it("prices the nutrient-deficient hydroponics tub instead of using a beta placeholder", () => {
+    const nutrientDeficientTub = (items as Array<Record<string, any>>).find(
+      (item) => item.name === "hydroponics tub (nutrient deficient)"
+    );
+
+    expect(nutrientDeficientTub).toBeDefined();
+    expect(nutrientDeficientTub?.price).toBeDefined();
+    expect(nutrientDeficientTub?.price).toMatch(/[0-9]/);
+    expect(nutrientDeficientTub?.priceExemptionReason ?? null).not.toBe(
+      PriceExemptionReason.BETA_PLACEHOLDER
+    );
+  });
+
   it("prices the first aid kit instead of using a beta placeholder", () => {
     const firstAidKit = (items as Array<Record<string, any>>).find(
       (item) => item.name === "first aid kit"
