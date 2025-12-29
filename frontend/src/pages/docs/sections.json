@@ -58,6 +58,7 @@
     {
         "title": "Dev",
         "links": [
+            { "label": "Release QA", "href": "/docs/release-qa" },
             { "label": "Pull Requests", "href": "/docs/prs" },
             { "label": "Bounties", "href": "/docs/bounties" },
             { "label": "User journeys", "href": "/docs/user-journeys" },

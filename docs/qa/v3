@@ -8,6 +8,17 @@
 
 ---
 
+## Quick command index
+
+- `npm run qa:smoke` — type-checks, runs the full PR suite (lint/hardening/root tests +
+  grouped E2E), checks docs links, and scans for duplicate/missing images.
+- `npm test` — cross-platform pre-PR suite (lint/check, hardening metadata, grouped E2E).
+- `npm run link-check` — docs + route link validation.
+- `python -m scripts.image_issues find-image-issues` — image duplicate/missing gate (run from
+  repo root).
+
+---
+
 ## 0) Release metadata
 
 - [ ] RC commit SHA: `__________`
