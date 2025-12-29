@@ -1,0 +1,4 @@
+{
+    "title": "Root Quest",
+    "requiresQuests": ["beta/banana", "beta/apple", "alpha/zeta", "beta/apple-2.json"]
+}

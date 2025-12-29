@@ -1,0 +1,4 @@
+{
+    "title": "Quest B",
+    "requiresQuests": ["alpha/quest-a"]
+}

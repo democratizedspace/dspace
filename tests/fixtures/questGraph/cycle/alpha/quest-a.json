@@ -1,0 +1,4 @@
+{
+    "title": "Quest A",
+    "requiresQuests": ["welcome/howtodoquests.json", "beta/quest-b.json"]
+}
