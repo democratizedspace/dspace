@@ -8,6 +8,21 @@
 
 ---
 
+## Quick command index
+
+- `npm run qa:smoke` — type-checks, link-checks, validates items, and runs CI-parity tests without
+  Playwright E2E
+- `npm run test:pr` — full pre-PR suite (root tests, hardening metadata, lint/format check, grouped
+  Playwright E2E)
+- `npm run link-check` — validates internal docs routes and external links
+- `npm run itemValidation` — runs schema validation for built-in items, processes, and quests
+- `python -m scripts.image_issues find-image-issues` — required release gate for missing/duplicate
+  images (see [Developer Guide](../../DEVELOPER_GUIDE.md#image-analysis-cli))
+
+Related docs: [QA index](./README.md) and [reusable template](./template.md).
+
+---
+
 ## 0) Release metadata
 
 - [ ] RC commit SHA: `__________`
