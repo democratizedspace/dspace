@@ -54,6 +54,11 @@ npx playwright install-deps
 
 See [Testing Guide](./frontend/TESTING.md) for detailed testing information.
 
+### Releasing / QA
+
+- [QA checklists](./docs/qa/README.md) (index for current and upcoming releases)
+- [DSPACE v3 QA checklist](./docs/qa/v3)
+
 ## Documentation Index
 
 All project documentation is organized below for easy discovery:

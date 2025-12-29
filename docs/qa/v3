@@ -8,6 +8,20 @@
 
 ---
 
+## Quick command index
+
+- [ ] `npm run qa:smoke` — lint + format check, type-check, root tests, content validation, link
+      validation
+- [ ] `npm test` — cross-platform suite (grouped Playwright E2E)  
+      `SKIP_E2E=1 npm test` to skip Playwright locally
+- [ ] `npm run test:e2e:groups` — grouped Playwright smoke on the release candidate
+- [ ] `npm run link-check` — docs/internal route validation
+- [ ] `npm run itemValidation` — built-in content schema validation
+- [ ] `python -m scripts.image_issues find-image-issues` — duplicate/missing image gate (see
+      [Image Analysis CLI](../../DEVELOPER_GUIDE.md#image-analysis-cli))
+
+---
+
 ## 0) Release metadata
 
 - [ ] RC commit SHA: `__________`
@@ -36,6 +50,8 @@
 ## 2) Automated checks (make the robot suffer so humans don’t have to)
 
 ### 2.1 CI / local automation (must be green)
+- [ ] `npm run qa:smoke` passes (lint/format check + type-check + root tests + content +
+      link validation)
 - [ ] Lint passes (JS/TS + Svelte + markdown if applicable)
 - [ ] Typecheck passes
 - [ ] Unit tests pass
