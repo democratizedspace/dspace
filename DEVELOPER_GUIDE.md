@@ -9,13 +9,14 @@ covering everything from setup and architecture to testing and best practices.
 2. [Project Setup](#project-setup)
 3. [Architecture Overview](#architecture-overview)
 4. [Development Workflow](#development-workflow)
-5. [Testing Strategy](#testing-strategy)
-6. [Code Standards](#code-standards)
-7. [Component Development](#component-development)
-8. [Game Systems](#game-systems)
-9. [Performance Considerations](#performance-considerations)
-10. [Debugging and Test Insights](#debugging-and-test-insights)
-11. [Troubleshooting](#troubleshooting)
+5. [Release QA](#release-qa)
+6. [Testing Strategy](#testing-strategy)
+7. [Code Standards](#code-standards)
+8. [Component Development](#component-development)
+9. [Game Systems](#game-systems)
+10. [Performance Considerations](#performance-considerations)
+11. [Debugging and Test Insights](#debugging-and-test-insights)
+12. [Troubleshooting](#troubleshooting)
 
 ## Introduction
 
@@ -274,6 +275,22 @@ are consistent across:
 - Documentation
 
 Run `npm test` to verify configuration stays in sync.
+
+## Release QA
+
+Use the [DSPACE v3 QA checklist](./docs/qa/v3.md) and the [QA index](./docs/qa/README.md) to
+prepare releases. Canonical commands to run before cutting a release:
+
+- `npm run qa:smoke` – lint/format check, type-check, root CI-parity suite (SKIP_E2E), and docs
+  link check.
+- `npm run test:pr` – full PR harness (includes grouped Playwright E2E via `run-tests.js`).
+- `npm run test:e2e:groups` – optimized Playwright run from `frontend/`.
+- `npm run link-check` – internal docs link validation.
+- `python -m scripts.image_issues find-image-issues` – required release gate; see
+  [Image Analysis CLI](#image-analysis-cli).
+
+Treat the image issues workflow as a release blocker: duplicates/missing images must be triaged
+before tagging.
 
 ## Testing Strategy
 

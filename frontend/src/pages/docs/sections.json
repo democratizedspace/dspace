@@ -61,6 +61,10 @@
             { "label": "Pull Requests", "href": "/docs/prs" },
             { "label": "Bounties", "href": "/docs/bounties" },
             { "label": "User journeys", "href": "/docs/user-journeys" },
+            {
+                "label": "Release QA (GitHub)",
+                "href": "https://github.com/democratizedspace/dspace/blob/v3/docs/qa/README.md"
+            },
             { "label": "Self-hosting", "href": "/docs/self-hosting" },
             { "label": "Outages", "href": "/docs/outages" },
             { "label": "Database benchmark", "href": "/docs/db-benchmark" },

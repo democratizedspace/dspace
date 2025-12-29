@@ -44,7 +44,7 @@ export function resolveSvelteSubpath(
 }
 
 type SvelteSubpathResolverPlugin = Plugin & {
-  resolveId: NonNullable<Plugin['resolveId']>;
+  resolveId: (source: string) => { id: string; external: false } | null;
 };
 
 export function createSvelteSubpathResolver(
