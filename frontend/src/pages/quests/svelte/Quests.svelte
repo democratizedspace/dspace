@@ -135,6 +135,10 @@
             {/each}
         </div>
 
+        <div class="visualizer-slot">
+            <slot name="between" />
+        </div>
+
         {#if finishedQuests.length > 0}
             <h2>Completed Quests</h2>
             {#each finishedQuests as quest}
@@ -163,5 +167,9 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 20px;
+    }
+
+    .visualizer-slot {
+        margin: 30px 0;
     }
 </style>
