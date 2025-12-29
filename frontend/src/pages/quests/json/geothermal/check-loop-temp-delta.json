@@ -8,27 +8,160 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Curious if your loop is transferring heat efficiently? Let's measure both ends.",
+            "text": "Time to see how much heat the loop really moves. We'll combine inlet plots with a live outlet feed to watch the delta in real time.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "measure",
-                    "text": "I'm ready."
+                    "goto": "align",
+                    "text": "Both probes are mounted",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        },
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "align",
+                    "text": "Need a quick walkthrough"
                 }
             ]
         },
         {
-            "id": "measure",
-            "text": "Wire two sensors per arduino-thermistor-read, dip one in the inlet, one in the outlet and log.",
+            "id": "align",
+            "text": "Secure both probes, purge bubbles, and balance the leads so readings don't drift. Capture a fresh paired trace before we compare it to the live outlet stream.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture the paired trace",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "plot",
+                    "text": "Trace is saved",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "plot",
+            "text": "Plot inlet versus outlet for this run so you can catch lag or odd spikes. We'll annotate before pushing it to the live dashboard.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Plot both runs",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "annotate",
+                    "text": "Plot looks clean",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "annotate",
+            "text": "Mark pump start, circulator speed changes, and outdoor temp in the notes. That context makes the delta meaningful when you automate alerts.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Add notes to the overlay",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        },
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "publish",
+                    "text": "Notes are logged",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "publish",
+            "text": "Now pair your annotated inlet plot with the live outlet endpoint so you can watch the delta-T as the heat pump cycles.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "publish-live-temperature-graph",
+                    "text": "Push a live delta dashboard",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        },
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Temps logged",
-                    "process": "arduino-thermistor-read",
+                    "text": "Dashboard is live",
                     "requiresItems": [
                         {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
                             "count": 1
                         }
                     ]
@@ -37,11 +170,17 @@
         },
         {
             "id": "finish",
-            "text": "Sweet! A big delta means your pump is moving heat like a champ.",
+            "text": "Pin that delta-T dashboard to your maintenance list. Trends will call out air in the loop or fouled exchangers long before you feel it indoors.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll track it."
+                    "text": "Delta is monitored",
+                    "requiresItems": [
+                        {
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -50,7 +189,7 @@
     "requiresQuests": ["geothermal/check-loop-inlet-temp", "geothermal/check-loop-outlet-temp"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

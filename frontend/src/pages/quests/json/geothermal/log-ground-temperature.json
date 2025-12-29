@@ -8,27 +8,111 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to take your geothermal survey further? Let's log the ground temperature for a few days.",
+            "text": "Tie back hair, don gloves, and mark where utilities run before you dig. Want to log a clean ground temperature baseline?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "deploy",
-                    "text": "How do I do that?"
+                    "goto": "prep",
+                    "text": "Site is marked and safe."
                 }
             ]
         },
         {
-            "id": "deploy",
-            "text": "Wire a thermistor as in the arduino-thermistor-read process and bury the sensor about a meter deep. Connect the Arduino to record readings.",
+            "id": "prep",
+            "text": "Dust and moisture kill logs. Weatherproof the thermistor leads, leave a drip loop, and tape the USB connector so soil can't wick water inside.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Sensor logging",
-                    "process": "arduino-thermistor-read",
+                    "goto": "bury",
+                    "text": "Logger is built and sealed",
+                    "process": "assemble-thermistor-logger"
+                },
+                {
+                    "type": "goto",
+                    "goto": "bury",
+                    "text": "Rig is already sealed",
                     "requiresItems": [
                         {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "bury",
+            "text": "Dig to 1 m, tamp the probe against undisturbed soil, and backfill tight so air pockets don't skew readings. Let's capture a full-day baseline.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Start a buried 24 h log",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "chart",
+                    "text": "Baseline log exported",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "chart",
+            "text": "Plot the buried probe data and mark sunrise, irrigation, or rain so you know which blips are weather and which are loop effects.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Plot the baseline curve",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Annotate weather notes",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Baseline chart saved",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
                             "count": 1
                         }
                     ]
@@ -37,11 +121,17 @@
         },
         {
             "id": "finish",
-            "text": "Great! With consistent data you'll know if a heat pump will work year-round.",
+            "text": "Store that baseline plot with notes on soil type and depth. It'll anchor every seasonal check and heat-pump sizing run you do next.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait for the results."
+                    "text": "Ground curve logged",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -50,7 +140,7 @@
     "requiresQuests": ["geothermal/survey-ground-temperature"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
