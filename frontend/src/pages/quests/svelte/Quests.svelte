@@ -7,6 +7,10 @@
     import { state, ready } from '../../../utils/gameState/common.js';
 
     export let quests = [];
+    export let mode = 'both';
+
+    const showActive = () => mode === 'both' || mode === 'active';
+    const showCompleted = () => mode === 'both' || mode === 'completed';
     let filteredQuests = [];
     let finishedQuests = [];
     let mounted = false;
@@ -121,21 +125,23 @@
 
 <div class="container">
     {#if mounted}
-        <div class="action-buttons">
-            {#each actionButtons as button}
-                <Chip text={button.text} href={button.href} inverted={true} />
-            {/each}
-        </div>
+        {#if showActive()}
+            <div class="action-buttons">
+                {#each actionButtons as button}
+                    <Chip text={button.text} href={button.href} inverted={true} />
+                {/each}
+            </div>
 
-        <div class="quests-grid">
-            {#each filteredQuests as quest}
-                <a href="/quests/{quest.id}" aria-label={quest.title}>
-                    <Quest {quest} />
-                </a>
-            {/each}
-        </div>
+            <div class="quests-grid">
+                {#each filteredQuests as quest}
+                    <a href="/quests/{quest.id}" aria-label={quest.title}>
+                        <Quest {quest} />
+                    </a>
+                {/each}
+            </div>
+        {/if}
 
-        {#if finishedQuests.length > 0}
+        {#if showCompleted() && finishedQuests.length > 0}
             <h2>Completed Quests</h2>
             {#each finishedQuests as quest}
                 <a href="/quests/{quest.id}" aria-label={quest.title}>

@@ -1,11 +1,64 @@
 ---
 import Page from '../../components/Page.astro';
+import QuestGraphVisualizer from '../../components/quests/QuestGraphVisualizer.svelte';
 import Quests from './svelte/Quests.svelte';
-
+import { buildQuestGraph } from '../../lib/quests/questGraph.js';
 
 const quests = await Astro.glob('./json/*/*.json');
+const graph = buildQuestGraph();
+const hasDiagnostics =
+    graph.diagnostics.missingRefs.length > 0 ||
+    graph.diagnostics.ambiguousRefs.length > 0 ||
+    graph.diagnostics.unreachableNodes.length > 0 ||
+    graph.diagnostics.cycles.length > 0;
 ---
 
 <Page title="Quests">
-    <Quests client:load quests={quests} />
+    <Quests client:load quests={quests} mode="active" />
+
+    <section class="graph-section">
+        <div class="graph-heading">
+            <div>
+                <h2>Quest Graph (QA)</h2>
+                <p class="graph-description">
+                    Navigate quest dependencies with shelves, keyboard shortcuts, or on-screen
+                    controls.
+                </p>
+            </div>
+            {hasDiagnostics && <div class="graph-warning">Diagnostics available</div>}
+        </div>
+        <QuestGraphVisualizer client:visible graph={graph} />
+    </section>
+
+    <Quests client:load quests={quests} mode="completed" />
 </Page>
+
+<style>
+    .graph-section {
+        margin: 2rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .graph-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .graph-description {
+        margin: 0.25rem 0 0 0;
+        color: #1c1c1c;
+    }
+
+    .graph-warning {
+        background: rgba(255, 193, 7, 0.16);
+        border: 1px solid rgba(255, 193, 7, 0.6);
+        padding: 0.35rem 0.75rem;
+        border-radius: 12px;
+        font-weight: 600;
+    }
+</style>
