@@ -1,0 +1,5 @@
+{
+    "id": "cycle/b",
+    "title": "Cycle B",
+    "requiresQuests": ["cycle/a"]
+}

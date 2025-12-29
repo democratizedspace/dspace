@@ -1,0 +1,5 @@
+{
+    "id": "group-two/shared",
+    "title": "Shared Two",
+    "requiresQuests": ["welcome/howtodoquests"]
+}

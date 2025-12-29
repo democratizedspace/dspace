@@ -1,0 +1,5 @@
+{
+    "id": "alpha/needs-shared",
+    "title": "Needs Shared",
+    "requiresQuests": ["shared.json"]
+}

@@ -1,0 +1,5 @@
+{
+    "id": "cycle/a",
+    "title": "Cycle A",
+    "requiresQuests": ["welcome/howtodoquests", "cycle/b.json"]
+}

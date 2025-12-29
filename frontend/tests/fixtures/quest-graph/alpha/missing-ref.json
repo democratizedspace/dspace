@@ -1,0 +1,5 @@
+{
+    "id": "alpha/missing-ref",
+    "title": "Missing Ref",
+    "requiresQuests": ["ghost-quest"]
+}
