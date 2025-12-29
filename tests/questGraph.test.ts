@@ -99,6 +99,45 @@ describe('quest graph diagnostics', () => {
       ],
     ]);
   });
+
+  it('reports unreachable nodes from the root', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
+    writeQuest(questDir, 'isolated/alone.json', { title: 'Unreachable quest' });
+
+    const graph = buildQuestGraph({ questDir });
+
+    expect(graph.diagnostics.unreachableNodes).toEqual(['isolated/alone.json']);
+  });
+
+  it('resolves requiresQuests by quest id field', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', {
+      title: 'Root',
+      requiresQuests: ['quest-id'],
+    });
+    writeQuest(questDir, 'chain/linked.json', {
+      id: 'quest-id',
+      title: 'Linked quest',
+    });
+
+    const graph = buildQuestGraph({ questDir });
+
+    expect(graph.edges.map((edge) => `${edge.from}->${edge.to}`)).toEqual([
+      'chain/linked.json->welcome/howtodoquests.json',
+    ]);
+  });
+
+  it('throws a helpful error when quest JSON is invalid', () => {
+    const questDir = createQuestDir();
+    const badFile = path.join(questDir, 'welcome/howtodoquests.json');
+    fs.mkdirSync(path.dirname(badFile), { recursive: true });
+    fs.writeFileSync(badFile, '{ invalid json', 'utf8');
+
+    expect(() => buildQuestGraph({ questDir })).toThrowError(
+      /Failed to parse quest JSON in file/
+    );
+  });
 });
 
 describe('quest graph ordering', () => {

@@ -98,7 +98,14 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
 
     for (const file of questFiles) {
         const raw = fs.readFileSync(file, 'utf8');
-        const quest = JSON.parse(raw);
+        let quest: any;
+        try {
+            quest = JSON.parse(raw);
+        } catch (err: any) {
+            const message =
+                err && typeof err.message === 'string' ? err.message : String(err);
+            throw new Error(`Failed to parse quest JSON in file "${file}": ${message}`);
+        }
         const canonicalKey = toCanonicalKey(questDir, file);
         const basename = path.posix.basename(canonicalKey);
         const group = canonicalKey.split('/')[0] ?? '';
@@ -196,9 +203,9 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
             reverseList.push(node.canonicalKey);
             requiredBy.set(requireKey, reverseList);
 
-            const out = adjacency.get(requireKey) ?? [];
-            out.push(node.canonicalKey);
-            adjacency.set(requireKey, out);
+            const adjacentNodes = adjacency.get(requireKey) ?? [];
+            adjacentNodes.push(node.canonicalKey);
+            adjacency.set(requireKey, adjacentNodes);
         }
     }
 
@@ -222,7 +229,7 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         if (candidates.length === 1) return candidates[0];
         if (candidates.length === 0) {
             diagnostics.missingRefs.push({ from: '<root>', ref: ROOT_BASENAME });
-            throw new Error('Quest root not found');
+            return undefined;
         }
 
         diagnostics.ambiguousRefs.push({
@@ -230,14 +237,15 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
             ref: ROOT_BASENAME,
             candidates: [...candidates],
         });
-        throw new Error('Quest root is ambiguous');
+        return undefined;
     })();
 
     const reachableFromRoot = new Set<string>();
-    const queue: string[] = [rootKey];
+    const queue: string[] = rootKey ? [rootKey] : [];
+    let queueIndex = 0;
 
-    while (queue.length > 0) {
-        const current = queue.shift();
+    while (queueIndex < queue.length) {
+        const current = queue[queueIndex++];
         if (!current || reachableFromRoot.has(current)) continue;
 
         reachableFromRoot.add(current);
@@ -260,7 +268,6 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
     const stack: string[] = [];
 
     const visit = (key: string) => {
-        if (visiting.has(key)) return;
         if (visited.has(key)) return;
 
         visiting.add(key);
@@ -268,8 +275,6 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         const neighbors = adjacency.get(key) ?? [];
 
         for (const neighbor of neighbors) {
-            if (!reachableFromRoot.has(neighbor)) continue;
-
             if (visiting.has(neighbor)) {
                 const startIndex = stack.indexOf(neighbor);
                 if (startIndex !== -1) {
@@ -296,7 +301,10 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
     const reachableList = Array.from(reachableFromRoot).sort((a, b) =>
         compareKeys(a, b, nodeIndex)
     );
-    const traversalOrder = [rootKey, ...reachableList.filter((key) => key !== rootKey)];
+    const allKeysInOrder = nodes.map((node) => node.canonicalKey);
+    const traversalOrder = rootKey
+        ? [rootKey, ...allKeysInOrder.filter((key) => key !== rootKey)]
+        : allKeysInOrder;
     for (const key of traversalOrder) {
         if (!visited.has(key)) {
             visit(key);
@@ -326,9 +334,9 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         if (feedbackEdges.has(key)) continue;
 
         indegree.set(edge.to, (indegree.get(edge.to) ?? 0) + 1);
-        const out = filteredAdjacency.get(edge.from) ?? [];
-        out.push(edge.to);
-        filteredAdjacency.set(edge.from, out);
+        const adjacentNodes = filteredAdjacency.get(edge.from) ?? [];
+        adjacentNodes.push(edge.to);
+        filteredAdjacency.set(edge.from, adjacentNodes);
     }
 
     for (const [, list] of filteredAdjacency) {
@@ -342,8 +350,25 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
 
     topoQueue.sort((a, b) => compareKeys(a, b, nodeIndex));
 
-    while (topoQueue.length > 0) {
-        const current = topoQueue.shift() as string;
+    const insertSorted = (list: string[], value: string, startIndex: number) => {
+        let low = startIndex;
+        let high = list.length;
+
+        while (low < high) {
+            const mid = Math.floor((low + high) / 2);
+            if (compareKeys(value, list[mid], nodeIndex) < 0) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        list.splice(low, 0, value);
+    };
+
+    let topoQueueIndex = 0;
+    while (topoQueueIndex < topoQueue.length) {
+        const current = topoQueue[topoQueueIndex++];
         const currentDepth = depthByKey.get(current) ?? 0;
         const neighbors = filteredAdjacency.get(current) ?? [];
 
@@ -354,8 +379,7 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
             const nextIndegree = (indegree.get(neighbor) ?? 0) - 1;
             indegree.set(neighbor, nextIndegree);
             if (nextIndegree === 0) {
-                topoQueue.push(neighbor);
-                topoQueue.sort((a, b) => compareKeys(a, b, nodeIndex));
+                insertSorted(topoQueue, neighbor, topoQueueIndex);
             }
         }
     }
