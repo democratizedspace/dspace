@@ -132,6 +132,12 @@
             { "title": "Self-hosting", "href": "/docs/self-hosting", "keywords": ["setup"] },
             { "title": "Outages", "href": "/docs/outages", "keywords": ["status"] },
             {
+                "title": "QA / Release",
+                "href": "https://github.com/democratizedspace/dspace/tree/v3/docs/qa",
+                "keywords": ["qa", "release"],
+                "external": true
+            },
+            {
                 "title": "Database benchmark",
                 "href": "/docs/db-benchmark",
                 "keywords": ["performance", "database"]

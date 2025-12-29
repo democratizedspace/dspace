@@ -6,6 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const defaultSvelteBasePath = path.resolve(__dirname, '../node_modules/svelte/src');
 
 type SvelteSubpathMap = Record<string, string>;
+type ResolveIdResult = { id: string; external?: boolean } | null;
 
 const svelteSubpathMap = (basePath: string): SvelteSubpathMap => ({
   'svelte/compiler': path.join(basePath, 'compiler/index.js'),
@@ -44,7 +45,11 @@ export function resolveSvelteSubpath(
 }
 
 type SvelteSubpathResolverPlugin = Plugin & {
-  resolveId: NonNullable<Plugin['resolveId']>;
+  resolveId(
+    source: string,
+    importer?: string,
+    options?: { attributes?: Record<string, string>; custom?: unknown; ssr?: boolean }
+  ): ResolveIdResult;
 };
 
 export function createSvelteSubpathResolver(

@@ -10,12 +10,13 @@ covering everything from setup and architecture to testing and best practices.
 3. [Architecture Overview](#architecture-overview)
 4. [Development Workflow](#development-workflow)
 5. [Testing Strategy](#testing-strategy)
-6. [Code Standards](#code-standards)
-7. [Component Development](#component-development)
-8. [Game Systems](#game-systems)
-9. [Performance Considerations](#performance-considerations)
-10. [Debugging and Test Insights](#debugging-and-test-insights)
-11. [Troubleshooting](#troubleshooting)
+6. [Release QA](#release-qa)
+7. [Code Standards](#code-standards)
+8. [Component Development](#component-development)
+9. [Game Systems](#game-systems)
+10. [Performance Considerations](#performance-considerations)
+11. [Debugging and Test Insights](#debugging-and-test-insights)
+12. [Troubleshooting](#troubleshooting)
 
 ## Introduction
 
@@ -485,6 +486,21 @@ If tests are running slowly or failing intermittently:
 3. **Isolate failing tests**: Run specific test groups individually
 4. **Visual debugging**: Use `npm run test:e2e:ui` to observe test execution
 5. **Check for timeouts**: Look for slow operations that might need longer timeouts
+
+## Release QA
+
+Use the [v3 QA checklist](./docs/qa/v3) and the [QA index](./docs/qa/README.md) when preparing a
+release. Keep the automation commands handy:
+
+- `npm run qa:smoke` — type-checks, validates docs links, runs data validation, and executes the
+  CI-parity test run without Playwright E2E
+- `npm run test:pr` — full pre-PR suite with grouped Playwright tests, hardening metadata checks,
+  and lint/format validation
+- `npm run test:e2e:groups` — grouped Playwright run when you only need the browser coverage
+- `npm run link-check` — validates internal docs routes and external links
+- `npm run itemValidation` — schema validation for built-in items, quests, and processes
+- `python -m scripts.image_issues find-image-issues` — required release gate for missing or
+  duplicated images (see [Image Analysis CLI](#image-analysis-cli))
 
 ## Code Standards
 
