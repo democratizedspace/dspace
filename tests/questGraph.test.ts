@@ -88,16 +88,20 @@ describe('quest graph diagnostics', () => {
       requiresQuests: ['welcome/howtodoquests.json'],
     });
 
-    const graph = buildQuestGraph({ questDir });
+    const first = buildQuestGraph({ questDir });
+    const second = buildQuestGraph({ questDir });
 
-    expect(graph.diagnostics.cycles).toEqual([
+    const expectedCycle = [
       [
         'welcome/howtodoquests.json',
         'chain/c.json',
         'chain/b.json',
         'welcome/howtodoquests.json',
       ],
-    ]);
+    ];
+
+    expect(first.diagnostics.cycles).toEqual(expectedCycle);
+    expect(second.diagnostics.cycles).toEqual(expectedCycle);
   });
 
   it('reports unreachable nodes from the root', () => {
@@ -125,6 +129,29 @@ describe('quest graph diagnostics', () => {
 
     expect(graph.edges.map((edge) => `${edge.from}->${edge.to}`)).toEqual([
       'chain/linked.json->welcome/howtodoquests.json',
+    ]);
+  });
+
+  it('prioritizes quest id resolution before basename matches', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', {
+      title: 'Root',
+      requiresQuests: ['shared-id'],
+    });
+    writeQuest(questDir, 'alpha/preferred.json', {
+      id: 'shared-id',
+      title: 'Preferred by id',
+    });
+    writeQuest(questDir, 'beta/shared-id.json', {
+      title: 'Fallback by basename',
+    });
+
+    const graph = buildQuestGraph({ questDir });
+
+    expect(graph.diagnostics.ambiguousRefs).toEqual([]);
+    expect(graph.diagnostics.missingRefs).toEqual([]);
+    expect(graph.edges.map((edge) => `${edge.from}->${edge.to}`)).toEqual([
+      'alpha/preferred.json->welcome/howtodoquests.json',
     ]);
   });
 
