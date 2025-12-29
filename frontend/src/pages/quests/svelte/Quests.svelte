@@ -127,21 +127,30 @@
             {/each}
         </div>
 
-        <div class="quests-grid">
-            {#each filteredQuests as quest}
-                <a href="/quests/{quest.id}" aria-label={quest.title}>
-                    <Quest {quest} />
-                </a>
-            {/each}
-        </div>
+        <section class="quests-section">
+            <h2>Active Quests</h2>
+            <div class="quests-grid">
+                {#each filteredQuests as quest}
+                    <a href="/quests/{quest.id}" aria-label={quest.title}>
+                        <Quest {quest} />
+                    </a>
+                {/each}
+            </div>
+        </section>
+
+        <slot name="visualizer" />
 
         {#if finishedQuests.length > 0}
-            <h2>Completed Quests</h2>
-            {#each finishedQuests as quest}
-                <a href="/quests/{quest.id}" aria-label={quest.title}>
-                    <Quest {quest} compact={true} />
-                </a>
-            {/each}
+            <section class="quests-section">
+                <h2>Completed Quests</h2>
+                <div class="completed-list">
+                    {#each finishedQuests as quest}
+                        <a href="/quests/{quest.id}" aria-label={quest.title}>
+                            <Quest {quest} compact={true} />
+                        </a>
+                    {/each}
+                </div>
+            </section>
         {/if}
     {/if}
 </div>
@@ -149,7 +158,7 @@
 <style>
     a {
         text-decoration: none;
-        margin: 50px;
+        margin: 10px;
     }
 
     .action-buttons {
@@ -163,5 +172,23 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 20px;
+    }
+
+    .quests-section {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+
+    .quests-section h2 {
+        text-align: center;
+        color: var(--color-heading);
+    }
+
+    .completed-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 16px;
     }
 </style>
