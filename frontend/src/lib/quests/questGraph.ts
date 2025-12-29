@@ -98,14 +98,22 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
 
     for (const file of questFiles) {
         const raw = fs.readFileSync(file, 'utf8');
-        let quest: any;
+        let questRaw: unknown;
         try {
-            quest = JSON.parse(raw);
-        } catch (err: any) {
+            questRaw = JSON.parse(raw);
+        } catch (err: unknown) {
             const message =
-                err && typeof err.message === 'string' ? err.message : String(err);
+                err instanceof Error && typeof err.message === 'string' ? err.message : String(err);
             throw new Error(`Failed to parse quest JSON in file "${file}": ${message}`);
         }
+        if (!questRaw || typeof questRaw !== 'object' || Array.isArray(questRaw)) {
+            throw new Error(`Quest JSON in file "${file}" must be an object`);
+        }
+        const quest = questRaw as {
+            id?: unknown;
+            title?: unknown;
+            requiresQuests?: unknown;
+        };
         const canonicalKey = toCanonicalKey(questDir, file);
         const basename = path.posix.basename(canonicalKey);
         const group = canonicalKey.split('/')[0] ?? '';
@@ -136,7 +144,9 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
             }
         }
 
-        const requiresQuests = Array.isArray(quest.requiresQuests) ? quest.requiresQuests : [];
+        const requiresQuests = Array.isArray(quest.requiresQuests)
+            ? quest.requiresQuests.filter((value): value is string => typeof value === 'string')
+            : [];
         rawRequiresIndex.set(canonicalKey, requiresQuests);
     }
 
