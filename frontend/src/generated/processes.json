@@ -1380,6 +1380,84 @@
         }
     },
     {
+        "id": "mix-stevia-tasting-solution",
+        "title": "Prepare a 1% stevia solution in rinsed glassware for tasting",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+                "count": 0.05
+            }
+        ],
+        "createItems": [
+            {
+                "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "record-stevia-tasting-notes",
+        "title": "Blind taste the stevia solution and log sweetness, onset, and aftertaste",
+        "requireItems": [
+            {
+                "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "fe146f9d-d912-4841-bf1f-1675c3aa93f3",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "sink",
         "title": "find your sink",
         "requireItems": [],
@@ -3138,6 +3216,62 @@
         }
     },
     {
+        "id": "prepare-local-testbed",
+        "title": "Clone DSPACE and install dependencies for local test runs",
+        "requireItems": [
+            {
+                "id": "52593d07-908b-4109-92cf-826b2184ef6f",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "execute-dspace-tests",
+        "title": "Run lint, type-check, coverage, and Playwright shards locally",
+        "requireItems": [
+            {
+                "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
+                "count": 1
+            },
+            {
+                "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
+                "count": 1
+            }
+        ],
+        "duration": "25m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "run-docker-compose",
         "title": "Launch DSPACE with Docker Compose",
         "requireItems": [
@@ -4565,6 +4699,70 @@
                     "score": 90
                 }
             ]
+        }
+    },
+    {
+        "id": "align-star-trail-rig",
+        "title": "Level a tripod, polar align, and lock a camera for star trail stacking",
+        "requireItems": [
+            {
+                "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                "count": 1
+            },
+            {
+                "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                "count": 1
+            },
+            {
+                "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                "count": 1
+            },
+            {
+                "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 92,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "capture-star-trail-stack",
+        "title": "Shoot and stack long exposures into a finished star trail photo",
+        "requireItems": [
+            {
+                "id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
+                "count": 1
+            }
+        ],
+        "duration": "45m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
         }
     },
     {
@@ -7861,6 +8059,118 @@
                     "score": 60
                 }
             ]
+        }
+    },
+    {
+        "id": "configure-unattended-upgrades",
+        "title": "Enable unattended-upgrades with a weekly reboot window on a Pi cluster node",
+        "requireItems": [
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            },
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "d8346735-7f1c-4309-a400-6cf6801534f7",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "verify-unattended-upgrades",
+        "title": "Trigger an unattended-upgrades dry run and record the log summary",
+        "requireItems": [
+            {
+                "id": "d8346735-7f1c-4309-a400-6cf6801534f7",
+                "count": 1
+            },
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "afd6a926-bd21-4242-ba79-d25fc152de03",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "request-letsencrypt-cert",
+        "title": "Request and install dual RSA/ECDSA certbot certificates on the Pi cluster",
+        "requireItems": [
+            {
+                "id": "afd6a926-bd21-4242-ba79-d25fc152de03",
+                "count": 1
+            },
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "fc89727c-8fd9-4b40-a186-40a0c56c6063",
+                "count": 1
+            }
+        ],
+        "duration": "7m",
+        "hardening": {
+            "passes": 0,
+            "score": 92,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "verify-https-service",
+        "title": "Run an HTTPS health check and log renewal status on the cluster",
+        "requireItems": [
+            {
+                "id": "fc89727c-8fd9-4b40-a186-40a0c56c6063",
+                "count": 1
+            },
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "d3d0a7bd-e338-48f1-86ab-ddcc3626cecc",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 92,
+            "emoji": "🛠️",
+            "history": []
         }
     },
     {

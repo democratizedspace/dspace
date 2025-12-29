@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/stevia-tasting.jpg",
+    "entity": "frontend/src/pages/quests/json/chemistry/stevia-tasting.json",
+    "item_name": "Taste Test Stevia Crystals",
+    "item_id": "chemistry/stevia-tasting",
+    "entity_type": "quest",
+    "prompt": "A small solarpunk lab bench holds a rinsed glass beaker of pale stevia solution beside a graduated cylinder and glass stir rod. A pair of nitrile gloves and vented safety goggles rest nearby, and a notebook page with blurred tasting notes sits open for logging observations. Soft, indirect light and a leafy window keep the scene calm and food-safe, with no brand logos or readable text.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

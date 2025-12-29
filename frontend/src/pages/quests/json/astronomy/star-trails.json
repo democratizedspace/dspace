@@ -8,26 +8,24 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've mapped constellations; now let's photograph their motion across the sky.",
+            "text": "You've mapped constellations; now let's capture their motion. We need a plan before we open the shutter.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "expose",
-                    "text": "I'm excited!"
-                }
-            ]
-        },
-        {
-            "id": "expose",
-            "text": "Point your camera north and take a multi-minute exposure to capture circular star trails.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Exposure complete",
+                    "goto": "plan",
+                    "text": "Plot the hop and gear.",
+                    "process": "draft-seasonal-star-plan",
                     "requiresItems": [
                         {
-                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
                             "count": 1
                         }
                     ]
@@ -35,12 +33,80 @@
             ]
         },
         {
+            "id": "plan",
+            "text": "Mark Polaris on your chart and note your exposure window so you avoid passing planes and neighbor lights.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Tripod leveled and azimuth marked.",
+                    "process": "align-star-trail-rig",
+                    "requiresItems": [
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                            "count": 1
+                        },
+                        {
+                            "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Recheck my sky window."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Dial in a 20–30 second base exposure, use your red light to frame foreground, and lock focus on a bright star.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Stack captured and color-balanced.",
+                    "process": "capture-star-trail-stack",
+                    "requiresItems": [
+                        {
+                            "id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "I bumped the tripod—realign."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Beautiful! Those trails reveal our planet's steady spin.",
+            "text": "Beautiful! That spiral proves Earth's steady spin and your methodical setup.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Stunning!"
+                    "text": "Save to the observing log.",
+                    "requiresItems": [
+                        {
+                            "id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -49,7 +115,7 @@
     "requiresQuests": ["astronomy/constellations"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

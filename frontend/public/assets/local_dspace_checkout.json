@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/local_dspace_checkout.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "local DSPACE checkout",
+    "item_id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
+    "entity_type": "item",
+    "prompt": "A laptop shows a cloned DSPACE repository with dependency installs completing in a terminal pane while a file tree sits beside it. Sticky notes list \"pnpm install\" and \"tests\" as blurred reminders, and a closed toolkit of adapters sits nearby to hint at offline work. The workspace matches the solarpunk aesthetic: warm light, a small plant, and clean cables, with no readable text or logos.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

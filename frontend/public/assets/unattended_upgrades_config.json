@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/pi_cluster_node_with_hat_and_ssd.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "unattended-upgrades config",
+    "item_id": "d8346735-7f1c-4309-a400-6cf6801534f7",
+    "entity_type": "item",
+    "prompt": "A compact Raspberry Pi cluster node sits on a desk beside a blurred printout of unattended-upgrades settings and a weekly reboot window. Ethernet and power cables are neatly routed, and a small plant softens the 512×512 photorealistic solarpunk scene. No logos or readable text appear.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
