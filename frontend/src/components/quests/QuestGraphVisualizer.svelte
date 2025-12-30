@@ -373,7 +373,7 @@
                             'text-max-width': 160,
                             'font-size': 12,
                             'font-weight': 600,
-                            'padding': '12px',
+                            padding: '12px',
                             'text-outline-color': colors.nodeFill,
                             'text-outline-width': 2,
                             'shadow-blur': 12,
@@ -400,14 +400,15 @@
                     {
                         selector: 'node.cycle',
                         style: {
-                            'background-image': 'linear-gradient(135deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%, transparent)',
+                            'background-image':
+                                'linear-gradient(135deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%, transparent)',
                             'background-size': '12px 12px',
                         },
                     },
                     {
                         selector: 'node.unreachable',
                         style: {
-                            'opacity': 0.6,
+                            opacity: 0.6,
                             'border-style': 'dashed',
                         },
                     },
@@ -650,7 +651,11 @@
                 <button type="button" on:click={() => focusChild(false)} aria-label="First child">
                     Child
                 </button>
-                <button type="button" on:click={() => setFocus(resolveRoot())} aria-label="Go to root">
+                <button
+                    type="button"
+                    on:click={() => setFocus(resolveRoot())}
+                    aria-label="Go to root"
+                >
                     Root
                 </button>
                 <button type="button" on:click={() => (searchOpen = true)} aria-label="Search">
@@ -766,7 +771,9 @@
                             <ul>
                                 {#each graph.diagnostics.unreachableNodes as key}
                                     <li>
-                                        <button type="button" on:click={() => setFocus(key)}>{key}</button>
+                                        <button type="button" on:click={() => setFocus(key)}
+                                            >{key}</button
+                                        >
                                     </li>
                                 {/each}
                             </ul>
@@ -907,7 +914,9 @@
         border-radius: 8px;
         padding: 8px 12px;
         cursor: pointer;
-        transition: background 120ms ease, color 120ms ease;
+        transition:
+            background 120ms ease,
+            color 120ms ease;
     }
 
     .tab-bar button.selected {
