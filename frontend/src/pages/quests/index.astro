@@ -5,6 +5,7 @@ import QuestGraphVisualizer from '../../components/quests/QuestGraphVisualizer.s
 import { buildQuestGraph } from '../../lib/quests/questGraph';
 
 const questModules = import.meta.glob('./json/*/*.json', { eager: true });
+// Sort by file path for deterministic ordering across builds
 const quests = Object.entries(questModules)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([, mod]) => mod);
