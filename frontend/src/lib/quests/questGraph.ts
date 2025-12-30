@@ -48,6 +48,7 @@ export type BuildQuestGraphOptions = {
 
 const ROOT_CANONICAL_KEY = 'welcome/howtodoquests.json';
 const ROOT_BASENAME = 'howtodoquests.json';
+const QUEST_JSON_PATH_PREFIX = './json/';
 
 const comparatorKeys: Array<keyof QuestNode> = ['group', 'title', 'canonicalKey'];
 
@@ -75,7 +76,9 @@ const normalizeRef = (ref: string): string =>
 // './json/welcome/howtodoquests.json' -> 'welcome/howtodoquests.json'
 const toCanonicalKey = (globPath: string): string => {
     const normalized = globPath.replace(/\\/g, '/');
-    const match = normalized.match(/\.\/json\/(.+)$/);
+    const match = normalized.match(
+        new RegExp(`^${QUEST_JSON_PATH_PREFIX.replace('.', '\\.')}(.+)$`)
+    );
     return match ? path.posix.normalize(match[1]) : path.posix.normalize(normalized);
 };
 
@@ -133,7 +136,7 @@ export const loadQuestsFromDir = (questDir: string): QuestData[] => {
 
         // Convert absolute path to relative path format like './json/welcome/howtodoquests.json'
         const relativePath = path.relative(questDir, file).replace(/\\/g, '/');
-        const globPath = `./json/${relativePath}`;
+        const globPath = `${QUEST_JSON_PATH_PREFIX}${relativePath}`;
 
         questData.push({
             path: globPath,

@@ -12,7 +12,7 @@ const quests = questEntries.map(([, mod]) => mod);
 // Prepare quest data for graph builder
 const questData: QuestData[] = questEntries.map(([path, mod]) => ({
     path,
-    quest: mod as any,
+    quest: mod as { id?: string; title?: string; requiresQuests?: string[] },
 }));
 const graph = buildQuestGraph({ quests: questData });
 ---
