@@ -478,11 +478,11 @@
         initMap();
     }
 
-    $: if (mapInitialized && activeTab === 'map') {
+    $: if (mapInitialized && activeTab === 'map' && showUnreachable !== undefined) {
         refreshMap(showUnreachable);
     }
 
-    $: if (mapInitialized && activeTab === 'map' && highlightMultiParent !== undefined) {
+    $: if (mapInitialized && activeTab === 'map') {
         applyMultiParentHighlight();
     }
 
@@ -516,6 +516,8 @@
             class:selected={activeTab === 'navigator'}
             role="tab"
             aria-selected={activeTab === 'navigator'}
+            aria-controls="quest-graph-panel-navigator"
+            id="quest-graph-tab-navigator"
             on:click={() => (activeTab = 'navigator')}
         >
             Navigator
@@ -525,6 +527,8 @@
             class:selected={activeTab === 'map'}
             role="tab"
             aria-selected={activeTab === 'map'}
+            aria-controls="quest-graph-panel-map"
+            id="quest-graph-tab-map"
             on:click={() => (activeTab = 'map')}
         >
             Map
@@ -534,6 +538,8 @@
             class:selected={activeTab === 'diagnostics'}
             role="tab"
             aria-selected={activeTab === 'diagnostics'}
+            aria-controls="quest-graph-panel-diagnostics"
+            id="quest-graph-tab-diagnostics"
             on:click={() => (activeTab = 'diagnostics')}
         >
             Diagnostics
@@ -541,210 +547,240 @@
     </div>
 
     {#if activeTab === 'navigator'}
-        <div class="shelves">
-            <div class="shelf">
-                <div class="shelf-label">Parents</div>
-                <div class="cards">
-                    {#if parentKeys.length === 0}
-                        <div class="empty">No parents</div>
-                    {:else}
-                        {#each parentKeys as key}
-                            {#if byKey[key]}
-                                <QuestGraphCard
-                                    node={byKey[key]}
-                                    keyValue={key}
-                                    register={cardRef}
-                                    isFocused={key === focusedKey}
-                                    isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
-                                    on:select={() => setFocus(key)}
-                                />
-                            {/if}
-                        {/each}
-                    {/if}
+        <div
+            role="tabpanel"
+            id="quest-graph-panel-navigator"
+            aria-labelledby="quest-graph-tab-navigator"
+            tabindex="0"
+        >
+            <div class="shelves">
+                <div class="shelf">
+                    <div class="shelf-label">Parents</div>
+                    <div class="cards">
+                        {#if parentKeys.length === 0}
+                            <div class="empty">No parents</div>
+                        {:else}
+                            {#each parentKeys as key}
+                                {#if byKey[key]}
+                                    <QuestGraphCard
+                                        node={byKey[key]}
+                                        keyValue={key}
+                                        register={cardRef}
+                                        isFocused={key === focusedKey}
+                                        isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
+                                        on:select={() => setFocus(key)}
+                                    />
+                                {/if}
+                            {/each}
+                        {/if}
+                    </div>
+                </div>
+
+                <div class="shelf current">
+                    <div class="shelf-label">Current depth</div>
+                    <div class="cards">
+                        {#if depthKeys.length === 0}
+                            <div class="empty">No quests at this depth</div>
+                        {:else}
+                            {#each depthKeys as key}
+                                {#if byKey[key]}
+                                    <QuestGraphCard
+                                        node={byKey[key]}
+                                        keyValue={key}
+                                        register={cardRef}
+                                        isFocused={key === focusedKey}
+                                        isRoot={key === resolveRoot()}
+                                        isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
+                                        on:select={() => setFocus(key)}
+                                    />
+                                {/if}
+                            {/each}
+                        {/if}
+                    </div>
+                </div>
+
+                <div class="shelf">
+                    <div class="shelf-label">Children</div>
+                    <div class="cards">
+                        {#if childKeys.length === 0}
+                            <div class="empty">No children</div>
+                        {:else}
+                            {#each childKeys as key}
+                                {#if byKey[key]}
+                                    <QuestGraphCard
+                                        node={byKey[key]}
+                                        keyValue={key}
+                                        register={cardRef}
+                                        isFocused={key === focusedKey}
+                                        isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
+                                        on:select={() => setFocus(key)}
+                                    />
+                                {/if}
+                            {/each}
+                        {/if}
+                    </div>
                 </div>
             </div>
 
-            <div class="shelf current">
-                <div class="shelf-label">Current depth</div>
-                <div class="cards">
-                    {#if depthKeys.length === 0}
-                        <div class="empty">No quests at this depth</div>
-                    {:else}
-                        {#each depthKeys as key}
-                            {#if byKey[key]}
-                                <QuestGraphCard
-                                    node={byKey[key]}
-                                    keyValue={key}
-                                    register={cardRef}
-                                    isFocused={key === focusedKey}
-                                    isRoot={key === resolveRoot()}
-                                    isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
-                                    on:select={() => setFocus(key)}
-                                />
-                            {/if}
-                        {/each}
-                    {/if}
-                </div>
+            <div class="control-bar" aria-label="Navigator controls">
+                <button
+                    type="button"
+                    on:click={() => moveWithinDepth(-1)}
+                    aria-label="Previous at depth"
+                >
+                    Prev
+                </button>
+                <button
+                    type="button"
+                    on:click={() => moveWithinDepth(1)}
+                    aria-label="Next at depth"
+                >
+                    Next
+                </button>
+                <button type="button" on:click={() => focusParent(false)} aria-label="First parent">
+                    Parent
+                </button>
+                <button type="button" on:click={() => focusChild(false)} aria-label="First child">
+                    Child
+                </button>
+                <button type="button" on:click={() => setFocus(resolveRoot())} aria-label="Go to root">
+                    Root
+                </button>
+                <button type="button" on:click={() => (searchOpen = true)} aria-label="Search">
+                    Search
+                </button>
             </div>
-
-            <div class="shelf">
-                <div class="shelf-label">Children</div>
-                <div class="cards">
-                    {#if childKeys.length === 0}
-                        <div class="empty">No children</div>
-                    {:else}
-                        {#each childKeys as key}
-                            {#if byKey[key]}
-                                <QuestGraphCard
-                                    node={byKey[key]}
-                                    keyValue={key}
-                                    register={cardRef}
-                                    isFocused={key === focusedKey}
-                                    isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
-                                    on:select={() => setFocus(key)}
-                                />
-                            {/if}
-                        {/each}
-                    {/if}
-                </div>
-            </div>
-        </div>
-
-        <div class="control-bar" aria-label="Navigator controls">
-            <button type="button" on:click={() => moveWithinDepth(-1)} aria-label="Previous at depth">
-                Prev
-            </button>
-            <button type="button" on:click={() => moveWithinDepth(1)} aria-label="Next at depth">
-                Next
-            </button>
-            <button type="button" on:click={() => focusParent(false)} aria-label="First parent">
-                Parent
-            </button>
-            <button type="button" on:click={() => focusChild(false)} aria-label="First child">
-                Child
-            </button>
-            <button type="button" on:click={() => setFocus(resolveRoot())} aria-label="Go to root">
-                Root
-            </button>
-            <button type="button" on:click={() => (searchOpen = true)} aria-label="Search">
-                Search
-            </button>
         </div>
     {:else if activeTab === 'map'}
-        <div class="map-tools">
-            <div class="toggles">
-                <label>
-                    <input
-                        type="checkbox"
-                        bind:checked={showUnreachable}
-                        aria-label="Show unreachable quests"
-                    />
-                    Show unreachable quests
-                </label>
-                <label>
-                    <input
-                        type="checkbox"
-                        bind:checked={highlightMultiParent}
-                        aria-label="Highlight multi-parent quests"
-                    />
-                    Highlight multi-parent quests
-                </label>
-            </div>
-            <div class="legend">
-                <span class="legend-item">
-                    <span class="chip root-chip" aria-hidden="true"></span> Root
-                </span>
-                <span class="legend-item">
-                    <span class="chip standard-chip" aria-hidden="true"></span> Reachable
-                </span>
-                <span class="legend-item">
-                    <span class="chip unreachable-chip" aria-hidden="true"></span> Unreachable
-                </span>
-                <span class="legend-item">
-                    <span class="chip multi-chip" aria-hidden="true"></span> Multi-parent
-                </span>
-            </div>
-        </div>
-        <div class="map-shell">
-            {#if mapStatus === 'error'}
-                <p class="subtle">Map failed to load: {mapError}</p>
-            {:else}
-                <div class="map-canvas" bind:this={mapContainer}>
-                    {#if mapStatus === 'loading'}
-                        <div class="map-overlay subtle">Loading map…</div>
-                    {:else if !mapInitialized}
-                        <div class="map-overlay subtle">Select Map to load the full graph</div>
-                    {/if}
+        <div
+            role="tabpanel"
+            id="quest-graph-panel-map"
+            aria-labelledby="quest-graph-tab-map"
+            tabindex="0"
+        >
+            <div class="map-tools">
+                <div class="toggles">
+                    <label>
+                        <input
+                            type="checkbox"
+                            bind:checked={showUnreachable}
+                            aria-label="Show unreachable quests"
+                        />
+                        Show unreachable quests
+                    </label>
+                    <label>
+                        <input
+                            type="checkbox"
+                            bind:checked={highlightMultiParent}
+                            aria-label="Highlight multi-parent quests"
+                        />
+                        Highlight multi-parent quests
+                    </label>
                 </div>
-            {/if}
+                <div class="legend">
+                    <span class="legend-item">
+                        <span class="chip root-chip" aria-hidden="true"></span> Root
+                    </span>
+                    <span class="legend-item">
+                        <span class="chip standard-chip" aria-hidden="true"></span> Reachable
+                    </span>
+                    <span class="legend-item">
+                        <span class="chip unreachable-chip" aria-hidden="true"></span> Unreachable
+                    </span>
+                    <span class="legend-item">
+                        <span class="chip multi-chip" aria-hidden="true"></span> Multi-parent
+                    </span>
+                </div>
+            </div>
+            <div class="map-shell">
+                {#if mapStatus === 'error'}
+                    <p class="subtle">Map failed to load: {mapError}</p>
+                {:else}
+                    <div class="map-canvas" bind:this={mapContainer}>
+                        {#if mapStatus === 'loading'}
+                            <div class="map-overlay subtle">Loading map…</div>
+                        {:else if !mapInitialized}
+                            <div class="map-overlay subtle">Select Map to load the full graph</div>
+                        {/if}
+                    </div>
+                {/if}
+            </div>
+            <p class="subtle hint">
+                Tip: click a node to sync focus with Navigator. Scroll or pinch to zoom and drag to
+                pan.
+            </p>
         </div>
-        <p class="subtle hint">
-            Tip: click a node to sync focus with Navigator. Scroll or pinch to zoom and drag to pan.
-        </p>
     {:else}
-        <div class="diagnostics">
-            <div class="diag-grid">
-                <div>
-                    <h4>Missing refs ({graph.diagnostics.missingRefs.length})</h4>
-                    {#if graph.diagnostics.missingRefs.length === 0}
-                        <p class="subtle">None</p>
-                    {:else}
-                        <ul>
-                            {#each graph.diagnostics.missingRefs as issue}
-                                <li>
-                                    <button type="button" on:click={() => setFocus(issue.from)}>
-                                        {issue.from} → {issue.ref}
-                                    </button>
-                                </li>
-                            {/each}
-                        </ul>
-                    {/if}
-                </div>
-                <div>
-                    <h4>Ambiguous refs ({graph.diagnostics.ambiguousRefs.length})</h4>
-                    {#if graph.diagnostics.ambiguousRefs.length === 0}
-                        <p class="subtle">None</p>
-                    {:else}
-                        <ul>
-                            {#each graph.diagnostics.ambiguousRefs as issue}
-                                <li>
-                                    <button type="button" on:click={() => setFocus(issue.from)}>
-                                        {issue.from} → {issue.ref} ({issue.candidates.length} candidates)
-                                    </button>
-                                </li>
-                            {/each}
-                        </ul>
-                    {/if}
-                </div>
-                <div>
-                    <h4>Unreachable ({graph.diagnostics.unreachableNodes.length})</h4>
-                    {#if graph.diagnostics.unreachableNodes.length === 0}
-                        <p class="subtle">None</p>
-                    {:else}
-                        <ul>
-                            {#each graph.diagnostics.unreachableNodes as key}
-                                <li>
-                                    <button type="button" on:click={() => setFocus(key)}>{key}</button>
-                                </li>
-                            {/each}
-                        </ul>
-                    {/if}
-                </div>
-                <div>
-                    <h4>Cycles ({graph.diagnostics.cycles.length})</h4>
-                    {#if graph.diagnostics.cycles.length === 0}
-                        <p class="subtle">None</p>
-                    {:else}
-                        <ul>
-                            {#each graph.diagnostics.cycles as cycle}
-                                <li>
-                                    <button type="button" on:click={() => setFocus(cycle[0])}>
-                                        {cycle.join(' → ')}
-                                    </button>
-                                </li>
-                            {/each}
-                        </ul>
-                    {/if}
+        <div
+            role="tabpanel"
+            id="quest-graph-panel-diagnostics"
+            aria-labelledby="quest-graph-tab-diagnostics"
+            tabindex="0"
+        >
+            <div class="diagnostics">
+                <div class="diag-grid">
+                    <div>
+                        <h4>Missing refs ({graph.diagnostics.missingRefs.length})</h4>
+                        {#if graph.diagnostics.missingRefs.length === 0}
+                            <p class="subtle">None</p>
+                        {:else}
+                            <ul>
+                                {#each graph.diagnostics.missingRefs as issue}
+                                    <li>
+                                        <button type="button" on:click={() => setFocus(issue.from)}>
+                                            {issue.from} → {issue.ref}
+                                        </button>
+                                    </li>
+                                {/each}
+                            </ul>
+                        {/if}
+                    </div>
+                    <div>
+                        <h4>Ambiguous refs ({graph.diagnostics.ambiguousRefs.length})</h4>
+                        {#if graph.diagnostics.ambiguousRefs.length === 0}
+                            <p class="subtle">None</p>
+                        {:else}
+                            <ul>
+                                {#each graph.diagnostics.ambiguousRefs as issue}
+                                    <li>
+                                        <button type="button" on:click={() => setFocus(issue.from)}>
+                                            {issue.from} → {issue.ref} ({issue.candidates.length} candidates)
+                                        </button>
+                                    </li>
+                                {/each}
+                            </ul>
+                        {/if}
+                    </div>
+                    <div>
+                        <h4>Unreachable ({graph.diagnostics.unreachableNodes.length})</h4>
+                        {#if graph.diagnostics.unreachableNodes.length === 0}
+                            <p class="subtle">None</p>
+                        {:else}
+                            <ul>
+                                {#each graph.diagnostics.unreachableNodes as key}
+                                    <li>
+                                        <button type="button" on:click={() => setFocus(key)}>{key}</button>
+                                    </li>
+                                {/each}
+                            </ul>
+                        {/if}
+                    </div>
+                    <div>
+                        <h4>Cycles ({graph.diagnostics.cycles.length})</h4>
+                        {#if graph.diagnostics.cycles.length === 0}
+                            <p class="subtle">None</p>
+                        {:else}
+                            <ul>
+                                {#each graph.diagnostics.cycles as cycle}
+                                    <li>
+                                        <button type="button" on:click={() => setFocus(cycle[0])}>
+                                            {cycle.join(' → ')}
+                                        </button>
+                                    </li>
+                                {/each}
+                            </ul>
+                        {/if}
+                    </div>
                 </div>
             </div>
         </div>
