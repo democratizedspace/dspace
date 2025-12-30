@@ -191,3 +191,34 @@ describe('quest graph ordering', () => {
     ]);
   });
 });
+
+describe('production quest directory', () => {
+  it('finds at least 1 quest file when using default questDir', () => {
+    // Build quest graph with default directory
+    const graph = buildQuestGraph();
+
+    // Should find at least one quest
+    expect(graph.nodes.length).toBeGreaterThan(0);
+  });
+
+  it('finds the root quest welcome/howtodoquests.json', () => {
+    const graph = buildQuestGraph();
+
+    // Should include the root quest
+    const rootQuest = graph.nodes.find(
+      (node) => node.canonicalKey === 'welcome/howtodoquests.json'
+    );
+    expect(rootQuest).toBeDefined();
+    expect(rootQuest?.basename).toBe('howtodoquests.json');
+  });
+
+  it('produces deterministic ordering across multiple calls', () => {
+    const graph1 = buildQuestGraph();
+    const graph2 = buildQuestGraph();
+
+    // Node ordering should be identical
+    expect(graph1.nodes.map((n) => n.canonicalKey)).toEqual(
+      graph2.nodes.map((n) => n.canonicalKey)
+    );
+  });
+});

@@ -93,6 +93,9 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         const results: string[] = [];
         const items = fs.readdirSync(dir, { withFileTypes: true });
 
+        // Sort by name for deterministic traversal across filesystems
+        items.sort((a, b) => a.name.localeCompare(b.name));
+
         for (const item of items) {
             const fullPath = path.join(dir, item.name);
             if (item.isDirectory()) {
