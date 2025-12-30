@@ -14,6 +14,7 @@
     let mapStatus = 'idle';
     let mapError = '';
     let showUnreachable = false;
+    let prevShowUnreachable = showUnreachable;
     let highlightMultiParent = true;
     let mapInitialized = false;
     let cy = null;
@@ -478,7 +479,13 @@
         initMap();
     }
 
-    $: if (mapInitialized && activeTab === 'map' && showUnreachable !== undefined) {
+    $: if (
+        mapInitialized &&
+        activeTab === 'map' &&
+        showUnreachable !== undefined &&
+        showUnreachable !== prevShowUnreachable
+    ) {
+        prevShowUnreachable = showUnreachable;
         refreshMap(showUnreachable);
     }
 
@@ -486,7 +493,7 @@
         applyMultiParentHighlight();
     }
 
-    $: if (mapInitialized) {
+    $: if (mapInitialized && activeTab === 'map') {
         highlightFocus(focusedKey);
     }
 </script>
