@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import * as glob from 'glob';
 
 export type QuestNode = {
     canonicalKey: string;
@@ -89,7 +88,24 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         cycles: [],
     };
 
-    const questFiles = glob.sync('**/*.json', { cwd: questDir, absolute: true }).sort();
+    // Recursively find all .json files in questDir
+    const findQuestFiles = (dir: string): string[] => {
+        const results: string[] = [];
+        const items = fs.readdirSync(dir, { withFileTypes: true });
+        
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            if (item.isDirectory()) {
+                results.push(...findQuestFiles(fullPath));
+            } else if (item.isFile() && item.name.endsWith('.json')) {
+                results.push(fullPath);
+            }
+        }
+        
+        return results;
+    };
+
+    const questFiles = findQuestFiles(questDir).sort();
     const nodes: QuestNode[] = [];
     const nodeIndex = new Map<string, QuestNode>();
     const rawRequiresIndex = new Map<string, string[]>();
