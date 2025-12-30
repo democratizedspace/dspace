@@ -49,6 +49,7 @@ export type BuildQuestGraphOptions = {
 const ROOT_CANONICAL_KEY = 'welcome/howtodoquests.json';
 const ROOT_BASENAME = 'howtodoquests.json';
 const QUEST_JSON_PATH_PREFIX = './json/';
+const QUEST_PATH_REGEX = new RegExp(`^${QUEST_JSON_PATH_PREFIX.replace('.', '\\.')}(.+)$`);
 
 const comparatorKeys: Array<keyof QuestNode> = ['group', 'title', 'canonicalKey'];
 
@@ -76,9 +77,7 @@ const normalizeRef = (ref: string): string =>
 // './json/welcome/howtodoquests.json' -> 'welcome/howtodoquests.json'
 const toCanonicalKey = (globPath: string): string => {
     const normalized = globPath.replace(/\\/g, '/');
-    const match = normalized.match(
-        new RegExp(`^${QUEST_JSON_PATH_PREFIX.replace('.', '\\.')}(.+)$`)
-    );
+    const match = normalized.match(QUEST_PATH_REGEX);
     return match ? path.posix.normalize(match[1]) : path.posix.normalize(normalized);
 };
 
@@ -149,6 +148,11 @@ export const loadQuestsFromDir = (questDir: string): QuestData[] => {
 
 export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGraph => {
     // Support both new (quests) and old (questDir) API
+    // Validate that both options are not provided simultaneously
+    if (options.quests && options.questDir) {
+        throw new Error('Cannot provide both "quests" and "questDir" options to buildQuestGraph');
+    }
+
     let quests: QuestData[];
     if (options.quests) {
         quests = options.quests;
@@ -172,7 +176,7 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
     const byBasename = new Map<string, string[]>();
     const byQuestId = new Map<string, string>();
 
-    // Sort quest data by path for deterministic processing
+    // Sort quest data by path for deterministic processing (copy to avoid mutating input)
     const sortedQuests = [...quests].sort((a, b) => a.path.localeCompare(b.path));
 
     for (const { path: globPath, quest } of sortedQuests) {
