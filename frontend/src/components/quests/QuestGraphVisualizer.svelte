@@ -1,6 +1,7 @@
 <script>
     import { onMount, tick } from 'svelte';
     import QuestGraphCard from './QuestGraphCard.svelte';
+    import QuestGraphMap from './QuestGraphMap.svelte';
 
     export let graph;
 
@@ -38,7 +39,7 @@
     let focusedKey = resolveRoot();
     let searchOpen = false;
     let searchQuery = '';
-    let diagnosticsOpen = false;
+    let activeTab = 'navigator';
     let parentCycleIndex = 0;
     let childCycleIndex = 0;
     const cards = new Map();
@@ -101,6 +102,10 @@
         });
     }
 
+    const activateTab = (tab) => {
+        activeTab = tab;
+    };
+
     const setFocus = async (key, options = {}) => {
         if (!key || !byKey[key]) return;
         focusedKey = key;
@@ -154,6 +159,8 @@
         }
         const isInsideVisualizer = target ? visualizerEl?.contains(target) : false;
         if (!isInsideVisualizer && !searchOpen) return;
+
+        if (activeTab !== 'navigator' && !searchOpen && !isSearchShortcut) return;
 
         if (isSearchShortcut) {
             event.preventDefault();
@@ -224,115 +231,139 @@
             <button class="pill" type="button" on:click={() => (searchOpen = true)}>
                 Search
             </button>
+        </div>
+    </div>
+
+    <div class="tab-bar" role="tablist" aria-label="Quest graph view">
+        <button
+            class:active={activeTab === 'navigator'}
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'navigator'}
+            on:click={() => activateTab('navigator')}
+        >
+            Navigator
+        </button>
+        <button
+            class:active={activeTab === 'map'}
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'map'}
+            on:click={() => activateTab('map')}
+        >
+            Map
+        </button>
+        <button
+            class:active={activeTab === 'diagnostics'}
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'diagnostics'}
+            on:click={() => activateTab('diagnostics')}
+        >
+            Diagnostics
+        </button>
+    </div>
+
+    {#if activeTab === 'navigator'}
+        <div class="shelves">
+            <div class="shelf">
+                <div class="shelf-label">Parents</div>
+                <div class="cards">
+                    {#if parentKeys.length === 0}
+                        <div class="empty">No parents</div>
+                    {:else}
+                        {#each parentKeys as key}
+                            {#if byKey[key]}
+                                <QuestGraphCard
+                                    node={byKey[key]}
+                                    keyValue={key}
+                                    register={cardRef}
+                                    isFocused={key === focusedKey}
+                                    isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
+                                    on:select={() => setFocus(key)}
+                                />
+                            {/if}
+                        {/each}
+                    {/if}
+                </div>
+            </div>
+
+            <div class="shelf current">
+                <div class="shelf-label">Current depth</div>
+                <div class="cards">
+                    {#if depthKeys.length === 0}
+                        <div class="empty">No quests at this depth</div>
+                    {:else}
+                        {#each depthKeys as key}
+                            {#if byKey[key]}
+                                <QuestGraphCard
+                                    node={byKey[key]}
+                                    keyValue={key}
+                                    register={cardRef}
+                                    isFocused={key === focusedKey}
+                                    isRoot={key === resolveRoot()}
+                                    isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
+                                    on:select={() => setFocus(key)}
+                                />
+                            {/if}
+                        {/each}
+                    {/if}
+                </div>
+            </div>
+
+            <div class="shelf">
+                <div class="shelf-label">Children</div>
+                <div class="cards">
+                    {#if childKeys.length === 0}
+                        <div class="empty">No children</div>
+                    {:else}
+                        {#each childKeys as key}
+                            {#if byKey[key]}
+                                <QuestGraphCard
+                                    node={byKey[key]}
+                                    keyValue={key}
+                                    register={cardRef}
+                                    isFocused={key === focusedKey}
+                                    isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
+                                    on:select={() => setFocus(key)}
+                                />
+                            {/if}
+                        {/each}
+                    {/if}
+                </div>
+            </div>
+        </div>
+
+        <div class="control-bar" aria-label="Navigator controls">
             <button
-                class="pill"
                 type="button"
-                on:click={() => (diagnosticsOpen = !diagnosticsOpen)}
+                on:click={() => moveWithinDepth(-1)}
+                aria-label="Previous at depth"
             >
-                {diagnosticsOpen ? 'Hide diagnostics' : 'Show diagnostics'}
+                Prev
+            </button>
+            <button type="button" on:click={() => moveWithinDepth(1)} aria-label="Next at depth">
+                Next
+            </button>
+            <button type="button" on:click={() => focusParent(false)} aria-label="First parent">
+                Parent
+            </button>
+            <button type="button" on:click={() => focusChild(false)} aria-label="First child">
+                Child
+            </button>
+            <button type="button" on:click={() => setFocus(resolveRoot())} aria-label="Go to root">
+                Root
+            </button>
+            <button type="button" on:click={() => (searchOpen = true)} aria-label="Search">
+                Search
             </button>
         </div>
-    </div>
-
-    <div class="shelves">
-        <div class="shelf">
-            <div class="shelf-label">Parents</div>
-            <div class="cards">
-                {#if parentKeys.length === 0}
-                    <div class="empty">No parents</div>
-                {:else}
-                    {#each parentKeys as key}
-                        {#if byKey[key]}
-                            <QuestGraphCard
-                                node={byKey[key]}
-                                keyValue={key}
-                                register={cardRef}
-                                isFocused={key === focusedKey}
-                                isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
-                                on:select={() => setFocus(key)}
-                            />
-                        {/if}
-                    {/each}
-                {/if}
-            </div>
+    {:else if activeTab === 'map'}
+        <div class="map-panel">
+            <QuestGraphMap {graph} {focusedKey} on:focusNode={(event) => setFocus(event.detail)} />
         </div>
-
-        <div class="shelf current">
-            <div class="shelf-label">Current depth</div>
-            <div class="cards">
-                {#if depthKeys.length === 0}
-                    <div class="empty">No quests at this depth</div>
-                {:else}
-                    {#each depthKeys as key}
-                        {#if byKey[key]}
-                            <QuestGraphCard
-                                node={byKey[key]}
-                                keyValue={key}
-                                register={cardRef}
-                                isFocused={key === focusedKey}
-                                isRoot={key === resolveRoot()}
-                                isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
-                                on:select={() => setFocus(key)}
-                            />
-                        {/if}
-                    {/each}
-                {/if}
-            </div>
-        </div>
-
-        <div class="shelf">
-            <div class="shelf-label">Children</div>
-            <div class="cards">
-                {#if childKeys.length === 0}
-                    <div class="empty">No children</div>
-                {:else}
-                    {#each childKeys as key}
-                        {#if byKey[key]}
-                            <QuestGraphCard
-                                node={byKey[key]}
-                                keyValue={key}
-                                register={cardRef}
-                                isFocused={key === focusedKey}
-                                isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
-                                on:select={() => setFocus(key)}
-                            />
-                        {/if}
-                    {/each}
-                {/if}
-            </div>
-        </div>
-    </div>
-
-    <div class="control-bar" aria-label="Navigator controls">
-        <button type="button" on:click={() => moveWithinDepth(-1)} aria-label="Previous at depth">
-            Prev
-        </button>
-        <button type="button" on:click={() => moveWithinDepth(1)} aria-label="Next at depth">
-            Next
-        </button>
-        <button type="button" on:click={() => focusParent(false)} aria-label="First parent">
-            Parent
-        </button>
-        <button type="button" on:click={() => focusChild(false)} aria-label="First child">
-            Child
-        </button>
-        <button type="button" on:click={() => setFocus(resolveRoot())} aria-label="Go to root">
-            Root
-        </button>
-        <button type="button" on:click={() => (searchOpen = true)} aria-label="Search">
-            Search
-        </button>
-    </div>
-
-    <div class="diagnostics" data-open={diagnosticsOpen}>
-        <button
-            class="diagnostics-toggle"
-            type="button"
-            on:click={() => (diagnosticsOpen = !diagnosticsOpen)}
-        >
-            {diagnosticsOpen ? 'Hide diagnostics' : 'Show diagnostics'}
-        </button>
-        {#if diagnosticsOpen}
+    {:else if activeTab === 'diagnostics'}
+        <div class="diagnostics">
             <div class="diag-grid">
                 <div>
                     <h4>Missing refs ({graph.diagnostics.missingRefs.length})</h4>
@@ -399,8 +430,8 @@
                     {/if}
                 </div>
             </div>
-        {/if}
-    </div>
+        </div>
+    {/if}
 
     {#if searchOpen}
         <div
@@ -500,6 +531,28 @@
         cursor: pointer;
     }
 
+    .tab-bar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 8px;
+        margin: 12px 0;
+    }
+
+    .tab-bar button {
+        border: 1px solid var(--color-border);
+        background: rgba(0, 0, 0, 0.1);
+        color: var(--color-heading);
+        padding: 10px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .tab-bar button.active {
+        background: var(--color-pill);
+        color: var(--color-pill-text);
+        box-shadow: 0 0 0 2px rgba(104, 212, 109, 0.35);
+    }
+
     .shelves {
         display: flex;
         flex-direction: column;
@@ -552,20 +605,15 @@
         cursor: pointer;
     }
 
+    .map-panel {
+        margin-top: 12px;
+    }
+
     .diagnostics {
         margin-top: 12px;
         background: rgba(0, 0, 0, 0.1);
         border-radius: 12px;
         padding: 10px;
-    }
-
-    .diagnostics-toggle {
-        background: none;
-        color: var(--color-heading);
-        border: 1px solid var(--color-border);
-        border-radius: 8px;
-        padding: 8px 12px;
-        cursor: pointer;
     }
 
     .diag-grid {
