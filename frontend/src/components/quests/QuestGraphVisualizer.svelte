@@ -1,19 +1,17 @@
-<script lang="ts">
+<script>
     import { onMount, tick } from 'svelte';
-    import type { Action } from 'svelte/action';
     import QuestGraphCard from './QuestGraphCard.svelte';
-    import type { QuestGraph, QuestNode } from '../../lib/quests/questGraph';
 
-    export let graph: QuestGraph;
+    export let graph;
 
     const ROOT_KEY = 'welcome/howtodoquests.json';
     const byKey = graph?.byKey ?? {};
-    let visualizerEl: HTMLElement | null = null;
-    let searchInput: HTMLInputElement | null = null;
+    let visualizerEl = null;
+    let searchInput = null;
 
-    const compareNodes = (a?: QuestNode, b?: QuestNode) => {
+    const compareNodes = (a, b) => {
         if (!a || !b) return a ? -1 : b ? 1 : 0;
-        const order: Array<keyof QuestNode> = ['group', 'title', 'canonicalKey'];
+        const order = ['group', 'title', 'canonicalKey'];
         for (const key of order) {
             if (a[key] < b[key]) return -1;
             if (a[key] > b[key]) return 1;
@@ -21,15 +19,20 @@
         return 0;
     };
 
-    const sortKeys = (keys: string[]) =>
-        [...keys].sort((a, b) => compareNodes(byKey[a], byKey[b]));
+    const sortKeys = (keys) => [...keys].sort((a, b) => compareNodes(byKey[a], byKey[b]));
+
+    const getSortedNodes = () => [...(graph?.nodes ?? [])].sort(compareNodes);
 
     const resolveRoot = () => {
         if (byKey[ROOT_KEY]) return ROOT_KEY;
-        if (Array.isArray(graph?.reachableFromRoot) && graph.reachableFromRoot.length > 0) {
-            return graph.reachableFromRoot[0];
+        const sortedNodes = getSortedNodes();
+        const howToMatches = sortedNodes.filter(
+            (node) => node.canonicalKey.split('/').pop() === 'howtodoquests.json'
+        );
+        if (howToMatches.length === 1) {
+            return howToMatches[0].canonicalKey;
         }
-        return graph?.nodes?.[0]?.canonicalKey ?? '';
+        return sortedNodes[0]?.canonicalKey ?? '';
     };
 
     let focusedKey = resolveRoot();
@@ -38,8 +41,8 @@
     let diagnosticsOpen = false;
     let parentCycleIndex = 0;
     let childCycleIndex = 0;
-    const cards = new Map<string, HTMLElement>();
-    const cardRef: Action<HTMLElement, string> = (node, key) => {
+    const cards = new Map();
+    const cardRef = (node, key) => {
         let currentKey = key;
         if (currentKey) {
             cards.set(currentKey, node);
@@ -73,25 +76,24 @@
     $: focusedNode = byKey[focusedKey];
     $: parentKeys = focusedNode ? sortKeys(focusedNode.requires ?? []) : [];
     $: childKeys = focusedKey ? sortKeys(graph?.requiredBy?.[focusedKey] ?? []) : [];
-    $: depth = focusedKey ? graph?.depthByKey?.[focusedKey] ?? 0 : 0;
+    $: depth = focusedKey ? (graph?.depthByKey?.[focusedKey] ?? 0) : 0;
     $: depthKeys = sortKeys(
         (graph?.nodes ?? [])
             .filter((node) => graph?.depthByKey?.[node.canonicalKey] === depth)
             .map((node) => node.canonicalKey)
     );
-    $: searchResults = searchQuery.trim()
-        ? sortKeys(
-              (graph?.nodes ?? [])
-                  .filter((node) => {
-                      const query = searchQuery.toLowerCase();
-                      return (
-                          node.title.toLowerCase().includes(query) ||
-                          node.canonicalKey.toLowerCase().includes(query)
-                      );
-                  })
-                  .map((node) => node.canonicalKey)
-          )
-        : [];
+    $: searchResults = (() => {
+        const query = searchQuery.trim().toLowerCase();
+        const nodes = getSortedNodes();
+        const filteredNodes = query
+            ? nodes.filter(
+                  (node) =>
+                      node.title.toLowerCase().includes(query) ||
+                      node.canonicalKey.toLowerCase().includes(query)
+              )
+            : nodes;
+        return filteredNodes.map((node) => node.canonicalKey);
+    })();
     $: if (searchOpen) {
         tick().then(() => {
             searchInput?.focus();
@@ -99,7 +101,7 @@
         });
     }
 
-    const setFocus = async (key: string | undefined, options: { resetCycles?: boolean } = {}) => {
+    const setFocus = async (key, options = {}) => {
         if (!key || !byKey[key]) return;
         focusedKey = key;
         if (options.resetCycles !== false) {
@@ -112,7 +114,7 @@
         }
     };
 
-    const moveWithinDepth = (delta: number) => {
+    const moveWithinDepth = (delta) => {
         if (!depthKeys.length) return;
         const currentIndex = depthKeys.indexOf(focusedKey);
         const nextIndex =
@@ -139,13 +141,21 @@
         setFocus(childKeys[index], { resetCycles: false });
     };
 
-    const handleKeydown = (event: KeyboardEvent) => {
+    const handleKeydown = (event) => {
         if (event.defaultPrevented) return;
-        const target = event.target as Node | null;
+        const target = event.target;
+        const isEditableTarget =
+            target?.closest('input, textarea') !== null || target?.isContentEditable;
+        const isSearchShortcut =
+            (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k';
+        const isOverlayEscape = searchOpen && event.key === 'Escape';
+        if (isEditableTarget && !isSearchShortcut && !isOverlayEscape) {
+            return;
+        }
         const isInsideVisualizer = target ? visualizerEl?.contains(target) : false;
         if (!isInsideVisualizer && !searchOpen) return;
 
-        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        if (isSearchShortcut) {
             event.preventDefault();
             searchOpen = true;
             return;
@@ -182,7 +192,7 @@
                 break;
         }
     };
-    const handleOverlayKeydown = (event: KeyboardEvent) => {
+    const handleOverlayKeydown = (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             closeSearch();
@@ -217,7 +227,8 @@
             <button
                 class="pill"
                 type="button"
-                on:click={() => (diagnosticsOpen = !diagnosticsOpen)}>
+                on:click={() => (diagnosticsOpen = !diagnosticsOpen)}
+            >
                 {diagnosticsOpen ? 'Hide diagnostics' : 'Show diagnostics'}
             </button>
         </div>
@@ -317,7 +328,8 @@
         <button
             class="diagnostics-toggle"
             type="button"
-            on:click={() => (diagnosticsOpen = !diagnosticsOpen)}>
+            on:click={() => (diagnosticsOpen = !diagnosticsOpen)}
+        >
             {diagnosticsOpen ? 'Hide diagnostics' : 'Show diagnostics'}
         </button>
         {#if diagnosticsOpen}
@@ -362,7 +374,9 @@
                         <ul>
                             {#each graph.diagnostics.unreachableNodes as key}
                                 <li>
-                                    <button type="button" on:click={() => setFocus(key)}>{key}</button>
+                                    <button type="button" on:click={() => setFocus(key)}
+                                        >{key}</button
+                                    >
                                 </li>
                             {/each}
                         </ul>
@@ -394,7 +408,8 @@
             role="presentation"
             tabindex="-1"
             on:keydown|stopPropagation={handleOverlayKeydown}
-            on:click={closeSearch}>
+            on:click={closeSearch}
+        >
             <div
                 class="search"
                 role="dialog"
@@ -402,7 +417,8 @@
                 aria-label="Quest search dialog"
                 tabindex="-1"
                 on:click|stopPropagation
-                on:keydown|stopPropagation>
+                on:keydown|stopPropagation
+            >
                 <div class="search-header">
                     <input
                         type="text"
@@ -410,11 +426,7 @@
                         bind:value={searchQuery}
                         bind:this={searchInput}
                     />
-                    <button
-                        type="button"
-                        on:click={closeSearch}>
-                        Close
-                    </button>
+                    <button type="button" on:click={closeSearch}> Close </button>
                 </div>
                 {#if searchResults.length === 0}
                     <p class="subtle">No results</p>
@@ -427,7 +439,8 @@
                                     on:click={() => {
                                         setFocus(key);
                                         closeSearch();
-                                    }}>
+                                    }}
+                                >
                                     {byKey[key]?.title ?? key}
                                     <span class="subtle">({key})</span>
                                 </button>

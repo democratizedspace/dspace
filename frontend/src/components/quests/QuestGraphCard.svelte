@@ -1,18 +1,16 @@
-<script lang="ts">
+<script>
     import { createEventDispatcher } from 'svelte';
-    import type { Action } from 'svelte/action';
-    import type { QuestNode } from '../../lib/quests/questGraph';
 
-    const noop: Action<HTMLElement, string> = () => ({});
+    const noop = () => ({});
 
-    export let node: QuestNode;
-    export let keyValue: string;
+    export let node;
+    export let keyValue;
     export let isFocused = false;
     export let isRoot = false;
     export let isMultiParent = false;
-    export let register: Action<HTMLElement, string> = noop;
+    export let register = noop;
 
-    const dispatch = createEventDispatcher<{ select: string }>();
+    const dispatch = createEventDispatcher();
 </script>
 
 <button
@@ -21,7 +19,8 @@
     aria-current={isFocused ? 'true' : undefined}
     type="button"
     on:click={() => dispatch('select', keyValue)}
-    use:register={keyValue}>
+    use:register={keyValue}
+>
     <div class="title">{node.title}</div>
     <div class="meta">
         <span class="badge">{node.group}</span>
@@ -45,7 +44,10 @@
         padding: 12px;
         cursor: pointer;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+        transition:
+            transform 120ms ease,
+            box-shadow 120ms ease,
+            border-color 120ms ease;
     }
 
     .card:hover {
