@@ -7,7 +7,18 @@
     const ROOT_KEY = 'welcome/howtodoquests.json';
     const byKey = graph?.byKey ?? {};
     let visualizerEl = null;
+    let mapContainer = null;
     let searchInput = null;
+
+    let activeTab = 'navigator';
+    let mapStatus = 'idle';
+    let mapError = '';
+    let showUnreachable = false;
+    let prevShowUnreachable = showUnreachable;
+    let highlightMultiParent = true;
+    let mapInitialized = false;
+    let cy = null;
+    let hasMounted = false;
 
     const compareNodes = (a, b) => {
         if (!a || !b) return a ? -1 : b ? 1 : 0;
@@ -22,6 +33,15 @@
     const sortKeys = (keys) => [...keys].sort((a, b) => compareNodes(byKey[a], byKey[b]));
 
     const getSortedNodes = () => [...(graph?.nodes ?? [])].sort(compareNodes);
+
+    const reachableSet = new Set(graph?.reachableFromRoot ?? []);
+    const unreachableSet = new Set(graph?.diagnostics?.unreachableNodes ?? []);
+    const cycleNodeSet = new Set(graph?.diagnostics?.cycles?.flatMap((cycle) => cycle) ?? []);
+    const multiParentKeys = new Set(
+        (graph?.nodes ?? [])
+            .filter((node) => (node.requires?.length ?? 0) > 1)
+            .map((node) => node.canonicalKey)
+    );
 
     const resolveRoot = () => {
         if (byKey[ROOT_KEY]) return ROOT_KEY;
@@ -38,7 +58,6 @@
     let focusedKey = resolveRoot();
     let searchOpen = false;
     let searchQuery = '';
-    let diagnosticsOpen = false;
     let parentCycleIndex = 0;
     let childCycleIndex = 0;
     const cards = new Map();
@@ -202,10 +221,282 @@
     onMount(() => {
         window.addEventListener('keydown', handleKeydown);
         setFocus(focusedKey);
+        hasMounted = true;
         return () => {
             window.removeEventListener('keydown', handleKeydown);
+            cy?.destroy?.();
         };
     });
+
+    const getCssVar = (name, fallback) => {
+        if (typeof window === 'undefined') return fallback;
+        const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        return value || fallback;
+    };
+
+    const mapStyles = () => ({
+        background: getCssVar('--color-surface', '#121212'),
+        nodeFill: getCssVar('--color-pill', '#1f6feb'),
+        nodeText: getCssVar('--color-pill-text', '#ffffff'),
+        nodeAccent: getCssVar('--color-pill-active', '#68d46d'),
+        nodeAccentText: getCssVar('--color-pill-active-text', '#0b1f0f'),
+        nodeBorder: getCssVar('--color-border', '#2f2f2f'),
+        textSubtle: getCssVar('--color-text', '#b3b3b3'),
+        warning: getCssVar('--color-warning', '#f39c12'),
+    });
+
+    const buildMapElements = (includeUnreachable) => {
+        const includedKeys = new Set(reachableSet);
+        if (includeUnreachable) {
+            unreachableSet.forEach((key) => includedKeys.add(key));
+        }
+
+        const nodes = (graph?.nodes ?? [])
+            .filter((node) => includedKeys.has(node.canonicalKey))
+            .map((node) => ({
+                data: {
+                    id: node.canonicalKey,
+                    label: node.title,
+                    group: node.group,
+                    isRoot: node.canonicalKey === resolveRoot(),
+                    isMultiParent: multiParentKeys.has(node.canonicalKey),
+                    isUnreachable: unreachableSet.has(node.canonicalKey),
+                    inCycle: cycleNodeSet.has(node.canonicalKey),
+                },
+                classes: [
+                    'quest-node',
+                    unreachableSet.has(node.canonicalKey) ? 'unreachable' : '',
+                    multiParentKeys.has(node.canonicalKey) ? 'multi-parent' : '',
+                    cycleNodeSet.has(node.canonicalKey) ? 'cycle' : '',
+                    node.canonicalKey === resolveRoot() ? 'root' : '',
+                ]
+                    .filter(Boolean)
+                    .join(' '),
+            }));
+
+        const allowedKeys = new Set(nodes.map((node) => node.data.id));
+        const edges =
+            graph?.edges
+                ?.filter((edge) => allowedKeys.has(edge.from) && allowedKeys.has(edge.to))
+                .map((edge) => ({
+                    data: {
+                        id: `${edge.from}->${edge.to}`,
+                        source: edge.from,
+                        target: edge.to,
+                    },
+                })) ?? [];
+
+        return [...nodes, ...edges];
+    };
+
+    const applyMultiParentHighlight = () => {
+        if (!cy) return;
+        const nodes = cy.nodes('.multi-parent');
+        if (highlightMultiParent) {
+            nodes.addClass('emphasize');
+        } else {
+            nodes.removeClass('emphasize');
+        }
+    };
+
+    const highlightFocus = (key) => {
+        if (!cy) return;
+        cy.nodes().removeClass('focused highlight-parent highlight-child');
+        cy.edges().removeClass('highlighted');
+        if (!key) return;
+        const node = cy.getElementById(key);
+        if (!node || node.empty()) return;
+        node.addClass('focused');
+        const incomingEdges = node.incomers('edge');
+        incomingEdges.addClass('highlighted');
+        incomingEdges.sources().addClass('highlight-parent');
+        const outgoingEdges = node.outgoers('edge');
+        outgoingEdges.addClass('highlighted');
+        outgoingEdges.targets().addClass('highlight-child');
+    };
+
+    const runLayout = () => {
+        if (!cy) return;
+        cy.layout({
+            name: 'dagre',
+            rankDir: 'TB',
+            nodeSep: 60,
+            edgeSep: 16,
+            rankSep: 80,
+            padding: 30,
+        }).run();
+        cy.fit(undefined, 24);
+    };
+
+    const refreshMap = (includeUnreachable) => {
+        if (!cy) return;
+        cy.elements().remove();
+        cy.add(buildMapElements(includeUnreachable));
+        applyMultiParentHighlight();
+        runLayout();
+        highlightFocus(focusedKey);
+    };
+
+    const initMap = async () => {
+        if (!hasMounted || mapInitialized || activeTab !== 'map') return;
+        mapStatus = 'loading';
+        mapError = '';
+        try {
+            const [{ default: cytoscape }, { default: registerDagre }] = await Promise.all([
+                import('cytoscape'),
+                import('cytoscape-dagre'),
+            ]);
+            cytoscape.use(registerDagre);
+
+            const colors = mapStyles();
+            cy = cytoscape({
+                container: mapContainer,
+                elements: buildMapElements(showUnreachable),
+                style: [
+                    {
+                        selector: 'core',
+                        style: {
+                            'selection-box-border-color': colors.nodeAccent,
+                            'selection-box-background-color': 'rgba(104, 212, 109, 0.1)',
+                        },
+                    },
+                    {
+                        selector: 'node',
+                        style: {
+                            'background-color': colors.nodeFill,
+                            'border-color': colors.nodeBorder,
+                            'border-width': 2,
+                            label: 'data(label)',
+                            color: colors.nodeText,
+                            'text-valign': 'center',
+                            'text-wrap': 'wrap',
+                            'text-max-width': 160,
+                            'font-size': 12,
+                            'font-weight': 600,
+                            padding: '12px',
+                            'text-outline-color': colors.nodeFill,
+                            'text-outline-width': 2,
+                            'shadow-blur': 12,
+                            'shadow-color': 'rgba(0,0,0,0.35)',
+                        },
+                    },
+                    {
+                        selector: 'node.root',
+                        style: {
+                            'background-color': colors.nodeAccent,
+                            color: colors.nodeAccentText,
+                            'text-outline-color': colors.nodeAccent,
+                        },
+                    },
+                    {
+                        selector: 'node.multi-parent.emphasize',
+                        style: {
+                            'border-width': 4,
+                            'border-color': colors.warning,
+                            'text-outline-color': colors.nodeFill,
+                            'text-outline-width': 3,
+                        },
+                    },
+                    {
+                        selector: 'node.cycle',
+                        style: {
+                            'background-image':
+                                'linear-gradient(135deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%, transparent)',
+                            'background-size': '12px 12px',
+                        },
+                    },
+                    {
+                        selector: 'node.unreachable',
+                        style: {
+                            opacity: 0.6,
+                            'border-style': 'dashed',
+                        },
+                    },
+                    {
+                        selector: 'edge',
+                        style: {
+                            width: 2,
+                            'line-color': colors.textSubtle,
+                            'target-arrow-color': colors.textSubtle,
+                            'target-arrow-shape': 'triangle',
+                            'curve-style': 'bezier',
+                        },
+                    },
+                    {
+                        selector: 'edge.highlighted',
+                        style: {
+                            width: 3,
+                            'line-color': colors.nodeAccent,
+                            'target-arrow-color': colors.nodeAccent,
+                        },
+                    },
+                    {
+                        selector: 'node.focused',
+                        style: {
+                            'border-width': 4,
+                            'border-color': colors.nodeAccent,
+                            'text-outline-color': colors.nodeAccent,
+                        },
+                    },
+                    {
+                        selector: 'node.highlight-parent',
+                        style: {
+                            'border-color': colors.nodeAccent,
+                        },
+                    },
+                    {
+                        selector: 'node.highlight-child',
+                        style: {
+                            'border-color': colors.nodeAccent,
+                            'border-style': 'dotted',
+                        },
+                    },
+                ],
+                wheelSensitivity: 0.2,
+                motionBlur: false,
+            });
+
+            cy.on('tap', 'node', (event) => {
+                const nodeKey = event?.target?.id?.();
+                if (nodeKey) {
+                    setFocus(nodeKey);
+                    highlightFocus(nodeKey);
+                }
+            });
+
+            applyMultiParentHighlight();
+            runLayout();
+            highlightFocus(focusedKey);
+            mapInitialized = true;
+            mapStatus = 'ready';
+        } catch (error) {
+            mapError =
+                error instanceof Error && error.message ? error.message : 'Failed to load map view';
+            mapStatus = 'error';
+        }
+    };
+
+    $: if (hasMounted && activeTab === 'map') {
+        initMap();
+    }
+
+    $: if (
+        mapInitialized &&
+        activeTab === 'map' &&
+        showUnreachable !== undefined &&
+        showUnreachable !== prevShowUnreachable
+    ) {
+        prevShowUnreachable = showUnreachable;
+        refreshMap(showUnreachable);
+    }
+
+    $: if (mapInitialized && activeTab === 'map') {
+        applyMultiParentHighlight();
+    }
+
+    $: if (mapInitialized && activeTab === 'map') {
+        highlightFocus(focusedKey);
+    }
 </script>
 
 <div class="visualizer" bind:this={visualizerEl}>
@@ -224,183 +515,290 @@
             <button class="pill" type="button" on:click={() => (searchOpen = true)}>
                 Search
             </button>
-            <button
-                class="pill"
-                type="button"
-                on:click={() => (diagnosticsOpen = !diagnosticsOpen)}
-            >
-                {diagnosticsOpen ? 'Hide diagnostics' : 'Show diagnostics'}
-            </button>
         </div>
     </div>
 
-    <div class="shelves">
-        <div class="shelf">
-            <div class="shelf-label">Parents</div>
-            <div class="cards">
-                {#if parentKeys.length === 0}
-                    <div class="empty">No parents</div>
-                {:else}
-                    {#each parentKeys as key}
-                        {#if byKey[key]}
-                            <QuestGraphCard
-                                node={byKey[key]}
-                                keyValue={key}
-                                register={cardRef}
-                                isFocused={key === focusedKey}
-                                isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
-                                on:select={() => setFocus(key)}
-                            />
-                        {/if}
-                    {/each}
-                {/if}
-            </div>
-        </div>
-
-        <div class="shelf current">
-            <div class="shelf-label">Current depth</div>
-            <div class="cards">
-                {#if depthKeys.length === 0}
-                    <div class="empty">No quests at this depth</div>
-                {:else}
-                    {#each depthKeys as key}
-                        {#if byKey[key]}
-                            <QuestGraphCard
-                                node={byKey[key]}
-                                keyValue={key}
-                                register={cardRef}
-                                isFocused={key === focusedKey}
-                                isRoot={key === resolveRoot()}
-                                isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
-                                on:select={() => setFocus(key)}
-                            />
-                        {/if}
-                    {/each}
-                {/if}
-            </div>
-        </div>
-
-        <div class="shelf">
-            <div class="shelf-label">Children</div>
-            <div class="cards">
-                {#if childKeys.length === 0}
-                    <div class="empty">No children</div>
-                {:else}
-                    {#each childKeys as key}
-                        {#if byKey[key]}
-                            <QuestGraphCard
-                                node={byKey[key]}
-                                keyValue={key}
-                                register={cardRef}
-                                isFocused={key === focusedKey}
-                                isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
-                                on:select={() => setFocus(key)}
-                            />
-                        {/if}
-                    {/each}
-                {/if}
-            </div>
-        </div>
-    </div>
-
-    <div class="control-bar" aria-label="Navigator controls">
-        <button type="button" on:click={() => moveWithinDepth(-1)} aria-label="Previous at depth">
-            Prev
-        </button>
-        <button type="button" on:click={() => moveWithinDepth(1)} aria-label="Next at depth">
-            Next
-        </button>
-        <button type="button" on:click={() => focusParent(false)} aria-label="First parent">
-            Parent
-        </button>
-        <button type="button" on:click={() => focusChild(false)} aria-label="First child">
-            Child
-        </button>
-        <button type="button" on:click={() => setFocus(resolveRoot())} aria-label="Go to root">
-            Root
-        </button>
-        <button type="button" on:click={() => (searchOpen = true)} aria-label="Search">
-            Search
-        </button>
-    </div>
-
-    <div class="diagnostics" data-open={diagnosticsOpen}>
+    <div class="tab-bar" role="tablist" aria-label="Quest graph views">
         <button
-            class="diagnostics-toggle"
             type="button"
-            on:click={() => (diagnosticsOpen = !diagnosticsOpen)}
+            class:selected={activeTab === 'navigator'}
+            role="tab"
+            aria-selected={activeTab === 'navigator'}
+            aria-controls="quest-graph-panel-navigator"
+            id="quest-graph-tab-navigator"
+            on:click={() => (activeTab = 'navigator')}
         >
-            {diagnosticsOpen ? 'Hide diagnostics' : 'Show diagnostics'}
+            Navigator
         </button>
-        {#if diagnosticsOpen}
-            <div class="diag-grid">
-                <div>
-                    <h4>Missing refs ({graph.diagnostics.missingRefs.length})</h4>
-                    {#if graph.diagnostics.missingRefs.length === 0}
-                        <p class="subtle">None</p>
-                    {:else}
-                        <ul>
-                            {#each graph.diagnostics.missingRefs as issue}
-                                <li>
-                                    <button type="button" on:click={() => setFocus(issue.from)}>
-                                        {issue.from} → {issue.ref}
-                                    </button>
-                                </li>
+        <button
+            type="button"
+            class:selected={activeTab === 'map'}
+            role="tab"
+            aria-selected={activeTab === 'map'}
+            aria-controls="quest-graph-panel-map"
+            id="quest-graph-tab-map"
+            on:click={() => (activeTab = 'map')}
+        >
+            Map
+        </button>
+        <button
+            type="button"
+            class:selected={activeTab === 'diagnostics'}
+            role="tab"
+            aria-selected={activeTab === 'diagnostics'}
+            aria-controls="quest-graph-panel-diagnostics"
+            id="quest-graph-tab-diagnostics"
+            on:click={() => (activeTab = 'diagnostics')}
+        >
+            Diagnostics
+        </button>
+    </div>
+
+    {#if activeTab === 'navigator'}
+        <div
+            role="tabpanel"
+            id="quest-graph-panel-navigator"
+            aria-labelledby="quest-graph-tab-navigator"
+            tabindex="0"
+        >
+            <div class="shelves">
+                <div class="shelf">
+                    <div class="shelf-label">Parents</div>
+                    <div class="cards">
+                        {#if parentKeys.length === 0}
+                            <div class="empty">No parents</div>
+                        {:else}
+                            {#each parentKeys as key}
+                                {#if byKey[key]}
+                                    <QuestGraphCard
+                                        node={byKey[key]}
+                                        keyValue={key}
+                                        register={cardRef}
+                                        isFocused={key === focusedKey}
+                                        isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
+                                        on:select={() => setFocus(key)}
+                                    />
+                                {/if}
                             {/each}
-                        </ul>
-                    {/if}
+                        {/if}
+                    </div>
                 </div>
-                <div>
-                    <h4>Ambiguous refs ({graph.diagnostics.ambiguousRefs.length})</h4>
-                    {#if graph.diagnostics.ambiguousRefs.length === 0}
-                        <p class="subtle">None</p>
-                    {:else}
-                        <ul>
-                            {#each graph.diagnostics.ambiguousRefs as issue}
-                                <li>
-                                    <button type="button" on:click={() => setFocus(issue.from)}>
-                                        {issue.from} → {issue.ref} ({issue.candidates.length} candidates)
-                                    </button>
-                                </li>
+
+                <div class="shelf current">
+                    <div class="shelf-label">Current depth</div>
+                    <div class="cards">
+                        {#if depthKeys.length === 0}
+                            <div class="empty">No quests at this depth</div>
+                        {:else}
+                            {#each depthKeys as key}
+                                {#if byKey[key]}
+                                    <QuestGraphCard
+                                        node={byKey[key]}
+                                        keyValue={key}
+                                        register={cardRef}
+                                        isFocused={key === focusedKey}
+                                        isRoot={key === resolveRoot()}
+                                        isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
+                                        on:select={() => setFocus(key)}
+                                    />
+                                {/if}
                             {/each}
-                        </ul>
-                    {/if}
+                        {/if}
+                    </div>
                 </div>
-                <div>
-                    <h4>Unreachable ({graph.diagnostics.unreachableNodes.length})</h4>
-                    {#if graph.diagnostics.unreachableNodes.length === 0}
-                        <p class="subtle">None</p>
-                    {:else}
-                        <ul>
-                            {#each graph.diagnostics.unreachableNodes as key}
-                                <li>
-                                    <button type="button" on:click={() => setFocus(key)}
-                                        >{key}</button
-                                    >
-                                </li>
+
+                <div class="shelf">
+                    <div class="shelf-label">Children</div>
+                    <div class="cards">
+                        {#if childKeys.length === 0}
+                            <div class="empty">No children</div>
+                        {:else}
+                            {#each childKeys as key}
+                                {#if byKey[key]}
+                                    <QuestGraphCard
+                                        node={byKey[key]}
+                                        keyValue={key}
+                                        register={cardRef}
+                                        isFocused={key === focusedKey}
+                                        isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
+                                        on:select={() => setFocus(key)}
+                                    />
+                                {/if}
                             {/each}
-                        </ul>
-                    {/if}
-                </div>
-                <div>
-                    <h4>Cycles ({graph.diagnostics.cycles.length})</h4>
-                    {#if graph.diagnostics.cycles.length === 0}
-                        <p class="subtle">None</p>
-                    {:else}
-                        <ul>
-                            {#each graph.diagnostics.cycles as cycle}
-                                <li>
-                                    <button type="button" on:click={() => setFocus(cycle[0])}>
-                                        {cycle.join(' → ')}
-                                    </button>
-                                </li>
-                            {/each}
-                        </ul>
-                    {/if}
+                        {/if}
+                    </div>
                 </div>
             </div>
-        {/if}
-    </div>
+
+            <div class="control-bar" aria-label="Navigator controls">
+                <button
+                    type="button"
+                    on:click={() => moveWithinDepth(-1)}
+                    aria-label="Previous at depth"
+                >
+                    Prev
+                </button>
+                <button
+                    type="button"
+                    on:click={() => moveWithinDepth(1)}
+                    aria-label="Next at depth"
+                >
+                    Next
+                </button>
+                <button type="button" on:click={() => focusParent(false)} aria-label="First parent">
+                    Parent
+                </button>
+                <button type="button" on:click={() => focusChild(false)} aria-label="First child">
+                    Child
+                </button>
+                <button
+                    type="button"
+                    on:click={() => setFocus(resolveRoot())}
+                    aria-label="Go to root"
+                >
+                    Root
+                </button>
+                <button type="button" on:click={() => (searchOpen = true)} aria-label="Search">
+                    Search
+                </button>
+            </div>
+        </div>
+    {:else if activeTab === 'map'}
+        <div
+            role="tabpanel"
+            id="quest-graph-panel-map"
+            aria-labelledby="quest-graph-tab-map"
+            tabindex="0"
+        >
+            <div class="map-tools">
+                <div class="toggles">
+                    <label>
+                        <input
+                            type="checkbox"
+                            bind:checked={showUnreachable}
+                            aria-label="Show unreachable quests"
+                        />
+                        Show unreachable quests
+                    </label>
+                    <label>
+                        <input
+                            type="checkbox"
+                            bind:checked={highlightMultiParent}
+                            aria-label="Highlight multi-parent quests"
+                        />
+                        Highlight multi-parent quests
+                    </label>
+                </div>
+                <div class="legend">
+                    <span class="legend-item">
+                        <span class="chip root-chip" aria-hidden="true"></span> Root
+                    </span>
+                    <span class="legend-item">
+                        <span class="chip standard-chip" aria-hidden="true"></span> Reachable
+                    </span>
+                    <span class="legend-item">
+                        <span class="chip unreachable-chip" aria-hidden="true"></span> Unreachable
+                    </span>
+                    <span class="legend-item">
+                        <span class="chip multi-chip" aria-hidden="true"></span> Multi-parent
+                    </span>
+                </div>
+            </div>
+            <div class="map-shell">
+                {#if mapStatus === 'error'}
+                    <p class="subtle">Map failed to load: {mapError}</p>
+                {:else}
+                    <div class="map-canvas" bind:this={mapContainer}>
+                        {#if mapStatus === 'loading'}
+                            <div class="map-overlay subtle">Loading map…</div>
+                        {:else if !mapInitialized}
+                            <div class="map-overlay subtle">Select Map to load the full graph</div>
+                        {/if}
+                    </div>
+                {/if}
+            </div>
+            <p class="subtle hint">
+                Tip: click a node to sync focus with Navigator. Scroll or pinch to zoom and drag to
+                pan.
+            </p>
+        </div>
+    {:else}
+        <div
+            role="tabpanel"
+            id="quest-graph-panel-diagnostics"
+            aria-labelledby="quest-graph-tab-diagnostics"
+            tabindex="0"
+        >
+            <div class="diagnostics">
+                <div class="diag-grid">
+                    <div>
+                        <h4>Missing refs ({graph.diagnostics.missingRefs.length})</h4>
+                        {#if graph.diagnostics.missingRefs.length === 0}
+                            <p class="subtle">None</p>
+                        {:else}
+                            <ul>
+                                {#each graph.diagnostics.missingRefs as issue}
+                                    <li>
+                                        <button type="button" on:click={() => setFocus(issue.from)}>
+                                            {issue.from} → {issue.ref}
+                                        </button>
+                                    </li>
+                                {/each}
+                            </ul>
+                        {/if}
+                    </div>
+                    <div>
+                        <h4>Ambiguous refs ({graph.diagnostics.ambiguousRefs.length})</h4>
+                        {#if graph.diagnostics.ambiguousRefs.length === 0}
+                            <p class="subtle">None</p>
+                        {:else}
+                            <ul>
+                                {#each graph.diagnostics.ambiguousRefs as issue}
+                                    <li>
+                                        <button type="button" on:click={() => setFocus(issue.from)}>
+                                            {issue.from} → {issue.ref} ({issue.candidates.length} candidates)
+                                        </button>
+                                    </li>
+                                {/each}
+                            </ul>
+                        {/if}
+                    </div>
+                    <div>
+                        <h4>Unreachable ({graph.diagnostics.unreachableNodes.length})</h4>
+                        {#if graph.diagnostics.unreachableNodes.length === 0}
+                            <p class="subtle">None</p>
+                        {:else}
+                            <ul>
+                                {#each graph.diagnostics.unreachableNodes as key}
+                                    <li>
+                                        <button type="button" on:click={() => setFocus(key)}
+                                            >{key}</button
+                                        >
+                                    </li>
+                                {/each}
+                            </ul>
+                        {/if}
+                    </div>
+                    <div>
+                        <h4>Cycles ({graph.diagnostics.cycles.length})</h4>
+                        {#if graph.diagnostics.cycles.length === 0}
+                            <p class="subtle">None</p>
+                        {:else}
+                            <ul>
+                                {#each graph.diagnostics.cycles as cycle}
+                                    <li>
+                                        <button type="button" on:click={() => setFocus(cycle[0])}>
+                                            {cycle.join(' → ')}
+                                        </button>
+                                    </li>
+                                {/each}
+                            </ul>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {/if}
 
     {#if searchOpen}
         <div
@@ -500,6 +898,33 @@
         cursor: pointer;
     }
 
+    .tab-bar {
+        display: inline-flex;
+        gap: 8px;
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 6px;
+        margin-top: 12px;
+    }
+
+    .tab-bar button {
+        background: transparent;
+        color: var(--color-text);
+        border: none;
+        border-radius: 8px;
+        padding: 8px 12px;
+        cursor: pointer;
+        transition:
+            background 120ms ease,
+            color 120ms ease;
+    }
+
+    .tab-bar button.selected {
+        background: var(--color-pill);
+        color: var(--color-pill-text);
+        border: 1px solid var(--color-border);
+    }
+
     .shelves {
         display: flex;
         flex-direction: column;
@@ -557,15 +982,6 @@
         background: rgba(0, 0, 0, 0.1);
         border-radius: 12px;
         padding: 10px;
-    }
-
-    .diagnostics-toggle {
-        background: none;
-        color: var(--color-heading);
-        border: 1px solid var(--color-border);
-        border-radius: 8px;
-        padding: 8px 12px;
-        cursor: pointer;
     }
 
     .diag-grid {
@@ -657,9 +1073,102 @@
         cursor: pointer;
     }
 
+    .map-tools {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+    }
+
+    .toggles {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        color: var(--color-heading);
+        font-size: 0.95rem;
+    }
+
+    .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        color: var(--color-text);
+    }
+
+    .legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.9rem;
+    }
+
+    .chip {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border-radius: 6px;
+        border: 1px solid var(--color-border);
+    }
+
+    .root-chip {
+        background: var(--color-pill-active);
+    }
+
+    .standard-chip {
+        background: var(--color-pill);
+    }
+
+    .unreachable-chip {
+        background: rgba(255, 255, 255, 0.1);
+        border-style: dashed;
+    }
+
+    .multi-chip {
+        background: var(--color-pill);
+        border: 2px solid var(--color-warning, #f39c12);
+    }
+
+    .map-shell {
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        border: 1px solid var(--color-border);
+        margin-top: 12px;
+        position: relative;
+    }
+
+    .map-canvas {
+        height: 520px;
+        width: 100%;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .map-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.45);
+        text-align: center;
+        padding: 16px;
+    }
+
+    .hint {
+        margin-top: 8px;
+        font-size: 0.9rem;
+    }
+
     @media (max-width: 720px) {
         .cards {
             grid-auto-columns: minmax(180px, 1fr);
+        }
+
+        .map-canvas {
+            height: 400px;
         }
     }
 </style>
