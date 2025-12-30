@@ -1,11 +1,15 @@
 <script lang="ts">
     import { onMount, tick } from 'svelte';
+    import type { Action } from 'svelte/action';
+    import QuestGraphCard from './QuestGraphCard.svelte';
     import type { QuestGraph, QuestNode } from '../../lib/quests/questGraph';
 
     export let graph: QuestGraph;
 
     const ROOT_KEY = 'welcome/howtodoquests.json';
     const byKey = graph?.byKey ?? {};
+    let visualizerEl: HTMLElement | null = null;
+    let searchInput: HTMLInputElement | null = null;
 
     const compareNodes = (a?: QuestNode, b?: QuestNode) => {
         if (!a || !b) return a ? -1 : b ? 1 : 0;
@@ -34,10 +38,36 @@
     let diagnosticsOpen = false;
     let parentCycleIndex = 0;
     let childCycleIndex = 0;
-    let cards: Record<string, HTMLElement | null> = {};
+    const cards = new Map<string, HTMLElement>();
+    const cardRef: Action<HTMLElement, string> = (node, key) => {
+        let currentKey = key;
+        if (currentKey) {
+            cards.set(currentKey, node);
+        }
+        return {
+            destroy() {
+                if (currentKey) {
+                    cards.delete(currentKey);
+                }
+            },
+            update(nextKey) {
+                if (currentKey && nextKey !== currentKey) {
+                    cards.delete(currentKey);
+                }
+                currentKey = nextKey;
+                if (currentKey) {
+                    cards.set(currentKey, node);
+                }
+            },
+        };
+    };
     const resetCycles = () => {
         parentCycleIndex = 0;
         childCycleIndex = 0;
+    };
+    const closeSearch = () => {
+        searchOpen = false;
+        searchQuery = '';
     };
 
     $: focusedNode = byKey[focusedKey];
@@ -51,7 +81,7 @@
     );
     $: searchResults = searchQuery.trim()
         ? sortKeys(
-              graph.nodes
+              (graph?.nodes ?? [])
                   .filter((node) => {
                       const query = searchQuery.toLowerCase();
                       return (
@@ -62,6 +92,12 @@
                   .map((node) => node.canonicalKey)
           )
         : [];
+    $: if (searchOpen) {
+        tick().then(() => {
+            searchInput?.focus();
+            searchInput?.select();
+        });
+    }
 
     const setFocus = async (key: string | undefined, options: { resetCycles?: boolean } = {}) => {
         if (!key || !byKey[key]) return;
@@ -70,7 +106,7 @@
             resetCycles();
         }
         await tick();
-        const card = cards[focusedKey];
+        const card = cards.get(focusedKey);
         if (card?.scrollIntoView) {
             card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         }
@@ -105,6 +141,9 @@
 
     const handleKeydown = (event: KeyboardEvent) => {
         if (event.defaultPrevented) return;
+        const target = event.target as Node | null;
+        const isInsideVisualizer = target ? visualizerEl?.contains(target) : false;
+        if (!isInsideVisualizer && !searchOpen) return;
 
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
             event.preventDefault();
@@ -114,8 +153,7 @@
 
         if (event.key === 'Escape') {
             if (searchOpen) {
-                searchOpen = false;
-                searchQuery = '';
+                closeSearch();
                 event.preventDefault();
             }
             return;
@@ -144,6 +182,12 @@
                 break;
         }
     };
+    const handleOverlayKeydown = (event: KeyboardEvent) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            closeSearch();
+        }
+    };
 
     onMount(() => {
         window.addEventListener('keydown', handleKeydown);
@@ -154,7 +198,7 @@
     });
 </script>
 
-<div class="visualizer">
+<div class="visualizer" bind:this={visualizerEl}>
     <div class="header">
         <div>
             <p class="eyebrow">Quest Graph (QA)</p>
@@ -188,20 +232,14 @@
                 {:else}
                     {#each parentKeys as key}
                         {#if byKey[key]}
-                            <button
-                                class:focused={key === focusedKey}
-                                class="card"
-                                type="button"
-                                on:click={() => setFocus(key)}
-                                bind:this={cards[key]}>
-                                <div class="title">{byKey[key].title}</div>
-                                <div class="meta">
-                                    <span class="badge">{byKey[key].group}</span>
-                                    {#if (byKey[key].requires?.length ?? 0) > 1}
-                                        <span class="badge subtle">multi-parent</span>
-                                    {/if}
-                                </div>
-                            </button>
+                            <QuestGraphCard
+                                node={byKey[key]}
+                                keyValue={key}
+                                register={cardRef}
+                                isFocused={key === focusedKey}
+                                isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
+                                on:select={() => setFocus(key)}
+                            />
                         {/if}
                     {/each}
                 {/if}
@@ -216,23 +254,15 @@
                 {:else}
                     {#each depthKeys as key}
                         {#if byKey[key]}
-                            <button
-                                class:focused={key === focusedKey}
-                                class="card"
-                                type="button"
-                                on:click={() => setFocus(key)}
-                                bind:this={cards[key]}>
-                                <div class="title">{byKey[key].title}</div>
-                                <div class="meta">
-                                    <span class="badge">{byKey[key].group}</span>
-                                    {#if key === resolveRoot()}
-                                        <span class="badge accent">root</span>
-                                    {/if}
-                                    {#if (byKey[key].requires?.length ?? 0) > 1}
-                                        <span class="badge subtle">multi-parent</span>
-                                    {/if}
-                                </div>
-                            </button>
+                            <QuestGraphCard
+                                node={byKey[key]}
+                                keyValue={key}
+                                register={cardRef}
+                                isFocused={key === focusedKey}
+                                isRoot={key === resolveRoot()}
+                                isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
+                                on:select={() => setFocus(key)}
+                            />
                         {/if}
                     {/each}
                 {/if}
@@ -247,20 +277,14 @@
                 {:else}
                     {#each childKeys as key}
                         {#if byKey[key]}
-                            <button
-                                class:focused={key === focusedKey}
-                                class="card"
-                                type="button"
-                                on:click={() => setFocus(key)}
-                                bind:this={cards[key]}>
-                                <div class="title">{byKey[key].title}</div>
-                                <div class="meta">
-                                    <span class="badge">{byKey[key].group}</span>
-                                    {#if (byKey[key].requires?.length ?? 0) > 1}
-                                        <span class="badge subtle">multi-parent</span>
-                                    {/if}
-                                </div>
-                            </button>
+                            <QuestGraphCard
+                                node={byKey[key]}
+                                keyValue={key}
+                                register={cardRef}
+                                isFocused={key === focusedKey}
+                                isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
+                                on:select={() => setFocus(key)}
+                            />
                         {/if}
                     {/each}
                 {/if}
@@ -270,22 +294,22 @@
 
     <div class="control-bar" aria-label="Navigator controls">
         <button type="button" on:click={() => moveWithinDepth(-1)} aria-label="Previous at depth">
-            ◀
+            Prev
         </button>
         <button type="button" on:click={() => moveWithinDepth(1)} aria-label="Next at depth">
-            ▶
+            Next
         </button>
         <button type="button" on:click={() => focusParent(false)} aria-label="First parent">
-            ▲
+            Parent
         </button>
         <button type="button" on:click={() => focusChild(false)} aria-label="First child">
-            ▼
+            Child
         </button>
         <button type="button" on:click={() => setFocus(resolveRoot())} aria-label="Go to root">
             Root
         </button>
         <button type="button" on:click={() => (searchOpen = true)} aria-label="Search">
-            🔍
+            Search
         </button>
     </div>
 
@@ -365,18 +389,30 @@
     </div>
 
     {#if searchOpen}
-        <div class="overlay" on:keydown|stopPropagation>
-            <div class="search">
+        <div
+            class="overlay"
+            role="presentation"
+            tabindex="-1"
+            on:keydown|stopPropagation={handleOverlayKeydown}
+            on:click={closeSearch}>
+            <div
+                class="search"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Quest search dialog"
+                tabindex="-1"
+                on:click|stopPropagation
+                on:keydown|stopPropagation>
                 <div class="search-header">
                     <input
                         type="text"
                         placeholder="Jump to quest"
                         bind:value={searchQuery}
-                        autofocus
+                        bind:this={searchInput}
                     />
                     <button
                         type="button"
-                        on:click={() => ((searchOpen = false), (searchQuery = ''))}>
+                        on:click={closeSearch}>
                         Close
                     </button>
                 </div>
@@ -390,8 +426,7 @@
                                     type="button"
                                     on:click={() => {
                                         setFocus(key);
-                                        searchOpen = false;
-                                        searchQuery = '';
+                                        closeSearch();
                                     }}>
                                     {byKey[key]?.title ?? key}
                                     <span class="subtle">({key})</span>
@@ -479,58 +514,6 @@
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         padding-bottom: 6px;
-    }
-
-    .card {
-        scroll-snap-align: start;
-        text-align: left;
-        background: var(--color-pill);
-        color: var(--color-pill-text);
-        border: 2px solid transparent;
-        border-radius: 12px;
-        padding: 12px;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
-    }
-
-    .card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .card.focused {
-        border-color: var(--color-pill-active);
-        box-shadow: 0 0 0 3px rgba(104, 212, 109, 0.4);
-    }
-
-    .title {
-        font-weight: 700;
-        margin-bottom: 6px;
-    }
-
-    .meta {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-        align-items: center;
-    }
-
-    .badge {
-        background: var(--color-pill-active);
-        color: var(--color-pill-active-text);
-        border-radius: 8px;
-        padding: 4px 8px;
-        font-size: 0.8rem;
-    }
-
-    .badge.subtle {
-        background: rgba(255, 255, 255, 0.15);
-        color: var(--color-pill-text);
-    }
-
-    .badge.accent {
-        border: 1px solid var(--color-border);
     }
 
     .empty {

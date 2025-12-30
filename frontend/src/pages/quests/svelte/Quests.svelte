@@ -136,7 +136,7 @@
         </div>
 
         <div class="visualizer-slot">
-            <slot name="between" />
+            <slot name="visualizer" />
         </div>
 
         {#if finishedQuests.length > 0}

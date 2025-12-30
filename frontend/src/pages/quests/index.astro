@@ -10,6 +10,6 @@ const graph = buildQuestGraph();
 
 <Page title="Quests">
     <Quests client:load quests={quests}>
-        <QuestGraphVisualizer slot="between" client:visible graph={graph} />
+        <QuestGraphVisualizer slot="visualizer" client:visible graph={graph} />
     </Quests>
 </Page>
