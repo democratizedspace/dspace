@@ -1,0 +1,665 @@
+<script>
+    import { onMount, tick } from 'svelte';
+    import QuestGraphCard from './QuestGraphCard.svelte';
+
+    export let graph;
+
+    const ROOT_KEY = 'welcome/howtodoquests.json';
+    const byKey = graph?.byKey ?? {};
+    let visualizerEl = null;
+    let searchInput = null;
+
+    const compareNodes = (a, b) => {
+        if (!a || !b) return a ? -1 : b ? 1 : 0;
+        const order = ['group', 'title', 'canonicalKey'];
+        for (const key of order) {
+            if (a[key] < b[key]) return -1;
+            if (a[key] > b[key]) return 1;
+        }
+        return 0;
+    };
+
+    const sortKeys = (keys) => [...keys].sort((a, b) => compareNodes(byKey[a], byKey[b]));
+
+    const getSortedNodes = () => [...(graph?.nodes ?? [])].sort(compareNodes);
+
+    const resolveRoot = () => {
+        if (byKey[ROOT_KEY]) return ROOT_KEY;
+        const sortedNodes = getSortedNodes();
+        const howToMatches = sortedNodes.filter(
+            (node) => node.canonicalKey.split('/').pop() === 'howtodoquests.json'
+        );
+        if (howToMatches.length === 1) {
+            return howToMatches[0].canonicalKey;
+        }
+        return sortedNodes[0]?.canonicalKey ?? '';
+    };
+
+    let focusedKey = resolveRoot();
+    let searchOpen = false;
+    let searchQuery = '';
+    let diagnosticsOpen = false;
+    let parentCycleIndex = 0;
+    let childCycleIndex = 0;
+    const cards = new Map();
+    const cardRef = (node, key) => {
+        let currentKey = key;
+        if (currentKey) {
+            cards.set(currentKey, node);
+        }
+        return {
+            destroy() {
+                if (currentKey) {
+                    cards.delete(currentKey);
+                }
+            },
+            update(nextKey) {
+                if (currentKey && nextKey !== currentKey) {
+                    cards.delete(currentKey);
+                }
+                currentKey = nextKey;
+                if (currentKey) {
+                    cards.set(currentKey, node);
+                }
+            },
+        };
+    };
+    const resetCycles = () => {
+        parentCycleIndex = 0;
+        childCycleIndex = 0;
+    };
+    const closeSearch = () => {
+        searchOpen = false;
+        searchQuery = '';
+    };
+
+    $: focusedNode = byKey[focusedKey];
+    $: parentKeys = focusedNode ? sortKeys(focusedNode.requires ?? []) : [];
+    $: childKeys = focusedKey ? sortKeys(graph?.requiredBy?.[focusedKey] ?? []) : [];
+    $: depth = focusedKey ? (graph?.depthByKey?.[focusedKey] ?? 0) : 0;
+    $: depthKeys = sortKeys(
+        (graph?.nodes ?? [])
+            .filter((node) => graph?.depthByKey?.[node.canonicalKey] === depth)
+            .map((node) => node.canonicalKey)
+    );
+    $: searchResults = (() => {
+        const query = searchQuery.trim().toLowerCase();
+        const nodes = getSortedNodes();
+        const filteredNodes = query
+            ? nodes.filter(
+                  (node) =>
+                      node.title.toLowerCase().includes(query) ||
+                      node.canonicalKey.toLowerCase().includes(query)
+              )
+            : nodes;
+        return filteredNodes.map((node) => node.canonicalKey);
+    })();
+    $: if (searchOpen) {
+        tick().then(() => {
+            searchInput?.focus();
+            searchInput?.select();
+        });
+    }
+
+    const setFocus = async (key, options = {}) => {
+        if (!key || !byKey[key]) return;
+        focusedKey = key;
+        if (options.resetCycles !== false) {
+            resetCycles();
+        }
+        await tick();
+        const card = cards.get(focusedKey);
+        if (card?.scrollIntoView) {
+            card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    };
+
+    const moveWithinDepth = (delta) => {
+        if (!depthKeys.length) return;
+        const currentIndex = depthKeys.indexOf(focusedKey);
+        const nextIndex =
+            currentIndex === -1
+                ? 0
+                : Math.min(Math.max(currentIndex + delta, 0), depthKeys.length - 1);
+        const nextKey = depthKeys[nextIndex];
+        if (nextKey !== focusedKey) {
+            setFocus(nextKey);
+        }
+    };
+
+    const focusParent = (cycle = false) => {
+        if (!parentKeys.length) return;
+        const index = cycle ? parentCycleIndex % parentKeys.length : 0;
+        parentCycleIndex = cycle ? (parentCycleIndex + 1) % parentKeys.length : 0;
+        setFocus(parentKeys[index], { resetCycles: false });
+    };
+
+    const focusChild = (cycle = false) => {
+        if (!childKeys.length) return;
+        const index = cycle ? childCycleIndex % childKeys.length : 0;
+        childCycleIndex = cycle ? (childCycleIndex + 1) % childKeys.length : 0;
+        setFocus(childKeys[index], { resetCycles: false });
+    };
+
+    const handleKeydown = (event) => {
+        if (event.defaultPrevented) return;
+        const target = event.target;
+        const isEditableTarget =
+            target?.closest('input, textarea') !== null || target?.isContentEditable;
+        const isSearchShortcut =
+            (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k';
+        const isOverlayEscape = searchOpen && event.key === 'Escape';
+        if (isEditableTarget && !isSearchShortcut && !isOverlayEscape) {
+            return;
+        }
+        const isInsideVisualizer = target ? visualizerEl?.contains(target) : false;
+        if (!isInsideVisualizer && !searchOpen) return;
+
+        if (isSearchShortcut) {
+            event.preventDefault();
+            searchOpen = true;
+            return;
+        }
+
+        if (event.key === 'Escape') {
+            if (searchOpen) {
+                closeSearch();
+                event.preventDefault();
+            }
+            return;
+        }
+
+        if (searchOpen) return;
+
+        switch (event.key) {
+            case 'ArrowLeft':
+                event.preventDefault();
+                moveWithinDepth(-1);
+                break;
+            case 'ArrowRight':
+                event.preventDefault();
+                moveWithinDepth(1);
+                break;
+            case 'ArrowUp':
+                event.preventDefault();
+                focusParent(event.shiftKey);
+                break;
+            case 'ArrowDown':
+                event.preventDefault();
+                focusChild(event.shiftKey);
+                break;
+            default:
+                break;
+        }
+    };
+    const handleOverlayKeydown = (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            closeSearch();
+        }
+    };
+
+    onMount(() => {
+        window.addEventListener('keydown', handleKeydown);
+        setFocus(focusedKey);
+        return () => {
+            window.removeEventListener('keydown', handleKeydown);
+        };
+    });
+</script>
+
+<div class="visualizer" bind:this={visualizerEl}>
+    <div class="header">
+        <div>
+            <p class="eyebrow">Quest Graph (QA)</p>
+            <h3>{focusedNode ? focusedNode.title : 'Quest graph'}</h3>
+            {#if focusedNode}
+                <p class="subtle">{focusedNode.canonicalKey}</p>
+            {/if}
+        </div>
+        <div class="controls">
+            <button class="pill" type="button" on:click={() => setFocus(resolveRoot())}>
+                Root
+            </button>
+            <button class="pill" type="button" on:click={() => (searchOpen = true)}>
+                Search
+            </button>
+            <button
+                class="pill"
+                type="button"
+                on:click={() => (diagnosticsOpen = !diagnosticsOpen)}
+            >
+                {diagnosticsOpen ? 'Hide diagnostics' : 'Show diagnostics'}
+            </button>
+        </div>
+    </div>
+
+    <div class="shelves">
+        <div class="shelf">
+            <div class="shelf-label">Parents</div>
+            <div class="cards">
+                {#if parentKeys.length === 0}
+                    <div class="empty">No parents</div>
+                {:else}
+                    {#each parentKeys as key}
+                        {#if byKey[key]}
+                            <QuestGraphCard
+                                node={byKey[key]}
+                                keyValue={key}
+                                register={cardRef}
+                                isFocused={key === focusedKey}
+                                isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
+                                on:select={() => setFocus(key)}
+                            />
+                        {/if}
+                    {/each}
+                {/if}
+            </div>
+        </div>
+
+        <div class="shelf current">
+            <div class="shelf-label">Current depth</div>
+            <div class="cards">
+                {#if depthKeys.length === 0}
+                    <div class="empty">No quests at this depth</div>
+                {:else}
+                    {#each depthKeys as key}
+                        {#if byKey[key]}
+                            <QuestGraphCard
+                                node={byKey[key]}
+                                keyValue={key}
+                                register={cardRef}
+                                isFocused={key === focusedKey}
+                                isRoot={key === resolveRoot()}
+                                isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
+                                on:select={() => setFocus(key)}
+                            />
+                        {/if}
+                    {/each}
+                {/if}
+            </div>
+        </div>
+
+        <div class="shelf">
+            <div class="shelf-label">Children</div>
+            <div class="cards">
+                {#if childKeys.length === 0}
+                    <div class="empty">No children</div>
+                {:else}
+                    {#each childKeys as key}
+                        {#if byKey[key]}
+                            <QuestGraphCard
+                                node={byKey[key]}
+                                keyValue={key}
+                                register={cardRef}
+                                isFocused={key === focusedKey}
+                                isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
+                                on:select={() => setFocus(key)}
+                            />
+                        {/if}
+                    {/each}
+                {/if}
+            </div>
+        </div>
+    </div>
+
+    <div class="control-bar" aria-label="Navigator controls">
+        <button type="button" on:click={() => moveWithinDepth(-1)} aria-label="Previous at depth">
+            Prev
+        </button>
+        <button type="button" on:click={() => moveWithinDepth(1)} aria-label="Next at depth">
+            Next
+        </button>
+        <button type="button" on:click={() => focusParent(false)} aria-label="First parent">
+            Parent
+        </button>
+        <button type="button" on:click={() => focusChild(false)} aria-label="First child">
+            Child
+        </button>
+        <button type="button" on:click={() => setFocus(resolveRoot())} aria-label="Go to root">
+            Root
+        </button>
+        <button type="button" on:click={() => (searchOpen = true)} aria-label="Search">
+            Search
+        </button>
+    </div>
+
+    <div class="diagnostics" data-open={diagnosticsOpen}>
+        <button
+            class="diagnostics-toggle"
+            type="button"
+            on:click={() => (diagnosticsOpen = !diagnosticsOpen)}
+        >
+            {diagnosticsOpen ? 'Hide diagnostics' : 'Show diagnostics'}
+        </button>
+        {#if diagnosticsOpen}
+            <div class="diag-grid">
+                <div>
+                    <h4>Missing refs ({graph.diagnostics.missingRefs.length})</h4>
+                    {#if graph.diagnostics.missingRefs.length === 0}
+                        <p class="subtle">None</p>
+                    {:else}
+                        <ul>
+                            {#each graph.diagnostics.missingRefs as issue}
+                                <li>
+                                    <button type="button" on:click={() => setFocus(issue.from)}>
+                                        {issue.from} → {issue.ref}
+                                    </button>
+                                </li>
+                            {/each}
+                        </ul>
+                    {/if}
+                </div>
+                <div>
+                    <h4>Ambiguous refs ({graph.diagnostics.ambiguousRefs.length})</h4>
+                    {#if graph.diagnostics.ambiguousRefs.length === 0}
+                        <p class="subtle">None</p>
+                    {:else}
+                        <ul>
+                            {#each graph.diagnostics.ambiguousRefs as issue}
+                                <li>
+                                    <button type="button" on:click={() => setFocus(issue.from)}>
+                                        {issue.from} → {issue.ref} ({issue.candidates.length} candidates)
+                                    </button>
+                                </li>
+                            {/each}
+                        </ul>
+                    {/if}
+                </div>
+                <div>
+                    <h4>Unreachable ({graph.diagnostics.unreachableNodes.length})</h4>
+                    {#if graph.diagnostics.unreachableNodes.length === 0}
+                        <p class="subtle">None</p>
+                    {:else}
+                        <ul>
+                            {#each graph.diagnostics.unreachableNodes as key}
+                                <li>
+                                    <button type="button" on:click={() => setFocus(key)}
+                                        >{key}</button
+                                    >
+                                </li>
+                            {/each}
+                        </ul>
+                    {/if}
+                </div>
+                <div>
+                    <h4>Cycles ({graph.diagnostics.cycles.length})</h4>
+                    {#if graph.diagnostics.cycles.length === 0}
+                        <p class="subtle">None</p>
+                    {:else}
+                        <ul>
+                            {#each graph.diagnostics.cycles as cycle}
+                                <li>
+                                    <button type="button" on:click={() => setFocus(cycle[0])}>
+                                        {cycle.join(' → ')}
+                                    </button>
+                                </li>
+                            {/each}
+                        </ul>
+                    {/if}
+                </div>
+            </div>
+        {/if}
+    </div>
+
+    {#if searchOpen}
+        <div
+            class="overlay"
+            role="presentation"
+            tabindex="-1"
+            on:keydown|stopPropagation={handleOverlayKeydown}
+            on:click={closeSearch}
+        >
+            <div
+                class="search"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Quest search dialog"
+                tabindex="-1"
+                on:click|stopPropagation
+                on:keydown|stopPropagation
+            >
+                <div class="search-header">
+                    <input
+                        type="text"
+                        placeholder="Jump to quest"
+                        bind:value={searchQuery}
+                        bind:this={searchInput}
+                    />
+                    <button type="button" on:click={closeSearch}> Close </button>
+                </div>
+                {#if searchResults.length === 0}
+                    <p class="subtle">No results</p>
+                {:else}
+                    <ul>
+                        {#each searchResults as key}
+                            <li>
+                                <button
+                                    type="button"
+                                    on:click={() => {
+                                        setFocus(key);
+                                        closeSearch();
+                                    }}
+                                >
+                                    {byKey[key]?.title ?? key}
+                                    <span class="subtle">({key})</span>
+                                </button>
+                            </li>
+                        {/each}
+                    </ul>
+                {/if}
+            </div>
+        </div>
+    {/if}
+</div>
+
+<style>
+    .visualizer {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        color: var(--color-heading);
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.85rem;
+        color: var(--color-pill-text);
+        margin: 0 0 4px 0;
+    }
+
+    .subtle {
+        color: var(--color-text);
+        opacity: 0.8;
+    }
+
+    .controls {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .pill {
+        background: var(--color-pill);
+        color: var(--color-pill-text);
+        border: 1px solid var(--color-border);
+        border-radius: 999px;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+
+    .shelves {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-top: 12px;
+    }
+
+    .shelf-label {
+        font-size: 0.9rem;
+        color: var(--color-text);
+        margin-bottom: 6px;
+    }
+
+    .shelf {
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        padding: 10px;
+    }
+
+    .cards {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(220px, 1fr);
+        gap: 10px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 6px;
+    }
+
+    .empty {
+        color: var(--color-text);
+        opacity: 0.7;
+        padding: 8px;
+    }
+
+    .control-bar {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 12px;
+    }
+
+    .control-bar button {
+        background: var(--color-pill);
+        color: var(--color-pill-text);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        padding: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+    .diagnostics {
+        margin-top: 12px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        padding: 10px;
+    }
+
+    .diagnostics-toggle {
+        background: none;
+        color: var(--color-heading);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+
+    .diag-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .diag-grid ul {
+        list-style: none;
+        padding: 0;
+        margin: 6px 0 0;
+    }
+
+    .diag-grid li button {
+        background: none;
+        border: none;
+        color: var(--color-pill-text);
+        text-align: left;
+        padding: 6px 0;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 30;
+    }
+
+    .search {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 16px;
+        width: min(640px, 90vw);
+        max-height: 80vh;
+        overflow: auto;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .search-header {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .search input {
+        flex: 1;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid var(--color-border);
+        background: var(--color-bg);
+        color: var(--color-heading);
+    }
+
+    .search button {
+        background: var(--color-pill);
+        color: var(--color-pill-text);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+
+    .search ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .search li button {
+        width: 100%;
+        text-align: left;
+        background: rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        padding: 10px;
+        color: var(--color-heading);
+        cursor: pointer;
+    }
+
+    @media (max-width: 720px) {
+        .cards {
+            grid-auto-columns: minmax(180px, 1fr);
+        }
+    }
+</style>

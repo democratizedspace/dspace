@@ -1,11 +1,15 @@
 ---
 import Page from '../../components/Page.astro';
 import Quests from './svelte/Quests.svelte';
-
+import QuestGraphVisualizer from '../../components/quests/QuestGraphVisualizer.svelte';
+import { buildQuestGraph } from '../../lib/quests/questGraph';
 
 const quests = await Astro.glob('./json/*/*.json');
+const graph = buildQuestGraph();
 ---
 
 <Page title="Quests">
-    <Quests client:load quests={quests} />
+    <Quests client:load quests={quests}>
+        <QuestGraphVisualizer slot="visualizer" client:visible graph={graph} />
+    </Quests>
 </Page>
