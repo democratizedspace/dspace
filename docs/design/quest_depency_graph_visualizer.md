@@ -165,7 +165,7 @@ Implementation:
 - Provide optional toggle to try ELK layered layout later if needed for complex DAGs.
 
 Rationale:
-- Cytoscape supports both dagre and elk layout extensions and is designed for interactive graphs. Dagre is a canonical “hierarchical DAG” layout; ELK layered is a more configurable layered approach. :contentReference[oaicite:2]{index=2}
+- Cytoscape supports both dagre and elk layout extensions and is designed for interactive graphs. Dagre is a canonical “hierarchical DAG” layout; ELK layered is a more configurable layered approach.
 
 Map interactions:
 - Scroll/pinch to zoom
@@ -183,7 +183,7 @@ Map interactions:
 
 Rendering notes:
 - In Svelte, Cytoscape should be dynamically imported inside `onMount()` so it never runs on the server.
-- Hydrate the entire visualizer via Astro `client:visible` so it doesn’t load until scrolled into view. :contentReference[oaicite:3]{index=3}
+- Hydrate the entire visualizer via Astro `client:visible` so it doesn’t load until scrolled into view.
 
 ## Astro SSR + Svelte Hydration Integration
 
@@ -197,7 +197,7 @@ Hydration choice:
 - Default: `client:visible` (hydrate when scrolled into view)
 - Optionally: `client:media="(min-width: 1024px)"` to load Map view only on large screens
 
-Astro supports these hydration directives explicitly. :contentReference[oaicite:4]{index=4}
+Astro supports these hydration directives explicitly.
 
 ## Styling
 
@@ -285,7 +285,7 @@ Acceptance:
 - Only if dagre is insufficient for readability
 - Consider bundle size/perf impact
 
-Note: Cytoscape community guidance suggests starting with dagre for DAGs; ELK can do better on complex graphs but is heavier. :contentReference[oaicite:5]{index=5}
+Note: Cytoscape community guidance suggests starting with dagre for DAGs; ELK can do better on complex graphs but is heavier.
 
 ## Proposed Files (adjust to repo conventions)
 
