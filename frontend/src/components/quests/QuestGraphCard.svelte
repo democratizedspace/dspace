@@ -48,7 +48,7 @@
             transform 120ms ease,
             box-shadow 120ms ease,
             border-color 120ms ease;
-        flex: 0 0 220px;
+        flex: 0 0 clamp(200px, 28vw, 320px);
         min-width: 0;
     }
 
@@ -65,6 +65,9 @@
     .title {
         font-weight: 700;
         margin-bottom: 6px;
+        width: 100%;
+        min-width: 0;
+        overflow-wrap: anywhere;
     }
 
     .meta {
