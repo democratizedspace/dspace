@@ -1,7 +1,6 @@
-import fs from 'fs';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
-import * as glob from 'glob';
 
 export type QuestNode = {
     canonicalKey: string;
@@ -33,17 +32,24 @@ export type QuestGraph = {
     diagnostics: QuestDiagnostics;
 };
 
-type BuildQuestGraphOptions = {
-    questDir?: string;
+export type QuestData = {
+    path: string; // Relative path like './json/welcome/howtodoquests.json'
+    quest: {
+        id?: string;
+        title?: string;
+        requiresQuests?: string[];
+    };
+};
+
+export type BuildQuestGraphOptions = {
+    quests?: QuestData[]; // Pre-loaded quest data
+    questDir?: string; // For backwards compatibility with tests
 };
 
 const ROOT_CANONICAL_KEY = 'welcome/howtodoquests.json';
 const ROOT_BASENAME = 'howtodoquests.json';
-
-const QUESTS_DIR = path.resolve(
-    path.dirname(fileURLToPath(import.meta.url)),
-    '../../pages/quests/json'
-);
+const QUEST_JSON_PATH_PREFIX = './json/';
+const QUEST_PATH_REGEX = new RegExp(`^${QUEST_JSON_PATH_PREFIX.replace('.', '\\.')}(.+)$`);
 
 const comparatorKeys: Array<keyof QuestNode> = ['group', 'title', 'canonicalKey'];
 
@@ -67,9 +73,12 @@ const compareKeys = (a: string, b: string, nodeIndex: Map<string, QuestNode>): n
 const normalizeRef = (ref: string): string =>
     path.posix.normalize(ref.trim().replace(/\\/g, '/').replace(/^\/+/, ''));
 
-const toCanonicalKey = (questDir: string, absolutePath: string): string => {
-    const relative = path.relative(questDir, absolutePath).replace(/\\/g, '/');
-    return path.posix.normalize(relative);
+// Convert import.meta.glob path to canonical key
+// './json/welcome/howtodoquests.json' -> 'welcome/howtodoquests.json'
+const toCanonicalKey = (globPath: string): string => {
+    const normalized = globPath.replace(/\\/g, '/');
+    const match = normalized.match(QUEST_PATH_REGEX);
+    return match ? path.posix.normalize(match[1]) : path.posix.normalize(normalized);
 };
 
 const makeRecord = <T>(map: Map<string, T>): Record<string, T> => {
@@ -80,21 +89,35 @@ const makeRecord = <T>(map: Map<string, T>): Record<string, T> => {
     return record;
 };
 
-export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGraph => {
-    const questDir = options.questDir ?? QUESTS_DIR;
-    const diagnostics: QuestDiagnostics = {
-        missingRefs: [],
-        ambiguousRefs: [],
-        unreachableNodes: [],
-        cycles: [],
+// Default quest directory (for tests that don't pass a questDir)
+const getDefaultQuestDir = (): string => {
+    return path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../pages/quests/json');
+};
+
+// Helper function to load quest data from filesystem (for tests and Node.js environments)
+export const loadQuestsFromDir = (questDir: string): QuestData[] => {
+    // Recursively find all .json files in questDir
+    const findQuestFiles = (dir: string): string[] => {
+        const results: string[] = [];
+        const items = fs.readdirSync(dir, { withFileTypes: true });
+
+        // Sort by name for deterministic traversal across filesystems
+        items.sort((a, b) => a.name.localeCompare(b.name));
+
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            if (item.isDirectory()) {
+                results.push(...findQuestFiles(fullPath));
+            } else if (item.isFile() && item.name.endsWith('.json')) {
+                results.push(fullPath);
+            }
+        }
+
+        return results;
     };
 
-    const questFiles = glob.sync('**/*.json', { cwd: questDir, absolute: true }).sort();
-    const nodes: QuestNode[] = [];
-    const nodeIndex = new Map<string, QuestNode>();
-    const rawRequiresIndex = new Map<string, string[]>();
-    const byBasename = new Map<string, string[]>();
-    const byQuestId = new Map<string, string>();
+    const questFiles = findQuestFiles(questDir).sort();
+    const questData: QuestData[] = [];
 
     for (const file of questFiles) {
         const raw = fs.readFileSync(file, 'utf8');
@@ -109,12 +132,55 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         if (!questRaw || typeof questRaw !== 'object' || Array.isArray(questRaw)) {
             throw new Error(`Quest JSON in file "${file}" must be an object`);
         }
-        const quest = questRaw as {
-            id?: unknown;
-            title?: unknown;
-            requiresQuests?: unknown;
-        };
-        const canonicalKey = toCanonicalKey(questDir, file);
+
+        // Convert absolute path to relative path format like './json/welcome/howtodoquests.json'
+        const relativePath = path.relative(questDir, file).replace(/\\/g, '/');
+        const globPath = `${QUEST_JSON_PATH_PREFIX}${relativePath}`;
+
+        questData.push({
+            path: globPath,
+            quest: questRaw as { id?: string; title?: string; requiresQuests?: string[] },
+        });
+    }
+
+    return questData;
+};
+
+export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGraph => {
+    // Support both new (quests) and old (questDir) API
+    // Validate that both options are not provided simultaneously
+    if (options.quests && options.questDir) {
+        throw new Error('Cannot provide both "quests" and "questDir" options to buildQuestGraph');
+    }
+
+    let quests: QuestData[];
+    if (options.quests) {
+        quests = options.quests;
+    } else if (options.questDir) {
+        quests = loadQuestsFromDir(options.questDir);
+    } else {
+        // Default: load from default quest directory
+        quests = loadQuestsFromDir(getDefaultQuestDir());
+    }
+
+    const diagnostics: QuestDiagnostics = {
+        missingRefs: [],
+        ambiguousRefs: [],
+        unreachableNodes: [],
+        cycles: [],
+    };
+
+    const nodes: QuestNode[] = [];
+    const nodeIndex = new Map<string, QuestNode>();
+    const rawRequiresIndex = new Map<string, string[]>();
+    const byBasename = new Map<string, string[]>();
+    const byQuestId = new Map<string, string>();
+
+    // Sort quest data by path for deterministic processing (copy to avoid mutating input)
+    const sortedQuests = [...quests].sort((a, b) => a.path.localeCompare(b.path));
+
+    for (const { path: globPath, quest } of sortedQuests) {
+        const canonicalKey = toCanonicalKey(globPath);
         const basename = path.posix.basename(canonicalKey);
         const group = canonicalKey.split('/')[0] ?? '';
         const title =

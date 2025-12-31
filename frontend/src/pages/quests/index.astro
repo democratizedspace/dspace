@@ -2,10 +2,19 @@
 import Page from '../../components/Page.astro';
 import Quests from './svelte/Quests.svelte';
 import QuestGraphVisualizer from '../../components/quests/QuestGraphVisualizer.svelte';
-import { buildQuestGraph } from '../../lib/quests/questGraph';
+import { buildQuestGraph, type QuestData } from '../../lib/quests/questGraph';
 
-const quests = await Astro.glob('./json/*/*.json');
-const graph = buildQuestGraph();
+const questModules = import.meta.glob('./json/*/*.json', { eager: true });
+// Sort by file path for deterministic ordering across builds
+const questEntries = Object.entries(questModules).sort(([a], [b]) => a.localeCompare(b));
+const quests = questEntries.map(([, mod]) => mod);
+
+// Prepare quest data for graph builder
+const questData: QuestData[] = questEntries.map(([path, mod]) => ({
+    path,
+    quest: mod as { id?: string; title?: string; requiresQuests?: string[] },
+}));
+const graph = buildQuestGraph({ quests: questData });
 ---
 
 <Page title="Quests">
