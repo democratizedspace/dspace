@@ -161,15 +161,15 @@ test.describe('Quests page horizontal overflow regression', () => {
         await visualizer.scrollIntoViewIfNeeded();
         await expect(visualizer).toBeVisible();
 
-        // Get card widths
-        const cards = page.locator('.card');
+        // Get card widths - scoped to visualizer shelf cards specifically
+        const cards = page.locator('.visualizer .cards .card');
         const cardCount = await cards.count();
         expect(cardCount).toBeGreaterThan(0);
 
-        // Check first 3 cards have minimum readable width (>= 280px)
+        // Check first 3 visualizer shelf cards have minimum readable width (>= 280px)
         const MINIMUM_CARD_WIDTH = 280;
         const cardWidths = await page.evaluate(() => {
-            const cardElements = document.querySelectorAll('.card');
+            const cardElements = document.querySelectorAll('.visualizer .cards .card');
             return Array.from(cardElements)
                 .slice(0, 3)
                 .map((el) => el.getBoundingClientRect().width);

@@ -102,5 +102,6 @@
         width: 100%;
         min-width: 0;
         overflow-wrap: anywhere;
+        padding: 0;
     }
 </style>

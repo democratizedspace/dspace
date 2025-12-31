@@ -50,7 +50,6 @@
             border-color 120ms ease;
         flex: 0 0 auto;
         width: clamp(280px, 28vw, 420px);
-        min-width: 280px;
     }
 
     .card:hover {
