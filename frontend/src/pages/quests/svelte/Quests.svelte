@@ -160,7 +160,8 @@
 
     a {
         text-decoration: none;
-        margin: 50px;
+        display: block;
+        margin: 0;
     }
 
     .action-buttons {
@@ -172,7 +173,7 @@
 
     .quests-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
         gap: 20px;
     }
 

@@ -179,4 +179,39 @@ test.describe('Quests page horizontal overflow regression', () => {
             expect(width).toBeGreaterThanOrEqual(MINIMUM_CARD_WIDTH);
         }
     });
+
+    test('quest tile text column should have readable minimum width', async ({ page }) => {
+        await page.setViewportSize({ width: 1920, height: 1080 });
+
+        await page.goto('/quests');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        // Wait for quest tiles to be visible (does not depend on QuestGraphVisualizer)
+        const questTiles = page.locator('[data-testid="quest-tile"]');
+        await expect(questTiles.first()).toBeVisible();
+
+        // Get text column widths for the first quest tile
+        const MINIMUM_TEXT_WIDTH = 180;
+        const textColumnWidths = await page.evaluate(() => {
+            const textElements = document.querySelectorAll('[data-testid="quest-tile-text"]');
+            return Array.from(textElements)
+                .slice(0, 3)
+                .map((el) => el.getBoundingClientRect().width);
+        });
+
+        expect(textColumnWidths.length).toBeGreaterThan(0);
+
+        for (const width of textColumnWidths) {
+            expect(width).toBeGreaterThanOrEqual(MINIMUM_TEXT_WIDTH);
+        }
+
+        // Also verify no document-level overflow
+        const hasOverflow = await page.evaluate((tolerance) => {
+            const docEl = document.documentElement;
+            return docEl.scrollWidth > docEl.clientWidth + tolerance;
+        }, OVERFLOW_TOLERANCE);
+
+        expect(hasOverflow).toBe(false);
+    });
 });

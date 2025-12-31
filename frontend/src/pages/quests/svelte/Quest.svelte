@@ -3,7 +3,7 @@
         compact = false;
 </script>
 
-<div class="container" class:quest>
+<div class="container" class:quest data-testid="quest-tile">
     {#if quest}
         {#if compact}
             <div class="content">
@@ -12,14 +12,14 @@
                     src={quest.image}
                     alt={`Quest artwork for ${quest.title}`}
                 />
-                <div class="content-text">
+                <div class="content-text" data-testid="quest-tile-text">
                     <h3>{quest.title}</h3>
                 </div>
             </div>
         {:else}
             <div class="content">
                 <img class="quest-img" src={quest.image} alt={`Quest artwork for ${quest.title}`} />
-                <div class="content-text">
+                <div class="content-text" data-testid="quest-tile-text">
                     <h3>{quest.title}</h3>
                     <p>{quest.description}</p>
                 </div>
@@ -49,6 +49,7 @@
     }
 
     .quest-img {
+        flex: 0 0 200px;
         width: 200px;
         height: 400px;
         border-radius: 20px;
@@ -65,8 +66,8 @@
     .content {
         display: flex;
         flex-direction: row;
-        align-items: center;
-        gap: 20px;
+        align-items: stretch;
+        gap: 0;
     }
 
     @media only screen and (max-width: 479px) {
@@ -81,8 +82,19 @@
     }
 
     .content-text {
+        flex: 1 1 auto;
+        min-width: 0;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .content-text h3,
+    .content-text p {
+        width: 100%;
+        min-width: 0;
+        overflow-wrap: anywhere;
     }
 </style>
