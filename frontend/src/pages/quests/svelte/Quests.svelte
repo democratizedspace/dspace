@@ -151,6 +151,13 @@
 </div>
 
 <style>
+    .container {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
     a {
         text-decoration: none;
         margin: 50px;
@@ -171,5 +178,8 @@
 
     .visualizer-slot {
         margin: 30px 0;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
     }
 </style>

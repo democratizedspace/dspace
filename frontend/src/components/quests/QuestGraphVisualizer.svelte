@@ -859,6 +859,10 @@
         padding: 16px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         color: var(--color-heading);
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        min-width: 0;
     }
 
     .header {
@@ -925,11 +929,17 @@
         border: 1px solid var(--color-border);
     }
 
+    [role='tabpanel'] {
+        min-width: 0;
+        max-width: 100%;
+    }
+
     .shelves {
         display: flex;
         flex-direction: column;
         gap: 16px;
         margin-top: 12px;
+        min-width: 0;
     }
 
     .shelf-label {
@@ -942,16 +952,18 @@
         background: rgba(0, 0, 0, 0.1);
         border-radius: 12px;
         padding: 10px;
+        min-width: 0;
     }
 
     .cards {
-        display: grid;
-        grid-auto-flow: column;
-        grid-auto-columns: minmax(220px, 1fr);
+        display: flex;
+        flex-wrap: nowrap;
         gap: 10px;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         padding-bottom: 6px;
+        max-width: 100%;
+        min-width: 0;
     }
 
     .empty {
@@ -1163,10 +1175,6 @@
     }
 
     @media (max-width: 720px) {
-        .cards {
-            grid-auto-columns: minmax(180px, 1fr);
-        }
-
         .map-canvas {
             height: 400px;
         }

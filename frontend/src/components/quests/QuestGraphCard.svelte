@@ -48,6 +48,8 @@
             transform 120ms ease,
             box-shadow 120ms ease,
             border-color 120ms ease;
+        flex: 0 0 220px;
+        min-width: 0;
     }
 
     .card:hover {
