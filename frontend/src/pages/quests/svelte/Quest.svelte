@@ -88,7 +88,13 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: center;
-        padding: 10px;
+        padding: 16px 24px;
+    }
+
+    @media only screen and (max-width: 479px) {
+        .content-text {
+            padding: 12px 16px;
+        }
     }
 
     .content-text h3,

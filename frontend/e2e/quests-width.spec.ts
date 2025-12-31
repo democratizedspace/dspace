@@ -214,4 +214,26 @@ test.describe('Quests page horizontal overflow regression', () => {
 
         expect(hasOverflow).toBe(false);
     });
+
+    test('quest tile text column should have comfortable right padding', async ({ page }) => {
+        await page.setViewportSize({ width: 1920, height: 1080 });
+
+        await page.goto('/quests');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        // Wait for quest tiles to be visible
+        const questTiles = page.locator('[data-testid="quest-tile"]');
+        await expect(questTiles.first()).toBeVisible();
+
+        // Get padding-right of the first quest tile text container
+        const MINIMUM_PADDING_RIGHT = 16;
+        const paddingRight = await page.evaluate(() => {
+            const textEl = document.querySelector('[data-testid="quest-tile-text"]');
+            if (!textEl) return 0;
+            return parseFloat(window.getComputedStyle(textEl).paddingRight);
+        });
+
+        expect(paddingRight).toBeGreaterThanOrEqual(MINIMUM_PADDING_RIGHT);
+    });
 });
