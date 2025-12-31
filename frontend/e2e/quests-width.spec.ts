@@ -148,4 +148,35 @@ test.describe('Quests page horizontal overflow regression', () => {
 
         expect(overflowStyle.overflowX).toBe('auto');
     });
+
+    test('cards should have readable minimum width', async ({ page }) => {
+        await page.setViewportSize({ width: 1920, height: 1080 });
+
+        await page.goto('/quests');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        // Scroll visualizer into view
+        const visualizer = page.locator('.visualizer');
+        await visualizer.scrollIntoViewIfNeeded();
+        await expect(visualizer).toBeVisible();
+
+        // Get card widths
+        const cards = page.locator('.card');
+        const cardCount = await cards.count();
+        expect(cardCount).toBeGreaterThan(0);
+
+        // Check first 3 cards have minimum readable width (>= 280px)
+        const MINIMUM_CARD_WIDTH = 280;
+        const cardWidths = await page.evaluate(() => {
+            const cardElements = document.querySelectorAll('.card');
+            return Array.from(cardElements)
+                .slice(0, 3)
+                .map((el) => el.getBoundingClientRect().width);
+        });
+
+        for (const width of cardWidths) {
+            expect(width).toBeGreaterThanOrEqual(MINIMUM_CARD_WIDTH);
+        }
+    });
 });
