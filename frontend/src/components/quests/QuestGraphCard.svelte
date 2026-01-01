@@ -48,6 +48,8 @@
             transform 120ms ease,
             box-shadow 120ms ease,
             border-color 120ms ease;
+        flex: 0 0 auto;
+        width: clamp(280px, 28vw, 420px);
     }
 
     .card:hover {
@@ -63,6 +65,9 @@
     .title {
         font-weight: 700;
         margin-bottom: 6px;
+        width: 100%;
+        min-width: 0;
+        overflow-wrap: anywhere;
     }
 
     .meta {
