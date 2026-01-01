@@ -93,6 +93,7 @@
     };
 
     $: focusedNode = byKey[focusedKey];
+    $: unreachableCount = graph?.diagnostics?.unreachableNodes?.length ?? 0;
     $: parentKeys = focusedNode ? sortKeys(focusedNode.requires ?? []) : [];
     $: childKeys = focusedKey ? sortKeys(graph?.requiredBy?.[focusedKey] ?? []) : [];
     $: depth = focusedKey ? (graph?.depthByKey?.[focusedKey] ?? 0) : 0;
@@ -315,26 +316,41 @@
         outgoingEdges.targets().addClass('highlight-child');
     };
 
-    const runLayout = () => {
+    const runLayout = (options = {}) => {
         if (!cy) return;
-        cy.layout({
+        const layout = cy.layout({
             name: 'dagre',
             rankDir: 'TB',
             nodeSep: 60,
             edgeSep: 16,
             rankSep: 80,
             padding: 30,
-        }).run();
-        cy.fit(undefined, 24);
+        });
+        layout.run();
+        if (options.fit !== false) {
+            cy.fit(undefined, 24);
+        }
     };
 
     const refreshMap = (includeUnreachable) => {
         if (!cy) return;
+
+        // Store current pan and zoom to preserve user's view
+        const zoom = cy.zoom();
+        const pan = cy.pan();
+
         cy.elements().remove();
         cy.add(buildMapElements(includeUnreachable));
         applyMultiParentHighlight();
-        runLayout();
-        highlightFocus(focusedKey);
+
+        // Restore pan/zoom after layout completes (layout can be async)
+        cy.once('layoutstop', () => {
+            cy.zoom(zoom);
+            cy.pan(pan);
+            highlightFocus(focusedKey);
+        });
+
+        runLayout({ fit: false });
     };
 
     const initMap = async () => {
@@ -463,6 +479,11 @@
                     highlightFocus(nodeKey);
                 }
             });
+
+            // Expose Cytoscape instance for E2E tests (always exposed in non-production builds)
+            if (typeof window !== 'undefined') {
+                window.__questGraphCy = cy;
+            }
 
             applyMultiParentHighlight();
             runLayout();
@@ -672,14 +693,20 @@
         >
             <div class="map-tools">
                 <div class="toggles">
-                    <label>
+                    <label class:disabled={unreachableCount === 0}>
                         <input
                             type="checkbox"
                             bind:checked={showUnreachable}
+                            disabled={unreachableCount === 0}
                             aria-label="Show unreachable quests"
                         />
-                        Show unreachable quests
+                        Show unreachable ({unreachableCount})
                     </label>
+                    {#if unreachableCount === 0}
+                        <div class="hint-wrapper">
+                            <span class="hint subtle">No unreachable quests detected</span>
+                        </div>
+                    {/if}
                     <label>
                         <input
                             type="checkbox"
@@ -1100,6 +1127,22 @@
         gap: 12px;
         color: var(--color-heading);
         font-size: 0.95rem;
+        align-items: flex-start;
+    }
+
+    .hint-wrapper {
+        flex-basis: 100%;
+        font-size: 0.85rem;
+        color: var(--color-text-muted);
+    }
+
+    .toggles label.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .toggles label.disabled input {
+        cursor: not-allowed;
     }
 
     .legend {

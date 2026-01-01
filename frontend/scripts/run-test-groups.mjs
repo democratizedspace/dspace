@@ -131,6 +131,7 @@ const TEST_GROUPS = [
             'tutorial-quest.spec.ts',
             'quests.spec.ts',
             'quests-width.spec.ts',
+            'quest-graph-unreachable.spec.ts',
             'quest-grant-items.spec.ts',
             'quest-hardening.spec.ts',
             'constellations-quest.spec.ts',
