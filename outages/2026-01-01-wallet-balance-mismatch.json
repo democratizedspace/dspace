@@ -1,0 +1,11 @@
+{
+  "id": "wallet-balance-mismatch",
+  "date": "2026-01-01",
+  "component": "frontend wallet",
+  "rootCause": "Wallet page read cookie balances while inventory data lived in game state storage.",
+  "resolution": "Wallet balances now hydrate from game state inventory with cookie fallback for extras.",
+  "references": [
+    "frontend/src/pages/wallet/index.astro",
+    "frontend/src/components/svelte/WalletBalances.svelte"
+  ]
+}

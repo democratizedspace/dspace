@@ -4,7 +4,8 @@ import Header from '../../components/Header.astro';
 import Menu from '../../components/svelte/Menu.svelte';
 import Updater from '../../components/svelte/Updater.svelte';
 import Card from '../../components/Card.astro';
-import { getCookieItems, getWalletBalance, parseCookie, prettyPrintNumber } from '../../utils.js';
+import WalletBalances from '../../components/svelte/WalletBalances.svelte';
+import { getCookieItems, getWalletBalance, parseCookie } from '../../utils.js';
 
 const cookie = Astro.request.headers.get('cookie') ?? '';
 const pathname = Astro.url.pathname;
@@ -39,7 +40,7 @@ const currencies = Array.from(currencySymbols)
         return {
             symbol,
             ...metadata,
-            balance: prettyPrintNumber(getWalletBalance(Astro.request, symbol)),
+            balance: getWalletBalance(Astro.request, symbol),
         };
     })
     .sort((a, b) => a.symbol.localeCompare(b.symbol));
@@ -65,19 +66,7 @@ const currencies = Array.from(currencySymbols)
                 <h2 id="wallet-balances">Balances</h2>
                 <p class="section-hint">Balances persist in your browser and power shop transactions.</p>
             </div>
-            <ul class="balance-list" role="list">
-                {currencies.map((currency) => (
-                    <li class="balance-row" data-currency={currency.symbol}>
-                        <div>
-                            <p class="balance-label">{currency.name}</p>
-                            <p class="balance-description">{currency.description}</p>
-                        </div>
-                        <p class="balance-value" aria-label={`${currency.symbol} balance`}>
-                            {currency.balance} {currency.symbol}
-                        </p>
-                    </li>
-                ))}
-            </ul>
+            <WalletBalances currencies={currencies} client:load />
         </section>
 
         <section class="process-section" aria-labelledby="wallet-processes">
@@ -158,7 +147,7 @@ const currencies = Array.from(currencySymbols)
         box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
     }
 
-    .balance-list {
+    :global(.balance-list) {
         list-style: none;
         padding: 0;
         margin: 0;
@@ -167,7 +156,7 @@ const currencies = Array.from(currencySymbols)
         gap: 0.75rem;
     }
 
-    .balance-row {
+    :global(.balance-row) {
         display: grid;
         grid-template-columns: 1fr auto;
         gap: 0.5rem;
@@ -178,19 +167,19 @@ const currencies = Array.from(currencySymbols)
         padding: 0.9rem 1rem;
     }
 
-    .balance-label {
+    :global(.balance-label) {
         margin: 0 0 0.1rem;
         font-weight: 700;
         color: var(--color-heading);
     }
 
-    .balance-description {
+    :global(.balance-description) {
         margin: 0;
         color: var(--color-text);
         line-height: 1.4;
     }
 
-    .balance-value {
+    :global(.balance-value) {
         margin: 0;
         font-weight: 800;
         color: var(--color-heading);
@@ -215,12 +204,12 @@ const currencies = Array.from(currencySymbols)
             padding: 1rem;
         }
 
-        .balance-row {
+        :global(.balance-row) {
             grid-template-columns: 1fr;
             align-items: flex-start;
         }
 
-        .balance-value {
+        :global(.balance-value) {
             font-size: 0.95rem;
         }
     }
