@@ -13,10 +13,15 @@ const getEnvUrl = () => {
     return null;
 };
 
-export const tokenPlaceChat = async (messages, { signal } = {}) => {
+export const getTokenPlaceUrl = (stateOverride) => {
     const envUrl = getEnvUrl();
+    const gameState = stateOverride ?? loadGameState();
+    return gameState?.tokenPlace?.url || envUrl || null;
+};
+
+export const tokenPlaceChat = async (messages, { signal } = {}) => {
     await ready;
-    const baseUrl = loadGameState().tokenPlace?.url || envUrl || DEFAULT_URL;
+    const baseUrl = getTokenPlaceUrl() || DEFAULT_URL;
 
     const systemMessage = {
         role: 'system',

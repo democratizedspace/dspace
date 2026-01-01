@@ -6,8 +6,31 @@ jest.mock('../src/utils/gameState/common.js', () => ({
     ready: Promise.resolve(),
 }));
 
-const { tokenPlaceChat } = require('../src/utils/tokenPlace.js');
+const { getTokenPlaceUrl, tokenPlaceChat } = require('../src/utils/tokenPlace.js');
 const { loadGameState } = require('../src/utils/gameState/common.js');
+
+describe('getTokenPlaceUrl', () => {
+    afterEach(() => {
+        jest.resetAllMocks();
+        delete process.env.VITE_TOKEN_PLACE_URL;
+    });
+
+    test('prefers game state url when available', () => {
+        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://from.state' } });
+        expect(getTokenPlaceUrl()).toBe('http://from.state');
+    });
+
+    test('falls back to env url when state missing', () => {
+        loadGameState.mockReturnValue({});
+        process.env.VITE_TOKEN_PLACE_URL = 'http://from.env';
+        expect(getTokenPlaceUrl()).toBe('http://from.env');
+    });
+
+    test('returns null when not configured', () => {
+        loadGameState.mockReturnValue({});
+        expect(getTokenPlaceUrl()).toBeNull();
+    });
+});
 
 describe('tokenPlaceChat', () => {
     beforeEach(() => {
