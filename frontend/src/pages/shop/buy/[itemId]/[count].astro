@@ -3,7 +3,7 @@ import Page from '../../../../components/Page.astro';
 import Chip from '../../../../components/Chip.astro';
 import items from '../../../inventory/json/items';
 
-import { getWalletBalance, getSymbolFromId, prettyPrintNumber } from '../../../../utils.js';
+import { getSymbolFromId, prettyPrintNumber } from '../../../../utils.js';
 
 const { itemId, count } = Astro.params;
 
@@ -11,17 +11,15 @@ const item = items.find((item) => item.id === itemId);
 const symbol = getSymbolFromId(item.id);
 
 const totalCost = parseFloat(item.price) * parseFloat(count.toString());
-const previousWalletBalance = getWalletBalance(Astro.request, symbol);
-const currentWalletBalance = prettyPrintNumber(previousWalletBalance - totalCost);
+const formattedCost = prettyPrintNumber(totalCost);
 ---
 
 <Page title={`Purchase successful!`} columns="1">
   <div class="vertical">
     <p>Added</p>
   </div>
-  Your wallet balance went from
   <div class="horizontal">
-    <Chip text={`${prettyPrintNumber(previousWalletBalance)} ${symbol}`} /> to <Chip text={`${currentWalletBalance} ${symbol}`} />.
+    Spent <Chip text={`${formattedCost} ${symbol}`} /> on <Chip text={`${count} x ${item.name}`} />.
   </div>
 </Page>
 

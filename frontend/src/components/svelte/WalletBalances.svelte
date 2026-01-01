@@ -6,6 +6,19 @@
 
     export let currencies = [];
 
+    const defaultCurrencies = [
+        {
+            symbol: 'dUSD',
+            name: 'dUSD',
+            description: 'Spendable currency for items, processes, and conversions.',
+        },
+        {
+            symbol: 'dBI',
+            name: 'dBI',
+            description: 'Earned alongside dUSD from the basic income process.',
+        },
+    ];
+
     const symbolToItemId = items.reduce((map, item) => {
         if (item?.name && !map[item.name]) {
             map[item.name] = item.id;
@@ -14,6 +27,7 @@
     }, {});
 
     let useGameStateBalances = false;
+    let hydrationAttempted = false;
 
     onMount(() => {
         ready
@@ -22,25 +36,32 @@
             })
             .catch(() => {
                 useGameStateBalances = false;
+            })
+            .finally(() => {
+                hydrationAttempted = true;
             });
     });
 
+    $: normalizedCurrencies = (currencies?.length ? currencies : defaultCurrencies)
+        .map((currency) => ({
+            ...currency,
+            symbol: currency.symbol ?? currency.name,
+            name: currency.name ?? currency.symbol ?? 'Currency',
+        }))
+        .sort((a, b) => a.symbol.localeCompare(b.symbol));
+
     $: inventory = $state?.inventory ?? {};
-    $: relevantBalances = Object.keys(symbolToItemId).reduce((acc, symbol) => {
-        const id = symbolToItemId[symbol];
-        if (id !== undefined) acc[id] = inventory[id];
-        return acc;
-    }, {});
-    $: displayCurrencies = currencies.map((currency) => {
+    $: displayCurrencies = normalizedCurrencies.map((currency) => {
         const itemId = symbolToItemId[currency.symbol];
-        const balanceSource =
-            useGameStateBalances && itemId !== undefined ? relevantBalances[itemId] : currency.balance;
+        const hasInventoryBalance = itemId !== undefined;
+        const balanceSource = hasInventoryBalance && useGameStateBalances ? inventory[itemId] : 0;
         const numericBalance = Number(balanceSource ?? 0);
         const safeBalance = Number.isFinite(numericBalance) ? numericBalance : 0;
+        const isLoading = hasInventoryBalance && !hydrationAttempted;
 
         return {
             ...currency,
-            balance: prettyPrintNumber(safeBalance),
+            balance: isLoading ? 'Loading…' : prettyPrintNumber(safeBalance),
         };
     });
 </script>
@@ -53,7 +74,7 @@
                 <p class="balance-description">{currency.description}</p>
             </div>
             <p class="balance-value" aria-label={`${currency.symbol} balance`}>
-                {currency.balance} {currency.symbol}
+                {`${currency.balance} ${currency.symbol}`}
             </p>
         </li>
     {/each}

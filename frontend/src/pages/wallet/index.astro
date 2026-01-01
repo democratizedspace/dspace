@@ -2,54 +2,28 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Menu from '../../components/svelte/Menu.svelte';
-import Updater from '../../components/svelte/Updater.svelte';
 import Card from '../../components/Card.astro';
 import WalletBalances from '../../components/svelte/WalletBalances.svelte';
-import { getCookieItems, getWalletBalance, parseCookie } from '../../utils.js';
 
-const cookie = Astro.request.headers.get('cookie') ?? '';
 const pathname = Astro.url.pathname;
-const itemList = getCookieItems(cookie);
 
-const knownCurrencies = {
-    dUSD: {
+const currencies = [
+    {
+        symbol: 'dUSD',
         name: 'dUSD',
         description: 'Spendable currency for items, processes, and conversions.',
     },
-    dBI: {
+    {
+        symbol: 'dBI',
         name: 'dBI',
         description: 'Earned alongside dUSD from the basic income process.',
     },
-};
-
-const currencySymbols = Object.keys(parseCookie(cookie)).reduce((symbols, key) => {
-    const match = key.match(/^currency-balance-([A-Za-z0-9]+)$/);
-    if (match?.[1]) {
-        symbols.add(match[1]);
-    }
-    return symbols;
-}, new Set(Object.keys(knownCurrencies)));
-
-const currencies = Array.from(currencySymbols)
-    .map((symbol) => {
-        const metadata = knownCurrencies[symbol] ?? {
-            name: symbol,
-            description: 'Tracked wallet currency.',
-        };
-
-        return {
-            symbol,
-            ...metadata,
-            balance: getWalletBalance(Astro.request, symbol),
-        };
-    })
-    .sort((a, b) => a.symbol.localeCompare(b.symbol));
+].sort((a, b) => a.name.localeCompare(b.name));
 ---
 
 <Layout title="Wallet">
     <main class="wallet-page">
         <Header title="" body="" href="" />
-        <Updater shouldUpdate={itemList.length === 0} />
         <Menu pathname={pathname} client:idle />
 
         <section class="wallet-hero">

@@ -1,23 +1,11 @@
 ---
 import Page from '../components/Page.astro';
-import { getCookieValue } from '../utils';
+import LongTaskTimer from '../components/svelte/LongTaskTimer.svelte';
 
-let timeMs;
-let message;
-const cookie = Astro.request.headers.get('cookie');
-let timestamp = getCookieValue(cookie, 'longTaskDone');
-
-if (!timestamp) {
-    timeMs = new Date(Date.now() + 86400000);
-    Astro.response.headers.append('Set-Cookie', `longTaskDone=${timeMs.toString()}; expires=Fri, 31 Dec 9999 23:59:59 GMT`);
-    message = "Started the task.";
-} else {
-    timeMs = new Date(timestamp);
-}
-
-let diff = timeMs - Date.now();
+const message =
+    'Start a 24-hour task and keep track of it using your browser storage—no cookies required.';
 ---
 
 <Page message={message}>
-    {(diff >= 0) ? `Come back after ${Math.floor((diff)/1000)} seconds.` : `Done.`}
+    <LongTaskTimer client:load />
 </Page>

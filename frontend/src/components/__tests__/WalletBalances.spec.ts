@@ -1,20 +1,34 @@
-const { dUSDId, dBIId } = vi.hoisted(() => ({
-    dUSDId: '5247a603-294a-4a34-a884-1ae20969b2a1',
-    dBIId: '016d4758-d114-4e04-9e6a-853db93a2eee',
-}));
-
 import { render, waitFor } from '@testing-library/svelte';
 import { describe, expect, it, vi } from 'vitest';
 import { writable } from 'svelte/store';
 
-vi.mock('../../pages/inventory/json/items', () => ({
-    default: [
-        { id: dUSDId, name: 'dUSD' },
-        { id: dBIId, name: 'dBI' },
-    ],
-}));
+async function loadCurrencyIds() {
+    const { default: allItems } = await vi.importActual<
+        typeof import('../../pages/inventory/json/items')
+    >('../../pages/inventory/json/items');
+
+    const dUSDId = allItems.find((item) => item.name === 'dUSD')?.id;
+    const dBIId = allItems.find((item) => item.name === 'dBI')?.id;
+
+    if (!dUSDId || !dBIId) {
+        throw new Error('Currency items are missing from the inventory dataset.');
+    }
+
+    return { dUSDId, dBIId };
+}
+
+vi.mock('../../pages/inventory/json/items', async () => {
+    const { dUSDId, dBIId } = await loadCurrencyIds();
+    return {
+        default: [
+            { id: dUSDId, name: 'dUSD' },
+            { id: dBIId, name: 'dBI' },
+        ],
+    };
+});
 
 vi.mock('../../utils/gameState/common.js', async () => {
+    const { dUSDId, dBIId } = await loadCurrencyIds();
     const inventoryStore = writable({
         inventory: {
             [dUSDId]: 250,
@@ -35,9 +49,9 @@ describe('WalletBalances', () => {
         const { getByLabelText } = render(WalletBalances, {
             props: {
                 currencies: [
-                    { symbol: 'dUSD', name: 'dUSD', description: 'Spendable currency.', balance: 0 },
-                    { symbol: 'dBI', name: 'dBI', description: 'Basic income token.', balance: 0 },
-                    { symbol: 'TEST', name: 'Test', description: 'Fallback currency.', balance: 7 },
+                    { symbol: 'dUSD', name: 'dUSD', description: 'Spendable currency.' },
+                    { symbol: 'dBI', name: 'dBI', description: 'Basic income token.' },
+                    { symbol: 'TEST', name: 'Test', description: 'Fallback currency.' },
                 ],
             },
         });
@@ -47,6 +61,6 @@ describe('WalletBalances', () => {
             expect(getByLabelText('dBI balance').textContent).toBe('75 dBI');
         });
 
-        expect(getByLabelText('TEST balance').textContent).toBe('7 TEST');
+        expect(getByLabelText('TEST balance').textContent).toBe('0 TEST');
     });
 });
