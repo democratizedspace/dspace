@@ -247,6 +247,10 @@
         hasMounted = true;
         return () => {
             window.removeEventListener('keydown', handleKeydown);
+            cancelQueuedLayout();
+            if (layoutRestoreHandler) {
+                cy?.off?.('layoutstop', layoutRestoreHandler);
+            }
             cy?.destroy?.();
         };
     });
@@ -354,6 +358,12 @@
         }
     };
 
+    const cancelQueuedLayout = () => {
+        if (!layoutQueueHandle) return;
+        layoutQueueHandle.cancel?.();
+        layoutQueueHandle = null;
+    };
+
     const queueLayout = (options = {}) => {
         if (!cy) return;
         pendingLayoutOptions = {
@@ -371,11 +381,27 @@
             runLayout(nextOptions);
         };
 
-        if (typeof requestAnimationFrame === 'function') {
-            layoutQueueHandle = requestAnimationFrame(flush);
-        } else {
-            layoutQueueHandle = setTimeout(flush, 0);
+        const useRaf = typeof requestAnimationFrame === 'function';
+
+        if (useRaf) {
+            const handle = requestAnimationFrame(flush);
+            layoutQueueHandle = {
+                id: handle,
+                type: 'raf',
+                cancel:
+                    typeof cancelAnimationFrame === 'function'
+                        ? () => cancelAnimationFrame(handle)
+                        : null,
+            };
+            return;
         }
+
+        const handle = setTimeout(flush, 0);
+        layoutQueueHandle = {
+            id: handle,
+            type: 'timeout',
+            cancel: () => clearTimeout(handle),
+        };
     };
 
     const restoreViewportAfterLayout = (viewport) => {
@@ -405,7 +431,6 @@
 
         restoreViewportAfterLayout(viewport);
         queueLayout();
-        highlightFocus(focusedKey);
     };
 
     const initMap = async () => {

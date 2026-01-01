@@ -138,4 +138,53 @@ test.describe('Quest graph map viewport controls', () => {
             expect(Math.abs(zoomAfterFit - startingZoom)).toBeGreaterThan(0.05);
         }
     });
+
+    test('centers on the focused node when requested', async ({ page }) => {
+        await loadQuestMap(page);
+        await waitForLayoutStop(page);
+
+        const setupState = await page.evaluate(() => {
+            const cy = window.__questGraphCy;
+            const root = cy?.nodes('.root').first();
+            if (!cy || !root || root.empty()) return null;
+
+            cy.zoom(1.8);
+            cy.pan({ x: 240, y: 210 });
+
+            return {
+                rootId: root.id(),
+                beforePan: cy.pan(),
+            };
+        });
+
+        expect(setupState).not.toBeNull();
+        if (!setupState) return;
+
+        const centerButton = page.getByRole('button', { name: 'Center on focused' });
+        await centerButton.click();
+
+        const centeredState = await page.evaluate(({ rootId }) => {
+            const cy = window.__questGraphCy;
+            const node = cy?.getElementById(rootId);
+            if (!cy || !node || node.empty()) return null;
+
+            const renderedPosition = node.renderedPosition();
+            return {
+                pan: cy.pan(),
+                renderedPosition,
+                viewportCenter: { x: cy.width() / 2, y: cy.height() / 2 },
+            };
+        }, setupState);
+
+        expect(centeredState).not.toBeNull();
+        if (!centeredState) return;
+
+        expect(centeredState.pan).not.toEqual(setupState.beforePan);
+        expect(
+            Math.abs(centeredState.renderedPosition.x - centeredState.viewportCenter.x)
+        ).toBeLessThanOrEqual(8);
+        expect(
+            Math.abs(centeredState.renderedPosition.y - centeredState.viewportCenter.y)
+        ).toBeLessThanOrEqual(8);
+    });
 });
