@@ -4,7 +4,9 @@ import Header from '../../components/Header.astro';
 import Menu from '../../components/svelte/Menu.svelte';
 import Updater from '../../components/svelte/Updater.svelte';
 import Card from '../../components/Card.astro';
+import WalletBalanceList from '../../components/svelte/WalletBalanceList.svelte';
 import { getCookieItems, getWalletBalance, parseCookie, prettyPrintNumber } from '../../utils.js';
+import items from '../inventory/json/items';
 
 const cookie = Astro.request.headers.get('cookie') ?? '';
 const pathname = Astro.url.pathname;
@@ -29,17 +31,27 @@ const currencySymbols = Object.keys(parseCookie(cookie)).reduce((symbols, key) =
     return symbols;
 }, new Set(Object.keys(knownCurrencies)));
 
+const currencyItemIds = Object.fromEntries(
+    Object.keys(knownCurrencies).map((symbol) => {
+        const item = items.find((inventoryItem) => inventoryItem.name === symbol);
+        return [symbol, item?.id];
+    })
+);
+
 const currencies = Array.from(currencySymbols)
     .map((symbol) => {
         const metadata = knownCurrencies[symbol] ?? {
             name: symbol,
             description: 'Tracked wallet currency.',
         };
+        const rawBalance = getWalletBalance(Astro.request, symbol);
 
         return {
             symbol,
             ...metadata,
-            balance: prettyPrintNumber(getWalletBalance(Astro.request, symbol)),
+            itemId: currencyItemIds[symbol],
+            rawBalance,
+            balance: prettyPrintNumber(rawBalance),
         };
     })
     .sort((a, b) => a.symbol.localeCompare(b.symbol));
@@ -65,19 +77,7 @@ const currencies = Array.from(currencySymbols)
                 <h2 id="wallet-balances">Balances</h2>
                 <p class="section-hint">Balances persist in your browser and power shop transactions.</p>
             </div>
-            <ul class="balance-list" role="list">
-                {currencies.map((currency) => (
-                    <li class="balance-row" data-currency={currency.symbol}>
-                        <div>
-                            <p class="balance-label">{currency.name}</p>
-                            <p class="balance-description">{currency.description}</p>
-                        </div>
-                        <p class="balance-value" aria-label={`${currency.symbol} balance`}>
-                            {currency.balance} {currency.symbol}
-                        </p>
-                    </li>
-                ))}
-            </ul>
+            <WalletBalanceList currencies={currencies} client:load />
         </section>
 
         <section class="process-section" aria-labelledby="wallet-processes">

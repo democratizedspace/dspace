@@ -1,0 +1,12 @@
+{
+  "id": "OUT-2026-01-01-wallet-balance-desync",
+  "date": "2026-01-01",
+  "component": "frontend/wallet page",
+  "rootCause": "The wallet page rendered balances from currency cookies (`currency-balance-*`) even though the application no longer writes wallet totals to cookies. Inventory and shop flows persist currency counts in the game state store (IndexedDB/localStorage), so wallet SSR always showed 0 balances while the in-browser inventory reflected the correct non-zero counts.",
+  "resolution": "Added a WalletBalanceList component that hydrates on the client and reads currency totals directly from the game state store using the dUSD and dBI inventory item IDs, falling back to cookie values only when no game state entry exists. Updated the wallet page to use this component and added a regression test to ensure wallet balances reflect game state when cookies are empty.",
+  "references": [
+    "frontend/src/components/svelte/WalletBalanceList.svelte",
+    "frontend/src/pages/wallet/index.astro",
+    "frontend/src/components/__tests__/WalletBalanceList.spec.ts"
+  ]
+}
