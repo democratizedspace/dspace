@@ -1,0 +1,11 @@
+{
+  "id": "wallet-balance-cookie-drift",
+  "date": "2026-01-01",
+  "component": "frontend-wallet",
+  "rootCause": "The wallet page read balances exclusively from currency cookies, but currency amounts are persisted in the client-side game state (IndexedDB/localStorage) and no longer mirror cookies, causing every balance to render as 0 despite non-zero inventory.",
+  "resolution": "Hydrate the wallet balances from the game state store and map currency symbols to their inventory items so client-side balances populate the list while retaining server-rendered defaults.",
+  "references": [
+    "frontend/src/pages/wallet/index.astro",
+    "frontend/src/pages/wallet/WalletBalances.svelte"
+  ]
+}
