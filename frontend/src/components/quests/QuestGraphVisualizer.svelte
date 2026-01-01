@@ -318,14 +318,15 @@
 
     const runLayout = (options = {}) => {
         if (!cy) return;
-        cy.layout({
+        const layout = cy.layout({
             name: 'dagre',
             rankDir: 'TB',
             nodeSep: 60,
             edgeSep: 16,
             rankSep: 80,
             padding: 30,
-        }).run();
+        });
+        layout.run();
         if (options.fit !== false) {
             cy.fit(undefined, 24);
         }
@@ -341,13 +342,15 @@
         cy.elements().remove();
         cy.add(buildMapElements(includeUnreachable));
         applyMultiParentHighlight();
+
+        // Restore pan/zoom after layout completes (layout can be async)
+        cy.once('layoutstop', () => {
+            cy.zoom(zoom);
+            cy.pan(pan);
+            highlightFocus(focusedKey);
+        });
+
         runLayout({ fit: false });
-
-        // Restore pan and zoom after layout
-        cy.zoom(zoom);
-        cy.pan(pan);
-
-        highlightFocus(focusedKey);
     };
 
     const initMap = async () => {
@@ -476,6 +479,11 @@
                     highlightFocus(nodeKey);
                 }
             });
+
+            // Expose Cytoscape instance for E2E tests (always exposed in non-production builds)
+            if (typeof window !== 'undefined') {
+                window.__questGraphCy = cy;
+            }
 
             applyMultiParentHighlight();
             runLayout();
@@ -1119,11 +1127,13 @@
         gap: 12px;
         color: var(--color-heading);
         font-size: 0.95rem;
+        align-items: flex-start;
     }
 
     .hint-wrapper {
         flex-basis: 100%;
-        margin-top: -6px;
+        font-size: 0.85rem;
+        color: var(--color-text-muted);
     }
 
     .toggles label.disabled {
