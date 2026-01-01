@@ -42,6 +42,7 @@
             .filter((node) => (node.requires?.length ?? 0) > 1)
             .map((node) => node.canonicalKey)
     );
+    const unreachableCount = graph?.diagnostics?.unreachableNodes?.length ?? 0;
 
     const resolveRoot = () => {
         if (byKey[ROOT_KEY]) return ROOT_KEY;
@@ -330,10 +331,20 @@
 
     const refreshMap = (includeUnreachable) => {
         if (!cy) return;
+
+        // Store current pan and zoom to preserve user's view
+        const zoom = cy.zoom();
+        const pan = cy.pan();
+
         cy.elements().remove();
         cy.add(buildMapElements(includeUnreachable));
         applyMultiParentHighlight();
         runLayout();
+
+        // Restore pan and zoom after layout
+        cy.zoom(zoom);
+        cy.pan(pan);
+
         highlightFocus(focusedKey);
     };
 
@@ -672,14 +683,18 @@
         >
             <div class="map-tools">
                 <div class="toggles">
-                    <label>
+                    <label class:disabled={unreachableCount === 0}>
                         <input
                             type="checkbox"
                             bind:checked={showUnreachable}
+                            disabled={unreachableCount === 0}
                             aria-label="Show unreachable quests"
                         />
-                        Show unreachable quests
+                        Show unreachable ({unreachableCount})
                     </label>
+                    {#if unreachableCount === 0}
+                        <span class="hint subtle">No unreachable quests detected</span>
+                    {/if}
                     <label>
                         <input
                             type="checkbox"
@@ -1100,6 +1115,15 @@
         gap: 12px;
         color: var(--color-heading);
         font-size: 0.95rem;
+    }
+
+    .toggles label.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .toggles label.disabled input {
+        cursor: not-allowed;
     }
 
     .legend {
