@@ -26,6 +26,11 @@
     let hasMounted = false;
     let copyStatus = 'idle';
     let copyError = '';
+    let layoutTimeoutId = null;
+    let pendingLayoutOptions = { fit: false };
+    let layoutCallbacks = [];
+
+    const LAYOUT_DEBOUNCE_MS = 60;
 
     const compareNodes = (a, b) => {
         if (!a || !b) return a ? -1 : b ? 1 : 0;
@@ -245,6 +250,7 @@
         return () => {
             window.removeEventListener('keydown', handleKeydown);
             cy?.destroy?.();
+            clearTimeout(layoutTimeoutId);
         };
     });
 
@@ -335,8 +341,28 @@
         outgoingEdges.targets().addClass('highlight-child');
     };
 
+    const captureViewState = () => {
+        if (!cy) return null;
+        return {
+            pan: cy.pan(),
+            zoom: cy.zoom(),
+        };
+    };
+
+    const restoreViewState = (viewState) => {
+        if (!cy || !viewState) return;
+        cy.zoom(viewState.zoom);
+        cy.pan(viewState.pan);
+    };
+
     const runLayout = (options = {}) => {
         if (!cy) return;
+        const { fit = false, onLayoutComplete } = options;
+        if (onLayoutComplete) {
+            cy.once('layoutstop', () => {
+                onLayoutComplete();
+            });
+        }
         const layout = cy.layout({
             name: 'dagre',
             rankDir: 'TB',
@@ -346,30 +372,64 @@
             padding: 30,
         });
         layout.run();
-        if (options.fit !== false) {
+        if (fit) {
             cy.fit(undefined, 24);
         }
+    };
+
+    const scheduleLayout = (options = {}) => {
+        if (!cy) return;
+        const { onLayoutComplete, ...layoutOptions } = options;
+        pendingLayoutOptions = { ...pendingLayoutOptions, ...layoutOptions };
+        if (onLayoutComplete) {
+            layoutCallbacks.push(onLayoutComplete);
+        }
+        clearTimeout(layoutTimeoutId);
+        layoutTimeoutId = setTimeout(() => {
+            const callbacks = layoutCallbacks;
+            layoutCallbacks = [];
+            const mergedOptions = pendingLayoutOptions;
+            pendingLayoutOptions = { fit: false };
+            runLayout({
+                ...mergedOptions,
+                onLayoutComplete:
+                    callbacks.length > 0
+                        ? () => {
+                              callbacks.forEach((callback) => callback?.());
+                          }
+                        : undefined,
+            });
+        }, LAYOUT_DEBOUNCE_MS);
     };
 
     const refreshMap = (includeUnreachable) => {
         if (!cy) return;
 
-        // Store current pan and zoom to preserve user's view
-        const zoom = cy.zoom();
-        const pan = cy.pan();
+        const viewState = captureViewState();
 
         cy.elements().remove();
         cy.add(buildMapElements(includeUnreachable));
         applyMultiParentHighlight();
 
-        // Restore pan/zoom after layout completes (layout can be async)
-        cy.once('layoutstop', () => {
-            cy.zoom(zoom);
-            cy.pan(pan);
-            highlightFocus(focusedKey);
+        scheduleLayout({
+            fit: false,
+            onLayoutComplete: () => {
+                restoreViewState(viewState);
+                highlightFocus(focusedKey);
+            },
         });
+    };
 
-        runLayout({ fit: false });
+    const fitGraph = () => {
+        if (!cy) return;
+        cy.fit(undefined, 24);
+    };
+
+    const centerOnFocused = () => {
+        if (!cy || !focusedKey) return;
+        const node = cy.getElementById(focusedKey);
+        if (!node || node.empty()) return;
+        cy.center(node);
     };
 
     const initMap = async () => {
@@ -487,7 +547,7 @@
                         },
                     },
                 ],
-                wheelSensitivity: 0.2,
+                wheelSensitivity: 0.5,
                 motionBlur: false,
             });
 
@@ -508,8 +568,7 @@
             }
 
             applyMultiParentHighlight();
-            runLayout();
-            highlightFocus(focusedKey);
+            runLayout({ fit: true, onLayoutComplete: () => highlightFocus(focusedKey) });
             mapInitialized = true;
             mapStatus = 'ready';
         } catch (error) {
@@ -737,6 +796,26 @@
                         />
                         Highlight multi-parent quests
                     </label>
+                </div>
+                <div class="map-actions">
+                    <button
+                        class="pill"
+                        type="button"
+                        on:click={fitGraph}
+                        disabled={!mapInitialized || mapStatus !== 'ready'}
+                        data-testid="fit-graph-button"
+                    >
+                        Fit graph
+                    </button>
+                    <button
+                        class="pill"
+                        type="button"
+                        on:click={centerOnFocused}
+                        disabled={!mapInitialized || mapStatus !== 'ready'}
+                        data-testid="center-focused-button"
+                    >
+                        Center on focused
+                    </button>
                 </div>
                 <div class="legend">
                     <span class="legend-item">
@@ -1005,6 +1084,11 @@
         cursor: pointer;
     }
 
+    .pill:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
     .tab-bar {
         display: inline-flex;
         gap: 8px;
@@ -1249,6 +1333,15 @@
         color: var(--color-heading);
         font-size: 0.95rem;
         align-items: flex-start;
+    }
+
+    .map-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        justify-content: flex-end;
+        min-width: 0;
     }
 
     .hint-wrapper {
