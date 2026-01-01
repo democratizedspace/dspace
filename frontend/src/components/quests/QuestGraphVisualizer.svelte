@@ -42,7 +42,6 @@
             .filter((node) => (node.requires?.length ?? 0) > 1)
             .map((node) => node.canonicalKey)
     );
-    const unreachableCount = graph?.diagnostics?.unreachableNodes?.length ?? 0;
 
     const resolveRoot = () => {
         if (byKey[ROOT_KEY]) return ROOT_KEY;
@@ -94,6 +93,7 @@
     };
 
     $: focusedNode = byKey[focusedKey];
+    $: unreachableCount = graph?.diagnostics?.unreachableNodes?.length ?? 0;
     $: parentKeys = focusedNode ? sortKeys(focusedNode.requires ?? []) : [];
     $: childKeys = focusedKey ? sortKeys(graph?.requiredBy?.[focusedKey] ?? []) : [];
     $: depth = focusedKey ? (graph?.depthByKey?.[focusedKey] ?? 0) : 0;

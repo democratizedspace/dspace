@@ -49,8 +49,6 @@ test.describe('Quest graph "Show unreachable" toggle', () => {
         const countMatch = labelText?.match(/Show unreachable \((\d+)\)/);
         const unreachableCount = countMatch ? parseInt(countMatch[1], 10) : -1;
 
-        console.log(`Unreachable count detected: ${unreachableCount}`);
-
         // Get the checkbox element
         const showUnreachableCheckbox = page.getByLabel(/Show unreachable/);
 
@@ -113,22 +111,14 @@ test.describe('Quest graph "Show unreachable" toggle', () => {
             return cyElements?.length ?? 0;
         });
 
-        console.log(`Initial Cytoscape elements: ${initialNodeCount}`);
-
         // Check if unreachable toggle is enabled (meaning there are unreachable nodes)
         const showUnreachableCheckbox = page.getByLabel(/Show unreachable/);
         const isEnabled = await showUnreachableCheckbox.isEnabled();
 
         if (!isEnabled) {
-            console.log('No unreachable nodes in production data, skipping toggle test');
             test.skip();
             return;
         }
-
-        // Get the label text to see the count
-        const showUnreachableLabel = page.locator('label:has-text("Show unreachable")');
-        const labelText = await showUnreachableLabel.textContent();
-        console.log(`Unreachable label: ${labelText}`);
 
         // Toggle the checkbox ON (to show unreachable)
         await showUnreachableCheckbox.check();
@@ -143,8 +133,6 @@ test.describe('Quest graph "Show unreachable" toggle', () => {
             return cyElements?.length ?? 0;
         });
 
-        console.log(`Node count after toggle ON: ${nodeCountAfterToggleOn}`);
-
         // Toggle the checkbox OFF (to hide unreachable)
         await showUnreachableCheckbox.uncheck();
 
@@ -157,8 +145,6 @@ test.describe('Quest graph "Show unreachable" toggle', () => {
             const cyElements = canvas?.querySelectorAll('[class*="cy-"]');
             return cyElements?.length ?? 0;
         });
-
-        console.log(`Node count after toggle OFF: ${nodeCountAfterToggleOff}`);
 
         // Verify that toggling had an effect
         // Note: We can't guarantee exact counts without mocking, but we can verify the toggle works
