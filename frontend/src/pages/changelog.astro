@@ -41,9 +41,8 @@ const CHANGELOG_SCROLL_BUFFER_PX = 16;
     </div>
 </Page>
 
-<script is:inline>
+<script is:inline define:vars={{ scrollBuffer: CHANGELOG_SCROLL_BUFFER_PX }}>
     (() => {
-        const scrollBuffer = ${CHANGELOG_SCROLL_BUFFER_PX};
         const updateOffset = () => {
             const header = document.querySelector('header.header');
             const headerHeight = header?.getBoundingClientRect().height ?? 0;
