@@ -26,6 +26,11 @@
     let hasMounted = false;
     let copyStatus = 'idle';
     let copyError = '';
+    let layoutHandle = null;
+    let pendingViewState = null;
+    let pendingLayoutFit = false;
+
+    const LAYOUT_DEBOUNCE_MS = 60;
 
     const compareNodes = (a, b) => {
         if (!a || !b) return a ? -1 : b ? 1 : 0;
@@ -244,6 +249,9 @@
         hasMounted = true;
         return () => {
             window.removeEventListener('keydown', handleKeydown);
+            if (layoutHandle) {
+                clearTimeout(layoutHandle);
+            }
             cy?.destroy?.();
         };
     });
@@ -335,41 +343,83 @@
         outgoingEdges.targets().addClass('highlight-child');
     };
 
-    const runLayout = (options = {}) => {
+    const captureViewState = () => {
+        if (!cy) return null;
+        return { pan: cy.pan(), zoom: cy.zoom() };
+    };
+
+    const restoreViewState = (viewState) => {
+        if (!cy || !viewState) return;
+        cy.zoom(viewState.zoom);
+        cy.pan(viewState.pan);
+    };
+
+    const scheduleLayout = ({ fit = false, preserveView = false } = {}) => {
         if (!cy) return;
-        const layout = cy.layout({
-            name: 'dagre',
-            rankDir: 'TB',
-            nodeSep: 60,
-            edgeSep: 16,
-            rankSep: 80,
-            padding: 30,
-        });
-        layout.run();
-        if (options.fit !== false) {
-            cy.fit(undefined, 24);
+
+        const viewState = preserveView ? captureViewState() : null;
+        if (fit) {
+            pendingViewState = null;
+        } else if (!pendingViewState && viewState) {
+            pendingViewState = viewState;
         }
+        pendingLayoutFit = pendingLayoutFit || fit;
+
+        if (layoutHandle) {
+            clearTimeout(layoutHandle);
+        }
+
+        layoutHandle = setTimeout(() => {
+            layoutHandle = null;
+            const layoutViewState = pendingViewState;
+            const shouldFit = pendingLayoutFit && !layoutViewState;
+            pendingViewState = null;
+            pendingLayoutFit = false;
+
+            const layout = cy.layout({
+                name: 'dagre',
+                rankDir: 'TB',
+                nodeSep: 60,
+                edgeSep: 16,
+                rankSep: 80,
+                padding: 30,
+            });
+
+            layout.once('layoutstop', () => {
+                if (layoutViewState) {
+                    restoreViewState(layoutViewState);
+                } else if (shouldFit) {
+                    cy.fit(undefined, 24);
+                }
+                highlightFocus(focusedKey);
+            });
+
+            layout.run();
+        }, LAYOUT_DEBOUNCE_MS);
     };
 
     const refreshMap = (includeUnreachable) => {
         if (!cy) return;
 
-        // Store current pan and zoom to preserve user's view
-        const zoom = cy.zoom();
-        const pan = cy.pan();
-
         cy.elements().remove();
         cy.add(buildMapElements(includeUnreachable));
         applyMultiParentHighlight();
+        highlightFocus(focusedKey);
 
-        // Restore pan/zoom after layout completes (layout can be async)
-        cy.once('layoutstop', () => {
-            cy.zoom(zoom);
-            cy.pan(pan);
-            highlightFocus(focusedKey);
-        });
+        scheduleLayout({ preserveView: true });
+    };
 
-        runLayout({ fit: false });
+    const fitGraph = () => {
+        if (!cy) return;
+        scheduleLayout({ fit: true });
+    };
+
+    const centerOnFocused = () => {
+        if (!cy || !focusedKey) return;
+        const node = cy.getElementById(focusedKey);
+        if (!node || node.empty()) return;
+        cy.center(node);
+        highlightFocus(focusedKey);
     };
 
     const initMap = async () => {
@@ -487,7 +537,7 @@
                         },
                     },
                 ],
-                wheelSensitivity: 0.2,
+                wheelSensitivity: 0.6,
                 motionBlur: false,
             });
 
@@ -508,7 +558,7 @@
             }
 
             applyMultiParentHighlight();
-            runLayout();
+            scheduleLayout({ fit: true });
             highlightFocus(focusedKey);
             mapInitialized = true;
             mapStatus = 'ready';
@@ -751,6 +801,12 @@
                     <span class="legend-item">
                         <span class="chip multi-chip" aria-hidden="true"></span> Multi-parent
                     </span>
+                </div>
+                <div class="map-actions">
+                    <button type="button" class="pill" on:click={centerOnFocused}>
+                        Center on focused
+                    </button>
+                    <button type="button" class="pill" on:click={fitGraph}>Fit graph</button>
                 </div>
             </div>
             <div class="map-shell">
@@ -1271,6 +1327,13 @@
         flex-wrap: wrap;
         gap: 10px;
         color: var(--color-text);
+    }
+
+    .map-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
     }
 
     .legend-item {
