@@ -3,7 +3,7 @@ import { loadGameState, ready } from './gameState/common.js';
 const DEFAULT_URL = 'https://token.place/api';
 
 const parseBoolean = (value) => {
-    if (value === undefined) return undefined;
+    if (value === undefined || value === null) return undefined;
 
     if (typeof value === 'boolean') return value;
 
@@ -42,6 +42,7 @@ export const isTokenPlaceEnabled = (options = {}) => {
     const enabledOverride = getEnabledOverride();
 
     if (enabledOverride !== undefined) {
+        // Explicit env flag takes precedence over any configured URLs
         return enabledOverride;
     }
 

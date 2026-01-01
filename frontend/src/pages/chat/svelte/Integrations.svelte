@@ -1,20 +1,21 @@
 <script>
     import OpenAIAPIKeySettings from './OpenAIAPIKeySettings.svelte';
     import { onMount } from 'svelte';
-    import { writable } from 'svelte/store';
-    import { loadGameState, ready } from '../../../utils/gameState/common.js';
+    import { derived, writable } from 'svelte/store';
+    import { loadGameState, ready, state as gameState } from '../../../utils/gameState/common.js';
     import OpenAIChat from './OpenAIChat.svelte';
     import TokenPlaceChat from './TokenPlaceChat.svelte';
     import { isTokenPlaceEnabled } from '../../../utils/tokenPlace.js';
 
     const apiKey = writable('');
-    const tokenPlaceEnabled = writable(false);
+    const tokenPlaceEnabled = derived(gameState, ($gameState) =>
+        isTokenPlaceEnabled({ state: $gameState })
+    );
 
     onMount(async () => {
         await ready;
         const state = loadGameState();
         apiKey.set(state.openAI?.apiKey || '');
-        tokenPlaceEnabled.set(isTokenPlaceEnabled({ state }));
     });
 </script>
 

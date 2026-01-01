@@ -47,14 +47,14 @@ describe('tokenPlaceChat', () => {
     });
 
     test('passes abort signal to fetch', async () => {
-        loadGameState.mockReturnValue({});
+        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place' } });
         const controller = new AbortController();
         await tokenPlaceChat([], { signal: controller.signal });
         expect(fetch.mock.calls[0][1].signal).toBe(controller.signal);
     });
 
     test('throws helpful error when request fails', async () => {
-        loadGameState.mockReturnValue({});
+        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place' } });
         fetch.mockResolvedValueOnce({
             ok: false,
             json: () => Promise.resolve({ error: 'bad request' }),
@@ -92,13 +92,11 @@ describe('isTokenPlaceEnabled', () => {
     });
 
     test('is true when env url is set', () => {
-        process.env.VITE_TOKEN_PLACE_URL = 'http://tp';
-        expect(isTokenPlaceEnabled({ state: {} })).toBe(true);
+        expect(isTokenPlaceEnabled({ state: {}, envUrl: 'http://tp' })).toBe(true);
     });
 
     test('respects explicit env disable', () => {
-        process.env.VITE_TOKEN_PLACE_URL = 'http://tp';
         process.env.VITE_TOKEN_PLACE_ENABLED = 'false';
-        expect(isTokenPlaceEnabled({ state: {} })).toBe(false);
+        expect(isTokenPlaceEnabled({ state: {}, envUrl: 'http://tp' })).toBe(false);
     });
 });
