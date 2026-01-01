@@ -53,7 +53,7 @@ const QUEST_PATH_REGEX = new RegExp(`^${QUEST_JSON_PATH_PREFIX.replace('.', '\\.
 
 const comparatorKeys: Array<keyof QuestNode> = ['group', 'title', 'canonicalKey'];
 
-const compareNodes = (a: QuestNode | undefined, b: QuestNode | undefined): number => {
+export const questNodeComparator = (a: QuestNode | undefined, b: QuestNode | undefined): number => {
     if (!a || !b) {
         return a ? -1 : b ? 1 : 0;
     }
@@ -66,8 +66,12 @@ const compareNodes = (a: QuestNode | undefined, b: QuestNode | undefined): numbe
     return 0;
 };
 
-const compareKeys = (a: string, b: string, nodeIndex: Map<string, QuestNode>): number => {
-    return compareNodes(nodeIndex.get(a), nodeIndex.get(b));
+export const questKeyComparator = (
+    a: string,
+    b: string,
+    nodeIndex: Map<string, QuestNode>
+): number => {
+    return questNodeComparator(nodeIndex.get(a), nodeIndex.get(b));
 };
 
 const normalizeRef = (ref: string): string =>
@@ -216,9 +220,9 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         rawRequiresIndex.set(canonicalKey, requiresQuests);
     }
 
-    nodes.sort(compareNodes);
+    nodes.sort(questNodeComparator);
     for (const [, list] of byBasename) {
-        list.sort((a, b) => compareKeys(a, b, nodeIndex));
+        list.sort((a, b) => questKeyComparator(a, b, nodeIndex));
     }
 
     const edges: QuestEdge[] = [];
@@ -269,7 +273,7 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         }
 
         const resolvedList = Array.from(resolved);
-        resolvedList.sort((a, b) => compareKeys(a, b, nodeIndex));
+        resolvedList.sort((a, b) => questKeyComparator(a, b, nodeIndex));
         node.requires = resolvedList;
 
         for (const requireKey of resolvedList) {
@@ -286,16 +290,16 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
     }
 
     edges.sort((a, b) => {
-        const fromCompare = compareKeys(a.from, b.from, nodeIndex);
+        const fromCompare = questKeyComparator(a.from, b.from, nodeIndex);
         if (fromCompare !== 0) return fromCompare;
-        return compareKeys(a.to, b.to, nodeIndex);
+        return questKeyComparator(a.to, b.to, nodeIndex);
     });
 
     for (const [, list] of requiredBy) {
-        list.sort((a, b) => compareKeys(a, b, nodeIndex));
+        list.sort((a, b) => questKeyComparator(a, b, nodeIndex));
     }
     for (const [, list] of adjacency) {
-        list.sort((a, b) => compareKeys(a, b, nodeIndex));
+        list.sort((a, b) => questKeyComparator(a, b, nodeIndex));
     }
 
     const rootKey = (() => {
@@ -375,7 +379,7 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
     };
 
     const reachableList = Array.from(reachableFromRoot).sort((a, b) =>
-        compareKeys(a, b, nodeIndex)
+        questKeyComparator(a, b, nodeIndex)
     );
     const allKeysInOrder = nodes.map((node) => node.canonicalKey);
     const traversalOrder = rootKey
@@ -416,7 +420,7 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
     }
 
     for (const [, list] of filteredAdjacency) {
-        list.sort((a, b) => compareKeys(a, b, nodeIndex));
+        list.sort((a, b) => questKeyComparator(a, b, nodeIndex));
     }
 
     const depthByKey = new Map<string, number>();
@@ -424,7 +428,7 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         .filter((node) => (indegree.get(node.canonicalKey) ?? 0) === 0)
         .map((node) => node.canonicalKey);
 
-    topoQueue.sort((a, b) => compareKeys(a, b, nodeIndex));
+    topoQueue.sort((a, b) => questKeyComparator(a, b, nodeIndex));
 
     const insertSorted = (list: string[], value: string, startIndex: number) => {
         let low = startIndex;
@@ -432,7 +436,7 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
 
         while (low < high) {
             const mid = Math.floor((low + high) / 2);
-            if (compareKeys(value, list[mid], nodeIndex) < 0) {
+            if (questKeyComparator(value, list[mid], nodeIndex) < 0) {
                 high = mid;
             } else {
                 low = mid + 1;
