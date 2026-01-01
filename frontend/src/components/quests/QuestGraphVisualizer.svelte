@@ -26,6 +26,8 @@
     let hasMounted = false;
     let copyStatus = 'idle';
     let copyError = '';
+    let layoutHandle = null;
+    const LAYOUT_DEBOUNCE_MS = 80;
 
     const compareNodes = (a, b) => {
         if (!a || !b) return a ? -1 : b ? 1 : 0;
@@ -335,20 +337,46 @@
         outgoingEdges.targets().addClass('highlight-child');
     };
 
-    const runLayout = (options = {}) => {
+    const scheduleLayout = (options = {}) => {
         if (!cy) return;
-        const layout = cy.layout({
-            name: 'dagre',
-            rankDir: 'TB',
-            nodeSep: 60,
-            edgeSep: 16,
-            rankSep: 80,
-            padding: 30,
-        });
-        layout.run();
-        if (options.fit !== false) {
-            cy.fit(undefined, 24);
+        const { fit = false, viewport, onAfterLayout } = options;
+
+        if (layoutHandle) {
+            clearTimeout(layoutHandle);
         }
+
+        layoutHandle = setTimeout(() => {
+            layoutHandle = null;
+            let hasCompleted = false;
+            const runAfterLayout = () => {
+                if (hasCompleted) return;
+                hasCompleted = true;
+                if (viewport) {
+                    cy.zoom(viewport.zoom);
+                    cy.pan(viewport.pan);
+                }
+                onAfterLayout?.();
+            };
+
+            const fallback = setTimeout(runAfterLayout, 500);
+            cy.one('layoutstop', () => {
+                clearTimeout(fallback);
+                runAfterLayout();
+            });
+
+            const layout = cy.layout({
+                name: 'dagre',
+                rankDir: 'TB',
+                nodeSep: 60,
+                edgeSep: 16,
+                rankSep: 80,
+                padding: 30,
+            });
+            layout.run();
+            if (fit) {
+                cy.fit(undefined, 24);
+            }
+        }, LAYOUT_DEBOUNCE_MS);
     };
 
     const refreshMap = (includeUnreachable) => {
@@ -362,14 +390,22 @@
         cy.add(buildMapElements(includeUnreachable));
         applyMultiParentHighlight();
 
-        // Restore pan/zoom after layout completes (layout can be async)
-        cy.once('layoutstop', () => {
-            cy.zoom(zoom);
-            cy.pan(pan);
-            highlightFocus(focusedKey);
+        scheduleLayout({
+            viewport: { zoom, pan },
+            onAfterLayout: () => highlightFocus(focusedKey),
         });
+    };
 
-        runLayout({ fit: false });
+    const fitGraph = () => {
+        if (!cy) return;
+        cy.fit(undefined, 24);
+    };
+
+    const centerOnFocused = () => {
+        if (!cy || !focusedKey) return;
+        const node = cy.getElementById(focusedKey);
+        if (!node || node.empty()) return;
+        cy.center(node);
     };
 
     const initMap = async () => {
@@ -487,7 +523,7 @@
                         },
                     },
                 ],
-                wheelSensitivity: 0.2,
+                wheelSensitivity: 0.6,
                 motionBlur: false,
             });
 
@@ -508,8 +544,7 @@
             }
 
             applyMultiParentHighlight();
-            runLayout();
-            highlightFocus(focusedKey);
+            scheduleLayout({ fit: true, onAfterLayout: () => highlightFocus(focusedKey) });
             mapInitialized = true;
             mapStatus = 'ready';
         } catch (error) {
@@ -737,6 +772,10 @@
                         />
                         Highlight multi-parent quests
                     </label>
+                </div>
+                <div class="map-actions">
+                    <button type="button" on:click={fitGraph}>Fit graph</button>
+                    <button type="button" on:click={centerOnFocused}>Center on focused</button>
                 </div>
                 <div class="legend">
                     <span class="legend-item">
@@ -1249,6 +1288,23 @@
         color: var(--color-heading);
         font-size: 0.95rem;
         align-items: flex-start;
+    }
+
+    .map-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .map-actions button {
+        background: var(--color-pill);
+        color: var(--color-pill-text);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        padding: 8px 12px;
+        cursor: pointer;
+        white-space: nowrap;
     }
 
     .hint-wrapper {
