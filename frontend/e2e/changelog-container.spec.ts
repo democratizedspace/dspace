@@ -23,6 +23,37 @@ async function setTheme(page: Page, theme: Theme) {
 }
 
 test.describe('Changelog container regression', () => {
+    test('loads without console syntax errors', async ({ page }) => {
+        const consoleErrors: string[] = [];
+        const pageErrors: string[] = [];
+
+        page.on('console', (message) => {
+            if (message.type() === 'error') {
+                consoleErrors.push(message.text());
+            }
+        });
+
+        page.on('pageerror', (error) => {
+            pageErrors.push(error.message);
+        });
+
+        await navigateWithRetry(page, '/changelog');
+        await page.waitForLoadState('networkidle');
+
+        const hasSyntaxConsoleError = consoleErrors.some((message) =>
+            /syntaxerror|unexpected token/i.test(message)
+        );
+        const hasSyntaxPageError = pageErrors.some((message) =>
+            /syntaxerror|unexpected token/i.test(message)
+        );
+
+        expect(hasSyntaxConsoleError).toBe(false);
+        expect(hasSyntaxPageError).toBe(false);
+
+        const firstHeading = page.getByRole('heading', { level: 3 }).first();
+        await expect(firstHeading).toBeVisible();
+    });
+
     const themes: Theme[] = ['light', 'dark'];
 
     for (const theme of themes) {
