@@ -1,6 +1,15 @@
 import { test, expect } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
+// Extend Window interface for test-only exposed Cytoscape instance
+declare global {
+    interface Window {
+        __questGraphCy?: {
+            nodes: () => { length: number };
+        };
+    }
+}
+
 test.describe('Quest graph "Show unreachable" toggle', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
@@ -95,7 +104,7 @@ test.describe('Quest graph "Show unreachable" toggle', () => {
         // Wait for Cytoscape instance to be available
         await page.waitForFunction(
             () => {
-                return (window as any).__questGraphCy != null;
+                return window.__questGraphCy != null;
             },
             { timeout: 10000 }
         );
@@ -111,7 +120,7 @@ test.describe('Quest graph "Show unreachable" toggle', () => {
 
         // Get initial node count using real Cytoscape API
         const initialNodeCount = await page.evaluate(() => {
-            return (window as any).__questGraphCy?.nodes().length ?? 0;
+            return window.__questGraphCy?.nodes().length ?? 0;
         });
 
         // Toggle the checkbox ON (to show unreachable)
@@ -120,7 +129,7 @@ test.describe('Quest graph "Show unreachable" toggle', () => {
         // Wait for graph to update by checking real node count changes
         await page.waitForFunction(
             (initial) => {
-                const current = (window as any).__questGraphCy?.nodes().length ?? 0;
+                const current = window.__questGraphCy?.nodes().length ?? 0;
                 return current !== initial;
             },
             initialNodeCount,
@@ -128,7 +137,7 @@ test.describe('Quest graph "Show unreachable" toggle', () => {
         );
 
         const nodeCountAfterToggleOn = await page.evaluate(() => {
-            return (window as any).__questGraphCy?.nodes().length ?? 0;
+            return window.__questGraphCy?.nodes().length ?? 0;
         });
 
         // Toggle the checkbox OFF (to hide unreachable)
@@ -137,7 +146,7 @@ test.describe('Quest graph "Show unreachable" toggle', () => {
         // Wait for graph to revert to initial count
         await page.waitForFunction(
             (expected) => {
-                const current = (window as any).__questGraphCy?.nodes().length ?? 0;
+                const current = window.__questGraphCy?.nodes().length ?? 0;
                 return current === expected;
             },
             initialNodeCount,
@@ -145,7 +154,7 @@ test.describe('Quest graph "Show unreachable" toggle', () => {
         );
 
         const nodeCountAfterToggleOff = await page.evaluate(() => {
-            return (window as any).__questGraphCy?.nodes().length ?? 0;
+            return window.__questGraphCy?.nodes().length ?? 0;
         });
 
         // Verify that toggling actually changed the node count
