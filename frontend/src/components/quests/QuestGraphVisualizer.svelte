@@ -13,7 +13,7 @@
     let visualizerEl = null;
     let mapContainer = null;
     let searchInput = null;
-    const resolvedRootKey = resolveRootKey(graph);
+    let resolvedRootKey = resolveRootKey(graph);
 
     let activeTab = 'navigator';
     let mapStatus = 'idle';
@@ -95,6 +95,7 @@
         await setFocus(key);
     };
 
+    $: resolvedRootKey = resolveRootKey(graph);
     $: focusedNode = byKey[focusedKey];
     $: unreachableCount = graph?.diagnostics?.unreachableNodes?.length ?? 0;
     $: parentKeys = focusedNode ? sortKeys(focusedNode.requires ?? []) : [];
@@ -814,6 +815,7 @@
                                             >
                                             <button
                                                 type="button"
+                                                aria-label={`Jump to node ${issue.from}`}
                                                 on:click={() => jumpToNode(issue.from)}
                                             >
                                                 Jump to node
@@ -839,6 +841,7 @@
                                             </span>
                                             <button
                                                 type="button"
+                                                aria-label={`Jump to node ${issue.from}`}
                                                 on:click={() => jumpToNode(issue.from)}
                                             >
                                                 Jump to node
@@ -859,7 +862,11 @@
                                     <li>
                                         <div class="diag-item">
                                             <span class="diag-text">{key}</span>
-                                            <button type="button" on:click={() => jumpToNode(key)}>
+                                            <button
+                                                type="button"
+                                                aria-label={`Jump to node ${key}`}
+                                                on:click={() => jumpToNode(key)}
+                                            >
                                                 Jump to node
                                             </button>
                                         </div>
@@ -880,6 +887,7 @@
                                             <span class="diag-text">{cycle.join(' → ')}</span>
                                             <button
                                                 type="button"
+                                                aria-label={`Jump to node ${cycle[0]}`}
                                                 on:click={() => jumpToNode(cycle[0])}
                                             >
                                                 Jump to node
