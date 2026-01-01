@@ -130,6 +130,7 @@ const TEST_GROUPS = [
             'test-quest-chat.spec.ts',
             'tutorial-quest.spec.ts',
             'quests.spec.ts',
+            'quests-width.spec.ts',
             'quest-grant-items.spec.ts',
             'quest-hardening.spec.ts',
             'constellations-quest.spec.ts',
