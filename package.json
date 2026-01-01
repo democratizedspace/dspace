@@ -26,7 +26,7 @@
     "lint": "cd frontend && npm run lint",
     "lint:fix": "cd frontend && npm run lint:fix",
     "format": "cd frontend && npm run format",
-    "format:check:frontend-canary": "npx prettier --config frontend/.prettierrc --check frontend/__tests__/offlineWorkerRegistration.test.js",
+    "format:check:frontend-canary": "npx prettier --check frontend/__tests__/offlineWorkerRegistration.test.js",
     "type-check": "tsc --noEmit",
     "build": "cd frontend && npm run build",
     "link-check": "node scripts/link-check.mjs",
