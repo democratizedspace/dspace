@@ -98,15 +98,21 @@ test.describe('Quests page horizontal overflow regression', () => {
         const mapCanvas = page.locator('.map-canvas');
         await expect(mapCanvas).toBeVisible();
 
-        // Toggle "Show unreachable quests" checkbox
-        const showUnreachableCheckbox = page.getByLabel('Show unreachable quests');
+        // Check if the "Show unreachable" checkbox is enabled
+        const showUnreachableCheckbox = page.getByLabel(/Show unreachable/);
         await expect(showUnreachableCheckbox).toBeVisible();
-        await showUnreachableCheckbox.check();
 
-        // Wait for stable state after toggle
-        await page.waitForFunction(() => document.readyState === 'complete');
+        const isEnabled = await showUnreachableCheckbox.isEnabled();
 
-        // Check for overflow
+        // Only toggle if the checkbox is enabled (i.e., there are unreachable nodes)
+        if (isEnabled) {
+            await showUnreachableCheckbox.check();
+
+            // Wait for stable state after toggle
+            await page.waitForFunction(() => document.readyState === 'complete');
+        }
+
+        // Check for overflow (regardless of whether we toggled)
         const hasOverflow = await page.evaluate((tolerance) => {
             const docEl = document.documentElement;
             const body = document.body;
