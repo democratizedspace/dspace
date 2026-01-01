@@ -2,6 +2,23 @@ import { loadGameState, ready } from './gameState/common.js';
 
 const DEFAULT_URL = 'https://token.place/api';
 
+const parseBoolean = (value) => value === true || value === 'true';
+
+const getEnvEnabled = () => {
+    if (
+        typeof import.meta !== 'undefined' &&
+        import.meta.env?.VITE_TOKEN_PLACE_ENABLED !== undefined
+    ) {
+        return parseBoolean(import.meta.env.VITE_TOKEN_PLACE_ENABLED);
+    }
+
+    if (typeof process !== 'undefined' && process.env?.VITE_TOKEN_PLACE_ENABLED !== undefined) {
+        return parseBoolean(process.env.VITE_TOKEN_PLACE_ENABLED);
+    }
+
+    return undefined;
+};
+
 const getEnvUrl = () => {
     // Prefer Vite-style environment variables but fall back to Node env for tests
     if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_TOKEN_PLACE_URL) {
@@ -13,10 +30,36 @@ const getEnvUrl = () => {
     return null;
 };
 
+export const isTokenPlaceEnabled = (state = loadGameState()) => {
+    const envEnabled = getEnvEnabled();
+    if (envEnabled !== undefined) {
+        return envEnabled;
+    }
+
+    const tokenPlaceState = state.tokenPlace;
+    if (!tokenPlaceState) {
+        return false;
+    }
+
+    if (tokenPlaceState.enabled !== undefined) {
+        return Boolean(tokenPlaceState.enabled);
+    }
+
+    return Boolean(tokenPlaceState.url);
+};
+
 export const tokenPlaceChat = async (messages, { signal } = {}) => {
     const envUrl = getEnvUrl();
     await ready;
-    const baseUrl = loadGameState().tokenPlace?.url || envUrl || DEFAULT_URL;
+    const state = loadGameState();
+
+    if (!isTokenPlaceEnabled(state)) {
+        throw new Error(
+            'token.place chat is disabled. Enable it with VITE_TOKEN_PLACE_ENABLED=true or configure a token.place URL.'
+        );
+    }
+
+    const baseUrl = state.tokenPlace?.url || envUrl || DEFAULT_URL;
 
     const systemMessage = {
         role: 'system',
