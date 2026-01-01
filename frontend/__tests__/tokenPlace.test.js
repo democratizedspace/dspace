@@ -6,7 +6,7 @@ jest.mock('../src/utils/gameState/common.js', () => ({
     ready: Promise.resolve(),
 }));
 
-const { tokenPlaceChat } = require('../src/utils/tokenPlace.js');
+const { tokenPlaceChat, isTokenPlaceEnabled } = require('../src/utils/tokenPlace.js');
 const { loadGameState } = require('../src/utils/gameState/common.js');
 
 describe('tokenPlaceChat', () => {
@@ -22,6 +22,7 @@ describe('tokenPlaceChat', () => {
     afterEach(() => {
         jest.resetAllMocks();
         delete process.env.VITE_TOKEN_PLACE_URL;
+        delete process.env.VITE_TOKEN_PLACE_ENABLED;
     });
 
     test('uses game state url when configured', async () => {
@@ -35,12 +36,6 @@ describe('tokenPlaceChat', () => {
         process.env.VITE_TOKEN_PLACE_URL = 'http://env.token';
         await tokenPlaceChat([]);
         expect(fetch).toHaveBeenCalledWith('http://env.token/chat', expect.any(Object));
-    });
-
-    test('uses default url when none provided', async () => {
-        loadGameState.mockReturnValue({});
-        await tokenPlaceChat([]);
-        expect(fetch).toHaveBeenCalledWith('https://token.place/api/chat', expect.any(Object));
     });
 
     test('prepends system message and returns response', async () => {
@@ -67,5 +62,43 @@ describe('tokenPlaceChat', () => {
         await expect(tokenPlaceChat([])).rejects.toThrow(
             'token.place API request failed: bad request'
         );
+    });
+
+    test('throws when disabled by default', async () => {
+        loadGameState.mockReturnValue({});
+        await expect(tokenPlaceChat([])).rejects.toThrow('token.place is disabled');
+    });
+
+    test('uses default url when explicitly enabled without overrides', async () => {
+        loadGameState.mockReturnValue({});
+        process.env.VITE_TOKEN_PLACE_ENABLED = 'true';
+        await tokenPlaceChat([]);
+        expect(fetch).toHaveBeenCalledWith('https://token.place/api/chat', expect.any(Object));
+    });
+});
+
+describe('isTokenPlaceEnabled', () => {
+    afterEach(() => {
+        delete process.env.VITE_TOKEN_PLACE_URL;
+        delete process.env.VITE_TOKEN_PLACE_ENABLED;
+    });
+
+    test('is false when no overrides are set', () => {
+        expect(isTokenPlaceEnabled({ state: {} })).toBe(false);
+    });
+
+    test('is true when tokenPlace url exists in state', () => {
+        expect(isTokenPlaceEnabled({ state: { tokenPlace: { url: 'http://tp' } } })).toBe(true);
+    });
+
+    test('is true when env url is set', () => {
+        process.env.VITE_TOKEN_PLACE_URL = 'http://tp';
+        expect(isTokenPlaceEnabled({ state: {} })).toBe(true);
+    });
+
+    test('respects explicit env disable', () => {
+        process.env.VITE_TOKEN_PLACE_URL = 'http://tp';
+        process.env.VITE_TOKEN_PLACE_ENABLED = 'false';
+        expect(isTokenPlaceEnabled({ state: {} })).toBe(false);
     });
 });

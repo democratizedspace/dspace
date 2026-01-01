@@ -2,6 +2,19 @@ import { loadGameState, ready } from './gameState/common.js';
 
 const DEFAULT_URL = 'https://token.place/api';
 
+const parseBoolean = (value) => {
+    if (value === undefined) return undefined;
+
+    if (typeof value === 'boolean') return value;
+
+    const normalized = String(value).trim().toLowerCase();
+
+    if (['1', 'true', 'yes', 'on'].includes(normalized)) return true;
+    if (['0', 'false', 'no', 'off'].includes(normalized)) return false;
+
+    return undefined;
+};
+
 const getEnvUrl = () => {
     // Prefer Vite-style environment variables but fall back to Node env for tests
     if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_TOKEN_PLACE_URL) {
@@ -13,10 +26,43 @@ const getEnvUrl = () => {
     return null;
 };
 
+const getEnabledOverride = () => {
+    const envValue =
+        (typeof import.meta !== 'undefined' &&
+        import.meta.env?.VITE_TOKEN_PLACE_ENABLED !== undefined
+            ? import.meta.env.VITE_TOKEN_PLACE_ENABLED
+            : undefined) ??
+        (typeof process !== 'undefined' ? process.env?.VITE_TOKEN_PLACE_ENABLED : undefined);
+
+    return parseBoolean(envValue);
+};
+
+export const isTokenPlaceEnabled = (options = {}) => {
+    const { envUrl = getEnvUrl(), state = loadGameState() } = options;
+    const enabledOverride = getEnabledOverride();
+
+    if (enabledOverride !== undefined) {
+        return enabledOverride;
+    }
+
+    const stateUrl = state?.tokenPlace?.url;
+
+    return Boolean(envUrl || stateUrl);
+};
+
 export const tokenPlaceChat = async (messages, { signal } = {}) => {
-    const envUrl = getEnvUrl();
     await ready;
-    const baseUrl = loadGameState().tokenPlace?.url || envUrl || DEFAULT_URL;
+    const envUrl = getEnvUrl();
+    const state = loadGameState();
+    const enabled = isTokenPlaceEnabled({ envUrl, state });
+
+    if (!enabled) {
+        throw new Error(
+            'token.place is disabled. Set VITE_TOKEN_PLACE_ENABLED=true or configure a tokenPlace url.'
+        );
+    }
+
+    const baseUrl = state.tokenPlace?.url || envUrl || DEFAULT_URL;
 
     const systemMessage = {
         role: 'system',

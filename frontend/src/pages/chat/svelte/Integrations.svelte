@@ -5,16 +5,23 @@
     import { loadGameState, ready } from '../../../utils/gameState/common.js';
     import OpenAIChat from './OpenAIChat.svelte';
     import TokenPlaceChat from './TokenPlaceChat.svelte';
+    import { isTokenPlaceEnabled } from '../../../utils/tokenPlace.js';
 
     const apiKey = writable('');
+    const tokenPlaceEnabled = writable(false);
+
     onMount(async () => {
         await ready;
-        apiKey.set(loadGameState().openAI?.apiKey || '');
+        const state = loadGameState();
+        apiKey.set(state.openAI?.apiKey || '');
+        tokenPlaceEnabled.set(isTokenPlaceEnabled({ state }));
     });
 </script>
 
 <div class="container">
-    <TokenPlaceChat />
+    {#if $tokenPlaceEnabled}
+        <TokenPlaceChat />
+    {/if}
     <div class="api-container">
         <OpenAIAPIKeySettings {apiKey} />
     </div>
