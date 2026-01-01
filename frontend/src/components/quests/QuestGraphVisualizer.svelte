@@ -1,10 +1,11 @@
 <script>
     import { onMount, tick } from 'svelte';
+    import { buildQuestDiagnosticsReport } from '../../lib/quests/questDiagnosticsReport';
+    import { resolveQuestGraphRoot } from '../../lib/quests/questGraphClient';
     import QuestGraphCard from './QuestGraphCard.svelte';
 
     export let graph;
 
-    const ROOT_KEY = 'welcome/howtodoquests.json';
     const byKey = graph?.byKey ?? {};
     let visualizerEl = null;
     let mapContainer = null;
@@ -19,6 +20,10 @@
     let mapInitialized = false;
     let cy = null;
     let hasMounted = false;
+    let copyState = 'idle';
+    let copyMessage = '';
+
+    const rootKey = resolveQuestGraphRoot(graph);
 
     const compareNodes = (a, b) => {
         if (!a || !b) return a ? -1 : b ? 1 : 0;
@@ -43,19 +48,11 @@
             .map((node) => node.canonicalKey)
     );
 
-    const resolveRoot = () => {
-        if (byKey[ROOT_KEY]) return ROOT_KEY;
-        const sortedNodes = getSortedNodes();
-        const howToMatches = sortedNodes.filter(
-            (node) => node.canonicalKey.split('/').pop() === 'howtodoquests.json'
-        );
-        if (howToMatches.length === 1) {
-            return howToMatches[0].canonicalKey;
-        }
-        return sortedNodes[0]?.canonicalKey ?? '';
-    };
+    $: diagnosticsReportPreview = buildQuestDiagnosticsReport(graph, {
+        includeMultiParentTop: true,
+    });
 
-    let focusedKey = resolveRoot();
+    let focusedKey = rootKey;
     let searchOpen = false;
     let searchQuery = '';
     let parentCycleIndex = 0;
@@ -131,6 +128,34 @@
         const card = cards.get(focusedKey);
         if (card?.scrollIntoView) {
             card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    };
+
+    const handleDiagnosticJump = async (key) => {
+        if (!key) return;
+        activeTab = 'navigator';
+        await tick();
+        await setFocus(key);
+    };
+
+    const copyDiagnosticsReport = async () => {
+        copyState = 'copying';
+        copyMessage = '';
+        try {
+            const report = buildQuestDiagnosticsReport(graph, { includeMultiParentTop: true });
+            const serialized = JSON.stringify(report, null, 2);
+            if (typeof navigator === 'undefined' || !navigator.clipboard) {
+                throw new Error('Clipboard access is unavailable in this browser context.');
+            }
+            await navigator.clipboard.writeText(serialized);
+            copyState = 'success';
+            copyMessage = 'Diagnostics report copied to clipboard.';
+        } catch (error) {
+            copyState = 'error';
+            copyMessage =
+                error instanceof Error && error.message
+                    ? error.message
+                    : 'Failed to copy diagnostics report.';
         }
     };
 
@@ -259,7 +284,7 @@
                     id: node.canonicalKey,
                     label: node.title,
                     group: node.group,
-                    isRoot: node.canonicalKey === resolveRoot(),
+                    isRoot: node.canonicalKey === rootKey,
                     isMultiParent: multiParentKeys.has(node.canonicalKey),
                     isUnreachable: unreachableSet.has(node.canonicalKey),
                     inCycle: cycleNodeSet.has(node.canonicalKey),
@@ -269,7 +294,7 @@
                     unreachableSet.has(node.canonicalKey) ? 'unreachable' : '',
                     multiParentKeys.has(node.canonicalKey) ? 'multi-parent' : '',
                     cycleNodeSet.has(node.canonicalKey) ? 'cycle' : '',
-                    node.canonicalKey === resolveRoot() ? 'root' : '',
+                    node.canonicalKey === rootKey ? 'root' : '',
                 ]
                     .filter(Boolean)
                     .join(' '),
@@ -533,9 +558,7 @@
             {/if}
         </div>
         <div class="controls">
-            <button class="pill" type="button" on:click={() => setFocus(resolveRoot())}>
-                Root
-            </button>
+            <button class="pill" type="button" on:click={() => setFocus(rootKey)}> Root </button>
             <button class="pill" type="button" on:click={() => (searchOpen = true)}>
                 Search
             </button>
@@ -621,7 +644,7 @@
                                         keyValue={key}
                                         register={cardRef}
                                         isFocused={key === focusedKey}
-                                        isRoot={key === resolveRoot()}
+                                        isRoot={key === rootKey}
                                         isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
                                         on:select={() => setFocus(key)}
                                     />
@@ -675,11 +698,7 @@
                 <button type="button" on:click={() => focusChild(false)} aria-label="First child">
                     Child
                 </button>
-                <button
-                    type="button"
-                    on:click={() => setFocus(resolveRoot())}
-                    aria-label="Go to root"
-                >
+                <button type="button" on:click={() => setFocus(rootKey)} aria-label="Go to root">
                     Root
                 </button>
                 <button type="button" on:click={() => (searchOpen = true)} aria-label="Search">
@@ -760,72 +779,171 @@
             tabindex="0"
         >
             <div class="diagnostics">
+                <div class="diagnostic-actions">
+                    <div>
+                        <p class="eyebrow subtle">Diagnostics</p>
+                        <h4>QA helpers</h4>
+                        <p class="subtle">
+                            Root:{' '}
+                            {diagnosticsReportPreview.root
+                                ? diagnosticsReportPreview.root
+                                : 'Unknown'}
+                        </p>
+                    </div>
+                    <div class="action-buttons">
+                        <button
+                            class="pill"
+                            type="button"
+                            on:click={copyDiagnosticsReport}
+                            disabled={copyState === 'copying'}
+                        >
+                            {copyState === 'copying' ? 'Copying…' : 'Copy report'}
+                        </button>
+                        {#if copyMessage}
+                            <p class={`copy-status ${copyState}`}>{copyMessage}</p>
+                        {/if}
+                    </div>
+                </div>
                 <div class="diag-grid">
                     <div>
-                        <h4>Missing refs ({graph.diagnostics.missingRefs.length})</h4>
+                        <h4>Missing refs ({diagnosticsReportPreview.counts.missingRefs})</h4>
                         {#if graph.diagnostics.missingRefs.length === 0}
                             <p class="subtle">None</p>
                         {:else}
                             <ul>
                                 {#each graph.diagnostics.missingRefs as issue}
                                     <li>
-                                        <button type="button" on:click={() => setFocus(issue.from)}>
-                                            {issue.from} → {issue.ref}
-                                        </button>
+                                        <div class="diag-item">
+                                            <div class="diag-text">
+                                                <div class="diag-label">{issue.from}</div>
+                                                <div class="subtle">Missing: {issue.ref}</div>
+                                            </div>
+                                            <button
+                                                class="ghost-button"
+                                                type="button"
+                                                on:click={() => handleDiagnosticJump(issue.from)}
+                                            >
+                                                Jump to node
+                                            </button>
+                                        </div>
                                     </li>
                                 {/each}
                             </ul>
                         {/if}
                     </div>
                     <div>
-                        <h4>Ambiguous refs ({graph.diagnostics.ambiguousRefs.length})</h4>
+                        <h4>Ambiguous refs ({diagnosticsReportPreview.counts.ambiguousRefs})</h4>
                         {#if graph.diagnostics.ambiguousRefs.length === 0}
                             <p class="subtle">None</p>
                         {:else}
                             <ul>
                                 {#each graph.diagnostics.ambiguousRefs as issue}
                                     <li>
-                                        <button type="button" on:click={() => setFocus(issue.from)}>
-                                            {issue.from} → {issue.ref} ({issue.candidates.length} candidates)
-                                        </button>
+                                        <div class="diag-item">
+                                            <div class="diag-text">
+                                                <div class="diag-label">{issue.from}</div>
+                                                <div class="subtle">
+                                                    {issue.ref} ({issue.candidates.length} candidates)
+                                                </div>
+                                            </div>
+                                            <button
+                                                class="ghost-button"
+                                                type="button"
+                                                on:click={() => handleDiagnosticJump(issue.from)}
+                                            >
+                                                Jump to node
+                                            </button>
+                                        </div>
                                     </li>
                                 {/each}
                             </ul>
                         {/if}
                     </div>
                     <div>
-                        <h4>Unreachable ({graph.diagnostics.unreachableNodes.length})</h4>
+                        <h4>Unreachable ({diagnosticsReportPreview.counts.unreachable})</h4>
                         {#if graph.diagnostics.unreachableNodes.length === 0}
                             <p class="subtle">None</p>
                         {:else}
                             <ul>
                                 {#each graph.diagnostics.unreachableNodes as key}
                                     <li>
-                                        <button type="button" on:click={() => setFocus(key)}
-                                            >{key}</button
-                                        >
+                                        <div class="diag-item">
+                                            <div class="diag-text diag-label">{key}</div>
+                                            <button
+                                                class="ghost-button"
+                                                type="button"
+                                                on:click={() => handleDiagnosticJump(key)}
+                                            >
+                                                Jump to node
+                                            </button>
+                                        </div>
                                     </li>
                                 {/each}
                             </ul>
                         {/if}
                     </div>
                     <div>
-                        <h4>Cycles ({graph.diagnostics.cycles.length})</h4>
+                        <h4>Cycles ({diagnosticsReportPreview.counts.cycles})</h4>
                         {#if graph.diagnostics.cycles.length === 0}
                             <p class="subtle">None</p>
                         {:else}
                             <ul>
                                 {#each graph.diagnostics.cycles as cycle}
                                     <li>
-                                        <button type="button" on:click={() => setFocus(cycle[0])}>
-                                            {cycle.join(' → ')}
-                                        </button>
+                                        <div class="diag-item">
+                                            <div class="diag-text diag-label">
+                                                {cycle.join(' → ')}
+                                            </div>
+                                            <button
+                                                class="ghost-button"
+                                                type="button"
+                                                on:click={() => handleDiagnosticJump(cycle[0])}
+                                            >
+                                                Jump to node
+                                            </button>
+                                        </div>
                                     </li>
                                 {/each}
                             </ul>
                         {/if}
                     </div>
                 </div>
+                {#if diagnosticsReportPreview.multiParentTop?.length}
+                    <div class="diag-subsection">
+                        <div class="subsection-header">
+                            <h4>
+                                Top multi-parent quests ({diagnosticsReportPreview.multiParentTop
+                                    .length})
+                            </h4>
+                            <p class="subtle">Requires more than one parent quest</p>
+                        </div>
+                        <ul>
+                            {#each diagnosticsReportPreview.multiParentTop as quest}
+                                <li>
+                                    <div class="diag-item">
+                                        <div class="diag-text">
+                                            <div class="diag-label">{quest.title}</div>
+                                            <div class="subtle">{quest.canonicalKey}</div>
+                                            <div class="subtle">
+                                                Parents ({quest.requiresCount}): {quest.requires.join(
+                                                    ', '
+                                                )}
+                                            </div>
+                                        </div>
+                                        <button
+                                            class="ghost-button"
+                                            type="button"
+                                            on:click={() =>
+                                                handleDiagnosticJump(quest.canonicalKey)}
+                                        >
+                                            Jump to node
+                                        </button>
+                                    </div>
+                                </li>
+                            {/each}
+                        </ul>
+                    </div>
+                {/if}
             </div>
         </div>
     {/if}
@@ -1026,6 +1144,21 @@
         padding: 10px;
     }
 
+    .diagnostic-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+    }
+
     .diag-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -1037,16 +1170,6 @@
         list-style: none;
         padding: 0;
         margin: 6px 0 0;
-    }
-
-    .diag-grid li button {
-        background: none;
-        border: none;
-        color: var(--color-pill-text);
-        text-align: left;
-        padding: 6px 0;
-        cursor: pointer;
-        width: 100%;
     }
 
     .overlay {
@@ -1218,6 +1341,66 @@
     .hint {
         margin-top: 8px;
         font-size: 0.9rem;
+    }
+
+    .ghost-button {
+        background: transparent;
+        color: var(--color-pill-text);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        padding: 6px 10px;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .diag-item {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 6px 0;
+    }
+
+    .diag-text {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .diag-label {
+        font-weight: 600;
+        color: var(--color-heading);
+        word-break: break-word;
+    }
+
+    .copy-status {
+        margin: 0;
+        font-size: 0.9rem;
+        text-align: right;
+    }
+
+    .copy-status.success {
+        color: var(--color-pill-text);
+    }
+
+    .copy-status.error {
+        color: var(--color-warning, #f39c12);
+    }
+
+    .diag-subsection ul {
+        list-style: none;
+        padding: 0;
+        margin: 8px 0 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .subsection-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: wrap;
     }
 
     @media (max-width: 720px) {

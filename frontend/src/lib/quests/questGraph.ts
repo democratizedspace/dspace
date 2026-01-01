@@ -66,8 +66,37 @@ const compareNodes = (a: QuestNode | undefined, b: QuestNode | undefined): numbe
     return 0;
 };
 
+export const compareQuestNodes = (a: QuestNode | undefined, b: QuestNode | undefined): number =>
+    compareNodes(a, b);
+
+export const compareQuestKeys = (
+    a: string,
+    b: string,
+    graph:
+        | {
+              byKey?: Record<string, QuestNode | undefined>;
+          }
+        | Map<string, QuestNode>
+): number => {
+    const lookup =
+        graph instanceof Map
+            ? (key: string) => graph.get(key)
+            : (key: string) => graph.byKey?.[key];
+    const comparison = compareNodes(lookup(a), lookup(b));
+    return comparison === 0 ? a.localeCompare(b) : comparison;
+};
+
+export const sortQuestKeys = (
+    keys: string[] | Set<string>,
+    graph:
+        | {
+              byKey?: Record<string, QuestNode | undefined>;
+          }
+        | Map<string, QuestNode>
+): string[] => [...keys].sort((left, right) => compareQuestKeys(left, right, graph));
+
 const compareKeys = (a: string, b: string, nodeIndex: Map<string, QuestNode>): number => {
-    return compareNodes(nodeIndex.get(a), nodeIndex.get(b));
+    return compareQuestKeys(a, b, nodeIndex);
 };
 
 const normalizeRef = (ref: string): string =>
@@ -87,6 +116,21 @@ const makeRecord = <T>(map: Map<string, T>): Record<string, T> => {
         record[key] = value;
     }
     return record;
+};
+
+export const resolveQuestGraphRoot = (graph: QuestGraph | undefined): string => {
+    if (!graph) return '';
+    if (graph.byKey?.[ROOT_CANONICAL_KEY]) return ROOT_CANONICAL_KEY;
+
+    const sortedNodes = [...(graph.nodes ?? [])].sort(compareQuestNodes);
+    const howToMatches = sortedNodes.filter(
+        (node) => node.canonicalKey.split('/').pop() === ROOT_BASENAME
+    );
+    if (howToMatches.length === 1) {
+        return howToMatches[0].canonicalKey;
+    }
+
+    return sortedNodes[0]?.canonicalKey ?? '';
 };
 
 // Default quest directory (for tests that don't pass a questDir)
