@@ -316,7 +316,7 @@
         outgoingEdges.targets().addClass('highlight-child');
     };
 
-    const runLayout = () => {
+    const runLayout = (options = {}) => {
         if (!cy) return;
         cy.layout({
             name: 'dagre',
@@ -326,7 +326,9 @@
             rankSep: 80,
             padding: 30,
         }).run();
-        cy.fit(undefined, 24);
+        if (options.fit !== false) {
+            cy.fit(undefined, 24);
+        }
     };
 
     const refreshMap = (includeUnreachable) => {
@@ -339,7 +341,7 @@
         cy.elements().remove();
         cy.add(buildMapElements(includeUnreachable));
         applyMultiParentHighlight();
-        runLayout();
+        runLayout({ fit: false });
 
         // Restore pan and zoom after layout
         cy.zoom(zoom);
@@ -693,7 +695,9 @@
                         Show unreachable ({unreachableCount})
                     </label>
                     {#if unreachableCount === 0}
-                        <span class="hint subtle">No unreachable quests detected</span>
+                        <div class="hint-wrapper">
+                            <span class="hint subtle">No unreachable quests detected</span>
+                        </div>
                     {/if}
                     <label>
                         <input
@@ -1115,6 +1119,11 @@
         gap: 12px;
         color: var(--color-heading);
         font-size: 0.95rem;
+    }
+
+    .hint-wrapper {
+        flex-basis: 100%;
+        margin-top: -6px;
     }
 
     .toggles label.disabled {

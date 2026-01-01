@@ -102,15 +102,6 @@ test.describe('Quest graph "Show unreachable" toggle', () => {
             { timeout: 10000 }
         );
 
-        // Get initial node count
-        const initialNodeCount = await page.evaluate(() => {
-            // Access Cytoscape instance if available
-            const canvas = document.querySelector('.map-canvas');
-            // Check if cytoscape is initialized by looking for cytoscape-specific elements
-            const cyElements = canvas?.querySelectorAll('[class*="cy-"]');
-            return cyElements?.length ?? 0;
-        });
-
         // Check if unreachable toggle is enabled (meaning there are unreachable nodes)
         const showUnreachableCheckbox = page.getByLabel(/Show unreachable/);
         const isEnabled = await showUnreachableCheckbox.isEnabled();
@@ -120,35 +111,47 @@ test.describe('Quest graph "Show unreachable" toggle', () => {
             return;
         }
 
-        // Toggle the checkbox ON (to show unreachable)
-        await showUnreachableCheckbox.check();
-
-        // Wait for graph to update (small delay for reactivity)
-        await page.waitForTimeout(500);
-
-        // Get node count after toggling ON
-        const nodeCountAfterToggleOn = await page.evaluate(() => {
+        // Get initial node count (with unreachable hidden)
+        const getNodeCount = () => {
             const canvas = document.querySelector('.map-canvas');
             const cyElements = canvas?.querySelectorAll('[class*="cy-"]');
             return cyElements?.length ?? 0;
-        });
+        };
+
+        const initialNodeCount = await page.evaluate(getNodeCount);
+
+        // Toggle the checkbox ON (to show unreachable)
+        await showUnreachableCheckbox.check();
+
+        // Wait for graph to update by checking node count changes
+        await page.waitForFunction(
+            ({ initial, getCount }) => {
+                const current = eval(`(${getCount})()`);
+                return current !== initial;
+            },
+            { initial: initialNodeCount, getCount: getNodeCount.toString() },
+            { timeout: 5000 }
+        );
+
+        const nodeCountAfterToggleOn = await page.evaluate(getNodeCount);
 
         // Toggle the checkbox OFF (to hide unreachable)
         await showUnreachableCheckbox.uncheck();
 
-        // Wait for graph to update
-        await page.waitForTimeout(500);
+        // Wait for graph to revert
+        await page.waitForFunction(
+            ({ expected, getCount }) => {
+                const current = eval(`(${getCount})()`);
+                return current === expected;
+            },
+            { expected: initialNodeCount, getCount: getNodeCount.toString() },
+            { timeout: 5000 }
+        );
 
-        // Get node count after toggling OFF
-        const nodeCountAfterToggleOff = await page.evaluate(() => {
-            const canvas = document.querySelector('.map-canvas');
-            const cyElements = canvas?.querySelectorAll('[class*="cy-"]');
-            return cyElements?.length ?? 0;
-        });
+        const nodeCountAfterToggleOff = await page.evaluate(getNodeCount);
 
-        // Verify that toggling had an effect
-        // Note: We can't guarantee exact counts without mocking, but we can verify the toggle works
-        // by checking that the map actually re-renders (initial state should match toggle off state)
-        expect(initialNodeCount).toBeGreaterThan(0);
+        // Verify that toggling actually changed the node count
+        expect(nodeCountAfterToggleOn).toBeGreaterThan(initialNodeCount);
+        expect(nodeCountAfterToggleOff).toBe(initialNodeCount);
     });
 });
