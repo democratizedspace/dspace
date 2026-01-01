@@ -250,6 +250,7 @@
             cancelQueuedLayout();
             if (layoutRestoreHandler) {
                 cy?.off?.('layoutstop', layoutRestoreHandler);
+                layoutRestoreHandler = null;
             }
             cy?.destroy?.();
         };
@@ -360,7 +361,15 @@
 
     const cancelQueuedLayout = () => {
         if (!layoutQueueHandle) return;
-        layoutQueueHandle.cancel?.();
+        if (layoutQueueHandle.type === 'raf') {
+            if (typeof cancelAnimationFrame === 'function') {
+                cancelAnimationFrame(layoutQueueHandle.id);
+            }
+        } else if (layoutQueueHandle.type === 'timeout') {
+            clearTimeout(layoutQueueHandle.id);
+        } else {
+            layoutQueueHandle.cancel?.();
+        }
         layoutQueueHandle = null;
     };
 
@@ -413,6 +422,7 @@
             cy.zoom(viewport.zoom);
             cy.pan(viewport.pan);
             highlightFocus(focusedKey);
+            layoutRestoreHandler = null;
         };
         cy.once('layoutstop', layoutRestoreHandler);
     };
