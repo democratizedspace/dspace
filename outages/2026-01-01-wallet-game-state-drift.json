@@ -1,0 +1,11 @@
+{
+  "id": "wallet-game-state-drift",
+  "date": "2026-01-01",
+  "component": "frontend-wallet",
+  "rootCause": "The Wallet page rendered balances from currency cookies, but dUSD and dBI amounts are stored in the client game state. Without a currency cookie, SSR always showed 0 even when the inventory contained funds.",
+  "resolution": "Hydrated wallet balances from the game state store and mapped currency item IDs so client data overwrites the cookie fallback and reflects real dUSD and dBI holdings.",
+  "references": [
+    "frontend/src/pages/wallet/index.astro",
+    "frontend/src/pages/wallet/WalletBalances.svelte"
+  ]
+}
