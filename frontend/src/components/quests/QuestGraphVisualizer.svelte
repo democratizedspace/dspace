@@ -1,14 +1,19 @@
 <script>
     import { onMount, tick } from 'svelte';
     import QuestGraphCard from './QuestGraphCard.svelte';
+    import {
+        formatDiagnosticsReport,
+        resolveRootKey,
+    } from '../../lib/quests/questGraphDiagnostics';
+    import { copyToClipboard } from '../../utils/copyToClipboard.js';
 
     export let graph;
 
-    const ROOT_KEY = 'welcome/howtodoquests.json';
     const byKey = graph?.byKey ?? {};
     let visualizerEl = null;
     let mapContainer = null;
     let searchInput = null;
+    const resolvedRootKey = resolveRootKey(graph);
 
     let activeTab = 'navigator';
     let mapStatus = 'idle';
@@ -19,6 +24,8 @@
     let mapInitialized = false;
     let cy = null;
     let hasMounted = false;
+    let copyStatus = 'idle';
+    let copyError = '';
 
     const compareNodes = (a, b) => {
         if (!a || !b) return a ? -1 : b ? 1 : 0;
@@ -43,19 +50,7 @@
             .map((node) => node.canonicalKey)
     );
 
-    const resolveRoot = () => {
-        if (byKey[ROOT_KEY]) return ROOT_KEY;
-        const sortedNodes = getSortedNodes();
-        const howToMatches = sortedNodes.filter(
-            (node) => node.canonicalKey.split('/').pop() === 'howtodoquests.json'
-        );
-        if (howToMatches.length === 1) {
-            return howToMatches[0].canonicalKey;
-        }
-        return sortedNodes[0]?.canonicalKey ?? '';
-    };
-
-    let focusedKey = resolveRoot();
+    let focusedKey = resolvedRootKey;
     let searchOpen = false;
     let searchQuery = '';
     let parentCycleIndex = 0;
@@ -90,6 +85,14 @@
     const closeSearch = () => {
         searchOpen = false;
         searchQuery = '';
+    };
+    const jumpToNode = async (key) => {
+        if (!key) return;
+        if (activeTab !== 'navigator') {
+            activeTab = 'navigator';
+            await tick();
+        }
+        await setFocus(key);
     };
 
     $: focusedNode = byKey[focusedKey];
@@ -218,6 +221,21 @@
             closeSearch();
         }
     };
+    const handleCopyReport = async () => {
+        copyError = '';
+        try {
+            const report = formatDiagnosticsReport(graph);
+            await copyToClipboard(report);
+            copyStatus = 'copied';
+            setTimeout(() => {
+                copyStatus = 'idle';
+            }, 2000);
+        } catch (error) {
+            copyStatus = 'idle';
+            copyError =
+                error instanceof Error && error.message ? error.message : 'Failed to copy report';
+        }
+    };
 
     onMount(() => {
         window.addEventListener('keydown', handleKeydown);
@@ -259,7 +277,7 @@
                     id: node.canonicalKey,
                     label: node.title,
                     group: node.group,
-                    isRoot: node.canonicalKey === resolveRoot(),
+                    isRoot: node.canonicalKey === resolvedRootKey,
                     isMultiParent: multiParentKeys.has(node.canonicalKey),
                     isUnreachable: unreachableSet.has(node.canonicalKey),
                     inCycle: cycleNodeSet.has(node.canonicalKey),
@@ -269,7 +287,7 @@
                     unreachableSet.has(node.canonicalKey) ? 'unreachable' : '',
                     multiParentKeys.has(node.canonicalKey) ? 'multi-parent' : '',
                     cycleNodeSet.has(node.canonicalKey) ? 'cycle' : '',
-                    node.canonicalKey === resolveRoot() ? 'root' : '',
+                    node.canonicalKey === resolvedRootKey ? 'root' : '',
                 ]
                     .filter(Boolean)
                     .join(' '),
@@ -533,7 +551,7 @@
             {/if}
         </div>
         <div class="controls">
-            <button class="pill" type="button" on:click={() => setFocus(resolveRoot())}>
+            <button class="pill" type="button" on:click={() => setFocus(resolvedRootKey)}>
                 Root
             </button>
             <button class="pill" type="button" on:click={() => (searchOpen = true)}>
@@ -621,7 +639,7 @@
                                         keyValue={key}
                                         register={cardRef}
                                         isFocused={key === focusedKey}
-                                        isRoot={key === resolveRoot()}
+                                        isRoot={key === resolvedRootKey}
                                         isMultiParent={(byKey[key].requires?.length ?? 0) > 1}
                                         on:select={() => setFocus(key)}
                                     />
@@ -677,7 +695,7 @@
                 </button>
                 <button
                     type="button"
-                    on:click={() => setFocus(resolveRoot())}
+                    on:click={() => setFocus(resolvedRootKey)}
                     aria-label="Go to root"
                 >
                     Root
@@ -760,6 +778,28 @@
             tabindex="0"
         >
             <div class="diagnostics">
+                <div class="diagnostics-toolbar">
+                    <div>
+                        <h4>Diagnostics</h4>
+                        <p class="subtle">Jump to nodes or copy a full report for QA.</p>
+                    </div>
+                    <div class="diag-actions">
+                        <button
+                            type="button"
+                            class="pill"
+                            data-testid="copy-diagnostics-report"
+                            on:click={handleCopyReport}
+                        >
+                            Copy report
+                        </button>
+                        {#if copyStatus === 'copied'}
+                            <span class="status success" aria-live="polite">Copied</span>
+                        {/if}
+                        {#if copyError}
+                            <span class="status error" aria-live="assertive">{copyError}</span>
+                        {/if}
+                    </div>
+                </div>
                 <div class="diag-grid">
                     <div>
                         <h4>Missing refs ({graph.diagnostics.missingRefs.length})</h4>
@@ -769,9 +809,16 @@
                             <ul>
                                 {#each graph.diagnostics.missingRefs as issue}
                                     <li>
-                                        <button type="button" on:click={() => setFocus(issue.from)}>
-                                            {issue.from} → {issue.ref}
-                                        </button>
+                                        <div class="diag-item">
+                                            <span class="diag-text">{issue.from} → {issue.ref}</span
+                                            >
+                                            <button
+                                                type="button"
+                                                on:click={() => jumpToNode(issue.from)}
+                                            >
+                                                Jump to node
+                                            </button>
+                                        </div>
                                     </li>
                                 {/each}
                             </ul>
@@ -785,9 +832,18 @@
                             <ul>
                                 {#each graph.diagnostics.ambiguousRefs as issue}
                                     <li>
-                                        <button type="button" on:click={() => setFocus(issue.from)}>
-                                            {issue.from} → {issue.ref} ({issue.candidates.length} candidates)
-                                        </button>
+                                        <div class="diag-item">
+                                            <span class="diag-text">
+                                                {issue.from} → {issue.ref} ({issue.candidates
+                                                    .length} candidates)
+                                            </span>
+                                            <button
+                                                type="button"
+                                                on:click={() => jumpToNode(issue.from)}
+                                            >
+                                                Jump to node
+                                            </button>
+                                        </div>
                                     </li>
                                 {/each}
                             </ul>
@@ -801,9 +857,12 @@
                             <ul>
                                 {#each graph.diagnostics.unreachableNodes as key}
                                     <li>
-                                        <button type="button" on:click={() => setFocus(key)}
-                                            >{key}</button
-                                        >
+                                        <div class="diag-item">
+                                            <span class="diag-text">{key}</span>
+                                            <button type="button" on:click={() => jumpToNode(key)}>
+                                                Jump to node
+                                            </button>
+                                        </div>
                                     </li>
                                 {/each}
                             </ul>
@@ -817,9 +876,15 @@
                             <ul>
                                 {#each graph.diagnostics.cycles as cycle}
                                     <li>
-                                        <button type="button" on:click={() => setFocus(cycle[0])}>
-                                            {cycle.join(' → ')}
-                                        </button>
+                                        <div class="diag-item">
+                                            <span class="diag-text">{cycle.join(' → ')}</span>
+                                            <button
+                                                type="button"
+                                                on:click={() => jumpToNode(cycle[0])}
+                                            >
+                                                Jump to node
+                                            </button>
+                                        </div>
                                     </li>
                                 {/each}
                             </ul>
@@ -1026,6 +1091,33 @@
         padding: 10px;
     }
 
+    .diagnostics-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .diag-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .status {
+        font-weight: 600;
+    }
+
+    .status.success {
+        color: var(--color-pill-active);
+    }
+
+    .status.error {
+        color: var(--color-warning, #f39c12);
+    }
+
     .diag-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -1039,14 +1131,32 @@
         margin: 6px 0 0;
     }
 
-    .diag-grid li button {
-        background: none;
-        border: none;
+    .diag-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: space-between;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        padding: 8px 10px;
+    }
+
+    .diag-text {
+        flex: 1;
+        color: var(--color-heading);
+        word-break: break-word;
+        min-width: 0;
+    }
+
+    .diag-item button {
+        background: var(--color-pill);
         color: var(--color-pill-text);
-        text-align: left;
-        padding: 6px 0;
+        border: 1px solid var(--color-border);
+        border-radius: 6px;
+        padding: 6px 10px;
         cursor: pointer;
-        width: 100%;
+        white-space: nowrap;
     }
 
     .overlay {
