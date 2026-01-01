@@ -16,16 +16,25 @@
     let useGameStateBalances = false;
 
     onMount(() => {
-        ready.finally(() => {
-            useGameStateBalances = true;
-        });
+        ready
+            .then(() => {
+                useGameStateBalances = true;
+            })
+            .catch(() => {
+                useGameStateBalances = false;
+            });
     });
 
     $: inventory = $state?.inventory ?? {};
+    $: relevantBalances = Object.keys(symbolToItemId).reduce((acc, symbol) => {
+        const id = symbolToItemId[symbol];
+        if (id !== undefined) acc[id] = inventory[id];
+        return acc;
+    }, {});
     $: displayCurrencies = currencies.map((currency) => {
         const itemId = symbolToItemId[currency.symbol];
         const balanceSource =
-            useGameStateBalances && itemId !== undefined ? inventory[itemId] : currency.balance;
+            useGameStateBalances && itemId !== undefined ? relevantBalances[itemId] : currency.balance;
         const numericBalance = Number(balanceSource ?? 0);
         const safeBalance = Number.isFinite(numericBalance) ? numericBalance : 0;
 

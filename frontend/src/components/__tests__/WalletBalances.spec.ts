@@ -1,11 +1,17 @@
-import { render, waitFor } from '@testing-library/svelte';
-import { describe, expect, it, vi } from 'vitest';
-import { writable } from 'svelte/store';
-import WalletBalances from '../svelte/WalletBalances.svelte';
-
 const { dUSDId, dBIId } = vi.hoisted(() => ({
     dUSDId: '5247a603-294a-4a34-a884-1ae20969b2a1',
     dBIId: '016d4758-d114-4e04-9e6a-853db93a2eee',
+}));
+
+import { render, waitFor } from '@testing-library/svelte';
+import { describe, expect, it, vi } from 'vitest';
+import { writable } from 'svelte/store';
+
+vi.mock('../../pages/inventory/json/items', () => ({
+    default: [
+        { id: dUSDId, name: 'dUSD' },
+        { id: dBIId, name: 'dBI' },
+    ],
 }));
 
 vi.mock('../../utils/gameState/common.js', async () => {
@@ -21,6 +27,8 @@ vi.mock('../../utils/gameState/common.js', async () => {
         ready: Promise.resolve(),
     };
 });
+
+import WalletBalances from '../svelte/WalletBalances.svelte';
 
 describe('WalletBalances', () => {
     it('hydrates balances from the game state inventory', async () => {
