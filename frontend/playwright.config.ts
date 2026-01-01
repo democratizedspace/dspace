@@ -230,6 +230,10 @@ export default defineConfig({
         url: baseURL,
         reuseExistingServer: !isCI,
         timeout: 60000,
+        env: {
+            ...process.env,
+            PUBLIC_ENABLE_QUEST_GRAPH_DEBUG: 'true',
+        },
     },
     // Group tests to improve parallelization
     fullyParallel: !isCI, // Keep serial runs in CI to avoid cross-test interference
