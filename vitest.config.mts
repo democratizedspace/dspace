@@ -74,6 +74,10 @@ export default defineConfig({
         replacement: svelteCompilerPath,
       },
       {
+        find: 'svelte/transition',
+        replacement: path.join(sveltePackageDir, 'src/transition/index.js'),
+      },
+      {
         find: 'svelte',
         replacement: path.join(sveltePackageDir, 'src/index-client.js'),
       },
@@ -101,6 +105,7 @@ export default defineConfig({
       'scripts/tests/**/*.test.ts',
       'backend/**/*.test.ts',
       'frontend/src/components/__tests__/**/*.spec.ts',
+      'frontend/src/pages/**/__tests__/**/*.spec.ts',
     ],
     exclude: ['frontend/e2e/**', 'frontend/__tests__/**'],
     coverage: {

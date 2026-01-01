@@ -20,13 +20,18 @@
 </script>
 
 <div class="container">
-    {#if $tokenPlaceEnabled}
-        <TokenPlaceChat />
+    {#if !$tokenPlaceEnabled}
+        <div class="notice" data-testid="token-place-disabled-banner">
+            token.place is disabled by default. Using OpenAI chat instead.
+        </div>
     {/if}
     <div class="api-container">
         <OpenAIAPIKeySettings {apiKey} />
     </div>
     <OpenAIChat />
+    {#if $tokenPlaceEnabled}
+        <TokenPlaceChat />
+    {/if}
 </div>
 
 <style>
@@ -39,6 +44,17 @@
         color: black;
         border-radius: 10px;
         padding: 20px;
+        gap: 1rem;
+    }
+
+    .notice {
+        background: rgba(0, 0, 0, 0.08);
+        border-radius: 8px;
+        padding: 10px 14px;
+        width: 100%;
+        text-align: center;
+        font-weight: 600;
+        border: 1px dashed rgba(0, 0, 0, 0.2);
     }
 
     .api-container {

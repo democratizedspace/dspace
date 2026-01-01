@@ -38,28 +38,28 @@ const getEnabledOverride = () => {
 };
 
 export const isTokenPlaceEnabled = (options = {}) => {
-    const { envUrl = getEnvUrl(), state = loadGameState() } = options;
+    const { state = loadGameState() } = options;
     const enabledOverride = getEnabledOverride();
 
     if (enabledOverride !== undefined) {
-        // Explicit env flag takes precedence over any configured URLs
+        // Explicit env flag takes precedence over any configured URLs or saved state
         return enabledOverride;
     }
 
-    const stateUrl = state?.tokenPlace?.url;
+    const stateEnabled = parseBoolean(state?.tokenPlace?.enabled);
 
-    return Boolean(envUrl || stateUrl);
+    return stateEnabled === true;
 };
 
 export const tokenPlaceChat = async (messages, { signal } = {}) => {
     await ready;
     const envUrl = getEnvUrl();
     const state = loadGameState();
-    const enabled = isTokenPlaceEnabled({ envUrl, state });
+    const enabled = isTokenPlaceEnabled({ state });
 
     if (!enabled) {
         throw new Error(
-            'token.place is disabled. Set VITE_TOKEN_PLACE_ENABLED=true or configure a tokenPlace url.'
+            'token.place is disabled. Set VITE_TOKEN_PLACE_ENABLED=true or set tokenPlace.enabled=true in game settings.'
         );
     }
 

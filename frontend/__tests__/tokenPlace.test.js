@@ -26,7 +26,7 @@ describe('tokenPlaceChat', () => {
     });
 
     test('uses game state url when configured', async () => {
-        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place' } });
+        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place', enabled: true } });
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
         expect(fetch).toHaveBeenCalledWith('http://token.place/chat', expect.any(Object));
     });
@@ -34,12 +34,13 @@ describe('tokenPlaceChat', () => {
     test('falls back to env url when game state missing', async () => {
         loadGameState.mockReturnValue({});
         process.env.VITE_TOKEN_PLACE_URL = 'http://env.token';
+        process.env.VITE_TOKEN_PLACE_ENABLED = 'true';
         await tokenPlaceChat([]);
         expect(fetch).toHaveBeenCalledWith('http://env.token/chat', expect.any(Object));
     });
 
     test('prepends system message and returns response', async () => {
-        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place' } });
+        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place', enabled: true } });
         const result = await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
         const body = JSON.parse(fetch.mock.calls[0][1].body);
         expect(body.messages[0].role).toBe('system');
@@ -47,14 +48,14 @@ describe('tokenPlaceChat', () => {
     });
 
     test('passes abort signal to fetch', async () => {
-        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place' } });
+        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place', enabled: true } });
         const controller = new AbortController();
         await tokenPlaceChat([], { signal: controller.signal });
         expect(fetch.mock.calls[0][1].signal).toBe(controller.signal);
     });
 
     test('throws helpful error when request fails', async () => {
-        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place' } });
+        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place', enabled: true } });
         fetch.mockResolvedValueOnce({
             ok: false,
             json: () => Promise.resolve({ error: 'bad request' }),
@@ -87,16 +88,21 @@ describe('isTokenPlaceEnabled', () => {
         expect(isTokenPlaceEnabled({ state: {} })).toBe(false);
     });
 
-    test('is true when tokenPlace url exists in state', () => {
-        expect(isTokenPlaceEnabled({ state: { tokenPlace: { url: 'http://tp' } } })).toBe(true);
+    test('is false when tokenPlace url exists in state without opt-in', () => {
+        expect(isTokenPlaceEnabled({ state: { tokenPlace: { url: 'http://tp' } } })).toBe(false);
     });
 
-    test('is true when env url is set', () => {
-        expect(isTokenPlaceEnabled({ state: {}, envUrl: 'http://tp' })).toBe(true);
+    test('is true when tokenPlace is explicitly enabled in state', () => {
+        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: true } } })).toBe(true);
     });
 
     test('respects explicit env disable', () => {
         process.env.VITE_TOKEN_PLACE_ENABLED = 'false';
-        expect(isTokenPlaceEnabled({ state: {}, envUrl: 'http://tp' })).toBe(false);
+        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: true } } })).toBe(false);
+    });
+
+    test('is true when env override enables it', () => {
+        process.env.VITE_TOKEN_PLACE_ENABLED = 'true';
+        expect(isTokenPlaceEnabled({ state: {} })).toBe(true);
     });
 });
