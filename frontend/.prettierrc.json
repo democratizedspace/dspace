@@ -1,10 +1,13 @@
 {
+    "endOfLine": "lf",
     "semi": true,
-    "tabWidth": 4,
     "singleQuote": true,
+    "tabWidth": 4,
     "printWidth": 100,
     "trailingComma": "es5",
-    "endOfLine": "lf",
+    "svelteSortOrder": "options-scripts-markup-styles",
+    "svelteStrictMode": false,
+    "svelteIndentScriptAndStyle": true,
     "plugins": ["prettier-plugin-svelte"],
     "overrides": [
         {
