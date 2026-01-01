@@ -31,7 +31,9 @@ test.describe('Quest graph diagnostics tools', () => {
         await copyButton.click();
 
         await expect
-            .poll(async () => page.evaluate(async () => navigator.clipboard.readText()))
+            .poll(async () => page.evaluate(async () => navigator.clipboard.readText()), {
+                timeout: 5000,
+            })
             .toMatch(/\S/);
 
         const clipboardText = await page.evaluate(async () => navigator.clipboard.readText());
