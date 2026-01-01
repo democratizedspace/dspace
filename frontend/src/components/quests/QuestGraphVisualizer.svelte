@@ -480,9 +480,13 @@
                 }
             });
 
-            // Expose Cytoscape instance for E2E tests (always exposed in non-production builds)
+            // Expose Cytoscape instance for E2E tests (DEV-only to avoid production leakage)
             if (typeof window !== 'undefined') {
-                window.__questGraphCy = cy;
+                if (import.meta.env.DEV) {
+                    window.__questGraphCy = cy;
+                } else if (import.meta.env.PROD) {
+                    delete window.__questGraphCy;
+                }
             }
 
             applyMultiParentHighlight();
