@@ -481,15 +481,11 @@
             });
 
             // Expose Cytoscape instance for E2E tests (DEV-only to avoid production leakage)
-            if (typeof window !== 'undefined') {
-                if (
-                    import.meta.env.DEV ||
-                    import.meta.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG === 'true'
-                ) {
-                    window.__questGraphCy = cy;
-                } else {
-                    delete window.__questGraphCy;
-                }
+            if (
+                typeof window !== 'undefined' &&
+                (import.meta.env.DEV || import.meta.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG === 'true')
+            ) {
+                window.__questGraphCy = cy;
             }
 
             applyMultiParentHighlight();
