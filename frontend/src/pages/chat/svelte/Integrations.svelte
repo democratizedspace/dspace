@@ -7,14 +7,39 @@
     import TokenPlaceChat from './TokenPlaceChat.svelte';
 
     const apiKey = writable('');
+    const tokenPlaceEnabled = writable(false);
+
+    const parseBooleanFlag = (value) => {
+        if (typeof value !== 'string') return false;
+        const normalized = value.trim().toLowerCase();
+        return ['1', 'true', 'yes', 'on', 'enabled'].includes(normalized);
+    };
+
+    const isTokenPlaceEnabled = (gameState) => {
+        const envFlag =
+            parseBooleanFlag(import.meta.env?.PUBLIC_ENABLE_TOKEN_PLACE) ||
+            parseBooleanFlag(import.meta.env?.VITE_ENABLE_TOKEN_PLACE);
+        const userConfiguredUrl = Boolean(gameState?.tokenPlace?.url);
+        return envFlag || userConfiguredUrl;
+    };
+
     onMount(async () => {
         await ready;
-        apiKey.set(loadGameState().openAI?.apiKey || '');
+        const gameState = loadGameState();
+        apiKey.set(gameState.openAI?.apiKey || '');
+        tokenPlaceEnabled.set(isTokenPlaceEnabled(gameState));
     });
 </script>
 
 <div class="container">
-    <TokenPlaceChat />
+    {#if $tokenPlaceEnabled}
+        <TokenPlaceChat />
+    {:else}
+        <p class="tokenplace-disabled">
+            token.place chat is disabled for now; conversations will use OpenAI when you enter an
+            API key below.
+        </p>
+    {/if}
     <div class="api-container">
         <OpenAIAPIKeySettings {apiKey} />
     </div>
@@ -36,5 +61,13 @@
     .api-container {
         min-height: 70px;
         transition: opacity 0.5s;
+    }
+
+    .tokenplace-disabled {
+        margin: 0 0 1rem;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        background: rgba(255, 255, 255, 0.75);
+        text-align: center;
     }
 </style>
