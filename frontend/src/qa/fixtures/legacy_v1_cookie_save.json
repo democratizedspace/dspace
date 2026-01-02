@@ -1,0 +1,17 @@
+{
+    "description": "Sample v1 cookie-based save that mirrors legacy numeric item IDs.",
+    "cookies": [
+        {
+            "name": "item-3",
+            "value": "5"
+        },
+        {
+            "name": "item-24",
+            "value": "250"
+        },
+        {
+            "name": "item-1",
+            "value": "1"
+        }
+    ]
+}

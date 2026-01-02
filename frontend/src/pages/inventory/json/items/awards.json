@@ -202,5 +202,18 @@
                 }
             ]
         }
+    },
+    {
+        "id": "378421b0-b6d0-451e-8081-0bd33ff63736",
+        "name": "v2 Migration Trophy",
+        "description": "Awarded for upgrading your legacy v2 save to the v3 format.",
+        "image": "/assets/trophies/upgrade_v2_to_v3.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

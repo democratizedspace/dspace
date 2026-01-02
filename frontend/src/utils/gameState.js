@@ -9,6 +9,7 @@ import { isBrowser } from './ssr.js';
 import items from '../pages/inventory/json/items';
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
+const V2_TO_V3_TROPHY_ID = items.find((i) => i.name === 'v2 Migration Trophy')?.id;
 
 // ---------------------
 // QUESTS
@@ -120,6 +121,14 @@ export const normalizeCount = (value) => {
     return Number.isFinite(parsed) ? parsed : 0;
 };
 
+const ensureInventoryItem = (state, id, count = 1) => {
+    const normalizedCount = normalizeCount(count);
+    if (!id || normalizedCount <= 0) return;
+    state.inventory = state.inventory ?? {};
+    state.inventory[id] = normalizeCount(state.inventory[id]) || 0;
+    state.inventory[id] += normalizedCount;
+};
+
 const persistMigratedState = async (state) => {
     const migrated = validateGameState(structuredClone(state));
     migrated.versionNumberString = VERSIONS.V3;
@@ -164,21 +173,15 @@ export const importV1V3 = async (itemList, options = {}) => {
     const nextState = structuredClone(baseState);
 
     const hasLegacyItems = normalizedItems.some(({ id, parsedCount }) => id && parsedCount > 0);
-    const shouldGrantEarlyAdopter =
-        Boolean(EARLY_ADOPTER_ID) &&
-        hasLegacyItems &&
-        !(nextState.inventory || {})[EARLY_ADOPTER_ID];
+    const shouldGrantEarlyAdopter = Boolean(EARLY_ADOPTER_ID) && hasLegacyItems;
 
-    const itemsToImport = [
-        ...(shouldGrantEarlyAdopter ? [{ id: EARLY_ADOPTER_ID, parsedCount: 1 }] : []),
-        ...normalizedItems.filter(({ id, parsedCount }) => id && parsedCount > 0),
-    ];
+    const itemsToImport = normalizedItems.filter(({ id, parsedCount }) => id && parsedCount > 0);
 
     nextState.inventory = nextState.inventory ?? {};
-    itemsToImport.forEach(({ id, parsedCount }) => {
-        if (!id || parsedCount <= 0) return;
-        nextState.inventory[id] = (nextState.inventory[id] || 0) + parsedCount;
-    });
+    itemsToImport.forEach(({ id, parsedCount }) => ensureInventoryItem(nextState, id, parsedCount));
+    if (shouldGrantEarlyAdopter && !(nextState.inventory || {})[EARLY_ADOPTER_ID]) {
+        ensureInventoryItem(nextState, EARLY_ADOPTER_ID, 1);
+    }
 
     return persistMigratedState(nextState);
 };
@@ -200,6 +203,9 @@ export const importV2V3 = async (legacyState) => {
         }
     }
     if (!migrated) return null;
+    if (V2_TO_V3_TROPHY_ID && !(migrated.inventory || {})[V2_TO_V3_TROPHY_ID]) {
+        ensureInventoryItem(migrated, V2_TO_V3_TROPHY_ID, 1);
+    }
     return persistMigratedState(migrated);
 };
 
@@ -230,6 +236,10 @@ export const mergeLegacyStateIntoCurrent = async (legacyState) => {
             merged.processes[processId] = processState;
         }
     });
+
+    if (V2_TO_V3_TROPHY_ID && !(merged.inventory || {})[V2_TO_V3_TROPHY_ID]) {
+        ensureInventoryItem(merged, V2_TO_V3_TROPHY_ID, 1);
+    }
 
     return persistMigratedState(merged);
 };

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/trophies/upgrade_v2_to_v3.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "v2 Migration Trophy",
+    "item_id": "378421b0-b6d0-451e-8081-0bd33ff63736",
+    "entity_type": "item",
+    "prompt": "A sleek solarpunk-inspired trophy symbolizing software migration success: a brushed aluminum base supporting three ascending translucent glass layers labeled subtly as V2, an arrow, then V3 (no readable text, just etched numerals). Warm teal edge-lighting glows through the layers, and a small rocket silhouette rises along the side, hinting at progress and upgrades. Photorealistic 512×512 render on a tidy desk with faint circuitry patterns in the background, no logos or readable UI, and a celebratory yet minimal feel.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

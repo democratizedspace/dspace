@@ -32,6 +32,7 @@ import { addItems } from '../../src/utils/gameState/inventory.js';
 import items from '../../src/pages/inventory/json/items';
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token').id;
+const V2_TO_V3_TROPHY_ID = items.find((i) => i.name === 'v2 Migration Trophy')?.id;
 
 describe('gameState top-level helpers', () => {
     let mockGameState;
@@ -119,7 +120,7 @@ describe('gameState top-level helpers', () => {
         expect(mockGameState.versionNumberString).toBe(VERSIONS.V2);
     });
 
-    test('importV2V3 migrates localStorage data and clears legacy keys', () => {
+    test('importV2V3 migrates localStorage data, clears legacy keys, and awards trophy', () => {
         mockGameState.versionNumberString = VERSIONS.V2;
         const legacy = { quests: { q: { finished: true } }, inventory: { a: 1 } };
         const removeItem = vi.fn();
@@ -133,7 +134,10 @@ describe('gameState top-level helpers', () => {
         expect(saveGameState).toHaveBeenCalledWith(
             expect.objectContaining({
                 quests: legacy.quests,
-                inventory: legacy.inventory,
+                inventory: expect.objectContaining({
+                    ...legacy.inventory,
+                    ...(V2_TO_V3_TROPHY_ID ? { [V2_TO_V3_TROPHY_ID]: 1 } : {}),
+                }),
                 processes: {},
                 versionNumberString: VERSIONS.V3,
             })
