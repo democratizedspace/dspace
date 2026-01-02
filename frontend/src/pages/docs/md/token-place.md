@@ -13,13 +13,14 @@ You can enable token.place in two ways:
 
 - **Environment variable**: set `VITE_TOKEN_PLACE_ENABLED=true`. You can also point to a custom URL
   with `VITE_TOKEN_PLACE_URL`.
-- **Game settings**: set a custom URL in your saved game state (automatically enables the feature).
+- **Game settings**: save `tokenPlace.enabled=true` in your game state (for example, via a settings
+  screen that toggles the integration). Optionally pair this with a custom `tokenPlace.url`.
 
 ```bash
 VITE_TOKEN_PLACE_ENABLED=true VITE_TOKEN_PLACE_URL=https://my-token-place/api npm run dev
 ```
 
-You can clear the saved URL by resetting your game state.
+You can clear the saved URL (or the opt-in flag) by resetting your game state.
 
 `tokenPlaceChat` accepts an optional `AbortSignal` and throws a descriptive error when the
 service returns one, making failures easier to diagnose.
