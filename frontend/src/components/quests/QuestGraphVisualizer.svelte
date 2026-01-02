@@ -12,6 +12,9 @@
     const byKey = graph?.byKey ?? {};
     let visualizerEl = null;
     let mapContainer = null;
+    let navigatorPanel = null;
+    let mapPanel = null;
+    let diagnosticsPanel = null;
     let searchInput = null;
     let resolvedRootKey = resolveRootKey(graph);
 
@@ -92,10 +95,22 @@
     const jumpToNode = async (key) => {
         if (!key) return;
         if (activeTab !== 'navigator') {
-            activeTab = 'navigator';
-            await tick();
+            await setActiveTab('navigator');
         }
         await setFocus(key);
+    };
+
+    const setActiveTab = async (tab) => {
+        activeTab = tab;
+        await tick();
+        if (activeTab === 'navigator') {
+            navigatorPanel?.focus();
+        } else if (activeTab === 'map') {
+            mapPanel?.focus();
+            mapContainer?.focus?.();
+        } else if (activeTab === 'diagnostics') {
+            diagnosticsPanel?.focus();
+        }
     };
 
     $: resolvedRootKey = resolveRootKey(graph);
@@ -127,6 +142,28 @@
             searchInput?.select();
         });
     }
+
+    const hasMultipleParents = (key) => multiParentKeys.has(key);
+    const isUnreachable = (key) => unreachableSet.has(key);
+    const isInCycle = (key) => cycleNodeSet.has(key);
+
+    $: focusedBadges = focusedNode
+        ? {
+              isRoot: focusedKey === resolvedRootKey,
+              isMultiParent: hasMultipleParents(focusedKey),
+              isUnreachable: isUnreachable(focusedKey),
+              isCycle: isInCycle(focusedKey),
+          }
+        : {
+              isRoot: false,
+              isMultiParent: false,
+              isUnreachable: false,
+              isCycle: false,
+          };
+
+    $: focusAnnouncement = focusedNode
+        ? `${focusedNode.title} (${focusedNode.canonicalKey})`
+        : 'No quest focused';
 
     const setFocus = async (key, options = {}) => {
         if (!key || !byKey[key]) return;
@@ -197,6 +234,15 @@
         }
 
         if (searchOpen) return;
+
+        const isMapAreaTarget =
+            activeTab === 'map' && (mapPanel?.contains(target) || mapContainer?.contains(target));
+
+        if (event.key === 'Enter' && isMapAreaTarget) {
+            event.preventDefault();
+            setActiveTab('navigator');
+            return;
+        }
 
         switch (event.key) {
             case 'ArrowLeft':
@@ -645,6 +691,10 @@
         </div>
     </div>
 
+    <div class="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        Focused quest: {focusAnnouncement}
+    </div>
+
     <div class="tab-bar" role="tablist" aria-label="Quest graph views">
         <button
             type="button"
@@ -653,7 +703,8 @@
             aria-selected={activeTab === 'navigator'}
             aria-controls="quest-graph-panel-navigator"
             id="quest-graph-tab-navigator"
-            on:click={() => (activeTab = 'navigator')}
+            tabindex={activeTab === 'navigator' ? 0 : -1}
+            on:click={() => setActiveTab('navigator')}
         >
             Navigator
         </button>
@@ -664,7 +715,8 @@
             aria-selected={activeTab === 'map'}
             aria-controls="quest-graph-panel-map"
             id="quest-graph-tab-map"
-            on:click={() => (activeTab = 'map')}
+            tabindex={activeTab === 'map' ? 0 : -1}
+            on:click={() => setActiveTab('map')}
         >
             Map
         </button>
@@ -675,7 +727,8 @@
             aria-selected={activeTab === 'diagnostics'}
             aria-controls="quest-graph-panel-diagnostics"
             id="quest-graph-tab-diagnostics"
-            on:click={() => (activeTab = 'diagnostics')}
+            tabindex={activeTab === 'diagnostics' ? 0 : -1}
+            on:click={() => setActiveTab('diagnostics')}
         >
             Diagnostics
         </button>
@@ -687,6 +740,7 @@
             id="quest-graph-panel-navigator"
             aria-labelledby="quest-graph-tab-navigator"
             tabindex="0"
+            bind:this={navigatorPanel}
         >
             <div class="shelves">
                 <div class="shelf">
@@ -796,7 +850,33 @@
             id="quest-graph-panel-map"
             aria-labelledby="quest-graph-tab-map"
             tabindex="0"
+            bind:this={mapPanel}
         >
+            {#if focusedNode}
+                <div class="focus-strip" data-testid="focused-quest-strip">
+                    <div class="focus-strip__label">Focused quest</div>
+                    <div class="focus-strip__details">
+                        <div class="focus-strip__title">{focusedNode.title}</div>
+                        <div class="focus-strip__meta">
+                            <span class="badge subtle" data-testid="focused-quest-key">
+                                {focusedNode.canonicalKey}
+                            </span>
+                            {#if focusedBadges.isRoot}
+                                <span class="badge accent">root</span>
+                            {/if}
+                            {#if focusedBadges.isMultiParent}
+                                <span class="badge subtle">multi-parent</span>
+                            {/if}
+                            {#if focusedBadges.isUnreachable}
+                                <span class="badge warning">unreachable</span>
+                            {/if}
+                            {#if focusedBadges.isCycle}
+                                <span class="badge accent">cycle</span>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            {/if}
             <div class="map-tools">
                 <div class="toggles">
                     <label class:disabled={unreachableCount === 0}>
@@ -849,7 +929,13 @@
                 {#if mapStatus === 'error'}
                     <p class="subtle">Map failed to load: {mapError}</p>
                 {:else}
-                    <div class="map-canvas" bind:this={mapContainer}>
+                    <div
+                        class="map-canvas"
+                        bind:this={mapContainer}
+                        role="region"
+                        aria-label="Quest graph map"
+                        tabindex="-1"
+                    >
                         {#if mapStatus === 'loading'}
                             <div class="map-overlay subtle">Loading map…</div>
                         {:else if !mapInitialized}
@@ -869,6 +955,7 @@
             id="quest-graph-panel-diagnostics"
             aria-labelledby="quest-graph-tab-diagnostics"
             tabindex="0"
+            bind:this={diagnosticsPanel}
         >
             <div class="diagnostics">
                 <div class="diagnostics-toolbar">
@@ -1129,6 +1216,49 @@
         max-width: 100%;
     }
 
+    .focus-strip {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.04);
+        margin-top: 12px;
+    }
+
+    .focus-strip__label {
+        font-size: 0.9rem;
+        color: var(--color-text);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .focus-strip__details {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .focus-strip__title {
+        font-weight: 700;
+        color: var(--color-heading);
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .focus-strip__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+    }
+
     .shelves {
         display: flex;
         flex-direction: column;
@@ -1182,6 +1312,32 @@
         padding: 8px;
         font-size: 1rem;
         cursor: pointer;
+    }
+
+    .badge {
+        background: var(--color-pill-active);
+        color: var(--color-pill-active-text);
+        border-radius: 8px;
+        padding: 4px 8px;
+        font-size: 0.8rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .badge.subtle {
+        background: rgba(255, 255, 255, 0.15);
+        color: var(--color-pill-text);
+    }
+
+    .badge.accent {
+        border: 1px solid var(--color-border);
+    }
+
+    .badge.warning {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--color-warning, #f39c12);
+        border: 1px solid var(--color-warning, #f39c12);
     }
 
     .diagnostics {
@@ -1425,6 +1581,11 @@
         position: relative;
     }
 
+    .map-canvas:focus {
+        outline: 2px solid var(--color-pill);
+        outline-offset: 4px;
+    }
+
     .map-overlay {
         position: absolute;
         inset: 0;
@@ -1445,5 +1606,17 @@
         .map-canvas {
             height: 400px;
         }
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
     }
 </style>
