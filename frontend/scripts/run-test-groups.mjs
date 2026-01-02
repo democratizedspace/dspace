@@ -133,6 +133,7 @@ const TEST_GROUPS = [
             'quests-width.spec.ts',
             'quest-graph-unreachable.spec.ts',
             'quest-graph-map-viewport.spec.ts',
+            'quest-graph-map-keyboard.spec.ts',
             'quest-graph-diagnostics-copy.spec.ts',
             'quest-grant-items.spec.ts',
             'quest-hardening.spec.ts',

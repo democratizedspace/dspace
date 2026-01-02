@@ -29,6 +29,13 @@
     let hasMounted = false;
     let copyStatus = 'idle';
     let copyError = '';
+    let navigatorPanel = null;
+    let mapPanel = null;
+    let diagnosticsPanel = null;
+    let navigatorTab = null;
+    let mapTab = null;
+    let diagnosticsTab = null;
+    const tabOrder = ['navigator', 'map', 'diagnostics'];
 
     const compareNodes = (a, b) => {
         if (!a || !b) return a ? -1 : b ? 1 : 0;
@@ -59,6 +66,58 @@
     let parentCycleIndex = 0;
     let childCycleIndex = 0;
     const cards = new Map();
+    let focusedBadges = [];
+    const focusPanelForTab = (tab) => {
+        const panel =
+            tab === 'navigator' ? navigatorPanel : tab === 'map' ? mapPanel : diagnosticsPanel;
+        if (panel?.focus) {
+            panel.focus();
+        }
+    };
+    const activateTab = async (tab, { focusPanel = true } = {}) => {
+        activeTab = tab;
+        await tick();
+        if (focusPanel) {
+            focusPanelForTab(tab);
+        }
+    };
+    const getTabRef = (tab) =>
+        tab === 'navigator' ? navigatorTab : tab === 'map' ? mapTab : diagnosticsTab;
+    const focusTabButton = (tab) => {
+        const ref = getTabRef(tab);
+        if (ref?.focus) {
+            ref.focus();
+        }
+    };
+    const moveTabFocus = async (direction) => {
+        const currentIndex = tabOrder.indexOf(activeTab);
+        const delta = direction === 'next' ? 1 : -1;
+        const nextIndex = (currentIndex + delta + tabOrder.length) % tabOrder.length;
+        const nextTab = tabOrder[nextIndex];
+        await activateTab(nextTab, { focusPanel: false });
+        focusTabButton(nextTab);
+    };
+    const handleTabKeydown = (event, tab) => {
+        if (event.key === 'ArrowRight') {
+            event.stopPropagation();
+            event.preventDefault();
+            moveTabFocus('next');
+            return;
+        }
+
+        if (event.key === 'ArrowLeft') {
+            event.stopPropagation();
+            event.preventDefault();
+            moveTabFocus('prev');
+            return;
+        }
+
+        if (event.key === ' ' || event.key === 'Enter') {
+            event.stopPropagation();
+            event.preventDefault();
+            activateTab(tab);
+        }
+    };
     const cardRef = (node, key) => {
         let currentKey = key;
         if (currentKey) {
@@ -92,8 +151,7 @@
     const jumpToNode = async (key) => {
         if (!key) return;
         if (activeTab !== 'navigator') {
-            activeTab = 'navigator';
-            await tick();
+            await activateTab('navigator');
         }
         await setFocus(key);
     };
@@ -109,6 +167,14 @@
             .filter((node) => graph?.depthByKey?.[node.canonicalKey] === depth)
             .map((node) => node.canonicalKey)
     );
+    $: focusedBadges = !focusedNode
+        ? []
+        : [
+              focusedKey === resolvedRootKey ? 'Root' : null,
+              multiParentKeys.has(focusedKey) ? 'Multi-parent' : null,
+              unreachableSet.has(focusedKey) ? 'Unreachable' : null,
+              cycleNodeSet.has(focusedKey) ? 'Cycle' : null,
+          ].filter(Boolean);
     $: searchResults = (() => {
         const query = searchQuery.trim().toLowerCase();
         const nodes = getSortedNodes();
@@ -176,6 +242,8 @@
         const isSearchShortcut =
             (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k';
         const isOverlayEscape = searchOpen && event.key === 'Escape';
+        const isMapToggleTarget = target === mapPanel || target === mapTab;
+        const isNavigatorToggleTarget = target === navigatorPanel || target === navigatorTab;
         if (isEditableTarget && !isSearchShortcut && !isOverlayEscape) {
             return;
         }
@@ -197,6 +265,18 @@
         }
 
         if (searchOpen) return;
+
+        if (event.key === 'Enter' && activeTab === 'map' && isMapToggleTarget) {
+            event.preventDefault();
+            activateTab('navigator');
+            return;
+        }
+
+        if (event.key === 'Enter' && activeTab === 'navigator' && isNavigatorToggleTarget) {
+            event.preventDefault();
+            activateTab('map');
+            return;
+        }
 
         switch (event.key) {
             case 'ArrowLeft':
@@ -653,7 +733,10 @@
             aria-selected={activeTab === 'navigator'}
             aria-controls="quest-graph-panel-navigator"
             id="quest-graph-tab-navigator"
-            on:click={() => (activeTab = 'navigator')}
+            tabindex={activeTab === 'navigator' ? 0 : -1}
+            on:click={() => activateTab('navigator')}
+            on:keydown|stopPropagation={(event) => handleTabKeydown(event, 'navigator')}
+            bind:this={navigatorTab}
         >
             Navigator
         </button>
@@ -664,7 +747,10 @@
             aria-selected={activeTab === 'map'}
             aria-controls="quest-graph-panel-map"
             id="quest-graph-tab-map"
-            on:click={() => (activeTab = 'map')}
+            tabindex={activeTab === 'map' ? 0 : -1}
+            on:click={() => activateTab('map')}
+            on:keydown|stopPropagation={(event) => handleTabKeydown(event, 'map')}
+            bind:this={mapTab}
         >
             Map
         </button>
@@ -675,7 +761,10 @@
             aria-selected={activeTab === 'diagnostics'}
             aria-controls="quest-graph-panel-diagnostics"
             id="quest-graph-tab-diagnostics"
-            on:click={() => (activeTab = 'diagnostics')}
+            tabindex={activeTab === 'diagnostics' ? 0 : -1}
+            on:click={() => activateTab('diagnostics')}
+            on:keydown|stopPropagation={(event) => handleTabKeydown(event, 'diagnostics')}
+            bind:this={diagnosticsTab}
         >
             Diagnostics
         </button>
@@ -686,7 +775,8 @@
             role="tabpanel"
             id="quest-graph-panel-navigator"
             aria-labelledby="quest-graph-tab-navigator"
-            tabindex="0"
+            tabindex="-1"
+            bind:this={navigatorPanel}
         >
             <div class="shelves">
                 <div class="shelf">
@@ -795,8 +885,34 @@
             role="tabpanel"
             id="quest-graph-panel-map"
             aria-labelledby="quest-graph-tab-map"
-            tabindex="0"
+            tabindex="-1"
+            bind:this={mapPanel}
+            data-testid="quest-graph-panel-map"
         >
+            <div
+                class="focused-strip"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                data-testid="focused-quest-strip"
+            >
+                <div class="strip-text">
+                    <p class="strip-label">Focused quest</p>
+                    <div class="strip-title" data-testid="focused-quest-title">
+                        {focusedNode ? focusedNode.title : 'Select a quest'}
+                    </div>
+                    <p class="strip-key" data-testid="focused-quest-key">
+                        {focusedNode ? focusedNode.canonicalKey : 'No quest focused'}
+                    </p>
+                </div>
+                {#if focusedBadges.length}
+                    <div class="strip-badges" aria-hidden="true">
+                        {#each focusedBadges as badge}
+                            <span class="strip-badge">{badge}</span>
+                        {/each}
+                    </div>
+                {/if}
+            </div>
             <div class="map-tools">
                 <div class="toggles">
                     <label class:disabled={unreachableCount === 0}>
@@ -868,7 +984,8 @@
             role="tabpanel"
             id="quest-graph-panel-diagnostics"
             aria-labelledby="quest-graph-tab-diagnostics"
-            tabindex="0"
+            tabindex="-1"
+            bind:this={diagnosticsPanel}
         >
             <div class="diagnostics">
                 <div class="diagnostics-toolbar">
@@ -1323,6 +1440,63 @@
         padding: 10px;
         color: var(--color-heading);
         cursor: pointer;
+    }
+
+    .focused-strip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        background: rgba(0, 0, 0, 0.12);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 10px 12px;
+        margin-top: 12px;
+    }
+
+    .strip-text {
+        min-width: 0;
+    }
+
+    .strip-label {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.85rem;
+        color: var(--color-pill-text);
+        margin: 0 0 4px 0;
+    }
+
+    .strip-title {
+        font-weight: 700;
+        color: var(--color-heading);
+        margin: 0;
+        word-break: break-word;
+    }
+
+    .strip-key {
+        margin: 2px 0 0;
+        color: var(--color-text);
+        font-size: 0.95rem;
+        word-break: break-word;
+    }
+
+    .strip-badges {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .strip-badge {
+        background: var(--color-pill);
+        color: var(--color-pill-text);
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+        padding: 4px 10px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
     }
 
     .map-tools {
