@@ -1,6 +1,27 @@
 import items from './pages/inventory/json/items';
 import { questFinished, canStartQuest } from './utils/gameState.js';
 
+const markdownEncodingReplacements = [
+    // Common mojibake sequences from UTF-8 text misread as Windows-1252
+    { pattern: /â€™/g, replacement: "'" },
+    { pattern: /â€˜/g, replacement: "'" },
+    { pattern: /â€œ/g, replacement: '"' },
+    { pattern: /â€�/g, replacement: '"' },
+    { pattern: /â€“/g, replacement: '-' },
+    { pattern: /â€”/g, replacement: '-' },
+    { pattern: /â€¦/g, replacement: '...' },
+    { pattern: /Â /g, replacement: ' ' },
+    { pattern: /Â/g, replacement: '' },
+    // Straighten curly punctuation to ASCII to avoid charset issues
+    { pattern: /’/g, replacement: "'" },
+    { pattern: /‘/g, replacement: "'" },
+    { pattern: /“/g, replacement: '"' },
+    { pattern: /”/g, replacement: '"' },
+    { pattern: /–/g, replacement: '-' },
+    { pattern: /—/g, replacement: '-' },
+    { pattern: /\u00a0/g, replacement: ' ' },
+];
+
 export const prettyPrintNumber = (number) => {
     const n = parseFloat(number);
 
@@ -89,7 +110,12 @@ export const fixMarkdownText = (text) => {
         return typeof text === 'undefined' || text === null ? '' : String(text);
     }
 
-    return text.replace(/'/g, "'");
+    return markdownEncodingReplacements
+        .reduce(
+            (normalized, { pattern, replacement }) => normalized.replace(pattern, replacement),
+            text
+        )
+        .trim();
 };
 
 export const getPriceStringComponents = (currency) => {
