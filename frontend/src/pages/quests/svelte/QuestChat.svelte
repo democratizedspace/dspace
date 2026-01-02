@@ -66,7 +66,6 @@
             }
         }
     }
-
 </script>
 
 <div class="vertical">
