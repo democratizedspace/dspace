@@ -71,6 +71,7 @@ Astro uses file-based routing where files in `frontend/src/pages/` map to URL pa
 - `/quests/review` - Review quests
 - `/quests/submit` - Submit quest
 - `/quests/[id]` - Quest by ID (simple pattern)
+- `/quests/fixtures/ancestor-highlights` - Quest graph fixture used for ancestor/descendant QA
 - `/quests/[id]/edit` - Edit quest by ID
 - `/quests/[pathId]/[questId]` - Quest by path and ID (nested pattern)
   - Examples: `/quests/play/2`, `/quests/custom/5`
