@@ -115,7 +115,7 @@ export const getVersionNumber = () => {
     return gameState.versionNumberString;
 };
 
-const normalizeCount = (value) => {
+export const normalizeCount = (value) => {
     const parsed = Number.parseFloat(value);
     return Number.isFinite(parsed) ? parsed : 0;
 };
@@ -154,19 +154,26 @@ export const importV1V2 = (itemList) => {
 export const importV1V3 = async (itemList, options = {}) => {
     if (!isBrowser) return null;
     const { replaceExisting = false } = options;
-    const validItems = Array.isArray(itemList) ? itemList : [];
+
+    const normalizedItems = (Array.isArray(itemList) ? itemList : []).map(({ id, count }) => ({
+        id,
+        parsedCount: normalizeCount(count),
+    }));
 
     const baseState = replaceExisting ? validateGameState({}) : validateGameState(loadGameState());
     const nextState = structuredClone(baseState);
 
+    const hasLegacyItems = normalizedItems.some(({ id, parsedCount }) => id && parsedCount > 0);
+    const shouldGrantEarlyAdopter =
+        Boolean(EARLY_ADOPTER_ID) && hasLegacyItems && !(nextState.inventory || {})[EARLY_ADOPTER_ID];
+
     const itemsToImport = [
-        { id: EARLY_ADOPTER_ID, count: 1 },
-        ...validItems.filter(({ id, count }) => id && normalizeCount(count) > 0),
+        ...(shouldGrantEarlyAdopter ? [{ id: EARLY_ADOPTER_ID, parsedCount: 1 }] : []),
+        ...normalizedItems.filter(({ id, parsedCount }) => id && parsedCount > 0),
     ];
 
     nextState.inventory = nextState.inventory ?? {};
-    itemsToImport.forEach(({ id, count }) => {
-        const parsedCount = normalizeCount(count);
+    itemsToImport.forEach(({ id, parsedCount }) => {
         if (!id || parsedCount <= 0) return;
         nextState.inventory[id] = (nextState.inventory[id] || 0) + parsedCount;
     });
@@ -177,7 +184,7 @@ export const importV1V3 = async (itemList, options = {}) => {
 // v2 -> v3
 export const importV2V3 = async (legacyState) => {
     // Only run in browser environment
-    if (!isBrowser) return;
+    if (!isBrowser) return null;
 
     let migrated = legacyState;
     if (!migrated) {
@@ -190,7 +197,7 @@ export const importV2V3 = async (legacyState) => {
             console.error('Error reading legacy v2 state:', err);
         }
     }
-    if (!migrated) return;
+    if (!migrated) return null;
     return persistMigratedState(migrated);
 };
 

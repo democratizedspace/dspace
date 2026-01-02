@@ -402,20 +402,10 @@ export const rollbackGameState = async () => {
 };
 
 export const inspectGameStateStorage = async () => {
-    if (!isBrowser) {
-        return {
-            indexedDbSupported: false,
-            indexedDbState: undefined,
-            localStorageState: undefined,
-            localStorageBackup: undefined,
-            usesLocalStorageFallback: useLocalStorage,
-            loadedFromPersistence,
-        };
-    }
+    const supportsIndexedDB = isBrowser && 'indexedDB' in globalThis;
 
-    const localStorageState = lsRead(STATE_STORE);
-    const localStorageBackup = lsRead(BACKUP_STORE);
-    const supportsIndexedDB = 'indexedDB' in globalThis;
+    const localStorageState = isBrowser ? lsRead(STATE_STORE) : undefined;
+    const localStorageBackup = isBrowser ? lsRead(BACKUP_STORE) : undefined;
 
     let indexedDbState;
     if (supportsIndexedDB && !useLocalStorage) {

@@ -1,27 +1,42 @@
 <script>
     import { onMount } from 'svelte';
-    import { importV1V3, importV2V3, mergeLegacyStateIntoCurrent } from '../../utils/gameState.js';
+    import {
+        importV1V3,
+        importV2V3,
+        mergeLegacyStateIntoCurrent,
+        normalizeCount,
+    } from '../../utils/gameState.js';
     import { inspectGameStateStorage } from '../../utils/gameState/common.js';
     import Chip from './Chip.svelte';
 
     export let legacyV1Items = [];
     export let legacyCookieKeys = [];
 
-    const stableSerialize = (value) => {
+    const normalizeForStableSerialization = (value, seen = new WeakSet()) => {
         if (value === null || typeof value !== 'object') {
-            return JSON.stringify(value);
+            return value;
         }
+        if (seen.has(value)) {
+            return '[Circular]';
+        }
+        seen.add(value);
         if (Array.isArray(value)) {
-            return `[${value.map((item) => stableSerialize(item)).join(',')}]`;
+            return value.map((item) => normalizeForStableSerialization(item, seen));
         }
+        const normalized = {};
         const keys = Object.keys(value).sort();
-        return `{${keys.map((key) => `"${key}":${stableSerialize(value[key])}`).join(',')}}`;
+        for (const key of keys) {
+            normalized[key] = normalizeForStableSerialization(value[key], seen);
+        }
+        return normalized;
     };
 
+    const stableSerialize = (value) => JSON.stringify(normalizeForStableSerialization(value));
+
     const filterLegacyItems = (items) =>
-        (Array.isArray(items) ? items : []).filter(
-            ({ id, count }) => id && !Number.isNaN(Number.parseFloat(count)) && count > 0
-        );
+        (Array.isArray(items) ? items : [])
+            .map(({ id, count }) => ({ id, count: normalizeCount(count) }))
+            .filter(({ id, count }) => id && count > 0);
 
     let normalizedV1Items = filterLegacyItems(legacyV1Items);
     let detection = {
@@ -137,7 +152,7 @@
         } catch (err) {
             errorMessage = err?.message
                 ? err.message
-                : 'Something went wrong while upgrading saves.';
+                : `Something went wrong while upgrading saves: ${String(err)}`;
             console.error(err);
         } finally {
             workingAction = '';
@@ -211,7 +226,7 @@
     </div>
 
     {#if detection.loading}
-        <p>Detecting saved data…</p>
+        <p role="status" aria-live="polite">Detecting saved data…</p>
     {:else}
         <div class="status-grid">
             <div class="card">
