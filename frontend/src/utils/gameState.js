@@ -9,6 +9,7 @@ import { isBrowser } from './ssr.js';
 import items from '../pages/inventory/json/items';
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
+const LEGACY_V2_TROPHY_ID = items.find((i) => i.name === 'Legacy V2 Upgrade')?.id;
 
 // ---------------------
 // QUESTS
@@ -120,6 +121,15 @@ export const normalizeCount = (value) => {
     return Number.isFinite(parsed) ? parsed : 0;
 };
 
+const ensureTrophyOwned = (state, trophyId) => {
+    if (!trophyId) return;
+    state.inventory = state.inventory ?? {};
+    if (state.inventory[trophyId] && state.inventory[trophyId] > 0) {
+        return;
+    }
+    state.inventory[trophyId] = 1;
+};
+
 const persistMigratedState = async (state) => {
     const migrated = validateGameState(structuredClone(state));
     migrated.versionNumberString = VERSIONS.V3;
@@ -200,6 +210,7 @@ export const importV2V3 = async (legacyState) => {
         }
     }
     if (!migrated) return null;
+    ensureTrophyOwned(migrated, LEGACY_V2_TROPHY_ID);
     return persistMigratedState(migrated);
 };
 
@@ -231,6 +242,7 @@ export const mergeLegacyStateIntoCurrent = async (legacyState) => {
         }
     });
 
+    ensureTrophyOwned(merged, LEGACY_V2_TROPHY_ID);
     return persistMigratedState(merged);
 };
 

@@ -1,0 +1,8 @@
+{
+    "cookies": [
+        { "name": "item-1", "value": "2" },
+        { "name": "item-20", "value": "10" },
+        { "name": "item-24", "value": "250" },
+        { "name": "item-29", "value": "1" }
+    ]
+}

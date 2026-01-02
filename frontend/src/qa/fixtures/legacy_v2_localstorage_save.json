@@ -1,0 +1,31 @@
+{
+    "localStorage": {
+        "gameState": {
+            "quests": {
+                "welcome/howtodoquests": {
+                    "finished": true,
+                    "stepId": "hangofthis"
+                },
+                "energy/solarintro": {
+                    "finished": true
+                }
+            },
+            "inventory": {
+                "1": 1,
+                "20": 12,
+                "22": 1200,
+                "24": 320,
+                "29": 1,
+                "83": 1,
+                "85": 1
+            },
+            "processes": {
+                "outlet-dWatt-1e3": {
+                    "startedAt": 1672531200000,
+                    "duration": 1200000
+                }
+            },
+            "versionNumberString": "2"
+        }
+    }
+}

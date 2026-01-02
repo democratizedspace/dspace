@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/legacy_v2_upgrade_award.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "Legacy V2 Upgrade",
+    "item_id": "7c6b1d49-0e9f-4d2c-9c7d-51f2ba233c02",
+    "entity_type": "item",
+    "prompt": "Metallic desk-size trophy etched \"Legacy V2 Upgrade\" with a subtle arrow motif and a small rocket accent, staged on a dark wood shelf. Studio-style lighting, no visible logos or text besides the award title, photorealistic 1:1 aspect ratio.",
+    "image_model": "To be added",
+    "resolution": "512x512"
+}

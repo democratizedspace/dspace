@@ -4,6 +4,7 @@ import LogoutPanel from '../components/svelte/LogoutPanel.svelte';
 import DataReset from '../components/svelte/DataReset.svelte';
 import QaCheatsToggle from '../components/svelte/QaCheatsToggle.svelte';
 import LegacySaveUpgrade from '../components/svelte/LegacySaveUpgrade.svelte';
+import LegacySaveSeeder from '../components/svelte/LegacySaveSeeder.svelte';
 import { getCheatsAvailabilityFlag } from '../utils/cheatsAvailability';
 import { getCookieItemsFromStore, getCookieKeysFromStore } from '../utils/migrationCookies.js';
 
@@ -16,7 +17,10 @@ const legacyCookieKeys = getCookieKeysFromStore(Astro.cookies);
     <div class="settings-content">
         <LogoutPanel client:idle />
         {cheatsAvailable ? (
-            <QaCheatsToggle cheatsAvailable={cheatsAvailable} client:idle />
+            <div class="qa-stack">
+                <QaCheatsToggle cheatsAvailable={cheatsAvailable} client:idle />
+                <LegacySaveSeeder cheatsAvailable={cheatsAvailable} client:idle />
+            </div>
         ) : null}
         <LegacySaveUpgrade
             legacyV1Items={legacyV1Items}
@@ -33,5 +37,10 @@ const legacyCookieKeys = getCookieKeysFromStore(Astro.cookies);
         justify-content: center;
         gap: 1rem;
         padding: 1rem;
+    }
+
+    .qa-stack {
+        display: grid;
+        gap: 0.75rem;
     }
 </style>

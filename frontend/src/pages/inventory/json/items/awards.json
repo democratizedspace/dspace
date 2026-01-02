@@ -202,5 +202,18 @@
                 }
             ]
         }
+    },
+    {
+        "id": "7c6b1d49-0e9f-4d2c-9c7d-51f2ba233c02",
+        "name": "Legacy V2 Upgrade",
+        "description": "Awarded for migrating a standalone v2 save to the current v3 format.",
+        "image": "/assets/legacy_v2_upgrade_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
