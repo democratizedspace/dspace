@@ -120,7 +120,7 @@ const TEST_GROUPS = [
     },
     {
         name: 'Process Preview',
-        files: ['process-preview.spec.ts'],
+        files: ['process-preview.spec.ts', 'process-hardening.spec.ts'],
         parallel: true,
         workers: 1,
     },

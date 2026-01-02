@@ -66,9 +66,8 @@ Use this template as a baseline and expand it with additional dialogue nodes, pr
 requirements, and rewards. For more in-depth guidance, see the
 [Quest Development Guidelines](/docs/quest-guidelines).
 The optional `hardening` block tracks how many upgrade passes a quest has survived and stores a
-history of Codex tasks.
-If you omit it, the quest page will still render the default 🛠️ Score 0/100 and Passes 0 values;
-add the block to surface the real review history.
+history of Codex tasks. This metadata is meant for maintainers and QA reporting; it no longer
+surfaces in the player-facing UI but is still used by tests and dashboards.
 Increment `passes`, update `score`, switch the status `emoji` (🛠️ → 🌀 → ✅ → 💯) and append an
 entry to `history` with the task ID, date and score each time you run the quest hardening loop
 described in the [quest prompt guide][quest-prompt-guide].

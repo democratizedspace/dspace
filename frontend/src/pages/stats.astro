@@ -96,11 +96,6 @@ const inventoryCategories = Array.from(inventoryCategoryStats.entries())
 const totalItems = inventoryItems.length;
 
 const totalProcesses = processes.length;
-const processesWithHardening = processes.filter((process) => process.hardening).length;
-const totalHardeningPasses = processes.reduce(
-    (sum, process) => sum + (process.hardening?.passes ?? 0),
-    0
-);
 const processesWithDuration = processes.filter((process) => Boolean(process.duration)).length;
 ---
 
@@ -204,14 +199,6 @@ const processesWithDuration = processes.filter((process) => Boolean(process.dura
             <div>
                 <dt>Total processes</dt>
                 <dd data-testid="stats-total-processes">{totalProcesses}</dd>
-            </div>
-            <div>
-                <dt>With hardening history</dt>
-                <dd>{processesWithHardening}</dd>
-            </div>
-            <div>
-                <dt>Recorded hardening passes</dt>
-                <dd>{totalHardeningPasses}</dd>
             </div>
             <div>
                 <dt>Processes with durations</dt>
