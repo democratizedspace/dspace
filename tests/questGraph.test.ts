@@ -192,6 +192,37 @@ describe('quest graph ordering', () => {
   });
 });
 
+describe('quest graph caching', () => {
+  it('returns the same instance on cache hit', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root quest' });
+    writeQuest(questDir, 'exploration/side.json', { title: 'Side quest' });
+
+    const first = buildQuestGraph({ questDir, cacheTtlMs: 60_000 });
+    const second = buildQuestGraph({ questDir, cacheTtlMs: 60_000 });
+
+    expect(second).toBe(first);
+  });
+
+  it('forces rebuild when requested', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root quest' });
+    writeQuest(questDir, 'exploration/side.json', { title: 'Side quest' });
+
+    const cached = buildQuestGraph({ questDir, cacheTtlMs: 60_000 });
+    const rebuilt = buildQuestGraph({
+      questDir,
+      cacheTtlMs: 60_000,
+      forceRebuild: true,
+    });
+
+    expect(rebuilt).not.toBe(cached);
+    expect(rebuilt.nodes).toEqual(cached.nodes);
+    expect(rebuilt.edges).toEqual(cached.edges);
+    expect(rebuilt.diagnostics).toEqual(cached.diagnostics);
+  });
+});
+
 describe('production quest directory', () => {
   it('finds at least 1 quest file when using default questDir', () => {
     // Build quest graph with default directory

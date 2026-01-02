@@ -44,12 +44,17 @@ export type QuestData = {
 export type BuildQuestGraphOptions = {
     quests?: QuestData[]; // Pre-loaded quest data
     questDir?: string; // For backwards compatibility with tests
+    cacheTtlMs?: number; // Override cache TTL (0 disables cache)
+    disableCache?: boolean; // Opt-out of caching (useful in dev)
+    forceRebuild?: boolean; // Rebuild graph even if cached
 };
 
 const ROOT_CANONICAL_KEY = 'welcome/howtodoquests.json';
 const ROOT_BASENAME = 'howtodoquests.json';
 const QUEST_JSON_PATH_PREFIX = './json/';
 const QUEST_PATH_REGEX = new RegExp(`^${QUEST_JSON_PATH_PREFIX.replace('.', '\\.')}(.+)$`);
+const DEFAULT_DEV_CACHE_TTL_MS = 30_000;
+const isProduction = process.env.NODE_ENV === 'production';
 
 const comparatorKeys: Array<keyof QuestNode> = ['group', 'title', 'canonicalKey'];
 
@@ -146,6 +151,13 @@ export const loadQuestsFromDir = (questDir: string): QuestData[] => {
     return questData;
 };
 
+type QuestGraphCacheEntry = {
+    graph: QuestGraph;
+    builtAt: number;
+};
+
+const questGraphCache = new Map<string, QuestGraphCacheEntry>();
+
 export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGraph => {
     // Support both new (quests) and old (questDir) API
     // Validate that both options are not provided simultaneously
@@ -153,14 +165,34 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         throw new Error('Cannot provide both "quests" and "questDir" options to buildQuestGraph');
     }
 
+    const effectiveQuestDir = options.questDir
+        ? path.resolve(options.questDir)
+        : getDefaultQuestDir();
+    const defaultCacheTtlMs = isProduction ? Number.POSITIVE_INFINITY : DEFAULT_DEV_CACHE_TTL_MS;
+    const cacheTtlMs =
+        typeof options.cacheTtlMs === 'number'
+            ? Math.max(0, options.cacheTtlMs)
+            : defaultCacheTtlMs;
+    const cacheEnabled = !options.disableCache && !options.quests && cacheTtlMs !== 0;
+
+    if (cacheEnabled && !options.forceRebuild) {
+        const cacheEntry = questGraphCache.get(effectiveQuestDir);
+        if (cacheEntry) {
+            const ageMs = Date.now() - cacheEntry.builtAt;
+            if (ageMs <= cacheTtlMs) {
+                return cacheEntry.graph;
+            }
+        }
+    }
+
     let quests: QuestData[];
     if (options.quests) {
         quests = options.quests;
     } else if (options.questDir) {
-        quests = loadQuestsFromDir(options.questDir);
+        quests = loadQuestsFromDir(effectiveQuestDir);
     } else {
         // Default: load from default quest directory
-        quests = loadQuestsFromDir(getDefaultQuestDir());
+        quests = loadQuestsFromDir(effectiveQuestDir);
     }
 
     const diagnostics: QuestDiagnostics = {
@@ -466,7 +498,7 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         }
     }
 
-    return {
+    const graph: QuestGraph = {
         nodes,
         edges,
         byKey: makeRecord(nodeIndex),
@@ -475,4 +507,10 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         reachableFromRoot: reachableList,
         diagnostics,
     };
+
+    if (cacheEnabled) {
+        questGraphCache.set(effectiveQuestDir, { graph, builtAt: Date.now() });
+    }
+
+    return graph;
 };
