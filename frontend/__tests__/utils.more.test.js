@@ -81,6 +81,14 @@ describe('string and object helpers', () => {
         expect(fixMarkdownText("it's fine")).toBe("it's fine");
     });
 
+    test('fixMarkdownText repairs common mojibake punctuation', () => {
+        const brokenText =
+            'youâ€™ll see â€œsmartâ€� quotes, dashes â€“ and â€” plus ellipsis â€¦ and bullets â€¢';
+        expect(fixMarkdownText(brokenText)).toBe(
+            'you’ll see “smart” quotes, dashes – and — plus ellipsis … and bullets •'
+        );
+    });
+
     test('fixMarkdownText handles non-string inputs', () => {
         expect(fixMarkdownText()).toBe('');
         expect(fixMarkdownText(undefined)).toBe('');

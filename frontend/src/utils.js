@@ -89,7 +89,20 @@ export const fixMarkdownText = (text) => {
         return typeof text === 'undefined' || text === null ? '' : String(text);
     }
 
-    return text.replace(/'/g, "'");
+    const mojibakeMap = {
+        'â€˜': '‘',
+        'â€™': '’',
+        'â€œ': '“',
+        'â€�': '”',
+        'â€“': '–',
+        'â€”': '—',
+        'â€¢': '•',
+        'â€¦': '…',
+    };
+
+    return Object.entries(mojibakeMap).reduce((normalized, [bad, good]) => {
+        return normalized.split(bad).join(good);
+    }, text);
 };
 
 export const getPriceStringComponents = (currency) => {
