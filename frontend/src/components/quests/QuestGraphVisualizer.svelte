@@ -23,6 +23,9 @@
     let highlightMultiParent = true;
     let mapInitialized = false;
     let cy = null;
+    let layoutQueueHandle = null;
+    let pendingLayoutOptions = { fit: false };
+    let layoutRestoreHandler = null;
     let hasMounted = false;
     let copyStatus = 'idle';
     let copyError = '';
@@ -244,6 +247,11 @@
         hasMounted = true;
         return () => {
             window.removeEventListener('keydown', handleKeydown);
+            cancelQueuedLayout();
+            if (layoutRestoreHandler) {
+                cy?.off?.('layoutstop', layoutRestoreHandler);
+                layoutRestoreHandler = null;
+            }
             cy?.destroy?.();
         };
     });
@@ -346,9 +354,77 @@
             padding: 30,
         });
         layout.run();
-        if (options.fit !== false) {
+        if (options.fit) {
             cy.fit(undefined, 24);
         }
+    };
+
+    const cancelQueuedLayout = () => {
+        if (!layoutQueueHandle) return;
+        if (layoutQueueHandle.type === 'raf') {
+            if (typeof cancelAnimationFrame === 'function') {
+                cancelAnimationFrame(layoutQueueHandle.id);
+            }
+        } else if (layoutQueueHandle.type === 'timeout') {
+            clearTimeout(layoutQueueHandle.id);
+        } else {
+            layoutQueueHandle.cancel?.();
+        }
+        layoutQueueHandle = null;
+    };
+
+    const queueLayout = (options = {}) => {
+        if (!cy) return;
+        pendingLayoutOptions = {
+            ...pendingLayoutOptions,
+            ...options,
+            fit: options.fit ?? pendingLayoutOptions.fit ?? false,
+        };
+
+        if (layoutQueueHandle) return;
+
+        const flush = () => {
+            layoutQueueHandle = null;
+            const nextOptions = pendingLayoutOptions;
+            pendingLayoutOptions = { fit: false };
+            runLayout(nextOptions);
+        };
+
+        const useRaf = typeof requestAnimationFrame === 'function';
+
+        if (useRaf) {
+            const handle = requestAnimationFrame(flush);
+            layoutQueueHandle = {
+                id: handle,
+                type: 'raf',
+                cancel:
+                    typeof cancelAnimationFrame === 'function'
+                        ? () => cancelAnimationFrame(handle)
+                        : null,
+            };
+            return;
+        }
+
+        const handle = setTimeout(flush, 0);
+        layoutQueueHandle = {
+            id: handle,
+            type: 'timeout',
+            cancel: () => clearTimeout(handle),
+        };
+    };
+
+    const restoreViewportAfterLayout = (viewport) => {
+        if (!cy || !viewport) return;
+        if (layoutRestoreHandler) {
+            cy.off('layoutstop', layoutRestoreHandler);
+        }
+        layoutRestoreHandler = () => {
+            cy.zoom(viewport.zoom);
+            cy.pan(viewport.pan);
+            highlightFocus(focusedKey);
+            layoutRestoreHandler = null;
+        };
+        cy.once('layoutstop', layoutRestoreHandler);
     };
 
     const refreshMap = (includeUnreachable) => {
@@ -357,19 +433,14 @@
         // Store current pan and zoom to preserve user's view
         const zoom = cy.zoom();
         const pan = cy.pan();
+        const viewport = { zoom, pan };
 
         cy.elements().remove();
         cy.add(buildMapElements(includeUnreachable));
         applyMultiParentHighlight();
 
-        // Restore pan/zoom after layout completes (layout can be async)
-        cy.once('layoutstop', () => {
-            cy.zoom(zoom);
-            cy.pan(pan);
-            highlightFocus(focusedKey);
-        });
-
-        runLayout({ fit: false });
+        restoreViewportAfterLayout(viewport);
+        queueLayout();
     };
 
     const initMap = async () => {
@@ -487,7 +558,7 @@
                         },
                     },
                 ],
-                wheelSensitivity: 0.2,
+                wheelSensitivity: 0.6,
                 motionBlur: false,
             });
 
@@ -508,7 +579,7 @@
             }
 
             applyMultiParentHighlight();
-            runLayout();
+            queueLayout({ fit: true });
             highlightFocus(focusedKey);
             mapInitialized = true;
             mapStatus = 'ready';
@@ -540,6 +611,19 @@
     $: if (mapInitialized && activeTab === 'map') {
         highlightFocus(focusedKey);
     }
+
+    const fitGraph = () => {
+        if (!cy) return;
+        cy.fit(undefined, 24);
+    };
+
+    const centerOnFocused = () => {
+        if (!cy || !focusedKey) return;
+        const node = cy.getElementById(focusedKey);
+        if (!node || node.empty()) return;
+        cy.center(node);
+        highlightFocus(focusedKey);
+    };
 </script>
 
 <div class="visualizer" bind:this={visualizerEl}>
@@ -737,6 +821,14 @@
                         />
                         Highlight multi-parent quests
                     </label>
+                </div>
+                <div class="map-actions">
+                    <button type="button" on:click={fitGraph} class="pill ghost">
+                        Fit graph
+                    </button>
+                    <button type="button" on:click={centerOnFocused} class="pill ghost">
+                        Center on focused
+                    </button>
                 </div>
                 <div class="legend">
                     <span class="legend-item">
@@ -1249,6 +1341,17 @@
         color: var(--color-heading);
         font-size: 0.95rem;
         align-items: flex-start;
+    }
+
+    .map-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .pill.ghost {
+        background: transparent;
+        color: var(--color-heading);
     }
 
     .hint-wrapper {
