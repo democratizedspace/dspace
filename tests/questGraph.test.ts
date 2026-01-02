@@ -1,9 +1,9 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { describe, expect, it, afterEach } from 'vitest';
+import { describe, expect, it, afterEach, beforeEach, vi } from 'vitest';
 
-import { buildQuestGraph } from '../frontend/src/lib/quests/questGraph';
+import { buildQuestGraph, clearQuestGraphCache } from '../frontend/src/lib/quests/questGraph';
 
 const tmpDirs: string[] = [];
 
@@ -30,6 +30,10 @@ afterEach(() => {
       fs.rmSync(dir, { recursive: true, force: true });
     }
   }
+});
+
+beforeEach(() => {
+  clearQuestGraphCache();
 });
 
 describe('quest graph diagnostics', () => {
@@ -189,6 +193,137 @@ describe('quest graph ordering', () => {
     expect(graph.edges.map((edge) => `${edge.from}->${edge.to}`)).toEqual([
       'aurora/alpha.json->aurora/zeta.json',
     ]);
+  });
+});
+
+describe('quest graph cache', () => {
+  it('returns the same instance for cache hits', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
+
+    const first = buildQuestGraph({ questDir, cacheTtlMs: 60_000 });
+    const second = buildQuestGraph({ questDir, cacheTtlMs: 60_000 });
+
+    expect(second).toBe(first);
+  });
+
+  it('forces rebuild when requested', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
+
+    const initial = buildQuestGraph({ questDir, cacheTtlMs: 60_000 });
+    writeQuest(questDir, 'alpha/added.json', { title: 'Added quest' });
+
+    const rebuilt = buildQuestGraph({
+      questDir,
+      cacheTtlMs: 60_000,
+      forceRebuild: true,
+    });
+
+    expect(rebuilt).not.toBe(initial);
+    expect(rebuilt.nodes.map((node) => node.canonicalKey)).toContain('alpha/added.json');
+
+    const cached = buildQuestGraph({ questDir, cacheTtlMs: 60_000 });
+    expect(cached).toBe(rebuilt);
+  });
+
+  it('expires cached entries after the TTL passes', () => {
+    vi.useFakeTimers();
+    try {
+      const questDir = createQuestDir();
+      writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
+
+      const ttlMs = 50;
+      const cached = buildQuestGraph({ questDir, cacheTtlMs: ttlMs });
+
+      vi.advanceTimersByTime(ttlMs + 1);
+      const rebuilt = buildQuestGraph({ questDir, cacheTtlMs: ttlMs });
+
+      expect(rebuilt).not.toBe(cached);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('disables caching when requested', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
+
+    const first = buildQuestGraph({ questDir, disableCache: true });
+    writeQuest(questDir, 'alpha/added.json', { title: 'Added quest' });
+    const second = buildQuestGraph({ questDir, disableCache: true });
+
+    expect(second).not.toBe(first);
+    expect(second.nodes.map((node) => node.canonicalKey)).toContain('alpha/added.json');
+  });
+
+  it('honors cache=false to opt out of caching', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
+
+    const first = buildQuestGraph({ questDir, cache: false });
+    writeQuest(questDir, 'alpha/added.json', { title: 'Added quest' });
+    const second = buildQuestGraph({ questDir, cache: false });
+
+    expect(second).not.toBe(first);
+    expect(second.nodes.map((node) => node.canonicalKey)).toContain('alpha/added.json');
+  });
+
+  it('treats cacheTtlMs of zero as uncached', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
+
+    const first = buildQuestGraph({ questDir, cacheTtlMs: 0 });
+    writeQuest(questDir, 'alpha/added.json', { title: 'Added quest' });
+    const second = buildQuestGraph({ questDir, cacheTtlMs: 0 });
+
+    expect(second).not.toBe(first);
+    expect(second.nodes.map((node) => node.canonicalKey)).toContain('alpha/added.json');
+  });
+
+  it('rejects cache options when using preloaded quests', () => {
+    expect(() =>
+      buildQuestGraph({
+        quests: [{ path: './json/welcome/howtodoquests.json', quest: {} }],
+        cacheTtlMs: 1000,
+      })
+    ).toThrowError(/cache options/i);
+  });
+
+  it('preserves determinism with and without caching', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', {
+      title: 'Root',
+      requiresQuests: ['alpha/start.json', 'beta/start.json'],
+    });
+    writeQuest(questDir, 'alpha/start.json', { title: 'Alpha' });
+    writeQuest(questDir, 'beta/start.json', { title: 'Beta' });
+
+    const uncached = buildQuestGraph({ questDir, cache: false });
+    const cached = buildQuestGraph({ questDir, cacheTtlMs: 10_000 });
+    const cachedHit = buildQuestGraph({ questDir, cacheTtlMs: 10_000 });
+
+    expect(cachedHit).toBe(cached);
+    expect(cached.nodes.map((node) => node.canonicalKey)).toEqual(
+      uncached.nodes.map((node) => node.canonicalKey)
+    );
+    expect(cached.diagnostics).toEqual(uncached.diagnostics);
+  });
+
+  it('returns frozen graphs to guard against mutation', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
+
+    const graph = buildQuestGraph({ questDir, cacheTtlMs: 60_000 });
+
+    expect(Object.isFrozen(graph)).toBe(true);
+    expect(Object.isFrozen(graph.nodes)).toBe(true);
+    expect(Object.isFrozen(graph.diagnostics)).toBe(true);
+    expect(() => {
+      (graph.nodes as unknown as Array<{ canonicalKey: string }>).push({
+        canonicalKey: 'mutated.json',
+      });
+    }).toThrow();
   });
 });
 
