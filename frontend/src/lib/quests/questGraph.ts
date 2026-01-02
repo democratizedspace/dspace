@@ -44,6 +44,7 @@ export type QuestData = {
 export type BuildQuestGraphOptions = {
     quests?: QuestData[]; // Pre-loaded quest data
     questDir?: string; // For backwards compatibility with tests
+    cache?: boolean; // Enable or disable caching explicitly
     forceRebuild?: boolean; // Force rebuild and refresh cache (for dev/tests)
     cacheTtlMs?: number; // Override cache TTL in milliseconds
     disableCache?: boolean; // Skip cache entirely (useful in watch mode)
@@ -53,7 +54,7 @@ const ROOT_CANONICAL_KEY = 'welcome/howtodoquests.json';
 const ROOT_BASENAME = 'howtodoquests.json';
 const QUEST_JSON_PATH_PREFIX = './json/';
 const QUEST_PATH_REGEX = new RegExp(`^${QUEST_JSON_PATH_PREFIX.replace('.', '\\.')}(.+)$`);
-const DEFAULT_DEV_CACHE_TTL_MS = 5_000;
+const DEFAULT_DEV_CACHE_TTL_MS = 2_000;
 
 const comparatorKeys: Array<keyof QuestNode> = ['group', 'title', 'canonicalKey'];
 
@@ -93,6 +94,46 @@ const makeRecord = <T>(map: Map<string, T>): Record<string, T> => {
     return record;
 };
 
+const freezeDiagnostics = (diagnostics: QuestDiagnostics): void => {
+    diagnostics.missingRefs.forEach((entry) => Object.freeze(entry));
+    diagnostics.ambiguousRefs.forEach((entry) => {
+        Object.freeze(entry.candidates);
+        Object.freeze(entry);
+    });
+    diagnostics.cycles.forEach((cycle) => Object.freeze(cycle));
+    Object.freeze(diagnostics.missingRefs);
+    Object.freeze(diagnostics.ambiguousRefs);
+    Object.freeze(diagnostics.unreachableNodes);
+    Object.freeze(diagnostics.cycles);
+    Object.freeze(diagnostics);
+};
+
+const deepFreezeGraph = (graph: QuestGraph): QuestGraph => {
+    for (const node of graph.nodes) {
+        Object.freeze(node.requires);
+        Object.freeze(node);
+    }
+    Object.freeze(graph.nodes);
+
+    for (const edge of graph.edges) {
+        Object.freeze(edge);
+    }
+    Object.freeze(graph.edges);
+
+    Object.values(graph.byKey).forEach((node) => Object.freeze(node));
+    Object.freeze(graph.byKey);
+
+    Object.values(graph.requiredBy).forEach((list) => Object.freeze(list));
+    Object.freeze(graph.requiredBy);
+
+    Object.freeze(graph.depthByKey);
+    Object.freeze(graph.reachableFromRoot);
+
+    freezeDiagnostics(graph.diagnostics);
+
+    return Object.freeze(graph);
+};
+
 // Default quest directory (for tests that don't pass a questDir)
 const getDefaultQuestDir = (): string => {
     return path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../pages/quests/json');
@@ -109,7 +150,7 @@ const isTest = process.env.NODE_ENV === 'test';
 const isProduction = process.env.NODE_ENV === 'production';
 
 const getCacheTtlMs = (options: BuildQuestGraphOptions): number => {
-    if (options.disableCache) {
+    if (options.cache === false || options.disableCache) {
         return 0;
     }
     if (typeof options.cacheTtlMs === 'number') {
@@ -204,7 +245,10 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
     }
 
     const cacheOptionsProvided =
-        typeof options.cacheTtlMs === 'number' || options.forceRebuild || options.disableCache;
+        typeof options.cacheTtlMs === 'number' ||
+        options.forceRebuild !== undefined ||
+        options.cache !== undefined ||
+        options.disableCache !== undefined;
     evictExpiredEntries();
 
     let quests: QuestData[];
@@ -214,7 +258,7 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
     if (options.quests) {
         if (cacheOptionsProvided) {
             throw new Error(
-                'Cache options (cacheTtlMs, forceRebuild, disableCache) cannot be used with pre-loaded quests'
+                'Cache options (cache, cacheTtlMs, forceRebuild, disableCache) cannot be used with pre-loaded quests'
             );
         }
         quests = options.quests;
@@ -227,6 +271,9 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
             if (cached) {
                 const effectiveTtlMs = Math.min(cacheTtlMs, cached.ttlMs);
                 if (isCacheEntryFresh(cached, effectiveTtlMs)) {
+                    if (!Object.isFrozen(cached.graph)) {
+                        cached.graph = deepFreezeGraph(cached.graph);
+                    }
                     return cached.graph;
                 }
                 if (!isCacheEntryFresh(cached, cached.ttlMs)) {
@@ -551,9 +598,15 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         diagnostics,
     };
 
+    const frozenGraph = deepFreezeGraph(graph);
+
     if (cacheKey && cacheTtlMs !== 0) {
-        questGraphCache.set(cacheKey, { builtAt: Date.now(), graph, ttlMs: cacheTtlMs });
+        questGraphCache.set(cacheKey, {
+            builtAt: Date.now(),
+            graph: frozenGraph,
+            ttlMs: cacheTtlMs,
+        });
     }
 
-    return graph;
+    return frozenGraph;
 };

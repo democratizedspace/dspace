@@ -257,6 +257,18 @@ describe('quest graph cache', () => {
     expect(second.nodes.map((node) => node.canonicalKey)).toContain('alpha/added.json');
   });
 
+  it('honors cache=false to opt out of caching', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
+
+    const first = buildQuestGraph({ questDir, cache: false });
+    writeQuest(questDir, 'alpha/added.json', { title: 'Added quest' });
+    const second = buildQuestGraph({ questDir, cache: false });
+
+    expect(second).not.toBe(first);
+    expect(second.nodes.map((node) => node.canonicalKey)).toContain('alpha/added.json');
+  });
+
   it('treats cacheTtlMs of zero as uncached', () => {
     const questDir = createQuestDir();
     writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
@@ -276,6 +288,42 @@ describe('quest graph cache', () => {
         cacheTtlMs: 1000,
       })
     ).toThrowError(/cache options/i);
+  });
+
+  it('preserves determinism with and without caching', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', {
+      title: 'Root',
+      requiresQuests: ['alpha/start.json', 'beta/start.json'],
+    });
+    writeQuest(questDir, 'alpha/start.json', { title: 'Alpha' });
+    writeQuest(questDir, 'beta/start.json', { title: 'Beta' });
+
+    const uncached = buildQuestGraph({ questDir, cache: false });
+    const cached = buildQuestGraph({ questDir, cacheTtlMs: 10_000 });
+    const cachedHit = buildQuestGraph({ questDir, cacheTtlMs: 10_000 });
+
+    expect(cachedHit).toBe(cached);
+    expect(cached.nodes.map((node) => node.canonicalKey)).toEqual(
+      uncached.nodes.map((node) => node.canonicalKey)
+    );
+    expect(cached.diagnostics).toEqual(uncached.diagnostics);
+  });
+
+  it('returns frozen graphs to guard against mutation', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
+
+    const graph = buildQuestGraph({ questDir, cacheTtlMs: 60_000 });
+
+    expect(Object.isFrozen(graph)).toBe(true);
+    expect(Object.isFrozen(graph.nodes)).toBe(true);
+    expect(Object.isFrozen(graph.diagnostics)).toBe(true);
+    expect(() => {
+      (graph.nodes as unknown as Array<{ canonicalKey: string }>).push({
+        canonicalKey: 'mutated.json',
+      });
+    }).toThrow();
   });
 });
 
