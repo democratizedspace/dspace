@@ -21,6 +21,9 @@
     let showUnreachable = false;
     let prevShowUnreachable = showUnreachable;
     let highlightMultiParent = true;
+    let highlightNeighbors = true;
+    let highlightAncestors = false;
+    let highlightDescendants = false;
     let mapInitialized = false;
     let cy = null;
     let layoutQueueHandle = null;
@@ -409,20 +412,102 @@
         }
     };
 
-    const highlightFocus = (key) => {
+    const collectAncestorPaths = (startKey) => {
+        const nodes = new Set();
+        const edges = new Set();
+        const visited = new Set();
+        const stack = (byKey[startKey]?.requires ?? []).map((parent) => ({
+            parent,
+            child: startKey,
+        }));
+
+        while (stack.length) {
+            const { parent, child } = stack.pop();
+            if (!parent || visited.has(parent)) continue;
+            visited.add(parent);
+            nodes.add(parent);
+            edges.add(`${parent}->${child}`);
+
+            const parents = byKey[parent]?.requires ?? [];
+            for (const nextParent of parents) {
+                stack.push({ parent: nextParent, child: parent });
+            }
+        }
+
+        return { nodes, edges };
+    };
+
+    const collectDescendantPaths = (startKey) => {
+        const nodes = new Set();
+        const edges = new Set();
+        const visited = new Set();
+        const stack = (graph?.requiredBy?.[startKey] ?? []).map((child) => ({
+            parent: startKey,
+            child,
+        }));
+
+        while (stack.length) {
+            const { parent, child } = stack.pop();
+            if (!child || visited.has(child)) continue;
+            visited.add(child);
+            nodes.add(child);
+            edges.add(`${parent}->${child}`);
+
+            const children = graph?.requiredBy?.[child] ?? [];
+            for (const nextChild of children) {
+                stack.push({ parent: child, child: nextChild });
+            }
+        }
+
+        return { nodes, edges };
+    };
+
+    const highlightFocus = (
+        key,
+        { includeNeighbors, includeAncestors, includeDescendants } = {
+            includeNeighbors: highlightNeighbors,
+            includeAncestors: highlightAncestors,
+            includeDescendants: highlightDescendants,
+        }
+    ) => {
         if (!cy) return;
-        cy.nodes().removeClass('focused highlight-parent highlight-child');
-        cy.edges().removeClass('highlighted');
+        cy.nodes().removeClass(
+            'focused highlight-parent highlight-child highlight-ancestor highlight-descendant'
+        );
+        cy.edges().removeClass('highlighted ancestor-path descendant-path');
         if (!key) return;
         const node = cy.getElementById(key);
         if (!node || node.empty()) return;
         node.addClass('focused');
-        const incomingEdges = node.incomers('edge');
-        incomingEdges.addClass('highlighted');
-        incomingEdges.sources().addClass('highlight-parent');
-        const outgoingEdges = node.outgoers('edge');
-        outgoingEdges.addClass('highlighted');
-        outgoingEdges.targets().addClass('highlight-child');
+        if (includeNeighbors) {
+            const incomingEdges = node.incomers('edge');
+            incomingEdges.addClass('highlighted');
+            incomingEdges.sources().addClass('highlight-parent');
+            const outgoingEdges = node.outgoers('edge');
+            outgoingEdges.addClass('highlighted');
+            outgoingEdges.targets().addClass('highlight-child');
+        }
+
+        if (includeAncestors) {
+            const { nodes: ancestorNodes, edges: ancestorEdges } = collectAncestorPaths(key);
+            ancestorNodes.forEach((ancestor) => {
+                cy.getElementById(ancestor).addClass('highlight-ancestor');
+            });
+            ancestorEdges.forEach((edgeId) => {
+                cy.getElementById(edgeId).addClass('highlighted ancestor-path');
+            });
+        }
+
+        if (includeDescendants) {
+            const { nodes: descendantNodes, edges: descendantEdges } =
+                collectDescendantPaths(key);
+            descendantNodes.forEach((descendant) => {
+                cy.getElementById(descendant).addClass('highlight-descendant');
+            });
+            descendantEdges.forEach((edgeId) => {
+                cy.getElementById(edgeId).addClass('highlighted descendant-path');
+            });
+        }
     };
 
     const runLayout = (options = {}) => {
@@ -503,7 +588,11 @@
         layoutRestoreHandler = () => {
             cy.zoom(viewport.zoom);
             cy.pan(viewport.pan);
-            highlightFocus(focusedKey);
+            highlightFocus(focusedKey, {
+                includeNeighbors: highlightNeighbors,
+                includeAncestors: highlightAncestors,
+                includeDescendants: highlightDescendants,
+            });
             layoutRestoreHandler = null;
         };
         cy.once('layoutstop', layoutRestoreHandler);
@@ -639,6 +728,33 @@
                             'border-style': 'dotted',
                         },
                     },
+                    {
+                        selector: 'node.highlight-ancestor',
+                        style: {
+                            'border-color': colors.nodeAccent,
+                            'border-width': 3,
+                        },
+                    },
+                    {
+                        selector: 'node.highlight-descendant',
+                        style: {
+                            'border-color': colors.nodeAccent,
+                            'border-width': 3,
+                            'border-style': 'dashed',
+                        },
+                    },
+                    {
+                        selector: 'edge.ancestor-path',
+                        style: {
+                            'line-style': 'solid',
+                        },
+                    },
+                    {
+                        selector: 'edge.descendant-path',
+                        style: {
+                            'line-style': 'dashed',
+                        },
+                    },
                 ],
                 wheelSensitivity: 0.6,
                 motionBlur: false,
@@ -648,7 +764,11 @@
                 const nodeKey = event?.target?.id?.();
                 if (nodeKey) {
                     setFocus(nodeKey);
-                    highlightFocus(nodeKey);
+                    highlightFocus(nodeKey, {
+                        includeNeighbors: highlightNeighbors,
+                        includeAncestors: highlightAncestors,
+                        includeDescendants: highlightDescendants,
+                    });
                 }
             });
 
@@ -662,7 +782,11 @@
 
             applyMultiParentHighlight();
             queueLayout({ fit: true });
-            highlightFocus(focusedKey);
+            highlightFocus(focusedKey, {
+                includeNeighbors: highlightNeighbors,
+                includeAncestors: highlightAncestors,
+                includeDescendants: highlightDescendants,
+            });
             mapInitialized = true;
             mapStatus = 'ready';
         } catch (error) {
@@ -691,7 +815,11 @@
     }
 
     $: if (mapInitialized && activeTab === 'map') {
-        highlightFocus(focusedKey);
+        highlightFocus(focusedKey, {
+            includeNeighbors: highlightNeighbors,
+            includeAncestors: highlightAncestors,
+            includeDescendants: highlightDescendants,
+        });
     }
 
     const fitGraph = () => {
@@ -704,7 +832,11 @@
         const node = cy.getElementById(focusedKey);
         if (!node || node.empty()) return;
         cy.center(node);
-        highlightFocus(focusedKey);
+        highlightFocus(focusedKey, {
+            includeNeighbors: highlightNeighbors,
+            includeAncestors: highlightAncestors,
+            includeDescendants: highlightDescendants,
+        });
     };
 </script>
 
@@ -939,6 +1071,33 @@
                         />
                         Highlight multi-parent quests
                     </label>
+                    <div class="highlight-toggle-group" role="group" aria-label="Highlight scope">
+                        <span class="toggle-label">Highlight</span>
+                        <label>
+                            <input
+                                type="checkbox"
+                                bind:checked={highlightNeighbors}
+                                aria-label="Highlight direct neighbors"
+                            />
+                            Direct neighbors
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                bind:checked={highlightAncestors}
+                                aria-label="Highlight all ancestors"
+                            />
+                            All ancestors
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                bind:checked={highlightDescendants}
+                                aria-label="Highlight all descendants"
+                            />
+                            All descendants
+                        </label>
+                    </div>
                 </div>
                 <div class="map-actions">
                     <button type="button" on:click={fitGraph} class="pill ghost">
@@ -1517,6 +1676,21 @@
         color: var(--color-heading);
         font-size: 0.95rem;
         align-items: flex-start;
+    }
+
+    .highlight-toggle-group {
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+    }
+
+    .toggle-label {
+        font-weight: 700;
+        color: var(--color-heading);
     }
 
     .map-actions {
