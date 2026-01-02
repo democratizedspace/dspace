@@ -3,9 +3,13 @@ import Page from '../components/Page.astro';
 import LogoutPanel from '../components/svelte/LogoutPanel.svelte';
 import DataReset from '../components/svelte/DataReset.svelte';
 import QaCheatsToggle from '../components/svelte/QaCheatsToggle.svelte';
+import LegacySaveUpgrade from '../components/svelte/LegacySaveUpgrade.svelte';
 import { getCheatsAvailabilityFlag } from '../utils/cheatsAvailability';
+import { getCookieItemsFromStore, getCookieKeysFromStore } from '../utils/migrationCookies.js';
 
 const cheatsAvailable = getCheatsAvailabilityFlag();
+const legacyV1Items = getCookieItemsFromStore(Astro.cookies);
+const legacyCookieKeys = getCookieKeysFromStore(Astro.cookies);
 ---
 
 <Page title="Settings" message="Manage your DSPACE session" columns="1">
@@ -14,6 +18,11 @@ const cheatsAvailable = getCheatsAvailabilityFlag();
         {cheatsAvailable ? (
             <QaCheatsToggle cheatsAvailable={cheatsAvailable} client:idle />
         ) : null}
+        <LegacySaveUpgrade
+            legacyV1Items={legacyV1Items}
+            legacyCookieKeys={legacyCookieKeys}
+            client:idle
+        />
         <DataReset client:idle />
     </div>
 </Page>

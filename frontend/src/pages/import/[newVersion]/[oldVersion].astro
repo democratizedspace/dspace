@@ -1,13 +1,11 @@
 ---
 import Page from '../../../components/Page.astro';
 import Importer from '../svelte/Importer.svelte';
-import { getCookieItems } from '../../../utils/migrationCookies.js';
+import { getCookieItemsFromStore } from '../../../utils/migrationCookies.js';
 
 const { newVersion, oldVersion } = Astro.params;
 
-const cookie = Astro.request.headers.get('cookie');
-
-const itemList = getCookieItems(cookie);
+const itemList = getCookieItemsFromStore(Astro.cookies);
 
 const title = `Upgrade from ${oldVersion.toString()} to ${newVersion.toString()}`;
 ---

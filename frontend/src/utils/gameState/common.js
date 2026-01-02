@@ -18,6 +18,7 @@ let dbInstance;
 let useLocalStorage = false;
 let warnedFallback = false;
 let readyResolved = false;
+let loadedFromPersistence = false;
 export const isUsingLocalStorage = () => useLocalStorage;
 
 function warnFallback() {
@@ -243,6 +244,7 @@ export const ready = isBrowser
               if (stored) {
                   gameState = validateGameState(stored);
                   state.set(gameState);
+                  loadedFromPersistence = true;
               }
           } catch (err) {
               console.error('Error loading game state from IndexedDB:', err);
@@ -259,6 +261,7 @@ let writeQueue = Promise.resolve();
 export const loadGameState = () => structuredClone(gameState);
 
 export const isGameStateReady = () => readyResolved;
+export const hasLoadedPersistedGameState = () => loadedFromPersistence;
 
 export const saveGameState = async (newState) => {
     if (!readyResolved) {
@@ -396,4 +399,39 @@ export const rollbackGameState = async () => {
     } catch (err) {
         console.error('Error rolling back game state:', err);
     }
+};
+
+export const inspectGameStateStorage = async () => {
+    if (!isBrowser) {
+        return {
+            indexedDbSupported: false,
+            indexedDbState: undefined,
+            localStorageState: undefined,
+            localStorageBackup: undefined,
+            usesLocalStorageFallback: useLocalStorage,
+            loadedFromPersistence,
+        };
+    }
+
+    const localStorageState = lsRead(STATE_STORE);
+    const localStorageBackup = lsRead(BACKUP_STORE);
+    const supportsIndexedDB = 'indexedDB' in globalThis;
+
+    let indexedDbState;
+    if (supportsIndexedDB && !useLocalStorage) {
+        try {
+            indexedDbState = await idbRead(STATE_STORE);
+        } catch (err) {
+            console.warn('IndexedDB inspection failed:', err);
+        }
+    }
+
+    return {
+        indexedDbSupported: supportsIndexedDB,
+        indexedDbState,
+        localStorageState,
+        localStorageBackup,
+        usesLocalStorageFallback: useLocalStorage,
+        loadedFromPersistence,
+    };
 };
