@@ -1,5 +1,7 @@
 /** @jest-environment node */
 
+import { jest } from '@jest/globals';
+
 import {
     prettyPrintNumber,
     parseBool,
@@ -79,6 +81,18 @@ describe('wallet utilities', () => {
 describe('string and object helpers', () => {
     test('fixMarkdownText keeps straight quotes', () => {
         expect(fixMarkdownText("it's fine")).toBe("it's fine");
+    });
+
+    test('fixMarkdownText repairs mojibake punctuation', () => {
+        const corrupted =
+            'Through gameplay, youâ€™ll learn â€“ launch â€” and iterate â€œsafelyâ€�...Â ';
+        expect(fixMarkdownText(corrupted)).toBe(
+            'Through gameplay, you\'ll learn - launch - and iterate "safely"...'
+        );
+    });
+
+    test('fixMarkdownText normalizes curly punctuation to ASCII', () => {
+        expect(fixMarkdownText('“Quoted” text — it’s here.')).toBe('"Quoted" text - it\'s here.');
     });
 
     test('fixMarkdownText handles non-string inputs', () => {
