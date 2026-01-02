@@ -2,20 +2,45 @@
     import Chip from '../../../components/svelte/Chip.svelte';
     import { exportGameStateString, state, ready } from '../../../utils/gameState/common.js';
     import { copyToClipboard } from '../../../utils/copyToClipboard.js';
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
 
     let gameStateString = '';
     let loaded = false;
+    let copyState = 'idle';
+    let resetCopyTimeout;
 
     onMount(async () => {
         await ready;
         loaded = true;
     });
 
+    onDestroy(() => {
+        if (resetCopyTimeout) {
+            clearTimeout(resetCopyTimeout);
+        }
+    });
+
+    const handleCopy = async () => {
+        try {
+            await copyToClipboard(gameStateString);
+            copyState = 'copied';
+            if (resetCopyTimeout) {
+                clearTimeout(resetCopyTimeout);
+            }
+            resetCopyTimeout = setTimeout(() => {
+                copyState = 'idle';
+            }, 2000);
+        } catch (error) {
+            console.error('Failed to copy game state string', error);
+        }
+    };
+
     $: if (loaded) {
         const _gs = $state; // refresh when game state changes
         gameStateString = exportGameStateString();
     }
+
+    $: copyButtonText = copyState === 'copied' ? 'Copied!' : 'Copy';
 </script>
 
 {#if loaded}
@@ -33,7 +58,7 @@
                 </code>
             </div>
 
-            <Chip text="Copy" onClick={() => copyToClipboard(gameStateString)} inverted={true} />
+            <Chip text={copyButtonText} onClick={handleCopy} inverted={true} />
         </div>
     </Chip>
 {/if}
