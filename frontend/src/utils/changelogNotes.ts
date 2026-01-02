@@ -9,7 +9,7 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
         {
             message:
                 'Process reservations evolved significantly after this build. For the v3 behavior and related fixes, take a look at the November 1, 2025 release notes.',
-            href: '/docs/changelog/20251101',
+            href: '/docs/changelog/20260201',
             linkLabel: 'November 1, 2025 changelog',
         },
         {
@@ -31,7 +31,7 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
         {
             message:
                 'The energy and offset systems described below evolved over time. For the up-to-date renewable workflow, review the November 1, 2025 release notes.',
-            href: '/docs/changelog/20251101',
+            href: '/docs/changelog/20260201',
             linkLabel: 'November 1, 2025 changelog',
         },
         {
@@ -45,7 +45,7 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
         {
             message:
                 'Need the modern process reservation rules? They are documented alongside the v3 architecture refresh in the November 1, 2025 release notes.',
-            href: '/docs/changelog/20251101',
+            href: '/docs/changelog/20260201',
             linkLabel: 'November 1, 2025 changelog',
         },
     ],
@@ -59,7 +59,7 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
         {
             message:
                 'Inventory filters, the contributor tooling roadmap, and the dChat knowledge base all matured in the November 1, 2025 release. Read the v3 changelog for the latest details.',
-            href: '/docs/changelog/20251101',
+            href: '/docs/changelog/20260201',
             linkLabel: 'November 1, 2025 changelog',
         },
         {
@@ -94,7 +94,7 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
         {
             message:
                 'Cloud Sync and cross-device backups arrived in the November 1, 2025 release. Check that changelog for setup instructions.',
-            href: '/docs/changelog/20251101',
+            href: '/docs/changelog/20260201',
             linkLabel: 'November 1, 2025 changelog',
         },
     ],

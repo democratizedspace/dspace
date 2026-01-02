@@ -12,7 +12,7 @@ describe('November 1, 2025 changelog release checklist', () => {
             'docs',
             'md',
             'changelog',
-            '20251101.md'
+            '20260201.md'
         );
 
         const content = readFileSync(changelogPath, 'utf8');
