@@ -44,12 +44,21 @@ export type QuestData = {
 export type BuildQuestGraphOptions = {
     quests?: QuestData[]; // Pre-loaded quest data
     questDir?: string; // For backwards compatibility with tests
+    forceRebuild?: boolean;
+    cacheTtlMs?: number;
+    disableCache?: boolean;
 };
 
 const ROOT_CANONICAL_KEY = 'welcome/howtodoquests.json';
 const ROOT_BASENAME = 'howtodoquests.json';
 const QUEST_JSON_PATH_PREFIX = './json/';
 const QUEST_PATH_REGEX = new RegExp(`^${QUEST_JSON_PATH_PREFIX.replace('.', '\\.')}(.+)$`);
+
+const DEFAULT_DEV_CACHE_TTL_MS = 5000;
+const INFINITE_TTL = Number.POSITIVE_INFINITY;
+
+const questGraphCache = new Map<string, { graph: QuestGraph; timestamp: number }>();
+const isProductionEnv = process.env.NODE_ENV === 'production';
 
 const comparatorKeys: Array<keyof QuestNode> = ['group', 'title', 'canonicalKey'];
 
@@ -92,6 +101,17 @@ const makeRecord = <T>(map: Map<string, T>): Record<string, T> => {
 // Default quest directory (for tests that don't pass a questDir)
 const getDefaultQuestDir = (): string => {
     return path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../pages/quests/json');
+};
+
+const cacheIsValid = (entry: { timestamp: number }, ttlMs: number): boolean => {
+    if (ttlMs === INFINITE_TTL) return true;
+    return Date.now() - entry.timestamp <= ttlMs;
+};
+
+const getCacheKey = (options: BuildQuestGraphOptions): string | undefined => {
+    if (options.quests) return undefined;
+    const dir = options.questDir ?? getDefaultQuestDir();
+    return path.resolve(dir);
 };
 
 // Helper function to load quest data from filesystem (for tests and Node.js environments)
@@ -151,6 +171,18 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
     // Validate that both options are not provided simultaneously
     if (options.quests && options.questDir) {
         throw new Error('Cannot provide both "quests" and "questDir" options to buildQuestGraph');
+    }
+
+    const cacheKey = getCacheKey(options);
+    const effectiveTtl =
+        options.cacheTtlMs ?? (isProductionEnv ? INFINITE_TTL : DEFAULT_DEV_CACHE_TTL_MS);
+    const shouldUseCache = cacheKey && !options.disableCache && !options.forceRebuild;
+
+    if (shouldUseCache) {
+        const cached = questGraphCache.get(cacheKey);
+        if (cached && cacheIsValid(cached, effectiveTtl)) {
+            return cached.graph;
+        }
     }
 
     let quests: QuestData[];
@@ -466,7 +498,7 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         }
     }
 
-    return {
+    const graph: QuestGraph = {
         nodes,
         edges,
         byKey: makeRecord(nodeIndex),
@@ -475,4 +507,10 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         reachableFromRoot: reachableList,
         diagnostics,
     };
+
+    if (cacheKey && !options.disableCache) {
+        questGraphCache.set(cacheKey, { graph, timestamp: Date.now() });
+    }
+
+    return graph;
 };

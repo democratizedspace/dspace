@@ -222,3 +222,35 @@ describe('production quest directory', () => {
     );
   });
 });
+
+describe('quest graph caching', () => {
+  it('returns the same instance on cache hit for the same questDir', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
+
+    const first = buildQuestGraph({ questDir });
+    const second = buildQuestGraph({ questDir });
+
+    expect(second).toBe(first);
+  });
+
+  it('rebuilds when forceRebuild is set', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
+
+    const first = buildQuestGraph({ questDir });
+
+    writeQuest(questDir, 'chain/next.json', {
+      title: 'Next',
+      requiresQuests: ['welcome/howtodoquests.json'],
+    });
+
+    const second = buildQuestGraph({ questDir, forceRebuild: true });
+
+    expect(second).not.toBe(first);
+    expect(second.nodes.map((node) => node.canonicalKey)).toEqual([
+      'chain/next.json',
+      'welcome/howtodoquests.json',
+    ]);
+  });
+});
