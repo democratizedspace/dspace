@@ -11,7 +11,7 @@ describe('playwright.config browser setup', () => {
       /import\s+\{\s*ensurePlaywrightBrowsers\s*\}\s+from\s+'\.\/scripts\/utils\/ensure-playwright-browsers\.js';/
     );
     expect(contents).toMatch(
-      /ensurePlaywrightBrowsers\(\{\s*cwd:\s*frontendDir\s*\}\);/
+      /ensurePlaywrightBrowsers\(\{\s*cwd:\s*frontendDir,\s*env:\s*ensureEnv,\s*installArgs,\s*installSystemDeps:\s*!skipSystemDepsInstall,\s*\}\);/s
     );
   });
 });
