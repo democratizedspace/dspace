@@ -130,13 +130,6 @@
             { "title": "Bounties", "href": "/docs/bounties", "keywords": ["rewards"] },
             { "title": "User journeys", "href": "/docs/user-journeys", "keywords": ["testing"] },
             { "title": "Self-hosting", "href": "/docs/self-hosting", "keywords": ["setup"] },
-            { "title": "Outages", "href": "/docs/outages", "keywords": ["status"] },
-            {
-                "title": "QA / Release",
-                "href": "https://github.com/democratizedspace/dspace/tree/v3/docs/qa",
-                "keywords": ["qa", "release"],
-                "external": true
-            },
             {
                 "title": "Database benchmark",
                 "href": "/docs/db-benchmark",
@@ -153,12 +146,6 @@
                 "title": "Codex prompt library",
                 "href": "/docs/prompts-codex",
                 "keywords": ["prompts", "automation"]
-            },
-            {
-                "title": "Implement prompt guide",
-                "href": "https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/implement.md",
-                "keywords": ["prompts", "implementation"],
-                "external": true
             }
         ]
     }
