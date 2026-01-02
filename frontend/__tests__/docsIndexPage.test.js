@@ -26,6 +26,6 @@ describe('docs index.astro', () => {
         const implementPromptLink = allLinks.find((link) =>
             link.href.includes('docs/prompts/codex/implement.md')
         );
-        expect(implementPromptLink?.label).toBe('Implement prompt guide');
+        expect(implementPromptLink).toBeUndefined();
     });
 });

@@ -62,16 +62,11 @@
             { "label": "Bounties", "href": "/docs/bounties" },
             { "label": "User journeys", "href": "/docs/user-journeys" },
             { "label": "Self-hosting", "href": "/docs/self-hosting" },
-            { "label": "Outages", "href": "/docs/outages" },
             { "label": "Database benchmark", "href": "/docs/db-benchmark" },
             { "label": "token.place API", "href": "/docs/token-place" },
             { "label": "Schema versioning", "href": "/docs/schema-versioning" },
             { "label": "UI lifecycle", "href": "/docs/ui-lifecycle" },
-            { "label": "Codex prompt library", "href": "/docs/prompts-codex" },
-            {
-                "label": "Implement prompt guide",
-                "href": "https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/implement.md"
-            }
+            { "label": "Codex prompt library", "href": "/docs/prompts-codex" }
         ]
     }
 ]
