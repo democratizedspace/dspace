@@ -110,14 +110,16 @@ export const fixMarkdownText = (text) => {
         return typeof text === 'undefined' || text === null ? '' : String(text);
     }
 
-    return markdownEncodingReplacements
-        .reduce(
-            (normalized, { pattern, replacement }) => normalized.replace(pattern, replacement),
-            text
-        )
-        // Callers render compiled Markdown/HTML where surrounding whitespace is non-significant,
-        // so trimming removes mojibake padding without altering meaningful content.
-        .trim();
+    return (
+        markdownEncodingReplacements
+            .reduce(
+                (normalized, { pattern, replacement }) => normalized.replace(pattern, replacement),
+                text
+            )
+            // Callers render compiled Markdown/HTML where surrounding whitespace is non-significant,
+            // so trimming removes mojibake padding without altering meaningful content.
+            .trim()
+    );
 };
 
 export const getPriceStringComponents = (currency) => {
@@ -150,6 +152,72 @@ export const constructLink = (astroRedirect, url, redirectLink) => {
         return `${url}?redirect=${redirectLink}`;
     }
     return url;
+};
+
+const WALLET_COOKIE_PREFIX = 'currency-balance-';
+const WALLET_COOKIE_EXPIRES = 'Fri, 31 Dec 9999 23:59:59 GMT';
+
+const getCookieHeader = (req) => {
+    if (!req || !req.headers) {
+        return '';
+    }
+
+    const headerValue =
+        typeof req.headers.get === 'function'
+            ? (req.headers.get('cookie') ?? req.headers.get('Cookie'))
+            : (req.headers.cookie ?? req.headers.Cookie);
+
+    return typeof headerValue === 'string' ? headerValue : '';
+};
+
+const parseWalletBalance = (req, symbol) => {
+    if (!symbol) {
+        return 0;
+    }
+
+    const cookieHeader = getCookieHeader(req);
+    if (!cookieHeader) {
+        return 0;
+    }
+
+    const match = cookieHeader.match(new RegExp(`${WALLET_COOKIE_PREFIX}${symbol}=([^;]+)`, 'i'));
+    const balance = match ? parseFloat(match[1]) : 0;
+    return Number.isFinite(balance) ? balance : 0;
+};
+
+const setWalletBalanceCookie = (res, symbol, balance) => {
+    if (!res?.headers?.append || !symbol) {
+        return;
+    }
+    res.headers.append(
+        'Set-Cookie',
+        `${WALLET_COOKIE_PREFIX}${symbol}=${balance}; expires=${WALLET_COOKIE_EXPIRES}; path=/`
+    );
+};
+
+export const getWalletBalance = (req, symbol) => parseWalletBalance(req, symbol);
+
+export const burnCurrency = (req, res, symbol, amount) => {
+    const debit = Number(amount) || 0;
+    if (!symbol || debit <= 0) {
+        return false;
+    }
+
+    const balance = getWalletBalance(req, symbol);
+    if (balance < debit) {
+        return false;
+    }
+
+    const updatedBalance = balance - debit;
+    setWalletBalanceCookie(res, symbol, updatedBalance);
+    return true;
+};
+
+export const addWalletBalance = (req, res, symbol, amount) => {
+    const credit = Number(amount) || 0;
+    const updatedBalance = getWalletBalance(req, symbol) + credit;
+    setWalletBalanceCookie(res, symbol, updatedBalance);
+    return updatedBalance;
 };
 
 export const base64ToObject = (base64) => {
