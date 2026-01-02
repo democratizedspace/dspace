@@ -13,6 +13,11 @@
     let visualizerEl = null;
     let mapContainer = null;
     let searchInput = null;
+    let navigatorPanel = null;
+    let mapPanel = null;
+    let diagnosticsPanel = null;
+    let navigatorTabEl = null;
+    let mapTabEl = null;
     let resolvedRootKey = resolveRootKey(graph);
 
     let activeTab = 'navigator';
@@ -29,6 +34,7 @@
     let hasMounted = false;
     let copyStatus = 'idle';
     let copyError = '';
+    let focusedLiveMessage = '';
 
     const compareNodes = (a, b) => {
         if (!a || !b) return a ? -1 : b ? 1 : 0;
@@ -127,6 +133,9 @@
             searchInput?.select();
         });
     }
+    $: focusedLiveMessage = focusedNode
+        ? `Focused quest: ${focusedNode.title} (${focusedNode.canonicalKey})`
+        : 'Focused quest: None selected';
 
     const setFocus = async (key, options = {}) => {
         if (!key || !byKey[key]) return;
@@ -168,6 +177,33 @@
         setFocus(childKeys[index], { resetCycles: false });
     };
 
+    const focusPanel = (tab) => {
+        const panel =
+            tab === 'navigator' ? navigatorPanel : tab === 'map' ? mapPanel : diagnosticsPanel;
+        panel?.focus({ preventScroll: true });
+    };
+
+    const activateTab = async (tab) => {
+        if (tab === activeTab) {
+            focusPanel(tab);
+            return;
+        }
+        activeTab = tab;
+        await tick();
+        focusPanel(tab);
+    };
+
+    const toggleNavigatorAndMap = () => {
+        const nextTab = activeTab === 'map' ? 'navigator' : 'map';
+        activateTab(nextTab);
+    };
+
+    const isNavigatorContext = (target) =>
+        navigatorPanel?.contains(target) || navigatorTabEl?.contains(target);
+
+    const isMapContext = (target) =>
+        mapPanel?.contains(target) || mapContainer?.contains(target) || mapTabEl?.contains(target);
+
     const handleKeydown = (event) => {
         if (event.defaultPrevented) return;
         const target = event.target;
@@ -197,6 +233,12 @@
         }
 
         if (searchOpen) return;
+
+        if (event.key === 'Enter' && (isNavigatorContext(target) || isMapContext(target))) {
+            event.preventDefault();
+            toggleNavigatorAndMap();
+            return;
+        }
 
         switch (event.key) {
             case 'ArrowLeft':
@@ -644,6 +686,14 @@
             </button>
         </div>
     </div>
+    <div
+        class="sr-only"
+        aria-live="polite"
+        aria-atomic="true"
+        data-testid="focused-quest-live"
+    >
+        {focusedLiveMessage}
+    </div>
 
     <div class="tab-bar" role="tablist" aria-label="Quest graph views">
         <button
@@ -653,7 +703,8 @@
             aria-selected={activeTab === 'navigator'}
             aria-controls="quest-graph-panel-navigator"
             id="quest-graph-tab-navigator"
-            on:click={() => (activeTab = 'navigator')}
+            bind:this={navigatorTabEl}
+            on:click={() => activateTab('navigator')}
         >
             Navigator
         </button>
@@ -664,7 +715,8 @@
             aria-selected={activeTab === 'map'}
             aria-controls="quest-graph-panel-map"
             id="quest-graph-tab-map"
-            on:click={() => (activeTab = 'map')}
+            bind:this={mapTabEl}
+            on:click={() => activateTab('map')}
         >
             Map
         </button>
@@ -675,7 +727,7 @@
             aria-selected={activeTab === 'diagnostics'}
             aria-controls="quest-graph-panel-diagnostics"
             id="quest-graph-tab-diagnostics"
-            on:click={() => (activeTab = 'diagnostics')}
+            on:click={() => activateTab('diagnostics')}
         >
             Diagnostics
         </button>
@@ -687,6 +739,7 @@
             id="quest-graph-panel-navigator"
             aria-labelledby="quest-graph-tab-navigator"
             tabindex="0"
+            bind:this={navigatorPanel}
         >
             <div class="shelves">
                 <div class="shelf">
@@ -796,7 +849,41 @@
             id="quest-graph-panel-map"
             aria-labelledby="quest-graph-tab-map"
             tabindex="0"
+            aria-describedby="quest-graph-focused-info"
+            bind:this={mapPanel}
         >
+            <div
+                class="focused-info"
+                id="quest-graph-focused-info"
+                aria-live="polite"
+                data-testid="focused-quest-info"
+            >
+                <div class="focused-label">Focused quest</div>
+                <div class="focused-main">
+                    <div class="focused-title" data-testid="focused-quest-title">
+                        {focusedNode ? focusedNode.title : 'None selected'}
+                    </div>
+                    <div class="focused-key" data-testid="focused-quest-key">
+                        {focusedNode?.canonicalKey ?? '—'}
+                    </div>
+                </div>
+                {#if focusedNode}
+                    <div class="focused-badges" role="list">
+                        {#if focusedKey === resolvedRootKey}
+                            <span class="badge root" role="listitem">Root</span>
+                        {/if}
+                        {#if multiParentKeys.has(focusedKey)}
+                            <span class="badge multi" role="listitem">Multi-parent</span>
+                        {/if}
+                        {#if unreachableSet.has(focusedKey)}
+                            <span class="badge unreachable" role="listitem">Unreachable</span>
+                        {/if}
+                        {#if cycleNodeSet.has(focusedKey)}
+                            <span class="badge cycle" role="listitem">Cycle</span>
+                        {/if}
+                    </div>
+                {/if}
+            </div>
             <div class="map-tools">
                 <div class="toggles">
                     <label class:disabled={unreachableCount === 0}>
@@ -849,7 +936,13 @@
                 {#if mapStatus === 'error'}
                     <p class="subtle">Map failed to load: {mapError}</p>
                 {:else}
-                    <div class="map-canvas" bind:this={mapContainer}>
+                    <div
+                        class="map-canvas"
+                        bind:this={mapContainer}
+                        tabindex="-1"
+                        role="region"
+                        aria-label="Quest map"
+                    >
                         {#if mapStatus === 'loading'}
                             <div class="map-overlay subtle">Loading map…</div>
                         {:else if !mapInitialized}
@@ -869,6 +962,7 @@
             id="quest-graph-panel-diagnostics"
             aria-labelledby="quest-graph-tab-diagnostics"
             tabindex="0"
+            bind:this={diagnosticsPanel}
         >
             <div class="diagnostics">
                 <div class="diagnostics-toolbar">
@@ -1323,6 +1417,100 @@
         padding: 10px;
         color: var(--color-heading);
         cursor: pointer;
+    }
+
+    .focused-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+        padding: 10px 12px;
+        margin-top: 12px;
+    }
+
+    .focused-label {
+        font-size: 0.9rem;
+        color: var(--color-text);
+        font-weight: 600;
+    }
+
+    .focused-main {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+    }
+
+    .focused-title {
+        color: var(--color-heading);
+        font-weight: 700;
+    }
+
+    .focused-key {
+        font-family: var(
+            --font-mono,
+            'SFMono-Regular',
+            Consolas,
+            'Liberation Mono',
+            Menlo,
+            monospace
+        );
+        color: var(--color-text);
+        font-size: 0.95rem;
+        word-break: break-word;
+    }
+
+    .focused-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+    }
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--color-border);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--color-heading);
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .badge.root {
+        background: var(--color-pill);
+        color: var(--color-pill-text);
+    }
+
+    .badge.multi {
+        border-color: var(--color-warning, #f39c12);
+    }
+
+    .badge.unreachable {
+        border-style: dashed;
+        opacity: 0.9;
+    }
+
+    .badge.cycle {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
     }
 
     .map-tools {
