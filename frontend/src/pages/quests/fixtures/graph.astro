@@ -1,0 +1,59 @@
+---
+import Page from '../../../components/Page.astro';
+import QuestGraphVisualizer from '../../../components/quests/QuestGraphVisualizer.svelte';
+import { buildQuestGraph, type QuestData } from '../../../lib/quests/questGraph';
+
+const fixturesEnabled =
+    import.meta.env.DEV || import.meta.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG === 'true';
+
+const fixtureQuests: QuestData[] = [
+    {
+        path: './json/welcome/howtodoquests.json',
+        quest: { id: 'fixture-root', title: 'Fixture Root Quest' },
+    },
+    {
+        path: './json/fixtures/parent.json',
+        quest: {
+            id: 'fixture-parent',
+            title: 'Fixture Parent Quest',
+            requiresQuests: ['welcome/howtodoquests.json'],
+        },
+    },
+    {
+        path: './json/fixtures/child.json',
+        quest: {
+            id: 'fixture-child',
+            title: 'Fixture Child Quest',
+            requiresQuests: ['fixtures/parent.json'],
+        },
+    },
+    {
+        path: './json/fixtures/leaf.json',
+        quest: {
+            id: 'fixture-leaf',
+            title: 'Fixture Leaf Quest',
+            requiresQuests: ['fixtures/child.json'],
+        },
+    },
+];
+
+const graph = fixturesEnabled ? buildQuestGraph({ quests: fixtureQuests }) : null;
+---
+
+<Page title="Quest Graph Fixtures">
+    <section>
+        <p class="eyebrow">QA fixture</p>
+        <h1>Quest graph fixture map</h1>
+        <p class="subtle">
+            {fixturesEnabled
+                ? 'Small quest graph fixture for ancestor/descendant highlighting tests.'
+                : 'Quest graph fixtures are disabled outside of debug builds.'}
+        </p>
+    </section>
+
+    {fixturesEnabled && graph ? (
+        <QuestGraphVisualizer client:visible graph={graph} />
+    ) : (
+        <p class="subtle">Enable PUBLIC_ENABLE_QUEST_GRAPH_DEBUG to view the fixture map.</p>
+    )}
+</Page>

@@ -21,6 +21,9 @@
     let showUnreachable = false;
     let prevShowUnreachable = showUnreachable;
     let highlightMultiParent = true;
+    let highlightNeighbors = true;
+    let highlightAncestors = false;
+    let highlightDescendants = false;
     let mapInitialized = false;
     let cy = null;
     let layoutQueueHandle = null;
@@ -399,6 +402,52 @@
         return [...nodes, ...edges];
     };
 
+    const getParentKeys = (key) => byKey[key]?.requires ?? [];
+    const getChildKeys = (key) => graph?.requiredBy?.[key] ?? [];
+    const buildEdgeId = (from, to) => `${from}->${to}`;
+
+    const collectAncestors = (key) => {
+        const nodes = new Set();
+        const edges = new Set();
+        const queue = getParentKeys(key).map((parent) => ({ from: parent, to: key }));
+
+        while (queue.length) {
+            const current = queue.shift();
+            if (!current?.from || !current.to) continue;
+
+            edges.add(buildEdgeId(current.from, current.to));
+            if (!nodes.has(current.from)) {
+                nodes.add(current.from);
+                getParentKeys(current.from).forEach((parent) =>
+                    queue.push({ from: parent, to: current.from })
+                );
+            }
+        }
+
+        return { nodes, edges };
+    };
+
+    const collectDescendants = (key) => {
+        const nodes = new Set();
+        const edges = new Set();
+        const queue = getChildKeys(key).map((child) => ({ from: key, to: child }));
+
+        while (queue.length) {
+            const current = queue.shift();
+            if (!current?.from || !current.to) continue;
+
+            edges.add(buildEdgeId(current.from, current.to));
+            if (!nodes.has(current.to)) {
+                nodes.add(current.to);
+                getChildKeys(current.to).forEach((child) =>
+                    queue.push({ from: current.to, to: child })
+                );
+            }
+        }
+
+        return { nodes, edges };
+    };
+
     const applyMultiParentHighlight = () => {
         if (!cy) return;
         const nodes = cy.nodes('.multi-parent');
@@ -409,20 +458,82 @@
         }
     };
 
-    const highlightFocus = (key) => {
+    const getHighlightOptions = () => ({
+        includeNeighbors: highlightNeighbors,
+        includeAncestors: highlightAncestors,
+        includeDescendants: highlightDescendants,
+    });
+
+    const highlightFocus = (key, options = getHighlightOptions()) => {
         if (!cy) return;
-        cy.nodes().removeClass('focused highlight-parent highlight-child');
-        cy.edges().removeClass('highlighted');
+
+        cy.nodes().removeClass(
+            'focused highlight-parent highlight-child highlight-ancestor highlight-descendant'
+        );
+        cy.edges().removeClass('highlighted ancestor-edge descendant-edge');
+
         if (!key) return;
+
         const node = cy.getElementById(key);
         if (!node || node.empty()) return;
+
         node.addClass('focused');
-        const incomingEdges = node.incomers('edge');
-        incomingEdges.addClass('highlighted');
-        incomingEdges.sources().addClass('highlight-parent');
-        const outgoingEdges = node.outgoers('edge');
-        outgoingEdges.addClass('highlighted');
-        outgoingEdges.targets().addClass('highlight-child');
+
+        if (options.includeAncestors) {
+            const { nodes, edges } = collectAncestors(key);
+            nodes.forEach((id) => {
+                const ancestor = cy.getElementById(id);
+                if (ancestor && !ancestor.empty()) {
+                    ancestor.addClass('highlight-ancestor');
+                }
+            });
+            edges.forEach((edgeId) => {
+                const edge = cy.getElementById(edgeId);
+                if (edge && !edge.empty()) {
+                    edge.addClass('ancestor-edge');
+                }
+            });
+        }
+
+        if (options.includeDescendants) {
+            const { nodes, edges } = collectDescendants(key);
+            nodes.forEach((id) => {
+                const descendant = cy.getElementById(id);
+                if (descendant && !descendant.empty()) {
+                    descendant.addClass('highlight-descendant');
+                }
+            });
+            edges.forEach((edgeId) => {
+                const edge = cy.getElementById(edgeId);
+                if (edge && !edge.empty()) {
+                    edge.addClass('descendant-edge');
+                }
+            });
+        }
+
+        if (options.includeNeighbors) {
+            getParentKeys(key).forEach((parentKey) => {
+                const parentNode = cy.getElementById(parentKey);
+                if (parentNode && !parentNode.empty()) {
+                    parentNode.addClass('highlight-parent');
+                }
+                const edge = cy.getElementById(buildEdgeId(parentKey, key));
+                if (edge && !edge.empty()) {
+                    edge.addClass('highlighted');
+                }
+            });
+
+            getChildKeys(key).forEach((childKey) => {
+                const childNode = cy.getElementById(childKey);
+                if (childNode && !childNode.empty()) {
+                    childNode.addClass('highlight-child');
+                }
+                const edge = cy.getElementById(buildEdgeId(key, childKey));
+                if (edge && !edge.empty()) {
+                    edge.addClass('highlighted');
+                }
+            });
+        }
     };
 
     const runLayout = (options = {}) => {
@@ -503,7 +614,7 @@
         layoutRestoreHandler = () => {
             cy.zoom(viewport.zoom);
             cy.pan(viewport.pan);
-            highlightFocus(focusedKey);
+            highlightFocus(focusedKey, getHighlightOptions());
             layoutRestoreHandler = null;
         };
         cy.once('layoutstop', layoutRestoreHandler);
@@ -611,6 +722,23 @@
                         },
                     },
                     {
+                        selector: 'edge.ancestor-edge',
+                        style: {
+                            width: 2.5,
+                            'line-color': colors.nodeAccent,
+                            'target-arrow-color': colors.nodeAccent,
+                            'line-style': 'dashed',
+                        },
+                    },
+                    {
+                        selector: 'edge.descendant-edge',
+                        style: {
+                            width: 2.5,
+                            'line-color': colors.nodeAccent,
+                            'target-arrow-color': colors.nodeAccent,
+                        },
+                    },
+                    {
                         selector: 'edge.highlighted',
                         style: {
                             width: 3,
@@ -624,6 +752,21 @@
                             'border-width': 4,
                             'border-color': colors.nodeAccent,
                             'text-outline-color': colors.nodeAccent,
+                        },
+                    },
+                    {
+                        selector: 'node.highlight-ancestor',
+                        style: {
+                            'border-color': colors.nodeAccent,
+                            'border-style': 'dashed',
+                            'border-width': 3,
+                        },
+                    },
+                    {
+                        selector: 'node.highlight-descendant',
+                        style: {
+                            'border-color': colors.nodeAccent,
+                            'border-width': 3,
                         },
                     },
                     {
@@ -691,7 +834,8 @@
     }
 
     $: if (mapInitialized && activeTab === 'map') {
-        highlightFocus(focusedKey);
+        const highlightOptions = getHighlightOptions();
+        highlightFocus(focusedKey, highlightOptions);
     }
 
     const fitGraph = () => {
@@ -915,35 +1059,59 @@
                     </div>
                 {/if}
             </div>
-            <div class="map-tools">
-                <div class="toggles">
-                    <label class:disabled={unreachableCount === 0}>
-                        <input
-                            type="checkbox"
+                <div class="map-tools">
+                    <div class="toggles">
+                        <label class:disabled={unreachableCount === 0}>
+                            <input
+                                type="checkbox"
                             bind:checked={showUnreachable}
                             disabled={unreachableCount === 0}
                             aria-label="Show unreachable quests"
                         />
                         Show unreachable ({unreachableCount})
                     </label>
-                    {#if unreachableCount === 0}
-                        <div class="hint-wrapper">
-                            <span class="hint subtle">No unreachable quests detected</span>
-                        </div>
-                    {/if}
-                    <label>
-                        <input
-                            type="checkbox"
-                            bind:checked={highlightMultiParent}
-                            aria-label="Highlight multi-parent quests"
-                        />
-                        Highlight multi-parent quests
-                    </label>
-                </div>
-                <div class="map-actions">
-                    <button type="button" on:click={fitGraph} class="pill ghost">
-                        Fit graph
-                    </button>
+                        {#if unreachableCount === 0}
+                            <div class="hint-wrapper">
+                                <span class="hint subtle">No unreachable quests detected</span>
+                            </div>
+                        {/if}
+                        <label>
+                            <input
+                                type="checkbox"
+                                bind:checked={highlightMultiParent}
+                                aria-label="Highlight multi-parent quests"
+                            />
+                            Highlight multi-parent quests
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                bind:checked={highlightNeighbors}
+                                aria-label="Highlight direct parents and children"
+                            />
+                            Highlight direct neighbors
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                bind:checked={highlightAncestors}
+                                aria-label="Highlight all ancestor quests"
+                            />
+                            Highlight all ancestors
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                bind:checked={highlightDescendants}
+                                aria-label="Highlight all descendant quests"
+                            />
+                            Highlight all descendants
+                        </label>
+                    </div>
+                    <div class="map-actions">
+                        <button type="button" on:click={fitGraph} class="pill ghost">
+                            Fit graph
+                        </button>
                     <button type="button" on:click={centerOnFocused} class="pill ghost">
                         Center on focused
                     </button>
@@ -1511,12 +1679,18 @@
     }
 
     .toggles {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 12px;
         color: var(--color-heading);
         font-size: 0.95rem;
         align-items: flex-start;
+    }
+
+    .toggles label {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
     }
 
     .map-actions {
@@ -1531,7 +1705,7 @@
     }
 
     .hint-wrapper {
-        flex-basis: 100%;
+        grid-column: 1 / -1;
         font-size: 0.85rem;
         color: var(--color-text-muted);
     }
