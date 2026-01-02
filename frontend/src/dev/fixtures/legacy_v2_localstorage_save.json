@@ -1,0 +1,54 @@
+{
+    "localStorage": [
+        {
+            "key": "gameState",
+            "value": {
+                "inventory": {
+                    "1": 3,
+                    "24": 120,
+                    "85": 1
+                },
+                "quests": {
+                    "launch-rocket": {
+                        "finished": true
+                    }
+                },
+                "processes": {
+                    "1": {
+                        "startedAt": 1693526400000,
+                        "duration": 3600000
+                    }
+                },
+                "versionNumberString": "2",
+                "_meta": {
+                    "lastUpdated": 1693526400000
+                }
+            }
+        },
+        {
+            "key": "gameStateBackup",
+            "value": {
+                "inventory": {
+                    "1": 3,
+                    "24": 120,
+                    "85": 1
+                },
+                "quests": {
+                    "launch-rocket": {
+                        "finished": true
+                    }
+                },
+                "processes": {
+                    "1": {
+                        "startedAt": 1693526400000,
+                        "duration": 3600000
+                    }
+                },
+                "versionNumberString": "2",
+                "_meta": {
+                    "lastUpdated": 1693526400000
+                }
+            }
+        }
+    ]
+}

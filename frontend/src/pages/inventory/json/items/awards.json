@@ -202,5 +202,12 @@
                 }
             ]
         }
+    },
+    {
+        "id": "9758baf4-ba15-46cb-ae49-ecb090909100",
+        "name": "Legacy V2 Upgrade Trophy",
+        "description": "Awarded for migrating a standalone v2 save into the current IndexedDB format.",
+        "image": "/assets/legacy_v2_upgrade_trophy.jpg",
+        "priceExemptionReason": "TROPHY"
     }
 ]

@@ -8,7 +8,22 @@ import { addItems } from './gameState/inventory.js';
 import { isBrowser } from './ssr.js';
 import items from '../pages/inventory/json/items';
 
-const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
+const findItemIdByName = (itemName) => items.find((i) => i.name === itemName)?.id;
+const EARLY_ADOPTER_ID = findItemIdByName('Early Adopter Token');
+const V2_UPGRADE_TROPHY_ID = findItemIdByName('Legacy V2 Upgrade Trophy');
+
+const grantUniqueItem = (state, itemId) => {
+    if (!itemId) return;
+    state.inventory = state.inventory ?? {};
+    if (!state.inventory[itemId]) {
+        state.inventory[itemId] = 1;
+    }
+};
+
+const grantLegacyV2UpgradeAward = (state) => {
+    if (!state || typeof state !== 'object') return;
+    grantUniqueItem(state, V2_UPGRADE_TROPHY_ID);
+};
 
 // ---------------------
 // QUESTS
@@ -169,16 +184,17 @@ export const importV1V3 = async (itemList, options = {}) => {
         hasLegacyItems &&
         !(nextState.inventory || {})[EARLY_ADOPTER_ID];
 
-    const itemsToImport = [
-        ...(shouldGrantEarlyAdopter ? [{ id: EARLY_ADOPTER_ID, parsedCount: 1 }] : []),
-        ...normalizedItems.filter(({ id, parsedCount }) => id && parsedCount > 0),
-    ];
+    const itemsToImport = normalizedItems.filter(({ id, parsedCount }) => id && parsedCount > 0);
 
     nextState.inventory = nextState.inventory ?? {};
     itemsToImport.forEach(({ id, parsedCount }) => {
         if (!id || parsedCount <= 0) return;
         nextState.inventory[id] = (nextState.inventory[id] || 0) + parsedCount;
     });
+
+    if (shouldGrantEarlyAdopter) {
+        grantUniqueItem(nextState, EARLY_ADOPTER_ID);
+    }
 
     return persistMigratedState(nextState);
 };
@@ -200,6 +216,9 @@ export const importV2V3 = async (legacyState) => {
         }
     }
     if (!migrated) return null;
+
+    migrated = validateGameState(structuredClone(migrated));
+    grantLegacyV2UpgradeAward(migrated);
     return persistMigratedState(migrated);
 };
 
@@ -230,6 +249,8 @@ export const mergeLegacyStateIntoCurrent = async (legacyState) => {
             merged.processes[processId] = processState;
         }
     });
+
+    grantLegacyV2UpgradeAward(merged);
 
     return persistMigratedState(merged);
 };

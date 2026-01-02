@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/legacy_v2_upgrade_trophy.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "Legacy V2 Upgrade Trophy",
+    "item_id": "9758baf4-ba15-46cb-ae49-ecb090909100",
+    "entity_type": "item",
+    "prompt": "A brushed aluminum tabletop trophy shaped like an upward-pointing arrow wrapped around a small storage chip, symbolizing upgrading a local save to a new platform. The base is a matte black plinth with a subtle engraving that reads \"V2 → V3\" without any other text or logos. The scene is lit with cool studio lighting on a dark blue background, styled as a clean product shot at 512x512 resolution. No people are present.",
+    "image_model": "OpenAI gpt-image-1",
+    "resolution": "512x512"
+}
