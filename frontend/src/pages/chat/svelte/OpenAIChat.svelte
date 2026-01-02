@@ -109,7 +109,7 @@
 
 <div
     class="chat"
-    data-testid="openai-chat"
+    data-testid="chat-panel"
     data-provider="openai"
     data-hydrated={hydrated ? 'true' : 'false'}
 >

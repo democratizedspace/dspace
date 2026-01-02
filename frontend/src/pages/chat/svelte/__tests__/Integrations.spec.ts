@@ -43,8 +43,14 @@ describe('Integrations chat entrypoint', () => {
     it('renders OpenAI chat and hides token.place by default', async () => {
         render(Integrations);
 
-        await waitFor(() => expect(screen.getByTestId('openai-chat')).toBeInTheDocument());
-        expect(screen.queryByTestId('token-place-chat')).not.toBeInTheDocument();
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-testid="chat-panel"][data-provider="openai"]')
+            ).toBeInTheDocument()
+        );
+        expect(
+            document.querySelector('[data-testid="chat-panel"][data-provider="token-place"]')
+        ).not.toBeInTheDocument();
         expect(screen.getByTestId('token-place-disabled-banner')).toBeInTheDocument();
     });
 });
