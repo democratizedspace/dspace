@@ -19,6 +19,14 @@ let useLocalStorage = false;
 let warnedFallback = false;
 let readyResolved = false;
 export const isUsingLocalStorage = () => useLocalStorage;
+const safeJsonParse = (value) => {
+    try {
+        return JSON.parse(value);
+    } catch (err) {
+        console.error('Error parsing stored game state:', err);
+        return undefined;
+    }
+};
 
 function warnFallback() {
     if (warnedFallback) return;
@@ -116,7 +124,7 @@ function lsRead(store) {
     if (!isBrowser) return undefined;
     try {
         const raw = localStorage.getItem(lsKey(store));
-        return raw ? JSON.parse(raw) : undefined;
+        return raw ? safeJsonParse(raw) : undefined;
     } catch (err) {
         console.error('Error reading from localStorage:', err);
         return undefined;
@@ -395,5 +403,47 @@ export const rollbackGameState = async () => {
         await write(STATE_STORE, gameState);
     } catch (err) {
         console.error('Error rolling back game state:', err);
+    }
+};
+
+export const getPersistedStateSnapshots = async () => {
+    const snapshots = {
+        indexedDbState: undefined,
+        localState: undefined,
+        backupState: undefined,
+        usingLocalStorage: useLocalStorage,
+    };
+
+    if (!isBrowser) {
+        return snapshots;
+    }
+
+    snapshots.localState = lsRead(STATE_STORE);
+    snapshots.backupState = lsRead(BACKUP_STORE);
+
+    try {
+        snapshots.indexedDbState = await idbRead(STATE_STORE);
+    } catch (err) {
+        console.error('IndexedDB read failed while collecting snapshots:', err);
+    }
+
+    const normalizeSnapshot = (value) =>
+        value ? validateGameState(structuredClone(value)) : undefined;
+
+    return {
+        ...snapshots,
+        indexedDbState: normalizeSnapshot(snapshots.indexedDbState),
+        localState: normalizeSnapshot(snapshots.localState),
+        backupState: normalizeSnapshot(snapshots.backupState),
+    };
+};
+
+export const clearLegacyLocalState = () => {
+    if (!isBrowser) return;
+    try {
+        localStorage.removeItem(LS_STATE_KEY);
+        localStorage.removeItem(LS_BACKUP_KEY);
+    } catch (err) {
+        console.error('Error clearing legacy localStorage state:', err);
     }
 };

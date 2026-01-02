@@ -4,6 +4,13 @@ vi.mock('../../src/utils/gameState/common.js', () => ({
     loadGameState: vi.fn(),
     saveGameState: vi.fn().mockResolvedValue(undefined),
     validateGameState: (s) => s,
+    getPersistedStateSnapshots: vi.fn(async () => ({
+        indexedDbState: undefined,
+        localState: undefined,
+        backupState: undefined,
+        usingLocalStorage: false,
+    })),
+    clearLegacyLocalState: vi.fn(),
 }));
 
 vi.mock('../../src/utils/gameState/inventory.js', () => {
@@ -25,6 +32,9 @@ import {
     importV1V2,
     importV2V3,
     VERSIONS,
+    mergeGameStates,
+    normalizeToV3State,
+    buildV2StateFromV1Items,
 } from '../../src/utils/gameState.js';
 
 import { loadGameState, saveGameState } from '../../src/utils/gameState/common.js';
@@ -115,7 +125,10 @@ describe('gameState top-level helpers', () => {
     test('importV1V2 adds award item and sets version', () => {
         const items = [{ id: '5', count: 2 }];
         importV1V2(items);
-        expect(addItems).toHaveBeenCalledWith([{ id: EARLY_ADOPTER_ID, count: 1 }, ...items]);
+        expect(mockGameState.inventory).toMatchObject({
+            5: 2,
+            [EARLY_ADOPTER_ID]: 1,
+        });
         expect(mockGameState.versionNumberString).toBe(VERSIONS.V2);
     });
 
@@ -143,5 +156,45 @@ describe('gameState top-level helpers', () => {
         // cleanup
         // @ts-expect-error - cleanup stub
         delete global.localStorage;
+    });
+
+    test('normalizeToV3State sets version and ensures processes', () => {
+        const normalized = normalizeToV3State({ quests: {}, inventory: {} });
+        expect(normalized.versionNumberString).toBe(VERSIONS.V3);
+        expect(normalized.processes).toEqual({});
+    });
+
+    test('buildV2StateFromV1Items tallies counts and adds early adopter token', () => {
+        const result = buildV2StateFromV1Items([
+            { id: '10', count: 2 },
+            // should ignore invalid entries
+            { id: 'ignored', count: -1 },
+        ]);
+        expect(result.inventory['10']).toBe(2);
+        expect(result.inventory[EARLY_ADOPTER_ID]).toBe(1);
+        expect(result.versionNumberString).toBe(VERSIONS.V2);
+    });
+
+    test('mergeGameStates favors current quests and merges inventory', () => {
+        const base = {
+            quests: { a: { finished: true } },
+            inventory: { 1: 1 },
+            processes: { p: { started: true } },
+        };
+        const incoming = {
+            quests: { a: { finished: false }, b: { finished: true } },
+            inventory: { 1: 2, 2: 3 },
+            processes: { q: { done: true } },
+        };
+        const merged = mergeGameStates(base, incoming);
+        expect(merged.inventory['1']).toBe(3);
+        expect(merged.inventory['2']).toBe(3);
+        expect(merged.quests['a'].finished).toBe(true);
+        expect(merged.quests['b'].finished).toBe(true);
+        expect(merged.processes).toMatchObject({
+            p: { started: true },
+            q: { done: true },
+        });
+        expect(merged.versionNumberString).toBe(VERSIONS.V3);
     });
 });

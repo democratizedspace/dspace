@@ -34,3 +34,13 @@ import { ready } from '../utils/gameState/common.js';
 
 await ready; // game state is now loaded
 ```
+
+## Manual upgrades
+
+Players can also upgrade legacy saves from the **Settings** page:
+
+- **v1 → v3**: Detects cookie-based item saves and converts them (including the Early Adopter
+  token) into the v3 IndexedDB format.
+- **v2 → v3**: Converts `localStorage` saves into the v3 format and cleans up legacy keys.
+- When v1/v2 and v3 saves are both present, players can merge the legacy data into the current
+  save, replace the v3 save with the legacy data, or delete the legacy copy.

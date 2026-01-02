@@ -3,12 +3,71 @@ import {
     saveGameState,
     validateGameState,
     isUsingLocalStorage,
+    getPersistedStateSnapshots,
+    clearLegacyLocalState,
 } from './gameState/common.js';
 import { addItems } from './gameState/inventory.js';
 import { isBrowser } from './ssr.js';
+import { getCookieItems } from './migrationCookies.js';
 import items from '../pages/inventory/json/items';
 
+export const VERSIONS = {
+    V1: '1',
+    V2: '2',
+    V3: '3',
+};
+
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
+const addInventoryToState = (state, inventoryUpdates) => {
+    Object.entries(inventoryUpdates).forEach(([id, count]) => {
+        if (!count || Number.isNaN(count)) return;
+        state.inventory[id] = (state.inventory[id] || 0) + count;
+    });
+};
+
+export const normalizeToV3State = (state) => {
+    const normalized = validateGameState(structuredClone(state ?? {}));
+    if (!normalized.processes) {
+        normalized.processes = {};
+    }
+    normalized.versionNumberString = VERSIONS.V3;
+    return normalized;
+};
+
+export const buildV2StateFromV1Items = (itemList = []) => {
+    const baseState = validateGameState({
+        quests: {},
+        inventory: {},
+        processes: {},
+    });
+    const tallied = itemList.reduce((inventory, { id, count }) => {
+        if (!id || typeof count !== 'number') {
+            return inventory;
+        }
+        const parsedCount = Number(count);
+        if (Number.isNaN(parsedCount) || parsedCount <= 0) {
+            return inventory;
+        }
+        inventory[id] = (inventory[id] || 0) + parsedCount;
+        return inventory;
+    }, {});
+    addInventoryToState(baseState, tallied);
+    if (EARLY_ADOPTER_ID) {
+        baseState.inventory[EARLY_ADOPTER_ID] = (baseState.inventory[EARLY_ADOPTER_ID] || 0) + 1;
+    }
+    baseState.versionNumberString = VERSIONS.V2;
+    return baseState;
+};
+
+export const mergeGameStates = (baseState, incomingState) => {
+    const target = normalizeToV3State(baseState);
+    const incoming = normalizeToV3State(incomingState);
+
+    addInventoryToState(target, incoming.inventory);
+    target.quests = { ...incoming.quests, ...target.quests };
+    target.processes = { ...incoming.processes, ...target.processes };
+    return target;
+};
 
 // ---------------------
 // QUESTS
@@ -96,12 +155,6 @@ export const grantItems = (questId, stepId, optionIndex, itemList) => {
 // IMPORTER
 // ---------------------
 
-export const VERSIONS = {
-    V1: '1',
-    V2: '2',
-    V3: '3',
-};
-
 export const setVersionNumber = (versionNumber) => {
     const gameState = loadGameState();
 
@@ -118,14 +171,9 @@ export const getVersionNumber = () => {
 // v1 -> v2
 export const importV1V2 = (itemList) => {
     const gameState = loadGameState();
-
-    const award = {
-        id: EARLY_ADOPTER_ID,
-        count: 1,
-    };
-
-    addItems([award, ...itemList]);
-    setVersionNumber(VERSIONS.V2);
+    const legacyState = buildV2StateFromV1Items(itemList);
+    addInventoryToState(gameState, legacyState.inventory);
+    gameState.versionNumberString = VERSIONS.V2;
     saveGameState(gameState);
 };
 
@@ -144,11 +192,8 @@ export const importV2V3 = async () => {
         console.error('Error reading legacy v2 state:', err);
     }
     if (!migrated) return;
-    if (!migrated.processes) {
-        migrated.processes = {};
-    }
-    migrated.versionNumberString = VERSIONS.V3;
-    await saveGameState(migrated);
+    const normalized = normalizeToV3State(migrated);
+    await saveGameState(normalized);
 
     if (!isUsingLocalStorage()) {
         try {
@@ -168,3 +213,36 @@ try {
 } catch {
     /* ignore */
 }
+
+export const detectGameSaveVersions = async (cookieHeader = '') => {
+    const legacyV1Items = getCookieItems(cookieHeader);
+    const snapshots = await getPersistedStateSnapshots();
+    const legacyLocal =
+        snapshots.localState &&
+        (snapshots.localState.versionNumberString === VERSIONS.V2 ||
+            !snapshots.localState.versionNumberString)
+            ? snapshots.localState
+            : undefined;
+    const indexedLegacy =
+        snapshots.indexedDbState && snapshots.indexedDbState.versionNumberString === VERSIONS.V2
+            ? snapshots.indexedDbState
+            : undefined;
+    const v3State =
+        snapshots.indexedDbState?.versionNumberString === VERSIONS.V3
+            ? snapshots.indexedDbState
+            : snapshots.localState?.versionNumberString === VERSIONS.V3
+              ? snapshots.localState
+              : undefined;
+
+    return {
+        cookieHeader,
+        legacyV1Items,
+        legacyV2State: indexedLegacy ?? legacyLocal,
+        v3State,
+        usingLocalStorage: snapshots.usingLocalStorage,
+    };
+};
+
+export const discardLegacyLocalState = () => {
+    clearLegacyLocalState();
+};
