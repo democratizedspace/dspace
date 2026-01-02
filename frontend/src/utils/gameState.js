@@ -115,6 +115,28 @@ export const getVersionNumber = () => {
     return gameState.versionNumberString;
 };
 
+export const normalizeCount = (value) => {
+    const parsed = Number.parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const persistMigratedState = async (state) => {
+    const migrated = validateGameState(structuredClone(state));
+    migrated.versionNumberString = VERSIONS.V3;
+
+    if (isBrowser && !isUsingLocalStorage()) {
+        try {
+            localStorage.removeItem('gameState');
+            localStorage.removeItem('gameStateBackup');
+        } catch {
+            /* ignore */
+        }
+    }
+
+    await saveGameState(migrated);
+    return migrated;
+};
+
 // v1 -> v2
 export const importV1V2 = (itemList) => {
     const gameState = loadGameState();
@@ -129,35 +151,87 @@ export const importV1V2 = (itemList) => {
     saveGameState(gameState);
 };
 
+export const importV1V3 = async (itemList, options = {}) => {
+    if (!isBrowser) return null;
+    const { replaceExisting = false } = options;
+
+    const normalizedItems = (Array.isArray(itemList) ? itemList : []).map(({ id, count }) => ({
+        id,
+        parsedCount: normalizeCount(count),
+    }));
+
+    const baseState = replaceExisting ? validateGameState({}) : validateGameState(loadGameState());
+    const nextState = structuredClone(baseState);
+
+    const hasLegacyItems = normalizedItems.some(({ id, parsedCount }) => id && parsedCount > 0);
+    const shouldGrantEarlyAdopter =
+        Boolean(EARLY_ADOPTER_ID) &&
+        hasLegacyItems &&
+        !(nextState.inventory || {})[EARLY_ADOPTER_ID];
+
+    const itemsToImport = [
+        ...(shouldGrantEarlyAdopter ? [{ id: EARLY_ADOPTER_ID, parsedCount: 1 }] : []),
+        ...normalizedItems.filter(({ id, parsedCount }) => id && parsedCount > 0),
+    ];
+
+    nextState.inventory = nextState.inventory ?? {};
+    itemsToImport.forEach(({ id, parsedCount }) => {
+        if (!id || parsedCount <= 0) return;
+        nextState.inventory[id] = (nextState.inventory[id] || 0) + parsedCount;
+    });
+
+    return persistMigratedState(nextState);
+};
+
 // v2 -> v3
-export const importV2V3 = async () => {
+export const importV2V3 = async (legacyState) => {
     // Only run in browser environment
-    if (!isBrowser) return;
+    if (!isBrowser) return null;
 
-    let migrated;
-    try {
-        const legacy = localStorage.getItem('gameState');
-        if (legacy) {
-            migrated = validateGameState(JSON.parse(legacy));
-        }
-    } catch (err) {
-        console.error('Error reading legacy v2 state:', err);
-    }
-    if (!migrated) return;
-    if (!migrated.processes) {
-        migrated.processes = {};
-    }
-    migrated.versionNumberString = VERSIONS.V3;
-    await saveGameState(migrated);
-
-    if (!isUsingLocalStorage()) {
+    let migrated = legacyState;
+    if (!migrated) {
         try {
-            localStorage.removeItem('gameState');
-            localStorage.removeItem('gameStateBackup');
-        } catch {
-            /* ignore */
+            const legacy = localStorage.getItem('gameState');
+            if (legacy) {
+                migrated = validateGameState(JSON.parse(legacy));
+            }
+        } catch (err) {
+            console.error('Error reading legacy v2 state:', err);
         }
     }
+    if (!migrated) return null;
+    return persistMigratedState(migrated);
+};
+
+export const mergeLegacyStateIntoCurrent = async (legacyState) => {
+    if (!isBrowser || !legacyState || typeof legacyState !== 'object') return null;
+
+    const current = validateGameState(loadGameState());
+    const incoming = validateGameState(structuredClone(legacyState));
+    const merged = validateGameState(structuredClone(current));
+
+    merged.inventory = merged.inventory ?? {};
+    Object.entries(incoming.inventory || {}).forEach(([id, count]) => {
+        const parsedCount = normalizeCount(count);
+        if (parsedCount <= 0) return;
+        merged.inventory[id] = (merged.inventory[id] || 0) + parsedCount;
+    });
+
+    merged.quests = merged.quests ?? {};
+    Object.entries(incoming.quests || {}).forEach(([questId, questState]) => {
+        if (!merged.quests[questId]) {
+            merged.quests[questId] = questState;
+        }
+    });
+
+    merged.processes = merged.processes ?? {};
+    Object.entries(incoming.processes || {}).forEach(([processId, processState]) => {
+        if (!merged.processes[processId]) {
+            merged.processes[processId] = processState;
+        }
+    });
+
+    return persistMigratedState(merged);
 };
 
 // Auto-migrate legacy v2 state on first v3 load when localStorage data is present.

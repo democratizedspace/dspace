@@ -18,6 +18,7 @@ let dbInstance;
 let useLocalStorage = false;
 let warnedFallback = false;
 let readyResolved = false;
+let loadedFromPersistence = false;
 export const isUsingLocalStorage = () => useLocalStorage;
 
 function warnFallback() {
@@ -243,6 +244,7 @@ export const ready = isBrowser
               if (stored) {
                   gameState = validateGameState(stored);
                   state.set(gameState);
+                  loadedFromPersistence = true;
               }
           } catch (err) {
               console.error('Error loading game state from IndexedDB:', err);
@@ -259,6 +261,7 @@ let writeQueue = Promise.resolve();
 export const loadGameState = () => structuredClone(gameState);
 
 export const isGameStateReady = () => readyResolved;
+export const hasLoadedPersistedGameState = () => loadedFromPersistence;
 
 export const saveGameState = async (newState) => {
     if (!readyResolved) {
@@ -396,4 +399,44 @@ export const rollbackGameState = async () => {
     } catch (err) {
         console.error('Error rolling back game state:', err);
     }
+};
+
+export const inspectGameStateStorage = async () => {
+    const supportsIndexedDB = isBrowser && 'indexedDB' in globalThis;
+
+    const localStorageState = isBrowser ? lsRead(STATE_STORE) : undefined;
+    const localStorageBackup = isBrowser ? lsRead(BACKUP_STORE) : undefined;
+    const legacyStateRaw = isBrowser ? localStorage.getItem('gameState') : null;
+    const legacyBackupRaw = isBrowser ? localStorage.getItem('gameStateBackup') : null;
+
+    let legacyV2State;
+    if (legacyStateRaw) {
+        try {
+            legacyV2State = JSON.parse(legacyStateRaw);
+        } catch (err) {
+            console.warn('Failed to parse legacy v2 localStorage state:', err);
+        }
+    }
+
+    const hasLegacyV2Keys = Boolean(legacyStateRaw || legacyBackupRaw);
+
+    let indexedDbState;
+    if (supportsIndexedDB && !useLocalStorage) {
+        try {
+            indexedDbState = await idbRead(STATE_STORE);
+        } catch (err) {
+            console.warn('IndexedDB inspection failed:', err);
+        }
+    }
+
+    return {
+        indexedDbSupported: supportsIndexedDB,
+        indexedDbState,
+        localStorageState,
+        localStorageBackup,
+        legacyV2State,
+        hasLegacyV2Keys,
+        usesLocalStorageFallback: useLocalStorage,
+        loadedFromPersistence,
+    };
 };
