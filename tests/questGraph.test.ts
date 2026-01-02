@@ -1,9 +1,9 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { describe, expect, it, afterEach } from 'vitest';
+import { describe, expect, it, afterEach, beforeEach, vi } from 'vitest';
 
-import { buildQuestGraph } from '../frontend/src/lib/quests/questGraph';
+import { buildQuestGraph, clearQuestGraphCache } from '../frontend/src/lib/quests/questGraph';
 
 const tmpDirs: string[] = [];
 
@@ -30,6 +30,10 @@ afterEach(() => {
       fs.rmSync(dir, { recursive: true, force: true });
     }
   }
+});
+
+beforeEach(() => {
+  clearQuestGraphCache();
 });
 
 describe('quest graph diagnostics', () => {
@@ -221,6 +225,57 @@ describe('quest graph cache', () => {
 
     const cached = buildQuestGraph({ questDir, cacheTtlMs: 60_000 });
     expect(cached).toBe(rebuilt);
+  });
+
+  it('expires cached entries after the TTL passes', () => {
+    vi.useFakeTimers();
+    try {
+      const questDir = createQuestDir();
+      writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
+
+      const ttlMs = 50;
+      const cached = buildQuestGraph({ questDir, cacheTtlMs: ttlMs });
+
+      vi.advanceTimersByTime(ttlMs + 1);
+      const rebuilt = buildQuestGraph({ questDir, cacheTtlMs: ttlMs });
+
+      expect(rebuilt).not.toBe(cached);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('disables caching when requested', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
+
+    const first = buildQuestGraph({ questDir, disableCache: true });
+    writeQuest(questDir, 'alpha/added.json', { title: 'Added quest' });
+    const second = buildQuestGraph({ questDir, disableCache: true });
+
+    expect(second).not.toBe(first);
+    expect(second.nodes.map((node) => node.canonicalKey)).toContain('alpha/added.json');
+  });
+
+  it('treats cacheTtlMs of zero as uncached', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
+
+    const first = buildQuestGraph({ questDir, cacheTtlMs: 0 });
+    writeQuest(questDir, 'alpha/added.json', { title: 'Added quest' });
+    const second = buildQuestGraph({ questDir, cacheTtlMs: 0 });
+
+    expect(second).not.toBe(first);
+    expect(second.nodes.map((node) => node.canonicalKey)).toContain('alpha/added.json');
+  });
+
+  it('rejects cache options when using preloaded quests', () => {
+    expect(() =>
+      buildQuestGraph({
+        quests: [{ path: './json/welcome/howtodoquests.json', quest: {} }],
+        cacheTtlMs: 1000,
+      })
+    ).toThrowError(/cache options/i);
   });
 });
 

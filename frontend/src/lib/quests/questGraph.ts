@@ -101,9 +101,11 @@ const getDefaultQuestDir = (): string => {
 type QuestGraphCacheEntry = {
     builtAt: number;
     graph: QuestGraph;
+    ttlMs: number;
 };
 
 const questGraphCache = new Map<string, QuestGraphCacheEntry>();
+const isTest = process.env.NODE_ENV === 'test';
 const isProduction = process.env.NODE_ENV === 'production';
 
 const getCacheTtlMs = (options: BuildQuestGraphOptions): number => {
@@ -113,6 +115,9 @@ const getCacheTtlMs = (options: BuildQuestGraphOptions): number => {
     if (typeof options.cacheTtlMs === 'number') {
         return Math.max(0, options.cacheTtlMs);
     }
+    if (isTest) {
+        return 0;
+    }
     return isProduction ? Number.POSITIVE_INFINITY : DEFAULT_DEV_CACHE_TTL_MS;
 };
 
@@ -121,6 +126,22 @@ const isCacheEntryFresh = (entry: QuestGraphCacheEntry, ttlMs: number): boolean 
         return true;
     }
     return Date.now() - entry.builtAt < ttlMs;
+};
+
+const evictExpiredEntries = (): void => {
+    const now = Date.now();
+    for (const [key, entry] of questGraphCache) {
+        if (entry.ttlMs === Number.POSITIVE_INFINITY) {
+            continue;
+        }
+        if (now - entry.builtAt >= entry.ttlMs) {
+            questGraphCache.delete(key);
+        }
+    }
+};
+
+export const clearQuestGraphCache = (): void => {
+    questGraphCache.clear();
 };
 
 // Helper function to load quest data from filesystem (for tests and Node.js environments)
@@ -182,11 +203,20 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         throw new Error('Cannot provide both "quests" and "questDir" options to buildQuestGraph');
     }
 
+    const cacheOptionsProvided =
+        typeof options.cacheTtlMs === 'number' || options.forceRebuild || options.disableCache;
+    evictExpiredEntries();
+
     let quests: QuestData[];
     let cacheKey: string | undefined;
     let cacheTtlMs = 0;
 
     if (options.quests) {
+        if (cacheOptionsProvided) {
+            throw new Error(
+                'Cache options (cacheTtlMs, forceRebuild, disableCache) cannot be used with pre-loaded quests'
+            );
+        }
         quests = options.quests;
     } else {
         cacheKey = path.resolve(options.questDir ?? getDefaultQuestDir());
@@ -194,8 +224,14 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
 
         if (!options.forceRebuild && cacheTtlMs !== 0) {
             const cached = questGraphCache.get(cacheKey);
-            if (cached && isCacheEntryFresh(cached, cacheTtlMs)) {
-                return cached.graph;
+            if (cached) {
+                const effectiveTtlMs = Math.min(cacheTtlMs, cached.ttlMs);
+                if (isCacheEntryFresh(cached, effectiveTtlMs)) {
+                    return cached.graph;
+                }
+                if (!isCacheEntryFresh(cached, cached.ttlMs)) {
+                    questGraphCache.delete(cacheKey);
+                }
             }
         }
 
@@ -516,7 +552,7 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
     };
 
     if (cacheKey && cacheTtlMs !== 0) {
-        questGraphCache.set(cacheKey, { builtAt: Date.now(), graph });
+        questGraphCache.set(cacheKey, { builtAt: Date.now(), graph, ttlMs: cacheTtlMs });
     }
 
     return graph;
