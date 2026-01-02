@@ -1,7 +1,9 @@
+import 'fake-indexeddb/auto';
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 
 import {
     clearSeededLegacySaves,
+    clearV3GameStateStorage,
     seedSampleV1CookieSave,
     seedSampleV2LocalStorageSave,
 } from '../src/utils/legacySaveSeeding';
@@ -40,6 +42,7 @@ describe('legacy save seeding utilities', () => {
             'item-3': '75',
             'item-10': '2',
             'item-83': '1',
+            'item-21': '20+',
         });
     });
 
@@ -68,6 +71,17 @@ describe('legacy save seeding utilities', () => {
         expect(cookies).not.toHaveProperty('item-3');
         expect(cookies).not.toHaveProperty('item-10');
         expect(cookies).not.toHaveProperty('item-83');
+        expect(localStorage.getItem('gameState')).toBeNull();
+        expect(localStorage.getItem('gameStateBackup')).toBeNull();
+    });
+
+    test('clearV3GameStateStorage deletes v3 IndexedDB and localStorage keys', async () => {
+        localStorage.setItem('gameState', JSON.stringify({ inventory: { 1: 1 } }));
+        localStorage.setItem('gameStateBackup', JSON.stringify({ inventory: { 1: 1 } }));
+
+        const cleared = await clearV3GameStateStorage();
+
+        expect(cleared).toBe(true);
         expect(localStorage.getItem('gameState')).toBeNull();
         expect(localStorage.getItem('gameStateBackup')).toBeNull();
     });
