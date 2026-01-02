@@ -89,7 +89,27 @@ export const fixMarkdownText = (text) => {
         return typeof text === 'undefined' || text === null ? '' : String(text);
     }
 
-    return text.replace(/'/g, "'");
+    const mojibakeReplacements = [
+        ['â€™', '’'],
+        ['â€˜', '‘'],
+        ['â€œ', '“'],
+        ['â€�', '”'],
+        ['â€“', '–'],
+        ['â€”', '—'],
+        ['â€¦', '…'],
+        ['Â ', ' '],
+        ['Â', ''],
+    ];
+
+    let normalized = text;
+
+    mojibakeReplacements.forEach(([bad, good]) => {
+        if (normalized.includes(bad)) {
+            normalized = normalized.split(bad).join(good);
+        }
+    });
+
+    return normalized;
 };
 
 export const getPriceStringComponents = (currency) => {

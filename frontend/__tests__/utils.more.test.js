@@ -81,6 +81,17 @@ describe('string and object helpers', () => {
         expect(fixMarkdownText("it's fine")).toBe("it's fine");
     });
 
+    test('fixMarkdownText repairs common mojibake sequences', () => {
+        const input =
+            'youâ€™ll see â€œsmartâ€� punctuation â€“ even em dashes â€” and ellipses â€¦ in text';
+        const output = 'you’ll see “smart” punctuation – even em dashes — and ellipses … in text';
+        expect(fixMarkdownText(input)).toBe(output);
+    });
+
+    test('fixMarkdownText cleans up stray non-breaking space markers', () => {
+        expect(fixMarkdownText('Â This Â line')).toBe(' This  line');
+    });
+
     test('fixMarkdownText handles non-string inputs', () => {
         expect(fixMarkdownText()).toBe('');
         expect(fixMarkdownText(undefined)).toBe('');
