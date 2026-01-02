@@ -99,18 +99,21 @@
     };
     const handleTabKeydown = (event, tab) => {
         if (event.key === 'ArrowRight') {
+            event.stopPropagation();
             event.preventDefault();
             moveTabFocus('next');
             return;
         }
 
         if (event.key === 'ArrowLeft') {
+            event.stopPropagation();
             event.preventDefault();
             moveTabFocus('prev');
             return;
         }
 
         if (event.key === ' ' || event.key === 'Enter') {
+            event.stopPropagation();
             event.preventDefault();
             activateTab(tab);
         }
