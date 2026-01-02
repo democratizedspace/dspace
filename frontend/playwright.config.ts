@@ -21,6 +21,7 @@ declare const process: {
         PW_PROJECTS?: string;
         PW_PROJECT?: string;
         PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH?: string;
+        PLAYWRIGHT_SKIP_INSTALL_DEPS?: string;
     };
     argv: string[];
 };
@@ -30,8 +31,23 @@ const frontendDir = fileURLToPath(new URL('.', import.meta.url));
 
 // Try to ensure Playwright browsers are available
 // In CI, browsers may be pre-installed or handled separately
+const skipSystemDepsInstall =
+    process.env.CI === 'true' || process.env.PLAYWRIGHT_SKIP_INSTALL_DEPS === '1';
+const installArgs = skipSystemDepsInstall
+    ? ['install', 'chromium', 'chromium-headless-shell']
+    : undefined;
+const ensureEnv = {
+    ...process.env,
+    ...(skipSystemDepsInstall ? { PLAYWRIGHT_SKIP_INSTALL_DEPS: '1' } : {}),
+};
+
 try {
-    await ensurePlaywrightBrowsers({ cwd: frontendDir });
+    await ensurePlaywrightBrowsers({
+        cwd: frontendDir,
+        env: ensureEnv,
+        installArgs,
+        installSystemDeps: !skipSystemDepsInstall,
+    });
 } catch (error) {
     // Log warning but don't fail - browsers may be available via other means
     console.warn('Warning: Could not ensure Playwright browsers:', error.message);
