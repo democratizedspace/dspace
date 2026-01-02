@@ -84,12 +84,39 @@ export const durationInSeconds = (durationString) => {
     }
 };
 
+const mojibakeReplacements = Object.freeze({
+    'â€™': "'",
+    'â€˜': "'",
+    'â€œ': '"',
+    'â€�': '"',
+    'â€“': '–',
+    'â€”': '—',
+    'â€¦': '…',
+    'â€¢': '•',
+});
+
+const mojibakePattern = new RegExp(
+    Object.keys(mojibakeReplacements)
+        .map((sequence) => sequence.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+        .join('|'),
+    'g'
+);
+
 export const fixMarkdownText = (text) => {
     if (typeof text !== 'string') {
         return typeof text === 'undefined' || text === null ? '' : String(text);
     }
 
-    return text.replace(/'/g, "'");
+    if (!mojibakePattern.test(text)) {
+        mojibakePattern.lastIndex = 0;
+        return text;
+    }
+
+    mojibakePattern.lastIndex = 0;
+    const fixed = text.replace(mojibakePattern, (match) => mojibakeReplacements[match] ?? match);
+    mojibakePattern.lastIndex = 0;
+
+    return fixed;
 };
 
 export const getPriceStringComponents = (currency) => {

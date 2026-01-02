@@ -81,6 +81,20 @@ describe('string and object helpers', () => {
         expect(fixMarkdownText("it's fine")).toBe("it's fine");
     });
 
+    test('fixMarkdownText repairs mojibake punctuation', () => {
+        const mangled =
+            'Guidance â€“ youâ€™ll see â€œquotesâ€�, bullets â€¢, and ellipsisâ€¦ in copy.';
+        expect(fixMarkdownText(mangled)).toBe(
+            'Guidance – you\'ll see "quotes", bullets •, and ellipsis… in copy.'
+        );
+    });
+
+    test('fixMarkdownText skips clean text without altering dashes', () => {
+        const clean =
+            'Launch window – windows stay readable, even when already correct.';
+        expect(fixMarkdownText(clean)).toBe(clean);
+    });
+
     test('fixMarkdownText handles non-string inputs', () => {
         expect(fixMarkdownText()).toBe('');
         expect(fixMarkdownText(undefined)).toBe('');
