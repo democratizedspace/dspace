@@ -2,15 +2,37 @@
     import Chip from '../../../components/svelte/Chip.svelte';
     import { exportGameStateString, state, ready } from '../../../utils/gameState/common.js';
     import { copyToClipboard } from '../../../utils/copyToClipboard.js';
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
 
     let gameStateString = '';
     let loaded = false;
+    let copyLabel = 'Copy';
+    let copyResetTimeout;
 
     onMount(async () => {
         await ready;
         loaded = true;
     });
+
+    onDestroy(() => {
+        if (copyResetTimeout) {
+            clearTimeout(copyResetTimeout);
+        }
+    });
+
+    function handleCopy() {
+        copyToClipboard(gameStateString);
+        copyLabel = 'Copied!';
+
+        if (copyResetTimeout) {
+            clearTimeout(copyResetTimeout);
+        }
+
+        copyResetTimeout = setTimeout(() => {
+            copyLabel = 'Copy';
+            copyResetTimeout = null;
+        }, 2000);
+    }
 
     $: if (loaded) {
         const _gs = $state; // refresh when game state changes
@@ -33,7 +55,7 @@
                 </code>
             </div>
 
-            <Chip text="Copy" onClick={() => copyToClipboard(gameStateString)} inverted={true} />
+            <Chip text={copyLabel} onClick={handleCopy} inverted={true} />
         </div>
     </Chip>
 {/if}
