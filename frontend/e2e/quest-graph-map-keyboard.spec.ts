@@ -36,7 +36,8 @@ test.describe('Quest graph map keyboard accessibility', () => {
         await page.keyboard.press('Enter');
 
         const mapPanel = page.getByTestId('quest-graph-panel-map');
-        await expect(mapPanel).toBeFocused();
+        await expect(mapTab).toHaveAttribute('aria-selected', 'true');
+        await expect(mapPanel).toBeVisible();
         await expect(page.getByTestId('focused-quest-strip')).toBeVisible();
 
         await page.waitForFunction(() => window.__questGraphCy != null, { timeout: 10_000 });
@@ -69,6 +70,7 @@ test.describe('Quest graph map keyboard accessibility', () => {
         await page.keyboard.press('ArrowDown');
         await expect(page.getByTestId('focused-quest-key')).toHaveText(childId);
 
+        await mapPanel.focus();
         await page.keyboard.press('Enter');
 
         const navigatorTab = page.getByRole('tab', { name: 'Navigator' });

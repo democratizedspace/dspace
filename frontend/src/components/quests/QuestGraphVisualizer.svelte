@@ -242,8 +242,10 @@
         const isSearchShortcut =
             (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k';
         const isOverlayEscape = searchOpen && event.key === 'Escape';
-        const isMapToggleTarget = target === mapPanel || target === mapTab;
-        const isNavigatorToggleTarget = target === navigatorPanel || target === navigatorTab;
+        const isMapToggleTarget =
+            (target instanceof Node && mapPanel?.contains(target)) || target === mapTab;
+        const isNavigatorToggleTarget =
+            (target instanceof Node && navigatorPanel?.contains(target)) || target === navigatorTab;
         if (isEditableTarget && !isSearchShortcut && !isOverlayEscape) {
             return;
         }
