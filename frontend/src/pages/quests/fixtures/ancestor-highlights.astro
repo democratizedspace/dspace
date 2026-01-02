@@ -3,6 +3,9 @@ import Page from '../../../components/Page.astro';
 import QuestGraphVisualizer from '../../../components/quests/QuestGraphVisualizer.svelte';
 import { buildQuestGraph, type QuestData } from '../../../lib/quests/questGraph';
 
+const fixturesEnabled =
+    import.meta.env.DEV || import.meta.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG === 'true';
+
 const questData: QuestData[] = [
     {
         path: './json/welcome/howtodoquests.json',
@@ -33,5 +36,13 @@ const graph = buildQuestGraph({ quests: questData });
         This fixture renders a small quest graph for validating ancestor and descendant highlighting
         behaviors.
     </p>
-    <QuestGraphVisualizer client:visible graph={graph} />
+    {
+        fixturesEnabled ? (
+            <QuestGraphVisualizer client:visible graph={graph} />
+        ) : (
+            <p class="subtle">
+                Fixtures are disabled. Enable PUBLIC_ENABLE_QUEST_GRAPH_DEBUG to view this page.
+            </p>
+        )
+    }
 </Page>
