@@ -68,7 +68,7 @@
     });
 </script>
 
-<div class="chat" data-testid="chat-panel">
+<div class="chat" data-testid="chat-panel" data-provider="token-place">
     <div class="vertical">
         <textarea
             class="message-textarea"

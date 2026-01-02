@@ -1,24 +1,37 @@
 <script>
     import OpenAIAPIKeySettings from './OpenAIAPIKeySettings.svelte';
     import { onMount } from 'svelte';
-    import { writable } from 'svelte/store';
-    import { loadGameState, ready } from '../../../utils/gameState/common.js';
+    import { derived, writable } from 'svelte/store';
+    import { loadGameState, ready, state as gameState } from '../../../utils/gameState/common.js';
     import OpenAIChat from './OpenAIChat.svelte';
     import TokenPlaceChat from './TokenPlaceChat.svelte';
+    import { isTokenPlaceEnabled } from '../../../utils/tokenPlace.js';
 
     const apiKey = writable('');
+    const tokenPlaceEnabled = derived(gameState, ($gameState) =>
+        isTokenPlaceEnabled({ state: $gameState })
+    );
+
     onMount(async () => {
         await ready;
-        apiKey.set(loadGameState().openAI?.apiKey || '');
+        const state = loadGameState();
+        apiKey.set(state.openAI?.apiKey || '');
     });
 </script>
 
 <div class="container">
-    <TokenPlaceChat />
+    {#if !$tokenPlaceEnabled}
+        <div class="notice" data-testid="token-place-disabled-banner">
+            token.place is disabled by default. Using OpenAI chat instead.
+        </div>
+    {/if}
     <div class="api-container">
         <OpenAIAPIKeySettings {apiKey} />
     </div>
     <OpenAIChat />
+    {#if $tokenPlaceEnabled}
+        <TokenPlaceChat />
+    {/if}
 </div>
 
 <style>
@@ -31,6 +44,17 @@
         color: black;
         border-radius: 10px;
         padding: 20px;
+        gap: 1rem;
+    }
+
+    .notice {
+        background: rgba(0, 0, 0, 0.08);
+        border-radius: 8px;
+        padding: 10px 14px;
+        width: 100%;
+        text-align: center;
+        font-weight: 600;
+        border: 1px dashed rgba(0, 0, 0, 0.2);
     }
 
     .api-container {
