@@ -4,7 +4,6 @@
 import { render } from '@testing-library/svelte';
 import { writable } from 'svelte/store';
 import QuestChat from '../src/pages/quests/svelte/QuestChat.svelte';
-import { DEFAULT_HARDENING } from '../src/utils/hardening.js';
 
 jest.mock('../src/pages/quests/svelte/QuestChatOption.svelte', () => ({
     __esModule: true,
@@ -23,8 +22,8 @@ jest.mock('../src/pages/inventory/json/items', () => [
     { id: 'item-1', name: 'Test Item', image: '/item.png' },
 ]);
 
-describe('QuestChat hardening fallback', () => {
-    it('displays default hardening metrics when metadata is missing', () => {
+describe('QuestChat hardening metadata', () => {
+    it('does not render hardening information in the quest UI', () => {
         const quest = {
             id: 'quest-1',
             title: 'Test quest',
@@ -32,6 +31,11 @@ describe('QuestChat hardening fallback', () => {
             image: '/quest.png',
             npc: '/npc.png',
             start: 'start',
+            hardening: {
+                emoji: '🛡️',
+                score: 80,
+                passes: 2,
+            },
             dialogue: [
                 {
                     id: 'start',
@@ -42,13 +46,11 @@ describe('QuestChat hardening fallback', () => {
             rewards: [{ id: 'item-1', count: 1 }],
         };
 
-        const { getByTestId } = render(QuestChat, { props: { quest } });
+        const { container, queryByTestId } = render(QuestChat, { props: { quest } });
 
-        expect(getByTestId('quest-hardening-status')).toHaveTextContent(
-            `${DEFAULT_HARDENING.emoji} Score ${DEFAULT_HARDENING.score}/100`
-        );
-        expect(getByTestId('quest-hardening-passes')).toHaveTextContent(
-            `Passes: ${DEFAULT_HARDENING.passes}`
-        );
+        expect(queryByTestId('quest-hardening-status')).toBeNull();
+        expect(queryByTestId('quest-hardening-passes')).toBeNull();
+        expect(container.textContent).not.toContain('Score 80/100');
+        expect(container.textContent).not.toContain('Passes: 2');
     });
 });
