@@ -536,6 +536,11 @@
         includeDescendants: highlightDescendants,
     });
 
+    const updateHighlights = (key = focusedKey, options = highlightOptions()) => {
+        applyMultiParentHighlight(highlightMultiParent);
+        highlightFocus(key, options);
+    };
+
     const runLayout = (options = {}) => {
         if (!cy) return;
         const layout = cy.layout({
@@ -614,7 +619,7 @@
         layoutRestoreHandler = () => {
             cy.zoom(viewport.zoom);
             cy.pan(viewport.pan);
-            highlightFocus(focusedKey, highlightOptions());
+            updateHighlights();
             layoutRestoreHandler = null;
         };
         cy.once('layoutstop', layoutRestoreHandler);
@@ -632,8 +637,7 @@
 
         cy.elements().remove();
         cy.add(buildMapElements(includeUnreachable));
-        applyMultiParentHighlight();
-        highlightFocus(focusedKey, highlightOptions());
+        updateHighlights();
 
         restoreViewportAfterLayout(viewport);
         queueLayout();
@@ -804,7 +808,7 @@
                 const nodeKey = event?.target?.id?.();
                 if (nodeKey) {
                     setFocus(nodeKey);
-                    highlightFocus(nodeKey, highlightOptions());
+                    updateHighlights(nodeKey);
                 }
             });
 
@@ -816,9 +820,8 @@
                 window.__questGraphCy = cy;
             }
 
-            applyMultiParentHighlight();
             queueLayout({ fit: true });
-            highlightFocus(focusedKey, highlightOptions());
+            updateHighlights();
             mapInitialized = true;
             mapStatus = 'ready';
         } catch (error) {
@@ -843,15 +846,7 @@
     }
 
     $: if (mapInitialized && activeTab === 'map') {
-        const includeDirect = highlightDirectNeighbors;
-        const includeAncestors = highlightAncestors;
-        const includeDescendants = highlightDescendants;
-        applyMultiParentHighlight(highlightMultiParent);
-        highlightFocus(focusedKey, {
-            includeDirect,
-            includeAncestors,
-            includeDescendants,
-        });
+        updateHighlights();
     }
 
     const fitGraph = () => {
@@ -864,7 +859,7 @@
         const node = cy.getElementById(focusedKey);
         if (!node || node.empty()) return;
         cy.center(node);
-        highlightFocus(focusedKey, highlightOptions());
+        updateHighlights();
     };
 </script>
 
