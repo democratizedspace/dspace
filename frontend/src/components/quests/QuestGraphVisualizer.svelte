@@ -735,7 +735,7 @@
             id="quest-graph-tab-navigator"
             tabindex={activeTab === 'navigator' ? 0 : -1}
             on:click={() => activateTab('navigator')}
-            on:keydown={(event) => handleTabKeydown(event, 'navigator')}
+            on:keydown|stopPropagation={(event) => handleTabKeydown(event, 'navigator')}
             bind:this={navigatorTab}
         >
             Navigator
@@ -749,7 +749,7 @@
             id="quest-graph-tab-map"
             tabindex={activeTab === 'map' ? 0 : -1}
             on:click={() => activateTab('map')}
-            on:keydown={(event) => handleTabKeydown(event, 'map')}
+            on:keydown|stopPropagation={(event) => handleTabKeydown(event, 'map')}
             bind:this={mapTab}
         >
             Map
@@ -763,7 +763,7 @@
             id="quest-graph-tab-diagnostics"
             tabindex={activeTab === 'diagnostics' ? 0 : -1}
             on:click={() => activateTab('diagnostics')}
-            on:keydown={(event) => handleTabKeydown(event, 'diagnostics')}
+            on:keydown|stopPropagation={(event) => handleTabKeydown(event, 'diagnostics')}
             bind:this={diagnosticsTab}
         >
             Diagnostics
