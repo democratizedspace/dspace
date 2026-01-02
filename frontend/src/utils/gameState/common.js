@@ -406,6 +406,19 @@ export const inspectGameStateStorage = async () => {
 
     const localStorageState = isBrowser ? lsRead(STATE_STORE) : undefined;
     const localStorageBackup = isBrowser ? lsRead(BACKUP_STORE) : undefined;
+    const legacyStateRaw = isBrowser ? localStorage.getItem('gameState') : null;
+    const legacyBackupRaw = isBrowser ? localStorage.getItem('gameStateBackup') : null;
+
+    let legacyV2State;
+    if (legacyStateRaw) {
+        try {
+            legacyV2State = JSON.parse(legacyStateRaw);
+        } catch (err) {
+            console.warn('Failed to parse legacy v2 localStorage state:', err);
+        }
+    }
+
+    const hasLegacyV2Keys = Boolean(legacyStateRaw || legacyBackupRaw);
 
     let indexedDbState;
     if (supportsIndexedDB && !useLocalStorage) {
@@ -421,6 +434,8 @@ export const inspectGameStateStorage = async () => {
         indexedDbState,
         localStorageState,
         localStorageBackup,
+        legacyV2State,
+        hasLegacyV2Keys,
         usesLocalStorageFallback: useLocalStorage,
         loadedFromPersistence,
     };

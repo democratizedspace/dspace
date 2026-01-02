@@ -4,6 +4,7 @@ import { describe, expect, test, beforeEach, afterEach } from 'vitest';
 import {
     closeGameStateDatabaseForTesting,
     loadGameState,
+    inspectGameStateStorage,
     resetGameState,
     saveGameState,
 } from '../src/utils/gameState/common.js';
@@ -90,5 +91,14 @@ describe('game state upgrades', () => {
         expect(state.inventory['item-1']).toBe(2);
         expect(state.inventory.stale || 0).toBe(0);
         expect(state.quests.keep).toBeUndefined();
+    });
+
+    test('inspectGameStateStorage detects legacy v2 localStorage state', async () => {
+        localStorage.setItem('gameState', JSON.stringify({ inventory: { 1: 1 } }));
+
+        const inspection = await inspectGameStateStorage();
+
+        expect(inspection.hasLegacyV2Keys).toBe(true);
+        expect(inspection.legacyV2State).toEqual({ inventory: { 1: 1 } });
     });
 });

@@ -165,7 +165,9 @@ export const importV1V3 = async (itemList, options = {}) => {
 
     const hasLegacyItems = normalizedItems.some(({ id, parsedCount }) => id && parsedCount > 0);
     const shouldGrantEarlyAdopter =
-        Boolean(EARLY_ADOPTER_ID) && hasLegacyItems && !(nextState.inventory || {})[EARLY_ADOPTER_ID];
+        Boolean(EARLY_ADOPTER_ID) &&
+        hasLegacyItems &&
+        !(nextState.inventory || {})[EARLY_ADOPTER_ID];
 
     const itemsToImport = [
         ...(shouldGrantEarlyAdopter ? [{ id: EARLY_ADOPTER_ID, parsedCount: 1 }] : []),

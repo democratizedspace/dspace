@@ -45,7 +45,9 @@ export const getCookieItemsFromStore = (cookieStore) => {
 export const getCookieKeysFromStore = (cookieStore) => {
     try {
         const cookies = cookieStore?.getAll?.() ?? [];
-        return cookies.map(({ name }) => name);
+        return cookies
+            .filter(({ name, value }) => isLegacyItemCookie(name, value))
+            .map(({ name }) => name);
     } catch (e) {
         console.warn('Failed to list cookies from Astro.cookies:', e);
         return [];

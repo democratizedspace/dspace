@@ -59,28 +59,36 @@
         detection = { ...detection, loading: true };
 
         const inspection = await inspectGameStateStorage();
-        const { indexedDbState, localStorageState, indexedDbSupported, usesLocalStorageFallback } =
-            inspection;
-
-        const statesMatch =
-            indexedDbState &&
-            localStorageState &&
-            stableSerialize(indexedDbState) === stableSerialize(localStorageState);
+        const {
+            indexedDbState,
+            localStorageState,
+            indexedDbSupported,
+            usesLocalStorageFallback,
+            legacyV2State,
+            hasLegacyV2Keys,
+        } = inspection;
 
         const hasIndexedDbState = Boolean(indexedDbState);
+        const statesMatch =
+            indexedDbState &&
+            legacyV2State &&
+            stableSerialize(indexedDbState) === stableSerialize(legacyV2State);
+
         const treatLocalAsLegacy =
             indexedDbSupported &&
-            Boolean(localStorageState) &&
-            (!hasIndexedDbState || !statesMatch) &&
-            !usesLocalStorageFallback;
-        const pendingLocalState = treatLocalAsLegacy ? localStorageState : undefined;
+            !usesLocalStorageFallback &&
+            Boolean(legacyV2State) &&
+            (!hasIndexedDbState || !statesMatch);
+
+        const pendingLocalState = treatLocalAsLegacy ? legacyV2State : undefined;
         const usingFallback =
-            usesLocalStorageFallback || (!indexedDbSupported && localStorageState);
+            usesLocalStorageFallback ||
+            (!indexedDbSupported && (localStorageState || legacyV2State));
 
         detection = {
             loading: false,
             hasV3State: hasIndexedDbState || Boolean(usingFallback),
-            hasLegacyV2: Boolean(pendingLocalState),
+            hasLegacyV2: Boolean(pendingLocalState || (hasLegacyV2Keys && indexedDbSupported)),
             hasV1Cookies: normalizedV1Items.length > 0,
             indexedDbSupported,
             usingFallback: Boolean(usingFallback),
@@ -89,7 +97,7 @@
                 (hasIndexedDbState || Boolean(usingFallback)),
             pendingLocalState,
             localVsIndexedMismatch:
-                Boolean(localStorageState) && Boolean(indexedDbState) && !statesMatch,
+                Boolean(legacyV2State) && Boolean(indexedDbState) && !statesMatch,
         };
     };
 
