@@ -7,7 +7,7 @@
     let gameStateString = '';
     let loaded = false;
     let copyState = 'idle';
-    let resetCopyTimeout;
+    let copyFeedbackTimeoutId;
 
     onMount(async () => {
         await ready;
@@ -15,8 +15,8 @@
     });
 
     onDestroy(() => {
-        if (resetCopyTimeout) {
-            clearTimeout(resetCopyTimeout);
+        if (copyFeedbackTimeoutId) {
+            clearTimeout(copyFeedbackTimeoutId);
         }
     });
 
@@ -24,14 +24,19 @@
         try {
             await copyToClipboard(gameStateString);
             copyState = 'copied';
-            if (resetCopyTimeout) {
-                clearTimeout(resetCopyTimeout);
-            }
-            resetCopyTimeout = setTimeout(() => {
-                copyState = 'idle';
-            }, 2000);
         } catch (error) {
             console.error('Failed to copy game state string', error);
+            copyState = 'error';
+        }
+
+        if (copyFeedbackTimeoutId) {
+            clearTimeout(copyFeedbackTimeoutId);
+        }
+
+        if (copyState !== 'idle') {
+            copyFeedbackTimeoutId = setTimeout(() => {
+                copyState = 'idle';
+            }, 2000);
         }
     };
 
@@ -40,7 +45,8 @@
         gameStateString = exportGameStateString();
     }
 
-    $: copyButtonText = copyState === 'copied' ? 'Copied!' : 'Copy';
+    $: copyButtonText =
+        copyState === 'copied' ? 'Copied!' : copyState === 'error' ? 'Copy failed' : 'Copy';
 </script>
 
 {#if loaded}
