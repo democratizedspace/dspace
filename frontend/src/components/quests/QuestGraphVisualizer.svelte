@@ -16,6 +16,9 @@
     let resolvedRootKey = resolveRootKey(graph);
 
     let activeTab = 'navigator';
+    let navigatorTab;
+    let mapTab;
+    let diagnosticsTab;
     let mapStatus = 'idle';
     let mapError = '';
     let showUnreachable = false;
@@ -89,11 +92,68 @@
         searchOpen = false;
         searchQuery = '';
     };
+    const tabsInOrder = ['navigator', 'map', 'diagnostics'];
+
+    const getTabRef = (tab) => {
+        if (tab === 'navigator') return navigatorTab;
+        if (tab === 'map') return mapTab;
+        if (tab === 'diagnostics') return diagnosticsTab;
+        return null;
+    };
+
+    const activateTab = async (tab, { focusTab = false } = {}) => {
+        if (!tab) return;
+        activeTab = tab;
+        const tabRef = getTabRef(tab);
+        if (focusTab && tabRef) {
+            await tick();
+            tabRef?.focus?.();
+        }
+    };
+
+    const focusTabByDelta = (delta) => {
+        const currentElement = document.activeElement;
+        const currentIndex = tabsInOrder.findIndex((tab) => getTabRef(tab) === currentElement);
+        const nextIndex =
+            currentIndex === -1
+                ? 0
+                : (currentIndex + delta + tabsInOrder.length) % tabsInOrder.length;
+        const nextTab = tabsInOrder[nextIndex];
+        const nextRef = getTabRef(nextTab);
+        nextRef?.focus?.();
+    };
+
+    const handleTabKeydown = (event) => {
+        const currentTab = tabsInOrder.find((tab) => getTabRef(tab) === event.target);
+        if (!currentTab) return;
+
+        switch (event.key) {
+            case 'ArrowLeft':
+            case 'ArrowUp':
+                event.preventDefault();
+                focusTabByDelta(-1);
+                break;
+            case 'ArrowRight':
+            case 'ArrowDown':
+                event.preventDefault();
+                focusTabByDelta(1);
+                break;
+            case 'Enter':
+            case 'Space':
+            case 'Spacebar':
+            case ' ':
+                event.preventDefault();
+                activateTab(currentTab);
+                break;
+            default:
+                break;
+        }
+    };
+
     const jumpToNode = async (key) => {
         if (!key) return;
         if (activeTab !== 'navigator') {
-            activeTab = 'navigator';
-            await tick();
+            await activateTab('navigator');
         }
         await setFocus(key);
     };
@@ -121,6 +181,26 @@
             : nodes;
         return filteredNodes.map((node) => node.canonicalKey);
     })();
+    $: focusBadges = (() => {
+        if (!focusedNode) return [];
+        const badges = [];
+        if (focusedKey === resolvedRootKey) {
+            badges.push({ label: 'Root', kind: 'root' });
+        }
+        if (multiParentKeys.has(focusedKey)) {
+            badges.push({ label: 'Multi-parent', kind: 'multi' });
+        }
+        if (unreachableSet.has(focusedKey)) {
+            badges.push({ label: 'Unreachable', kind: 'unreachable' });
+        }
+        if (cycleNodeSet.has(focusedKey)) {
+            badges.push({ label: 'Cycle', kind: 'cycle' });
+        }
+        return badges;
+    })();
+    $: focusedAnnouncement = focusedNode
+        ? `Focused quest: ${focusedNode.title} (${focusedNode.canonicalKey})`
+        : 'No quest focused';
     $: if (searchOpen) {
         tick().then(() => {
             searchInput?.focus();
@@ -168,11 +248,15 @@
         setFocus(childKeys[index], { resetCycles: false });
     };
 
-    const handleKeydown = (event) => {
+    const handleKeydown = async (event) => {
         if (event.defaultPrevented) return;
         const target = event.target;
         const isEditableTarget =
             target?.closest('input, textarea') !== null || target?.isContentEditable;
+        const isInteractiveTarget =
+            target?.closest(
+                'button, a, [role="button"], [role="tab"], input, select, textarea, [contenteditable]'
+            ) !== null;
         const isSearchShortcut =
             (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k';
         const isOverlayEscape = searchOpen && event.key === 'Escape';
@@ -180,7 +264,8 @@
             return;
         }
         const isInsideVisualizer = target ? visualizerEl?.contains(target) : false;
-        if (!isInsideVisualizer && !searchOpen) return;
+        const shouldHandleNavigation = isInsideVisualizer || activeTab === 'map' || searchOpen;
+        if (!shouldHandleNavigation) return;
 
         if (isSearchShortcut) {
             event.preventDefault();
@@ -197,6 +282,19 @@
         }
 
         if (searchOpen) return;
+
+        if (!isInteractiveTarget && event.key === 'Enter') {
+            if (activeTab === 'map') {
+                event.preventDefault();
+                await activateTab('navigator', { focusTab: true });
+                return;
+            }
+            if (activeTab === 'navigator') {
+                event.preventDefault();
+                await activateTab('map', { focusTab: true });
+                return;
+            }
+        }
 
         switch (event.key) {
             case 'ArrowLeft':
@@ -645,7 +743,13 @@
         </div>
     </div>
 
-    <div class="tab-bar" role="tablist" aria-label="Quest graph views">
+    <div
+        class="tab-bar"
+        role="tablist"
+        aria-label="Quest graph views"
+        tabindex="0"
+        on:keydown={handleTabKeydown}
+    >
         <button
             type="button"
             class:selected={activeTab === 'navigator'}
@@ -653,7 +757,8 @@
             aria-selected={activeTab === 'navigator'}
             aria-controls="quest-graph-panel-navigator"
             id="quest-graph-tab-navigator"
-            on:click={() => (activeTab = 'navigator')}
+            bind:this={navigatorTab}
+            on:click={() => activateTab('navigator')}
         >
             Navigator
         </button>
@@ -664,7 +769,8 @@
             aria-selected={activeTab === 'map'}
             aria-controls="quest-graph-panel-map"
             id="quest-graph-tab-map"
-            on:click={() => (activeTab = 'map')}
+            bind:this={mapTab}
+            on:click={() => activateTab('map')}
         >
             Map
         </button>
@@ -675,10 +781,20 @@
             aria-selected={activeTab === 'diagnostics'}
             aria-controls="quest-graph-panel-diagnostics"
             id="quest-graph-tab-diagnostics"
-            on:click={() => (activeTab = 'diagnostics')}
+            bind:this={diagnosticsTab}
+            on:click={() => activateTab('diagnostics')}
         >
             Diagnostics
         </button>
+    </div>
+
+    <div
+        class="sr-only"
+        aria-live="polite"
+        aria-atomic="true"
+        data-testid="focused-quest-announcer"
+    >
+        {focusedAnnouncement}
     </div>
 
     {#if activeTab === 'navigator'}
@@ -797,6 +913,37 @@
             aria-labelledby="quest-graph-tab-map"
             tabindex="0"
         >
+            <div
+                class="focus-strip"
+                aria-live="polite"
+                aria-atomic="true"
+                data-testid="focused-quest-strip"
+            >
+                <div class="focus-strip-label">Focused quest</div>
+                {#if focusedNode}
+                    <div class="focus-strip-body">
+                        <div class="focus-strip-text">
+                            <div class="focus-strip-title" data-testid="focused-quest-title">
+                                {focusedNode.title}
+                            </div>
+                            <div class="focus-strip-key" data-testid="focused-quest-key">
+                                {focusedNode.canonicalKey}
+                            </div>
+                        </div>
+                        {#if focusBadges.length}
+                            <div class="focus-strip-badges" aria-label="Quest annotations">
+                                {#each focusBadges as badge}
+                                    <span class={`focus-badge ${badge.kind}`} aria-label={badge.label}>
+                                        {badge.label}
+                                    </span>
+                                {/each}
+                            </div>
+                        {/if}
+                    </div>
+                {:else}
+                    <p class="subtle">No quest selected</p>
+                {/if}
+            </div>
             <div class="map-tools">
                 <div class="toggles">
                     <label class:disabled={unreachableCount === 0}>
@@ -1439,6 +1586,104 @@
     .hint {
         margin-top: 8px;
         font-size: 0.9rem;
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .focus-strip {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 10px 12px;
+        margin-top: 12px;
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .focus-strip-label {
+        font-size: 0.9rem;
+        color: var(--color-text);
+        letter-spacing: 0.02em;
+    }
+
+    .focus-strip-body {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        justify-content: space-between;
+    }
+
+    .focus-strip-text {
+        min-width: 0;
+    }
+
+    .focus-strip-title {
+        font-weight: 700;
+        color: var(--color-heading);
+    }
+
+    .focus-strip-key {
+        color: var(--color-text);
+        font-size: 0.95rem;
+        word-break: break-word;
+    }
+
+    .focus-strip-badges {
+        display: inline-flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .focus-badge {
+        border-radius: 999px;
+        padding: 6px 10px;
+        border: 1px solid var(--color-border);
+        background: rgba(0, 0, 0, 0.2);
+        color: var(--color-heading);
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .focus-badge.root {
+        background: var(--color-pill-active);
+        color: var(--color-pill-active-text);
+    }
+
+    .focus-badge.multi {
+        border-color: var(--color-warning, #f39c12);
+    }
+
+    .focus-badge.unreachable {
+        border-style: dashed;
+        opacity: 0.9;
+    }
+
+    .focus-badge.cycle {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.08) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.08) 50%,
+            rgba(255, 255, 255, 0.08) 75%,
+            transparent 75%,
+            transparent
+        );
     }
 
     @media (max-width: 720px) {
