@@ -66,7 +66,7 @@
     });
 </script>
 
-<ul class="balance-list" role="list">
+<ul class="balance-list">
     {#each displayCurrencies as currency}
         <li class="balance-row" data-currency={currency.symbol}>
             <div>
