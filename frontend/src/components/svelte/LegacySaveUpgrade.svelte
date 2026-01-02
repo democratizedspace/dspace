@@ -219,8 +219,21 @@
         });
     };
 
+    const handleExternalRefresh = () => {
+        refreshStatus();
+    };
+
     onMount(() => {
         refreshStatus();
+        if (typeof window !== 'undefined') {
+            window.addEventListener('legacy-upgrade-refresh', handleExternalRefresh);
+        }
+
+        return () => {
+            if (typeof window !== 'undefined') {
+                window.removeEventListener('legacy-upgrade-refresh', handleExternalRefresh);
+            }
+        };
     });
 </script>
 

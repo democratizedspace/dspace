@@ -9,6 +9,7 @@ import { isBrowser } from './ssr.js';
 import items from '../pages/inventory/json/items';
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
+const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy')?.id;
 
 // ---------------------
 // QUESTS
@@ -120,6 +121,14 @@ export const normalizeCount = (value) => {
     return Number.isFinite(parsed) ? parsed : 0;
 };
 
+const grantTrophyIfMissing = (state, trophyId) => {
+    if (!trophyId) return;
+    state.inventory = state.inventory ?? {};
+    if (!state.inventory[trophyId] || state.inventory[trophyId] <= 0) {
+        state.inventory[trophyId] = 1;
+    }
+};
+
 const persistMigratedState = async (state) => {
     const migrated = validateGameState(structuredClone(state));
     migrated.versionNumberString = VERSIONS.V3;
@@ -164,21 +173,17 @@ export const importV1V3 = async (itemList, options = {}) => {
     const nextState = structuredClone(baseState);
 
     const hasLegacyItems = normalizedItems.some(({ id, parsedCount }) => id && parsedCount > 0);
-    const shouldGrantEarlyAdopter =
-        Boolean(EARLY_ADOPTER_ID) &&
-        hasLegacyItems &&
-        !(nextState.inventory || {})[EARLY_ADOPTER_ID];
-
-    const itemsToImport = [
-        ...(shouldGrantEarlyAdopter ? [{ id: EARLY_ADOPTER_ID, parsedCount: 1 }] : []),
-        ...normalizedItems.filter(({ id, parsedCount }) => id && parsedCount > 0),
-    ];
+    const itemsToImport = normalizedItems.filter(({ id, parsedCount }) => id && parsedCount > 0);
 
     nextState.inventory = nextState.inventory ?? {};
     itemsToImport.forEach(({ id, parsedCount }) => {
         if (!id || parsedCount <= 0) return;
         nextState.inventory[id] = (nextState.inventory[id] || 0) + parsedCount;
     });
+
+    if (hasLegacyItems) {
+        grantTrophyIfMissing(nextState, EARLY_ADOPTER_ID);
+    }
 
     return persistMigratedState(nextState);
 };
@@ -200,7 +205,9 @@ export const importV2V3 = async (legacyState) => {
         }
     }
     if (!migrated) return null;
-    return persistMigratedState(migrated);
+    const normalized = validateGameState(structuredClone(migrated));
+    grantTrophyIfMissing(normalized, LEGACY_V2_UPGRADE_TROPHY_ID);
+    return persistMigratedState(normalized);
 };
 
 export const mergeLegacyStateIntoCurrent = async (legacyState) => {
@@ -230,6 +237,8 @@ export const mergeLegacyStateIntoCurrent = async (legacyState) => {
             merged.processes[processId] = processState;
         }
     });
+
+    grantTrophyIfMissing(merged, LEGACY_V2_UPGRADE_TROPHY_ID);
 
     return persistMigratedState(merged);
 };
