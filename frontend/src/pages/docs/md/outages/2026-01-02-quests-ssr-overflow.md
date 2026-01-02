@@ -37,3 +37,10 @@ summary: 'Documented /quests SSR 500 from runtime glob dependency and horizontal
 - During CI image builds, scan server bundles for unbundled runtime dependencies (for example,
   `require('glob')`) and fail fast; prefer `import.meta.glob` or generated artifacts for filesystem
   data.
+
+## Verification
+
+- `pnpm -C frontend build`
+- `pnpm -C frontend dev`
+    - Visit [http://localhost:4321/docs/outages/2026-01-02-quests-ssr-overflow](http://localhost:4321/docs/outages/2026-01-02-quests-ssr-overflow).
+    - Check [http://localhost:4321/docs/outages](http://localhost:4321/docs/outages) renders without broken links.
