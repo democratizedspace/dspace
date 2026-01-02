@@ -44,12 +44,23 @@ export type QuestData = {
 export type BuildQuestGraphOptions = {
     quests?: QuestData[]; // Pre-loaded quest data
     questDir?: string; // For backwards compatibility with tests
+    forceRebuild?: boolean;
+    cacheTtlMs?: number;
+    cache?: boolean;
 };
 
 const ROOT_CANONICAL_KEY = 'welcome/howtodoquests.json';
 const ROOT_BASENAME = 'howtodoquests.json';
 const QUEST_JSON_PATH_PREFIX = './json/';
 const QUEST_PATH_REGEX = new RegExp(`^${QUEST_JSON_PATH_PREFIX.replace('.', '\\.')}(.+)$`);
+const DEFAULT_DEV_CACHE_TTL_MS = 30_000;
+
+type QuestGraphCacheEntry = {
+    graph: QuestGraph;
+    expiresAt: number | null;
+};
+
+const questGraphCache = new Map<string, QuestGraphCacheEntry>();
 
 const comparatorKeys: Array<keyof QuestNode> = ['group', 'title', 'canonicalKey'];
 
@@ -92,6 +103,39 @@ const makeRecord = <T>(map: Map<string, T>): Record<string, T> => {
 // Default quest directory (for tests that don't pass a questDir)
 const getDefaultQuestDir = (): string => {
     return path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../pages/quests/json');
+};
+
+const getCacheKeyForQuestDir = (questDir?: string): string => {
+    if (questDir) return path.resolve(questDir);
+    return getDefaultQuestDir();
+};
+
+const getCacheTtlMs = (options: BuildQuestGraphOptions): number => {
+    if (typeof options.cacheTtlMs === 'number') {
+        return options.cacheTtlMs;
+    }
+    return process.env.NODE_ENV === 'production'
+        ? Number.POSITIVE_INFINITY
+        : DEFAULT_DEV_CACHE_TTL_MS;
+};
+
+const readCache = (cacheKey: string): QuestGraph | undefined => {
+    const cached = questGraphCache.get(cacheKey);
+    if (!cached) return undefined;
+
+    if (cached.expiresAt === null || cached.expiresAt > Date.now()) {
+        return cached.graph;
+    }
+
+    questGraphCache.delete(cacheKey);
+    return undefined;
+};
+
+const writeCache = (cacheKey: string, graph: QuestGraph, cacheTtlMs: number): void => {
+    if (cacheTtlMs <= 0) return;
+
+    const expiresAt = Number.isFinite(cacheTtlMs) ? Date.now() + cacheTtlMs : null;
+    questGraphCache.set(cacheKey, { graph, expiresAt });
 };
 
 // Helper function to load quest data from filesystem (for tests and Node.js environments)
@@ -153,14 +197,24 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         throw new Error('Cannot provide both "quests" and "questDir" options to buildQuestGraph');
     }
 
+    const questDir = options.quests ? undefined : getCacheKeyForQuestDir(options.questDir);
+    const shouldCache = options.cache !== false && !options.quests && !!questDir;
+    const cacheKey = shouldCache && questDir ? questDir : undefined;
+    const cacheTtlMs = shouldCache ? getCacheTtlMs(options) : 0;
+
+    if (cacheKey && !options.forceRebuild) {
+        const cachedGraph = readCache(cacheKey);
+        if (cachedGraph) {
+            return cachedGraph;
+        }
+    }
+
     let quests: QuestData[];
     if (options.quests) {
         quests = options.quests;
-    } else if (options.questDir) {
-        quests = loadQuestsFromDir(options.questDir);
     } else {
-        // Default: load from default quest directory
-        quests = loadQuestsFromDir(getDefaultQuestDir());
+        const resolvedQuestDir = questDir ?? getDefaultQuestDir();
+        quests = loadQuestsFromDir(resolvedQuestDir);
     }
 
     const diagnostics: QuestDiagnostics = {
@@ -466,7 +520,7 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         }
     }
 
-    return {
+    const graph: QuestGraph = {
         nodes,
         edges,
         byKey: makeRecord(nodeIndex),
@@ -475,4 +529,10 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         reachableFromRoot: reachableList,
         diagnostics,
     };
+
+    if (cacheKey) {
+        writeCache(cacheKey, graph, cacheTtlMs);
+    }
+
+    return graph;
 };

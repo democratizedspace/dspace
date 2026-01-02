@@ -192,6 +192,30 @@ describe('quest graph ordering', () => {
   });
 });
 
+describe('quest graph caching', () => {
+  it('returns the cached graph for repeated questDir calls', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Welcome' });
+
+    const first = buildQuestGraph({ questDir });
+    const second = buildQuestGraph({ questDir });
+
+    expect(second).toBe(first);
+  });
+
+  it('forceRebuild refreshes the cache with a new instance', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Welcome' });
+
+    const first = buildQuestGraph({ questDir });
+    const refreshed = buildQuestGraph({ questDir, forceRebuild: true });
+    const cachedAgain = buildQuestGraph({ questDir });
+
+    expect(refreshed).not.toBe(first);
+    expect(cachedAgain).toBe(refreshed);
+  });
+});
+
 describe('production quest directory', () => {
   it('finds at least 1 quest file when using default questDir', () => {
     // Build quest graph with default directory
