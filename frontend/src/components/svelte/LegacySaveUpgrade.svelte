@@ -99,8 +99,8 @@
             hasV3State: hasIndexedDbState || Boolean(usingFallback),
             hasLegacyV2: Boolean(
                 pendingLocalState ||
-                (hasLegacyV2Keys && indexedDbSupported) ||
-                artifacts.hasV2LocalStorage
+                    (hasLegacyV2Keys && indexedDbSupported) ||
+                    artifacts.hasV2LocalStorage
             ),
             hasV1Cookies: hasV1Artifacts,
             indexedDbSupported,
