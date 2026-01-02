@@ -3,15 +3,15 @@ import { questFinished, canStartQuest } from './utils/gameState.js';
 
 const markdownEncodingReplacements = [
     // Common mojibake sequences from UTF-8 text misread as Windows-1252
-    { pattern: /â€™/g, replacement: "'" },
-    { pattern: /â€˜/g, replacement: "'" },
-    { pattern: /â€œ/g, replacement: '"' },
-    { pattern: /â€�/g, replacement: '"' },
-    { pattern: /â€“/g, replacement: '-' },
-    { pattern: /â€”/g, replacement: '-' },
-    { pattern: /â€¦/g, replacement: '...' },
-    { pattern: /Â /g, replacement: ' ' },
-    { pattern: /Â/g, replacement: '' },
+    { pattern: /â€™/g, replacement: "'" }, // mojibake apostrophe
+    { pattern: /â€˜/g, replacement: "'" }, // mojibake opening apostrophe
+    { pattern: /â€œ/g, replacement: '"' }, // mojibake opening quote
+    { pattern: /â€�/g, replacement: '"' }, // mojibake closing quote
+    { pattern: /â€“/g, replacement: '-' }, // mojibake en dash (UTF-8 read as Windows-1252)
+    { pattern: /â€”/g, replacement: '-' }, // mojibake em dash (UTF-8 read as Windows-1252)
+    { pattern: /â€¦/g, replacement: '...' }, // mojibake ellipsis
+    { pattern: /Â /g, replacement: ' ' }, // Â followed by space
+    { pattern: /Â/g, replacement: '' }, // stray Â
     // Straighten curly punctuation to ASCII to avoid charset issues
     { pattern: /’/g, replacement: "'" },
     { pattern: /‘/g, replacement: "'" },
@@ -115,6 +115,8 @@ export const fixMarkdownText = (text) => {
             (normalized, { pattern, replacement }) => normalized.replace(pattern, replacement),
             text
         )
+        // Callers render compiled Markdown/HTML where surrounding whitespace is non-significant,
+        // so trimming removes mojibake padding without altering meaningful content.
         .trim();
 };
 
