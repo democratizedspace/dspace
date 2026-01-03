@@ -95,6 +95,11 @@ describe('string and object helpers', () => {
         expect(fixMarkdownText('“Quoted” text — it’s here.')).toBe('"Quoted" text - it\'s here.');
     });
 
+    test('fixMarkdownText repairs mojibake emoji checkmarks and crosses', () => {
+        const corrupted = 'Required \u00e2\u009c\u0094\u00ef\u00b8\u008f Optional \u00e2\u009d\u008c';
+        expect(fixMarkdownText(corrupted)).toBe('Required ✔ Optional ❌');
+    });
+
     test('fixMarkdownText handles non-string inputs', () => {
         expect(fixMarkdownText()).toBe('');
         expect(fixMarkdownText(undefined)).toBe('');
