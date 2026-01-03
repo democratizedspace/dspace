@@ -117,7 +117,7 @@ describe('gpt-5 chat responses integration', () => {
       role: 'user',
       content: [
         {
-          type: 'text',
+          type: 'input_text',
           text: 'Hello there',
         },
       ],
@@ -146,7 +146,7 @@ describe('gpt-5 chat responses integration', () => {
       role: 'assistant',
       content: [
         {
-          type: 'text',
+          type: 'input_text',
           text: dchatPersona.welcomeMessage,
         },
       ],

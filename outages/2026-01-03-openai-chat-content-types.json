@@ -6,6 +6,7 @@
   "rootCause": "OpenAI responses API was called with deprecated content type 'text' causing 400 errors before any chat messages were processed.",
   "resolution": "Updated the chat client to send input_text blocks and read output_text fallbacks for the Responses API response format.",
   "references": [
-    "frontend/src/utils/openAI.js"
+    "frontend/src/utils/openAI.js",
+    "frontend/tests/openAI.test.ts"
   ]
 }

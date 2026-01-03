@@ -158,6 +158,154 @@ describe('GPT35Turbo', () => {
         expect(result).toBe('content response');
     });
 
+    it('sends input_text content blocks in the payload', async () => {
+        const resolver = vi.fn(async (payload) => {
+            return {
+                output_text: 'ok',
+                received: payload,
+            };
+        });
+
+        globalThis.__DSpaceOpenAIClient = class extends MockResponseClient {
+            constructor() {
+                super(resolver);
+            }
+        };
+
+        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+
+        expect(resolver).toHaveBeenCalledTimes(1);
+        const payload = resolver.mock.calls[0][0];
+        expect(payload.input).toEqual([
+            expect.objectContaining({
+                role: 'system',
+                content: [
+                    {
+                        type: 'input_text',
+                        text: expect.any(String),
+                    },
+                ],
+            }),
+            expect.objectContaining({
+                role: 'system',
+                content: [
+                    {
+                        type: 'input_text',
+                        text: expect.stringContaining('knowledge'),
+                    },
+                ],
+            }),
+            {
+                role: 'user',
+                content: [
+                    {
+                        type: 'input_text',
+                        text: 'Hello',
+                    },
+                ],
+            },
+        ]);
+        expect(result).toBe('ok');
+    });
+
+    it('falls back to output content when output_text is an empty string', async () => {
+        const resolver = vi.fn(async () => ({
+            output_text: '   ',
+            output: [
+                {
+                    content: [
+                        {
+                            type: 'output_text',
+                            text: 'content response',
+                        },
+                    ],
+                },
+            ],
+        }));
+
+        globalThis.__DSpaceOpenAIClient = class extends MockResponseClient {
+            constructor() {
+                super(resolver);
+            }
+        };
+
+        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+
+        expect(result).toBe('content response');
+    });
+
+    it('extracts output_text from multiple output entries', async () => {
+        const resolver = vi.fn(async () => ({
+            output: [
+                {
+                    content: [
+                        {
+                            type: 'image',
+                            text: 'ignore me',
+                        },
+                    ],
+                },
+                {
+                    content: [
+                        {
+                            type: 'output_text',
+                            text: 'second entry response',
+                        },
+                    ],
+                },
+            ],
+        }));
+
+        globalThis.__DSpaceOpenAIClient = class extends MockResponseClient {
+            constructor() {
+                super(resolver);
+            }
+        };
+
+        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+
+        expect(result).toBe('second entry response');
+    });
+
+    it('returns empty string when no output_text content is present', async () => {
+        const resolver = vi.fn(async () => ({
+            output: [
+                {
+                    content: [
+                        {
+                            type: 'image',
+                            text: 'ignore me',
+                        },
+                    ],
+                },
+            ],
+        }));
+
+        globalThis.__DSpaceOpenAIClient = class extends MockResponseClient {
+            constructor() {
+                super(resolver);
+            }
+        };
+
+        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+
+        expect(result).toBe('');
+    });
+
+    it('returns empty string when no outputs exist', async () => {
+        const resolver = vi.fn(async () => ({}));
+
+        globalThis.__DSpaceOpenAIClient = class extends MockResponseClient {
+            constructor() {
+                super(resolver);
+            }
+        };
+
+        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+
+        expect(result).toBe('');
+    });
+
     it('surfaces unexpected OpenAI errors without retrying', async () => {
         const resolver = vi.fn(async () => {
             const error = new Error('temporary outage');
