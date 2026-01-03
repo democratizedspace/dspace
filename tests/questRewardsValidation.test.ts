@@ -101,11 +101,15 @@ describe('quest reward validation', () => {
 
                 const count = entry.count ?? 1;
                 expect(
-                    Number.isFinite(count),
+                    typeof count,
+                    `Reward count should be a number at ${entryPath} in ${file}`
+                ).toBe('number');
+                expect(
+                    Number.isFinite(count as number),
                     `Reward count is not finite at ${entryPath} in ${file}: ${String(count)}`
                 ).toBe(true);
                 expect(
-                    Number(count),
+                    count as number,
                     `Reward count should be positive at ${entryPath} in ${file}: ${String(count)}`
                 ).toBeGreaterThan(0);
             }
