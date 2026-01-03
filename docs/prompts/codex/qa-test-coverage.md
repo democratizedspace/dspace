@@ -18,7 +18,7 @@ them, and append the links inline.
 - CI enforces QA-doc link freshness for `docs/qa/v3.md` and `docs/qa/v3.1.md` via
   `tests/qaDocsLinkFreshness.test.ts`; keep anchors (`#L...` or `#LSTART-LEND`) wrapped around the
   referenced snippet.
-- Keep scope tight: default **3–5** checklist items, hard cap **6** per run.
+- Keep scope tight: default to **3–5** checklist items, hard cap **6** per run.
 - Do not refactor or rename outside the chosen checklist lines and their tests.
 - Prefer deterministic, stable tests; avoid flakes and long timeouts.
 
@@ -29,7 +29,7 @@ them, and append the links inline.
      - `rg "^- \[ \]" docs/qa/v3.md | rg -v "#L"` → unchecked + unlinked (heuristic).
      - `rg "\\[ \\] .*#L" docs/qa/v3.md` → already-linked items.
      - `rg "\\[ \\] .*" docs/qa/v3.md | rg -v "#L"` → candidate unlinked items.
-2) Choose 3–5 automatable items first (routes load, schema/validation checks, map/graph behavior,
+2) Choose 3–5 automatable items first (route loading, schema/validation checks, map/graph behavior,
    import/export flows, etc.); never exceed 6.
 3) When human judgment is needed, design the tightest mechanical proxy (lint-like checks,
    placeholder guards, schema coverage). Note any remaining manual gap in the PR summary.
@@ -37,7 +37,7 @@ them, and append the links inline.
 ## Finding or creating tests for each selected item
 For each chosen checklist line:
 1) Search for existing coverage before writing new tests.
-   - Likely locations: `frontend/e2e/*.spec.ts`, `tests/*.test.ts`, `frontend/tests`, plus test
+   - Likely locations: `frontend/e2e/*.spec.ts`, `tests/*.test.ts`, `frontend/tests`, plus any test
      directories near the feature under test.
    - Targeted searches:
      - `rg "<keyword>" frontend/e2e` for route/UI behaviors.
