@@ -10,6 +10,7 @@ const markdownEncodingReplacements = [
     { pattern: /\u00e2\u0080\u0093/g, replacement: '-' }, // mojibake en dash (UTF-8 read as Windows-1252)
     { pattern: /\u00e2\u0080\u0094/g, replacement: '-' }, // mojibake em dash (UTF-8 read as Windows-1252)
     { pattern: /\u00e2\u0080\u00a6/g, replacement: '...' }, // mojibake ellipsis
+    { pattern: /\u00e2\u009c\u0094(?:\u00ef\u00b8\u008f)?/g, replacement: '✔️' }, // mojibake check mark
     { pattern: /\u00c2 /g, replacement: ' ' }, // U+00C2 followed by space
     { pattern: /\u00c2/g, replacement: '' }, // stray U+00C2
     // Straighten curly punctuation to ASCII to avoid charset issues

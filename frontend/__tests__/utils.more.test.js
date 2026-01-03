@@ -91,6 +91,12 @@ describe('string and object helpers', () => {
         );
     });
 
+    test('fixMarkdownText repairs mojibake check marks', () => {
+        expect(fixMarkdownText('Required: \u00e2\u009c\u0094\u00ef\u00b8\u008f')).toBe(
+            'Required: ✔️'
+        );
+    });
+
     test('fixMarkdownText normalizes curly punctuation to ASCII', () => {
         expect(fixMarkdownText('“Quoted” text — it’s here.')).toBe('"Quoted" text - it\'s here.');
     });

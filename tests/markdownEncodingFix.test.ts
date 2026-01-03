@@ -11,6 +11,11 @@ describe('fixMarkdownText encoding guardrails', () => {
         );
     });
 
+    it('repairs mojibake check marks from docs tables', () => {
+        const corrupted = 'Required: \u00e2\u009c\u0094\u00ef\u00b8\u008f';
+        expect(fixMarkdownText(corrupted)).toBe('Required: ✔️');
+    });
+
     it('normalizes curly punctuation and non-breaking spaces', () => {
         expect(fixMarkdownText('“Quoted” text — it’s resilient\u00a0')).toBe(
             "\"Quoted\" text - it's resilient"
