@@ -5,9 +5,20 @@
         formatDiagnosticsReport,
         resolveRootKey,
     } from '../../lib/quests/questGraphDiagnostics';
+    import {
+        buildQuestGraphSnapshot,
+        serializeQuestGraphSnapshot,
+    } from '../../lib/quests/questGraphSnapshot';
+    import {
+        compareQuestNodes,
+        sortQuestNodeKeys,
+        sortQuestNodes,
+    } from '../../lib/quests/questGraphOrdering';
     import { copyToClipboard } from '../../utils/copyToClipboard.js';
 
     export let graph;
+    export let version = 'unknown';
+    export let buildTimestamp = '';
 
     const byKey = graph?.byKey ?? {};
     let visualizerEl = null;
@@ -39,22 +50,16 @@
     let highlightDirectNeighbors = true;
     let highlightAncestors = false;
     let highlightDescendants = false;
+    let downloadStatus = 'idle';
+    let downloadError = '';
 
-    const compareNodes = (a, b) => {
-        if (!a || !b) return a ? -1 : b ? 1 : 0;
-        const order = ['group', 'title', 'canonicalKey'];
-        for (const key of order) {
-            if (a[key] < b[key]) return -1;
-            if (a[key] > b[key]) return 1;
-        }
-        return 0;
-    };
+    const compareNodes = (a, b) => compareQuestNodes(a, b);
     const ancestorCache = new Map();
     const descendantCache = new Map();
 
-    const sortKeys = (keys) => [...keys].sort((a, b) => compareNodes(byKey[a], byKey[b]));
+    const sortKeys = (keys) => sortQuestNodeKeys(byKey, keys);
 
-    const getSortedNodes = () => [...(graph?.nodes ?? [])].sort(compareNodes);
+    const getSortedNodes = () => sortQuestNodes(graph?.nodes ?? []);
 
     const reachableSet = new Set(graph?.reachableFromRoot ?? []);
     const unreachableSet = new Set(graph?.diagnostics?.unreachableNodes ?? []);
@@ -325,6 +330,49 @@
             copyStatus = 'idle';
             copyError =
                 error instanceof Error && error.message ? error.message : 'Failed to copy report';
+        }
+    };
+
+    const handleDownloadSnapshot = () => {
+        downloadError = '';
+        let objectUrl = null;
+        let revokeScheduled = false;
+        try {
+            const snapshot = buildQuestGraphSnapshot(graph, {
+                version,
+                buildTimestamp,
+            });
+            const serialized = serializeQuestGraphSnapshot(snapshot);
+            if (typeof Blob === 'undefined' || typeof URL === 'undefined') {
+                throw new Error('Downloads are not supported in this environment');
+            }
+            const blob = new Blob([serialized], { type: 'application/json;charset=utf-8' });
+            objectUrl = URL.createObjectURL(blob);
+            const timestampSafe = snapshot.capturedAt.replace(/[:.]/g, '-');
+            const anchor = document.createElement('a');
+            anchor.href = objectUrl;
+            anchor.download = `quest-graph-${timestampSafe}.json`;
+            anchor.click();
+            revokeScheduled = true;
+            setTimeout(() => {
+                if (objectUrl) {
+                    URL.revokeObjectURL(objectUrl);
+                }
+            }, 100);
+            downloadStatus = 'downloaded';
+            setTimeout(() => {
+                downloadStatus = 'idle';
+            }, 2000);
+        } catch (error) {
+            downloadStatus = 'idle';
+            downloadError =
+                error instanceof Error && error.message
+                    ? error.message
+                    : 'Failed to download snapshot';
+        } finally {
+            if (objectUrl && !revokeScheduled) {
+                URL.revokeObjectURL(objectUrl);
+            }
         }
     };
 
@@ -1183,6 +1231,14 @@
                     <div class="diag-actions">
                         <button
                             type="button"
+                            class="pill ghost"
+                            data-testid="download-graph-json"
+                            on:click={handleDownloadSnapshot}
+                        >
+                            Download graph JSON
+                        </button>
+                        <button
+                            type="button"
                             class="pill"
                             data-testid="copy-diagnostics-report"
                             on:click={handleCopyReport}
@@ -1192,8 +1248,14 @@
                         {#if copyStatus === 'copied'}
                             <span class="status success" aria-live="polite">Copied</span>
                         {/if}
+                        {#if downloadStatus === 'downloaded'}
+                            <span class="status success" aria-live="polite">Downloaded</span>
+                        {/if}
                         {#if copyError}
                             <span class="status error" aria-live="assertive">{copyError}</span>
+                        {/if}
+                        {#if downloadError}
+                            <span class="status error" aria-live="assertive">{downloadError}</span>
                         {/if}
                     </div>
                 </div>

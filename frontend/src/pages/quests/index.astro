@@ -4,6 +4,10 @@ import Quests from './svelte/Quests.svelte';
 import QuestGraphVisualizerGate from '../../components/quests/QuestGraphVisualizerGate.svelte';
 import { buildQuestGraph, type QuestData } from '../../lib/quests/questGraph';
 
+const version =
+    process.env.DSPACE_VERSION ?? process.env.npm_package_version ?? 'unknown';
+const buildTimestamp = process.env.DSPACE_BUILD_TIMESTAMP ?? new Date().toISOString();
+
 const questModules = import.meta.glob('./json/*/*.json', { eager: true });
 // Sort by file path for deterministic ordering across builds
 const questEntries = Object.entries(questModules).sort(([a], [b]) => a.localeCompare(b));

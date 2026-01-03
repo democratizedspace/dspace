@@ -102,6 +102,7 @@ export default defineConfig({
     },
     include: [
       'tests/**/*.test.ts',
+      'frontend/tests/**/*.test.ts',
       'scripts/tests/**/*.test.ts',
       'backend/**/*.test.ts',
       'frontend/src/components/__tests__/**/*.spec.ts',
