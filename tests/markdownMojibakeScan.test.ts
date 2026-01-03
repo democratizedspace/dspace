@@ -2,24 +2,30 @@ import fs from 'fs';
 import path from 'path';
 import { describe, expect, it } from 'vitest';
 
-const mojibakePatterns: { pattern: RegExp; label: string }[] = [
-  { pattern: /â€™/, label: 'mojibake apostrophe' },
-  { pattern: /â€˜/, label: 'mojibake opening apostrophe' },
-  { pattern: /â€œ/, label: 'mojibake opening quote' },
-  { pattern: /â€�/, label: 'mojibake closing quote' },
-  { pattern: /â€“/, label: 'mojibake en dash' },
-  { pattern: /â€”/, label: 'mojibake em dash' },
-  { pattern: /â€¦/, label: 'mojibake ellipsis' },
-  { pattern: /Â\s/, label: 'stray Â with space' },
-  { pattern: /Â/, label: 'stray Â' },
+type MojibakeToken = { token: string; label: string };
+type Offender = { filePath: string; tokens: string[] };
+
+const mojibakeTokens: MojibakeToken[] = [
+  { token: 'â€™', label: 'mojibake apostrophe' },
+  { token: 'â€˜', label: 'mojibake opening apostrophe' },
+  { token: 'â€œ', label: 'mojibake opening quote' },
+  { token: 'â€�', label: 'mojibake closing quote' },
+  { token: 'â€“', label: 'mojibake en dash' },
+  { token: 'â€”', label: 'mojibake em dash' },
+  { token: 'â€¦', label: 'mojibake ellipsis' },
+  { token: 'â€¢', label: 'mojibake bullet' },
+  { token: 'Â ', label: 'stray Â with space' },
+  { token: 'Â', label: 'stray Â' },
 ];
 
 const docRoots = [
-  path.join(process.cwd(), 'frontend', 'src', 'pages', 'docs', 'md'),
+  path.join(process.cwd(), 'frontend', 'src', 'pages', 'docs'),
   path.join(process.cwd(), 'docs'),
 ];
 
-function collectMarkdownFiles(rootDir: string): string[] {
+const allowedExtensions = new Set(['.md', '.mdx', '.markdown', '.astro']);
+
+function collectContentFiles(rootDir: string): string[] {
   if (!fs.existsSync(rootDir)) {
     return [];
   }
@@ -28,26 +34,46 @@ function collectMarkdownFiles(rootDir: string): string[] {
   return entries.flatMap((entry) => {
     const entryPath = path.join(rootDir, entry.name);
     if (entry.isDirectory()) {
-      return collectMarkdownFiles(entryPath);
+      return collectContentFiles(entryPath);
     }
-    return entry.isFile() && entry.name.endsWith('.md') ? [entryPath] : [];
+
+    if (entry.isFile() && allowedExtensions.has(path.extname(entry.name).toLowerCase())) {
+      return [entryPath];
+    }
+
+    return [];
   });
 }
 
-const markdownFiles = docRoots.flatMap(collectMarkdownFiles);
+const markdownFiles = docRoots.flatMap(collectContentFiles);
 
 describe('docs markdown mojibake scan', () => {
   it('rejects common mojibake markers in source content', () => {
-    const offenders: string[] = [];
+    const offenders: Offender[] = [];
 
     markdownFiles.forEach((filePath) => {
       const content = fs.readFileSync(filePath, 'utf8');
-      mojibakePatterns.forEach(({ pattern, label }) => {
-        if (pattern.test(content)) {
-          offenders.push(`${filePath} contains ${label} (${pattern.source})`);
-        }
-      });
+      const matchedTokens = mojibakeTokens
+        .filter(({ token }) => content.includes(token))
+        .map(({ token, label }) => `${label} ("${token}")`);
+
+      if (matchedTokens.length > 0) {
+        offenders.push({
+          filePath: path.relative(process.cwd(), filePath),
+          tokens: matchedTokens,
+        });
+      }
     });
+
+    if (offenders.length > 0) {
+      const message = [
+        'Mojibake detected in docs sources:',
+        ...offenders.map(
+          ({ filePath, tokens }) => `- ${filePath}: ${tokens.join(', ')}`
+        ),
+      ].join('\n');
+      expect.fail(message);
+    }
 
     expect(offenders).toEqual([]);
   });
