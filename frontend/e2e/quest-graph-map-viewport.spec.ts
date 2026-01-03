@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, enableQuestDependencyMap, waitForHydration } from './test-helpers';
 
 declare global {
     interface Window {
@@ -39,6 +39,7 @@ const waitForLayoutStop = async (page: Page) => {
 };
 
 const loadQuestMap = async (page: Page) => {
+    await enableQuestDependencyMap(page);
     await page.setViewportSize({ width: 1920, height: 1080 });
     await page.goto('/quests');
     await page.waitForLoadState('networkidle');

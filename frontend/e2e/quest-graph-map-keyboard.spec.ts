@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, enableQuestDependencyMap, waitForHydration } from './test-helpers';
 
 type QuestNodeElement = {
     id: () => string;
@@ -21,6 +21,7 @@ test.describe('Quest graph map keyboard accessibility', () => {
     });
 
     test('allows keyboard navigation to update focus and switch tabs', async ({ page }) => {
+        await enableQuestDependencyMap(page);
         await page.setViewportSize({ width: 1400, height: 900 });
 
         await page.goto('/quests');

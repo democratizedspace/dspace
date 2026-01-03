@@ -13,6 +13,10 @@ const META_KEY = '_meta';
 const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
 
+export const DEFAULT_SETTINGS = {
+    showQuestDependencyMap: false,
+};
+
 let dbPromise;
 let dbInstance;
 let useLocalStorage = false;
@@ -201,8 +205,21 @@ const initializeGameState = () => ({
     quests: {},
     inventory: {},
     processes: {},
+    settings: structuredClone(DEFAULT_SETTINGS),
     [META_KEY]: { lastUpdated: Date.now() },
 });
+
+const ensureSettings = (state) => {
+    if (!state.settings || typeof state.settings !== 'object') {
+        state.settings = structuredClone(DEFAULT_SETTINGS);
+        return;
+    }
+
+    state.settings = {
+        ...structuredClone(DEFAULT_SETTINGS),
+        ...state.settings,
+    };
+};
 
 const ensureMeta = (state) => {
     const meta = state[META_KEY];
@@ -230,6 +247,7 @@ export const validateGameState = (state) => {
         state.processes = {};
     }
     ensureMeta(state);
+    ensureSettings(state);
     return state;
 };
 

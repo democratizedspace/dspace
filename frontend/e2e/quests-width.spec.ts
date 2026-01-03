@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, enableQuestDependencyMap, waitForHydration } from './test-helpers';
 
 // Tolerance for scrollWidth comparison (1px for rounding)
 const OVERFLOW_TOLERANCE = 1;
@@ -12,6 +12,7 @@ test.describe('Quests page horizontal overflow regression', () => {
     test('should not create document-level horizontal overflow at wide viewport', async ({
         page,
     }) => {
+        await enableQuestDependencyMap(page);
         // Set wide viewport to reproduce the overflow issue
         await page.setViewportSize({ width: 1920, height: 1080 });
 
@@ -45,6 +46,7 @@ test.describe('Quests page horizontal overflow regression', () => {
     });
 
     test('should not overflow after clicking Map tab', async ({ page }) => {
+        await enableQuestDependencyMap(page);
         await page.setViewportSize({ width: 1920, height: 1080 });
 
         await page.goto('/quests');
@@ -79,6 +81,7 @@ test.describe('Quests page horizontal overflow regression', () => {
     });
 
     test('should not overflow after toggling Show unreachable', async ({ page }) => {
+        await enableQuestDependencyMap(page);
         await page.setViewportSize({ width: 1920, height: 1080 });
 
         await page.goto('/quests');
@@ -126,6 +129,7 @@ test.describe('Quests page horizontal overflow regression', () => {
     });
 
     test('shelf cards should scroll horizontally within the container', async ({ page }) => {
+        await enableQuestDependencyMap(page);
         await page.setViewportSize({ width: 1920, height: 1080 });
 
         await page.goto('/quests');

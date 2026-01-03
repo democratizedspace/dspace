@@ -718,6 +718,21 @@ export async function waitForHydration(page: Page, target?: string): Promise<voi
     }
 }
 
+export async function enableQuestDependencyMap(page: Page): Promise<void> {
+    await page.goto('/settings');
+    await page.waitForLoadState('networkidle');
+    await waitForHydration(page);
+
+    const toggle = page.getByTestId('quest-graph-visibility-toggle');
+    await expect(toggle).toBeVisible();
+
+    const pressed = await toggle.getAttribute('aria-pressed');
+    if (pressed !== 'true') {
+        await toggle.click();
+        await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+    }
+}
+
 export async function expectLocalStorageCleared(page: Page, key: string): Promise<void> {
     await expect
         .poll(async () => page.evaluate((candidate) => localStorage.getItem(candidate), key))

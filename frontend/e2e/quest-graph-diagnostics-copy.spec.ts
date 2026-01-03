@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, enableQuestDependencyMap, waitForHydration } from './test-helpers';
 
 test.describe('Quest graph diagnostics tools', () => {
     test.beforeEach(async ({ page }) => {
@@ -10,6 +10,8 @@ test.describe('Quest graph diagnostics tools', () => {
         page,
         context,
     }) => {
+        await enableQuestDependencyMap(page);
+
         await page.setViewportSize({ width: 1440, height: 900 });
 
         await page.goto('/quests');

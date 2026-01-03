@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, enableQuestDependencyMap, waitForHydration } from './test-helpers';
 
 // Extend Window interface for test-only exposed Cytoscape instance
 declare global {
@@ -18,6 +18,7 @@ test.describe('Quest graph "Show unreachable" toggle', () => {
     test('should show unreachable count and disable when no unreachable nodes exist', async ({
         page,
     }) => {
+        await enableQuestDependencyMap(page);
         await page.setViewportSize({ width: 1920, height: 1080 });
 
         await page.goto('/quests');
@@ -82,6 +83,7 @@ test.describe('Quest graph "Show unreachable" toggle', () => {
     });
 
     test('should toggle node visibility when unreachable nodes exist', async ({ page }) => {
+        await enableQuestDependencyMap(page);
         await page.setViewportSize({ width: 1920, height: 1080 });
 
         await page.goto('/quests');
