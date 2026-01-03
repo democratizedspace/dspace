@@ -2,24 +2,27 @@ import fs from 'fs';
 import path from 'path';
 import { describe, expect, it } from 'vitest';
 
-const mojibakePatterns: { pattern: RegExp; label: string }[] = [
-  { pattern: /â€™/, label: 'mojibake apostrophe' },
-  { pattern: /â€˜/, label: 'mojibake opening apostrophe' },
-  { pattern: /â€œ/, label: 'mojibake opening quote' },
-  { pattern: /â€�/, label: 'mojibake closing quote' },
-  { pattern: /â€“/, label: 'mojibake en dash' },
-  { pattern: /â€”/, label: 'mojibake em dash' },
-  { pattern: /â€¦/, label: 'mojibake ellipsis' },
-  { pattern: /Â\s/, label: 'stray Â with space' },
-  { pattern: /Â/, label: 'stray Â' },
+const mojibakeTokens = [
+  'â€™',
+  'â€˜',
+  'â€œ',
+  'â€�',
+  'â€“',
+  'â€”',
+  'â€¦',
+  'â€¢',
+  'Â ',
+  'Â',
 ];
 
 const docRoots = [
-  path.join(process.cwd(), 'frontend', 'src', 'pages', 'docs', 'md'),
+  path.join(process.cwd(), 'frontend', 'src', 'pages', 'docs'),
   path.join(process.cwd(), 'docs'),
 ];
 
-function collectMarkdownFiles(rootDir: string): string[] {
+const allowedExtensions = new Set(['.md', '.mdx', '.markdown', '.astro']);
+
+function collectContentFiles(rootDir: string): string[] {
   if (!fs.existsSync(rootDir)) {
     return [];
   }
@@ -27,28 +30,43 @@ function collectMarkdownFiles(rootDir: string): string[] {
   const entries = fs.readdirSync(rootDir, { withFileTypes: true });
   return entries.flatMap((entry) => {
     const entryPath = path.join(rootDir, entry.name);
+
     if (entry.isDirectory()) {
-      return collectMarkdownFiles(entryPath);
+      return collectContentFiles(entryPath);
     }
-    return entry.isFile() && entry.name.endsWith('.md') ? [entryPath] : [];
+
+    return entry.isFile() && allowedExtensions.has(path.extname(entry.name))
+      ? [entryPath]
+      : [];
   });
 }
 
-const markdownFiles = docRoots.flatMap(collectMarkdownFiles);
+const contentFiles = Array.from(new Set(docRoots.flatMap(collectContentFiles)));
 
 describe('docs markdown mojibake scan', () => {
   it('rejects common mojibake markers in source content', () => {
-    const offenders: string[] = [];
+    const offenders: { file: string; tokens: string[] }[] = [];
 
-    markdownFiles.forEach((filePath) => {
+    contentFiles.forEach((filePath) => {
       const content = fs.readFileSync(filePath, 'utf8');
-      mojibakePatterns.forEach(({ pattern, label }) => {
-        if (pattern.test(content)) {
-          offenders.push(`${filePath} contains ${label} (${pattern.source})`);
-        }
-      });
+      const matchedTokens = mojibakeTokens.filter((token) => content.includes(token));
+
+      if (matchedTokens.length > 0) {
+        offenders.push({
+          file: path.relative(process.cwd(), filePath),
+          tokens: matchedTokens,
+        });
+      }
     });
 
-    expect(offenders).toEqual([]);
+    const message =
+      offenders.length === 0
+        ? undefined
+        : [
+            'Mojibake detected in docs sources:',
+            ...offenders.map(({ file, tokens }) => `- ${file}: ${tokens.join(', ')}`),
+          ].join('\n');
+
+    expect(offenders, message).toEqual([]);
   });
 });
