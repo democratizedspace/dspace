@@ -873,7 +873,7 @@
     <div class="header">
         <div>
             <p class="eyebrow">Quest dependency map</p>
-            <h3>{focusedNode ? focusedNode.title : 'Quest graph'}</h3>
+            <h3>{focusedNode ? focusedNode.title : 'Quest dependency map'}</h3>
             {#if focusedNode}
                 <p class="subtle">{focusedNode.canonicalKey}</p>
             {/if}
@@ -888,7 +888,7 @@
         </div>
     </div>
 
-    <div class="tab-bar" role="tablist" aria-label="Quest graph views">
+    <div class="tab-bar" role="tablist" aria-label="Quest dependency map views">
         <button
             type="button"
             class:selected={activeTab === 'navigator'}
