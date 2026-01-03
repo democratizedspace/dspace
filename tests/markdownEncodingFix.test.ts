@@ -7,13 +7,18 @@ describe('fixMarkdownText encoding guardrails', () => {
         const corrupted =
             'Through gameplay, you\u00e2\u0080\u0099ll learn \u00e2\u0080\u0093 launch \u00e2\u0080\u0094 and iterate \u00e2\u0080\u009csafely\u00e2\u0080\u009d...\u00c2 ';
         expect(fixMarkdownText(corrupted)).toBe(
-            "Through gameplay, you'll learn - launch - and iterate \"safely\"..."
+            'Through gameplay, you\'ll learn - launch - and iterate "safely"...'
         );
     });
 
     it('normalizes curly punctuation and non-breaking spaces', () => {
         expect(fixMarkdownText('“Quoted” text — it’s resilient\u00a0')).toBe(
-            "\"Quoted\" text - it's resilient"
+            '"Quoted" text - it\'s resilient'
         );
+    });
+
+    it('repairs mojibake checkmarks in docs tables', () => {
+        const corrupted = 'Type \u00e2\u009c\u0094\u00ef\u00b8\u008f Optional \u00e2\u009d\u008c';
+        expect(fixMarkdownText(corrupted)).toBe('Type ✔️ Optional ❌');
     });
 });
