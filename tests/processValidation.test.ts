@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import Ajv from 'ajv';
 import { describe, expect, it } from 'vitest';
 import items from '../frontend/src/pages/inventory/json/items';
-import processes from '../frontend/src/generated/processes.json' assert { type: 'json' };
+import { durationInSeconds, prettyPrintDuration } from '../frontend/src/utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -15,6 +15,9 @@ const schema = JSON.parse(
 const hardeningSchema = JSON.parse(
     readFileSync(join(__dirname, '../frontend/src/pages/sharedSchemas/hardening.json'), 'utf8')
 );
+const processes = JSON.parse(
+    readFileSync(join(__dirname, '../frontend/src/generated/processes.json'), 'utf8')
+) as Array<Record<string, unknown>>;
 
 describe('process validation', () => {
     it('conforms to the JSON schema for built-in processes', () => {
@@ -22,7 +25,7 @@ describe('process validation', () => {
         ajv.addSchema(hardeningSchema, hardeningSchema.$id);
         const validate = ajv.compile(schema);
 
-        for (const process of processes as Array<Record<string, unknown>>) {
+        for (const process of processes) {
             const valid = validate(process);
             if (!valid) {
                 console.error(validate.errors);
@@ -34,11 +37,20 @@ describe('process validation', () => {
     it('keeps recipe references valid with sane counts and durations', () => {
         const itemIds = new Set((items as Array<Record<string, any>>).map((item) => item.id));
         const durationPattern = /^(?:\d+(?:\.\d+)?[dhmsDHMS]\s*)+$/;
+        const canonicalizeDuration = (duration: string) =>
+            prettyPrintDuration(durationInSeconds(duration));
 
         for (const process of processes as Array<Record<string, any>>) {
             expect(typeof process.duration).toBe('string');
             expect(process.duration.trim().length).toBeGreaterThan(0);
             expect(durationPattern.test(process.duration)).toBe(true);
+
+            const canonicalDuration = canonicalizeDuration(process.duration);
+            const reparsedDuration = durationInSeconds(canonicalDuration);
+
+            expect(canonicalDuration).toBe(canonicalizeDuration(canonicalDuration));
+            expect(reparsedDuration).toBeGreaterThan(0);
+            expect(reparsedDuration).toBe(durationInSeconds(process.duration));
 
             for (const field of ['requireItems', 'consumeItems', 'createItems']) {
                 for (const entry of process[field] ?? []) {
