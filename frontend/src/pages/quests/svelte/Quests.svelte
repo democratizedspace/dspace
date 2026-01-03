@@ -13,6 +13,7 @@
     let customQuestRecords = [];
     let normalizedBuiltInQuests = [];
     let normalizedCustomQuests = [];
+    let showQuestGraph = false;
 
     const normalizeQuest = (entry) => {
         if (!entry) {
@@ -97,6 +98,7 @@
 
     $: normalizedBuiltInQuests = normalizeQuestList(quests);
     $: normalizedCustomQuests = normalizeQuestList(customQuestRecords);
+    $: showQuestGraph = Boolean($state?.settings?.showQuestGraphVisualizer);
 
     $: if (mounted) {
         const _gs = $state; // rerun when game state updates
@@ -135,9 +137,11 @@
             {/each}
         </div>
 
-        <div class="visualizer-slot">
-            <slot name="visualizer" />
-        </div>
+        {#if showQuestGraph}
+            <div class="visualizer-slot">
+                <slot name="visualizer" />
+            </div>
+        {/if}
 
         {#if finishedQuests.length > 0}
             <h2>Completed Quests</h2>

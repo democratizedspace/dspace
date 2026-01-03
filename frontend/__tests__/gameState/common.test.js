@@ -21,7 +21,12 @@ describe('gameState - common utilities', () => {
 
         await resetGameState();
         const fresh = loadGameState();
-        expect(fresh).toMatchObject({ quests: {}, inventory: {}, processes: {} });
+        expect(fresh).toMatchObject({
+            quests: {},
+            inventory: {},
+            processes: {},
+            settings: { showQuestGraphVisualizer: false },
+        });
         expect(typeof fresh._meta?.lastUpdated).toBe('number');
     });
 
@@ -54,6 +59,7 @@ describe('gameState - common utilities', () => {
             '_meta',
             'inventory',
             'processes',
+            'settings',
             'quests',
         ]);
     });

@@ -10,6 +10,9 @@ const ROOT_KEY = 'root';
 const LS_STATE_KEY = 'gameState';
 const LS_BACKUP_KEY = 'gameStateBackup';
 const META_KEY = '_meta';
+export const DEFAULT_SETTINGS = {
+    showQuestGraphVisualizer: false,
+};
 const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
 
@@ -201,6 +204,7 @@ const initializeGameState = () => ({
     quests: {},
     inventory: {},
     processes: {},
+    settings: { ...DEFAULT_SETTINGS },
     [META_KEY]: { lastUpdated: Date.now() },
 });
 
@@ -229,6 +233,9 @@ export const validateGameState = (state) => {
     if (typeof state.processes !== 'object' || state.processes === null) {
         state.processes = {};
     }
+    const currentSettings =
+        state.settings && typeof state.settings === 'object' ? state.settings : undefined;
+    state.settings = { ...DEFAULT_SETTINGS, ...(currentSettings || {}) };
     ensureMeta(state);
     return state;
 };
