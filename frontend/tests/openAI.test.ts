@@ -132,6 +132,32 @@ describe('GPT35Turbo', () => {
         expect(result).toBe('primary response');
     });
 
+    it('extracts output text from the content blocks when output_text is missing', async () => {
+        const resolver = vi.fn(async () => ({
+            output: [
+                {
+                    content: [
+                        {
+                            type: 'output_text',
+                            text: 'content response',
+                        },
+                    ],
+                },
+            ],
+        }));
+
+        globalThis.__DSpaceOpenAIClient = class extends MockResponseClient {
+            constructor() {
+                super(resolver);
+            }
+        };
+
+        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+
+        expect(resolver).toHaveBeenCalledTimes(1);
+        expect(result).toBe('content response');
+    });
+
     it('surfaces unexpected OpenAI errors without retrying', async () => {
         const resolver = vi.fn(async () => {
             const error = new Error('temporary outage');
