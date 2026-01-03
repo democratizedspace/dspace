@@ -55,4 +55,27 @@ describe('custom content backup', () => {
         const decoded = JSON.parse(atob(encoded));
         expect(Object.keys(decoded).sort()).toEqual(['items', 'processes', 'quests']);
     });
+
+    test('importCustomContentString does not overwrite main game state snapshots', async () => {
+        await indexedDB.deleteDatabase('CustomContent');
+        const mainState = { inventory: { safe: 1 }, versionNumberString: '3.0' };
+        const serialized = JSON.stringify(mainState);
+        localStorage.setItem('gameState', serialized);
+        localStorage.setItem('gameStateBackup', serialized);
+
+        const encoded = btoa(
+            JSON.stringify({
+                items: [{ id: 'i-safe', name: 'custom item' }],
+                processes: [],
+                quests: [],
+            })
+        );
+
+        await importCustomContentString(encoded);
+
+        expect(localStorage.getItem('gameState')).toBe(serialized);
+        expect(localStorage.getItem('gameStateBackup')).toBe(serialized);
+        const imported = await db.items.get('i-safe');
+        expect(imported?.name).toBe('custom item');
+    });
 });
