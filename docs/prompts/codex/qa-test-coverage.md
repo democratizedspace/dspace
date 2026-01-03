@@ -16,6 +16,9 @@ coverage, add or locate tests for them, and append the links inline.
 ## Guardrails
 - If this repo contains relevant AGENTS.md files (per-directory instructions), read them before
   editing and obey the most specific instructions.
+- CI enforces QA-doc test-link freshness for `docs/qa/v3.md` and `docs/qa/v3.1.md` via
+  `tests/qaDocsLinkFreshness.test.ts`; expect to update `#L...` anchors (or widen to
+  `#LSTART-LEND`) so they still include the referenced test snippet.
 - Keep scope tight: default to **3–5** checklist items, hard cap **6** per run.
 - Do not refactor or rename unrelated code; only touch the chosen checklist lines and the tests you
   add/adjust.
@@ -25,6 +28,7 @@ coverage, add or locate tests for them, and append the links inline.
 1) Open `docs/qa/v3.md` and list unchecked lines without linked tests.
    - Use the heuristic: linked lines contain `#L` anchors inside parentheses.
    - Helper commands:
+     - `rg "^- \[ \]" docs/qa/v3.md | rg -v "#L"` → unchecked + unlinked (heuristic).
      - `rg "\\[ \\] .*#L" docs/qa/v3.md` → shows already-linked items.
      - `rg "\\[ \\] .*" docs/qa/v3.md | rg -v "#L"` → candidate unlinked items.
 2) Choose 3–5 items (max 6) that are deterministic and automatable first (routes loading, schema or
@@ -52,15 +56,28 @@ For each chosen checklist line:
    - Keep tests narrowly scoped to the checklist statement.
 
 ## Updating the checklist with links (required)
-- Append test links at the end of the checklist line in `docs/qa/v3.md` using the existing style:
-  `([<short description>](relative/path/to/test#L<line-number>))`. Multiple links go inside one set
-  of parentheses, comma-separated.
+- Append test links at the end of the checklist line in `docs/qa/v3.md` using the enforced pattern:
+  `([<FILE_LABEL:TEST_NAME_SUBSTRING>](relative/path/to/test#LSTART[-LEND]))`. Multiple links go
+  inside one set of parentheses, comma-separated.
+  - `FILE_LABEL` should match the target filename or its trailing path segment (e.g.
+    `wallet-page.spec.ts`, `questGraph.test.ts`).
+  - `TEST_NAME_SUBSTRING` must literally appear within the linked line range (often the `it(` title
+    or a unique assertion string) so the freshness checker can validate the anchor.
+  - Use `#LSTART-LEND` ranges when needed for stability, but keep them tight around the referenced
+    snippet.
 - Paths are relative to `docs/qa/v3.md` (already in `docs/qa/`); mimic existing examples.
 - The short description should summarize what the test asserts.
 
 ## Verification commands
-- Inspect `package.json`, `frontend/package.json`, and `.github/workflows/*.yml` to identify the
-  correct commands for the tests you changed (root unit/integration vs. Playwright E2E, etc.).
+- Discover the right runner: inspect `package.json`, `frontend/package.json`, and
+  `.github/workflows/*.yml` to map tests you touched to the correct command (unit/integration vs.
+  Playwright E2E).
+- Always run the QA-doc link freshness check when touching `docs/qa/v3*.md`:
+  `npm run test:root -- qaDocsLinkFreshness.test.ts`.
+- Keep verification lightweight for docs-only PRs: `git diff --check` plus the freshness test above.
+- Additional helpers:
+  - `rg -n "qaDocsLinkFreshness" -S .`
+  - `rg -n "QA docs test link freshness" -S tests`
 - Run the relevant subset locally (at least the runner(s) that cover your new/modified tests).
 - Record every command and result in the PR summary. If a required command can’t run locally,
   note why (environment limit) and mark it as a warning.
