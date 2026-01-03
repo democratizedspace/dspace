@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Menu from '../components/svelte/Menu.svelte';
+import LegacyUpgradeBanner from '../components/svelte/LegacyUpgradeBanner.svelte';
 
 const { title, message } = Astro.props;
 
@@ -16,6 +17,8 @@ const pathname = Astro.url.pathname;
 
 			<!-- for each item in menu, if  -->
 			<Menu pathname={pathname} client:idle />
+
+			<LegacyUpgradeBanner client:idle />
 
 			<h2>{title}</h2>
 

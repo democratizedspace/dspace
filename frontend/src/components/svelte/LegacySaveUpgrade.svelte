@@ -7,10 +7,14 @@
         normalizeCount,
     } from '../../utils/gameState.js';
     import { inspectGameStateStorage } from '../../utils/gameState/common.js';
+    import { qaCheatsEnabled } from '../../lib/qaCheats';
+    import { clearV3GameStateStorage } from '../../utils/legacySaveSeeding';
+    import { detectLegacyArtifacts } from '../../utils/legacySaveDetection';
     import Chip from './Chip.svelte';
 
     export let legacyV1Items = [];
     export let legacyCookieKeys = [];
+    export let cheatsAvailable = false;
 
     const normalizeForStableSerialization = (value, seen = new WeakSet()) => {
         if (value === null || typeof value !== 'object') {
@@ -52,6 +56,8 @@
     let statusMessage = '';
     let errorMessage = '';
     let workingAction = '';
+    let qaEnabled = false;
+    $: showV2V3ConflictWarning = detection.hasLegacyV2 && detection.hasV3State;
 
     $: normalizedV1Items = filterLegacyItems(legacyV1Items);
 
@@ -85,16 +91,22 @@
             usesLocalStorageFallback ||
             (!indexedDbSupported && (localStorageState || legacyV2State));
 
+        const artifacts = detectLegacyArtifacts();
+        const hasV1Artifacts = artifacts.hasV1Cookies || normalizedV1Items.length > 0;
+        const hasV3State = hasIndexedDbState || Boolean(usingFallback);
+        const hasLegacyV2 =
+            Boolean(pendingLocalState) ||
+            (!hasIndexedDbState && !usingFallback && hasLegacyV2Keys) ||
+            (!hasIndexedDbState && artifacts.hasV2LocalStorage);
+
         detection = {
             loading: false,
-            hasV3State: hasIndexedDbState || Boolean(usingFallback),
-            hasLegacyV2: Boolean(pendingLocalState || (hasLegacyV2Keys && indexedDbSupported)),
-            hasV1Cookies: normalizedV1Items.length > 0,
+            hasV3State,
+            hasLegacyV2,
+            hasV1Cookies: hasV1Artifacts,
             indexedDbSupported,
             usingFallback: Boolean(usingFallback),
-            conflict:
-                (normalizedV1Items.length > 0 || Boolean(pendingLocalState)) &&
-                (hasIndexedDbState || Boolean(usingFallback)),
+            conflict: (hasV1Artifacts || Boolean(pendingLocalState)) && hasV3State,
             pendingLocalState,
             localVsIndexedMismatch:
                 Boolean(legacyV2State) && Boolean(indexedDbState) && !statesMatch,
@@ -219,8 +231,43 @@
         });
     };
 
+    const clearV3ForTesting = async () => {
+        await withStatus('clear-v3', async () => {
+            const cleared = await clearV3GameStateStorage();
+            statusMessage = cleared
+                ? 'Cleared v3 IndexedDB save for QA testing. Reloading…'
+                : 'Unable to confirm v3 save deletion. Reload and verify manually.';
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('legacy-upgrade-refresh'));
+                window.setTimeout(() => window.location.reload(), 50);
+            }
+        });
+    };
+
+    const handleExternalRefresh = () => {
+        refreshStatus();
+    };
+
     onMount(() => {
         refreshStatus();
+
+        if (typeof window !== 'undefined') {
+            window.addEventListener('legacy-upgrade-refresh', handleExternalRefresh);
+        }
+
+        let unsubscribeQa;
+        if (cheatsAvailable) {
+            unsubscribeQa = qaCheatsEnabled.subscribe((value) => {
+                qaEnabled = Boolean(value);
+            });
+        }
+
+        return () => {
+            if (typeof window !== 'undefined') {
+                window.removeEventListener('legacy-upgrade-refresh', handleExternalRefresh);
+            }
+            unsubscribeQa?.();
+        };
     });
 </script>
 
@@ -310,6 +357,26 @@
                             Both legacy localStorage data and a current v3 save exist. Choose to
                             merge or replace to avoid mixed state.
                         </p>
+                    {/if}
+                    {#if showV2V3ConflictWarning}
+                        <div class="warning-panel" role="alert">
+                            <p class="warning-title">Legacy + v3 save conflict detected</p>
+                            <p class="warning-body">
+                                A v2 localStorage save and a v3 IndexedDB save both exist. Importing
+                                could overwrite or merge data. Back up your v3 save first. For QA,
+                                clear v3 before testing legacy imports.
+                            </p>
+                            {#if cheatsAvailable && qaEnabled}
+                                <Chip
+                                    text={workingAction === 'clear-v3'
+                                        ? 'Clearing v3 save…'
+                                        : 'Clear v3 save for testing'}
+                                    onClick={clearV3ForTesting}
+                                    hazard={true}
+                                    disabled={Boolean(workingAction)}
+                                />
+                            {/if}
+                        </div>
                     {/if}
                     {#if detection.localVsIndexedMismatch}
                         <p class="warning">
@@ -414,6 +481,25 @@
     .warning {
         color: #fcd34d;
         margin: 0;
+    }
+
+    .warning-panel {
+        display: grid;
+        gap: 0.35rem;
+        padding: 0.75rem;
+        border-radius: 10px;
+        border: 1px solid rgba(234, 179, 8, 0.65);
+        background: rgba(234, 179, 8, 0.12);
+    }
+
+    .warning-title {
+        margin: 0;
+        font-weight: 700;
+    }
+
+    .warning-body {
+        margin: 0;
+        color: #fcd34d;
     }
 
     .muted {

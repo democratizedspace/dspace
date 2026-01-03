@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/v2_to_v3_upgrade_trophy.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "V2 Upgrade Trophy",
+    "item_id": "fd8bdb69-0f29-469c-9383-93f97b6ea015",
+    "entity_type": "item",
+    "prompt": "A solarpunk-inspired brushed aluminum trophy celebrating an upgrade: the base is shaped like a stacked database cylinder with a small arrow stepping up to a larger indexed cube. The engraving reads \"v2 ➜ v3\" with a subtle rocket icon. Warm desk lighting, dark teal background, no text beyond the engraving, and no logos.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

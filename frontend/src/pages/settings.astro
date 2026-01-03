@@ -21,6 +21,7 @@ const legacyCookieKeys = getCookieKeysFromStore(Astro.cookies);
         <LegacySaveUpgrade
             legacyV1Items={legacyV1Items}
             legacyCookieKeys={legacyCookieKeys}
+            cheatsAvailable={cheatsAvailable}
             client:idle
         />
         <DataReset client:idle />

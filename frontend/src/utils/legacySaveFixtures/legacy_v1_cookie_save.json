@@ -1,0 +1,23 @@
+{
+    "description": "Legacy v1 saves may be chunked across multiple cookies. Add one entry per cookie chunk to seed the full payload.",
+    "cookies": [
+        {
+            "name": "item-3",
+            "value": "75",
+            "encodeValue": true
+        },
+        {
+            "name": "item-10",
+            "value": "2"
+        },
+        {
+            "name": "item-83",
+            "value": "1"
+        },
+        {
+            "name": "item-21",
+            "value": "20%2B",
+            "encodeValue": false
+        }
+    ]
+}

@@ -131,23 +131,44 @@ jobs:
       - name: Setup Playwright environment
         run: pnpm --dir frontend run setup-test-env
 
-      - name: Install Ubuntu 24 Playwright runtime dependencies
+      - name: Install Playwright runtime dependencies
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
+          set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            libatk1.0-0t64 \
-            libatk-bridge2.0-0t64 \
-            libatspi2.0-0t64 \
-            libcups2t64 \
-            libgbm1 \
-            libxkbcommon0 \
-            libxcomposite1 \
-            libxdamage1 \
-            libxfixes3 \
-            libxrandr2 \
-            libasound2t64
+
+          if sudo apt-cache show libatk1.0-0t64 >/dev/null 2>&1; then
+            packages=(
+              libatk1.0-0t64
+              libatk-bridge2.0-0t64
+              libatspi2.0-0t64
+              libcups2t64
+              libgbm1
+              libxkbcommon0
+              libxcomposite1
+              libxdamage1
+              libxfixes3
+              libxrandr2
+              libasound2t64
+            )
+          else
+            packages=(
+              libatk1.0-0
+              libatk-bridge2.0-0
+              libatspi2.0-0
+              libcups2
+              libgbm1
+              libxkbcommon0
+              libxcomposite1
+              libxdamage1
+              libxfixes3
+              libxrandr2
+              libasound2
+            )
+          fi
+
+          sudo apt-get install -y --no-install-recommends "${packages[@]}"
 
       - name: Install Playwright browsers and runtime dependencies
         run: sudo env "PATH=$PATH" pnpm --dir frontend exec playwright install --with-deps chromium chromium-headless-shell firefox webkit

@@ -6,12 +6,21 @@
         qaCheatsEnabled,
         setQaCheatsPreference,
     } from '../../lib/qaCheats';
+    import Chip from './Chip.svelte';
+    import {
+        clearSeededLegacySaves,
+        seedSampleV1CookieSave,
+        seedSampleV2LocalStorageSave,
+    } from '../../utils/legacySaveSeeding';
 
     export let cheatsAvailable = false;
 
     let available = cheatsAvailable;
     let enabled = false;
     let hydrated = false;
+    let workingAction = '';
+    let statusMessage = '';
+    let errorMessage = '';
 
     let unsubscribeAvailability;
     let unsubscribeEnabled;
@@ -19,6 +28,48 @@
     const handleToggle = () => {
         setQaCheatsPreference(!enabled);
     };
+
+    const notifyLegacyUpgradeRefresh = (shouldReload = false) => {
+        if (typeof window === 'undefined') return;
+        window.dispatchEvent(new CustomEvent('legacy-upgrade-refresh'));
+        if (shouldReload) {
+            window.setTimeout(() => window.location.reload(), 50);
+        }
+    };
+
+    const withStatus = async (actionName, fn) => {
+        workingAction = actionName;
+        statusMessage = '';
+        errorMessage = '';
+        try {
+            await fn();
+        } catch (error) {
+            errorMessage = error?.message ?? 'Unable to complete the requested legacy save action.';
+        } finally {
+            workingAction = '';
+        }
+    };
+
+    const seedV1Save = () =>
+        withStatus('seed-v1', async () => {
+            seedSampleV1CookieSave();
+            statusMessage = 'Seeded sample v1 cookie save. Reloading…';
+            notifyLegacyUpgradeRefresh(true);
+        });
+
+    const seedV2Save = () =>
+        withStatus('seed-v2', async () => {
+            seedSampleV2LocalStorageSave();
+            statusMessage = 'Seeded sample v2 localStorage save. Refreshing detection…';
+            notifyLegacyUpgradeRefresh(false);
+        });
+
+    const clearSeededSaves = () =>
+        withStatus('clear-seeded', async () => {
+            clearSeededLegacySaves();
+            statusMessage = 'Cleared seeded legacy saves. Reloading…';
+            notifyLegacyUpgradeRefresh(true);
+        });
 
     onMount(() => {
         initializeQaCheats(cheatsAvailable);
@@ -66,6 +117,48 @@
                 <span class="cheat-toggle__state">{enabled ? 'On' : 'Off'}</span>
             </button>
         </label>
+    </section>
+{/if}
+{#if available && enabled}
+    <section class="qa-tools" data-hydrated={hydrated ? 'true' : 'false'}>
+        <div class="qa-tools__heading">
+            <h3>Legacy save seeding</h3>
+            <p>
+                Create or clear sample legacy saves to test the Legacy save upgrades flows. Actions
+                refresh the page so detection reruns immediately.
+            </p>
+        </div>
+        <div class="qa-tools__actions">
+            <Chip
+                text={workingAction === 'seed-v1' ? 'Seeding v1…' : 'Seed sample v1 save (cookies)'}
+                onClick={seedV1Save}
+                cheat={true}
+                disabled={Boolean(workingAction)}
+                dataTestId="qa-seed-v1"
+            />
+            <Chip
+                text={workingAction === 'seed-v2'
+                    ? 'Seeding v2…'
+                    : 'Seed sample v2 save (localStorage)'}
+                onClick={seedV2Save}
+                cheat={true}
+                disabled={Boolean(workingAction)}
+                dataTestId="qa-seed-v2"
+            />
+            <Chip
+                text="Clear seeded legacy saves"
+                onClick={clearSeededSaves}
+                cheat={true}
+                disabled={Boolean(workingAction)}
+                dataTestId="qa-clear-seeded"
+            />
+        </div>
+        {#if statusMessage}
+            <p class="status" role="status" aria-live="polite">{statusMessage}</p>
+        {/if}
+        {#if errorMessage}
+            <p class="status error" role="alert">{errorMessage}</p>
+        {/if}
     </section>
 {/if}
 
@@ -175,5 +268,50 @@
     .cheat-toggle__state {
         font-weight: 700;
         letter-spacing: 0.02em;
+    }
+
+    .qa-tools {
+        margin-top: 0.75rem;
+        border: 1px dashed rgba(249, 115, 22, 0.6);
+        border-radius: 10px;
+        padding: 1rem;
+        display: grid;
+        gap: 0.75rem;
+        background: rgba(15, 23, 42, 0.6);
+    }
+
+    .qa-tools__heading {
+        display: grid;
+        gap: 0.25rem;
+    }
+
+    .qa-tools h3 {
+        margin: 0;
+        color: #fed7aa;
+    }
+
+    .qa-tools p {
+        margin: 0;
+        color: #fef3c7;
+    }
+
+    .qa-tools__actions {
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .status {
+        margin: 0;
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        background: rgba(22, 163, 74, 0.2);
+        color: #bbf7d0;
+        border: 1px solid rgba(22, 163, 74, 0.6);
+    }
+
+    .status.error {
+        background: rgba(239, 68, 68, 0.2);
+        color: #fecdd3;
+        border-color: rgba(239, 68, 68, 0.6);
     }
 </style>
