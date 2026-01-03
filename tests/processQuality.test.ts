@@ -29,4 +29,18 @@ describe('process quality', () => {
       }
     }
   });
+
+  it('uses positive quantities and canonical duration strings', () => {
+    const durationPattern = /^(\d+(?:\.\d+)?[dhmsDHMS]\s*)+$/;
+
+    for (const proc of processes as Array<any>) {
+      expect(proc.duration).toMatch(durationPattern);
+      for (const list of ['requireItems', 'consumeItems', 'createItems']) {
+        for (const entry of proc[list] || []) {
+          expect(Number.isFinite(entry.count)).toBe(true);
+          expect(entry.count).toBeGreaterThan(0);
+        }
+      }
+    }
+  });
 });
