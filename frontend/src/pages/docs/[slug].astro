@@ -49,6 +49,8 @@ const docs = await Astro.glob('./md/*.md');
 const slugString = typeof slug === 'string' ? slug : '';
 const normalizedSlug = slugString.toLowerCase();
 
+Astro.response.headers.set('Content-Type', 'text/html; charset=utf-8');
+
 try {
     doc = docs.find(
         (entry) => String(entry?.frontmatter?.slug ?? '').toLowerCase() === normalizedSlug
@@ -87,9 +89,7 @@ const newDocUrl = slugString
 ---
 
 {
-    doc
-    ?
-    <div>
+    doc ? (
         <Page title={doc.frontmatter.title} columns="1">
             <div>
                 <Chip text="Docs" href="/docs" />
@@ -98,9 +98,7 @@ const newDocUrl = slugString
             </div>
             <span set:html={html} />
         </Page>
-    </div>
-     : 
-    <div>
+    ) : (
         <Page title="Doc not found" columns="1">
             <Chip text="Docs" href="/docs" />
             <Card
@@ -111,7 +109,7 @@ const newDocUrl = slugString
                 imageAlt="Quill pen on paper"
             />
         </Page>
-    </div>
+    )
 }
 
 <style>

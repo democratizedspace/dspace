@@ -14,6 +14,9 @@ const mojibakeTokens: MojibakeToken[] = [
   { token: '\u00e2\u0080\u0094', label: 'mojibake em dash' },
   { token: '\u00e2\u0080\u00a6', label: 'mojibake ellipsis' },
   { token: '\u00e2\u20ac\u00a2', label: 'mojibake bullet' },
+  { token: '\u00e2\u009c\u0094', label: 'mojibake check mark' },
+  { token: '\u00e2\u009d\u008c', label: 'mojibake cross mark' },
+  { token: '\u00ef\u00b8\u008f', label: 'mojibake variation selector' },
   { token: '\u00c2 ', label: 'stray U+00C2 with space' },
   { token: '\u00c2', label: 'stray U+00C2' },
 ];
