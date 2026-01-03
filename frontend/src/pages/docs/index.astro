@@ -1,21 +1,8 @@
 ---
 import Page from '../../components/Page.astro';
 import DocsIndex from '../../components/svelte/DocsIndex.svelte';
-import sections from './json/sections.json' assert { type: 'json' };
+import sections from './json/sections.json';
 import { detectDocFeatures } from '../../utils/docsSearchFeatures.js';
-
-type DocLink = {
-    title: string;
-    href: string;
-    keywords?: string[];
-    external?: boolean;
-    features?: string[];
-};
-
-type DocsSection = {
-    title: string;
-    links: DocLink[];
-};
 
 const docModules = await Astro.glob('./md/**/*.md');
 
@@ -52,7 +39,8 @@ const buildDocFeatureIndex = async () => {
         })
     );
 
-    return new Map(entries.filter(Boolean) as [string, string[]][]);
+    const filteredEntries = entries.filter((entry) => Array.isArray(entry));
+    return new Map(filteredEntries);
 };
 
 const docFeatureIndex = await buildDocFeatureIndex();
@@ -68,7 +56,7 @@ const getSlugFromHref = (href = '') => {
     return trimmed.toLowerCase();
 };
 
-const docsSections = (sections as DocsSection[]).map((section) => ({
+const docsSections = sections.map((section) => ({
     title: section.title,
     links: section.links.map((link) => {
         const slug = getSlugFromHref(link.href);
