@@ -2,53 +2,58 @@ import fs from 'fs';
 import path from 'path';
 import { describe, expect, it } from 'vitest';
 
-const mojibakePatterns: { pattern: RegExp; label: string }[] = [
-  { pattern: /â€™/, label: 'mojibake apostrophe' },
-  { pattern: /â€˜/, label: 'mojibake opening apostrophe' },
-  { pattern: /â€œ/, label: 'mojibake opening quote' },
-  { pattern: /â€�/, label: 'mojibake closing quote' },
-  { pattern: /â€“/, label: 'mojibake en dash' },
-  { pattern: /â€”/, label: 'mojibake em dash' },
-  { pattern: /â€¦/, label: 'mojibake ellipsis' },
-  { pattern: /Â\s/, label: 'stray Â with space' },
-  { pattern: /Â/, label: 'stray Â' },
+const mojibakeTokens = [
+    'â€™',
+    'â€˜',
+    'â€œ',
+    'â€�',
+    'â€“',
+    'â€”',
+    'â€¦',
+    'â€¢',
+    'Â ',
+    'Â',
 ];
 
 const docRoots = [
-  path.join(process.cwd(), 'frontend', 'src', 'pages', 'docs', 'md'),
-  path.join(process.cwd(), 'docs'),
+    path.join(process.cwd(), 'frontend', 'src', 'pages', 'docs'),
+    path.join(process.cwd(), 'docs'),
 ];
 
-function collectMarkdownFiles(rootDir: string): string[] {
-  if (!fs.existsSync(rootDir)) {
-    return [];
-  }
+const allowedExtensions = new Set(['.md', '.mdx', '.markdown', '.astro']);
 
-  const entries = fs.readdirSync(rootDir, { withFileTypes: true });
-  return entries.flatMap((entry) => {
-    const entryPath = path.join(rootDir, entry.name);
-    if (entry.isDirectory()) {
-      return collectMarkdownFiles(entryPath);
+function collectDocFiles(rootDir: string): string[] {
+    if (!fs.existsSync(rootDir)) {
+        return [];
     }
-    return entry.isFile() && entry.name.endsWith('.md') ? [entryPath] : [];
-  });
+
+    const entries = fs.readdirSync(rootDir, { withFileTypes: true });
+    return entries.flatMap((entry) => {
+        const entryPath = path.join(rootDir, entry.name);
+        if (entry.isDirectory()) {
+            return collectDocFiles(entryPath);
+        }
+
+        const extension = path.extname(entry.name).toLowerCase();
+        return entry.isFile() && allowedExtensions.has(extension) ? [entryPath] : [];
+    });
 }
 
-const markdownFiles = docRoots.flatMap(collectMarkdownFiles);
+const docFiles = docRoots.flatMap(collectDocFiles);
 
-describe('docs markdown mojibake scan', () => {
-  it('rejects common mojibake markers in source content', () => {
-    const offenders: string[] = [];
+describe('docs source mojibake scan', () => {
+    it('rejects common mojibake markers in source content', () => {
+        const offenders: string[] = [];
 
-    markdownFiles.forEach((filePath) => {
-      const content = fs.readFileSync(filePath, 'utf8');
-      mojibakePatterns.forEach(({ pattern, label }) => {
-        if (pattern.test(content)) {
-          offenders.push(`${filePath} contains ${label} (${pattern.source})`);
-        }
-      });
+        docFiles.forEach((filePath) => {
+            const content = fs.readFileSync(filePath, 'utf8');
+            const matches = new Set(mojibakeTokens.filter((token) => content.includes(token)));
+
+            if (matches.size > 0) {
+                offenders.push(`${filePath}: ${Array.from(matches).join(', ')}`);
+            }
+        });
+
+        expect(offenders).toEqual([]);
     });
-
-    expect(offenders).toEqual([]);
-  });
 });
