@@ -2,6 +2,7 @@ import { isBrowser } from './ssr.js';
 
 const LEGACY_ITEM_COOKIE_REGEX = /^item-\d+$/;
 const LEGACY_V2_KEYS = ['gameState', 'gameStateBackup'];
+const LEGACY_VERSION_PREFIXES = ['1', '2'];
 
 const hasLegacyCookies = () => {
     if (!isBrowser) return false;
@@ -24,7 +25,30 @@ const hasLegacyCookies = () => {
 const hasLegacyLocalStorage = () => {
     if (!isBrowser) return false;
     try {
-        return LEGACY_V2_KEYS.some((key) => localStorage.getItem(key));
+        return LEGACY_V2_KEYS.some((key) => {
+            const raw = localStorage.getItem(key);
+            if (!raw) return false;
+            try {
+                const parsed = JSON.parse(raw);
+                const candidate =
+                    parsed && typeof parsed === 'object' && 'gameState' in parsed
+                        ? parsed.gameState
+                        : parsed;
+                if (!candidate || typeof candidate !== 'object') return false;
+                const version =
+                    typeof candidate.versionNumberString === 'string'
+                        ? candidate.versionNumberString
+                        : typeof candidate.versionNumber === 'string'
+                          ? candidate.versionNumber
+                          : undefined;
+                if (!version) return false;
+                const normalized = version.trim();
+                if (!normalized) return false;
+                return LEGACY_VERSION_PREFIXES.some((prefix) => normalized.startsWith(prefix));
+            } catch {
+                return false;
+            }
+        });
     } catch {
         return false;
     }

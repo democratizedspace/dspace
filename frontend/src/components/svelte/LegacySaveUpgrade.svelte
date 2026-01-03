@@ -93,21 +93,20 @@
 
         const artifacts = detectLegacyArtifacts();
         const hasV1Artifacts = artifacts.hasV1Cookies || normalizedV1Items.length > 0;
+        const hasV3State = hasIndexedDbState || Boolean(usingFallback);
+        const hasLegacyV2 =
+            Boolean(pendingLocalState) ||
+            (!hasIndexedDbState && !usingFallback && hasLegacyV2Keys) ||
+            (!hasIndexedDbState && artifacts.hasV2LocalStorage);
 
         detection = {
             loading: false,
-            hasV3State: hasIndexedDbState || Boolean(usingFallback),
-            hasLegacyV2: Boolean(
-                pendingLocalState ||
-                    (hasLegacyV2Keys && indexedDbSupported) ||
-                    artifacts.hasV2LocalStorage
-            ),
+            hasV3State,
+            hasLegacyV2,
             hasV1Cookies: hasV1Artifacts,
             indexedDbSupported,
             usingFallback: Boolean(usingFallback),
-            conflict:
-                (hasV1Artifacts || Boolean(pendingLocalState)) &&
-                (hasIndexedDbState || Boolean(usingFallback)),
+            conflict: (hasV1Artifacts || Boolean(pendingLocalState)) && hasV3State,
             pendingLocalState,
             localVsIndexedMismatch:
                 Boolean(legacyV2State) && Boolean(indexedDbState) && !statesMatch,

@@ -22,13 +22,23 @@ describe('detectLegacyArtifacts', () => {
         expect(result.hasV2LocalStorage).toBe(false);
     });
 
-    test('detects legacy v2 localStorage keys', () => {
-        localStorage.setItem('gameState', JSON.stringify({ inventory: { 1: 1 } }));
+    test('detects legacy v2 localStorage keys with version markers', () => {
+        localStorage.setItem('gameState', JSON.stringify({ versionNumberString: '2.1' }));
 
         const result = detectLegacyArtifacts();
 
         expect(result.hasV1Cookies).toBe(false);
         expect(result.hasV2LocalStorage).toBe(true);
+    });
+
+    test('ignores v3 localStorage snapshots', () => {
+        localStorage.setItem('gameState', JSON.stringify({ versionNumberString: '3' }));
+        localStorage.setItem('gameStateBackup', JSON.stringify({ versionNumberString: '3.0' }));
+
+        const result = detectLegacyArtifacts();
+
+        expect(result.hasV1Cookies).toBe(false);
+        expect(result.hasV2LocalStorage).toBe(false);
     });
 
     test('returns false when no artifacts are present', () => {
