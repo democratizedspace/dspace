@@ -2,6 +2,7 @@
 import Page from '../components/Page.astro';
 import LogoutPanel from '../components/svelte/LogoutPanel.svelte';
 import DataReset from '../components/svelte/DataReset.svelte';
+import QuestGraphSetting from '../components/svelte/QuestGraphSetting.svelte';
 import QaCheatsToggle from '../components/svelte/QaCheatsToggle.svelte';
 import LegacySaveUpgrade from '../components/svelte/LegacySaveUpgrade.svelte';
 import { getCheatsAvailabilityFlag } from '../utils/cheatsAvailability';
@@ -18,6 +19,7 @@ const legacyCookieKeys = getCookieKeysFromStore(Astro.cookies);
         {cheatsAvailable ? (
             <QaCheatsToggle cheatsAvailable={cheatsAvailable} client:idle />
         ) : null}
+        <QuestGraphSetting client:idle />
         <LegacySaveUpgrade
             legacyV1Items={legacyV1Items}
             legacyCookieKeys={legacyCookieKeys}

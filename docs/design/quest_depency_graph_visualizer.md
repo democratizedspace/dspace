@@ -189,7 +189,7 @@ Rendering notes:
 
 - Add an Astro wrapper component inserted into the `/quests` page between Active and Completed sections.
 - The wrapper renders:
-  - A heading: “Quest Graph (QA)”
+  - A heading: “Quest dependency map”
   - A short description + warning banner if diagnostics exist
   - The Svelte island: `<QuestGraphVisualizer client:visible />`
 
@@ -299,4 +299,3 @@ Note: Cytoscape community guidance suggests starting with dagre for DAGs; ELK ca
   - insert Astro wrapper between Active and Completed sections
 - `docs/qa/v3/quest-dependency-graph-visualizer.md`
   - this design doc
-

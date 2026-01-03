@@ -12,6 +12,9 @@ const LS_BACKUP_KEY = 'gameStateBackup';
 const META_KEY = '_meta';
 const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
+export const DEFAULT_SETTINGS = Object.freeze({
+    showQuestGraphVisualizer: false,
+});
 
 let dbPromise;
 let dbInstance;
@@ -201,8 +204,24 @@ const initializeGameState = () => ({
     quests: {},
     inventory: {},
     processes: {},
+    settings: { ...DEFAULT_SETTINGS },
     [META_KEY]: { lastUpdated: Date.now() },
 });
+
+const normalizeSettings = (settings) => {
+    if (!settings || typeof settings !== 'object') {
+        return { ...DEFAULT_SETTINGS };
+    }
+
+    const normalized = {
+        ...DEFAULT_SETTINGS,
+        ...settings,
+    };
+
+    normalized.showQuestGraphVisualizer = Boolean(normalized.showQuestGraphVisualizer);
+
+    return normalized;
+};
 
 const ensureMeta = (state) => {
     const meta = state[META_KEY];
@@ -229,6 +248,7 @@ export const validateGameState = (state) => {
     if (typeof state.processes !== 'object' || state.processes === null) {
         state.processes = {};
     }
+    state.settings = normalizeSettings(state.settings);
     ensureMeta(state);
     return state;
 };

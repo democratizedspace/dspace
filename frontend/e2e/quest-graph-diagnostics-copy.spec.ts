@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, enableQuestGraphVisualizer, waitForHydration } from './test-helpers';
 
 test.describe('Quest graph diagnostics tools', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
+        await enableQuestGraphVisualizer(page);
     });
 
     test('copies a diagnostics report and supports jumping from diagnostics', async ({

@@ -228,6 +228,22 @@ export async function clearUserData(page: Page): Promise<void> {
     await purgeClientState(page);
 }
 
+export async function enableQuestGraphVisualizer(page: Page): Promise<void> {
+    await page.goto('/settings');
+    await page.waitForLoadState('networkidle');
+    await waitForHydration(page);
+
+    const toggle = page.getByTestId('quest-graph-visualizer-toggle');
+    await expect(toggle).toBeVisible();
+
+    const isEnabled = (await toggle.getAttribute('aria-pressed')) === 'true';
+    if (!isEnabled) {
+        await toggle.click();
+    }
+
+    await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+}
+
 export async function waitForQuestRecordByTitle(
     page: Page,
     title: string,

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, enableQuestGraphVisualizer, waitForHydration } from './test-helpers';
 
 // Extend Window interface for test-only exposed Cytoscape instance
 declare global {
@@ -13,6 +13,7 @@ declare global {
 test.describe('Quest graph "Show unreachable" toggle', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
+        await enableQuestGraphVisualizer(page);
     });
 
     test('should show unreachable count and disable when no unreachable nodes exist', async ({
