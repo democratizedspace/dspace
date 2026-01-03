@@ -534,10 +534,11 @@
         includeDirect: highlightDirectNeighbors,
         includeAncestors: highlightAncestors,
         includeDescendants: highlightDescendants,
+        includeMultiParent: highlightMultiParent,
     });
 
     const updateHighlights = (key = focusedKey, options = highlightOptions()) => {
-        applyMultiParentHighlight(highlightMultiParent);
+        applyMultiParentHighlight(options.includeMultiParent);
         highlightFocus(key, options);
     };
 
@@ -846,7 +847,12 @@
     }
 
     $: if (mapInitialized && activeTab === 'map') {
-        updateHighlights();
+        updateHighlights(focusedKey, {
+            includeDirect: highlightDirectNeighbors,
+            includeAncestors: highlightAncestors,
+            includeDescendants: highlightDescendants,
+            includeMultiParent: highlightMultiParent,
+        });
     }
 
     const fitGraph = () => {
