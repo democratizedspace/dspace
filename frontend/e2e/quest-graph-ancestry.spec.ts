@@ -65,24 +65,27 @@ test.describe('Quest graph ancestor and descendant highlighting', () => {
         await loadFixtureGraph(page);
         await focusQuest(page, 'Fixture Grandchild Quest', GRANDCHILD_KEY);
 
-        await expect.poll(() => hasClass(page, PARENT_KEY, 'highlight-parent')).toBe(true);
+        await expect.poll(() => hasClass(page, CHILD_KEY, 'highlight-parent')).toBe(true);
 
         await page.getByLabel('Highlight all ancestors').check();
         await expect.poll(() => hasClass(page, PARENT_KEY, 'highlight-ancestor')).toBe(true);
         await expect.poll(() => hasClass(page, ROOT_KEY, 'highlight-ancestor')).toBe(true);
 
         await page.getByLabel('Highlight direct neighbors').uncheck();
-        await expect.poll(() => hasClass(page, PARENT_KEY, 'highlight-parent')).toBe(false);
+        await expect.poll(() => hasClass(page, CHILD_KEY, 'highlight-parent')).toBe(false);
 
-        const ancestorStates = await page.evaluate(() => {
-            const cy = window.__questGraphCy;
-            const parent = cy?.getElementById('fixtures/parent.json');
-            const root = cy?.getElementById('welcome/howtodoquests.json');
-            return {
-                parentAncestor: parent?.hasClass('highlight-ancestor') ?? false,
-                rootAncestor: root?.hasClass('highlight-ancestor') ?? false,
-            };
-        });
+        const ancestorStates = await page.evaluate(
+            ([parentKey, rootKey]) => {
+                const cy = window.__questGraphCy;
+                const parent = cy?.getElementById(parentKey);
+                const root = cy?.getElementById(rootKey);
+                return {
+                    parentAncestor: parent?.hasClass('highlight-ancestor') ?? false,
+                    rootAncestor: root?.hasClass('highlight-ancestor') ?? false,
+                };
+            },
+            [PARENT_KEY, ROOT_KEY]
+        );
 
         expect(ancestorStates.parentAncestor).toBe(true);
         expect(ancestorStates.rootAncestor).toBe(true);
