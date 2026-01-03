@@ -53,7 +53,8 @@ For each chosen checklist line:
 
 ## Updating the checklist with links (required)
 - Append test links at the end of the checklist line in `docs/qa/v3.md` using:
-  `([<FILE_LABEL:TEST_NAME_SUBSTRING>](relative/path/to/test#LSTART[-LEND]))`. Multiple links live
+  `([<wallet-page.spec.ts:renders balances and process card>](../../../frontend/e2e/wallet-page.spec.ts#L5-L20))`.
+  Multiple links live
   inside one set of parentheses, comma-separated.
   - `FILE_LABEL` must match the filename or trailing path segment (e.g. `wallet-page.spec.ts`,
     `questGraph.test.ts`).
