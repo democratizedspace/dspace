@@ -1,7 +1,7 @@
 # QA checklist → automated test coverage prompts
 
-Use these prompts to steadily convert the v3 QA checklist into lines backed by automated tests while
-keeping each PR small and reviewable.
+Use these prompts to convert the v3 QA checklist into lines backed by automated tests while keeping
+each PR small and reviewable.
 
 ## QA-test-coverage prompt
 Use this when you want to link QA checklist items to existing or new automated tests.
@@ -9,16 +9,15 @@ Use this when you want to link QA checklist items to existing or new automated t
 ```markdown
 # DSPACE QA checklist → automated test coverage
 
-You are Codex working in the democratizedspace/dspace repository on branch `v3`. Your mission is to
-pick a small set of unchecked QA checklist items in `docs/qa/v3.md` that lack linked automated
+You are Codex working in the democratizedspace/dspace repository on the current branch. Your mission
+is to pick a small set of unchecked QA checklist items in `docs/qa/v3.md` that lack linked automated
 coverage, add or locate tests for them, and append the links inline.
 
 ## Guardrails
-- If this repo contains relevant AGENTS.md files (per-directory instructions), read them before
-  editing and obey the most specific instructions.
+- Obey any applicable AGENTS.md instructions before editing.
 - CI enforces QA-doc test-link freshness for `docs/qa/v3.md` and `docs/qa/v3.1.md` via
-  `tests/qaDocsLinkFreshness.test.ts`; expect to update `#L...` anchors (or widen to
-  `#LSTART-LEND`) so they still include the referenced test snippet.
+  `tests/qaDocsLinkFreshness.test.ts`; expect to refresh `#L...` anchors (or widen to
+  `#LSTART-LEND`) so they still wrap the referenced snippet.
 - Keep scope tight: default to **3–5** checklist items, hard cap **6** per run.
 - Do not refactor or rename unrelated code; only touch the chosen checklist lines and the tests you
   add/adjust.
@@ -26,10 +25,10 @@ coverage, add or locate tests for them, and append the links inline.
 
 ## Selecting checklist items (small batches)
 1) Open `docs/qa/v3.md` and list unchecked lines without linked tests.
-   - Use the heuristic: linked lines contain `#L` anchors inside parentheses.
+   - Heuristic: linked lines contain `#L` anchors inside parentheses.
    - Helper commands:
-     - `rg "^- \[ \]" docs/qa/v3.md | rg -v "#L"` → unchecked + unlinked (heuristic).
-     - `rg "\\[ \\] .*#L" docs/qa/v3.md` → shows already-linked items.
+     - `rg "^- \\[ \\]" docs/qa/v3.md | rg -v "#L"` → unchecked + unlinked (heuristic).
+     - `rg "\\[ \\] .*#L" docs/qa/v3.md` → already-linked items.
      - `rg "\\[ \\] .*" docs/qa/v3.md | rg -v "#L"` → candidate unlinked items.
 2) Choose 3–5 items (max 6) that are deterministic and automatable first (routes loading, schema or
    validation checks, map/graph behaviors, import/export flows, etc.).
@@ -40,9 +39,9 @@ coverage, add or locate tests for them, and append the links inline.
 ## Finding or creating tests for each selected item
 For each chosen checklist line:
 1) Search for existing coverage before writing new tests.
-   - Likely locations: `frontend/e2e/*.spec.ts`, `tests/*.test.ts`, `frontend/tests`, and any test
-     directories near the relevant feature.
-   - Use targeted searches:
+   - Likely locations: `frontend/e2e/*.spec.ts`, `tests/*.test.ts`, `frontend/tests`, and test
+     directories near the feature.
+   - Targeted searches:
      - `rg "<keyword>" frontend/e2e` for route/UI behaviors.
      - `rg "<keyword>" tests` for root/unit/integration coverage.
      - `rg "<route or selector>" frontend/src` to locate the page/component under test.
@@ -57,9 +56,9 @@ For each chosen checklist line:
 
 ## Updating the checklist with links (required)
 - Append test links at the end of the checklist line in `docs/qa/v3.md` using the enforced pattern:
-  `([<FILE_LABEL:TEST_NAME_SUBSTRING>](relative/path/to/test#LSTART[-LEND]))`. Multiple links go
-  inside one set of parentheses, comma-separated.
-  - `FILE_LABEL` should match the target filename or its trailing path segment (e.g.
+  `([<FILE_LABEL:TEST_NAME_SUBSTRING>](relative/path/to/test#LSTART[-LEND]))`. Multiple links go in
+  one set of parentheses, comma-separated.
+  - `FILE_LABEL` should match the filename or trailing path segment (e.g.
     `wallet-page.spec.ts`, `questGraph.test.ts`).
   - `TEST_NAME_SUBSTRING` must literally appear within the linked line range (often the `it(` title
     or a unique assertion string) so the freshness checker can validate the anchor.
@@ -79,8 +78,8 @@ For each chosen checklist line:
   - `rg -n "qaDocsLinkFreshness" -S .`
   - `rg -n "QA docs test link freshness" -S tests`
 - Run the relevant subset locally (at least the runner(s) that cover your new/modified tests).
-- Record every command and result in the PR summary. If a required command can’t run locally,
-  note why (environment limit) and mark it as a warning.
+- Record every command and result in the PR summary. If a required command can’t run locally, note
+  why (environment limit) and mark it as a warning.
 
 ## PR summary requirements
 - List the exact checklist items you covered (quote the lines) and the test files linked/added for
