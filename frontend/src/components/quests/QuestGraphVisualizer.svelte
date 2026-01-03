@@ -1,13 +1,16 @@
 <script>
     import { onMount, tick } from 'svelte';
     import QuestGraphCard from './QuestGraphCard.svelte';
+    import { formatDiagnosticsReport, resolveRootKey } from '../../lib/quests/questGraphDiagnostics';
     import {
-        formatDiagnosticsReport,
-        resolveRootKey,
-    } from '../../lib/quests/questGraphDiagnostics';
+        buildQuestGraphSnapshot,
+        serializeQuestGraphSnapshot,
+    } from '../../lib/quests/questGraphSnapshot';
     import { copyToClipboard } from '../../utils/copyToClipboard.js';
 
     export let graph;
+    export let version = 'unknown';
+    export let buildTimestamp = '';
 
     const byKey = graph?.byKey ?? {};
     let visualizerEl = null;
@@ -39,6 +42,8 @@
     let highlightDirectNeighbors = true;
     let highlightAncestors = false;
     let highlightDescendants = false;
+    let downloadStatus = 'idle';
+    let downloadError = '';
 
     const compareNodes = (a, b) => {
         if (!a || !b) return a ? -1 : b ? 1 : 0;
@@ -325,6 +330,38 @@
             copyStatus = 'idle';
             copyError =
                 error instanceof Error && error.message ? error.message : 'Failed to copy report';
+        }
+    };
+
+    const handleDownloadSnapshot = () => {
+        downloadError = '';
+        try {
+            const snapshot = buildQuestGraphSnapshot(graph, {
+                version,
+                buildTimestamp,
+            });
+            const serialized = serializeQuestGraphSnapshot(snapshot);
+            if (typeof Blob === 'undefined' || typeof URL === 'undefined') {
+                throw new Error('Downloads are not supported in this environment');
+            }
+            const blob = new Blob([serialized], { type: 'application/json;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const timestampSafe = snapshot.capturedAt.replace(/[:.]/g, '-');
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = `quest-graph-${timestampSafe}.json`;
+            anchor.click();
+            URL.revokeObjectURL(url);
+            downloadStatus = 'downloaded';
+            setTimeout(() => {
+                downloadStatus = 'idle';
+            }, 2000);
+        } catch (error) {
+            downloadStatus = 'idle';
+            downloadError =
+                error instanceof Error && error.message
+                    ? error.message
+                    : 'Failed to download snapshot';
         }
     };
 
@@ -1183,6 +1220,14 @@
                     <div class="diag-actions">
                         <button
                             type="button"
+                            class="pill ghost"
+                            data-testid="download-graph-json"
+                            on:click={handleDownloadSnapshot}
+                        >
+                            Download graph JSON
+                        </button>
+                        <button
+                            type="button"
                             class="pill"
                             data-testid="copy-diagnostics-report"
                             on:click={handleCopyReport}
@@ -1192,8 +1237,14 @@
                         {#if copyStatus === 'copied'}
                             <span class="status success" aria-live="polite">Copied</span>
                         {/if}
+                        {#if downloadStatus === 'downloaded'}
+                            <span class="status success" aria-live="polite">Downloaded</span>
+                        {/if}
                         {#if copyError}
                             <span class="status error" aria-live="assertive">{copyError}</span>
+                        {/if}
+                        {#if downloadError}
+                            <span class="status error" aria-live="assertive">{downloadError}</span>
                         {/if}
                     </div>
                 </div>
