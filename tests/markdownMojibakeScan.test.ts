@@ -74,7 +74,5 @@ describe('docs markdown mojibake scan', () => {
       ].join('\n');
       expect.fail(message);
     }
-
-    expect(offenders).toEqual([]);
   });
 });
