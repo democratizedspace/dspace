@@ -13,10 +13,15 @@ const resolveOpenAIClient = () => {
     return OpenAI;
 };
 
-const toResponseMessage = (message) => ({
-    role: message.role,
-    content: [{ type: 'text', text: message.content }],
-});
+const contentTypeForRole = (role) => (role === 'assistant' ? 'output_text' : 'input_text');
+
+const toResponseMessage = (message) => {
+    const type = contentTypeForRole(message.role);
+    return {
+        role: message.role,
+        content: [{ type, text: message.content }],
+    };
+};
 
 const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';

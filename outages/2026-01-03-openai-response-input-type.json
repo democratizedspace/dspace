@@ -1,0 +1,12 @@
+{
+  "id": "2026-01-03-openai-response-input-type",
+  "date": "2026-01-03",
+  "component": "chat-openai-client",
+  "longForm": "outages/2026-01-03-openai-response-input-type.md",
+  "rootCause": "The OpenAI Responses API payload sent `content.type: text`, which the endpoint rejects in favor of input_text/output_text, so every chat request returned HTTP 400.",
+  "resolution": "Mapped chat history roles to the Responses API content types (input_text for system/user prompts and output_text for assistant turns) and expanded unit coverage to lock the schema.",
+  "references": [
+    "frontend/src/utils/openAI.js",
+    "frontend/__tests__/openAI.test.js"
+  ]
+}

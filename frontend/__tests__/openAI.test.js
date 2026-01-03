@@ -62,13 +62,14 @@ describe('gpt-5 chat responses utility', () => {
         const call = createResponseMock.mock.calls[0][0];
         expect(call.model).toBe('gpt-5.2');
         expect(call.input[0].role).toBe('system');
+        expect(call.input[0].content[0].type).toBe('input_text');
         expect(call.input[0].content[0].text).toContain('GPT-5');
         expect(call.input[1]).toEqual(
             expect.objectContaining({
                 role: 'system',
                 content: [
                     expect.objectContaining({
-                        type: 'text',
+                        type: 'input_text',
                         text: expect.stringContaining('DSPACE knowledge base:'),
                     }),
                 ],
@@ -82,7 +83,7 @@ describe('gpt-5 chat responses utility', () => {
             role: 'assistant',
             content: [
                 {
-                    type: 'text',
+                    type: 'output_text',
                     text: 'Welcome! How can I assist you today?',
                 },
             ],
@@ -93,12 +94,13 @@ describe('gpt-5 chat responses utility', () => {
         await GPT35Turbo([{ role: 'user', content: 'hello' }]);
         const call = createResponseMock.mock.calls[0][0];
         expect(call.input[0]).toEqual(expect.objectContaining({ role: 'system' }));
+        expect(call.input[0].content[0].type).toBe('input_text');
         expect(call.input[1]).toEqual(
             expect.objectContaining({
                 role: 'system',
                 content: [
                     expect.objectContaining({
-                        type: 'text',
+                        type: 'input_text',
                         text: expect.stringContaining('DSPACE knowledge base:'),
                     }),
                 ],
@@ -108,7 +110,7 @@ describe('gpt-5 chat responses utility', () => {
             role: 'user',
             content: [
                 {
-                    type: 'text',
+                    type: 'input_text',
                     text: 'hello',
                 },
             ],
