@@ -29,13 +29,24 @@ const buildDocFeatureIndex = async () => {
             }
 
             try {
-                const content =
-                    (typeof doc.rawContent === 'function' && (await doc.rawContent())) ||
-                    (await doc.compiledContent());
+                let content;
+
+                if (typeof doc.rawContent === 'function') {
+                    content = await doc.rawContent();
+                } else if (typeof doc.compiledContent === 'function') {
+                    content = await doc.compiledContent();
+                } else {
+                    throw new Error(`No content loader found for doc slug ${slug}`);
+                }
 
                 return [slug, detectDocFeatures(content)];
             } catch (error) {
                 console.error(`Failed to detect features for doc slug ${slug}`, error);
+
+                if (import.meta.env?.DEV) {
+                    throw error;
+                }
+
                 return [slug, []];
             }
         })
@@ -51,7 +62,8 @@ const getSlugFromHref = (href = '') => {
         return '';
     }
 
-    const trimmed = href.replace(/^\/docs\//, '').replace(/\/?$/, '');
+    const pathOnly = href.split(/[?#]/, 1)[0];
+    const trimmed = pathOnly.replace(/^\/docs\//, '').replace(/\/?$/, '');
     return trimmed.toLowerCase();
 };
 

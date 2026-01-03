@@ -1,11 +1,6 @@
-import fs from 'node:fs';
-import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { detectDocFeatures } from '../frontend/src/utils/docsSearchFeatures.js';
-
-const readDoc = (slug: string) =>
-    fs.readFileSync(path.join(process.cwd(), 'frontend/src/pages/docs/md', `${slug}.md`), 'utf8');
 
 describe('detectDocFeatures', () => {
     it('identifies link and image markers in markdown content', () => {
@@ -19,11 +14,23 @@ describe('detectDocFeatures', () => {
         ).toEqual(['link', 'image']);
     });
 
-    it('reflects features from real docs', () => {
-        const processesDoc = detectDocFeatures(readDoc('processes'));
+    it('reflects features from representative doc content', () => {
+        const processesDoc = detectDocFeatures(
+            `
+            ## Processes overview
+            Learn more with our [process guide](/docs/processes-guide).
+
+            ![Process diagram](/images/process.png)
+        `
+        );
         expect(processesDoc).toEqual(expect.arrayContaining(['link', 'image']));
 
-        const missionDoc = detectDocFeatures(readDoc('mission'));
+        const missionDoc = detectDocFeatures(
+            `
+            ## Mission
+            The mission focuses on resilience and sustainability.
+        `
+        );
         expect(missionDoc).not.toContain('link');
         expect(missionDoc).not.toContain('image');
     });

@@ -1,6 +1,8 @@
 const FEATURE_DETECTORS = {
-    link: (content) => /<a\s[^>]*href=|(?<!!)\[[^\]]+]\([^\s)]+\)/i.test(content),
-    image: (content) => /<img\s[^>]*src=|!\[[^\]]*]\([^\s)]+\)/i.test(content),
+    // The negative lookbehind `(?<!!)` ensures the `[` is not immediately preceded by `!`,
+    // so we match markdown links `[text](url)` but not image syntax `![alt](url)`.
+    link: (content) => /<a\s[^>]*href=|(?<!!)\[[^\]]+]\([^\s)]+\)/.test(content),
+    image: (content) => /<img\s[^>]*src=|!\[[^\]]*]\([^\s)]+\)/.test(content),
 };
 
 const normalizeFeatureName = (feature = '') => feature.toLowerCase().trim();

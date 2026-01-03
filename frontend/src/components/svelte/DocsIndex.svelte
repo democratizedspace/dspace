@@ -44,6 +44,8 @@
         return { normalized, operators, terms };
     };
 
+    // Note: `terms` may be an empty array for operator-only queries (e.g. "has:link").
+    // In that case, `every()` returns `true` by design, so word matching does not filter out results.
     const matchesWords = (terms, values) =>
         terms.every((term) => values.some((value) => value.includes(term)));
 
