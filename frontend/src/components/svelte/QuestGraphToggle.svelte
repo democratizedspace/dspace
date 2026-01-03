@@ -68,7 +68,7 @@
         <button
             type="button"
             class="toggle__control"
-            class:enabled={enabled}
+            class:enabled
             aria-pressed={enabled}
             aria-label="Show quest dependency map on the quests page"
             disabled={loading}
@@ -139,7 +139,9 @@
         background: #0f172a;
         color: #cbd5e1;
         cursor: pointer;
-        transition: background 0.2s ease, border-color 0.2s ease;
+        transition:
+            background 0.2s ease,
+            border-color 0.2s ease;
         display: inline-flex;
         align-items: center;
         justify-content: space-between;
