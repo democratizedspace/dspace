@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, enableQuestGraphVisualizer, waitForHydration } from './test-helpers';
 
 type QuestNodeElement = {
     id: () => string;
@@ -18,6 +18,7 @@ declare global {
 test.describe('Quest graph map keyboard accessibility', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
+        await enableQuestGraphVisualizer(page);
     });
 
     test('allows keyboard navigation to update focus and switch tabs', async ({ page }) => {
