@@ -14,7 +14,8 @@ pick a small set of unchecked QA checklist items in `docs/qa/v3.md` that lack li
 coverage, add or locate tests for them, and append the links inline.
 
 ## Guardrails
-- Read all applicable AGENTS.md files before editing; obey the most specific instructions.
+- If this repo contains relevant AGENTS.md files (per-directory instructions), read them before
+  editing and obey the most specific instructions.
 - Keep scope tight: default to **3–5** checklist items, hard cap **6** per run.
 - Do not refactor or rename unrelated code; only touch the chosen checklist lines and the tests you
   add/adjust.
@@ -52,8 +53,8 @@ For each chosen checklist line:
 
 ## Updating the checklist with links (required)
 - Append test links at the end of the checklist line in `docs/qa/v3.md` using the existing style:
-  `([<short description>](relative/path/to/test#L##))`. Multiple links go inside one parentheses,
-  comma-separated.
+  `([<short description>](relative/path/to/test#L<line-number>))`. Multiple links go inside one set
+  of parentheses, comma-separated.
 - Paths are relative to `docs/qa/v3.md` (already in `docs/qa/`); mimic existing examples.
 - The short description should summarize what the test asserts.
 
