@@ -68,7 +68,7 @@ describe('gpt-5 chat responses utility', () => {
                 role: 'system',
                 content: [
                     expect.objectContaining({
-                        type: 'text',
+                        type: 'input_text',
                         text: expect.stringContaining('DSPACE knowledge base:'),
                     }),
                 ],
@@ -82,7 +82,7 @@ describe('gpt-5 chat responses utility', () => {
             role: 'assistant',
             content: [
                 {
-                    type: 'text',
+                    type: 'output_text',
                     text: 'Welcome! How can I assist you today?',
                 },
             ],
@@ -98,7 +98,7 @@ describe('gpt-5 chat responses utility', () => {
                 role: 'system',
                 content: [
                     expect.objectContaining({
-                        type: 'text',
+                        type: 'input_text',
                         text: expect.stringContaining('DSPACE knowledge base:'),
                     }),
                 ],
@@ -108,7 +108,7 @@ describe('gpt-5 chat responses utility', () => {
             role: 'user',
             content: [
                 {
-                    type: 'text',
+                    type: 'input_text',
                     text: 'hello',
                 },
             ],
