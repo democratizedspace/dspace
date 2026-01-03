@@ -79,6 +79,22 @@ const sortCycles = (graph: QuestGraph, diagnostics: QuestDiagnostics): string[][
         .sort((left, right) => sortKeyLists(graph, left, right));
 };
 
+export const sortDiagnostics = (graph: QuestGraph): QuestDiagnostics => {
+    const diagnostics: QuestDiagnostics = graph.diagnostics ?? {
+        missingRefs: [],
+        ambiguousRefs: [],
+        unreachableNodes: [],
+        cycles: [],
+    };
+
+    return {
+        missingRefs: sortMissingRefs(graph, diagnostics),
+        ambiguousRefs: sortAmbiguousRefs(graph, diagnostics),
+        unreachableNodes: sortKeys(graph, diagnostics.unreachableNodes ?? []),
+        cycles: sortCycles(graph, diagnostics),
+    };
+};
+
 const getMultiParentNodes = (graph: QuestGraph) => {
     const nodes = graph.nodes ?? [];
     const multiParents = nodes.filter((node) => (node.requires?.length ?? 0) > 1);
@@ -138,34 +154,24 @@ export type QuestDiagnosticsReport = {
 };
 
 export const buildDiagnosticsReport = (graph: QuestGraph): QuestDiagnosticsReport => {
-    const diagnostics: QuestDiagnostics = graph.diagnostics ?? {
-        missingRefs: [],
-        ambiguousRefs: [],
-        unreachableNodes: [],
-        cycles: [],
-    };
-
+    const sortedDiagnostics = sortDiagnostics(graph);
     const rootKey = resolveRootKey(graph);
-    const missingRefs = sortMissingRefs(graph, diagnostics);
-    const ambiguousRefs = sortAmbiguousRefs(graph, diagnostics);
-    const unreachableNodes = sortKeys(graph, diagnostics.unreachableNodes ?? []);
-    const cycles = sortCycles(graph, diagnostics);
     const multiParent = getMultiParentNodes(graph);
 
     return {
         timestamp: new Date().toISOString(),
         rootKey,
         counts: {
-            missingRefs: missingRefs.length,
-            ambiguousRefs: ambiguousRefs.length,
-            unreachableNodes: unreachableNodes.length,
-            cycles: cycles.length,
+            missingRefs: sortedDiagnostics.missingRefs.length,
+            ambiguousRefs: sortedDiagnostics.ambiguousRefs.length,
+            unreachableNodes: sortedDiagnostics.unreachableNodes.length,
+            cycles: sortedDiagnostics.cycles.length,
             multiParent: multiParent.length,
         },
-        missingRefs,
-        ambiguousRefs,
-        unreachableNodes,
-        cycles,
+        missingRefs: sortedDiagnostics.missingRefs,
+        ambiguousRefs: sortedDiagnostics.ambiguousRefs,
+        unreachableNodes: sortedDiagnostics.unreachableNodes,
+        cycles: sortedDiagnostics.cycles,
         multiParent,
     };
 };

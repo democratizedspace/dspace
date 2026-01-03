@@ -5,7 +5,9 @@
         formatDiagnosticsReport,
         resolveRootKey,
     } from '../../lib/quests/questGraphDiagnostics';
+    import { serializeQuestGraph } from '../../lib/quests/questGraphSnapshot';
     import { copyToClipboard } from '../../utils/copyToClipboard.js';
+    import { isBrowser } from '../../utils/ssr.js';
 
     export let graph;
 
@@ -29,6 +31,8 @@
     let hasMounted = false;
     let copyStatus = 'idle';
     let copyError = '';
+    let downloadStatus = 'idle';
+    let downloadError = '';
     let navigatorPanel = null;
     let mapPanel = null;
     let diagnosticsPanel = null;
@@ -325,6 +329,55 @@
             copyStatus = 'idle';
             copyError =
                 error instanceof Error && error.message ? error.message : 'Failed to copy report';
+        }
+    };
+
+    const buildSnapshotFilename = () => {
+        const sanitizedRoot = (resolvedRootKey || 'quest-graph')
+            .replace(/[^a-z0-9-_]+/gi, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '');
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const rootSegment = sanitizedRoot || 'quest-graph';
+        return `${rootSegment}-snapshot-${timestamp}.json`;
+    };
+
+    const handleDownloadSnapshot = () => {
+        downloadError = '';
+        if (!graph) {
+            downloadError = 'Graph is unavailable';
+            return;
+        }
+        if (!isBrowser) {
+            downloadError = 'Download is only available in the browser';
+            return;
+        }
+        let objectUrl = '';
+        try {
+            const snapshot = serializeQuestGraph(graph);
+            if (!snapshot.trim()) {
+                throw new Error('Snapshot is empty');
+            }
+            const blob = new Blob([snapshot], { type: 'application/json' });
+            objectUrl = URL.createObjectURL(blob);
+            const anchor = document.createElement('a');
+            anchor.href = objectUrl;
+            anchor.download = buildSnapshotFilename();
+            anchor.click();
+            downloadStatus = 'downloaded';
+            setTimeout(() => {
+                downloadStatus = 'idle';
+            }, 2000);
+        } catch (error) {
+            downloadStatus = 'idle';
+            downloadError =
+                error instanceof Error && error.message
+                    ? error.message
+                    : 'Failed to download graph JSON';
+        } finally {
+            if (objectUrl) {
+                URL.revokeObjectURL(objectUrl);
+            }
         }
     };
 
@@ -1184,13 +1237,27 @@
                         <button
                             type="button"
                             class="pill"
+                            data-testid="download-graph-json"
+                            on:click={handleDownloadSnapshot}
+                        >
+                            Download graph JSON
+                        </button>
+                        <button
+                            type="button"
+                            class="pill"
                             data-testid="copy-diagnostics-report"
                             on:click={handleCopyReport}
                         >
                             Copy report
                         </button>
+                        {#if downloadStatus === 'downloaded'}
+                            <span class="status success" aria-live="polite">Downloaded</span>
+                        {/if}
                         {#if copyStatus === 'copied'}
                             <span class="status success" aria-live="polite">Copied</span>
+                        {/if}
+                        {#if downloadError}
+                            <span class="status error" aria-live="assertive">{downloadError}</span>
                         {/if}
                         {#if copyError}
                             <span class="status error" aria-live="assertive">{copyError}</span>
