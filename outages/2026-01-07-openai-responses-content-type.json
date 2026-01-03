@@ -1,0 +1,12 @@
+{
+  "id": "2026-01-07-openai-responses-content-type",
+  "date": "2026-01-07",
+  "component": "chat-openai-client",
+  "longForm": "outages/2026-01-07-openai-responses-content-type.md",
+  "rootCause": "Chat sent Responses API content blocks with type text instead of input_text, so OpenAI rejected each request with 400.",
+  "resolution": "Switched chat message payloads to input_text blocks and added coverage to enforce the Responses API format.",
+  "references": [
+    "frontend/src/utils/openAI.js",
+    "frontend/tests/openAI.test.ts"
+  ]
+}

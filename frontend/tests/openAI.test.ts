@@ -36,6 +36,39 @@ describe('GPT35Turbo', () => {
         delete globalThis.__DSpaceOpenAIClient;
     });
 
+    it('formats chat messages using input_text blocks for the Responses API', async () => {
+        const resolver = vi.fn(async () => ({ output_text: 'ok' }));
+
+        globalThis.__DSpaceOpenAIClient = class extends MockResponseClient {
+            constructor() {
+                super(resolver);
+            }
+        };
+
+        await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+
+        expect(resolver).toHaveBeenCalledWith(
+            expect.objectContaining({
+                input: [
+                    {
+                        role: 'system',
+                        content: [{ type: 'input_text', text: 'system prompt' }],
+                    },
+                    {
+                        role: 'system',
+                        content: [
+                            { type: 'input_text', text: 'DSPACE knowledge base:\nknowledge' },
+                        ],
+                    },
+                    {
+                        role: 'user',
+                        content: [{ type: 'input_text', text: 'Hello' }],
+                    },
+                ],
+            })
+        );
+    });
+
     it('falls back to a supported model when the primary model is unavailable', async () => {
         const models = [];
         const resolver = vi.fn(async ({ model }) => {

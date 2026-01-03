@@ -15,7 +15,7 @@ const resolveOpenAIClient = () => {
 
 const toResponseMessage = (message) => ({
     role: message.role,
-    content: [{ type: 'text', text: message.content }],
+    content: [{ type: 'input_text', text: message.content }],
 });
 
 const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
