@@ -1,21 +1,70 @@
 ---
 import Page from '../../components/Page.astro';
 import DocsIndex from '../../components/svelte/DocsIndex.svelte';
-import sections from './json/sections.json' assert { type: 'json' };
+import sections from './json/sections.json';
+import { detectDocFeatures } from '../../utils/docsSearchFeatures.js';
 
-type DocLink = {
-    title: string;
-    href: string;
-    keywords?: string[];
-    external?: boolean;
+const docModules = await Astro.glob('./md/**/*.md');
+
+const buildDocFeatureIndex = async () => {
+    const entries = await Promise.all(
+        docModules.map(async (doc) => {
+            const slug = String(doc?.frontmatter?.slug ?? '').toLowerCase();
+
+            if (!slug) {
+                return null;
+            }
+
+            try {
+                let content;
+
+                if (typeof doc.rawContent === 'function') {
+                    content = await doc.rawContent();
+                } else if (typeof doc.compiledContent === 'function') {
+                    content = await doc.compiledContent();
+                } else {
+                    throw new Error(`No content loader found for doc slug ${slug}`);
+                }
+
+                return [slug, detectDocFeatures(content)];
+            } catch (error) {
+                console.error(`Failed to detect features for doc slug ${slug}`, error);
+
+                if (import.meta.env?.DEV) {
+                    throw error;
+                }
+
+                return [slug, []];
+            }
+        })
+    );
+
+    const filteredEntries = entries.filter((entry) => Array.isArray(entry));
+    return new Map(filteredEntries);
 };
 
-type DocsSection = {
-    title: string;
-    links: DocLink[];
+const docFeatureIndex = await buildDocFeatureIndex();
+
+const getSlugFromHref = (href = '') => {
+    const clean = href.split('#')[0].split('?')[0];
+
+    if (!clean.startsWith('/docs/')) {
+        return '';
+    }
+
+    const trimmed = clean.replace(/^\/docs\//, '').replace(/\/?$/, '');
+    return trimmed.toLowerCase();
 };
 
-const docsSections = sections as DocsSection[];
+const docsSections = sections.map((section) => ({
+    title: section.title,
+    links: section.links.map((link) => {
+        const slug = getSlugFromHref(link.href);
+        const features = slug ? docFeatureIndex.get(slug) ?? [] : [];
+
+        return { ...link, features };
+    }),
+}));
 ---
 
 <Page title="Docs">

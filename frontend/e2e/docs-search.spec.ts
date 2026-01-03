@@ -27,4 +27,22 @@ test.describe('Docs search', () => {
         await searchInput.fill('');
         await expect(page.getByRole('link', { name: 'About', exact: true })).toBeVisible();
     });
+
+    test('supports has: feature operators for docs content', async ({ page }) => {
+        await page.goto('/docs');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const searchInput = page.getByRole('searchbox', { name: /search docs/i });
+        await searchInput.fill('has:image');
+
+        await expect(page.getByRole('link', { name: 'NPCs', exact: true })).toBeVisible();
+        await expect(page.getByRole('link', { name: 'Processes', exact: true })).toBeVisible();
+        await expect(page.getByRole('link', { name: 'Mission', exact: true })).toHaveCount(0);
+
+        await searchInput.fill('has:link');
+
+        await expect(page.getByRole('link', { name: 'About', exact: true })).toBeVisible();
+        await expect(page.getByRole('link', { name: 'Mission', exact: true })).toHaveCount(0);
+    });
 });

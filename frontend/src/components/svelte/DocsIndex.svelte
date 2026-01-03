@@ -5,6 +5,7 @@
      * @property {string} href
      * @property {string[]=} keywords
      * @property {boolean=} external
+     * @property {string[]=} features
      */
 
     /**
@@ -20,22 +21,61 @@
 
     const normalize = (value) => value.toLowerCase().trim();
 
-    const matchLink = (link, normalizedQuery) => {
-        if (!normalizedQuery) {
+    const parseQuery = (value) => {
+        const normalized = normalize(value);
+        const words = normalized.split(/\s+/).filter(Boolean);
+        const operators = [];
+        const terms = [];
+
+        words.forEach((word) => {
+            if (word.startsWith('has:')) {
+                const feature = normalize(word.slice(4));
+
+                if (feature) {
+                    operators.push(feature);
+                }
+
+                return;
+            }
+
+            terms.push(word);
+        });
+
+        return { normalized, operators, terms };
+    };
+
+    // Note: `terms` may be an empty array for operator-only queries (e.g. "has:link").
+    // In that case, `every()` returns `true` by design, so word matching does not filter out results.
+    const matchesWords = (terms, values) =>
+        terms.every((term) => values.some((value) => value.includes(term)));
+
+    const matchesOperators = (operators, features = []) => {
+        if (!operators.length) {
+            return true;
+        }
+
+        const normalizedFeatures = features.map(normalize);
+        return operators.every((operator) => normalizedFeatures.includes(operator));
+    };
+
+    const matchLink = (link, parsedQuery) => {
+        if (!parsedQuery.operators.length && !parsedQuery.terms.length) {
             return true;
         }
 
         const searchableValues = [link.title, ...(link.keywords ?? [])].map(normalize);
-        const words = normalizedQuery.split(/\s+/).filter(Boolean);
 
-        return words.every((word) => searchableValues.some((value) => value.includes(word)));
+        return (
+            matchesWords(parsedQuery.terms, searchableValues) &&
+            matchesOperators(parsedQuery.operators, link.features)
+        );
     };
 
-    $: normalizedQuery = normalize(query);
+    $: parsedQuery = parseQuery(query);
     $: filteredSections = sections
         .map((section) => ({
             title: section.title,
-            links: section.links.filter((link) => matchLink(link, normalizedQuery)),
+            links: section.links.filter((link) => matchLink(link, parsedQuery)),
         }))
         .filter((section) => section.links.length > 0);
 
@@ -52,11 +92,11 @@
         aria-label="Search docs"
     />
 
-    {#if normalizedQuery && totalResults === 0}
+    {#if parsedQuery.normalized && totalResults === 0}
         <p class="empty-state">No docs found for "{query}".</p>
     {:else}
         <div class="docs-grid" data-testid="docs-grid">
-            {#each normalizedQuery ? filteredSections : sections as section}
+            {#each parsedQuery.normalized ? filteredSections : sections as section}
                 <section class="docs-section">
                     <h2>{section.title}</h2>
                     <nav aria-label={`Docs ${section.title}`}>
