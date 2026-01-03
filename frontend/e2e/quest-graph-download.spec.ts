@@ -7,7 +7,7 @@ test.describe('Quest graph snapshot download', () => {
         await clearUserData(page);
     });
 
-    test('downloads a non-empty graph JSON snapshot', async ({ page }) => {
+    test('downloads a non-empty graph JSON snapshot', async ({ page }, testInfo) => {
         await page.setViewportSize({ width: 1440, height: 900 });
         await page.goto('/quests');
         await page.waitForLoadState('networkidle');
@@ -27,9 +27,8 @@ test.describe('Quest graph snapshot download', () => {
         await downloadButton.click();
         const download = await downloadPromise;
 
-        const filePath = await download.path();
-        expect(filePath).not.toBeNull();
-        if (!filePath) return;
+        const filePath = testInfo.outputPath('quest-graph.json');
+        await download.saveAs(filePath);
 
         const content = fs.readFileSync(filePath, 'utf8');
         expect(content.trim().length).toBeGreaterThan(0);
