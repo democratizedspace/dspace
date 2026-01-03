@@ -58,12 +58,13 @@ const buildDocFeatureIndex = async () => {
 const docFeatureIndex = await buildDocFeatureIndex();
 
 const getSlugFromHref = (href = '') => {
-    if (!href.startsWith('/docs/')) {
+    const clean = href.split('#')[0].split('?')[0];
+
+    if (!clean.startsWith('/docs/')) {
         return '';
     }
 
-    const pathOnly = href.split(/[?#]/, 1)[0];
-    const trimmed = pathOnly.replace(/^\/docs\//, '').replace(/\/?$/, '');
+    const trimmed = clean.replace(/^\/docs\//, '').replace(/\/?$/, '');
     return trimmed.toLowerCase();
 };
 

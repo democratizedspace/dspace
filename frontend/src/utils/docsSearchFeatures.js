@@ -1,7 +1,7 @@
 const FEATURE_DETECTORS = {
-    // The negative lookbehind `(?<!!)` ensures the `[` is not immediately preceded by `!`,
-    // so we match markdown links `[text](url)` but not image syntax `![alt](url)`.
-    link: (content) => /<a\s[^>]*href=|(?<!!)\[[^\]]+]\([^\s)]+\)/.test(content),
+    // `(^|[^!])` ensures the `[` is not immediately preceded by `!`, so we match markdown links
+    // `[text](url)` but not image syntax `![alt](url)`.
+    link: (content) => /<a\s[^>]*href=|(^|[^!])\[[^\]]+]\([^\s)]+\)/.test(content),
     image: (content) => /<img\s[^>]*src=|!\[[^\]]*]\([^\s)]+\)/.test(content),
 };
 
