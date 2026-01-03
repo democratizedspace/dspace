@@ -1,7 +1,7 @@
 <script>
     import Quest from './Quest.svelte';
     import Chip from '../../../components/svelte/Chip.svelte';
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import { questFinished, canStartQuest } from '../../../utils/gameState.js';
     import { listCustomQuests } from '../../../utils/customcontent.js';
     import { loadGameState, state, ready } from '../../../utils/gameState/common.js';
@@ -102,10 +102,10 @@
             console.error('Unable to load custom quests for listing:', error);
             customQuestRecords = [];
         }
+    });
 
-        return () => {
-            unsubscribeState?.();
-        };
+    onDestroy(() => {
+        unsubscribeState?.();
     });
 
     $: normalizedBuiltInQuests = normalizeQuestList(quests);

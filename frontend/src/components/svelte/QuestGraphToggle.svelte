@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import {
         loadGameState,
         ready,
@@ -27,10 +27,10 @@
         unsubscribe = gameStateStore.subscribe((value) => syncFromState(value));
         hydrated = true;
         loading = false;
+    });
 
-        return () => {
-            unsubscribe?.();
-        };
+    onDestroy(() => {
+        unsubscribe?.();
     });
 
     const persistSetting = async (nextValue) => {
