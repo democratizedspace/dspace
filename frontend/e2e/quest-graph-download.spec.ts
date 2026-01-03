@@ -9,13 +9,21 @@ test.describe('Quest graph snapshot download', () => {
 
     test('downloads a non-empty graph JSON snapshot', async ({ page }, testInfo) => {
         await page.setViewportSize({ width: 1440, height: 900 });
+        await page.goto('/settings');
+        const graphToggle = page.getByTestId('quest-graph-visualizer-toggle');
+        await expect(graphToggle).toBeVisible({ timeout: 10000 });
+        const isEnabled = (await graphToggle.getAttribute('aria-pressed')) === 'true';
+        if (!isEnabled) {
+            await graphToggle.click();
+        }
+
         await page.goto('/quests');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
         const visualizer = page.locator('.visualizer');
+        await expect(visualizer).toBeVisible({ timeout: 30000 });
         await visualizer.scrollIntoViewIfNeeded();
-        await expect(visualizer).toBeVisible();
 
         const diagnosticsTab = page.getByRole('tab', { name: 'Diagnostics' });
         await diagnosticsTab.click();

@@ -1,7 +1,10 @@
 <script>
     import { onMount, tick } from 'svelte';
     import QuestGraphCard from './QuestGraphCard.svelte';
-    import { formatDiagnosticsReport, resolveRootKey } from '../../lib/quests/questGraphDiagnostics';
+    import {
+        formatDiagnosticsReport,
+        resolveRootKey,
+    } from '../../lib/quests/questGraphDiagnostics';
     import {
         buildQuestGraphSnapshot,
         serializeQuestGraphSnapshot,

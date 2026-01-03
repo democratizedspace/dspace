@@ -4,11 +4,7 @@ import {
     type QuestDiagnosticsReport,
 } from './questGraphDiagnostics';
 import type { QuestEdge, QuestGraph } from './questGraph';
-import {
-    compareQuestNodeKeys,
-    sortQuestNodeKeys,
-    sortQuestNodes,
-} from './questGraphOrdering';
+import { compareQuestNodeKeys, sortQuestNodeKeys, sortQuestNodes } from './questGraphOrdering';
 
 type SnapshotMetadata = {
     version?: string;

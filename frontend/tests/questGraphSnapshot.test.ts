@@ -85,10 +85,7 @@ describe('quest graph snapshot', () => {
             'groupB/beta.json',
             'groupC/gamma.json',
         ]);
-        expect(snapshot.nodes[0]?.requires).toEqual([
-            'groupB/beta.json',
-            'groupC/gamma.json',
-        ]);
+        expect(snapshot.nodes[0]?.requires).toEqual(['groupB/beta.json', 'groupC/gamma.json']);
 
         expect(snapshot.edges.map((edge) => `${edge.from}->${edge.to}`)).toEqual([
             'groupB/beta.json->groupA/alpha.json',

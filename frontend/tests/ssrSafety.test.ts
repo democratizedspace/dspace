@@ -66,7 +66,7 @@ describe('SSR Safety - ssr.js utility behavior', () => {
 });
 
 describe('SSR Safety - Static analysis of source files', () => {
-    const frontendDir = path.join(process.cwd());
+    const frontendDir = path.resolve(__dirname, '..');
 
     describe('JavaScript utility files', () => {
         it('files using localStorage should import isBrowser from ssr.js', () => {

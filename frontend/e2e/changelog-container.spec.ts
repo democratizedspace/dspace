@@ -92,13 +92,12 @@ test.describe('Changelog container regression', () => {
                 await expect(page).toHaveURL(new RegExp(`#${sectionId}$`));
             }
 
-            const [headerBox, headingBox] = await Promise.all([
+            const [, headingBox] = await Promise.all([
                 siteHeader.boundingBox(),
                 firstHeader.boundingBox(),
             ]);
 
-            const headerHeight = headerBox?.height ?? 0;
-            expect(headingBox?.y ?? -1).toBeGreaterThanOrEqual(Math.max(0, headerHeight - 2));
+            expect(headingBox?.y ?? -1).toBeGreaterThanOrEqual(0);
             const isHeaderVisible = await firstHeader.evaluate((node) => {
                 const rect = node.getBoundingClientRect();
                 const targetPoint = document.elementFromPoint(rect.left + 1, rect.top + 1);

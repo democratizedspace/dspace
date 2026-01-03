@@ -10,10 +10,7 @@ export type QuestNodeLookup<T extends QuestNodeLike> =
 
 export const comparatorKeys: Array<keyof QuestNodeLike> = ['group', 'title', 'canonicalKey'];
 
-export const compareQuestNodes = <T extends QuestNodeLike | undefined>(
-    a?: T,
-    b?: T
-): number => {
+export const compareQuestNodes = <T extends QuestNodeLike | undefined>(a?: T, b?: T): number => {
     if (!a || !b) {
         return a ? -1 : b ? 1 : 0;
     }
