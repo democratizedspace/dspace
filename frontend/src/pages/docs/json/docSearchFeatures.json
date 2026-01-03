@@ -1,0 +1,253 @@
+[
+    {
+        "href": "/docs/3dprinting",
+        "features": []
+    },
+    {
+        "href": "/docs/about",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/achievements",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/amazing",
+        "features": [
+            "link",
+            "image"
+        ]
+    },
+    {
+        "href": "/docs/authentication",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/backups",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/bounties",
+        "features": []
+    },
+    {
+        "href": "/docs/changelog",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/chemistry-lab",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/cloud-sync",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/contribute",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/custom-quest-system",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/db-benchmark",
+        "features": []
+    },
+    {
+        "href": "/docs/dCarbon",
+        "features": [
+            "link",
+            "image"
+        ]
+    },
+    {
+        "href": "/docs/dwatt",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/electricity",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/faq",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/glossary",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/guilds",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/hydroponics",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/inventory",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/mission",
+        "features": []
+    },
+    {
+        "href": "/docs/new-quests",
+        "features": []
+    },
+    {
+        "href": "/docs/npcs",
+        "features": [
+            "link",
+            "image"
+        ]
+    },
+    {
+        "href": "/docs/processes",
+        "features": [
+            "link",
+            "image"
+        ]
+    },
+    {
+        "href": "/docs/prompts-codex",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/prs",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/quest-contribution",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/quest-guidelines",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/quest-schema",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/quest-submission",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/quest-template",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/quest-trees",
+        "features": []
+    },
+    {
+        "href": "/docs/realtime",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/roadmap",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/rockets",
+        "features": []
+    },
+    {
+        "href": "/docs/rollback",
+        "features": []
+    },
+    {
+        "href": "/docs/schema-versioning",
+        "features": []
+    },
+    {
+        "href": "/docs/self-hosting",
+        "features": []
+    },
+    {
+        "href": "/docs/solar",
+        "features": []
+    },
+    {
+        "href": "/docs/team",
+        "features": [
+            "link",
+            "image"
+        ]
+    },
+    {
+        "href": "/docs/titles",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/token-place",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/ui-lifecycle",
+        "features": [
+            "link"
+        ]
+    },
+    {
+        "href": "/docs/user-journeys",
+        "features": []
+    }
+]

@@ -30,6 +30,13 @@ const SECTIONS_FIXTURE = [
             },
         ],
     },
+    {
+        title: 'Showcase',
+        links: [
+            { title: 'Amazing', href: '/docs/amazing', keywords: ['image'] },
+            { title: 'Bounties', href: '/docs/bounties', keywords: ['tokens'] },
+        ],
+    },
 ];
 
 describe('DocsIndex component', () => {
@@ -55,5 +62,27 @@ describe('DocsIndex component', () => {
                 name: 'Quest Development Guidelines',
             })
         ).toBeInTheDocument();
+    });
+
+    it('supports has:link operator', async () => {
+        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+
+        const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
+
+        await fireEvent.input(searchBox, { target: { value: 'has:link' } });
+
+        expect(screen.getByRole('link', { name: 'About' })).toBeInTheDocument();
+        expect(screen.queryByRole('link', { name: 'Bounties' })).not.toBeInTheDocument();
+    });
+
+    it('supports has:image operator', async () => {
+        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+
+        const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
+
+        await fireEvent.input(searchBox, { target: { value: 'has:image' } });
+
+        expect(screen.getByRole('link', { name: 'Amazing' })).toBeInTheDocument();
+        expect(screen.queryByRole('link', { name: 'About' })).not.toBeInTheDocument();
     });
 });

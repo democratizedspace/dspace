@@ -1,4 +1,6 @@
 <script>
+    import docSearchFeatures from '../../pages/docs/json/docSearchFeatures.json';
+
     /**
      * @typedef {Object} DocLink
      * @property {string} title
@@ -19,16 +21,46 @@
     let query = '';
 
     const normalize = (value) => value.toLowerCase().trim();
+    const normalizeHref = (href) => href.split('#')[0].replace(/\/+$/, '');
+
+    const featureMap = new Map(
+        docSearchFeatures.map((entry) => [normalizeHref(entry.href), entry.features ?? []])
+    );
+
+    const parseQuery = (normalizedQuery) => {
+        const tokens = normalizedQuery.split(/\s+/).filter(Boolean);
+        const operators = [];
+        const terms = [];
+
+        tokens.forEach((token) => {
+            const operatorMatch = token.match(/^has:(.+)$/);
+
+            if (operatorMatch) {
+                operators.push(operatorMatch[1]);
+            } else {
+                terms.push(token);
+            }
+        });
+
+        return { operators, terms };
+    };
 
     const matchLink = (link, normalizedQuery) => {
         if (!normalizedQuery) {
             return true;
         }
 
-        const searchableValues = [link.title, ...(link.keywords ?? [])].map(normalize);
-        const words = normalizedQuery.split(/\s+/).filter(Boolean);
+        const { operators, terms } = parseQuery(normalizedQuery);
 
-        return words.every((word) => searchableValues.some((value) => value.includes(word)));
+        const searchableValues = [link.title, ...(link.keywords ?? [])].map(normalize);
+        const matchesTerms = terms.every((word) =>
+            searchableValues.some((value) => value.includes(word))
+        );
+
+        const features = featureMap.get(normalizeHref(link.href)) ?? [];
+        const matchesOperators = operators.every((operator) => features.includes(operator));
+
+        return matchesTerms && matchesOperators;
     };
 
     $: normalizedQuery = normalize(query);
