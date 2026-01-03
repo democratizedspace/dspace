@@ -3,7 +3,12 @@ import {
     resolveRootKey,
     type QuestDiagnosticsReport,
 } from './questGraphDiagnostics';
-import type { QuestEdge, QuestGraph, QuestNode } from './questGraph';
+import type { QuestEdge, QuestGraph } from './questGraph';
+import {
+    compareQuestNodeKeys,
+    sortQuestNodeKeys,
+    sortQuestNodes,
+} from './questGraphOrdering';
 
 type SnapshotMetadata = {
     version?: string;
@@ -28,37 +33,19 @@ export type QuestGraphSnapshot = {
     diagnostics: QuestDiagnosticsReport;
 };
 
-const comparatorKeys: Array<keyof QuestNode> = ['group', 'title', 'canonicalKey'];
-
-const compareNodes = (a?: QuestNode, b?: QuestNode): number => {
-    if (!a || !b) {
-        return a ? -1 : b ? 1 : 0;
-    }
-
-    for (const key of comparatorKeys) {
-        if (a[key] < b[key]) return -1;
-        if (a[key] > b[key]) return 1;
-    }
-
-    return 0;
-};
-
 const sortKeys = (graph: QuestGraph, keys: string[] = []): string[] => {
     const byKey = graph.byKey ?? {};
-    return [...keys].sort((left, right) => compareNodes(byKey[left], byKey[right]));
+    return sortQuestNodeKeys(byKey, keys);
 };
 
 const sortNodes = (graph: QuestGraph): QuestGraphSnapshotNode[] => {
-    const byKey = graph.byKey ?? {};
-    return [...(graph.nodes ?? [])]
-        .map((node) => ({
-            canonicalKey: node.canonicalKey,
-            title: node.title,
-            group: node.group,
-            basename: node.basename,
-            requires: sortKeys(graph, node.requires ?? []),
-        }))
-        .sort((left, right) => compareNodes(byKey[left.canonicalKey], byKey[right.canonicalKey]));
+    return sortQuestNodes(graph.nodes ?? []).map((node) => ({
+        canonicalKey: node.canonicalKey,
+        title: node.title,
+        group: node.group,
+        basename: node.basename,
+        requires: sortKeys(graph, node.requires ?? []),
+    }));
 };
 
 const sortEdges = (graph: QuestGraph): QuestEdge[] => {
@@ -66,9 +53,9 @@ const sortEdges = (graph: QuestGraph): QuestEdge[] => {
     return [...(graph.edges ?? [])]
         .map((edge) => ({ ...edge }))
         .sort((left, right) => {
-            const fromCompare = compareNodes(byKey[left.from], byKey[right.from]);
+            const fromCompare = compareQuestNodeKeys(byKey, left.from, right.from);
             if (fromCompare !== 0) return fromCompare;
-            return compareNodes(byKey[left.to], byKey[right.to]);
+            return compareQuestNodeKeys(byKey, left.to, right.to);
         });
 };
 

@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { compareQuestNodeKeys, compareQuestNodes } from './questGraphOrdering';
 
 export type QuestNode = {
     canonicalKey: string;
@@ -56,23 +57,8 @@ const QUEST_JSON_PATH_PREFIX = './json/';
 const QUEST_PATH_REGEX = new RegExp(`^${QUEST_JSON_PATH_PREFIX.replace('.', '\\.')}(.+)$`);
 const DEFAULT_DEV_CACHE_TTL_MS = 2_000;
 
-const comparatorKeys: Array<keyof QuestNode> = ['group', 'title', 'canonicalKey'];
-
-const compareNodes = (a: QuestNode | undefined, b: QuestNode | undefined): number => {
-    if (!a || !b) {
-        return a ? -1 : b ? 1 : 0;
-    }
-
-    for (const key of comparatorKeys) {
-        if (a[key] < b[key]) return -1;
-        if (a[key] > b[key]) return 1;
-    }
-
-    return 0;
-};
-
 const compareKeys = (a: string, b: string, nodeIndex: Map<string, QuestNode>): number => {
-    return compareNodes(nodeIndex.get(a), nodeIndex.get(b));
+    return compareQuestNodeKeys(nodeIndex, a, b);
 };
 
 const normalizeRef = (ref: string): string =>
@@ -338,7 +324,7 @@ export const buildQuestGraph = (options: BuildQuestGraphOptions = {}): QuestGrap
         rawRequiresIndex.set(canonicalKey, requiresQuests);
     }
 
-    nodes.sort(compareNodes);
+    nodes.sort(compareQuestNodes);
     for (const [, list] of byBasename) {
         list.sort((a, b) => compareKeys(a, b, nodeIndex));
     }

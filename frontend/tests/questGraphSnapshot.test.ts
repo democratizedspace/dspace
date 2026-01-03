@@ -95,6 +95,41 @@ describe('quest graph snapshot', () => {
             'groupC/gamma.json->groupA/alpha.json',
         ]);
 
+        expect(snapshot.diagnostics.timestamp).toBe('2025-02-03T04:05:06.789Z');
+        expect(snapshot.diagnostics.rootKey).toBe('groupA/alpha.json');
+        expect(snapshot.diagnostics.counts).toEqual({
+            missingRefs: 1,
+            ambiguousRefs: 1,
+            unreachableNodes: 2,
+            cycles: 1,
+            multiParent: 1,
+        });
+        expect(snapshot.diagnostics.missingRefs).toEqual([
+            { from: 'groupB/beta.json', ref: 'missing.json' },
+        ]);
+        expect(snapshot.diagnostics.ambiguousRefs).toEqual([
+            {
+                from: 'groupB/beta.json',
+                ref: 'shared.json',
+                candidates: ['groupA/alpha.json', 'groupC/gamma.json'],
+            },
+        ]);
+        expect(snapshot.diagnostics.unreachableNodes).toEqual([
+            'groupA/alpha.json',
+            'groupB/beta.json',
+        ]);
+        expect(snapshot.diagnostics.cycles).toEqual([
+            ['groupA/alpha.json', 'groupC/gamma.json', 'groupA/alpha.json'],
+        ]);
+        expect(snapshot.diagnostics.multiParent).toEqual([
+            {
+                canonicalKey: 'groupA/alpha.json',
+                title: 'Alpha quest',
+                requires: ['groupB/beta.json', 'groupC/gamma.json'],
+                requiresCount: 2,
+            },
+        ]);
+
         const first = serializeQuestGraphSnapshot(snapshot);
         const second = serializeQuestGraphSnapshot(snapshot);
         expect(second).toBe(first);

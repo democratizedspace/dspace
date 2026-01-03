@@ -1,32 +1,25 @@
 import type { QuestDiagnostics, QuestGraph, QuestNode } from './questGraph';
+import {
+    compareQuestNodeKeys,
+    compareQuestNodes,
+    sortQuestNodeKeys,
+    sortQuestNodes,
+} from './questGraphOrdering';
 
 const ROOT_KEY = 'welcome/howtodoquests.json';
-const comparatorKeys: Array<keyof QuestNode> = ['group', 'title', 'canonicalKey'];
-
-const compareNodes = (a?: QuestNode, b?: QuestNode): number => {
-    if (!a || !b) {
-        return a ? -1 : b ? 1 : 0;
-    }
-
-    for (const key of comparatorKeys) {
-        if (a[key] < b[key]) return -1;
-        if (a[key] > b[key]) return 1;
-    }
-
-    return 0;
-};
 
 const compareKeys = (graph: QuestGraph, a?: string, b?: string): number => {
     const byKey = graph.byKey ?? {};
-    return compareNodes(a ? byKey[a] : undefined, b ? byKey[b] : undefined);
+    return compareQuestNodeKeys(byKey, a, b);
 };
 
 const sortKeys = (graph: QuestGraph, keys: string[] = []): string[] => {
-    return [...keys].sort((left, right) => compareKeys(graph, left, right));
+    const byKey = graph.byKey ?? {};
+    return sortQuestNodeKeys(byKey, keys);
 };
 
 const sortNodes = (graph: QuestGraph): QuestNode[] => {
-    return [...(graph.nodes ?? [])].sort(compareNodes);
+    return sortQuestNodes(graph.nodes ?? []);
 };
 
 const sortKeyLists = (graph: QuestGraph, left: string[], right: string[]): number => {
@@ -86,7 +79,7 @@ const getMultiParentNodes = (graph: QuestGraph) => {
     multiParents.sort((left, right) => {
         const diff = (right.requires?.length ?? 0) - (left.requires?.length ?? 0);
         if (diff !== 0) return diff;
-        return compareNodes(left, right);
+        return compareQuestNodes(left, right);
     });
 
     return multiParents.slice(0, 20).map((node) => ({
