@@ -109,8 +109,8 @@ What I need:
   reconciliation.
 
 Output format:
-- “Safe to merge together” list (pairs/groups) with brief rationale.
-- “Needs reconciliation” list with the overlapping file(s) or checklist lines called out.
+- "Safe to merge together" list (pairs/groups) with brief rationale.
+- "Needs reconciliation" list with the overlapping file(s) or checklist lines called out.
 - Compact overlap matrix or pairwise notes (file paths are enough).
 ```
 
