@@ -8,6 +8,12 @@
      */
 
     /**
+     * @typedef {Object} DocMetadata
+     * @property {boolean=} hasLink
+     * @property {boolean=} hasImage
+     */
+
+    /**
      * @typedef {Object} DocsSection
      * @property {string} title
      * @property {DocLink[]} links
@@ -15,27 +21,83 @@
 
     /** @type {DocsSection[]} */
     export let sections = [];
+    /** @type {Record<string, DocMetadata>} */
+    export let metadata = {};
 
     let query = '';
 
     const normalize = (value) => value.toLowerCase().trim();
 
-    const matchLink = (link, normalizedQuery) => {
-        if (!normalizedQuery) {
+    const normalizeHref = (href) => normalize(href.split('#')[0].replace(/\/+$/, ''));
+
+    const SUPPORTED_OPERATORS = {
+        link: (docMetadata) => Boolean(docMetadata?.hasLink),
+        image: (docMetadata) => Boolean(docMetadata?.hasImage),
+    };
+
+    const parseQuery = (value) => {
+        if (!value) {
+            return { terms: [], operators: [] };
+        }
+
+        const tokens = value.split(/\s+/).filter(Boolean);
+        const operators = [];
+        const terms = [];
+
+        tokens.forEach((token) => {
+            if (token.startsWith('has:')) {
+                const operator = token.slice(4);
+                if (operator in SUPPORTED_OPERATORS) {
+                    operators.push(operator);
+                    return;
+                }
+            }
+
+            terms.push(token);
+        });
+
+        return { terms, operators };
+    };
+
+    const matchesOperators = (link, operators) => {
+        if (!operators.length) {
+            return true;
+        }
+
+        const docMetadata = metadata[normalizeHref(link.href)] ?? {};
+
+        return operators.every((operator) => SUPPORTED_OPERATORS[operator](docMetadata));
+    };
+
+    const matchLink = (link, parsedQuery) => {
+        const hasOperators = parsedQuery.operators.length > 0;
+        const hasTerms = parsedQuery.terms.length > 0;
+
+        if (!hasOperators && !hasTerms) {
             return true;
         }
 
         const searchableValues = [link.title, ...(link.keywords ?? [])].map(normalize);
-        const words = normalizedQuery.split(/\s+/).filter(Boolean);
+        const words = parsedQuery.terms;
 
-        return words.every((word) => searchableValues.some((value) => value.includes(word)));
+        const hasTextMatch =
+            words.length === 0
+                ? true
+                : words.every((word) => searchableValues.some((value) => value.includes(word)));
+
+        if (!hasTextMatch) {
+            return false;
+        }
+
+        return matchesOperators(link, parsedQuery.operators);
     };
 
     $: normalizedQuery = normalize(query);
+    $: parsedQuery = parseQuery(normalizedQuery);
     $: filteredSections = sections
         .map((section) => ({
             title: section.title,
-            links: section.links.filter((link) => matchLink(link, normalizedQuery)),
+            links: section.links.filter((link) => matchLink(link, parsedQuery)),
         }))
         .filter((section) => section.links.length > 0);
 

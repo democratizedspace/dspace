@@ -1,25 +1,63 @@
 ---
 import Page from '../../components/Page.astro';
 import DocsIndex from '../../components/svelte/DocsIndex.svelte';
-import sections from './json/sections.json' assert { type: 'json' };
+import sections from './json/sections.json';
 
-type DocLink = {
-    title: string;
-    href: string;
-    keywords?: string[];
-    external?: boolean;
-};
+/**
+ * @typedef {{ hasLink?: boolean, hasImage?: boolean }} DocMetadata
+ */
 
-type DocsSection = {
-    title: string;
-    links: DocLink[];
-};
+const normalizeHref = (href) => href.toLowerCase().split('#')[0].replace(/\/+$/, '');
 
-const docsSections = sections as DocsSection[];
+const docs = await Astro.glob('./md/*.md');
+const docsBySlug = new Map(
+    docs
+        .map((doc) => {
+            const slug = doc && doc.frontmatter && doc.frontmatter.slug
+                ? String(doc.frontmatter.slug).toLowerCase()
+                : '';
+            return [slug, doc];
+        })
+        .filter(([slug]) => Boolean(slug))
+);
+
+const metadataEntries = sections.flatMap((section) =>
+    section.links.map(async (link) => {
+        if (!link.href.startsWith('/docs/')) {
+            return null;
+        }
+
+        const normalizedHref = normalizeHref(link.href);
+        const slug = normalizedHref.replace(/^\/docs\//, '');
+        const doc = docsBySlug.get(slug);
+
+        if (!doc) {
+            return null;
+        }
+
+        const compiled = await doc.compiledContent();
+
+        return [
+            normalizedHref,
+            {
+                hasLink: compiled.includes('<a '),
+                hasImage: /<img\s/i.test(compiled),
+            },
+        ];
+    })
+);
+
+/** @type {Record<string, DocMetadata>} */
+const metadata = Object.fromEntries(
+    (await Promise.all(metadataEntries)).filter((entry) => Array.isArray(entry))
+);
+
+const docsSections = sections;
+
 ---
 
 <Page title="Docs">
-    <DocsIndex sections={docsSections} client:load />
+    <DocsIndex sections={docsSections} metadata={metadata} client:load />
 </Page>
 
 <style>

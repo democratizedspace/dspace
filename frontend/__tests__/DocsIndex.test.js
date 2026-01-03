@@ -56,4 +56,19 @@ describe('DocsIndex component', () => {
             })
         ).toBeInTheDocument();
     });
+
+    it('ignores unsupported has: operators and falls back to text search', async () => {
+        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+
+        const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
+
+        await fireEvent.input(searchBox, { target: { value: 'has:video quest' } });
+
+        expect(screen.queryByRole('link', { name: 'About' })).not.toBeInTheDocument();
+        expect(
+            screen.getByRole('link', {
+                name: 'Quest Development Guidelines',
+            })
+        ).toBeInTheDocument();
+    });
 });
