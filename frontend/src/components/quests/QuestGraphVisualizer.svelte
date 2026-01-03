@@ -906,11 +906,11 @@
     };
 </script>
 
-<div class="visualizer" bind:this={visualizerEl}>
+<div class="visualizer" bind:this={visualizerEl} data-testid="quest-graph-visualizer">
     <div class="header">
         <div>
-            <p class="eyebrow">Quest Graph (QA)</p>
-            <h3>{focusedNode ? focusedNode.title : 'Quest graph'}</h3>
+            <p class="eyebrow">Quest dependency map</p>
+            <h3>{focusedNode ? focusedNode.title : 'Quest dependency map'}</h3>
             {#if focusedNode}
                 <p class="subtle">{focusedNode.canonicalKey}</p>
             {/if}
@@ -925,7 +925,7 @@
         </div>
     </div>
 
-    <div class="tab-bar" role="tablist" aria-label="Quest graph views">
+    <div class="tab-bar" role="tablist" aria-label="Quest dependency map views">
         <button
             type="button"
             class:selected={activeTab === 'navigator'}
@@ -1215,7 +1215,7 @@
                 <div class="diagnostics-toolbar">
                     <div>
                         <h4>Diagnostics</h4>
-                        <p class="subtle">Jump to nodes or copy a full report for QA.</p>
+                        <p class="subtle">Jump to nodes or copy a full report for analysis.</p>
                     </div>
                     <div class="diag-actions">
                         <button

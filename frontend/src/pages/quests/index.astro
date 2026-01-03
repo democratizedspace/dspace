@@ -1,7 +1,7 @@
 ---
 import Page from '../../components/Page.astro';
 import Quests from './svelte/Quests.svelte';
-import QuestGraphVisualizer from '../../components/quests/QuestGraphVisualizer.svelte';
+import QuestGraphVisualizerGate from '../../components/quests/QuestGraphVisualizerGate.svelte';
 import { buildQuestGraph, type QuestData } from '../../lib/quests/questGraph';
 
 const version =
@@ -23,12 +23,6 @@ const graph = buildQuestGraph({ quests: questData });
 
 <Page title="Quests">
     <Quests client:load quests={quests}>
-        <QuestGraphVisualizer
-            slot="visualizer"
-            client:visible
-            graph={graph}
-            version={version}
-            buildTimestamp={buildTimestamp}
-        />
+        <QuestGraphVisualizerGate slot="visualizer" client:load graph={graph} />
     </Quests>
 </Page>

@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import { sanitizeSaveForBackup } from '../../lib/cloudsync/githubGists';
+import { normalizeSettings, DEFAULT_SETTINGS } from '../settingsDefaults.js';
 import { isBrowser } from '../ssr.js';
 
 const DB_NAME = 'dspaceGameState';
@@ -201,6 +202,7 @@ const initializeGameState = () => ({
     quests: {},
     inventory: {},
     processes: {},
+    settings: { ...DEFAULT_SETTINGS },
     [META_KEY]: { lastUpdated: Date.now() },
 });
 
@@ -229,6 +231,7 @@ export const validateGameState = (state) => {
     if (typeof state.processes !== 'object' || state.processes === null) {
         state.processes = {};
     }
+    state.settings = normalizeSettings(state.settings);
     ensureMeta(state);
     return state;
 };

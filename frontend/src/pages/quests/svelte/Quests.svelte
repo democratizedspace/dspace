@@ -1,10 +1,10 @@
 <script>
     import Quest from './Quest.svelte';
     import Chip from '../../../components/svelte/Chip.svelte';
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import { questFinished, canStartQuest } from '../../../utils/gameState.js';
     import { listCustomQuests } from '../../../utils/customcontent.js';
-    import { state, ready } from '../../../utils/gameState/common.js';
+    import { loadGameState, state, ready } from '../../../utils/gameState/common.js';
 
     export let quests = [];
     let filteredQuests = [];
@@ -13,6 +13,8 @@
     let customQuestRecords = [];
     let normalizedBuiltInQuests = [];
     let normalizedCustomQuests = [];
+    let showQuestGraphVisualizer = false;
+    let unsubscribeState;
 
     const normalizeQuest = (entry) => {
         if (!entry) {
@@ -86,6 +88,13 @@
     onMount(async () => {
         await ready;
         mounted = true;
+        const initialState = loadGameState();
+        showQuestGraphVisualizer = Boolean(initialState.settings?.showQuestGraphVisualizer);
+
+        unsubscribeState = state.subscribe((value) => {
+            showQuestGraphVisualizer = Boolean(value?.settings?.showQuestGraphVisualizer);
+        });
+
         try {
             const questsFromStorage = await listCustomQuests();
             customQuestRecords = Array.isArray(questsFromStorage) ? questsFromStorage : [];
@@ -93,6 +102,10 @@
             console.error('Unable to load custom quests for listing:', error);
             customQuestRecords = [];
         }
+    });
+
+    onDestroy(() => {
+        unsubscribeState?.();
     });
 
     $: normalizedBuiltInQuests = normalizeQuestList(quests);
@@ -135,9 +148,11 @@
             {/each}
         </div>
 
-        <div class="visualizer-slot">
-            <slot name="visualizer" />
-        </div>
+        {#if showQuestGraphVisualizer}
+            <div class="visualizer-slot">
+                <slot name="visualizer" />
+            </div>
+        {/if}
 
         {#if finishedQuests.length > 0}
             <h2>Completed Quests</h2>

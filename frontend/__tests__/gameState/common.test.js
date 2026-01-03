@@ -21,7 +21,12 @@ describe('gameState - common utilities', () => {
 
         await resetGameState();
         const fresh = loadGameState();
-        expect(fresh).toMatchObject({ quests: {}, inventory: {}, processes: {} });
+        expect(fresh).toMatchObject({
+            quests: {},
+            inventory: {},
+            processes: {},
+            settings: { showQuestGraphVisualizer: false },
+        });
         expect(typeof fresh._meta?.lastUpdated).toBe('number');
     });
 
@@ -55,6 +60,7 @@ describe('gameState - common utilities', () => {
             'inventory',
             'processes',
             'quests',
+            'settings',
         ]);
     });
 
@@ -93,7 +99,12 @@ describe('gameState - common utilities', () => {
     test('validateGameState should fill missing sections', () => {
         const corrupted = { quests: null };
         const validated = validateGameState(corrupted);
-        expect(validated).toMatchObject({ quests: {}, inventory: {}, processes: {} });
+        expect(validated).toMatchObject({
+            quests: {},
+            inventory: {},
+            processes: {},
+            settings: { showQuestGraphVisualizer: false },
+        });
         expect(typeof validated._meta?.lastUpdated).toBe('number');
     });
 

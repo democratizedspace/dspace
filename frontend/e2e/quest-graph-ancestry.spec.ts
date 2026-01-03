@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, enableQuestGraphVisualizer, waitForHydration } from './test-helpers';
 
 declare global {
     interface Window {
@@ -57,6 +57,7 @@ const hasClass = async (page: Page, key: string, className: string) => {
 test.describe('Quest graph ancestor and descendant highlighting', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
+        await enableQuestGraphVisualizer(page);
     });
 
     test('ancestor toggle highlights multi-hop parents without needing direct neighbors', async ({

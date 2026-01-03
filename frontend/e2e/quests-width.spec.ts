@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, enableQuestGraphVisualizer, waitForHydration } from './test-helpers';
 
 // Tolerance for scrollWidth comparison (1px for rounding)
 const OVERFLOW_TOLERANCE = 1;
@@ -7,6 +7,7 @@ const OVERFLOW_TOLERANCE = 1;
 test.describe('Quests page horizontal overflow regression', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
+        await enableQuestGraphVisualizer(page);
     });
 
     test('should not create document-level horizontal overflow at wide viewport', async ({
