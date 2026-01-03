@@ -3,6 +3,7 @@
     import QuestGraphCard from './QuestGraphCard.svelte';
     import {
         formatDiagnosticsReport,
+        formatQuestGraphSnapshot,
         resolveRootKey,
     } from '../../lib/quests/questGraphDiagnostics';
     import { copyToClipboard } from '../../utils/copyToClipboard.js';
@@ -29,6 +30,8 @@
     let hasMounted = false;
     let copyStatus = 'idle';
     let copyError = '';
+    let downloadStatus = 'idle';
+    let downloadError = '';
     let navigatorPanel = null;
     let mapPanel = null;
     let diagnosticsPanel = null;
@@ -325,6 +328,50 @@
             copyStatus = 'idle';
             copyError =
                 error instanceof Error && error.message ? error.message : 'Failed to copy report';
+        }
+    };
+
+    const resolvePackageVersion = () => {
+        const version = import.meta.env?.npm_package_version;
+        if (typeof version === 'string' && version.trim()) {
+            return version;
+        }
+        return 'unknown';
+    };
+
+    const handleDownloadGraph = () => {
+        downloadError = '';
+        try {
+            if (!graph) {
+                downloadError = 'Graph unavailable';
+                return;
+            }
+
+            const generatedAt = new Date().toISOString();
+            const snapshot = formatQuestGraphSnapshot(graph, {
+                version: resolvePackageVersion(),
+                generatedAt,
+            });
+            const blob = new Blob([snapshot], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = `quest-graph-${generatedAt.replace(/[:.]/g, '-')}.json`;
+            anchor.rel = 'noopener';
+            document.body.appendChild(anchor);
+            anchor.click();
+            anchor.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 0);
+            downloadStatus = 'downloaded';
+            setTimeout(() => {
+                downloadStatus = 'idle';
+            }, 2000);
+        } catch (error) {
+            downloadStatus = 'idle';
+            downloadError =
+                error instanceof Error && error.message
+                    ? error.message
+                    : 'Failed to download graph';
         }
     };
 
@@ -707,8 +754,11 @@
                     {
                         selector: 'node.cycle',
                         style: {
-                            'background-image':
-                                'linear-gradient(135deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%, transparent)',
+                            'background-image': [
+                                'linear-gradient(135deg, rgba(255,255,255,0.1) 25%,',
+                                'transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%,',
+                                'rgba(255,255,255,0.1) 75%, transparent 75%, transparent)',
+                            ].join(' '),
                             'background-size': '12px 12px',
                         },
                     },
@@ -885,6 +935,22 @@
             <button class="pill" type="button" on:click={() => (searchOpen = true)}>
                 Search
             </button>
+            <div class="download-group">
+                <button
+                    class="pill ghost"
+                    type="button"
+                    data-testid="download-quest-graph"
+                    on:click={handleDownloadGraph}
+                >
+                    Download graph JSON
+                </button>
+                {#if downloadStatus === 'downloaded'}
+                    <span class="status success" aria-live="polite">Saved</span>
+                {/if}
+                {#if downloadError}
+                    <span class="status error" aria-live="assertive">{downloadError}</span>
+                {/if}
+            </div>
         </div>
     </div>
 
@@ -1713,6 +1779,14 @@
     .pill.ghost {
         background: transparent;
         color: var(--color-heading);
+    }
+
+    .download-group {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
     }
 
     .hint-wrapper {

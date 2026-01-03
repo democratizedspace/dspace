@@ -3,6 +3,11 @@ import type { QuestDiagnostics, QuestGraph, QuestNode } from './questGraph';
 const ROOT_KEY = 'welcome/howtodoquests.json';
 const comparatorKeys: Array<keyof QuestNode> = ['group', 'title', 'canonicalKey'];
 
+type SnapshotMetadata = {
+    version?: string;
+    generatedAt?: string;
+};
+
 const compareNodes = (a?: QuestNode, b?: QuestNode): number => {
     if (!a || !b) {
         return a ? -1 : b ? 1 : 0;
@@ -173,4 +178,79 @@ export const buildDiagnosticsReport = (graph: QuestGraph): QuestDiagnosticsRepor
 export const formatDiagnosticsReport = (graph: QuestGraph): string => {
     const report = buildDiagnosticsReport(graph);
     return JSON.stringify(report, null, 2);
+};
+
+const sortEdges = (graph: QuestGraph, edges: QuestGraph['edges'] = []): QuestGraph['edges'] => {
+    return [...edges]
+        .map((edge) => ({ ...edge }))
+        .sort(
+            (left, right) =>
+                compareKeys(graph, left.from, right.from) || compareKeys(graph, left.to, right.to)
+        );
+};
+
+const normalizeDiagnostics = (graph: QuestGraph): QuestDiagnostics => {
+    const diagnostics: QuestDiagnostics = graph.diagnostics ?? {
+        missingRefs: [],
+        ambiguousRefs: [],
+        unreachableNodes: [],
+        cycles: [],
+    };
+
+    return {
+        missingRefs: sortMissingRefs(graph, diagnostics),
+        ambiguousRefs: sortAmbiguousRefs(graph, diagnostics),
+        unreachableNodes: sortKeys(graph, diagnostics.unreachableNodes ?? []),
+        cycles: sortCycles(graph, diagnostics),
+    };
+};
+
+export type QuestGraphSnapshot = {
+    version: string;
+    generatedAt: string;
+    rootKey: string;
+    nodes: QuestNode[];
+    edges: QuestGraph['edges'];
+    reachableFromRoot: string[];
+    diagnostics: QuestDiagnostics;
+};
+
+export const buildQuestGraphSnapshot = (
+    graph: QuestGraph,
+    metadata: SnapshotMetadata = {}
+): QuestGraphSnapshot => {
+    const version =
+        typeof metadata.version === 'string' && metadata.version.trim()
+            ? metadata.version
+            : 'unknown';
+    const generatedAt =
+        typeof metadata.generatedAt === 'string' && metadata.generatedAt.trim()
+            ? metadata.generatedAt
+            : new Date().toISOString();
+
+    const nodes = sortNodes(graph).map((node) => ({
+        canonicalKey: node.canonicalKey,
+        title: node.title,
+        group: node.group,
+        basename: node.basename,
+        requires: sortKeys(graph, node.requires ?? []),
+    }));
+
+    return {
+        version,
+        generatedAt,
+        rootKey: resolveRootKey(graph),
+        nodes,
+        edges: sortEdges(graph, graph.edges ?? []),
+        reachableFromRoot: sortKeys(graph, graph.reachableFromRoot ?? []),
+        diagnostics: normalizeDiagnostics(graph),
+    };
+};
+
+export const formatQuestGraphSnapshot = (
+    graph: QuestGraph,
+    metadata: SnapshotMetadata = {}
+): string => {
+    const snapshot = buildQuestGraphSnapshot(graph, metadata);
+    return JSON.stringify(snapshot, null, 2);
 };

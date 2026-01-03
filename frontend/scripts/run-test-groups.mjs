@@ -136,6 +136,7 @@ const TEST_GROUPS = [
             'quest-graph-map-viewport.spec.ts',
             'quest-graph-map-keyboard.spec.ts',
             'quest-graph-diagnostics-copy.spec.ts',
+            'quest-graph-download.spec.ts',
             'quest-grant-items.spec.ts',
             'quest-hardening.spec.ts',
             'constellations-quest.spec.ts',
