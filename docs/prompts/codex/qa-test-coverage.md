@@ -1,7 +1,7 @@
 # QA checklist → automated test coverage prompts
 
-Use these prompts to steadily convert the v3 QA checklist into lines backed by automated tests while
-keeping each PR small and reviewable.
+Use these prompts to convert unchecked QA checklist lines into automated coverage without bloating a
+PR.
 
 ## QA-test-coverage prompt
 Use this when you want to link QA checklist items to existing or new automated tests.
@@ -9,85 +9,74 @@ Use this when you want to link QA checklist items to existing or new automated t
 ```markdown
 # DSPACE QA checklist → automated test coverage
 
-You are Codex working in the democratizedspace/dspace repository on branch `v3`. Your mission is to
-pick a small set of unchecked QA checklist items in `docs/qa/v3.md` that lack linked automated
-coverage, add or locate tests for them, and append the links inline.
+You are Codex working in the democratizedspace/dspace repository. Your mission is to pick a small,
+deterministic set of unchecked QA checklist items in `docs/qa/v3.md` (or `docs/qa/v3.1.md`), add or
+locate tests for them, and append the links inline.
 
 ## Guardrails
-- If this repo contains relevant AGENTS.md files (per-directory instructions), read them before
-  editing and obey the most specific instructions.
-- CI enforces QA-doc test-link freshness for `docs/qa/v3.md` and `docs/qa/v3.1.md` via
-  `tests/qaDocsLinkFreshness.test.ts`; expect to update `#L...` anchors (or widen to
-  `#LSTART-LEND`) so they still include the referenced test snippet.
-- Keep scope tight: default to **3–5** checklist items, hard cap **6** per run.
-- Do not refactor or rename unrelated code; only touch the chosen checklist lines and the tests you
-  add/adjust.
-- Prefer deterministic, stable tests; avoid flakes and excessive timeouts.
+- Read and obey any relevant AGENTS.md instructions before editing.
+- CI enforces QA-doc test-link freshness via `tests/qaDocsLinkFreshness.test.ts`; keep anchors tight
+  and include the referenced string (use `#LSTART-LEND` ranges if anchors drift).
+- Keep scope tight: default to **3–5** checklist items, hard cap **6**.
+- Only touch the chosen checklist lines and the tests you add/adjust; avoid unrelated refactors.
+- Prefer deterministic, fast tests; avoid flakes and arbitrary timeouts.
 
 ## Selecting checklist items (small batches)
-1) Open `docs/qa/v3.md` and list unchecked lines without linked tests.
-   - Use the heuristic: linked lines contain `#L` anchors inside parentheses.
+1) Open `docs/qa/v3.md` (or `docs/qa/v3.1.md`) and list unchecked lines without linked tests.
+   - Linked lines contain the `[<...>](...#L...)` pattern.
    - Helper commands:
-     - `rg "^- \[ \]" docs/qa/v3.md | rg -v "#L"` → unchecked + unlinked (heuristic).
-     - `rg "\\[ \\] .*#L" docs/qa/v3.md` → shows already-linked items.
+     - `rg "^- \\[ \\]" docs/qa/v3.md | rg -v "#L"` → unchecked + unlinked (heuristic).
+     - `rg "\\[ \\] .*#L" docs/qa/v3.md` → already linked items.
      - `rg "\\[ \\] .*" docs/qa/v3.md | rg -v "#L"` → candidate unlinked items.
-2) Choose 3–5 items (max 6) that are deterministic and automatable first (routes loading, schema or
-   validation checks, map/graph behaviors, import/export flows, etc.).
-3) If an item needs human judgment, design the best mechanical proxy (lint-like checks, placeholder
-   text guards, schema coverage). If partial automation is the best possible, note the gap in the PR
-   summary.
+2) Prioritize automatable items: route loading, schema/validation checks, map/graph behaviors,
+   import/export flows, deterministic data guards. If an item needs human judgment, design the best
+   mechanical proxy and note any gaps in the PR summary.
+3) Stick to 3–5 items; never exceed 6 per pass.
 
 ## Finding or creating tests for each selected item
 For each chosen checklist line:
 1) Search for existing coverage before writing new tests.
-   - Likely locations: `frontend/e2e/*.spec.ts`, `tests/*.test.ts`, `frontend/tests`, and any test
-     directories near the relevant feature.
+   - Likely locations: `tests/*.test.ts`, `frontend/tests`, `frontend/e2e/*.spec.ts`, and nearby
+     test directories.
    - Use targeted searches:
      - `rg "<keyword>" frontend/e2e` for route/UI behaviors.
      - `rg "<keyword>" tests` for root/unit/integration coverage.
      - `rg "<route or selector>" frontend/src` to locate the page/component under test.
-2) If a test exists and matches the checklist claim, link to it (no code change needed unless a
-   small assertion tweak improves alignment).
-3) If no coverage exists, add a minimal, deterministic test:
-   - Prefer unit/integration when logic is pure; only use Playwright when validating page routing,
-     rendering, or interactive flows.
-   - Reuse existing fixtures/selectors; prefer data-testid and stable text over positional selectors.
-   - Avoid timing races: wait for network-idle or specific locators, not arbitrary sleeps.
-   - Keep tests narrowly scoped to the checklist statement.
+2) If a test already covers the checklist claim, link to it. Only adjust assertions when needed for
+   alignment.
+3) When adding coverage:
+   - Prefer unit/integration when logic is pure; use Playwright only for routing/rendering or
+     interactive flows.
+   - Reuse existing fixtures and stable selectors (data-testid or durable text, not positional).
+   - Avoid timing races: wait for specific locators or network-idle instead of sleeps.
+   - Keep each test narrowly scoped to the checklist statement.
 
 ## Updating the checklist with links (required)
-- Append test links at the end of the checklist line in `docs/qa/v3.md` using the enforced pattern:
-  `([<FILE_LABEL:TEST_NAME_SUBSTRING>](relative/path/to/test#LSTART[-LEND]))`. Multiple links go
-  inside one set of parentheses, comma-separated.
-  - `FILE_LABEL` should match the target filename or its trailing path segment (e.g.
-    `wallet-page.spec.ts`, `questGraph.test.ts`).
-  - `TEST_NAME_SUBSTRING` must literally appear within the linked line range (often the `it(` title
-    or a unique assertion string) so the freshness checker can validate the anchor.
-  - Use `#LSTART-LEND` ranges when needed for stability, but keep them tight around the referenced
-    snippet.
-- Paths are relative to `docs/qa/v3.md` (already in `docs/qa/`); mimic existing examples.
-- The short description should summarize what the test asserts.
+- Append test links at the end of the checklist line in `docs/qa/v3*.md` using this pattern:
+  `([<FILE_LABEL:TEST_NAME_SUBSTRING>](relative/path/to/test#LSTART[-LEND]))`. Multiple links share
+  one pair of parentheses, comma-separated.
+  - `FILE_LABEL` must match the filename or trailing path segment (e.g. `questGraph.test.ts`).
+  - `TEST_NAME_SUBSTRING` must appear inside the linked line range (often the `it(...)` title or a
+    unique assertion).
+  - Use `#LSTART-LEND` ranges for stability, but keep them tight.
+- Paths are relative to `docs/qa/` (e.g. `../../tests/...` or `../../frontend/e2e/...`).
+- If widening a range to keep anchors fresh, confirm the link still encloses the referenced string.
 
 ## Verification commands
-- Discover the right runner: inspect `package.json`, `frontend/package.json`, and
-  `.github/workflows/*.yml` to map tests you touched to the correct command (unit/integration vs.
-  Playwright E2E).
-- Always run the QA-doc link freshness check when touching `docs/qa/v3*.md`:
+- Run the QA-doc link freshness check whenever `docs/qa/v3*.md` changes:
   `npm run test:root -- qaDocsLinkFreshness.test.ts`.
-- Keep verification lightweight for docs-only PRs: `git diff --check` plus the freshness test above.
-- Additional helpers:
-  - `rg -n "qaDocsLinkFreshness" -S .`
-  - `rg -n "QA docs test link freshness" -S tests`
-- Run the relevant subset locally (at least the runner(s) that cover your new/modified tests).
-- Record every command and result in the PR summary. If a required command can’t run locally,
-  note why (environment limit) and mark it as a warning.
+- Run the right runner for any tests you touched:
+  - Root/unit/integration: `npm run test:root -- <file-or-pattern>`.
+  - Playwright E2E: `cd frontend && npm run test:e2e -- <args>` (or existing grouped scripts).
+- For docs-only PRs, keep verification lightweight (`git diff --check` plus the freshness test).
+- Record every command and result in the PR summary. If a required command cannot run locally, call
+  it out with the reason.
 
 ## PR summary requirements
-- List the exact checklist items you covered (quote the lines) and the test files linked/added for
-  each.
-- Note whether coverage was newly added or already existed.
+- Quote the checklist lines you covered and list the linked/added test files for each; state whether
+  coverage was reused or newly added.
 - Include every command you ran with results.
-- Call out any partially automated items and the remaining manual expectation.
+- Note any partial automation and what manual expectation remains.
 ```
 
 ## Merge compatibility prompt
@@ -112,7 +101,8 @@ What I need:
 - Overlap analysis:
   - exact file-path overlaps (same file touched by multiple PRs)
   - obvious content overlaps (e.g., same checklist lines or same test files/fixtures updated)
-- Recommendations on which PRs can merge together safely vs. which need sequencing or reconciliation.
+- Recommendations on which PRs can merge together safely vs. which need sequencing or
+  reconciliation.
 
 Output format:
 - “Safe to merge together” list (pairs/groups) with brief rationale.
