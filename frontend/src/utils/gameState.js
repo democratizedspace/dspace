@@ -7,6 +7,7 @@ import {
 import { addItems } from './gameState/inventory.js';
 import { isBrowser } from './ssr.js';
 import items from '../pages/inventory/json/items';
+import { normalizeSettings } from './settingsDefaults.js';
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy')?.id;
@@ -236,6 +237,11 @@ export const mergeLegacyStateIntoCurrent = async (legacyState) => {
         if (!merged.processes[processId]) {
             merged.processes[processId] = processState;
         }
+    });
+
+    merged.settings = normalizeSettings({
+        ...normalizeSettings(current.settings),
+        ...normalizeSettings(incoming.settings),
     });
 
     grantTrophyIfMissing(merged, LEGACY_V2_UPGRADE_TROPHY_ID);

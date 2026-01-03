@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, enableQuestGraphVisualizer, waitForHydration } from './test-helpers';
 
 declare global {
     interface Window {
@@ -90,6 +90,7 @@ const expectViewportClose = (actual: ViewportState, expected: ViewportState) => 
 test.describe('Quest graph map viewport controls', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
+        await enableQuestGraphVisualizer(page);
     });
 
     test('keeps pan and zoom when toggling unreachable nodes', async ({ page }) => {
