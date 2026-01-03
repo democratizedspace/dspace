@@ -13,6 +13,7 @@ const SECTIONS_FIXTURE = [
         links: [
             { title: 'About', href: '/docs/about' },
             { title: 'Mission', href: '/docs/mission', keywords: ['vision'] },
+            { title: 'Meet the team', href: '/docs/team', keywords: ['people'] },
         ],
     },
     {
@@ -53,6 +54,31 @@ describe('DocsIndex component', () => {
         expect(
             screen.getByRole('link', {
                 name: 'Quest Development Guidelines',
+            })
+        ).toBeInTheDocument();
+    });
+
+    it('supports has: search operators for docs metadata', async () => {
+        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+
+        const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
+
+        await fireEvent.input(searchBox, { target: { value: 'has:image' } });
+
+        expect(screen.getByRole('link', { name: 'Meet the team' })).toBeInTheDocument();
+        expect(screen.queryByRole('link', { name: 'Mission' })).not.toBeInTheDocument();
+
+        await fireEvent.input(searchBox, { target: { value: 'has:link quest' } });
+
+        expect(screen.queryByRole('link', { name: 'About' })).not.toBeInTheDocument();
+        expect(
+            screen.getByRole('link', {
+                name: 'Quest Development Guidelines',
+            })
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('link', {
+                name: 'Quest Schema Requirements',
             })
         ).toBeInTheDocument();
     });

@@ -1,0 +1,311 @@
+{
+    "/docs/3dprinting": {
+        "features": []
+    },
+    "/docs/about": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/achievements": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/amazing": {
+        "features": [
+            "image",
+            "link"
+        ]
+    },
+    "/docs/authentication": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/backups": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/bounties": {
+        "features": []
+    },
+    "/docs/changelog": {
+        "features": [
+            "link"
+        ]
+    },
+    "/docs/chemistry-lab": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/cloud-sync": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/content-development": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/contribute": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/contributors-guide": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/custom-bundles": {
+        "features": [
+            "code",
+            "link",
+            "list"
+        ]
+    },
+    "/docs/custom-quest-system": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/db-benchmark": {
+        "features": [
+            "code"
+        ]
+    },
+    "/docs/dcarbon": {
+        "features": [
+            "image",
+            "link",
+            "list"
+        ]
+    },
+    "/docs/developer-resources": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/dusd": {
+        "features": [
+            "link"
+        ]
+    },
+    "/docs/dwatt": {
+        "features": [
+            "link"
+        ]
+    },
+    "/docs/electricity": {
+        "features": [
+            "link"
+        ]
+    },
+    "/docs/faq": {
+        "features": [
+            "link"
+        ]
+    },
+    "/docs/glossary": {
+        "features": [
+            "link"
+        ]
+    },
+    "/docs/guilds": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/hydroponics": {
+        "features": [
+            "link"
+        ]
+    },
+    "/docs/inventory": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/item-guidelines": {
+        "features": [
+            "code",
+            "link",
+            "list"
+        ]
+    },
+    "/docs/mission": {
+        "features": []
+    },
+    "/docs/new-quests": {
+        "features": [
+            "list"
+        ]
+    },
+    "/docs/npcs": {
+        "features": [
+            "image",
+            "link",
+            "list"
+        ]
+    },
+    "/docs/outages": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/process-guidelines": {
+        "features": [
+            "code",
+            "link",
+            "list"
+        ]
+    },
+    "/docs/processes": {
+        "features": [
+            "image",
+            "link",
+            "list"
+        ]
+    },
+    "/docs/prompts-codex": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/prs": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/quest-contribution": {
+        "features": [
+            "code",
+            "link",
+            "list"
+        ]
+    },
+    "/docs/quest-guidelines": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/quest-schema": {
+        "features": [
+            "link",
+            "table"
+        ]
+    },
+    "/docs/quest-submission": {
+        "features": [
+            "code",
+            "link",
+            "list"
+        ]
+    },
+    "/docs/quest-template": {
+        "features": [
+            "code",
+            "link"
+        ]
+    },
+    "/docs/quest-trees": {
+        "features": [
+            "list"
+        ]
+    },
+    "/docs/realtime": {
+        "features": [
+            "link"
+        ]
+    },
+    "/docs/roadmap": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/rockets": {
+        "features": [
+            "list"
+        ]
+    },
+    "/docs/rollback": {
+        "features": [
+            "code"
+        ]
+    },
+    "/docs/schema-versioning": {
+        "features": [
+            "code",
+            "list"
+        ]
+    },
+    "/docs/self-hosting": {
+        "features": [
+            "code",
+            "list"
+        ]
+    },
+    "/docs/solar": {
+        "features": [
+            "list"
+        ]
+    },
+    "/docs/state-migration": {
+        "features": [
+            "code"
+        ]
+    },
+    "/docs/team": {
+        "features": [
+            "image",
+            "link"
+        ]
+    },
+    "/docs/titles": {
+        "features": [
+            "link",
+            "list"
+        ]
+    },
+    "/docs/token-place": {
+        "features": [
+            "code",
+            "link",
+            "list"
+        ]
+    },
+    "/docs/ui-lifecycle": {
+        "features": [
+            "code",
+            "link",
+            "list"
+        ]
+    },
+    "/docs/user-journeys": {
+        "features": [
+            "table"
+        ]
+    }
+}

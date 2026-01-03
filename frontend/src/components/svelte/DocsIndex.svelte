@@ -1,4 +1,5 @@
 <script>
+    import docsSearchMetadata from '../../pages/docs/json/searchMetadata.json';
     /**
      * @typedef {Object} DocLink
      * @property {string} title
@@ -18,24 +19,78 @@
 
     let query = '';
 
+    const normalizeHref = (href = '') => href.toLowerCase().replace(/\/+$/, '');
     const normalize = (value) => value.toLowerCase().trim();
 
-    const matchLink = (link, normalizedQuery) => {
-        if (!normalizedQuery) {
+    const docFeatures = new Map(
+        Object.entries(docsSearchMetadata ?? {}).map(([href, meta]) => [
+            normalizeHref(href),
+            new Set(meta?.features ?? []),
+        ])
+    );
+
+    const supportedFeatureOperators = new Set(['link', 'image', 'list', 'code', 'table']);
+
+    const parseQuery = (normalizedQuery) => {
+        const terms = [];
+        const requiredFeatures = [];
+
+        normalizedQuery
+            .split(/\s+/)
+            .filter(Boolean)
+            .forEach((word) => {
+                const match = word.match(/^has:(.+)$/);
+
+                if (match) {
+                    const feature = match[1];
+
+                    if (supportedFeatureOperators.has(feature)) {
+                        requiredFeatures.push(feature);
+                        return;
+                    }
+                }
+
+                terms.push(word);
+            });
+
+        return { requiredFeatures, terms };
+    };
+
+    const hasRequiredFeatures = (link, requiredFeatures) => {
+        if (!requiredFeatures.length) {
             return true;
         }
 
-        const searchableValues = [link.title, ...(link.keywords ?? [])].map(normalize);
-        const words = normalizedQuery.split(/\s+/).filter(Boolean);
+        const features = docFeatures.get(normalizeHref(link.href ?? ''));
 
-        return words.every((word) => searchableValues.some((value) => value.includes(word)));
+        if (!features) {
+            return false;
+        }
+
+        return requiredFeatures.every((feature) => features.has(feature));
+    };
+
+    const matchLink = (link, parsedQuery) => {
+        const { requiredFeatures, terms } = parsedQuery;
+
+        if (!hasRequiredFeatures(link, requiredFeatures)) {
+            return false;
+        }
+
+        if (!terms.length) {
+            return true;
+        }
+        const searchableValues = [link.title, ...(link.keywords ?? [])].map(normalize);
+
+        return terms.every((word) => searchableValues.some((value) => value.includes(word)));
     };
 
     $: normalizedQuery = normalize(query);
+    $: parsedQuery = parseQuery(normalizedQuery);
     $: filteredSections = sections
         .map((section) => ({
             title: section.title,
-            links: section.links.filter((link) => matchLink(link, normalizedQuery)),
+            links: section.links.filter((link) => matchLink(link, parsedQuery)),
         }))
         .filter((section) => section.links.length > 0);
 
