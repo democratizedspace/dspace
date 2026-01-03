@@ -1,54 +1,81 @@
 import fs from 'fs';
 import path from 'path';
-import { describe, expect, it } from 'vitest';
+import { describe, it } from 'vitest';
 
-const mojibakePatterns: { pattern: RegExp; label: string }[] = [
-  { pattern: /â€™/, label: 'mojibake apostrophe' },
-  { pattern: /â€˜/, label: 'mojibake opening apostrophe' },
-  { pattern: /â€œ/, label: 'mojibake opening quote' },
-  { pattern: /â€�/, label: 'mojibake closing quote' },
-  { pattern: /â€“/, label: 'mojibake en dash' },
-  { pattern: /â€”/, label: 'mojibake em dash' },
-  { pattern: /â€¦/, label: 'mojibake ellipsis' },
-  { pattern: /Â\s/, label: 'stray Â with space' },
-  { pattern: /Â/, label: 'stray Â' },
+const mojibakeTokens = [
+    'â€™',
+    'â€˜',
+    'â€œ',
+    'â€�',
+    'â€“',
+    'â€”',
+    'â€¦',
+    'â€¢',
+    'Â ',
+    'Â',
 ];
 
 const docRoots = [
-  path.join(process.cwd(), 'frontend', 'src', 'pages', 'docs', 'md'),
-  path.join(process.cwd(), 'docs'),
+    path.join(process.cwd(), 'frontend', 'src', 'pages', 'docs'),
+    path.join(process.cwd(), 'docs'),
 ];
 
-function collectMarkdownFiles(rootDir: string): string[] {
-  if (!fs.existsSync(rootDir)) {
-    return [];
-  }
+const allowedExtensions = new Set(['.md', '.mdx', '.markdown', '.astro']);
+const ignoredDirectories = new Set([
+    'node_modules',
+    '.git',
+    'dist',
+    'build',
+    '.next',
+    'coverage',
+]);
 
-  const entries = fs.readdirSync(rootDir, { withFileTypes: true });
-  return entries.flatMap((entry) => {
-    const entryPath = path.join(rootDir, entry.name);
-    if (entry.isDirectory()) {
-      return collectMarkdownFiles(entryPath);
+function collectContentFiles(rootDir: string): string[] {
+    if (!fs.existsSync(rootDir)) {
+        return [];
     }
-    return entry.isFile() && entry.name.endsWith('.md') ? [entryPath] : [];
-  });
+
+    const entries = fs.readdirSync(rootDir, { withFileTypes: true });
+    return entries.flatMap((entry) => {
+        const entryPath = path.join(rootDir, entry.name);
+        if (entry.isDirectory()) {
+            if (ignoredDirectories.has(entry.name)) {
+                return [];
+            }
+            return collectContentFiles(entryPath);
+        }
+        if (!entry.isFile()) {
+            return [];
+        }
+        return allowedExtensions.has(path.extname(entry.name)) ? [entryPath] : [];
+    });
 }
 
-const markdownFiles = docRoots.flatMap(collectMarkdownFiles);
+const contentFiles = docRoots.flatMap(collectContentFiles);
 
-describe('docs markdown mojibake scan', () => {
-  it('rejects common mojibake markers in source content', () => {
-    const offenders: string[] = [];
+describe('docs sources avoid mojibake', () => {
+    it('rejects common mojibake markers in markdown-like content', () => {
+        const offenders: { filePath: string; tokens: string[] }[] = [];
 
-    markdownFiles.forEach((filePath) => {
-      const content = fs.readFileSync(filePath, 'utf8');
-      mojibakePatterns.forEach(({ pattern, label }) => {
-        if (pattern.test(content)) {
-          offenders.push(`${filePath} contains ${label} (${pattern.source})`);
+        contentFiles.forEach((filePath) => {
+            const content = fs.readFileSync(filePath, 'utf8');
+            const matchedTokens = mojibakeTokens.filter((token) => content.includes(token));
+            if (matchedTokens.length > 0) {
+                offenders.push({
+                    filePath,
+                    tokens: Array.from(new Set(matchedTokens)),
+                });
+            }
+        });
+
+        if (offenders.length > 0) {
+            const summary = offenders
+                .map(({ filePath, tokens }) => {
+                    const relativePath = path.relative(process.cwd(), filePath);
+                    return `- ${relativePath}: ${tokens.join(', ')}`;
+                })
+                .join('\n');
+            throw new Error(`Mojibake detected in docs sources:\n${summary}`);
         }
-      });
     });
-
-    expect(offenders).toEqual([]);
-  });
 });
