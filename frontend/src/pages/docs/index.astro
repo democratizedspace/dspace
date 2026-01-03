@@ -2,12 +2,14 @@
 import Page from '../../components/Page.astro';
 import DocsIndex from '../../components/svelte/DocsIndex.svelte';
 import sections from './json/sections.json' assert { type: 'json' };
+import { detectDocFeatures } from '../../utils/docsSearchFeatures.js';
 
 type DocLink = {
     title: string;
     href: string;
     keywords?: string[];
     external?: boolean;
+    features?: string[];
 };
 
 type DocsSection = {
@@ -15,7 +17,53 @@ type DocsSection = {
     links: DocLink[];
 };
 
-const docsSections = sections as DocsSection[];
+const docModules = await Astro.glob('./md/**/*.md');
+
+const buildDocFeatureIndex = async () => {
+    const entries = await Promise.all(
+        docModules.map(async (doc) => {
+            const slug = String(doc?.frontmatter?.slug ?? '').toLowerCase();
+
+            if (!slug) {
+                return null;
+            }
+
+            try {
+                const content =
+                    (typeof doc.rawContent === 'function' && (await doc.rawContent())) ||
+                    (await doc.compiledContent());
+
+                return [slug, detectDocFeatures(content)];
+            } catch (error) {
+                console.error(`Failed to detect features for doc slug ${slug}`, error);
+                return [slug, []];
+            }
+        })
+    );
+
+    return new Map(entries.filter(Boolean) as [string, string[]][]);
+};
+
+const docFeatureIndex = await buildDocFeatureIndex();
+
+const getSlugFromHref = (href = '') => {
+    if (!href.startsWith('/docs/')) {
+        return '';
+    }
+
+    const trimmed = href.replace(/^\/docs\//, '').replace(/\/?$/, '');
+    return trimmed.toLowerCase();
+};
+
+const docsSections = (sections as DocsSection[]).map((section) => ({
+    title: section.title,
+    links: section.links.map((link) => {
+        const slug = getSlugFromHref(link.href);
+        const features = slug ? docFeatureIndex.get(slug) ?? [] : [];
+
+        return { ...link, features };
+    }),
+}));
 ---
 
 <Page title="Docs">
