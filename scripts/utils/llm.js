@@ -14,14 +14,25 @@ async function scoreQuest(dialogue) {
                 role: 'user',
                 content: [
                     {
-                        type: 'text',
+                        type: 'input_text',
                         text: prompt,
                     },
                 ],
             },
         ],
     });
-    const text = (res.output_text || '').trim();
+    const extractOutputText = (response) => {
+        if (!response) return '';
+        if (typeof response.output_text === 'string' && response.output_text.trim()) {
+            return response.output_text;
+        }
+        const outputContent = response.output?.flatMap((entry) => entry.content || []);
+        const outputText = outputContent?.find((block) => block.type === 'output_text')?.text;
+
+        return outputText || '';
+    };
+
+    const text = extractOutputText(res).trim();
     const num = parseFloat(text);
     return isNaN(num) ? 0.5 : num;
 }

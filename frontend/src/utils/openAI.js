@@ -15,8 +15,21 @@ const resolveOpenAIClient = () => {
 
 const toResponseMessage = (message) => ({
     role: message.role,
-    content: [{ type: 'text', text: message.content }],
+    content: [{ type: 'input_text', text: message.content }],
 });
+
+const toOutputText = (response) => {
+    if (!response) return '';
+
+    if (typeof response.output_text === 'string' && response.output_text.trim()) {
+        return response.output_text;
+    }
+
+    const outputContent = response.output?.flatMap((entry) => entry.content || []);
+    const outputText = outputContent?.find((block) => block.type === 'output_text')?.text;
+
+    return outputText || '';
+};
 
 const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';
@@ -111,5 +124,5 @@ export const GPT35Turbo = async (messages, options = {}) => {
 
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
 
-    return response.output_text;
+    return toOutputText(response);
 };
