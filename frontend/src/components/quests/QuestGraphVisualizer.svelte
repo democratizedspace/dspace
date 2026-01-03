@@ -6,6 +6,11 @@
         buildQuestGraphSnapshot,
         serializeQuestGraphSnapshot,
     } from '../../lib/quests/questGraphSnapshot';
+    import {
+        compareQuestNodes,
+        sortQuestNodeKeys,
+        sortQuestNodes,
+    } from '../../lib/quests/questGraphOrdering';
     import { copyToClipboard } from '../../utils/copyToClipboard.js';
 
     export let graph;
@@ -45,21 +50,13 @@
     let downloadStatus = 'idle';
     let downloadError = '';
 
-    const compareNodes = (a, b) => {
-        if (!a || !b) return a ? -1 : b ? 1 : 0;
-        const order = ['group', 'title', 'canonicalKey'];
-        for (const key of order) {
-            if (a[key] < b[key]) return -1;
-            if (a[key] > b[key]) return 1;
-        }
-        return 0;
-    };
+    const compareNodes = (a, b) => compareQuestNodes(a, b);
     const ancestorCache = new Map();
     const descendantCache = new Map();
 
-    const sortKeys = (keys) => [...keys].sort((a, b) => compareNodes(byKey[a], byKey[b]));
+    const sortKeys = (keys) => sortQuestNodeKeys(byKey, keys);
 
-    const getSortedNodes = () => [...(graph?.nodes ?? [])].sort(compareNodes);
+    const getSortedNodes = () => sortQuestNodes(graph?.nodes ?? []);
 
     const reachableSet = new Set(graph?.reachableFromRoot ?? []);
     const unreachableSet = new Set(graph?.diagnostics?.unreachableNodes ?? []);
@@ -335,6 +332,8 @@
 
     const handleDownloadSnapshot = () => {
         downloadError = '';
+        let objectUrl = null;
+        let revokeScheduled = false;
         try {
             const snapshot = buildQuestGraphSnapshot(graph, {
                 version,
@@ -345,13 +344,18 @@
                 throw new Error('Downloads are not supported in this environment');
             }
             const blob = new Blob([serialized], { type: 'application/json;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
+            objectUrl = URL.createObjectURL(blob);
             const timestampSafe = snapshot.capturedAt.replace(/[:.]/g, '-');
             const anchor = document.createElement('a');
-            anchor.href = url;
+            anchor.href = objectUrl;
             anchor.download = `quest-graph-${timestampSafe}.json`;
             anchor.click();
-            URL.revokeObjectURL(url);
+            revokeScheduled = true;
+            setTimeout(() => {
+                if (objectUrl) {
+                    URL.revokeObjectURL(objectUrl);
+                }
+            }, 100);
             downloadStatus = 'downloaded';
             setTimeout(() => {
                 downloadStatus = 'idle';
@@ -362,6 +366,10 @@
                 error instanceof Error && error.message
                     ? error.message
                     : 'Failed to download snapshot';
+        } finally {
+            if (objectUrl && !revokeScheduled) {
+                URL.revokeObjectURL(objectUrl);
+            }
         }
     };
 

@@ -37,7 +37,29 @@ test.describe('Quest graph snapshot download', () => {
         const parsed = JSON.parse(content);
         expect(Array.isArray(parsed.nodes)).toBe(true);
         expect(parsed.nodes.length).toBeGreaterThan(0);
+        expect(typeof parsed.capturedAt).toBe('string');
         expect(typeof parsed.rootKey).toBe('string');
         expect(typeof parsed.buildTimestamp).toBe('string');
+        expect(typeof parsed.version).toBe('string');
+        expect(Array.isArray(parsed.edges)).toBe(true);
+        expect(parsed.edges.length).toBeGreaterThan(0);
+        expect(parsed.edges.every((edge) => typeof edge.from === 'string')).toBe(true);
+        expect(parsed.edges.every((edge) => typeof edge.to === 'string')).toBe(true);
+        expect(parsed.diagnostics).toEqual(
+            expect.objectContaining({
+                counts: expect.objectContaining({
+                    missingRefs: expect.any(Number),
+                    ambiguousRefs: expect.any(Number),
+                    unreachableNodes: expect.any(Number),
+                    cycles: expect.any(Number),
+                    multiParent: expect.any(Number),
+                }),
+                missingRefs: expect.any(Array),
+                ambiguousRefs: expect.any(Array),
+                unreachableNodes: expect.any(Array),
+                cycles: expect.any(Array),
+                multiParent: expect.any(Array),
+            })
+        );
     });
 });
