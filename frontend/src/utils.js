@@ -3,15 +3,15 @@ import { questFinished, canStartQuest } from './utils/gameState.js';
 
 const markdownEncodingReplacements = [
     // Common mojibake sequences from UTF-8 text misread as Windows-1252
-    { pattern: /â€™/g, replacement: "'" }, // mojibake apostrophe
-    { pattern: /â€˜/g, replacement: "'" }, // mojibake opening apostrophe
-    { pattern: /â€œ/g, replacement: '"' }, // mojibake opening quote
-    { pattern: /â€�/g, replacement: '"' }, // mojibake closing quote
-    { pattern: /â€“/g, replacement: '-' }, // mojibake en dash (UTF-8 read as Windows-1252)
-    { pattern: /â€”/g, replacement: '-' }, // mojibake em dash (UTF-8 read as Windows-1252)
-    { pattern: /â€¦/g, replacement: '...' }, // mojibake ellipsis
-    { pattern: /Â /g, replacement: ' ' }, // Â followed by space
-    { pattern: /Â/g, replacement: '' }, // stray Â
+    { pattern: /\u00e2\u0080\u0099/g, replacement: "'" }, // mojibake apostrophe
+    { pattern: /\u00e2\u0080\u0098/g, replacement: "'" }, // mojibake opening apostrophe
+    { pattern: /\u00e2\u0080\u009c/g, replacement: '"' }, // mojibake opening quote
+    { pattern: /\u00e2\u0080\u009d/g, replacement: '"' }, // mojibake closing quote
+    { pattern: /\u00e2\u0080\u0093/g, replacement: '-' }, // mojibake en dash (UTF-8 read as Windows-1252)
+    { pattern: /\u00e2\u0080\u0094/g, replacement: '-' }, // mojibake em dash (UTF-8 read as Windows-1252)
+    { pattern: /\u00e2\u0080\u00a6/g, replacement: '...' }, // mojibake ellipsis
+    { pattern: /\u00c2 /g, replacement: ' ' }, // U+00C2 followed by space
+    { pattern: /\u00c2/g, replacement: '' }, // stray U+00C2
     // Straighten curly punctuation to ASCII to avoid charset issues
     { pattern: /’/g, replacement: "'" },
     { pattern: /‘/g, replacement: "'" },
