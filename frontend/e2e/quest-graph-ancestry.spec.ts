@@ -65,22 +65,14 @@ test.describe('Quest graph ancestor and descendant highlighting', () => {
         await loadFixtureGraph(page);
         await focusQuest(page, 'Fixture Grandchild Quest', GRANDCHILD_KEY);
 
-        await expect
-            .poll(() => hasClass(page, PARENT_KEY, 'highlight-parent'))
-            .toBe(true);
+        await expect.poll(() => hasClass(page, PARENT_KEY, 'highlight-parent')).toBe(true);
 
         await page.getByLabel('Highlight all ancestors').check();
-        await expect
-            .poll(() => hasClass(page, PARENT_KEY, 'highlight-ancestor'))
-            .toBe(true);
-        await expect
-            .poll(() => hasClass(page, ROOT_KEY, 'highlight-ancestor'))
-            .toBe(true);
+        await expect.poll(() => hasClass(page, PARENT_KEY, 'highlight-ancestor')).toBe(true);
+        await expect.poll(() => hasClass(page, ROOT_KEY, 'highlight-ancestor')).toBe(true);
 
         await page.getByLabel('Highlight direct neighbors').uncheck();
-        await expect
-            .poll(() => hasClass(page, PARENT_KEY, 'highlight-parent'))
-            .toBe(false);
+        await expect.poll(() => hasClass(page, PARENT_KEY, 'highlight-parent')).toBe(false);
 
         const ancestorStates = await page.evaluate(() => {
             const cy = window.__questGraphCy;
@@ -102,14 +94,8 @@ test.describe('Quest graph ancestor and descendant highlighting', () => {
 
         await page.getByLabel('Highlight all descendants').check();
 
-        await expect
-            .poll(() => hasClass(page, PARENT_KEY, 'highlight-descendant'))
-            .toBe(true);
-        await expect
-            .poll(() => hasClass(page, CHILD_KEY, 'highlight-descendant'))
-            .toBe(true);
-        await expect
-            .poll(() => hasClass(page, GRANDCHILD_KEY, 'highlight-descendant'))
-            .toBe(true);
+        await expect.poll(() => hasClass(page, PARENT_KEY, 'highlight-descendant')).toBe(true);
+        await expect.poll(() => hasClass(page, CHILD_KEY, 'highlight-descendant')).toBe(true);
+        await expect.poll(() => hasClass(page, GRANDCHILD_KEY, 'highlight-descendant')).toBe(true);
     });
 });
