@@ -3,6 +3,9 @@ import { questFinished, canStartQuest } from './utils/gameState.js';
 
 const markdownEncodingReplacements = [
     // Common mojibake sequences from UTF-8 text misread as Windows-1252
+    { pattern: /\u00e2\u009c\u0094\u00ef\u00b8\u008f/g, replacement: '✔️' }, // mojibake check mark + variant
+    { pattern: /\u00e2\u009c\u0094/g, replacement: '✔' }, // mojibake check mark
+    { pattern: /\u00e2\u009d\u008c/g, replacement: '❌' }, // mojibake cross mark
     { pattern: /\u00e2\u0080\u0099/g, replacement: "'" }, // mojibake apostrophe
     { pattern: /\u00e2\u0080\u0098/g, replacement: "'" }, // mojibake opening apostrophe
     { pattern: /\u00e2\u0080\u009c/g, replacement: '"' }, // mojibake opening quote

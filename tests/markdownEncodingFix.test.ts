@@ -16,4 +16,9 @@ describe('fixMarkdownText encoding guardrails', () => {
             "\"Quoted\" text - it's resilient"
         );
     });
+
+    it('repairs mojibake emoji check and cross marks', () => {
+        const corrupted = 'Type \u00e2\u009c\u0094\u00ef\u00b8\u008f / \u00e2\u009d\u008c';
+        expect(fixMarkdownText(corrupted)).toBe('Type ✔️ / ❌');
+    });
 });
