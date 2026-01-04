@@ -15,7 +15,7 @@ jobs:
           version: "0.14.0"
           args: >-
             --accept 200,403,429,503
-            --base-url https://democratized.space
+            --base https://democratized.space
             --exclude "http://localhost"
             --timeout 30
             --max-retries 2
