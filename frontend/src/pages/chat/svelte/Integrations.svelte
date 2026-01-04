@@ -22,7 +22,8 @@
 <div class="container">
     {#if !$tokenPlaceEnabled}
         <div class="notice" data-testid="token-place-disabled-banner">
-            token.place is disabled by default. Using OpenAI chat instead.
+            Chat works now with your OpenAI API key. Soon (in v3.1), chat will be powered by
+            <a href="https://token.place" target="_blank" rel="noopener">token.place</a> — no key needed.
         </div>
     {/if}
     <div class="api-container">
