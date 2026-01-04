@@ -19,6 +19,7 @@ from urllib.parse import urlparse
 
 ImageMap = Dict[str, List["ImageReference"]]
 IdenticalImageMap = Dict[str, List[str]]
+MAX_INLINE_IMAGE_BYTES = 1_500_000
 
 
 class DuplicateImageError(Exception):
@@ -229,6 +230,45 @@ def find_missing_images(usages: Mapping[str, List[ImageReference]], repo_root: P
             missing_map[image].extend(references)
 
     return dict(missing_map)
+
+
+def find_data_urls(usages: Mapping[str, List[ImageReference]]) -> ImageMap:
+    """Return image references that embed data URLs instead of external asset paths."""
+
+    data_url_map: DefaultDict[str, List[ImageReference]] = defaultdict(list)
+
+    for image, references in usages.items():
+        if not isinstance(image, str):
+            continue
+        if image.strip().lower().startswith("data:"):
+            data_url_map[image].extend(references)
+
+    return dict(data_url_map)
+
+
+def find_oversized_images(
+    usages: Mapping[str, List[ImageReference]],
+    repo_root: Path,
+    max_bytes: int = MAX_INLINE_IMAGE_BYTES,
+) -> ImageMap:
+    """Identify images on disk that exceed the configured byte threshold."""
+
+    oversized_map: DefaultDict[str, List[ImageReference]] = defaultdict(list)
+
+    for image, references in usages.items():
+        filesystem_path = _filesystem_path_for_image(image, repo_root)
+        if filesystem_path is None or not filesystem_path.is_file():
+            continue
+
+        try:
+            size = filesystem_path.stat().st_size
+        except OSError:
+            continue
+
+        if size > max_bytes:
+            oversized_map[image].extend(references)
+
+    return dict(oversized_map)
 
 
 def format_duplicates(
