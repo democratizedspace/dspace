@@ -43,6 +43,7 @@ const TEST_GROUPS = [
             'builtin-quests.spec.ts',
             'custom-backup.spec.ts',
             'authentication-flow.spec.ts',
+            'header-actions-placement.spec.ts',
             'cloud-sync.spec.ts',
             'cookie-consent.spec.ts',
             'docs-navigation.spec.ts',
