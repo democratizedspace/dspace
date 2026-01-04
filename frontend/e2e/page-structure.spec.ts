@@ -9,6 +9,52 @@ test.describe('Page Layout Structure', () => {
         await clearUserData(page);
     });
 
+    test('nav smoke covers primary routes without console errors', async ({ page }) => {
+        const consoleErrors: Array<{ route: string; message: string }> = [];
+        const pageErrors: Array<{ route: string; message: string }> = [];
+
+        let activeRoute = '';
+
+        page.on('console', (message) => {
+            if (message.type() === 'error') {
+                consoleErrors.push({ route: activeRoute, message: message.text() });
+            }
+        });
+
+        page.on('pageerror', (error) => {
+            pageErrors.push({ route: activeRoute, message: error.message });
+        });
+
+        const routes = [
+            '/',
+            '/quests',
+            '/inventory',
+            '/energy',
+            '/wallet',
+            '/profile',
+            '/docs',
+            '/chat',
+            '/toolbox',
+            '/inventory/manage',
+            '/processes/manage',
+            '/quests/manage',
+        ];
+
+        for (const path of routes) {
+            activeRoute = path;
+            await page.goto(path);
+            await waitForHydration(page);
+            await page.waitForLoadState('networkidle');
+
+            const heading = page.locator('main h1, main h2, main h3').first();
+            await expect(heading).toBeVisible();
+            expect((await heading.innerText()).trim().length).toBeGreaterThan(0);
+        }
+
+        expect(consoleErrors).toEqual([]);
+        expect(pageErrors).toEqual([]);
+    });
+
     test('home page should have correct structure with header, logo and navigation', async ({
         page,
     }) => {
