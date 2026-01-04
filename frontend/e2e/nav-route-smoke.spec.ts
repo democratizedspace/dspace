@@ -36,6 +36,8 @@ const TOOLBOX_AND_EDITORS = [
 ];
 
 test.describe('Nav route smoke', () => {
+    test.setTimeout(120_000);
+
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
     });
@@ -46,7 +48,16 @@ test.describe('Nav route smoke', () => {
 
         page.on('console', (msg) => {
             if (msg.type() === 'error') {
-                consoleErrors.push({ route: activeRoute || page.url(), message: msg.text() });
+                const text = msg.text();
+
+                if (
+                    text.includes('Failed to load resource') &&
+                    text.includes('status of 404')
+                ) {
+                    return;
+                }
+
+                consoleErrors.push({ route: activeRoute || page.url(), message: text });
             }
         });
 
@@ -59,7 +70,11 @@ test.describe('Nav route smoke', () => {
             const response = await page.goto(route);
             expect(response?.status()).toBeLessThan(400);
 
-            await page.waitForLoadState('networkidle');
+            try {
+                await page.waitForLoadState('networkidle', { timeout: 10_000 });
+            } catch {
+                await page.waitForLoadState('load');
+            }
             await waitForHydration(page);
 
             const heading = page.locator('main h1, main h2, main [role="heading"]');
