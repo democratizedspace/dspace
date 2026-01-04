@@ -52,7 +52,7 @@ export interface Props {
     .header-inner {
         display: grid;
         grid-template-columns: 1fr auto 1fr;
-        align-items: center;
+        align-items: start;
         gap: 1rem;
     }
 
@@ -68,6 +68,7 @@ export interface Props {
 
     .header-actions {
         justify-self: end;
+        align-self: start;
     }
 
     .header-actions__stack {
@@ -142,28 +143,6 @@ export interface Props {
         font-size: 0.8em;
         color: #00ff22;
         margin-top: 0px;
-    }
-
-    @media (max-width: 720px) {
-        .header-inner {
-            grid-template-columns: 1fr auto;
-            grid-template-areas:
-                'brand brand'
-                'spacer actions';
-            row-gap: 0.5rem;
-        }
-
-        .brand {
-            grid-area: brand;
-        }
-
-        .header-spacer {
-            grid-area: spacer;
-        }
-
-        .header-actions {
-            grid-area: actions;
-        }
     }
 
     .skip-link {
