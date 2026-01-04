@@ -59,7 +59,7 @@
     });
 </script>
 
-<nav>
+<nav data-testid="header-nav">
     {#each pinned as item}
         {#if isActive(item)}
             <a class="active" href={item.href} aria-current="page">{item.name}</a>
