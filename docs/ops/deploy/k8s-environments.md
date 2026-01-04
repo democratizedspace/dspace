@@ -3,9 +3,9 @@
 Use the `infra/k8s/environments/` overlays when you need to tune replica counts or image tags for
 a specific environment without rewriting the base manifests under `infra/k8s/`. These overlays are
 kept in sync with the k3s + sugarkube deployment flow documented in
-[`docs/k3s-sugarkube-dev.md`](../../k3s-sugarkube-dev.md); use that runbook for end-to-end
-cluster setup and ingress. This guide stays as the raw `kubectl` / `kustomize` fallback if you need
-to operate outside sugarkube.
+[`docs/k3s-sugarkube-staging.md`](../../k3s-sugarkube-staging.md); see the dev/prod runbooks in the
+same folder for environment-specific details. This guide stays as the raw `kubectl` / `kustomize`
+fallback if you need to operate outside sugarkube.
 
 ## Layout
 
