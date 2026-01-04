@@ -250,7 +250,12 @@ export const ready = isBrowser
                   loadedFromPersistence = true;
               }
           } catch (err) {
-              console.error('Error loading game state from IndexedDB:', err);
+              const message = 'Error loading game state from IndexedDB:';
+              if (import.meta.env?.DEV) {
+                  console.error(message, err);
+              } else {
+                  console.warn(message, err?.message ?? err);
+              }
           } finally {
               readyResolved = true;
           }
