@@ -7,11 +7,14 @@ from pathlib import Path
 import pytest
 
 from scripts.image_issues import (
+    MAX_INLINE_IMAGE_BYTES,
     DuplicateImageError,
     collect_image_references,
+    find_data_urls,
     find_duplicates,
     find_identical_files,
     find_missing_images,
+    find_oversized_images,
     format_duplicates,
     serialize_report,
 )
@@ -216,3 +219,54 @@ def test_collect_image_references_requires_valid_json(tmp_path: Path) -> None:
 
     with pytest.raises(DuplicateImageError):
         collect_image_references(quests_dir, items_dir, repo_root)
+
+
+def test_detects_data_urls_in_quests_and_items(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
+
+    data_url = "data:image/png;base64,AAA"
+    _write_json(
+        quests_dir / "dataurl" / "inline.json",
+        {"id": "dataurl/inline", "title": "Inline Quest", "image": data_url},
+    )
+    _write_json(
+        items_dir / "dataurl.json",
+        [{"id": "inline-item", "name": "Inline Item", "image": data_url}],
+    )
+
+    usages = collect_image_references(quests_dir, items_dir, repo_root)
+    data_urls = find_data_urls(usages)
+
+    assert list(data_urls.keys()) == [data_url]
+    references = data_urls[data_url]
+    assert {ref.identifier for ref in references} == {"dataurl/inline", "inline-item"}
+    assert all(ref.display_path().startswith("frontend/src") for ref in references)
+
+
+def test_reports_oversized_images(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
+
+    image_path = repo_root / "frontend" / "public" / "assets" / "big.png"
+    image_path.parent.mkdir(parents=True, exist_ok=True)
+    # Write a file slightly larger than the inline image limit
+    image_path.write_bytes(b"0" * (MAX_INLINE_IMAGE_BYTES + 10))
+
+    _write_json(
+        quests_dir / "oversized" / "quest.json",
+        {"id": "oversized/quest", "title": "Oversized Quest", "image": "/assets/big.png"},
+    )
+    _write_json(
+        items_dir / "oversized.json",
+        [{"id": "oversized-item", "name": "Oversized Item", "image": "/assets/big.png"}],
+    )
+
+    usages = collect_image_references(quests_dir, items_dir, repo_root)
+    oversized = find_oversized_images(usages, repo_root)
+
+    assert "/assets/big.png" in oversized
+    identifiers = {ref.identifier for ref in oversized["/assets/big.png"]}
+    assert identifiers == {"oversized/quest", "oversized-item"}
