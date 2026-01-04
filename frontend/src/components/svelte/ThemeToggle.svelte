@@ -47,8 +47,8 @@
         cursor: pointer;
         display: inline-flex;
         font: inherit;
-        gap: 0.5rem;
-        padding: 0.35rem 0.85rem;
+        gap: 0.4rem;
+        padding: 0.3rem 0.75rem;
         transition:
             background-color 120ms ease-in-out,
             opacity 120ms ease-in-out;
@@ -73,11 +73,11 @@
     }
 
     .theme-toggle__icon {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .theme-toggle__text {
-        font-size: 0.85rem;
+        font-size: 0.78rem;
         font-weight: 600;
         white-space: nowrap;
     }
