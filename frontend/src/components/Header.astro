@@ -47,7 +47,9 @@ export interface Props {
     }
 
     .header {
-        --header-actions-top: clamp(0.5rem, 1vw + 0.25rem, 1.25rem);
+        --header-actions-top-base: clamp(0.5rem, 1vw + 0.25rem, 1.25rem);
+        --header-actions-offset: 0.75rem;
+        --header-actions-top: calc(var(--header-actions-top-base) + var(--header-actions-offset));
         --header-actions-right: clamp(0.75rem, 1vw + 0.25rem, 1.5rem);
         --header-actions-stack-width: 6.5rem;
         --header-actions-stack-height: 5.75rem;
