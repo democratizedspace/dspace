@@ -46,7 +46,8 @@ export interface Props {
     }
 
     .header {
-        padding: 0.25rem 0;
+        position: relative;
+        padding: 0.25rem 0.85rem 0.25rem;
     }
 
     .header-inner {
@@ -54,6 +55,7 @@ export interface Props {
         grid-template-columns: 1fr auto 1fr;
         align-items: center;
         gap: 1rem;
+        position: relative;
     }
 
     .header-spacer {
@@ -67,7 +69,11 @@ export interface Props {
     }
 
     .header-actions {
+        position: absolute;
+        top: 0.35rem;
+        right: clamp(0.65rem, 3vw, 1.5rem);
         justify-self: end;
+        z-index: 2;
     }
 
     .header-actions__stack {
