@@ -77,8 +77,9 @@
     }
 
     .theme-toggle__text {
-        font-size: 0.85rem;
+        font-size: 0.78rem;
         font-weight: 600;
+        line-height: 1.1;
         white-space: nowrap;
     }
 </style>

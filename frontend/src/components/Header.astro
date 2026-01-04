@@ -22,11 +22,11 @@ export interface Props {
                 <p class="domain">democratized.space</p>
             </div>
         </a>
-        <div class="header-actions" data-testid="header-actions">
-            <div class="header-actions__stack">
-                <ThemeToggle client:load />
-                <HeaderAvatar client:load />
-            </div>
+    </div>
+    <div class="header-actions" data-testid="header-actions">
+        <div class="header-actions__stack">
+            <ThemeToggle client:load />
+            <HeaderAvatar client:load />
         </div>
     </div>
 </header>
@@ -46,6 +46,7 @@ export interface Props {
     }
 
     .header {
+        position: relative;
         padding: 0.25rem 0;
     }
 
@@ -67,7 +68,10 @@ export interface Props {
     }
 
     .header-actions {
-        justify-self: end;
+        position: fixed;
+        top: max(0.75rem, env(safe-area-inset-top, 0px));
+        right: max(0.75rem, env(safe-area-inset-right, 0px));
+        z-index: 6;
     }
 
     .header-actions__stack {
@@ -149,7 +153,7 @@ export interface Props {
             grid-template-columns: 1fr auto;
             grid-template-areas:
                 'brand brand'
-                'spacer actions';
+                'spacer spacer';
             row-gap: 0.5rem;
         }
 
@@ -159,10 +163,6 @@ export interface Props {
 
         .header-spacer {
             grid-area: spacer;
-        }
-
-        .header-actions {
-            grid-area: actions;
         }
     }
 
