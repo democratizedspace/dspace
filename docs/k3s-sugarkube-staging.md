@@ -253,8 +253,8 @@ The chart uses a single `host` string (not a list) and creates one Ingress rule 
 with a catch-all path (`/`). TLS is disabled by default because Cloudflare terminates TLS at the
 tunnel edge before forwarding to Traefik inside the cluster.
 
-Deploys from the Pis are run from `~/sugarkube` using `just helm-oci-install` with both
-`dspace.values.dev.yaml` and `dspace.values.staging.yaml` passed via the `values=` parameter. No
+Deploys from the Pis are run from `~/sugarkube` using `just helm-oci-install` with only the staging
+values file (`dspace.values.staging.yaml`) passed via the `values=` parameter. No
 manual creation of a values file is required.
 
 ## Step 5: Install or upgrade the Helm release
@@ -267,7 +267,7 @@ cd ~/sugarkube
 just helm-oci-install \
   release=dspace namespace=dspace \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
-  values=docs/examples/dspace.values.dev.yaml,docs/examples/dspace.values.staging.yaml \
+  values=docs/examples/dspace.values.staging.yaml \
   version_file=docs/apps/dspace.version \
   default_tag=v3-latest
 ```
@@ -279,7 +279,6 @@ the same arguments. If you are running Helm directly, mirror the same values fil
 helm upgrade --install dspace oci://ghcr.io/democratizedspace/charts/dspace \
   --namespace dspace --create-namespace \
   --version "$(cat docs/apps/dspace.version)" \
-  --values docs/examples/dspace.values.dev.yaml \
   --values docs/examples/dspace.values.staging.yaml
 ```
 
@@ -344,7 +343,7 @@ version and values; it simply forces Helm to pull the refreshed image tag.
    just helm-oci-install \
      release=dspace namespace=dspace \
      chart=oci://ghcr.io/democratizedspace/charts/dspace \
-     values=docs/examples/dspace.values.dev.yaml,docs/examples/dspace.values.staging.yaml \
+     values=docs/examples/dspace.values.staging.yaml \
      version_file=docs/apps/dspace.version \
      default_tag=v3-latest
    ```
@@ -393,7 +392,7 @@ Use this quick runbook to confirm staging is healthy after a deploy:
 - Release drift: inspect rendered values and history with `helm -n dspace status dspace` and
   `helm -n dspace get values dspace`.
 - Pods failing readiness:
-  - Check pod logs (`kubectl -n dspace logs deploy/dspace-frontend`) and describe events to see if
+  - Check pod logs (`kubectl -n dspace logs deploy/dspace`) and describe events to see if
     the image tag or chart version mismatches the published artifacts.
 - Cluster-level issues: use sugarkube's HA diagnostics and log capture from the Raspberry Pi runbooks
   if mDNS discovery, etcd health, or networking regress after upgrades.
