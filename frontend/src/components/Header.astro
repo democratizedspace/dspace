@@ -72,8 +72,6 @@ export interface Props {
         top: clamp(0.5rem, 1vw + 0.25rem, 1.25rem);
         right: clamp(0.75rem, 1vw + 0.25rem, 1.5rem);
         z-index: 5;
-        justify-self: end;
-        pointer-events: none;
     }
 
     .header-actions__stack {
@@ -81,7 +79,6 @@ export interface Props {
         flex-direction: column;
         align-items: flex-end;
         gap: 0.25rem;
-        pointer-events: auto;
     }
 
     .text-gradient {
@@ -153,23 +150,9 @@ export interface Props {
 
     @media (max-width: 720px) {
         .header-inner {
-            grid-template-columns: 1fr auto;
-            grid-template-areas:
-                'brand brand'
-                'spacer actions';
+            grid-template-columns: 1fr;
+            justify-items: center;
             row-gap: 0.5rem;
-        }
-
-        .brand {
-            grid-area: brand;
-        }
-
-        .header-spacer {
-            grid-area: spacer;
-        }
-
-        .header-actions {
-            grid-area: actions;
         }
     }
 

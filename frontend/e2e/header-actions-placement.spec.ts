@@ -47,11 +47,23 @@ test.describe('Header actions placement', () => {
 
                     const rightGap = viewportSize.width - (actionsBox.x + actionsBox.width);
                     const topGap = actionsBox.y;
+                    const baseFontSizePx = 16;
+                    const preferredGap = viewportSize.width * 0.01 + 0.25 * baseFontSizePx;
 
-                    expect(rightGap).toBeGreaterThanOrEqual(0);
-                    expect(rightGap).toBeLessThanOrEqual(32);
-                    expect(topGap).toBeGreaterThanOrEqual(0);
-                    expect(topGap).toBeLessThanOrEqual(24);
+                    const rightMin = 0.75 * baseFontSizePx;
+                    const rightMax = 1.5 * baseFontSizePx;
+                    const expectedRightGap = Math.min(Math.max(preferredGap, rightMin), rightMax);
+
+                    const topMin = 0.5 * baseFontSizePx;
+                    const topMax = 1.25 * baseFontSizePx;
+                    const expectedTopGap = Math.min(Math.max(preferredGap, topMin), topMax);
+
+                    const tolerance = 1;
+
+                    expect(rightGap).toBeGreaterThanOrEqual(expectedRightGap - tolerance);
+                    expect(rightGap).toBeLessThanOrEqual(expectedRightGap + tolerance);
+                    expect(topGap).toBeGreaterThanOrEqual(expectedTopGap - tolerance);
+                    expect(topGap).toBeLessThanOrEqual(expectedTopGap + tolerance);
 
                     expect(boxesOverlap(actionsBox, brandBox)).toBeFalsy();
 
@@ -64,8 +76,8 @@ test.describe('Header actions placement', () => {
                         return;
                     }
 
-                    expect(scrolledBox.x).toBeCloseTo(actionsBox.x, 1);
-                    expect(scrolledBox.y).toBeCloseTo(actionsBox.y, 1);
+                    expect(scrolledBox.x).toBe(actionsBox.x);
+                    expect(scrolledBox.y).toBe(actionsBox.y);
                 }
             );
         });
