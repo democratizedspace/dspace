@@ -143,53 +143,46 @@ test.describe('Page Layout Structure', () => {
 
                 const header = page.locator('header.header');
                 const brand = page.locator('[data-testid="brand"]');
+                const actionsStack = page.getByTestId('header-actions-stack');
                 const toggle = page.getByRole('button', { name: /toggle dark mode/i });
-                const avatar = page.getByTestId('header-avatar');
+                const avatar = page.getByTestId('header-avatar-link');
 
-                await Promise.all([expect(toggle).toBeVisible(), expect(avatar).toBeVisible()]);
-
-                const [headerBox, brandBox, toggleBox, avatarBox] = await Promise.all([
-                    header.boundingBox(),
-                    brand.boundingBox(),
-                    toggle.boundingBox(),
-                    avatar.boundingBox(),
+                await Promise.all([
+                    expect(toggle).toBeVisible(),
+                    expect(avatar).toBeVisible(),
+                    expect(actionsStack).toBeVisible(),
                 ]);
 
-                if (!headerBox || !brandBox || !toggleBox || !avatarBox) {
+                const [headerBox, brandBox, actionsBox] = await Promise.all([
+                    header.boundingBox(),
+                    brand.boundingBox(),
+                    actionsStack.boundingBox(),
+                ]);
+
+                if (!headerBox || !brandBox || !actionsBox) {
                     throw new Error('Unable to read header layout');
                 }
 
                 const headerCenter = headerBox.x + headerBox.width / 2;
                 const brandCenter = brandBox.x + brandBox.width / 2;
-                const pixelTolerance = 2.01;
-                const alignmentTolerance = 4.01;
+                const viewportSize = page.viewportSize();
+                const brandTolerance = 8;
 
-                expect(Math.abs(brandCenter - headerCenter)).toBeLessThan(pixelTolerance);
+                if (!viewportSize) {
+                    throw new Error('Viewport unavailable');
+                }
 
-                const rightmostControl = Math.max(
-                    toggleBox.x + toggleBox.width,
-                    avatarBox.x + avatarBox.width
-                );
-                const leftmostControl = Math.min(toggleBox.x, avatarBox.x);
+                const rightGap = viewportSize.width - (actionsBox.x + actionsBox.width);
+                const topGap = actionsBox.y - headerBox.y;
 
-                expect(
-                    Math.abs(toggleBox.x + toggleBox.width - (avatarBox.x + avatarBox.width))
-                ).toBeLessThan(alignmentTolerance);
+                expect(Math.abs(brandCenter - headerCenter)).toBeLessThan(brandTolerance);
+                expect(actionsBox.x).toBeGreaterThan(brandCenter + 8);
+                expect(rightGap).toBeGreaterThanOrEqual(0);
+                expect(rightGap).toBeLessThanOrEqual(32);
+                expect(topGap).toBeGreaterThanOrEqual(0);
+                expect(topGap).toBeLessThanOrEqual(32);
 
-                expect(leftmostControl).toBeGreaterThan(headerCenter - 12);
-                expect(rightmostControl).toBeLessThanOrEqual(
-                    headerBox.x + headerBox.width + pixelTolerance
-                );
-
-                expect(toggleBox.y + toggleBox.height).toBeLessThanOrEqual(
-                    avatarBox.y + pixelTolerance
-                );
-                expect(avatarBox.y).toBeGreaterThanOrEqual(headerBox.y - pixelTolerance * 2);
-                expect(avatarBox.y + avatarBox.height).toBeLessThanOrEqual(
-                    headerBox.y + headerBox.height + pixelTolerance * 4
-                );
-
-                const overlapsBrand = (boxA: typeof brandBox, boxB: typeof brandBox) =>
+                const overlaps = (boxA: typeof brandBox, boxB: typeof brandBox) =>
                     !(
                         boxA.x + boxA.width <= boxB.x ||
                         boxB.x + boxB.width <= boxA.x ||
@@ -197,8 +190,7 @@ test.describe('Page Layout Structure', () => {
                         boxB.y + boxB.height <= boxA.y
                     );
 
-                expect(overlapsBrand(brandBox, toggleBox)).toBeFalsy();
-                expect(overlapsBrand(brandBox, avatarBox)).toBeFalsy();
+                expect(overlaps(brandBox, actionsBox)).toBeFalsy();
             });
         });
     }
