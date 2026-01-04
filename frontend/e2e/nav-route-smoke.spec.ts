@@ -13,6 +13,18 @@ const TOP_NAV_ROUTES = [
     '/changelog',
 ];
 
+const MORE_MENU_ROUTES = [
+    '/settings',
+    '/cloudsync',
+    '/stats',
+    '/leaderboard',
+    '/gamesaves',
+    '/contentbackup',
+    '/achievements',
+    '/titles',
+    '/shop',
+];
+
 const TOOLBOX_AND_EDITORS = [
     '/toolbox',
     '/inventory/manage',
@@ -57,6 +69,10 @@ test.describe('Nav route smoke', () => {
         };
 
         for (const route of TOP_NAV_ROUTES) {
+            await visitAndAssert(route);
+        }
+
+        for (const route of MORE_MENU_ROUTES) {
             await visitAndAssert(route);
         }
 
