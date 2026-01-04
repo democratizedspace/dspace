@@ -94,7 +94,8 @@ Create quests, items, and processes for the game:
   - [Netlify Migration](./docs/ops/netlify-migration.md) - Self-hosting background
   - [Offline-First Strategy](./docs/ops/offline-first.md) - PWA capabilities
 - [Kubernetes Deployment](./docs/charts.md) - Helm chart installation
-- [k3s + Sugarkube](./docs/k3s-sugarkube-dev.md) - HA cluster setup
+- [k3s + Sugarkube runbooks](./docs/k3s-sugarkube-staging.md) - HA cluster setup (see dev/prod
+  variants alongside)
 
 ### Service worker update strategy
 
