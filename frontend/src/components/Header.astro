@@ -50,6 +50,9 @@ export interface Props {
         --header-actions-right: clamp(0.75rem, 1vw + 0.25rem, 1.5rem);
         --header-actions-stack-height: 5.75rem;
         --header-actions-padding-buffer: 0.5rem;
+        --header-actions-inline-padding: calc(
+            var(--header-actions-right) + var(--header-actions-padding-buffer)
+        );
         padding: 0.25rem 0;
     }
 
@@ -63,7 +66,7 @@ export interface Props {
             var(--header-actions-top) + var(--header-actions-stack-height) +
                 var(--header-actions-padding-buffer)
         );
-        padding-inline-end: calc(var(--header-actions-right) + var(--header-actions-padding-buffer));
+        padding-inline: var(--header-actions-inline-padding);
     }
 
     .header-spacer {
