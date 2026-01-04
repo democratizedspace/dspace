@@ -93,6 +93,8 @@ Create quests, items, and processes for the game:
   - [Failover Procedures](./docs/ops/failover_procedures.md) - Handling outages
   - [Netlify Migration](./docs/ops/netlify-migration.md) - Self-hosting background
   - [Offline-First Strategy](./docs/ops/offline-first.md) - PWA capabilities
+  - [Raspberry Pi 9-node topology](./docs/raspi_cluster_topology_9_nodes.md) - Inventory and role map
+  - [Power budget and load test](./docs/power_budget_load_test.md) - Verify PoE headroom
 - [Kubernetes Deployment](./docs/charts.md) - Helm chart installation
 - k3s + Sugarkube runbooks: [dev](./docs/k3s-sugarkube-dev.md) / [staging](./docs/k3s-sugarkube-staging.md) / [prod](./docs/k3s-sugarkube-prod.md)
 

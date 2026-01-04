@@ -46,7 +46,7 @@ Prerequisites:
 - Sugarkube ha3 cluster is running _and_ you have completed the Traefik installation in the
   sugarkube operations guide:
   [Install and verify Traefik ingress](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md#install-and-verify-traefik-ingress).
-- Cluster joins use `SUGARKUBE_TOKEN_STAGING` (or the deprecated `env=int` alias); avoid reusing dev
+- Cluster joins use `SUGARKUBE_TOKEN_STAGING`; avoid reusing dev
   tokens for staging.
 
 ### Hardware and cluster configuration
@@ -284,7 +284,7 @@ helm upgrade --install dspace oci://ghcr.io/democratizedspace/charts/dspace \
 
 > **Runtime environment flag:** The Astro server reads `DSPACE_ENV` to decide whether QA-only UI
 > (such as cheat toggles) should render. The Helm chart now defaults this to `production`; staging
-> values should set `DSPACE_ENV=staging` and dev values to `DSPACE_ENV=dev` to enable the cheats
+> Each environment's values should set `DSPACE_ENV` to match the target (`staging` for this guide).
 > surface safely outside production.
 
 ### Force a rollout restart when using mutable tags (e.g., `v3-latest`)

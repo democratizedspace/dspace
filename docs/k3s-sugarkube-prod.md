@@ -15,12 +15,13 @@
 Production runs with QA Cheats **OFF**. The production values set `environment: prod`, mapping to
 `DSPACE_ENV=prod`, which disables cheats in the UI. Do not override this value.
 
-## Image/tag guidance
+## Immutable tags only
 
-Use immutable tags for production rollouts:
+Production must use immutable tags so every rollout is reproducible and auditable:
 
-- Prefer semantic versions or git SHA tags (`v3.0.0`, `main-<shortsha>`, etc.)
-- Avoid mutable `*-latest` tags unless you plan to restart pods explicitly after updating the tag
+- Prefer semantic versions or git SHA tags such as `v3.0.0`, `v3-2024-08-15`, or `main-<shortsha>`.
+- Avoid mutable tags like `*-latest`. Mutable tags do not trigger a new rollout on image republish,
+  and they make it harder to confirm which build is running during an incident.
 
 ## Deployment steps
 

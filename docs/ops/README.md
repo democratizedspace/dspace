@@ -14,5 +14,8 @@ incidents, or performing maintenance.
 - [Netlify migration history](./netlify-migration.md)
 - [Raspberry Pi deployment guide](./RPI_DEPLOYMENT_GUIDE.md)
 - [Offline-first strategy](./offline-first.md)
+- Hardware notes:
+  - [9-node Raspberry Pi topology](../raspi_cluster_topology_9_nodes.md)
+  - [Power budget and load test](../power_budget_load_test.md)
 
 Add new runbooks in this directory and update the list above.
