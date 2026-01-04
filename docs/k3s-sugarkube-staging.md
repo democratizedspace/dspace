@@ -116,7 +116,9 @@ just helm-oci-install \
 3. **Verify**: Check the deployment and open the site at `staging.democratized.space`.
 
 The sections below provide full context for each step, branch-specific tag conventions, and
-troubleshooting guidance.
+troubleshooting guidance. Keep the values list scoped to `dspace.values.staging.yaml`; mixing in the
+dev values file (`dspace.values.dev.yaml`) will flip the environment to `dev` and misconfigure the
+hostnames for staging.
 
 ## Step 1: Build and publish GHCR artifacts from the right branch
 
@@ -283,9 +285,9 @@ helm upgrade --install dspace oci://ghcr.io/democratizedspace/charts/dspace \
 ```
 
 > **Runtime environment flag:** The Astro server reads `DSPACE_ENV` to decide whether QA-only UI
-> (such as cheat toggles) should render. The Helm chart now defaults this to `production`; staging
-> Each environment's values should set `DSPACE_ENV` to match the target (`staging` for this guide).
-> surface safely outside production.
+> (such as cheat toggles) should render. The Helm chart defaults this flag to `production`;
+> `dspace.values.staging.yaml` overrides it to `staging` so QA Cheats stay enabled here. Production
+> should keep `DSPACE_ENV=prod` so cheats remain disabled.
 
 ### Force a rollout restart when using mutable tags (e.g., `v3-latest`)
 

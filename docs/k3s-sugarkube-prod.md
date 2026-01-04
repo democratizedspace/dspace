@@ -22,6 +22,8 @@ Production must use immutable tags so every rollout is reproducible and auditabl
 - Prefer semantic versions or git SHA tags such as `v3.0.0`, `v3-2024-08-15`, or `main-<shortsha>`.
 - Avoid mutable tags like `*-latest`. Mutable tags do not trigger a new rollout on image republish,
   and they make it harder to confirm which build is running during an incident.
+- Pin `default_tag` in the Helm helper to one of the immutable tags above (for example,
+  `default_tag=main-a1b2c3d` or `default_tag=v3.0.1`), not `v3-latest`.
 
 ## Deployment steps
 
