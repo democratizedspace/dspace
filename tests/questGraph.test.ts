@@ -108,6 +108,18 @@ describe('quest graph diagnostics', () => {
     expect(second.diagnostics.cycles).toEqual(expectedCycle);
   });
 
+  it('flags self-referential quests as contradictory cycles', () => {
+    const questDir = createQuestDir();
+    writeQuest(questDir, 'loop/self.json', {
+      title: 'Self loop',
+      requiresQuests: ['loop/self.json'],
+    });
+
+    const graph = buildQuestGraph({ questDir });
+
+    expect(graph.diagnostics.cycles).toEqual([['loop/self.json', 'loop/self.json']]);
+  });
+
   it('reports unreachable nodes from the root', () => {
     const questDir = createQuestDir();
     writeQuest(questDir, 'welcome/howtodoquests.json', { title: 'Root' });
