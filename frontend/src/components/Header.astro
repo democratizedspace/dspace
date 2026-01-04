@@ -46,6 +46,9 @@ export interface Props {
     }
 
     .header {
+        --header-actions-top: clamp(0.5rem, 1vw + 0.25rem, 1.25rem);
+        --header-actions-right: clamp(0.75rem, 1vw + 0.25rem, 1.5rem);
+        --header-actions-stack-height: 4rem;
         padding: 0.25rem 0;
     }
 
@@ -55,6 +58,8 @@ export interface Props {
         grid-template-columns: 1fr auto 1fr;
         align-items: center;
         gap: 1rem;
+        padding-top: calc(var(--header-actions-top) + var(--header-actions-stack-height));
+        padding-inline-end: calc(var(--header-actions-right) + 0.5rem);
     }
 
     .header-spacer {
@@ -69,8 +74,8 @@ export interface Props {
 
     .header-actions {
         position: fixed;
-        top: clamp(0.5rem, 1vw + 0.25rem, 1.25rem);
-        right: clamp(0.75rem, 1vw + 0.25rem, 1.5rem);
+        top: var(--header-actions-top);
+        right: var(--header-actions-right);
         z-index: 5;
     }
 
