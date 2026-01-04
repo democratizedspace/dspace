@@ -1,7 +1,7 @@
 # Kubernetes Manifests for DSPACE
 
 These manifests deploy the `dspace-app` container built from the root `Dockerfile`. They match the
-k3s + sugarkube deployment documented in [`docs/k3s-sugarkube-dev.md`](../../docs/k3s-sugarkube-dev.md)
+k3s + sugarkube deployment documented in [`docs/k3s-sugarkube-staging.md`](../../docs/k3s-sugarkube-staging.md)
 for the staging cluster.
 
 The container exposes port **8080** and provides health endpoints at `/healthz` (readiness)

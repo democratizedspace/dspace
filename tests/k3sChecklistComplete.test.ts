@@ -4,7 +4,7 @@ import { join } from 'node:path';
 
 describe('k3s sugarkube staging guide', () => {
     it('does not advertise unchecked staging tasks', () => {
-        const docPath = join(process.cwd(), 'docs', 'k3s-sugarkube-dev.md');
+        const docPath = join(process.cwd(), 'docs', 'k3s-sugarkube-staging.md');
         const content = readFileSync(docPath, 'utf8');
 
         const uncheckedItems = content.match(/-\s+\[ \]/g) || [];

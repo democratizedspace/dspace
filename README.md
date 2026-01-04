@@ -89,12 +89,31 @@ Create quests, items, and processes for the game:
   - [Docker Deployment](./docs/ops/deploy/docker.md) - Container-based deployment
   - [Monitoring Setup](./docs/ops/monitoring_setup.md) - Prometheus and Grafana
   - [Backup System](./docs/ops/backup_system.md) - Automated backups
-  - [Cloudflare Load Balancing](./docs/ops/cloudflare_load_balancing.md) - High availability
-  - [Failover Procedures](./docs/ops/failover_procedures.md) - Handling outages
-  - [Netlify Migration](./docs/ops/netlify-migration.md) - Self-hosting background
-  - [Offline-First Strategy](./docs/ops/offline-first.md) - PWA capabilities
+- [Cloudflare Load Balancing](./docs/ops/cloudflare_load_balancing.md) - High availability
+- [Failover Procedures](./docs/ops/failover_procedures.md) - Handling outages
+- [Netlify Migration](./docs/ops/netlify-migration.md) - Self-hosting background
+- [Offline-First Strategy](./docs/ops/offline-first.md) - PWA capabilities
+- [Raspberry Pi 9-node topology](./docs/raspi_cluster_topology_9_nodes.md) - Inventory and role map
+- [Power budget and load test](./docs/power_budget_load_test.md) - Verify PoE headroom
 - [Kubernetes Deployment](./docs/charts.md) - Helm chart installation
-- [k3s + Sugarkube](./docs/k3s-sugarkube-dev.md) - HA cluster setup
+- k3s + Sugarkube runbooks: [dev](./docs/k3s-sugarkube-dev.md) / [staging](./docs/k3s-sugarkube-staging.md) / [prod](./docs/k3s-sugarkube-prod.md)
+
+### Verification (environment split)
+
+Run these commands to verify the environment-specific runbooks, token alignment, and supporting docs
+stay consistent:
+
+```bash
+rg -n "k3s-sugarkube-(dev|staging|prod)\\.md" -S docs README.md
+rg -n "QA Cheats|DSPACE_ENV" -S docs/k3s-sugarkube-*.md
+rg -n "(^|[^A-Z])INT([^A-Z]|$)" -S .
+rg -n "env=.*int|sugar-int|SUGARKUBE_TOKEN_INT" -S .
+rg -n "SUGARKUBE_TOKEN_DEV" -S docs
+rg -n "env=dev" -S docs/k3s-sugarkube-staging.md
+test -f docs/raspi_cluster_topology_9_nodes.md && test -f docs/power_budget_load_test.md
+rg -n "raspi_cluster_topology_9_nodes|power_budget_load_test" -S README.md docs
+rg -n "k3s-sugarkube-dev\\.md" -S docs README.md
+```
 
 ### Service worker update strategy
 
