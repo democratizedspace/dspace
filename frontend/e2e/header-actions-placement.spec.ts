@@ -73,6 +73,9 @@ test.describe('Header actions placement', () => {
                 expect(Math.abs(brandCenter - headerCenter)).toBeLessThan(8);
                 expect(Math.abs(navCenter - headerCenter)).toBeLessThan(8);
 
+                const topAlignDelta = Math.abs(brandBox.y - actionsBox.y);
+                expect(topAlignDelta).toBeLessThanOrEqual(12);
+
                 const rightGap = viewportSize.width - (actionsBox.x + actionsBox.width);
                 const topGap = actionsBox.y;
                 expect(rightGap).toBeGreaterThanOrEqual(0);
