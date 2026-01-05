@@ -13,10 +13,35 @@ const resolveOpenAIClient = () => {
     return OpenAI;
 };
 
-const toResponseMessage = (message) => ({
-    role: message.role,
-    content: [{ type: 'input_text', text: message.content }],
-});
+const defaultContentType = (role) => (role === 'assistant' ? 'output_text' : 'input_text');
+
+const toResponseMessage = (message) => {
+    const contentEntries = Array.isArray(message.content)
+        ? message.content
+        : [message.content ?? ''];
+
+    return {
+        role: message.role,
+        content: contentEntries.map((entry) => {
+            if (entry && typeof entry === 'object' && !Array.isArray(entry)) {
+                if (entry.type === 'input_text' && message.role === 'assistant') {
+                    return { ...entry, type: 'output_text' };
+                }
+
+                if (entry.type) {
+                    return entry;
+                }
+
+                return { ...entry, type: defaultContentType(message.role) };
+            }
+
+            return {
+                type: defaultContentType(message.role),
+                text: typeof entry === 'string' ? entry : String(entry ?? ''),
+            };
+        }),
+    };
+};
 
 const toOutputText = (response) => {
     if (!response) return '';

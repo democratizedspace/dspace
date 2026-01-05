@@ -82,7 +82,7 @@ describe('gpt-5 chat responses utility', () => {
             role: 'assistant',
             content: [
                 {
-                    type: 'input_text',
+                    type: 'output_text',
                     text: 'Welcome! How can I assist you today?',
                 },
             ],
@@ -113,6 +113,30 @@ describe('gpt-5 chat responses utility', () => {
                 },
             ],
         });
+    });
+
+    test('sends assistant history as output_text blocks', async () => {
+        await GPT35Turbo([
+            {
+                role: 'assistant',
+                content: 'previous reply',
+            },
+        ]);
+        const call = createResponseMock.mock.calls[0][0];
+        const assistantMessages = call.input.filter((entry) => entry.role === 'assistant');
+
+        expect(assistantMessages).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    content: [
+                        {
+                            type: 'output_text',
+                            text: 'previous reply',
+                        },
+                    ],
+                }),
+            ])
+        );
     });
 
     test('returns response content', async () => {
