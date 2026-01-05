@@ -62,10 +62,12 @@ export interface Props {
         box-sizing: border-box;
         --header-actions-top: var(--header-top-inset);
         --header-actions-right: var(--header-inline-inset-right);
+        --header-actions-height: 4.75rem;
         padding-top: var(--header-top-inset);
         padding-bottom: 0.75rem;
         padding-left: calc(var(--page-inline-padding, 0px) + var(--header-inline-inset-left));
         padding-right: calc(var(--page-inline-padding, 0px) + var(--header-inline-inset-right));
+        min-height: calc(var(--header-actions-top) + var(--header-actions-height));
     }
 
     .header-inner {
@@ -200,20 +202,21 @@ export interface Props {
     @media (max-width: 480px) {
         .header {
             padding-right: calc(var(--header-inline-inset-right) + 0.25rem);
+            --header-actions-height: 4.2rem;
         }
 
         .header-actions__stack {
             gap: 0.18rem;
-            transform: scale(0.78);
+            transform: scale(0.76);
             transform-origin: top right;
         }
 
         .brand {
-            max-width: clamp(8.75rem, 54vw, 10.75rem);
+            max-width: clamp(8.5rem, 52vw, 10.25rem);
         }
 
         .text-gradient {
-            font-size: 1.6em;
+            font-size: 1.55em;
         }
 
         .domain {
@@ -222,12 +225,16 @@ export interface Props {
     }
 
     @media (max-width: 360px) {
+        .header {
+            --header-actions-height: 3.9rem;
+        }
+
         .header-actions__stack {
-            transform: scale(0.72);
+            transform: scale(0.7);
         }
 
         .text-gradient {
-            font-size: 1.5em;
+            font-size: 1.45em;
         }
 
         .domain {
@@ -235,7 +242,7 @@ export interface Props {
         }
 
         .brand {
-            max-width: clamp(8.5rem, 60vw, 9.75rem);
+            max-width: clamp(8.25rem, 58vw, 9.25rem);
         }
     }
 </style>
