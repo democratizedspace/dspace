@@ -113,17 +113,14 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        width: min(
-            70rem,
-            calc(100% - (var(--header-inline-inset-left, 1rem) + var(--header-inline-inset-right, 1rem)))
-        );
-        max-width: min(
-            70rem,
-            calc(100% - (var(--header-inline-inset-left, 1rem) + var(--header-inline-inset-right, 1rem)))
-        );
+        width: min(70rem, calc(100% - var(--header-inline-total, 2rem)));
+        max-width: min(70rem, calc(100% - var(--header-inline-total, 2rem)));
         margin-inline: auto;
         box-sizing: border-box;
-        padding-inline: max(0.25rem, calc(var(--header-inline-inset-left, 1rem) / 3));
+        padding-inline: max(
+            0.25rem,
+            calc((var(--page-inline-padding, 0px) + var(--header-inline-inset-left, 1rem)) / 3)
+        );
     }
 
     nav a {

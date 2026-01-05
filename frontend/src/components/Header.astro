@@ -33,9 +33,15 @@ export interface Props {
 <style>
     :global(:root) {
         --astro-gradient: linear-gradient(0deg, #80df98, #00ff22);
+        --page-inline-padding: 1rem;
         --header-top-inset: calc(0.5rem + env(safe-area-inset-top, 0px));
         --header-inline-inset-left: calc(0.75rem + env(safe-area-inset-left, 0px));
         --header-inline-inset-right: calc(0.75rem + env(safe-area-inset-right, 0px));
+        --header-inline-total: calc(
+            (var(--page-inline-padding, 0px) * 2) +
+                var(--header-inline-inset-left) +
+                var(--header-inline-inset-right)
+        );
     }
 
     a {
@@ -58,8 +64,8 @@ export interface Props {
         --header-actions-right: var(--header-inline-inset-right);
         padding-top: var(--header-top-inset);
         padding-bottom: 0.75rem;
-        padding-left: var(--header-inline-inset-left);
-        padding-right: var(--header-inline-inset-right);
+        padding-left: calc(var(--page-inline-padding, 0px) + var(--header-inline-inset-left));
+        padding-right: calc(var(--page-inline-padding, 0px) + var(--header-inline-inset-right));
     }
 
     .header-inner {
@@ -68,14 +74,8 @@ export interface Props {
         align-items: flex-start;
         justify-items: center;
         gap: 1rem;
-        width: min(
-            70rem,
-            calc(100% - (var(--header-inline-inset-left) + var(--header-inline-inset-right)))
-        );
-        max-width: min(
-            70rem,
-            calc(100% - (var(--header-inline-inset-left) + var(--header-inline-inset-right)))
-        );
+        width: min(70rem, calc(100% - var(--header-inline-total)));
+        max-width: min(70rem, calc(100% - var(--header-inline-total)));
         margin: 0 auto;
     }
 
