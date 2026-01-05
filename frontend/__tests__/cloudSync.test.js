@@ -47,6 +47,37 @@ describe('cloudSync', () => {
         expect(await loadCloudGistId()).toBe('');
     });
 
+    test('uploadGameStateToGist keeps custom content payloads', async () => {
+        await saveGitHubToken('ghp_x');
+        const state = loadGameState();
+        state.customItems = [{ id: 'c-item', name: 'Custom Item' }];
+        state.customProcesses = [{ id: 'c-process', title: 'Custom Process' }];
+        state.customQuests = [{ id: 'c-quest', title: 'Custom Quest' }];
+        await saveGameState(state);
+
+        global.fetch.mockResolvedValueOnce({
+            ok: true,
+            json: () =>
+                Promise.resolve({
+                    id: 'custom-content-backup',
+                    created_at: '2024-02-02T03:04:05Z',
+                    html_url: 'https://gist.github.com/custom-content-backup',
+                }),
+        });
+
+        await uploadGameStateToGist();
+
+        const [, requestInit] = global.fetch.mock.calls[0];
+        const body = JSON.parse(requestInit.body);
+        const content = Object.values(body.files)[0].content;
+        const parsed = JSON.parse(atob(content));
+        const payload = parsed.payload || parsed;
+
+        expect(payload.customItems).toEqual(state.customItems);
+        expect(payload.customProcesses).toEqual(state.customProcesses);
+        expect(payload.customQuests).toEqual(state.customQuests);
+    });
+
     test('downloadGameStateFromGist updates state', async () => {
         await saveGitHubToken('ghp_x');
         const encoded = btoa(JSON.stringify({ quests: { q: true }, inventory: {}, processes: {} }));
