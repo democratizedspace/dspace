@@ -110,10 +110,10 @@
 
 <style>
     nav {
-        text-align: center;
-        display: inline-flex;
+        display: flex;
         flex-wrap: wrap;
         justify-content: center;
+        width: 100%;
     }
 
     nav a {
