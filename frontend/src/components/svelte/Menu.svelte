@@ -113,7 +113,8 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        width: 100%;
+        width: min(70rem, calc(100vw - 1.5rem));
+        margin-inline: auto;
     }
 
     nav a {

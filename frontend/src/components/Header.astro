@@ -52,10 +52,9 @@ export interface Props {
         overflow-x: clip;
         --header-top-inset: calc(0.5rem + env(safe-area-inset-top, 0px));
         --header-inline-inset-left: calc(0.75rem + env(safe-area-inset-left, 0px));
-        --header-inline-inset-right: calc(0.75rem + env(safe-area-inset-right, 0px));
+        --header-inline-inset-right: calc(1rem + env(safe-area-inset-right, 0px));
         --header-actions-top: var(--header-top-inset);
         --header-actions-right: var(--header-inline-inset-right);
-        --header-actions-stack-width: 6.5rem;
         padding-top: var(--header-top-inset);
         padding-bottom: 0.75rem;
         padding-left: var(--header-inline-inset-left);
@@ -95,7 +94,7 @@ export interface Props {
         flex-direction: column;
         align-items: flex-end;
         gap: 0.25rem;
-        min-width: var(--header-actions-stack-width);
+        min-width: fit-content;
     }
 
     .text-gradient {
