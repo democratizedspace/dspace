@@ -143,6 +143,7 @@ test.describe('Page Layout Structure', () => {
 
                 const header = page.locator('header.header');
                 const brand = page.locator('[data-testid="brand"]');
+                const nav = page.getByTestId('header-nav');
                 const actionsStack = page.getByTestId('header-actions-stack');
                 const toggle = page.getByRole('button', { name: /toggle dark mode/i });
                 const avatar = page.getByTestId('header-avatar-link');
@@ -150,21 +151,24 @@ test.describe('Page Layout Structure', () => {
                 await Promise.all([
                     expect(toggle).toBeVisible(),
                     expect(avatar).toBeVisible(),
+                    expect(nav).toBeVisible(),
                     expect(actionsStack).toBeVisible(),
                 ]);
 
-                const [headerBox, brandBox, actionsBox] = await Promise.all([
+                const [headerBox, brandBox, navBox, actionsBox] = await Promise.all([
                     header.boundingBox(),
                     brand.boundingBox(),
+                    nav.boundingBox(),
                     actionsStack.boundingBox(),
                 ]);
 
-                if (!headerBox || !brandBox || !actionsBox) {
+                if (!headerBox || !brandBox || !navBox || !actionsBox) {
                     throw new Error('Unable to read header layout');
                 }
 
                 const headerCenter = headerBox.x + headerBox.width / 2;
                 const brandCenter = brandBox.x + brandBox.width / 2;
+                const navCenter = navBox.x + navBox.width / 2;
                 const viewportSize = page.viewportSize();
                 const brandTolerance = 8;
 
@@ -176,6 +180,7 @@ test.describe('Page Layout Structure', () => {
                 const topGap = actionsBox.y - headerBox.y;
 
                 expect(Math.abs(brandCenter - headerCenter)).toBeLessThan(brandTolerance);
+                expect(Math.abs(navCenter - headerCenter)).toBeLessThan(brandTolerance);
                 expect(actionsBox.x).toBeGreaterThan(brandCenter + 8);
                 expect(rightGap).toBeGreaterThanOrEqual(0);
                 expect(rightGap).toBeLessThanOrEqual(32);
@@ -191,6 +196,27 @@ test.describe('Page Layout Structure', () => {
                     );
 
                 expect(overlaps(brandBox, actionsBox)).toBeFalsy();
+                expect(overlaps(navBox, actionsBox)).toBeFalsy();
+
+                const scrollDistance = Math.max(viewportSize.height * 1.5, 800);
+                await page.mouse.wheel(0, scrollDistance);
+                await page.evaluate(() =>
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' })
+                );
+                await page.waitForTimeout(100);
+
+                const scrolledBox = await actionsStack.boundingBox();
+                if (!scrolledBox) {
+                    throw new Error('Unable to read scrolled header actions box');
+                }
+
+                const inViewport =
+                    scrolledBox.x + scrolledBox.width > 0 &&
+                    scrolledBox.y + scrolledBox.height > 0 &&
+                    scrolledBox.x < viewportSize.width &&
+                    scrolledBox.y < viewportSize.height;
+
+                expect(inViewport).toBeFalsy();
             });
         });
     }
