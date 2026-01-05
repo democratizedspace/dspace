@@ -52,7 +52,7 @@ export interface Props {
         overflow-x: clip;
         box-sizing: border-box;
         --header-top-inset: calc(0.5rem + env(safe-area-inset-top, 0px));
-        --header-inline-inset-left: calc(0.75rem + env(safe-area-inset-left, 0px));
+        --header-inline-inset-left: calc(1rem + env(safe-area-inset-left, 0px));
         --header-inline-inset-right: calc(1rem + env(safe-area-inset-right, 0px));
         --header-actions-top: var(--header-top-inset);
         --header-actions-right: var(--header-inline-inset-right);
@@ -81,7 +81,7 @@ export interface Props {
         align-items: center;
         justify-self: center;
         text-align: center;
-        max-width: min(16rem, calc(100vw - 7rem));
+        max-width: clamp(9.5rem, 28vw, 16rem);
     }
 
     .header-actions {
@@ -95,7 +95,7 @@ export interface Props {
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        gap: 0.25rem;
+        gap: 0.2rem;
         min-width: fit-content;
     }
 
@@ -197,27 +197,27 @@ export interface Props {
         }
 
         .header-actions__stack {
-            gap: 0.2rem;
-            transform: scale(0.85);
+            gap: 0.18rem;
+            transform: scale(0.82);
             transform-origin: top right;
         }
 
         .brand {
-            max-width: min(14rem, calc(100vw - 6rem));
+            max-width: clamp(9.5rem, 60vw, 11.5rem);
         }
 
         .text-gradient {
-            font-size: 1.75em;
+            font-size: 1.65em;
         }
 
         .domain {
-            font-size: 0.75em;
+            font-size: 0.72em;
         }
     }
 
     @media (max-width: 360px) {
         .header-actions__stack {
-            transform: scale(0.8);
+            transform: scale(0.75);
         }
 
         .text-gradient {
@@ -229,7 +229,7 @@ export interface Props {
         }
 
         .brand {
-            max-width: min(12.5rem, calc(100vw - 5.5rem));
+            max-width: clamp(9rem, 64vw, 10.5rem);
         }
     }
 </style>
