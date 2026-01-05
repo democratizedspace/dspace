@@ -13,10 +13,14 @@ const resolveOpenAIClient = () => {
     return OpenAI;
 };
 
-const toResponseMessage = (message) => ({
-    role: message.role,
-    content: [{ type: 'input_text', text: message.content }],
-});
+const toResponseMessage = (message) => {
+    const contentType = message.role === 'assistant' ? 'output_text' : 'input_text';
+
+    return {
+        role: message.role,
+        content: [{ type: contentType, text: message.content }],
+    };
+};
 
 const toOutputText = (response) => {
     if (!response) return '';
