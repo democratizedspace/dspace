@@ -9,19 +9,22 @@ test.describe('Chat message flow', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
 
-        await page.addInitScript(({ reply }) => {
-            // @ts-expect-error test hook for OpenAI client
-            window.__DSpaceOpenAIClient = function () {
-                return {
-                    responses: {
-                        create: async () => {
-                            await new Promise((resolve) => setTimeout(resolve, 150));
-                            return { output_text: reply } as const;
+        await page.addInitScript(
+            ({ reply }) => {
+                // @ts-expect-error test hook for OpenAI client
+                window.__DSpaceOpenAIClient = function () {
+                    return {
+                        responses: {
+                            create: async () => {
+                                await new Promise((resolve) => setTimeout(resolve, 150));
+                                return { output_text: reply } as const;
+                            },
                         },
-                    },
+                    };
                 };
-            };
-        }, { reply: LONG_REPLY });
+            },
+            { reply: LONG_REPLY }
+        );
     });
 
     test('shows loading state and renders assistant replies', async ({ page }) => {
