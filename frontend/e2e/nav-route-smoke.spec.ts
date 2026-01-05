@@ -50,10 +50,7 @@ test.describe('Nav route smoke', () => {
             if (msg.type() === 'error') {
                 const text = msg.text();
 
-                if (
-                    text.includes('Failed to load resource') &&
-                    text.includes('status of 404')
-                ) {
+                if (text.includes('Failed to load resource') && text.includes('status of 404')) {
                     return;
                 }
 
