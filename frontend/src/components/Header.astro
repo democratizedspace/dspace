@@ -46,6 +46,10 @@ export interface Props {
 
     .header {
         position: relative;
+        width: 100vw;
+        max-width: 100vw;
+        margin-inline: calc(50% - 50vw);
+        overflow-x: clip;
         --header-actions-top-base: clamp(0.5rem, 1vw + 0.25rem, 1.25rem);
         --header-actions-top: calc(
             var(--header-actions-top-base) + env(safe-area-inset-top, 0px)
@@ -73,6 +77,9 @@ export interface Props {
         align-items: center;
         justify-items: center;
         gap: 1rem;
+        max-width: 70rem;
+        margin: 0 auto;
+        width: 100%;
     }
 
     .brand {
