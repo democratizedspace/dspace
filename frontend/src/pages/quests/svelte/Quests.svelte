@@ -168,7 +168,7 @@
 <style>
     .container {
         width: 100%;
-        max-width: 100vw;
+        max-width: 100%;
         min-width: 0;
         box-sizing: border-box;
         margin-inline: auto;

@@ -113,11 +113,17 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        width: min(70rem, calc(100% - 1.5rem));
-        max-width: 100%;
+        width: min(
+            70rem,
+            calc(100% - (var(--header-inline-inset-left, 1rem) + var(--header-inline-inset-right, 1rem)))
+        );
+        max-width: min(
+            70rem,
+            calc(100% - (var(--header-inline-inset-left, 1rem) + var(--header-inline-inset-right, 1rem)))
+        );
         margin-inline: auto;
         box-sizing: border-box;
-        padding-inline: 0.25rem;
+        padding-inline: max(0.25rem, calc(var(--header-inline-inset-left, 1rem) / 3));
     }
 
     nav a {

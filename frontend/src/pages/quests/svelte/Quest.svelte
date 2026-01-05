@@ -87,7 +87,7 @@
 
     .content-text {
         flex: 1 1 auto;
-        min-width: 0;
+        min-width: 180px;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
