@@ -62,13 +62,7 @@ test.describe('Header actions placement', () => {
                 expect(navBox).not.toBeNull();
                 expect(viewportSize).not.toBeNull();
 
-                if (
-                    !headerBox ||
-                    !actionsBox ||
-                    !brandBox ||
-                    !navBox ||
-                    !viewportSize
-                ) {
+                if (!headerBox || !actionsBox || !brandBox || !navBox || !viewportSize) {
                     return;
                 }
 
