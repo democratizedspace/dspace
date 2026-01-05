@@ -138,19 +138,19 @@ describe('gpt-5 chat responses integration', () => {
 
     const [, init] = fetchMock.mock.calls[0];
     const payload = JSON.parse(init?.body ?? '{}');
-    expect(payload.input).toHaveLength(2);
-    if (!dchatPersona) {
-      throw new Error('Expected to find the default dChat persona');
-    }
-    expect(payload.input[1]).toEqual({
-      role: 'assistant',
-      content: [
-        {
-          type: 'input_text',
-          text: dchatPersona.welcomeMessage,
-        },
-      ],
-    });
-    expect(result).toBe('hello!');
+  expect(payload.input).toHaveLength(2);
+  if (!dchatPersona) {
+    throw new Error('Expected to find the default dChat persona');
+  }
+  expect(payload.input[1]).toEqual({
+    role: 'assistant',
+    content: [
+      {
+        type: 'output_text',
+        text: dchatPersona.welcomeMessage,
+      },
+    ],
+  });
+  expect(result).toBe('hello!');
   });
 });
