@@ -4,6 +4,7 @@ import { clearUserData, waitForHydration } from './test-helpers';
 const VIEWPORTS = [
     { label: 'small mobile', viewport: { width: 320, height: 568 } },
     { label: 'mobile', viewport: { width: 375, height: 812 } },
+    { label: 'large mobile', viewport: { width: 430, height: 932 } },
     { label: 'tablet', viewport: { width: 768, height: 1024 } },
     { label: 'small laptop', viewport: { width: 1024, height: 768 } },
     { label: 'desktop', viewport: { width: 1440, height: 900 } },
@@ -18,48 +19,63 @@ function boxesOverlap(first: BoundingBox, second: BoundingBox): boolean {
     );
 }
 
+function centerOf(box: BoundingBox): number {
+    return box.x + box.width / 2;
+}
+
 test.describe('Header actions placement', () => {
     for (const { label, viewport } of VIEWPORTS) {
         test.describe(label, () => {
             test.use({ viewport });
 
-            test('pins theme toggle and avatar to the top right without overlapping the brand', async ({
+            test('keeps brand and nav centered with non-sticky actions in the header', async ({
                 page,
             }) => {
                 await clearUserData(page);
                 await page.goto('/');
                 await waitForHydration(page, '[data-testid="header-actions"]');
 
-                const actions = page.getByTestId('header-actions');
+                const header = page.locator('header.header');
                 const actionsStack = page.getByTestId('header-actions-stack');
                 const brand = page.getByTestId('brand');
                 const nav = page.getByTestId('header-nav');
                 const themeToggle = page.getByRole('button', { name: /dark mode|light mode/i });
                 const avatarLink = page.getByTestId('header-avatar-link');
 
-                await expect(actions).toBeVisible();
+                await expect(header).toBeVisible();
                 await expect(actionsStack).toBeVisible();
                 await expect(brand).toBeVisible();
                 await expect(nav).toBeVisible();
                 await expect(themeToggle).toBeVisible();
                 await expect(avatarLink).toBeVisible();
 
-                const actionsBox = await actionsStack.boundingBox();
-                const brandBox = await brand.boundingBox();
-                const navBox = await nav.boundingBox();
+                const [headerBox, brandBox, navBox, actionsBox] = await Promise.all([
+                    header.boundingBox(),
+                    brand.boundingBox(),
+                    nav.boundingBox(),
+                    actionsStack.boundingBox(),
+                ]);
                 const viewportSize = page.viewportSize();
 
-                expect(actionsBox).not.toBeNull();
+                expect(headerBox).not.toBeNull();
                 expect(brandBox).not.toBeNull();
                 expect(navBox).not.toBeNull();
+                expect(actionsBox).not.toBeNull();
                 expect(viewportSize).not.toBeNull();
 
-                if (!actionsBox || !brandBox || !navBox || !viewportSize) {
+                if (!headerBox || !brandBox || !navBox || !actionsBox || !viewportSize) {
                     return;
                 }
 
+                const headerCenter = centerOf(headerBox);
+                const brandCenter = centerOf(brandBox);
+                const navCenter = centerOf(navBox);
                 const rightGap = viewportSize.width - (actionsBox.x + actionsBox.width);
-                const topGap = actionsBox.y;
+                const topGap = actionsBox.y - headerBox.y;
+
+                expect(Math.abs(brandCenter - headerCenter)).toBeLessThan(8);
+                expect(Math.abs(navCenter - headerCenter)).toBeLessThan(12);
+
                 expect(rightGap).toBeGreaterThanOrEqual(0);
                 expect(rightGap).toBeLessThanOrEqual(32);
                 expect(topGap).toBeGreaterThanOrEqual(0);
@@ -68,17 +84,29 @@ test.describe('Header actions placement', () => {
                 expect(boxesOverlap(actionsBox, brandBox)).toBeFalsy();
                 expect(boxesOverlap(actionsBox, navBox)).toBeFalsy();
 
-                await page.mouse.wheel(0, 600);
+                await page.mouse.wheel(0, 900);
 
-                const scrolledBox = await actions.boundingBox();
-                expect(scrolledBox).not.toBeNull();
+                const scrolledBox = await actionsStack.boundingBox();
+                const scrolledViewport = page.viewportSize();
 
-                if (!scrolledBox) {
+                expect(scrolledViewport).not.toBeNull();
+
+                if (!scrolledViewport) {
                     return;
                 }
 
-                expect(scrolledBox.x).toBe(actionsBox.x);
-                expect(scrolledBox.y).toBe(actionsBox.y);
+                if (!scrolledBox) {
+                    expect(scrolledBox).toBeNull();
+                    return;
+                }
+
+                const inViewport =
+                    scrolledBox.x + scrolledBox.width > 0 &&
+                    scrolledBox.y + scrolledBox.height > 0 &&
+                    scrolledBox.x < scrolledViewport.width &&
+                    scrolledBox.y < scrolledViewport.height;
+
+                expect(inViewport).toBeFalsy();
             });
         });
     }

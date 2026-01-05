@@ -110,10 +110,14 @@
 
 <style>
     nav {
-        text-align: center;
-        display: inline-flex;
+        display: flex;
         flex-wrap: wrap;
         justify-content: center;
+        align-items: center;
+        gap: 0.25rem;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0.5rem 1rem;
     }
 
     nav a {
