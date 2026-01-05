@@ -146,7 +146,7 @@ describe('gpt-5 chat responses integration', () => {
       role: 'assistant',
       content: [
         {
-          type: 'input_text',
+          type: 'output_text',
           text: dchatPersona.welcomeMessage,
         },
       ],

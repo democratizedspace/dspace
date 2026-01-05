@@ -208,6 +208,45 @@ describe('GPT35Turbo', () => {
         expect(result).toBe('ok');
     });
 
+    it('uses output_text content blocks for assistant history entries', async () => {
+        const resolver = vi.fn(async () => ({
+            output_text: 'follow up',
+        }));
+
+        globalThis.__DSpaceOpenAIClient = class extends MockResponseClient {
+            constructor() {
+                super(resolver);
+            }
+        };
+
+        const result = await GPT35Turbo([
+            { role: 'assistant', content: 'Earlier reply' },
+            { role: 'user', content: 'Hello again' },
+        ]);
+
+        expect(resolver).toHaveBeenCalledTimes(1);
+        const payload = resolver.mock.calls[0][0];
+        expect(payload.input[2]).toEqual({
+            role: 'assistant',
+            content: [
+                {
+                    type: 'output_text',
+                    text: 'Earlier reply',
+                },
+            ],
+        });
+        expect(payload.input[3]).toEqual({
+            role: 'user',
+            content: [
+                {
+                    type: 'input_text',
+                    text: 'Hello again',
+                },
+            ],
+        });
+        expect(result).toBe('follow up');
+    });
+
     it('falls back to output content when output_text is an empty string', async () => {
         const resolver = vi.fn(async () => ({
             output_text: '   ',
