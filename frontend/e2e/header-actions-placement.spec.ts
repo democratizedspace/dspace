@@ -70,6 +70,9 @@ test.describe('Header actions placement', () => {
                 const brandCenter = brandBox.x + brandBox.width / 2;
                 const navCenter = navBox.x + navBox.width / 2;
 
+                const topAlignDelta = Math.abs(brandBox.y - actionsBox.y);
+                expect(topAlignDelta).toBeLessThanOrEqual(12);
+
                 expect(Math.abs(brandCenter - headerCenter)).toBeLessThan(8);
                 expect(Math.abs(navCenter - headerCenter)).toBeLessThan(8);
 
