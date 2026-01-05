@@ -168,9 +168,12 @@
 <style>
     .container {
         width: 100%;
-        max-width: 100%;
+        max-width: 100vw;
         min-width: 0;
         box-sizing: border-box;
+        margin-inline: auto;
+        padding-inline: 0.5rem;
+        overflow-x: clip;
     }
 
     a {

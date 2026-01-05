@@ -113,8 +113,11 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        width: min(70rem, calc(100vw - 1.5rem));
+        width: min(70rem, calc(100% - 1.5rem));
+        max-width: 100%;
         margin-inline: auto;
+        box-sizing: border-box;
+        padding-inline: 0.25rem;
     }
 
     nav a {
