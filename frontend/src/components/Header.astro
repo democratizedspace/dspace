@@ -46,13 +46,14 @@ export interface Props {
 
     .header {
         position: relative;
-        width: 100vw;
-        max-width: 100vw;
-        margin-inline: calc(50% - 50vw);
+        width: 100%;
+        max-width: 100%;
+        margin-inline: 0;
         overflow-x: clip;
+        box-sizing: border-box;
         --header-top-inset: calc(0.5rem + env(safe-area-inset-top, 0px));
         --header-inline-inset-left: calc(0.75rem + env(safe-area-inset-left, 0px));
-        --header-inline-inset-right: calc(0.75rem + env(safe-area-inset-right, 0px));
+        --header-inline-inset-right: calc(1rem + env(safe-area-inset-right, 0px));
         --header-actions-top: var(--header-top-inset);
         --header-actions-right: var(--header-inline-inset-right);
         padding-top: var(--header-top-inset);
@@ -80,7 +81,7 @@ export interface Props {
         align-items: center;
         justify-self: center;
         text-align: center;
-        max-width: min(18rem, calc(100vw - 5rem));
+        max-width: min(16rem, calc(100vw - 7rem));
     }
 
     .header-actions {
@@ -191,10 +192,18 @@ export interface Props {
     }
 
     @media (max-width: 480px) {
+        .header {
+            padding-right: calc(var(--header-inline-inset-right) + 0.35rem);
+        }
+
         .header-actions__stack {
             gap: 0.2rem;
-            transform: scale(0.9);
+            transform: scale(0.85);
             transform-origin: top right;
+        }
+
+        .brand {
+            max-width: min(14rem, calc(100vw - 6rem));
         }
 
         .text-gradient {
@@ -208,7 +217,7 @@ export interface Props {
 
     @media (max-width: 360px) {
         .header-actions__stack {
-            transform: scale(0.85);
+            transform: scale(0.8);
         }
 
         .text-gradient {
@@ -217,6 +226,10 @@ export interface Props {
 
         .domain {
             font-size: 0.7em;
+        }
+
+        .brand {
+            max-width: min(12.5rem, calc(100vw - 5.5rem));
         }
     }
 </style>
