@@ -52,7 +52,7 @@ export interface Props {
         overflow-x: clip;
         --header-top-inset: calc(0.5rem + env(safe-area-inset-top, 0px));
         --header-inline-inset-left: calc(0.75rem + env(safe-area-inset-left, 0px));
-        --header-inline-inset-right: calc(1rem + env(safe-area-inset-right, 0px));
+        --header-inline-inset-right: calc(0.75rem + env(safe-area-inset-right, 0px));
         --header-actions-top: var(--header-top-inset);
         --header-actions-right: var(--header-inline-inset-right);
         padding-top: var(--header-top-inset);
@@ -80,6 +80,7 @@ export interface Props {
         align-items: center;
         justify-self: center;
         text-align: center;
+        max-width: min(18rem, calc(100vw - 5rem));
     }
 
     .header-actions {
@@ -187,5 +188,35 @@ export interface Props {
 
     .skip-link:focus {
         top: 0;
+    }
+
+    @media (max-width: 480px) {
+        .header-actions__stack {
+            gap: 0.2rem;
+            transform: scale(0.9);
+            transform-origin: top right;
+        }
+
+        .text-gradient {
+            font-size: 1.75em;
+        }
+
+        .domain {
+            font-size: 0.75em;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .header-actions__stack {
+            transform: scale(0.85);
+        }
+
+        .text-gradient {
+            font-size: 1.6em;
+        }
+
+        .domain {
+            font-size: 0.7em;
+        }
     }
 </style>
