@@ -4,8 +4,9 @@ import { clearUserData, waitForHydration } from './test-helpers';
 const VIEWPORTS = [
     { label: 'small mobile', viewport: { width: 320, height: 568 } },
     { label: 'mobile', viewport: { width: 375, height: 812 } },
+    { label: 'large mobile', viewport: { width: 430, height: 932 } },
     { label: 'tablet', viewport: { width: 768, height: 1024 } },
-    { label: 'small laptop', viewport: { width: 1024, height: 768 } },
+    { label: 'tablet landscape', viewport: { width: 1024, height: 768 } },
     { label: 'desktop', viewport: { width: 1440, height: 900 } },
 ] as const;
 
@@ -23,13 +24,14 @@ test.describe('Header actions placement', () => {
         test.describe(label, () => {
             test.use({ viewport });
 
-            test('pins theme toggle and avatar to the top right without overlapping the brand', async ({
+            test('keeps header centered and actions top-right without sticking on scroll', async ({
                 page,
             }) => {
                 await clearUserData(page);
                 await page.goto('/');
                 await waitForHydration(page, '[data-testid="header-actions"]');
 
+                const header = page.locator('header.header');
                 const actions = page.getByTestId('header-actions');
                 const actionsStack = page.getByTestId('header-actions-stack');
                 const brand = page.getByTestId('brand');
@@ -44,22 +46,26 @@ test.describe('Header actions placement', () => {
                 await expect(themeToggle).toBeVisible();
                 await expect(avatarLink).toBeVisible();
 
-                const actionsBox = await actionsStack.boundingBox();
+                const [headerBox, actionsBox] = await Promise.all([
+                    header.boundingBox(),
+                    actionsStack.boundingBox(),
+                ]);
                 const brandBox = await brand.boundingBox();
                 const navBox = await nav.boundingBox();
                 const viewportSize = page.viewportSize();
 
-                expect(actionsBox).not.toBeNull();
-                expect(brandBox).not.toBeNull();
-                expect(navBox).not.toBeNull();
-                expect(viewportSize).not.toBeNull();
-
-                if (!actionsBox || !brandBox || !navBox || !viewportSize) {
-                    return;
+                if (!actionsBox || !brandBox || !navBox || !viewportSize || !headerBox) {
+                    throw new Error('Unable to read header layout');
                 }
 
+                const headerCenter = headerBox.x + headerBox.width / 2;
+                const brandCenter = brandBox.x + brandBox.width / 2;
+                const navCenter = navBox.x + navBox.width / 2;
+                expect(Math.abs(brandCenter - headerCenter)).toBeLessThan(8);
+                expect(Math.abs(navCenter - headerCenter)).toBeLessThan(12);
+
                 const rightGap = viewportSize.width - (actionsBox.x + actionsBox.width);
-                const topGap = actionsBox.y;
+                const topGap = actionsBox.y - headerBox.y;
                 expect(rightGap).toBeGreaterThanOrEqual(0);
                 expect(rightGap).toBeLessThanOrEqual(32);
                 expect(topGap).toBeGreaterThanOrEqual(0);
@@ -68,17 +74,22 @@ test.describe('Header actions placement', () => {
                 expect(boxesOverlap(actionsBox, brandBox)).toBeFalsy();
                 expect(boxesOverlap(actionsBox, navBox)).toBeFalsy();
 
-                await page.mouse.wheel(0, 600);
+                await page.mouse.wheel(0, 900);
 
                 const scrolledBox = await actions.boundingBox();
                 expect(scrolledBox).not.toBeNull();
 
-                if (!scrolledBox) {
-                    return;
+                if (!scrolledBox || !viewportSize) {
+                    throw new Error('Unable to read scrolled layout');
                 }
 
-                expect(scrolledBox.x).toBe(actionsBox.x);
-                expect(scrolledBox.y).toBe(actionsBox.y);
+                const inViewport =
+                    scrolledBox.x + scrolledBox.width > 0 &&
+                    scrolledBox.y + scrolledBox.height > 0 &&
+                    scrolledBox.x < viewportSize.width &&
+                    scrolledBox.y < viewportSize.height;
+
+                expect(inViewport).toBeFalsy();
             });
         });
     }

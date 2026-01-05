@@ -137,36 +137,43 @@ test.describe('Page Layout Structure', () => {
         test.describe(`Header layout (${label})`, () => {
             test.use({ viewport });
 
-            test('keeps the brand centered with toggle on the right', async ({ page }) => {
+            test('keeps the brand and nav centered with actions on the right', async ({
+                page,
+            }) => {
                 await page.goto('/');
                 await waitForHydration(page);
 
                 const header = page.locator('header.header');
                 const brand = page.locator('[data-testid="brand"]');
                 const actionsStack = page.getByTestId('header-actions-stack');
+                const nav = page.getByTestId('header-nav');
                 const toggle = page.getByRole('button', { name: /toggle dark mode/i });
                 const avatar = page.getByTestId('header-avatar-link');
 
                 await Promise.all([
+                    expect(nav).toBeVisible(),
                     expect(toggle).toBeVisible(),
                     expect(avatar).toBeVisible(),
                     expect(actionsStack).toBeVisible(),
                 ]);
 
-                const [headerBox, brandBox, actionsBox] = await Promise.all([
+                const [headerBox, brandBox, actionsBox, navBox] = await Promise.all([
                     header.boundingBox(),
                     brand.boundingBox(),
                     actionsStack.boundingBox(),
+                    nav.boundingBox(),
                 ]);
 
-                if (!headerBox || !brandBox || !actionsBox) {
+                if (!headerBox || !brandBox || !actionsBox || !navBox) {
                     throw new Error('Unable to read header layout');
                 }
 
                 const headerCenter = headerBox.x + headerBox.width / 2;
                 const brandCenter = brandBox.x + brandBox.width / 2;
+                const navCenter = navBox.x + navBox.width / 2;
                 const viewportSize = page.viewportSize();
                 const brandTolerance = 8;
+                const navTolerance = 12;
 
                 if (!viewportSize) {
                     throw new Error('Viewport unavailable');
@@ -176,6 +183,7 @@ test.describe('Page Layout Structure', () => {
                 const topGap = actionsBox.y - headerBox.y;
 
                 expect(Math.abs(brandCenter - headerCenter)).toBeLessThan(brandTolerance);
+                expect(Math.abs(navCenter - headerCenter)).toBeLessThan(navTolerance);
                 expect(actionsBox.x).toBeGreaterThan(brandCenter + 8);
                 expect(rightGap).toBeGreaterThanOrEqual(0);
                 expect(rightGap).toBeLessThanOrEqual(32);
@@ -191,6 +199,7 @@ test.describe('Page Layout Structure', () => {
                     );
 
                 expect(overlaps(brandBox, actionsBox)).toBeFalsy();
+                expect(overlaps(navBox, actionsBox)).toBeFalsy();
             });
         });
     }

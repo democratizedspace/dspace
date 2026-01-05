@@ -81,4 +81,14 @@
         font-weight: 600;
         white-space: nowrap;
     }
+
+    @media (max-width: 480px) {
+        .theme-toggle {
+            padding: 0.25rem 0.65rem;
+        }
+
+        .theme-toggle__text {
+            font-size: 0.72rem;
+        }
+    }
 </style>
