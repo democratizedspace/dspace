@@ -9,6 +9,18 @@ const LEGACY_STORE_NAME = 'quests';
 
 let dbInstance = null;
 
+const isDev = Boolean(import.meta?.env?.DEV);
+
+const logIndexedDbIssue = (message, error) => {
+    const details = error?.message ?? error;
+    if (isDev) {
+        console.error(message, details);
+        return;
+    }
+
+    console.warn(message, details);
+};
+
 function getIndexedDB() {
     // In browser, use window.indexedDB
     if (isBrowser) {
@@ -59,7 +71,7 @@ function openDB() {
         };
 
         request.onerror = (event) => {
-            console.error('IndexedDB error:', event.target.error);
+            logIndexedDbIssue('IndexedDB error:', event.target.error);
             reject(event.target.error);
         };
     });
@@ -86,7 +98,7 @@ export function addEntity(entity) {
             request.onsuccess = () => resolve(request.result);
             /* istanbul ignore next */
             request.onerror = (event) => {
-                console.error('Add entity failed:', event.target.error);
+                logIndexedDbIssue('Add entity failed:', event.target.error);
                 reject(event.target.error);
             };
         });
@@ -104,7 +116,7 @@ export function getEntity(id, entityType) {
             request.onsuccess = () => resolve(request.result);
             /* istanbul ignore next */
             request.onerror = (event) => {
-                console.error('Get entity failed:', event.target.error);
+                logIndexedDbIssue('Get entity failed:', event.target.error);
                 reject(event.target.error);
             };
         });
@@ -158,7 +170,7 @@ export function deleteEntity(id, entityType) {
             request.onsuccess = () => resolve();
             /* istanbul ignore next */
             request.onerror = (event) => {
-                console.error('Delete entity failed:', event.target.error);
+                logIndexedDbIssue('Delete entity failed:', event.target.error);
                 reject(event.target.error);
             };
         });
@@ -277,7 +289,7 @@ export const saveItem = async (item) => {
             };
         });
     } catch (error) {
-        console.error('Error saving item:', error);
+        logIndexedDbIssue('Error saving item:', error);
         return Promise.reject(error);
     }
 };
@@ -304,7 +316,7 @@ export const getItems = async () => {
             };
         });
     } catch (error) {
-        console.error('Error getting items:', error);
+        logIndexedDbIssue('Error getting items:', error);
         return Promise.reject(error);
     }
 };
@@ -331,7 +343,7 @@ export const getItem = async (id) => {
             };
         });
     } catch (error) {
-        console.error('Error getting item:', error);
+        logIndexedDbIssue('Error getting item:', error);
         return Promise.reject(error);
     }
 };
@@ -358,7 +370,7 @@ export const deleteItem = async (id) => {
             };
         });
     } catch (error) {
-        console.error('Error deleting item:', error);
+        logIndexedDbIssue('Error deleting item:', error);
         return Promise.reject(error);
     }
 };
@@ -385,7 +397,7 @@ export const saveProcess = async (process) => {
             };
         });
     } catch (error) {
-        console.error('Error saving process:', error);
+        logIndexedDbIssue('Error saving process:', error);
         return Promise.reject(error);
     }
 };
@@ -412,7 +424,7 @@ export const getProcesses = async () => {
             };
         });
     } catch (error) {
-        console.error('Error getting processes:', error);
+        logIndexedDbIssue('Error getting processes:', error);
         return Promise.reject(error);
     }
 };
@@ -439,7 +451,7 @@ export const getProcess = async (id) => {
             };
         });
     } catch (error) {
-        console.error('Error getting process:', error);
+        logIndexedDbIssue('Error getting process:', error);
         return Promise.reject(error);
     }
 };
@@ -466,7 +478,7 @@ export const deleteProcess = async (id) => {
             };
         });
     } catch (error) {
-        console.error('Error deleting process:', error);
+        logIndexedDbIssue('Error deleting process:', error);
         return Promise.reject(error);
     }
 };
@@ -493,7 +505,7 @@ export const saveQuest = async (quest) => {
             };
         });
     } catch (error) {
-        console.error('Error saving quest:', error);
+        logIndexedDbIssue('Error saving quest:', error);
         return Promise.reject(error);
     }
 };
@@ -520,7 +532,7 @@ export const getQuests = async () => {
             };
         });
     } catch (error) {
-        console.error('Error getting quests:', error);
+        logIndexedDbIssue('Error getting quests:', error);
         return Promise.reject(error);
     }
 };
@@ -547,7 +559,7 @@ export const getQuest = async (id) => {
             };
         });
     } catch (error) {
-        console.error('Error getting quest:', error);
+        logIndexedDbIssue('Error getting quest:', error);
         return Promise.reject(error);
     }
 };
@@ -574,7 +586,7 @@ export const deleteQuest = async (id) => {
             };
         });
     } catch (error) {
-        console.error('Error deleting quest:', error);
+        logIndexedDbIssue('Error deleting quest:', error);
         return Promise.reject(error);
     }
 };

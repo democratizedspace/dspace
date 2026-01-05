@@ -13,6 +13,18 @@ const LS_BACKUP_KEY = 'gameStateBackup';
 const META_KEY = '_meta';
 const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
+const isDev = Boolean(import.meta?.env?.DEV);
+
+const logPersistenceIssue = (message, error) => {
+    const details = error?.message ?? error;
+
+    if (isDev) {
+        console.error(message, details);
+        return;
+    }
+
+    console.warn(message, details);
+};
 
 let dbPromise;
 let dbInstance;
@@ -120,7 +132,7 @@ function lsRead(store) {
         const raw = localStorage.getItem(lsKey(store));
         return raw ? JSON.parse(raw) : undefined;
     } catch (err) {
-        console.error('Error reading from localStorage:', err);
+        logPersistenceIssue('Error reading from localStorage:', err);
         return undefined;
     }
 }
@@ -130,7 +142,7 @@ function lsWrite(store, value) {
     try {
         localStorage.setItem(lsKey(store), JSON.stringify(value));
     } catch (err) {
-        console.error('Error writing to localStorage:', err);
+        logPersistenceIssue('Error writing to localStorage:', err);
     }
 }
 
@@ -139,7 +151,7 @@ function lsClear(store) {
     try {
         localStorage.removeItem(lsKey(store));
     } catch (err) {
-        console.error('Error clearing localStorage:', err);
+        logPersistenceIssue('Error clearing localStorage:', err);
     }
 }
 
@@ -159,7 +171,7 @@ async function read(store) {
         }
         return idbValue ?? localValue;
     } catch (err) {
-        console.error('IndexedDB read failed:', err);
+        logPersistenceIssue('IndexedDB read failed:', err);
         useLocalStorage = true;
         warnFallback();
         return localValue;
@@ -178,7 +190,7 @@ async function write(store, value, options = {}) {
     try {
         await idbWrite(store, value);
     } catch (err) {
-        console.error('IndexedDB write failed:', err);
+        logPersistenceIssue('IndexedDB write failed:', err);
         useLocalStorage = true;
         warnFallback();
     }
@@ -192,7 +204,7 @@ async function clearStore(store) {
     try {
         await idbClear(store);
     } catch (err) {
-        console.error('IndexedDB clear failed:', err);
+        logPersistenceIssue('IndexedDB clear failed:', err);
         useLocalStorage = true;
         warnFallback();
     }
@@ -250,7 +262,7 @@ export const ready = isBrowser
                   loadedFromPersistence = true;
               }
           } catch (err) {
-              console.error('Error loading game state from IndexedDB:', err);
+              logPersistenceIssue('Error loading game state from IndexedDB:', err);
           } finally {
               readyResolved = true;
           }
@@ -400,7 +412,7 @@ export const rollbackGameState = async () => {
         state.set(gameState);
         await write(STATE_STORE, gameState);
     } catch (err) {
-        console.error('Error rolling back game state:', err);
+        logPersistenceIssue('Error rolling back game state:', err);
     }
 };
 

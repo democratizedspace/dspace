@@ -685,11 +685,17 @@ export async function waitForHydration(page: Page, target?: string): Promise<voi
 
     await page.evaluate(async () => {
         await new Promise<void>((resolve) => {
+            const fallback = setTimeout(() => resolve(), 250);
+
             if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-                window.requestIdleCallback(() => resolve());
+                window.requestIdleCallback(() => {
+                    clearTimeout(fallback);
+                    resolve();
+                });
                 return;
             }
 
+            clearTimeout(fallback);
             setTimeout(() => resolve(), 50);
         });
     });
