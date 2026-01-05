@@ -2,6 +2,36 @@ import { test, expect } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
 const DEFAULT_AVATAR = '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
+const BRAND_CENTER_TOLERANCE = 8;
+const NAV_CENTER_TOLERANCE = 12;
+
+function centerOf(box: { x: number; width: number }): number {
+    return box.x + box.width / 2;
+}
+
+function boxesOverlap(
+    first: { x: number; y: number; width: number; height: number },
+    second: { x: number; y: number; width: number; height: number }
+): boolean {
+    return !(
+        first.x + first.width <= second.x ||
+        second.x + second.width <= first.x ||
+        first.y + first.height <= second.y ||
+        second.y + second.height <= first.y
+    );
+}
+
+function isInViewport(
+    box: { x: number; y: number; width: number; height: number },
+    viewport: { width: number; height: number }
+): boolean {
+    return (
+        box.x + box.width > 0 &&
+        box.y + box.height > 0 &&
+        box.x < viewport.width &&
+        box.y < viewport.height
+    );
+}
 
 test.describe('Page Layout Structure', () => {
     test.beforeEach(async ({ page }) => {
@@ -137,60 +167,65 @@ test.describe('Page Layout Structure', () => {
         test.describe(`Header layout (${label})`, () => {
             test.use({ viewport });
 
-            test('keeps the brand centered with toggle on the right', async ({ page }) => {
+            test('keeps the header centered and actions clear the content', async ({ page }) => {
                 await page.goto('/');
-                await waitForHydration(page);
+                await waitForHydration(page, '[data-testid="header-actions"]');
+                await waitForHydration(page, '[data-testid="header-nav"]');
 
                 const header = page.locator('header.header');
                 const brand = page.locator('[data-testid="brand"]');
+                const nav = page.getByTestId('header-nav');
                 const actionsStack = page.getByTestId('header-actions-stack');
-                const toggle = page.getByRole('button', { name: /toggle dark mode/i });
+                const toggle = page.getByRole('button', { name: /dark mode|light mode/i });
                 const avatar = page.getByTestId('header-avatar-link');
 
                 await Promise.all([
                     expect(toggle).toBeVisible(),
                     expect(avatar).toBeVisible(),
                     expect(actionsStack).toBeVisible(),
+                    expect(nav).toBeVisible(),
+                    expect(header).toBeVisible(),
+                    expect(brand).toBeVisible(),
                 ]);
 
-                const [headerBox, brandBox, actionsBox] = await Promise.all([
+                const [headerBox, brandBox, navBox, actionsBox] = await Promise.all([
                     header.boundingBox(),
                     brand.boundingBox(),
+                    nav.boundingBox(),
                     actionsStack.boundingBox(),
                 ]);
 
-                if (!headerBox || !brandBox || !actionsBox) {
+                const viewportSize = page.viewportSize();
+
+                if (!headerBox || !brandBox || !navBox || !actionsBox || !viewportSize) {
                     throw new Error('Unable to read header layout');
                 }
 
-                const headerCenter = headerBox.x + headerBox.width / 2;
-                const brandCenter = brandBox.x + brandBox.width / 2;
-                const viewportSize = page.viewportSize();
-                const brandTolerance = 8;
-
-                if (!viewportSize) {
-                    throw new Error('Viewport unavailable');
-                }
-
+                const headerCenter = centerOf(headerBox);
+                const brandCenter = centerOf(brandBox);
+                const navCenter = centerOf(navBox);
                 const rightGap = viewportSize.width - (actionsBox.x + actionsBox.width);
                 const topGap = actionsBox.y - headerBox.y;
 
-                expect(Math.abs(brandCenter - headerCenter)).toBeLessThan(brandTolerance);
-                expect(actionsBox.x).toBeGreaterThan(brandCenter + 8);
+                expect(Math.abs(brandCenter - headerCenter)).toBeLessThan(BRAND_CENTER_TOLERANCE);
+                expect(Math.abs(navCenter - headerCenter)).toBeLessThan(NAV_CENTER_TOLERANCE);
                 expect(rightGap).toBeGreaterThanOrEqual(0);
                 expect(rightGap).toBeLessThanOrEqual(32);
                 expect(topGap).toBeGreaterThanOrEqual(0);
                 expect(topGap).toBeLessThanOrEqual(32);
 
-                const overlaps = (boxA: typeof brandBox, boxB: typeof brandBox) =>
-                    !(
-                        boxA.x + boxA.width <= boxB.x ||
-                        boxB.x + boxB.width <= boxA.x ||
-                        boxA.y + boxA.height <= boxB.y ||
-                        boxB.y + boxB.height <= boxA.y
-                    );
+                expect(boxesOverlap(brandBox, actionsBox)).toBeFalsy();
+                expect(boxesOverlap(navBox, actionsBox)).toBeFalsy();
 
-                expect(overlaps(brandBox, actionsBox)).toBeFalsy();
+                await page.mouse.wheel(0, 900);
+
+                const scrolledBox = await actionsStack.boundingBox();
+                expect(scrolledBox).not.toBeNull();
+
+                if (scrolledBox) {
+                    const visibleAfterScroll = isInViewport(scrolledBox, viewportSize);
+                    expect(visibleAfterScroll).toBeFalsy();
+                }
             });
         });
     }
