@@ -40,6 +40,7 @@ test.describe('chat RAG context', () => {
                         responses: {
                             create: async (payload) => {
                                 payloads.push(payload);
+                                await new Promise((resolve) => setTimeout(resolve, 75));
                                 return { output_text: 'stubbed reply' };
                             },
                         },
@@ -70,6 +71,7 @@ test.describe('chat RAG context', () => {
 
         await chatPanel.getByRole('textbox').fill('How am I progressing?');
         await chatPanel.getByRole('button', { name: 'Send' }).click();
+        await expect(chatPanel.locator('.spinner-container')).toBeVisible();
 
         const payloadHandle = await page.waitForFunction(() => {
             // @ts-expect-error test hook
@@ -91,5 +93,8 @@ test.describe('chat RAG context', () => {
         expect(messageTexts).toContain('welcome/howtodoquests');
         expect(messageTexts).toContain('Processes in flight');
         expect(messageTexts).toContain('Buy 1 kWh of electricity from a wall outlet');
+
+        await expect(chatPanel.locator('.spinner-container')).not.toBeVisible();
+        await expect(chatPanel.getByText('stubbed reply')).toBeVisible();
     });
 });
