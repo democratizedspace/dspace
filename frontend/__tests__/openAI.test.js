@@ -82,7 +82,7 @@ describe('gpt-5 chat responses utility', () => {
             role: 'assistant',
             content: [
                 {
-                    type: 'input_text',
+                    type: 'output_text',
                     text: 'Welcome! How can I assist you today?',
                 },
             ],
