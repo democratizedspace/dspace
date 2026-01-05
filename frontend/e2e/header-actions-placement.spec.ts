@@ -80,6 +80,9 @@ test.describe('Header actions placement', () => {
                 expect(topGap).toBeGreaterThanOrEqual(0);
                 expect(topGap).toBeLessThanOrEqual(32);
 
+                const topAlignDelta = Math.abs(brandBox.y - actionsBox.y);
+                expect(topAlignDelta).toBeLessThanOrEqual(12);
+
                 expect(boxesOverlap(actionsBox, brandBox)).toBeFalsy();
                 expect(boxesOverlap(actionsBox, navBox)).toBeFalsy();
 
