@@ -52,6 +52,13 @@ export interface Props {
         );
         --header-actions-right: calc(0.75rem + env(safe-area-inset-right, 0px));
         --header-actions-stack-width: 6.5rem;
+        /* NOTE:
+         * The header's top padding is calculated using the actions stack height.
+         * This couples `.header-actions__stack` (absolutely positioned) with the
+         * header layout. If the visual height of `.header-actions__stack`
+         * changes (components, spacing, or font sizes), also update
+         * `--header-actions-stack-height` to keep header content clear.
+         */
         --header-actions-stack-height: 5.75rem;
         --header-padding-top: calc(var(--header-actions-top) + var(--header-actions-stack-height));
         padding: var(--header-padding-top) 1rem 0.75rem;

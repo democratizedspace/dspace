@@ -77,7 +77,7 @@ test.describe('Header actions placement', () => {
                 const navCenter = navBox.x + navBox.width / 2;
 
                 expect(Math.abs(brandCenter - headerCenter)).toBeLessThan(8);
-                expect(Math.abs(navCenter - headerCenter)).toBeLessThan(12);
+                expect(Math.abs(navCenter - headerCenter)).toBeLessThan(8);
 
                 const rightGap = viewportSize.width - (actionsBox.x + actionsBox.width);
                 const topGap = actionsBox.y;
