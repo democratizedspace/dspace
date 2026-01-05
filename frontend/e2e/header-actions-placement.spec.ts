@@ -83,7 +83,12 @@ test.describe('Header actions placement', () => {
                 expect(boxesOverlap(actionsBox, brandBox)).toBeFalsy();
                 expect(boxesOverlap(actionsBox, navBox)).toBeFalsy();
 
-                await page.mouse.wheel(0, 600);
+                const scrollDistance = Math.max(viewportSize.height * 1.5, 800);
+                await page.mouse.wheel(0, scrollDistance);
+                await page.evaluate(() =>
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' })
+                );
+                await page.waitForTimeout(100);
 
                 const scrolledBox = await actionsStack.boundingBox();
                 const viewport = page.viewportSize();
