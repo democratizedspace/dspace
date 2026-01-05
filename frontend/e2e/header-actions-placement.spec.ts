@@ -10,6 +10,10 @@ const VIEWPORTS = [
     { label: 'desktop', viewport: { width: 1440, height: 900 } },
 ] as const;
 
+// Allow a small cushion so subpixel font/rendering differences across platforms
+// do not fail the test while still catching meaningful misalignment.
+const VERTICAL_ALIGNMENT_TOLERANCE_PX = 12;
+
 function boxesOverlap(first: BoundingBox, second: BoundingBox): boolean {
     return !(
         first.x + first.width <= second.x ||
@@ -81,7 +85,7 @@ test.describe('Header actions placement', () => {
                 expect(topGap).toBeLessThanOrEqual(32);
 
                 const topAlignDelta = Math.abs(brandBox.y - actionsBox.y);
-                expect(topAlignDelta).toBeLessThanOrEqual(12);
+                expect(topAlignDelta).toBeLessThanOrEqual(VERTICAL_ALIGNMENT_TOLERANCE_PX);
 
                 expect(boxesOverlap(actionsBox, brandBox)).toBeFalsy();
                 expect(boxesOverlap(actionsBox, navBox)).toBeFalsy();
