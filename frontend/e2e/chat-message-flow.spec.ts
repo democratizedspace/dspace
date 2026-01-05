@@ -11,11 +11,13 @@ test.describe('Chat message flow', () => {
 
         await page.addInitScript(({ reply }) => {
             // @ts-expect-error test hook for OpenAI client
-            window.__DSpaceOpenAIClient = class {
-                responses = {
-                    create: async () => {
-                        await new Promise((resolve) => setTimeout(resolve, 50));
-                        return { output_text: reply } as const;
+            window.__DSpaceOpenAIClient = function () {
+                return {
+                    responses: {
+                        create: async () => {
+                            await new Promise((resolve) => setTimeout(resolve, 150));
+                            return { output_text: reply } as const;
+                        },
                     },
                 };
             };
@@ -35,11 +37,12 @@ test.describe('Chat message flow', () => {
 
         await chatPanel.getByRole('button', { name: 'Send' }).click();
 
-        await expect(spinner).toHaveCSS('display', 'flex');
+        await expect(chatPanel.getByText('Hello from the automated test')).toBeVisible();
+
+        await expect(spinner).toBeVisible();
 
         await expect(chatPanel.getByText(LONG_REPLY)).toBeVisible();
 
-        await expect(spinner).toHaveCSS('display', 'none');
-        await expect(chatPanel.getByText('Hello from the automated test')).toBeVisible();
+        await expect(spinner).not.toBeVisible();
     });
 });
