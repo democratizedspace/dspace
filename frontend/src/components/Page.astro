@@ -78,7 +78,14 @@ const pathname = Astro.url.pathname;
 		display: grid;
 		gap: 1rem;
 		padding: 0;
-		grid-template-columns: 1fr;
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.link-card-grid-1 > * {
+		min-width: 0;
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
 	}
 	
 	.main-grid {
