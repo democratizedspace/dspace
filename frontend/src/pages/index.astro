@@ -4,10 +4,7 @@ import WhatsNew from '../components/WhatsNew.astro';
 import UIResponsiveness from '../components/svelte/UIResponsiveness.svelte';
 import FailoverStatus from '../components/svelte/FailoverStatus.svelte';
 
-const version =
-    process.env.DSPACE_VERSION ??
-    process.env.npm_package_version ??
-    'unknown';
+const version = process.env.DSPACE_VERSION ?? process.env.npm_package_version ?? 'unknown';
 const environment = process.env.DSPACE_ENV ?? 'unknown';
 
 // Component rendering errors (e.g., in <WhatsNew />) are caught by middleware. Add SSR
@@ -50,10 +47,28 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
         background-color: #f4f4f5;
         color: #1f2933;
         float: right;
+        max-width: min(100%, 100vw - 2rem);
+        min-width: 0;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        text-align: right;
+        overflow-wrap: anywhere;
     }
 
     .build-meta .env {
         font-weight: 600;
         text-transform: lowercase;
+    }
+
+    .build-meta > span {
+        min-width: 0;
+    }
+
+    @media (max-width: 720px) {
+        .build-meta {
+            float: none;
+            display: flex;
+            margin-left: auto;
+        }
     }
 </style>

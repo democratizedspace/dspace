@@ -140,7 +140,7 @@
             {/each}
         </div>
 
-        <div class="quests-grid">
+        <div class="quests-grid" data-testid="quests-grid">
             {#each filteredQuests as quest}
                 <a href="/quests/{quest.id}" aria-label={quest.title}>
                     <Quest {quest} />
