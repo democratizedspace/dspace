@@ -121,7 +121,7 @@
                     12rem,
                     calc(
                         100% - var(--header-inline-total, 2rem) -
-                            var(--header-actions-reserved-inline, 6rem)
+                            var(--header-actions-reserved-inline, 7rem)
                     )
                 )
             )
@@ -134,7 +134,7 @@
                     12rem,
                     calc(
                         100% - var(--header-inline-total, 2rem) -
-                            var(--header-actions-reserved-inline, 6rem)
+                            var(--header-actions-reserved-inline, 7rem)
                     )
                 )
             )
