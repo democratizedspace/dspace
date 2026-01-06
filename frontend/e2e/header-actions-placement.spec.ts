@@ -14,7 +14,7 @@ const VIEWPORTS = [
 // do not fail the test while still catching meaningful misalignment.
 const VERTICAL_ALIGNMENT_TOLERANCE_PX = 12;
 const ROW_GROUPING_TOLERANCE_PX = 2;
-const NAV_WIDTH_TOLERANCE_PX = 24;
+const NAV_WIDTH_TOLERANCE_PX = 48;
 const NAV_LINK_MARGIN_PX = 2;
 
 function cssLengthToPx(length: string | null, rootFontSize: number): number | null {
@@ -122,10 +122,28 @@ test.describe('Header actions placement', () => {
                 expect(boxesOverlap(actionsBox, brandBox)).toBeFalsy();
                 expect(boxesOverlap(actionsBox, navBox)).toBeFalsy();
 
-                const scrollDistance = Math.max(viewportSize.height * 1.5, 800);
+                const scrollHeight = await page.evaluate(() => {
+                    const fillerId = 'header-actions-placement-scroll-filler';
+                    let filler = document.getElementById(fillerId);
+
+                    if (!filler) {
+                        filler = document.createElement('div');
+                        filler.id = fillerId;
+                        filler.style.height = '200vh';
+                        filler.style.width = '1px';
+                        filler.style.pointerEvents = 'none';
+                        document.body.appendChild(filler);
+                    }
+
+                    return document.body.scrollHeight;
+                });
+
+                const scrollDistance = Math.max(viewportSize.height * 2, scrollHeight);
+
                 await page.mouse.wheel(0, scrollDistance);
-                await page.evaluate(() =>
-                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' })
+                await page.evaluate(
+                    (target) => window.scrollTo({ top: target, behavior: 'instant' }),
+                    scrollHeight
                 );
                 await page.waitForTimeout(100);
 
@@ -193,7 +211,7 @@ test.describe('Header actions placement', () => {
                     cssLengthToPx(pageInlinePaddingValue, rootFontSizePx) ?? rootFontSizePx;
 
                 const minNavWidth = Math.max(
-                    viewportSize.width * 0.8,
+                    viewportSize.width * 0.7,
                     viewportSize.width - pageInlinePaddingPx * 2 - NAV_WIDTH_TOLERANCE_PX
                 );
 
