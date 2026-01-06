@@ -47,6 +47,35 @@ describe('cloudSync', () => {
         expect(await loadCloudGistId()).toBe('');
     });
 
+    test('uploadGameStateToGist includes custom content payloads', async () => {
+        await saveGitHubToken('ghp_x');
+        const state = loadGameState();
+        state.customContent = {
+            items: [{ id: 'custom-item', name: 'Custom Item', image: '/custom.png' }],
+            processes: [{ id: 'custom-process', title: 'Custom Process', duration: '5m' }],
+            quests: [{ id: 'custom-quest', title: 'Custom Quest', start: 'start' }],
+        };
+        await saveGameState(state);
+
+        global.fetch.mockResolvedValueOnce({
+            ok: true,
+            json: () =>
+                Promise.resolve({
+                    id: 'custom-content-backup',
+                    created_at: '2024-02-03T04:05:06Z',
+                    html_url: 'https://gist.github.com/custom-content-backup',
+                }),
+        });
+
+        await uploadGameStateToGist();
+        const [, requestInit] = global.fetch.mock.calls[0];
+        const body = JSON.parse(requestInit.body);
+        const content = Object.values(body.files)[0].content;
+        const decoded = JSON.parse(atob(content));
+
+        expect(decoded.payload.customContent).toEqual(state.customContent);
+    });
+
     test('downloadGameStateFromGist updates state', async () => {
         await saveGitHubToken('ghp_x');
         const encoded = btoa(JSON.stringify({ quests: { q: true }, inventory: {}, processes: {} }));
