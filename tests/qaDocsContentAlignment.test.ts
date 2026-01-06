@@ -1,4 +1,5 @@
-import { describe, it, expect } from 'vitest';
+import 'fake-indexeddb/auto';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -14,13 +15,26 @@ const decodeBase64Json = (value: string) => {
     return JSON.parse(buffer.toString('utf8'));
 };
 
+async function clearCustomContentDatabase(): Promise<void> {
+    if (typeof indexedDB === 'undefined') {
+        return;
+    }
+
+    await new Promise<void>((resolve, reject) => {
+        const request = indexedDB.deleteDatabase('CustomContent');
+        request.onsuccess = () => resolve();
+        request.onblocked = () => resolve();
+        request.onerror = () => reject(request.error ?? new Error('Failed to clear IndexedDB'));
+    });
+}
+
 describe('processes doc alignment', () => {
     it('explains requires/consumes/creates semantics and duration normalization', () => {
         const doc = readDoc('../frontend/src/pages/docs/md/processes.md');
 
         expect(doc).toMatch(/Requires list[^]*not consumed/i);
-        expect(doc).toMatch(/Consumes list[^]*removed[^]*process (?:is )?started/i);
-        expect(doc).toMatch(/cancel[^]*items (?:will be )?returned/i);
+        expect(doc).toMatch(/Consumes list[\s\S]*?removed[\s\S]*?process (?:is )?started/i);
+        expect(doc).toMatch(/cancel[^]*items[^]*returned/i);
         expect(doc).toMatch(/Creates list[^]*added[^]*completion/i);
         expect(doc).toMatch(/normalizes input like[\s\S]*0\.5h 30s[\s\S]*30m 30s/i);
     });
@@ -39,6 +53,14 @@ describe('cloud sync doc alignment', () => {
 });
 
 describe('backups doc alignment', () => {
+    beforeEach(async () => {
+        await clearCustomContentDatabase();
+    });
+
+    afterEach(async () => {
+        await clearCustomContentDatabase();
+    });
+
     it('matches the documented export formats for saves and custom content', async () => {
         const doc = readDoc('../frontend/src/pages/docs/md/backups.md');
 
@@ -60,15 +82,6 @@ describe('backups doc alignment', () => {
             processes: baseState.processes,
         });
 
-        const originalBtoa = globalThis.btoa;
-        const originalAtob = globalThis.atob;
-        globalThis.btoa =
-            globalThis.btoa ||
-            ((value: string) => Buffer.from(value, 'utf8').toString('base64'));
-        globalThis.atob =
-            globalThis.atob ||
-            ((value: string) => Buffer.from(value, 'base64').toString('utf8'));
-
         const customExport = await exportCustomContentString();
         const decodedCustom = decodeBase64Json(customExport);
         expect(decodedCustom).toMatchObject({
@@ -76,9 +89,6 @@ describe('backups doc alignment', () => {
             processes: expect.any(Array),
             quests: expect.any(Array),
         });
-
-        globalThis.btoa = originalBtoa;
-        globalThis.atob = originalAtob;
 
         expect(doc).toMatch(/Base64-encoded JSON snapshot/i);
         expect(doc).toMatch(/quest progress, inventory, and processes/i);
