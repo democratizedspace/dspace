@@ -113,38 +113,48 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        width: min(
-            70rem,
-            var(
-                --header-content-width,
-                max(
-                    12rem,
-                    calc(
-                        100% - var(--header-inline-total, 2rem) -
-                            var(--header-actions-reserved-inline, 8rem)
-                    )
-                )
-            )
-        );
-        max-width: min(
-            70rem,
-            var(
-                --header-content-width,
-                max(
-                    12rem,
-                    calc(
-                        100% - var(--header-inline-total, 2rem) -
-                            var(--header-actions-reserved-inline, 8rem)
-                    )
-                )
-            )
-        );
-        margin-inline: auto;
+        width: 100%;
+        max-width: none;
         box-sizing: border-box;
-        padding-inline: max(
-            0.25rem,
-            calc((var(--page-inline-padding, 0px) + var(--header-inline-inset-left, 1rem)) / 3)
-        );
+        margin-inline: auto;
+        padding-inline: clamp(0.75rem, 4vw, 1.25rem);
+    }
+
+    @media (min-width: 768px) {
+        nav {
+            width: min(
+                70rem,
+                var(
+                    --header-content-width,
+                    max(
+                        12rem,
+                        calc(
+                            100% - var(--header-inline-total, 2rem) -
+                                var(--header-actions-reserved-inline, 8rem)
+                        )
+                    )
+                )
+            );
+            max-width: min(
+                70rem,
+                var(
+                    --header-content-width,
+                    max(
+                        12rem,
+                        calc(
+                            100% - var(--header-inline-total, 2rem) -
+                                var(--header-actions-reserved-inline, 8rem)
+                        )
+                    )
+                )
+            );
+            padding-inline: max(
+                0.25rem,
+                calc(
+                    (var(--page-inline-padding, 0px) + var(--header-inline-inset-left, 1rem)) / 3
+                )
+            );
+        }
     }
 
     nav a {
@@ -157,6 +167,7 @@
         margin: 1px;
         padding: 5px;
         text-align: center;
+        flex: 0 0 auto;
     }
 
     nav a:hover {

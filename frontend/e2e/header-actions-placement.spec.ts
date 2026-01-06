@@ -13,6 +13,9 @@ const VIEWPORTS = [
 // Allow a small cushion so subpixel font/rendering differences across platforms
 // do not fail the test while still catching meaningful misalignment.
 const VERTICAL_ALIGNMENT_TOLERANCE_PX = 12;
+const ROW_ALIGNMENT_TOLERANCE_PX = 2;
+const NAV_INLINE_ALLOWANCE_PX = 32;
+const MOBILE_NAV_MAX_WIDTH = 430;
 
 function boxesOverlap(first: BoundingBox, second: BoundingBox): boolean {
     return !(
@@ -78,6 +81,41 @@ test.describe('Header actions placement', () => {
                 // Navigation pills can wrap differently across platforms and safe-area insets,
                 // so allow a slightly larger tolerance than the brand check.
                 expect(Math.abs(navCenter - headerCenter)).toBeLessThanOrEqual(16);
+
+                if (viewportSize.width <= MOBILE_NAV_MAX_WIDTH) {
+                    expect(navBox.width).toBeGreaterThanOrEqual(
+                        viewportSize.width - NAV_INLINE_ALLOWANCE_PX * 2
+                    );
+
+                    const navLinks = nav.locator('a:visible');
+                    const linkCount = await navLinks.count();
+                    const sampledCount = Math.min(linkCount, 8);
+                    const linkBoxes: BoundingBox[] = [];
+
+                    for (let index = 0; index < sampledCount; index += 1) {
+                        const box = await navLinks.nth(index).boundingBox();
+                        if (box) {
+                            linkBoxes.push(box);
+                        }
+                    }
+
+                    expect(linkBoxes.length).toBeGreaterThanOrEqual(2);
+
+                    const rows: { y: number; count: number }[] = [];
+                    for (const box of linkBoxes) {
+                        const row = rows.find(
+                            (existingRow) =>
+                                Math.abs(existingRow.y - box.y) <= ROW_ALIGNMENT_TOLERANCE_PX
+                        );
+                        if (row) {
+                            row.count += 1;
+                        } else {
+                            rows.push({ y: box.y, count: 1 });
+                        }
+                    }
+
+                    expect(rows.some((row) => row.count >= 2)).toBeTruthy();
+                }
 
                 const rightGap = viewportSize.width - (actionsBox.x + actionsBox.width);
                 const topGap = actionsBox.y;
