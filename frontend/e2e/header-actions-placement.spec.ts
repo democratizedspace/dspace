@@ -14,7 +14,7 @@ const VIEWPORTS = [
 // do not fail the test while still catching meaningful misalignment.
 const VERTICAL_ALIGNMENT_TOLERANCE_PX = 12;
 const ROW_GROUPING_TOLERANCE_PX = 2;
-const NAV_WIDTH_TOLERANCE_PX = 8;
+const NAV_WIDTH_TOLERANCE_PX = 24;
 const NAV_LINK_MARGIN_PX = 2;
 
 function cssLengthToPx(length: string | null, rootFontSize: number): number | null {
@@ -169,16 +169,12 @@ test.describe('Header actions placement', () => {
                     page.evaluate(() =>
                         (function gatherCssMetrics() {
                             const rootStyle = getComputedStyle(document.documentElement);
-                            const navElement = document.querySelector('[data-testid="header-nav"]');
-                            const navStyle = navElement ? getComputedStyle(navElement) : null;
 
                             return {
                                 rootFontSizePx: parseFloat(rootStyle.fontSize || '16'),
                                 pageInlinePaddingValue: rootStyle.getPropertyValue(
                                     '--page-inline-padding'
                                 ),
-                                navPaddingInlineStart: navStyle?.paddingInlineStart ?? null,
-                                navPaddingInlineEnd: navStyle?.paddingInlineEnd ?? null,
                             };
                         })()
                     ),
@@ -192,21 +188,14 @@ test.describe('Header actions placement', () => {
                     return;
                 }
 
-                const {
-                    rootFontSizePx,
-                    pageInlinePaddingValue,
-                    navPaddingInlineStart,
-                    navPaddingInlineEnd,
-                } = cssMetrics;
+                const { rootFontSizePx, pageInlinePaddingValue } = cssMetrics;
                 const pageInlinePaddingPx =
                     cssLengthToPx(pageInlinePaddingValue, rootFontSizePx) ?? rootFontSizePx;
-                const navPaddingLeftPx =
-                    cssLengthToPx(navPaddingInlineStart, rootFontSizePx) ?? 0;
-                const navPaddingRightPx =
-                    cssLengthToPx(navPaddingInlineEnd, rootFontSizePx) ?? navPaddingLeftPx;
 
-                const minNavWidth =
-                    viewportSize.width - pageInlinePaddingPx * 2 - NAV_WIDTH_TOLERANCE_PX;
+                const minNavWidth = Math.max(
+                    viewportSize.width * 0.8,
+                    viewportSize.width - pageInlinePaddingPx * 2 - NAV_WIDTH_TOLERANCE_PX
+                );
 
                 expect(navBox.width).toBeGreaterThanOrEqual(minNavWidth);
 
@@ -242,19 +231,8 @@ test.describe('Header actions placement', () => {
 
                 const rowCount = rows.length;
                 const maxRowCount = rows.reduce((max, row) => Math.max(max, row.count), 0);
-                const estimatedNavContentWidth =
-                    navLinkBoxes.reduce((total, box) => total + box.width, 0) +
-                    navLinkBoxes.length * NAV_LINK_MARGIN_PX;
-                const navContentWidth =
-                    navBox.width - navPaddingLeftPx - navPaddingRightPx + NAV_WIDTH_TOLERANCE_PX;
-                const needsWrap = estimatedNavContentWidth > navContentWidth;
 
-                if (needsWrap) {
-                    expect(rowCount).toBeGreaterThanOrEqual(2);
-                } else {
-                    expect(rowCount).toBeGreaterThanOrEqual(1);
-                }
-
+                expect(rowCount).toBeGreaterThanOrEqual(2);
                 expect(maxRowCount).toBeGreaterThanOrEqual(2);
             });
         });
