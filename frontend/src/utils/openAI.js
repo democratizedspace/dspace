@@ -45,10 +45,18 @@ const fallbackWelcomeMessage =
 export const defaultOpenAIErrorMessage =
     "Sorry, I'm having some trouble and can't generate a response.";
 
+const toNumericStatus = (status) => {
+    if (typeof status === 'string') {
+        return Number(status);
+    }
+
+    return status;
+};
+
 const isModelAccessError = (error) => {
     if (!error || typeof error !== 'object') return false;
 
-    const status = error.status ?? error.statusCode;
+    const status = toNumericStatus(error.status ?? error.statusCode);
     const code = error.code ?? error?.error?.code;
     const message = typeof error.message === 'string' ? error.message.toLowerCase() : undefined;
 
@@ -89,13 +97,14 @@ const extractErrorDetails = (error) => {
 
 export const describeOpenAIError = (error) => {
     const { status, code, type, message } = extractErrorDetails(error);
+    const numericStatus = toNumericStatus(status);
     const normalizedMessage = message?.toLowerCase() ?? '';
 
-    if (status === 401) {
+    if (numericStatus === 401) {
         return 'OpenAI rejected your API key. Update your key in Settings and try again.';
     }
 
-    if (status === 429 || code === 'rate_limit_exceeded') {
+    if (numericStatus === 429 || code === 'rate_limit_exceeded') {
         if (
             normalizedMessage.includes('quota') ||
             code === 'insufficient_quota' ||
@@ -117,7 +126,7 @@ export const describeOpenAIError = (error) => {
         );
     }
 
-    if (typeof status === 'number' && status >= 500) {
+    if (typeof numericStatus === 'number' && numericStatus >= 500) {
         return 'OpenAI is unavailable right now. Please try again in a moment.';
     }
 

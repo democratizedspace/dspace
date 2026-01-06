@@ -398,6 +398,16 @@ describe('describeOpenAIError', () => {
         expect(result).toMatch(/openai/i);
     });
 
+    it('treats numeric status strings as server errors', () => {
+        const error = new Error('internal server error');
+        // @ts-expect-error testing string coercion
+        error.status = '503';
+
+        const result = describeOpenAIError(error);
+
+        expect(result).toMatch(/unavailable/i);
+    });
+
     it('falls back to the default message for unknown errors', () => {
         const result = describeOpenAIError(new Error('unexpected'));
 
