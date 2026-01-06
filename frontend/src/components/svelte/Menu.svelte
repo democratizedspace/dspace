@@ -176,6 +176,7 @@
         color: var(--color-pill-text);
         text-decoration: none;
         flex-direction: row;
+        flex: 0 0 auto;
         margin: 1px;
         padding: 5px;
         text-align: center;

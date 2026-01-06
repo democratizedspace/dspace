@@ -13,8 +13,15 @@ const VIEWPORTS = [
 // Allow a small cushion so subpixel font/rendering differences across platforms
 // do not fail the test while still catching meaningful misalignment.
 const VERTICAL_ALIGNMENT_TOLERANCE_PX = 12;
-const ROW_ALIGNMENT_TOLERANCE_PX = 2;
-const MOBILE_NAV_INLINE_PADDING_PX = 32;
+const ROW_GROUPING_TOLERANCE_PX = 2;
+
+function getNavInlinePaddingPx(viewportWidth: number): number {
+    const minPadding = 12; // 0.75rem
+    const maxPadding = 20; // 1.25rem
+    const idealPadding = viewportWidth * 0.04; // 4vw
+
+    return Math.min(maxPadding, Math.max(minPadding, idealPadding));
+}
 
 function boxesOverlap(first: BoundingBox, second: BoundingBox): boolean {
     return !(
@@ -97,53 +104,8 @@ test.describe('Header actions placement', () => {
                 expect(boxesOverlap(actionsBox, brandBox)).toBeFalsy();
                 expect(boxesOverlap(actionsBox, navBox)).toBeFalsy();
 
-                const isMobileViewport = viewportSize.width <= 430;
-
-                if (isMobileViewport) {
-                    const minNavWidth =
-                        viewportSize.width - MOBILE_NAV_INLINE_PADDING_PX * 2;
-
-                    expect(navBox.width).toBeGreaterThanOrEqual(minNavWidth);
-
-                    const navLinks = nav.locator('a:visible');
-                    const navLinkCount = await navLinks.count();
-
-                    expect(navLinkCount).toBeGreaterThanOrEqual(2);
-
-                    const navLinkBoxes: BoundingBox[] = [];
-                    const maxLinksToCheck = Math.min(navLinkCount, 8);
-
-                    for (let index = 0; index < maxLinksToCheck; index += 1) {
-                        const linkBox = await navLinks.nth(index).boundingBox();
-                        expect(linkBox).not.toBeNull();
-
-                        if (linkBox) {
-                            navLinkBoxes.push(linkBox);
-                        }
-                    }
-
-                    expect(navLinkBoxes.length).toBeGreaterThanOrEqual(2);
-
-                    const rows: { y: number; count: number }[] = [];
-
-                    for (const box of navLinkBoxes) {
-                        const rowIndex = rows.findIndex(
-                            (row) => Math.abs(row.y - box.y) <= ROW_ALIGNMENT_TOLERANCE_PX
-                        );
-
-                        if (rowIndex === -1) {
-                            rows.push({ y: box.y, count: 1 });
-                        } else {
-                            rows[rowIndex].count += 1;
-                        }
-                    }
-
-                    const maxRowCount = Math.max(...rows.map((row) => row.count));
-                    expect(maxRowCount).toBeGreaterThanOrEqual(2);
-                }
-
-                const scrollDistance = Math.max(viewportSize.height * 1.5, 800);
-                await page.mouse.wheel(0, scrollDistance);
+				const scrollDistance = Math.max(viewportSize.height * 1.5, 800);
+				await page.mouse.wheel(0, scrollDistance);
                 await page.evaluate(() =>
                     window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' })
                 );
@@ -162,6 +124,77 @@ test.describe('Header actions placement', () => {
 
                     expect(inViewport).toBeFalsy();
                 }
+            });
+        });
+    }
+
+    const MOBILE_VIEWPORT_MAX_WIDTH = 768;
+    const MOBILE_VIEWPORTS = VIEWPORTS.filter(
+        ({ viewport }) => viewport.width <= MOBILE_VIEWPORT_MAX_WIDTH
+    );
+
+    for (const { label, viewport } of MOBILE_VIEWPORTS) {
+        test.describe(`${label} nav layout`, () => {
+            test.use({ viewport });
+
+            test('expands nav and wraps links on constrained widths', async ({ page }) => {
+                await clearUserData(page);
+                await page.goto('/');
+                await waitForHydration(page, '[data-testid="header-actions"]');
+
+                const nav = page.getByTestId('header-nav');
+                await expect(nav).toBeVisible();
+
+                const [navBox, viewportSize] = await Promise.all([
+                    nav.boundingBox(),
+                    page.viewportSize(),
+                ]);
+
+                expect(navBox).not.toBeNull();
+                expect(viewportSize).not.toBeNull();
+
+                if (!navBox || !viewportSize) {
+                    return;
+                }
+
+                const navInlinePadding = getNavInlinePaddingPx(viewportSize.width);
+                const minNavWidth = viewportSize.width - navInlinePadding * 2;
+                expect(navBox.width).toBeGreaterThanOrEqual(minNavWidth);
+
+                const navLinks = nav.locator('a:visible');
+                const navLinkCount = await navLinks.count();
+                expect(navLinkCount).toBeGreaterThanOrEqual(2);
+
+                const navLinkBoxes: BoundingBox[] = [];
+                const maxLinksToCheck = Math.min(navLinkCount, 8);
+
+                for (let index = 0; index < maxLinksToCheck; index += 1) {
+                    const linkBox = await navLinks.nth(index).boundingBox();
+                    expect(linkBox).not.toBeNull();
+
+                    if (linkBox) {
+                        navLinkBoxes.push(linkBox);
+                    }
+                }
+
+                expect(navLinkBoxes.length).toBeGreaterThanOrEqual(2);
+
+                const rows: { y: number; count: number }[] = [];
+
+                for (const box of navLinkBoxes) {
+                    const rowIndex = rows.findIndex(
+                        (row) => Math.abs(row.y - box.y) <= ROW_GROUPING_TOLERANCE_PX
+                    );
+
+                    if (rowIndex === -1) {
+                        rows.push({ y: box.y, count: 1 });
+                    } else {
+                        rows[rowIndex].count += 1;
+                    }
+                }
+
+                const rowCount = rows.length;
+                expect(rowCount).toBeGreaterThanOrEqual(2);
             });
         });
     }
