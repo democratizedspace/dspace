@@ -21,7 +21,7 @@ vi.mock('../src/data/npcPersonas.js', () => ({
     ],
 }));
 
-import { GPT35Turbo } from '../src/utils/openAI.js';
+import { GPT35Turbo, describeOpenAIError } from '../src/utils/openAI.js';
 
 class MockResponseClient {
     constructor(resolver) {
@@ -366,5 +366,52 @@ describe('GPT35Turbo', () => {
             'temporary outage'
         );
         expect(resolver).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('describeOpenAIError', () => {
+    it('returns a quota guidance when billing credits are exhausted', () => {
+        const error = {
+            status: 429,
+            error: {
+                code: 'insufficient_quota',
+                message: 'You exceeded your current quota',
+            },
+        };
+
+        expect(describeOpenAIError(error)).toContain('billing credits are exhausted');
+    });
+
+    it('returns an invalid key message for bad credentials', () => {
+        const error = {
+            status: 401,
+            error: { code: 'invalid_api_key', message: 'Invalid API key provided' },
+        };
+
+        expect(describeOpenAIError(error)).toContain('looks invalid');
+    });
+
+    it('returns a rate limit message for throttle errors', () => {
+        const error = { status: 429, message: 'Rate limit exceeded' };
+
+        expect(describeOpenAIError(error)).toContain('rate limiting');
+    });
+
+    it('returns a server unavailable message for 5xx errors', () => {
+        const error = { status: 503, message: 'Temporary outage' };
+
+        expect(describeOpenAIError(error)).toContain('currently unavailable');
+    });
+
+    it('returns a connectivity message for network errors', () => {
+        const error = { message: 'Network error fetching response' };
+
+        expect(describeOpenAIError(error)).toContain('could not reach OpenAI');
+    });
+
+    it('falls back to a default message for unknown errors', () => {
+        const error = { message: 'unexpected' };
+
+        expect(describeOpenAIError(error)).toContain("can't generate a response");
     });
 });

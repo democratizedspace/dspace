@@ -1,0 +1,14 @@
+{
+  "id": "2026-01-06-openai-chat-quota-messaging",
+  "date": "2026-01-06",
+  "component": "chat-openai-client",
+  "longForm": "outages/2026-01-06-openai-chat-quota-messaging.md",
+  "rootCause": "Quota and authentication failures from the OpenAI SDK only surfaced in console logs, leaving users with a generic chat error and no guidance to fix billing or key issues.",
+  "resolution": "Map common OpenAI errors to user-friendly strings, surface them inline in the chat UI, and cover the behavior with unit and integration tests.",
+  "references": [
+    "frontend/src/utils/openAI.js",
+    "frontend/src/pages/chat/svelte/OpenAIChat.svelte",
+    "frontend/tests/openAI.test.ts",
+    "frontend/src/pages/chat/svelte/__tests__/OpenAIChat.errors.spec.ts"
+  ]
+}

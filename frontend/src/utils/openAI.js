@@ -43,6 +43,54 @@ const fallbackSystemPrompt =
 const fallbackWelcomeMessage =
     defaultPersona?.welcomeMessage || 'Welcome! How can I assist you today?';
 
+const defaultErrorMessage = "Sorry, I'm having some trouble and can't generate a response.";
+
+const extractErrorDetails = (error) => {
+    const status = error?.status ?? error?.statusCode ?? error?.response?.status;
+    const code = error?.code ?? error?.error?.code;
+    const message =
+        error?.error?.message ?? error?.message ?? error?.response?.data?.error?.message ?? '';
+
+    return {
+        status,
+        code,
+        message: typeof message === 'string' ? message : '',
+    };
+};
+
+export const describeOpenAIError = (error) => {
+    const { status, code, message } = extractErrorDetails(error);
+    const normalizedMessage = message.toLowerCase();
+
+    if (status === 429 && (code === 'insufficient_quota' || normalizedMessage.includes('quota'))) {
+        return (
+            'OpenAI billing credits are exhausted for this key. Add credits and try again from the ' +
+            'OpenAI billing page.'
+        );
+    }
+
+    if (
+        (status === 401 || status === 403) &&
+        (code === 'invalid_api_key' || normalizedMessage.includes('invalid api key'))
+    ) {
+        return 'The OpenAI API key looks invalid. Update the key above and try again.';
+    }
+
+    if (status === 429 || normalizedMessage.includes('rate limit')) {
+        return 'OpenAI is rate limiting requests right now. Please wait a moment and retry.';
+    }
+
+    if (status && status >= 500 && status < 600) {
+        return 'OpenAI is currently unavailable. Please try again shortly.';
+    }
+
+    if (normalizedMessage.includes('network') || normalizedMessage.includes('fetch failed')) {
+        return 'We could not reach OpenAI. Check your connection and try again.';
+    }
+
+    return defaultErrorMessage;
+};
+
 const isModelAccessError = (error) => {
     if (!error || typeof error !== 'object') return false;
 

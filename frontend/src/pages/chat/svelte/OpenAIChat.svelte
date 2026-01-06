@@ -1,6 +1,6 @@
 <script>
     import { onMount, tick } from 'svelte';
-    import { GPT35Turbo } from '../../../utils/openAI.js';
+    import { GPT35Turbo, describeOpenAIError } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
     import {
         messages,
@@ -17,6 +17,7 @@
     const messageHistory = writable([]);
     let showSpinner = false;
     let hydrated = false;
+    let errorMessage = '';
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -52,6 +53,7 @@
 
         addMessage(userMessage);
         showSpinner = true;
+        errorMessage = '';
 
         try {
             const aiResponse = await GPT35Turbo([...$messageHistory, userMessage], {
@@ -66,7 +68,8 @@
             addMessage(aiMessage);
         } catch (error) {
             console.error(error);
-            const fallback = "Sorry, I'm having some trouble and can't generate a response.";
+            const fallback = describeOpenAIError(error);
+            errorMessage = fallback;
             addMessage({
                 role: 'assistant',
                 content: fallback,
@@ -139,6 +142,11 @@
     </div>
 
     <div class="chat-container">
+        {#if errorMessage}
+            <div class="error-banner" role="status" aria-live="polite">
+                {errorMessage}
+            </div>
+        {/if}
         <div class="spinner-container" style="display: {showSpinner ? 'flex' : 'none'}">
             <Spinner />
         </div>
@@ -206,6 +214,7 @@
         flex-direction: column;
         align-items: flex-start;
         width: 100%;
+        gap: 0.5rem;
     }
 
     .vertical {
@@ -222,6 +231,15 @@
         align-items: center;
         width: 100%;
         margin-top: 20px;
+    }
+
+    .error-banner {
+        width: 100%;
+        background: #fff3cd;
+        color: #5c4500;
+        border: 1px solid #f5c24d;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
     }
 
     button {
