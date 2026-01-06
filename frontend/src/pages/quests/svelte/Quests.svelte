@@ -171,6 +171,9 @@
         max-width: 100%;
         min-width: 0;
         box-sizing: border-box;
+        margin-inline: auto;
+        padding-inline: 0.5rem;
+        overflow-x: clip;
     }
 
     a {

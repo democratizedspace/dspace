@@ -35,6 +35,9 @@
         border-radius: 20px;
         margin: 5px;
         opacity: 0.8;
+        max-width: 100%;
+        overflow: hidden;
+        box-sizing: border-box;
     }
 
     .container:hover,
@@ -68,6 +71,7 @@
         flex-direction: row;
         align-items: stretch;
         gap: 0;
+        min-width: 0;
     }
 
     @media only screen and (max-width: 479px) {
@@ -83,7 +87,7 @@
 
     .content-text {
         flex: 1 1 auto;
-        min-width: 0;
+        min-width: 180px;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
