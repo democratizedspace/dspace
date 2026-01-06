@@ -1,6 +1,6 @@
 {
-  "id": "2026-02-19-openai-chat-quota-messaging",
-  "date": "2026-02-19",
+  "id": "2024-02-19-openai-chat-quota-messaging",
+  "date": "2024-02-19",
   "component": "chat-openai-client",
   "rootCause": "The chat UI only revealed OpenAI quota failures in console logs, so players with exhausted credits saw silent failures instead of guidance.",
   "resolution": "Surfaced friendly OpenAI error messaging for quota exhaustion and authentication failures, and added regression coverage for the helper and chat UI.",

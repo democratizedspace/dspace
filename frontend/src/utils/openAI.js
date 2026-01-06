@@ -117,7 +117,7 @@ export const describeOpenAIError = (error) => {
         );
     }
 
-    if (status && status >= 500) {
+    if (typeof status === 'number' && status >= 500) {
         return 'OpenAI is unavailable right now. Please try again in a moment.';
     }
 

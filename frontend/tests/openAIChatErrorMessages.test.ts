@@ -1,8 +1,30 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import '@testing-library/jest-dom';
-import OpenAIChat from '../src/pages/chat/svelte/OpenAIChat.svelte';
-import { activePersonaId, messages } from '../src/stores/chat.js';
+
+vi.mock('../src/utils/gameState/common.js', () => ({
+    loadGameState: vi.fn(() => ({
+        openAI: {},
+    })),
+    ready: Promise.resolve(),
+}));
+
+vi.mock('../src/utils/dchatKnowledge.js', () => ({
+    buildDchatKnowledge: vi.fn(() => 'knowledge'),
+}));
+
+vi.mock('../src/data/npcPersonas.js', () => ({
+    npcPersonas: [
+        {
+            id: 'dchat',
+            name: 'D-Chat',
+            avatar: '',
+            systemPrompt: 'system prompt',
+            welcomeMessage: 'hello',
+            summary: 'summary',
+        },
+    ],
+}));
 
 const GPT35Turbo = vi.hoisted(() => vi.fn());
 
@@ -13,6 +35,9 @@ vi.mock('../src/utils/openAI.js', async () => {
         GPT35Turbo,
     };
 });
+
+import OpenAIChat from '../src/pages/chat/svelte/OpenAIChat.svelte';
+import { activePersonaId, messages } from '../src/stores/chat.js';
 
 const sendMessage = async (text: string) => {
     const textarea = screen.getByRole('textbox');
@@ -55,7 +80,9 @@ describe('OpenAIChat error messaging', () => {
 
         await waitFor(() => expect(GPT35Turbo).toHaveBeenCalled());
         expect(await screen.findByText(/out of credits/i)).toBeInTheDocument();
-        expect(await screen.findByText(/openai/i)).toBeInTheDocument();
+        expect(
+            await screen.findByText(/openai could not generate a reply because this account/i)
+        ).toBeInTheDocument();
     });
 
     it('surfaces invalid API key errors to the user', async () => {
