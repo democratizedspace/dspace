@@ -157,6 +157,7 @@
         margin: 1px;
         padding: 5px;
         text-align: center;
+        flex: 0 0 auto;
     }
 
     nav a:hover {
@@ -212,5 +213,17 @@
     .disabled:hover {
         /* make the cursor normal */
         cursor: default;
+    }
+
+    @media (max-width: 640px) {
+        nav {
+            width: 100%;
+            max-width: none;
+            box-sizing: border-box;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding-inline: clamp(0.75rem, 4vw, 1.25rem);
+        }
     }
 </style>
