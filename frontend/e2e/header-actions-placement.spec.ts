@@ -13,6 +13,8 @@ const VIEWPORTS = [
 // Allow a small cushion so subpixel font/rendering differences across platforms
 // do not fail the test while still catching meaningful misalignment.
 const VERTICAL_ALIGNMENT_TOLERANCE_PX = 12;
+const ROW_ALIGNMENT_TOLERANCE_PX = 2;
+const MOBILE_NAV_INLINE_PADDING_PX = 32;
 
 function boxesOverlap(first: BoundingBox, second: BoundingBox): boolean {
     return !(
@@ -94,6 +96,51 @@ test.describe('Header actions placement', () => {
 
                 expect(boxesOverlap(actionsBox, brandBox)).toBeFalsy();
                 expect(boxesOverlap(actionsBox, navBox)).toBeFalsy();
+
+                const isMobileViewport = viewportSize.width <= 430;
+
+                if (isMobileViewport) {
+                    const minNavWidth =
+                        viewportSize.width - MOBILE_NAV_INLINE_PADDING_PX * 2;
+
+                    expect(navBox.width).toBeGreaterThanOrEqual(minNavWidth);
+
+                    const navLinks = nav.locator('a:visible');
+                    const navLinkCount = await navLinks.count();
+
+                    expect(navLinkCount).toBeGreaterThanOrEqual(2);
+
+                    const navLinkBoxes: BoundingBox[] = [];
+                    const maxLinksToCheck = Math.min(navLinkCount, 8);
+
+                    for (let index = 0; index < maxLinksToCheck; index += 1) {
+                        const linkBox = await navLinks.nth(index).boundingBox();
+                        expect(linkBox).not.toBeNull();
+
+                        if (linkBox) {
+                            navLinkBoxes.push(linkBox);
+                        }
+                    }
+
+                    expect(navLinkBoxes.length).toBeGreaterThanOrEqual(2);
+
+                    const rows: { y: number; count: number }[] = [];
+
+                    for (const box of navLinkBoxes) {
+                        const rowIndex = rows.findIndex(
+                            (row) => Math.abs(row.y - box.y) <= ROW_ALIGNMENT_TOLERANCE_PX
+                        );
+
+                        if (rowIndex === -1) {
+                            rows.push({ y: box.y, count: 1 });
+                        } else {
+                            rows[rowIndex].count += 1;
+                        }
+                    }
+
+                    const maxRowCount = Math.max(...rows.map((row) => row.count));
+                    expect(maxRowCount).toBeGreaterThanOrEqual(2);
+                }
 
                 const scrollDistance = Math.max(viewportSize.height * 1.5, 800);
                 await page.mouse.wheel(0, scrollDistance);
