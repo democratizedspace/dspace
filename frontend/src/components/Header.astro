@@ -34,9 +34,14 @@ export interface Props {
     :global(:root) {
         --astro-gradient: linear-gradient(0deg, #80df98, #00ff22);
         --page-inline-padding: 1rem;
+        --header-inline-inset-base: 0.55rem;
         --header-top-inset: calc(0.5rem + env(safe-area-inset-top, 0px));
-        --header-inline-inset-left: calc(0.75rem + env(safe-area-inset-left, 0px));
-        --header-inline-inset-right: calc(0.35rem + env(safe-area-inset-right, 0px));
+        --header-inline-inset-left: calc(
+            var(--header-inline-inset-base) + env(safe-area-inset-left, 0px)
+        );
+        --header-inline-inset-right: calc(
+            var(--header-inline-inset-base) + env(safe-area-inset-right, 0px)
+        );
         --header-actions-reserved-inline: 7rem;
         --header-inline-total: calc(
             (var(--page-inline-padding, 0px) * 2) +
@@ -66,7 +71,7 @@ export interface Props {
         overflow-x: clip;
         box-sizing: border-box;
         --header-actions-top: var(--header-top-inset);
-        --header-actions-right: var(--header-inline-inset-right);
+        --header-actions-right: max(0rem, calc(var(--header-inline-inset-right) - 0.15rem));
         --header-actions-height: 4.75rem;
         padding-top: var(--header-top-inset);
         padding-bottom: 0.75rem;
@@ -87,12 +92,6 @@ export interface Props {
         max-width: min(70rem, var(--header-content-width));
         margin: 0 auto;
         justify-self: center;
-    }
-
-    @media (min-width: 1024px) {
-        :global(:root) {
-            --header-inline-inset-right: calc(0.25rem + env(safe-area-inset-right, 0px));
-        }
     }
 
     .brand {
