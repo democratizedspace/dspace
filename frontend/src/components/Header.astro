@@ -42,7 +42,7 @@ export interface Props {
         --header-inline-inset-right: calc(
             var(--header-inline-inset-base) + env(safe-area-inset-right, 0px)
         );
-        --header-actions-reserved-inline: 7rem;
+        --header-actions-reserved-inline: 8rem;
         --header-inline-total: calc(
             (var(--page-inline-padding, 0px) * 2) +
                 var(--header-inline-inset-left) +
@@ -214,11 +214,12 @@ export interface Props {
 
     @media (max-width: 480px) {
         :global(:root) {
+            --header-actions-reserved-inline: 8.5rem;
             --header-content-width: max(
                 10rem,
                 calc(
                     100% - var(--header-inline-total) -
-                        var(--header-actions-reserved-inline, 7rem)
+                        var(--header-actions-reserved-inline, 8.5rem)
                 )
             );
         }
@@ -236,21 +237,21 @@ export interface Props {
 
         .header-actions__stack {
             gap: 0.18rem;
-            transform: scale(0.62);
+            transform: scale(0.58);
             transform-origin: top right;
         }
 
         .brand {
-            max-width: clamp(7rem, 52vw, 8rem);
+            max-width: clamp(6.75rem, 50vw, 7.75rem);
             margin-top: 0.35rem;
         }
 
         .text-gradient {
-            font-size: 1.55em;
+            font-size: 1.5em;
         }
 
         .domain {
-            font-size: 0.7em;
+            font-size: 0.68em;
         }
     }
 
@@ -260,19 +261,19 @@ export interface Props {
         }
 
         .header-actions__stack {
-            transform: scale(0.6);
+            transform: scale(0.56);
         }
 
         .text-gradient {
-            font-size: 1.45em;
+            font-size: 1.4em;
         }
 
         .domain {
-            font-size: 0.68em;
+            font-size: 0.64em;
         }
 
         .brand {
-            max-width: clamp(7.25rem, 60vw, 8.25rem);
+            max-width: clamp(6.9rem, 60vw, 7.6rem);
         }
     }
 </style>
