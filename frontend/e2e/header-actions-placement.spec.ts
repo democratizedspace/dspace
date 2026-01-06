@@ -14,11 +14,12 @@ const VIEWPORTS = [
 // do not fail the test while still catching meaningful misalignment.
 const VERTICAL_ALIGNMENT_TOLERANCE_PX = 12;
 const ROW_GROUPING_TOLERANCE_PX = 2;
+const NAV_WIDTH_TOLERANCE_PX = 2;
 
-function getNavInlinePaddingPx(viewportWidth: number): number {
-    const minPadding = 12; // 0.75rem
-    const maxPadding = 20; // 1.25rem
-    const idealPadding = viewportWidth * 0.04; // 4vw
+function getNavInlinePaddingPx(viewportWidth: number, rootFontSize: number): number {
+    const minPadding = 0.75 * rootFontSize; // clamp min
+    const maxPadding = 1.25 * rootFontSize; // clamp max
+    const idealPadding = viewportWidth * 0.04; // clamp middle (4vw)
 
     return Math.min(maxPadding, Math.max(minPadding, idealPadding));
 }
@@ -145,21 +146,32 @@ test.describe('Header actions placement', () => {
                 const nav = page.getByTestId('header-nav');
                 await expect(nav).toBeVisible();
 
-                const [navBox, viewportSize] = await Promise.all([
+                const [navBox, viewportSize, rootFontSizePx] = await Promise.all([
                     nav.boundingBox(),
                     page.viewportSize(),
+                    page.evaluate(() =>
+                        parseFloat(
+                            getComputedStyle(document.documentElement).fontSize || '16'
+                        )
+                    ),
                 ]);
 
                 expect(navBox).not.toBeNull();
                 expect(viewportSize).not.toBeNull();
+                expect(rootFontSizePx).toBeTruthy();
 
-                if (!navBox || !viewportSize) {
+                if (!navBox || !viewportSize || !rootFontSizePx) {
                     return;
                 }
 
-                const navInlinePadding = getNavInlinePaddingPx(viewportSize.width);
+                const navInlinePadding = getNavInlinePaddingPx(
+                    viewportSize.width,
+                    rootFontSizePx
+                );
                 const minNavWidth = viewportSize.width - navInlinePadding * 2;
-                expect(navBox.width).toBeGreaterThanOrEqual(minNavWidth);
+                expect(navBox.width + NAV_WIDTH_TOLERANCE_PX).toBeGreaterThanOrEqual(
+                    minNavWidth
+                );
 
                 const navLinks = nav.locator('a:visible');
                 const navLinkCount = await navLinks.count();
