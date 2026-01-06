@@ -51,4 +51,33 @@ describe('githubGists helpers', () => {
         expect(sanitized.array[0].keep).toBe('yep');
         expect(sanitized.array[1].credentialNotes).toBeUndefined();
     });
+
+    it('retains custom items, processes, and quests when sanitizing backups', () => {
+        const customContent = {
+            items: [{ id: 'custom-item-1', name: 'Custom Item' }],
+            processes: [
+                {
+                    id: 'custom-process-1',
+                    name: 'Custom Process',
+                    consumes: [{ id: 'item', qty: 1 }],
+                },
+            ],
+            quests: [
+                { id: 'custom-quest-1', title: 'Custom Quest', requiresQuests: ['core/intro'] },
+            ],
+        };
+
+        const save = {
+            custom: customContent,
+            openAI: { apiKey: 'sk-secret' }, // scan-secrets: ignore - test fixture
+            inventory: { items: { 'core/intro': 1 } },
+        };
+
+        const sanitized = sanitizeSaveForBackup(save);
+
+        expect(sanitized.custom).toEqual(customContent);
+        expect(sanitized.inventory).toEqual({ items: { 'core/intro': 1 } });
+        expect(sanitized.openAI).toBeUndefined();
+        expect(save.custom).toBe(customContent);
+    });
 });
