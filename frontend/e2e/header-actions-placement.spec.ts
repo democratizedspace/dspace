@@ -16,6 +16,30 @@ const VERTICAL_ALIGNMENT_TOLERANCE_PX = 12;
 const ROW_GROUPING_TOLERANCE_PX = 2;
 const NAV_WIDTH_TOLERANCE_PX = 2;
 
+function cssLengthToPx(length: string | null, rootFontSize: number): number | null {
+    if (!length) {
+        return null;
+    }
+
+    const value = length.trim();
+
+    if (!value) {
+        return null;
+    }
+
+    if (value.endsWith('rem')) {
+        return parseFloat(value) * rootFontSize;
+    }
+
+    if (value.endsWith('px')) {
+        return parseFloat(value);
+    }
+
+    const numeric = parseFloat(value);
+
+    return Number.isFinite(numeric) ? numeric : null;
+}
+
 function getNavInlinePaddingPx(viewportWidth: number, rootFontSize: number): number {
     const minPadding = 0.75 * rootFontSize; // clamp min
     const maxPadding = 1.25 * rootFontSize; // clamp max
@@ -146,29 +170,40 @@ test.describe('Header actions placement', () => {
                 const nav = page.getByTestId('header-nav');
                 await expect(nav).toBeVisible();
 
-                const [navBox, viewportSize, rootFontSizePx] = await Promise.all([
+                const [navBox, viewportSize, cssMetrics] = await Promise.all([
                     nav.boundingBox(),
                     page.viewportSize(),
                     page.evaluate(() =>
-                        parseFloat(
-                            getComputedStyle(document.documentElement).fontSize || '16'
-                        )
+                        (function gatherCssMetrics() {
+                            const rootStyle = getComputedStyle(document.documentElement);
+
+                            return {
+                                rootFontSizePx: parseFloat(rootStyle.fontSize || '16'),
+                                pageInlinePaddingValue: rootStyle.getPropertyValue(
+                                    '--page-inline-padding'
+                                ),
+                            };
+                        })()
                     ),
                 ]);
 
                 expect(navBox).not.toBeNull();
                 expect(viewportSize).not.toBeNull();
-                expect(rootFontSizePx).toBeTruthy();
+                expect(cssMetrics?.rootFontSizePx).toBeTruthy();
 
-                if (!navBox || !viewportSize || !rootFontSizePx) {
+                if (!navBox || !viewportSize || !cssMetrics?.rootFontSizePx) {
                     return;
                 }
 
+                const { rootFontSizePx, pageInlinePaddingValue } = cssMetrics;
+                const pageInlinePaddingPx =
+                    cssLengthToPx(pageInlinePaddingValue, rootFontSizePx) ?? rootFontSizePx;
                 const navInlinePadding = getNavInlinePaddingPx(
                     viewportSize.width,
                     rootFontSizePx
                 );
-                const minNavWidth = viewportSize.width - navInlinePadding * 2;
+                const minNavWidth =
+                    viewportSize.width - (pageInlinePaddingPx + navInlinePadding) * 2;
                 expect(navBox.width + NAV_WIDTH_TOLERANCE_PX).toBeGreaterThanOrEqual(
                     minNavWidth
                 );
