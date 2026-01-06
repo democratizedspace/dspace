@@ -24,15 +24,17 @@ test.describe('Responsive width regression tests', () => {
             await page.waitForLoadState('networkidle');
             await waitForHydration(page);
 
-            const { scrollWidth, clientWidth } = await page.evaluate(() => {
+            const { docScrollWidth, docClientWidth, bodyScrollWidth } = await page.evaluate(() => {
                 const docEl = document.documentElement;
                 return {
-                    scrollWidth: docEl.scrollWidth,
-                    clientWidth: docEl.clientWidth,
+                    docScrollWidth: docEl.scrollWidth,
+                    docClientWidth: docEl.clientWidth,
+                    bodyScrollWidth: document.body.scrollWidth,
                 };
             });
 
-            expect(scrollWidth).toBeLessThanOrEqual(clientWidth + OVERFLOW_TOLERANCE);
+            expect(docScrollWidth).toBeLessThanOrEqual(docClientWidth + OVERFLOW_TOLERANCE);
+            expect(bodyScrollWidth).toBeLessThanOrEqual(docClientWidth + OVERFLOW_TOLERANCE);
         });
     }
 
@@ -43,11 +45,9 @@ test.describe('Responsive width regression tests', () => {
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        const firstQuest = page.getByTestId('quest-tile').first();
-        await expect(firstQuest).toBeVisible();
-
         const questsGrid = page.getByTestId('quests-grid');
         await expect(questsGrid).toBeVisible();
+        await expect(questsGrid.locator('a').first()).toBeVisible();
 
         const { gridWidth, viewportWidth } = await questsGrid.evaluate((el) => {
             const rect = el.getBoundingClientRect();
