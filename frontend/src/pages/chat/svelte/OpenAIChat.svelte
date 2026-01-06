@@ -1,6 +1,10 @@
 <script>
     import { onMount, tick } from 'svelte';
-    import { GPT35Turbo } from '../../../utils/openAI.js';
+    import {
+        defaultOpenAIErrorMessage,
+        describeOpenAIError,
+        GPT35Turbo,
+    } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
     import {
         messages,
@@ -65,8 +69,8 @@
 
             addMessage(aiMessage);
         } catch (error) {
-            console.error(error);
-            const fallback = "Sorry, I'm having some trouble and can't generate a response.";
+            console.error('OpenAI chat request failed', error);
+            const fallback = describeOpenAIError(error) || defaultOpenAIErrorMessage;
             addMessage({
                 role: 'assistant',
                 content: fallback,

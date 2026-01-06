@@ -21,7 +21,11 @@ vi.mock('../src/data/npcPersonas.js', () => ({
     ],
 }));
 
-import { GPT35Turbo } from '../src/utils/openAI.js';
+import {
+    defaultOpenAIErrorMessage,
+    describeOpenAIError,
+    GPT35Turbo,
+} from '../src/utils/openAI.js';
 
 class MockResponseClient {
     constructor(resolver) {
@@ -366,5 +370,37 @@ describe('GPT35Turbo', () => {
             'temporary outage'
         );
         expect(resolver).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('describeOpenAIError', () => {
+    it('returns a quota message when OpenAI rejects for insufficient credits', () => {
+        const error = new Error(
+            'You exceeded your current quota, please check your plan and billing details.'
+        );
+        error.status = 429;
+        error.code = 'insufficient_quota';
+        error.error = { message: error.message, type: 'insufficient_quota' };
+
+        const result = describeOpenAIError(error);
+
+        expect(result).toMatch(/out of credits/i);
+        expect(result).toMatch(/openai/i);
+    });
+
+    it('returns an API key message for authentication failures', () => {
+        const error = new Error('Incorrect API key provided');
+        error.status = 401;
+
+        const result = describeOpenAIError(error);
+
+        expect(result).toMatch(/api key/i);
+        expect(result).toMatch(/openai/i);
+    });
+
+    it('falls back to the default message for unknown errors', () => {
+        const result = describeOpenAIError(new Error('unexpected'));
+
+        expect(result).toBe(defaultOpenAIErrorMessage);
     });
 });
