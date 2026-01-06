@@ -170,11 +170,7 @@ test.describe('Header actions placement', () => {
 
                 for (let index = 0; index < maxLinksToCheck; index += 1) {
                     const linkBox = await navLinks.nth(index).boundingBox();
-                    expect(linkBox).not.toBeNull();
-
-                    if (linkBox) {
-                        navLinkBoxes.push(linkBox);
-                    }
+                    if (linkBox) navLinkBoxes.push(linkBox);
                 }
 
                 expect(navLinkBoxes.length).toBeGreaterThanOrEqual(2);

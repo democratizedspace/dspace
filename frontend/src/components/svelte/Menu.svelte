@@ -218,6 +218,9 @@
 
     @media (max-width: 768px) {
         nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             width: 100%;
             max-width: none;
             box-sizing: border-box;
