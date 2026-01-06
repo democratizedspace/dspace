@@ -15,6 +15,8 @@ test('quest PR form is accessible', async ({ page }) => {
 test('shows validation guidance when token or quest JSON are missing', async ({ page }) => {
     await page.goto('/quests/submit');
     await waitForHydration(page);
+    await page.getByLabel('GitHub Token*').fill('   ');
+    await page.getByLabel('Quest JSON*').fill('   ');
     await page.getByRole('button', { name: 'Create Pull Request' }).click();
     await expect(page.getByTestId('token-error')).toHaveText('GitHub token looks invalid');
     await expect(page.getByTestId('quest-json-error')).toHaveText('Quest JSON is required');
