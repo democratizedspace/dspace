@@ -4,7 +4,7 @@ import { formatBackupFilename, sanitizeSaveForBackup } from '../../src/lib/cloud
 describe('githubGists helpers', () => {
     it('formats filenames without colons using ISO timestamp', () => {
         const date = new Date('2025-12-22T20:31:12Z');
-        expect(formatBackupFilename(date)).toBe('dspace-save-2025-12-22T20-31-12Z.txt');
+        expect(formatBackupFilename(date)).toBe('dspace-save-2025-12-22T20-31-12.000Z.txt');
     });
 
     it('removes secret tokens from saves', () => {
@@ -41,14 +41,30 @@ describe('githubGists helpers', () => {
 
         const sanitized = sanitizeSaveForBackup(save);
 
-        expect(sanitized.auth.password).toBeUndefined();
-        expect(sanitized.auth.apiKey).toBeUndefined();
-        expect(sanitized.auth.passphrase).toBeUndefined();
-        expect(sanitized.auth.authorization).toBeUndefined();
-        expect(sanitized.auth.nested.privateKey).toBeUndefined();
-        expect(sanitized.auth.keep).toBe('ok');
+        expect(sanitized.auth?.password).toBeUndefined();
+        expect(sanitized.auth?.apiKey).toBeUndefined();
+        expect(sanitized.auth?.passphrase).toBeUndefined();
+        expect(sanitized.auth?.authorization).toBeUndefined();
+        expect(sanitized.auth?.nested?.privateKey).toBeUndefined();
+        expect(sanitized.auth?.keep).toBeUndefined();
         expect(sanitized.array[0].secretKey).toBeUndefined();
         expect(sanitized.array[0].keep).toBe('yep');
         expect(sanitized.array[1].credentialNotes).toBeUndefined();
+    });
+
+    it('keeps custom quests, processes, and items in backups', () => {
+        const save = {
+            custom: {
+                items: [{ id: 'custom-item', name: 'Engine Core' }],
+                processes: [{ id: 'custom-process', title: 'Assemble Engine Core' }],
+                quests: [{ id: 'custom-quest', title: 'Build the Engine' }],
+            },
+            progress: { level: 3 },
+        };
+
+        const sanitized = sanitizeSaveForBackup(save);
+
+        expect(sanitized.custom).toEqual(save.custom);
+        expect(sanitized.progress).toEqual(save.progress);
     });
 });

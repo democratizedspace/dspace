@@ -16,6 +16,7 @@ import {
     updateProcess,
     deleteProcess,
 } from '../src/utils/customcontent.js';
+import items from '../src/pages/inventory/json/items';
 
 describe('Custom Content Functions', () => {
     // Quest Tests
@@ -140,6 +141,24 @@ describe('Custom Content Functions', () => {
             expect(process.requireItems).toEqual([]);
             expect(process.consumeItems).toEqual([]);
             expect(process.createItems).toEqual([]);
+        });
+
+        test('supports mixing built-in and custom items in process IO lists', async () => {
+            const builtInItemId = items[0]?.id ?? 'built-in-item-id';
+            const customItemId = await createItem('Custom Alloy', 'Used for mixed crafting flows');
+
+            const id = await createProcess(
+                'Mixed Sources',
+                '45m',
+                [{ id: builtInItemId, count: 1 }],
+                [{ id: customItemId, count: 2 }],
+                [{ id: builtInItemId, count: 1 }]
+            );
+
+            const process = await getProcess(id);
+            expect(process.requireItems).toEqual([{ id: builtInItemId, count: 1 }]);
+            expect(process.consumeItems).toEqual([{ id: customItemId, count: 2 }]);
+            expect(process.createItems).toEqual([{ id: builtInItemId, count: 1 }]);
         });
 
         test('should update a process', async () => {
