@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 import { clearUserData, waitForHydration } from './test-helpers';
 
@@ -8,10 +8,7 @@ const FALLBACK_MESSAGE = "Sorry, I'm having some trouble and can't generate a re
 
 type StubMode = 'success' | 'network-error' | 'rate-limit' | 'abort';
 
-const installChatStub = async (
-    page: Parameters<typeof test['beforeEach']>[0]['page'],
-    mode: StubMode
-) => {
+const installChatStub = async (page: Page, mode: StubMode) => {
     await page.addInitScript(
         ({ reply, stubMode }) => {
             const createResponse = async () => {
@@ -47,7 +44,7 @@ const installChatStub = async (
     );
 };
 
-const openChatPanel = async (page: Parameters<typeof test['beforeEach']>[0]['page']) => {
+const openChatPanel = async (page: Page) => {
     await page.goto('/chat');
     await waitForHydration(page);
 
@@ -61,10 +58,7 @@ const openChatPanel = async (page: Parameters<typeof test['beforeEach']>[0]['pag
     };
 };
 
-const sendMessage = async (
-    page: Parameters<typeof test['beforeEach']>[0]['page'],
-    text: string
-) => {
+const sendMessage = async (page: Page, text: string) => {
     const { chatPanel, spinner, messageBox } = await openChatPanel(page);
     await messageBox.fill(text);
     await chatPanel.getByRole('button', { name: 'Send' }).click();
@@ -94,7 +88,7 @@ test.describe('Chat message flow', () => {
         await installChatStub(page, 'network-error');
         const { chatPanel, spinner } = await sendMessage(page, 'Trigger a network failure');
 
-        await expect(chatPanel.getByText(/having some trouble/i)).toBeVisible();
+        await expect(chatPanel.getByText(FALLBACK_MESSAGE)).toBeVisible();
         await expect(spinner).not.toBeVisible();
     });
 
