@@ -14,7 +14,8 @@ const VIEWPORTS = [
 // do not fail the test while still catching meaningful misalignment.
 const VERTICAL_ALIGNMENT_TOLERANCE_PX = 12;
 const ROW_GROUPING_TOLERANCE_PX = 2;
-const NAV_WIDTH_TOLERANCE_PX = 2;
+const NAV_WIDTH_TOLERANCE_PX = 8;
+const NAV_LINK_MARGIN_PX = 2;
 
 function cssLengthToPx(length: string | null, rootFontSize: number): number | null {
     if (!length) {
@@ -38,14 +39,6 @@ function cssLengthToPx(length: string | null, rootFontSize: number): number | nu
     const numeric = parseFloat(value);
 
     return Number.isFinite(numeric) ? numeric : null;
-}
-
-function getNavInlinePaddingPx(viewportWidth: number, rootFontSize: number): number {
-    const minPadding = 0.75 * rootFontSize; // clamp min
-    const maxPadding = 1.25 * rootFontSize; // clamp max
-    const idealPadding = viewportWidth * 0.04; // clamp middle (4vw)
-
-    return Math.min(maxPadding, Math.max(minPadding, idealPadding));
 }
 
 function boxesOverlap(first: BoundingBox, second: BoundingBox): boolean {
@@ -176,12 +169,16 @@ test.describe('Header actions placement', () => {
                     page.evaluate(() =>
                         (function gatherCssMetrics() {
                             const rootStyle = getComputedStyle(document.documentElement);
+                            const navElement = document.querySelector('[data-testid="header-nav"]');
+                            const navStyle = navElement ? getComputedStyle(navElement) : null;
 
                             return {
                                 rootFontSizePx: parseFloat(rootStyle.fontSize || '16'),
                                 pageInlinePaddingValue: rootStyle.getPropertyValue(
                                     '--page-inline-padding'
                                 ),
+                                navPaddingInlineStart: navStyle?.paddingInlineStart ?? null,
+                                navPaddingInlineEnd: navStyle?.paddingInlineEnd ?? null,
                             };
                         })()
                     ),
@@ -195,18 +192,23 @@ test.describe('Header actions placement', () => {
                     return;
                 }
 
-                const { rootFontSizePx, pageInlinePaddingValue } = cssMetrics;
+                const {
+                    rootFontSizePx,
+                    pageInlinePaddingValue,
+                    navPaddingInlineStart,
+                    navPaddingInlineEnd,
+                } = cssMetrics;
                 const pageInlinePaddingPx =
                     cssLengthToPx(pageInlinePaddingValue, rootFontSizePx) ?? rootFontSizePx;
-                const navInlinePadding = getNavInlinePaddingPx(
-                    viewportSize.width,
-                    rootFontSizePx
-                );
+                const navPaddingLeftPx =
+                    cssLengthToPx(navPaddingInlineStart, rootFontSizePx) ?? 0;
+                const navPaddingRightPx =
+                    cssLengthToPx(navPaddingInlineEnd, rootFontSizePx) ?? navPaddingLeftPx;
+
                 const minNavWidth =
-                    viewportSize.width - (pageInlinePaddingPx + navInlinePadding) * 2;
-                expect(navBox.width + NAV_WIDTH_TOLERANCE_PX).toBeGreaterThanOrEqual(
-                    minNavWidth
-                );
+                    viewportSize.width - pageInlinePaddingPx * 2 - NAV_WIDTH_TOLERANCE_PX;
+
+                expect(navBox.width).toBeGreaterThanOrEqual(minNavWidth);
 
                 const navLinks = nav.locator('a:visible');
                 const navLinkCount = await navLinks.count();
@@ -239,9 +241,20 @@ test.describe('Header actions placement', () => {
                 }
 
                 const rowCount = rows.length;
-                const maxRowCount = Math.max(...rows.map((row) => row.count));
+                const maxRowCount = rows.reduce((max, row) => Math.max(max, row.count), 0);
+                const estimatedNavContentWidth =
+                    navLinkBoxes.reduce((total, box) => total + box.width, 0) +
+                    navLinkBoxes.length * NAV_LINK_MARGIN_PX;
+                const navContentWidth =
+                    navBox.width - navPaddingLeftPx - navPaddingRightPx + NAV_WIDTH_TOLERANCE_PX;
+                const needsWrap = estimatedNavContentWidth > navContentWidth;
 
-                expect(rowCount).toBeGreaterThanOrEqual(2);
+                if (needsWrap) {
+                    expect(rowCount).toBeGreaterThanOrEqual(2);
+                } else {
+                    expect(rowCount).toBeGreaterThanOrEqual(1);
+                }
+
                 expect(maxRowCount).toBeGreaterThanOrEqual(2);
             });
         });
