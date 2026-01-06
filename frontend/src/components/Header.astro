@@ -37,10 +37,17 @@ export interface Props {
         --header-top-inset: calc(0.5rem + env(safe-area-inset-top, 0px));
         --header-inline-inset-left: calc(0.75rem + env(safe-area-inset-left, 0px));
         --header-inline-inset-right: calc(0.75rem + env(safe-area-inset-right, 0px));
+        --header-actions-reserved-inline: 6rem;
         --header-inline-total: calc(
             (var(--page-inline-padding, 0px) * 2) +
                 var(--header-inline-inset-left) +
                 var(--header-inline-inset-right)
+        );
+        --header-content-width: max(
+            12rem,
+            calc(
+                100% - var(--header-inline-total) - var(--header-actions-reserved-inline, 6rem)
+            )
         );
     }
 
@@ -76,8 +83,8 @@ export interface Props {
         align-items: flex-start;
         justify-items: center;
         gap: 1rem;
-        width: min(70rem, calc(100% - var(--header-inline-total)));
-        max-width: min(70rem, calc(100% - var(--header-inline-total)));
+        width: min(70rem, var(--header-content-width));
+        max-width: min(70rem, var(--header-content-width));
         margin: 0 auto;
     }
 

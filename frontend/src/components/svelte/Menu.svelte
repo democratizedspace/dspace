@@ -113,8 +113,32 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        width: min(70rem, calc(100% - var(--header-inline-total, 2rem)));
-        max-width: min(70rem, calc(100% - var(--header-inline-total, 2rem)));
+        width: min(
+            70rem,
+            var(
+                --header-content-width,
+                max(
+                    12rem,
+                    calc(
+                        100% - var(--header-inline-total, 2rem) -
+                            var(--header-actions-reserved-inline, 6rem)
+                    )
+                )
+            )
+        );
+        max-width: min(
+            70rem,
+            var(
+                --header-content-width,
+                max(
+                    12rem,
+                    calc(
+                        100% - var(--header-inline-total, 2rem) -
+                            var(--header-actions-reserved-inline, 6rem)
+                    )
+                )
+            )
+        );
         margin-inline: auto;
         box-sizing: border-box;
         padding-inline: max(
