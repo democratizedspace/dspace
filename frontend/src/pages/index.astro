@@ -15,16 +15,18 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
 ---
 
 <Page title="Home" columns="1">
-    <div class="build-meta" aria-label="Build metadata">
-        <span class="env">{environment}</span>
-        <span class="version">{version}</span>
+    <div class="home-shell">
+        <div class="build-meta" aria-label="Build metadata">
+            <span class="env">{environment}</span>
+            <span class="version">{version}</span>
+        </div>
+        <script>
+            window.dspaceStart = performance.now();
+        </script>
+        <WhatsNew />
+        <FailoverStatus client:load />
+        <UIResponsiveness client:load />
     </div>
-    <script>
-        window.dspaceStart = performance.now();
-    </script>
-    <WhatsNew />
-    <FailoverStatus client:load />
-    <UIResponsiveness client:load />
 </Page>
 
 <style>
@@ -39,6 +41,19 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
         text-align: center;
     }
 
+    .home-shell {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        padding: 0;
+        background: transparent;
+        color: inherit;
+        box-sizing: border-box;
+    }
+
     .build-meta {
         display: inline-flex;
         gap: 0.5rem;
@@ -49,7 +64,13 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
         border-radius: 9999px;
         background-color: #f4f4f5;
         color: #1f2933;
-        float: right;
+        align-self: flex-end;
+        width: fit-content;
+        max-width: min(100%, 22rem);
+        min-width: 0;
+        box-sizing: border-box;
+        flex-wrap: wrap;
+        justify-content: flex-end;
     }
 
     .build-meta .env {
