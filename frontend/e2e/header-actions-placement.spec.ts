@@ -79,6 +79,12 @@ test.describe('Header actions placement', () => {
                 // so allow a slightly larger tolerance than the brand check.
                 expect(Math.abs(navCenter - headerCenter)).toBeLessThanOrEqual(16);
 
+                const viewportWidth = viewportSize.width;
+
+                if (viewportWidth <= 430) {
+                    expect(navBox.width).toBeGreaterThanOrEqual(viewportWidth - 64);
+                }
+
                 const rightGap = viewportSize.width - (actionsBox.x + actionsBox.width);
                 const topGap = actionsBox.y;
                 // Allow a small negative gap to account for subpixel rounding and safe-area
@@ -94,6 +100,41 @@ test.describe('Header actions placement', () => {
 
                 expect(boxesOverlap(actionsBox, brandBox)).toBeFalsy();
                 expect(boxesOverlap(actionsBox, navBox)).toBeFalsy();
+
+                if (viewportWidth <= 430) {
+                    const navLinks = page.locator('[data-testid="header-nav"] a');
+                    const maxLinksToCheck = 8;
+                    const linkCount = await navLinks.count();
+                    const sampleCount = Math.min(linkCount, maxLinksToCheck);
+
+                    const linkBoxes: BoundingBox[] = [];
+                    for (let i = 0; i < sampleCount; i++) {
+                        const linkBox = await navLinks.nth(i).boundingBox();
+                        if (linkBox) {
+                            linkBoxes.push(linkBox);
+                        }
+                    }
+
+                    expect(linkBoxes.length).toBeGreaterThanOrEqual(2);
+
+                    const rowCounts = new Map<number, number>();
+                    const rowTolerance = 2;
+
+                    for (const linkBox of linkBoxes) {
+                        const existingRowKey =
+                            Array.from(rowCounts.keys()).find(
+                                (key) => Math.abs(key - linkBox.y) <= rowTolerance
+                            ) ?? linkBox.y;
+
+                        rowCounts.set(existingRowKey, (rowCounts.get(existingRowKey) ?? 0) + 1);
+                    }
+
+                    const hasRowWithAtLeastTwoLinks = Array.from(rowCounts.values()).some(
+                        (count) => count >= 2
+                    );
+
+                    expect(hasRowWithAtLeastTwoLinks).toBeTruthy();
+                }
 
                 const scrollDistance = Math.max(viewportSize.height * 1.5, 800);
                 await page.mouse.wheel(0, scrollDistance);
