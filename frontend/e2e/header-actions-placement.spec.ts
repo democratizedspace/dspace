@@ -165,12 +165,14 @@ test.describe('Header actions placement', () => {
                 const navLinkCount = await navLinks.count();
                 expect(navLinkCount).toBeGreaterThanOrEqual(2);
 
-                const navLinkBoxes: BoundingBox[] = [];
                 const maxLinksToCheck = Math.min(navLinkCount, 8);
+                const navLinkBoxes: BoundingBox[] = [];
 
                 for (let index = 0; index < maxLinksToCheck; index += 1) {
                     const linkBox = await navLinks.nth(index).boundingBox();
-                    if (linkBox) navLinkBoxes.push(linkBox);
+                    if (linkBox) {
+                        navLinkBoxes.push(linkBox);
+                    }
                 }
 
                 expect(navLinkBoxes.length).toBeGreaterThanOrEqual(2);
@@ -190,7 +192,10 @@ test.describe('Header actions placement', () => {
                 }
 
                 const rowCount = rows.length;
+                const maxRowCount = Math.max(...rows.map((row) => row.count));
+
                 expect(rowCount).toBeGreaterThanOrEqual(2);
+                expect(maxRowCount).toBeGreaterThanOrEqual(2);
             });
         });
     }
