@@ -97,4 +97,15 @@ describe('run-test-groups', () => {
 
     expect(missingFiles).toEqual([]);
   });
+
+  it('includes an integration group for the custom content end-to-end flow', () => {
+    const integrationGroup = TEST_GROUPS.find(
+      (group: any) => group.name === 'Integration Tests'
+    );
+
+    expect(integrationGroup).toBeDefined();
+    expect(integrationGroup?.files).toContain('custom-content.spec.ts');
+    expect(integrationGroup?.grep).toBe('integrate custom items, processes, and quests');
+    expect(integrationGroup?.parallel).toBe(false);
+  });
 });
