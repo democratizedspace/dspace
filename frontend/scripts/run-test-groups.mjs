@@ -52,6 +52,7 @@ const TEST_GROUPS = [
             'changelog-container.spec.ts',
             'failover-status.spec.ts',
             'home-page-basic.spec.ts',
+            'homepage-responsive-width.spec.ts',
             'inventory-items-bug.spec.ts',
             'profile-avatar-selection.spec.ts',
             'profile-page.spec.ts',

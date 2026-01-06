@@ -42,15 +42,20 @@ const pathname = Astro.url.pathname;
 		--link-gradient: linear-gradient(45deg, #003a03, #003a03 30%, var(--color-border) 60%);
 	}
 
-	
-
 	main {
 		margin: 0 auto;
 		padding: 0 1rem 1.5rem;
 		max-width: 100%;
-		width: 100%;
+		width: min(100%, 100vw);
+		min-width: 0;
 		box-sizing: border-box;
 		overflow-x: clip;
+	}
+
+	main > div {
+		width: min(100%, 100vw);
+		min-width: 0;
+		box-sizing: border-box;
 	}
 
 	.text-gradient {
