@@ -50,11 +50,13 @@ const openChatPanel = async (page: Page) => {
 
     const chatPanel = page.locator('[data-testid="chat-panel"][data-provider="openai"]');
     await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
+    const messageBox = chatPanel.getByRole('textbox');
+    await expect(messageBox).toBeEnabled();
 
     return {
         chatPanel,
         spinner: chatPanel.locator('.spinner-container'),
-        messageBox: chatPanel.getByRole('textbox'),
+        messageBox,
     };
 };
 
