@@ -4,7 +4,7 @@ import { formatBackupFilename, sanitizeSaveForBackup } from '../../src/lib/cloud
 describe('githubGists helpers', () => {
     it('formats filenames without colons using ISO timestamp', () => {
         const date = new Date('2025-12-22T20:31:12Z');
-        expect(formatBackupFilename(date)).toBe('dspace-save-2025-12-22T20-31-12Z.txt');
+        expect(formatBackupFilename(date)).toBe('dspace-save-2025-12-22T20-31-12.000Z.txt');
     });
 
     it('removes secret tokens from saves', () => {
@@ -41,14 +41,32 @@ describe('githubGists helpers', () => {
 
         const sanitized = sanitizeSaveForBackup(save);
 
-        expect(sanitized.auth.password).toBeUndefined();
-        expect(sanitized.auth.apiKey).toBeUndefined();
-        expect(sanitized.auth.passphrase).toBeUndefined();
-        expect(sanitized.auth.authorization).toBeUndefined();
-        expect(sanitized.auth.nested.privateKey).toBeUndefined();
-        expect(sanitized.auth.keep).toBe('ok');
-        expect(sanitized.array[0].secretKey).toBeUndefined();
-        expect(sanitized.array[0].keep).toBe('yep');
-        expect(sanitized.array[1].credentialNotes).toBeUndefined();
+        expect(sanitized.auth?.password).toBeUndefined();
+        expect(sanitized.auth?.apiKey).toBeUndefined();
+        expect(sanitized.auth?.passphrase).toBeUndefined();
+        expect(sanitized.auth?.authorization).toBeUndefined();
+        expect(sanitized.auth?.nested?.privateKey).toBeUndefined();
+        expect(sanitized.auth).toBeUndefined();
+        expect(sanitized.array?.[0]?.secretKey).toBeUndefined();
+        expect(sanitized.array?.[0]?.keep).toBe('yep');
+        expect(sanitized.array?.[1]?.credentialNotes).toBeUndefined();
+    });
+
+    it('retains custom content when sanitizing saves for backup', () => {
+        const save = {
+            custom: {
+                items: [{ id: 'custom-item-1' }],
+                processes: [{ id: 'custom-process-1' }],
+                quests: [{ id: 'custom-quest-1' }],
+            },
+            github: { token: 'ghp_secret' },
+        };
+
+        const sanitized = sanitizeSaveForBackup(save);
+
+        expect(sanitized.custom?.items).toEqual([{ id: 'custom-item-1' }]);
+        expect(sanitized.custom?.processes).toEqual([{ id: 'custom-process-1' }]);
+        expect(sanitized.custom?.quests).toEqual([{ id: 'custom-quest-1' }]);
+        expect(sanitized.github?.token).toBeUndefined();
     });
 });
