@@ -1,6 +1,6 @@
 <script>
     import { onMount, tick } from 'svelte';
-    import { GPT35Turbo } from '../../../utils/openAI.js';
+    import { GPT35Turbo, describeOpenAIError } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
     import {
         messages,
@@ -15,6 +15,7 @@
 
     const message = writable('');
     const messageHistory = writable([]);
+    let errorMessage = '';
     let showSpinner = false;
     let hydrated = false;
 
@@ -52,6 +53,7 @@
 
         addMessage(userMessage);
         showSpinner = true;
+        errorMessage = '';
 
         try {
             const aiResponse = await GPT35Turbo([...$messageHistory, userMessage], {
@@ -66,11 +68,13 @@
             addMessage(aiMessage);
         } catch (error) {
             console.error(error);
+            const friendly = describeOpenAIError(error);
             const fallback = "Sorry, I'm having some trouble and can't generate a response.";
+            errorMessage = friendly || fallback;
             addMessage({
                 role: 'assistant',
-                content: fallback,
-                tokens: countTokens(fallback),
+                content: friendly || fallback,
+                tokens: countTokens(friendly || fallback),
             });
         }
 
@@ -94,6 +98,7 @@
         messageHistory.set([]);
         messages.set([]);
         showSpinner = false;
+        errorMessage = '';
         message.set('');
         await tick();
         addWelcomeMessage(nextPersona);
@@ -125,6 +130,9 @@
         {/if}
         {#if personaSummary}
             <p class="persona-summary">{personaSummary}</p>
+        {/if}
+        {#if errorMessage}
+            <div class="error-banner" role="alert">{errorMessage}</div>
         {/if}
     </div>
 
@@ -199,6 +207,17 @@
         font-size: 0.9rem;
         text-align: center;
         color: rgba(0, 0, 0, 0.8);
+    }
+
+    .error-banner {
+        width: 100%;
+        background-color: #fef3c7;
+        color: #92400e;
+        border: 1px solid #f59e0b;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     }
 
     .chat-container {

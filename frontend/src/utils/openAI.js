@@ -34,6 +34,62 @@ const toOutputText = (response) => {
     return outputText || '';
 };
 
+const normalizeMessage = (message) => {
+    if (typeof message !== 'string') return undefined;
+    return message.toLowerCase();
+};
+
+export const describeOpenAIError = (error) => {
+    if (!error || typeof error !== 'object') return null;
+
+    const status = error.status ?? error.statusCode ?? error?.response?.status;
+    const code = error.code ?? error?.error?.code ?? error?.response?.data?.error?.code;
+    const message =
+        error.message ??
+        error?.error?.message ??
+        error?.response?.data?.error?.message ??
+        '';
+    const normalized = normalizeMessage(message) || '';
+
+    if (status === 401 || code === 'invalid_api_key') {
+        return [
+            'OpenAI rejected the request because the API key looks invalid.',
+            'Update the key in chat settings and try again.',
+        ].join(' ');
+    }
+
+    if (
+        status === 429 ||
+        code === 'rate_limit_exceeded' ||
+        code === 'insufficient_quota' ||
+        normalized.includes('quota') ||
+        normalized.includes('billing')
+    ) {
+        return [
+            'OpenAI blocked the request because this API key has no remaining credits or hit its quota.',
+            'Add billing credits or wait for the quota to reset, then try again.',
+        ].join(' ');
+    }
+
+    if (status === 403 || code === 'insufficient_permissions') {
+        return [
+            'OpenAI denied access to the requested model.',
+            'Check that your API key has the necessary permissions and try again.',
+        ].join(' ');
+    }
+
+    if (status >= 500 && status < 600) {
+        return 'OpenAI is experiencing a temporary issue. Please try again in a moment.';
+    }
+
+    const networkErrors = ['ENOTFOUND', 'ECONNREFUSED', 'ETIMEDOUT'];
+    if (networkErrors.includes(code)) {
+        return 'We could not reach OpenAI. Check your connection and try again.';
+    }
+
+    return null;
+};
+
 const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';
 const fallbackModels = ['gpt-5-mini'];

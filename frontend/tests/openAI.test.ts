@@ -21,7 +21,7 @@ vi.mock('../src/data/npcPersonas.js', () => ({
     ],
 }));
 
-import { GPT35Turbo } from '../src/utils/openAI.js';
+import { describeOpenAIError, GPT35Turbo } from '../src/utils/openAI.js';
 
 class MockResponseClient {
     constructor(resolver) {
@@ -366,5 +366,32 @@ describe('GPT35Turbo', () => {
             'temporary outage'
         );
         expect(resolver).toHaveBeenCalledTimes(1);
+    });
+
+    describe('describeOpenAIError', () => {
+        it('returns a quota message for 429 responses', () => {
+            const error = new Error('insufficient_quota');
+            error.status = 429;
+
+            const message = describeOpenAIError(error);
+
+            expect(message).toContain('no remaining credits');
+        });
+
+        it('returns an invalid key message for 401 responses', () => {
+            const error = new Error('invalid_api_key');
+            error.status = 401;
+            error.code = 'invalid_api_key';
+
+            const message = describeOpenAIError(error);
+
+            expect(message).toContain('API key looks invalid');
+        });
+
+        it('returns null for unknown errors', () => {
+            const message = describeOpenAIError(new Error('mystery failure'));
+
+            expect(message).toBeNull();
+        });
     });
 });
