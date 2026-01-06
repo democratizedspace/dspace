@@ -21,7 +21,7 @@ vi.mock('../src/data/npcPersonas.js', () => ({
     ],
 }));
 
-import { GPT35Turbo } from '../src/utils/openAI.js';
+import { GPT35Turbo, getOpenAIErrorMessage } from '../src/utils/openAI.js';
 
 class MockResponseClient {
     constructor(resolver) {
@@ -366,5 +366,54 @@ describe('GPT35Turbo', () => {
             'temporary outage'
         );
         expect(resolver).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('getOpenAIErrorMessage', () => {
+    it('surfaces a quota-specific message for 429 errors with credit details', () => {
+        const error = new Error('You exceeded your current quota, please check your plan.');
+        error.status = 429;
+
+        expect(getOpenAIErrorMessage(error)).toContain('out of credits');
+    });
+
+    it('suggests retry for generic 429 rate limits', () => {
+        const error = new Error('Too many requests');
+        error.status = 429;
+
+        expect(getOpenAIErrorMessage(error)).toContain('rate limiting');
+    });
+
+    it('mentions invalid API keys', () => {
+        const error = new Error('Invalid API key');
+        error.status = 401;
+        error.code = 'invalid_api_key';
+
+        expect(getOpenAIErrorMessage(error)).toContain('rejected the API key');
+    });
+
+    it('handles permission errors', () => {
+        const error = new Error('insufficient permissions');
+        error.status = 403;
+        error.code = 'insufficient_permissions';
+
+        expect(getOpenAIErrorMessage(error)).toContain('cannot access this model');
+    });
+
+    it('handles server outages', () => {
+        const error = new Error('server down');
+        error.status = 503;
+
+        expect(getOpenAIErrorMessage(error)).toContain('temporarily unavailable');
+    });
+
+    it('handles network failures', () => {
+        const error = new Error('TypeError: fetch failed');
+
+        expect(getOpenAIErrorMessage(error)).toContain('network issue');
+    });
+
+    it('falls back to the default message for unknown errors', () => {
+        expect(getOpenAIErrorMessage(null)).toContain("couldn't reach OpenAI");
     });
 });

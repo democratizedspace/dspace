@@ -1,6 +1,6 @@
 <script>
     import { onMount, tick } from 'svelte';
-    import { GPT35Turbo } from '../../../utils/openAI.js';
+    import { GPT35Turbo, getOpenAIErrorMessage } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
     import {
         messages,
@@ -66,11 +66,11 @@
             addMessage(aiMessage);
         } catch (error) {
             console.error(error);
-            const fallback = "Sorry, I'm having some trouble and can't generate a response.";
+            const friendlyError = getOpenAIErrorMessage(error);
             addMessage({
                 role: 'assistant',
-                content: fallback,
-                tokens: countTokens(fallback),
+                content: friendlyError,
+                tokens: countTokens(friendlyError),
             });
         }
 

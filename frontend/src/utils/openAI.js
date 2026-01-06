@@ -43,6 +43,57 @@ const fallbackSystemPrompt =
 const fallbackWelcomeMessage =
     defaultPersona?.welcomeMessage || 'Welcome! How can I assist you today?';
 
+const defaultOpenAIErrorMessage =
+    "Sorry, I couldn't reach OpenAI right now. Please try again shortly.";
+
+const toLowerCase = (text) => {
+    return typeof text === 'string' ? text.toLowerCase() : '';
+};
+
+const hasStatus = (error, status) => {
+    const statusCode = error?.status ?? error?.statusCode;
+    return statusCode === status;
+};
+
+const hasCode = (error, code) => {
+    const errorCode = error?.code ?? error?.error?.code;
+    return errorCode === code;
+};
+
+export const getOpenAIErrorMessage = (error) => {
+    if (!error || typeof error !== 'object') {
+        return defaultOpenAIErrorMessage;
+    }
+
+    const message = toLowerCase(error.message);
+
+    if (hasStatus(error, 401) || hasCode(error, 'invalid_api_key')) {
+        return 'OpenAI rejected the API key. Update it in Settings and try again.';
+    }
+
+    if (hasStatus(error, 429) || hasCode(error, 'insufficient_quota')) {
+        if (message.includes('quota') || message.includes('credit')) {
+            return 'OpenAI reports your account is out of credits. Add billing or wait for your quota to reset, then try again.';
+        }
+
+        return 'OpenAI is rate limiting requests right now. Please wait a few seconds and retry.';
+    }
+
+    if (hasStatus(error, 403) || hasCode(error, 'insufficient_permissions')) {
+        return 'Your OpenAI key cannot access this model. Switch models or update your plan before trying again.';
+    }
+
+    if (hasStatus(error, 503) || hasStatus(error, 500) || hasCode(error, 'server_error')) {
+        return 'OpenAI is temporarily unavailable. Please try again in a moment.';
+    }
+
+    if (message.includes('fetch failed') || message.includes('network')) {
+        return 'We could not contact OpenAI due to a network issue. Check your connection and try again.';
+    }
+
+    return defaultOpenAIErrorMessage;
+};
+
 const isModelAccessError = (error) => {
     if (!error || typeof error !== 'object') return false;
 
