@@ -11,7 +11,7 @@ const OVERFLOW_TOLERANCE = 1;
 const DESKTOP_VIEWPORT = { width: 1440, height: 900 };
 const DESKTOP_MARGIN_ALLOWANCE = 64 * 2;
 
-test.describe('Homepage responsive width', () => {
+test.describe('Responsive width regression tests', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
     });
