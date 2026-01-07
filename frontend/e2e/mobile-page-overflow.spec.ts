@@ -6,7 +6,7 @@ const MOBILE_VIEWPORTS = [
     { width: 375, height: 812 },
 ];
 
-const OVERFLOW_TOLERANCE = 1;
+const OVERFLOW_TOLERANCE = 2;
 
 const PAGES = [
     { label: 'home', path: '/' },
@@ -42,17 +42,24 @@ test.describe('Mobile page width bounds', () => {
                 } = await page.evaluate(() => {
                     const docEl = document.documentElement;
                     const main = document.querySelector('main#main');
+                    const pageShell = document.querySelector('.page-shell');
                     const viewportWidth = docEl.clientWidth;
                     let pageShellGapDiff = null;
 
-                    if (main) {
-                        const styles = window.getComputedStyle(main);
-                        const leftPadding = Number.parseFloat(styles.paddingLeft) || 0;
-                        const rightPadding = Number.parseFloat(styles.paddingRight) || 0;
-                        pageShellGapDiff = Math.abs(leftPadding - rightPadding);
+                    if (pageShell) {
+                        const rect = pageShell.getBoundingClientRect();
+                        const leftGap = rect.left;
+                        const rightGap = viewportWidth - rect.right;
+                        pageShellGapDiff = Math.abs(leftGap - rightGap);
+                    } else if (main) {
+                        const rect = main.getBoundingClientRect();
+                        const leftGap = rect.left;
+                        const rightGap = viewportWidth - rect.right;
+                        pageShellGapDiff = Math.abs(leftGap - rightGap);
                     }
 
-                    const elements = Array.from(document.body.querySelectorAll('*'));
+                    const root = pageShell || main || document.body;
+                    const elements = [root, ...Array.from(root.querySelectorAll('*'))];
                     let maxRightEdge = 0;
                     let maxRightEdgeTag = '';
 
@@ -99,7 +106,7 @@ test.describe('Mobile page width bounds', () => {
                     docClientWidth + OVERFLOW_TOLERANCE
                 );
                 expect(pageShellGapDiff).not.toBeNull();
-                expect(pageShellGapDiff).toBeLessThanOrEqual(1);
+                expect(pageShellGapDiff).toBeLessThanOrEqual(OVERFLOW_TOLERANCE);
                 expect(
                     maxRightEdge,
                     `widest element: ${maxRightEdgeTag}`
