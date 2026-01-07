@@ -4,15 +4,25 @@ import Header from '../components/Header.astro';
 import Menu from '../components/svelte/Menu.svelte';
 import LegacyUpgradeBanner from '../components/svelte/LegacyUpgradeBanner.svelte';
 
-const { title, message } = Astro.props;
+const {
+	title,
+	message,
+	columns = 1,
+	contentTag = 'div',
+	contentClass = '',
+} = Astro.props;
 
 // get path of URL
 const pathname = Astro.url.pathname;
+const ContentTag = contentTag;
+const contentClasses = ['page-content', `columns-${columns}`, contentClass]
+	.filter(Boolean)
+	.join(' ');
 ---
 
 <Layout title="DSPACE">
-        <main id="main">
-		<div>
+	<main id="main">
+		<div class="page-shell" data-page-shell>
 			<Header title="" body="" href="" />
 
 			<!-- for each item in menu, if  -->
@@ -20,18 +30,13 @@ const pathname = Astro.url.pathname;
 
 			<LegacyUpgradeBanner client:idle />
 
-			<h2>{title}</h2>
+			{title && <h2>{title}</h2>}
 
-			<ul role="list" class="link-card-grid">
-			</ul>
-			<span />
-			<h2>
-				{message}
-			</h2>
+			{message && <h2>{message}</h2>}
 
-			<ul role="list" class="link-card-grid-1">
+			<ContentTag class={contentClasses} data-page-content>
 				<slot />
-			</ul>
+			</ContentTag>
 		</div>
 	</main>
 </Layout>
@@ -51,6 +56,12 @@ const pathname = Astro.url.pathname;
 		width: 100%;
 		box-sizing: border-box;
 		overflow-x: clip;
+	}
+
+	.page-shell {
+		margin: 0 auto;
+		max-width: min(100%, 72rem);
+		width: 100%;
 	}
 
 	.text-gradient {
@@ -74,11 +85,36 @@ const pathname = Astro.url.pathname;
 		}
 	}
 
-	.link-card-grid-1 {
+	:global([data-page-content]) {
 		display: grid;
 		gap: 1rem;
+		margin: 0;
 		padding: 0;
 		grid-template-columns: 1fr;
+		width: 100%;
+		list-style: none;
+		box-sizing: border-box;
+		overflow-wrap: anywhere;
+		word-break: break-word;
+	}
+
+	:global([data-page-content] > *) {
+		min-width: 0;
+	}
+
+	:global([data-page-content] a) {
+		overflow-wrap: anywhere;
+		word-break: break-word;
+	}
+
+	:global([data-page-content].columns-2) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	@media (max-width: 720px) {
+		:global([data-page-content].columns-2) {
+			grid-template-columns: 1fr;
+		}
 	}
 	
 	.main-grid {
