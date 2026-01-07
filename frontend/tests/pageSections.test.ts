@@ -14,7 +14,7 @@ describe('Page section structure', () => {
     for (const pagePath of pages) {
         it(`wraps content in page-section list items for ${pagePath}`, () => {
             const content = fs.readFileSync(path.join(__dirname, '..', pagePath), 'utf8');
-            expect(content).toMatch(/class=\"page-section/);
+            expect(content).toMatch(/<li\s+class=\"[^\"]*page-section/);
         });
     }
 });

@@ -11,11 +11,12 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
 // preparation logic here if the homepage requires it in the future.
 ---
 
+<script>
+    window.dspaceStart = performance.now();
+</script>
+
 <Page title="Home" columns="1">
-    <script>
-        window.dspaceStart = performance.now();
-    </script>
-    <li class="page-section home-section">
+    <li class="page-section home-section whats-new-section">
         <div class="build-meta-row" aria-label="Build metadata">
             <div class="build-meta">
                 <span class="env">{environment}</span>
@@ -35,10 +36,6 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
 <style>
     .fallback {
         text-align: center;
-    }
-
-    .home-section {
-        color: black;
     }
 
     .build-meta-row {
