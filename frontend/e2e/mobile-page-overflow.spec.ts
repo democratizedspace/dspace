@@ -42,15 +42,13 @@ test.describe('Mobile page width bounds', () => {
                     const docEl = document.documentElement;
                     const main = document.querySelector('main#main');
                     const pageShell = document.querySelector('.page-shell');
-                    const viewportWidth =
-                        initialViewportWidth || docEl.clientWidth || window.innerWidth;
-                    const docClientWidth = docEl.clientWidth || viewportWidth;
-                    const innerWidth = window.innerWidth || viewportWidth;
-                    const effectiveViewportWidth = Math.max(
-                        viewportWidth,
-                        docClientWidth,
-                        innerWidth
-                    );
+                    const layoutViewportWidth =
+                        docEl.clientWidth ||
+                        window.visualViewport?.width ||
+                        window.innerWidth ||
+                        initialViewportWidth;
+                    const effectiveViewportWidth =
+                        layoutViewportWidth || initialViewportWidth || window.innerWidth || 0;
                     let pageShellGapDiff = null;
 
                     if (pageShell) {
