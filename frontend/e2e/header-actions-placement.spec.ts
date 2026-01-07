@@ -193,9 +193,8 @@ test.describe('Header actions placement', () => {
 
                             return {
                                 rootFontSizePx: parseFloat(rootStyle.fontSize || '16'),
-                                pageInlinePaddingValue: rootStyle.getPropertyValue(
-                                    '--page-inline-padding'
-                                ),
+                                pageInlinePaddingValue:
+                                    rootStyle.getPropertyValue('--page-inline-padding'),
                                 navPaddingLeft: navStyle?.paddingLeft ?? null,
                                 navPaddingRight: navStyle?.paddingRight ?? null,
                                 linkMarginLeft: linkStyle?.marginLeft ?? null,
@@ -277,8 +276,7 @@ test.describe('Header actions placement', () => {
                     (total, box) => total + box.width + linkMarginTotal,
                     0
                 );
-                const shouldWrap =
-                    estimatedLinksWidth > navInnerWidth + NAV_WIDTH_TOLERANCE_PX;
+                const shouldWrap = estimatedLinksWidth > navInnerWidth + NAV_WIDTH_TOLERANCE_PX;
 
                 if (shouldWrap) {
                     expect(rowCount).toBeGreaterThanOrEqual(2);
