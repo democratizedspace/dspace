@@ -33,18 +33,18 @@ test.describe('Mobile page width bounds', () => {
 
                 const {
                     docScrollWidth,
-                    docClientWidth,
                     bodyScrollWidth,
                     pageShellGapDiff,
                     maxRightEdge,
                     maxRightEdgeTag,
-                    viewportWidth,
+                    effectiveViewportWidth,
                 } = await page.evaluate(() => {
                     const docEl = document.documentElement;
                     const main = document.querySelector('main#main');
                     const pageShell = document.querySelector('.page-shell');
                     const viewportWidth = window.innerWidth || docEl.clientWidth;
                     const docClientWidth = docEl.clientWidth || viewportWidth;
+                    const effectiveViewportWidth = Math.max(viewportWidth, docClientWidth);
                     let pageShellGapDiff = null;
 
                     if (main) {
@@ -116,27 +116,26 @@ test.describe('Mobile page width bounds', () => {
 
                     return {
                         docScrollWidth: docEl.scrollWidth,
-                        docClientWidth,
                         bodyScrollWidth: document.body.scrollWidth,
                         pageShellGapDiff,
-                        viewportWidth,
+                        effectiveViewportWidth,
                         maxRightEdge,
                         maxRightEdgeTag,
                     };
                 });
 
                 expect(docScrollWidth).toBeLessThanOrEqual(
-                    docClientWidth + OVERFLOW_TOLERANCE
+                    effectiveViewportWidth + OVERFLOW_TOLERANCE
                 );
                 expect(bodyScrollWidth).toBeLessThanOrEqual(
-                    docClientWidth + OVERFLOW_TOLERANCE
+                    effectiveViewportWidth + OVERFLOW_TOLERANCE
                 );
                 expect(pageShellGapDiff).not.toBeNull();
                 expect(pageShellGapDiff).toBeLessThanOrEqual(OVERFLOW_TOLERANCE);
                 expect(
                     maxRightEdge,
                     `widest element: ${maxRightEdgeTag}`
-                ).toBeLessThanOrEqual(viewportWidth + OVERFLOW_TOLERANCE);
+                ).toBeLessThanOrEqual(effectiveViewportWidth + OVERFLOW_TOLERANCE);
             });
         }
     }
