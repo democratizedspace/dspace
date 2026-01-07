@@ -16,29 +16,31 @@ const CHANGELOG_SCROLL_BUFFER_PX = 16;
 ---
 
 <Page title="Changelog" columns="1">
-    <div class="changelog-list">
-        {changelogsReversed.map((doc) => (
-            <section id={slugToHeadingId(doc.frontmatter.slug)} class="changelog-entry">
-                <div class="changelog-card">
-                    <div class="entry-header">
-                        <h3>{doc.frontmatter.title}</h3>
-                        <a
-                            class="permalink"
-                            href={`#${slugToHeadingId(doc.frontmatter.slug)}`}
-                            aria-label={`Link to ${doc.frontmatter.title}`}
-                        >
-                            <span class="permalink-label" aria-hidden="true">Permalink</span>
-                            <span class="visually-hidden">Link to {doc.frontmatter.title}</span>
-                        </a>
+    <li class="page-section">
+        <div class="changelog-list">
+            {changelogsReversed.map((doc) => (
+                <section id={slugToHeadingId(doc.frontmatter.slug)} class="changelog-entry">
+                    <div class="changelog-card">
+                        <div class="entry-header">
+                            <h3>{doc.frontmatter.title}</h3>
+                            <a
+                                class="permalink"
+                                href={`#${slugToHeadingId(doc.frontmatter.slug)}`}
+                                aria-label={`Link to ${doc.frontmatter.title}`}
+                            >
+                                <span class="permalink-label" aria-hidden="true">Permalink</span>
+                                <span class="visually-hidden">Link to {doc.frontmatter.title}</span>
+                            </a>
+                        </div>
+                        <div
+                            class="entry-body"
+                            set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}
+                        ></div>
                     </div>
-                    <div
-                        class="entry-body"
-                        set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}
-                    ></div>
-                </div>
-            </section>
-        ))}
-    </div>
+                </section>
+            ))}
+        </div>
+    </li>
 </Page>
 
 <script is:inline define:vars={{ scrollBuffer: CHANGELOG_SCROLL_BUFFER_PX }}>
@@ -79,6 +81,8 @@ const CHANGELOG_SCROLL_BUFFER_PX = 16;
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        flex-wrap: wrap;
+        min-width: 0;
     }
 
     .permalink {
@@ -104,11 +108,17 @@ const CHANGELOG_SCROLL_BUFFER_PX = 16;
         padding: 1.25rem;
         border: 1px solid var(--color-border);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        min-width: 0;
     }
 
     .entry-body :global(p) {
         margin: 0.75rem 0;
         line-height: 1.6;
+    }
+
+    .entry-body {
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     .entry-body :global(ul),
@@ -125,6 +135,8 @@ const CHANGELOG_SCROLL_BUFFER_PX = 16;
 
     .entry-body :global(a) {
         color: inherit;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     .entry-body :global(img) {

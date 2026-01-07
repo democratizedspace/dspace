@@ -71,11 +71,11 @@ try {
 }
 ---
 
-<span class="wrapper">
+<div class="wrapper">
     {latestUpdateHtml && latestUpdateTitle ? (
         <>
             <h3>Latest update: {latestUpdateTitle}</h3>
-            <span set:html={latestUpdateHtml}></span>
+            <div class="update-body" set:html={latestUpdateHtml}></div>
         </>
     ) : (
         <p class="fallback">Unable to load the latest updates right now.</p>
@@ -84,7 +84,7 @@ try {
     {(changelogError || changelogRenderError) && (
         <p class="fallback">Please check back after a refresh.</p>
     )}
-</span>
+</div>
 
 <style>
     img {
@@ -92,16 +92,21 @@ try {
         border-radius: 20px;
     }
 
-    span {
+    .update-body {
         background-color: white;
         color: black;
         padding: 10px;
         border-radius: 20px;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     .wrapper {
         background-color: white;
         padding: 20px;
+        border-radius: 20px;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     .fallback {

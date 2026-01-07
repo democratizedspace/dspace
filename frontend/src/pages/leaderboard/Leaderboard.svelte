@@ -50,28 +50,30 @@
 
     <section aria-labelledby="donation-table" class="panel">
         <h2 id="donation-table">Top UBI donors</h2>
-        <table aria-label="Donation leaderboard">
-            <thead>
-                <tr>
-                    <th scope="col">Rank</th>
-                    <th scope="col">Callsign</th>
-                    <th scope="col">Guild</th>
-                    <th scope="col">Total dUSD</th>
-                    <th scope="col">Streak (days)</th>
-                </tr>
-            </thead>
-            <tbody>
-                {#each DONATION_LEADERS as entry}
+        <div class="table-wrapper">
+            <table aria-label="Donation leaderboard">
+                <thead>
                     <tr>
-                        <th scope="row">#{entry.rank}</th>
-                        <td>{entry.callsign}</td>
-                        <td>{entry.guild}</td>
-                        <td>{formatNumber(entry.contribution)}</td>
-                        <td>{entry.streak}</td>
+                        <th scope="col">Rank</th>
+                        <th scope="col">Callsign</th>
+                        <th scope="col">Guild</th>
+                        <th scope="col">Total dUSD</th>
+                        <th scope="col">Streak (days)</th>
                     </tr>
-                {/each}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {#each DONATION_LEADERS as entry}
+                        <tr>
+                            <th scope="row">#{entry.rank}</th>
+                            <td>{entry.callsign}</td>
+                            <td>{entry.guild}</td>
+                            <td>{formatNumber(entry.contribution)}</td>
+                            <td>{entry.streak}</td>
+                        </tr>
+                    {/each}
+                </tbody>
+            </table>
+        </div>
     </section>
 
     <section aria-labelledby="personal-progress" class="panel personal">
@@ -175,6 +177,17 @@
         width: 100%;
         border-collapse: collapse;
         font-size: 0.95rem;
+    }
+
+    .table-wrapper {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table-wrapper table {
+        min-width: 32rem;
     }
 
     th,

@@ -12,28 +12,39 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
 ---
 
 <Page title="Home" columns="1">
-    <div class="build-meta" aria-label="Build metadata">
-        <span class="env">{environment}</span>
-        <span class="version">{version}</span>
-    </div>
     <script>
         window.dspaceStart = performance.now();
     </script>
-    <WhatsNew />
-    <FailoverStatus client:load />
-    <UIResponsiveness client:load />
+    <li class="page-section home-section">
+        <div class="build-meta-row" aria-label="Build metadata">
+            <div class="build-meta">
+                <span class="env">{environment}</span>
+                <span class="version">{version}</span>
+            </div>
+        </div>
+        <WhatsNew />
+    </li>
+    <li class="page-section home-section">
+        <FailoverStatus client:load />
+    </li>
+    <li class="page-section home-section">
+        <UIResponsiveness client:load />
+    </li>
 </Page>
 
 <style>
-    div {
-        background-color: white;
-        padding: 20px;
-        border-radius: 20px;
+    .fallback {
+        text-align: center;
+    }
+
+    .home-section {
         color: black;
     }
 
-    .fallback {
-        text-align: center;
+    .build-meta-row {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 0.5rem;
     }
 
     .build-meta {
@@ -46,8 +57,8 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
         border-radius: 9999px;
         background-color: #f4f4f5;
         color: #1f2933;
-        float: right;
-        max-width: min(100%, 100vw - 2rem);
+        margin-left: auto;
+        max-width: 100%;
         min-width: 0;
         flex-wrap: wrap;
         justify-content: flex-end;
@@ -66,7 +77,6 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
 
     @media (max-width: 720px) {
         .build-meta {
-            float: none;
             display: flex;
             margin-left: auto;
         }

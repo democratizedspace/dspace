@@ -12,7 +12,7 @@ const pathname = Astro.url.pathname;
 
 <Layout title="DSPACE">
         <main id="main">
-		<div>
+		<div class="page-shell">
 			<Header title="" body="" href="" />
 
 			<!-- for each item in menu, if  -->
@@ -22,12 +22,7 @@ const pathname = Astro.url.pathname;
 
 			<h2>{title}</h2>
 
-			<ul role="list" class="link-card-grid">
-			</ul>
-			<span />
-			<h2>
-				{message}
-			</h2>
+			{message ? <h2>{message}</h2> : null}
 
 			<ul role="list" class="link-card-grid-1">
 				<slot />
@@ -46,11 +41,20 @@ const pathname = Astro.url.pathname;
 
 	main {
 		margin: 0 auto;
-		padding: 0 1rem 1.5rem;
+		padding-bottom: 1.5rem;
+		padding-left: calc(var(--page-inline-padding, 1rem) + env(safe-area-inset-left, 0px));
+		padding-right: calc(var(--page-inline-padding, 1rem) + env(safe-area-inset-right, 0px));
 		max-width: 100%;
 		width: 100%;
 		box-sizing: border-box;
 		overflow-x: clip;
+	}
+
+	.page-shell {
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
 	}
 
 	.text-gradient {
@@ -78,7 +82,28 @@ const pathname = Astro.url.pathname;
 		display: grid;
 		gap: 1rem;
 		padding: 0;
+		margin: 0;
 		grid-template-columns: 1fr;
+		list-style: none;
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
+	}
+
+	.link-card-grid-1 > * {
+		min-width: 0;
+		max-width: 100%;
+		box-sizing: border-box;
+	}
+
+	.page-section {
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
+		overflow-wrap: anywhere;
+		word-break: break-word;
 	}
 	
 	.main-grid {
