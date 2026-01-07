@@ -12,6 +12,8 @@ const installChatStub = async (page: Page, mode: StubMode) => {
     await page.addInitScript(
         ({ reply, stubMode }) => {
             const createResponse = async () => {
+                await new Promise((resolve) => setTimeout(resolve, 150));
+
                 if (stubMode === 'network-error') {
                     throw new Error('Network connection failed');
                 }
@@ -27,7 +29,6 @@ const installChatStub = async (page: Page, mode: StubMode) => {
                     throw new DOMException('The operation was aborted.', 'AbortError');
                 }
 
-                await new Promise((resolve) => setTimeout(resolve, 150));
                 return { output_text: reply } as const;
             };
 
