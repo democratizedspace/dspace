@@ -14,20 +14,22 @@ const legacyCookieKeys = getCookieKeysFromStore(Astro.cookies);
 ---
 
 <Page title="Settings" message="Manage your DSPACE session" columns="1">
-    <div class="settings-content">
-        <LogoutPanel client:idle />
-        {cheatsAvailable ? (
-            <QaCheatsToggle cheatsAvailable={cheatsAvailable} client:idle />
-        ) : null}
-        <QuestGraphToggle client:idle />
-        <LegacySaveUpgrade
-            legacyV1Items={legacyV1Items}
-            legacyCookieKeys={legacyCookieKeys}
-            cheatsAvailable={cheatsAvailable}
-            client:idle
-        />
-        <DataReset client:idle />
-    </div>
+    <li class="page-section">
+        <div class="settings-content">
+            <LogoutPanel client:idle />
+            {cheatsAvailable ? (
+                <QaCheatsToggle cheatsAvailable={cheatsAvailable} client:idle />
+            ) : null}
+            <QuestGraphToggle client:idle />
+            <LegacySaveUpgrade
+                legacyV1Items={legacyV1Items}
+                legacyCookieKeys={legacyCookieKeys}
+                cheatsAvailable={cheatsAvailable}
+                client:idle
+            />
+            <DataReset client:idle />
+        </div>
+    </li>
 </Page>
 
 <style>

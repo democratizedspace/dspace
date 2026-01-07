@@ -68,7 +68,9 @@ const docsSections = sections.map((section) => ({
 ---
 
 <Page title="Docs">
-    <DocsIndex sections={docsSections} client:load />
+    <li class="page-section">
+        <DocsIndex sections={docsSections} client:load />
+    </li>
 </Page>
 
 <style>

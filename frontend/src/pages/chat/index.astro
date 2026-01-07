@@ -5,9 +5,11 @@ import Integrations from './svelte/Integrations.svelte';
 ---
 
 <Page title="Chat" message="Talk with the dChat copilots" columns="1">
-    <img src="/assets/npc/dChat.jpg" alt="dChat" />
-    <TokenBadge client:load />
-    <Integrations client:idle />
+    <li class="page-section">
+        <img src="/assets/npc/dChat.jpg" alt="dChat" />
+        <TokenBadge client:load />
+        <Integrations client:idle />
+    </li>
 </Page>
 
 <style>

@@ -31,12 +31,61 @@ test.describe('Mobile page width bounds', () => {
                 await page.waitForLoadState('networkidle');
                 await waitForHydration(page);
 
-                const { docScrollWidth, docClientWidth, bodyScrollWidth } = await page.evaluate(() => {
+                const {
+                    docScrollWidth,
+                    docClientWidth,
+                    bodyScrollWidth,
+                    pageShellGapDiff,
+                    maxRightEdge,
+                    maxRightEdgeTag,
+                } = await page.evaluate(() => {
                     const docEl = document.documentElement;
+                    const shell = document.querySelector('.page-shell');
+                    let pageShellGapDiff = null;
+
+                    if (shell) {
+                        const rect = shell.getBoundingClientRect();
+                        const leftGap = rect.left;
+                        const rightGap = docEl.clientWidth - rect.right;
+                        pageShellGapDiff = Math.abs(leftGap - rightGap);
+                    }
+
+                    const elements = Array.from(document.body.querySelectorAll('*'));
+                    let maxRightEdge = 0;
+                    let maxRightEdgeTag = '';
+
+                    for (const el of elements) {
+                        const style = window.getComputedStyle(el);
+                        if (
+                            style.display === 'none' ||
+                            style.visibility === 'hidden' ||
+                            style.position === 'fixed'
+                        ) {
+                            continue;
+                        }
+
+                        if (el.tagName.toLowerCase() === 'canvas') {
+                            continue;
+                        }
+
+                        const rect = el.getBoundingClientRect();
+                        if (rect.width === 0 && rect.height === 0) {
+                            continue;
+                        }
+
+                        if (rect.right > maxRightEdge) {
+                            maxRightEdge = rect.right;
+                            maxRightEdgeTag = el.tagName.toLowerCase();
+                        }
+                    }
+
                     return {
                         docScrollWidth: docEl.scrollWidth,
                         docClientWidth: docEl.clientWidth,
                         bodyScrollWidth: document.body.scrollWidth,
+                        pageShellGapDiff,
+                        maxRightEdge,
+                        maxRightEdgeTag,
                     };
                 });
 
@@ -44,6 +93,11 @@ test.describe('Mobile page width bounds', () => {
                     docClientWidth + OVERFLOW_TOLERANCE
                 );
                 expect(bodyScrollWidth).toBeLessThanOrEqual(
+                    docClientWidth + OVERFLOW_TOLERANCE
+                );
+                expect(pageShellGapDiff).not.toBeNull();
+                expect(pageShellGapDiff).toBeLessThanOrEqual(1);
+                expect(maxRightEdge, `widest element: ${maxRightEdgeTag}`).toBeLessThanOrEqual(
                     docClientWidth + OVERFLOW_TOLERANCE
                 );
             });

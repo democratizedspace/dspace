@@ -5,10 +5,12 @@ import Importer from './svelte/Importer.svelte';
 ---
 
 <Page title="Gamesaves" columns="1">
-    <div class="vertical">
-        <Exporter client:idle />
-        <Importer client:idle />
-    </div>
+    <li class="page-section">
+        <div class="vertical">
+            <Exporter client:idle />
+            <Importer client:idle />
+        </div>
+    </li>
 </Page>
 
 <style>

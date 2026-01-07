@@ -5,25 +5,27 @@ import ProfileTitles from './ProfileTitles.svelte';
 ---
 
 <Page title="Profile" message="Pick your avatar and review the titles you've unlocked.">
-    <div class="profile-layout">
-        <section class="panel">
-            <div class="section-header">
-                <h2 data-testid="avatar-heading">Avatar</h2>
-                <p>Choose how you appear across quests, stats, and leaderboards.</p>
-            </div>
-            <div class="avatar-card">
-                <Avatar client:load />
-            </div>
-        </section>
+    <li class="page-section">
+        <div class="profile-layout">
+            <section class="panel">
+                <div class="section-header">
+                    <h2 data-testid="avatar-heading">Avatar</h2>
+                    <p>Choose how you appear across quests, stats, and leaderboards.</p>
+                </div>
+                <div class="avatar-card">
+                    <Avatar client:load />
+                </div>
+            </section>
 
-        <section class="panel">
-            <div class="section-header">
-                <h2>Titles</h2>
-                <p>Show off what you've earned. Complete achievements to unlock more titles.</p>
-            </div>
-            <ProfileTitles client:load />
-        </section>
-    </div>
+            <section class="panel">
+                <div class="section-header">
+                    <h2>Titles</h2>
+                    <p>Show off what you've earned. Complete achievements to unlock more titles.</p>
+                </div>
+                <ProfileTitles client:load />
+            </section>
+        </div>
+    </li>
 </Page>
 
 <style>
