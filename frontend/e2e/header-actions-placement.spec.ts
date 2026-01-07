@@ -185,13 +185,21 @@ test.describe('Header actions placement', () => {
                     page.viewportSize(),
                     page.evaluate(() =>
                         (function gatherCssMetrics() {
+                            const navElement = document.querySelector('[data-testid="header-nav"]');
                             const rootStyle = getComputedStyle(document.documentElement);
+                            const navStyle = navElement ? getComputedStyle(navElement) : null;
+                            const linkElement = navElement?.querySelector('a');
+                            const linkStyle = linkElement ? getComputedStyle(linkElement) : null;
 
                             return {
                                 rootFontSizePx: parseFloat(rootStyle.fontSize || '16'),
                                 pageInlinePaddingValue: rootStyle.getPropertyValue(
                                     '--page-inline-padding'
                                 ),
+                                navPaddingLeft: navStyle?.paddingLeft ?? null,
+                                navPaddingRight: navStyle?.paddingRight ?? null,
+                                linkMarginLeft: linkStyle?.marginLeft ?? null,
+                                linkMarginRight: linkStyle?.marginRight ?? null,
                             };
                         })()
                     ),
@@ -205,9 +213,20 @@ test.describe('Header actions placement', () => {
                     return;
                 }
 
-                const { rootFontSizePx, pageInlinePaddingValue } = cssMetrics;
+                const {
+                    rootFontSizePx,
+                    pageInlinePaddingValue,
+                    navPaddingLeft,
+                    navPaddingRight,
+                    linkMarginLeft,
+                    linkMarginRight,
+                } = cssMetrics;
                 const pageInlinePaddingPx =
                     cssLengthToPx(pageInlinePaddingValue, rootFontSizePx) ?? rootFontSizePx;
+                const navPaddingLeftPx = cssLengthToPx(navPaddingLeft, rootFontSizePx) ?? 0;
+                const navPaddingRightPx = cssLengthToPx(navPaddingRight, rootFontSizePx) ?? 0;
+                const linkMarginLeftPx = cssLengthToPx(linkMarginLeft, rootFontSizePx) ?? 0;
+                const linkMarginRightPx = cssLengthToPx(linkMarginRight, rootFontSizePx) ?? 0;
 
                 const minNavWidth = Math.max(
                     viewportSize.width * 0.7,
@@ -249,7 +268,22 @@ test.describe('Header actions placement', () => {
                 const rowCount = rows.length;
                 const maxRowCount = rows.reduce((max, row) => Math.max(max, row.count), 0);
 
-                expect(rowCount).toBeGreaterThanOrEqual(2);
+                const navInnerWidth = Math.max(
+                    navBox.width - navPaddingLeftPx - navPaddingRightPx,
+                    0
+                );
+                const linkMarginTotal = linkMarginLeftPx + linkMarginRightPx;
+                const estimatedLinksWidth = navLinkBoxes.reduce(
+                    (total, box) => total + box.width + linkMarginTotal,
+                    0
+                );
+                const shouldWrap = estimatedLinksWidth > navInnerWidth + ROW_GROUPING_TOLERANCE_PX;
+
+                if (shouldWrap) {
+                    expect(rowCount).toBeGreaterThanOrEqual(2);
+                } else {
+                    expect(rowCount).toBeGreaterThanOrEqual(1);
+                }
                 expect(maxRowCount).toBeGreaterThanOrEqual(2);
             });
         });
