@@ -185,13 +185,14 @@
     .action-buttons {
         display: flex;
         justify-content: center;
+        flex-wrap: wrap;
         gap: 10px;
         margin-bottom: 20px;
     }
 
     .quests-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
         gap: 20px;
     }
 
