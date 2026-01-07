@@ -38,6 +38,7 @@ test.describe('Mobile page width bounds', () => {
                     pageShellGapDiff,
                     maxRightEdge,
                     maxRightEdgeTag,
+                    viewportWidth,
                 } = await page.evaluate(() => {
                     const docEl = document.documentElement;
                     const shell = document.querySelector('.page-shell');
