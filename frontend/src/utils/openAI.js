@@ -119,7 +119,7 @@ export const describeOpenAIError = (error) => {
         return 'OpenAI rate limited this request. Please wait a few seconds and try again.';
     }
 
-    if (status === 403 || code === 'insufficient_permissions') {
+    if (numericStatus === 403 || code === 'insufficient_permissions') {
         return (
             'OpenAI denied access to the requested model. Try another model or check your ' +
             'OpenAI account permissions.'
