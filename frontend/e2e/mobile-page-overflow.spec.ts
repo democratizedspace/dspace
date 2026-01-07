@@ -38,27 +38,31 @@ test.describe('Mobile page width bounds', () => {
                     maxRightEdge,
                     maxRightEdgeTag,
                     effectiveViewportWidth,
-                } = await page.evaluate(() => {
+                } = await page.evaluate((initialViewportWidth) => {
                     const docEl = document.documentElement;
                     const main = document.querySelector('main#main');
                     const pageShell = document.querySelector('.page-shell');
-                    const visualViewportWidth = window.visualViewport?.width;
-                    const viewportWidth = visualViewportWidth || docEl.clientWidth || window.innerWidth;
+                    const viewportWidth =
+                        initialViewportWidth || docEl.clientWidth || window.innerWidth;
                     const docClientWidth = docEl.clientWidth || viewportWidth;
                     const innerWidth = window.innerWidth || viewportWidth;
-                    const effectiveViewportWidth = Math.max(viewportWidth, docClientWidth, innerWidth);
+                    const effectiveViewportWidth = Math.max(
+                        viewportWidth,
+                        docClientWidth,
+                        innerWidth
+                    );
                     let pageShellGapDiff = null;
 
-                    if (main) {
+                    if (pageShell) {
+                        const rect = pageShell.getBoundingClientRect();
+                        const leftGap = rect.left;
+                        const rightGap = effectiveViewportWidth - rect.right;
+                        pageShellGapDiff = Math.abs(leftGap - rightGap);
+                    } else if (main) {
                         const style = window.getComputedStyle(main);
                         const paddingLeft = Number.parseFloat(style.paddingLeft) || 0;
                         const paddingRight = Number.parseFloat(style.paddingRight) || 0;
                         pageShellGapDiff = Math.abs(paddingLeft - paddingRight);
-                    } else if (pageShell) {
-                        const rect = pageShell.getBoundingClientRect();
-                        const leftGap = rect.left;
-                        const rightGap = viewportWidth - rect.right;
-                        pageShellGapDiff = Math.abs(leftGap - rightGap);
                     }
 
                     const root = pageShell || main || document.body;
@@ -124,7 +128,7 @@ test.describe('Mobile page width bounds', () => {
                         maxRightEdge,
                         maxRightEdgeTag,
                     };
-                });
+                }, viewport.width);
 
                 expect(docScrollWidth).toBeLessThanOrEqual(
                     effectiveViewportWidth + OVERFLOW_TOLERANCE
