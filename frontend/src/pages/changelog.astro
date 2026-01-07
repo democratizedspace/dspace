@@ -111,6 +111,11 @@ const CHANGELOG_SCROLL_BUFFER_PX = 16;
         line-height: 1.6;
     }
 
+    .entry-body {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
     .entry-body :global(ul),
     .entry-body :global(ol) {
         margin: 0.75rem 0 0.75rem 1.5rem;
@@ -125,6 +130,7 @@ const CHANGELOG_SCROLL_BUFFER_PX = 16;
 
     .entry-body :global(a) {
         color: inherit;
+        overflow-wrap: anywhere;
     }
 
     .entry-body :global(img) {

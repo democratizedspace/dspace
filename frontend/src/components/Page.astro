@@ -4,36 +4,35 @@ import Header from '../components/Header.astro';
 import Menu from '../components/svelte/Menu.svelte';
 import LegacyUpgradeBanner from '../components/svelte/LegacyUpgradeBanner.svelte';
 
-const { title, message } = Astro.props;
+const { title = '', message = '' } = Astro.props;
 
 // get path of URL
 const pathname = Astro.url.pathname;
 ---
 
 <Layout title="DSPACE">
-        <main id="main">
-		<div>
-			<Header title="" body="" href="" />
+    <main id="main">
+        <div class="page-shell">
+            <Header title="" body="" href="" />
 
-			<!-- for each item in menu, if  -->
-			<Menu pathname={pathname} client:idle />
+            <div class="page-content">
+                <!-- for each item in menu, if  -->
+                <Menu pathname={pathname} client:idle />
 
-			<LegacyUpgradeBanner client:idle />
+                <LegacyUpgradeBanner client:idle />
 
-			<h2>{title}</h2>
+                {title ? <h2>{title}</h2> : null}
 
-			<ul role="list" class="link-card-grid">
-			</ul>
-			<span />
-			<h2>
-				{message}
-			</h2>
+                <ul role="list" class="link-card-grid"></ul>
+                <span />
+                {message ? <h2>{message}</h2> : null}
 
-			<ul role="list" class="link-card-grid-1">
-				<slot />
-			</ul>
-		</div>
-	</main>
+                <ul role="list" class="link-card-grid-1">
+                    <slot />
+                </ul>
+            </div>
+        </div>
+    </main>
 </Layout>
 
 <style>
@@ -43,15 +42,28 @@ const pathname = Astro.url.pathname;
 	}
 
 	
+    main {
+        margin: 0 auto;
+        padding: 0 0 1.5rem;
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        overflow-x: clip;
+    }
 
-	main {
-		margin: 0 auto;
-		padding: 0 1rem 1.5rem;
-		max-width: 100%;
-		width: 100%;
-		box-sizing: border-box;
-		overflow-x: clip;
-	}
+    .page-shell {
+        width: 100%;
+    }
+
+    .page-content {
+        width: min(70rem, 100%);
+        max-width: min(70rem, 100%);
+        margin-inline: auto;
+        padding-left: calc(var(--page-inline-padding, 1rem) + env(safe-area-inset-left, 0px));
+        padding-right: calc(var(--page-inline-padding, 1rem) + env(safe-area-inset-right, 0px));
+        box-sizing: border-box;
+        overflow-wrap: anywhere;
+    }
 
 	.text-gradient {
 		font-weight: 900;
@@ -74,53 +86,54 @@ const pathname = Astro.url.pathname;
 		}
 	}
 
-	.link-card-grid-1 {
-		display: grid;
-		gap: 1rem;
-		padding: 0;
-		grid-template-columns: 1fr;
-	}
-	
-	.main-grid {
-		list-style-type: none;
-	}
+    .link-card-grid-1 {
+        display: grid;
+        gap: 1rem;
+        padding: 0;
+        margin: 0;
+        grid-template-columns: 1fr;
+    }
 
-	/* Navbar */
-        h2 {
-                color: var(--color-heading);
-                text-align: center;
-        }
+    .main-grid {
+        list-style-type: none;
+    }
 
-	nav {
-		text-align: center;
-		display: inline-flex;
-		flex-wrap: wrap;
-		justify-content: center;
-	}
+    /* Navbar */
+    h2 {
+        color: var(--color-heading);
+        text-align: center;
+    }
 
-        nav a {
-                opacity: 0.8;
-                background-color: var(--color-pill);
-                border-radius: 0.4rem;
-                color: var(--color-pill-text);
-                text-decoration: none;
-                flex-direction: row;
-                margin: 1px;
-		padding: 5px;
-		text-align: center;
-	}
+    nav {
+        text-align: center;
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 
-	nav a:hover {
-		opacity: 1;
-	}
+    nav a {
+        opacity: 0.8;
+        background-color: var(--color-pill);
+        border-radius: 0.4rem;
+        color: var(--color-pill-text);
+        text-decoration: none;
+        flex-direction: row;
+        margin: 1px;
+        padding: 5px;
+        text-align: center;
+    }
 
-	canvas {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-	}
+    nav a:hover {
+        opacity: 1;
+    }
+
+    canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
 
 </style>

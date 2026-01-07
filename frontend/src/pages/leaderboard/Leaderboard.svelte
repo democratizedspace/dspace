@@ -174,6 +174,7 @@
     table {
         width: 100%;
         border-collapse: collapse;
+        table-layout: fixed;
         font-size: 0.95rem;
     }
 
@@ -182,6 +183,8 @@
         padding: 0.75rem 1rem;
         text-align: left;
         border-bottom: 1px solid rgba(157, 220, 255, 0.2);
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     tbody tr:last-child th,

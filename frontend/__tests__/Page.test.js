@@ -10,4 +10,10 @@ describe('Page.astro', () => {
         const content = fs.readFileSync(pageFile, 'utf8');
         expect(content).toMatch(/<main id="main">/);
     });
+
+    it('wraps page content in a consistent container', () => {
+        const content = fs.readFileSync(pageFile, 'utf8');
+        expect(content).toMatch(/class="page-shell"/);
+        expect(content).toMatch(/class="page-content"/);
+    });
 });

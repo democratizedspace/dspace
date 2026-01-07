@@ -51,6 +51,7 @@ const TEST_GROUPS = [
             'docs-changelog.spec.ts',
             'changelog-container.spec.ts',
             'homepage-responsive-width.spec.ts',
+            'mobile-page-widths.spec.ts',
             'failover-status.spec.ts',
             'home-page-basic.spec.ts',
             'inventory-items-bug.spec.ts',
