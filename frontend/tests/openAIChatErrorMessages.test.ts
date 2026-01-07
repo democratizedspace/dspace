@@ -26,13 +26,13 @@ vi.mock('../src/data/npcPersonas.js', () => ({
     ],
 }));
 
-const GPT35Turbo = vi.hoisted(() => vi.fn());
+const GPT5Chat = vi.hoisted(() => vi.fn());
 
 vi.mock('../src/utils/openAI.js', async () => {
     const actual = await vi.importActual('../src/utils/openAI.js');
     return {
         ...actual,
-        GPT35Turbo,
+        GPT5Chat,
     };
 });
 
@@ -62,7 +62,7 @@ describe('OpenAIChat error messaging', () => {
     let consoleErrorMock: ReturnType<typeof vi.spyOn>;
 
     beforeEach(() => {
-        GPT35Turbo.mockReset();
+        GPT5Chat.mockReset();
         messages.set([]);
         activePersonaId.set('dchat');
         consoleErrorMock = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -73,12 +73,12 @@ describe('OpenAIChat error messaging', () => {
     });
 
     it('surfaces actionable guidance when quota is exhausted', async () => {
-        GPT35Turbo.mockRejectedValueOnce(quotaError());
+        GPT5Chat.mockRejectedValueOnce(quotaError());
 
         render(OpenAIChat);
         await sendMessage('Hello');
 
-        await waitFor(() => expect(GPT35Turbo).toHaveBeenCalled());
+        await waitFor(() => expect(GPT5Chat).toHaveBeenCalled());
         expect(await screen.findByText(/out of credits/i)).toBeInTheDocument();
         expect(
             await screen.findByText(/openai could not generate a reply because this account/i)
@@ -89,12 +89,12 @@ describe('OpenAIChat error messaging', () => {
         const error = new Error('Incorrect API key provided');
         // @ts-expect-error vitest mock error extension
         error.status = 401;
-        GPT35Turbo.mockRejectedValueOnce(error);
+        GPT5Chat.mockRejectedValueOnce(error);
 
         render(OpenAIChat);
         await sendMessage('Hello again');
 
-        await waitFor(() => expect(GPT35Turbo).toHaveBeenCalled());
+        await waitFor(() => expect(GPT5Chat).toHaveBeenCalled());
         expect(await screen.findByText(/api key/i)).toBeInTheDocument();
     });
 });

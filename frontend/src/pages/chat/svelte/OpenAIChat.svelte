@@ -3,7 +3,7 @@
     import {
         defaultOpenAIErrorMessage,
         describeOpenAIError,
-        GPT35Turbo,
+        GPT5Chat,
     } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
     import {
@@ -58,7 +58,7 @@
         showSpinner = true;
 
         try {
-            const aiResponse = await GPT35Turbo([...$messageHistory, userMessage], {
+            const aiResponse = await GPT5Chat([...$messageHistory, userMessage], {
                 persona: currentPersona,
             });
             const aiMessage = {

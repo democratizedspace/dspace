@@ -21,11 +21,7 @@ vi.mock('../src/data/npcPersonas.js', () => ({
     ],
 }));
 
-import {
-    defaultOpenAIErrorMessage,
-    describeOpenAIError,
-    GPT35Turbo,
-} from '../src/utils/openAI.js';
+import { defaultOpenAIErrorMessage, describeOpenAIError, GPT5Chat } from '../src/utils/openAI.js';
 
 class MockResponseClient {
     constructor(resolver) {
@@ -35,7 +31,7 @@ class MockResponseClient {
     }
 }
 
-describe('GPT35Turbo', () => {
+describe('GPT5Chat', () => {
     afterEach(() => {
         delete globalThis.__DSpaceOpenAIClient;
     });
@@ -60,7 +56,7 @@ describe('GPT35Turbo', () => {
             }
         };
 
-        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+        const result = await GPT5Chat([{ role: 'user', content: 'Hello' }]);
 
         expect(models).toEqual(['gpt-5.2', 'gpt-5-mini']);
         expect(result).toBe('fallback response');
@@ -86,7 +82,7 @@ describe('GPT35Turbo', () => {
             }
         };
 
-        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+        const result = await GPT5Chat([{ role: 'user', content: 'Hello' }]);
 
         expect(models).toEqual(['gpt-5.2', 'gpt-5-mini']);
         expect(result).toBe('fallback response');
@@ -111,7 +107,7 @@ describe('GPT35Turbo', () => {
             }
         };
 
-        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+        const result = await GPT5Chat([{ role: 'user', content: 'Hello' }]);
 
         expect(models).toEqual(['gpt-5.2', 'gpt-5-mini']);
         expect(result).toBe('fallback response');
@@ -130,7 +126,7 @@ describe('GPT35Turbo', () => {
             }
         };
 
-        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+        const result = await GPT5Chat([{ role: 'user', content: 'Hello' }]);
 
         expect(models).toEqual(['gpt-5.2']);
         expect(result).toBe('primary response');
@@ -156,7 +152,7 @@ describe('GPT35Turbo', () => {
             }
         };
 
-        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+        const result = await GPT5Chat([{ role: 'user', content: 'Hello' }]);
 
         expect(resolver).toHaveBeenCalledTimes(1);
         expect(result).toBe('content response');
@@ -176,7 +172,7 @@ describe('GPT35Turbo', () => {
             }
         };
 
-        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+        const result = await GPT5Chat([{ role: 'user', content: 'Hello' }]);
 
         expect(resolver).toHaveBeenCalledTimes(1);
         const payload = resolver.mock.calls[0][0];
@@ -223,7 +219,7 @@ describe('GPT35Turbo', () => {
             }
         };
 
-        const result = await GPT35Turbo([
+        const result = await GPT5Chat([
             { role: 'assistant', content: 'Earlier reply' },
             { role: 'user', content: 'Hello again' },
         ]);
@@ -276,7 +272,7 @@ describe('GPT35Turbo', () => {
             }
         };
 
-        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+        const result = await GPT5Chat([{ role: 'user', content: 'Hello' }]);
 
         expect(result).toBe('content response');
     });
@@ -309,7 +305,7 @@ describe('GPT35Turbo', () => {
             }
         };
 
-        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+        const result = await GPT5Chat([{ role: 'user', content: 'Hello' }]);
 
         expect(result).toBe('second entry response');
     });
@@ -334,7 +330,7 @@ describe('GPT35Turbo', () => {
             }
         };
 
-        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+        const result = await GPT5Chat([{ role: 'user', content: 'Hello' }]);
 
         expect(result).toBe('');
     });
@@ -348,7 +344,7 @@ describe('GPT35Turbo', () => {
             }
         };
 
-        const result = await GPT35Turbo([{ role: 'user', content: 'Hello' }]);
+        const result = await GPT5Chat([{ role: 'user', content: 'Hello' }]);
 
         expect(result).toBe('');
     });
@@ -366,7 +362,7 @@ describe('GPT35Turbo', () => {
             }
         };
 
-        await expect(GPT35Turbo([{ role: 'user', content: 'Hello' }])).rejects.toThrow(
+        await expect(GPT5Chat([{ role: 'user', content: 'Hello' }])).rejects.toThrow(
             'temporary outage'
         );
         expect(resolver).toHaveBeenCalledTimes(1);
