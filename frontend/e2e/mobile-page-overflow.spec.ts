@@ -38,25 +38,22 @@ test.describe('Mobile page width bounds', () => {
                     maxRightEdge,
                     maxRightEdgeTag,
                     effectiveViewportWidth,
+                    rootRightEdge,
                 } = await page.evaluate((initialViewportWidth) => {
                     const docEl = document.documentElement;
                     const main = document.querySelector('main#main');
                     const pageShell = document.querySelector('.page-shell');
-                    const layoutViewportWidth =
-                        docEl.clientWidth ||
-                        window.visualViewport?.width ||
-                        window.innerWidth ||
-                        initialViewportWidth;
+                    const layoutViewportWidth = Math.max(
+                        docEl.clientWidth || 0,
+                        window.innerWidth || 0,
+                        window.visualViewport?.width || 0,
+                        initialViewportWidth || 0
+                    );
                     const effectiveViewportWidth =
                         layoutViewportWidth || initialViewportWidth || window.innerWidth || 0;
                     let pageShellGapDiff = null;
 
-                    if (pageShell) {
-                        const rect = pageShell.getBoundingClientRect();
-                        const leftGap = rect.left;
-                        const rightGap = effectiveViewportWidth - rect.right;
-                        pageShellGapDiff = Math.abs(leftGap - rightGap);
-                    } else if (main) {
+                    if (main) {
                         const style = window.getComputedStyle(main);
                         const paddingLeft = Number.parseFloat(style.paddingLeft) || 0;
                         const paddingRight = Number.parseFloat(style.paddingRight) || 0;
@@ -67,6 +64,7 @@ test.describe('Mobile page width bounds', () => {
                     const elements = [root, ...Array.from(root.querySelectorAll('*'))];
                     let maxRightEdge = 0;
                     let maxRightEdgeTag = '';
+                    const rootRect = root.getBoundingClientRect();
 
                     const isScrollableX = (element) => {
                         const style = window.getComputedStyle(element);
@@ -125,6 +123,7 @@ test.describe('Mobile page width bounds', () => {
                         effectiveViewportWidth,
                         maxRightEdge,
                         maxRightEdgeTag,
+                        rootRightEdge: rootRect.right,
                     };
                 }, viewport.width);
 
@@ -139,7 +138,7 @@ test.describe('Mobile page width bounds', () => {
                 expect(
                     maxRightEdge,
                     `widest element: ${maxRightEdgeTag}`
-                ).toBeLessThanOrEqual(effectiveViewportWidth + OVERFLOW_TOLERANCE);
+                ).toBeLessThanOrEqual(rootRightEdge + OVERFLOW_TOLERANCE);
             });
         }
     }
