@@ -41,12 +41,13 @@ test.describe('Mobile page width bounds', () => {
                 } = await page.evaluate(() => {
                     const docEl = document.documentElement;
                     const shell = document.querySelector('.page-shell');
+                    const viewportWidth = window.innerWidth;
                     let pageShellGapDiff = null;
 
                     if (shell) {
                         const rect = shell.getBoundingClientRect();
                         const leftGap = rect.left;
-                        const rightGap = docEl.clientWidth - rect.right;
+                        const rightGap = viewportWidth - rect.right;
                         pageShellGapDiff = Math.abs(leftGap - rightGap);
                     }
 
@@ -84,6 +85,7 @@ test.describe('Mobile page width bounds', () => {
                         docClientWidth: docEl.clientWidth,
                         bodyScrollWidth: document.body.scrollWidth,
                         pageShellGapDiff,
+                        viewportWidth,
                         maxRightEdge,
                         maxRightEdgeTag,
                     };
@@ -97,9 +99,10 @@ test.describe('Mobile page width bounds', () => {
                 );
                 expect(pageShellGapDiff).not.toBeNull();
                 expect(pageShellGapDiff).toBeLessThanOrEqual(1);
-                expect(maxRightEdge, `widest element: ${maxRightEdgeTag}`).toBeLessThanOrEqual(
-                    docClientWidth + OVERFLOW_TOLERANCE
-                );
+                expect(
+                    maxRightEdge,
+                    `widest element: ${maxRightEdgeTag}`
+                ).toBeLessThanOrEqual(viewportWidth + OVERFLOW_TOLERANCE);
             });
         }
     }
