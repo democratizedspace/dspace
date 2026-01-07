@@ -63,6 +63,27 @@ test.describe('Mobile page width bounds', () => {
                     let maxRightEdge = 0;
                     let maxRightEdgeTag = '';
 
+                    const isScrollableX = (element) => {
+                        const style = window.getComputedStyle(element);
+                        const overflowX = style.overflowX;
+                        if (overflowX !== 'auto' && overflowX !== 'scroll') {
+                            return false;
+                        }
+
+                        return element.scrollWidth > element.clientWidth + 1;
+                    };
+
+                    const hasScrollableAncestor = (element) => {
+                        let parent = element.parentElement;
+                        while (parent && parent !== root) {
+                            if (isScrollableX(parent)) {
+                                return true;
+                            }
+                            parent = parent.parentElement;
+                        }
+                        return false;
+                    };
+
                     for (const el of elements) {
                         const style = window.getComputedStyle(el);
                         if (
@@ -74,6 +95,10 @@ test.describe('Mobile page width bounds', () => {
                         }
 
                         if (el.tagName.toLowerCase() === 'canvas') {
+                            continue;
+                        }
+
+                        if (el !== root && hasScrollableAncestor(el)) {
                             continue;
                         }
 
