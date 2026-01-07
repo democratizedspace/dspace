@@ -41,15 +41,15 @@ test.describe('Mobile page width bounds', () => {
                     viewportWidth,
                 } = await page.evaluate(() => {
                     const docEl = document.documentElement;
-                    const shell = document.querySelector('.page-shell');
-                    const viewportWidth = window.innerWidth;
+                    const main = document.querySelector('main#main');
+                    const viewportWidth = docEl.clientWidth;
                     let pageShellGapDiff = null;
 
-                    if (shell) {
-                        const rect = shell.getBoundingClientRect();
-                        const leftGap = rect.left;
-                        const rightGap = viewportWidth - rect.right;
-                        pageShellGapDiff = Math.abs(leftGap - rightGap);
+                    if (main) {
+                        const styles = window.getComputedStyle(main);
+                        const leftPadding = Number.parseFloat(styles.paddingLeft) || 0;
+                        const rightPadding = Number.parseFloat(styles.paddingRight) || 0;
+                        pageShellGapDiff = Math.abs(leftPadding - rightPadding);
                     }
 
                     const elements = Array.from(document.body.querySelectorAll('*'));
