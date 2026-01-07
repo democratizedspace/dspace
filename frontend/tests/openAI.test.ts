@@ -21,11 +21,7 @@ vi.mock('../src/data/npcPersonas.js', () => ({
     ],
 }));
 
-import {
-    defaultOpenAIErrorMessage,
-    describeOpenAIError,
-    GPT35Turbo,
-} from '../src/utils/openAI.js';
+import { defaultOpenAIErrorMessage, describeOpenAIError, GPT35Turbo } from '../src/utils/openAI.js';
 
 class MockResponseClient {
     constructor(resolver) {
