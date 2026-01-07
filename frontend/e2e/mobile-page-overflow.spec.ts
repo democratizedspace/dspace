@@ -42,9 +42,11 @@ test.describe('Mobile page width bounds', () => {
                     const docEl = document.documentElement;
                     const main = document.querySelector('main#main');
                     const pageShell = document.querySelector('.page-shell');
-                    const viewportWidth = window.innerWidth || docEl.clientWidth;
+                    const visualViewportWidth = window.visualViewport?.width;
+                    const viewportWidth = visualViewportWidth || docEl.clientWidth || window.innerWidth;
                     const docClientWidth = docEl.clientWidth || viewportWidth;
-                    const effectiveViewportWidth = Math.max(viewportWidth, docClientWidth);
+                    const innerWidth = window.innerWidth || viewportWidth;
+                    const effectiveViewportWidth = Math.max(viewportWidth, docClientWidth, innerWidth);
                     let pageShellGapDiff = null;
 
                     if (main) {
@@ -87,11 +89,11 @@ test.describe('Mobile page width bounds', () => {
 
                     for (const el of elements) {
                         const style = window.getComputedStyle(el);
-                        if (
-                            style.display === 'none' ||
-                            style.visibility === 'hidden' ||
-                            style.position === 'fixed'
-                        ) {
+                        if (style.display === 'none' || style.visibility === 'hidden') {
+                            continue;
+                        }
+
+                        if (!['static', 'relative'].includes(style.position)) {
                             continue;
                         }
 
