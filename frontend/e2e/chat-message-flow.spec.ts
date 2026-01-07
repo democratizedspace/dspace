@@ -4,7 +4,7 @@ import { clearUserData, waitForHydration } from './test-helpers';
 
 const LONG_REPLY =
     'This is a long assistant response that should render in the chat history without breaking the layout or truncating text, even when it spans multiple sentences and needs wrapping across several lines for readability.';
-const FALLBACK_MESSAGE = "Sorry, I'm having some trouble and can't generate a response.";
+const FALLBACK_MESSAGE = 'Sorry, I\'m having some trouble and can\'t generate a response.';
 
 type StubMode = 'success' | 'network-error' | 'rate-limit' | 'abort';
 
