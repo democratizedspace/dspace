@@ -94,7 +94,7 @@ describe('gpt-5 chat responses integration', () => {
     buildDchatKnowledgeMock.mockReturnValue('Quest facts');
     fetchMock.mockResolvedValueOnce(jsonResponse('ok'));
 
-    const { GPT35Turbo: gpt5Chat } = await import('../frontend/src/utils/openAI.js');
+    const { GPT5Chat: gpt5Chat } = await import('../frontend/src/utils/openAI.js');
     const result = await gpt5Chat([{ role: 'user', content: 'Hello there' }]);
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -133,7 +133,7 @@ describe('gpt-5 chat responses integration', () => {
     buildDchatKnowledgeMock.mockReturnValue(null);
     fetchMock.mockResolvedValueOnce(jsonResponse('hello!'));
 
-    const { GPT35Turbo: gpt5Chat } = await import('../frontend/src/utils/openAI.js');
+    const { GPT5Chat: gpt5Chat } = await import('../frontend/src/utils/openAI.js');
     const result = await gpt5Chat([]);
 
     const [, init] = fetchMock.mock.calls[0];

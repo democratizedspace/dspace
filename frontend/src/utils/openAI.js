@@ -154,7 +154,7 @@ async function createChatResponse(openai, input) {
     }
 }
 
-export const GPT35Turbo = async (messages, options = {}) => {
+export const GPT5Chat = async (messages, options = {}) => {
     await ready;
     const gameState = loadGameState();
     const apiKey = gameState.openAI?.apiKey || '';
