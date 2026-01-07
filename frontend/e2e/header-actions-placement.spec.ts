@@ -15,7 +15,6 @@ const VIEWPORTS = [
 const VERTICAL_ALIGNMENT_TOLERANCE_PX = 12;
 const ROW_GROUPING_TOLERANCE_PX = 2;
 const NAV_WIDTH_TOLERANCE_PX = 48;
-const NAV_LINK_MARGIN_PX = 2;
 
 function cssLengthToPx(length: string | null, rootFontSize: number): number | null {
     if (!length) {
