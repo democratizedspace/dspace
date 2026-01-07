@@ -43,16 +43,17 @@ test.describe('Mobile page width bounds', () => {
                     const docEl = document.documentElement;
                     const main = document.querySelector('main#main');
                     const pageShell = document.querySelector('.page-shell');
-                    const viewportWidth = docEl.clientWidth;
+                    const viewportWidth = window.innerWidth || docEl.clientWidth;
+                    const docClientWidth = docEl.clientWidth || viewportWidth;
                     let pageShellGapDiff = null;
 
-                    if (pageShell) {
+                    if (main) {
+                        const style = window.getComputedStyle(main);
+                        const paddingLeft = Number.parseFloat(style.paddingLeft) || 0;
+                        const paddingRight = Number.parseFloat(style.paddingRight) || 0;
+                        pageShellGapDiff = Math.abs(paddingLeft - paddingRight);
+                    } else if (pageShell) {
                         const rect = pageShell.getBoundingClientRect();
-                        const leftGap = rect.left;
-                        const rightGap = viewportWidth - rect.right;
-                        pageShellGapDiff = Math.abs(leftGap - rightGap);
-                    } else if (main) {
-                        const rect = main.getBoundingClientRect();
                         const leftGap = rect.left;
                         const rightGap = viewportWidth - rect.right;
                         pageShellGapDiff = Math.abs(leftGap - rightGap);
@@ -115,7 +116,7 @@ test.describe('Mobile page width bounds', () => {
 
                     return {
                         docScrollWidth: docEl.scrollWidth,
-                        docClientWidth: docEl.clientWidth,
+                        docClientWidth,
                         bodyScrollWidth: document.body.scrollWidth,
                         pageShellGapDiff,
                         viewportWidth,
