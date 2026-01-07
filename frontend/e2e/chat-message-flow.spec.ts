@@ -78,10 +78,7 @@ test.describe('Chat message flow', () => {
 
     test('shows loading state and renders assistant replies', async ({ page }) => {
         await installChatStub(page, 'success');
-        const { chatPanel, spinner } = await sendMessage(
-            page,
-            'Hello from the automated test'
-        );
+        const { chatPanel, spinner } = await sendMessage(page, 'Hello from the automated test');
 
         await expect(chatPanel.getByText(LONG_REPLY)).toBeVisible();
         await expect(spinner).not.toBeVisible();
