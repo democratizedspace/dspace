@@ -49,7 +49,7 @@ jest.mock('../src/utils/gameState/common.js', () => ({
     ready: Promise.resolve(),
 }));
 
-const { GPT35Turbo } = require('../src/utils/openAI.js');
+const { GPT5Chat } = require('../src/utils/openAI.js');
 
 describe('gpt-5 chat responses utility', () => {
     beforeEach(() => {
@@ -57,7 +57,7 @@ describe('gpt-5 chat responses utility', () => {
     });
 
     test('uses opening message and knowledge when no messages provided', async () => {
-        await GPT35Turbo([]);
+        await GPT5Chat([]);
         expect(createResponseMock).toHaveBeenCalledTimes(1);
         const call = createResponseMock.mock.calls[0][0];
         expect(call.model).toBe('gpt-5.2');
@@ -90,7 +90,7 @@ describe('gpt-5 chat responses utility', () => {
     });
 
     test('prepends system message when messages supplied', async () => {
-        await GPT35Turbo([{ role: 'user', content: 'hello' }]);
+        await GPT5Chat([{ role: 'user', content: 'hello' }]);
         const call = createResponseMock.mock.calls[0][0];
         expect(call.input[0]).toEqual(expect.objectContaining({ role: 'system' }));
         expect(call.input[1]).toEqual(
@@ -116,7 +116,7 @@ describe('gpt-5 chat responses utility', () => {
     });
 
     test('returns response content', async () => {
-        const result = await GPT35Turbo([]);
+        const result = await GPT5Chat([]);
         expect(result).toBe('mocked reply');
     });
 });
