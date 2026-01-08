@@ -32,12 +32,14 @@ test.describe('Mobile page width bounds', () => {
                 await waitForHydration(page);
 
                 const {
-                    rootScrollWidth,
-                    rootClientWidth,
+                    documentScrollWidth,
+                    documentClientWidth,
+                    bodyScrollWidth,
+                    bodyClientWidth,
                     pageShellGapDiff,
                     maxRightEdge,
                     maxRightEdgeTag,
-                    rootRightEdge,
+                    viewportWidth,
                 } = await page.evaluate(() => {
                     const docEl = document.documentElement;
                     const main = document.querySelector('main#main');
@@ -55,7 +57,8 @@ test.describe('Mobile page width bounds', () => {
                     const elements = [root, ...Array.from(root.querySelectorAll('*'))];
                     let maxRightEdge = 0;
                     let maxRightEdgeTag = '';
-                    const rootRect = root.getBoundingClientRect();
+                    const viewportWidth =
+                        docEl?.clientWidth || window.innerWidth || document.body.clientWidth;
 
                     const isScrollableX = (element) => {
                         const style = window.getComputedStyle(element);
@@ -108,22 +111,27 @@ test.describe('Mobile page width bounds', () => {
                     }
 
                     return {
-                        rootScrollWidth: root.scrollWidth,
-                        rootClientWidth: root.clientWidth,
+                        documentScrollWidth: docEl.scrollWidth,
+                        documentClientWidth: docEl.clientWidth,
+                        bodyScrollWidth: document.body.scrollWidth,
+                        bodyClientWidth: document.body.clientWidth,
                         pageShellGapDiff,
                         maxRightEdge,
                         maxRightEdgeTag,
-                        rootRightEdge: rootRect.right,
+                        viewportWidth,
                     };
                 });
 
-                expect(rootScrollWidth).toBeLessThanOrEqual(rootClientWidth + OVERFLOW_TOLERANCE);
+                expect(documentScrollWidth).toBeLessThanOrEqual(
+                    documentClientWidth + OVERFLOW_TOLERANCE
+                );
+                expect(bodyScrollWidth).toBeLessThanOrEqual(bodyClientWidth + OVERFLOW_TOLERANCE);
                 expect(pageShellGapDiff).not.toBeNull();
                 expect(pageShellGapDiff).toBeLessThanOrEqual(OVERFLOW_TOLERANCE);
                 expect(
                     maxRightEdge,
                     `widest element: ${maxRightEdgeTag}`
-                ).toBeLessThanOrEqual(rootRightEdge + OVERFLOW_TOLERANCE);
+                ).toBeLessThanOrEqual(viewportWidth + OVERFLOW_TOLERANCE);
             });
         }
     }
