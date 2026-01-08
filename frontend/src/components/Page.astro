@@ -46,7 +46,9 @@ const pathname = Astro.url.pathname;
 
 	main {
 		margin: 0 auto;
-		padding: 0 1rem 1.5rem;
+		padding: 0 0 1.5rem;
+		padding-left: calc(1rem + env(safe-area-inset-left, 0px));
+		padding-right: calc(1rem + env(safe-area-inset-right, 0px));
 		max-width: 100%;
 		width: 100%;
 		box-sizing: border-box;
@@ -79,6 +81,19 @@ const pathname = Astro.url.pathname;
 		gap: 1rem;
 		padding: 0;
 		grid-template-columns: 1fr;
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
+	}
+
+	.page-section {
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
+		overflow-wrap: anywhere;
+		word-break: break-word;
 	}
 	
 	.main-grid {
