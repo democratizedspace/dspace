@@ -11,17 +11,26 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
 // preparation logic here if the homepage requires it in the future.
 ---
 
+<script>
+    window.dspaceStart = performance.now();
+</script>
+
 <Page title="Home" columns="1">
-    <div class="build-meta" aria-label="Build metadata">
-        <span class="env">{environment}</span>
-        <span class="version">{version}</span>
-    </div>
-    <script>
-        window.dspaceStart = performance.now();
-    </script>
-    <WhatsNew />
-    <FailoverStatus client:load />
-    <UIResponsiveness client:load />
+    <li class="page-section build-meta-section">
+        <div class="build-meta" aria-label="Build metadata">
+            <span class="env">{environment}</span>
+            <span class="version">{version}</span>
+        </div>
+    </li>
+    <li class="page-section">
+        <WhatsNew />
+    </li>
+    <li class="page-section">
+        <FailoverStatus client:load />
+    </li>
+    <li class="page-section">
+        <UIResponsiveness client:load />
+    </li>
 </Page>
 
 <style>
@@ -46,7 +55,6 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
         border-radius: 9999px;
         background-color: #f4f4f5;
         color: #1f2933;
-        float: right;
         max-width: min(100%, 100vw - 2rem);
         min-width: 0;
         flex-wrap: wrap;
@@ -64,11 +72,8 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
         min-width: 0;
     }
 
-    @media (max-width: 720px) {
-        .build-meta {
-            float: none;
-            display: flex;
-            margin-left: auto;
-        }
+    .build-meta-section {
+        display: flex;
+        justify-content: flex-end;
     }
 </style>
