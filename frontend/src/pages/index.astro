@@ -19,9 +19,6 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
                 <span class="version">{version}</span>
             </div>
         </section>
-        <script>
-            window.dspaceStart = performance.now();
-        </script>
     </li>
     <li class="page-section">
         <WhatsNew />
@@ -33,6 +30,10 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
         <UIResponsiveness client:load />
     </li>
 </Page>
+
+<script>
+    window.dspaceStart = performance.now();
+</script>
 
 <style>
     div {
