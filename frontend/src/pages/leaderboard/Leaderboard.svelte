@@ -141,6 +141,7 @@
         flex-direction: column;
         gap: 2rem;
         padding: 1rem 0 3rem;
+        min-width: 0;
     }
 
     .intro h1 {
@@ -154,6 +155,8 @@
         max-width: 60ch;
         color: rgba(222, 245, 255, 0.85);
         line-height: 1.6;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     .panel {
@@ -187,6 +190,7 @@
         max-width: 100%;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        min-width: 0;
     }
 
     .table-wrapper table {
@@ -198,6 +202,8 @@
         padding: 0.75rem 1rem;
         text-align: left;
         border-bottom: 1px solid rgba(157, 220, 255, 0.2);
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     tbody tr:last-child th,
@@ -253,6 +259,7 @@
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
+        min-width: 0;
     }
 
     .grid li {

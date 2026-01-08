@@ -418,6 +418,8 @@
         padding: 0.75rem;
         display: grid;
         gap: 0.5rem;
+        min-width: 0;
+        max-width: 100%;
     }
 
     .backups-header {
@@ -425,6 +427,8 @@
         align-items: center;
         justify-content: space-between;
         gap: 0.75rem;
+        min-width: 0;
+        max-width: 100%;
     }
 
     .backup-list {
@@ -441,11 +445,22 @@
         align-items: center;
         gap: 0.75rem;
         flex-wrap: wrap;
+        min-width: 0;
+        max-width: 100%;
     }
 
     .backup-meta {
         display: grid;
         gap: 0.25rem;
+        min-width: 0;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .backup-meta a {
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     .backup-actions {
@@ -453,6 +468,8 @@
         gap: 0.5rem;
         align-items: center;
         flex-wrap: wrap;
+        min-width: 0;
+        max-width: 100%;
     }
 
     .backup-id {
