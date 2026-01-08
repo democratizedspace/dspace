@@ -18,60 +18,60 @@ test.describe('Mobile page overflow regression', () => {
 
     for (const viewport of MOBILE_VIEWPORTS) {
         for (const path of TARGET_PATHS) {
-            test(`keeps ${path} within viewport at ${viewport.width}x${viewport.height}`, async ({
-                page,
-            }) => {
-                await page.setViewportSize(viewport);
-                await page.goto(path);
-                await page.waitForLoadState('networkidle');
-                await waitForHydration(page);
+            test(
+                `keeps ${path} within viewport at ${viewport.width}x${viewport.height}`,
+                async ({ page }) => {
+                    await page.setViewportSize(viewport);
+                    await page.goto(path);
+                    await page.waitForLoadState('networkidle');
+                    await waitForHydration(page);
 
-                const { docScrollWidth, docClientWidth, bodyScrollWidth } = await page.evaluate(
-                    () => {
-                        const docEl = document.documentElement;
-                        return {
-                            docScrollWidth: docEl.scrollWidth,
-                            docClientWidth: docEl.clientWidth,
-                            bodyScrollWidth: document.body.scrollWidth,
-                        };
-                    }
-                );
-
-                const main = page.locator('main#main');
-                await expect(main).toBeVisible();
-
-                const { paddingLeft, paddingRight } = await main.evaluate((element) => {
-                    const style = window.getComputedStyle(element);
-                    return {
-                        paddingLeft: Number.parseFloat(style.paddingLeft || '0'),
-                        paddingRight: Number.parseFloat(style.paddingRight || '0'),
-                    };
-                });
-
-                expect(docClientWidth).toBeGreaterThan(0);
-                try {
-                    expect(docScrollWidth).toBeLessThanOrEqual(
-                        docClientWidth + OVERFLOW_TOLERANCE
-                    );
-                    expect(bodyScrollWidth).toBeLessThanOrEqual(
-                        docClientWidth + OVERFLOW_TOLERANCE
-                    );
-                } catch (error) {
-                    if (path === '/changelog') {
-                        console.info('Changelog overflow diagnostics', {
-                            docScrollWidth,
-                            docClientWidth,
-                            bodyScrollWidth,
-                            paddingLeft,
-                            paddingRight,
+                    const { docScrollWidth, docClientWidth, bodyScrollWidth } =
+                        await page.evaluate(() => {
+                            const docEl = document.documentElement;
+                            return {
+                                docScrollWidth: docEl.scrollWidth,
+                                docClientWidth: docEl.clientWidth,
+                                bodyScrollWidth: document.body.scrollWidth,
+                            };
                         });
+
+                    const main = page.locator('main#main');
+                    await expect(main).toBeVisible();
+
+                    const { paddingLeft, paddingRight } = await main.evaluate((element) => {
+                        const style = window.getComputedStyle(element);
+                        return {
+                            paddingLeft: Number.parseFloat(style.paddingLeft || '0'),
+                            paddingRight: Number.parseFloat(style.paddingRight || '0'),
+                        };
+                    });
+
+                    expect(docClientWidth).toBeGreaterThan(0);
+                    try {
+                        expect(docScrollWidth).toBeLessThanOrEqual(
+                            docClientWidth + OVERFLOW_TOLERANCE
+                        );
+                        expect(bodyScrollWidth).toBeLessThanOrEqual(
+                            docClientWidth + OVERFLOW_TOLERANCE
+                        );
+                    } catch (error) {
+                        if (path === '/changelog') {
+                            console.info('Changelog overflow diagnostics', {
+                                docScrollWidth,
+                                docClientWidth,
+                                bodyScrollWidth,
+                                paddingLeft,
+                                paddingRight,
+                            });
+                        }
+                        throw error;
                     }
-                    throw error;
+                    expect(Math.abs(paddingLeft - paddingRight)).toBeLessThanOrEqual(
+                        PADDING_TOLERANCE
+                    );
                 }
-                expect(Math.abs(paddingLeft - paddingRight)).toBeLessThanOrEqual(
-                    PADDING_TOLERANCE
-                );
-            });
+            );
         }
     }
 });
