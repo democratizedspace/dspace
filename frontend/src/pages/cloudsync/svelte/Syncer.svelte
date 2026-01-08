@@ -357,6 +357,7 @@
         flex-wrap: wrap;
         gap: 10px;
         align-items: center;
+        min-width: 0;
     }
     .form-group label {
         font-weight: bold;
@@ -379,6 +380,9 @@
         flex: 1;
         padding: 5px;
         border-radius: 6px;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .gist-input {
@@ -387,7 +391,7 @@
 
     .chip-container {
         text-align: center;
-        display: inline-flex;
+        display: flex;
         flex-wrap: wrap;
         justify-content: center;
         background-color: #007006;
@@ -396,6 +400,9 @@
         margin: 1px;
         padding: 5px;
         position: relative;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .chip-row {
@@ -453,6 +460,8 @@
         padding: 0.25rem 0.35rem;
         border-radius: 0.35rem;
         font-size: 0.9rem;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     .timestamp {

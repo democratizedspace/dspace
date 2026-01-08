@@ -43,6 +43,27 @@
         addMessage(welcome);
     }
 
+    function getErrorMessage(error) {
+        const message = typeof error?.message === 'string' ? error.message.toLowerCase() : '';
+        const status = error?.status ?? error?.statusCode;
+        const code = error?.code ?? error?.error?.code;
+
+        if (status === 429 || code === 'rate_limit' || message.includes('rate limit')) {
+            return 'Rate limit reached. Please wait a moment and try again.';
+        }
+
+        if (
+            error instanceof TypeError ||
+            message.includes('network') ||
+            message.includes('failed to fetch') ||
+            message.includes('fetch')
+        ) {
+            return 'Network error. Please check your connection and try again.';
+        }
+
+        return "Sorry, I'm having some trouble and can't generate a response.";
+    }
+
     async function submitMessage() {
         const userMessage = {
             role: 'user',
@@ -66,7 +87,7 @@
             addMessage(aiMessage);
         } catch (error) {
             console.error(error);
-            const fallback = "Sorry, I'm having some trouble and can't generate a response.";
+            const fallback = getErrorMessage(error);
             addMessage({
                 role: 'assistant',
                 content: fallback,

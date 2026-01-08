@@ -165,6 +165,7 @@
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
+        min-width: 0;
     }
 
     h2 {
@@ -240,6 +241,7 @@
         display: grid;
         gap: 2rem;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        min-width: 0;
     }
 
     .grid ul {
@@ -260,6 +262,7 @@
         border-radius: 12px;
         background: rgba(22, 44, 61, 0.65);
         border: 1px solid rgba(157, 220, 255, 0.18);
+        min-width: 0;
     }
 
     .rank {
@@ -272,21 +275,28 @@
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
+        min-width: 0;
     }
 
     .details strong {
         font-size: 1rem;
         color: #e6f7ff;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     .details span {
         font-size: 0.85rem;
         color: rgba(222, 245, 255, 0.7);
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     .metric {
         font-weight: 600;
         color: #b6ecff;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     @media (max-width: 640px) {
