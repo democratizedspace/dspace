@@ -22,7 +22,9 @@ const graph = buildQuestGraph({ quests: questData });
 ---
 
 <Page title="Quests">
-    <Quests client:load quests={quests}>
-        <QuestGraphVisualizerGate slot="visualizer" client:load graph={graph} />
-    </Quests>
+    <li class="page-section">
+        <Quests client:load quests={quests}>
+            <QuestGraphVisualizerGate slot="visualizer" client:load graph={graph} />
+        </Quests>
+    </li>
 </Page>

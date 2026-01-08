@@ -12,17 +12,26 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
 ---
 
 <Page title="Home" columns="1">
-    <div class="build-meta" aria-label="Build metadata">
-        <span class="env">{environment}</span>
-        <span class="version">{version}</span>
-    </div>
-    <script>
-        window.dspaceStart = performance.now();
-    </script>
-    <WhatsNew />
-    <FailoverStatus client:load />
-    <UIResponsiveness client:load />
+    <li class="page-section page-section--meta">
+        <div class="build-meta" aria-label="Build metadata">
+            <span class="env">{environment}</span>
+            <span class="version">{version}</span>
+        </div>
+    </li>
+    <li class="page-section">
+        <WhatsNew />
+    </li>
+    <li class="page-section">
+        <FailoverStatus client:load />
+    </li>
+    <li class="page-section">
+        <UIResponsiveness client:load />
+    </li>
 </Page>
+
+<script is:inline>
+    window.dspaceStart = performance.now();
+</script>
 
 <style>
     div {
@@ -36,6 +45,12 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
         text-align: center;
     }
 
+    .page-section--meta {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+    }
+
     .build-meta {
         display: inline-flex;
         gap: 0.5rem;
@@ -46,7 +61,6 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
         border-radius: 9999px;
         background-color: #f4f4f5;
         color: #1f2933;
-        float: right;
         max-width: min(100%, 100vw - 2rem);
         min-width: 0;
         flex-wrap: wrap;
@@ -65,10 +79,9 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
     }
 
     @media (max-width: 720px) {
-        .build-meta {
-            float: none;
+        .page-section--meta {
             display: flex;
-            margin-left: auto;
+            justify-content: flex-end;
         }
     }
 </style>

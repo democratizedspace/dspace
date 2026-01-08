@@ -11,29 +11,29 @@ const pathname = Astro.url.pathname;
 ---
 
 <Layout title="DSPACE">
-        <main id="main">
-		<div>
-			<Header title="" body="" href="" />
+    <main id="main">
+        <div>
+            <Header title="" body="" href="" />
 
-			<!-- for each item in menu, if  -->
-			<Menu pathname={pathname} client:idle />
+            <!-- for each item in menu, if  -->
+            <Menu pathname={pathname} client:idle />
 
-			<LegacyUpgradeBanner client:idle />
+            <LegacyUpgradeBanner client:idle />
 
-			<h2>{title}</h2>
+            <h2>{title}</h2>
 
-			<ul role="list" class="link-card-grid">
-			</ul>
-			<span />
-			<h2>
-				{message}
-			</h2>
+            <ul role="list" class="link-card-grid">
+            </ul>
+            <span />
+            <h2>
+                {message}
+            </h2>
 
-			<ul role="list" class="link-card-grid-1">
-				<slot />
-			</ul>
-		</div>
-	</main>
+            <ul role="list" class="link-card-grid-1">
+                <slot />
+            </ul>
+        </div>
+    </main>
 </Layout>
 
 <style>
@@ -44,14 +44,15 @@ const pathname = Astro.url.pathname;
 
 	
 
-	main {
-		margin: 0 auto;
-		padding: 0 1rem 1.5rem;
-		max-width: 100%;
-		width: 100%;
-		box-sizing: border-box;
-		overflow-x: clip;
-	}
+    main {
+        margin: 0 auto;
+        padding: 0 0 1.5rem;
+        padding-left: calc(1rem + env(safe-area-inset-left, 0px));
+        padding-right: calc(1rem + env(safe-area-inset-right, 0px));
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
+    }
 
 	.text-gradient {
 		font-weight: 900;
@@ -74,22 +75,37 @@ const pathname = Astro.url.pathname;
 		}
 	}
 
-	.link-card-grid-1 {
-		display: grid;
-		gap: 1rem;
-		padding: 0;
-		grid-template-columns: 1fr;
-	}
-	
-	.main-grid {
-		list-style-type: none;
-	}
+    .link-card-grid-1 {
+        display: grid;
+        gap: 1rem;
+        padding: 0;
+        grid-template-columns: 1fr;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        list-style: none;
+    }
 
-	/* Navbar */
-        h2 {
-                color: var(--color-heading);
-                text-align: center;
-        }
+    .page-section {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        list-style: none;
+    }
+
+    .main-grid {
+        list-style-type: none;
+    }
+
+    /* Navbar */
+    h2 {
+        color: var(--color-heading);
+        text-align: center;
+    }
 
 	nav {
 		text-align: center;
@@ -98,17 +114,17 @@ const pathname = Astro.url.pathname;
 		justify-content: center;
 	}
 
-        nav a {
-                opacity: 0.8;
-                background-color: var(--color-pill);
-                border-radius: 0.4rem;
-                color: var(--color-pill-text);
-                text-decoration: none;
-                flex-direction: row;
-                margin: 1px;
-		padding: 5px;
-		text-align: center;
-	}
+    nav a {
+        opacity: 0.8;
+        background-color: var(--color-pill);
+        border-radius: 0.4rem;
+        color: var(--color-pill-text);
+        text-decoration: none;
+        flex-direction: row;
+        margin: 1px;
+        padding: 5px;
+        text-align: center;
+    }
 
 	nav a:hover {
 		opacity: 1;
