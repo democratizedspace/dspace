@@ -32,25 +32,16 @@ test.describe('Mobile page width bounds', () => {
                 await waitForHydration(page);
 
                 const {
-                    docScrollWidth,
-                    bodyScrollWidth,
+                    rootScrollWidth,
+                    rootClientWidth,
                     pageShellGapDiff,
                     maxRightEdge,
                     maxRightEdgeTag,
-                    effectiveViewportWidth,
                     rootRightEdge,
-                } = await page.evaluate((initialViewportWidth) => {
+                } = await page.evaluate(() => {
                     const docEl = document.documentElement;
                     const main = document.querySelector('main#main');
                     const pageShell = document.querySelector('.page-shell');
-                    const layoutViewportWidth = Math.max(
-                        docEl.clientWidth || 0,
-                        window.innerWidth || 0,
-                        window.visualViewport?.width || 0,
-                        initialViewportWidth || 0
-                    );
-                    const effectiveViewportWidth =
-                        layoutViewportWidth || initialViewportWidth || window.innerWidth || 0;
                     let pageShellGapDiff = null;
 
                     if (main) {
@@ -117,22 +108,16 @@ test.describe('Mobile page width bounds', () => {
                     }
 
                     return {
-                        docScrollWidth: docEl.scrollWidth,
-                        bodyScrollWidth: document.body.scrollWidth,
+                        rootScrollWidth: root.scrollWidth,
+                        rootClientWidth: root.clientWidth,
                         pageShellGapDiff,
-                        effectiveViewportWidth,
                         maxRightEdge,
                         maxRightEdgeTag,
                         rootRightEdge: rootRect.right,
                     };
-                }, viewport.width);
+                });
 
-                expect(docScrollWidth).toBeLessThanOrEqual(
-                    effectiveViewportWidth + OVERFLOW_TOLERANCE
-                );
-                expect(bodyScrollWidth).toBeLessThanOrEqual(
-                    effectiveViewportWidth + OVERFLOW_TOLERANCE
-                );
+                expect(rootScrollWidth).toBeLessThanOrEqual(rootClientWidth + OVERFLOW_TOLERANCE);
                 expect(pageShellGapDiff).not.toBeNull();
                 expect(pageShellGapDiff).toBeLessThanOrEqual(OVERFLOW_TOLERANCE);
                 expect(
