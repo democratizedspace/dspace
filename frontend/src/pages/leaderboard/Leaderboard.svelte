@@ -166,6 +166,8 @@
         flex-direction: column;
         gap: 1.5rem;
         min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     h2 {
