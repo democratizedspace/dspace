@@ -1,6 +1,10 @@
 <script>
     import { onMount, tick } from 'svelte';
-    import { GPT35Turbo } from '../../../utils/openAI.js';
+    import {
+        defaultOpenAIErrorMessage,
+        describeOpenAIError,
+        GPT5Chat,
+    } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
     import {
         messages,
@@ -75,7 +79,7 @@
         showSpinner = true;
 
         try {
-            const aiResponse = await GPT35Turbo([...$messageHistory, userMessage], {
+            const aiResponse = await GPT5Chat([...$messageHistory, userMessage], {
                 persona: currentPersona,
             });
             const aiMessage = {
@@ -86,7 +90,7 @@
 
             addMessage(aiMessage);
         } catch (error) {
-            console.error(error);
+            console.error('OpenAI chat request failed', error);
             const fallback = getErrorMessage(error);
             addMessage({
                 role: 'assistant',

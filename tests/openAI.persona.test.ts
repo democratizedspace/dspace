@@ -16,7 +16,7 @@ vi.mock('../frontend/src/utils/gameState/common.js', () => ({
     ready: Promise.resolve(),
 }));
 
-describe('GPT35Turbo persona integration', () => {
+describe('GPT5Chat persona integration', () => {
     beforeEach(() => {
         responsesCreateMock.mockClear();
         globalThis.__DSpaceOpenAIClient = MockOpenAI;
@@ -27,12 +27,12 @@ describe('GPT35Turbo persona integration', () => {
     });
 
     it('injects persona-specific prompt and welcome message', async () => {
-        const { GPT35Turbo } = await import('../frontend/src/utils/openAI.js');
+        const { GPT5Chat } = await import('../frontend/src/utils/openAI.js');
         const chatStore = await import('../frontend/src/stores/chat.js');
         const persona = chatStore.personaOptions?.find((p) => p.id === 'sydney');
         expect(persona, 'expected a Sydney persona to be defined').toBeTruthy();
 
-        await GPT35Turbo([], { persona });
+        await GPT5Chat([], { persona });
 
         expect(responsesCreateMock).toHaveBeenCalledTimes(1);
         const call = responsesCreateMock.mock.calls[0][0];

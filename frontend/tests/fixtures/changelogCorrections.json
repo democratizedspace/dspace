@@ -47,6 +47,11 @@
             "type": "link",
             "description": "Removed dead internal Wallet link because the route no longer exists",
             "date": "2025-11-06"
+        },
+        {
+            "type": "formatting",
+            "description": "Updated GPT-3.5 model reference to GPT-5 for current naming",
+            "date": "2026-01-07"
         }
     ]
 }

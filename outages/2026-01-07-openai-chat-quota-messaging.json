@@ -1,0 +1,13 @@
+{
+  "id": "2026-01-07-openai-chat-quota-messaging",
+  "date": "2026-01-07",
+  "component": "chat-openai-client",
+  "rootCause": "The chat UI only revealed OpenAI quota failures in console logs, so players with exhausted credits saw silent failures instead of guidance.",
+  "resolution": "Surfaced friendly OpenAI error messaging for quota exhaustion and authentication failures, and added regression coverage for the helper and chat UI.",
+  "references": [
+    "frontend/src/pages/chat/svelte/OpenAIChat.svelte",
+    "frontend/src/utils/openAI.js",
+    "frontend/tests/openAI.test.ts",
+    "frontend/tests/openAIChatErrorMessages.test.ts"
+  ]
+}
