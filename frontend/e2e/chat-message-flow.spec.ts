@@ -5,6 +5,8 @@ import { clearUserData, waitForHydration } from './test-helpers';
 const LONG_REPLY =
     'This is a long assistant response that should render in the chat history without breaking the layout or truncating text, even when it spans multiple sentences and needs wrapping across several lines for readability.';
 const FALLBACK_MESSAGE = "Sorry, I'm having some trouble and can't generate a response.";
+const NETWORK_ERROR_MESSAGE = /could not reach openai/i;
+const RATE_LIMIT_MESSAGE = /openai rate limited/i;
 
 type StubMode = 'success' | 'network-error' | 'rate-limit' | 'abort';
 
@@ -88,7 +90,7 @@ test.describe('Chat message flow', () => {
         await installChatStub(page, 'network-error');
         const { chatPanel, spinner } = await sendMessage(page, 'Trigger a network failure');
 
-        await expect(chatPanel.getByText(FALLBACK_MESSAGE)).toBeVisible();
+        await expect(chatPanel.getByText(NETWORK_ERROR_MESSAGE)).toBeVisible();
         await expect(spinner).not.toBeVisible();
     });
 
@@ -96,7 +98,7 @@ test.describe('Chat message flow', () => {
         await installChatStub(page, 'rate-limit');
         const { chatPanel, spinner } = await sendMessage(page, 'Trigger a rate limit');
 
-        await expect(chatPanel.getByText(FALLBACK_MESSAGE)).toBeVisible();
+        await expect(chatPanel.getByText(RATE_LIMIT_MESSAGE)).toBeVisible();
         await expect(spinner).not.toBeVisible();
     });
 

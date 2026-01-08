@@ -48,8 +48,26 @@ test.describe('Mobile page overflow regression', () => {
                     };
                 });
 
-                expect(docScrollWidth).toBeLessThanOrEqual(docClientWidth + OVERFLOW_TOLERANCE);
-                expect(bodyScrollWidth).toBeLessThanOrEqual(docClientWidth + OVERFLOW_TOLERANCE);
+                expect(docClientWidth).toBeGreaterThan(0);
+                try {
+                    expect(docScrollWidth).toBeLessThanOrEqual(
+                        docClientWidth + OVERFLOW_TOLERANCE
+                    );
+                    expect(bodyScrollWidth).toBeLessThanOrEqual(
+                        docClientWidth + OVERFLOW_TOLERANCE
+                    );
+                } catch (error) {
+                    if (path === '/changelog') {
+                        console.info('Changelog overflow diagnostics', {
+                            docScrollWidth,
+                            docClientWidth,
+                            bodyScrollWidth,
+                            paddingLeft,
+                            paddingRight,
+                        });
+                    }
+                    throw error;
+                }
                 expect(Math.abs(paddingLeft - paddingRight)).toBeLessThanOrEqual(
                     PADDING_TOLERANCE
                 );

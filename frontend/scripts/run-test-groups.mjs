@@ -57,6 +57,7 @@ const TEST_GROUPS = [
             'profile-avatar-selection.spec.ts',
             'profile-page.spec.ts',
             'service-worker-update.spec.ts',
+            'mobile-page-overflow.spec.ts',
             'mobile-process-form.spec.ts',
             'leaderboard.spec.ts',
             'settings-page.spec.ts',
