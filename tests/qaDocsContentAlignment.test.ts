@@ -52,6 +52,31 @@ describe('cloud sync doc alignment', () => {
     });
 });
 
+describe('authentication doc alignment', () => {
+    it('lists required scopes and token storage UX', () => {
+        const doc = readDoc('../frontend/src/pages/docs/md/authentication.md');
+
+        expect(doc).toMatch(/`repo`/i);
+        expect(doc).toMatch(/`gist`/i);
+        expect(doc).toMatch(/IndexedDB/i);
+        expect(doc).toMatch(/gameState\.github\.token/i);
+        expect(doc).toMatch(/Clear/i);
+        expect(doc).toMatch(/Log out/i);
+    });
+});
+
+describe('token.place doc alignment', () => {
+    it('matches default endpoint and opt-in guidance', () => {
+        const doc = readDoc('../frontend/src/pages/docs/md/token-place.md');
+
+        expect(doc).toMatch(/https:\/\/token\.place\/api/);
+        expect(doc).toMatch(/disabled by default/i);
+        expect(doc).toMatch(/OpenAI/i);
+        expect(doc).toMatch(/VITE_TOKEN_PLACE_ENABLED/i);
+        expect(doc).toMatch(/VITE_TOKEN_PLACE_URL/i);
+    });
+});
+
 describe('backups doc alignment', () => {
     beforeEach(async () => {
         await clearCustomContentDatabase();
