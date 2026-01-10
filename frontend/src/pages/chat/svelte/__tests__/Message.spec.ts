@@ -21,23 +21,15 @@ describe('Message', () => {
         const messageBody = messageElement.closest('.message-body');
         expect(messageBody).not.toBeNull();
 
-        const styleRules = Array.from(document.styleSheets).flatMap((sheet) => {
-            try {
-                return Array.from(sheet.cssRules);
-            } catch {
-                return [];
-            }
-        });
-        const messageBodyRule = styleRules.find(
-            (rule) =>
-                rule instanceof CSSStyleRule &&
-                typeof rule.selectorText === 'string' &&
-                rule.selectorText.includes('.message-body')
-        ) as CSSStyleRule | undefined;
+        const styleTag = Array.from(document.querySelectorAll('style')).find((style) =>
+            style.textContent?.includes('.message-body')
+        );
 
-        expect(messageBodyRule).toBeDefined();
-        expect(messageBodyRule?.style.getPropertyValue('overflow-wrap')).toBe('anywhere');
-        expect(messageBodyRule?.style.getPropertyValue('word-break')).toBe('break-word');
-        expect(messageBodyRule?.style.getPropertyValue('white-space')).toBe('pre-wrap');
+        expect(styleTag).toBeDefined();
+
+        const styleText = styleTag?.textContent ?? '';
+        expect(styleText).toMatch(/overflow-wrap:\s*anywhere/);
+        expect(styleText).toMatch(/word-break:\s*break-word/);
+        expect(styleText).toMatch(/white-space:\s*pre-wrap/);
     });
 });
