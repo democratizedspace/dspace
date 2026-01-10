@@ -90,7 +90,7 @@
     }
 </script>
 
-<div class={`message-row ${className}`}>
+<div class="message-row">
     {#if className === 'assistant' && avatarUrl}
         <img class="avatar" src={avatarUrl} alt={avatarAlt} use:applyAvatarRole />
     {:else}
