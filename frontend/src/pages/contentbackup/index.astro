@@ -5,17 +5,35 @@ import Importer from './svelte/Importer.svelte';
 ---
 
 <Page title="Custom Content Backup" columns="1">
-    <div class="vertical">
-        <Exporter client:idle />
-        <Importer client:idle />
-    </div>
+    <li class="page-section surface-plain">
+        <div class="vertical">
+            <Exporter client:idle />
+            <Importer client:idle />
+        </div>
+    </li>
 </Page>
 
 <style>
     .vertical {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        width: 100%;
+		align-items: center;
+		gap: 1.25rem;
+		width: min(960px, 100%);
+		margin: 0 auto;
     }
+
+	.vertical :global(nav) {
+		width: 100%;
+		max-width: 720px;
+		display: block;
+		margin: 0 auto;
+	}
+
+	.vertical :global(nav button) {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+	}
 </style>

@@ -88,12 +88,28 @@ const pathname = Astro.url.pathname;
 		list-style: none;
 	}
 
-	.page-section {
+	:global(.page-section) {
 		width: 100%;
 		max-width: 100%;
 		min-width: 0;
 		box-sizing: border-box;
 		overflow-wrap: anywhere;
+		background-color: var(--page-section-bg, #ffffff);
+		color: var(--page-section-text, #111827);
+		padding: 1.25rem;
+		border-radius: 1.25rem;
+		border: 1px solid var(--color-border);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+		background-clip: padding-box;
+		overflow: hidden;
+	}
+
+	:global(.page-section.surface-plain) {
+		background: transparent;
+		color: inherit;
+		padding: 0;
+		border: none;
+		box-shadow: none;
 	}
 	
 	.main-grid {
