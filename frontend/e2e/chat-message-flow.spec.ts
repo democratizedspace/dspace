@@ -118,6 +118,21 @@ test.describe('Chat message flow', () => {
 
         await expect(chatPanel.getByText(UNBROKEN_REPLY)).toBeVisible();
 
+        const pageOverflow = await page.evaluate(() => {
+            const doc = document.documentElement;
+            const body = document.body;
+
+            return {
+                docScrollWidth: doc.scrollWidth,
+                docClientWidth: doc.clientWidth,
+                bodyScrollWidth: body?.scrollWidth ?? 0,
+                bodyClientWidth: body?.clientWidth ?? 0,
+            };
+        });
+        const maxAllowedPageWidth = pageOverflow.docClientWidth + 1;
+        expect(pageOverflow.docScrollWidth).toBeLessThanOrEqual(maxAllowedPageWidth);
+        expect(pageOverflow.bodyScrollWidth).toBeLessThanOrEqual(maxAllowedPageWidth);
+
         const overflowMetrics = await chatPanel.locator('.message-bubble').evaluateAll((nodes) =>
             nodes.map((node) => ({
                 scrollWidth: node.scrollWidth,

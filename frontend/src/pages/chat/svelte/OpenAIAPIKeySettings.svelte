@@ -75,9 +75,9 @@
         </div>
 
         <p>
-            When you connect your API key, NPCs can draw from a curated knowledge base covering
-            quest lore, items, and highlights from your local inventory so they can answer gameplay
-            questions right away.
+            When you connect your API key, you can talk to NPCs and experience their unique
+            personality while they answer gameplay questions from quest lore, items, and your
+            inventory.
         </p>
     </div>
 {/if}
