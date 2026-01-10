@@ -176,37 +176,34 @@ describe('registerOfflineWorker', () => {
         );
     });
 
-    it(
-        'retries stylesheets that 404 shortly after load when controlled by service worker',
-        async () => {
-            const waitingWorker = { postMessage: vi.fn() };
-            serviceWorker.register.mockResolvedValue({ waiting: waitingWorker });
+    it('retries stylesheets that 404 shortly after load when controlled by service worker', async () => {
+        const waitingWorker = { postMessage: vi.fn() };
+        serviceWorker.register.mockResolvedValue({ waiting: waitingWorker });
 
-            fetch.mockImplementation((url) => {
-                if (typeof url === 'string' && url.includes('_astro/')) {
-                    return Promise.resolve({ status: 404, ok: false });
-                }
-                return mockFetchResponse({ offlineWorker: { enabled: true } });
-            });
+        fetch.mockImplementation((url) => {
+            if (typeof url === 'string' && url.includes('_astro/')) {
+                return Promise.resolve({ status: 404, ok: false });
+            }
+            return mockFetchResponse({ offlineWorker: { enabled: true } });
+        });
 
-            const { registerOfflineWorker } =
-                await import('../public/scripts/offlineWorkerRegistration.js');
+        const { registerOfflineWorker } =
+            await import('../public/scripts/offlineWorkerRegistration.js');
 
-            registerOfflineWorker();
-            await dispatchLoad();
+        registerOfflineWorker();
+        await dispatchLoad();
 
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = '/_astro/app.css';
-            const errorEvent = new Event('error', { bubbles: true });
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/_astro/app.css';
+        const errorEvent = new Event('error', { bubbles: true });
 
-            link.dispatchEvent(errorEvent);
+        link.dispatchEvent(errorEvent);
 
-            await vi.waitFor(() => {
-                expect(window.location.reload).toHaveBeenCalledTimes(1);
-            });
-        }
-    );
+        await vi.waitFor(() => {
+            expect(window.location.reload).toHaveBeenCalledTimes(1);
+        });
+    });
 
     it('logs warning when service worker registration fails', async () => {
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: {} }));
