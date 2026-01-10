@@ -79,11 +79,20 @@
             });
         };
     });
+
+    function applyAvatarRole(node) {
+        node.setAttribute('role', 'img');
+        return {
+            destroy() {
+                node.removeAttribute('role');
+            },
+        };
+    }
 </script>
 
 <div class={`message-row ${className}`}>
     {#if className === 'assistant' && avatarUrl}
-        <img class="avatar" src={avatarUrl} alt={avatarAlt} />
+        <img class="avatar" src={avatarUrl} alt={avatarAlt} use:applyAvatarRole />
     {:else}
         <div class="avatar-spacer" aria-hidden="true"></div>
     {/if}
