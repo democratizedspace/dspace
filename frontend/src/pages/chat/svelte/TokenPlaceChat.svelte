@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { tokenPlaceChat } from '../../../utils/tokenPlace.js';
     import { writable } from 'svelte/store';
-    import { messages, countTokens } from '../../../stores/chat.js';
+    import { messages, countTokens, activePersona } from '../../../stores/chat.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -10,7 +10,7 @@
     const messageHistory = writable([]);
     let showSpinner = false;
     let welcomeMessage =
-        "Hello, adventurer! I'm dChat! I'm here to answer any questions you may have about DSPACE or nearly any other topic. I may accidentally generate incorrect information, so please double-check anything I say.";
+        "Hello, adventurer! I'm here to answer questions about DSPACE and respond with an NPC's unique personality. I may accidentally generate incorrect information, so please double-check anything I say.";
 
     function addMessage(msg) {
         messageHistory.update((history) => [...history, msg]);
@@ -89,6 +89,8 @@
                     messageMarkdown={message.content}
                     className={message.role}
                     timestamp={Date.now()}
+                    avatarUrl={message.role === 'assistant' ? $activePersona?.avatar : undefined}
+                    avatarAlt={message.role === 'assistant' ? $activePersona?.name : undefined}
                 />
             {/each}
         {/if}

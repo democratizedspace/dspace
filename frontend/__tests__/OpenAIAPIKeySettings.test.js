@@ -17,9 +17,7 @@ describe('OpenAIAPIKeySettings', () => {
     it('mentions the built-in knowledge base used for chat responses', async () => {
         const { findByText } = render(OpenAIAPIKeySettings);
         const info = await findByText((content) =>
-            content.includes(
-                'curated knowledge base covering quest lore, items, and highlights from your local inventory'
-            )
+            content.includes('talk to NPCs from the game and experience their unique personalities')
         );
         expect(info).toBeInTheDocument();
     });

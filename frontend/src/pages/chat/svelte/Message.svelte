@@ -11,6 +11,8 @@
     export let messageMarkdown;
     export let className;
     export let timestamp;
+    export let avatarUrl = undefined;
+    export let avatarAlt = undefined;
 
     let messageHtml;
     const md = new Remarkable({
@@ -79,52 +81,91 @@
     });
 </script>
 
-<div class={className}>
-    <div class="timestamp" title={format(new Date(timestamp), 'PPpp')}>
-        {formatRelative(new Date(timestamp), new Date())}
-    </div>
-    {@html messageHtml}
-    {#if toastVisible}
-        <div
-            class="toast"
-            role="status"
-            aria-live="polite"
-            transition:fade={{ delay: 2000, duration: 1000 }}
-        >
-            Copied to clipboard
-        </div>
+<div class={`message ${className}`}>
+    {#if avatarUrl}
+        <img class="message-avatar" src={avatarUrl} alt={avatarAlt || 'NPC avatar'} />
     {/if}
+    <div class="message-content">
+        <div class="timestamp" title={format(new Date(timestamp), 'PPpp')}>
+            {formatRelative(new Date(timestamp), new Date())}
+        </div>
+        {@html messageHtml}
+        {#if toastVisible}
+            <div
+                class="toast"
+                role="status"
+                aria-live="polite"
+                transition:fade={{ delay: 2000, duration: 1000 }}
+            >
+                Copied to clipboard
+            </div>
+        {/if}
+    </div>
 </div>
 
 <style>
-    .user,
-    .assistant {
+    .message {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        max-width: 80%;
+    }
+
+    .message-content {
         padding: 10px;
         font-size: 16px;
         border-radius: 5px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
         margin-bottom: 10px;
-        max-width: 80%;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .message-content :global(p),
+    .message-content :global(li) {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .message-content :global(pre) {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .message.user {
+        align-self: flex-end;
+    }
+
+    .message.assistant {
+        align-self: flex-start;
+    }
+
+    .message.user .message-content {
+        background-color: #007006;
         color: white;
     }
 
-    .user {
-        align-self: flex-end;
-        background-color: #007006;
+    .message.assistant .message-content {
+        background-color: #dddddd;
+        color: black;
     }
 
-    .assistant .timestamp {
+    .message.assistant .timestamp {
         color: #4d4d4d;
     }
 
-    .user .timestamp {
+    .message.user .timestamp {
         color: #f0f0f0;
     }
 
-    .assistant {
-        align-self: flex-start;
-        background-color: #dddddd;
-        color: black;
+    .message-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
     }
 
     .timestamp {

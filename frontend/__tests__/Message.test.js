@@ -40,4 +40,31 @@ describe('Message component', () => {
         expect(toast).toHaveAttribute('role', 'status');
         expect(toast).toHaveAttribute('aria-live', 'polite');
     });
+
+    it('renders an avatar when provided', () => {
+        const { container } = render(Message, {
+            messageMarkdown: 'Hello there!',
+            className: 'assistant',
+            timestamp: Date.now(),
+            avatarUrl: '/assets/npc/dChat.jpg',
+            avatarAlt: 'dChat',
+        });
+        const avatar = container.querySelector('.message-avatar');
+        expect(avatar).toHaveAttribute('src', '/assets/npc/dChat.jpg');
+        expect(avatar).toHaveAttribute('alt', 'dChat');
+    });
+
+    it('includes overflow wrapping rules for long lines', () => {
+        const { container } = render(Message, {
+            messageMarkdown: 'A'.repeat(100),
+            className: 'assistant',
+            timestamp: Date.now(),
+        });
+        expect(container.querySelector('.message-content')).toBeInTheDocument();
+        const styleTags = Array.from(document.head.querySelectorAll('style'));
+        const hasOverflowRule = styleTags.some((style) =>
+            style.textContent?.includes('overflow-wrap: anywhere')
+        );
+        expect(hasOverflowRule).toBe(true);
+    });
 });

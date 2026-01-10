@@ -4,9 +4,11 @@ import { clearUserData, waitForHydration } from './test-helpers';
 
 const LONG_REPLY =
     'This is a long assistant response that should render in the chat history without breaking the layout or truncating text, even when it spans multiple sentences and needs wrapping across several lines for readability.';
+const LONG_UNBROKEN_TEXT = 'A'.repeat(600);
 const FALLBACK_MESSAGE = "Sorry, I'm having some trouble and can't generate a response.";
 const NETWORK_ERROR_MESSAGE = /could not reach openai/i;
 const RATE_LIMIT_MESSAGE = /openai rate limited/i;
+const OVERFLOW_TOLERANCE = 1;
 
 type StubMode = 'success' | 'network-error' | 'rate-limit' | 'abort';
 
@@ -108,5 +110,36 @@ test.describe('Chat message flow', () => {
 
         await expect(chatPanel.getByText(FALLBACK_MESSAGE)).toBeVisible();
         await expect(spinner).not.toBeVisible();
+    });
+
+    test('wraps long unbroken lines without horizontal overflow', async ({ page }) => {
+        await installChatStub(page, 'success');
+        const { chatPanel, spinner, messageBox } = await openChatPanel(page);
+
+        await messageBox.fill(LONG_UNBROKEN_TEXT);
+        await chatPanel.getByRole('button', { name: 'Send' }).click();
+        await expect(chatPanel.getByText(LONG_UNBROKEN_TEXT)).toBeVisible();
+        await expect(spinner).not.toBeVisible();
+
+        const messageBubble = chatPanel.locator('.message.user .message-content');
+        await expect(messageBubble).toBeVisible();
+
+        const overflowWrap = await messageBubble.evaluate(
+            (element) => window.getComputedStyle(element).overflowWrap
+        );
+        expect(overflowWrap).toBe('anywhere');
+
+        const { docScrollWidth, docClientWidth, bodyScrollWidth } = await page.evaluate(() => {
+            const docEl = document.documentElement;
+            return {
+                docScrollWidth: docEl.scrollWidth,
+                docClientWidth: docEl.clientWidth,
+                bodyScrollWidth: document.body.scrollWidth,
+            };
+        });
+
+        expect(docClientWidth).toBeGreaterThan(0);
+        expect(docScrollWidth).toBeLessThanOrEqual(docClientWidth + OVERFLOW_TOLERANCE);
+        expect(bodyScrollWidth).toBeLessThanOrEqual(docClientWidth + OVERFLOW_TOLERANCE);
     });
 });

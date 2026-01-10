@@ -4,18 +4,7 @@ import TokenBadge from '../dchat/TokenBadge.svelte';
 import Integrations from './svelte/Integrations.svelte';
 ---
 
-<Page title="Chat" message="Talk with the dChat copilots" columns="1">
-    <img src="/assets/npc/dChat.jpg" alt="dChat" />
+<Page title="Chat" message="Talk with NPCs from the game" columns="1">
     <TokenBadge client:load />
     <Integrations client:idle />
 </Page>
-
-<style>
-    img {
-        width: 100%;
-        height: 100px;
-        object-fit: cover;
-        border-radius: 20px;
-        margin-bottom: -25px;
-    }
-</style>
