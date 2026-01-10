@@ -11,6 +11,8 @@
     export let messageMarkdown;
     export let className;
     export let timestamp;
+    export let avatarUrl = null;
+    export let avatarAlt = 'NPC portrait';
 
     let messageHtml;
     const md = new Remarkable({
@@ -79,26 +81,50 @@
     });
 </script>
 
-<div class={className}>
-    <div class="timestamp" title={format(new Date(timestamp), 'PPpp')}>
-        {formatRelative(new Date(timestamp), new Date())}
-    </div>
-    {@html messageHtml}
-    {#if toastVisible}
-        <div
-            class="toast"
-            role="status"
-            aria-live="polite"
-            transition:fade={{ delay: 2000, duration: 1000 }}
-        >
-            Copied to clipboard
-        </div>
+<div class={`message-row ${className}`}>
+    {#if className === 'assistant' && avatarUrl}
+        <img class="avatar" src={avatarUrl} alt={avatarAlt} />
     {/if}
+    <div class={`message-bubble ${className}`}>
+        <div class="timestamp" title={format(new Date(timestamp), 'PPpp')}>
+            {formatRelative(new Date(timestamp), new Date())}
+        </div>
+        {@html messageHtml}
+        {#if toastVisible}
+            <div
+                class="toast"
+                role="status"
+                aria-live="polite"
+                transition:fade={{ delay: 2000, duration: 1000 }}
+            >
+                Copied to clipboard
+            </div>
+        {/if}
+    </div>
 </div>
 
 <style>
-    .user,
-    .assistant {
+    .message-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .message-row.user {
+        justify-content: flex-end;
+    }
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .message-bubble.user,
+    .message-bubble.assistant {
         padding: 10px;
         font-size: 16px;
         border-radius: 5px;
@@ -108,20 +134,20 @@
         color: white;
     }
 
-    .user {
+    .message-bubble.user {
         align-self: flex-end;
         background-color: #007006;
     }
 
-    .assistant .timestamp {
+    .message-bubble.assistant .timestamp {
         color: #4d4d4d;
     }
 
-    .user .timestamp {
+    .message-bubble.user .timestamp {
         color: #f0f0f0;
     }
 
-    .assistant {
+    .message-bubble.assistant {
         align-self: flex-start;
         background-color: #dddddd;
         color: black;

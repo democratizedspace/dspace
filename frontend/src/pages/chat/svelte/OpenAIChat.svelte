@@ -29,6 +29,14 @@
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
     }
 
+    function getPersonaAvatar(persona) {
+        return persona?.avatar ?? null;
+    }
+
+    function getPersonaAlt(persona) {
+        return persona?.name ? `${persona.name} portrait` : 'NPC portrait';
+    }
+
     function addMessage(msg) {
         messageHistory.update((history) => [...history, msg]);
         messages.update((all) => [...all, msg]);
@@ -43,6 +51,8 @@
             role: 'assistant',
             content: welcomeText,
             tokens: countTokens(welcomeText),
+            avatarUrl: getPersonaAvatar(persona),
+            avatarAlt: getPersonaAlt(persona),
         };
         addMessage(welcome);
     }
@@ -65,6 +75,8 @@
                 role: 'assistant',
                 content: aiResponse,
                 tokens: countTokens(aiResponse),
+                avatarUrl: getPersonaAvatar(currentPersona),
+                avatarAlt: getPersonaAlt(currentPersona),
             };
 
             addMessage(aiMessage);
@@ -75,6 +87,8 @@
                 role: 'assistant',
                 content: fallback,
                 tokens: countTokens(fallback),
+                avatarUrl: getPersonaAvatar(currentPersona),
+                avatarAlt: getPersonaAlt(currentPersona),
             });
         }
 
@@ -124,11 +138,15 @@
                 <option value={persona.id}>{persona.name}</option>
             {/each}
         </select>
-        {#if currentPersona?.avatar}
-            <img src={currentPersona.avatar} alt={`${currentPersona.name} portrait`} />
-        {/if}
-        {#if personaSummary}
-            <p class="persona-summary">{personaSummary}</p>
+        {#if currentPersona?.avatar || personaSummary}
+            <div class="persona-details">
+                {#if currentPersona?.avatar}
+                    <img src={currentPersona.avatar} alt={getPersonaAlt(currentPersona)} />
+                {/if}
+                {#if personaSummary}
+                    <p class="persona-summary">{personaSummary}</p>
+                {/if}
+            </div>
         {/if}
     </div>
 
@@ -152,6 +170,8 @@
                     messageMarkdown={message.content}
                     className={message.role}
                     timestamp={Date.now()}
+                    avatarUrl={message.avatarUrl}
+                    avatarAlt={message.avatarAlt}
                 />
             {/each}
         {/if}
@@ -191,17 +211,26 @@
         font-size: 1rem;
     }
 
-    .persona-selector img {
+    .persona-details {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
         width: 100%;
-        height: 140px;
+        justify-content: center;
+    }
+
+    .persona-details img {
+        width: 128px;
+        height: 128px;
         object-fit: cover;
         border-radius: 0.75rem;
+        flex-shrink: 0;
     }
 
     .persona-summary {
         margin: 0;
         font-size: 0.9rem;
-        text-align: center;
+        text-align: left;
         color: rgba(0, 0, 0, 0.8);
     }
 

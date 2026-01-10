@@ -11,6 +11,8 @@
     let showSpinner = false;
     let welcomeMessage =
         "Hello, adventurer! I'm dChat! I'm here to answer any questions you may have about DSPACE or nearly any other topic. I may accidentally generate incorrect information, so please double-check anything I say.";
+    const assistantAvatar = '/assets/npc/dChat.jpg';
+    const assistantAlt = 'dChat portrait';
 
     function addMessage(msg) {
         messageHistory.update((history) => [...history, msg]);
@@ -32,6 +34,8 @@
                 role: 'assistant',
                 content: aiResponse,
                 tokens: countTokens(aiResponse),
+                avatarUrl: assistantAvatar,
+                avatarAlt: assistantAlt,
             };
             addMessage(aiMessage);
         } catch (error) {
@@ -42,6 +46,8 @@
                 tokens: countTokens(
                     "Sorry, I'm having some trouble and can't generate a response."
                 ),
+                avatarUrl: assistantAvatar,
+                avatarAlt: assistantAlt,
             });
         }
 
@@ -62,6 +68,8 @@
                 role: 'assistant',
                 content: welcomeMessage,
                 tokens: countTokens(welcomeMessage),
+                avatarUrl: assistantAvatar,
+                avatarAlt: assistantAlt,
             };
             addMessage(welcome);
         }
@@ -89,6 +97,8 @@
                     messageMarkdown={message.content}
                     className={message.role}
                     timestamp={Date.now()}
+                    avatarUrl={message.avatarUrl}
+                    avatarAlt={message.avatarAlt}
                 />
             {/each}
         {/if}
