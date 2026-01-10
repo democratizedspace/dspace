@@ -1,11 +1,13 @@
 <script>
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
+    import { ready, isGameStateReady } from '../../utils/gameState/common.js';
     import { getItemCounts } from '../../utils/gameState/inventory.js';
     import { prettyPrintNumber } from '../../utils.js';
     import { buildFullItemList } from './compactItemListHelpers.js';
     import Chip from './Chip.svelte';
     import DelayedRender from './DelayedRender.svelte';
+    import Spinner from './Spinner.svelte';
 
     // Props
     export let itemList = [],
@@ -18,7 +20,8 @@
     // Local State
     let fullItemList = [];
     let isMounted = false;
-    const itemCounts = writable(getItemCounts(itemList));
+    let inventoryReady = isGameStateReady();
+    const itemCounts = writable({});
     $: isEmpty = fullItemList.length === 0;
     const getStableItemId = (item) =>
         typeof item?.id === 'string' || typeof item?.id === 'number' ? String(item.id) : null;
@@ -46,13 +49,24 @@
     // Initial setup and cleanup on mount
     onMount(() => {
         isMounted = true;
-        const intervalId = setInterval(() => itemCounts.set(getItemCounts(itemList)), 1000);
+        let intervalId;
+        const startCounts = async () => {
+            if (!inventoryReady) {
+                await ready;
+                inventoryReady = true;
+            }
+            itemCounts.set(getItemCounts(itemList));
+            intervalId = setInterval(() => itemCounts.set(getItemCounts(itemList)), 1000);
+        };
+        startCounts();
         return () => clearInterval(intervalId);
     });
 
     // Reactive updates
     $: {
-        itemCounts.set(getItemCounts(itemList));
+        if (inventoryReady) {
+            itemCounts.set(getItemCounts(itemList));
+        }
         fullItemList = buildFullItemList(itemList, $itemCounts);
     }
 </script>
@@ -77,18 +91,35 @@
                             </DelayedRender>
 
                             <p
-                                class:disabled={disabled || $itemCounts[item.id] < item.count}
+                                class:disabled={
+                                    disabled ||
+                                    (inventoryReady &&
+                                        item.count !== null &&
+                                        $itemCounts[item.id] < item.count)
+                                }
                                 class:inverted
                             >
                                 {#if increase}
-                                    {prettyPrintNumber($itemCounts[item.id])}
+                                    {#if inventoryReady}
+                                        {prettyPrintNumber($itemCounts[item.id])}
+                                    {:else}
+                                        <span class="count-placeholder">
+                                            <Spinner size={12} color={inverted ? '#ffffff' : '#1f2937'} />
+                                        </span>
+                                    {/if}
                                     {#if item.count !== null}
                                         <span class="qty">
                                             +{prettyPrintNumber(item.count)}
                                         </span>
                                     {/if}
                                 {:else if decrease}
-                                    {prettyPrintNumber($itemCounts[item.id])}
+                                    {#if inventoryReady}
+                                        {prettyPrintNumber($itemCounts[item.id])}
+                                    {:else}
+                                        <span class="count-placeholder">
+                                            <Spinner size={12} color={inverted ? '#ffffff' : '#1f2937'} />
+                                        </span>
+                                    {/if}
                                     {#if item.count !== null}
                                         <span class="qty {!noRed ? 'neg' : ''}">
                                             −{prettyPrintNumber(item.count)}
@@ -100,10 +131,22 @@
                                     </span>
                                     /
                                     <span class="qty">
-                                        {prettyPrintNumber($itemCounts[item.id])}
+                                        {#if inventoryReady}
+                                            {prettyPrintNumber($itemCounts[item.id])}
+                                        {:else}
+                                            <span class="count-placeholder">
+                                                <Spinner size={12} color={inverted ? '#ffffff' : '#1f2937'} />
+                                            </span>
+                                        {/if}
                                     </span>
                                 {:else}
-                                    {prettyPrintNumber($itemCounts[item.id])}
+                                    {#if inventoryReady}
+                                        {prettyPrintNumber($itemCounts[item.id])}
+                                    {:else}
+                                        <span class="count-placeholder">
+                                            <Spinner size={12} color={inverted ? '#ffffff' : '#1f2937'} />
+                                        </span>
+                                    {/if}
                                 {/if}
                                 x {item.name}
                             </p>
@@ -152,5 +195,11 @@
     .qty.neg {
         color: var(--red-500);
         font-weight: 600;
+    }
+
+    .count-placeholder {
+        display: inline-flex;
+        align-items: center;
+        min-width: 14px;
     }
 </style>
