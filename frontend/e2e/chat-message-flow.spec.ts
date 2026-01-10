@@ -4,6 +4,7 @@ import { clearUserData, waitForHydration } from './test-helpers';
 
 const LONG_REPLY =
     'This is a long assistant response that should render in the chat history without breaking the layout or truncating text, even when it spans multiple sentences and needs wrapping across several lines for readability.';
+const LONG_UNBROKEN_LINE = 'X'.repeat(320);
 const FALLBACK_MESSAGE = "Sorry, I'm having some trouble and can't generate a response.";
 const NETWORK_ERROR_MESSAGE = /could not reach openai/i;
 const RATE_LIMIT_MESSAGE = /openai rate limited/i;
@@ -108,5 +109,29 @@ test.describe('Chat message flow', () => {
 
         await expect(chatPanel.getByText(FALLBACK_MESSAGE)).toBeVisible();
         await expect(spinner).not.toBeVisible();
+    });
+
+    test('wraps long unbroken lines instead of overflowing the chat panel', async ({ page }) => {
+        await installChatStub(page, 'success');
+        const { chatPanel } = await sendMessage(page, LONG_UNBROKEN_LINE);
+
+        const assistantBubble = chatPanel
+            .locator('[data-testid="chat-message-bubble"][data-role="assistant"]')
+            .last();
+        const userBubble = chatPanel
+            .locator('[data-testid="chat-message-bubble"][data-role="user"]')
+            .first();
+
+        await expect(assistantBubble).toBeVisible();
+        await expect(userBubble).toBeVisible();
+
+        await expect
+            .poll(async () =>
+                assistantBubble.evaluate((node) => node.scrollWidth <= node.clientWidth)
+            )
+            .toBe(true);
+        await expect
+            .poll(async () => userBubble.evaluate((node) => node.scrollWidth <= node.clientWidth))
+            .toBe(true);
     });
 });

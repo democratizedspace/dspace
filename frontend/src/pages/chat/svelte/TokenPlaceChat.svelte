@@ -89,6 +89,8 @@
                     messageMarkdown={message.content}
                     className={message.role}
                     timestamp={Date.now()}
+                    avatarUrl={message.role === 'assistant' ? '/assets/npc/dChat.jpg' : ''}
+                    avatarAlt="dChat avatar"
                 />
             {/each}
         {/if}

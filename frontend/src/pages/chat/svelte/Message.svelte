@@ -11,6 +11,8 @@
     export let messageMarkdown;
     export let className;
     export let timestamp;
+    export let avatarUrl = '';
+    export let avatarAlt = '';
 
     let messageHtml;
     const md = new Remarkable({
@@ -79,26 +81,54 @@
     });
 </script>
 
-<div class={className}>
-    <div class="timestamp" title={format(new Date(timestamp), 'PPpp')}>
-        {formatRelative(new Date(timestamp), new Date())}
-    </div>
-    {@html messageHtml}
-    {#if toastVisible}
-        <div
-            class="toast"
-            role="status"
-            aria-live="polite"
-            transition:fade={{ delay: 2000, duration: 1000 }}
-        >
-            Copied to clipboard
-        </div>
+<div class={`message-row ${className}-row`}>
+    {#if avatarUrl}
+        <img class="avatar" src={avatarUrl} alt={avatarAlt} />
     {/if}
+    <div class={`message-bubble ${className}`} data-testid="chat-message-bubble" data-role={className}>
+        <div class="timestamp" title={format(new Date(timestamp), 'PPpp')}>
+            {formatRelative(new Date(timestamp), new Date())}
+        </div>
+        {@html messageHtml}
+        {#if toastVisible}
+            <div
+                class="toast"
+                role="status"
+                aria-live="polite"
+                transition:fade={{ delay: 2000, duration: 1000 }}
+            >
+                Copied to clipboard
+            </div>
+        {/if}
+    </div>
 </div>
 
 <style>
-    .user,
-    .assistant {
+    .message-row {
+        display: flex;
+        width: 100%;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+
+    .user-row {
+        justify-content: flex-end;
+    }
+
+    .assistant-row {
+        justify-content: flex-start;
+    }
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex: 0 0 auto;
+    }
+
+    .message-bubble.user,
+    .message-bubble.assistant {
         padding: 10px;
         font-size: 16px;
         border-radius: 5px;
@@ -106,22 +136,25 @@
         margin-bottom: 10px;
         max-width: 80%;
         color: white;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        min-width: 0;
     }
 
-    .user {
+    .message-bubble.user {
         align-self: flex-end;
         background-color: #007006;
     }
 
-    .assistant .timestamp {
+    .message-bubble.assistant .timestamp {
         color: #4d4d4d;
     }
 
-    .user .timestamp {
+    .message-bubble.user .timestamp {
         color: #f0f0f0;
     }
 
-    .assistant {
+    .message-bubble.assistant {
         align-self: flex-start;
         background-color: #dddddd;
         color: black;
@@ -130,6 +163,17 @@
     .timestamp {
         font-size: 12px;
         margin-bottom: 5px;
+    }
+
+    :global(.message-bubble pre) {
+        max-width: 100%;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    :global(.message-bubble code) {
+        word-break: break-word;
     }
 
     .copy-button {
