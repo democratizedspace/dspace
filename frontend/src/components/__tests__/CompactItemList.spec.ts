@@ -6,7 +6,7 @@ const getItemCountsMock = vi.fn();
 const buildFullItemListMock = vi.fn();
 const isGameStateReadyMock = vi.fn();
 let readyPromise: Promise<void> = Promise.resolve();
-let resolveReadyPromise: (() => void) | null = null;
+let resolveReadyPromise = () => {};
 
 vi.mock('../../utils/gameState/inventory.js', () => ({
     getItemCounts: (...args) => getItemCountsMock(...args),
@@ -30,6 +30,7 @@ describe('CompactItemList', () => {
         getItemCountsMock.mockReset();
         buildFullItemListMock.mockReset();
         isGameStateReadyMock.mockReset();
+        resolveReadyPromise = () => {};
         readyPromise = new Promise((resolve) => {
             resolveReadyPromise = resolve;
         });
@@ -37,7 +38,7 @@ describe('CompactItemList', () => {
     });
 
     afterEach(() => {
-        vi.runOnlyPendingTimers();
+        vi.clearAllTimers();
         vi.useRealTimers();
     });
 
@@ -145,7 +146,7 @@ describe('CompactItemList', () => {
         expect(container.textContent).not.toMatch(/\b0\b/);
 
         isReady = true;
-        resolveReadyPromise?.();
+        resolveReadyPromise();
         await Promise.resolve();
         await tick();
 
