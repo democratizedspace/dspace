@@ -32,10 +32,11 @@
             timestamp: Date.now(),
         };
         addMessage(userMessage);
+        const historyForApi = [...$messageHistory];
         showSpinner = true;
 
         try {
-            const aiResponse = await tokenPlaceChat([...$messageHistory, userMessage]);
+            const aiResponse = await tokenPlaceChat(historyForApi);
             const aiMessage = {
                 role: 'assistant',
                 content: aiResponse,

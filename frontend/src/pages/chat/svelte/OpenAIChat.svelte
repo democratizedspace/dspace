@@ -71,10 +71,11 @@
         };
 
         addMessage(userMessage);
+        const historyForApi = [...$messageHistory];
         showSpinner = true;
 
         try {
-            const aiResponse = await GPT5Chat([...$messageHistory, userMessage], {
+            const aiResponse = await GPT5Chat(historyForApi, {
                 persona: currentPersona,
             });
             const aiMessage = {
