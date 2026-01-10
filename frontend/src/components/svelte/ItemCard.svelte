@@ -6,14 +6,6 @@
     export const count = undefined;
 
     const item = items.find((item) => item.id === itemId);
-
-    function truncateString(str, length = 80) {
-        if (str.length <= length) {
-            return str;
-        } else {
-            return str.slice(0, length - 3) + '...';
-        }
-    }
 </script>
 
 <div class="item">
@@ -24,7 +16,7 @@
             </div>
             <div class="vertical">
                 <h4 class="name">{item.name}</h4>
-                <p class="description">{truncateString(item.description)}</p>
+                <p class="description">{item.description}</p>
                 <p><strong>Count:</strong> {getItemCount(item.id)}</p>
                 {#if item.price}
                     <p><strong>Price:</strong> {item.price}</p>
