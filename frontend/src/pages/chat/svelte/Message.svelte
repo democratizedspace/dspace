@@ -130,6 +130,7 @@
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
         margin-bottom: 10px;
         max-width: 100%;
+        min-width: 0;
         color: white;
     }
 
