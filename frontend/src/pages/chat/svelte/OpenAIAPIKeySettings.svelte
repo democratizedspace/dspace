@@ -75,9 +75,8 @@
         </div>
 
         <p>
-            When you connect your API key, you can talk to NPCs and experience their unique
-            personality while they answer gameplay questions from quest lore, items, and your
-            inventory.
+            Connect your API key to talk with NPCs from the game, each with a unique personality,
+            while they answer gameplay questions from quest lore, items, and your inventory.
         </p>
     </div>
 {/if}
