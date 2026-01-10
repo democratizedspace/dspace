@@ -174,14 +174,14 @@
             <Spinner />
         </div>
         {#if $messageHistory.length}
-            {#each $messageHistory.slice().reverse() as message (message.content)}
-                    <Message
-                        messageMarkdown={message.content}
-                        className={message.role}
-                        timestamp={message.timestamp}
-                        avatarUrl={message.avatarUrl}
-                        avatarAlt={message.avatarAlt}
-                    />
+            {#each $messageHistory.slice().reverse() as message (message.timestamp)}
+                <Message
+                    messageMarkdown={message.content}
+                    className={message.role}
+                    timestamp={message.timestamp}
+                    avatarUrl={message.avatarUrl}
+                    avatarAlt={message.avatarAlt}
+                />
             {/each}
         {/if}
     </div>

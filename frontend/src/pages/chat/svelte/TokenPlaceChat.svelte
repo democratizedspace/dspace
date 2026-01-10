@@ -102,7 +102,7 @@
             <Spinner />
         </div>
         {#if $messageHistory.length}
-            {#each $messageHistory.slice().reverse() as message (message.content)}
+            {#each $messageHistory.slice().reverse() as message (message.timestamp)}
                 <Message
                     messageMarkdown={message.content}
                     className={message.role}
