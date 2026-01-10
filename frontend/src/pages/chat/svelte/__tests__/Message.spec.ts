@@ -14,13 +14,15 @@ describe('Message', () => {
             avatarAlt: 'NPC avatar',
         });
 
-        expect(screen.getByText(longMessage)).toBeInTheDocument();
+        const messageElement = screen.getByText(longMessage);
+        expect(messageElement).toBeInTheDocument();
         expect(screen.getByAltText('NPC avatar')).toBeInTheDocument();
 
-        const styles = Array.from(document.querySelectorAll('style'))
-            .map((style) => style.textContent || '')
-            .join(' ');
-        expect(styles).toContain('overflow-wrap: anywhere');
-        expect(styles).toContain('word-break: break-word');
+        const messageBody = messageElement.closest('.message-body');
+        expect(messageBody).not.toBeNull();
+        const computedStyle = getComputedStyle(messageBody as HTMLElement);
+        expect(computedStyle.overflowWrap).toBe('anywhere');
+        expect(computedStyle.wordBreak).toBe('break-word');
+        expect(computedStyle.whiteSpace).toBe('pre-wrap');
     });
 });

@@ -81,7 +81,7 @@
     });
 </script>
 
-<div class={`message-row ${className}`}>
+<div class={`message-row ${className} ${avatarUrl ? 'has-avatar' : 'no-avatar'}`}>
     {#if avatarUrl}
         <img class="message-avatar" src={avatarUrl} alt={avatarAlt || 'NPC avatar'} />
     {/if}
@@ -109,6 +109,11 @@
         gap: 0.5rem;
         align-items: flex-start;
         max-width: 100%;
+        width: 100%;
+    }
+
+    .message-row.no-avatar {
+        gap: 0;
     }
 
     .message-row.user {
@@ -138,7 +143,6 @@
     }
 
     .message-bubble.user {
-        align-self: flex-end;
         background-color: #007006;
     }
 
@@ -151,7 +155,6 @@
     }
 
     .message-bubble.assistant {
-        align-self: flex-start;
         background-color: #dddddd;
         color: black;
     }

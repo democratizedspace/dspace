@@ -34,25 +34,25 @@
         messages.update((all) => [...all, msg]);
     }
 
+    function createMessage(role, content) {
+        return {
+            role,
+            content,
+            tokens: countTokens(content),
+            timestamp: Date.now(),
+        };
+    }
+
     function addWelcomeMessage(persona = currentPersona) {
         const welcomeText = getWelcomeText(persona);
         if (!welcomeText) {
             return;
         }
-        const welcome = {
-            role: 'assistant',
-            content: welcomeText,
-            tokens: countTokens(welcomeText),
-        };
-        addMessage(welcome);
+        addMessage(createMessage('assistant', welcomeText));
     }
 
     async function submitMessage() {
-        const userMessage = {
-            role: 'user',
-            content: $message,
-            tokens: countTokens($message),
-        };
+        const userMessage = createMessage('user', $message);
 
         addMessage(userMessage);
         showSpinner = true;
@@ -61,21 +61,13 @@
             const aiResponse = await GPT5Chat([...$messageHistory, userMessage], {
                 persona: currentPersona,
             });
-            const aiMessage = {
-                role: 'assistant',
-                content: aiResponse,
-                tokens: countTokens(aiResponse),
-            };
+            const aiMessage = createMessage('assistant', aiResponse);
 
             addMessage(aiMessage);
         } catch (error) {
             console.error('OpenAI chat request failed', error);
             const fallback = describeOpenAIError(error) || defaultOpenAIErrorMessage;
-            addMessage({
-                role: 'assistant',
-                content: fallback,
-                tokens: countTokens(fallback),
-            });
+            addMessage(createMessage('assistant', fallback));
         }
 
         message.set('');
@@ -159,7 +151,7 @@
                 <Message
                     messageMarkdown={message.content}
                     className={message.role}
-                    timestamp={Date.now()}
+                    timestamp={message.timestamp ?? Date.now()}
                     avatarUrl={message.role === 'assistant' ? currentPersona?.avatar : null}
                     avatarAlt={
                         message.role === 'assistant' && currentPersona?.name

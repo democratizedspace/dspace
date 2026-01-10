@@ -126,7 +126,11 @@ test.describe('Chat message flow', () => {
         );
 
         for (const metric of overflowMetrics) {
-            expect(metric.scrollWidth).toBeLessThanOrEqual(metric.clientWidth + 1);
+            // Allow up to 1px difference to account for subpixel rounding differences between
+            // scrollWidth and clientWidth in different browsers and zoom levels. Any larger
+            // difference would indicate a real horizontal overflow regression.
+            const maxAllowedScrollWidth = metric.clientWidth + 1;
+            expect(metric.scrollWidth).toBeLessThanOrEqual(maxAllowedScrollWidth);
         }
     });
 });

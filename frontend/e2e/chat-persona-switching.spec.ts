@@ -56,7 +56,7 @@ test.describe('Chat NPC persona switching', () => {
             await expect(personaSummary).toHaveText(persona.summary);
             await expect(personaAvatar).toHaveAttribute('alt', `${persona.name} portrait`);
 
-            const assistantMessages = openAIChatPanel.locator('.assistant');
+            const assistantMessages = openAIChatPanel.locator('.message-bubble.assistant');
             await expect(assistantMessages).toHaveCount(1);
             await expect(assistantMessages.first()).toContainText(persona.welcomeText);
         }
