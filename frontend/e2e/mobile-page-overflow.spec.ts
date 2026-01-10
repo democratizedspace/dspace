@@ -67,6 +67,36 @@ test.describe('Mobile page overflow regression', () => {
                     throw error;
                 }
                 expect(Math.abs(paddingLeft - paddingRight)).toBeLessThanOrEqual(PADDING_TOLERANCE);
+
+                const pageSections = page.locator('main#main li.page-section');
+                const sectionCount = await pageSections.count();
+                expect(sectionCount).toBeGreaterThan(0);
+
+                const surfaceStates = await pageSections.evaluateAll((nodes) =>
+                    nodes.map((node) => {
+                        const style = window.getComputedStyle(node);
+                        const backgroundColor = style.backgroundColor || '';
+                        const hasSolidBackground =
+                            backgroundColor.toLowerCase() !== 'transparent' &&
+                            backgroundColor !== 'rgba(0, 0, 0, 0)';
+                        const borderRadius = Number.parseFloat(style.borderRadius || '0');
+                        const paddingTop = Number.parseFloat(style.paddingTop || '0');
+                        const paddingLeftPx = Number.parseFloat(style.paddingLeft || '0');
+                        const paddingRightPx = Number.parseFloat(style.paddingRight || '0');
+
+                        return {
+                            hasSolidBackground,
+                            borderRadius,
+                            paddingTop,
+                            paddingInline: paddingLeftPx + paddingRightPx,
+                        };
+                    })
+                );
+
+                expect(surfaceStates.every((state) => state.hasSolidBackground)).toBe(true);
+                expect(surfaceStates.every((state) => state.borderRadius >= 8)).toBe(true);
+                expect(surfaceStates.every((state) => state.paddingTop > 0)).toBe(true);
+                expect(surfaceStates.every((state) => state.paddingInline > 0)).toBe(true);
             });
         }
     }
