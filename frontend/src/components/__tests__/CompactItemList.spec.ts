@@ -134,7 +134,7 @@ describe('CompactItemList', () => {
             list.map((item) => ({ ...item, total: totals[item.id] ?? 0 }))
         );
 
-        const { container } = render(CompactItemList, {
+        const { container, unmount } = render(CompactItemList, {
             props: { itemList: items },
         });
 
@@ -151,5 +151,7 @@ describe('CompactItemList', () => {
 
         expect(container.querySelectorAll('.spinner')).toHaveLength(0);
         expect(container.textContent).toContain('5');
+
+        unmount();
     });
 });
