@@ -4,13 +4,15 @@ import { clearUserData, waitForHydration } from './test-helpers';
 
 const LONG_REPLY =
     'This is a long assistant response that should render in the chat history without breaking the layout or truncating text, even when it spans multiple sentences and needs wrapping across several lines for readability.';
+const UNBROKEN_LINE = 'A'.repeat(400);
+const UNBROKEN_REPLY = 'B'.repeat(400);
 const FALLBACK_MESSAGE = "Sorry, I'm having some trouble and can't generate a response.";
 const NETWORK_ERROR_MESSAGE = /could not reach openai/i;
 const RATE_LIMIT_MESSAGE = /openai rate limited/i;
 
 type StubMode = 'success' | 'network-error' | 'rate-limit' | 'abort';
 
-const installChatStub = async (page: Page, mode: StubMode) => {
+const installChatStub = async (page: Page, mode: StubMode, replyText = LONG_REPLY) => {
     await page.addInitScript(
         ({ reply, stubMode }) => {
             const createResponse = async () => {
@@ -43,7 +45,7 @@ const installChatStub = async (page: Page, mode: StubMode) => {
                 };
             };
         },
-        { reply: LONG_REPLY, stubMode: mode }
+        { reply: replyText, stubMode: mode }
     );
 };
 
@@ -108,5 +110,23 @@ test.describe('Chat message flow', () => {
 
         await expect(chatPanel.getByText(FALLBACK_MESSAGE)).toBeVisible();
         await expect(spinner).not.toBeVisible();
+    });
+
+    test('wraps long unbroken messages without overflowing', async ({ page }) => {
+        await installChatStub(page, 'success', UNBROKEN_REPLY);
+        const { chatPanel } = await sendMessage(page, UNBROKEN_LINE);
+
+        await expect(chatPanel.getByText(UNBROKEN_REPLY)).toBeVisible();
+
+        const overflowMetrics = await chatPanel.locator('.message-bubble').evaluateAll((nodes) =>
+            nodes.map((node) => ({
+                scrollWidth: node.scrollWidth,
+                clientWidth: node.clientWidth,
+            }))
+        );
+
+        for (const metric of overflowMetrics) {
+            expect(metric.scrollWidth).toBeLessThanOrEqual(metric.clientWidth + 1);
+        }
     });
 });

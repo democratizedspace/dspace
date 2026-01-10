@@ -124,11 +124,19 @@
                 <option value={persona.id}>{persona.name}</option>
             {/each}
         </select>
-        {#if currentPersona?.avatar}
-            <img src={currentPersona.avatar} alt={`${currentPersona.name} portrait`} />
-        {/if}
-        {#if personaSummary}
-            <p class="persona-summary">{personaSummary}</p>
+        {#if currentPersona?.avatar || personaSummary}
+            <div class="persona-details">
+                {#if currentPersona?.avatar}
+                    <img
+                        class="persona-avatar"
+                        src={currentPersona.avatar}
+                        alt={`${currentPersona.name} portrait`}
+                    />
+                {/if}
+                {#if personaSummary}
+                    <p class="persona-summary">{personaSummary}</p>
+                {/if}
+            </div>
         {/if}
     </div>
 
@@ -152,6 +160,12 @@
                     messageMarkdown={message.content}
                     className={message.role}
                     timestamp={Date.now()}
+                    avatarUrl={message.role === 'assistant' ? currentPersona?.avatar : null}
+                    avatarAlt={
+                        message.role === 'assistant' && currentPersona?.name
+                            ? `${currentPersona.name} avatar`
+                            : null
+                    }
                 />
             {/each}
         {/if}
@@ -191,9 +205,21 @@
         font-size: 1rem;
     }
 
-    .persona-selector img {
+    .persona-details {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
         width: 100%;
-        height: 140px;
+        justify-content: center;
+        flex-wrap: wrap;
+        text-align: center;
+    }
+
+    .persona-avatar {
+        width: 128px;
+        height: 128px;
+        max-width: 100%;
+        aspect-ratio: 1 / 1;
         object-fit: cover;
         border-radius: 0.75rem;
     }
