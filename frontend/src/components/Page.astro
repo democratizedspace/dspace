@@ -103,6 +103,14 @@ const pathname = Astro.url.pathname;
 		background-clip: padding-box;
 		overflow: hidden;
 	}
+
+	:global(.page-section.surface-plain) {
+		background: transparent;
+		color: inherit;
+		padding: 0;
+		border: none;
+		box-shadow: none;
+	}
 	
 	.main-grid {
 		list-style-type: none;

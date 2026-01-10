@@ -83,8 +83,10 @@ test.describe('Mobile page overflow regression', () => {
                         const paddingTop = Number.parseFloat(style.paddingTop || '0');
                         const paddingLeftPx = Number.parseFloat(style.paddingLeft || '0');
                         const paddingRightPx = Number.parseFloat(style.paddingRight || '0');
+                        const isPlainSurface = node.classList.contains('surface-plain');
 
                         return {
+                            isPlainSurface,
                             hasSolidBackground,
                             borderRadius,
                             paddingTop,
@@ -93,10 +95,11 @@ test.describe('Mobile page overflow regression', () => {
                     })
                 );
 
-                expect(surfaceStates.every((state) => state.hasSolidBackground)).toBe(true);
-                expect(surfaceStates.every((state) => state.borderRadius >= 8)).toBe(true);
-                expect(surfaceStates.every((state) => state.paddingTop > 0)).toBe(true);
-                expect(surfaceStates.every((state) => state.paddingInline > 0)).toBe(true);
+                const surfaced = surfaceStates.filter((state) => !state.isPlainSurface);
+                expect(surfaced.every((state) => state.hasSolidBackground)).toBe(true);
+                expect(surfaced.every((state) => state.borderRadius >= 8)).toBe(true);
+                expect(surfaced.every((state) => state.paddingTop > 0)).toBe(true);
+                expect(surfaced.every((state) => state.paddingInline > 0)).toBe(true);
             });
         }
     }
