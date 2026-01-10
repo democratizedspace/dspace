@@ -19,8 +19,8 @@
     // Local State
     let fullItemList = [];
     let isMounted = false;
-    let countsReady = isGameStateReady();
-    const itemCounts = writable(getItemCounts(itemList));
+    let countsReady = false;
+    const itemCounts = writable({});
     $: isEmpty = fullItemList.length === 0;
     const getStableItemId = (item) =>
         typeof item?.id === 'string' || typeof item?.id === 'number' ? String(item.id) : null;
@@ -62,8 +62,10 @@
             countsReady = true;
             startInterval();
         } else {
-            countsReady = false;
             ready.then(() => {
+                if (!isActive) {
+                    return;
+                }
                 countsReady = true;
                 startInterval();
             });
@@ -77,7 +79,9 @@
 
     // Reactive updates
     $: {
-        itemCounts.set(getItemCounts(itemList));
+        if (countsReady) {
+            itemCounts.set(getItemCounts(itemList));
+        }
         fullItemList = buildFullItemList(itemList, $itemCounts);
     }
 </script>
@@ -238,8 +242,8 @@
         width: 0.7em;
         height: 0.7em;
         border-radius: 999px;
-        border: 2px solid rgba(255, 255, 255, 0.35);
-        border-top-color: rgba(255, 255, 255, 0.85);
+        border: 2px solid var(--spinner-border-color, rgba(255, 255, 255, 0.35));
+        border-top-color: var(--spinner-border-top-color, rgba(255, 255, 255, 0.85));
         animation: spin 0.75s linear infinite;
     }
 

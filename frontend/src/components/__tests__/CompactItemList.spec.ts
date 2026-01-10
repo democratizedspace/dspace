@@ -1,23 +1,38 @@
 import { render } from '@testing-library/svelte';
 import { tick } from 'svelte';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
-import CompactItemList from '../svelte/CompactItemList.svelte';
 
 const getItemCountsMock = vi.fn();
 const buildFullItemListMock = vi.fn();
+const isGameStateReadyMock = vi.fn();
+let readyPromise: Promise<void> = Promise.resolve();
+let resolveReadyPromise: (() => void) | null = null;
 
 vi.mock('../../utils/gameState/inventory.js', () => ({
     getItemCounts: (...args) => getItemCountsMock(...args),
+}));
+
+vi.mock('../../utils/gameState/common.js', () => ({
+    get ready() {
+        return readyPromise;
+    },
+    isGameStateReady: (...args) => isGameStateReadyMock(...args),
 }));
 
 vi.mock('../svelte/compactItemListHelpers.js', () => ({
     buildFullItemList: (...args) => buildFullItemListMock(...args),
 }));
 
+import CompactItemList from '../svelte/CompactItemList.svelte';
+
 describe('CompactItemList', () => {
     beforeEach(() => {
         getItemCountsMock.mockReset();
         buildFullItemListMock.mockReset();
+        isGameStateReadyMock.mockReset();
+        readyPromise = new Promise((resolve) => {
+            resolveReadyPromise = resolve;
+        });
         vi.useFakeTimers();
     });
 
@@ -32,6 +47,7 @@ describe('CompactItemList', () => {
             { id: 'beta', name: 'Beta', image: '/beta.png', count: 2 },
         ];
 
+        isGameStateReadyMock.mockReturnValue(true);
         getItemCountsMock.mockImplementation((list) =>
             Object.fromEntries(list.map((item) => [item.id, item.count ?? 0]))
         );
@@ -73,6 +89,7 @@ describe('CompactItemList', () => {
             { id: 'repeat', name: 'Second Repeat', image: '/repeat-2.png', count: 2 },
         ];
 
+        isGameStateReadyMock.mockReturnValue(true);
         getItemCountsMock.mockReturnValue({ repeat: 5 });
         buildFullItemListMock.mockImplementation((list, totals) =>
             list.map((item) => ({ ...item, total: totals[item.id] ?? 0 }))
@@ -105,5 +122,29 @@ describe('CompactItemList', () => {
         expect(reversedRows[1]).toBe(initialRows[1]);
 
         unmount();
+    });
+
+    test('shows loading spinners until game state is ready', async () => {
+        const items = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 }];
+
+        isGameStateReadyMock.mockReturnValue(false);
+        getItemCountsMock.mockReturnValue({ alpha: 3 });
+        buildFullItemListMock.mockImplementation((list, totals) =>
+            list.map((item) => ({ ...item, total: totals[item.id] ?? 0 }))
+        );
+
+        const { container } = render(CompactItemList, {
+            props: { itemList: items },
+        });
+
+        await tick();
+
+        expect(container.querySelectorAll('.spinner')).toHaveLength(1);
+
+        resolveReadyPromise?.();
+        await tick();
+
+        expect(container.querySelectorAll('.spinner')).toHaveLength(0);
+        expect(container.textContent).toContain('3');
     });
 });
