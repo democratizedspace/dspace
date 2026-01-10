@@ -43,6 +43,7 @@
             role: 'assistant',
             content: welcomeText,
             tokens: countTokens(welcomeText),
+            avatar: persona?.avatar,
         };
         addMessage(welcome);
     }
@@ -65,6 +66,7 @@
                 role: 'assistant',
                 content: aiResponse,
                 tokens: countTokens(aiResponse),
+                avatar: currentPersona?.avatar,
             };
 
             addMessage(aiMessage);
@@ -75,6 +77,7 @@
                 role: 'assistant',
                 content: fallback,
                 tokens: countTokens(fallback),
+                avatar: currentPersona?.avatar,
             });
         }
 
@@ -124,11 +127,19 @@
                 <option value={persona.id}>{persona.name}</option>
             {/each}
         </select>
-        {#if currentPersona?.avatar}
-            <img src={currentPersona.avatar} alt={`${currentPersona.name} portrait`} />
-        {/if}
-        {#if personaSummary}
-            <p class="persona-summary">{personaSummary}</p>
+        {#if currentPersona?.avatar || personaSummary}
+            <div class="persona-details">
+                {#if currentPersona?.avatar}
+                    <img
+                        class="persona-avatar"
+                        src={currentPersona.avatar}
+                        alt={`${currentPersona.name} portrait`}
+                    />
+                {/if}
+                {#if personaSummary}
+                    <p class="persona-summary">{personaSummary}</p>
+                {/if}
+            </div>
         {/if}
     </div>
 
@@ -152,6 +163,7 @@
                     messageMarkdown={message.content}
                     className={message.role}
                     timestamp={Date.now()}
+                    avatarUrl={message.avatar}
                 />
             {/each}
         {/if}
@@ -191,18 +203,29 @@
         font-size: 1rem;
     }
 
-    .persona-selector img {
+    .persona-details {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
         width: 100%;
-        height: 140px;
+    }
+
+    .persona-avatar {
+        width: 128px;
+        height: 128px;
         object-fit: cover;
-        border-radius: 0.75rem;
+        border-radius: 12px;
+        flex-shrink: 0;
     }
 
     .persona-summary {
         margin: 0;
-        font-size: 0.9rem;
-        text-align: center;
+        font-size: 0.95rem;
+        text-align: left;
         color: rgba(0, 0, 0, 0.8);
+        max-width: 420px;
     }
 
     .chat-container {

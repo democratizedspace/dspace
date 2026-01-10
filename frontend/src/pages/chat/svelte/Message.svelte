@@ -11,6 +11,7 @@
     export let messageMarkdown;
     export let className;
     export let timestamp;
+    export let avatarUrl;
 
     let messageHtml;
     const md = new Remarkable({
@@ -79,52 +80,76 @@
     });
 </script>
 
-<div class={className}>
-    <div class="timestamp" title={format(new Date(timestamp), 'PPpp')}>
-        {formatRelative(new Date(timestamp), new Date())}
-    </div>
-    {@html messageHtml}
-    {#if toastVisible}
-        <div
-            class="toast"
-            role="status"
-            aria-live="polite"
-            transition:fade={{ delay: 2000, duration: 1000 }}
-        >
-            Copied to clipboard
-        </div>
+<div class={`message ${className}`}>
+    {#if avatarUrl && className === 'assistant'}
+        <img class="avatar" src={avatarUrl} alt="NPC avatar" />
     {/if}
+    <div class="message-body">
+        <div class="timestamp" title={format(new Date(timestamp), 'PPpp')}>
+            {formatRelative(new Date(timestamp), new Date())}
+        </div>
+        {@html messageHtml}
+        {#if toastVisible}
+            <div
+                class="toast"
+                role="status"
+                aria-live="polite"
+                transition:fade={{ delay: 2000, duration: 1000 }}
+            >
+                Copied to clipboard
+            </div>
+        {/if}
+    </div>
 </div>
 
 <style>
-    .user,
-    .assistant {
+    .message {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        margin-bottom: 10px;
+        max-width: 80%;
+    }
+
+    .message-body {
         padding: 10px;
         font-size: 16px;
         border-radius: 5px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 10px;
-        max-width: 80%;
         color: white;
     }
 
-    .user {
+    .message.user {
         align-self: flex-end;
+    }
+
+    .message.user .message-body {
         background-color: #007006;
     }
 
-    .assistant .timestamp {
+    .message.assistant {
+        align-self: flex-start;
+    }
+
+    .message.assistant .message-body {
+        background-color: #dddddd;
+        color: black;
+    }
+
+    .message.assistant .timestamp {
         color: #4d4d4d;
     }
 
-    .user .timestamp {
+    .message.user .timestamp {
         color: #f0f0f0;
     }
 
-    .assistant {
-        align-self: flex-start;
-        background-color: #dddddd;
-        color: black;
+    .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
     }
 
     .timestamp {
