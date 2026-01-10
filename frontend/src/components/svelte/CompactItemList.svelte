@@ -106,9 +106,8 @@
                             </DelayedRender>
 
                             <p
-                                class:disabled={
-                                    countsReady && (disabled || $itemCounts[item.id] < item.count)
-                                }
+                                class:disabled={countsReady &&
+                                    (disabled || $itemCounts[item.id] < item.count)}
                                 class:inverted
                             >
                                 {#if countsReady}
@@ -137,50 +136,48 @@
                                     {:else}
                                         {prettyPrintNumber($itemCounts[item.id])}
                                     {/if}
-                                {:else}
-                                    {#if increase}
-                                        <span
-                                            class="count-placeholder"
-                                            aria-label="Loading inventory count"
-                                        >
-                                            <span class="spinner" aria-hidden="true"></span>
-                                        </span>
-                                        {#if item.count !== null}
-                                            <span class="qty">
-                                                +{prettyPrintNumber(item.count)}
-                                            </span>
-                                        {/if}
-                                    {:else if decrease}
-                                        <span
-                                            class="count-placeholder"
-                                            aria-label="Loading inventory count"
-                                        >
-                                            <span class="spinner" aria-hidden="true"></span>
-                                        </span>
-                                        {#if item.count !== null}
-                                            <span class="qty {!noRed ? 'neg' : ''}">
-                                                −{prettyPrintNumber(item.count)}
-                                            </span>
-                                        {/if}
-                                    {:else if item.count !== null}
+                                {:else if increase}
+                                    <span
+                                        class="count-placeholder"
+                                        aria-label="Loading inventory count"
+                                    >
+                                        <span class="spinner" aria-hidden="true"></span>
+                                    </span>
+                                    {#if item.count !== null}
                                         <span class="qty">
-                                            {prettyPrintNumber(item.count)}
-                                        </span>
-                                        /
-                                        <span
-                                            class="count-placeholder"
-                                            aria-label="Loading inventory count"
-                                        >
-                                            <span class="spinner" aria-hidden="true"></span>
-                                        </span>
-                                    {:else}
-                                        <span
-                                            class="count-placeholder"
-                                            aria-label="Loading inventory count"
-                                        >
-                                            <span class="spinner" aria-hidden="true"></span>
+                                            +{prettyPrintNumber(item.count)}
                                         </span>
                                     {/if}
+                                {:else if decrease}
+                                    <span
+                                        class="count-placeholder"
+                                        aria-label="Loading inventory count"
+                                    >
+                                        <span class="spinner" aria-hidden="true"></span>
+                                    </span>
+                                    {#if item.count !== null}
+                                        <span class="qty {!noRed ? 'neg' : ''}">
+                                            −{prettyPrintNumber(item.count)}
+                                        </span>
+                                    {/if}
+                                {:else if item.count !== null}
+                                    <span class="qty">
+                                        {prettyPrintNumber(item.count)}
+                                    </span>
+                                    /
+                                    <span
+                                        class="count-placeholder"
+                                        aria-label="Loading inventory count"
+                                    >
+                                        <span class="spinner" aria-hidden="true"></span>
+                                    </span>
+                                {:else}
+                                    <span
+                                        class="count-placeholder"
+                                        aria-label="Loading inventory count"
+                                    >
+                                        <span class="spinner" aria-hidden="true"></span>
+                                    </span>
                                 {/if}
                                 x {item.name}
                             </p>
