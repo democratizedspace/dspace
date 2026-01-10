@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import { getItemCounts } from '../../utils/gameState/inventory.js';
+    import { ready, isGameStateReady } from '../../utils/gameState/common.js';
     import { prettyPrintNumber } from '../../utils.js';
     import { buildFullItemList } from './compactItemListHelpers.js';
     import Chip from './Chip.svelte';
@@ -18,6 +19,7 @@
     // Local State
     let fullItemList = [];
     let isMounted = false;
+    let countsReady = isGameStateReady();
     const itemCounts = writable(getItemCounts(itemList));
     $: isEmpty = fullItemList.length === 0;
     const getStableItemId = (item) =>
@@ -43,16 +45,21 @@
         return `index-${index}`;
     };
 
+    const refreshItemCounts = () => itemCounts.set(getItemCounts(itemList));
+
     // Initial setup and cleanup on mount
-    onMount(() => {
+    onMount(async () => {
         isMounted = true;
-        const intervalId = setInterval(() => itemCounts.set(getItemCounts(itemList)), 1000);
+        const intervalId = setInterval(refreshItemCounts, 1000);
+        await ready;
+        countsReady = true;
+        refreshItemCounts();
         return () => clearInterval(intervalId);
     });
 
     // Reactive updates
     $: {
-        itemCounts.set(getItemCounts(itemList));
+        refreshItemCounts();
         fullItemList = buildFullItemList(itemList, $itemCounts);
     }
 </script>
@@ -81,14 +88,22 @@
                                 class:inverted
                             >
                                 {#if increase}
-                                    {prettyPrintNumber($itemCounts[item.id])}
+                                    {#if countsReady}
+                                        {prettyPrintNumber($itemCounts[item.id])}
+                                    {:else}
+                                        <span class="count-placeholder" aria-label="Loading count" />
+                                    {/if}
                                     {#if item.count !== null}
                                         <span class="qty">
                                             +{prettyPrintNumber(item.count)}
                                         </span>
                                     {/if}
                                 {:else if decrease}
-                                    {prettyPrintNumber($itemCounts[item.id])}
+                                    {#if countsReady}
+                                        {prettyPrintNumber($itemCounts[item.id])}
+                                    {:else}
+                                        <span class="count-placeholder" aria-label="Loading count" />
+                                    {/if}
                                     {#if item.count !== null}
                                         <span class="qty {!noRed ? 'neg' : ''}">
                                             −{prettyPrintNumber(item.count)}
@@ -99,11 +114,19 @@
                                         {prettyPrintNumber(item.count)}
                                     </span>
                                     /
-                                    <span class="qty">
-                                        {prettyPrintNumber($itemCounts[item.id])}
-                                    </span>
+                                    {#if countsReady}
+                                        <span class="qty">
+                                            {prettyPrintNumber($itemCounts[item.id])}
+                                        </span>
+                                    {:else}
+                                        <span class="count-placeholder" aria-label="Loading count" />
+                                    {/if}
                                 {:else}
-                                    {prettyPrintNumber($itemCounts[item.id])}
+                                    {#if countsReady}
+                                        {prettyPrintNumber($itemCounts[item.id])}
+                                    {:else}
+                                        <span class="count-placeholder" aria-label="Loading count" />
+                                    {/if}
                                 {/if}
                                 x {item.name}
                             </p>
@@ -152,5 +175,31 @@
     .qty.neg {
         color: var(--red-500);
         font-weight: 600;
+    }
+
+    .count-placeholder {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.4ch;
+        height: 1em;
+        margin-right: 4px;
+        vertical-align: middle;
+    }
+
+    .count-placeholder::after {
+        content: '';
+        width: 0.85em;
+        height: 0.85em;
+        border-radius: 999px;
+        border: 2px solid rgba(255, 255, 255, 0.45);
+        border-top-color: transparent;
+        animation: spinner 0.8s linear infinite;
+    }
+
+    @keyframes spinner {
+        to {
+            transform: rotate(360deg);
+        }
     }
 </style>
