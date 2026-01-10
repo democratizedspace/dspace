@@ -149,11 +149,7 @@
         {#if currentPersona?.avatar || personaSummary}
             <div class="persona-details">
                 {#if currentPersona?.avatar}
-                    <img
-                        src={currentPersona.avatar}
-                        alt={getPersonaAlt(currentPersona)}
-                        role="img"
-                    />
+                    <img src={currentPersona.avatar} alt={getPersonaAlt(currentPersona)} />
                 {/if}
                 {#if personaSummary}
                     <p class="persona-summary">{personaSummary}</p>
@@ -234,7 +230,7 @@
 
     .persona-details img {
         width: min(128px, 40vw);
-        height: auto;
+        height: min(128px, 40vw);
         object-fit: cover;
         border-radius: 0.75rem;
         flex-shrink: 0;

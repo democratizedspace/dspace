@@ -83,7 +83,7 @@
 
 <div class={`message-row ${className}`}>
     {#if className === 'assistant' && avatarUrl}
-        <img class="avatar" src={avatarUrl} alt={avatarAlt} role="img" />
+        <img class="avatar" src={avatarUrl} alt={avatarAlt} />
     {:else}
         <div class="avatar-spacer" aria-hidden="true"></div>
     {/if}
