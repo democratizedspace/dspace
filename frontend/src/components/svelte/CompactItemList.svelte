@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
+    import { ready, isGameStateReady } from '../../utils/gameState/common.js';
     import { getItemCounts } from '../../utils/gameState/inventory.js';
     import { prettyPrintNumber } from '../../utils.js';
     import { buildFullItemList } from './compactItemListHelpers.js';
@@ -18,6 +19,7 @@
     // Local State
     let fullItemList = [];
     let isMounted = false;
+    let countsReady = isGameStateReady();
     const itemCounts = writable(getItemCounts(itemList));
     $: isEmpty = fullItemList.length === 0;
     const getStableItemId = (item) =>
@@ -46,8 +48,31 @@
     // Initial setup and cleanup on mount
     onMount(() => {
         isMounted = true;
-        const intervalId = setInterval(() => itemCounts.set(getItemCounts(itemList)), 1000);
-        return () => clearInterval(intervalId);
+        let intervalId;
+        let isActive = true;
+        const startInterval = () => {
+            if (!isActive) {
+                return;
+            }
+            itemCounts.set(getItemCounts(itemList));
+            intervalId = setInterval(() => itemCounts.set(getItemCounts(itemList)), 1000);
+        };
+
+        if (isGameStateReady()) {
+            countsReady = true;
+            startInterval();
+        } else {
+            countsReady = false;
+            ready.then(() => {
+                countsReady = true;
+                startInterval();
+            });
+        }
+
+        return () => {
+            isActive = false;
+            clearInterval(intervalId);
+        };
     });
 
     // Reactive updates
@@ -77,33 +102,81 @@
                             </DelayedRender>
 
                             <p
-                                class:disabled={disabled || $itemCounts[item.id] < item.count}
+                                class:disabled={
+                                    countsReady && (disabled || $itemCounts[item.id] < item.count)
+                                }
                                 class:inverted
                             >
-                                {#if increase}
-                                    {prettyPrintNumber($itemCounts[item.id])}
-                                    {#if item.count !== null}
-                                        <span class="qty">
-                                            +{prettyPrintNumber(item.count)}
-                                        </span>
-                                    {/if}
-                                {:else if decrease}
-                                    {prettyPrintNumber($itemCounts[item.id])}
-                                    {#if item.count !== null}
-                                        <span class="qty {!noRed ? 'neg' : ''}">
-                                            −{prettyPrintNumber(item.count)}
-                                        </span>
-                                    {/if}
-                                {:else if item.count !== null}
-                                    <span class="qty">
-                                        {prettyPrintNumber(item.count)}
-                                    </span>
-                                    /
-                                    <span class="qty">
+                                {#if countsReady}
+                                    {#if increase}
                                         {prettyPrintNumber($itemCounts[item.id])}
-                                    </span>
+                                        {#if item.count !== null}
+                                            <span class="qty">
+                                                +{prettyPrintNumber(item.count)}
+                                            </span>
+                                        {/if}
+                                    {:else if decrease}
+                                        {prettyPrintNumber($itemCounts[item.id])}
+                                        {#if item.count !== null}
+                                            <span class="qty {!noRed ? 'neg' : ''}">
+                                                −{prettyPrintNumber(item.count)}
+                                            </span>
+                                        {/if}
+                                    {:else if item.count !== null}
+                                        <span class="qty">
+                                            {prettyPrintNumber(item.count)}
+                                        </span>
+                                        /
+                                        <span class="qty">
+                                            {prettyPrintNumber($itemCounts[item.id])}
+                                        </span>
+                                    {:else}
+                                        {prettyPrintNumber($itemCounts[item.id])}
+                                    {/if}
                                 {:else}
-                                    {prettyPrintNumber($itemCounts[item.id])}
+                                    {#if increase}
+                                        <span
+                                            class="count-placeholder"
+                                            aria-label="Loading inventory count"
+                                        >
+                                            <span class="spinner" aria-hidden="true"></span>
+                                        </span>
+                                        {#if item.count !== null}
+                                            <span class="qty">
+                                                +{prettyPrintNumber(item.count)}
+                                            </span>
+                                        {/if}
+                                    {:else if decrease}
+                                        <span
+                                            class="count-placeholder"
+                                            aria-label="Loading inventory count"
+                                        >
+                                            <span class="spinner" aria-hidden="true"></span>
+                                        </span>
+                                        {#if item.count !== null}
+                                            <span class="qty {!noRed ? 'neg' : ''}">
+                                                −{prettyPrintNumber(item.count)}
+                                            </span>
+                                        {/if}
+                                    {:else if item.count !== null}
+                                        <span class="qty">
+                                            {prettyPrintNumber(item.count)}
+                                        </span>
+                                        /
+                                        <span
+                                            class="count-placeholder"
+                                            aria-label="Loading inventory count"
+                                        >
+                                            <span class="spinner" aria-hidden="true"></span>
+                                        </span>
+                                    {:else}
+                                        <span
+                                            class="count-placeholder"
+                                            aria-label="Loading inventory count"
+                                        >
+                                            <span class="spinner" aria-hidden="true"></span>
+                                        </span>
+                                    {/if}
                                 {/if}
                                 x {item.name}
                             </p>
@@ -152,5 +225,27 @@
     .qty.neg {
         color: var(--red-500);
         font-weight: 600;
+    }
+
+    .count-placeholder {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 2.4ch;
+    }
+
+    .spinner {
+        width: 0.7em;
+        height: 0.7em;
+        border-radius: 999px;
+        border: 2px solid rgba(255, 255, 255, 0.35);
+        border-top-color: rgba(255, 255, 255, 0.85);
+        animation: spin 0.75s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
     }
 </style>
