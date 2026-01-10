@@ -11,6 +11,8 @@
     export let messageMarkdown;
     export let className;
     export let timestamp;
+    export let avatar = '';
+    export let avatarAlt = '';
 
     let messageHtml;
     const md = new Remarkable({
@@ -79,26 +81,55 @@
     });
 </script>
 
-<div class={className}>
-    <div class="timestamp" title={format(new Date(timestamp), 'PPpp')}>
-        {formatRelative(new Date(timestamp), new Date())}
-    </div>
-    {@html messageHtml}
-    {#if toastVisible}
-        <div
-            class="toast"
-            role="status"
-            aria-live="polite"
-            transition:fade={{ delay: 2000, duration: 1000 }}
-        >
-            Copied to clipboard
-        </div>
+<div class={`message-row ${className}`}>
+    {#if avatar}
+        <img class="avatar" src={avatar} alt={avatarAlt || 'NPC portrait'} />
     {/if}
+    <div class={`message-bubble ${className}`}>
+        <div class="timestamp" title={format(new Date(timestamp), 'PPpp')}>
+            {formatRelative(new Date(timestamp), new Date())}
+        </div>
+        {@html messageHtml}
+        {#if toastVisible}
+            <div
+                class="toast"
+                role="status"
+                aria-live="polite"
+                transition:fade={{ delay: 2000, duration: 1000 }}
+            >
+                Copied to clipboard
+            </div>
+        {/if}
+    </div>
 </div>
 
 <style>
-    .user,
-    .assistant {
+    .message-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .message-row.user {
+        justify-content: flex-end;
+    }
+
+    .message-row.assistant {
+        justify-content: flex-start;
+    }
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+        margin-top: 4px;
+    }
+
+    .message-bubble.user,
+    .message-bubble.assistant {
         padding: 10px;
         font-size: 16px;
         border-radius: 5px;
@@ -108,21 +139,19 @@
         color: white;
     }
 
-    .user {
-        align-self: flex-end;
+    .message-bubble.user {
         background-color: #007006;
     }
 
-    .assistant .timestamp {
+    .message-bubble.assistant .timestamp {
         color: #4d4d4d;
     }
 
-    .user .timestamp {
+    .message-bubble.user .timestamp {
         color: #f0f0f0;
     }
 
-    .assistant {
-        align-self: flex-start;
+    .message-bubble.assistant {
         background-color: #dddddd;
         color: black;
     }
