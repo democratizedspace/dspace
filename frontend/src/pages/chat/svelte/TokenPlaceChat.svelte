@@ -9,16 +9,23 @@
     const message = writable('');
     const messageHistory = writable([]);
     let showSpinner = false;
+    let messageCounter = 0;
     // Default dChat persona; callers can override for other NPCs/personas.
     export let welcomeMessage =
         "Hello, adventurer! I'm dChat! I'm here to answer any questions you may have about DSPACE or nearly any other topic. I may accidentally generate incorrect information, so please double-check anything I say.";
     export let assistantAvatar = '/assets/npc/dChat.jpg';
     export let assistantAlt = 'dChat portrait';
 
+    function createMessageId() {
+        messageCounter += 1;
+        return `${Date.now()}-${messageCounter}`;
+    }
+
     function addMessage(msg) {
         const timestampedMessage = {
             ...msg,
             timestamp: msg.timestamp ?? Date.now(),
+            id: msg.id ?? createMessageId(),
         };
         messageHistory.update((history) => [...history, timestampedMessage]);
         messages.update((all) => [...all, timestampedMessage]);
@@ -102,7 +109,7 @@
             <Spinner />
         </div>
         {#if $messageHistory.length}
-            {#each $messageHistory.slice().reverse() as message (message.timestamp)}
+            {#each $messageHistory.slice().reverse() as message (message.id)}
                 <Message
                     messageMarkdown={message.content}
                     className={message.role}

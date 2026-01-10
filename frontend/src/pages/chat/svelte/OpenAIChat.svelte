@@ -21,6 +21,7 @@
     const messageHistory = writable([]);
     let showSpinner = false;
     let hydrated = false;
+    let messageCounter = 0;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -37,10 +38,16 @@
         return persona?.name ? `${persona.name} portrait` : 'NPC portrait';
     }
 
+    function createMessageId() {
+        messageCounter += 1;
+        return `${Date.now()}-${messageCounter}`;
+    }
+
     function addMessage(msg) {
         const timestampedMessage = {
             ...msg,
             timestamp: msg.timestamp ?? Date.now(),
+            id: msg.id ?? createMessageId(),
         };
         messageHistory.update((history) => [...history, timestampedMessage]);
         messages.update((all) => [...all, timestampedMessage]);
@@ -174,7 +181,7 @@
             <Spinner />
         </div>
         {#if $messageHistory.length}
-            {#each $messageHistory.slice().reverse() as message (message.timestamp)}
+            {#each $messageHistory.slice().reverse() as message (message.id)}
                 <Message
                     messageMarkdown={message.content}
                     className={message.role}
