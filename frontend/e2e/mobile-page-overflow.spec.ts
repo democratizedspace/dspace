@@ -36,6 +36,9 @@ test.describe('Mobile page overflow regression', () => {
                         };
                     }
                 );
+                const docDirection = await page.evaluate(
+                    () => getComputedStyle(document.documentElement).direction
+                );
 
                 const main = page.locator('main#main');
                 await expect(main).toBeVisible();
@@ -49,6 +52,7 @@ test.describe('Mobile page overflow regression', () => {
                 });
 
                 expect(docClientWidth).toBeGreaterThan(0);
+                expect(docDirection).toBe('ltr');
                 try {
                     expect(docScrollWidth).toBeLessThanOrEqual(docClientWidth + OVERFLOW_TOLERANCE);
                     expect(bodyScrollWidth).toBeLessThanOrEqual(

@@ -1,0 +1,11 @@
+{
+  "id": "staging-left-scrollbar",
+  "date": "2026-01-09",
+  "component": "frontend/layout",
+  "rootCause": "PR #2738 adjusted Page layout structure without a document-level LTR guard, allowing an unintended RTL direction to flip the global scrollbar to the left.",
+  "resolution": "Explicitly enforce LTR direction on the document root and add an e2e check to assert the computed direction stays ltr.",
+  "references": [
+    "frontend/src/layouts/Layout.astro",
+    "frontend/e2e/mobile-page-overflow.spec.ts"
+  ]
+}
