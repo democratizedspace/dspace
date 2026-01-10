@@ -5,10 +5,12 @@ import Importer from './svelte/Importer.svelte';
 ---
 
 <Page title="Custom Content Backup" columns="1">
-    <div class="vertical">
-        <Exporter client:idle />
-        <Importer client:idle />
-    </div>
+    <li class="page-section surface-plain">
+        <div class="vertical">
+            <Exporter client:idle />
+            <Importer client:idle />
+        </div>
+    </li>
 </Page>
 
 <style>
