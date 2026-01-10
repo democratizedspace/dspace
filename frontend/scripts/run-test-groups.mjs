@@ -50,6 +50,7 @@ const TEST_GROUPS = [
             'docs-navigation.spec.ts',
             'docs-changelog.spec.ts',
             'changelog-container.spec.ts',
+            'document-direction.spec.ts',
             'homepage-responsive-width.spec.ts',
             'failover-status.spec.ts',
             'home-page-basic.spec.ts',

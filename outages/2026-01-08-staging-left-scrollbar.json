@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-08-staging-left-scrollbar",
+  "date": "2026-01-08",
+  "component": "ui-layout",
+  "rootCause": "PR #2738 refactored Page.astro layout and allowed an unintended RTL direction to affect the top-level scroll container, which moved the browser scrollbar to the left on staging.",
+  "resolution": "Explicitly set the document direction to LTR in the shared layout and added a Playwright regression check to assert the root direction remains LTR.",
+  "references": [
+    "frontend/src/layouts/Layout.astro",
+    "frontend/e2e/document-direction.spec.ts"
+  ]
+}
