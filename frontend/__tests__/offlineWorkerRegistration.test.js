@@ -176,7 +176,10 @@ describe('registerOfflineWorker', () => {
         );
     });
 
-    it('retries stylesheets that 404 shortly after load when controlled by service worker', async () => {
+    const retryStylesheetTestName =
+        'retries stylesheets that 404 shortly after load when controlled by service worker';
+
+    it(retryStylesheetTestName, async () => {
         const waitingWorker = { postMessage: vi.fn() };
         serviceWorker.register.mockResolvedValue({ waiting: waitingWorker });
 
