@@ -140,6 +140,7 @@ describe('CompactItemList', () => {
 
         await tick();
 
+        expect(container.querySelectorAll('.count-placeholder')).toHaveLength(1);
         expect(container.querySelectorAll('.spinner')).toHaveLength(1);
         expect(container.textContent).not.toMatch(/\b0\b/);
 
