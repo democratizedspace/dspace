@@ -126,9 +126,10 @@ describe('CompactItemList', () => {
 
     test('shows loading spinners until game state is ready', async () => {
         const items = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 }];
+        let isReady = false;
 
         isGameStateReadyMock.mockReturnValue(false);
-        getItemCountsMock.mockReturnValue({ alpha: 3 });
+        getItemCountsMock.mockImplementation(() => ({ alpha: isReady ? 5 : 0 }));
         buildFullItemListMock.mockImplementation((list, totals) =>
             list.map((item) => ({ ...item, total: totals[item.id] ?? 0 }))
         );
@@ -140,11 +141,14 @@ describe('CompactItemList', () => {
         await tick();
 
         expect(container.querySelectorAll('.spinner')).toHaveLength(1);
+        expect(container.textContent).not.toMatch(/\b0\b/);
 
+        isReady = true;
         resolveReadyPromise?.();
+        await Promise.resolve();
         await tick();
 
         expect(container.querySelectorAll('.spinner')).toHaveLength(0);
-        expect(container.textContent).toContain('3');
+        expect(container.textContent).toContain('5');
     });
 });
