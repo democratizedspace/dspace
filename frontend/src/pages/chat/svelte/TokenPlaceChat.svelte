@@ -9,14 +9,19 @@
     const message = writable('');
     const messageHistory = writable([]);
     let showSpinner = false;
-    let welcomeMessage =
+    // Default dChat persona; callers can override for other NPCs/personas.
+    export let welcomeMessage =
         "Hello, adventurer! I'm dChat! I'm here to answer any questions you may have about DSPACE or nearly any other topic. I may accidentally generate incorrect information, so please double-check anything I say.";
-    const assistantAvatar = '/assets/npc/dChat.jpg';
-    const assistantAlt = 'dChat portrait';
+    export let assistantAvatar = '/assets/npc/dChat.jpg';
+    export let assistantAlt = 'dChat portrait';
 
     function addMessage(msg) {
-        messageHistory.update((history) => [...history, msg]);
-        messages.update((all) => [...all, msg]);
+        const timestampedMessage = {
+            ...msg,
+            timestamp: msg.timestamp ?? Date.now(),
+        };
+        messageHistory.update((history) => [...history, timestampedMessage]);
+        messages.update((all) => [...all, timestampedMessage]);
     }
 
     async function submitMessage() {
@@ -24,6 +29,7 @@
             role: 'user',
             content: $message,
             tokens: countTokens($message),
+            timestamp: Date.now(),
         };
         addMessage(userMessage);
         showSpinner = true;
@@ -36,6 +42,7 @@
                 tokens: countTokens(aiResponse),
                 avatarUrl: assistantAvatar,
                 avatarAlt: assistantAlt,
+                timestamp: Date.now(),
             };
             addMessage(aiMessage);
         } catch (error) {
@@ -48,6 +55,7 @@
                 ),
                 avatarUrl: assistantAvatar,
                 avatarAlt: assistantAlt,
+                timestamp: Date.now(),
             });
         }
 
@@ -70,6 +78,7 @@
                 tokens: countTokens(welcomeMessage),
                 avatarUrl: assistantAvatar,
                 avatarAlt: assistantAlt,
+                timestamp: Date.now(),
             };
             addMessage(welcome);
         }
@@ -96,7 +105,7 @@
                 <Message
                     messageMarkdown={message.content}
                     className={message.role}
-                    timestamp={Date.now()}
+                    timestamp={message.timestamp}
                     avatarUrl={message.avatarUrl}
                     avatarAlt={message.avatarAlt}
                 />

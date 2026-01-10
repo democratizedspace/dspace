@@ -83,7 +83,9 @@
 
 <div class={`message-row ${className}`}>
     {#if className === 'assistant' && avatarUrl}
-        <img class="avatar" src={avatarUrl} alt={avatarAlt} />
+        <img class="avatar" src={avatarUrl} alt={avatarAlt} role="img" />
+    {:else}
+        <div class="avatar-spacer" aria-hidden="true"></div>
     {/if}
     <div class={`message-bubble ${className}`}>
         <div class="timestamp" title={format(new Date(timestamp), 'PPpp')}>
@@ -105,14 +107,11 @@
 
 <style>
     .message-row {
-        display: flex;
-        align-items: flex-start;
+        display: grid;
+        grid-template-columns: 32px minmax(0, 1fr);
+        align-items: start;
         gap: 0.5rem;
         width: 100%;
-    }
-
-    .message-row.user {
-        justify-content: flex-end;
     }
 
     .avatar {
@@ -130,12 +129,12 @@
         border-radius: 5px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
         margin-bottom: 10px;
-        max-width: 80%;
+        max-width: 100%;
         color: white;
     }
 
     .message-bubble.user {
-        align-self: flex-end;
+        justify-self: end;
         background-color: #007006;
     }
 
@@ -148,7 +147,7 @@
     }
 
     .message-bubble.assistant {
-        align-self: flex-start;
+        justify-self: start;
         background-color: #dddddd;
         color: black;
     }
@@ -196,5 +195,10 @@
         padding: 10px 20px;
         border-radius: 5px;
         text-align: center;
+    }
+
+    .avatar-spacer {
+        width: 32px;
+        height: 32px;
     }
 </style>

@@ -38,8 +38,12 @@
     }
 
     function addMessage(msg) {
-        messageHistory.update((history) => [...history, msg]);
-        messages.update((all) => [...all, msg]);
+        const timestampedMessage = {
+            ...msg,
+            timestamp: msg.timestamp ?? Date.now(),
+        };
+        messageHistory.update((history) => [...history, timestampedMessage]);
+        messages.update((all) => [...all, timestampedMessage]);
     }
 
     function addWelcomeMessage(persona = currentPersona) {
@@ -53,6 +57,7 @@
             tokens: countTokens(welcomeText),
             avatarUrl: getPersonaAvatar(persona),
             avatarAlt: getPersonaAlt(persona),
+            timestamp: Date.now(),
         };
         addMessage(welcome);
     }
@@ -62,6 +67,7 @@
             role: 'user',
             content: $message,
             tokens: countTokens($message),
+            timestamp: Date.now(),
         };
 
         addMessage(userMessage);
@@ -77,6 +83,7 @@
                 tokens: countTokens(aiResponse),
                 avatarUrl: getPersonaAvatar(currentPersona),
                 avatarAlt: getPersonaAlt(currentPersona),
+                timestamp: Date.now(),
             };
 
             addMessage(aiMessage);
@@ -89,6 +96,7 @@
                 tokens: countTokens(fallback),
                 avatarUrl: getPersonaAvatar(currentPersona),
                 avatarAlt: getPersonaAlt(currentPersona),
+                timestamp: Date.now(),
             });
         }
 
@@ -141,7 +149,11 @@
         {#if currentPersona?.avatar || personaSummary}
             <div class="persona-details">
                 {#if currentPersona?.avatar}
-                    <img src={currentPersona.avatar} alt={getPersonaAlt(currentPersona)} />
+                    <img
+                        src={currentPersona.avatar}
+                        alt={getPersonaAlt(currentPersona)}
+                        role="img"
+                    />
                 {/if}
                 {#if personaSummary}
                     <p class="persona-summary">{personaSummary}</p>
@@ -166,13 +178,13 @@
         </div>
         {#if $messageHistory.length}
             {#each $messageHistory.slice().reverse() as message (message.content)}
-                <Message
-                    messageMarkdown={message.content}
-                    className={message.role}
-                    timestamp={Date.now()}
-                    avatarUrl={message.avatarUrl}
-                    avatarAlt={message.avatarAlt}
-                />
+                    <Message
+                        messageMarkdown={message.content}
+                        className={message.role}
+                        timestamp={message.timestamp}
+                        avatarUrl={message.avatarUrl}
+                        avatarAlt={message.avatarAlt}
+                    />
             {/each}
         {/if}
     </div>
@@ -217,11 +229,12 @@
         gap: 1rem;
         width: 100%;
         justify-content: center;
+        flex-wrap: wrap;
     }
 
     .persona-details img {
-        width: 128px;
-        height: 128px;
+        width: min(128px, 40vw);
+        height: auto;
         object-fit: cover;
         border-radius: 0.75rem;
         flex-shrink: 0;

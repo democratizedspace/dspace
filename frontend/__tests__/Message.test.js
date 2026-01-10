@@ -40,4 +40,29 @@ describe('Message component', () => {
         expect(toast).toHaveAttribute('role', 'status');
         expect(toast).toHaveAttribute('aria-live', 'polite');
     });
+
+    it('renders an avatar for assistant messages when provided', () => {
+        const { container } = render(Message, {
+            messageMarkdown: 'Hello there!',
+            className: 'assistant',
+            timestamp: Date.now(),
+            avatarUrl: '/assets/npc/example.png',
+            avatarAlt: 'Example portrait',
+        });
+        const avatar = container.querySelector('img.avatar');
+        expect(avatar).toHaveAttribute('src', '/assets/npc/example.png');
+        expect(avatar).toHaveAttribute('alt', 'Example portrait');
+        expect(avatar).toHaveAttribute('role', 'img');
+    });
+
+    it('does not render an avatar image for user messages', () => {
+        const { container } = render(Message, {
+            messageMarkdown: 'Hello there!',
+            className: 'user',
+            timestamp: Date.now(),
+            avatarUrl: '/assets/npc/example.png',
+            avatarAlt: 'Example portrait',
+        });
+        expect(container.querySelector('img.avatar')).toBeNull();
+    });
 });
