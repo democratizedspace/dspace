@@ -1,0 +1,14 @@
+{
+  "id": "2026-01-09-staging-left-scrollbar",
+  "date": "2026-01-09",
+  "component": "frontend-layout",
+  "longForm": "outages/2026-01-09-staging-left-scrollbar.md",
+  "rootCause": "PR #2738 refactored Page layout wrappers and relied on inherited document direction. Staging ended up with RTL direction on the root element, which moved the primary scrollbar to the left side of the viewport.",
+  "resolution": "Explicitly enforce LTR direction on the root document element and add Playwright coverage to assert the computed direction remains ltr.",
+  "references": [
+    "frontend/src/components/Page.astro",
+    "frontend/src/layouts/Layout.astro",
+    "frontend/e2e/home-page-basic.spec.ts",
+    "https://github.com/democratizedspace/dspace/pull/2738"
+  ]
+}

@@ -11,6 +11,11 @@ test.describe('Home Page Basic Rendering', () => {
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
+        const direction = await page.evaluate(
+            () => window.getComputedStyle(document.documentElement).direction
+        );
+        expect(direction).toBe('ltr');
+
         const latestUpdate = page.getByRole('heading', { name: /latest update/i });
         await expect(latestUpdate).toBeVisible();
     });
