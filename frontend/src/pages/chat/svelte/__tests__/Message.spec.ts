@@ -20,11 +20,24 @@ describe('Message', () => {
 
         const messageBody = messageElement.closest('.message-body');
         expect(messageBody).not.toBeNull();
-        const computedStyle = getComputedStyle(messageBody as HTMLElement);
-        const overflowWrap =
-            computedStyle.overflowWrap || computedStyle.getPropertyValue('overflow-wrap');
-        expect(overflowWrap).toBe('anywhere');
-        expect(computedStyle.wordBreak).toBe('break-word');
-        expect(computedStyle.whiteSpace).toBe('pre-wrap');
+
+        const styleRules = Array.from(document.styleSheets).flatMap((sheet) => {
+            try {
+                return Array.from(sheet.cssRules);
+            } catch {
+                return [];
+            }
+        });
+        const messageBodyRule = styleRules.find(
+            (rule) =>
+                rule instanceof CSSStyleRule &&
+                typeof rule.selectorText === 'string' &&
+                rule.selectorText.includes('.message-body')
+        ) as CSSStyleRule | undefined;
+
+        expect(messageBodyRule).toBeDefined();
+        expect(messageBodyRule?.style.getPropertyValue('overflow-wrap')).toBe('anywhere');
+        expect(messageBodyRule?.style.getPropertyValue('word-break')).toBe('break-word');
+        expect(messageBodyRule?.style.getPropertyValue('white-space')).toBe('pre-wrap');
     });
 });
