@@ -21,7 +21,9 @@ describe('Message', () => {
         const messageBody = messageElement.closest('.message-body');
         expect(messageBody).not.toBeNull();
         const computedStyle = getComputedStyle(messageBody as HTMLElement);
-        expect(computedStyle.overflowWrap).toBe('anywhere');
+        const overflowWrap =
+            computedStyle.overflowWrap || computedStyle.getPropertyValue('overflow-wrap');
+        expect(overflowWrap).toBe('anywhere');
         expect(computedStyle.wordBreak).toBe('break-word');
         expect(computedStyle.whiteSpace).toBe('pre-wrap');
     });

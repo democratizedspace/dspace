@@ -153,11 +153,9 @@
                     className={message.role}
                     timestamp={message.timestamp ?? Date.now()}
                     avatarUrl={message.role === 'assistant' ? currentPersona?.avatar : null}
-                    avatarAlt={
-                        message.role === 'assistant' && currentPersona?.name
-                            ? `${currentPersona.name} avatar`
-                            : null
-                    }
+                    avatarAlt={message.role === 'assistant' && currentPersona?.name
+                        ? `${currentPersona.name} avatar`
+                        : null}
                 />
             {/each}
         {/if}
