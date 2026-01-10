@@ -22,4 +22,17 @@ import Importer from './svelte/Importer.svelte';
 		width: min(960px, 100%);
 		margin: 0 auto;
     }
+
+	.vertical :global(nav) {
+		width: min(720px, 100%);
+		display: flex;
+		justify-content: center;
+	}
+
+	.vertical :global(nav button) {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+	}
 </style>
