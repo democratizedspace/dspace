@@ -11,6 +11,8 @@
     export let messageMarkdown;
     export let className;
     export let timestamp;
+    export let avatarUrl = null;
+    export let avatarAlt = 'NPC avatar';
 
     let messageHtml;
     const md = new Remarkable({
@@ -79,26 +81,54 @@
     });
 </script>
 
-<div class={className}>
-    <div class="timestamp" title={format(new Date(timestamp), 'PPpp')}>
-        {formatRelative(new Date(timestamp), new Date())}
-    </div>
-    {@html messageHtml}
-    {#if toastVisible}
-        <div
-            class="toast"
-            role="status"
-            aria-live="polite"
-            transition:fade={{ delay: 2000, duration: 1000 }}
-        >
-            Copied to clipboard
-        </div>
+<div class={`message ${className}`}>
+    {#if avatarUrl && className === 'assistant'}
+        <img class="avatar" src={avatarUrl} alt={avatarAlt} />
     {/if}
+    <div class={`bubble ${className}`}>
+        <div class="timestamp" title={format(new Date(timestamp), 'PPpp')}>
+            {formatRelative(new Date(timestamp), new Date())}
+        </div>
+        {@html messageHtml}
+        {#if toastVisible}
+            <div
+                class="toast"
+                role="status"
+                aria-live="polite"
+                transition:fade={{ delay: 2000, duration: 1000 }}
+            >
+                Copied to clipboard
+            </div>
+        {/if}
+    </div>
 </div>
 
 <style>
-    .user,
-    .assistant {
+    .message {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .message.user {
+        justify-content: flex-end;
+    }
+
+    .message.assistant {
+        justify-content: flex-start;
+    }
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .bubble.user,
+    .bubble.assistant {
         padding: 10px;
         font-size: 16px;
         border-radius: 5px;
@@ -108,21 +138,19 @@
         color: white;
     }
 
-    .user {
-        align-self: flex-end;
+    .bubble.user {
         background-color: #007006;
     }
 
-    .assistant .timestamp {
+    .bubble.assistant .timestamp {
         color: #4d4d4d;
     }
 
-    .user .timestamp {
+    .bubble.user .timestamp {
         color: #f0f0f0;
     }
 
-    .assistant {
-        align-self: flex-start;
+    .bubble.assistant {
         background-color: #dddddd;
         color: black;
     }

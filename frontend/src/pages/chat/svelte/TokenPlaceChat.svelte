@@ -11,6 +11,7 @@
     let showSpinner = false;
     let welcomeMessage =
         "Hello, adventurer! I'm dChat! I'm here to answer any questions you may have about DSPACE or nearly any other topic. I may accidentally generate incorrect information, so please double-check anything I say.";
+    const assistantAvatar = '/assets/npc/dChat.jpg';
 
     function addMessage(msg) {
         messageHistory.update((history) => [...history, msg]);
@@ -89,6 +90,8 @@
                     messageMarkdown={message.content}
                     className={message.role}
                     timestamp={Date.now()}
+                    avatarUrl={message.role === 'assistant' ? assistantAvatar : null}
+                    avatarAlt="dChat avatar"
                 />
             {/each}
         {/if}

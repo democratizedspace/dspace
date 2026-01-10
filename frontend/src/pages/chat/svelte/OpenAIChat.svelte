@@ -125,7 +125,11 @@
             {/each}
         </select>
         {#if currentPersona?.avatar}
-            <img src={currentPersona.avatar} alt={`${currentPersona.name} portrait`} />
+            <img
+                class="persona-avatar"
+                src={currentPersona.avatar}
+                alt={`${currentPersona.name} portrait`}
+            />
         {/if}
         {#if personaSummary}
             <p class="persona-summary">{personaSummary}</p>
@@ -152,6 +156,8 @@
                     messageMarkdown={message.content}
                     className={message.role}
                     timestamp={Date.now()}
+                    avatarUrl={message.role === 'assistant' ? currentPersona?.avatar : null}
+                    avatarAlt={currentPersona ? `${currentPersona.name} avatar` : 'NPC avatar'}
                 />
             {/each}
         {/if}
@@ -191,9 +197,9 @@
         font-size: 1rem;
     }
 
-    .persona-selector img {
-        width: 100%;
-        height: 140px;
+    .persona-avatar {
+        width: 128px;
+        height: 128px;
         object-fit: cover;
         border-radius: 0.75rem;
     }
