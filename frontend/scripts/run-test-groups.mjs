@@ -47,6 +47,7 @@ const TEST_GROUPS = [
             'header-actions-placement.spec.ts',
             'cloud-sync.spec.ts',
             'cookie-consent.spec.ts',
+            'document-direction.spec.ts',
             'docs-navigation.spec.ts',
             'docs-changelog.spec.ts',
             'changelog-container.spec.ts',

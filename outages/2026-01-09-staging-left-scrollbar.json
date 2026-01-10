@@ -1,0 +1,12 @@
+{
+  "id": "2026-01-09-staging-left-scrollbar",
+  "date": "2026-01-09",
+  "component": "frontend/layout",
+  "rootCause": "PR #2738 refactored the Page layout without an explicit LTR guard on the document root, allowing an inherited RTL direction to shift the scrollbar to the left on staging.",
+  "resolution": "Force LTR direction on the document root and add Playwright coverage to assert the document stays LTR.",
+  "references": [
+    "frontend/src/layouts/Layout.astro",
+    "frontend/e2e/document-direction.spec.ts",
+    "frontend/scripts/run-test-groups.mjs"
+  ]
+}
