@@ -21,6 +21,7 @@
     const messageHistory = writable([]);
     let showSpinner = false;
     let hydrated = false;
+    let messageCounter = 0;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -29,9 +30,27 @@
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
     }
 
+    function getPersonaAvatar(persona) {
+        return persona?.avatar ?? null;
+    }
+
+    function getPersonaAlt(persona) {
+        return persona?.name ? `${persona.name} portrait` : 'NPC portrait';
+    }
+
+    function createMessageId() {
+        messageCounter += 1;
+        return `${Date.now()}-${messageCounter}`;
+    }
+
     function addMessage(msg) {
-        messageHistory.update((history) => [...history, msg]);
-        messages.update((all) => [...all, msg]);
+        const timestampedMessage = {
+            ...msg,
+            timestamp: msg.timestamp ?? Date.now(),
+            id: msg.id ?? createMessageId(),
+        };
+        messageHistory.update((history) => [...history, timestampedMessage]);
+        messages.update((all) => [...all, timestampedMessage]);
     }
 
     function addWelcomeMessage(persona = currentPersona) {
@@ -43,6 +62,9 @@
             role: 'assistant',
             content: welcomeText,
             tokens: countTokens(welcomeText),
+            avatarUrl: getPersonaAvatar(persona),
+            avatarAlt: getPersonaAlt(persona),
+            timestamp: Date.now(),
         };
         addMessage(welcome);
     }
@@ -52,19 +74,24 @@
             role: 'user',
             content: $message,
             tokens: countTokens($message),
+            timestamp: Date.now(),
         };
 
         addMessage(userMessage);
+        const historyForApi = [...$messageHistory];
         showSpinner = true;
 
         try {
-            const aiResponse = await GPT5Chat([...$messageHistory, userMessage], {
+            const aiResponse = await GPT5Chat(historyForApi, {
                 persona: currentPersona,
             });
             const aiMessage = {
                 role: 'assistant',
                 content: aiResponse,
                 tokens: countTokens(aiResponse),
+                avatarUrl: getPersonaAvatar(currentPersona),
+                avatarAlt: getPersonaAlt(currentPersona),
+                timestamp: Date.now(),
             };
 
             addMessage(aiMessage);
@@ -75,6 +102,9 @@
                 role: 'assistant',
                 content: fallback,
                 tokens: countTokens(fallback),
+                avatarUrl: getPersonaAvatar(currentPersona),
+                avatarAlt: getPersonaAlt(currentPersona),
+                timestamp: Date.now(),
             });
         }
 
@@ -124,11 +154,15 @@
                 <option value={persona.id}>{persona.name}</option>
             {/each}
         </select>
-        {#if currentPersona?.avatar}
-            <img src={currentPersona.avatar} alt={`${currentPersona.name} portrait`} />
-        {/if}
-        {#if personaSummary}
-            <p class="persona-summary">{personaSummary}</p>
+        {#if currentPersona?.avatar || personaSummary}
+            <div class="persona-details">
+                {#if currentPersona?.avatar}
+                    <img src={currentPersona.avatar} alt={getPersonaAlt(currentPersona)} />
+                {/if}
+                {#if personaSummary}
+                    <p class="persona-summary">{personaSummary}</p>
+                {/if}
+            </div>
         {/if}
     </div>
 
@@ -147,11 +181,13 @@
             <Spinner />
         </div>
         {#if $messageHistory.length}
-            {#each $messageHistory.slice().reverse() as message (message.content)}
+            {#each $messageHistory.slice().reverse() as message (message.id)}
                 <Message
                     messageMarkdown={message.content}
                     className={message.role}
-                    timestamp={Date.now()}
+                    timestamp={message.timestamp}
+                    avatarUrl={message.avatarUrl}
+                    avatarAlt={message.avatarAlt}
                 />
             {/each}
         {/if}
@@ -191,17 +227,27 @@
         font-size: 1rem;
     }
 
-    .persona-selector img {
+    .persona-details {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
         width: 100%;
-        height: 140px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .persona-details img {
+        width: min(128px, 40vw);
+        height: min(128px, 40vw);
         object-fit: cover;
         border-radius: 0.75rem;
+        flex-shrink: 0;
     }
 
     .persona-summary {
         margin: 0;
         font-size: 0.9rem;
-        text-align: center;
+        text-align: left;
         color: rgba(0, 0, 0, 0.8);
     }
 

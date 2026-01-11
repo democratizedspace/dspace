@@ -75,9 +75,9 @@
         </div>
 
         <p>
-            When you connect your API key, dChat includes a curated knowledge base covering quest
-            lore, items, and highlights from your local inventory so it can answer gameplay
-            questions right away.
+            When you connect your API key, the chat can tap a curated knowledge base of quest lore,
+            items, and highlights from your local inventory so NPCs can answer gameplay questions
+            and show their unique personalities right away.
         </p>
     </div>
 {/if}

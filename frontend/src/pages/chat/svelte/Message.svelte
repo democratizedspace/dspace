@@ -11,6 +11,8 @@
     export let messageMarkdown;
     export let className;
     export let timestamp;
+    export let avatarUrl = null;
+    export let avatarAlt = 'NPC portrait';
 
     let messageHtml;
     const md = new Remarkable({
@@ -77,52 +79,85 @@
             });
         };
     });
+
+    function applyAvatarRole(node) {
+        node.setAttribute('role', 'img');
+        return {
+            destroy() {
+                node.removeAttribute('role');
+            },
+        };
+    }
 </script>
 
-<div class={className}>
-    <div class="timestamp" title={format(new Date(timestamp), 'PPpp')}>
-        {formatRelative(new Date(timestamp), new Date())}
-    </div>
-    {@html messageHtml}
-    {#if toastVisible}
-        <div
-            class="toast"
-            role="status"
-            aria-live="polite"
-            transition:fade={{ delay: 2000, duration: 1000 }}
-        >
-            Copied to clipboard
-        </div>
+<div class="message-row">
+    {#if className === 'assistant' && avatarUrl}
+        <img class="avatar" src={avatarUrl} alt={avatarAlt} use:applyAvatarRole />
+    {:else}
+        <div class="avatar-spacer" aria-hidden="true"></div>
     {/if}
+    <div class={`message-bubble ${className}`}>
+        <div class="timestamp" title={format(new Date(timestamp), 'PPpp')}>
+            {formatRelative(new Date(timestamp), new Date())}
+        </div>
+        {@html messageHtml}
+        {#if toastVisible}
+            <div
+                class="toast"
+                role="status"
+                aria-live="polite"
+                transition:fade={{ delay: 2000, duration: 1000 }}
+            >
+                Copied to clipboard
+            </div>
+        {/if}
+    </div>
 </div>
 
 <style>
-    .user,
-    .assistant {
+    .message-row {
+        display: grid;
+        grid-template-columns: 32px minmax(0, 1fr);
+        align-items: start;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .message-bubble.user,
+    .message-bubble.assistant {
         padding: 10px;
         font-size: 16px;
         border-radius: 5px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
         margin-bottom: 10px;
-        max-width: 80%;
+        max-width: 100%;
+        min-width: 0;
         color: white;
     }
 
-    .user {
-        align-self: flex-end;
+    .message-bubble.user {
+        justify-self: end;
         background-color: #007006;
     }
 
-    .assistant .timestamp {
+    .message-bubble.assistant .timestamp {
         color: #4d4d4d;
     }
 
-    .user .timestamp {
+    .message-bubble.user .timestamp {
         color: #f0f0f0;
     }
 
-    .assistant {
-        align-self: flex-start;
+    .message-bubble.assistant {
+        justify-self: start;
         background-color: #dddddd;
         color: black;
     }
@@ -170,5 +205,10 @@
         padding: 10px 20px;
         border-radius: 5px;
         text-align: center;
+    }
+
+    .avatar-spacer {
+        width: 32px;
+        height: 32px;
     }
 </style>
