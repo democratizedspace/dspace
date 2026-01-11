@@ -1,0 +1,16 @@
+{
+  "id": "OUT-2026-01-08-v1-cookie-detection-missing",
+  "date": "2026-01-08",
+  "component": "frontend/settings legacy upgrades",
+  "rootCause": "The settings legacy upgrade card relied on SSR-only cookie parsing (Astro.cookies) and never refreshed the v1 item list from document.cookie, so the UI stayed in a 'no cookies' state even when v1 cookies were present client-side.",
+  "resolution": "Added a shared v1 cookie detection helper used by both the global legacy banner and settings UI, surfaced parsing failures to the user, and added regression tests for cookie parsing and the merge flow.",
+  "references": [
+    "outages/2026-01-08-v1-cookie-detection-missing.md",
+    "frontend/src/utils/legacySaveDetection.ts",
+    "frontend/src/components/svelte/LegacySaveUpgrade.svelte",
+    "frontend/src/utils/migrationCookies.js",
+    "frontend/__tests__/legacySaveDetection.test.ts",
+    "frontend/e2e/legacy-import.spec.ts"
+  ],
+  "longForm": "outages/2026-01-08-v1-cookie-detection-missing.md"
+}

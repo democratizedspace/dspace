@@ -141,6 +141,11 @@
                 "href": "/docs/schema-versioning",
                 "keywords": ["migrations"]
             },
+            {
+                "title": "Legacy save storage",
+                "href": "/docs/legacy-save-storage",
+                "keywords": ["legacy", "storage", "migration"]
+            },
             { "title": "UI lifecycle", "href": "/docs/ui-lifecycle", "keywords": ["frontend"] },
             {
                 "title": "Codex prompt library",

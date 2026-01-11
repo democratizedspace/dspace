@@ -1,4 +1,6 @@
-export const parseCookie = (cookie) => {
+import { detectV1CookieItems } from './legacySaveDetection';
+
+export const parseCookie = (cookie = '') => {
     try {
         return cookie.split(/[;] */).reduce(function (result, pairStr) {
             const arr = pairStr.split('=');
@@ -12,30 +14,19 @@ export const parseCookie = (cookie) => {
     }
 };
 
-const isLegacyItemCookie = (key, value) =>
-    /^item-\d+$/.test(key) && !Number.isNaN(parseFloat(value)) && parseFloat(value) > 0;
+const buildCookieString = (cookies = []) =>
+    cookies
+        .map(({ name, value }) => `${name}=${value}`)
+        .filter((entry) => entry !== '=')
+        .join('; ');
 
-export const getCookieItems = (cookie) => {
-    const parsedCookie = parseCookie(cookie);
-    return Object.keys(parsedCookie)
-        .filter((key) => isLegacyItemCookie(key, parsedCookie[key]))
-        .map((key) => {
-            return {
-                id: key.split('-')[1],
-                count: parseFloat(parsedCookie[key]),
-            };
-        });
-};
+export const getCookieItems = (cookie) => detectV1CookieItems(cookie).items;
 
 export const getCookieItemsFromStore = (cookieStore) => {
     try {
         const cookies = cookieStore?.getAll?.() ?? [];
-        return cookies
-            .filter(({ name, value }) => isLegacyItemCookie(name, value))
-            .map(({ name, value }) => ({
-                id: name.split('-')[1],
-                count: parseFloat(value),
-            }));
+        const cookieString = buildCookieString(cookies);
+        return detectV1CookieItems(cookieString).items;
     } catch (e) {
         console.warn('Failed to parse legacy cookies from Astro.cookies:', e);
         return [];
@@ -45,9 +36,8 @@ export const getCookieItemsFromStore = (cookieStore) => {
 export const getCookieKeysFromStore = (cookieStore) => {
     try {
         const cookies = cookieStore?.getAll?.() ?? [];
-        return cookies
-            .filter(({ name, value }) => isLegacyItemCookie(name, value))
-            .map(({ name }) => name);
+        const cookieString = buildCookieString(cookies);
+        return detectV1CookieItems(cookieString).cookieKeys;
     } catch (e) {
         console.warn('Failed to list cookies from Astro.cookies:', e);
         return [];

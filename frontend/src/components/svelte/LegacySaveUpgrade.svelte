@@ -42,12 +42,14 @@
             .map(({ id, count }) => ({ id, count: normalizeCount(count) }))
             .filter(({ id, count }) => id && count > 0);
 
-    let normalizedV1Items = filterLegacyItems(legacyV1Items);
+    let v1CookieItems = filterLegacyItems(legacyV1Items);
+    let v1CookieKeys = Array.isArray(legacyCookieKeys) ? legacyCookieKeys : [];
+    let v1CookieIssues = [];
     let detection = {
         loading: true,
         hasV3State: false,
         hasLegacyV2: false,
-        hasV1Cookies: normalizedV1Items.length > 0,
+        hasV1Cookies: v1CookieItems.length > 0,
         indexedDbSupported: false,
         usingFallback: false,
         conflict: false,
@@ -59,7 +61,18 @@
     let qaEnabled = false;
     $: showV2V3ConflictWarning = detection.hasLegacyV2 && detection.hasV3State;
 
-    $: normalizedV1Items = filterLegacyItems(legacyV1Items);
+    const v1IssueMessage = (issues) => {
+        if (!issues || issues.length === 0) return '';
+        const examples = issues
+            .slice(0, 2)
+            .map(({ name, value }) => `${name}=${value}`)
+            .join(', ');
+        const suffix = issues.length > 2 ? ` (+${issues.length - 2} more)` : '';
+        return (
+            `Detected legacy cookies, but ${issues.length} value(s) could not be parsed ` +
+            `(${examples}${suffix}). Clear the cookies or re-seed the sample v1 save.`
+        );
+    };
 
     const refreshStatus = async () => {
         detection = { ...detection, loading: true };
@@ -92,7 +105,10 @@
             (!indexedDbSupported && (localStorageState || legacyV2State));
 
         const artifacts = detectLegacyArtifacts();
-        const hasV1Artifacts = artifacts.hasV1Cookies || normalizedV1Items.length > 0;
+        v1CookieItems = filterLegacyItems(artifacts.v1CookieItems);
+        v1CookieKeys = Array.isArray(artifacts.v1CookieKeys) ? artifacts.v1CookieKeys : [];
+        v1CookieIssues = Array.isArray(artifacts.v1CookieIssues) ? artifacts.v1CookieIssues : [];
+        const hasV1Artifacts = artifacts.hasV1Cookies;
         const hasV3State = hasIndexedDbState || Boolean(usingFallback);
         const hasLegacyV2 =
             Boolean(pendingLocalState) ||
@@ -115,7 +131,7 @@
 
     const expireLegacyCookies = () => {
         if (typeof document === 'undefined') return true;
-        const cookies = legacyCookieKeys && legacyCookieKeys.length > 0 ? legacyCookieKeys : [];
+        const cookies = v1CookieKeys && v1CookieKeys.length > 0 ? v1CookieKeys : [];
         if (cookies.length === 0) return true;
 
         const candidatePaths = (() => {
@@ -181,12 +197,12 @@
     };
 
     const upgradeV1 = async (mode) => {
-        if (!normalizedV1Items.length) {
+        if (!v1CookieItems.length) {
             statusMessage = 'No v1 cookies detected on this device.';
             return;
         }
         await withStatus(mode === 'replace' ? 'replace-v1' : 'merge-v1', async () => {
-            await importV1V3(normalizedV1Items, { replaceExisting: mode === 'replace' });
+            await importV1V3(v1CookieItems, { replaceExisting: mode === 'replace' });
             const cleared = expireLegacyCookies();
             statusMessage =
                 mode === 'replace'
@@ -288,17 +304,22 @@
                 <div class="card-header">
                     <h3>V1 (cookie saves)</h3>
                     <p>
-                        {normalizedV1Items.length
-                            ? `${normalizedV1Items.length} item cookies detected`
-                            : 'No v1 cookies found'}
+                        {v1CookieItems.length
+                            ? `${v1CookieItems.length} item cookies detected`
+                            : v1CookieIssues.length
+                              ? `${v1CookieIssues.length} cookie values need attention`
+                              : 'No v1 cookies found'}
                     </p>
                 </div>
-                {#if normalizedV1Items.length}
+                {#if v1CookieItems.length}
                     {#if detection.hasV3State}
                         <p class="warning">
                             Current v3 data exists. Choose whether to merge v1 items into it or
                             replace it entirely.
                         </p>
+                    {/if}
+                    {#if v1CookieIssues.length}
+                        <p class="warning">{v1IssueMessage(v1CookieIssues)}</p>
                     {/if}
                     <div class="actions">
                         <Chip
@@ -317,6 +338,21 @@
                             hazard={true}
                             disabled={Boolean(workingAction)}
                         />
+                        <Chip
+                            text="Delete v1 cookies"
+                            onClick={() => {
+                                const cleared = expireLegacyCookies();
+                                statusMessage = cleared
+                                    ? 'Removed legacy v1 cookies.'
+                                    : 'Unable to confirm removal. Clear cookies manually.';
+                            }}
+                            inverted={true}
+                            disabled={Boolean(workingAction)}
+                        />
+                    </div>
+                {:else if v1CookieIssues.length}
+                    <p class="warning">{v1IssueMessage(v1CookieIssues)}</p>
+                    <div class="actions">
                         <Chip
                             text="Delete v1 cookies"
                             onClick={() => {
