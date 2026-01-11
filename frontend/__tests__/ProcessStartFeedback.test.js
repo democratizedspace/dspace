@@ -85,6 +85,7 @@ describe('Process start feedback', () => {
     });
 
     it('pulses missing requirement sections and queues a single rerun', async () => {
+        const timeoutSpy = vi.spyOn(global, 'setTimeout');
         const { getByTestId, queryByTestId } = render(Process, {
             props: { processId: 'test-process' },
         });
@@ -106,13 +107,29 @@ describe('Process start feedback', () => {
         );
 
         await fireEvent.click(startButton);
+        await fireEvent.click(startButton);
+        await fireEvent.click(startButton);
+        await fireEvent.click(startButton);
         await tick();
+
+        expect(timeoutSpy.mock.calls.filter((call) => call[1] === pulseDurationMs)).toHaveLength(
+            1
+        );
 
         vi.advanceTimersByTime(pulseDurationMs);
         await tick();
 
         expect(startAction.classList.contains('pulse')).toBe(true);
         expect(getByTestId('process-start-feedback')).toBeTruthy();
+        expect(timeoutSpy.mock.calls.filter((call) => call[1] === pulseDurationMs)).toHaveLength(
+            2
+        );
+
+        vi.advanceTimersByTime(pulseDurationMs);
+        await tick();
+
+        expect(startAction.classList.contains('pulse')).toBe(false);
+        expect(queryByTestId('process-start-feedback')).toBeNull();
 
         vi.advanceTimersByTime(pulseDurationMs);
         await tick();

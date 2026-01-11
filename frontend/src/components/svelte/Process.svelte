@@ -193,18 +193,21 @@
         scrollMissingIntoView(targets);
 
         pulseTimeoutId = setTimeout(() => {
-            isPulsing = false;
-            pulseTargets = { require: false, consume: false };
-            startFeedbackMessage = '';
-
             if (rerunQueued) {
                 rerunQueued = false;
                 const nextTargets = queuedPulseTargets ?? targets;
                 const nextMessage = queuedPulseMessage || message;
                 queuedPulseTargets = null;
                 queuedPulseMessage = '';
+                isPulsing = false;
+                pulseTargets = { require: false, consume: false };
                 beginPulse(nextTargets, nextMessage);
+                return;
             }
+
+            isPulsing = false;
+            pulseTargets = { require: false, consume: false };
+            startFeedbackMessage = '';
         }, pulseDurationMs);
     };
 
