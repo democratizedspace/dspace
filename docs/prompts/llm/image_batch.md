@@ -117,10 +117,8 @@ these fields:
   the end); do not vary casing or use other values.
 - `prompt`: the full two-paragraph prompt, as a single string with a literal `\n\n` between
   paragraphs.
-- `image_model`: `"Z-Image Turbo"` (unless explicitly told otherwise).
+- `image_model`: `"Nano Banana Pro"` (unless explicitly told otherwise).
 - `resolution`: `"512x512"`.
-- `steps`: `4`.
-- `cfg`: `1.0`.
 
 Example manifest structure (values are illustrative):
 ~~~json
@@ -131,10 +129,8 @@ Example manifest structure (values are illustrative):
   "item_id": "743681a7-d2e7-465c-af07-43665079bf4d",
   "entity_type": "item",
   "prompt": "A compact 500 W horizontal-axis wind turbine mounted on a sturdy freestanding tower, seen outdoors on a breezy overcast day. The nacelle and blades are clean and modern, with visible cabling running down the inside of the tower to a small weather-proof junction box at the base. Rolling hills and a few distant turbines appear in soft focus behind it, emphasizing that this is a small personal turbine, not a utility-scale wind farm.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future renewable-energy aesthetic: soft natural lighting, muted colors, realistic terrain and sky, no brand logos, no large text, no people in frame. The composition is clear and uncluttered, with the turbine centered or slightly off-center against a simple background so it reads well as a small icon.",
-  "image_model": "Z-Image Turbo",
-  "resolution": "512x512",
-  "steps": 4,
-  "cfg": 1.0
+  "image_model": "Nano Banana Pro",
+  "resolution": "512x512"
 }
 ~~~
 
@@ -191,7 +187,7 @@ Instruction Recap:
   near-future DSPACE visual style.
 - Fill manifest fields from the bullet line (entity path, title, UUID, entity type) and the
   generated prompt.
-- Use Z-Image Turbo, 512x512, steps=4, cfg=1.0 unless explicitly told otherwise.
+- Use Nano Banana Pro and 512x512 unless explicitly told otherwise.
 - Do not add commentary; only output the requested blocks in order.
 - Default to handling one pasted snippet per response; allow follow-up messages that refine
   or correct outputs for the current snippet without starting a new batch.
