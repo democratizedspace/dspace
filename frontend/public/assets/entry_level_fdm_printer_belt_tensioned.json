@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/entry_level_fdm_printer_belt_tensioned.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "entry-level FDM 3D printer (belt tensioned)",
+    "item_id": "448e9fbb-8464-4799-956d-cc465a4a8376",
+    "entity_type": "item",
+    "prompt": "An entry-level FDM 3D printer on a clean workbench with the gantry squared and the X- and Y-axis belts visibly aligned and evenly tensioned. A small tension gauge tool and hex keys rest nearby, and the belt path and idlers are clearly visible to communicate “belt tensioned and gantry re-squared” as a completed maintenance state.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk maker lab: soft cinematic lighting, realistic metal and plastic textures, no brand logos, no readable labels, and no on-image text. Keep the printer centered and uncluttered so it reads clearly as an inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

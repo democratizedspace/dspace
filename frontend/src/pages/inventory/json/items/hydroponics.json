@@ -22,7 +22,7 @@
         "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
         "name": "Beginner hydroponics tub",
         "description": "20 L (5 gal) plastic tub with lid, six 50 mm net pots and airline grommet for starter hydroponics.",
-        "image": "/assets/beginner_hydroponics_tub_6_net_pots.jpg",
+        "image": "/assets/beginner_hydroponics_tub_20L_6_net_pots.jpg",
         "price": "35 dUSD",
         "hardening": {
             "passes": 1,
@@ -132,7 +132,7 @@
         "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
         "name": "hydroponic pH reading",
         "description": "Latest pH strip reading for the nutrient reservoir, logged with sample notes.",
-        "image": "/assets/digital_ph_meter_pocket.jpg",
+        "image": "/assets/hydroponic_ph_strip_reading_sample.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
@@ -153,7 +153,7 @@
         "id": "86b5d874-a04e-426f-be77-0f7047789faf",
         "name": "ten-bucket water haul",
         "description": "Ten dechlorinated 5 gal buckets staged together for a big hydroponics push.",
-        "image": "/assets/5_gallon_hdpe_bucket.jpg",
+        "image": "/assets/ten_bucket_water_haul_dechlorinated_5gal.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
@@ -181,14 +181,14 @@
         "id": "6498967e-284e-46ff-bee7-10e3907f60fd",
         "name": "sanitized net cups",
         "description": "Net cups scrubbed and rinsed in peroxide solution to knock back algae and biofilm.",
-        "image": "/assets/beginner_hydroponics_tub_6_net_pots.jpg",
+        "image": "/assets/sanitized_hydroponic_net_cups.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
         "id": "d4a73557-e5a8-458a-80d9-6c1b46667428",
         "name": "dried net cups",
         "description": "Net cups fully air-dried after sanitizing, ready for fresh plugs and seedlings.",
-        "image": "/assets/beginner_hydroponics_tub_6_net_pots.jpg",
+        "image": "/assets/dried_hydroponic_net_cups.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
@@ -432,7 +432,7 @@
         "id": "6360b1e7-84d6-4256-b085-f36fc53ef299",
         "name": "digital pH meter",
         "description": "Pocket-sized meter measures pH 0–14 with ±0.1 accuracy; includes calibration solution.",
-        "image": "/assets/digital_ph_meter_pocket.jpg",
+        "image": "/assets/pocket_digital_ph_meter_calibration.jpg",
         "price": "15 dUSD",
         "hardening": {
             "passes": 1,

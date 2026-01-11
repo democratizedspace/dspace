@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/benchy_stringing_tuned_retraction_test.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "stringing-tuned Benchy",
+    "item_id": "141581bf-be69-4522-973b-3d22292a85fa",
+    "entity_type": "item",
+    "prompt": "A small 3D-printed calibration tugboat (“Benchy”) sitting on a clean workbench, shown close-up so the hull, cabin windows, and smokestack edges look crisp and well-defined. The model should visibly demonstrate successful retraction tuning: almost no wispy strands between details, clean overhangs, and sharp corners, with a subtle matte PLA texture. Include a few out-of-focus calibration scraps nearby (tiny stringing samples or purge bits) to hint at iterative tuning without clutter.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future solarpunk workshop vibe: tidy maker bench, soft cinematic lighting, muted realistic colors, no brand logos, no large text, no UI labels. If any person is implied, show only gloved hands in the periphery; avoid identifiable faces. Keep the composition uncluttered so the tugboat reads clearly as an inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

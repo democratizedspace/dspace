@@ -60,7 +60,7 @@
         "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
         "name": "goldfish food",
         "description": "1 g of balanced goldfish flakes; feed about 0.1 g per fish daily.",
-        "image": "/assets/goldfish_food.jpg",
+        "image": "/assets/goldfish_flake_food_1g.jpg",
         "price": "0.07 dUSD",
         "unit": "g",
         "hardening": {
@@ -223,7 +223,7 @@
         "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
         "name": "Walstad aquarium with thermometer (80 L)",
         "description": "An 80 L Walstad tank with a strip thermometer attached on the outside glass for quick checks.",
-        "image": "/assets/aquarium_thermometer.jpg",
+        "image": "/assets/walstad_aquarium_strip_thermometer_80L.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -397,7 +397,7 @@
         "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
         "name": "Aquarium liquid test kit",
         "description": "Liquid reagent kit for aquariums. Four 15 mL bottles and test tubes provide ~130 tests for ammonia, nitrite and nitrate.",
-        "image": "/assets/aquarium_liquid_test_kit.jpg",
+        "image": "/assets/aquarium_liquid_reagent_test_kit.jpg",
         "price": "25 dUSD",
         "hardening": {
             "passes": 1,
@@ -479,7 +479,7 @@
         "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
         "name": "Rinsed guppy grass",
         "description": "Guppy grass swished in dechlorinated water to shake off algae, snails, and eggs before placing.",
-        "image": "/assets/guppy_grass_starter.jpg",
+        "image": "/assets/rinsed_guppy_grass_dechlorinated_water.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -531,7 +531,7 @@
         "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
         "name": "Liquid test readings",
         "description": "Fresh ammonia, nitrite, nitrate, and pH values gathered with a liquid kit and clean vials.",
-        "image": "/assets/aquarium_liquid_test_kit.jpg",
+        "image": "/assets/aquarium_liquid_test_readings_vials.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -557,7 +557,7 @@
         "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
         "name": "Aquarium temperature reading",
         "description": "Most recent strip thermometer reading recorded after the glass dried and stabilized.",
-        "image": "/assets/aquarium_thermometer.jpg",
+        "image": "/assets/aquarium_temperature_strip_reading.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -596,7 +596,7 @@
         "id": "eb0f7f00-98dc-44b0-bf7c-9c8d998cbbcb",
         "name": "Fry food pinch",
         "description": "Crushed flake powder sized for guppy fry; enough for a week of tiny feedings.",
-        "image": "/assets/goldfish_food.jpg",
+        "image": "/assets/fry_food_crushed_flake_pinch.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -609,7 +609,7 @@
         "id": "18a20f4e-a351-448e-837b-3caca90f71f4",
         "name": "Juvenile guppy brood",
         "description": "Home-bred guppy juveniles past the fry stage and ready to rehome or trade.",
-        "image": "/assets/guppy_group_breeding.jpg",
+        "image": "/assets/juvenile_guppy_brood_ready_to_rehome.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/polar_aligned_camera_star_trails_rig.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "polar-aligned camera rig",
+    "item_id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
+    "entity_type": "item",
+    "prompt": "A polar-aligned camera rig at night: a leveled tripod supporting a camera pointed toward the north star region, with a compact wedge or alignment head and a small bubble level visible. The camera is framed to suggest long-exposure star trails work—subtle arcs of stars in the sky—while the camera body and tripod remain the clear foreground subject. Any indicator lights are small and unobtrusive, and no screens show readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future solarpunk astronomy aesthetic: soft nocturnal lighting, realistic metal and plastic textures, no logos, no readable labels, and no on-image text. Composition is clean and icon-friendly, with the tripod and camera prominent and the sky softly blurred behind.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/walstad_aquarium_strip_thermometer_80L.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Walstad aquarium with thermometer (80 L)",
+    "item_id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+    "entity_type": "item",
+    "prompt": "A lush 80 L Walstad-style planted aquarium seen at a slight angle, with a simple adhesive strip thermometer attached to the outside of the front glass. The tank shows dense aquatic plants, natural substrate, and gentle surface movement; the thermometer strip is clearly visible as a small vertical panel on the glass without any readable numbers. The overall scene communicates quick temperature checks as part of routine aquarium care.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk home-lab aesthetic: soft cinematic lighting, clean glass highlights, no logos, no readable text, and no identifiable faces. Keep the composition clean and icon-friendly, with the thermometer strip and tank both easy to recognize.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
