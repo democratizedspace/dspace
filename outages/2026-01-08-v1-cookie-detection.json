@@ -1,0 +1,15 @@
+{
+  "id": "OUT-2026-01-08-v1-cookie-detection",
+  "date": "2026-01-08",
+  "component": "frontend/settings-legacy-upgrade",
+  "longForm": "outages/2026-01-08-v1-cookie-detection.md",
+  "rootCause": "The Settings legacy upgrade card parsed v1 cookies only from SSR `Astro.cookies` data via `migrationCookies.js` and never refreshed from `document.cookie` on the client. The global banner used a separate client-side detector, so cookies created in the browser were detected in the banner but ignored in Settings.",
+  "resolution": "Introduced a shared v1 cookie detection helper, refreshed Settings detection client-side, surfaced parse warnings, and added unit + Playwright coverage to validate v1 cookie detection and merge behavior.",
+  "references": [
+    "frontend/src/utils/legacySaveDetection.ts",
+    "frontend/src/utils/migrationCookies.js",
+    "frontend/src/components/svelte/LegacySaveUpgrade.svelte",
+    "frontend/e2e/legacy-v1-upgrade.spec.ts",
+    "outages/2026-01-08-v1-cookie-detection.md"
+  ]
+}

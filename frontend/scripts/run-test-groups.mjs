@@ -61,6 +61,7 @@ const TEST_GROUPS = [
             'mobile-process-form.spec.ts',
             'leaderboard.spec.ts',
             'settings-page.spec.ts',
+            'legacy-v1-upgrade.spec.ts',
         ],
         parallel: true,
         workers: MAX_WORKERS,

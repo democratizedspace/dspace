@@ -143,6 +143,11 @@
             },
             { "title": "UI lifecycle", "href": "/docs/ui-lifecycle", "keywords": ["frontend"] },
             {
+                "title": "Legacy save storage & migrations",
+                "href": "/docs/legacy-save-storage",
+                "keywords": ["saves", "migration", "storage"]
+            },
+            {
                 "title": "Codex prompt library",
                 "href": "/docs/prompts-codex",
                 "keywords": ["prompts", "automation"]

@@ -1,3 +1,5 @@
+import { detectV1CookieItems, detectV1CookieItemsFromEntries } from './legacySaveDetection';
+
 export const parseCookie = (cookie) => {
     try {
         return cookie.split(/[;] */).reduce(function (result, pairStr) {
@@ -12,30 +14,14 @@ export const parseCookie = (cookie) => {
     }
 };
 
-const isLegacyItemCookie = (key, value) =>
-    /^item-\d+$/.test(key) && !Number.isNaN(parseFloat(value)) && parseFloat(value) > 0;
-
 export const getCookieItems = (cookie) => {
-    const parsedCookie = parseCookie(cookie);
-    return Object.keys(parsedCookie)
-        .filter((key) => isLegacyItemCookie(key, parsedCookie[key]))
-        .map((key) => {
-            return {
-                id: key.split('-')[1],
-                count: parseFloat(parsedCookie[key]),
-            };
-        });
+    return detectV1CookieItems(cookie).items;
 };
 
 export const getCookieItemsFromStore = (cookieStore) => {
     try {
         const cookies = cookieStore?.getAll?.() ?? [];
-        return cookies
-            .filter(({ name, value }) => isLegacyItemCookie(name, value))
-            .map(({ name, value }) => ({
-                id: name.split('-')[1],
-                count: parseFloat(value),
-            }));
+        return detectV1CookieItemsFromEntries(cookies).items;
     } catch (e) {
         console.warn('Failed to parse legacy cookies from Astro.cookies:', e);
         return [];
@@ -45,9 +31,7 @@ export const getCookieItemsFromStore = (cookieStore) => {
 export const getCookieKeysFromStore = (cookieStore) => {
     try {
         const cookies = cookieStore?.getAll?.() ?? [];
-        return cookies
-            .filter(({ name, value }) => isLegacyItemCookie(name, value))
-            .map(({ name }) => name);
+        return detectV1CookieItemsFromEntries(cookies).cookieKeys;
     } catch (e) {
         console.warn('Failed to list cookies from Astro.cookies:', e);
         return [];
