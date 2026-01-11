@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import { readFileSync } from 'node:fs';
 import { render, screen } from '@testing-library/svelte';
 import { describe, expect, it } from 'vitest';
 import Message from '../Message.svelte';
@@ -21,15 +22,12 @@ describe('Message', () => {
         const messageBody = messageElement.closest('.message-body');
         expect(messageBody).not.toBeNull();
 
-        const styleTag = Array.from(document.querySelectorAll('style')).find((style) =>
-            style.textContent?.includes('.message-body')
-        );
+        const messageSource = readFileSync(new URL('../Message.svelte', import.meta.url), 'utf8');
+        const messageBodyStyles = messageSource.match(/\.message-body\s*{[^}]*}/s);
 
-        expect(styleTag).toBeDefined();
-
-        const styleText = styleTag?.textContent ?? '';
-        expect(styleText).toMatch(/overflow-wrap:\s*anywhere/);
-        expect(styleText).toMatch(/word-break:\s*break-word/);
-        expect(styleText).toMatch(/white-space:\s*pre-wrap/);
+        expect(messageBodyStyles).toBeDefined();
+        expect(messageBodyStyles?.[0]).toMatch(/overflow-wrap:\s*anywhere/);
+        expect(messageBodyStyles?.[0]).toMatch(/word-break:\s*break-word/);
+        expect(messageBodyStyles?.[0]).toMatch(/white-space:\s*pre-wrap/);
     });
 });

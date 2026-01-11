@@ -143,7 +143,7 @@
     </div>
 
     <div class="chat-container">
-        <div class="spinner-container" style="display: {showSpinner ? 'flex' : 'none'}">
+        <div class="spinner-container" style={`display: ${showSpinner ? 'flex' : 'none'}`}>
             <Spinner />
         </div>
         {#if $messageHistory.length}
