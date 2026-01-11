@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/ten_bucket_water_haul_dechlorinated_5gal.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "ten-bucket water haul",
+    "item_id": "86b5d874-a04e-426f-be77-0f7047789faf",
+    "entity_type": "item",
+    "prompt": "Ten sturdy 5-gallon HDPE buckets filled with water, staged together in a neat cluster on a garage or greenhouse floor for a large hydroponics water haul. The buckets should have metal handles, faint water surface reflections, and subtle differences in fill level; include a small measuring pitcher or dropper bottle nearby to imply dechlorination without showing any readable labels. The arrangement should clearly communicate “bulk prep” and scale—many buckets ready at once.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future solarpunk utility vibe: clean but practical space, soft cinematic lighting, realistic plastics and moisture highlights, no logos, no readable text, no overlays. Keep the scene uncluttered and compositionally clear so the group of buckets reads well as an inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

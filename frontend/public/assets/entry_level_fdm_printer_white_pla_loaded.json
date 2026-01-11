@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/entry_level_fdm_printer_white_pla_loaded.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "entry-level FDM 3D printer (white PLA loaded)",
+    "item_id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
+    "entity_type": "item",
+    "prompt": "An entry-level FDM 3D printer on a workbench with a spool of white PLA loaded and threaded through the extruder into the hotend. Show clear filament routing through a bowden tube or direct-drive path (either is fine), a clean extruder assembly with tension arm, and a fresh purge line or small blob of white filament on the corner of the build plate to imply the printer was just purged. The scene should feel like a practical maintenance moment after swapping spools: tidy tools nearby and the printer ready to start a job.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future workshop aesthetic: soft cinematic lighting, realistic plastics and metals, no brands, no readable text, no UI overlays. Keep the printer prominent and the background minimal so it reads clearly as an inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

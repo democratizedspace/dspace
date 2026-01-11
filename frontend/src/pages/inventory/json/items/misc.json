@@ -330,7 +330,7 @@
         "id": "9605048d-ea62-4b70-9bbc-ea1ad4baaf3e",
         "name": "3D printing kit",
         "description": "Assembled FDM printer, 0.4 mm nozzle, 180×180×180 mm build with 500 g PLA.",
-        "image": "/assets/3d_printing_kit_entry_level_printer_and_pla.jpg",
+        "image": "/assets/3d_printing_starter_kit_fdm_printer_04mm_nozzle_pla.jpg",
         "price": "220 dUSD",
         "type": "tool",
         "hardening": {
@@ -351,7 +351,7 @@
         "id": "0564d441-7367-412e-b709-dad770814a39",
         "name": "5 gallon bucket",
         "description": "19 L (5 gal) high-density polyethylene bucket with metal handle for carrying liquids.",
-        "image": "/assets/5_gallon_hdpe_bucket.jpg",
+        "image": "/assets/hdpe_bucket_5_gallon_metal_handle.jpg",
         "price": "8 dUSD",
         "hardening": {
             "passes": 1,
@@ -1323,7 +1323,7 @@
         "id": "3326e89c-5883-473d-a68f-3ea560093966",
         "name": "3D printed generator housing",
         "description": "PLA housing that holds the motor and crank.",
-        "image": "/assets/3d_printed_generator_housing_pla.jpg",
+        "image": "/assets/generator_housing_pla_motor_crank_shell.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "3D Printing & Fabrication"
     },
@@ -1347,7 +1347,7 @@
         "id": "afb2b5a3-60e2-4863-b2db-e4d280145128",
         "name": "hand crank generator assembly",
         "description": "Printed housing, crank handle, fused DC lead, and a 12 V motor bolted together and ready to charge packs.",
-        "image": "/assets/3d_printed_generator_housing_pla.jpg",
+        "image": "/assets/hand_crank_generator_assembly_12v_motor_dc_lead.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Energy & Power"
     },

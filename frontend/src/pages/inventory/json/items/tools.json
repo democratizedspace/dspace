@@ -56,7 +56,7 @@
         "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
         "name": "entry-level FDM 3D printer (green PLA loaded)",
         "description": "Printer with green PLA purged through the hotend and gears tensioned after a filament swap.",
-        "image": "/assets/3d_printing_kit_entry_level_printer_and_pla.jpg",
+        "image": "/assets/entry_level_fdm_printer_green_pla_loaded.jpg",
         "price": "230 dUSD",
         "type": "tool",
         "hardening": {
@@ -70,7 +70,7 @@
         "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
         "name": "entry-level FDM 3D printer (white PLA loaded)",
         "description": "Printer purged with white PLA and the extruder tension reset after swapping spools.",
-        "image": "/assets/3d_printing_kit_entry_level_printer_and_pla.jpg",
+        "image": "/assets/entry_level_fdm_printer_white_pla_loaded.jpg",
         "price": "230 dUSD",
         "type": "tool",
         "hardening": {
@@ -126,7 +126,7 @@
         "id": "141581bf-be69-4522-973b-3d22292a85fa",
         "name": "stringing-tuned Benchy",
         "description": "A Benchy printed after retraction tuning; hull and cabin show crisp edges with minimal stringing.",
-        "image": "/assets/3d_printed_benchy_calibration_model.jpg",
+        "image": "/assets/benchy_stringing_tuned_retraction_test.jpg",
         "price": "0.35 dUSD",
         "type": "tool",
         "hardening": {
@@ -168,7 +168,7 @@
         "id": "7892ffc6-c651-445f-946b-7edc998cf389",
         "name": "Benchy",
         "description": "60 mm long calibration tugboat 3D printed in PLA; weighs about 15 g and uses about 5 m of filament.",
-        "image": "/assets/3d_printed_benchy_calibration_model.jpg",
+        "image": "/assets/benchy_calibration_tugboat_60mm_pla.jpg",
         "price": "0.30 dUSD",
         "type": "tool",
         "hardening": {
