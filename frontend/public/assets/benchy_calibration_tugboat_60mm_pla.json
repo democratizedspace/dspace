@@ -7,5 +7,4 @@
     "prompt": "A classic 3D-printed “Benchy” calibration tugboat, about 60 mm long, resting on a cutting mat beside a small coil of filament and a few tiny support/purge pieces. The model should look like a typical calibration print: smooth hull curves, visible but fine layer lines, clean cabin roof, and a solid, uniform PLA finish. Include a subtle sense of scale (e.g., a caliper jaw partially in frame or a small ruler edge without readable markings) to convey the compact size without adding text.\n\nUltra-detailed, photorealistic 512×512 image in a clean near-future maker-lab setting: soft cinematic lighting, realistic materials, no logos, no readable text, no big overlays. Keep the background minimal and slightly blurred so the Benchy remains the clear focal subject and works well as a small icon.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}

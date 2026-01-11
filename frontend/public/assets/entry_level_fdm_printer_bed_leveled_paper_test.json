@@ -7,5 +7,4 @@
     "prompt": "An entry-level FDM 3D printer with the build plate in focus and a plain sheet of paper partially slid between the nozzle and the bed to indicate cold bed leveling. A hand (no face visible) gently adjusts a leveling knob under the bed, and the nozzle is positioned just above the paper, clearly conveying the “paper drag” method and readiness for a first-layer check.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future solarpunk workshop aesthetic: soft cinematic lighting, realistic textures, no logos, no readable screens, and no on-image text. Keep the bed-leveling action centered and easy to parse as an icon.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}

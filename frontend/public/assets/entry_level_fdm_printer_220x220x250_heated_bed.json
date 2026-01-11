@@ -7,5 +7,4 @@
     "prompt": "A clear, full view of an entry-level FDM 3D printer on a tidy bench: open-frame design, a flat heated build plate, and a standard extruder/hotend assembly positioned near the center. The printer is powered on with subtle indicator lights, but any UI screen content is abstracted and unreadable. A small spool holder and filament guide are present to communicate typical functionality without any branding.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk maker lab: soft cinematic lighting, realistic plastic/metal textures, no logos, no readable text, and minimal clutter. Keep the printer centered and unmistakable as an inventory icon.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}

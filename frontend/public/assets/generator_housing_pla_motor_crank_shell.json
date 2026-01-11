@@ -7,5 +7,4 @@
     "prompt": "A 3D-printed PLA generator housing designed to hold a small DC motor and a hand-crank mechanism, shown as a standalone part on a workbench. The housing should have clear functional geometry: mounting bosses, screw holes, a motor cradle, and a channel/exit for wires, with visible layer lines and a clean printed finish. Include a few nearby fasteners (nuts/bolts) and a detached shaft coupler or bushing to make it obvious this is a mechanical enclosure for a crank generator.\n\nUltra-detailed, photorealistic 512×512 image in a tidy near-future solarpunk workshop: soft cinematic lighting, realistic plastics and metal, no brands, no readable text, no UI overlays. Keep the composition simple and centered so the housing reads clearly as an inventory object.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}

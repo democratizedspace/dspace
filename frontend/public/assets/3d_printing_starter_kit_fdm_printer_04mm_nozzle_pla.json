@@ -7,5 +7,4 @@
     "prompt": "A complete entry-level 3D printing kit laid out neatly: a compact FDM 3D printer fully assembled with a 0.4 mm nozzle installed, a small spool of PLA (about 500 g) beside it, and a few basic accessories like an Allen key, scraper, and spare nozzle in a small tray. The printer should show a modest build volume vibe (roughly 180×180×180 mm), with a clean build plate and simple cable management. Include a small printed test cube or calibration strip nearby to make it unmistakably “ready to print.”\n\nUltra-detailed, photorealistic 512×512 image in a bright, clean near-future maker workspace: soft cinematic lighting, realistic materials, no brand logos, no readable labels, no text overlays. Keep the composition clear and balanced so the printer and spool read well as a single inventory icon.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}

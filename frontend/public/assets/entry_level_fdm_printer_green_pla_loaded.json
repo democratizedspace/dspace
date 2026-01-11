@@ -7,5 +7,4 @@
     "prompt": "An entry-level FDM 3D printer on a clean bench with a spool of green PLA loaded, showing the filament purged through the hotend and feeding smoothly. Include a small purge strip or short coil of green filament on the build plate edge, and make the extruder gears/tensioner area visible to suggest the drive gears were recently tensioned after a filament swap. The printer should look operational and ready: neatly routed cables, level build plate, and a simple calibration print in the background out of focus.\n\nUltra-detailed, photorealistic 512×512 image in a near-future solarpunk maker space: soft cinematic lighting, realistic materials, no brand logos, no readable text, no overlays. Keep the composition uncluttered and icon-friendly with the printer as the clear focal point.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}

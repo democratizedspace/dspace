@@ -7,5 +7,4 @@
     "prompt": "A compact hand-crank generator assembly on a workbench: a 3D-printed housing with a crank handle attached, a small 12 V DC motor bolted into place, and a fused DC lead exiting the housing. Show visible bolts and washers securing the motor, a sturdy crank arm with a comfortable grip, and insulated wiring with an inline fuse holder—everything looking “ready to charge packs” without showing any branded devices. The assembly should look practical and rugged, with realistic printed plastic texture and clean cable routing.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future renewable-hobbyist aesthetic: clean bench, soft cinematic lighting, muted realistic colors, no logos, no readable text, no overlays. If hands appear, keep them partial and non-identifiable; no unsafe behavior. Frame the device clearly so it reads instantly as a crank generator in icon form.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}
