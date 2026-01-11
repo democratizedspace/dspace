@@ -235,7 +235,7 @@
         "id": "82577af7-6724-4cb2-8922-f7140e550145",
         "name": "smartphone",
         "description": "150 g smartphone, 6 in (15 cm) LCD, 128 GB flash, 4 GB RAM; 3000 mAh battery via USB-C (5 V, 15 W).",
-        "image": "/assets/changelog/20230630/smartphone.jpg",
+        "image": "/assets/smartphone_6in_usbc_3000mah.jpg",
         "price": "200 dUSD",
         "hardening": {
             "passes": 2,
@@ -2281,7 +2281,7 @@
         "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
         "name": "weekly quest reminder",
         "description": "Calendar reminder pointing to the quest board each week with your chosen day and time.",
-        "image": "/assets/changelog/20230630/smartphone.jpg",
+        "image": "/assets/weekly_quest_reminder_calendar_phone.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },

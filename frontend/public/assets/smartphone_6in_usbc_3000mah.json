@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/smartphone_6in_usbc_3000mah.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "smartphone",
+    "item_id": "82577af7-6724-4cb2-8922-f7140e550145",
+    "entity_type": "item",
+    "prompt": "A compact modern smartphone lying on a clean workbench next to a USB-C cable, shown from a three-quarter angle so the slim profile and 6-inch screen are clear. The screen is on but displays only abstract, non-text shapes and soft gradients (no readable UI), emphasizing the device as a general-purpose tool with a rechargeable battery and modern port.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future solarpunk gadget aesthetic: soft studio lighting, realistic glass and metal reflections, no logos, no readable text, and a simple uncluttered background. Center the phone so it reads instantly as an inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

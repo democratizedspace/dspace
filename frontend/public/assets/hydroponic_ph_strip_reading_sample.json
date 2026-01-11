@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/hydroponic_ph_strip_reading_sample.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "hydroponic pH reading",
+    "item_id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+    "entity_type": "item",
+    "prompt": "A hydroponic nutrient reservoir test moment captured on a clean bench: a pH test strip held with tweezers above a small sample cup, showing a distinct color change on the strip pads. Next to it sits a simple note card with abstract, unreadable scribbles and a capped dropper pipette, clearly communicating “latest reading recorded with sample notes” without relying on readable text.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk lab aesthetic: soft, diffused lighting, clean plastics and glass, no logos, no readable labels, and no on-image text. Keep the strip and sample cup centered and unmistakable for icon clarity.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

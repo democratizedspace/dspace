@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/completionist_award_ii_pla_core_print.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "Completionist Award II core",
+    "item_id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
+    "entity_type": "item",
+    "prompt": "A freshly 3D-printed PLA trophy core sitting on a cutting mat, matte and slightly textured with visible layer lines, ready for sanding. Nearby are fine-grit sandpaper sheets, a small deburring tool, and a clean press-fit slot or recess where a nameplate will seat, making it unambiguous this is the unfinished “core” of a collectible award.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk maker workshop: soft cinematic lighting, clean bench organization, no logos, no readable text, and no identifiable faces. Keep the trophy core centered and well-lit so it reads clearly as an inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/completionist_award_ii_polished_finish.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "Completionist Award II (polished)",
+    "item_id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
+    "entity_type": "item",
+    "prompt": "A finished, polished PLA trophy sitting on a clean microfiber cloth, with a soft sheen and smudge-free surfaces, as if just wiped down for photos. A pair of nitrile-gloved hands (no face visible) lightly adjusts the trophy’s angle, emphasizing dust-and-fingerprint removal and a ready-to-display finish.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future solarpunk studio aesthetic: soft cinematic lighting, subtle back glow, no logos, no readable text, and minimal clutter. Compose the trophy prominently and clearly so it reads well as an inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/completionist_award_ii_displayed_backlit_shelf.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "Completionist Award II (displayed)",
+    "item_id": "a8120ce3-4a9d-4d49-b955-92bd9d7fbc07",
+    "entity_type": "item",
+    "prompt": "The Completionist Award II trophy staged on a clean, dusted shelf with soft backlighting, creating a gentle halo behind the silhouette. A small inspection setup is implied by a discreet light bar and a simple camera tripod in the distant blur, suggesting the display photos and lighting are logged for future checks, without any readable labels.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future solarpunk interior aesthetic: warm, soft cinematic lighting, clean surfaces, no logos, no readable text, and no identifiable faces. Keep the award centered and sharply in focus so it reads instantly as an inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

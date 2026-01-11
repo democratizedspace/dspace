@@ -132,7 +132,7 @@
         "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
         "name": "hydroponic pH reading",
         "description": "Latest pH strip reading for the nutrient reservoir, logged with sample notes.",
-        "image": "/assets/digital_ph_meter_pocket.jpg",
+        "image": "/assets/hydroponic_ph_strip_reading_sample.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
@@ -432,7 +432,7 @@
         "id": "6360b1e7-84d6-4256-b085-f36fc53ef299",
         "name": "digital pH meter",
         "description": "Pocket-sized meter measures pH 0–14 with ±0.1 accuracy; includes calibration solution.",
-        "image": "/assets/digital_ph_meter_pocket.jpg",
+        "image": "/assets/pocket_digital_ph_meter_calibration.jpg",
         "price": "15 dUSD",
         "hardening": {
             "passes": 1,
