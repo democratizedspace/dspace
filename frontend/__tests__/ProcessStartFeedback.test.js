@@ -8,6 +8,7 @@ import Process from '../src/components/svelte/Process.svelte';
 import { startProcess } from '../src/utils/gameState/processes.js';
 
 let mockCounts = {};
+const pulseDurationMs = 1050;
 
 vi.mock('../src/generated/processes.json', () => ({
     default: [
@@ -19,6 +20,22 @@ vi.mock('../src/generated/processes.json', () => ({
             consumeItems: [{ id: 'cons-item', count: 1 }],
             createItems: [],
         },
+        {
+            id: 'shared-process',
+            title: 'Shared Process',
+            duration: '1h',
+            requireItems: [{ id: 'shared-item', count: 2 }],
+            consumeItems: [{ id: 'shared-item', count: 2 }],
+            createItems: [],
+        },
+    ],
+}));
+
+vi.mock('../src/pages/inventory/json/items', () => ({
+    default: [
+        { id: 'req-item', name: 'Required Item' },
+        { id: 'cons-item', name: 'Consumed Item' },
+        { id: 'shared-item', name: 'Shared Item' },
     ],
 }));
 
@@ -55,6 +72,7 @@ describe('Process start feedback', () => {
 
     beforeEach(() => {
         vi.useFakeTimers();
+        vi.clearAllMocks();
         mockCounts = { 'req-item': 0, 'cons-item': 0 };
         originalScrollIntoView = Element.prototype.scrollIntoView;
         Element.prototype.scrollIntoView = vi.fn();
@@ -90,16 +108,78 @@ describe('Process start feedback', () => {
         await fireEvent.click(startButton);
         await tick();
 
-        vi.advanceTimersByTime(1000);
+        vi.advanceTimersByTime(pulseDurationMs);
         await tick();
 
         expect(startAction.classList.contains('pulse')).toBe(true);
         expect(getByTestId('process-start-feedback')).toBeTruthy();
 
-        vi.advanceTimersByTime(1000);
+        vi.advanceTimersByTime(pulseDurationMs);
         await tick();
 
         expect(startAction.classList.contains('pulse')).toBe(false);
         expect(queryByTestId('process-start-feedback')).toBeNull();
+    });
+
+    it('starts the process when requirements are met', async () => {
+        mockCounts = { 'req-item': 2, 'cons-item': 1 };
+
+        const { getByTestId } = render(Process, {
+            props: { processId: 'test-process' },
+        });
+
+        await fireEvent.click(getByTestId('process-start-button'));
+        await tick();
+
+        expect(startProcess).toHaveBeenCalledWith('test-process');
+    });
+
+    it('pulses only the required section when consume items are satisfied', async () => {
+        mockCounts = { 'req-item': 1, 'cons-item': 1 };
+
+        const { getByTestId } = render(Process, {
+            props: { processId: 'test-process' },
+        });
+
+        await fireEvent.click(getByTestId('process-start-button'));
+        await tick();
+
+        expect(getByTestId('process-requires').classList.contains('pulse')).toBe(true);
+        expect(getByTestId('process-consumes').classList.contains('pulse')).toBe(false);
+        expect(getByTestId('process-start-feedback').textContent).toContain('Required Item');
+    });
+
+    it('scrolls missing requirements into view when offscreen', async () => {
+        const { getByTestId } = render(Process, {
+            props: { processId: 'test-process' },
+        });
+
+        const requires = getByTestId('process-requires');
+        requires.getBoundingClientRect = () => ({
+            top: -20,
+            left: 0,
+            bottom: -10,
+            right: 0,
+        });
+
+        await fireEvent.click(getByTestId('process-start-button'));
+        await tick();
+
+        expect(Element.prototype.scrollIntoView).toHaveBeenCalled();
+    });
+
+    it('does not double-count shared items across required and consumed lists', async () => {
+        mockCounts = { 'shared-item': 1 };
+
+        const { getByTestId } = render(Process, {
+            props: { processId: 'shared-process' },
+        });
+
+        await fireEvent.click(getByTestId('process-start-button'));
+        await tick();
+
+        expect(getByTestId('process-start-feedback').textContent).toContain(
+            'Shared Item (1)'
+        );
     });
 });

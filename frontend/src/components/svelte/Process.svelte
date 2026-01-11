@@ -45,8 +45,11 @@
     let requiresContainer;
     let consumesContainer;
 
-    const pulseDurationMs = 1000;
+    // Slightly longer than the 1s CSS animation to avoid timing races.
+    const pulseDurationMs = 1050;
+    const updateIntervalMs = 100;
 
+    // Collect item deficits for a specific requirement list.
     const getMissingEntries = (items) => {
         if (!Array.isArray(items) || items.length === 0) {
             return [];
@@ -54,17 +57,22 @@
 
         const counts = getItemCounts(items);
         return items.reduce((missing, item) => {
+            const itemId =
+                typeof item?.id === 'string' && item.id.trim().length > 0 ? item.id : null;
+            if (!itemId) {
+                return missing;
+            }
             const required = Number(item?.count ?? 0);
             if (!Number.isFinite(required) || required <= 0) {
                 return missing;
             }
 
-            const available = Number(counts[item.id] ?? 0);
+            const available = Number(counts[itemId] ?? 0);
             const deficit = Math.max(0, required - available);
             if (deficit > 0) {
                 const metadata = getItemMetadata(item);
                 missing.push({
-                    id: item.id,
+                    id: itemId,
                     name: metadata.name,
                     missing: deficit,
                 });
@@ -73,19 +81,22 @@
         }, []);
     };
 
+    // Merge entries by id; keep the largest deficit to match hasItems() semantics.
     const mergeMissingEntries = (entries) => {
         const merged = new Map();
         entries.forEach((entry) => {
             const current = merged.get(entry.id);
             if (current) {
-                current.missing += entry.missing;
+                current.missing = Math.max(current.missing, entry.missing);
             } else {
+                // Items with the same id should share metadata, so the first entry is sufficient.
                 merged.set(entry.id, { ...entry });
             }
         });
         return Array.from(merged.values());
     };
 
+    // Build a short, user-friendly warning message from missing entries.
     const buildMissingMessage = (entries) => {
         if (!entries.length) {
             return '';
@@ -96,9 +107,15 @@
             return `Missing requirements: ${formatted.join(', ')}`;
         }
 
-        return `Missing requirements: ${formatted.slice(0, 2).join(', ')} …`;
+        const remainingCount = formatted.length - 2;
+        const moreLabel = remainingCount === 1 ? 'more' : 'more items';
+        return (
+            `Missing requirements: ${formatted.slice(0, 2).join(', ')}` +
+            ` and ${remainingCount} ${moreLabel}`
+        );
     };
 
+    // Determine missing entries, message, and which sections need highlighting.
     const getMissingRequirementInfo = () => {
         const missingRequires = getMissingEntries(process?.requireItems ?? []);
         const missingConsumes = getMissingEntries(process?.consumeItems ?? []);
@@ -113,13 +130,15 @@
         };
     };
 
+    // Check if an element is fully visible within the viewport.
     const isFullyVisible = (element) => {
         if (
             !element ||
             typeof element.getBoundingClientRect !== 'function' ||
             typeof window === 'undefined'
         ) {
-            return true;
+            // If we cannot measure visibility, treat it as not visible so we can attempt a scroll.
+            return false;
         }
 
         const rect = element.getBoundingClientRect();
@@ -134,6 +153,7 @@
         );
     };
 
+    // Scroll the first missing requirements section into view if needed.
     const scrollMissingIntoView = (targets) => {
         if (typeof window === 'undefined') {
             return;
@@ -149,16 +169,24 @@
 
         const target = candidates.find((candidate) => !isFullyVisible(candidate));
         if (target && typeof target.scrollIntoView === 'function') {
-            target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            try {
+                target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            } catch (error) {
+                console.warn('Unable to scroll missing requirements into view:', error);
+            }
         }
     };
 
+    // Start the missing-requirements pulse sequence and manage queued reruns.
     const beginPulse = (targets, message) => {
         if (!targets.require && !targets.consume) {
             return;
         }
 
         clearTimeout(pulseTimeoutId);
+        rerunQueued = false;
+        queuedPulseTargets = null;
+        queuedPulseMessage = '';
         isPulsing = true;
         pulseTargets = targets;
         startFeedbackMessage = message;
@@ -200,9 +228,12 @@
         const { missingEntries, targets, message } = getMissingRequirementInfo();
         if (missingEntries.length > 0) {
             if (isPulsing) {
-                rerunQueued = true;
-                queuedPulseTargets = targets;
-                queuedPulseMessage = message;
+                if (!rerunQueued) {
+                    rerunQueued = true;
+                    queuedPulseTargets = targets;
+                    queuedPulseMessage = message;
+                }
+                // Once a rerun is queued, additional clicks during the same pulse are ignored.
                 return;
             }
 
@@ -212,7 +243,7 @@
 
         clearInterval(intervalId);
         startProcess(processId);
-        intervalId = setInterval(updateState, 100);
+        intervalId = setInterval(updateState, updateIntervalMs);
         updateState();
     };
 
@@ -252,7 +283,7 @@
         }
 
         resumeProcess(processId);
-        intervalId = setInterval(updateState, 100);
+        intervalId = setInterval(updateState, updateIntervalMs);
         updateState();
     };
 
@@ -270,7 +301,7 @@
         mounted = true;
         updateState();
         if (!isCustomProcess) {
-            intervalId = setInterval(updateState, 100);
+            intervalId = setInterval(updateState, updateIntervalMs);
         }
 
         initializeQaCheats();
@@ -285,6 +316,8 @@
     onDestroy(() => {
         clearInterval(intervalId);
         clearTimeout(pulseTimeoutId);
+        requiresContainer = null;
+        consumesContainer = null;
         unsubscribeCheatsAvailability?.();
         unsubscribeCheatsEnabled?.();
     });
@@ -325,7 +358,7 @@
             clearInterval(intervalId);
             intervalId = null;
         } else if (!intervalId && mounted && !isCustomProcess) {
-            intervalId = setInterval(updateState, 100);
+            intervalId = setInterval(updateState, updateIntervalMs);
         }
 
         updateState();
@@ -485,7 +518,7 @@
 
     .requirements-group {
         border-radius: 12px;
-        padding: 2px;
+        padding: 6px;
     }
 
     .requirements-group.pulse {
@@ -493,7 +526,7 @@
         box-shadow: 0 0 0 1px rgba(var(--process-warning-rgb), 0);
     }
 
-    .start-action.pulse :global(button) {
+    .start-action.pulse > :global(nav) > :global(button) {
         background-color: rgb(var(--process-warning-rgb));
         color: #111827;
         opacity: 1;
