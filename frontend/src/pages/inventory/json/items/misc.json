@@ -1363,7 +1363,7 @@
         "id": "3f1cc002-1f7a-4301-a1c6-343f65e7f21a",
         "name": "Guppy group",
         "description": "Three females and one male guppy ready to breed.",
-        "image": "/assets/guppy_group_breeding.jpg",
+        "image": "/assets/guppy_group_three_females_one_male.jpg",
         "price": "6 dUSD",
         "category": "Biology & Lab"
     },
@@ -1379,7 +1379,7 @@
         "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
         "name": "Guppy grass starter",
         "description": "Easy floating plant ideal for breeding tanks.",
-        "image": "/assets/guppy_grass_starter.jpg",
+        "image": "/assets/guppy_grass_starter_floating_plant.jpg",
         "price": "1 dUSD",
         "category": "Biology & Lab"
     },

@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/fry_food_crushed_flake_pinch.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Fry food pinch",
+    "item_id": "eb0f7f00-98dc-44b0-bf7c-9c8d998cbbcb",
+    "entity_type": "item",
+    "prompt": "A tiny pile of crushed fish flake powder sized for fry feeding, shown on a small glass dish with a fine texture and speckled golden particles. A miniature mortar-and-pestle or crushing spoon rests nearby to suggest how the flakes were powdered, with everything clean and careful to communicate “tiny feedings” preparation.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future solarpunk aquarium-care aesthetic: soft cinematic lighting, no logos, no readable text, and no packaging in frame. Keep the powder pile prominent and uncluttered so it reads well as an inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/entry_level_fdm_printer_clean_nozzle_0_4mm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "entry-level FDM 3D printer (clean nozzle)",
+    "item_id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+    "entity_type": "item",
+    "prompt": "An entry-level FDM 3D printer with the hotend area in clear focus: a clean, freshly installed 0.4 mm nozzle seated in the heater block, with a small wrench and a spare nozzle resting on a silicone mat. A faint warm glow from the hotend assembly suggests it was torqued at temperature, while avoiding any readable temperature numbers or UI text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future solarpunk workshop aesthetic: soft cinematic lighting, realistic metal reflections, no brand logos, no readable screens, and no on-image text. Composition is clean and icon-friendly, with the nozzle/hotend clearly identifiable.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

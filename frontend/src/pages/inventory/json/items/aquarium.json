@@ -60,7 +60,7 @@
         "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
         "name": "goldfish food",
         "description": "1 g of balanced goldfish flakes; feed about 0.1 g per fish daily.",
-        "image": "/assets/goldfish_food.jpg",
+        "image": "/assets/goldfish_flake_food_1g.jpg",
         "price": "0.07 dUSD",
         "unit": "g",
         "hardening": {
@@ -479,7 +479,7 @@
         "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
         "name": "Rinsed guppy grass",
         "description": "Guppy grass swished in dechlorinated water to shake off algae, snails, and eggs before placing.",
-        "image": "/assets/guppy_grass_starter.jpg",
+        "image": "/assets/rinsed_guppy_grass_dechlorinated_water.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -596,7 +596,7 @@
         "id": "eb0f7f00-98dc-44b0-bf7c-9c8d998cbbcb",
         "name": "Fry food pinch",
         "description": "Crushed flake powder sized for guppy fry; enough for a week of tiny feedings.",
-        "image": "/assets/goldfish_food.jpg",
+        "image": "/assets/fry_food_crushed_flake_pinch.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -609,7 +609,7 @@
         "id": "18a20f4e-a351-448e-837b-3caca90f71f4",
         "name": "Juvenile guppy brood",
         "description": "Home-bred guppy juveniles past the fry stage and ready to rehome or trade.",
-        "image": "/assets/guppy_group_breeding.jpg",
+        "image": "/assets/juvenile_guppy_brood_ready_to_rehome.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,

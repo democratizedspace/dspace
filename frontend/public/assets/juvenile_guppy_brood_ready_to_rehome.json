@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/juvenile_guppy_brood_ready_to_rehome.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Juvenile guppy brood",
+    "item_id": "18a20f4e-a351-448e-837b-3caca90f71f4",
+    "entity_type": "item",
+    "prompt": "A small school of juvenile guppies in a clear aquarium, larger than fry but still youthful, swimming over a simple planted background. The fish are varied but subtle in coloration, and the scene suggests they are healthy and ready to rehome or trade, with gentle filtration flow and soft natural substrate visible.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk aquarium setting: soft cinematic lighting, clean water clarity, no logos, no readable text, and no human faces. Keep the group of juveniles centered and easy to recognize as the focal subject.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

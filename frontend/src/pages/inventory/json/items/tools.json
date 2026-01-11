@@ -3,7 +3,7 @@
         "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
         "name": "entry-level FDM 3D printer",
         "description": "Entry-level FDM printer with a 220×220×250 mm build volume, heated bed, and 0.4 mm nozzle.",
-        "image": "/assets/entry_level_fdm_printer_clean.jpg",
+        "image": "/assets/entry_level_fdm_printer_220x220x250_heated_bed.jpg",
         "price": "220 dUSD",
         "type": "tool",
         "hardening": {
@@ -28,7 +28,7 @@
         "id": "a42e441a-5569-490c-86e4-ce711117cd22",
         "name": "entry-level FDM 3D printer (leveled bed)",
         "description": "Printer with bed leveling completed cold using a sheet of paper; ready for a first-layer check.",
-        "image": "/assets/entry_level_fdm_printer_clean.jpg",
+        "image": "/assets/entry_level_fdm_printer_bed_leveled_paper_test.jpg",
         "price": "220 dUSD",
         "type": "tool",
         "hardening": {
@@ -42,7 +42,7 @@
         "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
         "name": "entry-level FDM 3D printer (clean nozzle)",
         "description": "Printer with the hotend cleared or a fresh 0.4 mm nozzle installed and torqued at temp.",
-        "image": "/assets/entry_level_fdm_printer_clean.jpg",
+        "image": "/assets/entry_level_fdm_printer_clean_nozzle_0_4mm.jpg",
         "price": "220 dUSD",
         "type": "tool",
         "hardening": {
@@ -112,7 +112,7 @@
         "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
         "name": "entry-level FDM 3D printer (belt tensioned)",
         "description": "Printer with X- and Y-axis belts tensioned evenly and gantry re-squared after adjustments.",
-        "image": "/assets/entry_level_fdm_printer_clean.jpg",
+        "image": "/assets/entry_level_fdm_printer_belt_tensioned.jpg",
         "price": "220 dUSD",
         "type": "tool",
         "hardening": {
