@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/iss_spotting_station_tripod_setup.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "ISS spotting station",
+    "item_id": "bb97e755-4337-4e9d-8063-4a0cff4649b5",
+    "entity_type": "item",
+    "prompt": "An ISS spotting station prepared at dusk: a leveled tripod holding a small telescope or long-lens camera, with a dim red clip-on light attached near the head and a small gear pouch hanging from the center column for stability. The scene includes a cleared footpath leading to an open patch of sky, with a subtle horizon line and faint stars beginning to appear, emphasizing practical outdoor setup for tracking a predicted pass.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk outdoor aesthetic: soft twilight lighting, realistic textures, no logos, no readable screens, and no large text. If a person is implied, show only partial hands adjusting a knob—no identifiable faces—and keep the composition clean and icon-friendly.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

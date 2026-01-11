@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/aluminum_camera_tripod_pan_head.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "camera tripod",
+    "item_id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+    "entity_type": "item",
+    "prompt": "A sturdy aluminum camera tripod standing on a smooth workshop floor, legs extended to a mid height, with a three-way pan head on top and a quick-release plate visible. The tripod has clean locking levers and rubber feet, with a compact folded carry handle or strap nearby to suggest portability and general-purpose use for photography.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future solarpunk workshop aesthetic: soft cinematic lighting, realistic metal textures, no logos, no readable labels, and no on-image text. Keep the tripod centered against a simple background so it reads instantly as an inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

@@ -223,7 +223,7 @@
         "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
         "name": "Walstad aquarium with thermometer (80 L)",
         "description": "An 80 L Walstad tank with a strip thermometer attached on the outside glass for quick checks.",
-        "image": "/assets/aquarium_thermometer.jpg",
+        "image": "/assets/walstad_aquarium_strip_thermometer_80L.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -397,7 +397,7 @@
         "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
         "name": "Aquarium liquid test kit",
         "description": "Liquid reagent kit for aquariums. Four 15 mL bottles and test tubes provide ~130 tests for ammonia, nitrite and nitrate.",
-        "image": "/assets/aquarium_liquid_test_kit.jpg",
+        "image": "/assets/aquarium_liquid_reagent_test_kit.jpg",
         "price": "25 dUSD",
         "hardening": {
             "passes": 1,
@@ -531,7 +531,7 @@
         "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
         "name": "Liquid test readings",
         "description": "Fresh ammonia, nitrite, nitrate, and pH values gathered with a liquid kit and clean vials.",
-        "image": "/assets/aquarium_liquid_test_kit.jpg",
+        "image": "/assets/aquarium_liquid_test_readings_vials.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -557,7 +557,7 @@
         "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
         "name": "Aquarium temperature reading",
         "description": "Most recent strip thermometer reading recorded after the glass dried and stabilized.",
-        "image": "/assets/aquarium_thermometer.jpg",
+        "image": "/assets/aquarium_temperature_strip_reading.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,

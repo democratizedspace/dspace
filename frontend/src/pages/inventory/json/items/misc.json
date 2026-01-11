@@ -1728,7 +1728,7 @@
         "id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
         "name": "polar-aligned camera rig",
         "description": "A leveled tripod with a focused camera locked on Polaris and framed for star trails.",
-        "image": "/assets/camera_tripod_astronomy.jpg",
+        "image": "/assets/polar_aligned_camera_star_trails_rig.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -1792,7 +1792,7 @@
         "id": "bb97e755-4337-4e9d-8063-4a0cff4649b5",
         "name": "ISS spotting station",
         "description": "Tripod-mounted telescope leveled, red light clipped, and a cleared footpath toward the predicted pass.",
-        "image": "/assets/camera_tripod_astronomy.jpg",
+        "image": "/assets/iss_spotting_station_tripod_setup.jpg",
         "price": "150 dUSD",
         "category": "Astronomy & Observation"
     },
@@ -2192,7 +2192,7 @@
         "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
         "name": "camera tripod",
         "description": "Aluminum tripod with 3-way pan head; extends 0.5–1.5 m, supports up to 3 kg, weighs 1.2 kg.",
-        "image": "/assets/camera_tripod_astronomy.jpg",
+        "image": "/assets/aluminum_camera_tripod_pan_head.jpg",
         "price": "30 dUSD",
         "hardening": {
             "passes": 1,
