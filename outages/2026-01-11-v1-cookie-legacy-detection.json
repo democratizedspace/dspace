@@ -1,0 +1,15 @@
+{
+  "id": "v1-cookie-legacy-detection",
+  "date": "2026-01-11",
+  "component": "legacy-saves",
+  "longForm": "outages/2026-01-11-v1-cookie-legacy-detection.md",
+  "rootCause": "The Settings legacy upgrade UI read v1 cookie inventory from server-side Astro.cookies while the global banner read document.cookie on the client, so the Settings V1 card never re-read cookies after hydration and reported no cookies even when v1 cookies existed.",
+  "resolution": "Introduced a shared v1 cookie detection helper, wired both the Settings V1 card and global banner to it, and added UI warnings plus integration coverage to ensure v1 merges and trophy awards work end-to-end.",
+  "references": [
+    "PR: pending",
+    "frontend/src/utils/legacySaveDetection.ts",
+    "frontend/src/components/svelte/LegacySaveUpgrade.svelte",
+    "frontend/src/components/svelte/LegacyUpgradeBanner.svelte",
+    "frontend/__tests__/legacySaveUpgrade.integration.test.js"
+  ]
+}

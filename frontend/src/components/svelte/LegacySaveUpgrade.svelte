@@ -9,11 +9,9 @@
     import { inspectGameStateStorage } from '../../utils/gameState/common.js';
     import { qaCheatsEnabled } from '../../lib/qaCheats';
     import { clearV3GameStateStorage } from '../../utils/legacySaveSeeding';
-    import { detectLegacyArtifacts } from '../../utils/legacySaveDetection';
+    import { detectLegacyArtifacts, detectV1CookieItems } from '../../utils/legacySaveDetection';
     import Chip from './Chip.svelte';
 
-    export let legacyV1Items = [];
-    export let legacyCookieKeys = [];
     export let cheatsAvailable = false;
 
     const normalizeForStableSerialization = (value, seen = new WeakSet()) => {
@@ -42,7 +40,11 @@
             .map(({ id, count }) => ({ id, count: normalizeCount(count) }))
             .filter(({ id, count }) => id && count > 0);
 
-    let normalizedV1Items = filterLegacyItems(legacyV1Items);
+    let v1CookieItems = [];
+    let v1CookieKeys = [];
+    let v1CookieIssues = [];
+    let invalidV1CookieSummary = '';
+    let normalizedV1Items = filterLegacyItems(v1CookieItems);
     let detection = {
         loading: true,
         hasV3State: false,
@@ -59,10 +61,18 @@
     let qaEnabled = false;
     $: showV2V3ConflictWarning = detection.hasLegacyV2 && detection.hasV3State;
 
-    $: normalizedV1Items = filterLegacyItems(legacyV1Items);
+    $: normalizedV1Items = filterLegacyItems(v1CookieItems);
+    $: invalidV1CookieSummary = v1CookieIssues
+        .map(({ name, value }) => `${name}=${value}`)
+        .join(', ');
 
     const refreshStatus = async () => {
         detection = { ...detection, loading: true };
+
+        const v1Detection = detectV1CookieItems();
+        v1CookieItems = v1Detection.items;
+        v1CookieKeys = v1Detection.cookieKeys;
+        v1CookieIssues = v1Detection.invalidCookies;
 
         const inspection = await inspectGameStateStorage();
         const {
@@ -91,7 +101,7 @@
             usesLocalStorageFallback ||
             (!indexedDbSupported && (localStorageState || legacyV2State));
 
-        const artifacts = detectLegacyArtifacts();
+        const artifacts = detectLegacyArtifacts(v1Detection);
         const hasV1Artifacts = artifacts.hasV1Cookies || normalizedV1Items.length > 0;
         const hasV3State = hasIndexedDbState || Boolean(usingFallback);
         const hasLegacyV2 =
@@ -115,7 +125,7 @@
 
     const expireLegacyCookies = () => {
         if (typeof document === 'undefined') return true;
-        const cookies = legacyCookieKeys && legacyCookieKeys.length > 0 ? legacyCookieKeys : [];
+        const cookies = v1CookieKeys && v1CookieKeys.length > 0 ? v1CookieKeys : [];
         if (cookies.length === 0) return true;
 
         const candidatePaths = (() => {
@@ -293,6 +303,17 @@
                             : 'No v1 cookies found'}
                     </p>
                 </div>
+                {#if v1CookieIssues.length}
+                    <p class="warning">
+                        {normalizedV1Items.length
+                            ? 'Some legacy v1 cookies could not be parsed and were skipped.'
+                            : 'Legacy v1 cookie keys were found, but counts could not be parsed.'}
+                    </p>
+                    <p class="muted">
+                        {invalidV1CookieSummary}. Clear the cookies or re-seed a sample save and
+                        refresh the page.
+                    </p>
+                {/if}
                 {#if normalizedV1Items.length}
                     {#if detection.hasV3State}
                         <p class="warning">

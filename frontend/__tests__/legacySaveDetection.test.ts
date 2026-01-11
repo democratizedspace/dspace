@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 
-import { detectLegacyArtifacts } from '../src/utils/legacySaveDetection';
+import { detectLegacyArtifacts, detectV1CookieItems } from '../src/utils/legacySaveDetection';
 
 beforeEach(() => {
     document.cookie = '';
@@ -46,5 +46,36 @@ describe('detectLegacyArtifacts', () => {
 
         expect(result.hasV1Cookies).toBe(false);
         expect(result.hasV2LocalStorage).toBe(false);
+    });
+});
+
+describe('detectV1CookieItems', () => {
+    test('parses standard item cookie values', () => {
+        const result = detectV1CookieItems('item-3=75; item-10=2');
+
+        expect(result.items).toEqual([
+            { id: '3', count: 75 },
+            { id: '10', count: 2 },
+        ]);
+        expect(result.hasLegacyCookies).toBe(true);
+        expect(result.invalidCookies).toHaveLength(0);
+    });
+
+    test('accepts URL-encoded plus values without invalidating detection', () => {
+        const result = detectV1CookieItems('item-21=20%2B');
+
+        expect(result.items).toEqual([{ id: '21', count: 20 }]);
+        expect(result.hasLegacyCookies).toBe(true);
+        expect(result.invalidCookies).toHaveLength(0);
+    });
+
+    test('ignores malformed values without failing detection', () => {
+        const result = detectV1CookieItems('item-99=abc');
+
+        expect(result.items).toEqual([]);
+        expect(result.hasLegacyCookies).toBe(true);
+        expect(result.invalidCookies).toEqual([
+            { name: 'item-99', value: 'abc', reason: 'Invalid count.' },
+        ]);
     });
 });

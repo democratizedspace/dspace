@@ -6,11 +6,8 @@ import QaCheatsToggle from '../components/svelte/QaCheatsToggle.svelte';
 import LegacySaveUpgrade from '../components/svelte/LegacySaveUpgrade.svelte';
 import QuestGraphToggle from '../components/svelte/QuestGraphToggle.svelte';
 import { getCheatsAvailabilityFlag } from '../utils/cheatsAvailability';
-import { getCookieItemsFromStore, getCookieKeysFromStore } from '../utils/migrationCookies.js';
 
 const cheatsAvailable = getCheatsAvailabilityFlag();
-const legacyV1Items = getCookieItemsFromStore(Astro.cookies);
-const legacyCookieKeys = getCookieKeysFromStore(Astro.cookies);
 ---
 
 <Page title="Settings" message="Manage your DSPACE session" columns="1">
@@ -21,8 +18,6 @@ const legacyCookieKeys = getCookieKeysFromStore(Astro.cookies);
         ) : null}
         <QuestGraphToggle client:idle />
         <LegacySaveUpgrade
-            legacyV1Items={legacyV1Items}
-            legacyCookieKeys={legacyCookieKeys}
             cheatsAvailable={cheatsAvailable}
             client:idle
         />
