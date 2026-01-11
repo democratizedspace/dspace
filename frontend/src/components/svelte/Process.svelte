@@ -393,11 +393,7 @@
                     data-testid="process-consumes"
                     bind:this={consumesContainer}
                 >
-                    <CompactItemList
-                        itemList={process.consumeItems}
-                        noRed={true}
-                        decrease={true}
-                    />
+                    <CompactItemList itemList={process.consumeItems} noRed={true} decrease={true} />
                 </div>
             {/if}
 
