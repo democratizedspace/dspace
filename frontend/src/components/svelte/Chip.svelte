@@ -10,7 +10,8 @@
         hazard = false,
         cheat = false,
         pressed = undefined,
-        dataTestId = undefined;
+        dataTestId = undefined,
+        className = '';
 
     const dispatch = createEventDispatcher();
 
@@ -24,7 +25,7 @@
 
 <nav>
     {#if href}
-        <a {href} data-testid={dataTestId}>{text}</a>
+        <a {href} class={className} data-testid={dataTestId}>{text}</a>
     {:else}
         <button
             type="button"
@@ -33,6 +34,7 @@
             class:red={red === true}
             class:hazard={hazard === true}
             class:cheat={cheat === true}
+            class={className}
             on:click={handleClick}
             {disabled}
             aria-disabled={disabled}

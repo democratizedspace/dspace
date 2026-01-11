@@ -12,12 +12,15 @@
         getProcessState,
         ProcessStates,
         getProcessStartedAt,
+        hasRequiredAndConsumedItems,
     } from '../../utils/gameState/processes.js';
     import processes from '../../generated/processes.json';
     import { durationInSeconds } from '../../utils.js';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
     import { initializeQaCheats, qaCheatsAvailability, qaCheatsEnabled } from '../../lib/qaCheats';
+    import { getItemCount } from '../../utils/gameState/inventory.js';
+    import items from '../../pages/inventory/json/items';
 
     export let processId;
     export let processData = null;
@@ -33,6 +36,88 @@
     let cheatsEnabled = false;
     let unsubscribeCheatsAvailability;
     let unsubscribeCheatsEnabled;
+    let requiresContainer;
+    let consumesContainer;
+    let isPulsing = false;
+    let rerunQueued = false;
+    let pulseTargets = { requires: false, consumes: false };
+    let pulseMessage = '';
+    let queuedPulse = null;
+    let pulseTimeoutId;
+    const pulseDurationMs = 1000;
+
+    const getMissingEntries = (list = []) =>
+        list
+            .map((entry) => {
+                const missingCount = entry.count - getItemCount(entry.id);
+                if (missingCount <= 0) {
+                    return null;
+                }
+                const item = items.find((inventoryItem) => inventoryItem.id === entry.id);
+                return {
+                    id: entry.id,
+                    name: item?.name ?? entry.id,
+                    count: missingCount,
+                };
+            })
+            .filter(Boolean);
+
+    const formatMissingMessage = (missingItems) => {
+        if (missingItems.length === 0) {
+            return '';
+        }
+        const preview = missingItems
+            .slice(0, 2)
+            .map((item) => `${item.name} (${item.count})`)
+            .join(', ');
+        const suffix = missingItems.length > 2 ? ' \u2026' : '';
+        return `Missing requirements: ${preview}${suffix}`;
+    };
+
+    const scrollIntoViewIfNeeded = (element) => {
+        if (!element || typeof window === 'undefined') {
+            return;
+        }
+        const rect = element.getBoundingClientRect();
+        const fullyVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
+        if (!fullyVisible) {
+            element.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+    };
+
+    const runPulse = (targets, message) => {
+        clearTimeout(pulseTimeoutId);
+        pulseTargets = targets;
+        pulseMessage = message;
+        isPulsing = true;
+        const scrollTargets = () => {
+            if (targets.requires) {
+                scrollIntoViewIfNeeded(requiresContainer);
+            }
+            if (targets.consumes) {
+                scrollIntoViewIfNeeded(consumesContainer);
+            }
+        };
+        if (typeof requestAnimationFrame === 'function') {
+            requestAnimationFrame(scrollTargets);
+        } else {
+            scrollTargets();
+        }
+        pulseTimeoutId = setTimeout(() => {
+            isPulsing = false;
+            pulseTargets = { requires: false, consumes: false };
+            pulseMessage = '';
+            if (rerunQueued && queuedPulse) {
+                rerunQueued = false;
+                const nextPulse = queuedPulse;
+                queuedPulse = null;
+                runPulse(nextPulse.targets, nextPulse.message);
+            } else {
+                rerunQueued = false;
+                queuedPulse = null;
+            }
+        }, pulseDurationMs);
+    };
 
     const updateState = () => {
         if (isCustomProcess || !process) {
@@ -48,6 +133,23 @@
 
     const onProcessStart = () => {
         if (isCustomProcess) {
+            return;
+        }
+
+        if (!hasRequiredAndConsumedItems(processId)) {
+            const requiresMissing = getMissingEntries(process?.requireItems);
+            const consumesMissing = getMissingEntries(process?.consumeItems);
+            const targets = {
+                requires: requiresMissing.length > 0,
+                consumes: consumesMissing.length > 0,
+            };
+            const message = formatMissingMessage([...requiresMissing, ...consumesMissing]);
+            if (isPulsing) {
+                rerunQueued = true;
+                queuedPulse = { targets, message };
+            } else {
+                runPulse(targets, message);
+            }
             return;
         }
 
@@ -125,6 +227,7 @@
 
     onDestroy(() => {
         clearInterval(intervalId);
+        clearTimeout(pulseTimeoutId);
         unsubscribeCheatsAvailability?.();
         unsubscribeCheatsEnabled?.();
     });
@@ -179,12 +282,26 @@
 
             {#if process.requireItems && process.requireItems.length > 0}
                 <h6>Requires:</h6>
-                <CompactItemList itemList={process.requireItems} noRed={true} />
+                <div
+                    class:requirements-pulse={isPulsing && pulseTargets.requires}
+                    class="requirements-container"
+                    data-testid="process-requires"
+                    bind:this={requiresContainer}
+                >
+                    <CompactItemList itemList={process.requireItems} noRed={true} />
+                </div>
             {/if}
 
             {#if process.consumeItems && process.consumeItems.length > 0}
                 <h6>Consumes:</h6>
-                <CompactItemList itemList={process.consumeItems} noRed={true} decrease={true} />
+                <div
+                    class:requirements-pulse={isPulsing && pulseTargets.consumes}
+                    class="requirements-container"
+                    data-testid="process-consumes"
+                    bind:this={consumesContainer}
+                >
+                    <CompactItemList itemList={process.consumeItems} noRed={true} decrease={true} />
+                </div>
             {/if}
 
             {#if process.createItems && process.createItems.length > 0}
@@ -199,7 +316,25 @@
                     Custom processes are displayed for reference and managed separately.
                 </p>
             {:else if state === ProcessStates.NOT_STARTED}
-                <Chip text="Start" onClick={onProcessStart} inverted={true} />
+                <div class="start-action" class:start-pulse={isPulsing}>
+                    <Chip
+                        text="Start"
+                        onClick={onProcessStart}
+                        inverted={true}
+                        className="start-button"
+                        dataTestId="process-start"
+                    />
+                    {#if pulseMessage}
+                        <div
+                            class="pulse-message"
+                            class:message-visible={isPulsing}
+                            role="status"
+                            aria-live="polite"
+                        >
+                            {pulseMessage}
+                        </div>
+                    {/if}
+                </div>
             {:else if state === ProcessStates.IN_PROGRESS}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
                 <Chip text="Pause" onClick={onProcessPause} inverted={true} />
@@ -254,6 +389,7 @@
         display: flex;
         flex-direction: column;
         gap: 12px;
+        --pulse-color: #f59e0b;
     }
 
     h3,
@@ -286,6 +422,39 @@
         font-size: 0.9rem;
     }
 
+    .requirements-container {
+        outline: 1px solid transparent;
+        outline-offset: 2px;
+        border-radius: 10px;
+    }
+
+    .requirements-pulse {
+        animation: pulseBorder 1s linear;
+    }
+
+    .start-action {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .pulse-message {
+        font-size: 0.9rem;
+        color: #fff7ed;
+        opacity: 0;
+        transition: opacity 150ms ease-in;
+    }
+
+    .message-visible {
+        opacity: 1;
+    }
+
+    :global(.start-action.start-pulse .start-button) {
+        background-color: var(--pulse-color);
+        color: #1f2933;
+    }
+
     .process-error {
         padding: 1rem;
         border-radius: 12px;
@@ -293,5 +462,23 @@
         background: #2c5837;
         color: white;
         text-align: center;
+    }
+
+    @keyframes pulseBorder {
+        0% {
+            outline-color: transparent;
+        }
+        25% {
+            outline-color: var(--pulse-color);
+        }
+        50% {
+            outline-color: transparent;
+        }
+        75% {
+            outline-color: var(--pulse-color);
+        }
+        100% {
+            outline-color: transparent;
+        }
     }
 </style>
