@@ -413,7 +413,11 @@
                     Custom processes are displayed for reference and managed separately.
                 </p>
             {:else if state === ProcessStates.NOT_STARTED}
-                <div class="start-action" class:pulse={isPulsing} data-testid="process-start-action">
+                <div
+                    class="start-action"
+                    class:pulse={isPulsing}
+                    data-testid="process-start-action"
+                >
                     <Chip
                         text="Start"
                         onClick={onProcessStart}

@@ -112,18 +112,18 @@ describe('Process start feedback', () => {
         await fireEvent.click(startButton);
         await tick();
 
-        expect(timeoutSpy.mock.calls.filter((call) => call[1] === pulseDurationMs)).toHaveLength(
-            1
-        );
+        expect(
+            timeoutSpy.mock.calls.filter((call) => call[1] === pulseDurationMs)
+        ).toHaveLength(1);
 
         vi.advanceTimersByTime(pulseDurationMs);
         await tick();
 
         expect(startAction.classList.contains('pulse')).toBe(true);
         expect(getByTestId('process-start-feedback')).toBeTruthy();
-        expect(timeoutSpy.mock.calls.filter((call) => call[1] === pulseDurationMs)).toHaveLength(
-            2
-        );
+        expect(
+            timeoutSpy.mock.calls.filter((call) => call[1] === pulseDurationMs)
+        ).toHaveLength(2);
 
         vi.advanceTimersByTime(pulseDurationMs);
         await tick();
@@ -195,8 +195,6 @@ describe('Process start feedback', () => {
         await fireEvent.click(getByTestId('process-start-button'));
         await tick();
 
-        expect(getByTestId('process-start-feedback').textContent).toContain(
-            'Shared Item (1)'
-        );
+        expect(getByTestId('process-start-feedback').textContent).toContain('Shared Item (1)');
     });
 });
