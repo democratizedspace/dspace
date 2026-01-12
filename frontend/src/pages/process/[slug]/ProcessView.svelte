@@ -17,14 +17,20 @@
     let toastMessage = '';
 
     const canBuyRequired = () =>
-        Boolean(builtInProcess && builtInProcess.requireItems && builtInProcess.requireItems.length);
+        Boolean(
+            builtInProcess &&
+                builtInProcess.requireItems &&
+                builtInProcess.requireItems.length
+        );
 
     const updateDisabled = () => {
         if (!displayProcess || !displayProcess.requireItems) {
             disableBuy = true;
             return;
         }
-        disableBuy = displayProcess.requireItems.every((item) => getItemCount(item.id) >= item.count);
+        disableBuy = displayProcess.requireItems.every(
+            (item) => getItemCount(item.id) >= item.count
+        );
     };
 
     const buyItem = (id, qty) => {
