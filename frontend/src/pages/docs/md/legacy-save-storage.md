@@ -18,38 +18,146 @@ This doc explains how DSPACE stores game state across v1 (cookies), v2 (localSto
 - **V3 IndexedDB migration (February 1, 2026):** v3 ships the IndexedDB storage system and a
   migration path from localStorage. See [`/changelog#20260201`](/changelog#20260201).
 
-## V1 storage (cookies)
+## DSPACE v1 save format (commit `fc840def24c5140411d2892f468960acb8250681`)
 
-**Schema:** Each item is stored as its own cookie.
+### High-level summary
 
-- **Stable v1 reference:** The last commit on the `main` branch before DSPACE v2 is
-  [`fc840def24c5140411d2892f468960acb8250681`](https://github.com/democratizedspace/dspace/tree/fc840def24c5140411d2892f468960acb8250681),
-  which is the most stable checkpoint for verifying v1 storage behavior and constructing seed
-  packets for v1 → v3 migration.
-- **Key pattern:** `item-<id>` (regex `/^item-\d+$/`).
-- **Value:** numeric count as a string. Values may be URL-encoded (ex: `20%2B` → `20+`). Parsing is
-  tolerant: the migration helper uses `parseFloat` on the decoded value and ignores non-positive
-  counts instead of failing the whole detection.
-- **Examples:**
-    - `item-3=75`
-    - `item-10=2`
-    - `item-21=20%2B`
+- **Storage split:** v1 uses **cookies** for inventory, currency, and quest progress, and uses
+  **localStorage** for process timers + machine locks.
+- **Legacy detection in v3:** the v3 upgrader looks at cookies + localStorage to detect legacy v1
+  saves before a v2/v3 merge.
+- **Migration scope (recommended default):** migrate **inventory + currency balances only**. Quest
+  completion + checkpoints and process timers are intentionally out of scope because v1 quest IDs
+  are numeric (`/quests/play/<int>`) while v2/v3 use slug-based routes, making ID mapping ambiguous.
 
-**Code references:**
+### Cookie schema (authoritative)
 
-- Cookie parsing + detection:
-  [`frontend/src/utils/legacySaveDetection.ts`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveDetection.ts)
-  (`detectV1CookieItems`).
-- QA fixtures used for seeding:
-  [`frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json).
-- Seeding helper:
-  [`frontend/src/utils/legacySaveSeeding.ts`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveSeeding.ts)
-  (`seedSampleV1CookieSave`).
+v1 writes cookies via `setCookieValue` (persistent expiry, `path=/`) and uses `parseFloat` to
+consume item and balance values. Quest progress cookies are only written when
+`acceptedCookies=true` is present (quests use `hasAcceptedCookies` to gate writes).
 
-**DevTools inspection:**
+| Key pattern | Example key | Value format | Meaning | Written when | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `acceptedCookies` | `acceptedCookies` | `true` | Consent flag for v1 cookie saves. | Set after the `/accept_cookies` flow routes to `/accepted_cookies`. | Used by `hasAcceptedCookies`; quests/checkpoints only persist when accepted. |
+| `quest-<questId>-finished` | `quest-7-finished` | JS `Date` string | Marks quest completion. | On `/quests/finish/<questId>` if cookies were accepted. | Quest IDs are numeric in v1. |
+| `checkpoint-<questId>` | `checkpoint-5` | Integer step ID | Tracks a checkpointed quest step. | On `/quests/play/<questId>/<stepId>` when the step is flagged as `checkpoint`. | Only written when cookies were accepted. |
+| `item-<itemId>` | `item-3` | Float or integer (string) | Non-currency inventory counts. | Item earn/burn, shop buy/sell, quest rewards/burns. | Currency items (like dUSD) are not stored here. |
+| `currency-balance-<symbol>` | `currency-balance-dUSD` | Float (string) | Currency wallet balance by symbol. | Wallet updates, shop buy/sell, burns. | dUSD is the only v1 item with `type: "currency"` and uses `symbol: "dUSD"`. |
 
-- Chrome/Firefox Application tab → Cookies → `staging.democratized.space` (or your local host).
-- Filter for keys starting with `item-` to view v1 item counts.
+**Verified v1 implementation references:**
+
+- Accept/deny cookies flow and `acceptedCookies` write:
+  `frontend/src/pages/accept_cookies.astro`,
+  `frontend/src/pages/accepted_cookies.astro`
+- Cookie helpers + `hasAcceptedCookies` gating:
+  `frontend/src/utils.js`
+- Item + currency cookie writes, including buy/sell/burns:
+  `frontend/src/pages/inventory/utils.js`
+- Quest completion cookie:
+  `frontend/src/pages/quests/finish/[questId].astro`
+- Quest checkpoint cookie:
+  `frontend/src/pages/quests/play/[questId]/[stepId].astro`
+
+### localStorage schema (authoritative)
+
+| Key pattern | Example key | Value format | Meaning | Written when | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `process-<processId>-starttime` | `process-outlet-dWatt-starttime` | Epoch timestamp (ms) | Start timestamp for a running process. | On process start; removed on finalize. | Stored via `Date().getTime()` and used to resume progress. |
+| `machine-lock-<machineId>` | `machine-lock-29` | Integer | Active lock count for a machine. | Increment on process start; decrement/remove on finalize. | Used by the machines page to show availability. |
+
+**Verified v1 implementation references:**
+
+- Process timers + machine locks:
+  `frontend/src/pages/processes/process.svelte`
+- Machines availability reads:
+  `frontend/src/pages/machines/index.astro`
+
+### How to inspect a v1 save (DevTools)
+
+1. Open **DevTools → Application** (Chrome) or **Storage** (Firefox).
+2. **Cookies:** select your domain, then filter for `acceptedCookies`, `item-`, `currency-balance-`,
+   `quest-`, and `checkpoint-`.
+3. **LocalStorage:** select your domain and look for `process-*-starttime` and `machine-lock-*`.
+4. Example cookie header fragment (copy/pasteable):
+
+    ```
+    acceptedCookies=true; item-3=50; item-20=2; item-46=3;
+    currency-balance-dUSD=123.45; quest-0-finished=Sat Jan 01 2022 00:00:00 GMT+0000
+    ```
+
+> **Note:** Quest/progress cookies can exist for detection/QA, but the default migration scope is
+> inventory + currency only.
+
+### v1 seed profiles for `/settings` (for seeding UI + QA)
+
+Use these explicit key/value sets as the baseline for the “Seed sample v1 save (cookies)” panel.
+They are derived from the v1 save format above and intentionally focus on **inventory + currency**.
+Quest/progress keys are optional and should remain **non-migrated** by default.
+
+#### Minimal seed (cookies only)
+
+**Set these cookies:**
+
+```
+acceptedCookies=true
+item-3=12.5
+item-10=2
+item-20=1
+currency-balance-dUSD=123.45
+quest-0-finished=Sat Jan 01 2022 00:00:00 GMT+0000
+```
+
+**Expected v3 detection outcome:**
+
+- Global “Legacy save detected” banner appears after reload.
+- `/settings` → **Legacy save upgrades** shows a v1 card listing:
+  - Items: `item-3`, `item-10`, `item-20` (dCarbon is an **item**, not a currency).
+  - Currency balances: `currency-balance-dUSD`.
+- Quest/progress cookie is shown as **detected but not migrated** (or ignored, if UI does not
+  surface it).
+
+#### Maximal seed (cookies + localStorage)
+
+**Set these cookies (all from minimal):**
+
+```
+acceptedCookies=true
+item-3=12.5
+item-10=2
+item-20=1
+currency-balance-dUSD=123.45
+quest-0-finished=Sat Jan 01 2022 00:00:00 GMT+0000
+```
+
+**Set these localStorage keys:**
+
+```
+process-outlet-dWatt-starttime=1700000000000
+machine-lock-29=1
+```
+
+**Expected v3 detection outcome:**
+
+- Global legacy banner appears (same as minimal).
+- v1 upgrade panel still lists cookie-based inventory + balances.
+- LocalStorage values are **detected for QA visibility** but should **not** be migrated by default.
+
+### QA: v1 → v2 → v3 migration checklist
+
+1. **Start clean:** clear IndexedDB (`dspaceGameState`) and localStorage, reload, confirm no legacy
+   banner.
+2. **Seed v1 cookies (minimal):** apply the minimal seed profile cookies and reload.
+3. **Confirm detection UX:**
+   - Legacy banner appears on non-settings pages and links back to `/settings`.
+   - `/settings` → v1 upgrade panel lists detected items + dUSD balance.
+4. **Merge v1 into v3:**
+   - Use **Merge v1 into current save**.
+   - Verify inventory gains the seeded items and wallet gains `dUSD` balance.
+   - Re-run merge to confirm idempotency (no double-adding on repeated merges).
+5. **Seed v1 maximal:** apply maximal profile (cookies + localStorage), reload, confirm detection.
+6. **Repeat merge verification:** same expectations as minimal; process timers/locks are ignored.
+7. **Handoff to v2 → v3:** note that v2 auditing is documented separately; v1 verification should
+   only confirm that v1 artifacts do not block v2 detection and that v1 data is merged correctly.
 
 ## V2 storage (localStorage)
 
@@ -150,3 +258,89 @@ QA seeding writes known-good fixtures that match the above schemas.
 
 After seeding, use [`/settings`](/settings) → **Legacy save upgrades** to merge or replace, and verify detection
 with the global legacy banner (shared detection logic).
+
+## Appendix: v1 item catalog (for mapping)
+
+Source of truth: `frontend/src/pages/inventory/json/items.json` from commit
+`fc840def24c5140411d2892f468960acb8250681`.
+
+| itemId | name | description | type | price | symbol | unit |
+| --- | --- | --- | --- | --- | --- | --- |
+| 0 | Real Printer 1 | A basic cheap printer that is easy to use and has a large community of users. | machine | 200 | dUSD | — |
+| 1 | Benchy | A basic test print that is used to test the quality of a printer. | 3dprint | 5 | dUSD | — |
+| 2 | hydroponics kit | A hydroponics tub with all the basic features you need to grow your own plants. | — | 30 | dUSD | — |
+| 3 | white PLA filament | 1 gram of white PLA filament for an FDM printer. | — | 0.02499 | dUSD | g |
+| 4 | Edison Model M | A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities. | — | 40000 | dUSD | — |
+| 5 | portable solar panel | A portable solar panel that can be used to charge your devices. Supports USB-A and USB-C ports, and it has a 110V AC outlet, with support for 200W at peak sunpower. | machine | 200 | dUSD | — |
+| 6 | 200 Wh battery pack | A 200 Wh battery pack that can be used to store energy from a solar panel or a wind turbine. | — | 130 | dUSD | — |
+| 7 | 500W wind turbine | A 500W wind turbine that can be used to generate electricity. | — | 200 | dUSD | — |
+| 8 | Benchy Award | A trophy granted for printing your first Benchy. | — | — | — | — |
+| 9 | Real Hydroponics Tub 1 | A hydroponics tub with all the basic features you need to grow your own plants. | machine | 30 | dUSD | — |
+| 10 | basil seeds | A packet of basil seeds. | — | 5 | dUSD | — |
+| 11 | 3D printed model rocket | A 3D-printed model rocket that can be used to launch small payloads into space. | 3dprint | 25 | dUSD | — |
+| 12 | green PLA filament | 1 gram of green PLA filament for an FDM printer. | — | 0.02499 | dUSD | g |
+| 13 | hydroponic starter plug | 1 rockwool starter plug for hydroponic seed germination. | — | 0.35 | dUSD | — |
+| 14 | hydroponics nutrients | A bottle of hydroponics nutrients that can be used to grow plants. NPK: 9-3-6 | — | 25 | dUSD |  L |
+| 15 | 3D printing kit | A kit that contains all the parts you need to get started with 3D printing. Everything is fully assembled. | — | — | — | — |
+| 16 | 5 gallon bucket | A 5 gallon bucket that can be used to store water or other liquids. | — | 8 | dUSD | — |
+| 17 | 5 gallon bucket of tap water (chlorinated) | A 5 gallon bucket of water. This water is chlorinated and should not be used for hydroponics. | machine | — | — | — |
+| 18 | Motor Award | A trophy granted for being one of the first people to buy an Edison Model M | — | — | — | — |
+| 19 | Rocket Award | A trophy granted for printing your first model rocket. | — | — | — | — |
+| 20 | dCarbon | A token that is generated for every 1 kg of carbon dioxide generated in-game. | — | — | — | — |
+| 21 | Hypercar (80% charge) | A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities. 80% charged. | — | — | — | — |
+| 22 | dWatt | A token that represents 1 watt of electricity that can be consumed by machines. To acquire 1 dWatt, you need to either prepay the dCarbon cost, or generate and store it in a battery without accruing dCarbon. | — | — | — | — |
+| 23 | Hypervan | A futuristic electric van with Fully Supervised Driving (FSD) capabilities. | — | 75000 | dUSD | — |
+| 24 | dUSD | An in-game tokenized version of the USD currency. Not backed by or in any way associated with actual USD. | currency | — | dUSD | — |
+| 25 | 5 gallon bucket of tap water (dechlorinated) | A 5 gallon bucket of water. This water is dechlorinated and can be used for hydroponics. | machine | — | — | — |
+| 26 | soaked hydroponic starter plug | A hydroponic starter plug soaked in water. Used to germinate seeds. | machine | — | — | — |
+| 27 | basil seedling | A basil seedling that has been germinated in a rockwool cube. | — | — | — | — |
+| 28 | sink | Generates tap water. | machine | — | — | — |
+| 29 | smart plug | A smart plug that plugs into a wall outlet to measure energy usage. | machine | — | — | — |
+| 30 | 3D printed nosecone | A nosecone for a modular model rocket. | — | — | — | — |
+| 31 | 3D printed body tube | A body tube for a modular model rocket. | — | — | — | — |
+| 32 | 3D printed fincan | A fincan for a modular model rocket. | — | — | — | — |
+| 33 | 3D printed nosecone coupler | A nosecone coupler for a modular model rocket. | — | — | — | — |
+| 34 | hobbyist solid rocket motor | 24mm in diameter, 95mm long, weighing 58.1g. Max thrust: 31.3 Newtons. | — | 10 | dUSD | — |
+| 35 | superglue | Don't get it on your hands! | machine | 10 | dUSD | — |
+| 36 | kevlar cord | Perfect for model rocketry. | — | 0.3 | dUSD |  m |
+| 37 | rocket igniter | Ignite a rocket motor with electricity. | — | 0.1 | dUSD | — |
+| 38 | launch controller | A controller for launching model rockets. | machine | 20 | dUSD | — |
+| 39 | launch-capable model rocket | A model rocket ready for launch. Ignite remotely using the launch controller. | — | — | — | — |
+| 40 | damaged model rocket | Badly damaged and broken in several places. | — | — | — | — |
+| 41 | Rocketeer Award | Awarded for launching your first rocket! | — | — | — | — |
+| 42 | harvestable basil plant | A basil plant that is ready to be harvested. Growing medium: rockwool. | machine | — | — | — |
+| 43 | hydroponic grow lamp | Nice pink lighting that completely changes the vibe of your room. Also used for growing plants. Energy consumption: 36W. | — | 50 | dUSD | — |
+| 44 | Real Hydroponics Tub 1 (ready) | A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens. | machine | — | — | — |
+| 45 | Real Hydroponics Tub 1 (nutrient deficient) | A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens. | machine | — | — | — |
+| 46 | bundle of basil leaves | A bundle of basil leaves. Maybe we can make pesto in the future? For now, maybe just sell it. | — | 3 | dUSD | — |
+| 47 | harvested basil plant | A basil plant that has been freshly harvested. Don't worry, it'll grow back eventually! | — | — | — | — |
+| 48 | Green Thumb Award | Awarded for growing and harvesting your first batch of hydroponic basil! | — | — | — | — |
+| 49 | Solarpunk Award | Awarded for generating dWatt using solar panels! | — | — | — | — |
+| 50 | Completionist Award | Awarded for completing all of the quests avaialble on January 1, 2023. | — | — | — | — |
+| 51 | aquarium (150 L) | A glass tank for housing fish. | machine | 60 | dUSD | — |
+| 52 | aquarium (goldfish) (150 L) | An aquarium containing a goldfish. | machine | — | — | — |
+| 53 | goldfish | A goldfish. | — | 10 | dUSD | — |
+| 54 | goldfish food | Food suitable for a goldfish. | — | 10 | dUSD | — |
+| 55 | aquarium filter | A filter for a fish tank. | — | 30 | dUSD | — |
+| 56 | aquarium heater | A heater for a fish tank. | — | 20 | dUSD | — |
+| 57 | aquarium light | A light for a fish tank. | — | 15 | dUSD | — |
+| 58 | Thermometer | A thermometer for measuring temperature. | — | 15 | dUSD | — |
+| 59 | pH strip | A pH strip for measuring pH. | — | 0.15 | dUSD | — |
+| 60 | 7 pH freshwater aquarium (150 L) | An freshwater aquarium with a pH of 7. | machine | — | — | — |
+| 61 | dSolar | a token that represents 1 Watt of energy generated using a solar panel. | — | — | — | — |
+| 62 | gravel | Loose gravel suitable for use in an aquarium. | — | 1 | dUSD |  kg |
+| 63 | aquarium net | A net for catching fish. | — | 5 | dUSD | — |
+| 64 | dGoldfish | A token granted for feeding a goldfish | — | — | — | — |
+| 65 | Fish Friend Award | An award given for setting up your first goldfish aquarium. | — | — | — | — |
+| 66 | parachute | A parachute for model rockets. | — | 30 | dUSD | — |
+| 67 | launch-capable model rocket (parachute) | A reusable rocket with a parachute | — | — | — | — |
+| 68 | Rocket Descent (animated) | A rocket descending to the ground with a parachute. | — | — | — | — |
+| 69 | dLaunch | 1 dLaunch = 1 launch of a rocket. Any launch counts, even a model rocket launch. | — | — | — | — |
+| 70 | dOffset | 1 dOffset is granted for reducing dCarbon with dUSD.  | — | — | — | — |
+| 71 | Tree Hugger Award | Awarded for converting dCarbon to dOffset. | — | — | — | — |
+| 72 | dBI | Awarded for every dUSD earned through Basic Income. See the Wallet page for more details. | — | — | — | — |
+| 73 | EV charger | A charger for electric vehicles. | — | 500 | dUSD | — |
+| 74 | Hypercar (20% charge) | A futuristic electric vehicle with Fully Supervised Driving (FSD) capabilities. 20% charged. | — | 30000 | dUSD | — |
+| 75 | Hypercar (animated) | A hypercar driving down the road. | — | — | — | — |
+| 76 | 1 kWh battery pack | A 1kWh Wh battery pack that can be used to store energy from a solar panel or a wind turbine. | — | 1000 | dUSD | — |
+| 77 | The grass is always greener (still) | A still image of a Hypercar on a grassy field. | — | — | — | — |
