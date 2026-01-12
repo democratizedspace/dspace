@@ -1,0 +1,7 @@
+---
+const { slug } = Astro.params;
+const anchor = slug ? encodeURIComponent(slug) : '';
+const destination = anchor ? `/changelog#${anchor}` : '/changelog';
+
+return Astro.redirect(destination, 301);
+---
