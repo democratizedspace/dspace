@@ -34,12 +34,12 @@ This doc explains how DSPACE stores game state across v1 (cookies), v2 (localSto
 **Code references:**
 
 - Cookie parsing + detection:
-  [`frontend/src/utils/legacySaveDetection.ts`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveDetection.ts)
+  [`frontend/src/utils/legacySaveDetection.ts`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveDetection.ts)
   (`detectV1CookieItems`).
 - QA fixtures used for seeding:
-  [`frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json).
+  [`frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json).
 - Seeding helper:
-  [`frontend/src/utils/legacySaveSeeding.ts`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveSeeding.ts)
+  [`frontend/src/utils/legacySaveSeeding.ts`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveSeeding.ts)
   (`seedSampleV1CookieSave`).
 
 **DevTools inspection:**
@@ -68,12 +68,12 @@ This doc explains how DSPACE stores game state across v1 (cookies), v2 (localSto
 **Code references:**
 
 - Detection + legacy parsing:
-  [`frontend/src/utils/legacySaveDetection.ts`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveDetection.ts)
+  [`frontend/src/utils/legacySaveDetection.ts`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveDetection.ts)
   (`hasLegacyLocalStorage`).
 - Fixture seed data:
-  [`frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json).
+  [`frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json).
 - Merge/replace logic:
-  [`frontend/src/utils/gameState.js`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/gameState.js)
+  [`frontend/src/utils/gameState.js`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/gameState.js)
   (`importV2V3`, `mergeLegacyStateIntoCurrent`).
 
 **DevTools inspection:**
@@ -95,10 +95,10 @@ and fallback for unsupported environments.
 **Code references:**
 
 - IndexedDB constants and store layout:
-  [`frontend/src/utils/gameState/common.js`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/gameState/common.js)
+  [`frontend/src/utils/gameState/common.js`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/gameState/common.js)
   (`DB_NAME`, `DB_VERSION`, `STATE_STORE`, `BACKUP_STORE`, `ROOT_KEY`).
 - Persistence + fallback behavior:
-  [`frontend/src/utils/gameState/common.js`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/gameState/common.js)
+  [`frontend/src/utils/gameState/common.js`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/gameState/common.js)
   (`read`, `write`, `warnFallback`).
 
 **DevTools inspection:**
@@ -114,7 +114,7 @@ and fallback for unsupported environments.
 - V2 localStorage detection reads `gameState` / `gameStateBackup` and checks that
   `versionNumberString` (or `versionNumber`) starts with `1` or `2`.
 - Shared detection entry point:
-  [`frontend/src/utils/legacySaveDetection.ts`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveDetection.ts)
+  [`frontend/src/utils/legacySaveDetection.ts`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveDetection.ts)
   (`detectLegacyArtifacts`).
 
 **Merge vs. replace semantics:**
@@ -128,7 +128,7 @@ and fallback for unsupported environments.
 **Cleanup behavior:**
 
 - V1 cleanup expires each `item-<id>` cookie (see
-  [`frontend/src/components/svelte/LegacySaveUpgrade.svelte`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/components/svelte/LegacySaveUpgrade.svelte)).
+  [`frontend/src/components/svelte/LegacySaveUpgrade.svelte`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/svelte/LegacySaveUpgrade.svelte)).
 - V2 cleanup deletes `gameState` / `gameStateBackup` (also in the Legacy Save Upgrade UI).
 
 ## QA seeding
@@ -136,13 +136,13 @@ and fallback for unsupported environments.
 QA seeding writes known-good fixtures that match the above schemas.
 
 - **V1 seed:**
-  [`frontend/src/utils/legacySaveSeeding.ts`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveSeeding.ts)
+  [`frontend/src/utils/legacySaveSeeding.ts`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveSeeding.ts)
   reads
-  [`frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json).
+  [`frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json).
 - **V2 seed:**
-  [`frontend/src/utils/legacySaveSeeding.ts`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveSeeding.ts)
+  [`frontend/src/utils/legacySaveSeeding.ts`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveSeeding.ts)
   reads
-  [`frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json).
+  [`frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json).
 
-After seeding, use `/settings` → **Legacy save upgrades** to merge or replace, and verify detection
+After seeding, use [`/settings`](/settings) → **Legacy save upgrades** to merge or replace, and verify detection
 with the global legacy banner (shared detection logic).
