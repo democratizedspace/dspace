@@ -71,14 +71,22 @@ function normalizeId(id) {
     return id;
 }
 
+const UUID_FALLBACK_TEMPLATE = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+
+function generateUuidFallback() {
+    return UUID_FALLBACK_TEMPLATE.replace(/[xy]/g, (character) => {
+        const random = (Math.random() * 16) | 0;
+        const value = character === 'x' ? random : (random & 0x3) | 0x8;
+        return value.toString(16);
+    });
+}
+
 function generateQuestId() {
     if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
         return crypto.randomUUID();
     }
 
-    const timestamp = Date.now().toString(36);
-    const random = Math.random().toString(36).slice(2, 8);
-    return `quest-${timestamp}-${random}`;
+    return generateUuidFallback();
 }
 
 function generateItemId() {
@@ -86,9 +94,7 @@ function generateItemId() {
         return crypto.randomUUID();
     }
 
-    const timestamp = Date.now().toString(36);
-    const random = Math.random().toString(36).slice(2, 8);
-    return `item-${timestamp}-${random}`;
+    return generateUuidFallback();
 }
 
 function allocateFallbackId(entityType, providedId) {

@@ -2,7 +2,7 @@
     import { getItemCount } from '../../utils/gameState/inventory.js';
 
     export let item;
-    export const count = undefined;
+    export let count = undefined;
 </script>
 
 <div class="item">

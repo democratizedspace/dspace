@@ -41,6 +41,24 @@
         }
     }
 
+    function readFileAsDataUrl(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const result = reader.result;
+                if (typeof result === 'string') {
+                    resolve(result);
+                    return;
+                }
+                reject(new Error('Image preview is invalid.'));
+            };
+            reader.onerror = () => {
+                reject(reader.error ?? new Error('Image preview failed to load.'));
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
     function validateForm() {
         const errors = {};
         if (!name.trim()) {
@@ -62,7 +80,19 @@
             return;
         }
 
-        const imageUrl = previewUrl;
+        let imageUrl = previewUrl;
+        if (!imageUrl && image instanceof File) {
+            try {
+                imageUrl = await readFileAsDataUrl(image);
+                previewUrl = imageUrl;
+            } catch (error) {
+                validationErrors = {
+                    ...validationErrors,
+                    image: 'Image preview failed. Please try again.',
+                };
+                return;
+            }
+        }
         const imageBlob = image instanceof File ? image : itemData?.imageBlob ?? null;
 
         const parsedDependencies = parseDependencies(dependenciesInput);
