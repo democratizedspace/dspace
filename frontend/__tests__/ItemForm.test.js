@@ -175,8 +175,9 @@ describe('ItemForm Component', () => {
         expect(successMessage).toHaveTextContent('Item created successfully.');
         expect(successMessage).toHaveTextContent('View item');
         expect(successMessage).toHaveTextContent('Manage items');
-        expect(successMessage.querySelector('a[href="/inventory/item/mocked-item-id"]'))
-            .toBeInTheDocument();
+        expect(
+            successMessage.querySelector('a[href="/inventory/item/mocked-item-id"]')
+        ).toBeInTheDocument();
         expect(successMessage.querySelector('a[href="/inventory/manage"]')).toBeInTheDocument();
     });
 
