@@ -1,0 +1,14 @@
+---
+export const prerender = true;
+
+const redirectSlugs = ['20230630', '20230915', '20260201'];
+
+export async function getStaticPaths() {
+    return redirectSlugs.map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const target = redirectSlugs.includes(slug) ? `/changelog#${slug}` : '/changelog';
+
+return Astro.redirect(target, 301);
+---

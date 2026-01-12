@@ -12,11 +12,11 @@ This doc explains how DSPACE stores game state across v1 (cookies), v2 (localSto
 
 - **V1 → V2 transition (June 30, 2023):** The v2 release notes call out returning v1 players and
   the quest reset, which anchors the cutoff between cookie-era saves and the v2 localStorage
-  format. See `/docs/changelog/20230630`.
+  format. See [`/docs/changelog/20230630`][docs-changelog-20230630].
 - **V2.1 localStorage format (September 15, 2023):** v2.1 explicitly documents that game state is
-  stored in localStorage. See `/docs/changelog/20230915`.
+  stored in localStorage. See [`/docs/changelog/20230915`][docs-changelog-20230915].
 - **V3 IndexedDB migration (February 1, 2026):** v3 ships the IndexedDB storage system and a
-  migration path from localStorage. See `/docs/changelog/20260201`.
+  migration path from localStorage. See [`/docs/changelog/20260201`][docs-changelog-20260201].
 
 ## V1 storage (cookies)
 
@@ -33,13 +33,17 @@ This doc explains how DSPACE stores game state across v1 (cookies), v2 (localSto
 
 **Code references:**
 
-- Cookie parsing + detection: `frontend/src/utils/legacySaveDetection.ts` (`detectV1CookieItems`).
-- QA fixtures used for seeding: `frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json`.
-- Seeding helper: `frontend/src/utils/legacySaveSeeding.ts` (`seedSampleV1CookieSave`).
+- Cookie parsing + detection: [`frontend/src/utils/legacySaveDetection.ts`][legacy-save-detection]
+  (`detectV1CookieItems`).
+- QA fixtures used for seeding:
+  [`frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json`][legacy-v1-fixture].
+- Seeding helper: [`frontend/src/utils/legacySaveSeeding.ts`][legacy-save-seeding]
+  (`seedSampleV1CookieSave`).
 
 **DevTools inspection:**
 
-- Chrome/Firefox Application tab → Cookies → `staging.democratized.space` (or your local host).
+- Chrome/Firefox Application tab → Cookies → [staging.democratized.space][staging-site]
+  (or your local host).
 - Filter for keys starting with `item-` to view v1 item counts.
 
 ## V2 storage (localStorage)
@@ -62,9 +66,12 @@ This doc explains how DSPACE stores game state across v1 (cookies), v2 (localSto
 
 **Code references:**
 
-- Detection + legacy parsing: `frontend/src/utils/legacySaveDetection.ts` (`hasLegacyLocalStorage`).
-- Fixture seed data: `frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`.
-- Merge/replace logic: `frontend/src/utils/gameState.js` (`importV2V3`, `mergeLegacyStateIntoCurrent`).
+- Detection + legacy parsing: [`frontend/src/utils/legacySaveDetection.ts`][legacy-save-detection]
+  (`hasLegacyLocalStorage`).
+- Fixture seed data:
+  [`frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`][legacy-v2-fixture].
+- Merge/replace logic: [`frontend/src/utils/gameState.js`][game-state]
+  (`importV2V3`, `mergeLegacyStateIntoCurrent`).
 
 **DevTools inspection:**
 
@@ -84,10 +91,10 @@ and fallback for unsupported environments.
 
 **Code references:**
 
-- IndexedDB constants and store layout: `frontend/src/utils/gameState/common.js` (`DB_NAME`,
-  `DB_VERSION`, `STATE_STORE`, `BACKUP_STORE`, `ROOT_KEY`).
-- Persistence + fallback behavior: `frontend/src/utils/gameState/common.js` (`read`, `write`,
-  `warnFallback`).
+- IndexedDB constants and store layout: [`frontend/src/utils/gameState/common.js`][game-state-common]
+  (`DB_NAME`, `DB_VERSION`, `STATE_STORE`, `BACKUP_STORE`, `ROOT_KEY`).
+- Persistence + fallback behavior: [`frontend/src/utils/gameState/common.js`][game-state-common]
+  (`read`, `write`, `warnFallback`).
 
 **DevTools inspection:**
 
@@ -101,7 +108,8 @@ and fallback for unsupported environments.
 - V1 cookies are detected on the client with `detectV1CookieItems(document.cookie)`.
 - V2 localStorage detection reads `gameState` / `gameStateBackup` and checks that
   `versionNumberString` (or `versionNumber`) starts with `1` or `2`.
-- Shared detection entry point: `frontend/src/utils/legacySaveDetection.ts` (`detectLegacyArtifacts`).
+- Shared detection entry point: [`frontend/src/utils/legacySaveDetection.ts`][legacy-save-detection]
+  (`detectLegacyArtifacts`).
 
 **Merge vs. replace semantics:**
 
@@ -113,17 +121,31 @@ and fallback for unsupported environments.
 
 **Cleanup behavior:**
 
-- V1 cleanup expires each `item-<id>` cookie (see `frontend/src/components/svelte/LegacySaveUpgrade.svelte`).
+- V1 cleanup expires each `item-<id>` cookie (see
+  [`frontend/src/components/svelte/LegacySaveUpgrade.svelte`][legacy-save-upgrade]).
 - V2 cleanup deletes `gameState` / `gameStateBackup` (also in the Legacy Save Upgrade UI).
 
 ## QA seeding
 
 QA seeding writes known-good fixtures that match the above schemas.
 
-- **V1 seed:** `frontend/src/utils/legacySaveSeeding.ts` reads
-  `frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json`.
-- **V2 seed:** `frontend/src/utils/legacySaveSeeding.ts` reads
-  `frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`.
+- **V1 seed:** [`frontend/src/utils/legacySaveSeeding.ts`][legacy-save-seeding] reads
+  [`frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json`][legacy-v1-fixture].
+- **V2 seed:** [`frontend/src/utils/legacySaveSeeding.ts`][legacy-save-seeding] reads
+  [`frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`][legacy-v2-fixture].
 
-After seeding, use `/settings` → **Legacy save upgrades** to merge or replace, and verify detection
-with the global legacy banner (shared detection logic).
+After seeding, use [`/settings`][settings-route] → **Legacy save upgrades** to merge or replace, and
+verify detection with the global legacy banner (shared detection logic).
+
+[docs-changelog-20230630]: /docs/changelog/20230630
+[docs-changelog-20230915]: /docs/changelog/20230915
+[docs-changelog-20260201]: /docs/changelog/20260201
+[legacy-save-detection]: https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveDetection.ts
+[legacy-v1-fixture]: https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json
+[legacy-save-seeding]: https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveSeeding.ts
+[staging-site]: https://staging.democratized.space
+[legacy-v2-fixture]: https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json
+[game-state]: https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/gameState.js
+[game-state-common]: https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/gameState/common.js
+[legacy-save-upgrade]: https://github.com/democratizedspace/dspace/blob/main/frontend/src/components/svelte/LegacySaveUpgrade.svelte
+[settings-route]: /settings
