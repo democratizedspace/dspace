@@ -45,6 +45,13 @@ function isPersistenceUnavailable(error) {
     return PERSISTENCE_ERROR_MESSAGES.some((text) => message.includes(text));
 }
 
+function getEntityType(entity) {
+    if (!entity) {
+        return null;
+    }
+    return entity.entityType ?? entity.type ?? null;
+}
+
 function getFallbackStore(entityType) {
     const store = fallbackStores.get(entityType);
     if (!store) {
@@ -64,14 +71,30 @@ function normalizeId(id) {
     return id;
 }
 
+const UUID_FALLBACK_TEMPLATE = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+
+function generateUuidFallback() {
+    return UUID_FALLBACK_TEMPLATE.replace(/[xy]/g, (character) => {
+        const random = (Math.random() * 16) | 0;
+        const value = character === 'x' ? random : (random & 0x3) | 0x8;
+        return value.toString(16);
+    });
+}
+
 function generateQuestId() {
     if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
         return crypto.randomUUID();
     }
 
-    const timestamp = Date.now().toString(36);
-    const random = Math.random().toString(36).slice(2, 8);
-    return `quest-${timestamp}-${random}`;
+    return generateUuidFallback();
+}
+
+function generateItemId() {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    }
+
+    return generateUuidFallback();
 }
 
 function allocateFallbackId(entityType, providedId) {
@@ -160,7 +183,7 @@ export const db = {
         getStoreForEntityType(entityType);
         const preparedEntity = {
             ...entity,
-            type: entityType,
+            entityType,
             createdAt: new Date().toISOString(),
         };
         return addEntity(preparedEntity).catch((error) => {
@@ -175,7 +198,7 @@ export const db = {
     get: (entityType, id) => {
         return getEntity(id, entityType)
             .then((entity) => {
-                if (entity && entity.type === entityType) {
+                if (entity && getEntityType(entity) === entityType) {
                     return entity;
                 }
                 throw new Error(`${entityType} not found with id: ${id}`);
@@ -195,7 +218,7 @@ export const db = {
     update: (entityType, id, updates) => {
         return getEntity(id, entityType)
             .then((entity) => {
-                if (!entity || entity.type !== entityType) {
+                if (!entity || getEntityType(entity) !== entityType) {
                     throw new Error(`${entityType} not found with id: ${id}`);
                 }
 
@@ -225,7 +248,7 @@ export const db = {
     delete: (entityType, id) => {
         return getEntity(id, entityType)
             .then((entity) => {
-                if (!entity || entity.type !== entityType) {
+                if (!entity || getEntityType(entity) !== entityType) {
                     throw new Error(`${entityType} not found with id: ${id}`);
                 }
                 return deleteEntity(id, entityType).catch((error) => {
@@ -307,14 +330,16 @@ export const db = {
         add: (item) => {
             // Ensure minimal item structure
             const preparedItem = {
+                ...item,
+                id: item.id ?? generateItemId(),
                 name: item.name || 'Unnamed Item',
                 description: item.description || '',
                 image: item.image || null,
                 price: item.price || null,
                 unit: item.unit || null,
                 type: item.type || null,
+                category: item.category || 'Custom',
                 custom: true,
-                ...item,
             };
 
             return db.add(ENTITY_TYPES.ITEM, preparedItem);

@@ -1,23 +1,20 @@
 <script>
-    import items from '../../pages/inventory/json/items';
     import { getItemCount } from '../../utils/gameState/inventory.js';
 
-    export let itemId;
-    export const count = undefined;
-
-    const item = items.find((item) => item.id === itemId);
+    export let item;
+    export let count = undefined;
 </script>
 
 <div class="item">
     <a href={`/inventory/item/${item.id}`}>
         <div class="horizontal">
             <div class="item-image">
-                <img alt={item.title} src={item.image} />
+                <img alt={item.name ?? item.title} src={item.image} />
             </div>
             <div class="vertical">
                 <h4 class="name">{item.name}</h4>
                 <p class="description">{item.description}</p>
-                <p><strong>Count:</strong> {getItemCount(item.id)}</p>
+                <p><strong>Count:</strong> {count ?? getItemCount(item.id)}</p>
                 {#if item.price}
                     <p><strong>Price:</strong> {item.price}</p>
                 {/if}

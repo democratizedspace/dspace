@@ -127,7 +127,7 @@
             {:else}
                 {#each filteredItems as item (item.id)}
                     <div class="item-row">
-                        <ItemCard itemId={item.id} />
+                        <ItemCard {item} />
                         <div class="item-actions">
                             <button
                                 class="preview-button"

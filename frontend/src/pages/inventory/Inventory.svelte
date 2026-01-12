@@ -3,28 +3,38 @@
     import ItemList from '../../components/svelte/ItemList.svelte';
     import Chip from '../../components/svelte/Chip.svelte';
     import items from './json/items';
+    import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
     import { onMount } from 'svelte';
 
     let showAllItems = false;
     let currentInventory = {};
     let isClientSide = false;
     let allItems = {};
+    let fullItemList = items;
     const actionButtons = [
         { text: 'Create a new item', href: '/inventory/create' },
         { text: 'Manage items', href: '/inventory/manage' },
     ];
 
     // Use onMount to ensure this code only runs in the browser after hydration
-    onMount(() => {
+    onMount(async () => {
         isClientSide = true;
 
-        // Initialize allItems with all available items from the items list
-        allItems = items.reduce((acc, item) => {
-            acc[item.id] = {
-                count: $state.inventory[item.id] ? $state.inventory[item.id].count : 0,
-            };
-            return acc;
-        }, {});
+        try {
+            const customItems = await db.list(ENTITY_TYPES.ITEM);
+            fullItemList = [...items, ...customItems];
+        } catch (error) {
+            console.warn('Failed to load custom items:', error);
+            fullItemList = items;
+        } finally {
+            // Initialize allItems with all available items from the items list
+            allItems = fullItemList.reduce((acc, item) => {
+                acc[item.id] = {
+                    count: $state.inventory[item.id] ? $state.inventory[item.id].count : 0,
+                };
+                return acc;
+            }, {});
+        }
     });
 
     // Reactive statement to update inventory when showAllItems or isClientSide changes
@@ -48,7 +58,7 @@
         </label>
     </div>
     {#if isClientSide}
-        <ItemList inventory={currentInventory} />
+        <ItemList inventory={currentInventory} items={fullItemList} />
     {:else}
         <div class="loading">Loading inventory...</div>
     {/if}

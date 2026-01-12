@@ -2,17 +2,16 @@
     import { writable } from 'svelte/store';
     import ItemCard from './ItemCard.svelte';
     import Chip from './Chip.svelte';
-    import items from '../../pages/inventory/json/items';
     import SearchBar from './SearchBar.svelte';
     import Sorter from './Sorter.svelte';
     import { getPriceStringComponents } from '../../utils.js';
     import { getItemCount } from '../../utils/gameState/inventory.js';
 
     export let inventory;
+    export let items = [];
 
-    const fullItemList = items.map((item) => ({ ...item }));
-
-    const categories = [...new Set(fullItemList.map((item) => item.category))].sort();
+    let fullItemList = [];
+    let categories = [];
 
     let inventoryItemList = [];
     let searchResults = [];
@@ -103,6 +102,8 @@
         },
     ];
 
+    $: fullItemList = items.map((item) => ({ ...item }));
+    $: categories = [...new Set(fullItemList.map((item) => item.category))].sort();
     $: {
         inventoryItemList = fullItemList.filter((item) => inventory[item.id] !== undefined);
         searchResults = inventoryItemList;
@@ -150,7 +151,7 @@
 
     <div class="horizontal">
         {#each $filteredItems as item (item.id)}
-            <ItemCard itemId={item.id} count={inventory[item.id]} />
+            <ItemCard {item} count={inventory[item.id]} />
         {/each}
     </div>
 </div>

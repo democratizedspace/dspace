@@ -91,7 +91,7 @@ export function addEntity(entity) {
     if (!hasIndexedDB()) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
-    const storeName = getStoreForEntityType(entity.type);
+    const storeName = getStoreForEntityType(entity.entityType ?? entity.type);
     return getTransaction(storeName, 'readwrite').then((store) => {
         return new Promise((resolve, reject) => {
             const request = store.add(entity);
@@ -127,7 +127,7 @@ export async function updateEntity(updatedEntity) {
     if (!hasIndexedDB()) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
-    const storeName = getStoreForEntityType(updatedEntity.type);
+    const storeName = getStoreForEntityType(updatedEntity.entityType ?? updatedEntity.type);
     return getTransaction(storeName, 'readwrite').then((store) => {
         return new Promise((resolve, reject) => {
             const getRequest = store.get(updatedEntity.id);
