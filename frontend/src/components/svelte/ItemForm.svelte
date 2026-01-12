@@ -81,7 +81,7 @@
         }
 
         let imageUrl = previewUrl;
-        if (!imageUrl && image instanceof File) {
+        if (image instanceof File && (!imageUrl || imageUrl.startsWith('blob:'))) {
             try {
                 imageUrl = await readFileAsDataUrl(image);
                 previewUrl = imageUrl;

@@ -132,7 +132,8 @@ describe('ItemForm Component', () => {
                 expect.objectContaining({
                     name: 'Test Item',
                     description: 'This is a test item description',
-                    image: 'mocked-image-url',
+                    image: 'data:image/png;base64,mockedBase64Data',
+                    imageBlob: expect.any(File),
                     dependencies: ['resource/filament', 'tool/nozzle'],
                 })
             );

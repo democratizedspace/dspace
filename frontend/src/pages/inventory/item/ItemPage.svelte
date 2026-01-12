@@ -6,6 +6,7 @@
     import { getProcessesForItem, ProcessItemTypes } from '../../../utils/gameState/processes.js';
     import { getItemCounts } from '../../../utils/gameState/inventory.js';
     import { getQuestsForItem } from '../../../utils/itemDependencies.js';
+    import { db, ENTITY_TYPES } from '../../../utils/customcontent.js';
     import items from '../json/items';
     import Process from '../../../components/svelte/Process.svelte';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
@@ -17,7 +18,7 @@
     const mounted = writable(false);
     const count = writable(0);
 
-    const item = items.find((item) => item.id === itemId);
+    let item = items.find((item) => item.id === itemId);
 
     const processes = getProcessesForItem(itemId);
     const quests = getQuestsForItem(itemId);
@@ -25,14 +26,21 @@
     const hasProcesses = Object.values(processes).some((arr) => arr.length);
     const hasQuests = quests.requires.length > 0 || quests.rewards.length > 0;
 
-    onMount(() => {
+    onMount(async () => {
+        if (!item) {
+            try {
+                item = await db.get(ENTITY_TYPES.ITEM, itemId);
+            } catch (error) {
+                item = null;
+            }
+        }
         const itemCount = getItemCounts([{ id: itemId }])[itemId];
         count.set(itemCount);
         mounted.set(true);
     });
 </script>
 
-{#if $mounted}
+{#if $mounted && item}
     <Chip inverted={true} text="">
         <div class="vertical">
             <img src={item.image} alt={item.name} />
