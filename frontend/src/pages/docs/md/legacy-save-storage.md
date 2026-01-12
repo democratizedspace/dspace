@@ -22,6 +22,10 @@ This doc explains how DSPACE stores game state across v1 (cookies), v2 (localSto
 
 **Schema:** Each item is stored as its own cookie.
 
+- **Stable v1 reference:** The last commit on the `main` branch before DSPACE v2 is
+  [`fc840def24c5140411d2892f468960acb8250681`](https://github.com/democratizedspace/dspace/tree/fc840def24c5140411d2892f468960acb8250681),
+  which is the most stable checkpoint for verifying v1 storage behavior and constructing seed
+  packets for v1 → v3 migration.
 - **Key pattern:** `item-<id>` (regex `/^item-\d+$/`).
 - **Value:** numeric count as a string. Values may be URL-encoded (ex: `20%2B` → `20+`). Parsing is
   tolerant: the migration helper uses `parseFloat` on the decoded value and ignores non-positive
