@@ -1,0 +1,8 @@
+{
+  "id": "inventory-create-upload-404",
+  "date": "2026-01-12",
+  "component": "frontend/ui/inventory/create",
+  "rootCause": "Item creation posted images to a missing /api/upload endpoint, so saves aborted.",
+  "resolution": "Persist image data URLs with the item payload so IndexedDB saves without uploads.",
+  "references": ["frontend/src/components/svelte/ItemForm.svelte"]
+}

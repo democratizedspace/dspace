@@ -24,6 +24,15 @@
             .filter(Boolean);
     }
 
+    function readFileAsDataUrl(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (event) => resolve(event.target.result);
+            reader.onerror = () => reject(new Error('Failed to read image file.'));
+            reader.readAsDataURL(file);
+        });
+    }
+
     function handleImageUpload(event) {
         const file = event.target.files[0];
         if (file) {
@@ -63,14 +72,7 @@
 
         let imageUrl = previewUrl;
         if (image instanceof File) {
-            const uploadData = new FormData();
-            uploadData.append('image', image);
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: uploadData,
-            });
-            const data = await response.json();
-            imageUrl = data.url;
+            imageUrl = previewUrl || (await readFileAsDataUrl(image));
         }
 
         const parsedDependencies = parseDependencies(dependenciesInput);
