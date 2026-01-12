@@ -1,5 +1,6 @@
 <script>
     import { state } from '../../utils/gameState/common.js';
+    import Chip from '../../components/svelte/Chip.svelte';
     import ItemList from '../../components/svelte/ItemList.svelte';
     import items from './json/items';
     import { onMount } from 'svelte';
@@ -8,6 +9,10 @@
     let currentInventory = {};
     let isClientSide = false;
     let allItems = {};
+    const actionButtons = [
+        { text: 'Create a new item', href: '/inventory/create' },
+        { text: 'Manage items', href: '/inventory/manage' },
+    ];
 
     // Use onMount to ensure this code only runs in the browser after hydration
     onMount(() => {
@@ -32,6 +37,11 @@
 </script>
 
 <div data-hydrated={isClientSide ? 'true' : 'false'}>
+    <div class="action-buttons">
+        {#each actionButtons as button}
+            <Chip text={button.text} href={button.href} inverted={true} />
+        {/each}
+    </div>
     <div class="horizontal">
         <label>
             <input type="checkbox" class="checkbox" bind:checked={showAllItems} /> Show all items
@@ -51,6 +61,13 @@
         align-items: center;
         /* center */
         justify-content: center;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
     }
 
     label {
