@@ -80,6 +80,9 @@
 
     async function handleSubmit(event) {
         event.preventDefault();
+        if (isSubmitting) {
+            return;
+        }
         submitError = '';
         submitSuccess = '';
         savedItemId = null;
@@ -131,6 +134,7 @@
             }
             savedItemId = storedId;
         } catch (error) {
+            console.error('Failed to save item', error);
             submitError =
                 error?.message ||
                 'Unable to save the item right now. Please try again or refresh the page.';
