@@ -4,11 +4,13 @@
     import items from '../../inventory/json/items';
     import { buyItems, getItemCount } from '../../../utils/gameState/inventory.js';
     import { getPriceStringComponents } from '../../../utils.js';
+    import { getProcess } from '../../../utils/customcontent.js';
     import { onMount } from 'svelte';
 
     export let slug;
 
     let process = processes.find((p) => p.id === slug);
+    let isCustomProcess = false;
     let disableBuy = true;
     let toastVisible = false;
     let toastMessage = '';
@@ -47,12 +49,31 @@
         updateDisabled();
     };
 
-    onMount(updateDisabled);
+    const loadCustomProcess = async () => {
+        if (process) {
+            updateDisabled();
+            return;
+        }
+
+        try {
+            const customProcess = await getProcess(slug);
+            process = customProcess;
+            isCustomProcess = Boolean(customProcess?.custom);
+        } catch (error) {
+            console.warn('Unable to load custom process:', error);
+            process = null;
+            isCustomProcess = false;
+        } finally {
+            updateDisabled();
+        }
+    };
+
+    onMount(loadCustomProcess);
 </script>
 
 <div class="process-view">
-    <Process processId={slug} />
-    {#if process && process.requireItems && process.requireItems.length > 0}
+    <Process processId={slug} processData={isCustomProcess ? process : null} />
+    {#if process && process.requireItems && process.requireItems.length > 0 && !isCustomProcess}
         <button
             class="primary"
             type="button"

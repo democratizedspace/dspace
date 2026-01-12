@@ -1,0 +1,11 @@
+{
+  "id": "custom-process-detail-link-missing",
+  "date": "2026-01-12",
+  "component": "frontend process detail view",
+  "rootCause": "The process detail page only searched the built-in processes dataset, so newly created custom processes could not be resolved and rendered when following the success link.",
+  "resolution": "Load custom process records from the custom content store when the slug does not match a built-in process and render the resolved data in the process view.",
+  "references": [
+    "frontend/src/pages/process/[slug]/ProcessView.svelte",
+    "frontend/src/utils/customcontent.js"
+  ]
+}
