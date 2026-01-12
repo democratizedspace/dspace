@@ -1,0 +1,12 @@
+{
+  "id": "OUT-2026-01-12-process-create-link-missing",
+  "date": "2026-01-12",
+  "component": "frontend/processes",
+  "rootCause": "ProcessView only resolved process metadata from the generated static JSON list, so newly created custom processes stored in IndexedDB rendered a success link that pointed to a page unable to load the process details.",
+  "resolution": "Load custom process metadata on the client when a built-in process is not found and pass it into the process renderer so process detail pages display newly created custom processes.",
+  "references": [
+    "frontend/src/pages/process/[slug]/ProcessView.svelte",
+    "frontend/src/utils/customcontent.js",
+    "frontend/src/components/svelte/Process.svelte"
+  ]
+}
