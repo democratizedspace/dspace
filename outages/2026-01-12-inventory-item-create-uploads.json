@@ -1,0 +1,15 @@
+{
+  "id": "inventory-create-item-upload-404",
+  "date": "2026-01-12",
+  "component": "frontend/ui/inventory/create",
+  "rootCause": "The item form attempted to upload images to /api/upload and used the entity type field for item metadata, so the upload 404 and type mismatch prevented custom items from being stored in IndexedDB.",
+  "resolution": "Store image data directly with the custom item payload, generate custom item IDs, and load custom items into the inventory listing so they appear after creation.",
+  "references": [
+    "frontend/src/components/svelte/ItemForm.svelte",
+    "frontend/src/pages/inventory/Inventory.svelte",
+    "frontend/src/components/svelte/ItemList.svelte",
+    "frontend/src/components/svelte/ItemCard.svelte",
+    "frontend/src/utils/customcontent.js",
+    "frontend/src/utils/indexeddb.js"
+  ]
+}

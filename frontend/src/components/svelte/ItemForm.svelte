@@ -1,7 +1,8 @@
 <script>
     import { createEventDispatcher, onMount } from 'svelte';
     import ItemPreview from './ItemPreview.svelte';
-    import { addEntity, updateEntity } from '../../utils/indexeddb.js';
+    import { addItems } from '../../utils/gameState/inventory.js';
+    import { db } from '../../utils/customcontent.js';
 
     export let name = '';
     export let description = '';
@@ -61,17 +62,8 @@
             return;
         }
 
-        let imageUrl = previewUrl;
-        if (image instanceof File) {
-            const uploadData = new FormData();
-            uploadData.append('image', image);
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: uploadData,
-            });
-            const data = await response.json();
-            imageUrl = data.url;
-        }
+        const imageUrl = previewUrl;
+        const imageBlob = image instanceof File ? image : itemData?.imageBlob ?? null;
 
         const parsedDependencies = parseDependencies(dependenciesInput);
         const hasDependenciesInput = dependenciesInput.trim().length > 0;
@@ -82,19 +74,22 @@
             ...(price && { price }),
             ...(unit && { unit }),
             ...(type && { type }),
+            ...(imageBlob && { imageBlob }),
             ...((hasDependenciesInput || (isEdit && itemData?.dependencies?.length)) && {
                 dependencies: parsedDependencies,
             }),
         };
 
+        let storedId = itemData?.id ?? null;
         if (isEdit && itemData?.id) {
-            payload.id = itemData.id;
-            await updateEntity(payload);
+            await db.items.update(itemData.id, payload);
+            storedId = itemData.id;
         } else {
-            await addEntity(payload);
+            storedId = await db.items.add(payload);
+            addItems([{ id: storedId, count: 0 }]);
         }
 
-        dispatch('submit', payload);
+        dispatch('submit', { ...payload, id: storedId });
     }
 
     onMount(() => {
