@@ -17,6 +17,15 @@
     let validationErrors = {};
     let dependenciesInput = '';
 
+    function readImageAsDataUrl(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(file);
+        });
+    }
+
     function parseDependencies(value) {
         return value
             .split(/[\n,]/)
@@ -63,14 +72,7 @@
 
         let imageUrl = previewUrl;
         if (image instanceof File) {
-            const uploadData = new FormData();
-            uploadData.append('image', image);
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: uploadData,
-            });
-            const data = await response.json();
-            imageUrl = data.url;
+            imageUrl = imageUrl || (await readImageAsDataUrl(image));
         }
 
         const parsedDependencies = parseDependencies(dependenciesInput);

@@ -3,6 +3,7 @@
     import ItemList from '../../components/svelte/ItemList.svelte';
     import items from './json/items';
     import { onMount } from 'svelte';
+    import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
 
     let showAllItems = false;
     let currentInventory = {};
@@ -13,13 +14,25 @@
     onMount(() => {
         isClientSide = true;
 
+        const buildInventoryMap = (itemList) =>
+            itemList.reduce((acc, item) => {
+                acc[item.id] = {
+                    count: $state.inventory[item.id] ? $state.inventory[item.id].count : 0,
+                };
+                return acc;
+            }, {});
+
         // Initialize allItems with all available items from the items list
-        allItems = items.reduce((acc, item) => {
-            acc[item.id] = {
-                count: $state.inventory[item.id] ? $state.inventory[item.id].count : 0,
-            };
-            return acc;
-        }, {});
+        allItems = buildInventoryMap(items);
+
+        db.list(ENTITY_TYPES.ITEM)
+            .then((customItems) => {
+                const mergedItems = [...items, ...customItems];
+                allItems = buildInventoryMap(mergedItems);
+            })
+            .catch((error) => {
+                console.error('Error loading custom items:', error);
+            });
     });
 
     // Reactive statement to update inventory when showAllItems or isClientSide changes

@@ -1,30 +1,46 @@
 <script>
+    import { onMount } from 'svelte';
     import items from '../../pages/inventory/json/items';
+    import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
     import { getItemCount } from '../../utils/gameState/inventory.js';
 
     export let itemId;
     export const count = undefined;
 
-    const item = items.find((item) => item.id === itemId);
+    let item = items.find((entry) => entry.id === itemId);
+
+    onMount(async () => {
+        if (item) {
+            return;
+        }
+
+        try {
+            item = await db.get(ENTITY_TYPES.ITEM, itemId);
+        } catch (error) {
+            console.error('Error loading custom item:', error);
+        }
+    });
 </script>
 
-<div class="item">
-    <a href={`/inventory/item/${item.id}`}>
-        <div class="horizontal">
-            <div class="item-image">
-                <img alt={item.title} src={item.image} />
+{#if item}
+    <div class="item">
+        <a href={`/inventory/item/${item.id}`}>
+            <div class="horizontal">
+                <div class="item-image">
+                    <img alt={item.name} src={item.image} />
+                </div>
+                <div class="vertical">
+                    <h4 class="name">{item.name}</h4>
+                    <p class="description">{item.description}</p>
+                    <p><strong>Count:</strong> {count ?? getItemCount(item.id)}</p>
+                    {#if item.price}
+                        <p><strong>Price:</strong> {item.price}</p>
+                    {/if}
+                </div>
             </div>
-            <div class="vertical">
-                <h4 class="name">{item.name}</h4>
-                <p class="description">{item.description}</p>
-                <p><strong>Count:</strong> {getItemCount(item.id)}</p>
-                {#if item.price}
-                    <p><strong>Price:</strong> {item.price}</p>
-                {/if}
-            </div>
-        </div>
-    </a>
-</div>
+        </a>
+    </div>
+{/if}
 
 <style>
     .item {

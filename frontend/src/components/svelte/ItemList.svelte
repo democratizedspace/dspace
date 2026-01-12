@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import ItemCard from './ItemCard.svelte';
     import Chip from './Chip.svelte';
@@ -6,13 +7,12 @@
     import SearchBar from './SearchBar.svelte';
     import Sorter from './Sorter.svelte';
     import { getPriceStringComponents } from '../../utils.js';
+    import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
     import { getItemCount } from '../../utils/gameState/inventory.js';
 
     export let inventory;
 
-    const fullItemList = items.map((item) => ({ ...item }));
-
-    const categories = [...new Set(fullItemList.map((item) => item.category))].sort();
+    let fullItemList = items.map((item) => ({ ...item }));
 
     let inventoryItemList = [];
     let searchResults = [];
@@ -20,6 +20,19 @@
     let sortConfig = null;
 
     const filteredItems = writable([]);
+
+    onMount(async () => {
+        try {
+            const customItems = await db.list(ENTITY_TYPES.ITEM);
+            const normalizedCustomItems = customItems.map((item) => ({
+                ...item,
+                category: item.category ?? 'Custom',
+            }));
+            fullItemList = [...items, ...normalizedCustomItems].map((item) => ({ ...item }));
+        } catch (error) {
+            console.error('Error loading custom items:', error);
+        }
+    });
 
     function applyFiltersAndSort() {
         const categorySet = new Set(activeCategories);
@@ -102,6 +115,8 @@
             },
         },
     ];
+
+    $: categories = [...new Set(fullItemList.map((item) => item.category))].sort();
 
     $: {
         inventoryItemList = fullItemList.filter((item) => inventory[item.id] !== undefined);

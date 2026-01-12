@@ -1,0 +1,14 @@
+{
+  "id": "inventory-create-item-upload-404",
+  "date": "2026-02-14",
+  "component": "frontend/ui/inventory/create",
+  "rootCause": "The custom item form tried to upload images to a missing /api/upload endpoint, which returned HTML and prevented the IndexedDB save.",
+  "resolution": "Store uploaded images as data URLs directly in IndexedDB and load custom items in inventory views.",
+  "references": [
+    "frontend/src/components/svelte/ItemForm.svelte",
+    "frontend/src/components/svelte/ItemList.svelte",
+    "frontend/src/pages/inventory/Inventory.svelte",
+    "frontend/src/pages/inventory/item/ItemPage.svelte",
+    "frontend/src/components/svelte/ItemCard.svelte"
+  ]
+}
