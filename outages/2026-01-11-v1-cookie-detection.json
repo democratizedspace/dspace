@@ -1,0 +1,16 @@
+{
+  "id": "v1-cookie-detection",
+  "date": "2026-01-11",
+  "component": "legacy-save-upgrade-ui",
+  "longForm": "outages/2026-01-11-v1-cookie-detection.md",
+  "rootCause": "The Settings legacy upgrade card only used server-rendered cookie props, so client-set v1 cookies never refreshed the item list even after detection reran.",
+  "resolution": "Added a shared v1 cookie parser and refreshed Settings state from document.cookie so v1 items and parse issues display correctly.",
+  "references": [
+    "frontend/src/components/svelte/LegacySaveUpgrade.svelte",
+    "frontend/src/utils/legacySaveDetection.ts",
+    "frontend/src/components/__tests__/LegacySaveUpgrade.spec.ts",
+    "frontend/__tests__/legacySaveDetection.test.ts",
+    "docs/qa/v3.md",
+    "outages/2026-01-11-v1-cookie-detection.md"
+  ]
+}
