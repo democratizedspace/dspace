@@ -208,8 +208,9 @@
     </div>
 
     <div class="form-submit">
-        <button type="submit" class="submit-button">{isEdit ? 'Update Item' : 'Create Item'}</button
-        >
+        <button type="submit" class="submit-button">
+            {isEdit ? 'Update Item' : 'Create Item'}
+        </button>
     </div>
 </form>
 
