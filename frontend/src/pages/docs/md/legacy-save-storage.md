@@ -12,11 +12,11 @@ This doc explains how DSPACE stores game state across v1 (cookies), v2 (localSto
 
 - **V1 → V2 transition (June 30, 2023):** The v2 release notes call out returning v1 players and
   the quest reset, which anchors the cutoff between cookie-era saves and the v2 localStorage
-  format. See [`/docs/changelog/20230630`](/docs/changelog/20230630).
+  format. See [`/changelog#20230630`](/changelog#20230630).
 - **V2.1 localStorage format (September 15, 2023):** v2.1 explicitly documents that game state is
-  stored in localStorage. See [`/docs/changelog/20230915`](/docs/changelog/20230915).
+  stored in localStorage. See [`/changelog#20230915`](/changelog#20230915).
 - **V3 IndexedDB migration (February 1, 2026):** v3 ships the IndexedDB storage system and a
-  migration path from localStorage. See [`/docs/changelog/20260201`](/docs/changelog/20260201).
+  migration path from localStorage. See [`/changelog#20260201`](/changelog#20260201).
 
 ## V1 storage (cookies)
 
