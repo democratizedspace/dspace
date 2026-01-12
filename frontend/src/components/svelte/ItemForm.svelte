@@ -386,6 +386,12 @@
         opacity: 0.7;
     }
 
+    .submit-button:disabled:hover {
+        background-color: #007006;
+        cursor: wait;
+        opacity: 0.7;
+    }
+
     .submit-message {
         margin-top: 12px;
         font-size: 15px;

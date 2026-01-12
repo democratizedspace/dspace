@@ -12,6 +12,10 @@ jest.mock('../src/utils/indexeddb.js', () => ({
     updateEntity: jest.fn().mockResolvedValue('mocked-item-id'),
 }));
 
+jest.mock('../src/utils/gameState/inventory.js', () => ({
+    addItems: jest.fn(),
+}));
+
 import { addEntity, updateEntity } from '../src/utils/indexeddb.js';
 
 // Mock the browser's fetch API
@@ -138,6 +142,75 @@ describe('ItemForm Component', () => {
                 })
             );
         });
+    });
+
+    it('shows success feedback with links after creating an item', async () => {
+        const { getByLabelText, findByRole, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Success Item' },
+            });
+
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Success description' },
+            });
+
+            const file = new File(['mock content'], 'success.jpg', { type: 'image/jpeg' });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        const successMessage = await findByRole('status');
+        expect(successMessage).toHaveTextContent('Item created successfully.');
+        expect(successMessage).toHaveTextContent('View item');
+        expect(successMessage).toHaveTextContent('Manage items');
+        expect(successMessage.querySelector('a[href="/inventory/item/mocked-item-id"]'))
+            .toBeInTheDocument();
+        expect(successMessage.querySelector('a[href="/inventory/manage"]')).toBeInTheDocument();
+    });
+
+    it('shows an error message when saving fails', async () => {
+        addEntity.mockRejectedValueOnce(new Error('Database exploded'));
+
+        const { getByLabelText, getByText, findByRole } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Error Item' },
+            });
+
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Error description' },
+            });
+
+            const file = new File(['mock content'], 'error.jpg', { type: 'image/jpeg' });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        const errorMessage = await findByRole('alert');
+        expect(errorMessage).toHaveTextContent('Database exploded');
     });
 
     it('trims dependency values and filters empty entries', async () => {
