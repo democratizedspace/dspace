@@ -5,16 +5,19 @@
     import { buyItems, getItemCount } from '../../../utils/gameState/inventory.js';
     import { getPriceStringComponents } from '../../../utils.js';
     import { onMount } from 'svelte';
+    import { db } from '../../../utils/customcontent.js';
 
     export let slug;
 
     let process = processes.find((p) => p.id === slug);
+    let customProcess = null;
+    let isCustomProcess = false;
     let disableBuy = true;
     let toastVisible = false;
     let toastMessage = '';
 
     const updateDisabled = () => {
-        if (!process || !process.requireItems) {
+        if (!process || !process.requireItems || isCustomProcess) {
             disableBuy = true;
             return;
         }
@@ -29,7 +32,7 @@
     };
 
     const buyRequired = () => {
-        if (!process) return;
+        if (!process || isCustomProcess) return;
         let added = 0;
         process.requireItems.forEach((req) => {
             const have = getItemCount(req.id);
@@ -47,12 +50,27 @@
         updateDisabled();
     };
 
-    onMount(updateDisabled);
+    onMount(async () => {
+        if (!process) {
+            try {
+                customProcess = await db.processes.get(slug);
+                process = customProcess ?? null;
+                isCustomProcess = Boolean(customProcess);
+            } catch (error) {
+                console.error('Failed to load custom process:', error);
+                process = null;
+                isCustomProcess = false;
+            }
+        } else {
+            isCustomProcess = Boolean(process.custom);
+        }
+        updateDisabled();
+    });
 </script>
 
 <div class="process-view">
-    <Process processId={slug} />
-    {#if process && process.requireItems && process.requireItems.length > 0}
+    <Process processId={slug} processData={customProcess} />
+    {#if !isCustomProcess && process && process.requireItems && process.requireItems.length > 0}
         <button
             class="primary"
             type="button"

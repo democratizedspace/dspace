@@ -1,0 +1,12 @@
+{
+  "id": "OUT-2026-01-12-process-create-link-missing-custom",
+  "date": "2026-01-12",
+  "component": "frontend/processes",
+  "rootCause": "The process detail page only resolved built-in processes from generated JSON, so links for newly created custom processes pointed to /processes/{id} without loading IndexedDB data and rendered the \"Process details unavailable\" state.",
+  "resolution": "Load custom process data from the custom content database on the process detail view and pass it to the Process component so created processes render correctly.",
+  "references": [
+    "frontend/src/pages/process/[slug]/ProcessView.svelte",
+    "frontend/src/components/svelte/Process.svelte",
+    "frontend/src/utils/customcontent.js"
+  ]
+}
