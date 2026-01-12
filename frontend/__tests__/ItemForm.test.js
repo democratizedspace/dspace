@@ -140,6 +140,36 @@ describe('ItemForm Component', () => {
         });
     });
 
+    it('shows a success message after creating an item', async () => {
+        const { getByLabelText, getByText, findByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Success Item' },
+            });
+
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Confirmation should appear.' },
+            });
+
+            const file = new File(['mock content'], 'success-image.jpg', { type: 'image/jpeg' });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        expect(await findByText(/item created\./i)).toBeInTheDocument();
+    });
+
     it('trims dependency values and filters empty entries', async () => {
         const { getByLabelText, getByText } = render(ItemForm, {
             target: container,

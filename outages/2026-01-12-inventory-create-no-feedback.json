@@ -1,0 +1,11 @@
+{
+  "id": "inventory-create-item-no-feedback",
+  "date": "2026-01-12",
+  "component": "frontend/ui/inventory/create",
+  "rootCause": "ItemForm.svelte did not surface success or error states after IndexedDB writes, so item creation failures (or successful saves) appeared to do nothing for users.",
+  "resolution": "Handle item persistence failures with a visible error message, render a success confirmation on save, and reset the form when creating new items.",
+  "references": [
+    "frontend/src/components/svelte/ItemForm.svelte",
+    "frontend/__tests__/ItemForm.test.js"
+  ]
+}

@@ -17,6 +17,10 @@
     const dispatch = createEventDispatcher();
     let validationErrors = {};
     let dependenciesInput = '';
+    let statusMessage = '';
+    let statusTone = 'success';
+    let isSubmitting = false;
+    let imageInput;
 
     function parseDependencies(value) {
         return value
@@ -74,11 +78,30 @@
         return Object.keys(errors).length === 0;
     }
 
+    function resetForm() {
+        name = '';
+        description = '';
+        image = null;
+        previewUrl = null;
+        price = '';
+        unit = '';
+        type = '';
+        dependenciesInput = '';
+        validationErrors = {};
+        if (imageInput) {
+            imageInput.value = '';
+        }
+    }
+
     async function handleSubmit(event) {
         event.preventDefault();
+        statusMessage = '';
+        statusTone = 'success';
         if (!validateForm()) {
             return;
         }
+
+        isSubmitting = true;
 
         let imageUrl = previewUrl;
         if (image instanceof File && (!imageUrl || imageUrl.startsWith('blob:'))) {
@@ -90,6 +113,7 @@
                     ...validationErrors,
                     image: 'Image preview failed. Please try again.',
                 };
+                isSubmitting = false;
                 return;
             }
         }
@@ -111,15 +135,28 @@
         };
 
         let storedId = itemData?.id ?? null;
-        if (isEdit && itemData?.id) {
-            await db.items.update(itemData.id, payload);
-            storedId = itemData.id;
-        } else {
-            storedId = await db.items.add(payload);
-            addItems([{ id: storedId, count: 0 }]);
-        }
+        try {
+            if (isEdit && itemData?.id) {
+                await db.items.update(itemData.id, payload);
+                storedId = itemData.id;
+            } else {
+                storedId = await db.items.add(payload);
+                addItems([{ id: storedId, count: 0 }]);
+            }
 
-        dispatch('submit', { ...payload, id: storedId });
+            dispatch('submit', { ...payload, id: storedId });
+            statusMessage = isEdit ? 'Item updated.' : 'Item created.';
+            statusTone = 'success';
+            if (!isEdit) {
+                resetForm();
+            }
+        } catch (error) {
+            console.error('Unable to save item:', error);
+            statusMessage = 'Item could not be saved. Please try again.';
+            statusTone = 'error';
+        } finally {
+            isSubmitting = false;
+        }
     }
 
     onMount(() => {
@@ -171,6 +208,7 @@
             accept="image/*"
             on:change={handleImageUpload}
             class:error={validationErrors.image}
+            bind:this={imageInput}
         />
         {#if validationErrors.image}
             <span class="error-message">{validationErrors.image}</span>
@@ -208,10 +246,20 @@
     </div>
 
     <div class="form-submit">
-        <button type="submit" class="submit-button">
-            {isEdit ? 'Update Item' : 'Create Item'}
+        <button type="submit" class="submit-button" disabled={isSubmitting}>
+            {#if isSubmitting}
+                Saving...
+            {:else}
+                {isEdit ? 'Update Item' : 'Create Item'}
+            {/if}
         </button>
     </div>
+
+    {#if statusMessage}
+        <p class="status-message {statusTone}" role={statusTone === 'error' ? 'alert' : 'status'}>
+            {statusMessage}
+        </p>
+    {/if}
 </form>
 
 {#if name || description || previewUrl}
@@ -345,6 +393,24 @@
 
     .submit-button:hover {
         background-color: #005004;
+    }
+
+    .submit-button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    .status-message {
+        margin-top: 12px;
+        font-weight: bold;
+    }
+
+    .status-message.success {
+        color: #c4f5c6;
+    }
+
+    .status-message.error {
+        color: #ff3e3e;
     }
 
     @media (max-width: 480px) {
