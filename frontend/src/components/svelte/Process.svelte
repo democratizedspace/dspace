@@ -335,12 +335,12 @@
     $: {
         const builtInProcess = processes.find((p) => p.id === processId);
 
-        if (builtInProcess) {
+        if (processData) {
+            process = processData;
+            isCustomProcess = processData.custom !== false;
+        } else if (builtInProcess) {
             process = builtInProcess;
             isCustomProcess = Boolean(builtInProcess.custom);
-        } else if (processData) {
-            process = processData;
-            isCustomProcess = true;
         } else {
             process = null;
             isCustomProcess = false;

@@ -184,6 +184,30 @@ test('shows custom process note when rendering a custom process', async () => {
     expect(queryByTestId('qa-instant-finish-chip')).toBeNull();
 });
 
+test('prefers provided process data over built-in catalog lookup', async () => {
+    const customOverride = {
+        id: 'p1',
+        title: 'Override Process',
+        duration: '15s',
+        requireItems: [],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByText, queryByText } = render(Process, {
+        processId: 'p1',
+        processData: customOverride,
+    });
+
+    await tick();
+    expect(getByText('Override Process')).toBeTruthy();
+    expect(
+        getByText('Custom processes are displayed for reference and managed separately.')
+    ).toBeTruthy();
+    expect(queryByText('Start')).toBeNull();
+});
+
 test('renders fallback message when process details are unavailable', async () => {
     const { getByText } = render(Process, { processId: 'missing-process' });
 
