@@ -18,9 +18,7 @@
 
     const canBuyRequired = () =>
         Boolean(
-            builtInProcess &&
-                builtInProcess.requireItems &&
-                builtInProcess.requireItems.length
+            builtInProcess && builtInProcess.requireItems && builtInProcess.requireItems.length
         );
 
     const updateDisabled = () => {
