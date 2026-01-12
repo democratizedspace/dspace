@@ -7,20 +7,16 @@ import { render, act, fireEvent, waitFor } from '@testing-library/svelte';
 import ItemForm from '../src/components/svelte/ItemForm.svelte';
 
 // Mock the database operations using Jest instead of Vitest
-jest.mock('../src/utils/indexeddb.js', () => ({
-    addEntity: jest.fn().mockResolvedValue('mocked-item-id'),
-    updateEntity: jest.fn().mockResolvedValue('mocked-item-id'),
+jest.mock('../src/utils/customcontent.js', () => ({
+    db: {
+        items: {
+            add: jest.fn().mockResolvedValue('mocked-item-id'),
+            update: jest.fn().mockResolvedValue('mocked-item-id'),
+        },
+    },
 }));
 
-import { addEntity, updateEntity } from '../src/utils/indexeddb.js';
-
-// Mock the browser's fetch API
-global.fetch = jest.fn(() =>
-    Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve({ url: 'mocked-image-url' }),
-    })
-);
+import { db } from '../src/utils/customcontent.js';
 
 // Mock File and FileReader for image uploads
 global.File = class File {
@@ -44,6 +40,10 @@ global.FileReader = class FileReader {
             }, 0);
         });
     }
+};
+
+global.crypto = {
+    randomUUID: () => 'mocked-uuid',
 };
 
 // Ensure __SSR__ is properly set for client-side hydration
@@ -128,11 +128,11 @@ describe('ItemForm Component', () => {
 
         // Check if database add was called with correct data
         await waitFor(() => {
-            expect(addEntity).toHaveBeenCalledWith(
+            expect(db.items.add).toHaveBeenCalledWith(
                 expect.objectContaining({
                     name: 'Test Item',
                     description: 'This is a test item description',
-                    image: 'mocked-image-url',
+                    image: 'data:image/png;base64,mockedBase64Data',
                     dependencies: ['resource/filament', 'tool/nozzle'],
                 })
             );
@@ -171,7 +171,7 @@ describe('ItemForm Component', () => {
         });
 
         await waitFor(() => {
-            expect(addEntity).toHaveBeenCalledWith(
+            expect(db.items.add).toHaveBeenCalledWith(
                 expect.objectContaining({
                     dependencies: ['item/one', 'item/two'],
                 })
@@ -200,7 +200,7 @@ describe('ItemForm Component', () => {
         });
 
         // Verify the database was not called
-        expect(addEntity).not.toHaveBeenCalled();
+        expect(db.items.add).not.toHaveBeenCalled();
     });
 
     it('handles edit mode correctly', async () => {
@@ -237,7 +237,8 @@ describe('ItemForm Component', () => {
 
         // Verify update was called with correct data
         await waitFor(() => {
-            expect(updateEntity).toHaveBeenCalledWith(
+            expect(db.items.update).toHaveBeenCalledWith(
+                existingItem.id,
                 expect.objectContaining({
                     id: existingItem.id,
                     name: existingItem.name,

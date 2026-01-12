@@ -1,7 +1,7 @@
 <script>
     import { createEventDispatcher, onMount } from 'svelte';
     import ItemPreview from './ItemPreview.svelte';
-    import { addEntity, updateEntity } from '../../utils/indexeddb.js';
+    import { db } from '../../utils/customcontent.js';
 
     export let name = '';
     export let description = '';
@@ -55,6 +55,15 @@
         return Object.keys(errors).length === 0;
     }
 
+    function readFileAsDataUrl(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = () => reject(new Error('Failed to read image file'));
+            reader.readAsDataURL(file);
+        });
+    }
+
     async function handleSubmit(event) {
         event.preventDefault();
         if (!validateForm()) {
@@ -63,14 +72,7 @@
 
         let imageUrl = previewUrl;
         if (image instanceof File) {
-            const uploadData = new FormData();
-            uploadData.append('image', image);
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: uploadData,
-            });
-            const data = await response.json();
-            imageUrl = data.url;
+            imageUrl = previewUrl || (await readFileAsDataUrl(image));
         }
 
         const parsedDependencies = parseDependencies(dependenciesInput);
@@ -89,9 +91,10 @@
 
         if (isEdit && itemData?.id) {
             payload.id = itemData.id;
-            await updateEntity(payload);
+            await db.items.update(itemData.id, payload);
         } else {
-            await addEntity(payload);
+            payload.id = itemData?.id ?? crypto?.randomUUID?.() ?? `${Date.now()}`;
+            await db.items.add(payload);
         }
 
         dispatch('submit', payload);

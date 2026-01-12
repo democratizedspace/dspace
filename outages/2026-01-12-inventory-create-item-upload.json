@@ -1,0 +1,13 @@
+{
+  "id": "OUT-2026-01-12-inventory-create-item-upload",
+  "date": "2026-01-12",
+  "component": "frontend/inventory create",
+  "rootCause": "The item creation form attempted to upload images to a non-existent `/api/upload` endpoint. The failed fetch threw during submission, preventing the client from writing the item (including its image data) to IndexedDB and leaving the Create Item button seemingly inert.",
+  "resolution": "Store uploaded images locally as data URLs and persist them directly in IndexedDB without calling `/api/upload`. Item persistence now routes through the custom content database layer with explicit entity-type handling to keep item metadata intact while saving and updating records.",
+  "references": [
+    "frontend/src/components/svelte/ItemForm.svelte",
+    "frontend/src/utils/customcontent.js",
+    "frontend/src/utils/indexeddb.js",
+    "frontend/__tests__/ItemForm.test.js"
+  ]
+}

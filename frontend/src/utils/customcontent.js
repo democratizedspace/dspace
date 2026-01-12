@@ -160,7 +160,7 @@ export const db = {
         getStoreForEntityType(entityType);
         const preparedEntity = {
             ...entity,
-            type: entityType,
+            entityType,
             createdAt: new Date().toISOString(),
         };
         return addEntity(preparedEntity).catch((error) => {
@@ -175,7 +175,8 @@ export const db = {
     get: (entityType, id) => {
         return getEntity(id, entityType)
             .then((entity) => {
-                if (entity && entity.type === entityType) {
+                const storedType = entity?.entityType ?? entity?.type;
+                if (entity && storedType === entityType) {
                     return entity;
                 }
                 throw new Error(`${entityType} not found with id: ${id}`);
@@ -195,7 +196,8 @@ export const db = {
     update: (entityType, id, updates) => {
         return getEntity(id, entityType)
             .then((entity) => {
-                if (!entity || entity.type !== entityType) {
+                const storedType = entity?.entityType ?? entity?.type;
+                if (!entity || storedType !== entityType) {
                     throw new Error(`${entityType} not found with id: ${id}`);
                 }
 
@@ -225,7 +227,8 @@ export const db = {
     delete: (entityType, id) => {
         return getEntity(id, entityType)
             .then((entity) => {
-                if (!entity || entity.type !== entityType) {
+                const storedType = entity?.entityType ?? entity?.type;
+                if (!entity || storedType !== entityType) {
                     throw new Error(`${entityType} not found with id: ${id}`);
                 }
                 return deleteEntity(id, entityType).catch((error) => {
