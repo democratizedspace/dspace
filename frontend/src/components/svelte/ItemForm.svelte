@@ -17,6 +17,10 @@
     const dispatch = createEventDispatcher();
     let validationErrors = {};
     let dependenciesInput = '';
+    let submitError = '';
+    let submitSuccess = '';
+    let savedItemId = null;
+    let isSubmitting = false;
 
     function parseDependencies(value) {
         return value
@@ -76,6 +80,9 @@
 
     async function handleSubmit(event) {
         event.preventDefault();
+        submitError = '';
+        submitSuccess = '';
+        savedItemId = null;
         if (!validateForm()) {
             return;
         }
@@ -110,13 +117,26 @@
             }),
         };
 
+        isSubmitting = true;
         let storedId = itemData?.id ?? null;
-        if (isEdit && itemData?.id) {
-            await db.items.update(itemData.id, payload);
-            storedId = itemData.id;
-        } else {
-            storedId = await db.items.add(payload);
-            addItems([{ id: storedId, count: 0 }]);
+        try {
+            if (isEdit && itemData?.id) {
+                await db.items.update(itemData.id, payload);
+                storedId = itemData.id;
+                submitSuccess = 'Item updated successfully.';
+            } else {
+                storedId = await db.items.add(payload);
+                addItems([{ id: storedId, count: 0 }]);
+                submitSuccess = 'Item created successfully.';
+            }
+            savedItemId = storedId;
+        } catch (error) {
+            submitError =
+                error?.message ||
+                'Unable to save the item right now. Please try again or refresh the page.';
+            return;
+        } finally {
+            isSubmitting = false;
         }
 
         dispatch('submit', { ...payload, id: storedId });
@@ -208,10 +228,24 @@
     </div>
 
     <div class="form-submit">
-        <button type="submit" class="submit-button">
-            {isEdit ? 'Update Item' : 'Create Item'}
+        <button type="submit" class="submit-button" disabled={isSubmitting}>
+            {isSubmitting ? 'Saving…' : isEdit ? 'Update Item' : 'Create Item'}
         </button>
     </div>
+
+    {#if submitError}
+        <p class="submit-message error" role="alert">{submitError}</p>
+    {/if}
+    {#if submitSuccess}
+        <p class="submit-message success" role="status">
+            {submitSuccess}
+            {#if savedItemId}
+                <a href={`/inventory/item/${savedItemId}`}>View item</a>
+                <span class="separator">•</span>
+                <a href="/inventory/manage">Manage items</a>
+            {/if}
+        </p>
+    {/if}
 </form>
 
 {#if name || description || previewUrl}
@@ -345,6 +379,34 @@
 
     .submit-button:hover {
         background-color: #005004;
+    }
+
+    .submit-button:disabled {
+        cursor: wait;
+        opacity: 0.7;
+    }
+
+    .submit-message {
+        margin-top: 12px;
+        font-size: 15px;
+    }
+
+    .submit-message.success {
+        color: #baf9c0;
+    }
+
+    .submit-message.error {
+        color: #ff3e3e;
+    }
+
+    .submit-message a {
+        color: inherit;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+    .separator {
+        margin: 0 6px;
     }
 
     @media (max-width: 480px) {

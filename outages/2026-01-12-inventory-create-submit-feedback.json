@@ -1,0 +1,12 @@
+{
+  "id": "inventory-create-item-submit-no-feedback",
+  "date": "2026-01-12",
+  "component": "frontend/ui/inventory/create",
+  "rootCause": "The item creation form did not surface any success or failure state, so when IndexedDB writes failed or completed silently the UI appeared to do nothing.",
+  "resolution": "Track submit state in the item form, display success and error messaging with links to the created item, and disable the submit button while saving.",
+  "references": [
+    "frontend/src/components/svelte/ItemForm.svelte",
+    "frontend/src/utils/customcontent.js",
+    "frontend/src/utils/indexeddb.js"
+  ]
+}
