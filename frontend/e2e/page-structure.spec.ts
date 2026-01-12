@@ -64,7 +64,7 @@ test.describe('Page Layout Structure', () => {
 
         // Verify action buttons are present - adjust selectors as needed
         const createQuestButton = page.getByRole('link', { name: 'Create a new quest' });
-        const managedQuestsButton = page.getByRole('link', { name: 'Managed quests' });
+        const managedQuestsButton = page.getByRole('link', { name: 'Manage quests' });
 
         await expect(createQuestButton).toBeVisible();
         await expect(managedQuestsButton).toBeVisible();

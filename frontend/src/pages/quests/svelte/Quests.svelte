@@ -128,7 +128,7 @@
     // Define buttons for easy expansion
     const actionButtons = [
         { text: 'Create a new quest', href: '/quests/create' },
-        { text: 'Managed quests', href: '/quests/managed' },
+        { text: 'Manage quests', href: '/quests/manage' },
     ];
 </script>
 
