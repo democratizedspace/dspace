@@ -1,0 +1,8 @@
+{
+  "id": "inventory-create-item-submit-feedback",
+  "date": "2026-01-13",
+  "component": "frontend/ui/inventory/create",
+  "rootCause": "The item creation form did not surface success or failure states, and it lacked explicit error handling around IndexedDB writes, so submissions appeared to do nothing.",
+  "resolution": "Add submit state handling, wrap persistence in a try/catch, disable the submit button during saves, and display success or error feedback after the write completes.",
+  "references": ["frontend/src/components/svelte/ItemForm.svelte"]
+}

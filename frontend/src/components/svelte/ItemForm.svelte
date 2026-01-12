@@ -17,6 +17,9 @@
     const dispatch = createEventDispatcher();
     let validationErrors = {};
     let dependenciesInput = '';
+    let formMessage = '';
+    let formStatus = 'idle';
+    let isSubmitting = false;
 
     function parseDependencies(value) {
         return value
@@ -76,9 +79,15 @@
 
     async function handleSubmit(event) {
         event.preventDefault();
+        formMessage = '';
+        formStatus = 'idle';
         if (!validateForm()) {
             return;
         }
+        if (isSubmitting) {
+            return;
+        }
+        isSubmitting = true;
 
         let imageUrl = previewUrl;
         if (image instanceof File && (!imageUrl || imageUrl.startsWith('blob:'))) {
@@ -90,6 +99,7 @@
                     ...validationErrors,
                     image: 'Image preview failed. Please try again.',
                 };
+                isSubmitting = false;
                 return;
             }
         }
@@ -111,15 +121,37 @@
         };
 
         let storedId = itemData?.id ?? null;
-        if (isEdit && itemData?.id) {
-            await db.items.update(itemData.id, payload);
-            storedId = itemData.id;
-        } else {
-            storedId = await db.items.add(payload);
-            addItems([{ id: storedId, count: 0 }]);
+        try {
+            if (isEdit && itemData?.id) {
+                await db.items.update(itemData.id, payload);
+                storedId = itemData.id;
+            } else {
+                storedId = await db.items.add(payload);
+                addItems([{ id: storedId, count: 0 }]);
+            }
+            dispatch('submit', { ...payload, id: storedId });
+            if (!isEdit) {
+                name = '';
+                description = '';
+                image = null;
+                previewUrl = null;
+                price = '';
+                unit = '';
+                type = '';
+                dependenciesInput = '';
+                validationErrors = {};
+            }
+            formMessage = isEdit
+                ? 'Item updated successfully.'
+                : 'Item created! View it in Manage Items.';
+            formStatus = 'success';
+        } catch (error) {
+            console.error('Failed to save item:', error);
+            formMessage = 'Failed to save item. Please try again.';
+            formStatus = 'error';
+        } finally {
+            isSubmitting = false;
         }
-
-        dispatch('submit', { ...payload, id: storedId });
     }
 
     onMount(() => {
@@ -208,10 +240,13 @@
     </div>
 
     <div class="form-submit">
-        <button type="submit" class="submit-button">
+        <button type="submit" class="submit-button" disabled={isSubmitting}>
             {isEdit ? 'Update Item' : 'Create Item'}
         </button>
     </div>
+    {#if formMessage}
+        <p class={`form-message ${formStatus}`} aria-live="polite">{formMessage}</p>
+    {/if}
 </form>
 
 {#if name || description || previewUrl}
@@ -343,8 +378,27 @@
         transition: background 0.2s ease-in-out;
     }
 
+    .submit-button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
     .submit-button:hover {
         background-color: #005004;
+    }
+
+    .form-message {
+        margin-top: 12px;
+        font-size: 14px;
+        text-align: left;
+    }
+
+    .form-message.success {
+        color: #9dff9f;
+    }
+
+    .form-message.error {
+        color: #ffb3b3;
     }
 
     @media (max-width: 480px) {
