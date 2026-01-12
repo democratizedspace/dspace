@@ -93,7 +93,7 @@
                 return;
             }
         }
-        const imageBlob = image instanceof File ? image : itemData?.imageBlob ?? null;
+        const imageBlob = image instanceof File ? image : (itemData?.imageBlob ?? null);
 
         const parsedDependencies = parseDependencies(dependenciesInput);
         const hasDependenciesInput = dependenciesInput.trim().length > 0;
