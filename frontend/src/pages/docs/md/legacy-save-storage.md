@@ -25,8 +25,9 @@ formats.
 
 - **Storage split:** v1 writes inventory + quest progress into cookies and uses localStorage for
   process timers and machine locks.
-- **v3 detection:** v3 checks cookies/localStorage for legacy artifacts, but the default migration
-  scope for v1 should be **items + currency balances only**.
+- **v3 detection:** v3 checks cookies/localStorage for legacy artifacts; the intended migration
+  scope for v1 is **items + currency balances**, but current detection only parses `item-<id>`
+  cookies (see the v1 seed notes below).
 - **Why skip quests/process timers:** v1 quest IDs are numeric (`0`, `1`, `2`), while v2/v3 use slug
   routes (ex: `/quests/3dprinter/start`). Process timers also depend on v1 process IDs/machine IDs
   that do not map 1:1. Treat quest/progress/process timers as **out-of-scope** for the default v1
@@ -112,9 +113,10 @@ currency-balance-dUSD=123.45
 
 - **Legacy save banner** appears (v1 `item-` cookies present).
 - **/settings → Legacy save upgrades** shows a V1 card with the items listed above.
-- **Currency balance:** `currency-balance-dUSD` should be detected once currency parsing is added
-  for v1 seeding/migration. Until then, verify the balance via DevTools and treat it as migration
-  scope (items + currency only).
+- **Currency balance:** v3 detection only parses `item-<id>` cookies today, so
+  `currency-balance-dUSD` is **not surfaced** in the V1 UI. Verify the balance via DevTools and
+  treat this as a TODO in `detectV1CookieItems()` (`frontend/src/utils/legacySaveDetection.ts`) if
+  currency migration is required.
 
 ### Maximal seed (cookies + localStorage)
 
@@ -154,13 +156,14 @@ machine-lock-0=1
    appears on non-settings pages and links to `/settings`.
 3. **Check V1 detection UI:** in `/settings` → **Legacy save upgrades**, confirm:
    - The V1 card lists item counts from `item-<id>` cookies.
-   - `currency-balance-dUSD` is either surfaced (if implemented) or explicitly noted as pending
-     parsing, but still considered migration scope.
+   - `currency-balance-dUSD` is not parsed by v1 detection (only `item-<id>` cookies are read); use
+     DevTools to confirm balances until `detectV1CookieItems()` adds currency support.
    - Quest/progress cookies (if present) are labeled “not migrated” or ignored.
 4. **Merge v1 into v3:** click **Merge v1 into current save**.
    - Inventory gains the seeded items.
-   - Wallet gains the seeded dUSD balance (once currency parsing is implemented).
-   - Legacy cookies are expired after merge; reloading should remove the V1 banner.
+   - Wallet balances are **not** migrated today; currency cookies are not parsed or cleared by the
+     v1 flow.
+   - Detected `item-<id>` cookies are expired after merge; reloading should remove the V1 banner.
    - If you re-seed the cookies and merge again, counts should increase again (merge is additive).
 5. **Maximal seed case:** repeat with the maximal profile and confirm the same results, plus
    ensure process timers and machine locks remain ignored.
@@ -249,9 +252,11 @@ backup and fallback for unsupported environments.
 
 **Cleanup behavior:**
 
-- V1 cleanup expires each `item-<id>` cookie (see
+- V1 cleanup expires each detected `item-<id>` cookie (see
   [`frontend/src/components/svelte/LegacySaveUpgrade.svelte`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/svelte/LegacySaveUpgrade.svelte)).
-- V2 cleanup deletes `gameState` / `gameStateBackup` (also in the Legacy Save Upgrade UI).
+  Other legacy cookies (ex: `currency-balance-<symbol>`, `quest-`, `checkpoint-`) are not cleared.
+- V2 cleanup deletes `gameState` / `gameStateBackup` during v2 → v3 migrations (when IndexedDB is
+  in use) and also via the **Delete v2 localStorage** action in the Legacy Save Upgrade UI.
 
 ## QA seeding
 
@@ -289,7 +294,7 @@ Source: [`frontend/src/pages/inventory/json/items.json`](https://github.com/demo
 | 11 | 3D printed model rocket | A 3D-printed model rocket that can be used to launch small payloads into space. | 3dprint | 25 dUSD | — | — |
 | 12 | green PLA filament | 1 gram of green PLA filament for an FDM printer. | — | 0.02499 dUSD | — | g |
 | 13 | hydroponic starter plug | 1 rockwool starter plug for hydroponic seed germination. | — | 0.35 dUSD | — | — |
-| 14 | hydroponics nutrients | A bottle of hydroponics nutrients that can be used to grow plants. NPK: 9-3-6 | — | 25 dUSD | — |  L |
+| 14 | hydroponics nutrients | A bottle of hydroponics nutrients that can be used to grow plants. NPK: 9-3-6 | — | 25 dUSD | — | L |
 | 15 | 3D printing kit | A kit that contains all the parts you need to get started with 3D printing. Everything is fully assembled. | — | — | — | — |
 | 16 | 5 gallon bucket | A 5 gallon bucket that can be used to store water or other liquids. | — | 8 dUSD | — | — |
 | 17 | 5 gallon bucket of tap water (chlorinated) | A 5 gallon bucket of water. This water is chlorinated and should not be used for hydroponics. | machine | — | — | — |
@@ -311,7 +316,7 @@ Source: [`frontend/src/pages/inventory/json/items.json`](https://github.com/demo
 | 33 | 3D printed nosecone coupler | A nosecone coupler for a modular model rocket. | — | — | — | — |
 | 34 | hobbyist solid rocket motor | 24mm in diameter, 95mm long, weighing 58.1g. Max thrust: 31.3 Newtons. | — | 10 dUSD | — | — |
 | 35 | superglue | Don't get it on your hands! | machine | 10 dUSD | — | — |
-| 36 | kevlar cord | Perfect for model rocketry. | — | 0.3 dUSD | — |  m |
+| 36 | kevlar cord | Perfect for model rocketry. | — | 0.3 dUSD | — | m |
 | 37 | rocket igniter | Ignite a rocket motor with electricity. | — | 0.1 dUSD | — | — |
 | 38 | launch controller | A controller for launching model rockets. | machine | 20 dUSD | — | — |
 | 39 | launch-capable model rocket | A model rocket ready for launch. Ignite remotely using the launch controller. | — | — | — | — |
@@ -337,7 +342,7 @@ Source: [`frontend/src/pages/inventory/json/items.json`](https://github.com/demo
 | 59 | pH strip | A pH strip for measuring pH. | — | 0.15 dUSD | — | — |
 | 60 | 7 pH freshwater aquarium (150 L) | An freshwater aquarium with a pH of 7. | machine | — | — | — |
 | 61 | dSolar | a token that represents 1 Watt of energy generated using a solar panel. | — | — | — | — |
-| 62 | gravel | Loose gravel suitable for use in an aquarium. | — | 1 dUSD | — |  kg |
+| 62 | gravel | Loose gravel suitable for use in an aquarium. | — | 1 dUSD | — | kg |
 | 63 | aquarium net | A net for catching fish. | — | 5 dUSD | — | — |
 | 64 | dGoldfish | A token granted for feeding a goldfish | — | — | — | — |
 | 65 | Fish Friend Award | An award given for setting up your first goldfish aquarium. | — | — | — | — |
@@ -345,7 +350,7 @@ Source: [`frontend/src/pages/inventory/json/items.json`](https://github.com/demo
 | 67 | launch-capable model rocket (parachute) | A reusable rocket with a parachute | — | — | — | — |
 | 68 | Rocket Descent (animated) | A rocket descending to the ground with a parachute. | — | — | — | — |
 | 69 | dLaunch | 1 dLaunch = 1 launch of a rocket. Any launch counts, even a model rocket launch. | — | — | — | — |
-| 70 | dOffset | 1 dOffset is granted for reducing dCarbon with dUSD.  | — | — | — | — |
+| 70 | dOffset | 1 dOffset is granted for reducing dCarbon with dUSD. | — | — | — | — |
 | 71 | Tree Hugger Award | Awarded for converting dCarbon to dOffset. | — | — | — | — |
 | 72 | dBI | Awarded for every dUSD earned through Basic Income. See the Wallet page for more details. | — | — | — | — |
 | 73 | EV charger | A charger for electric vehicles. | — | 500 dUSD | — | — |
