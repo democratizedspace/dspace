@@ -325,7 +325,7 @@ Source: [`frontend/src/pages/inventory/json/items.json`](https://github.com/demo
 | 47 | harvested basil plant | A basil plant that has been freshly harvested. Don't worry, it'll grow back eventually! | — | — | — | — |
 | 48 | Green Thumb Award | Awarded for growing and harvesting your first batch of hydroponic basil! | — | — | — | — |
 | 49 | Solarpunk Award | Awarded for generating dWatt using solar panels! | — | — | — | — |
-| 50 | Completionist Award | Awarded for completing all of the quests avaialble on January 1, 2023. | — | — | — | — |
+| 50 | Completionist Award | Awarded for completing all of the quests available on January 1, 2023. | — | — | — | — |
 | 51 | aquarium (150 L) | A glass tank for housing fish. | machine | 60 dUSD | — | — |
 | 52 | aquarium (goldfish) (150 L) | An aquarium containing a goldfish. | machine | — | — | — |
 | 53 | goldfish | A goldfish. | — | 10 dUSD | — | — |
