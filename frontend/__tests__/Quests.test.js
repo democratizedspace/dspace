@@ -170,7 +170,7 @@ describe('Quests Component', () => {
                     const buttons = container.querySelectorAll('.action-buttons a');
                     expect(buttons.length).toBe(2);
                     expect(buttons[0].textContent).toContain('Create a new quest');
-                    expect(buttons[1].textContent).toContain('Managed quests');
+                    expect(buttons[1].textContent).toContain('Manage quests');
 
                     // Clean up
                     document.body.removeChild(container);
