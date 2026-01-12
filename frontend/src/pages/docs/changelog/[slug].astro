@@ -1,0 +1,7 @@
+---
+export const prerender = true;
+
+const { slug } = Astro.params;
+
+return Astro.redirect(`/changelog#${slug}`, 301);
+---
