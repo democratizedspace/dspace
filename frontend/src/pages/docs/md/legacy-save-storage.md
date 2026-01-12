@@ -42,8 +42,8 @@ formats.
 - Inventory cookie reads/writes:
   [`frontend/src/pages/inventory/utils.js`](https://github.com/democratizedspace/dspace/blob/fc840def24c5140411d2892f468960acb8250681/frontend/src/pages/inventory/utils.js)
 - Quest finish + checkpoint cookies:
-  [`frontend/src/pages/quests/finish/[questId].astro`](https://github.com/democratizedspace/dspace/blob/fc840def24c5140411d2892f468960acb8250681/frontend/src/pages/quests/finish/[questId].astro),
-  [`frontend/src/pages/quests/play/[questId]/[stepId].astro`](https://github.com/democratizedspace/dspace/blob/fc840def24c5140411d2892f468960acb8250681/frontend/src/pages/quests/play/[questId]/[stepId].astro)
+  [`frontend/src/pages/quests/finish/[questId].astro`](https://github.com/democratizedspace/dspace/blob/fc840def24c5140411d2892f468960acb8250681/frontend/src/pages/quests/finish/%5BquestId%5D.astro),
+  [`frontend/src/pages/quests/play/[questId]/[stepId].astro`](https://github.com/democratizedspace/dspace/blob/fc840def24c5140411d2892f468960acb8250681/frontend/src/pages/quests/play/%5BquestId%5D/%5BstepId%5D.astro)
 - Process timers + machine locks:
   [`frontend/src/pages/processes/process.svelte`](https://github.com/democratizedspace/dspace/blob/fc840def24c5140411d2892f468960acb8250681/frontend/src/pages/processes/process.svelte)
 - Process cooldown cookies:
