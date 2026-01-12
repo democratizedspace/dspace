@@ -4,21 +4,27 @@
     import items from '../../inventory/json/items';
     import { buyItems, getItemCount } from '../../../utils/gameState/inventory.js';
     import { getPriceStringComponents } from '../../../utils.js';
+    import { getProcess } from '../../../utils/customcontent.js';
     import { onMount } from 'svelte';
 
     export let slug;
 
-    let process = processes.find((p) => p.id === slug);
+    let builtInProcess = processes.find((p) => p.id === slug);
+    let processData = null;
+    let displayProcess = builtInProcess;
     let disableBuy = true;
     let toastVisible = false;
     let toastMessage = '';
 
+    const canBuyRequired = () =>
+        Boolean(builtInProcess && builtInProcess.requireItems && builtInProcess.requireItems.length);
+
     const updateDisabled = () => {
-        if (!process || !process.requireItems) {
+        if (!displayProcess || !displayProcess.requireItems) {
             disableBuy = true;
             return;
         }
-        disableBuy = process.requireItems.every((item) => getItemCount(item.id) >= item.count);
+        disableBuy = displayProcess.requireItems.every((item) => getItemCount(item.id) >= item.count);
     };
 
     const buyItem = (id, qty) => {
@@ -29,9 +35,9 @@
     };
 
     const buyRequired = () => {
-        if (!process) return;
+        if (!displayProcess) return;
         let added = 0;
-        process.requireItems.forEach((req) => {
+        displayProcess.requireItems.forEach((req) => {
             const have = getItemCount(req.id);
             const need = req.count - have;
             if (need > 0) {
@@ -47,12 +53,29 @@
         updateDisabled();
     };
 
-    onMount(updateDisabled);
+    onMount(async () => {
+        if (builtInProcess) {
+            updateDisabled();
+            return;
+        }
+
+        try {
+            const customProcess = await getProcess(slug);
+            if (customProcess) {
+                processData = customProcess;
+                displayProcess = customProcess;
+            }
+        } catch (error) {
+            console.warn('Unable to load custom process:', error);
+        } finally {
+            updateDisabled();
+        }
+    });
 </script>
 
 <div class="process-view">
-    <Process processId={slug} />
-    {#if process && process.requireItems && process.requireItems.length > 0}
+    <Process processId={slug} {processData} />
+    {#if canBuyRequired()}
         <button
             class="primary"
             type="button"

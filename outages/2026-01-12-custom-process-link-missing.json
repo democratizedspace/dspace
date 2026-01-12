@@ -1,0 +1,12 @@
+{
+  "id": "OUT-2026-01-12-custom-process-link-missing",
+  "date": "2026-01-12",
+  "component": "frontend/processes",
+  "rootCause": "Process detail pages only looked up processes from the generated JSON catalog, so custom processes created in IndexedDB resolved to an empty state and showed the \"Process details unavailable\" message when the confirmation link was clicked.",
+  "resolution": "Load custom processes by ID in the process detail view, pass the resolved data into Process.svelte, and suppress built-in-only actions so newly created processes render correctly from the confirmation link.",
+  "references": [
+    "frontend/src/pages/process/[slug]/ProcessView.svelte",
+    "frontend/src/components/svelte/Process.svelte",
+    "frontend/src/utils/customcontent.js"
+  ]
+}
