@@ -1,0 +1,12 @@
+{
+  "id": "inventory-create-item-no-feedback",
+  "date": "2026-02-13",
+  "component": "frontend/ui/inventory/create",
+  "rootCause": "The item creation form saved to IndexedDB without surfacing any success or failure state, so users saw no visible feedback when the async save completed or failed.",
+  "resolution": "Added client-side submission state handling to ItemForm so successful saves show a confirmation with a link to the new item and failures surface an inline error message.",
+  "references": [
+    "frontend/src/components/svelte/ItemForm.svelte",
+    "frontend/src/pages/inventory/create.astro",
+    "frontend/src/utils/customcontent.js"
+  ]
+}

@@ -17,6 +17,12 @@
     const dispatch = createEventDispatcher();
     let validationErrors = {};
     let dependenciesInput = '';
+    let successMessage = '';
+    let errorMessage = '';
+    let lastCreatedItemId = null;
+    let isSubmitting = false;
+    let isClientSide = false;
+    let imageInput;
 
     function parseDependencies(value) {
         return value
@@ -80,6 +86,14 @@
             return;
         }
 
+        if (isSubmitting) {
+            return;
+        }
+
+        successMessage = '';
+        errorMessage = '';
+        isSubmitting = true;
+
         let imageUrl = previewUrl;
         if (image instanceof File && (!imageUrl || imageUrl.startsWith('blob:'))) {
             try {
@@ -90,6 +104,7 @@
                     ...validationErrors,
                     image: 'Image preview failed. Please try again.',
                 };
+                isSubmitting = false;
                 return;
             }
         }
@@ -110,19 +125,45 @@
             }),
         };
 
-        let storedId = itemData?.id ?? null;
-        if (isEdit && itemData?.id) {
-            await db.items.update(itemData.id, payload);
-            storedId = itemData.id;
-        } else {
-            storedId = await db.items.add(payload);
-            addItems([{ id: storedId, count: 0 }]);
-        }
+        try {
+            let storedId = itemData?.id ?? null;
+            if (isEdit && itemData?.id) {
+                await db.items.update(itemData.id, payload);
+                storedId = itemData.id;
+                successMessage = 'Item updated successfully!';
+            } else {
+                storedId = await db.items.add(payload);
+                addItems([{ id: storedId, count: 0 }]);
+                successMessage = 'Item created successfully!';
+            }
 
-        dispatch('submit', { ...payload, id: storedId });
+            lastCreatedItemId = storedId;
+            dispatch('submit', { ...payload, id: storedId });
+
+            if (!isEdit) {
+                name = '';
+                description = '';
+                price = '';
+                unit = '';
+                type = '';
+                image = null;
+                previewUrl = null;
+                dependenciesInput = '';
+                validationErrors = {};
+                if (imageInput) {
+                    imageInput.value = '';
+                }
+            }
+        } catch (error) {
+            console.error('Failed to save item:', error);
+            errorMessage = 'Failed to save item. Please try again.';
+        } finally {
+            isSubmitting = false;
+        }
     }
 
     onMount(() => {
+        isClientSide = true;
         if (isEdit && itemData) {
             name = itemData.name || '';
             description = itemData.description || '';
@@ -135,84 +176,102 @@
     });
 </script>
 
-<form on:submit={handleSubmit} enctype="multipart/form-data" class="item-form">
-    <div class="form-group">
-        <label for="name">Name*</label>
-        <input
-            type="text"
-            id="name"
-            bind:value={name}
-            placeholder="Item name"
-            class:error={validationErrors.name}
-        />
-        {#if validationErrors.name}
-            <span class="error-message">{validationErrors.name}</span>
-        {/if}
-    </div>
+<div data-hydrated={isClientSide ? 'true' : 'false'}>
+    {#if successMessage}
+        <div class="success-message" role="status" aria-live="polite">
+            {successMessage}
+            {#if lastCreatedItemId}
+                <a class="success-link" href={`/inventory/item/${lastCreatedItemId}`}>
+                    View item
+                </a>
+            {/if}
+        </div>
+    {/if}
 
-    <div class="form-group">
-        <label for="description">Description*</label>
-        <textarea
-            id="description"
-            bind:value={description}
-            placeholder="Describe the item in detail"
-            class:error={validationErrors.description}
-        ></textarea>
-        {#if validationErrors.description}
-            <span class="error-message">{validationErrors.description}</span>
-        {/if}
-    </div>
+    {#if errorMessage}
+        <div class="form-error" role="alert">{errorMessage}</div>
+    {/if}
 
-    <div class="form-group">
-        <label for="image">Upload an Image*</label>
-        <input
-            type="file"
-            id="image"
-            accept="image/*"
-            on:change={handleImageUpload}
-            class:error={validationErrors.image}
-        />
-        {#if validationErrors.image}
-            <span class="error-message">{validationErrors.image}</span>
-        {/if}
-        {#if previewUrl}
-            <div class="image-preview-container">
-                <img src={previewUrl} class="image-preview" alt="Preview" />
-            </div>
-        {/if}
-    </div>
+    <form on:submit={handleSubmit} enctype="multipart/form-data" class="item-form">
+        <div class="form-group">
+            <label for="name">Name*</label>
+            <input
+                type="text"
+                id="name"
+                bind:value={name}
+                placeholder="Item name"
+                class:error={validationErrors.name}
+            />
+            {#if validationErrors.name}
+                <span class="error-message">{validationErrors.name}</span>
+            {/if}
+        </div>
 
-    <div class="form-group">
-        <label for="price">Price (optional)</label>
-        <input type="text" id="price" bind:value={price} placeholder="e.g. 100 dUSD" />
-    </div>
+        <div class="form-group">
+            <label for="description">Description*</label>
+            <textarea
+                id="description"
+                bind:value={description}
+                placeholder="Describe the item in detail"
+                class:error={validationErrors.description}
+            ></textarea>
+            {#if validationErrors.description}
+                <span class="error-message">{validationErrors.description}</span>
+            {/if}
+        </div>
 
-    <div class="form-group">
-        <label for="unit">Unit (optional)</label>
-        <input type="text" id="unit" bind:value={unit} placeholder="e.g. kg, m, L" />
-    </div>
+        <div class="form-group">
+            <label for="image">Upload an Image*</label>
+            <input
+                type="file"
+                id="image"
+                accept="image/*"
+                on:change={handleImageUpload}
+                class:error={validationErrors.image}
+                bind:this={imageInput}
+            />
+            {#if validationErrors.image}
+                <span class="error-message">{validationErrors.image}</span>
+            {/if}
+            {#if previewUrl}
+                <div class="image-preview-container">
+                    <img src={previewUrl} class="image-preview" alt="Preview" />
+                </div>
+            {/if}
+        </div>
 
-    <div class="form-group">
-        <label for="type">Type (optional)</label>
-        <input type="text" id="type" bind:value={type} placeholder="e.g. 3dprint" />
-    </div>
+        <div class="form-group">
+            <label for="price">Price (optional)</label>
+            <input type="text" id="price" bind:value={price} placeholder="e.g. 100 dUSD" />
+        </div>
 
-    <div class="form-group">
-        <label for="dependencies">Dependencies (optional)</label>
-        <textarea
-            id="dependencies"
-            bind:value={dependenciesInput}
-            placeholder="Enter item IDs separated by commas or new lines"
-        ></textarea>
-        <p class="helper-text">Separate dependencies with commas or new lines.</p>
-    </div>
+        <div class="form-group">
+            <label for="unit">Unit (optional)</label>
+            <input type="text" id="unit" bind:value={unit} placeholder="e.g. kg, m, L" />
+        </div>
 
-    <div class="form-submit">
-        <button type="submit" class="submit-button">
-            {isEdit ? 'Update Item' : 'Create Item'}
-        </button>
-    </div>
-</form>
+        <div class="form-group">
+            <label for="type">Type (optional)</label>
+            <input type="text" id="type" bind:value={type} placeholder="e.g. 3dprint" />
+        </div>
+
+        <div class="form-group">
+            <label for="dependencies">Dependencies (optional)</label>
+            <textarea
+                id="dependencies"
+                bind:value={dependenciesInput}
+                placeholder="Enter item IDs separated by commas or new lines"
+            ></textarea>
+            <p class="helper-text">Separate dependencies with commas or new lines.</p>
+        </div>
+
+        <div class="form-submit">
+            <button type="submit" class="submit-button" disabled={isSubmitting}>
+                {isEdit ? 'Update Item' : 'Create Item'}
+            </button>
+        </div>
+    </form>
+</div>
 
 {#if name || description || previewUrl}
     <ItemPreview
@@ -303,6 +362,45 @@
         font-size: 14px;
         display: block;
         margin-top: 5px;
+    }
+
+    .success-message {
+        margin: 0 auto 16px;
+        padding: 12px 16px;
+        max-width: 600px;
+        border-radius: 10px;
+        border: 1px solid #0f0;
+        background: rgba(0, 64, 0, 0.6);
+        color: #e5ffe5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .success-link {
+        color: #b6ffb8;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .success-link:hover {
+        text-decoration: underline;
+    }
+
+    .success-link:focus-visible {
+        outline: 2px solid #b6ffb8;
+        outline-offset: 2px;
+    }
+
+    .form-error {
+        margin: 0 auto 16px;
+        max-width: 600px;
+        padding: 12px 16px;
+        border-radius: 10px;
+        border: 1px solid #ff3e3e;
+        background: rgba(80, 0, 0, 0.6);
+        color: #ffd4d4;
     }
 
     .helper-text {
