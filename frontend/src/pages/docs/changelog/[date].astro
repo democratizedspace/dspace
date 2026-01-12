@@ -1,0 +1,13 @@
+---
+export function getStaticPaths() {
+    return [
+        { params: { date: '20230630' } },
+        { params: { date: '20230915' } },
+        { params: { date: '20260201' } },
+    ];
+}
+
+const { date } = Astro.params;
+
+return Astro.redirect(`/changelog#${date}`);
+---
