@@ -58,8 +58,10 @@
         return name.includes(term) || description.includes(term);
     });
 
+    const getEditUrl = (id) => `/inventory/item/${encodeURIComponent(id)}/edit`;
+
     function handleEdit(id) {
-        window.location.href = `/inventory/item/${id}/edit`;
+        window.location.href = getEditUrl(id);
     }
 
     async function handleDelete(id) {

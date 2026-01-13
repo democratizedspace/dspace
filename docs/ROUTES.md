@@ -53,6 +53,8 @@ Astro uses file-based routing where files in `frontend/src/pages/` map to URL pa
 - `/inventory/manage` - Manage inventory
 - `/inventory/item/[itemId]` - Individual item details
   - Examples: `/inventory/item/1`, `/inventory/item/37`, `/inventory/item/50`
+- `/inventory/item/[itemId]/edit` - Edit custom item
+  - Examples: `/inventory/item/37/edit`, `/inventory/item/50/edit`
 
 ### Items (Alternative Inventory Routes)
 - `/items/create` - Create new item (alternative path)
@@ -101,6 +103,8 @@ When validating internal links in markdown files, the link checker (`scripts/lin
 4. **ID pattern**: `/quests/1` → `frontend/src/pages/quests/[id].astro`
 5. **Nested dynamic**: `/quests/play/2` → `frontend/src/pages/quests/[pathId]/[questId].astro`
 6. **Parameterized**: `/inventory/item/37` → `frontend/src/pages/inventory/item/[itemId].astro`
+7. **Parameterized**: `/inventory/item/37/edit` →
+   `frontend/src/pages/inventory/item/[itemId]/edit.astro`
 
 ## Static Assets
 

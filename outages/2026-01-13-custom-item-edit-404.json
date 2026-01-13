@@ -1,0 +1,13 @@
+{
+  "id": "OUT-2026-01-13-custom-item-edit-404",
+  "date": "2026-01-13",
+  "component": "frontend/inventory",
+  "rootCause": "The manage items UI linked custom item edits to /inventory/item/[itemId]/edit, but no route existed for that path, so the edit button returned a 404 for custom items.",
+  "resolution": "Add the missing edit route and client-loaded editor wrapper so custom items load from IndexedDB, and document the route.",
+  "references": [
+    "frontend/src/pages/inventory/item/[itemId]/edit.astro",
+    "frontend/src/pages/inventory/svelte/EditItem.svelte",
+    "frontend/src/pages/inventory/svelte/ManageItems.svelte",
+    "https://staging.democratized.space/inventory/item/c6ee398b-7f29-4088-9df2-73c8f8a5f54d/edit"
+  ]
+}
