@@ -33,14 +33,18 @@ test('marks duration zero as complete and dispatches once', async () => {
     const startDate = new Date('2026-01-13T00:00:00.000Z');
     vi.setSystemTime(startDate);
 
-    const { component, getByText } = render(ProgressBar, {
+    const { component, container, getByText } = render(ProgressBar, {
         startDate,
         totalDurationSeconds: 1,
         currentTime: startDate.getTime(),
     });
 
     const onComplete = vi.fn();
-    component.$on('fillComplete', onComplete);
+    const root = container.firstElementChild;
+    if (!root) {
+        throw new Error('ProgressBar root element was not rendered.');
+    }
+    root.addEventListener('fillComplete', onComplete);
 
     await tick();
     expect(onComplete).toHaveBeenCalledTimes(0);

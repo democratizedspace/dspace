@@ -19,10 +19,7 @@
         const startTimeMs = startDate ? new Date(startDate).getTime() : nowMs;
         const safeStartTimeMs = Number.isFinite(startTimeMs) ? startTimeMs : nowMs;
         const elapsedMillis = Math.max(0, nowMs - safeStartTimeMs);
-        elapsedSeconds =
-            durationSeconds > 0
-                ? Math.min(elapsedMillis / 1000, durationSeconds)
-                : 0;
+        elapsedSeconds = durationSeconds > 0 ? Math.min(elapsedMillis / 1000, durationSeconds) : 0;
         progressRatio = durationSeconds > 0 ? elapsedSeconds / durationSeconds : 1;
     }
 

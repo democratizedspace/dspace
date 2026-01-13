@@ -453,11 +453,7 @@
                         </span>
                     </Chip>
                 {/if}
-                <ProgressBar
-                    startDate={processStartedAt}
-                    {totalDurationSeconds}
-                    {currentTime}
-                />
+                <ProgressBar startDate={processStartedAt} {totalDurationSeconds} {currentTime} />
                 <RemainingTime
                     endDate={processStartedAt + totalDurationSeconds * 1000}
                     {currentTime}
@@ -477,11 +473,7 @@
                         </span>
                     </Chip>
                 {/if}
-                <ProgressBar
-                    startDate={processStartedAt}
-                    {totalDurationSeconds}
-                    {currentTime}
-                />
+                <ProgressBar startDate={processStartedAt} {totalDurationSeconds} {currentTime} />
                 <RemainingTime
                     endDate={processStartedAt + totalDurationSeconds * 1000}
                     {currentTime}

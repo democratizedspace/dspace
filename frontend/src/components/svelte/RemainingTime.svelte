@@ -7,8 +7,7 @@
     let timeRemaining;
 
     $: {
-        const endTime =
-            typeof endDate === 'number' ? endDate : new Date(endDate ?? 0).getTime();
+        const endTime = typeof endDate === 'number' ? endDate : new Date(endDate ?? 0).getTime();
         const nowMs =
             typeof currentTime === 'number' ? currentTime : new Date(currentTime).getTime();
         const safeEndTime = Number.isFinite(endTime) ? endTime : nowMs;
