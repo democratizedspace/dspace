@@ -15,6 +15,10 @@ import {
     VERSIONS,
 } from '../src/utils/gameState.js';
 import items from '../src/pages/inventory/json/items';
+import {
+    V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID,
+    V1_ITEM_ID_TO_V3_UUID,
+} from '../src/utils/legacyV1ItemIdMap.js';
 
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy').id;
 
@@ -119,17 +123,37 @@ describe('game state upgrades', () => {
 
         const migrated = await importV1V3(
             [
-                { id: 'item-1', count: 2 },
+                { id: '1', count: 2 },
                 { id: 'item-2', count: 0 },
             ],
-            { replaceExisting: true }
+            { replaceExisting: true, currencyBalances: [{ symbol: 'dUSD', balance: 5 }] }
         );
 
         expect(migrated.versionNumberString).toBe(VERSIONS.V3);
         const state = loadGameState();
-        expect(state.inventory['item-1']).toBe(2);
+        expect(state.inventory[V1_ITEM_ID_TO_V3_UUID[1]]).toBe(2);
+        expect(state.inventory[V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID.dUSD]).toBe(5);
         expect(state.inventory.stale || 0).toBe(0);
         expect(state.quests.keep).toBeUndefined();
+    });
+
+    test('importV2V3 sanitizes legacy inventory artifacts', async () => {
+        localStorage.setItem(
+            'gameState',
+            JSON.stringify({
+                versionNumberString: '2.1',
+                inventory: { '': 0, 1: 3 },
+                quests: {},
+                processes: {},
+                openAI: { ['api' + 'Key']: 'REDACTED' },
+            })
+        );
+
+        const migrated = await importV2V3();
+
+        expect(migrated.inventory['']).toBeUndefined();
+        expect(migrated.inventory['1']).toBe(3);
+        expect(migrated.openAI).toBeUndefined();
     });
 
     test('inspectGameStateStorage detects legacy v2 localStorage state', async () => {
@@ -138,6 +162,10 @@ describe('game state upgrades', () => {
         const inspection = await inspectGameStateStorage();
 
         expect(inspection.hasLegacyV2Keys).toBe(true);
-        expect(inspection.legacyV2State).toEqual({ inventory: { 1: 1 } });
+        expect(inspection.legacyV2State).toEqual({
+            quests: {},
+            inventory: { 1: 1 },
+            processes: {},
+        });
     });
 });

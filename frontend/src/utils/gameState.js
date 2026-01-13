@@ -8,6 +8,11 @@ import { addItems } from './gameState/inventory.js';
 import { isBrowser } from './ssr.js';
 import items from '../pages/inventory/json/items';
 import { normalizeSettings } from './settingsDefaults.js';
+import {
+    V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID,
+    V1_ITEM_ID_TO_V3_UUID,
+} from './legacyV1ItemIdMap.js';
+import { normalizeLegacyV2State, readLegacyV2LocalStorage } from './legacySaveParsing.js';
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy')?.id;
@@ -122,6 +127,40 @@ export const normalizeCount = (value) => {
     return Number.isFinite(parsed) ? parsed : 0;
 };
 
+const UUID_REGEX = /^[0-9a-f-]{36}$/i;
+
+const resolveLegacyV1ItemId = (rawId) => {
+    if (rawId === null || rawId === undefined) return null;
+    const trimmed = String(rawId).trim();
+    if (!trimmed) return null;
+    const match = trimmed.match(/^item-(\d+)$/);
+    const numeric = Number.parseInt(match ? match[1] : trimmed, 10);
+    if (Number.isFinite(numeric)) {
+        return V1_ITEM_ID_TO_V3_UUID[numeric] ?? null;
+    }
+    return UUID_REGEX.test(trimmed) ? trimmed : null;
+};
+
+const mapLegacyV1Items = (itemList, currencyBalances = []) => {
+    const mapped = [];
+
+    (Array.isArray(itemList) ? itemList : []).forEach(({ id, count }) => {
+        const mappedId = resolveLegacyV1ItemId(id);
+        const parsedCount = normalizeCount(count);
+        if (!mappedId || parsedCount <= 0) return;
+        mapped.push({ id: mappedId, parsedCount });
+    });
+
+    (Array.isArray(currencyBalances) ? currencyBalances : []).forEach(({ symbol, balance }) => {
+        const mappedId = V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID[symbol];
+        const parsedCount = normalizeCount(balance);
+        if (!mappedId || parsedCount <= 0) return;
+        mapped.push({ id: mappedId, parsedCount });
+    });
+
+    return mapped;
+};
+
 const grantTrophyIfMissing = (state, trophyId) => {
     if (!trophyId) return;
     state.inventory = state.inventory ?? {};
@@ -163,12 +202,9 @@ export const importV1V2 = (itemList) => {
 
 export const importV1V3 = async (itemList, options = {}) => {
     if (!isBrowser) return null;
-    const { replaceExisting = false } = options;
+    const { replaceExisting = false, currencyBalances = [] } = options;
 
-    const normalizedItems = (Array.isArray(itemList) ? itemList : []).map(({ id, count }) => ({
-        id,
-        parsedCount: normalizeCount(count),
-    }));
+    const normalizedItems = mapLegacyV1Items(itemList, currencyBalances);
 
     const baseState = replaceExisting ? validateGameState({}) : validateGameState(loadGameState());
     const nextState = structuredClone(baseState);
@@ -196,17 +232,16 @@ export const importV2V3 = async (legacyState) => {
 
     let migrated = legacyState;
     if (!migrated) {
-        try {
-            const legacy = localStorage.getItem('gameState');
-            if (legacy) {
-                migrated = validateGameState(JSON.parse(legacy));
-            }
-        } catch (err) {
-            console.error('Error reading legacy v2 state:', err);
+        const legacyRead = readLegacyV2LocalStorage();
+        if (legacyRead.errors?.length) {
+            legacyRead.errors.forEach((issue) => {
+                console.warn(`Error reading legacy v2 ${issue.key}:`, issue.message);
+            });
         }
+        migrated = legacyRead.state;
     }
     if (!migrated) return null;
-    const normalized = validateGameState(structuredClone(migrated));
+    const normalized = validateGameState(structuredClone(normalizeLegacyV2State(migrated)));
     grantTrophyIfMissing(normalized, LEGACY_V2_UPGRADE_TROPHY_ID);
     return persistMigratedState(normalized);
 };
@@ -215,7 +250,7 @@ export const mergeLegacyStateIntoCurrent = async (legacyState) => {
     if (!isBrowser || !legacyState || typeof legacyState !== 'object') return null;
 
     const current = validateGameState(loadGameState());
-    const incoming = validateGameState(structuredClone(legacyState));
+    const incoming = validateGameState(structuredClone(normalizeLegacyV2State(legacyState)));
     const merged = validateGameState(structuredClone(current));
 
     merged.inventory = merged.inventory ?? {};

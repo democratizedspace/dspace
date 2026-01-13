@@ -20,6 +20,7 @@ describe('detectLegacyArtifacts', () => {
 
         expect(result.hasV1Cookies).toBe(true);
         expect(result.v1Items).toEqual([{ id: '3', count: 75 }]);
+        expect(result.v1CurrencyBalances).toEqual([]);
         expect(result.hasV2LocalStorage).toBe(false);
     });
 
@@ -30,6 +31,15 @@ describe('detectLegacyArtifacts', () => {
 
         expect(result.hasV1Cookies).toBe(false);
         expect(result.hasV2LocalStorage).toBe(true);
+    });
+
+    test('surfaces legacy v2 JSON parse issues without throwing', () => {
+        localStorage.setItem('gameState', '{not valid json');
+
+        const result = detectLegacyArtifacts();
+
+        expect(result.hasV2LocalStorage).toBe(true);
+        expect(result.v2ParseIssues.length).toBeGreaterThan(0);
     });
 
     test('ignores v3 localStorage snapshots', () => {
@@ -60,6 +70,7 @@ describe('detectV1CookieItems', () => {
             { id: '10', count: 2 },
         ]);
         expect(result.invalidItems).toEqual([]);
+        expect(result.currencyBalances).toEqual([]);
     });
 
     test('handles URL-encoded plus values without discarding detection', () => {
@@ -75,6 +86,17 @@ describe('detectV1CookieItems', () => {
         expect(result.items).toEqual([{ id: '3', count: 75 }]);
         expect(result.invalidItems).toEqual([
             { name: 'item-99', value: 'abc', reason: 'non-numeric value' },
+        ]);
+    });
+
+    test('parses currency balances and ignores invalid entries', () => {
+        const result = detectV1CookieItems(
+            'currency-balance-dUSD=123.45; currency-balance-dUSDx=abc; item-3=1'
+        );
+
+        expect(result.currencyBalances).toEqual([{ symbol: 'dUSD', balance: 123.45 }]);
+        expect(result.invalidCurrency).toEqual([
+            { name: 'currency-balance-dUSDx', value: 'abc', reason: 'non-numeric value' },
         ]);
     });
 });

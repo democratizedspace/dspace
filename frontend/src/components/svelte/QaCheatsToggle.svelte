@@ -9,8 +9,10 @@
     import Chip from './Chip.svelte';
     import {
         clearSeededLegacySaves,
-        seedSampleV1CookieSave,
-        seedSampleV2LocalStorageSave,
+        LEGACY_V1_SEED_PROFILES,
+        LEGACY_V2_SEED_PROFILES,
+        seedLegacyV1Save,
+        seedLegacyV2LocalStorageSave,
     } from '../../utils/legacySaveSeeding';
 
     export let cheatsAvailable = false;
@@ -21,6 +23,9 @@
     let workingAction = '';
     let statusMessage = '';
     let errorMessage = '';
+    let lastSeedSummary = null;
+    let v1Profile = LEGACY_V1_SEED_PROFILES[0]?.id ?? 'minimal';
+    let v2Profile = LEGACY_V2_SEED_PROFILES[0]?.id ?? 'minimal';
 
     let unsubscribeAvailability;
     let unsubscribeEnabled;
@@ -52,21 +57,24 @@
 
     const seedV1Save = () =>
         withStatus('seed-v1', async () => {
-            seedSampleV1CookieSave();
-            statusMessage = 'Seeded sample v1 cookie save. Reloading…';
+            const summary = seedLegacyV1Save(v1Profile);
+            lastSeedSummary = summary;
+            statusMessage = `Seeded v1 ${summary.profileLabel}. Reloading…`;
             notifyLegacyUpgradeRefresh(true);
         });
 
     const seedV2Save = () =>
         withStatus('seed-v2', async () => {
-            seedSampleV2LocalStorageSave();
-            statusMessage = 'Seeded sample v2 localStorage save. Refreshing detection…';
+            const summary = seedLegacyV2LocalStorageSave(v2Profile);
+            lastSeedSummary = summary;
+            statusMessage = `Seeded v2 ${summary.profileLabel}. Refreshing detection…`;
             notifyLegacyUpgradeRefresh(false);
         });
 
     const clearSeededSaves = () =>
         withStatus('clear-seeded', async () => {
             clearSeededLegacySaves();
+            lastSeedSummary = null;
             statusMessage = 'Cleared seeded legacy saves. Reloading…';
             notifyLegacyUpgradeRefresh(true);
         });
@@ -129,22 +137,48 @@
             </p>
         </div>
         <div class="qa-tools__actions">
-            <Chip
-                text={workingAction === 'seed-v1' ? 'Seeding v1…' : 'Seed sample v1 save (cookies)'}
-                onClick={seedV1Save}
-                cheat={true}
-                disabled={Boolean(workingAction)}
-                dataTestId="qa-seed-v1"
-            />
-            <Chip
-                text={workingAction === 'seed-v2'
-                    ? 'Seeding v2…'
-                    : 'Seed sample v2 save (localStorage)'}
-                onClick={seedV2Save}
-                cheat={true}
-                disabled={Boolean(workingAction)}
-                dataTestId="qa-seed-v2"
-            />
+            <div class="qa-tools__seed-group">
+                <label class="qa-tools__label">
+                    <span class="qa-tools__label-text">V1 seed profile</span>
+                    <select
+                        bind:value={v1Profile}
+                        class="qa-tools__select"
+                        disabled={Boolean(workingAction)}
+                    >
+                        {#each LEGACY_V1_SEED_PROFILES as profile}
+                            <option value={profile.id}>{profile.label}</option>
+                        {/each}
+                    </select>
+                </label>
+                <Chip
+                    text={workingAction === 'seed-v1' ? 'Seeding v1…' : 'Seed v1 save'}
+                    onClick={seedV1Save}
+                    cheat={true}
+                    disabled={Boolean(workingAction)}
+                    dataTestId="qa-seed-v1"
+                />
+            </div>
+            <div class="qa-tools__seed-group">
+                <label class="qa-tools__label">
+                    <span class="qa-tools__label-text">V2.1 seed profile</span>
+                    <select
+                        bind:value={v2Profile}
+                        class="qa-tools__select"
+                        disabled={Boolean(workingAction)}
+                    >
+                        {#each LEGACY_V2_SEED_PROFILES as profile}
+                            <option value={profile.id}>{profile.label}</option>
+                        {/each}
+                    </select>
+                </label>
+                <Chip
+                    text={workingAction === 'seed-v2' ? 'Seeding v2…' : 'Seed v2 save'}
+                    onClick={seedV2Save}
+                    cheat={true}
+                    disabled={Boolean(workingAction)}
+                    dataTestId="qa-seed-v2"
+                />
+            </div>
             <Chip
                 text="Clear seeded legacy saves"
                 onClick={clearSeededSaves}
@@ -153,6 +187,38 @@
                 dataTestId="qa-clear-seeded"
             />
         </div>
+        {#if lastSeedSummary}
+            <div class="qa-tools__summary">
+                <h4>Last seeded profile</h4>
+                <p class="qa-tools__summary-label">{lastSeedSummary.profileLabel}</p>
+                <div class="qa-tools__summary-grid">
+                    <div>
+                        <p class="qa-tools__summary-title">Cookies written</p>
+                        {#if lastSeedSummary.cookies.length}
+                            <ul>
+                                {#each lastSeedSummary.cookies as cookie}
+                                    <li>{cookie}</li>
+                                {/each}
+                            </ul>
+                        {:else}
+                            <p class="qa-tools__summary-empty">None</p>
+                        {/if}
+                    </div>
+                    <div>
+                        <p class="qa-tools__summary-title">localStorage keys written</p>
+                        {#if lastSeedSummary.localStorageKeys.length}
+                            <ul>
+                                {#each lastSeedSummary.localStorageKeys as key}
+                                    <li>{key}</li>
+                                {/each}
+                            </ul>
+                        {:else}
+                            <p class="qa-tools__summary-empty">None</p>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        {/if}
         {#if statusMessage}
             <p class="status" role="status" aria-live="polite">{statusMessage}</p>
         {/if}
@@ -297,7 +363,70 @@
 
     .qa-tools__actions {
         display: grid;
+        gap: 0.75rem;
+    }
+
+    .qa-tools__seed-group {
+        display: grid;
+        gap: 0.4rem;
+        padding: 0.75rem;
+        border-radius: 10px;
+        border: 1px solid rgba(59, 130, 246, 0.25);
+        background: rgba(15, 23, 42, 0.4);
+    }
+
+    .qa-tools__label {
+        display: grid;
         gap: 0.35rem;
+        font-weight: 600;
+        color: #e0f2ff;
+    }
+
+    .qa-tools__label-text {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #93c5fd;
+    }
+
+    .qa-tools__select {
+        border-radius: 8px;
+        border: 1px solid rgba(59, 130, 246, 0.4);
+        background: rgba(15, 23, 42, 0.6);
+        color: #e0f2ff;
+        padding: 0.45rem 0.6rem;
+        font-size: 0.95rem;
+    }
+
+    .qa-tools__summary {
+        border-radius: 12px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        background: rgba(15, 23, 42, 0.6);
+        padding: 0.85rem;
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .qa-tools__summary-grid {
+        display: grid;
+        gap: 0.75rem;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .qa-tools__summary-label {
+        margin: 0;
+        font-weight: 700;
+    }
+
+    .qa-tools__summary-title {
+        margin: 0 0 0.35rem 0;
+        font-weight: 600;
+        color: #bfdbfe;
+    }
+
+    .qa-tools__summary-empty {
+        margin: 0;
+        color: #94a3b8;
     }
 
     .status {

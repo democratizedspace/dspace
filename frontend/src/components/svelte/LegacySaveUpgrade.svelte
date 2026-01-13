@@ -54,7 +54,10 @@
     let v1Items = filterLegacyItems(legacyV1Items);
     let v1CookieKeys = Array.isArray(legacyCookieKeys) ? legacyCookieKeys : [];
     let v1Issues = [];
+    let v1CurrencyBalances = [];
+    let v1CurrencyIssues = [];
     let v1Notice = '';
+    let v2Notice = '';
     let detection = {
         loading: true,
         hasV3State: false,
@@ -71,6 +74,15 @@
     let qaEnabled = false;
     $: showV2V3ConflictWarning = detection.hasLegacyV2 && detection.hasV3State;
 
+    const describeV2Issues = (issues) => {
+        if (!issues.length) return '';
+        const examples = issues
+            .slice(0, 2)
+            .map(({ name, key, reason, message }) => `${name ?? key}: ${reason ?? message}`)
+            .join(', ');
+        return issues.length > 2 ? `${examples}, and ${issues.length - 2} more` : examples;
+    };
+
     const refreshStatus = async () => {
         detection = { ...detection, loading: true };
 
@@ -82,6 +94,7 @@
             usesLocalStorageFallback,
             legacyV2State,
             hasLegacyV2Keys,
+            legacyV2ParseIssues,
         } = inspection;
 
         const hasIndexedDbState = Boolean(indexedDbState);
@@ -105,7 +118,10 @@
         v1Items = filterLegacyItems(artifacts.v1Items);
         v1CookieKeys = artifacts.v1CookieKeys;
         v1Issues = artifacts.v1InvalidItems;
+        v1CurrencyBalances = artifacts.v1CurrencyBalances;
+        v1CurrencyIssues = artifacts.v1CurrencyIssues;
         v1Notice = '';
+        v2Notice = '';
         if (v1CookieKeys.length > 0 && v1Items.length === 0) {
             v1Notice =
                 'V1 cookies were detected, but none had usable counts. Clear the cookies or ' +
@@ -114,8 +130,20 @@
         } else if (v1Issues.length > 0) {
             v1Notice = `Some v1 cookies were ignored: ${describeV1Issues(v1Issues)}.`;
         }
+        if (v1CurrencyIssues.length > 0) {
+            v1Notice = `${v1Notice ? `${v1Notice} ` : ''}Some currency cookies were ignored: ${
+                describeV1Issues(v1CurrencyIssues)
+            }.`;
+        }
 
-        const hasV1Artifacts = artifacts.hasV1Cookies || v1Items.length > 0;
+        if (legacyV2ParseIssues?.length) {
+            v2Notice = `Legacy v2 data could not be parsed: ${describeV2Issues(
+                legacyV2ParseIssues
+            )}.`;
+        }
+
+        const hasV1Artifacts =
+            artifacts.hasV1Cookies || v1Items.length > 0 || v1CurrencyBalances.length > 0;
         const hasV3State = hasIndexedDbState || Boolean(usingFallback);
         const hasLegacyV2 =
             Boolean(pendingLocalState) ||
@@ -204,7 +232,7 @@
     };
 
     const upgradeV1 = async (mode) => {
-        if (!v1Items.length) {
+        if (!v1Items.length && !v1CurrencyBalances.length) {
             statusMessage =
                 v1CookieKeys.length > 0
                     ? 'V1 cookies were detected but could not be parsed. Clear them or re-seed.'
@@ -212,7 +240,10 @@
             return;
         }
         await withStatus(mode === 'replace' ? 'replace-v1' : 'merge-v1', async () => {
-            await importV1V3(v1Items, { replaceExisting: mode === 'replace' });
+            await importV1V3(v1Items, {
+                replaceExisting: mode === 'replace',
+                currencyBalances: v1CurrencyBalances,
+            });
             const cleared = expireLegacyCookies();
             statusMessage =
                 mode === 'replace'
@@ -314,15 +345,31 @@
                 <div class="card-header">
                     <h3>V1 (cookie saves)</h3>
                     <p>
-                        {v1Items.length
-                            ? `${v1Items.length} item cookies detected`
-                            : 'No v1 cookies found'}
+                        {#if v1Items.length || v1CurrencyBalances.length}
+                            {v1Items.length
+                                ? `${v1Items.length} item cookies detected`
+                                : 'No v1 item cookies detected'}
+                            {#if v1CurrencyBalances.length}
+                                {' '}
+                                + {v1CurrencyBalances.length} currency balance
+                                {v1CurrencyBalances.length > 1 ? 's' : ''}
+                            {/if}
+                        {:else}
+                            No v1 cookies found
+                        {/if}
                     </p>
                 </div>
                 {#if v1Notice}
                     <p class="warning">{v1Notice}</p>
                 {/if}
-                {#if v1Items.length}
+                {#if v1CurrencyBalances.length}
+                    <p class="muted">
+                        {v1CurrencyBalances
+                            .map(({ symbol, balance }) => `${balance} ${symbol}`)
+                            .join(', ')}
+                    </p>
+                {/if}
+                {#if v1Items.length || v1CurrencyBalances.length}
                     {#if detection.hasV3State}
                         <p class="warning">
                             Current v3 data exists. Choose whether to merge v1 items into it or
@@ -374,6 +421,9 @@
                         {/if}
                     </p>
                 </div>
+                {#if v2Notice}
+                    <p class="warning">{v2Notice}</p>
+                {/if}
                 {#if !detection.indexedDbSupported}
                     <p class="warning">
                         IndexedDB is unavailable in this browser. You can keep using localStorage,
