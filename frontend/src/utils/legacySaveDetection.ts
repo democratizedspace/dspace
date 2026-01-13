@@ -70,7 +70,7 @@ export const detectV1CookieItems = (cookieString = '') => {
             targetList.push({
                 name: decodedName,
                 value: decodedValue,
-                reason: 'non-positive count',
+                reason: isCurrencyCookie ? 'non-positive balance' : 'non-positive count',
             });
             return;
         }

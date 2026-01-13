@@ -127,7 +127,7 @@ export const normalizeCount = (value) => {
     return Number.isFinite(parsed) ? parsed : 0;
 };
 
-const UUID_REGEX = /^[0-9a-f-]{36}$/i;
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const resolveLegacyV1ItemId = (rawId) => {
     if (rawId === null || rawId === undefined) return null;

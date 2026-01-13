@@ -488,8 +488,15 @@ export const V1_ITEM_ID_TO_V3_UUID = LEGACY_V1_ITEM_MAPPINGS.reduce((acc, entry)
     return acc;
 }, {});
 
-const dUSDId = items.find((item) => item.name === 'dUSD')?.id;
+const dUSDItem = items.find((item) => item.name === 'dUSD');
+
+if (!dUSDItem || !dUSDItem.id) {
+    throw new Error(
+        'dUSD item not found in items catalog or missing id; ' +
+            'V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID.dUSD cannot be initialized.'
+    );
+}
 
 export const V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID = {
-    dUSD: dUSDId,
+    dUSD: dUSDItem.id,
 };

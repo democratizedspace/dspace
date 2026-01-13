@@ -395,12 +395,13 @@
                         />
                         <Chip
                             text="Delete v1 cookies"
-                            onClick={() => {
-                                const cleared = expireLegacyCookies();
-                                statusMessage = cleared
-                                    ? 'Removed legacy v1 cookies.'
-                                    : 'Unable to confirm removal. Clear cookies manually.';
-                            }}
+                            onClick={() =>
+                                withStatus('delete-v1-cookies', async () => {
+                                    const cleared = expireLegacyCookies();
+                                    statusMessage = cleared
+                                        ? 'Removed legacy v1 cookies.'
+                                        : 'Unable to confirm removal. Clear cookies manually.';
+                                })}
                             inverted={true}
                             disabled={Boolean(workingAction)}
                         />

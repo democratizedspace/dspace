@@ -19,6 +19,8 @@ const readLegacyVersion = (candidate) => {
 const hasLegacyVersion = (version) =>
     Boolean(version) && LEGACY_VERSION_PREFIXES.some((prefix) => version.startsWith(prefix));
 
+const isCurrentVersion = (version) => Boolean(version) && version.startsWith('3');
+
 const hasLegacyShape = (candidate) =>
     Boolean(
         candidate &&
@@ -70,7 +72,8 @@ export const parseLegacyV2Raw = (raw) => {
         }
 
         const version = readLegacyVersion(candidate);
-        const isLegacy = hasLegacyVersion(version) || hasLegacyShape(candidate);
+        const isLegacy =
+            hasLegacyVersion(version) || (!isCurrentVersion(version) && hasLegacyShape(candidate));
 
         if (!isLegacy) {
             return { state: null, isLegacy: false, error: null };
