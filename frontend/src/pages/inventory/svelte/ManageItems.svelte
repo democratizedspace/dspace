@@ -13,6 +13,10 @@
     const ALL_CATEGORIES_LABEL = 'All categories';
     let selectedCategory = ALL_CATEGORIES_LABEL;
     let previewItemId = null;
+    const actionButtons = [
+        { text: 'Create a new item', href: '/inventory/create' },
+        { text: 'View inventory', href: '/inventory' },
+    ];
 
     onMount(async () => {
         customItems = await db.list(ENTITY_TYPES.ITEM);
@@ -90,6 +94,11 @@
 
 <div class="manage-items">
     {#if mounted}
+        <div class="action-buttons">
+            {#each actionButtons as button}
+                <Chip text={button.text} href={button.href} inverted={true} />
+            {/each}
+        </div>
         <div class="controls">
             <input
                 type="text"
@@ -176,6 +185,13 @@
         max-width: 800px;
         margin: 0 auto;
         padding: 20px;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
     }
 
     .controls {

@@ -1,0 +1,9 @@
+---
+import Page from '../../components/Page.astro';
+import Processes from './svelte/Processes.svelte';
+import processes from '../../generated/processes.json';
+---
+
+<Page title="Processes">
+    <Processes client:load processes={processes} />
+</Page>
