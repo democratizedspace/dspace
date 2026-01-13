@@ -1,4 +1,5 @@
 <script>
+    import { tick } from 'svelte';
     import Chip from '../../../components/svelte/Chip.svelte';
     import { buildCustomContentBackup } from '../../../utils/customContentBackup.js';
 
@@ -29,6 +30,8 @@
         backupBlob = null;
         backupFilename = '';
         assets = [];
+
+        await tick();
 
         try {
             const result = await buildCustomContentBackup({
