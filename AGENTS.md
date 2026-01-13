@@ -25,7 +25,7 @@ DSPACE uses Astro for SSR with file-based routing. All routes served by the appl
 **Common route patterns:**
 
 - `/docs/[slug]` → documentation pages (e.g., `/docs/about`, `/docs/solar`)
-- `/inventory/item/[itemId]` → item details (e.g., `/inventory/item/37`)
+- `/inventory/item/[itemId]` → item details (e.g., `/inventory/item/37`, `/inventory/item/37/edit`)
 - `/processes/[processId]` → process pages (e.g., `/processes/launch-rocket`)
 - `/quests/[pathId]/[questId]` → quest pages (e.g., `/quests/play/2`)
 
