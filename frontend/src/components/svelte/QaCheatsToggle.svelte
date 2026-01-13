@@ -9,8 +9,10 @@
     import Chip from './Chip.svelte';
     import {
         clearSeededLegacySaves,
-        seedSampleV1CookieSave,
-        seedSampleV2LocalStorageSave,
+        LEGACY_V1_SEED_PROFILES,
+        LEGACY_V2_SEED_PROFILES,
+        seedLegacyV1Profile,
+        seedLegacyV2Profile,
     } from '../../utils/legacySaveSeeding';
 
     export let cheatsAvailable = false;
@@ -21,6 +23,7 @@
     let workingAction = '';
     let statusMessage = '';
     let errorMessage = '';
+    let seedSummary = null;
 
     let unsubscribeAvailability;
     let unsubscribeEnabled;
@@ -50,23 +53,26 @@
         }
     };
 
-    const seedV1Save = () =>
-        withStatus('seed-v1', async () => {
-            seedSampleV1CookieSave();
-            statusMessage = 'Seeded sample v1 cookie save. Reloading…';
+    const seedV1Save = (profileId) =>
+        withStatus(`seed-v1-${profileId}`, async () => {
+            const summary = seedLegacyV1Profile(profileId);
+            seedSummary = { scope: 'v1', ...summary };
+            statusMessage = `Seeded v1 profile: ${summary.profileLabel}. Reloading…`;
             notifyLegacyUpgradeRefresh(true);
         });
 
-    const seedV2Save = () =>
-        withStatus('seed-v2', async () => {
-            seedSampleV2LocalStorageSave();
-            statusMessage = 'Seeded sample v2 localStorage save. Refreshing detection…';
+    const seedV2Save = (profileId) =>
+        withStatus(`seed-v2-${profileId}`, async () => {
+            const summary = seedLegacyV2Profile(profileId);
+            seedSummary = { scope: 'v2.1', ...summary };
+            statusMessage = `Seeded v2.1 profile: ${summary.profileLabel}. Refreshing…`;
             notifyLegacyUpgradeRefresh(false);
         });
 
     const clearSeededSaves = () =>
         withStatus('clear-seeded', async () => {
             clearSeededLegacySaves();
+            seedSummary = null;
             statusMessage = 'Cleared seeded legacy saves. Reloading…';
             notifyLegacyUpgradeRefresh(true);
         });
@@ -129,22 +135,34 @@
             </p>
         </div>
         <div class="qa-tools__actions">
-            <Chip
-                text={workingAction === 'seed-v1' ? 'Seeding v1…' : 'Seed sample v1 save (cookies)'}
-                onClick={seedV1Save}
-                cheat={true}
-                disabled={Boolean(workingAction)}
-                dataTestId="qa-seed-v1"
-            />
-            <Chip
-                text={workingAction === 'seed-v2'
-                    ? 'Seeding v2…'
-                    : 'Seed sample v2 save (localStorage)'}
-                onClick={seedV2Save}
-                cheat={true}
-                disabled={Boolean(workingAction)}
-                dataTestId="qa-seed-v2"
-            />
+            <div class="seed-group">
+                <p class="seed-label">v1 cookie profiles</p>
+                {#each LEGACY_V1_SEED_PROFILES as profile}
+                    <Chip
+                        text={workingAction === `seed-v1-${profile.id}`
+                            ? 'Seeding v1…'
+                            : profile.label}
+                        onClick={() => seedV1Save(profile.id)}
+                        cheat={true}
+                        disabled={Boolean(workingAction)}
+                        dataTestId={`qa-seed-v1-${profile.id}`}
+                    />
+                {/each}
+            </div>
+            <div class="seed-group">
+                <p class="seed-label">v2.1 localStorage profiles</p>
+                {#each LEGACY_V2_SEED_PROFILES as profile}
+                    <Chip
+                        text={workingAction === `seed-v2-${profile.id}`
+                            ? 'Seeding v2.1…'
+                            : profile.label}
+                        onClick={() => seedV2Save(profile.id)}
+                        cheat={true}
+                        disabled={Boolean(workingAction)}
+                        dataTestId={`qa-seed-v2-${profile.id}`}
+                    />
+                {/each}
+            </div>
             <Chip
                 text="Clear seeded legacy saves"
                 onClick={clearSeededSaves}
@@ -153,6 +171,27 @@
                 dataTestId="qa-clear-seeded"
             />
         </div>
+        {#if seedSummary}
+            <div class="seed-summary" role="status" aria-live="polite">
+                <p class="seed-summary__title">
+                    Seeded {seedSummary.scope} profile: {seedSummary.profileLabel}
+                </p>
+                <ul class="seed-summary__list">
+                    <li>
+                        <strong>Cookies:</strong>
+                        {seedSummary.cookiesWritten.length
+                            ? seedSummary.cookiesWritten.join(', ')
+                            : 'none'}
+                    </li>
+                    <li>
+                        <strong>localStorage:</strong>
+                        {seedSummary.localStorageKeysWritten.length
+                            ? seedSummary.localStorageKeysWritten.join(', ')
+                            : 'none'}
+                    </li>
+                </ul>
+            </div>
+        {/if}
         {#if statusMessage}
             <p class="status" role="status" aria-live="polite">{statusMessage}</p>
         {/if}
@@ -298,6 +337,46 @@
     .qa-tools__actions {
         display: grid;
         gap: 0.35rem;
+    }
+
+    .seed-group {
+        display: grid;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 10px;
+        border: 1px solid rgba(14, 165, 233, 0.25);
+        background: rgba(14, 165, 233, 0.08);
+    }
+
+    .seed-label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #93c5fd;
+        margin: 0;
+    }
+
+    .seed-summary {
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        background: rgba(14, 165, 233, 0.12);
+        border: 1px solid rgba(14, 165, 233, 0.4);
+        color: #e0f2ff;
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .seed-summary__title {
+        margin: 0;
+        font-weight: 600;
+        color: #e0f2ff;
+    }
+
+    .seed-summary__list {
+        margin: 0;
+        padding-left: 1.25rem;
+        display: grid;
+        gap: 0.25rem;
+        color: #e0f2ff;
     }
 
     .status {

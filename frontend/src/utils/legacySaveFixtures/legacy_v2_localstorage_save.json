@@ -1,31 +1,74 @@
 {
-    "gameState": {
-        "versionNumberString": "2.1",
-        "inventory": {
-            "0": 1,
-            "3": 120,
-            "10": 2,
-            "11": 1,
-            "85": 1
-        },
-        "quests": {
-            "welcome/howtodoquests": {
-                "finished": true,
-                "itemsClaimed": ["welcome/howtodoquests-start-0"]
-            },
-            "hydroponics/basil": {
-                "stepId": "grown"
+    "profiles": {
+        "minimal": {
+            "gameState": {
+                "versionNumberString": "2.1",
+                "inventory": {
+                    "3": 120,
+                    "10": 2
+                },
+                "quests": {
+                    "welcome/howtodoquests": {
+                        "finished": true,
+                        "itemsClaimed": ["welcome/howtodoquests-start-0"]
+                    }
+                },
+                "processes": {},
+                "_meta": {
+                    "lastUpdated": 1672534800000
+                }
             }
         },
-        "processes": {
-            "processes/benchy": {
-                "startedAt": 1672531200000,
-                "finished": true,
-                "result": "printed"
+        "inProgress": {
+            "gameState": {
+                "versionNumberString": "2.1",
+                "inventory": {
+                    "3": 5,
+                    "11": 1
+                },
+                "quests": {},
+                "processes": {
+                    "processes/benchy": {
+                        "startedAt": 1672531200000,
+                        "duration": 86400000
+                    }
+                },
+                "_meta": {
+                    "lastUpdated": 1672538400000
+                }
             }
         },
-        "_meta": {
-            "lastUpdated": 1672534800000
+        "messy": {
+            "gameState": {
+                "versionNumberString": "2.1",
+                "inventory": {
+                    "": null,
+                    "3": 120,
+                    "10": 0,
+                    "11": "4.5"
+                },
+                "quests": {
+                    "hydroponics/basil": {
+                        "stepId": "grown"
+                    }
+                },
+                "processes": {
+                    "processes/benchy": {
+                        "startedAt": 1672531200000,
+                        "duration": 86400000,
+                        "result": "printed"
+                    }
+                },
+                "openAI": {
+                    "apiKey": "REDACTED"
+                },
+                "extraKeys": {
+                    "notes": "legacy-localStorage-audit"
+                },
+                "_meta": {
+                    "lastUpdated": 1672542000000
+                }
+            }
         }
     }
 }

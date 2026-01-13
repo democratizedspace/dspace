@@ -9,6 +9,7 @@ import {
     resetGameState,
 } from '../../utils/gameState/common.js';
 import items from '../../pages/inventory/json/items';
+import { V1_CURRENCY_SYMBOL_TO_V3_UUID, V1_ITEM_ID_TO_V3_UUID } from '../../utils/legacyV1ItemIdMap';
 
 const EARLY_ADOPTER_ID = items.find((item) => item.name === 'Early Adopter Token')?.id;
 
@@ -32,6 +33,7 @@ describe('LegacySaveUpgrade', () => {
         document.cookie = 'item-10=2; path=/';
         document.cookie = 'item-21=20%2B; path=/';
         document.cookie = 'item-99=abc; path=/';
+        document.cookie = 'currency-balance-dUSD=250.5; path=/';
 
         const { findByRole, findByText } = render(LegacySaveUpgrade, {
             legacyV1Items: [],
@@ -39,7 +41,7 @@ describe('LegacySaveUpgrade', () => {
             cheatsAvailable: false,
         });
 
-        await findByText('3 item cookies detected');
+        await findByText('4 legacy cookie entries detected');
 
         const mergeButton = await findByRole('button', {
             name: /merge v1 into current save/i,
@@ -50,9 +52,10 @@ describe('LegacySaveUpgrade', () => {
 
         await waitFor(() => {
             const state = loadGameState();
-            expect(state.inventory['3']).toBe(75);
-            expect(state.inventory['10']).toBe(2);
-            expect(state.inventory['21']).toBe(20);
+            expect(state.inventory[V1_ITEM_ID_TO_V3_UUID[3]]).toBe(75);
+            expect(state.inventory[V1_ITEM_ID_TO_V3_UUID[10]]).toBe(2);
+            expect(state.inventory[V1_ITEM_ID_TO_V3_UUID[21]]).toBe(20);
+            expect(state.inventory[V1_CURRENCY_SYMBOL_TO_V3_UUID.dUSD]).toBe(250.5);
             expect(state.inventory[EARLY_ADOPTER_ID]).toBe(1);
         });
     });

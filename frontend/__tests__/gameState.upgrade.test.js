@@ -15,6 +15,10 @@ import {
     VERSIONS,
 } from '../src/utils/gameState.js';
 import items from '../src/pages/inventory/json/items';
+import {
+    V1_CURRENCY_SYMBOL_TO_V3_UUID,
+    V1_ITEM_ID_TO_V3_UUID,
+} from '../src/utils/legacyV1ItemIdMap.ts';
 
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy').id;
 
@@ -119,15 +123,16 @@ describe('game state upgrades', () => {
 
         const migrated = await importV1V3(
             [
-                { id: 'item-1', count: 2 },
-                { id: 'item-2', count: 0 },
+                { id: '3', count: 2 },
+                { id: '10', count: 0 },
             ],
-            { replaceExisting: true }
+            { replaceExisting: true, legacyCurrencyBalances: [{ symbol: 'dUSD', balance: 5 }] }
         );
 
         expect(migrated.versionNumberString).toBe(VERSIONS.V3);
         const state = loadGameState();
-        expect(state.inventory['item-1']).toBe(2);
+        expect(state.inventory[V1_ITEM_ID_TO_V3_UUID[3]]).toBe(2);
+        expect(state.inventory[V1_CURRENCY_SYMBOL_TO_V3_UUID.dUSD]).toBe(5);
         expect(state.inventory.stale || 0).toBe(0);
         expect(state.quests.keep).toBeUndefined();
     });
@@ -139,5 +144,36 @@ describe('game state upgrades', () => {
 
         expect(inspection.hasLegacyV2Keys).toBe(true);
         expect(inspection.legacyV2State).toEqual({ inventory: { 1: 1 } });
+        expect(inspection.legacyV2SourceKey).toBe('gameState');
+        expect(inspection.legacyV2Errors).toEqual([]);
+    });
+
+    test('importV2V3 ignores invalid inventory keys and preserves valid counts', async () => {
+        localStorage.setItem(
+            'gameState',
+            JSON.stringify({
+                inventory: { '': null, alpha: 2, beta: '3.5', gamma: -2 },
+                quests: { q1: { finished: true } },
+                processes: {},
+            })
+        );
+
+        const migrated = await importV2V3();
+        const state = loadGameState();
+
+        expect(migrated.versionNumberString).toBe(VERSIONS.V3);
+        expect(state.inventory.alpha).toBe(2);
+        expect(state.inventory.beta).toBe(3.5);
+        expect(state.inventory.gamma).toBeUndefined();
+        expect(state.inventory['']).toBeUndefined();
+    });
+
+    test('importV2V3 is non-destructive on invalid JSON', async () => {
+        localStorage.setItem('gameState', '{not-json');
+
+        const migrated = await importV2V3();
+
+        expect(migrated).toBeNull();
+        expect(localStorage.getItem('gameState')).toBe('{not-json');
     });
 });

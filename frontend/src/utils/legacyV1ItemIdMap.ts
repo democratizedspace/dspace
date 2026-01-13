@@ -1,0 +1,550 @@
+import items from '../pages/inventory/json/items';
+
+export type LegacyV1ItemMapping = {
+    v1Id: number;
+    v1Name: string;
+    v3Id: string;
+    v3Name: string;
+};
+
+export type LegacyV1ItemInput = {
+    id: string;
+    count: number;
+};
+
+export type LegacyV1CurrencyBalance = {
+    symbol: string;
+    balance: number;
+};
+
+export const V1_ITEM_ID_TO_V3_MAPPINGS: LegacyV1ItemMapping[] = [
+    {
+        v1Id: 0,
+        v1Name: 'Real Printer 1',
+        v3Id: '8aa6dc27-dc42-4622-ac88-cbd57f48625f',
+        v3Name: 'entry-level FDM 3D printer',
+    },
+    {
+        v1Id: 1,
+        v1Name: 'Benchy',
+        v3Id: '7892ffc6-c651-445f-946b-7edc998cf389',
+        v3Name: 'Benchy',
+    },
+    {
+        v1Id: 2,
+        v1Name: 'hydroponics kit',
+        v3Id: '92261497-d605-4db1-8710-953cf73d765c',
+        v3Name: 'hydroponics kit',
+    },
+    {
+        v1Id: 3,
+        v1Name: 'white PLA filament',
+        v3Id: '58580f6f-f3be-4be0-80b9-f6f8bf0b05a6',
+        v3Name: 'white PLA filament',
+    },
+    {
+        v1Id: 4,
+        v1Name: 'Edison Model M',
+        v3Id: '8f54a592-09de-4340-829b-7288897eb4c7',
+        v3Name: 'Edison Model M',
+    },
+    {
+        v1Id: 5,
+        v1Name: 'portable solar panel',
+        v3Id: '02b32152-a7b2-458e-9643-7b754c722165',
+        v3Name: 'portable solar panel',
+    },
+    {
+        v1Id: 6,
+        v1Name: '200 Wh battery pack',
+        v3Id: 'cfe87611-623a-45b0-9243-422cd8a73a16',
+        v3Name: '200 Wh battery pack',
+    },
+    {
+        v1Id: 7,
+        v1Name: '500W wind turbine',
+        v3Id: '743681a7-d2e7-465c-af07-43665079bf4d',
+        v3Name: '500 W wind turbine',
+    },
+    {
+        v1Id: 8,
+        v1Name: 'Benchy Award',
+        v3Id: 'fe46e236-5d03-4c95-9b38-68b045a0df03',
+        v3Name: 'Benchy Award',
+    },
+    {
+        v1Id: 9,
+        v1Name: 'Real Hydroponics Tub 1',
+        v3Id: '11aa585c-fdeb-41ba-9191-be4bcdaa23c4',
+        v3Name: 'Beginner hydroponics tub',
+    },
+    {
+        v1Id: 10,
+        v1Name: 'basil seeds',
+        v3Id: 'affa2f80-28f1-422e-a0c8-49e51ce65a1e',
+        v3Name: 'basil seeds',
+    },
+    {
+        v1Id: 11,
+        v1Name: '3D printed model rocket',
+        v3Id: '5322b85e-b47d-4ea4-b515-318f91abc7df',
+        v3Name: '3D printed model rocket',
+    },
+    {
+        v1Id: 12,
+        v1Name: 'green PLA filament',
+        v3Id: 'd3590107-25ff-4de5-af3a-46e2497bfc52',
+        v3Name: 'green PLA filament',
+    },
+    {
+        v1Id: 13,
+        v1Name: 'hydroponic starter plug',
+        v3Id: '78a45c1f-a791-44f1-88f4-dc5059c66c89',
+        v3Name: 'hydroponic starter plug',
+    },
+    {
+        v1Id: 14,
+        v1Name: 'hydroponics nutrients',
+        v3Id: 'ef5a843f-0a9d-41e2-b2bc-81fc9f99a150',
+        v3Name: 'hydroponic nutrient concentrate (1 L)',
+    },
+    {
+        v1Id: 15,
+        v1Name: '3D printing kit',
+        v3Id: '9605048d-ea62-4b70-9bbc-ea1ad4baaf3e',
+        v3Name: '3D printing kit',
+    },
+    {
+        v1Id: 16,
+        v1Name: '5 gallon bucket',
+        v3Id: '0564d441-7367-412e-b709-dad770814a39',
+        v3Name: '5 gallon bucket',
+    },
+    {
+        v1Id: 17,
+        v1Name: '5 gallon bucket of tap water (chlorinated)',
+        v3Id: '156d06b2-ff10-4265-9ae9-3b7753c0206e',
+        v3Name: '5 gallon bucket of tap water (chlorinated)',
+    },
+    {
+        v1Id: 18,
+        v1Name: 'Motor Award',
+        v3Id: '2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274',
+        v3Name: 'Motor Award',
+    },
+    {
+        v1Id: 19,
+        v1Name: 'Rocket Award',
+        v3Id: '946b07b7-2b2c-4507-a725-edb270d8e910',
+        v3Name: 'Rocket Award',
+    },
+    {
+        v1Id: 20,
+        v1Name: 'dCarbon',
+        v3Id: 'd88ef09c-9191-4c18-8628-a888bb9f926d',
+        v3Name: 'dCarbon',
+    },
+    {
+        v1Id: 21,
+        v1Name: 'Hypercar (80% charge)',
+        v3Id: '1498a7a1-2739-4943-a32f-4c277244a825',
+        v3Name: 'Hypercar (80% charge)',
+    },
+    {
+        v1Id: 22,
+        v1Name: 'dWatt',
+        v3Id: '061fd221-404a-4bd1-9432-3e25b0f17a2c',
+        v3Name: 'dWatt',
+    },
+    {
+        v1Id: 23,
+        v1Name: 'Hypervan',
+        v3Id: 'c2e3bbb6-0ded-4923-98e1-37e5ac3c7d77',
+        v3Name: 'Hypervan',
+    },
+    {
+        v1Id: 24,
+        v1Name: 'dUSD',
+        v3Id: '5247a603-294a-4a34-a884-1ae20969b2a1',
+        v3Name: 'dUSD',
+    },
+    {
+        v1Id: 25,
+        v1Name: '5 gallon bucket of tap water (dechlorinated)',
+        v3Id: '71efa72a-8c87-4dc2-8e2c-9119bb28fe50',
+        v3Name: '5 gallon bucket of dechlorinated tap water',
+    },
+    {
+        v1Id: 26,
+        v1Name: 'soaked hydroponic starter plug',
+        v3Id: '545aeb15-7e8b-489d-be4a-af2a59f447e1',
+        v3Name: 'soaked hydroponic starter plug',
+    },
+    {
+        v1Id: 27,
+        v1Name: 'basil seedling',
+        v3Id: '5712947f-716c-4f71-b28d-fcb811631080',
+        v3Name: 'basil seedling',
+    },
+    {
+        v1Id: 28,
+        v1Name: 'sink',
+        v3Id: '799ace33-1336-46c0-904a-9f16778230f1',
+        v3Name: 'sink',
+    },
+    {
+        v1Id: 29,
+        v1Name: 'smart plug',
+        v3Id: 'a5395e29-1862-4eb7-8517-5d161635e032',
+        v3Name: 'smart plug',
+    },
+    {
+        v1Id: 30,
+        v1Name: '3D printed nosecone',
+        v3Id: '7ca9cad5-4bc2-420b-9733-24d1e38c2324',
+        v3Name: '3D printed nosecone',
+    },
+    {
+        v1Id: 31,
+        v1Name: '3D printed body tube',
+        v3Id: '1eac8955-bb70-474b-b6b0-4002ff3aa09a',
+        v3Name: '3D printed body tube',
+    },
+    {
+        v1Id: 32,
+        v1Name: '3D printed fincan',
+        v3Id: '563956c2-17d1-4b82-8fce-48b07dc8a71b',
+        v3Name: '3D printed fincan',
+    },
+    {
+        v1Id: 33,
+        v1Name: '3D printed nosecone coupler',
+        v3Id: '05c339ee-f50b-419a-804a-341f850b85e9',
+        v3Name: '3D printed nosecone coupler',
+    },
+    {
+        v1Id: 34,
+        v1Name: 'hobbyist solid rocket motor',
+        v3Id: '4d817f1c-d78d-4fac-a514-402bce330693',
+        v3Name: 'hobbyist solid rocket motor',
+    },
+    {
+        v1Id: 35,
+        v1Name: 'superglue',
+        v3Id: '7bc8b73f-6e66-469d-865f-12d0cb36677a',
+        v3Name: 'superglue',
+    },
+    {
+        v1Id: 36,
+        v1Name: 'kevlar cord',
+        v3Id: '0484a3ab-92e7-42fa-a5e6-25a4afe841d6',
+        v3Name: 'kevlar shock cord',
+    },
+    {
+        v1Id: 37,
+        v1Name: 'rocket igniter',
+        v3Id: 'd2f3e684-84e2-41f9-b39d-51ee224608ac',
+        v3Name: 'rocket igniter',
+    },
+    {
+        v1Id: 38,
+        v1Name: 'launch controller',
+        v3Id: 'ae343640-c7c0-4f7e-907b-17bd87574d9b',
+        v3Name: 'launch controller',
+    },
+    {
+        v1Id: 39,
+        v1Name: 'launch-capable model rocket',
+        v3Id: 'aaa5fbca-54a1-40a5-8461-24dc2ef81d4d',
+        v3Name: 'launch-capable model rocket',
+    },
+    {
+        v1Id: 40,
+        v1Name: 'damaged model rocket',
+        v3Id: '63362e5c-9897-4710-8ef6-26540fabd0ca',
+        v3Name: 'damaged model rocket',
+    },
+    {
+        v1Id: 41,
+        v1Name: 'Rocketeer Award',
+        v3Id: 'c754c1e7-244c-41ec-96d4-ad468b6b3e52',
+        v3Name: 'Rocketeer Award',
+    },
+    {
+        v1Id: 42,
+        v1Name: 'harvestable basil plant',
+        v3Id: '79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be',
+        v3Name: 'harvestable basil plant',
+    },
+    {
+        v1Id: 43,
+        v1Name: 'hydroponic grow lamp',
+        v3Id: 'c8946a5f-caff-4e6d-9b9b-4dbf02bcd000',
+        v3Name: 'hydroponic grow lamp',
+    },
+    {
+        v1Id: 44,
+        v1Name: 'Real Hydroponics Tub 1 (ready)',
+        v3Id: 'fc2bb989-f192-4891-8bde-78ae631dae78',
+        v3Name: 'hydroponics tub (ready)',
+    },
+    {
+        v1Id: 45,
+        v1Name: 'Real Hydroponics Tub 1 (nutrient deficient)',
+        v3Id: 'dc765172-c2e4-40dd-bb5a-a399bf6d6d77',
+        v3Name: 'hydroponics tub (nutrient deficient)',
+    },
+    {
+        v1Id: 46,
+        v1Name: 'bundle of basil leaves',
+        v3Id: '5d48cefb-fc1f-4962-b2c6-9b014151d0ae',
+        v3Name: 'bundle of basil leaves',
+    },
+    {
+        v1Id: 47,
+        v1Name: 'harvested basil plant',
+        v3Id: '29190faf-8581-4769-b871-f0ee283840e1',
+        v3Name: 'harvested basil plant',
+    },
+    {
+        v1Id: 48,
+        v1Name: 'Green Thumb Award',
+        v3Id: '5599c466-91e9-46fb-8d8b-11388e4f8f9c',
+        v3Name: 'Green Thumb Award',
+    },
+    {
+        v1Id: 49,
+        v1Name: 'Solarpunk Award',
+        v3Id: '5bba251a-d223-4e22-aa30-b65238b17516',
+        v3Name: 'Solarpunk Award',
+    },
+    {
+        v1Id: 50,
+        v1Name: 'Completionist Award',
+        v3Id: '1394c366-5078-49cf-b24e-c748e8428234',
+        v3Name: 'Completionist Award',
+    },
+    {
+        v1Id: 51,
+        v1Name: 'aquarium (150 L)',
+        v3Id: '83fe7eee-135e-4885-9ce0-9042b9fb860a',
+        v3Name: 'aquarium (150 L)',
+    },
+    {
+        v1Id: 52,
+        v1Name: 'aquarium (goldfish) (150 L)',
+        v3Id: '76307a8e-4e0e-4dfa-abc2-7917d384d82c',
+        v3Name: 'aquarium (goldfish) (150 L)',
+    },
+    {
+        v1Id: 53,
+        v1Name: 'goldfish',
+        v3Id: '40920981-bf9f-4b89-b887-bebe7006f7dc',
+        v3Name: 'goldfish',
+    },
+    {
+        v1Id: 54,
+        v1Name: 'goldfish food',
+        v3Id: '8807f2f1-3ca2-48da-9b2b-1915604a63e2',
+        v3Name: 'goldfish food',
+    },
+    {
+        v1Id: 55,
+        v1Name: 'aquarium filter',
+        v3Id: '6fe61da2-6aa3-447e-aad5-c65b1b8da1f1',
+        v3Name: 'aquarium filter',
+    },
+    {
+        v1Id: 56,
+        v1Name: 'aquarium heater',
+        v3Id: '0b85f058-38f2-4e9a-93e9-d47441608619',
+        v3Name: 'aquarium heater (150 W)',
+    },
+    {
+        v1Id: 57,
+        v1Name: 'aquarium light',
+        v3Id: '62757412-be94-48c0-a1c0-8fad9bdb8c4a',
+        v3Name: 'aquarium LED light (20 W)',
+    },
+    {
+        v1Id: 58,
+        v1Name: 'Thermometer',
+        v3Id: '8e81b5e5-4aee-402c-bd04-fed9188f8c07',
+        v3Name: 'aquarium thermometer (0–50°C)',
+    },
+    {
+        v1Id: 59,
+        v1Name: 'pH strip',
+        v3Id: '13167d6a-5617-4931-8a6e-6f463c6b8835',
+        v3Name: 'pH strip',
+    },
+    {
+        v1Id: 60,
+        v1Name: '7 pH freshwater aquarium (150 L)',
+        v3Id: 'ca7c1069-4ba3-4339-9a10-0b690a690e60',
+        v3Name: '7 pH freshwater aquarium (150 L)',
+    },
+    {
+        v1Id: 61,
+        v1Name: 'dSolar',
+        v3Id: 'b02ecff5-1f7d-4247-a09d-7d6cd6bb218a',
+        v3Name: 'dSolar',
+    },
+    {
+        v1Id: 62,
+        v1Name: 'gravel',
+        v3Id: '75cec98f-fcf0-4d73-8d31-5a53571317b2',
+        v3Name: 'aquarium gravel (1 kg)',
+    },
+    {
+        v1Id: 63,
+        v1Name: 'aquarium net',
+        v3Id: 'ee7d437d-7426-47cd-b691-386dd20f4e47',
+        v3Name: 'aquarium net',
+    },
+    {
+        v1Id: 64,
+        v1Name: 'dGoldfish',
+        v3Id: '36a1168f-0109-4a8c-b70b-45f8ca582297',
+        v3Name: 'dGoldfish',
+    },
+    {
+        v1Id: 65,
+        v1Name: 'Fish Friend Award',
+        v3Id: 'a07b75e3-f828-4cb1-81d6-1ab0e9857a79',
+        v3Name: 'Fish Friend Award',
+    },
+    {
+        v1Id: 66,
+        v1Name: 'parachute',
+        v3Id: '80a83ecc-bcd2-400e-a469-8488a6453bb8',
+        v3Name: 'parachute',
+    },
+    {
+        v1Id: 67,
+        v1Name: 'launch-capable model rocket (parachute)',
+        v3Id: 'e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec',
+        v3Name: 'launch-capable model rocket (parachute)',
+    },
+    {
+        v1Id: 68,
+        v1Name: 'Rocket Descent (animated)',
+        v3Id: 'd660dc50-7afb-4a2f-9508-a42490aae5e4',
+        v3Name: 'Rocket Descent (animated)',
+    },
+    {
+        v1Id: 69,
+        v1Name: 'dLaunch',
+        v3Id: 'eb9c2a75-a87a-4171-8bc3-088e75936bcf',
+        v3Name: 'dLaunch',
+    },
+    {
+        v1Id: 70,
+        v1Name: 'dOffset',
+        v3Id: 'b0ac46e6-6c60-48f0-b753-d9b6ad9935a6',
+        v3Name: 'dOffset',
+    },
+    {
+        v1Id: 71,
+        v1Name: 'Tree Hugger Award',
+        v3Id: '96e11500-a2ce-4531-a1b5-3a92c44fcb9d',
+        v3Name: 'Tree Hugger Award',
+    },
+    {
+        v1Id: 72,
+        v1Name: 'dBI',
+        v3Id: '016d4758-d114-4e04-9e6a-853db93a2eee',
+        v3Name: 'dBI',
+    },
+    {
+        v1Id: 73,
+        v1Name: 'EV charger',
+        v3Id: '5258f098-6cae-4ee5-8888-435b08f1675a',
+        v3Name: 'EV charger',
+    },
+    {
+        v1Id: 74,
+        v1Name: 'Hypercar (20% charge)',
+        v3Id: '5e283c0b-fd3c-4884-ae32-9a237f02a40e',
+        v3Name: 'Hypercar (20% charge)',
+    },
+    {
+        v1Id: 75,
+        v1Name: 'Hypercar (animated)',
+        v3Id: '3486ebb3-d262-4e90-8873-b19ed69afee8',
+        v3Name: 'Hypercar (animated)',
+    },
+    {
+        v1Id: 76,
+        v1Name: '1 kWh battery pack',
+        v3Id: '7246c1c8-f22e-4d31-acd3-967f91b8626a',
+        v3Name: '1 kWh battery pack',
+    },
+    {
+        v1Id: 77,
+        v1Name: 'The grass is always greener (still)',
+        v3Id: '11a2a77a-0c43-47a9-b13a-1412ac475ce2',
+        v3Name: 'The grass is always greener (still)',
+    },
+];
+
+export const V1_ITEM_ID_TO_V3_UUID = Object.fromEntries(
+    V1_ITEM_ID_TO_V3_MAPPINGS.map((entry) => [entry.v1Id, entry.v3Id])
+);
+
+const dUSDId = items.find((item) => item.name === 'dUSD')?.id;
+
+export const V1_CURRENCY_SYMBOL_TO_V3_UUID: Record<string, string> = {
+    dUSD: dUSDId ?? '',
+};
+
+const parseLegacyV1Id = (id: string) => {
+    if (!id) return null;
+    const normalized = id.startsWith('item-') ? id.slice(5) : id;
+    if (!/^\d+$/.test(normalized)) return null;
+    return Number.parseInt(normalized, 10);
+};
+
+export const mapLegacyV1ItemsToV3 = (itemsList: LegacyV1ItemInput[] = []) => {
+    const mappedItems: LegacyV1ItemInput[] = [];
+    const skippedItems: LegacyV1ItemInput[] = [];
+
+    itemsList.forEach((item) => {
+        if (!item || !item.id) {
+            return;
+        }
+        const v1Id = parseLegacyV1Id(String(item.id));
+        if (v1Id !== null) {
+            const mappedId = V1_ITEM_ID_TO_V3_UUID[v1Id];
+            if (mappedId) {
+                mappedItems.push({ id: mappedId, count: item.count });
+            } else {
+                skippedItems.push(item);
+            }
+            return;
+        }
+        mappedItems.push({ id: item.id, count: item.count });
+    });
+
+    return { mappedItems, skippedItems };
+};
+
+const isLegacyV1ItemInput = (value: LegacyV1ItemInput | null): value is LegacyV1ItemInput =>
+    Boolean(value);
+
+export const mapLegacyV1CurrencyBalancesToV3 = (
+    balances: LegacyV1CurrencyBalance[] = []
+): LegacyV1ItemInput[] => {
+    return balances
+        .map((balance) => {
+            const symbol = balance?.symbol?.trim();
+            if (!symbol) return null;
+            const mappedId =
+                V1_CURRENCY_SYMBOL_TO_V3_UUID[symbol] ||
+                V1_CURRENCY_SYMBOL_TO_V3_UUID[symbol.toLowerCase()] ||
+                V1_CURRENCY_SYMBOL_TO_V3_UUID[symbol.toUpperCase()];
+            if (!mappedId) return null;
+            return { id: mappedId, count: balance.balance };
+        })
+        .filter(isLegacyV1ItemInput);
+};

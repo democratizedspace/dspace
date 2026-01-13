@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 import { sanitizeSaveForBackup } from '../../lib/cloudsync/githubGists';
 import { normalizeSettings, DEFAULT_SETTINGS } from '../settingsDefaults.js';
+import { readLegacyV2Storage } from '../legacyV2Storage.js';
 import { isBrowser } from '../ssr.js';
 
 const DB_NAME = 'dspaceGameState';
@@ -421,19 +422,11 @@ export const inspectGameStateStorage = async () => {
 
     const localStorageState = isBrowser ? lsRead(STATE_STORE) : undefined;
     const localStorageBackup = isBrowser ? lsRead(BACKUP_STORE) : undefined;
-    const legacyStateRaw = isBrowser ? localStorage.getItem('gameState') : null;
-    const legacyBackupRaw = isBrowser ? localStorage.getItem('gameStateBackup') : null;
-
-    let legacyV2State;
-    if (legacyStateRaw) {
-        try {
-            legacyV2State = JSON.parse(legacyStateRaw);
-        } catch (err) {
-            console.warn('Failed to parse legacy v2 localStorage state:', err);
-        }
-    }
-
-    const hasLegacyV2Keys = Boolean(legacyStateRaw || legacyBackupRaw);
+    const legacyInspection = readLegacyV2Storage();
+    const legacyV2State = legacyInspection.legacyState;
+    const legacyV2Errors = legacyInspection.errors;
+    const legacyV2SourceKey = legacyInspection.sourceKey;
+    const hasLegacyV2Keys = legacyInspection.hasLegacyV2Keys;
 
     let indexedDbState;
     if (supportsIndexedDB && !useLocalStorage) {
@@ -450,6 +443,8 @@ export const inspectGameStateStorage = async () => {
         localStorageState,
         localStorageBackup,
         legacyV2State,
+        legacyV2Errors,
+        legacyV2SourceKey,
         hasLegacyV2Keys,
         usesLocalStorageFallback: useLocalStorage,
         loadedFromPersistence,

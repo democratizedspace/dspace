@@ -1,23 +1,27 @@
 {
-    "description": "Legacy v1 saves may be chunked across multiple cookies. Add one entry per cookie chunk to seed the full payload.",
-    "cookies": [
-        {
-            "name": "item-3",
-            "value": "75",
-            "encodeValue": true
+    "description": "Legacy v1 cookies used by the /settings seeder. Profiles mirror audited cookie formats.",
+    "profiles": {
+        "minimal": {
+            "cookies": [
+                { "name": "acceptedCookies", "value": "true" },
+                { "name": "item-3", "value": 12.5 },
+                { "name": "item-10", "value": 2 },
+                { "name": "item-20", "value": 3 },
+                { "name": "item-22", "value": 150 },
+                { "name": "item-70", "value": 1 },
+                { "name": "currency-balance-dUSD", "value": 123.45 }
+            ]
         },
-        {
-            "name": "item-10",
-            "value": "2"
-        },
-        {
-            "name": "item-83",
-            "value": "1"
-        },
-        {
-            "name": "item-21",
-            "value": "20%2B",
-            "encodeValue": false
+        "maximal": {
+            "cookies": [
+                { "name": "acceptedCookies", "value": "true" },
+                { "name": "item-3", "value": 12.5 },
+                { "name": "item-10", "value": 2 },
+                { "name": "item-20", "value": 3 },
+                { "name": "item-22", "value": 150 },
+                { "name": "item-70", "value": 1 },
+                { "name": "currency-balance-dUSD", "value": 123.45 }
+            ]
         }
-    ]
+    }
 }

@@ -52,9 +52,12 @@
     };
 
     let v1Items = filterLegacyItems(legacyV1Items);
+    let v1CurrencyBalances = [];
     let v1CookieKeys = Array.isArray(legacyCookieKeys) ? legacyCookieKeys : [];
     let v1Issues = [];
     let v1Notice = '';
+    let v2ErrorMessage = '';
+    $: v1DetectedCount = v1Items.length + v1CurrencyBalances.length;
     let detection = {
         loading: true,
         hasV3State: false,
@@ -81,6 +84,8 @@
             indexedDbSupported,
             usesLocalStorageFallback,
             legacyV2State,
+            legacyV2Errors,
+            legacyV2SourceKey,
             hasLegacyV2Keys,
         } = inspection;
 
@@ -103,10 +108,11 @@
 
         const artifacts = detectLegacyArtifacts();
         v1Items = filterLegacyItems(artifacts.v1Items);
+        v1CurrencyBalances = artifacts.v1CurrencyBalances ?? [];
         v1CookieKeys = artifacts.v1CookieKeys;
         v1Issues = artifacts.v1InvalidItems;
         v1Notice = '';
-        if (v1CookieKeys.length > 0 && v1Items.length === 0) {
+        if (v1CookieKeys.length > 0 && v1Items.length === 0 && v1CurrencyBalances.length === 0) {
             v1Notice =
                 'V1 cookies were detected, but none had usable counts. Clear the cookies or ' +
                 're-seed a sample save. Examples: ' +
@@ -115,12 +121,19 @@
             v1Notice = `Some v1 cookies were ignored: ${describeV1Issues(v1Issues)}.`;
         }
 
-        const hasV1Artifacts = artifacts.hasV1Cookies || v1Items.length > 0;
+        const hasV1Artifacts =
+            artifacts.hasV1Cookies || v1Items.length > 0 || v1CurrencyBalances.length > 0;
         const hasV3State = hasIndexedDbState || Boolean(usingFallback);
-        const hasLegacyV2 =
-            Boolean(pendingLocalState) ||
-            (!hasIndexedDbState && !usingFallback && hasLegacyV2Keys) ||
-            (!hasIndexedDbState && artifacts.hasV2LocalStorage);
+        const hasLegacyV2 = Boolean(pendingLocalState) || hasLegacyV2Keys;
+
+        const errorDetails =
+            legacyV2Errors && legacyV2Errors.length > 0 && !legacyV2State
+                ? legacyV2Errors[0]
+                : null;
+        v2ErrorMessage = errorDetails
+            ? `Legacy v2 localStorage (${legacyV2SourceKey ?? errorDetails.key}) could not be ` +
+              `parsed: ${errorDetails.message}`
+            : '';
 
         detection = {
             loading: false,
@@ -204,7 +217,7 @@
     };
 
     const upgradeV1 = async (mode) => {
-        if (!v1Items.length) {
+        if (!v1Items.length && !v1CurrencyBalances.length) {
             statusMessage =
                 v1CookieKeys.length > 0
                     ? 'V1 cookies were detected but could not be parsed. Clear them or re-seed.'
@@ -212,7 +225,10 @@
             return;
         }
         await withStatus(mode === 'replace' ? 'replace-v1' : 'merge-v1', async () => {
-            await importV1V3(v1Items, { replaceExisting: mode === 'replace' });
+            await importV1V3(v1Items, {
+                replaceExisting: mode === 'replace',
+                legacyCurrencyBalances: v1CurrencyBalances,
+            });
             const cleared = expireLegacyCookies();
             statusMessage =
                 mode === 'replace'
@@ -226,7 +242,7 @@
 
     const upgradeV2 = async (mode) => {
         if (!detection.pendingLocalState) {
-            statusMessage = 'No legacy v2 localStorage save detected.';
+            statusMessage = v2ErrorMessage || 'No legacy v2 localStorage save detected.';
             return;
         }
         await withStatus(mode === 'replace' ? 'replace-v2' : 'merge-v2', async () => {
@@ -314,15 +330,23 @@
                 <div class="card-header">
                     <h3>V1 (cookie saves)</h3>
                     <p>
-                        {v1Items.length
-                            ? `${v1Items.length} item cookies detected`
+                        {v1DetectedCount
+                            ? `${v1DetectedCount} legacy cookie entries detected`
                             : 'No v1 cookies found'}
                     </p>
                 </div>
                 {#if v1Notice}
                     <p class="warning">{v1Notice}</p>
                 {/if}
-                {#if v1Items.length}
+                {#if v1CurrencyBalances.length}
+                    <p class="muted">
+                        Currency balances detected:
+                        {v1CurrencyBalances
+                            .map(({ symbol, balance }) => `${symbol} ${balance}`)
+                            .join(', ')}
+                    </p>
+                {/if}
+                {#if v1Items.length || v1CurrencyBalances.length}
                     {#if detection.hasV3State}
                         <p class="warning">
                             Current v3 data exists. Choose whether to merge v1 items into it or
@@ -374,6 +398,9 @@
                         {/if}
                     </p>
                 </div>
+                {#if v2ErrorMessage}
+                    <p class="warning">{v2ErrorMessage}</p>
+                {/if}
                 {#if !detection.indexedDbSupported}
                     <p class="warning">
                         IndexedDB is unavailable in this browser. You can keep using localStorage,

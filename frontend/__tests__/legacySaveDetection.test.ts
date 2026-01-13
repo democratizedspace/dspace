@@ -12,69 +12,43 @@ afterEach(() => {
     localStorage.clear();
 });
 
-describe('detectLegacyArtifacts', () => {
-    test('detects legacy v1 item cookies', () => {
-        document.cookie = 'item-3=75; path=/';
+describe('legacy save detection', () => {
+    test('detectV1CookieItems parses item cookies and currency balances', () => {
+        const detection = detectV1CookieItems(
+            'item-3=12.5; item-10=2; item-21=20%2B; item-99=abc; currency-balance-dUSD=123.45'
+        );
 
-        const result = detectLegacyArtifacts();
-
-        expect(result.hasV1Cookies).toBe(true);
-        expect(result.v1Items).toEqual([{ id: '3', count: 75 }]);
-        expect(result.hasV2LocalStorage).toBe(false);
-    });
-
-    test('detects legacy v2 localStorage keys with version markers', () => {
-        localStorage.setItem('gameState', JSON.stringify({ versionNumberString: '2.1' }));
-
-        const result = detectLegacyArtifacts();
-
-        expect(result.hasV1Cookies).toBe(false);
-        expect(result.hasV2LocalStorage).toBe(true);
-    });
-
-    test('ignores v3 localStorage snapshots', () => {
-        localStorage.setItem('gameState', JSON.stringify({ versionNumberString: '3' }));
-        localStorage.setItem('gameStateBackup', JSON.stringify({ versionNumberString: '3.0' }));
-
-        const result = detectLegacyArtifacts();
-
-        expect(result.hasV1Cookies).toBe(false);
-        expect(result.hasV2LocalStorage).toBe(false);
-    });
-
-    test('returns false when no artifacts are present', () => {
-        const result = detectLegacyArtifacts();
-
-        expect(result.hasV1Cookies).toBe(false);
-        expect(result.hasV2LocalStorage).toBe(false);
-        expect(result.v1Items).toEqual([]);
-    });
-});
-
-describe('detectV1CookieItems', () => {
-    test('parses standard v1 cookie values', () => {
-        const result = detectV1CookieItems('item-3=75; item-10=2');
-
-        expect(result.items).toEqual([
-            { id: '3', count: 75 },
+        expect(detection.items).toEqual([
+            { id: '3', count: 12.5 },
             { id: '10', count: 2 },
+            { id: '21', count: 20 },
         ]);
-        expect(result.invalidItems).toEqual([]);
-    });
-
-    test('handles URL-encoded plus values without discarding detection', () => {
-        const result = detectV1CookieItems('item-21=20%2B');
-
-        expect(result.items).toEqual([{ id: '21', count: 20 }]);
-        expect(result.cookieKeys).toEqual(['item-21']);
-    });
-
-    test('ignores malformed values while keeping other items', () => {
-        const result = detectV1CookieItems('item-99=abc; item-3=75');
-
-        expect(result.items).toEqual([{ id: '3', count: 75 }]);
-        expect(result.invalidItems).toEqual([
+        expect(detection.currencyBalances).toEqual([{ symbol: 'dUSD', balance: 123.45 }]);
+        expect(detection.invalidItems).toEqual([
             { name: 'item-99', value: 'abc', reason: 'non-numeric value' },
         ]);
+    });
+
+    test('detectLegacyArtifacts reads legacy v2 localStorage state', () => {
+        localStorage.setItem(
+            'gameState',
+            JSON.stringify({ inventory: { 1: 1 }, quests: {}, processes: {} })
+        );
+
+        const detection = detectLegacyArtifacts();
+
+        expect(detection.hasV2LocalStorage).toBe(true);
+        expect(detection.v2State).toEqual({ inventory: { 1: 1 }, quests: {}, processes: {} });
+        expect(detection.v2Errors).toEqual([]);
+    });
+
+    test('detectLegacyArtifacts surfaces invalid JSON errors', () => {
+        localStorage.setItem('gameState', '{not-json');
+
+        const detection = detectLegacyArtifacts();
+
+        expect(detection.hasV2LocalStorage).toBe(true);
+        expect(detection.v2State).toBeUndefined();
+        expect(detection.v2Errors?.[0].reason).toBe('invalid-json');
     });
 });
