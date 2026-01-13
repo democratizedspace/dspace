@@ -85,4 +85,34 @@ describe('DocsIndex search operators', () => {
             })
         ).not.toBeInTheDocument();
     });
+
+    it('shows a snippet when matching body text', async () => {
+        render(DocsIndex, {
+            props: {
+                sections: [
+                    {
+                        title: 'Skills',
+                        links: [
+                            {
+                                title: 'Solar Power',
+                                href: '/docs/solar',
+                                bodyText: 'Wind turbines are also available for renewable power.',
+                            },
+                        ],
+                    },
+                ],
+            },
+        });
+
+        const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
+
+        await fireEvent.input(searchBox, { target: { value: 'turbine' } });
+
+        expect(screen.getByRole('link', { name: 'Solar Power' })).toBeInTheDocument();
+
+        const snippet = screen.getByTestId('docs-snippet');
+
+        expect(snippet).toHaveTextContent('Wind turbines are also');
+        expect(snippet.querySelector('strong')).toHaveTextContent(/turbine/i);
+    });
 });

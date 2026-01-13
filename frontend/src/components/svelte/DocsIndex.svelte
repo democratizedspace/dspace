@@ -1,11 +1,15 @@
 <script>
+    import { findDocSnippet, parseDocsQuery } from '../../lib/docs/fullTextSearch';
+
     /**
      * @typedef {Object} DocLink
      * @property {string} title
      * @property {string} href
      * @property {string[]=} keywords
+     * @property {string=} bodyText
      * @property {boolean=} external
      * @property {string[]=} features
+     * @property {string=} snippetHtml
      */
 
     /**
@@ -20,29 +24,6 @@
     let query = '';
 
     const normalize = (value) => value.toLowerCase().trim();
-
-    const parseQuery = (value) => {
-        const normalized = normalize(value);
-        const words = normalized.split(/\s+/).filter(Boolean);
-        const operators = [];
-        const terms = [];
-
-        words.forEach((word) => {
-            if (word.startsWith('has:')) {
-                const feature = normalize(word.slice(4));
-
-                if (feature) {
-                    operators.push(feature);
-                }
-
-                return;
-            }
-
-            terms.push(word);
-        });
-
-        return { normalized, operators, terms };
-    };
 
     // Note: `terms` may be an empty array for operator-only queries (e.g. "has:link").
     // In that case, `every()` returns `true` by design, so word matching does not filter out results.
@@ -59,23 +40,51 @@
     };
 
     const matchLink = (link, parsedQuery) => {
-        if (!parsedQuery.operators.length && !parsedQuery.terms.length) {
+        if (!parsedQuery.operators.length && !parsedQuery.keywords.length) {
             return true;
         }
 
-        const searchableValues = [link.title, ...(link.keywords ?? [])].map(normalize);
+        const searchableValues = [
+            link.title,
+            ...(link.keywords ?? []),
+            ...(parsedQuery.isHasPredicate ? [] : [link.bodyText ?? '']),
+        ].map(normalize);
 
         return (
-            matchesWords(parsedQuery.terms, searchableValues) &&
+            matchesWords(parsedQuery.keywords, searchableValues) &&
             matchesOperators(parsedQuery.operators, link.features)
         );
     };
 
-    $: parsedQuery = parseQuery(query);
+    const getSnippet = (link, parsedQuery) => {
+        if (parsedQuery.isHasPredicate || !parsedQuery.keywords.length || !link.bodyText) {
+            return null;
+        }
+
+        const snippet = findDocSnippet(
+            { title: link.title, bodyText: link.bodyText },
+            parsedQuery.keywords
+        );
+
+        return snippet?.snippetHtml ?? null;
+    };
+
+    $: parsedQuery = parseDocsQuery(query);
     $: filteredSections = sections
         .map((section) => ({
             title: section.title,
-            links: section.links.filter((link) => matchLink(link, parsedQuery)),
+            links: section.links
+                .map((link) => {
+                    if (!matchLink(link, parsedQuery)) {
+                        return null;
+                    }
+
+                    return {
+                        ...link,
+                        snippetHtml: getSnippet(link, parsedQuery),
+                    };
+                })
+                .filter(Boolean),
         }))
         .filter((section) => section.links.length > 0);
 
@@ -101,13 +110,20 @@
                     <h2>{section.title}</h2>
                     <nav aria-label={`Docs ${section.title}`}>
                         {#each section.links as link}
-                            <a
-                                href={link.href}
-                                rel={link.external ? 'noopener noreferrer' : undefined}
-                                target={link.external ? '_blank' : undefined}
-                            >
-                                {link.title}
-                            </a>
+                            <div class="docs-link">
+                                <a
+                                    href={link.href}
+                                    rel={link.external ? 'noopener noreferrer' : undefined}
+                                    target={link.external ? '_blank' : undefined}
+                                >
+                                    {link.title}
+                                </a>
+                                {#if link.snippetHtml}
+                                    <span class="docs-snippet" data-testid="docs-snippet">
+                                        {@html link.snippetHtml}
+                                    </span>
+                                {/if}
+                            </div>
                         {/each}
                     </nav>
                 </section>
@@ -169,6 +185,13 @@
         gap: 0.5rem;
     }
 
+    .docs-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
     a {
         display: inline-flex;
         align-items: center;
@@ -186,6 +209,12 @@
     a:hover,
     a:focus {
         opacity: 1;
+    }
+
+    .docs-snippet {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.9);
+        text-align: center;
     }
 
     .empty-state {
