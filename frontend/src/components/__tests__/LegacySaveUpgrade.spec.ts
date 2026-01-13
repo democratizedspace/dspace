@@ -104,9 +104,21 @@ describe('LegacySaveUpgrade', () => {
         initializeQaCheats(true);
         setQaCheatsPreference(true);
 
-        const reloadSpy = vi
-            .spyOn(window.location, 'reload')
-            .mockImplementation(() => undefined);
+        const originalLocation = window.location;
+        const reloadMock = vi.fn();
+        const mockLocation = {
+            ...originalLocation,
+            reload: reloadMock,
+        };
+        try {
+            Object.defineProperty(window, 'location', {
+                configurable: true,
+                value: mockLocation,
+            });
+        } catch {
+            delete (window as { location?: Location }).location;
+            (window as Window).location = mockLocation;
+        }
 
         vi.useFakeTimers();
 
@@ -123,10 +135,18 @@ describe('LegacySaveUpgrade', () => {
 
         await findByText(/Cleared v3 IndexedDB save for QA testing/i);
         vi.runAllTimers();
-        expect(reloadSpy).toHaveBeenCalled();
+        expect(reloadMock).toHaveBeenCalled();
 
         vi.useRealTimers();
-        reloadSpy.mockRestore();
+        try {
+            Object.defineProperty(window, 'location', {
+                configurable: true,
+                value: originalLocation,
+            });
+        } catch {
+            delete (window as { location?: Location }).location;
+            (window as Window).location = originalLocation;
+        }
     });
 
     test('removes legacy v2 data when discarding localStorage saves', async () => {
