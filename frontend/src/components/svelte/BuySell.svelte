@@ -19,8 +19,7 @@
     let symbol = '';
     let taxAmount = 0;
     let effectiveSellPrice = 0;
-    let loading = false;
-    let errorMessage = null;
+    let isLoading = false;
 
     let activeType = 'buy'; // 'buy' or 'sell'
     let quantity = 1;
@@ -62,21 +61,19 @@
             return;
         }
 
-        loading = true;
-        errorMessage = null;
+        isLoading = true;
         try {
             const loadedItem = await db.get(ENTITY_TYPES.ITEM, itemId);
             item = loadedItem ?? null;
         } catch (error) {
             item = null;
-            errorMessage = 'Failed to load item details.';
             console.error('Failed to load item from IndexedDB in BuySell.svelte', {
                 itemId,
                 entityType: ENTITY_TYPES.ITEM,
                 error,
             });
         } finally {
-            loading = false;
+            isLoading = false;
         }
     });
 
@@ -101,10 +98,10 @@
 </script>
 
 <Chip inverted={true} text="">
-    {#if loading}
+    {#if isLoading}
         <p>Loading...</p>
-    {:else if errorMessage}
-        <p>{errorMessage}</p>
+    {:else if !item}
+        <p>Item not found</p>
     {:else if price === 0}
         <p>Not tradeable</p>
     {:else}

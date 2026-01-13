@@ -64,10 +64,13 @@ describe('BuySell', () => {
             unit: 'unit',
         });
 
-        const { findByText } = render(BuySell, { props: { itemId: 'custom-item' } });
+        const { findByText, queryByText } = render(BuySell, {
+            props: { itemId: 'custom-item' },
+        });
 
         const buyLabel = await findByText('Buy for 5 dUSD');
         expect(buyLabel).toBeTruthy();
+        expect(queryByText('Not tradeable')).toBeNull();
         expect(db.get).toHaveBeenCalledWith(ENTITY_TYPES.ITEM, 'custom-item');
     });
 
@@ -76,7 +79,7 @@ describe('BuySell', () => {
 
         const { findByText } = render(BuySell, { props: { itemId: 'custom-item' } });
 
-        const errorLabel = await findByText('Failed to load item details.');
+        const errorLabel = await findByText('Item not found');
         expect(errorLabel).toBeTruthy();
     });
 
