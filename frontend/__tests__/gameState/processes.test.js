@@ -425,4 +425,18 @@ describe('gameState - processes', () => {
         expect(mockGameState.inventory['custom-item']).toBe(1);
         expect(mockGameState.processes['custom-1']).toBeUndefined();
     });
+
+    test('finishProcessNow should handle missing create items for custom processes', () => {
+        const definition = {
+            id: 'custom-2',
+            duration: '10s',
+            requireItems: [],
+            consumeItems: [{ id: 'custom-item', count: 2 }],
+        };
+        mockGameState.inventory['custom-item'] = 4;
+        startProcess('custom-2', definition);
+        finishProcessNow('custom-2', definition);
+        expect(mockGameState.inventory['custom-item']).toBe(2);
+        expect(mockGameState.processes['custom-2']).toBeUndefined();
+    });
 });
