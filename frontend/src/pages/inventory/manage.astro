@@ -1,9 +1,29 @@
 ---
 import Page from '../../components/Page.astro';
+import Chip from '../../components/svelte/Chip.svelte';
 import ManageItems from './svelte/ManageItems.svelte';
 import items from './json/items';
+
+const actionButtons = [
+    { text: 'Create a new item', href: '/inventory/create' },
+    { text: 'Manage items', href: '/inventory/manage' },
+];
 ---
 
 <Page title="Manage Items">
+    <div class="action-buttons">
+        {actionButtons.map((button) => (
+            <Chip text={button.text} href={button.href} inverted={true} />
+        ))}
+    </div>
     <ManageItems client:load items={items} />
 </Page>
+
+<style>
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+</style>

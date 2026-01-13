@@ -1,6 +1,12 @@
 ---
 import Page from '../../components/Page.astro';
+import Chip from '../../components/svelte/Chip.svelte';
 import ManageQuests from './svelte/ManageQuests.svelte';
+
+const actionButtons = [
+    { text: 'Create a new quest', href: '/quests/create' },
+    { text: 'Manage quests', href: '/quests/manage' },
+];
 
 // Get all quests - similar to index.astro
 const questModules = import.meta.glob('./json/*/*.json', { eager: true });
@@ -11,5 +17,19 @@ const quests = Object.entries(questModules)
 ---
 
 <Page title="Manage Quests">
+    <div class="action-buttons">
+        {actionButtons.map((button) => (
+            <Chip text={button.text} href={button.href} inverted={true} />
+        ))}
+    </div>
     <ManageQuests client:load quests={quests} />
 </Page>
+
+<style>
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+</style>

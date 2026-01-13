@@ -1,9 +1,29 @@
 ---
 import Page from '../../components/Page.astro';
+import Chip from '../../components/svelte/Chip.svelte';
 import ManageProcesses from './svelte/ManageProcesses.svelte';
 import processes from '../../generated/processes.json';
+
+const actionButtons = [
+    { text: 'Create a new process', href: '/processes/create' },
+    { text: 'Manage processes', href: '/processes/manage' },
+];
 ---
 
 <Page title="Manage Processes">
+    <div class="action-buttons">
+        {actionButtons.map((button) => (
+            <Chip text={button.text} href={button.href} inverted={true} />
+        ))}
+    </div>
     <ManageProcesses client:load processes={processes} />
 </Page>
+
+<style>
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+</style>
