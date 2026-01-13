@@ -3,10 +3,11 @@ import Page from '../../components/Page.astro';
 import DocsIndex from '../../components/svelte/DocsIndex.svelte';
 import sections from './json/sections.json';
 import { detectDocFeatures } from '../../utils/docsSearchFeatures.js';
+import { markdownToPlainText } from '../../lib/docs/fullTextSearch';
 
 const docModules = await Astro.glob('./md/**/*.md');
 
-const buildDocFeatureIndex = async () => {
+const buildDocSearchIndex = async () => {
     const entries = await Promise.all(
         docModules.map(async (doc) => {
             const slug = String(doc?.frontmatter?.slug ?? '').toLowerCase();
@@ -26,7 +27,13 @@ const buildDocFeatureIndex = async () => {
                     throw new Error(`No content loader found for doc slug ${slug}`);
                 }
 
-                return [slug, detectDocFeatures(content)];
+                return [
+                    slug,
+                    {
+                        features: detectDocFeatures(content),
+                        bodyText: markdownToPlainText(content),
+                    },
+                ];
             } catch (error) {
                 console.error(`Failed to detect features for doc slug ${slug}`, error);
 
@@ -34,7 +41,7 @@ const buildDocFeatureIndex = async () => {
                     throw error;
                 }
 
-                return [slug, []];
+                return [slug, { features: [], bodyText: '' }];
             }
         })
     );
@@ -43,7 +50,7 @@ const buildDocFeatureIndex = async () => {
     return new Map(filteredEntries);
 };
 
-const docFeatureIndex = await buildDocFeatureIndex();
+const docSearchIndex = await buildDocSearchIndex();
 
 const getSlugFromHref = (href = '') => {
     const clean = href.split('#')[0].split('?')[0];
@@ -60,9 +67,11 @@ const docsSections = sections.map((section) => ({
     title: section.title,
     links: section.links.map((link) => {
         const slug = getSlugFromHref(link.href);
-        const features = slug ? docFeatureIndex.get(slug) ?? [] : [];
+        const docSearchData = slug ? docSearchIndex.get(slug) : null;
+        const features = docSearchData?.features ?? [];
+        const bodyText = docSearchData?.bodyText ?? '';
 
-        return { ...link, features };
+        return { ...link, features, bodyText };
     }),
 }));
 ---

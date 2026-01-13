@@ -1,4 +1,10 @@
 <script>
+    import {
+        findDocSnippet,
+        normalizeSearchValue,
+        parseDocsQuery,
+    } from '../../lib/docs/fullTextSearch';
+
     /**
      * @typedef {Object} DocLink
      * @property {string} title
@@ -6,6 +12,7 @@
      * @property {string[]=} keywords
      * @property {boolean=} external
      * @property {string[]=} features
+     * @property {string=} bodyText
      */
 
     /**
@@ -19,65 +26,73 @@
 
     let query = '';
 
-    const normalize = (value) => value.toLowerCase().trim();
+    const buildSearchableValues = (link) => {
+        const values = [link.title, ...(link.keywords ?? [])];
 
-    const parseQuery = (value) => {
-        const normalized = normalize(value);
-        const words = normalized.split(/\s+/).filter(Boolean);
-        const operators = [];
-        const terms = [];
+        if (link.bodyText) {
+            values.push(link.bodyText);
+        }
 
-        words.forEach((word) => {
-            if (word.startsWith('has:')) {
-                const feature = normalize(word.slice(4));
-
-                if (feature) {
-                    operators.push(feature);
-                }
-
-                return;
-            }
-
-            terms.push(word);
-        });
-
-        return { normalized, operators, terms };
+        return values.map(normalizeSearchValue);
     };
 
-    // Note: `terms` may be an empty array for operator-only queries (e.g. "has:link").
+    // Note: `keywords` may be an empty array for operator-only queries (e.g. "has:link").
     // In that case, `every()` returns `true` by design, so word matching does not filter out results.
-    const matchesWords = (terms, values) =>
-        terms.every((term) => values.some((value) => value.includes(term)));
+    const matchesWords = (keywords, values) =>
+        keywords.every((term) => values.some((value) => value.includes(term)));
 
     const matchesOperators = (operators, features = []) => {
         if (!operators.length) {
             return true;
         }
 
-        const normalizedFeatures = features.map(normalize);
+        const normalizedFeatures = features.map(normalizeSearchValue);
         return operators.every((operator) => normalizedFeatures.includes(operator));
     };
 
     const matchLink = (link, parsedQuery) => {
-        if (!parsedQuery.operators.length && !parsedQuery.terms.length) {
+        if (!parsedQuery.operators.length && !parsedQuery.keywords.length) {
             return true;
         }
 
-        const searchableValues = [link.title, ...(link.keywords ?? [])].map(normalize);
-
         return (
-            matchesWords(parsedQuery.terms, searchableValues) &&
+            matchesWords(parsedQuery.keywords, link.searchableValues ?? []) &&
             matchesOperators(parsedQuery.operators, link.features)
         );
     };
 
-    $: parsedQuery = parseQuery(query);
-    $: filteredSections = sections
+    $: parsedQuery = parseDocsQuery(query);
+    $: shouldShowSnippets = parsedQuery.keywords.length > 0 && !parsedQuery.isHasPredicate;
+    $: indexedSections = sections.map((section) => ({
+        title: section.title,
+        links: section.links.map((link) => ({
+            ...link,
+            searchableValues: buildSearchableValues(link),
+        })),
+    }));
+    $: filteredSections = indexedSections
         .map((section) => ({
             title: section.title,
             links: section.links.filter((link) => matchLink(link, parsedQuery)),
         }))
         .filter((section) => section.links.length > 0);
+    $: displaySections = (parsedQuery.normalized ? filteredSections : indexedSections).map(
+        (section) => ({
+            title: section.title,
+            links: section.links.map((link) => ({
+                ...link,
+                snippet: shouldShowSnippets
+                    ? findDocSnippet(
+                          {
+                              title: link.title,
+                              bodyText: link.bodyText ?? '',
+                          },
+                          parsedQuery.keywords
+                      )?.snippet
+                    : null,
+            })),
+        })
+    );
 
     $: totalResults = filteredSections.reduce((count, section) => count + section.links.length, 0);
 </script>
@@ -96,18 +111,31 @@
         <p class="empty-state">No docs found for "{query}".</p>
     {:else}
         <div class="docs-grid" data-testid="docs-grid">
-            {#each parsedQuery.normalized ? filteredSections : sections as section}
+            {#each displaySections as section}
                 <section class="docs-section">
                     <h2>{section.title}</h2>
                     <nav aria-label={`Docs ${section.title}`}>
                         {#each section.links as link}
-                            <a
-                                href={link.href}
-                                rel={link.external ? 'noopener noreferrer' : undefined}
-                                target={link.external ? '_blank' : undefined}
-                            >
-                                {link.title}
-                            </a>
+                            <div class="doc-entry" data-doc-href={link.href}>
+                                <a
+                                    href={link.href}
+                                    rel={link.external ? 'noopener noreferrer' : undefined}
+                                    target={link.external ? '_blank' : undefined}
+                                >
+                                    {link.title}
+                                </a>
+                                {#if link.snippet}
+                                    <p class="doc-snippet" data-testid="doc-snippet">
+                                        {#if link.snippet.before.length}
+                                            {link.snippet.before.join(' ')}{' '}
+                                        {/if}
+                                        <strong>{link.snippet.match}</strong>
+                                        {#if link.snippet.after.length}
+                                            {' '}{link.snippet.after.join(' ')}
+                                        {/if}
+                                    </p>
+                                {/if}
+                            </div>
                         {/each}
                     </nav>
                 </section>
@@ -169,6 +197,13 @@
         gap: 0.5rem;
     }
 
+    .doc-entry {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
     a {
         display: inline-flex;
         align-items: center;
@@ -186,6 +221,14 @@
     a:hover,
     a:focus {
         opacity: 1;
+    }
+
+    .doc-snippet {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 0.85rem;
+        line-height: 1.3;
+        text-align: center;
     }
 
     .empty-state {

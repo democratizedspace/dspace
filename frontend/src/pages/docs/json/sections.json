@@ -11,6 +11,7 @@
                 "keywords": ["release notes", "updates"]
             },
             { "title": "FAQ", "href": "/docs/faq", "keywords": ["questions"] },
+            { "title": "Docs search", "href": "/docs/docs-search", "keywords": ["search"] },
             { "title": "Glossary", "href": "/docs/glossary", "keywords": ["definitions"] },
             { "title": "Contribute", "href": "/docs/contribute", "keywords": ["get involved"] },
             {

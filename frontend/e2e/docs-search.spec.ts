@@ -45,4 +45,25 @@ test.describe('Docs search', () => {
         await expect(page.getByRole('link', { name: 'About', exact: true })).toBeVisible();
         await expect(page.getByRole('link', { name: 'Mission', exact: true })).toHaveCount(0);
     });
+
+    test('shows a body snippet for full-text matches', async ({ page }) => {
+        await page.goto('/docs');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const searchInput = page.getByRole('searchbox', { name: /search docs/i });
+        await searchInput.fill('turbine');
+
+        const solarEntry = page.locator('[data-doc-href=\"/docs/solar\"]');
+        await expect(solarEntry).toBeVisible();
+
+        const snippet = solarEntry.getByTestId('doc-snippet');
+        await expect(snippet).toBeVisible();
+        await expect(snippet).toContainText('Wind');
+        await expect(snippet.locator('strong')).toHaveText(/turbines/i);
+        await expect(snippet).toContainText('are also');
+
+        await searchInput.fill('');
+        await expect(solarEntry.getByTestId('doc-snippet')).toHaveCount(0);
+    });
 });
