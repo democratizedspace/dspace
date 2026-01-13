@@ -75,7 +75,7 @@
     };
 </script>
 
-<Chip text="">
+<div class="panel">
     <section class="vertical" data-hydrated="true" data-testid="contentbackup-export">
         <h2>Export custom content</h2>
         <p>Prepare a downloadable backup of your custom quests, items, and processes.</p>
@@ -84,6 +84,7 @@
             onClick={handlePrepareBackup}
             inverted={true}
             disabled={status === 'running'}
+            dataTestId="contentbackup-prepare"
         />
 
         {#if status === 'error'}
@@ -117,7 +118,7 @@
             <Chip text="Download backup" onClick={handleDownload} inverted={true} />
         {/if}
     </section>
-</Chip>
+</div>
 
 <style>
     h2 {
@@ -132,6 +133,10 @@
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
+        width: 100%;
+    }
+
+    .panel {
         width: 100%;
     }
 

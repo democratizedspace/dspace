@@ -84,7 +84,7 @@ test.describe('Custom content backup', () => {
             });
         });
 
-        const prepareButton = page.getByRole('button', { name: /prepare backup/i });
+        const prepareButton = page.getByTestId('contentbackup-prepare');
         await prepareButton.click();
         await expect(prepareButton).toBeDisabled();
 

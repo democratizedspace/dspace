@@ -88,7 +88,7 @@
     };
 </script>
 
-<Chip text="">
+<div class="panel">
     <section class="vertical" data-hydrated="true" data-testid="contentbackup-import">
         <h2>Import custom content</h2>
         <p id={dropzoneLabelId}>Drag and drop your backup file here, or click to browse.</p>
@@ -139,7 +139,7 @@
             </div>
         {/if}
     </section>
-</Chip>
+</div>
 
 <style>
     h2 {
@@ -154,6 +154,10 @@
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
+        width: 100%;
+    }
+
+    .panel {
         width: 100%;
     }
 
