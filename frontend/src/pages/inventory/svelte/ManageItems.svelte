@@ -13,7 +13,10 @@
     const ALL_CATEGORIES_LABEL = 'All categories';
     let selectedCategory = ALL_CATEGORIES_LABEL;
     let previewItemId = null;
-    const actionButtons = [{ text: 'Create a new item', href: '/inventory/create' }];
+    const actionButtons = [
+        { text: 'Create a new item', href: '/inventory/create' },
+        { text: 'View items', href: '/inventory' },
+    ];
 
     onMount(async () => {
         customItems = await db.list(ENTITY_TYPES.ITEM);

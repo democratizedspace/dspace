@@ -6,6 +6,19 @@ import ManageQuests from '../src/pages/quests/svelte/ManageQuests.svelte';
 import ManageProcesses from '../src/pages/processes/svelte/ManageProcesses.svelte';
 import Processes from '../src/pages/processes/Processes.svelte';
 
+vi.mock('../src/generated/processes.json', () => ({
+    default: [
+        {
+            id: 'test-process',
+            title: 'Test Process',
+            duration: '1h',
+            requireItems: [],
+            consumeItems: [],
+            createItems: [],
+        },
+    ],
+}));
+
 vi.mock('../src/utils/customcontent.js', () => ({
     db: {
         list: vi.fn().mockResolvedValue([]),
@@ -41,16 +54,34 @@ describe('Manage pages action buttons', () => {
         expect(createButton).toHaveAttribute('href', '/inventory/create');
     });
 
+    it('shows the view item button on manage items', async () => {
+        render(ManageItems, { props: { items: [] } });
+        const viewButton = await screen.findByRole('link', { name: 'View items' });
+        expect(viewButton).toHaveAttribute('href', '/inventory');
+    });
+
     it('shows the create quest button on manage quests', async () => {
         render(ManageQuests, { props: { quests: [] } });
         const createButton = await screen.findByRole('link', { name: 'Create a new quest' });
         expect(createButton).toHaveAttribute('href', '/quests/create');
     });
 
+    it('shows the view quest button on manage quests', async () => {
+        render(ManageQuests, { props: { quests: [] } });
+        const viewButton = await screen.findByRole('link', { name: 'View quests' });
+        expect(viewButton).toHaveAttribute('href', '/quests');
+    });
+
     it('shows the create process button on manage processes', async () => {
         render(ManageProcesses, { props: { processes: [] } });
         const createButton = await screen.findByRole('link', { name: 'Create a new process' });
         expect(createButton).toHaveAttribute('href', '/processes/create');
+    });
+
+    it('shows the view process button on manage processes', async () => {
+        render(ManageProcesses, { props: { processes: [] } });
+        const viewButton = await screen.findByRole('link', { name: 'View processes' });
+        expect(viewButton).toHaveAttribute('href', '/processes');
     });
 
     it('shows create and manage buttons on the processes page', async () => {

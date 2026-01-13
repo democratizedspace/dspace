@@ -25,8 +25,13 @@
         }
     });
 
+    const builtInProcesses = (Array.isArray(processes) ? processes : []).map((process) => ({
+        ...process,
+        custom: false,
+    }));
+
     $: allProcesses = [
-        ...(Array.isArray(processes) ? processes : []),
+        ...builtInProcesses,
         ...(Array.isArray(customProcesses) ? customProcesses : []),
     ].filter(Boolean);
 </script>
