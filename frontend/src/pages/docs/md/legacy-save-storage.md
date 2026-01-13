@@ -249,8 +249,8 @@ machine-lock-0=1
   milliseconds. (**Observed in audit output**.)
 - **Quest duplication guard:** `itemsClaimed` is used as a per-step guard to prevent re-granting
   rewards. (**Observed in audit output**.)
-- **Extra keys tolerated:** v2.1 can persist extra keys under `gameState`; v3 migration should
-  ignore unknown keys safely. (**Observed in audit output**.)
+- **Extra keys tolerated:** v2.1 can persist extra keys under `gameState`; validate v3 migration in
+  QA to ensure unknown keys are ignored safely. (**Observed in audit output**.)
 - **Cleanup artifact:** the v2.1 import cleanup can write an empty-string inventory key. Treat
   `inventory[""]` as a historical artifact; observed values include `null`. (**Observed in audit
   output**.)
@@ -330,17 +330,17 @@ Treat these as migration **warnings** and QA requirements, not guarantees of v3 
 - **Exporter can be stale:** validate migration using `localStorage["gameState"]`, not the v2.1
   base64 export. (**Observed in audit output**.)
 - **Importer overwrite bug:** some real saves may be missing items or version flags after import.
-  v3 migration should tolerate partial `quests`, `inventory`, or `processes` data. (**Observed in
-  audit output**.)
-- **Unknown keys in gameState:** v2.1 does not enforce a strict schema; v3 should ignore unknown
-  keys safely. (**Observed in audit output**.)
+  Validate v3 migration against partial `quests`, `inventory`, or `processes` data in QA.
+  (**Observed in audit output**.)
+- **Unknown keys in gameState:** v2.1 does not enforce a strict schema; validate v3 migration
+  against unknown keys in QA. (**Observed in audit output**.)
 - **Cleanup artifacts:** import cleanup can leave `inventory[""]` and erase all cookies, so
   post-import saves may have odd artifacts or missing v1 residue. (**Observed in audit output**.)
 
 ## v2.1 seed profiles for `/settings` (v2 localStorage)
 
 Use these to seed `localStorage["gameState"]` in DevTools or the `/settings` seeder. All JSON is
-copy-pastable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
+copy/pastable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
 
 ### Seed 1: Minimal v2 save
 
@@ -350,21 +350,19 @@ copy-pastable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
 
 **Expected v3 detection outcomes (verify in QA):**
 
-- **Banner + settings card:** v3 should detect legacy v2 localStorage and show the v2 card in
-  `/settings` → **Legacy save upgrades**. Detection inspects `gameState`/`gameStateBackup`, then
+- **Banner + settings card:** v3 legacy detection inspects `gameState`/`gameStateBackup`, then
   checks `versionNumberString` or `versionNumber` for a `1`/`2` prefix.  
   (v3: `detectLegacyArtifacts` + `LegacySaveUpgrade`.)  
   <https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveDetection.ts>  
   <https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/svelte/LegacySaveUpgrade.svelte>
-- **Merge:** `mergeLegacyStateIntoCurrent` adds inventory counts, fills only missing quest/process
-  entries, and merges settings without overwriting existing entries.  
+- **Merge:** `mergeLegacyStateIntoCurrent` adds positive inventory counts, fills missing
+  quest/process entries, merges settings (incoming values override current ones), grants the v2
+  upgrade trophy, and persists the merged state via `persistMigratedState`.  
   <https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/gameState.js>
-- **Replace:** `importV2V3` validates and persists the legacy state (including normalization and
-  trophy grant) and writes it as the new v3 save. **Verify in QA** that the resulting state matches
-  expectations after persistence.  
+- **Replace:** `importV2V3` validates the legacy state (provided or read from `gameState`), grants
+  the v2 upgrade trophy, and persists via `persistMigratedState` (which sets
+  `versionNumberString = "3"` and clears legacy localStorage when IndexedDB is in use).  
   <https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/gameState.js>
-- **Wallet UI:** currency displays should reflect inventory counts for currency items (ex: `24`)
-  if the current v3 wallet UI binds to inventory. **Must verify in QA.**
 
 ### Seed 2: In-progress process save
 
@@ -384,11 +382,11 @@ real v3 IDs as needed.
 
 - **Banner + settings card:** legacy v2 detected as above.  
   <https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/svelte/LegacySaveUpgrade.svelte>
-- **Merge:** `mergeLegacyStateIntoCurrent` adds inventory counts and only fills missing
-  quest/process entries.  
+- **Merge:** `mergeLegacyStateIntoCurrent` adds positive inventory counts and only fills missing
+  quest/process entries; settings merge with incoming values overriding current entries.  
   <https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/gameState.js>
-- **Replace:** `importV2V3` validates and persists the legacy state as the new v3 save. Process
-  timers based on `startedAt`/`duration` depend on runtime logic; **verify in QA**.  
+- **Replace:** `importV2V3` validates and persists the legacy state as the new v3 save (including
+  `versionNumberString = "3"` via `persistMigratedState`).  
   <https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/gameState.js>
 - **Finished processes:** in v2.1, the `processes` map only contains in-progress entries with
   `startedAt` and `duration`. When a process finishes, its entry is removed rather than persisted
@@ -418,13 +416,13 @@ real v3 IDs as needed.
 
 - **Banner + settings card:** legacy v2 detected.  
   <https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/svelte/LegacySaveUpgrade.svelte>
-- **Merge:** `mergeLegacyStateIntoCurrent` ignores unknown keys, ignores non-positive inventory
-  counts (including the empty-string cleanup artifact), and only fills missing quest/process
-  entries. The empty-string key with `null` represents a v2.1 cleanup artifact and should be
-  ignored/sanitized.  
+- **Merge:** `mergeLegacyStateIntoCurrent` ignores non-positive inventory counts (including the
+  empty-string cleanup artifact), only fills missing quest/process entries, and does not copy
+  arbitrary extra keys from the legacy state. The empty-string key with `null` represents a v2.1
+  cleanup artifact and will be skipped because it normalizes to `0`.  
   <https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/gameState.js>
-- **Replace:** `importV2V3` validates and persists the legacy state; unknown keys should be ignored
-  by validation, but **verify in QA** that the normalized result is sane.  
+- **Replace:** `importV2V3` validates and persists the legacy state; verify in QA that any extra
+  keys do not disrupt migration.  
   <https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/gameState.js>
 
 ## QA: v2.1 → v3 migration checklist
@@ -437,8 +435,9 @@ real v3 IDs as needed.
    are preserved (no overwrites).
 5. **Replace into existing v3 save:** validate replacement behavior and that the v3 save is written
    to IndexedDB after import.
-6. **Legacy data cleanup:** confirm whether v3 deletes v2 localStorage on import; do **not** assume
-   cleanup unless the UI action explicitly removes `gameState`.
+6. **Legacy data cleanup:** `persistMigratedState` removes `gameState` and `gameStateBackup` when
+   IndexedDB is in use; confirm that behavior matches runtime storage mode (localStorage-only
+   environments retain legacy keys).
 7. **Failure cases:**
     - **Corrupt JSON** in `gameState` → expect clear UX, no crash, no data deletion.
     - **Partial `gameState`** (missing `quests`, `inventory`, or `processes`) → defaults restored,
