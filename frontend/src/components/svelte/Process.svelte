@@ -213,16 +213,20 @@
     };
 
     const updateState = () => {
-        currentTime = Date.now();
         if (isCustomProcess || !process) {
             state = ProcessStates.NOT_STARTED;
             processStartedAt = undefined;
+            currentTime = Date.now();
             return;
         }
 
         const processState = getProcessState(processId);
         state = processState.state;
         processStartedAt = getProcessStartedAt(processId);
+
+        if (state !== ProcessStates.PAUSED) {
+            currentTime = Date.now();
+        }
     };
 
     const onProcessStart = () => {
