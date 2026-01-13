@@ -1,23 +1,33 @@
 {
-    "description": "Legacy v1 saves may be chunked across multiple cookies. Add one entry per cookie chunk to seed the full payload.",
-    "cookies": [
-        {
-            "name": "item-3",
-            "value": "75",
-            "encodeValue": true
+    "description": "Legacy v1 saves are cookie-based. Profiles below mirror audited keys and are used by the /settings seeding UI.",
+    "profiles": {
+        "minimal": {
+            "label": "Minimal (cookies only)",
+            "cookies": [
+                { "name": "acceptedCookies", "value": "true", "encodeValue": false },
+                { "name": "item-3", "value": "12.5", "encodeValue": true },
+                { "name": "item-10", "value": "2", "encodeValue": true },
+                { "name": "item-20", "value": "3", "encodeValue": true },
+                { "name": "item-22", "value": "150", "encodeValue": true },
+                { "name": "item-70", "value": "1", "encodeValue": true },
+                { "name": "currency-balance-dUSD", "value": "123.45", "encodeValue": true }
+            ]
         },
-        {
-            "name": "item-10",
-            "value": "2"
-        },
-        {
-            "name": "item-83",
-            "value": "1"
-        },
-        {
-            "name": "item-21",
-            "value": "20%2B",
-            "encodeValue": false
+        "maximal": {
+            "label": "Maximal (cookies + localStorage)",
+            "cookies": [
+                { "name": "acceptedCookies", "value": "true", "encodeValue": false },
+                { "name": "item-3", "value": "12.5", "encodeValue": true },
+                { "name": "item-10", "value": "2", "encodeValue": true },
+                { "name": "item-20", "value": "3", "encodeValue": true },
+                { "name": "item-22", "value": "150", "encodeValue": true },
+                { "name": "item-70", "value": "1", "encodeValue": true },
+                { "name": "currency-balance-dUSD", "value": "123.45", "encodeValue": true }
+            ],
+            "localStorage": [
+                { "key": "process-3dprint-benchy-starttime", "value": 1700000000000 },
+                { "key": "machine-lock-0", "value": 1 }
+            ]
         }
-    ]
+    }
 }
