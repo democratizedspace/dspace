@@ -8,7 +8,6 @@
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
 
     export let itemId;
-    export let gameState;
 
     const dUSDId = items.find((i) => i.name === 'dUSD').id;
     const dCarbonId = items.find((i) => i.name === 'dCarbon').id;
@@ -20,6 +19,8 @@
     let symbol = '';
     let taxAmount = 0;
     let effectiveSellPrice = 0;
+    let loading = false;
+    let errorMessage = null;
 
     let activeType = 'buy'; // 'buy' or 'sell'
     let quantity = 1;
@@ -50,9 +51,9 @@
         const transactionList = [transactionItem];
 
         if (activeType === 'buy') {
-            buyItems(transactionList, gameState);
+            buyItems(transactionList);
         } else {
-            sellItems(transactionList, gameState);
+            sellItems(transactionList);
         }
     }
 
@@ -61,10 +62,21 @@
             return;
         }
 
+        loading = true;
+        errorMessage = null;
         try {
-            item = await db.get(ENTITY_TYPES.ITEM, itemId);
+            const loadedItem = await db.get(ENTITY_TYPES.ITEM, itemId);
+            item = loadedItem ?? null;
         } catch (error) {
             item = null;
+            errorMessage = 'Failed to load item details.';
+            console.error('Failed to load item from IndexedDB in BuySell.svelte', {
+                itemId,
+                entityType: ENTITY_TYPES.ITEM,
+                error,
+            });
+        } finally {
+            loading = false;
         }
     });
 
@@ -89,7 +101,11 @@
 </script>
 
 <Chip inverted={true} text="">
-    {#if price === 0}
+    {#if loading}
+        <p>Loading...</p>
+    {:else if errorMessage}
+        <p>{errorMessage}</p>
+    {:else if price === 0}
         <p>Not tradeable</p>
     {:else}
         <div class="buy-sell-wrapper vertical">
