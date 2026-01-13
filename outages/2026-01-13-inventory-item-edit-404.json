@@ -1,0 +1,13 @@
+{
+  "id": "OUT-2026-01-13-inventory-item-edit-404",
+  "date": "2026-01-13",
+  "component": "frontend/inventory",
+  "rootCause": "The manage items page linked custom item edits to /inventory/item/:id/edit, but the inventory item route only had a single-item page and no edit route, so edits returned a 404.",
+  "resolution": "Add a nested edit route for inventory items and load the custom item data into the edit form so the edit link resolves correctly.",
+  "references": [
+    "frontend/src/pages/inventory/svelte/ManageItems.svelte",
+    "frontend/src/pages/inventory/item/[itemId]/edit.astro",
+    "frontend/src/pages/inventory/svelte/ItemEdit.svelte",
+    "https://staging.democratized.space/inventory/item/c6ee398b-7f29-4088-9df2-73c8f8a5f54d/edit"
+  ]
+}
