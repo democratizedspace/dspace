@@ -3,6 +3,7 @@ import Process from '../svelte/Process.svelte';
 import { vi, expect, test, beforeEach } from 'vitest';
 import { tick } from 'svelte';
 import { writable } from 'svelte/store';
+import { getProcessState as getProcessStateMock } from '../../utils/gameState/processes.js';
 
 const ProcessStates = vi.hoisted(() => ({
     NOT_STARTED: 'not started',
@@ -17,6 +18,8 @@ const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
 const startProcess = vi.hoisted(() => vi.fn());
+
+const getProcessState = vi.mocked(getProcessStateMock);
 
 vi.mock('../../pages/inventory/json/items', () => ({
     default: [
@@ -95,6 +98,7 @@ beforeEach(() => {
     cheatsAvailabilityStore.set(false);
     cheatsEnabledStore.set(false);
     stateInfo.state = ProcessStates.IN_PROGRESS;
+    getProcessState.mockReturnValue(stateInfo);
     finishProcessNow.mockClear();
     startProcess.mockClear();
 });
@@ -176,6 +180,7 @@ test('renders instant finish chip for paused processes', async () => {
 
 test('renders custom process start controls when rendering a custom process', async () => {
     stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
     const customProcess = {
         id: 'custom-1',
         title: 'Custom Process',
@@ -201,6 +206,7 @@ test('renders custom process start controls when rendering a custom process', as
 
 test('prefers provided process data over built-in catalog lookup', async () => {
     stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
     const customOverride = {
         id: 'p1',
         title: 'Override Process',

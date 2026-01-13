@@ -476,7 +476,6 @@
         font-size: 0.75rem;
     }
 
-
     .requirements-group {
         border-radius: 12px;
         padding: 6px;
