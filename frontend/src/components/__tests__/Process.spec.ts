@@ -160,7 +160,8 @@ test('renders instant finish chip for paused processes', async () => {
     expect(finishProcessNow).toHaveBeenCalledWith('p1');
 });
 
-test('shows custom process note when rendering a custom process', async () => {
+test('renders custom process controls when rendering a custom process', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
     const customProcess = {
         id: 'custom-1',
         title: 'Custom Process',
@@ -178,13 +179,12 @@ test('shows custom process note when rendering a custom process', async () => {
 
     await tick();
     expect(getByText('Duration: 5s')).toBeTruthy();
-    expect(
-        getByText('Custom processes are displayed for reference and managed separately.')
-    ).toBeTruthy();
+    expect(getByText('Start')).toBeTruthy();
     expect(queryByTestId('qa-instant-finish-chip')).toBeNull();
 });
 
 test('prefers provided process data over built-in catalog lookup', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
     const customOverride = {
         id: 'p1',
         title: 'Override Process',
@@ -202,10 +202,8 @@ test('prefers provided process data over built-in catalog lookup', async () => {
 
     await tick();
     expect(getByText('Override Process')).toBeTruthy();
-    expect(
-        getByText('Custom processes are displayed for reference and managed separately.')
-    ).toBeTruthy();
-    expect(queryByText('Start')).toBeNull();
+    expect(queryByText('Test Process')).toBeNull();
+    expect(getByText('Start')).toBeTruthy();
 });
 
 test('renders fallback message when process details are unavailable', async () => {

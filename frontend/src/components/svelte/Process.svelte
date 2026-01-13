@@ -212,7 +212,7 @@
     };
 
     const updateState = () => {
-        if (isCustomProcess || !process) {
+        if (!process) {
             state = ProcessStates.NOT_STARTED;
             processStartedAt = undefined;
             return;
@@ -224,10 +224,6 @@
     };
 
     const onProcessStart = () => {
-        if (isCustomProcess) {
-            return;
-        }
-
         const { missingEntries, targets, message } = getMissingRequirementInfo();
         if (missingEntries.length > 0) {
             if (isPulsing) {
@@ -245,57 +241,53 @@
         }
 
         clearInterval(intervalId);
-        startProcess(processId);
+        if (isCustomProcess && process) {
+            startProcess(processId, process);
+        } else {
+            startProcess(processId);
+        }
         intervalId = setInterval(updateState, updateIntervalMs);
         updateState();
     };
 
     const onProcessCancel = () => {
-        if (isCustomProcess) {
-            return;
-        }
-
         clearInterval(intervalId);
-        cancelProcess(processId);
+        if (isCustomProcess && process) {
+            cancelProcess(processId, process);
+        } else {
+            cancelProcess(processId);
+        }
         updateState();
     };
 
     const onProcessComplete = () => {
-        if (isCustomProcess) {
-            return;
-        }
-
         clearInterval(intervalId);
-        finishProcess(processId);
+        if (isCustomProcess && process) {
+            finishProcess(processId, process);
+        } else {
+            finishProcess(processId);
+        }
         updateState();
     };
 
     const onProcessPause = () => {
-        if (isCustomProcess) {
-            return;
-        }
-
         clearInterval(intervalId);
         pauseProcess(processId);
         updateState();
     };
 
     const onProcessResume = () => {
-        if (isCustomProcess) {
-            return;
-        }
-
         resumeProcess(processId);
         intervalId = setInterval(updateState, updateIntervalMs);
         updateState();
     };
 
     const onProcessInstantFinish = () => {
-        if (isCustomProcess) {
-            return;
+        if (isCustomProcess && process) {
+            finishProcessNow(processId, process);
+        } else {
+            finishProcessNow(processId);
         }
-
-        finishProcessNow(processId);
         clearInterval(intervalId);
         updateState();
     };
@@ -303,9 +295,7 @@
     onMount(() => {
         mounted = true;
         updateState();
-        if (!isCustomProcess) {
-            intervalId = setInterval(updateState, updateIntervalMs);
-        }
+        intervalId = setInterval(updateState, updateIntervalMs);
 
         initializeQaCheats();
         unsubscribeCheatsAvailability = qaCheatsAvailability.subscribe((available) => {
@@ -357,10 +347,7 @@
             totalDurationSeconds = 0;
         }
 
-        if (intervalId && isCustomProcess) {
-            clearInterval(intervalId);
-            intervalId = null;
-        } else if (!intervalId && mounted && !isCustomProcess) {
+        if (!intervalId && mounted) {
             intervalId = setInterval(updateState, updateIntervalMs);
         }
 
@@ -404,11 +391,7 @@
 
             <h4>Duration: {process.duration}</h4>
 
-            {#if isCustomProcess}
-                <p class="custom-process-note">
-                    Custom processes are displayed for reference and managed separately.
-                </p>
-            {:else if state === ProcessStates.NOT_STARTED}
+            {#if state === ProcessStates.NOT_STARTED}
                 <div
                     class="start-action"
                     class:pulse={isPulsing}
@@ -511,12 +494,6 @@
         border-radius: 10px;
         padding: 2px 7px;
         font-size: 0.75rem;
-    }
-
-    .custom-process-note {
-        margin-top: 12px;
-        color: #d0f0d0;
-        font-size: 0.9rem;
     }
 
     .requirements-group {
