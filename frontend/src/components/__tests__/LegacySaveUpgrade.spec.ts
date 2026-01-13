@@ -44,7 +44,7 @@ describe('LegacySaveUpgrade', () => {
             cheatsAvailable: false,
         });
 
-        await findByText('3 item cookies detected');
+        await findByText(/3 item cookies detected/i);
 
         const mergeButton = await findByRole('button', {
             name: /merge v1 into current save/i,

@@ -135,7 +135,9 @@ test.describe('Logout flow', () => {
         await expect(logoutButton).toBeVisible();
         await logoutButton.click();
 
-        await expect(page.getByRole('status')).toHaveText('Credentials cleared from this device.');
+        await expect(
+            page.getByRole('status', { name: 'Credentials cleared from this device.' })
+        ).toHaveText('Credentials cleared from this device.');
         await expect(page).toHaveURL(/\/settings\/?$/);
         await expect(page.getByTestId('logout-state')).toHaveText('No saved credentials detected.');
         await expectLocalStorageCleared(page, 'avatarUrl');
