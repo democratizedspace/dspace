@@ -14,6 +14,8 @@ const META_KEY = '_meta';
 const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
 const isDev = Boolean(import.meta?.env?.DEV);
+const LEGACY_VERSION_PREFIXES = ['1', '2'];
+const LEGACY_V2_SHAPE_KEYS = ['inventory', 'quests', 'processes'];
 
 const logPersistenceIssue = (message, error) => {
     const details = error?.message ?? error;
@@ -416,6 +418,31 @@ export const rollbackGameState = async () => {
     }
 };
 
+const extractLegacyV2Candidate = (parsed) => {
+    if (parsed && typeof parsed === 'object' && 'gameState' in parsed) {
+        return parsed.gameState;
+    }
+    return parsed;
+};
+
+const isLegacyV2Candidate = (candidate) => {
+    if (!candidate || typeof candidate !== 'object') return false;
+    const version =
+        typeof candidate.versionNumberString === 'string'
+            ? candidate.versionNumberString
+            : typeof candidate.versionNumber === 'string'
+              ? candidate.versionNumber
+              : undefined;
+    if (version) {
+        const normalized = version.trim();
+        if (normalized) {
+            return LEGACY_VERSION_PREFIXES.some((prefix) => normalized.startsWith(prefix));
+        }
+    }
+
+    return LEGACY_V2_SHAPE_KEYS.some((key) => key in candidate);
+};
+
 export const inspectGameStateStorage = async () => {
     const supportsIndexedDB = isBrowser && 'indexedDB' in globalThis;
 
@@ -424,14 +451,29 @@ export const inspectGameStateStorage = async () => {
     const legacyStateRaw = isBrowser ? localStorage.getItem('gameState') : null;
     const legacyBackupRaw = isBrowser ? localStorage.getItem('gameStateBackup') : null;
 
+    const legacyV2ParseErrors = [];
     let legacyV2State;
-    if (legacyStateRaw) {
+    let legacyV2SourceKey;
+    const legacyCandidates = [
+        { key: LS_STATE_KEY, raw: legacyStateRaw },
+        { key: LS_BACKUP_KEY, raw: legacyBackupRaw },
+    ];
+    legacyCandidates.forEach(({ key, raw }) => {
+        if (!raw || legacyV2State) return;
         try {
-            legacyV2State = JSON.parse(legacyStateRaw);
+            const parsed = JSON.parse(raw);
+            const candidate = extractLegacyV2Candidate(parsed);
+            if (isLegacyV2Candidate(candidate)) {
+                legacyV2State = candidate;
+                legacyV2SourceKey = key;
+            }
         } catch (err) {
-            console.warn('Failed to parse legacy v2 localStorage state:', err);
+            legacyV2ParseErrors.push({
+                key,
+                message: err?.message ?? String(err),
+            });
         }
-    }
+    });
 
     const hasLegacyV2Keys = Boolean(legacyStateRaw || legacyBackupRaw);
 
@@ -451,6 +493,8 @@ export const inspectGameStateStorage = async () => {
         localStorageBackup,
         legacyV2State,
         hasLegacyV2Keys,
+        legacyV2SourceKey,
+        legacyV2ParseErrors,
         usesLocalStorageFallback: useLocalStorage,
         loadedFromPersistence,
     };

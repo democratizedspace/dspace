@@ -15,8 +15,10 @@ import {
     VERSIONS,
 } from '../src/utils/gameState.js';
 import items from '../src/pages/inventory/json/items';
+import { V1_ITEM_ID_TO_V3_UUID } from '../src/utils/legacyV1ItemIdMap.ts';
 
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy').id;
+const DUSD_ITEM_ID = items.find((i) => i.name === 'dUSD')?.id;
 
 beforeEach(async () => {
     localStorage.clear();
@@ -33,7 +35,7 @@ describe('game state upgrades', () => {
         localStorage.setItem(
             'gameState',
             JSON.stringify({
-                inventory: { 1: 3 },
+                inventory: { 1: 3, '': 0, 2: -4 },
                 quests: { q1: { finished: true } },
             })
         );
@@ -43,6 +45,8 @@ describe('game state upgrades', () => {
         expect(migrated.versionNumberString).toBe(VERSIONS.V3);
         const state = loadGameState();
         expect(state.inventory['1']).toBe(3);
+        expect(state.inventory['']).toBeUndefined();
+        expect(state.inventory['2']).toBeUndefined();
         expect(state.quests.q1.finished).toBe(true);
         expect(localStorage.getItem('gameState')).toContain(
             `"versionNumberString":"${VERSIONS.V3}"`
@@ -119,17 +123,47 @@ describe('game state upgrades', () => {
 
         const migrated = await importV1V3(
             [
-                { id: 'item-1', count: 2 },
-                { id: 'item-2', count: 0 },
+                { id: '1', count: 2 },
+                { id: '2', count: 0 },
             ],
             { replaceExisting: true }
         );
 
         expect(migrated.versionNumberString).toBe(VERSIONS.V3);
         const state = loadGameState();
-        expect(state.inventory['item-1']).toBe(2);
+        expect(state.inventory[V1_ITEM_ID_TO_V3_UUID['1']]).toBe(2);
         expect(state.inventory.stale || 0).toBe(0);
         expect(state.quests.keep).toBeUndefined();
+    });
+
+    test('importV1V3 migrates v1 currency balances into dUSD', async () => {
+        expect(DUSD_ITEM_ID).toBeTruthy();
+
+        const migrated = await importV1V3(
+            [{ id: '3', count: 1 }],
+            { legacyCurrencyBalances: [{ symbol: 'dUSD', balance: 45.5 }] }
+        );
+
+        expect(migrated.inventory[DUSD_ITEM_ID]).toBe(45.5);
+    });
+
+    test('mergeLegacyStateIntoCurrent ignores empty inventory keys', async () => {
+        await saveGameState({
+            inventory: { alpha: 1 },
+            quests: {},
+            processes: {},
+            _meta: { lastUpdated: Date.now() },
+        });
+
+        const merged = await mergeLegacyStateIntoCurrent({
+            inventory: { '': 2, beta: 4 },
+            quests: {},
+            processes: {},
+        });
+
+        expect(merged.inventory.alpha).toBe(1);
+        expect(merged.inventory.beta).toBe(4);
+        expect(merged.inventory['']).toBeUndefined();
     });
 
     test('inspectGameStateStorage detects legacy v2 localStorage state', async () => {
@@ -139,5 +173,16 @@ describe('game state upgrades', () => {
 
         expect(inspection.hasLegacyV2Keys).toBe(true);
         expect(inspection.legacyV2State).toEqual({ inventory: { 1: 1 } });
+    });
+
+    test('inspectGameStateStorage reports parse errors for invalid legacy JSON', async () => {
+        localStorage.setItem('gameState', '{invalid');
+
+        const inspection = await inspectGameStateStorage();
+
+        expect(inspection.hasLegacyV2Keys).toBe(true);
+        expect(inspection.legacyV2State).toBeUndefined();
+        expect(inspection.legacyV2ParseErrors.length).toBeGreaterThan(0);
+        expect(inspection.legacyV2ParseErrors[0].key).toBe('gameState');
     });
 });

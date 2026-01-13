@@ -8,9 +8,11 @@ import { addItems } from './gameState/inventory.js';
 import { isBrowser } from './ssr.js';
 import items from '../pages/inventory/json/items';
 import { normalizeSettings } from './settingsDefaults.js';
+import { resolveV1ItemIdToV3Uuid } from './legacyV1ItemIdMap.ts';
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy')?.id;
+const DUSD_ITEM_ID = items.find((i) => i.name === 'dUSD')?.id;
 
 // ---------------------
 // QUESTS
@@ -122,6 +124,56 @@ export const normalizeCount = (value) => {
     return Number.isFinite(parsed) ? parsed : 0;
 };
 
+const normalizeLegacyInventory = (inventory = {}) => {
+    const normalized = {};
+    Object.entries(inventory).forEach(([id, count]) => {
+        const trimmedId = String(id ?? '').trim();
+        if (!trimmedId) return;
+        const parsedCount = normalizeCount(count);
+        if (parsedCount <= 0) return;
+        normalized[trimmedId] = parsedCount;
+    });
+    return normalized;
+};
+
+const normalizeLegacyV2State = (legacyState) => {
+    const normalized = validateGameState(structuredClone(legacyState ?? {}));
+    normalized.inventory = normalizeLegacyInventory(normalized.inventory);
+    normalized.quests = normalized.quests ?? {};
+    normalized.processes = normalized.processes ?? {};
+    normalized.settings = normalizeSettings(normalized.settings);
+    return normalized;
+};
+
+const mapLegacyV1Items = (itemList, legacyCurrencyBalances = []) => {
+    const uuidRegex =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    const mapped = [];
+    const normalizedItems = (Array.isArray(itemList) ? itemList : []).map(({ id, count }) => ({
+        id,
+        parsedCount: normalizeCount(count),
+    }));
+
+    normalizedItems.forEach(({ id, parsedCount }) => {
+        if (!id || parsedCount <= 0) return;
+        const mappedId =
+            resolveV1ItemIdToV3Uuid(id) ?? (uuidRegex.test(String(id)) ? String(id) : null);
+        if (!mappedId) return;
+        mapped.push({ id: mappedId, parsedCount });
+    });
+
+    const currencies = Array.isArray(legacyCurrencyBalances) ? legacyCurrencyBalances : [];
+    currencies.forEach(({ symbol, balance }) => {
+        if (!symbol || !DUSD_ITEM_ID) return;
+        if (symbol !== 'dUSD') return;
+        const parsedBalance = normalizeCount(balance);
+        if (parsedBalance <= 0) return;
+        mapped.push({ id: DUSD_ITEM_ID, parsedCount: parsedBalance });
+    });
+
+    return mapped;
+};
+
 const grantTrophyIfMissing = (state, trophyId) => {
     if (!trophyId) return;
     state.inventory = state.inventory ?? {};
@@ -163,12 +215,9 @@ export const importV1V2 = (itemList) => {
 
 export const importV1V3 = async (itemList, options = {}) => {
     if (!isBrowser) return null;
-    const { replaceExisting = false } = options;
+    const { replaceExisting = false, legacyCurrencyBalances = [] } = options;
 
-    const normalizedItems = (Array.isArray(itemList) ? itemList : []).map(({ id, count }) => ({
-        id,
-        parsedCount: normalizeCount(count),
-    }));
+    const normalizedItems = mapLegacyV1Items(itemList, legacyCurrencyBalances);
 
     const baseState = replaceExisting ? validateGameState({}) : validateGameState(loadGameState());
     const nextState = structuredClone(baseState);
@@ -199,14 +248,14 @@ export const importV2V3 = async (legacyState) => {
         try {
             const legacy = localStorage.getItem('gameState');
             if (legacy) {
-                migrated = validateGameState(JSON.parse(legacy));
+                migrated = JSON.parse(legacy);
             }
         } catch (err) {
             console.error('Error reading legacy v2 state:', err);
         }
     }
     if (!migrated) return null;
-    const normalized = validateGameState(structuredClone(migrated));
+    const normalized = normalizeLegacyV2State(migrated);
     grantTrophyIfMissing(normalized, LEGACY_V2_UPGRADE_TROPHY_ID);
     return persistMigratedState(normalized);
 };
@@ -215,7 +264,7 @@ export const mergeLegacyStateIntoCurrent = async (legacyState) => {
     if (!isBrowser || !legacyState || typeof legacyState !== 'object') return null;
 
     const current = validateGameState(loadGameState());
-    const incoming = validateGameState(structuredClone(legacyState));
+    const incoming = normalizeLegacyV2State(legacyState);
     const merged = validateGameState(structuredClone(current));
 
     merged.inventory = merged.inventory ?? {};

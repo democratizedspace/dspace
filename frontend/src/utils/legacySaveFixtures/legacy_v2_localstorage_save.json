@@ -1,31 +1,89 @@
 {
-    "gameState": {
-        "versionNumberString": "2.1",
-        "inventory": {
-            "0": 1,
-            "3": 120,
-            "10": 2,
-            "11": 1,
-            "85": 1
-        },
-        "quests": {
-            "welcome/howtodoquests": {
-                "finished": true,
-                "itemsClaimed": ["welcome/howtodoquests-start-0"]
-            },
-            "hydroponics/basil": {
-                "stepId": "grown"
+    "profiles": [
+        {
+            "id": "minimal",
+            "label": "Minimal v2.1 gameState",
+            "gameState": {
+                "versionNumberString": "2.1",
+                "inventory": {
+                    "3": 120.5,
+                    "10": 2,
+                    "24": 100
+                },
+                "quests": {
+                    "welcome/howtodoquests": {
+                        "finished": true,
+                        "itemsClaimed": ["welcome/howtodoquests-start-0"]
+                    }
+                },
+                "processes": {},
+                "_meta": {
+                    "lastUpdated": 1672534800000
+                }
             }
         },
-        "processes": {
-            "processes/benchy": {
-                "startedAt": 1672531200000,
-                "finished": true,
-                "result": "printed"
+        {
+            "id": "in-progress",
+            "label": "In-progress v2.1 process",
+            "gameState": {
+                "versionNumberString": "2.1",
+                "inventory": {
+                    "1": 1,
+                    "3": 18.75,
+                    "11": 1
+                },
+                "quests": {
+                    "hydroponics/basil": {
+                        "stepId": "grown"
+                    }
+                },
+                "processes": {
+                    "processes/benchy": {
+                        "startedAt": 1672531200000,
+                        "duration": 3600000
+                    }
+                },
+                "_meta": {
+                    "lastUpdated": 1672534800000
+                }
             }
         },
-        "_meta": {
-            "lastUpdated": 1672534800000
+        {
+            "id": "messy",
+            "label": "Messy v2.1 save (extras + artifacts)",
+            "gameState": {
+                "inventory": {
+                    "": 0,
+                    "3": 5,
+                    "10": 1,
+                    "85": 1
+                },
+                "quests": {
+                    "hydroponics/basil": {
+                        "stepId": "grown"
+                    },
+                    "welcome/howtodoquests": {
+                        "finished": true,
+                        "itemsClaimed": ["welcome/howtodoquests-start-0"]
+                    }
+                },
+                "processes": {
+                    "processes/benchy": {
+                        "startedAt": 1672531200000,
+                        "duration": 3600000,
+                        "finished": false
+                    }
+                },
+                "openAI": {
+                    "apiKey": "REDACTED"
+                },
+                "experimentalFlags": {
+                    "legacyImport": true
+                },
+                "_meta": {
+                    "lastUpdated": 1672534800000
+                }
+            }
         }
-    }
+    ]
 }

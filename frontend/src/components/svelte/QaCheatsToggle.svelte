@@ -9,8 +9,10 @@
     import Chip from './Chip.svelte';
     import {
         clearSeededLegacySaves,
-        seedSampleV1CookieSave,
-        seedSampleV2LocalStorageSave,
+        LEGACY_V1_SEED_PROFILES,
+        LEGACY_V2_SEED_PROFILES,
+        seedLegacyV1Profile,
+        seedLegacyV2Profile,
     } from '../../utils/legacySaveSeeding';
 
     export let cheatsAvailable = false;
@@ -21,6 +23,9 @@
     let workingAction = '';
     let statusMessage = '';
     let errorMessage = '';
+    let seedSummary = null;
+    let selectedV1Profile = LEGACY_V1_SEED_PROFILES[0]?.id ?? '';
+    let selectedV2Profile = LEGACY_V2_SEED_PROFILES[0]?.id ?? '';
 
     let unsubscribeAvailability;
     let unsubscribeEnabled;
@@ -52,15 +57,15 @@
 
     const seedV1Save = () =>
         withStatus('seed-v1', async () => {
-            seedSampleV1CookieSave();
-            statusMessage = 'Seeded sample v1 cookie save. Reloading…';
+            seedSummary = seedLegacyV1Profile(selectedV1Profile);
+            statusMessage = `Seeded v1 profile: ${seedSummary.profileLabel}. Reloading…`;
             notifyLegacyUpgradeRefresh(true);
         });
 
     const seedV2Save = () =>
         withStatus('seed-v2', async () => {
-            seedSampleV2LocalStorageSave();
-            statusMessage = 'Seeded sample v2 localStorage save. Refreshing detection…';
+            seedSummary = seedLegacyV2Profile(selectedV2Profile);
+            statusMessage = `Seeded v2 profile: ${seedSummary.profileLabel}. Refreshing detection…`;
             notifyLegacyUpgradeRefresh(false);
         });
 
@@ -69,6 +74,7 @@
             clearSeededLegacySaves();
             statusMessage = 'Cleared seeded legacy saves. Reloading…';
             notifyLegacyUpgradeRefresh(true);
+            seedSummary = null;
         });
 
     onMount(() => {
@@ -129,6 +135,18 @@
             </p>
         </div>
         <div class="qa-tools__actions">
+            <label class="qa-tools__field">
+                <span class="qa-tools__label">V1 seed profile</span>
+                <select
+                    class="qa-tools__select"
+                    bind:value={selectedV1Profile}
+                    disabled={Boolean(workingAction)}
+                >
+                    {#each LEGACY_V1_SEED_PROFILES as profile}
+                        <option value={profile.id}>{profile.label}</option>
+                    {/each}
+                </select>
+            </label>
             <Chip
                 text={workingAction === 'seed-v1' ? 'Seeding v1…' : 'Seed sample v1 save (cookies)'}
                 onClick={seedV1Save}
@@ -136,6 +154,18 @@
                 disabled={Boolean(workingAction)}
                 dataTestId="qa-seed-v1"
             />
+            <label class="qa-tools__field">
+                <span class="qa-tools__label">V2.1 seed profile</span>
+                <select
+                    class="qa-tools__select"
+                    bind:value={selectedV2Profile}
+                    disabled={Boolean(workingAction)}
+                >
+                    {#each LEGACY_V2_SEED_PROFILES as profile}
+                        <option value={profile.id}>{profile.label}</option>
+                    {/each}
+                </select>
+            </label>
             <Chip
                 text={workingAction === 'seed-v2'
                     ? 'Seeding v2…'
@@ -153,6 +183,39 @@
                 dataTestId="qa-clear-seeded"
             />
         </div>
+        {#if seedSummary}
+            <div class="seed-summary" role="status" aria-live="polite">
+                <p class="seed-summary__title">
+                    Seeded profile: {seedSummary.profileLabel}
+                </p>
+                <div class="seed-summary__grid">
+                    <div>
+                        <p class="seed-summary__label">Cookies written</p>
+                        {#if seedSummary.cookiesWritten.length}
+                            <ul>
+                                {#each seedSummary.cookiesWritten as cookieKey}
+                                    <li>{cookieKey}</li>
+                                {/each}
+                            </ul>
+                        {:else}
+                            <p class="seed-summary__muted">None</p>
+                        {/if}
+                    </div>
+                    <div>
+                        <p class="seed-summary__label">LocalStorage keys written</p>
+                        {#if seedSummary.localStorageWritten.length}
+                            <ul>
+                                {#each seedSummary.localStorageWritten as storageKey}
+                                    <li>{storageKey}</li>
+                                {/each}
+                            </ul>
+                        {:else}
+                            <p class="seed-summary__muted">None</p>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        {/if}
         {#if statusMessage}
             <p class="status" role="status" aria-live="polite">{statusMessage}</p>
         {/if}
@@ -298,6 +361,61 @@
     .qa-tools__actions {
         display: grid;
         gap: 0.35rem;
+    }
+
+    .qa-tools__field {
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .qa-tools__label {
+        font-size: 0.85rem;
+        color: #fed7aa;
+    }
+
+    .qa-tools__select {
+        border-radius: 8px;
+        border: 1px solid rgba(249, 115, 22, 0.6);
+        background: rgba(15, 23, 42, 0.8);
+        color: #fef3c7;
+        padding: 0.4rem 0.55rem;
+    }
+
+    .seed-summary {
+        border-radius: 8px;
+        border: 1px solid rgba(94, 234, 212, 0.4);
+        background: rgba(20, 83, 45, 0.2);
+        padding: 0.75rem;
+        display: grid;
+        gap: 0.5rem;
+        color: #bbf7d0;
+    }
+
+    .seed-summary__title {
+        margin: 0;
+        font-weight: 700;
+        color: #d1fae5;
+    }
+
+    .seed-summary__grid {
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .seed-summary__label {
+        margin: 0 0 0.35rem;
+        font-weight: 600;
+        color: #a7f3d0;
+    }
+
+    .seed-summary__muted {
+        margin: 0;
+        color: #86efac;
+    }
+
+    .seed-summary ul {
+        margin: 0;
+        padding-left: 1.2rem;
     }
 
     .status {

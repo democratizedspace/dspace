@@ -15,6 +15,12 @@ export const parseCookie = (cookie) => {
 const isLegacyItemCookie = (key, value) =>
     /^item-\d+$/.test(key) && !Number.isNaN(parseFloat(value)) && parseFloat(value) > 0;
 
+const isLegacyCurrencyCookie = (key, value) =>
+    /^currency-balance-dUSD$/.test(key) && !Number.isNaN(parseFloat(value)) && parseFloat(value) > 0;
+
+const isLegacyV1CookieKey = (key, value) =>
+    isLegacyItemCookie(key, value) || isLegacyCurrencyCookie(key, value);
+
 export const getCookieItems = (cookie) => {
     const parsedCookie = parseCookie(cookie);
     return Object.keys(parsedCookie)
@@ -46,7 +52,7 @@ export const getCookieKeysFromStore = (cookieStore) => {
     try {
         const cookies = cookieStore?.getAll?.() ?? [];
         return cookies
-            .filter(({ name, value }) => isLegacyItemCookie(name, value))
+            .filter(({ name, value }) => isLegacyV1CookieKey(name, value))
             .map(({ name }) => name);
     } catch (e) {
         console.warn('Failed to list cookies from Astro.cookies:', e);

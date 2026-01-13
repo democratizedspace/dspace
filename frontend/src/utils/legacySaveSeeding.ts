@@ -12,6 +12,31 @@ type CookieFixture = {
     encodeValue?: boolean;
 };
 
+type LocalStorageFixture = {
+    key: string;
+    value: string | number;
+};
+
+type LegacyV1SeedProfile = {
+    id: string;
+    label: string;
+    cookies: CookieFixture[];
+    localStorage: LocalStorageFixture[];
+};
+
+type LegacyV2SeedProfile = {
+    id: string;
+    label: string;
+    gameState: Record<string, unknown>;
+};
+
+export type LegacySeedSummary = {
+    profileId: string;
+    profileLabel: string;
+    cookiesWritten: string[];
+    localStorageWritten: string[];
+};
+
 const isSecureContext = () =>
     typeof location !== 'undefined' && typeof location.protocol === 'string'
         ? location.protocol === 'https:'
@@ -36,39 +61,95 @@ const expireCookie = (name: string) => {
     document.cookie = cookieString;
 };
 
-export const seedSampleV1CookieSave = (): void => {
-    if (!isBrowser) {
-        throw new Error('Legacy save seeding requires a browser environment.');
-    }
-
-    const cookies = Array.isArray(v1Fixture?.cookies) ? (v1Fixture.cookies as CookieFixture[]) : [];
-    if (!cookies.length) {
-        throw new Error('No legacy v1 cookies are available to seed.');
-    }
-
-    cookies.forEach(({ name, value, encodeValue = true }) => writeCookie(name, value, encodeValue));
+const resolveV1Profiles = (): LegacyV1SeedProfile[] => {
+    const profiles = v1Fixture?.profiles;
+    return Array.isArray(profiles) ? (profiles as LegacyV1SeedProfile[]) : [];
 };
 
-export const seedSampleV2LocalStorageSave = (): void => {
+const resolveV2Profiles = (): LegacyV2SeedProfile[] => {
+    const profiles = v2Fixture?.profiles;
+    return Array.isArray(profiles) ? (profiles as LegacyV2SeedProfile[]) : [];
+};
+
+export const LEGACY_V1_SEED_PROFILES = resolveV1Profiles();
+export const LEGACY_V2_SEED_PROFILES = resolveV2Profiles();
+
+const getV1Profile = (profileId: string) => {
+    const profile = LEGACY_V1_SEED_PROFILES.find((entry) => entry.id === profileId);
+    if (!profile) {
+        throw new Error(`Unknown legacy v1 seed profile: ${profileId}`);
+    }
+    return profile;
+};
+
+const getV2Profile = (profileId: string) => {
+    const profile = LEGACY_V2_SEED_PROFILES.find((entry) => entry.id === profileId);
+    if (!profile) {
+        throw new Error(`Unknown legacy v2 seed profile: ${profileId}`);
+    }
+    return profile;
+};
+
+const writeLocalStorage = (key: string, value: string | number) => {
+    if (!key) return;
+    localStorage.setItem(key, String(value));
+};
+
+export const seedLegacyV1Profile = (profileId = 'minimal'): LegacySeedSummary => {
     if (!isBrowser) {
         throw new Error('Legacy save seeding requires a browser environment.');
     }
 
-    const state = v2Fixture?.gameState;
-    if (!state || typeof state !== 'object') {
-        throw new Error('No legacy v2 localStorage state is available to seed.');
+    if (!LEGACY_V1_SEED_PROFILES.length) {
+        throw new Error('No legacy v1 seed profiles are available.');
     }
 
-    const serialized = JSON.stringify(state);
-    LEGACY_V2_KEYS.forEach((key) => {
-        localStorage.setItem(key, serialized);
-    });
+    const profile = getV1Profile(profileId);
+    const cookies = Array.isArray(profile.cookies) ? profile.cookies : [];
+    const localStorageEntries = Array.isArray(profile.localStorage) ? profile.localStorage : [];
+
+    cookies.forEach(({ name, value, encodeValue = true }) => writeCookie(name, value, encodeValue));
+    localStorageEntries.forEach(({ key, value }) => writeLocalStorage(key, value));
+
+    return {
+        profileId: profile.id,
+        profileLabel: profile.label,
+        cookiesWritten: cookies.map(({ name }) => name),
+        localStorageWritten: localStorageEntries.map(({ key }) => key),
+    };
+};
+
+export const seedLegacyV2Profile = (profileId = 'minimal'): LegacySeedSummary => {
+    if (!isBrowser) {
+        throw new Error('Legacy save seeding requires a browser environment.');
+    }
+
+    if (!LEGACY_V2_SEED_PROFILES.length) {
+        throw new Error('No legacy v2 seed profiles are available.');
+    }
+
+    const profile = getV2Profile(profileId);
+    if (!profile.gameState || typeof profile.gameState !== 'object') {
+        throw new Error(`Legacy v2 profile ${profileId} is missing a gameState payload.`);
+    }
+
+    const serialized = JSON.stringify(profile.gameState);
+    localStorage.setItem('gameState', serialized);
+
+    return {
+        profileId: profile.id,
+        profileLabel: profile.label,
+        cookiesWritten: [],
+        localStorageWritten: ['gameState'],
+    };
 };
 
 export const clearLegacyV1CookieSave = (): void => {
     if (!isBrowser) return;
-    const cookies = Array.isArray(v1Fixture?.cookies) ? v1Fixture.cookies : [];
-    cookies.forEach(({ name }) => expireCookie(name));
+    const cookieNames = LEGACY_V1_SEED_PROFILES.flatMap((profile) =>
+        Array.isArray(profile.cookies) ? profile.cookies.map(({ name }) => name) : []
+    );
+    [...new Set(cookieNames)].forEach((name) => expireCookie(name));
 };
 
 export const clearLegacyV2LocalStorageSave = (): void => {

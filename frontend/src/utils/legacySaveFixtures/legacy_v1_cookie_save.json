@@ -1,23 +1,75 @@
 {
-    "description": "Legacy v1 saves may be chunked across multiple cookies. Add one entry per cookie chunk to seed the full payload.",
-    "cookies": [
+    "profiles": [
         {
-            "name": "item-3",
-            "value": "75",
-            "encodeValue": true
+            "id": "minimal",
+            "label": "Minimal (cookies only)",
+            "cookies": [
+                {
+                    "name": "acceptedCookies",
+                    "value": "true"
+                },
+                {
+                    "name": "item-3",
+                    "value": "12.5"
+                },
+                {
+                    "name": "item-10",
+                    "value": "2"
+                },
+                {
+                    "name": "item-22",
+                    "value": "150"
+                },
+                {
+                    "name": "item-70",
+                    "value": "1"
+                },
+                {
+                    "name": "currency-balance-dUSD",
+                    "value": "123.45"
+                }
+            ],
+            "localStorage": []
         },
         {
-            "name": "item-10",
-            "value": "2"
-        },
-        {
-            "name": "item-83",
-            "value": "1"
-        },
-        {
-            "name": "item-21",
-            "value": "20%2B",
-            "encodeValue": false
+            "id": "maximal",
+            "label": "Maximal (cookies + localStorage)",
+            "cookies": [
+                {
+                    "name": "acceptedCookies",
+                    "value": "true"
+                },
+                {
+                    "name": "item-3",
+                    "value": "12.5"
+                },
+                {
+                    "name": "item-10",
+                    "value": "2"
+                },
+                {
+                    "name": "item-22",
+                    "value": "150"
+                },
+                {
+                    "name": "item-70",
+                    "value": "1"
+                },
+                {
+                    "name": "currency-balance-dUSD",
+                    "value": "123.45"
+                }
+            ],
+            "localStorage": [
+                {
+                    "key": "process-3dprint-benchy-starttime",
+                    "value": 1700000000000
+                },
+                {
+                    "key": "machine-lock-0",
+                    "value": 1
+                }
+            ]
         }
     ]
 }
