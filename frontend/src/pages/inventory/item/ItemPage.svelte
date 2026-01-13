@@ -20,6 +20,17 @@
 
     let item = items.find((item) => item.id === itemId);
 
+    $: itemList = item
+        ? [
+              {
+                  id: itemId,
+                  name: item.name,
+                  image: item.image,
+                  description: item.description,
+              },
+          ]
+        : [{ id: itemId }];
+
     const processes = getProcessesForItem(itemId);
     const quests = getQuestsForItem(itemId);
 
@@ -47,7 +58,7 @@
             <h2>{item.name}</h2>
             <CompactItemList {itemList} inverted={true} />
             {item.description}
-            <BuySell {itemId} />
+            <BuySell {itemId} itemData={item} />
             {#if hasProcesses}
                 <p>Processes:</p>
             {/if}

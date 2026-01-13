@@ -1,0 +1,12 @@
+{
+  "id": "OUT-2026-01-13-custom-item-buy-sell-crash",
+  "date": "2026-01-13",
+  "component": "frontend/inventory",
+  "rootCause": "The item detail buy/sell panel only looked up items from the static JSON catalog, so custom items loaded from IndexedDB resolved to undefined and the price formatter crashed when it tried to read item.price.",
+  "resolution": "Pass the resolved item data into the buy/sell panel, fall back gracefully when no item metadata exists, and hydrate the compact item list with custom item metadata to avoid undefined price access.",
+  "references": [
+    "frontend/src/pages/inventory/item/ItemPage.svelte",
+    "frontend/src/components/svelte/BuySell.svelte",
+    "frontend/src/components/svelte/CompactItemList.svelte"
+  ]
+}
