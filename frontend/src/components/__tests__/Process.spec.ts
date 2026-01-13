@@ -28,6 +28,21 @@ vi.mock('../../pages/inventory/json/items', () => ({
             name: 'Test Item',
             image: '/test.png',
         },
+        {
+            id: 'item-2',
+            name: 'Second Item',
+            image: '/test.png',
+        },
+        {
+            id: 'item-3',
+            name: 'Third Item',
+            image: '/test.png',
+        },
+        {
+            id: 'item-4',
+            name: 'Fourth Item',
+            image: '/test.png',
+        },
     ],
 }));
 
@@ -135,6 +150,76 @@ test('shows required items even when counts are zero', async () => {
     expect(normalizedText).toMatch(/2\s*\/\s*0/);
     expect(normalizedText).toMatch(/Test Item/);
     expect(normalizedText).not.toMatch(/0\s*\/\s*2/);
+});
+
+test('shows missing requirement feedback with singular "more" label', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-1': 0, 'item-2': 0, 'item-3': 0 });
+
+    const customProcess = {
+        id: 'custom-2',
+        title: 'Missing Requirements',
+        duration: '5s',
+        requireItems: [
+            { id: 'item-1', count: 1 },
+            { id: 'item-2', count: 1 },
+            { id: 'item-3', count: 1 },
+        ],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByTestId } = render(Process, {
+        processId: 'custom-2',
+        processData: customProcess,
+    });
+
+    await tick();
+    await fireEvent.click(getByTestId('process-start-button'));
+
+    const feedback = getByTestId('process-start-feedback');
+    expect(feedback.textContent).toContain('and 1 more');
+    expect(startProcess).not.toHaveBeenCalled();
+});
+
+test('shows missing requirement feedback with plural "more items" label', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({
+        'item-1': 0,
+        'item-2': 0,
+        'item-3': 0,
+        'item-4': 0,
+    });
+
+    const customProcess = {
+        id: 'custom-3',
+        title: 'Missing Requirements Plural',
+        duration: '5s',
+        requireItems: [
+            { id: 'item-1', count: 1 },
+            { id: 'item-2', count: 1 },
+            { id: 'item-3', count: 1 },
+            { id: 'item-4', count: 1 },
+        ],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByTestId } = render(Process, {
+        processId: 'custom-3',
+        processData: customProcess,
+    });
+
+    await tick();
+    await fireEvent.click(getByTestId('process-start-button'));
+
+    const feedback = getByTestId('process-start-feedback');
+    expect(feedback.textContent).toContain('and 2 more items');
+    expect(startProcess).not.toHaveBeenCalled();
 });
 
 test('renders instant finish chip when cheats are enabled', async () => {
