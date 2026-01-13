@@ -210,12 +210,12 @@ machine-lock-0=1
 > **Note:** v2.1 does **not** use IndexedDB or sessionStorage. Only the keys below were found in
 > the audited output.
 
-| Key (or pattern) | Example | Value format / schema | Meaning | Written by (v2.1 file + function) | Read by (v2.1 file + function) | Notes / edge cases |
-| --- | --- | --- | --- | --- | --- | --- |
-| `gameState` | `{"quests":{},"inventory":{"24":100},"processes":{}}` | JSON object (see deep schema below) | Canonical v2.1 save blob | `frontend/src/utils/gameState/common.js` → `saveGameState` (**Observed in audit output**) | `frontend/src/utils/gameState/common.js` → `loadGameState` (**Observed in audit output**) | Single source of truth; no `gameStateBackup` in v2.1. Exporter uses a module snapshot that can go stale (**Observed in audit output**). |
-| `avatarUrl` | `https://example.com/avatar.png` | String URL | Selected avatar image | **Observed in audit output**; v2.1 writer not confirmed in this checkout | **Observed in audit output**; v2.1 reader not confirmed in this checkout | Present in v2.1 localStorage; verify exact UI path in v2.1 if needed. |
-| `ethAddress` | `0x1111111111111111111111111111111111111111` | String hex address | Ethereum profile address | **Observed in audit output**; v2.1 writer not confirmed in this checkout | **Observed in audit output**; v2.1 reader not confirmed in this checkout | Present in v2.1 localStorage; not referenced in v3 codebase. Treat as legacy data only. |
-| `sessionStorage` (all keys) | N/A (not used in v2.1) | N/A (not used in v2.1) | None observed in v2.1 | None | None | **Observed in audit output:** no sessionStorage usage found. |
+| Key (or pattern)            | Example                                               | Value format / schema               | Meaning                  | Written by (v2.1 file + function)                                                         | Read by (v2.1 file + function)                                                            | Notes / edge cases                                                                                                                      |
+| --------------------------- | ----------------------------------------------------- | ----------------------------------- | ------------------------ | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `gameState`                 | `{"quests":{},"inventory":{"24":100},"processes":{}}` | JSON object (see deep schema below) | Canonical v2.1 save blob | `frontend/src/utils/gameState/common.js` → `saveGameState` (**Observed in audit output**) | `frontend/src/utils/gameState/common.js` → `loadGameState` (**Observed in audit output**) | Single source of truth; no `gameStateBackup` in v2.1. Exporter uses a module snapshot that can go stale (**Observed in audit output**). |
+| `avatarUrl`                 | `https://example.com/avatar.png`                      | String URL                          | Selected avatar image    | **Observed in audit output**; v2.1 writer not confirmed in this checkout                  | **Observed in audit output**; v2.1 reader not confirmed in this checkout                  | Present in v2.1 localStorage; verify exact UI path in v2.1 if needed.                                                                   |
+| `ethAddress`                | `0x1111111111111111111111111111111111111111`          | String hex address                  | Ethereum profile address | **Observed in audit output**; v2.1 writer not confirmed in this checkout                  | **Observed in audit output**; v2.1 reader not confirmed in this checkout                  | Present in v2.1 localStorage; not referenced in v3 codebase. Treat as legacy data only.                                                 |
+| `sessionStorage` (all keys) | N/A (not used in v2.1)                                | N/A (not used in v2.1)              | None observed in v2.1    | None                                                                                      | None                                                                                      | **Observed in audit output:** no sessionStorage usage found.                                                                            |
 
 **IndexedDB:** none in v2.1 (**Observed in audit output**).
 
@@ -223,23 +223,23 @@ machine-lock-0=1
 
 ```json
 {
-  "quests": {
-    "<questId>": {
-      "finished": true,
-      "stepId": "string-or-number",
-      "itemsClaimed": ["<questId>-<stepId>-<optionIndex>"]
-    }
-  },
-  "inventory": {
-    "<itemId>": 1,
-    "<itemId>": 5.5
-  },
-  "processes": {
-    "<processId>": { "startedAt": 1699999999000, "duration": 86400000 }
-  },
-  "versionNumberString": "2",
-  "openAI": { "apiKey": "string" },
-  "<otherKeys>": "allowed"
+    "quests": {
+        "<questId>": {
+            "finished": true,
+            "stepId": "string-or-number",
+            "itemsClaimed": ["<questId>-<stepId>-<optionIndex>"]
+        }
+    },
+    "inventory": {
+        "<itemId>": 1,
+        "<itemId>": 5.5
+    },
+    "processes": {
+        "<processId>": { "startedAt": 1699999999000, "duration": 86400000 }
+    },
+    "versionNumberString": "2",
+    "openAI": { "apiKey": "string" },
+    "<otherKeys>": "allowed"
 }
 ```
 
@@ -257,13 +257,13 @@ machine-lock-0=1
 
 ### D) Cookie usage in v2.1 (and v1 residue)
 
-| Cookie key/pattern | Example | Meaning in v2.1 | Notes |
-| --- | --- | --- | --- |
-| `acceptedCookies` | `acceptedCookies=true` | Legacy consent cookie from v1 | **Observed in audit output:** v2.1 does not otherwise use this except via v1 import flow. |
-| `item-<id>` | `item-12=5` | v1 inventory counts | v2.1 importer reads these for v1→v2 import. (**Observed in audit output**.) |
-| `currency-balance-<symbol>` | `currency-balance-dUSD=123.45` | v1 currency balance | **Observed in audit output:** v2.1 importer does **not** read these; treat as v1 residue only. Helpers exist but v2.1 does not write new balances; shop pages reportedly only display balances (must verify in v2.1). |
-| `longTaskDone` | `longTaskDone=true` | v2.1 `/task` flow flag | **Observed in audit output**; scoped to `/task`. |
-| _Import cleanup_ | — | Deletes **all** cookies | v2.1 import completion clears every cookie, regardless of prefix. See [`done.astro`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/import/%5BnewVersion%5D/%5BoldVersion%5D/done.astro). (**Observed in audit output**.) |
+| Cookie key/pattern          | Example                        | Meaning in v2.1               | Notes                                                                                                                                                                                                                                                                                   |
+| --------------------------- | ------------------------------ | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `acceptedCookies`           | `acceptedCookies=true`         | Legacy consent cookie from v1 | **Observed in audit output:** v2.1 does not otherwise use this except via v1 import flow.                                                                                                                                                                                               |
+| `item-<id>`                 | `item-12=5`                    | v1 inventory counts           | v2.1 importer reads these for v1→v2 import. (**Observed in audit output**.)                                                                                                                                                                                                             |
+| `currency-balance-<symbol>` | `currency-balance-dUSD=123.45` | v1 currency balance           | **Observed in audit output:** v2.1 importer does **not** read these; treat as v1 residue only. Helpers exist but v2.1 does not write new balances; shop pages reportedly only display balances (must verify in v2.1).                                                                   |
+| `longTaskDone`              | `longTaskDone=true`            | v2.1 `/task` flow flag        | **Observed in audit output**; scoped to `/task`.                                                                                                                                                                                                                                        |
+| _Import cleanup_            | —                              | Deletes **all** cookies       | v2.1 import completion clears every cookie, regardless of prefix. See [`done.astro`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/import/%5BnewVersion%5D/%5BoldVersion%5D/done.astro). (**Observed in audit output**.) |
 
 ## v1 → v2.1 importer behavior (v2.1)
 
@@ -345,7 +345,7 @@ copy/pastable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
 ### Seed 1: Minimal v2 save
 
 ```json
-{"quests":{},"inventory":{"24":100,"20":5.5},"processes":{},"versionNumberString":"2"}
+{ "quests": {}, "inventory": { "24": 100, "20": 5.5 }, "processes": {}, "versionNumberString": "2" }
 ```
 
 **Expected v3 detection outcomes (verify in QA):**
@@ -371,10 +371,10 @@ real v3 IDs as needed.
 
 ```json
 {
-  "quests": { "quest/launch": { "stepId": "midpoint" } },
-  "inventory": { "24": 42, "31": 1 },
-  "processes": { "processes/benchy": { "startedAt": 1700000000000, "duration": 86400000 } },
-  "versionNumberString": "2"
+    "quests": { "quest/launch": { "stepId": "midpoint" } },
+    "inventory": { "24": 42, "31": 1 },
+    "processes": { "processes/benchy": { "startedAt": 1700000000000, "duration": 86400000 } },
+    "versionNumberString": "2"
 }
 ```
 
@@ -398,17 +398,17 @@ real v3 IDs as needed.
 
 ```json
 {
-  "quests": {
-    "quest/messy": {
-      "finished": true,
-      "itemsClaimed": ["quest/messy-1-0"]
-    }
-  },
-  "inventory": { "24": 12, "": null },
-  "processes": {},
-  "versionNumberString": "2",
-  "openAI": { "apiKey": "REDACTED" },
-  "extraLegacyKey": { "note": "ignored by v3" }
+    "quests": {
+        "quest/messy": {
+            "finished": true,
+            "itemsClaimed": ["quest/messy-1-0"]
+        }
+    },
+    "inventory": { "24": 12, "": null },
+    "processes": {},
+    "versionNumberString": "2",
+    "openAI": { "apiKey": "REDACTED" },
+    "extraLegacyKey": { "note": "ignored by v3" }
 }
 ```
 
