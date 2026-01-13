@@ -5,20 +5,37 @@ import { durationInSeconds } from '../../utils.js';
 // Using import assertions for JSON imports
 import processes from '../../generated/processes.json' assert { type: 'json' };
 
-export const hasRequiredAndConsumedItems = (processId) => {
-    const process = processes.find((p) => p.id === processId);
+const getProcessDefinition = (processId, processDefinition, gameState) => {
+    if (processDefinition) {
+        return processDefinition;
+    }
+
+    const builtInProcess = processes.find((process) => process.id === processId);
+    if (builtInProcess) {
+        return builtInProcess;
+    }
+
+    return gameState?.processes?.[processId]?.definition ?? null;
+};
+
+export const hasRequiredAndConsumedItems = (processId, processDefinition = null) => {
+    const process = getProcessDefinition(processId, processDefinition);
     if (!process) {
         return false;
     }
-    return hasItems(process.requireItems) && hasItems(process.consumeItems);
+    return hasItems(process.requireItems ?? []) && hasItems(process.consumeItems ?? []);
 };
 
-export const startProcess = (processId) => {
+export const startProcess = (processId, processDefinition = null) => {
     const gameState = loadGameState();
 
-    const process = processes.find((p) => p.id === processId);
+    const process = getProcessDefinition(processId, processDefinition, gameState);
 
-    if (!hasRequiredAndConsumedItems(processId)) {
+    if (!process) {
+        return;
+    }
+
+    if (!hasRequiredAndConsumedItems(processId, process)) {
         console.log('Missing required items or consumed items');
         return;
     }
@@ -28,9 +45,10 @@ export const startProcess = (processId) => {
         duration: durationInSeconds(process.duration) * 1000,
         pausedAt: null,
         elapsedBeforePause: 0,
+        definition: process,
     };
     saveGameState(gameState);
-    burnItems(process.consumeItems);
+    burnItems(process.consumeItems ?? []);
 };
 
 export const ProcessStates = {
@@ -89,27 +107,27 @@ export const getProcessProgress = (processId) => {
     return progress * 100;
 };
 
-export const finishProcess = (processId) => {
+export const finishProcess = (processId, processDefinition = null) => {
     if (getProcessState(processId).state !== ProcessStates.FINISHED) {
         return;
     }
 
-    const process = processes.find((p) => p.id === processId);
+    const gameState = loadGameState();
+    const process = getProcessDefinition(processId, processDefinition, gameState);
     if (!process) {
         return;
     }
     const createItems = process.createItems;
 
-    addItems(createItems);
+    addItems(createItems ?? []);
 
-    const gameState = loadGameState();
     gameState.processes[processId] = undefined;
     saveGameState(gameState);
 };
 
-export const cancelProcess = (processId) => {
+export const cancelProcess = (processId, processDefinition = null) => {
     const gameState = loadGameState();
-    const process = processes.find((p) => p.id === processId);
+    const process = getProcessDefinition(processId, processDefinition, gameState);
 
     if (!process) {
         return;
@@ -123,7 +141,7 @@ export const cancelProcess = (processId) => {
         return;
     }
 
-    const consumeItems = process.consumeItems;
+    const consumeItems = process.consumeItems ?? [];
     // Return the consumed items to the player's inventory
     gameState.processes[processId] = undefined;
     saveGameState(gameState);
@@ -155,7 +173,7 @@ export const resumeProcess = (processId) => {
     saveGameState(gameState);
 };
 
-export const finishProcessNow = (processId) => {
+export const finishProcessNow = (processId, processDefinition = null) => {
     const state = getProcessState(processId).state;
     if (state === ProcessStates.NOT_STARTED) {
         return;
@@ -168,7 +186,7 @@ export const finishProcessNow = (processId) => {
 
     const gameState = loadGameState();
     const process = gameState.processes[processId];
-    const definition = processes.find((p) => p.id === processId);
+    const definition = getProcessDefinition(processId, processDefinition, gameState);
 
     if (!process || !definition) {
         return;

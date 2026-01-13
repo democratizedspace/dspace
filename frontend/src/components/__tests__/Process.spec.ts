@@ -12,6 +12,7 @@ const ProcessStates = vi.hoisted(() => ({
 }));
 
 const stateInfo = vi.hoisted(() => ({ state: ProcessStates.IN_PROGRESS, progress: 0 }));
+const startProcess = vi.hoisted(() => vi.fn());
 const getItemCountsMock = vi.hoisted(() => vi.fn(() => ({ 'item-1': 0 })));
 const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
@@ -69,7 +70,7 @@ vi.mock('../../generated/processes.json', () => ({
 }));
 
 vi.mock('../../utils/gameState/processes.js', () => ({
-    startProcess: vi.fn(),
+    startProcess,
     cancelProcess: vi.fn(),
     finishProcess: vi.fn(),
     getProcessState: vi.fn(() => stateInfo),
@@ -95,6 +96,7 @@ beforeEach(() => {
     cheatsEnabledStore.set(false);
     stateInfo.state = ProcessStates.IN_PROGRESS;
     finishProcessNow.mockClear();
+    startProcess.mockClear();
 });
 
 test('pauses and resumes a process while showing remaining time', async () => {
@@ -105,13 +107,19 @@ test('pauses and resumes a process while showing remaining time', async () => {
 
     // pause the process
     await fireEvent.click(getByText('Pause'));
-    expect(pauseProcess).toHaveBeenCalledWith('p1');
+    expect(pauseProcess).toHaveBeenCalledWith(
+        'p1',
+        expect.objectContaining({ id: 'p1' })
+    );
     await tick();
     expect(getByText(/remaining/)).toBeTruthy();
 
     // resume the process
     await fireEvent.click(getByText('Resume'));
-    expect(resumeProcess).toHaveBeenCalledWith('p1');
+    expect(resumeProcess).toHaveBeenCalledWith(
+        'p1',
+        expect.objectContaining({ id: 'p1' })
+    );
     await tick();
     expect(getByText(/remaining/)).toBeTruthy();
 });
@@ -142,7 +150,10 @@ test('renders instant finish chip when cheats are enabled', async () => {
     expect(chip).toBeTruthy();
 
     await fireEvent.click(chip);
-    expect(finishProcessNow).toHaveBeenCalledWith('p1');
+    expect(finishProcessNow).toHaveBeenCalledWith(
+        'p1',
+        expect.objectContaining({ id: 'p1' })
+    );
 });
 
 test('renders instant finish chip for paused processes', async () => {
@@ -157,10 +168,13 @@ test('renders instant finish chip for paused processes', async () => {
     expect(chip).toBeTruthy();
 
     await fireEvent.click(chip);
-    expect(finishProcessNow).toHaveBeenCalledWith('p1');
+    expect(finishProcessNow).toHaveBeenCalledWith(
+        'p1',
+        expect.objectContaining({ id: 'p1' })
+    );
 });
 
-test('shows custom process note when rendering a custom process', async () => {
+test('shows custom process controls when rendering a custom process', async () => {
     const customProcess = {
         id: 'custom-1',
         title: 'Custom Process',
@@ -170,8 +184,9 @@ test('shows custom process note when rendering a custom process', async () => {
         createItems: [],
         custom: true,
     };
+    stateInfo.state = ProcessStates.NOT_STARTED;
 
-    const { getByText, queryByTestId } = render(Process, {
+    const { getByText, queryByText, queryByTestId } = render(Process, {
         processId: 'custom-1',
         processData: customProcess,
     });
@@ -179,9 +194,11 @@ test('shows custom process note when rendering a custom process', async () => {
     await tick();
     expect(getByText('Duration: 5s')).toBeTruthy();
     expect(
-        getByText('Custom processes are displayed for reference and managed separately.')
-    ).toBeTruthy();
+        queryByText('Custom processes are displayed for reference and managed separately.')
+    ).toBeNull();
     expect(queryByTestId('qa-instant-finish-chip')).toBeNull();
+    await fireEvent.click(getByText('Start'));
+    expect(startProcess).toHaveBeenCalledWith('custom-1', customProcess);
 });
 
 test('prefers provided process data over built-in catalog lookup', async () => {
@@ -203,9 +220,9 @@ test('prefers provided process data over built-in catalog lookup', async () => {
     await tick();
     expect(getByText('Override Process')).toBeTruthy();
     expect(
-        getByText('Custom processes are displayed for reference and managed separately.')
-    ).toBeTruthy();
-    expect(queryByText('Start')).toBeNull();
+        queryByText('Custom processes are displayed for reference and managed separately.')
+    ).toBeNull();
+    expect(getByText('Cancel')).toBeTruthy();
 });
 
 test('renders fallback message when process details are unavailable', async () => {

@@ -2,8 +2,9 @@
  * @jest-environment jsdom
  */
 import { describe, expect, it, vi } from 'vitest';
-import { render } from '@testing-library/svelte';
+import { render, fireEvent } from '@testing-library/svelte';
 import Process from '../src/components/svelte/Process.svelte';
+import * as processActions from '../src/utils/gameState/processes.js';
 
 const mockState = { state: 'not started', progress: 0 };
 
@@ -22,7 +23,7 @@ vi.mock('../src/utils/gameState/processes.js', async () => {
 });
 
 describe('Process component custom data', () => {
-    it('renders custom process details without exposing start controls', () => {
+    it('renders custom process details with standard controls', async () => {
         const customProcess = {
             id: 'custom-process-1',
             title: 'Custom Habitat Cycle',
@@ -39,8 +40,10 @@ describe('Process component custom data', () => {
 
         getByText('Custom Habitat Cycle');
         getByText('Duration: 45m');
-        getByText('Custom processes are displayed for reference and managed separately.');
-        expect(queryByText('Start')).toBeNull();
-        expect(queryByText('Collect')).toBeNull();
+        expect(
+            queryByText('Custom processes are displayed for reference and managed separately.')
+        ).toBeNull();
+        await fireEvent.click(getByText('Start'));
+        expect(processActions.startProcess).toHaveBeenCalledWith(customProcess.id, customProcess);
     });
 });
