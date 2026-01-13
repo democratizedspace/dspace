@@ -68,7 +68,7 @@
         anchor.href = url;
         anchor.download = backupFilename || 'dspace-custom-content-backup.json';
         anchor.click();
-        URL.revokeObjectURL(url);
+        setTimeout(() => URL.revokeObjectURL(url), 100);
     };
 </script>
 

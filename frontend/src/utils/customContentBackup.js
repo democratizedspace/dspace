@@ -5,7 +5,19 @@ import { isBrowser } from './ssr.js';
 export const BACKUP_SCHEMA_VERSION = 1;
 
 const IMAGE_DATA_PREFIX = 'data:image';
+const DATA_URL_PREFIX = 'data:';
 const DEFAULT_IMAGE_MIME = 'application/octet-stream';
+const MAX_BACKUP_FILE_SIZE = 50 * 1024 * 1024;
+const IMAGE_FETCH_TIMEOUT_MS = 30000;
+const INVALID_SVG_PREFIX = 'data:image/svg+xml';
+const ALLOWED_IMAGE_DATA_PREFIXES = [
+    'data:image/png',
+    'data:image/jpeg',
+    'data:image/jpg',
+    'data:image/gif',
+    'data:image/webp',
+    'data:application/octet-stream',
+];
 
 function padNumber(value) {
     return String(value).padStart(2, '0');
@@ -89,7 +101,7 @@ function buildBackupPlan(items, processes, quests) {
             label: formatAssetLabel('quest', quest),
             entity: quest,
         });
-        if (quest?.image) {
+        if (quest?.image || quest?.imageBlob) {
             assets.push({
                 id: `quest-image:${quest.id}`,
                 kind: 'quest-image',
@@ -128,6 +140,20 @@ async function blobToDataUrl(blob) {
     throw new Error('Unable to encode image data.');
 }
 
+function isDataUrl(value) {
+    return typeof value === 'string' && value.startsWith(DATA_URL_PREFIX);
+}
+
+function isValidImageDataUrl(dataUrl) {
+    if (!isDataUrl(dataUrl)) {
+        return false;
+    }
+    if (dataUrl.startsWith(INVALID_SVG_PREFIX)) {
+        return false;
+    }
+    return ALLOWED_IMAGE_DATA_PREFIXES.some((prefix) => dataUrl.startsWith(prefix));
+}
+
 async function resolveImageData(entity) {
     if (entity?.imageBlob instanceof Blob) {
         return await blobToDataUrl(entity.imageBlob);
@@ -135,7 +161,10 @@ async function resolveImageData(entity) {
 
     if (typeof entity?.image === 'string' && entity.image.trim()) {
         const imageSource = entity.image.trim();
-        if (imageSource.startsWith(IMAGE_DATA_PREFIX)) {
+        if (isDataUrl(imageSource)) {
+            if (!isValidImageDataUrl(imageSource)) {
+                throw new Error('Unsupported image format in backup.');
+            }
             return imageSource;
         }
 
@@ -143,12 +172,34 @@ async function resolveImageData(entity) {
             throw new Error('Image export requires browser fetch support.');
         }
 
-        const response = await fetch(imageSource);
-        if (!response.ok) {
-            throw new Error(`Image request failed with ${response.status}`);
+        const controller =
+            typeof AbortController === 'function' ? new AbortController() : null;
+        const timeoutId = controller
+            ? setTimeout(() => controller.abort(), IMAGE_FETCH_TIMEOUT_MS)
+            : null;
+
+        try {
+            const response = await fetch(imageSource, {
+                signal: controller?.signal,
+            });
+            if (!response.ok) {
+                throw new Error(
+                    `Image request failed with ${response.status} for URL: ${imageSource}`
+                );
+            }
+            const blob = await response.blob();
+            return await blobToDataUrl(blob);
+        } catch (error) {
+            if (error instanceof Error && error.name === 'AbortError') {
+                throw new Error(`Image fetch timed out for URL: ${imageSource}`);
+            }
+            const message = error instanceof Error ? error.message : String(error);
+            throw new Error(`Failed to fetch image from ${imageSource}: ${message}`);
+        } finally {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
         }
-        const blob = await response.blob();
-        return await blobToDataUrl(blob);
     }
 
     return null;
@@ -312,6 +363,45 @@ function buildImportPlan(items, processes, quests, images) {
     return assets;
 }
 
+function assertEntityHasId(entity, label) {
+    if (!entity || (typeof entity.id !== 'string' && typeof entity.id !== 'number')) {
+        throw new Error(`Invalid ${label} record in backup.`);
+    }
+}
+
+async function assertNoImportConflicts(items, processes, quests) {
+    const [existingItems, existingProcesses, existingQuests] = await Promise.all([
+        getItems(),
+        getProcesses(),
+        getQuests(),
+    ]);
+    const existingItemIds = new Set(existingItems.map((item) => item.id));
+    const existingProcessIds = new Set(existingProcesses.map((process) => process.id));
+    const existingQuestIds = new Set(existingQuests.map((quest) => quest.id));
+
+    const conflicts = [];
+
+    items.forEach((item) => {
+        if (existingItemIds.has(item.id)) {
+            conflicts.push(`item:${item.id}`);
+        }
+    });
+    processes.forEach((process) => {
+        if (existingProcessIds.has(process.id)) {
+            conflicts.push(`process:${process.id}`);
+        }
+    });
+    quests.forEach((quest) => {
+        if (existingQuestIds.has(quest.id)) {
+            conflicts.push(`quest:${quest.id}`);
+        }
+    });
+
+    if (conflicts.length > 0) {
+        throw new Error(`Import conflicts with existing data: ${conflicts.join(', ')}`);
+    }
+}
+
 export async function restoreCustomContentBackup(data, { onProgress } = {}) {
     const normalized = normalizeBackupData(data);
     const items = normalized.items.map((item) => sanitizeEntity(item));
@@ -322,6 +412,10 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
     const itemMap = new Map(items.map((item) => [item.id, item]));
     const questMap = new Map(quests.map((quest) => [quest.id, quest]));
 
+    items.forEach((item) => assertEntityHasId(item, 'item'));
+    processes.forEach((process) => assertEntityHasId(process, 'process'));
+    quests.forEach((quest) => assertEntityHasId(quest, 'quest'));
+
     images.forEach((image) => {
         if (!image || typeof image !== 'object') {
             throw new Error('Invalid image record in backup.');
@@ -329,7 +423,7 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
         if (!image.entityId || !image.entityType) {
             throw new Error('Invalid image record in backup.');
         }
-        if (typeof image.dataUrl !== 'string' || !image.dataUrl.startsWith(IMAGE_DATA_PREFIX)) {
+        if (typeof image.dataUrl !== 'string' || !isValidImageDataUrl(image.dataUrl)) {
             throw new Error('Invalid image data in backup.');
         }
 
@@ -349,6 +443,8 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
             throw new Error('Invalid image record in backup.');
         }
     });
+
+    await assertNoImportConflicts(items, processes, quests);
 
     const plan = buildImportPlan(items, processes, quests, images);
     emitProgress(onProgress, { type: 'plan', assets: plan });
@@ -383,6 +479,10 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
 export async function restoreCustomContentBackupFromFile(file, options = {}) {
     if (!(file instanceof File)) {
         throw new Error('Invalid backup file.');
+    }
+
+    if (file.size > MAX_BACKUP_FILE_SIZE) {
+        throw new Error('Backup file is too large. Maximum size is 50MB.');
     }
 
     const text = await file.text();

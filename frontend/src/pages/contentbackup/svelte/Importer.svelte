@@ -68,10 +68,14 @@
         }
     };
 
-    const handleFileChange = (event) => {
-        const file = event.target?.files?.[0];
+    const handleFileChange = async (event) => {
+        const input = event.currentTarget;
+        const file = input?.files?.[0];
         if (file) {
-            handleImportFile(file);
+            await handleImportFile(file);
+        }
+        if (input) {
+            input.value = '';
         }
     };
 
@@ -97,7 +101,7 @@
             class="dropzone"
             aria-labelledby={dropzoneLabelId}
             on:dragover|preventDefault={() => (isDragging = true)}
-            on:dragleave={() => (isDragging = false)}
+            on:dragleave|self={() => (isDragging = false)}
             on:drop={handleDrop}
         >
             <input
