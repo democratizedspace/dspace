@@ -1,6 +1,6 @@
 import 'fake-indexeddb/auto';
 import { fireEvent, render, waitFor } from '@testing-library/svelte';
-import { afterEach, beforeEach, describe, expect, test } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import LegacySaveUpgrade from '../svelte/LegacySaveUpgrade.svelte';
 import {
@@ -8,7 +8,9 @@ import {
     loadGameState,
     resetGameState,
 } from '../../utils/gameState/common.js';
+import { initializeQaCheats, setQaCheatsPreference } from '../../lib/qaCheats';
 import items from '../../pages/inventory/json/items';
+import legacyV2Fixtures from '../../utils/legacySaveFixtures/legacy_v2_localstorage_save.json';
 import {
     V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID,
     V1_ITEM_ID_TO_V3_UUID,
@@ -20,6 +22,9 @@ describe('LegacySaveUpgrade', () => {
     beforeEach(async () => {
         document.cookie = '';
         localStorage.clear();
+        document.documentElement.dataset.cheatsAvailable = 'false';
+        initializeQaCheats(false);
+        setQaCheatsPreference(false);
         await resetGameState();
     });
 
@@ -27,6 +32,9 @@ describe('LegacySaveUpgrade', () => {
         await closeGameStateDatabaseForTesting();
         document.cookie = '';
         localStorage.clear();
+        document.documentElement.dataset.cheatsAvailable = 'false';
+        initializeQaCheats(false);
+        setQaCheatsPreference(false);
     });
 
     test('detects v1 cookies and merges them into v3 state', async () => {
@@ -62,5 +70,79 @@ describe('LegacySaveUpgrade', () => {
             expect(state.inventory[V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID.dUSD]).toBe(12.5);
             expect(state.inventory[EARLY_ADOPTER_ID]).toBe(1);
         });
+    });
+
+    test('surfaces invalid v1 cookie values with a notice', async () => {
+        document.cookie = 'item-99=abc; path=/';
+
+        const { findByText } = render(LegacySaveUpgrade, {
+            legacyV1Items: [],
+            legacyCookieKeys: [],
+            cheatsAvailable: false,
+        });
+
+        const notice = await findByText(/V1 cookies were detected/i);
+        expect(notice.textContent).toContain('item-99=abc');
+    });
+
+    test('shows v2 parse warnings when localStorage contains invalid JSON', async () => {
+        localStorage.setItem('gameState', '{bad json');
+
+        const { findByText } = render(LegacySaveUpgrade, {
+            legacyV1Items: [],
+            legacyCookieKeys: [],
+            cheatsAvailable: false,
+        });
+
+        await findByText(/Legacy v2 data could not be parsed/i);
+    });
+
+    test('shows conflict warning and QA clear button for v2 + v3 saves', async () => {
+        const legacyProfile = legacyV2Fixtures.profiles.minimal.gameState;
+        localStorage.setItem('gameState', JSON.stringify(legacyProfile));
+        document.documentElement.dataset.cheatsAvailable = 'true';
+        initializeQaCheats(true);
+        setQaCheatsPreference(true);
+
+        const reloadSpy = vi
+            .spyOn(window.location, 'reload')
+            .mockImplementation(() => undefined);
+
+        vi.useFakeTimers();
+
+        const { findByRole, findByText } = render(LegacySaveUpgrade, {
+            legacyV1Items: [],
+            legacyCookieKeys: [],
+            cheatsAvailable: true,
+        });
+
+        await findByText(/Legacy \+ v3 save conflict detected/i);
+
+        const clearButton = await findByRole('button', { name: /clear v3 save for testing/i });
+        await fireEvent.click(clearButton);
+
+        await findByText(/Cleared v3 IndexedDB save for QA testing/i);
+        vi.runAllTimers();
+        expect(reloadSpy).toHaveBeenCalled();
+
+        vi.useRealTimers();
+        reloadSpy.mockRestore();
+    });
+
+    test('removes legacy v2 data when discarding localStorage saves', async () => {
+        const legacyProfile = legacyV2Fixtures.profiles.minimal.gameState;
+        localStorage.setItem('gameState', JSON.stringify(legacyProfile));
+
+        const { findByRole, findByText } = render(LegacySaveUpgrade, {
+            legacyV1Items: [],
+            legacyCookieKeys: [],
+            cheatsAvailable: false,
+        });
+
+        const discardButton = await findByRole('button', { name: /discard legacy v2 data/i });
+        await fireEvent.click(discardButton);
+
+        await findByText(/Removed legacy v2 localStorage data/i);
+        expect(localStorage.getItem('gameState')).toBeNull();
     });
 });
