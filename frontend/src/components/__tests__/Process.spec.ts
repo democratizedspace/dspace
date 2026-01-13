@@ -222,6 +222,39 @@ test('shows missing requirement feedback with plural "more items" label', async 
     expect(startProcess).not.toHaveBeenCalled();
 });
 
+test('shows missing requirement feedback when two items are missing', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-1': 0, 'item-2': 0 });
+
+    const customProcess = {
+        id: 'custom-4',
+        title: 'Missing Two Requirements',
+        duration: '5s',
+        requireItems: [
+            { id: 'item-1', count: 1 },
+            { id: 'item-2', count: 1 },
+        ],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByTestId } = render(Process, {
+        processId: 'custom-4',
+        processData: customProcess,
+    });
+
+    await tick();
+    await fireEvent.click(getByTestId('process-start-button'));
+
+    const feedback = getByTestId('process-start-feedback');
+    expect(feedback.textContent).toContain(
+        'Missing requirements: Test Item (1), Second Item (1)'
+    );
+    expect(startProcess).not.toHaveBeenCalled();
+});
+
 test('renders instant finish chip when cheats are enabled', async () => {
     cheatsAvailabilityStore.set(true);
     cheatsEnabledStore.set(true);
