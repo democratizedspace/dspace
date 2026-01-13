@@ -177,15 +177,14 @@ machine-lock-0=1
 
 > **Source note:** This section is based on the audited v2.1 commit output provided for this doc
 > update. Where details are not directly verified in this checkout, they are explicitly labeled
-> **Observed in audit output** and paired with pinned GitHub links for review.
+> **Observed in audit output** and paired with pinned file paths for review.
 
 ### A) High-level summary (v3-focused)
 
 - **Single authoritative blob:** v2.1 stores the canonical save as
   `localStorage["gameState"]` (JSON), initialized to
   `{ quests: {}, inventory: {}, processes: {} }`. (**Observed in audit output**; see v2.1
-  `frontend/src/utils/gameState/common.js`.)  
-  <https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/utils/gameState/common.js>
+  `frontend/src/utils/gameState/common.js` in the audit snapshot.)
 - **No IndexedDB in v2.1:** migration to v3 must treat localStorage as the source of truth.
   (**Observed in audit output**.)
 - **v3 migration target:** v3 moves legacy v2 localStorage data into IndexedDB; QA should verify
@@ -194,13 +193,11 @@ machine-lock-0=1
   <https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/gameState.js>
 - **Versioning is manual:** `versionNumberString` exists, but is only set by v2.1 importer/update
   helpers—not automatically on every save. (**Observed in audit output**; see v2.1
-  `frontend/src/utils/gameState.js` + `frontend/src/components/svelte/Updater.svelte`.)  
-  <https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/utils/gameState.js>  
-  <https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/components/svelte/Updater.svelte>
+  `frontend/src/utils/gameState.js` + `frontend/src/components/svelte/Updater.svelte` in the
+  audit snapshot.)
 - **Synchronous writes:** every save writes immediately via
   `localStorage.setItem("gameState", JSON.stringify(gameState))`. (**Observed in audit output**;
-  see v2.1 `frontend/src/utils/gameState/common.js`.)  
-  <https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/utils/gameState/common.js>
+  see v2.1 `frontend/src/utils/gameState/common.js` in the audit snapshot.)
 - **Exporter/importer bugs exist:** v2.1 export can be stale and the v1→v2 importer has a known
   overwrite bug. v3 migration should **not** trust the exporter and must read from
   `localStorage["gameState"]`. (**Observed in audit output**; details below.)
@@ -257,13 +254,13 @@ machine-lock-0=1
 
 ### D) Cookie usage in v2.1 (and v1 residue)
 
-| Cookie key/pattern          | Example                        | Meaning in v2.1               | Notes                                                                                                                                                                                                                                                                                   |
-| --------------------------- | ------------------------------ | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `acceptedCookies`           | `acceptedCookies=true`         | Legacy consent cookie from v1 | **Observed in audit output:** v2.1 does not otherwise use this except via v1 import flow.                                                                                                                                                                                               |
-| `item-<id>`                 | `item-12=5`                    | v1 inventory counts           | v2.1 importer reads these for v1→v2 import. (**Observed in audit output**.)                                                                                                                                                                                                             |
-| `currency-balance-<symbol>` | `currency-balance-dUSD=123.45` | v1 currency balance           | **Observed in audit output:** v2.1 importer does **not** read these; treat as v1 residue only. Helpers exist but v2.1 does not write new balances; shop pages reportedly only display balances (must verify in v2.1).                                                                   |
-| `longTaskDone`              | `longTaskDone=true`            | v2.1 `/task` flow flag        | **Observed in audit output**; scoped to `/task`.                                                                                                                                                                                                                                        |
-| _Import cleanup_            | —                              | Deletes **all** cookies       | v2.1 import completion clears every cookie, regardless of prefix. See [`done.astro`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/import/%5BnewVersion%5D/%5BoldVersion%5D/done.astro). (**Observed in audit output**.) |
+| Cookie key/pattern          | Example                        | Meaning in v2.1               | Notes                                                                                                                                                                                                                 |
+| --------------------------- | ------------------------------ | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `acceptedCookies`           | `acceptedCookies=true`         | Legacy consent cookie from v1 | **Observed in audit output:** v2.1 does not otherwise use this except via v1 import flow.                                                                                                                             |
+| `item-<id>`                 | `item-12=5`                    | v1 inventory counts           | v2.1 importer reads these for v1→v2 import. (**Observed in audit output**.)                                                                                                                                           |
+| `currency-balance-<symbol>` | `currency-balance-dUSD=123.45` | v1 currency balance           | **Observed in audit output:** v2.1 importer does **not** read these; treat as v1 residue only. Helpers exist but v2.1 does not write new balances; shop pages reportedly only display balances (must verify in v2.1). |
+| `longTaskDone`              | `longTaskDone=true`            | v2.1 `/task` flow flag        | **Observed in audit output**; scoped to `/task`.                                                                                                                                                                      |
+| _Import cleanup_            | —                              | Deletes **all** cookies       | v2.1 import completion clears every cookie, regardless of prefix. See `frontend/src/pages/import/[newVersion]/[oldVersion]/done.astro` in the audit snapshot. (**Observed in audit output**.)                         |
 
 ## v1 → v2.1 importer behavior (v2.1)
 
@@ -272,20 +269,16 @@ All details below are **Observed in audit output** unless otherwise noted.
 
 **Route + entry points**
 
-- Route: `/import/v2/v1`  
-  <https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/import/%5BnewVersion%5D/%5BoldVersion%5D.astro>
-- Svelte UI:  
-  <https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/import/svelte/Importer.svelte>
-- Migration helper:  
-  <https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/utils/gameState.js>
+- Route: `/import/v2/v1` (audit path: `frontend/src/pages/import/[newVersion]/[oldVersion].astro`)
+- Svelte UI: `frontend/src/pages/import/svelte/Importer.svelte` (audit snapshot)
+- Migration helper: `frontend/src/utils/gameState.js` (audit snapshot)
 
 **Trigger conditions + UI gating**
 
-- Importer blocks if `getVersionNumber()` returns `"2"`.  
-  <https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/import/svelte/Importer.svelte>
+- Importer blocks if `getVersionNumber()` returns `"2"`. (See
+  `frontend/src/pages/import/svelte/Importer.svelte` in the audit snapshot.)
 - The menu entry “Import from v1” is hidden when the user owns item **85** (Early Adopter Token)
-  or **86** (Newcomer Token).  
-  <https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/config/menu.json>
+  or **86** (Newcomer Token). (See `frontend/src/config/menu.json` in the audit snapshot.)
 
 **Inputs**
 
@@ -297,8 +290,8 @@ All details below are **Observed in audit output** unless otherwise noted.
 **Outputs**
 
 - Adds items from cookies plus the **Early Adopter Token (85)**, sets
-  `versionNumberString = "2"`, and writes the save.  
-  <https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/utils/gameState.js>
+  `versionNumberString = "2"`, and writes the save. (See
+  `frontend/src/utils/gameState.js` in the audit snapshot.)
 - If no v1 data exists, the UI grants **Newcomer Token (86)** instead. (**Observed in audit
   output**.)
 
@@ -313,15 +306,14 @@ All details below are **Observed in audit output** unless otherwise noted.
 
 - **Importer overwrite bug:** `importV1V2` calls `addItems([...])`, then `setVersionNumber("2")`,
   then calls `saveGameState(gameState)` using the **pre-import snapshot**, likely overwriting the
-  imported items + version.  
-  <https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/utils/gameState.js>
-- **Cleanup writes empty inventory id:** `Cleanup.svelte` writes an empty-id item to gameState.  
-  <https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/import/svelte/Cleanup.svelte>
-- **Cleanup deletes all cookies:** v2.1 import completion removes every cookie.  
-  <https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/import/%5BnewVersion%5D/%5BoldVersion%5D/done.astro>
+  imported items + version. (See `frontend/src/utils/gameState.js` in the audit snapshot.)
+- **Cleanup writes empty inventory id:** `Cleanup.svelte` writes an empty-id item to gameState.
+  (See `frontend/src/pages/import/svelte/Cleanup.svelte` in the audit snapshot.)
+- **Cleanup deletes all cookies:** v2.1 import completion removes every cookie. (See
+  `frontend/src/pages/import/[newVersion]/[oldVersion]/done.astro` in the audit snapshot.)
 - **Base64 exporter can be stale:** `exportGameStateString` uses a module-level snapshot that is
-  not refreshed after initialization.  
-  <https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/utils/gameState/common.js>
+  not refreshed after initialization. (See `frontend/src/utils/gameState/common.js` in the audit
+  snapshot.)
 
 ## Known v2.1 pitfalls relevant to v2 → v3 migration
 
