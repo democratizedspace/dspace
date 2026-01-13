@@ -16,6 +16,7 @@ const getItemCountsMock = vi.hoisted(() => vi.fn(() => ({ 'item-1': 0 })));
 const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
+const startProcess = vi.hoisted(() => vi.fn());
 
 vi.mock('../../pages/inventory/json/items', () => ({
     default: [
@@ -69,7 +70,7 @@ vi.mock('../../generated/processes.json', () => ({
 }));
 
 vi.mock('../../utils/gameState/processes.js', () => ({
-    startProcess: vi.fn(),
+    startProcess,
     cancelProcess: vi.fn(),
     finishProcess: vi.fn(),
     getProcessState: vi.fn(() => stateInfo),
@@ -95,6 +96,7 @@ beforeEach(() => {
     cheatsEnabledStore.set(false);
     stateInfo.state = ProcessStates.IN_PROGRESS;
     finishProcessNow.mockClear();
+    startProcess.mockClear();
 });
 
 test('pauses and resumes a process while showing remaining time', async () => {
@@ -142,7 +144,13 @@ test('renders instant finish chip when cheats are enabled', async () => {
     expect(chip).toBeTruthy();
 
     await fireEvent.click(chip);
-    expect(finishProcessNow).toHaveBeenCalledWith('p1');
+    expect(finishProcessNow).toHaveBeenCalledWith(
+        'p1',
+        expect.objectContaining({
+            id: 'p1',
+            title: 'Test Process',
+        })
+    );
 });
 
 test('renders instant finish chip for paused processes', async () => {
@@ -157,10 +165,16 @@ test('renders instant finish chip for paused processes', async () => {
     expect(chip).toBeTruthy();
 
     await fireEvent.click(chip);
-    expect(finishProcessNow).toHaveBeenCalledWith('p1');
+    expect(finishProcessNow).toHaveBeenCalledWith(
+        'p1',
+        expect.objectContaining({
+            id: 'p1',
+            title: 'Test Process',
+        })
+    );
 });
 
-test('shows custom process note when rendering a custom process', async () => {
+test('renders custom process start controls when rendering a custom process', async () => {
     const customProcess = {
         id: 'custom-1',
         title: 'Custom Process',
@@ -171,17 +185,17 @@ test('shows custom process note when rendering a custom process', async () => {
         custom: true,
     };
 
-    const { getByText, queryByTestId } = render(Process, {
+    const { getByText, getByTestId } = render(Process, {
         processId: 'custom-1',
         processData: customProcess,
     });
 
     await tick();
     expect(getByText('Duration: 5s')).toBeTruthy();
-    expect(
-        getByText('Custom processes are displayed for reference and managed separately.')
-    ).toBeTruthy();
-    expect(queryByTestId('qa-instant-finish-chip')).toBeNull();
+    const startButton = getByTestId('process-start-button');
+    expect(startButton).toBeTruthy();
+    await fireEvent.click(startButton);
+    expect(startProcess).toHaveBeenCalledWith('custom-1', customProcess);
 });
 
 test('prefers provided process data over built-in catalog lookup', async () => {
@@ -195,17 +209,14 @@ test('prefers provided process data over built-in catalog lookup', async () => {
         custom: true,
     };
 
-    const { getByText, queryByText } = render(Process, {
+    const { getByText } = render(Process, {
         processId: 'p1',
         processData: customOverride,
     });
 
     await tick();
     expect(getByText('Override Process')).toBeTruthy();
-    expect(
-        getByText('Custom processes are displayed for reference and managed separately.')
-    ).toBeTruthy();
-    expect(queryByText('Start')).toBeNull();
+    expect(getByText('Start')).toBeTruthy();
 });
 
 test('renders fallback message when process details are unavailable', async () => {
