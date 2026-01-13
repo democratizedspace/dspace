@@ -169,7 +169,9 @@ machine-lock-0=1
     - If you re-seed the cookies and merge again, counts should increase again (merge is additive).
 5. **Maximal seed case:** repeat with the maximal profile and confirm the same results, plus
    ensure process timers and machine locks remain ignored.
-6. **Hand-off to v2.1 → v3:** use the v2.1 checklist below after finishing v1 validation.
+6. **Hand-off to v2.1 → v3:** after finishing v1 validation, continue with the v2.1 → v3 QA
+   checklist in the section below. That section is the canonical v2.1 migration guide and
+   supersedes any earlier high-level v2 migration notes.
 
 ## DSPACE v2.1 save format (commit `d956e807c26006b98227a89ca5039e4ed71fe2df`)
 
@@ -213,7 +215,7 @@ machine-lock-0=1
 | `gameState` | `{"quests":{},"inventory":{"24":100},"processes":{}}` | JSON object (see deep schema below) | Canonical v2.1 save blob | `frontend/src/utils/gameState/common.js` → `saveGameState` (**Observed in audit output**) | `frontend/src/utils/gameState/common.js` → `loadGameState` (**Observed in audit output**) | Single source of truth; no `gameStateBackup` in v2.1. Exporter uses a module snapshot that can go stale (**Observed in audit output**). |
 | `avatarUrl` | `https://example.com/avatar.png` | String URL | Selected avatar image | **Observed in audit output**; v2.1 writer not confirmed in this checkout | **Observed in audit output**; v2.1 reader not confirmed in this checkout | Present in v2.1 localStorage; verify exact UI path in v2.1 if needed. |
 | `ethAddress` | `0x1111111111111111111111111111111111111111` | String hex address | Ethereum profile address | **Observed in audit output**; v2.1 writer not confirmed in this checkout | **Observed in audit output**; v2.1 reader not confirmed in this checkout | Present in v2.1 localStorage; not referenced in v3 codebase. Treat as legacy data only. |
-| `sessionStorage` (all keys) | — | — | None observed in v2.1 | None | None | **Observed in audit output:** no sessionStorage usage found. |
+| `sessionStorage` (all keys) | N/A (not used in v2.1) | N/A (not used in v2.1) | None observed in v2.1 | None | None | **Observed in audit output:** no sessionStorage usage found. |
 
 **IndexedDB:** none in v2.1 (**Observed in audit output**).
 
@@ -250,7 +252,8 @@ machine-lock-0=1
 - **Extra keys tolerated:** v2.1 can persist extra keys under `gameState`; v3 migration should
   ignore unknown keys safely. (**Observed in audit output**.)
 - **Cleanup artifact:** the v2.1 import cleanup can write an empty-string inventory key. Treat
-  `inventory[""]` as a historical artifact. (**Observed in audit output**.)
+  `inventory[""]` as a historical artifact; observed values include `null`. (**Observed in audit
+  output**.)
 
 ### D) Cookie usage in v2.1 (and v1 residue)
 
@@ -260,10 +263,9 @@ machine-lock-0=1
 | `item-<id>` | `item-12=5` | v1 inventory counts | v2.1 importer reads these for v1→v2 import. (**Observed in audit output**.) |
 | `currency-balance-<symbol>` | `currency-balance-dUSD=123.45` | v1 currency balance | **Observed in audit output:** v2.1 importer does **not** read these; treat as v1 residue only. Helpers exist but v2.1 does not write new balances; shop pages reportedly only display balances (must verify in v2.1). |
 | `longTaskDone` | `longTaskDone=true` | v2.1 `/task` flow flag | **Observed in audit output**; scoped to `/task`. |
-| _Import cleanup_ | — | Deletes **all** cookies | v2.1 import completion clears every cookie, regardless of prefix. (**Observed in audit output**; see `done.astro`.)  
-<https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/import/%5BnewVersion%5D/%5BoldVersion%5D/done.astro> |
+| _Import cleanup_ | — | Deletes **all** cookies | v2.1 import completion clears every cookie, regardless of prefix. See [`done.astro`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/import/%5BnewVersion%5D/%5BoldVersion%5D/done.astro). (**Observed in audit output**.) |
 
-## v1 → v2 importer behavior (v2.1)
+## v1 → v2.1 importer behavior (v2.1)
 
 This section documents the historical v1→v2 importer so v3 QA does not assume ideal behavior.
 All details below are **Observed in audit output** unless otherwise noted.
@@ -338,7 +340,7 @@ Treat these as migration **warnings** and QA requirements, not guarantees of v3 
 ## v2.1 seed profiles for `/settings` (v2 localStorage)
 
 Use these to seed `localStorage["gameState"]` in DevTools or the `/settings` seeder. All JSON is
-copy/pasteable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
+copy-pastable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
 
 ### Seed 1: Minimal v2 save
 
@@ -383,6 +385,9 @@ copy/pasteable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
   <https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/gameState.js>
 - **Replace:** v3 should replace current save with this quest/process state; process timers should
   rehydrate from `startedAt`/`duration` if the v3 runtime uses those fields. **Must verify in QA.**
+- **Finished processes:** in v2.1, the `processes` map only contains in-progress entries with
+  `startedAt` and `duration`. When a process finishes, its entry is removed rather than persisted
+  with a `finished: true` flag. (**Observed in audit output**.)
 
 ### Seed 3: “Messy real-world” save
 
@@ -442,7 +447,9 @@ copy/pasteable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
 - **Keys:** `gameState` (v2.1). `gameStateBackup` is a v3-era fallback key but is still checked by
   v3 legacy detection. See the v2.1 format section above for the authoritative schema.
 - **Payload:** JSON with `versionNumberString` beginning with `2`, plus `inventory`, `quests`, and
-  `processes` (optional keys like `openAI` can also appear).
+  `processes` (optional keys like `openAI` can also appear). Earlier internal docs also mentioned
+  `settings` and `_meta` as possible fields, but those keys never shipped in any v2.x save format
+  and can be ignored if encountered.
 - **Example payload:**
     ```json
     {
