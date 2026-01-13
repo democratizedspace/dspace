@@ -1,0 +1,13 @@
+{
+  "id": "custom-inventory-item-edit-404",
+  "date": "2026-01-13",
+  "component": "frontend/ui/inventory/manage",
+  "rootCause": "The inventory manage view linked to /inventory/item/[id]/edit for custom items, but the edit route did not exist, resulting in a 404.",
+  "resolution": "Add an edit route that loads the custom item from IndexedDB and renders the item form in edit mode.",
+  "references": [
+    "frontend/src/pages/inventory/svelte/ManageItems.svelte",
+    "frontend/src/pages/inventory/item/[itemId]/edit.astro",
+    "frontend/src/pages/inventory/svelte/EditItemPage.svelte",
+    "frontend/src/components/svelte/ItemForm.svelte"
+  ]
+}

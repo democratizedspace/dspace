@@ -1,0 +1,10 @@
+---
+import Page from '../../../../components/Page.astro';
+import EditItemPage from '../../svelte/EditItemPage.svelte';
+
+const { itemId } = Astro.params;
+---
+
+<Page title="Edit Custom Item">
+    <EditItemPage itemId={itemId} client:load />
+</Page>
