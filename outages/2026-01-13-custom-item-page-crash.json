@@ -1,0 +1,12 @@
+{
+  "id": "OUT-2026-01-13-custom-item-page-crash",
+  "date": "2026-01-13",
+  "component": "frontend/inventory",
+  "rootCause": "The item detail page passed a custom item ID into BuySell, which only looked up items from the static catalog. Custom items loaded from IndexedDB were undefined there, so accessing item.price threw and blanked the page.",
+  "resolution": "Allow BuySell to accept resolved item data, guard missing price metadata, and have the item page pass the loaded custom item data so custom items render safely.",
+  "references": [
+    "frontend/src/components/svelte/BuySell.svelte",
+    "frontend/src/pages/inventory/item/ItemPage.svelte",
+    "frontend/__tests__/BuySellCustomItem.test.js"
+  ]
+}

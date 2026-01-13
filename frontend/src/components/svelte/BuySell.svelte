@@ -7,16 +7,25 @@
 
     export let itemId;
     export let gameState;
+    export let itemData = null;
 
     const dUSDId = items.find((i) => i.name === 'dUSD').id;
     const dCarbonId = items.find((i) => i.name === 'dCarbon').id;
 
-    let itemList = [{ id: itemId }, { id: dUSDId }];
+    const getItemById = (id) => items.find((item) => item.id === id);
 
-    const item = items.find((item) => item.id === itemId);
-    const { price, symbol } = getPriceStringComponents(item.price);
-    const taxAmount = getSalesTaxPercentage(item.price); // Assuming this function returns a percentage value.
-    const effectiveSellPrice = taxAmount > 0 ? price * (1 - taxAmount / 100) : price;
+    $: resolvedItem = itemData ?? getItemById(itemId);
+    $: itemList = [
+        {
+            id: itemId,
+            name: resolvedItem?.name,
+            image: resolvedItem?.image,
+        },
+        { id: dUSDId },
+    ];
+    $: ({ price, symbol } = getPriceStringComponents(resolvedItem?.price));
+    $: taxAmount = resolvedItem ? getSalesTaxPercentage() : 0;
+    $: effectiveSellPrice = taxAmount > 0 ? price * (1 - taxAmount / 100) : price;
 
     let activeType = 'buy'; // 'buy' or 'sell'
     let quantity = 1;
@@ -35,8 +44,11 @@
     }
 
     function handleTransactionClick() {
+        if (!resolvedItem || price === 0) {
+            return;
+        }
         const transactionItem = {
-            ...item,
+            ...resolvedItem,
             price: activeType === 'buy' ? price : effectiveSellPrice,
             symbol,
             quantity,

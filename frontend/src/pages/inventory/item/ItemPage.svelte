@@ -38,6 +38,12 @@
         count.set(itemCount);
         mounted.set(true);
     });
+
+    $: if (item) {
+        itemList = [{ id: item.id, name: item.name, image: item.image }];
+    } else {
+        itemList = [{ id: itemId }];
+    }
 </script>
 
 {#if $mounted && item}
@@ -47,7 +53,7 @@
             <h2>{item.name}</h2>
             <CompactItemList {itemList} inverted={true} />
             {item.description}
-            <BuySell {itemId} />
+            <BuySell {itemId} itemData={item} />
             {#if hasProcesses}
                 <p>Processes:</p>
             {/if}
