@@ -8,10 +8,7 @@ import { addItems } from './gameState/inventory.js';
 import { isBrowser } from './ssr.js';
 import items from '../pages/inventory/json/items';
 import { normalizeSettings } from './settingsDefaults.js';
-import {
-    V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID,
-    V1_ITEM_ID_TO_V3_UUID,
-} from './legacyV1ItemIdMap.js';
+import { V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID, V1_ITEM_ID_TO_V3_UUID } from './legacyV1ItemIdMap.js';
 import { normalizeLegacyV2State, readLegacyV2LocalStorage } from './legacySaveParsing.js';
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;

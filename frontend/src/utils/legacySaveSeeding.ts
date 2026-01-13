@@ -30,19 +30,15 @@ const getV1Profiles = () =>
 const getV2Profiles = () =>
     v2Fixture?.profiles && typeof v2Fixture.profiles === 'object' ? v2Fixture.profiles : {};
 
-export const LEGACY_V1_SEED_PROFILES = Object.entries(getV1Profiles()).map(
-    ([id, profile]) => ({
-        id,
-        label: profile?.label ?? id,
-    })
-);
+export const LEGACY_V1_SEED_PROFILES = Object.entries(getV1Profiles()).map(([id, profile]) => ({
+    id,
+    label: profile?.label ?? id,
+}));
 
-export const LEGACY_V2_SEED_PROFILES = Object.entries(getV2Profiles()).map(
-    ([id, profile]) => ({
-        id,
-        label: profile?.label ?? id,
-    })
-);
+export const LEGACY_V2_SEED_PROFILES = Object.entries(getV2Profiles()).map(([id, profile]) => ({
+    id,
+    label: profile?.label ?? id,
+}));
 
 const isSecureContext = () =>
     typeof location !== 'undefined' && typeof location.protocol === 'string'

@@ -152,86 +152,86 @@ The v1 numeric item IDs are mapped to v3 UUID item IDs during migration. The can
 lives in `frontend/src/utils/legacyV1ItemIdMap.js` and is consumed by the v1 migration helper.
 Use the table below to validate mappings during QA and when auditing legacy saves.
 
-| v1 itemId | v1 name | v3 item UUID | v3 name | Notes |
-| --- | --- | --- | --- | --- |
-| 0 | Real Printer 1 | 8aa6dc27-dc42-4622-ac88-cbd57f48625f | entry-level FDM 3D printer | Renamed to 'entry-level FDM 3D printer' in v3 catalog. |
-| 1 | Benchy | 7892ffc6-c651-445f-946b-7edc998cf389 | Benchy |  |
-| 2 | hydroponics kit | 92261497-d605-4db1-8710-953cf73d765c | hydroponics kit |  |
-| 3 | white PLA filament | 58580f6f-f3be-4be0-80b9-f6f8bf0b05a6 | white PLA filament |  |
-| 4 | Edison Model M | 8f54a592-09de-4340-829b-7288897eb4c7 | Edison Model M |  |
-| 5 | portable solar panel | 02b32152-a7b2-458e-9643-7b754c722165 | portable solar panel |  |
-| 6 | 200 Wh battery pack | cfe87611-623a-45b0-9243-422cd8a73a16 | 200 Wh battery pack |  |
-| 7 | 500W wind turbine | 743681a7-d2e7-465c-af07-43665079bf4d | 500 W wind turbine | Renamed to '500 W wind turbine' in v3 catalog. |
-| 8 | Benchy Award | fe46e236-5d03-4c95-9b38-68b045a0df03 | Benchy Award |  |
-| 9 | Real Hydroponics Tub 1 | 11aa585c-fdeb-41ba-9191-be4bcdaa23c4 | Beginner hydroponics tub | Renamed to 'Beginner hydroponics tub' in v3 catalog. |
-| 10 | basil seeds | affa2f80-28f1-422e-a0c8-49e51ce65a1e | basil seeds |  |
-| 11 | 3D printed model rocket | 5322b85e-b47d-4ea4-b515-318f91abc7df | 3D printed model rocket |  |
-| 12 | green PLA filament | d3590107-25ff-4de5-af3a-46e2497bfc52 | green PLA filament |  |
-| 13 | hydroponic starter plug | 78a45c1f-a791-44f1-88f4-dc5059c66c89 | hydroponic starter plug |  |
-| 14 | hydroponics nutrients | ef5a843f-0a9d-41e2-b2bc-81fc9f99a150 | hydroponic nutrient concentrate (1 L) | Renamed to 'hydroponic nutrient concentrate (1 L)' in v3 catalog. |
-| 15 | 3D printing kit | 9605048d-ea62-4b70-9bbc-ea1ad4baaf3e | 3D printing kit |  |
-| 16 | 5 gallon bucket | 0564d441-7367-412e-b709-dad770814a39 | 5 gallon bucket |  |
-| 17 | 5 gallon bucket of tap water (chlorinated) | 156d06b2-ff10-4265-9ae9-3b7753c0206e | 5 gallon bucket of tap water (chlorinated) |  |
-| 18 | Motor Award | 2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274 | Motor Award |  |
-| 19 | Rocket Award | 946b07b7-2b2c-4507-a725-edb270d8e910 | Rocket Award |  |
-| 20 | dCarbon | d88ef09c-9191-4c18-8628-a888bb9f926d | dCarbon |  |
-| 21 | Hypercar (80% charge) | 1498a7a1-2739-4943-a32f-4c277244a825 | Hypercar (80% charge) |  |
-| 22 | dWatt | 061fd221-404a-4bd1-9432-3e25b0f17a2c | dWatt |  |
-| 23 | Hypervan | c2e3bbb6-0ded-4923-98e1-37e5ac3c7d77 | Hypervan |  |
-| 24 | dUSD | 5247a603-294a-4a34-a884-1ae20969b2a1 | dUSD |  |
-| 25 | 5 gallon bucket of tap water (dechlorinated) | 71efa72a-8c87-4dc2-8e2c-9119bb28fe50 | 5 gallon bucket of dechlorinated tap water | Renamed to '5 gallon bucket of dechlorinated tap water' in v3 catalog. |
-| 26 | soaked hydroponic starter plug | 545aeb15-7e8b-489d-be4a-af2a59f447e1 | soaked hydroponic starter plug |  |
-| 27 | basil seedling | 5712947f-716c-4f71-b28d-fcb811631080 | basil seedling |  |
-| 28 | sink | 799ace33-1336-46c0-904a-9f16778230f1 | sink |  |
-| 29 | smart plug | a5395e29-1862-4eb7-8517-5d161635e032 | smart plug |  |
-| 30 | 3D printed nosecone | 7ca9cad5-4bc2-420b-9733-24d1e38c2324 | 3D printed nosecone |  |
-| 31 | 3D printed body tube | 1eac8955-bb70-474b-b6b0-4002ff3aa09a | 3D printed body tube |  |
-| 32 | 3D printed fincan | 563956c2-17d1-4b82-8fce-48b07dc8a71b | 3D printed fincan |  |
-| 33 | 3D printed nosecone coupler | 05c339ee-f50b-419a-804a-341f850b85e9 | 3D printed nosecone coupler |  |
-| 34 | hobbyist solid rocket motor | 4d817f1c-d78d-4fac-a514-402bce330693 | hobbyist solid rocket motor |  |
-| 35 | superglue | 7bc8b73f-6e66-469d-865f-12d0cb36677a | superglue |  |
-| 36 | kevlar cord | 0484a3ab-92e7-42fa-a5e6-25a4afe841d6 | kevlar shock cord | Renamed to 'kevlar shock cord' in v3 catalog. |
-| 37 | rocket igniter | d2f3e684-84e2-41f9-b39d-51ee224608ac | rocket igniter |  |
-| 38 | launch controller | ae343640-c7c0-4f7e-907b-17bd87574d9b | launch controller |  |
-| 39 | launch-capable model rocket | aaa5fbca-54a1-40a5-8461-24dc2ef81d4d | launch-capable model rocket |  |
-| 40 | damaged model rocket | 63362e5c-9897-4710-8ef6-26540fabd0ca | damaged model rocket |  |
-| 41 | Rocketeer Award | c754c1e7-244c-41ec-96d4-ad468b6b3e52 | Rocketeer Award |  |
-| 42 | harvestable basil plant | 79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be | harvestable basil plant |  |
-| 43 | hydroponic grow lamp | c8946a5f-caff-4e6d-9b9b-4dbf02bcd000 | hydroponic grow lamp |  |
-| 44 | Real Hydroponics Tub 1 (ready) | fc2bb989-f192-4891-8bde-78ae631dae78 | hydroponics tub (ready) | Renamed to 'hydroponics tub (ready)' in v3 catalog. |
-| 45 | Real Hydroponics Tub 1 (nutrient deficient) | dc765172-c2e4-40dd-bb5a-a399bf6d6d77 | hydroponics tub (nutrient deficient) | Renamed to 'hydroponics tub (nutrient deficient)' in v3 catalog. |
-| 46 | bundle of basil leaves | 5d48cefb-fc1f-4962-b2c6-9b014151d0ae | bundle of basil leaves |  |
-| 47 | harvested basil plant | 29190faf-8581-4769-b871-f0ee283840e1 | harvested basil plant |  |
-| 48 | Green Thumb Award | 5599c466-91e9-46fb-8d8b-11388e4f8f9c | Green Thumb Award |  |
-| 49 | Solarpunk Award | 5bba251a-d223-4e22-aa30-b65238b17516 | Solarpunk Award |  |
-| 50 | Completionist Award | 1394c366-5078-49cf-b24e-c748e8428234 | Completionist Award |  |
-| 51 | aquarium (150 L) | 83fe7eee-135e-4885-9ce0-9042b9fb860a | aquarium (150 L) |  |
-| 52 | aquarium (goldfish) (150 L) | 76307a8e-4e0e-4dfa-abc2-7917d384d82c | aquarium (goldfish) (150 L) |  |
-| 53 | goldfish | 40920981-bf9f-4b89-b887-bebe7006f7dc | goldfish |  |
-| 54 | goldfish food | 8807f2f1-3ca2-48da-9b2b-1915604a63e2 | goldfish food |  |
-| 55 | aquarium filter | 6fe61da2-6aa3-447e-aad5-c65b1b8da1f1 | aquarium filter |  |
-| 56 | aquarium heater | 0b85f058-38f2-4e9a-93e9-d47441608619 | aquarium heater (150 W) | Renamed to 'aquarium heater (150 W)' in v3 catalog. |
-| 57 | aquarium light | 62757412-be94-48c0-a1c0-8fad9bdb8c4a | aquarium LED light (20 W) | Renamed to 'aquarium LED light (20 W)' in v3 catalog. |
-| 58 | Thermometer | 8e81b5e5-4aee-402c-bd04-fed9188f8c07 | aquarium thermometer (0–50°C) | Renamed to 'aquarium thermometer (0–50°C)' in v3 catalog. |
-| 59 | pH strip | 13167d6a-5617-4931-8a6e-6f463c6b8835 | pH strip |  |
-| 60 | 7 pH freshwater aquarium (150 L) | ca7c1069-4ba3-4339-9a10-0b690a690e60 | 7 pH freshwater aquarium (150 L) |  |
-| 61 | dSolar | b02ecff5-1f7d-4247-a09d-7d6cd6bb218a | dSolar |  |
-| 62 | gravel | 75cec98f-fcf0-4d73-8d31-5a53571317b2 | aquarium gravel (1 kg) | Renamed to 'aquarium gravel (1 kg)' in v3 catalog. |
-| 63 | aquarium net | ee7d437d-7426-47cd-b691-386dd20f4e47 | aquarium net |  |
-| 64 | dGoldfish | 36a1168f-0109-4a8c-b70b-45f8ca582297 | dGoldfish |  |
-| 65 | Fish Friend Award | a07b75e3-f828-4cb1-81d6-1ab0e9857a79 | Fish Friend Award |  |
-| 66 | parachute | 80a83ecc-bcd2-400e-a469-8488a6453bb8 | parachute |  |
-| 67 | launch-capable model rocket (parachute) | e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec | launch-capable model rocket (parachute) |  |
-| 68 | Rocket Descent (animated) | d660dc50-7afb-4a2f-9508-a42490aae5e4 | Rocket Descent (animated) |  |
-| 69 | dLaunch | eb9c2a75-a87a-4171-8bc3-088e75936bcf | dLaunch |  |
-| 70 | dOffset | b0ac46e6-6c60-48f0-b753-d9b6ad9935a6 | dOffset |  |
-| 71 | Tree Hugger Award | 96e11500-a2ce-4531-a1b5-3a92c44fcb9d | Tree Hugger Award |  |
-| 72 | dBI | 016d4758-d114-4e04-9e6a-853db93a2eee | dBI |  |
-| 73 | EV charger | 5258f098-6cae-4ee5-8888-435b08f1675a | EV charger |  |
-| 74 | Hypercar (20% charge) | 5e283c0b-fd3c-4884-ae32-9a237f02a40e | Hypercar (20% charge) |  |
-| 75 | Hypercar (animated) | 3486ebb3-d262-4e90-8873-b19ed69afee8 | Hypercar (animated) |  |
-| 76 | 1 kWh battery pack | 7246c1c8-f22e-4d31-acd3-967f91b8626a | 1 kWh battery pack |  |
-| 77 | The grass is always greener (still) | 11a2a77a-0c43-47a9-b13a-1412ac475ce2 | The grass is always greener (still) |  |
+| v1 itemId | v1 name                                      | v3 item UUID                         | v3 name                                    | Notes                                                                  |
+| --------- | -------------------------------------------- | ------------------------------------ | ------------------------------------------ | ---------------------------------------------------------------------- |
+| 0         | Real Printer 1                               | 8aa6dc27-dc42-4622-ac88-cbd57f48625f | entry-level FDM 3D printer                 | Renamed to 'entry-level FDM 3D printer' in v3 catalog.                 |
+| 1         | Benchy                                       | 7892ffc6-c651-445f-946b-7edc998cf389 | Benchy                                     |                                                                        |
+| 2         | hydroponics kit                              | 92261497-d605-4db1-8710-953cf73d765c | hydroponics kit                            |                                                                        |
+| 3         | white PLA filament                           | 58580f6f-f3be-4be0-80b9-f6f8bf0b05a6 | white PLA filament                         |                                                                        |
+| 4         | Edison Model M                               | 8f54a592-09de-4340-829b-7288897eb4c7 | Edison Model M                             |                                                                        |
+| 5         | portable solar panel                         | 02b32152-a7b2-458e-9643-7b754c722165 | portable solar panel                       |                                                                        |
+| 6         | 200 Wh battery pack                          | cfe87611-623a-45b0-9243-422cd8a73a16 | 200 Wh battery pack                        |                                                                        |
+| 7         | 500W wind turbine                            | 743681a7-d2e7-465c-af07-43665079bf4d | 500 W wind turbine                         | Renamed to '500 W wind turbine' in v3 catalog.                         |
+| 8         | Benchy Award                                 | fe46e236-5d03-4c95-9b38-68b045a0df03 | Benchy Award                               |                                                                        |
+| 9         | Real Hydroponics Tub 1                       | 11aa585c-fdeb-41ba-9191-be4bcdaa23c4 | Beginner hydroponics tub                   | Renamed to 'Beginner hydroponics tub' in v3 catalog.                   |
+| 10        | basil seeds                                  | affa2f80-28f1-422e-a0c8-49e51ce65a1e | basil seeds                                |                                                                        |
+| 11        | 3D printed model rocket                      | 5322b85e-b47d-4ea4-b515-318f91abc7df | 3D printed model rocket                    |                                                                        |
+| 12        | green PLA filament                           | d3590107-25ff-4de5-af3a-46e2497bfc52 | green PLA filament                         |                                                                        |
+| 13        | hydroponic starter plug                      | 78a45c1f-a791-44f1-88f4-dc5059c66c89 | hydroponic starter plug                    |                                                                        |
+| 14        | hydroponics nutrients                        | ef5a843f-0a9d-41e2-b2bc-81fc9f99a150 | hydroponic nutrient concentrate (1 L)      | Renamed to 'hydroponic nutrient concentrate (1 L)' in v3 catalog.      |
+| 15        | 3D printing kit                              | 9605048d-ea62-4b70-9bbc-ea1ad4baaf3e | 3D printing kit                            |                                                                        |
+| 16        | 5 gallon bucket                              | 0564d441-7367-412e-b709-dad770814a39 | 5 gallon bucket                            |                                                                        |
+| 17        | 5 gallon bucket of tap water (chlorinated)   | 156d06b2-ff10-4265-9ae9-3b7753c0206e | 5 gallon bucket of tap water (chlorinated) |                                                                        |
+| 18        | Motor Award                                  | 2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274 | Motor Award                                |                                                                        |
+| 19        | Rocket Award                                 | 946b07b7-2b2c-4507-a725-edb270d8e910 | Rocket Award                               |                                                                        |
+| 20        | dCarbon                                      | d88ef09c-9191-4c18-8628-a888bb9f926d | dCarbon                                    |                                                                        |
+| 21        | Hypercar (80% charge)                        | 1498a7a1-2739-4943-a32f-4c277244a825 | Hypercar (80% charge)                      |                                                                        |
+| 22        | dWatt                                        | 061fd221-404a-4bd1-9432-3e25b0f17a2c | dWatt                                      |                                                                        |
+| 23        | Hypervan                                     | c2e3bbb6-0ded-4923-98e1-37e5ac3c7d77 | Hypervan                                   |                                                                        |
+| 24        | dUSD                                         | 5247a603-294a-4a34-a884-1ae20969b2a1 | dUSD                                       |                                                                        |
+| 25        | 5 gallon bucket of tap water (dechlorinated) | 71efa72a-8c87-4dc2-8e2c-9119bb28fe50 | 5 gallon bucket of dechlorinated tap water | Renamed to '5 gallon bucket of dechlorinated tap water' in v3 catalog. |
+| 26        | soaked hydroponic starter plug               | 545aeb15-7e8b-489d-be4a-af2a59f447e1 | soaked hydroponic starter plug             |                                                                        |
+| 27        | basil seedling                               | 5712947f-716c-4f71-b28d-fcb811631080 | basil seedling                             |                                                                        |
+| 28        | sink                                         | 799ace33-1336-46c0-904a-9f16778230f1 | sink                                       |                                                                        |
+| 29        | smart plug                                   | a5395e29-1862-4eb7-8517-5d161635e032 | smart plug                                 |                                                                        |
+| 30        | 3D printed nosecone                          | 7ca9cad5-4bc2-420b-9733-24d1e38c2324 | 3D printed nosecone                        |                                                                        |
+| 31        | 3D printed body tube                         | 1eac8955-bb70-474b-b6b0-4002ff3aa09a | 3D printed body tube                       |                                                                        |
+| 32        | 3D printed fincan                            | 563956c2-17d1-4b82-8fce-48b07dc8a71b | 3D printed fincan                          |                                                                        |
+| 33        | 3D printed nosecone coupler                  | 05c339ee-f50b-419a-804a-341f850b85e9 | 3D printed nosecone coupler                |                                                                        |
+| 34        | hobbyist solid rocket motor                  | 4d817f1c-d78d-4fac-a514-402bce330693 | hobbyist solid rocket motor                |                                                                        |
+| 35        | superglue                                    | 7bc8b73f-6e66-469d-865f-12d0cb36677a | superglue                                  |                                                                        |
+| 36        | kevlar cord                                  | 0484a3ab-92e7-42fa-a5e6-25a4afe841d6 | kevlar shock cord                          | Renamed to 'kevlar shock cord' in v3 catalog.                          |
+| 37        | rocket igniter                               | d2f3e684-84e2-41f9-b39d-51ee224608ac | rocket igniter                             |                                                                        |
+| 38        | launch controller                            | ae343640-c7c0-4f7e-907b-17bd87574d9b | launch controller                          |                                                                        |
+| 39        | launch-capable model rocket                  | aaa5fbca-54a1-40a5-8461-24dc2ef81d4d | launch-capable model rocket                |                                                                        |
+| 40        | damaged model rocket                         | 63362e5c-9897-4710-8ef6-26540fabd0ca | damaged model rocket                       |                                                                        |
+| 41        | Rocketeer Award                              | c754c1e7-244c-41ec-96d4-ad468b6b3e52 | Rocketeer Award                            |                                                                        |
+| 42        | harvestable basil plant                      | 79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be | harvestable basil plant                    |                                                                        |
+| 43        | hydroponic grow lamp                         | c8946a5f-caff-4e6d-9b9b-4dbf02bcd000 | hydroponic grow lamp                       |                                                                        |
+| 44        | Real Hydroponics Tub 1 (ready)               | fc2bb989-f192-4891-8bde-78ae631dae78 | hydroponics tub (ready)                    | Renamed to 'hydroponics tub (ready)' in v3 catalog.                    |
+| 45        | Real Hydroponics Tub 1 (nutrient deficient)  | dc765172-c2e4-40dd-bb5a-a399bf6d6d77 | hydroponics tub (nutrient deficient)       | Renamed to 'hydroponics tub (nutrient deficient)' in v3 catalog.       |
+| 46        | bundle of basil leaves                       | 5d48cefb-fc1f-4962-b2c6-9b014151d0ae | bundle of basil leaves                     |                                                                        |
+| 47        | harvested basil plant                        | 29190faf-8581-4769-b871-f0ee283840e1 | harvested basil plant                      |                                                                        |
+| 48        | Green Thumb Award                            | 5599c466-91e9-46fb-8d8b-11388e4f8f9c | Green Thumb Award                          |                                                                        |
+| 49        | Solarpunk Award                              | 5bba251a-d223-4e22-aa30-b65238b17516 | Solarpunk Award                            |                                                                        |
+| 50        | Completionist Award                          | 1394c366-5078-49cf-b24e-c748e8428234 | Completionist Award                        |                                                                        |
+| 51        | aquarium (150 L)                             | 83fe7eee-135e-4885-9ce0-9042b9fb860a | aquarium (150 L)                           |                                                                        |
+| 52        | aquarium (goldfish) (150 L)                  | 76307a8e-4e0e-4dfa-abc2-7917d384d82c | aquarium (goldfish) (150 L)                |                                                                        |
+| 53        | goldfish                                     | 40920981-bf9f-4b89-b887-bebe7006f7dc | goldfish                                   |                                                                        |
+| 54        | goldfish food                                | 8807f2f1-3ca2-48da-9b2b-1915604a63e2 | goldfish food                              |                                                                        |
+| 55        | aquarium filter                              | 6fe61da2-6aa3-447e-aad5-c65b1b8da1f1 | aquarium filter                            |                                                                        |
+| 56        | aquarium heater                              | 0b85f058-38f2-4e9a-93e9-d47441608619 | aquarium heater (150 W)                    | Renamed to 'aquarium heater (150 W)' in v3 catalog.                    |
+| 57        | aquarium light                               | 62757412-be94-48c0-a1c0-8fad9bdb8c4a | aquarium LED light (20 W)                  | Renamed to 'aquarium LED light (20 W)' in v3 catalog.                  |
+| 58        | Thermometer                                  | 8e81b5e5-4aee-402c-bd04-fed9188f8c07 | aquarium thermometer (0–50°C)              | Renamed to 'aquarium thermometer (0–50°C)' in v3 catalog.              |
+| 59        | pH strip                                     | 13167d6a-5617-4931-8a6e-6f463c6b8835 | pH strip                                   |                                                                        |
+| 60        | 7 pH freshwater aquarium (150 L)             | ca7c1069-4ba3-4339-9a10-0b690a690e60 | 7 pH freshwater aquarium (150 L)           |                                                                        |
+| 61        | dSolar                                       | b02ecff5-1f7d-4247-a09d-7d6cd6bb218a | dSolar                                     |                                                                        |
+| 62        | gravel                                       | 75cec98f-fcf0-4d73-8d31-5a53571317b2 | aquarium gravel (1 kg)                     | Renamed to 'aquarium gravel (1 kg)' in v3 catalog.                     |
+| 63        | aquarium net                                 | ee7d437d-7426-47cd-b691-386dd20f4e47 | aquarium net                               |                                                                        |
+| 64        | dGoldfish                                    | 36a1168f-0109-4a8c-b70b-45f8ca582297 | dGoldfish                                  |                                                                        |
+| 65        | Fish Friend Award                            | a07b75e3-f828-4cb1-81d6-1ab0e9857a79 | Fish Friend Award                          |                                                                        |
+| 66        | parachute                                    | 80a83ecc-bcd2-400e-a469-8488a6453bb8 | parachute                                  |                                                                        |
+| 67        | launch-capable model rocket (parachute)      | e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec | launch-capable model rocket (parachute)    |                                                                        |
+| 68        | Rocket Descent (animated)                    | d660dc50-7afb-4a2f-9508-a42490aae5e4 | Rocket Descent (animated)                  |                                                                        |
+| 69        | dLaunch                                      | eb9c2a75-a87a-4171-8bc3-088e75936bcf | dLaunch                                    |                                                                        |
+| 70        | dOffset                                      | b0ac46e6-6c60-48f0-b753-d9b6ad9935a6 | dOffset                                    |                                                                        |
+| 71        | Tree Hugger Award                            | 96e11500-a2ce-4531-a1b5-3a92c44fcb9d | Tree Hugger Award                          |                                                                        |
+| 72        | dBI                                          | 016d4758-d114-4e04-9e6a-853db93a2eee | dBI                                        |                                                                        |
+| 73        | EV charger                                   | 5258f098-6cae-4ee5-8888-435b08f1675a | EV charger                                 |                                                                        |
+| 74        | Hypercar (20% charge)                        | 5e283c0b-fd3c-4884-ae32-9a237f02a40e | Hypercar (20% charge)                      |                                                                        |
+| 75        | Hypercar (animated)                          | 3486ebb3-d262-4e90-8873-b19ed69afee8 | Hypercar (animated)                        |                                                                        |
+| 76        | 1 kWh battery pack                           | 7246c1c8-f22e-4d31-acd3-967f91b8626a | 1 kWh battery pack                         |                                                                        |
+| 77        | The grass is always greener (still)          | 11a2a77a-0c43-47a9-b13a-1412ac475ce2 | The grass is always greener (still)        |                                                                        |
 
 ## QA: v1 → v3 migration checklist
 
@@ -525,7 +525,7 @@ copy/pastable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
 - Detection + legacy parsing:
   [`frontend/src/utils/legacySaveDetection.ts`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveDetection.ts)
   (`detectLegacyArtifacts`) and
-  [`frontend/src/utils/legacySaveParsing.js`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveParsing.js)
+  [`frontend/src/utils/legacySaveParsing.js`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveParsing.js)
   (`readLegacyV2LocalStorage`).
 - Fixture seed data:
   [`frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json).

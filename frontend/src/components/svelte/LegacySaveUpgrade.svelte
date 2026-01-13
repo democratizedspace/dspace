@@ -131,9 +131,9 @@
             v1Notice = `Some v1 cookies were ignored: ${describeV1Issues(v1Issues)}.`;
         }
         if (v1CurrencyIssues.length > 0) {
-            v1Notice = `${v1Notice ? `${v1Notice} ` : ''}Some currency cookies were ignored: ${
-                describeV1Issues(v1CurrencyIssues)
-            }.`;
+            v1Notice = `${v1Notice ? `${v1Notice} ` : ''}Some currency cookies were ignored: ${describeV1Issues(
+                v1CurrencyIssues
+            )}.`;
         }
 
         if (legacyV2ParseIssues?.length) {

@@ -488,15 +488,17 @@ export const V1_ITEM_ID_TO_V3_UUID = LEGACY_V1_ITEM_MAPPINGS.reduce((acc, entry)
     return acc;
 }, {});
 
+const FALLBACK_DUSD_ITEM_ID = '5247a603-294a-4a34-a884-1ae20969b2a1';
 const dUSDItem = items.find((item) => item.name === 'dUSD');
+const resolvedDUSDItemId = dUSDItem?.id ?? FALLBACK_DUSD_ITEM_ID;
 
-if (!dUSDItem || !dUSDItem.id) {
-    throw new Error(
+if (!dUSDItem?.id) {
+    console.warn(
         'dUSD item not found in items catalog or missing id; ' +
-            'V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID.dUSD cannot be initialized.'
+            'falling back to the known dUSD item UUID.'
     );
 }
 
 export const V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID = {
-    dUSD: dUSDItem.id,
+    dUSD: resolvedDUSDItemId,
 };
