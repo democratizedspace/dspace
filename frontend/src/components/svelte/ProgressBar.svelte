@@ -1,47 +1,49 @@
 <script>
-    import { onMount, onDestroy, createEventDispatcher } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
     import { prettyPrintDuration } from '../../utils.js';
 
     export let startDate = new Date();
     export let totalDurationSeconds = 5;
     export let stopped = false;
 
-    if (typeof startDate === 'string' || typeof startDate === 'number') {
-        startDate = new Date(startDate);
-    }
-
-    let interval;
+    const dispatch = createEventDispatcher();
     let elapsedSeconds = 0;
     let progressRatio = 0;
+    let completed = false;
 
-    const dispatch = createEventDispatcher();
-
-    const updateState = () => {
-        const now = Date.now();
-        const elapsedMillis = now - startDate.getTime(); // Milliseconds since the start date
-        elapsedSeconds = Math.min(elapsedMillis / 1000, totalDurationSeconds);
-        progressRatio = elapsedSeconds / totalDurationSeconds;
-        if (elapsedSeconds >= totalDurationSeconds) {
-            progressRatio = 1;
-            clearInterval(interval);
-            dispatch('fillComplete');
+    const normalizeStartDate = (value) => {
+        if (value instanceof Date) {
+            return value;
         }
-    };
-
-    const startProgress = () => {
-        interval = setInterval(updateState, 100);
-    };
-
-    const stopProgress = () => {
-        if (interval) {
-            clearInterval(interval);
+        if (typeof value === 'string' || typeof value === 'number') {
+            return new Date(value);
         }
-        elapsedSeconds = 0;
-        progressRatio = 0;
+        return new Date();
     };
 
-    onMount(startProgress);
-    onDestroy(stopProgress);
+    $: normalizedStartDate = normalizeStartDate(startDate);
+
+    $: {
+        const durationSeconds = Number(totalDurationSeconds);
+        if (!Number.isFinite(durationSeconds) || durationSeconds <= 0) {
+            elapsedSeconds = 0;
+            progressRatio = 0;
+        } else {
+            const elapsedMillis = Date.now() - normalizedStartDate.getTime();
+            const rawElapsedSeconds = Math.max(0, elapsedMillis / 1000);
+            elapsedSeconds = Math.min(rawElapsedSeconds, durationSeconds);
+            progressRatio = elapsedSeconds / durationSeconds;
+        }
+    }
+
+    $: if (progressRatio >= 1 && !completed) {
+        completed = true;
+        dispatch('fillComplete');
+    }
+
+    $: if (progressRatio < 1 && completed) {
+        completed = false;
+    }
 </script>
 
 <div class="progress-container">
@@ -66,7 +68,7 @@
             Progress: {(progressRatio * 100).toFixed(2)}%
         </p>
         <p>
-            Time Left: {prettyPrintDuration(totalDurationSeconds - elapsedSeconds)}
+            Time Left: {prettyPrintDuration(Math.max(0, totalDurationSeconds - elapsedSeconds))}
         </p>
     </div>
 </div>

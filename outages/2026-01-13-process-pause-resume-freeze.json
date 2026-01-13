@@ -1,0 +1,18 @@
+{
+  "id": "process-pause-resume-freeze",
+  "date": "2026-01-13",
+  "component": "frontend processes pause/resume",
+  "rootCause": "ProgressBar and RemainingTime maintained their own intervals so they kept ticking while paused, and the process timing model lacked a stable effective start time, causing progress resets and jumps on resume.",
+  "resolution": "Reworked process pause/resume timing to use integer elapsed milliseconds with a stable effective start time, removed child component intervals so updates only occur via the parent poller, and added unit/component tests to cover pause, resume, and legacy paused state handling.",
+  "references": [
+    "frontend/src/utils/gameState/processes.js",
+    "frontend/src/components/svelte/Process.svelte",
+    "frontend/src/components/svelte/ProgressBar.svelte",
+    "frontend/src/components/svelte/RemainingTime.svelte",
+    "frontend/tests/processes.pauseResume.test.ts",
+    "frontend/src/components/__tests__/Process.spec.ts",
+    "frontend/src/components/__tests__/ProgressBar.spec.ts",
+    "frontend/src/components/__tests__/RemainingTime.spec.ts",
+    "https://staging.democratized.space/processes/solar-200Wh"
+  ]
+}
