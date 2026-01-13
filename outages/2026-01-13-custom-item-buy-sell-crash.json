@@ -1,0 +1,12 @@
+{
+  "id": "OUT-2026-01-13-custom-item-buy-sell-crash",
+  "date": "2026-01-13",
+  "component": "frontend/inventory",
+  "rootCause": "The BuySell component only looked up items in the static catalog and immediately read item.price, so custom items loaded from IndexedDB were undefined and threw a runtime error that blanked the item detail page.",
+  "resolution": "Load custom items from IndexedDB on mount, guard price calculations when item data is missing, and update the BuySell tests to cover custom items.",
+  "references": [
+    "frontend/src/components/svelte/BuySell.svelte",
+    "frontend/__tests__/BuySell.test.js",
+    "https://staging.democratized.space/inventory/item/5326766c-93ae-47e7-be08-15247c75a234"
+  ]
+}

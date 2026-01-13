@@ -1,22 +1,25 @@
 <script>
+    import { onMount } from 'svelte';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
     import items from '../../pages/inventory/json/items';
     import { getPriceStringComponents } from '../../utils';
     import { buyItems, sellItems, getSalesTaxPercentage } from '../../utils/gameState/inventory.js';
+    import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
 
     export let itemId;
-    export let gameState;
 
     const dUSDId = items.find((i) => i.name === 'dUSD').id;
     const dCarbonId = items.find((i) => i.name === 'dCarbon').id;
 
     let itemList = [{ id: itemId }, { id: dUSDId }];
 
-    const item = items.find((item) => item.id === itemId);
-    const { price, symbol } = getPriceStringComponents(item.price);
-    const taxAmount = getSalesTaxPercentage(item.price); // Assuming this function returns a percentage value.
-    const effectiveSellPrice = taxAmount > 0 ? price * (1 - taxAmount / 100) : price;
+    let item = items.find((item) => item.id === itemId);
+    let price = 0;
+    let symbol = '';
+    let taxAmount = 0;
+    let effectiveSellPrice = 0;
+    let isLoading = false;
 
     let activeType = 'buy'; // 'buy' or 'sell'
     let quantity = 1;
@@ -35,6 +38,9 @@
     }
 
     function handleTransactionClick() {
+        if (!item) {
+            return;
+        }
         const transactionItem = {
             ...item,
             price: activeType === 'buy' ? price : effectiveSellPrice,
@@ -44,9 +50,45 @@
         const transactionList = [transactionItem];
 
         if (activeType === 'buy') {
-            buyItems(transactionList, gameState);
+            buyItems(transactionList);
         } else {
-            sellItems(transactionList, gameState);
+            sellItems(transactionList);
+        }
+    }
+
+    onMount(async () => {
+        if (item) {
+            return;
+        }
+
+        isLoading = true;
+        try {
+            const loadedItem = await db.get(ENTITY_TYPES.ITEM, itemId);
+            item = loadedItem ?? null;
+        } catch (error) {
+            item = null;
+            console.error('Failed to load item from IndexedDB in BuySell.svelte', {
+                itemId,
+                entityType: ENTITY_TYPES.ITEM,
+                error,
+            });
+        } finally {
+            isLoading = false;
+        }
+    });
+
+    $: {
+        if (item) {
+            const components = getPriceStringComponents(item.price);
+            price = components.price;
+            symbol = components.symbol;
+            taxAmount = getSalesTaxPercentage(item.price);
+            effectiveSellPrice = taxAmount > 0 ? price * (1 - taxAmount / 100) : price;
+        } else {
+            price = 0;
+            symbol = '';
+            taxAmount = 0;
+            effectiveSellPrice = 0;
         }
     }
 
@@ -56,7 +98,11 @@
 </script>
 
 <Chip inverted={true} text="">
-    {#if price === 0}
+    {#if isLoading}
+        <p>Loading...</p>
+    {:else if !item}
+        <p>Item not found</p>
+    {:else if price === 0}
         <p>Not tradeable</p>
     {:else}
         <div class="buy-sell-wrapper vertical">
