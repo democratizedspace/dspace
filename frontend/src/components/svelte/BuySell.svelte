@@ -1,9 +1,11 @@
 <script>
+    import { onMount } from 'svelte';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
     import items from '../../pages/inventory/json/items';
     import { getPriceStringComponents } from '../../utils';
     import { buyItems, sellItems, getSalesTaxPercentage } from '../../utils/gameState/inventory.js';
+    import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
 
     export let itemId;
     export let gameState;
@@ -13,10 +15,11 @@
 
     let itemList = [{ id: itemId }, { id: dUSDId }];
 
-    const item = items.find((item) => item.id === itemId);
-    const { price, symbol } = getPriceStringComponents(item.price);
-    const taxAmount = getSalesTaxPercentage(item.price); // Assuming this function returns a percentage value.
-    const effectiveSellPrice = taxAmount > 0 ? price * (1 - taxAmount / 100) : price;
+    let item = items.find((item) => item.id === itemId);
+    let price = 0;
+    let symbol = '';
+    let taxAmount = 0;
+    let effectiveSellPrice = 0;
 
     let activeType = 'buy'; // 'buy' or 'sell'
     let quantity = 1;
@@ -35,6 +38,9 @@
     }
 
     function handleTransactionClick() {
+        if (!item) {
+            return;
+        }
         const transactionItem = {
             ...item,
             price: activeType === 'buy' ? price : effectiveSellPrice,
@@ -47,6 +53,33 @@
             buyItems(transactionList, gameState);
         } else {
             sellItems(transactionList, gameState);
+        }
+    }
+
+    onMount(async () => {
+        if (item) {
+            return;
+        }
+
+        try {
+            item = await db.get(ENTITY_TYPES.ITEM, itemId);
+        } catch (error) {
+            item = null;
+        }
+    });
+
+    $: {
+        if (item) {
+            const components = getPriceStringComponents(item.price);
+            price = components.price;
+            symbol = components.symbol;
+            taxAmount = getSalesTaxPercentage(item.price);
+            effectiveSellPrice = taxAmount > 0 ? price * (1 - taxAmount / 100) : price;
+        } else {
+            price = 0;
+            symbol = '';
+            taxAmount = 0;
+            effectiveSellPrice = 0;
         }
     }
 
