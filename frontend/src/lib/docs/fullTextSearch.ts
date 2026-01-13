@@ -1,4 +1,4 @@
-const WORD_REGEX = /[\p{L}\p{N}']+/gu;
+const WORD_TOKEN_STRIP_REGEX = /^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu;
 
 const normalize = (value: string) => value.toLowerCase().trim();
 
@@ -69,60 +69,33 @@ export const extractSnippet = (bodyText: string, keyword: string): SnippetParts 
     }
 
     const loweredKeyword = normalize(keyword);
-    const loweredBodyText = bodyText.toLowerCase();
-    const matchStart = loweredBodyText.indexOf(loweredKeyword);
+    const stripToken = (token: string) => token.replace(WORD_TOKEN_STRIP_REGEX, '');
 
-    if (matchStart === -1) {
+    const wordTokens = bodyText
+        .split(/\s+/)
+        .map((token) => ({
+            token,
+            normalized: stripToken(token).toLowerCase(),
+        }))
+        .filter((token) => token.normalized.length > 0);
+
+    if (!wordTokens.length) {
         return null;
     }
 
-    const matchEnd = matchStart + loweredKeyword.length;
-    const words = Array.from(bodyText.matchAll(WORD_REGEX), (match) => ({
-        word: match[0],
-        index: match.index ?? 0,
-        end: (match.index ?? 0) + match[0].length,
-    }));
+    const matchIndex = wordTokens.findIndex((token) => token.normalized.includes(loweredKeyword));
 
-    if (!words.length) {
+    if (matchIndex === -1) {
         return null;
     }
 
-    const findWordIndex = (position: number) =>
-        words.findIndex((word) => position >= word.index && position < word.end);
-
-    let startWordIndex = findWordIndex(matchStart);
-    if (startWordIndex === -1) {
-        const nextWordIndex = words.findIndex((word) => word.index > matchStart);
-        startWordIndex = nextWordIndex > 0 ? nextWordIndex - 1 : nextWordIndex;
-    }
-
-    if (startWordIndex === -1) {
-        return null;
-    }
-
-    let endWordIndex = findWordIndex(matchEnd - 1);
-    if (endWordIndex === -1) {
-        for (let index = words.length - 1; index >= 0; index -= 1) {
-            if (words[index].index < matchEnd) {
-                endWordIndex = index;
-                break;
-            }
-        }
-    }
-    endWordIndex = endWordIndex === -1 ? startWordIndex : endWordIndex;
-
-    const start = Math.max(0, startWordIndex - 2);
-    const end = Math.min(words.length, endWordIndex + 3);
-
-    const matchWord =
-        startWordIndex === endWordIndex && matchEnd <= words[startWordIndex].end
-            ? words[startWordIndex].word
-            : bodyText.slice(matchStart, matchEnd);
+    const start = Math.max(0, matchIndex - 2);
+    const end = Math.min(wordTokens.length, matchIndex + 3);
 
     return {
-        before: words.slice(start, startWordIndex).map((word) => word.word),
-        match: matchWord,
-        after: words.slice(endWordIndex + 1, end).map((word) => word.word),
+        before: wordTokens.slice(start, matchIndex).map((token) => token.token),
+        match: wordTokens[matchIndex].token,
+        after: wordTokens.slice(matchIndex + 1, end).map((token) => token.token),
     };
 };
 

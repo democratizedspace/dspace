@@ -45,8 +45,12 @@ filters.
 
 - Choose the snippet keyword as the first keyword in alphabetical order that matches the body
   text.
-- Find the first occurrence of that keyword (left-to-right) in the body text.
-- Extract up to two words before and after the matched word.
+- Tokenize the body text by whitespace and keep tokens whose stripped core contains at least one
+  letter/number (strip leading/trailing non-letter/number characters).
+- Match against the stripped, lowercased token value, but render the original token so punctuation
+  like `turbine.` remains visible.
+- Find the first occurrence of that keyword (left-to-right) in the filtered word tokens.
+- Extract up to two word tokens before and after the matched word.
 - Render with `<strong>` around the matched word.
 
 ### Markdown to plain text

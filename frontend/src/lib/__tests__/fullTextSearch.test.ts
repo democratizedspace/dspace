@@ -73,6 +73,18 @@ describe('extractSnippet', () => {
             after: ['for', 'the'],
         });
     });
+
+    it('preserves punctuation on matched tokens while skipping separator-only tokens', () => {
+        const snippet = extractSnippet('a wind turbine. | — 130 dUSD', 'turbine');
+
+        expect(snippet).toEqual({
+            before: ['a', 'wind'],
+            match: 'turbine.',
+            after: ['130', 'dUSD'],
+        });
+        expect(snippet?.before).not.toContain('|');
+        expect(snippet?.after).not.toContain('—');
+    });
 });
 
 describe('findDocSnippet', () => {
