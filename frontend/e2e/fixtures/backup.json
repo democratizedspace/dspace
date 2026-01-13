@@ -1,13 +1,24 @@
 {
-    "items": [
-        {
-            "id": "ci-item-e2e",
-            "name": "CI Test Item",
-            "description": "Fixture item for end-to-end custom backup coverage",
-            "type": "custom",
-            "createdAt": "2024-01-01T00:00:00.000Z"
-        }
-    ],
-    "processes": [],
-    "quests": []
+    "schemaVersion": 1,
+    "exportedAt": "2024-01-01T00:00:00.000Z",
+    "counts": {
+        "items": 1,
+        "processes": 0,
+        "quests": 0,
+        "images": 1
+    },
+    "data": {
+        "items": [
+            {
+                "id": "ci-item-e2e",
+                "name": "CI Test Item",
+                "description": "Fixture item for end-to-end custom backup coverage",
+                "type": "custom",
+                "image": "data:image/png;base64,iVBORw0KGgo=",
+                "createdAt": "2024-01-01T00:00:00.000Z"
+            }
+        ],
+        "processes": [],
+        "quests": []
+    }
 }
