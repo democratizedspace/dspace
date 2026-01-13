@@ -38,19 +38,14 @@ describe('LegacySaveUpgrade', () => {
         document.cookie = 'item-99=abc; path=/';
         document.cookie = 'currency-balance-dUSD=12.5; path=/';
 
-        const { findByRole, findByText } = render(LegacySaveUpgrade, {
+        const { findByRole, findByTestId, findByText } = render(LegacySaveUpgrade, {
             legacyV1Items: [],
             legacyCookieKeys: [],
             cheatsAvailable: false,
         });
 
-        await findByText((content, element) => {
-            if (!element?.textContent) {
-                return false;
-            }
-
-            return element.textContent.toLowerCase().includes('3 item cookies detected');
-        });
+        const cookieSummary = await findByTestId('legacy-v1-cookie-summary');
+        expect(cookieSummary.textContent?.toLowerCase()).toContain('3 item cookies detected');
 
         const mergeButton = await findByRole('button', {
             name: /merge v1 into current save/i,

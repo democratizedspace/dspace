@@ -344,7 +344,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3>V1 (cookie saves)</h3>
-                    <p>
+                    <p data-testid="legacy-v1-cookie-summary">
                         {#if v1Items.length || v1CurrencyBalances.length}
                             {v1Items.length
                                 ? `${v1Items.length} item cookies detected`
