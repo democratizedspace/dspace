@@ -175,6 +175,7 @@ test('renders instant finish chip for paused processes', async () => {
 });
 
 test('renders custom process start controls when rendering a custom process', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
     const customProcess = {
         id: 'custom-1',
         title: 'Custom Process',
@@ -199,6 +200,7 @@ test('renders custom process start controls when rendering a custom process', as
 });
 
 test('prefers provided process data over built-in catalog lookup', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
     const customOverride = {
         id: 'p1',
         title: 'Override Process',
