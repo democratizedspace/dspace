@@ -73,7 +73,7 @@
 </script>
 
 <Chip text="">
-    <section class="vertical" data-hydrated="true">
+    <section class="vertical" data-hydrated="true" data-testid="contentbackup-export">
         <h2>Export custom content</h2>
         <p>Prepare a downloadable backup of your custom quests, items, and processes.</p>
         <Chip

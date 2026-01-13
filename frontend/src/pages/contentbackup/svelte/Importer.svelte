@@ -90,7 +90,7 @@
 </script>
 
 <Chip text="">
-    <section class="vertical" data-hydrated="true">
+    <section class="vertical" data-hydrated="true" data-testid="contentbackup-import">
         <h2>Import custom content</h2>
         <p id={dropzoneLabelId}>
             Drag and drop your backup file here, or click to browse.

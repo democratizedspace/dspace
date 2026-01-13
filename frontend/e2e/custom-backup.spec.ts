@@ -15,6 +15,26 @@ test.describe('Custom content backup', () => {
         await page.goto('/contentbackup');
         await waitForHydration(page);
 
+        const exportPanel = page.getByTestId('contentbackup-export');
+        const importPanel = page.getByTestId('contentbackup-import');
+        await expect(exportPanel).toBeVisible();
+        await expect(importPanel).toBeVisible();
+
+        const exportBox = await exportPanel.boundingBox();
+        const importBox = await importPanel.boundingBox();
+        if (!exportBox || !importBox) {
+            throw new Error('Expected content backup panels to have layout boxes.');
+        }
+
+        const viewportWidth = page.viewportSize()?.width ?? 1280;
+        const viewportCenter = viewportWidth / 2;
+        const exportCenter = exportBox.x + exportBox.width / 2;
+        const importCenter = importBox.x + importBox.width / 2;
+
+        expect(Math.abs(exportCenter - viewportCenter)).toBeLessThanOrEqual(4);
+        expect(Math.abs(importCenter - viewportCenter)).toBeLessThanOrEqual(4);
+        expect(Math.abs(exportCenter - importCenter)).toBeLessThanOrEqual(4);
+
         await page.evaluate(async () => {
             await new Promise<void>((resolve, reject) => {
                 const request = indexedDB.open('CustomContent', 3);
