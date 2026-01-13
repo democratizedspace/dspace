@@ -172,8 +172,7 @@ async function resolveImageData(entity) {
             throw new Error('Image export requires browser fetch support.');
         }
 
-        const controller =
-            typeof AbortController === 'function' ? new AbortController() : null;
+        const controller = typeof AbortController === 'function' ? new AbortController() : null;
         const timeoutId = controller
             ? setTimeout(() => controller.abort(), IMAGE_FETCH_TIMEOUT_MS)
             : null;

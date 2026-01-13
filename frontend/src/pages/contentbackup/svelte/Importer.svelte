@@ -63,8 +63,7 @@
             message = `Import complete: ${file.name}`;
         } catch (error) {
             status = 'error';
-            message =
-                error instanceof Error ? error.message : 'Import failed. Please try again.';
+            message = error instanceof Error ? error.message : 'Import failed. Please try again.';
         }
     };
 
@@ -92,9 +91,7 @@
 <Chip text="">
     <section class="vertical" data-hydrated="true" data-testid="contentbackup-import">
         <h2>Import custom content</h2>
-        <p id={dropzoneLabelId}>
-            Drag and drop your backup file here, or click to browse.
-        </p>
+        <p id={dropzoneLabelId}>Drag and drop your backup file here, or click to browse.</p>
         <label
             for={fileInputId}
             class:dragging={isDragging}
@@ -169,7 +166,9 @@
         text-align: center;
         cursor: pointer;
         background: rgba(255, 255, 255, 0.6);
-        transition: border-color 0.2s ease, background 0.2s ease;
+        transition:
+            border-color 0.2s ease,
+            background 0.2s ease;
     }
 
     .dropzone.dragging {

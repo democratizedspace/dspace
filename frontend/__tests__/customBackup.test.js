@@ -61,7 +61,15 @@ describe('custom content backup', () => {
         const backup = await buildCustomContentBackupData();
         expect(backup.schemaVersion).toBe(BACKUP_SCHEMA_VERSION);
         expect(Object.keys(backup).sort()).toEqual(
-            ['counts', 'images', 'items', 'processes', 'quests', 'schemaVersion', 'timestamp'].sort()
+            [
+                'counts',
+                'images',
+                'items',
+                'processes',
+                'quests',
+                'schemaVersion',
+                'timestamp',
+            ].sort()
         );
     });
 
@@ -115,9 +123,7 @@ describe('custom content backup', () => {
             ],
         };
 
-        await expect(restoreCustomContentBackup(invalid)).rejects.toThrow(
-            'Missing item for image'
-        );
+        await expect(restoreCustomContentBackup(invalid)).rejects.toThrow('Missing item for image');
 
         const items = await db.list('item');
         expect(items).toEqual([]);
