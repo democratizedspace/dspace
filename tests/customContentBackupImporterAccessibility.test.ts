@@ -7,9 +7,9 @@ const source = readFileSync(
 );
 
 describe('Custom content backup importer accessibility', () => {
-    it('includes a persistent accessible label for the import textarea', () => {
-        expect(source).toMatch(/const\s+importTextareaLabelId\s*=\s*'custom-content-backup-label'/);
-        expect(source).toMatch(/<p\s+id={importTextareaLabelId}>Paste your custom content backup here:/);
-        expect(source).toMatch(/<textarea[\s\S]*aria-labelledby={importTextareaLabelId}/);
+    it('includes a persistent accessible label for the import file input', () => {
+        expect(source).toMatch(/const\s+fileInputLabelId\s*=\s*'custom-content-backup-label'/);
+        expect(source).toMatch(/id={fileInputLabelId}/);
+        expect(source).toMatch(/aria-labelledby={fileInputLabelId}/);
     });
 });
