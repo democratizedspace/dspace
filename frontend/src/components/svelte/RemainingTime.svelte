@@ -1,15 +1,18 @@
 <script>
-    import { onMount, onDestroy } from 'svelte';
     import { prettyPrintDuration } from '../../utils.js';
 
     export let endDate;
     export let totalDurationInSeconds;
+    export let renderTick = 0;
 
-    let intervalId;
     let timeRemaining;
 
-    const updateTimeRemaining = () => {
-        const timeDiffInSeconds = Math.round((endDate - Date.now()) / 1000);
+    $: if (renderTick || renderTick === 0) {
+        const normalizedEndDate = endDate instanceof Date ? endDate : new Date(endDate);
+        const endTimestamp = Number.isFinite(normalizedEndDate?.getTime?.())
+            ? normalizedEndDate.getTime()
+            : Date.now();
+        const timeDiffInSeconds = Math.round((endTimestamp - Date.now()) / 1000);
         if (timeDiffInSeconds > 0) {
             timeRemaining = prettyPrintDuration(timeDiffInSeconds, false);
         } else if (totalDurationInSeconds > 0) {
@@ -17,16 +20,7 @@
         } else {
             timeRemaining = '0s';
         }
-    };
-
-    onMount(() => {
-        updateTimeRemaining();
-        intervalId = setInterval(updateTimeRemaining, 1000);
-    });
-
-    onDestroy(() => {
-        clearInterval(intervalId);
-    });
+    }
 </script>
 
 <p>{timeRemaining} remaining</p>

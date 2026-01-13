@@ -1,6 +1,6 @@
 import { render, fireEvent } from '@testing-library/svelte';
 import Process from '../svelte/Process.svelte';
-import { vi, expect, test, beforeEach } from 'vitest';
+import { vi, expect, test, beforeEach, afterEach } from 'vitest';
 import { tick } from 'svelte';
 import { writable } from 'svelte/store';
 
@@ -16,6 +16,7 @@ const getItemCountsMock = vi.hoisted(() => vi.fn(() => ({ 'item-1': 0 })));
 const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
+const processStartedAtMock = vi.hoisted(() => ({ value: 0 }));
 
 vi.mock('../../pages/inventory/json/items', () => ({
     default: [
@@ -74,7 +75,7 @@ vi.mock('../../utils/gameState/processes.js', () => ({
     finishProcess: vi.fn(),
     getProcessState: vi.fn(() => stateInfo),
     ProcessStates,
-    getProcessStartedAt: vi.fn(() => Date.now()),
+    getProcessStartedAt: vi.fn(() => processStartedAtMock.value),
     pauseProcess,
     resumeProcess,
     finishProcessNow,
@@ -95,9 +96,18 @@ beforeEach(() => {
     cheatsEnabledStore.set(false);
     stateInfo.state = ProcessStates.IN_PROGRESS;
     finishProcessNow.mockClear();
+    processStartedAtMock.value = Date.now();
+});
+
+afterEach(() => {
+    vi.useRealTimers();
 });
 
 test('pauses and resumes a process while showing remaining time', async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-01-13T00:00:00Z'));
+    processStartedAtMock.value = Date.now();
+
     const { getByText } = render(Process, { processId: 'p1' });
 
     await tick();
@@ -107,13 +117,21 @@ test('pauses and resumes a process while showing remaining time', async () => {
     await fireEvent.click(getByText('Pause'));
     expect(pauseProcess).toHaveBeenCalledWith('p1');
     await tick();
-    expect(getByText(/remaining/)).toBeTruthy();
+    const pausedRemaining = getByText(/remaining/).textContent;
+
+    vi.advanceTimersByTime(4000);
+    await tick();
+    expect(getByText(/remaining/).textContent).toBe(pausedRemaining);
 
     // resume the process
     await fireEvent.click(getByText('Resume'));
     expect(resumeProcess).toHaveBeenCalledWith('p1');
     await tick();
-    expect(getByText(/remaining/)).toBeTruthy();
+    const resumedRemaining = getByText(/remaining/).textContent;
+
+    vi.advanceTimersByTime(4000);
+    await tick();
+    expect(getByText(/remaining/).textContent).not.toBe(resumedRemaining);
 });
 
 test('shows required items even when counts are zero', async () => {

@@ -1,47 +1,40 @@
 <script>
-    import { onMount, onDestroy, createEventDispatcher } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
     import { prettyPrintDuration } from '../../utils.js';
 
     export let startDate = new Date();
     export let totalDurationSeconds = 5;
     export let stopped = false;
-
-    if (typeof startDate === 'string' || typeof startDate === 'number') {
-        startDate = new Date(startDate);
-    }
-
-    let interval;
-    let elapsedSeconds = 0;
-    let progressRatio = 0;
+    export let renderTick = 0;
 
     const dispatch = createEventDispatcher();
+    let elapsedSeconds = 0;
+    let progressRatio = 0;
+    let completed = false;
 
-    const updateState = () => {
-        const now = Date.now();
-        const elapsedMillis = now - startDate.getTime(); // Milliseconds since the start date
-        elapsedSeconds = Math.min(elapsedMillis / 1000, totalDurationSeconds);
-        progressRatio = elapsedSeconds / totalDurationSeconds;
-        if (elapsedSeconds >= totalDurationSeconds) {
-            progressRatio = 1;
-            clearInterval(interval);
+    $: normalizedStartDate =
+        startDate instanceof Date ? startDate : new Date(startDate ?? Date.now());
+    $: startTimestamp = Number.isFinite(normalizedStartDate?.getTime?.())
+        ? normalizedStartDate.getTime()
+        : Date.now();
+
+    $: if (startTimestamp || totalDurationSeconds || totalDurationSeconds === 0) {
+        completed = false;
+    }
+
+    $: if (renderTick || renderTick === 0) {
+        const totalDurationSafe = Math.max(0, Number(totalDurationSeconds) || 0);
+        const elapsedMillis = Math.max(0, Date.now() - startTimestamp);
+        elapsedSeconds =
+            totalDurationSafe > 0 ? Math.min(elapsedMillis / 1000, totalDurationSafe) : 0;
+        progressRatio = totalDurationSafe > 0 ? elapsedSeconds / totalDurationSafe : 1;
+        progressRatio = Math.min(1, Math.max(0, progressRatio));
+
+        if (progressRatio >= 1 && !completed) {
+            completed = true;
             dispatch('fillComplete');
         }
-    };
-
-    const startProgress = () => {
-        interval = setInterval(updateState, 100);
-    };
-
-    const stopProgress = () => {
-        if (interval) {
-            clearInterval(interval);
-        }
-        elapsedSeconds = 0;
-        progressRatio = 0;
-    };
-
-    onMount(startProgress);
-    onDestroy(stopProgress);
+    }
 </script>
 
 <div class="progress-container">

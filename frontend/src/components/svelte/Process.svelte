@@ -33,6 +33,7 @@
     let totalDurationSeconds;
     let cheatsAvailable = false;
     let cheatsEnabled = false;
+    let renderTick = Date.now();
     let unsubscribeCheatsAvailability;
     let unsubscribeCheatsEnabled;
     let isPulsing = false;
@@ -211,7 +212,7 @@
         }, pulseDurationMs);
     };
 
-    const updateState = () => {
+    const updateState = (shouldTick = true) => {
         if (isCustomProcess || !process) {
             state = ProcessStates.NOT_STARTED;
             processStartedAt = undefined;
@@ -221,6 +222,9 @@
         const processState = getProcessState(processId);
         state = processState.state;
         processStartedAt = getProcessStartedAt(processId);
+        if (shouldTick) {
+            renderTick = Date.now();
+        }
     };
 
     const onProcessStart = () => {
@@ -303,7 +307,7 @@
     onMount(() => {
         mounted = true;
         updateState();
-        if (!isCustomProcess) {
+        if (!isCustomProcess && state === ProcessStates.IN_PROGRESS) {
             intervalId = setInterval(updateState, updateIntervalMs);
         }
 
@@ -325,7 +329,7 @@
         unsubscribeCheatsEnabled?.();
     });
 
-    beforeUpdate(updateState);
+    beforeUpdate(() => updateState(false));
 
     $: canInstantFinish =
         cheatsAvailable &&
@@ -357,10 +361,15 @@
             totalDurationSeconds = 0;
         }
 
-        if (intervalId && isCustomProcess) {
+        if (intervalId && (isCustomProcess || state !== ProcessStates.IN_PROGRESS)) {
             clearInterval(intervalId);
             intervalId = null;
-        } else if (!intervalId && mounted && !isCustomProcess) {
+        } else if (
+            !intervalId &&
+            mounted &&
+            !isCustomProcess &&
+            state === ProcessStates.IN_PROGRESS
+        ) {
             intervalId = setInterval(updateState, updateIntervalMs);
         }
 
@@ -447,10 +456,11 @@
                         </span>
                     </Chip>
                 {/if}
-                <ProgressBar startDate={processStartedAt} {totalDurationSeconds} />
+                <ProgressBar startDate={processStartedAt} {totalDurationSeconds} {renderTick} />
                 <RemainingTime
                     endDate={processStartedAt + totalDurationSeconds * 1000}
                     totalDurationInSeconds={totalDurationSeconds}
+                    {renderTick}
                 />
             {:else if state === ProcessStates.PAUSED}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
@@ -467,10 +477,11 @@
                         </span>
                     </Chip>
                 {/if}
-                <ProgressBar startDate={processStartedAt} {totalDurationSeconds} />
+                <ProgressBar startDate={processStartedAt} {totalDurationSeconds} {renderTick} />
                 <RemainingTime
                     endDate={processStartedAt + totalDurationSeconds * 1000}
                     totalDurationInSeconds={totalDurationSeconds}
+                    {renderTick}
                 />
             {:else}
                 <Chip text="Collect" onClick={onProcessComplete} inverted={true} />
