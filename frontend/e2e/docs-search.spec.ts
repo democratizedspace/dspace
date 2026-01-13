@@ -45,4 +45,22 @@ test.describe('Docs search', () => {
         await expect(page.getByRole('link', { name: 'About', exact: true })).toBeVisible();
         await expect(page.getByRole('link', { name: 'Mission', exact: true })).toHaveCount(0);
     });
+
+    test('shows a body-text snippet for content matches', async ({ page }) => {
+        await page.goto('/docs');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const searchInput = page.getByRole('searchbox', { name: /search docs/i });
+        await searchInput.fill('turbine');
+
+        const solarLink = page.getByRole('link', { name: /solar power/i });
+        await expect(solarLink).toBeVisible();
+
+        const solarSnippet = page.locator('.docs-link', { has: solarLink }).locator('.docs-snippet');
+
+        await expect(solarSnippet).toContainText('Wind');
+        await expect(solarSnippet).toContainText('are also');
+        await expect(solarSnippet.locator('strong')).toHaveText(/turbines?/i);
+    });
 });

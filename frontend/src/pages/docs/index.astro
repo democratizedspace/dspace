@@ -3,10 +3,23 @@ import Page from '../../components/Page.astro';
 import DocsIndex from '../../components/svelte/DocsIndex.svelte';
 import sections from './json/sections.json';
 import { detectDocFeatures } from '../../utils/docsSearchFeatures.js';
+import { markdownToPlainText } from '../../utils/docsFullTextSearch.js';
 
 const docModules = await Astro.glob('./md/**/*.md');
 
-const buildDocFeatureIndex = async () => {
+const loadDocContent = async (doc, slug) => {
+    if (typeof doc.rawContent === 'function') {
+        return doc.rawContent();
+    }
+
+    if (typeof doc.compiledContent === 'function') {
+        return doc.compiledContent();
+    }
+
+    throw new Error(`No content loader found for doc slug ${slug}`);
+};
+
+const buildDocSearchIndex = async () => {
     const entries = await Promise.all(
         docModules.map(async (doc) => {
             const slug = String(doc?.frontmatter?.slug ?? '').toLowerCase();
@@ -16,25 +29,23 @@ const buildDocFeatureIndex = async () => {
             }
 
             try {
-                let content;
+                const content = await loadDocContent(doc, slug);
 
-                if (typeof doc.rawContent === 'function') {
-                    content = await doc.rawContent();
-                } else if (typeof doc.compiledContent === 'function') {
-                    content = await doc.compiledContent();
-                } else {
-                    throw new Error(`No content loader found for doc slug ${slug}`);
-                }
-
-                return [slug, detectDocFeatures(content)];
+                return [
+                    slug,
+                    {
+                        features: detectDocFeatures(content),
+                        bodyText: markdownToPlainText(content),
+                    },
+                ];
             } catch (error) {
-                console.error(`Failed to detect features for doc slug ${slug}`, error);
+                console.error(`Failed to build search index for doc slug ${slug}`, error);
 
                 if (import.meta.env?.DEV) {
                     throw error;
                 }
 
-                return [slug, []];
+                return [slug, { features: [], bodyText: '' }];
             }
         })
     );
@@ -43,7 +54,7 @@ const buildDocFeatureIndex = async () => {
     return new Map(filteredEntries);
 };
 
-const docFeatureIndex = await buildDocFeatureIndex();
+const docSearchIndex = await buildDocSearchIndex();
 
 const getSlugFromHref = (href = '') => {
     const clean = href.split('#')[0].split('?')[0];
@@ -60,9 +71,11 @@ const docsSections = sections.map((section) => ({
     title: section.title,
     links: section.links.map((link) => {
         const slug = getSlugFromHref(link.href);
-        const features = slug ? docFeatureIndex.get(slug) ?? [] : [];
+        const docIndex = slug ? docSearchIndex.get(slug) : null;
+        const features = docIndex?.features ?? [];
+        const bodyText = docIndex?.bodyText ?? '';
 
-        return { ...link, features };
+        return { ...link, features, bodyText };
     }),
 }));
 ---

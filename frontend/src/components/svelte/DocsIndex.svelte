@@ -1,4 +1,6 @@
 <script>
+    import { findDocSnippet, parseDocsQuery } from '../../utils/docsFullTextSearch.js';
+
     /**
      * @typedef {Object} DocLink
      * @property {string} title
@@ -6,6 +8,7 @@
      * @property {string[]=} keywords
      * @property {boolean=} external
      * @property {string[]=} features
+     * @property {string=} bodyText
      */
 
     /**
@@ -19,30 +22,7 @@
 
     let query = '';
 
-    const normalize = (value) => value.toLowerCase().trim();
-
-    const parseQuery = (value) => {
-        const normalized = normalize(value);
-        const words = normalized.split(/\s+/).filter(Boolean);
-        const operators = [];
-        const terms = [];
-
-        words.forEach((word) => {
-            if (word.startsWith('has:')) {
-                const feature = normalize(word.slice(4));
-
-                if (feature) {
-                    operators.push(feature);
-                }
-
-                return;
-            }
-
-            terms.push(word);
-        });
-
-        return { normalized, operators, terms };
-    };
+    const normalize = (value = '') => value.toLowerCase().trim();
 
     // Note: `terms` may be an empty array for operator-only queries (e.g. "has:link").
     // In that case, `every()` returns `true` by design, so word matching does not filter out results.
@@ -59,23 +39,32 @@
     };
 
     const matchLink = (link, parsedQuery) => {
-        if (!parsedQuery.operators.length && !parsedQuery.terms.length) {
+        if (!parsedQuery.operators.length && !parsedQuery.keywords.length) {
             return true;
         }
 
-        const searchableValues = [link.title, ...(link.keywords ?? [])].map(normalize);
+        const searchableValues = [link.title, link.bodyText, ...(link.keywords ?? [])]
+            .filter(Boolean)
+            .map(normalize);
 
         return (
-            matchesWords(parsedQuery.terms, searchableValues) &&
+            matchesWords(parsedQuery.keywords, searchableValues) &&
             matchesOperators(parsedQuery.operators, link.features)
         );
     };
 
-    $: parsedQuery = parseQuery(query);
+    $: parsedQuery = parseDocsQuery(query);
+    $: isSnippetEnabled =
+        parsedQuery.normalized && !parsedQuery.isHasPredicate && parsedQuery.keywords.length > 0;
     $: filteredSections = sections
         .map((section) => ({
             title: section.title,
-            links: section.links.filter((link) => matchLink(link, parsedQuery)),
+            links: section.links
+                .filter((link) => matchLink(link, parsedQuery))
+                .map((link) => ({
+                    ...link,
+                    snippetData: isSnippetEnabled ? findDocSnippet(link, parsedQuery.keywords) : null,
+                })),
         }))
         .filter((section) => section.links.length > 0);
 
@@ -101,13 +90,26 @@
                     <h2>{section.title}</h2>
                     <nav aria-label={`Docs ${section.title}`}>
                         {#each section.links as link}
-                            <a
-                                href={link.href}
-                                rel={link.external ? 'noopener noreferrer' : undefined}
-                                target={link.external ? '_blank' : undefined}
-                            >
-                                {link.title}
-                            </a>
+                            <div class="docs-link">
+                                <a
+                                    href={link.href}
+                                    rel={link.external ? 'noopener noreferrer' : undefined}
+                                    target={link.external ? '_blank' : undefined}
+                                >
+                                    {link.title}
+                                </a>
+                                {#if link.snippetData}
+                                    <p class="docs-snippet">
+                                        {#if link.snippetData.snippet.before.length}
+                                            {link.snippetData.snippet.before.join(' ')}{' '}
+                                        {/if}
+                                        <strong>{link.snippetData.snippet.match}</strong>
+                                        {#if link.snippetData.snippet.after.length}
+                                            {' '}{link.snippetData.snippet.after.join(' ')}
+                                        {/if}
+                                    </p>
+                                {/if}
+                            </div>
                         {/each}
                     </nav>
                 </section>
@@ -169,6 +171,13 @@
         gap: 0.5rem;
     }
 
+    .docs-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
     a {
         display: inline-flex;
         align-items: center;
@@ -186,6 +195,14 @@
     a:hover,
     a:focus {
         opacity: 1;
+    }
+
+    .docs-snippet {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.875rem;
+        max-width: 16rem;
+        text-align: center;
     }
 
     .empty-state {
