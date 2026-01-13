@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import Quest from './Quest.svelte';
+    import Chip from '../../../components/svelte/Chip.svelte';
     import { questFinished } from '../../../utils/gameState.js';
     import { db, listCustomQuests } from '../../../utils/customcontent.js';
     import { state, ready } from '../../../utils/gameState/common.js';
@@ -13,6 +14,7 @@
     let filteredQuests = [];
     let customQuests = [];
     let combinedQuests = [];
+    const actionButtons = [{ text: 'Create a new quest', href: '/quests/create' }];
 
     $: if (mounted) {
         const _gs = $state; // recompute when game state changes
@@ -65,6 +67,11 @@
 </script>
 
 <div class="manage-quests" data-hydrated={hydrated ? 'true' : 'false'}>
+    <div class="action-buttons">
+        {#each actionButtons as button}
+            <Chip text={button.text} href={button.href} inverted={true} />
+        {/each}
+    </div>
     {#if mounted}
         <div class="controls">
             <div class="search-box">
@@ -116,6 +123,13 @@
         max-width: 800px;
         margin: 0 auto;
         padding: 20px;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
     }
 
     .controls {

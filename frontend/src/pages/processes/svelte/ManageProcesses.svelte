@@ -2,6 +2,7 @@
     import { onDestroy, onMount } from 'svelte';
     import Process from '../../../components/svelte/Process.svelte';
     import ProcessPreview from '../../../components/svelte/ProcessPreview.svelte';
+    import Chip from '../../../components/svelte/Chip.svelte';
     import { db, ENTITY_TYPES } from '../../../utils/customcontent.js';
 
     export let processes = [];
@@ -12,6 +13,7 @@
     let availableProcessIds = new Set();
     let lastToggleProcessId = '';
     let invalidPreviewTimeout;
+    const actionButtons = [{ text: 'Create a new process', href: '/processes/create' }];
 
     const normalizeProcessId = (id) => String(id ?? '').trim();
 
@@ -170,6 +172,11 @@
     data-testid="manage-processes"
     data-hydrated={mounted ? 'true' : 'false'}
 >
+    <div class="action-buttons">
+        {#each actionButtons as button}
+            <Chip text={button.text} href={button.href} inverted={true} />
+        {/each}
+    </div>
     <div class="controls">
         <input type="text" bind:value={searchTerm} placeholder="Search processes..." />
     </div>
@@ -246,6 +253,13 @@
         max-width: 800px;
         margin: 0 auto;
         padding: 20px;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
     }
 
     .controls {
