@@ -1,31 +1,68 @@
 {
-    "gameState": {
-        "versionNumberString": "2.1",
-        "inventory": {
-            "0": 1,
-            "3": 120,
-            "10": 2,
-            "11": 1,
-            "85": 1
-        },
-        "quests": {
-            "welcome/howtodoquests": {
-                "finished": true,
-                "itemsClaimed": ["welcome/howtodoquests-start-0"]
-            },
-            "hydroponics/basil": {
-                "stepId": "grown"
+    "profiles": {
+        "minimal": {
+            "label": "Minimal v2.1 gameState",
+            "gameState": {
+                "versionNumberString": "2.1",
+                "inventory": {
+                    "3": 12.5,
+                    "10": 2,
+                    "24": 100
+                },
+                "quests": {},
+                "processes": {}
             }
         },
-        "processes": {
-            "processes/benchy": {
-                "startedAt": 1672531200000,
-                "finished": true,
-                "result": "printed"
+        "inProgress": {
+            "label": "In-progress process",
+            "gameState": {
+                "versionNumberString": "2.1",
+                "inventory": {
+                    "3": 5,
+                    "11": 1
+                },
+                "quests": {
+                    "hydroponics/basil": {
+                        "stepId": "grown"
+                    }
+                },
+                "processes": {
+                    "processes/benchy": {
+                        "startedAt": 1672531200000,
+                        "duration": 86400000
+                    }
+                }
             }
         },
-        "_meta": {
-            "lastUpdated": 1672534800000
+        "messy": {
+            "label": "Messy real-world state",
+            "gameState": {
+                "versionNumberString": "2.1",
+                "inventory": {
+                    "": null,
+                    "3": 1.25,
+                    "85": 1
+                },
+                "quests": {
+                    "welcome/howtodoquests": {
+                        "finished": true,
+                        "itemsClaimed": ["welcome/howtodoquests-start-0"]
+                    }
+                },
+                "processes": {
+                    "processes/benchy": {
+                        "startedAt": 1672531200000,
+                        "finished": true,
+                        "result": "printed"
+                    }
+                },
+                "openAI": {
+                    "apiKey": "REDACTED (scan-secrets: ignore)"
+                },
+                "unknownKey": {
+                    "note": "legacy export drift"
+                }
+            }
         }
     }
 }

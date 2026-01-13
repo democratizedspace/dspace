@@ -9,6 +9,7 @@ import {
     resetGameState,
 } from '../../utils/gameState/common.js';
 import items from '../../pages/inventory/json/items';
+import { V1_ITEM_ID_TO_V3_UUID } from '../../utils/legacyV1ItemIdMap.js';
 
 const EARLY_ADOPTER_ID = items.find((item) => item.name === 'Early Adopter Token')?.id;
 
@@ -39,7 +40,7 @@ describe('LegacySaveUpgrade', () => {
             cheatsAvailable: false,
         });
 
-        await findByText('3 item cookies detected');
+        await findByText('3 inventory cookies detected');
 
         const mergeButton = await findByRole('button', {
             name: /merge v1 into current save/i,
@@ -50,9 +51,9 @@ describe('LegacySaveUpgrade', () => {
 
         await waitFor(() => {
             const state = loadGameState();
-            expect(state.inventory['3']).toBe(75);
-            expect(state.inventory['10']).toBe(2);
-            expect(state.inventory['21']).toBe(20);
+            expect(state.inventory[V1_ITEM_ID_TO_V3_UUID['3']]).toBe(75);
+            expect(state.inventory[V1_ITEM_ID_TO_V3_UUID['10']]).toBe(2);
+            expect(state.inventory[V1_ITEM_ID_TO_V3_UUID['21']]).toBe(20);
             expect(state.inventory[EARLY_ADOPTER_ID]).toBe(1);
         });
     });

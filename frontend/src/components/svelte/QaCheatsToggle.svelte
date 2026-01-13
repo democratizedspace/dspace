@@ -9,6 +9,8 @@
     import Chip from './Chip.svelte';
     import {
         clearSeededLegacySaves,
+        LEGACY_V1_SEED_PROFILES,
+        LEGACY_V2_SEED_PROFILES,
         seedSampleV1CookieSave,
         seedSampleV2LocalStorageSave,
     } from '../../utils/legacySaveSeeding';
@@ -21,6 +23,12 @@
     let workingAction = '';
     let statusMessage = '';
     let errorMessage = '';
+    let seedSummary = null;
+
+    const v1Profiles = Object.entries(LEGACY_V1_SEED_PROFILES);
+    const v2Profiles = Object.entries(LEGACY_V2_SEED_PROFILES);
+    let selectedV1Profile = v1Profiles[0]?.[0] ?? 'minimal';
+    let selectedV2Profile = v2Profiles[0]?.[0] ?? 'minimal';
 
     let unsubscribeAvailability;
     let unsubscribeEnabled;
@@ -52,23 +60,26 @@
 
     const seedV1Save = () =>
         withStatus('seed-v1', async () => {
-            seedSampleV1CookieSave();
-            statusMessage = 'Seeded sample v1 cookie save. Reloading…';
-            notifyLegacyUpgradeRefresh(true);
+            const summary = seedSampleV1CookieSave(selectedV1Profile);
+            seedSummary = summary;
+            statusMessage = `Seeded ${summary.profileLabel}.`;
+            notifyLegacyUpgradeRefresh(false);
         });
 
     const seedV2Save = () =>
         withStatus('seed-v2', async () => {
-            seedSampleV2LocalStorageSave();
-            statusMessage = 'Seeded sample v2 localStorage save. Refreshing detection…';
+            const summary = seedSampleV2LocalStorageSave(selectedV2Profile);
+            seedSummary = summary;
+            statusMessage = `Seeded ${summary.profileLabel}.`;
             notifyLegacyUpgradeRefresh(false);
         });
 
     const clearSeededSaves = () =>
         withStatus('clear-seeded', async () => {
             clearSeededLegacySaves();
-            statusMessage = 'Cleared seeded legacy saves. Reloading…';
-            notifyLegacyUpgradeRefresh(true);
+            seedSummary = null;
+            statusMessage = 'Cleared seeded legacy saves.';
+            notifyLegacyUpgradeRefresh(false);
         });
 
     onMount(() => {
@@ -125,8 +136,26 @@
             <h3>Legacy save seeding</h3>
             <p>
                 Create or clear sample legacy saves to test the Legacy save upgrades flows. Actions
-                refresh the page so detection reruns immediately.
+                refresh detection so the upgrade panel updates immediately.
             </p>
+        </div>
+        <div class="qa-tools__profiles">
+            <label class="profile-select">
+                <span>V1 seed profile</span>
+                <select bind:value={selectedV1Profile}>
+                    {#each v1Profiles as [profileId, profile]}
+                        <option value={profileId}>{profile.label ?? profileId}</option>
+                    {/each}
+                </select>
+            </label>
+            <label class="profile-select">
+                <span>V2 seed profile</span>
+                <select bind:value={selectedV2Profile}>
+                    {#each v2Profiles as [profileId, profile]}
+                        <option value={profileId}>{profile.label ?? profileId}</option>
+                    {/each}
+                </select>
+            </label>
         </div>
         <div class="qa-tools__actions">
             <Chip
@@ -153,6 +182,25 @@
                 dataTestId="qa-clear-seeded"
             />
         </div>
+        {#if seedSummary}
+            <div class="seed-summary" role="status" aria-live="polite">
+                <p class="seed-summary__title">Last seeded profile: {seedSummary.profileLabel}</p>
+                <ul>
+                    <li>
+                        <strong>Cookies:</strong>
+                        {seedSummary.cookiesWritten.length
+                            ? seedSummary.cookiesWritten.join(', ')
+                            : 'None'}
+                    </li>
+                    <li>
+                        <strong>localStorage:</strong>
+                        {seedSummary.localStorageWritten.length
+                            ? seedSummary.localStorageWritten.join(', ')
+                            : 'None'}
+                    </li>
+                </ul>
+            </div>
+        {/if}
         {#if statusMessage}
             <p class="status" role="status" aria-live="polite">{statusMessage}</p>
         {/if}
@@ -285,6 +333,27 @@
         gap: 0.25rem;
     }
 
+    .qa-tools__profiles {
+        display: grid;
+        gap: 0.75rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .profile-select {
+        display: grid;
+        gap: 0.35rem;
+        font-size: 0.9rem;
+        color: #fef3c7;
+    }
+
+    .profile-select select {
+        background: rgba(249, 115, 22, 0.12);
+        border: 1px solid rgba(249, 115, 22, 0.45);
+        color: #fff7ed;
+        border-radius: 8px;
+        padding: 0.45rem 0.6rem;
+    }
+
     .qa-tools h3 {
         margin: 0;
         color: #fed7aa;
@@ -298,6 +367,26 @@
     .qa-tools__actions {
         display: grid;
         gap: 0.35rem;
+    }
+
+    .seed-summary {
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        background: rgba(34, 197, 94, 0.12);
+        border: 1px solid rgba(34, 197, 94, 0.35);
+        color: #dcfce7;
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .seed-summary__title {
+        margin: 0;
+        font-weight: 700;
+    }
+
+    .seed-summary ul {
+        margin: 0;
+        padding-left: 1.25rem;
     }
 
     .status {

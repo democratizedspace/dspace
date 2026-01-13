@@ -15,6 +15,7 @@ import {
     VERSIONS,
 } from '../src/utils/gameState.js';
 import items from '../src/pages/inventory/json/items';
+import { V1_ITEM_ID_TO_V3_UUID } from '../src/utils/legacyV1ItemIdMap.js';
 
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy').id;
 
@@ -119,15 +120,15 @@ describe('game state upgrades', () => {
 
         const migrated = await importV1V3(
             [
-                { id: 'item-1', count: 2 },
-                { id: 'item-2', count: 0 },
+                { id: '1', count: 2, source: 'item' },
+                { id: '2', count: 0, source: 'item' },
             ],
             { replaceExisting: true }
         );
 
         expect(migrated.versionNumberString).toBe(VERSIONS.V3);
         const state = loadGameState();
-        expect(state.inventory['item-1']).toBe(2);
+        expect(state.inventory[V1_ITEM_ID_TO_V3_UUID['1']]).toBe(2);
         expect(state.inventory.stale || 0).toBe(0);
         expect(state.quests.keep).toBeUndefined();
     });

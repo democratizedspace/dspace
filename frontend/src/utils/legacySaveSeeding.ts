@@ -1,9 +1,12 @@
 import { isBrowser } from './ssr.js';
 import v1Fixture from './legacySaveFixtures/legacy_v1_cookie_save.json' assert { type: 'json' };
-import v2Fixture from './legacySaveFixtures/legacy_v2_localstorage_save.json' assert { type: 'json' };
+import v2Fixture from './legacySaveFixtures/legacy_v2_localstorage_save.json' assert {
+    type: 'json',
+};
 
 const COOKIE_EXPIRY = 'Fri, 31 Dec 9999 23:59:59 GMT';
 export const LEGACY_V2_KEYS = ['gameState', 'gameStateBackup'];
+const LEGACY_V2_PRIMARY_KEY = 'gameState';
 const GAME_STATE_DB_NAME = 'dspaceGameState';
 
 type CookieFixture = {
@@ -11,6 +14,30 @@ type CookieFixture = {
     value: string | number;
     encodeValue?: boolean;
 };
+
+type LocalStorageFixture = {
+    key: string;
+    value: string | number;
+};
+
+type LegacySeedProfile = {
+    label: string;
+    cookies?: CookieFixture[];
+    localStorage?: LocalStorageFixture[];
+    gameState?: Record<string, unknown>;
+};
+
+export type LegacySeedSummary = {
+    profileId: string;
+    profileLabel: string;
+    cookiesWritten: string[];
+    localStorageWritten: string[];
+};
+
+export const LEGACY_V1_SEED_PROFILES: Record<string, LegacySeedProfile> =
+    v1Fixture?.profiles ?? {};
+export const LEGACY_V2_SEED_PROFILES: Record<string, LegacySeedProfile> =
+    v2Fixture?.profiles ?? {};
 
 const isSecureContext = () =>
     typeof location !== 'undefined' && typeof location.protocol === 'string'
@@ -36,39 +63,90 @@ const expireCookie = (name: string) => {
     document.cookie = cookieString;
 };
 
-export const seedSampleV1CookieSave = (): void => {
+const ensureProfilesAvailable = (profiles: Record<string, LegacySeedProfile>, label: string) => {
+    if (!profiles || Object.keys(profiles).length === 0) {
+        throw new Error(`No legacy ${label} seed profiles are available.`);
+    }
+};
+
+const getProfile = (profiles: Record<string, LegacySeedProfile>, profileId: string) => {
+    ensureProfilesAvailable(profiles, 'save');
+    const fallback = profiles.minimal ?? Object.values(profiles)[0];
+    const profile = profiles[profileId] ?? fallback;
+    if (!profile) {
+        throw new Error('No legacy save profiles are configured.');
+    }
+    return profile;
+};
+
+const summarizeSeed = (
+    profileId: string,
+    profileLabel: string,
+    cookiesWritten: string[],
+    localStorageWritten: string[]
+): LegacySeedSummary => ({
+    profileId,
+    profileLabel,
+    cookiesWritten,
+    localStorageWritten,
+});
+
+export const seedSampleV1CookieSave = (profileId = 'minimal'): LegacySeedSummary => {
     if (!isBrowser) {
         throw new Error('Legacy save seeding requires a browser environment.');
     }
 
-    const cookies = Array.isArray(v1Fixture?.cookies) ? (v1Fixture.cookies as CookieFixture[]) : [];
+    const profile = getProfile(LEGACY_V1_SEED_PROFILES, profileId);
+    const cookies = Array.isArray(profile?.cookies) ? profile.cookies : [];
     if (!cookies.length) {
         throw new Error('No legacy v1 cookies are available to seed.');
     }
 
     cookies.forEach(({ name, value, encodeValue = true }) => writeCookie(name, value, encodeValue));
+
+    const localStorageEntries = Array.isArray(profile?.localStorage) ? profile.localStorage : [];
+    localStorageEntries.forEach(({ key, value }) => {
+        if (!key) return;
+        localStorage.setItem(key, String(value));
+    });
+
+    return summarizeSeed(
+        profileId,
+        profile?.label ?? 'v1 legacy seed',
+        cookies.map(({ name }) => name),
+        localStorageEntries.map(({ key }) => key)
+    );
 };
 
-export const seedSampleV2LocalStorageSave = (): void => {
+export const seedSampleV2LocalStorageSave = (profileId = 'minimal'): LegacySeedSummary => {
     if (!isBrowser) {
         throw new Error('Legacy save seeding requires a browser environment.');
     }
 
-    const state = v2Fixture?.gameState;
+    const profile = getProfile(LEGACY_V2_SEED_PROFILES, profileId);
+    const state = profile?.gameState;
     if (!state || typeof state !== 'object') {
         throw new Error('No legacy v2 localStorage state is available to seed.');
     }
 
     const serialized = JSON.stringify(state);
-    LEGACY_V2_KEYS.forEach((key) => {
-        localStorage.setItem(key, serialized);
-    });
+    localStorage.setItem(LEGACY_V2_PRIMARY_KEY, serialized);
+
+    return summarizeSeed(profileId, profile?.label ?? 'v2 legacy seed', [], [
+        LEGACY_V2_PRIMARY_KEY,
+    ]);
 };
+
+const getSeededCookieNames = () =>
+    Object.values(LEGACY_V1_SEED_PROFILES)
+        .flatMap((profile) => profile?.cookies ?? [])
+        .map((cookie) => cookie.name)
+        .filter(Boolean);
 
 export const clearLegacyV1CookieSave = (): void => {
     if (!isBrowser) return;
-    const cookies = Array.isArray(v1Fixture?.cookies) ? v1Fixture.cookies : [];
-    cookies.forEach(({ name }) => expireCookie(name));
+    const cookies = getSeededCookieNames();
+    cookies.forEach((name) => expireCookie(name));
 };
 
 export const clearLegacyV2LocalStorageSave = (): void => {

@@ -105,9 +105,7 @@ implementation-ready key/value sets that mirror the v1 format above.
 acceptedCookies=true
 item-3=12.5
 item-10=2
-item-20=3
 item-22=150
-item-70=1
 currency-balance-dUSD=123.45
 ```
 
@@ -115,10 +113,8 @@ currency-balance-dUSD=123.45
 
 - **Legacy save banner** appears (v1 `item-` cookies present).
 - **/settings → Legacy save upgrades** shows a V1 card with the items listed above.
-- **Currency balance:** v3 detection only parses `item-<id>` cookies today, so
-  `currency-balance-dUSD` is **not surfaced** in the V1 UI. Verify the balance via DevTools and
-  treat this as a TODO in `detectV1CookieItems()` (`frontend/src/utils/legacySaveDetection.ts`) if
-  currency migration is required.
+- **Currency balance:** `currency-balance-dUSD` is parsed and merged into the v3 wallet inventory
+  as the `dUSD` item (UUID mapping below).
 
 ### Maximal seed (cookies + localStorage)
 
@@ -128,12 +124,9 @@ currency-balance-dUSD=123.45
 acceptedCookies=true
 item-3=12.5
 item-10=2
-item-20=3
 item-22=150
 item-70=1
 currency-balance-dUSD=123.45
-quest-1-finished=Mon Jan 01 2024 00:00:00 GMT+0000 (Coordinated Universal Time)
-checkpoint-1=2
 ```
 
 **LocalStorage to set:**
@@ -146,8 +139,8 @@ machine-lock-0=1
 **Expected v3 detection outcomes:**
 
 - Same as minimal seed for **banner + V1 card** (v1 detection keys are cookie-based).
-- `quest-` and `checkpoint-` cookies may be detected for QA purposes but remain **out of scope**
-  for migration by default.
+- `quest-` and `checkpoint-` cookies are **not seeded** by default and remain **out of scope** for
+  migration.
 - `process-` and `machine-lock-` localStorage keys are **not migrated**; they exist solely for
   timer/lock state in v1 and should not affect v3 detection.
 
@@ -158,20 +151,106 @@ machine-lock-0=1
    appears on non-settings pages and links to `/settings`.
 3. **Check V1 detection UI:** in `/settings` → **Legacy save upgrades**, confirm:
     - The V1 card lists item counts from `item-<id>` cookies.
-    - `currency-balance-dUSD` is not parsed by v1 detection (only `item-<id>` cookies are read); use
-      DevTools to confirm balances until `detectV1CookieItems()` adds currency support.
+    - `currency-balance-dUSD` is parsed and mapped to the `dUSD` inventory item in v3.
     - Quest/progress cookies (if present) are labeled “not migrated” or ignored.
 4. **Merge v1 into v3:** click **Merge v1 into current save**.
     - Inventory gains the seeded items.
-    - Wallet balances are **not** migrated today; currency cookies are not parsed or cleared by the
-      v1 flow.
-    - Detected `item-<id>` cookies are expired after merge; reloading should remove the V1 banner.
+    - Wallet balances migrate from `currency-balance-dUSD` into the `dUSD` inventory item.
+    - Detected `item-<id>` + `currency-balance-` cookies are expired after merge; reloading should
+      remove the V1 banner.
     - If you re-seed the cookies and merge again, counts should increase again (merge is additive).
 5. **Maximal seed case:** repeat with the maximal profile and confirm the same results, plus
    ensure process timers and machine locks remain ignored.
 6. **Hand-off to v2.1 → v3:** after finishing v1 validation, continue with the v2.1 → v3 QA
    checklist in the section below. That section is the canonical v2.1 migration guide and
    supersedes any earlier high-level v2 migration notes.
+
+## V1 → V3 item ID mapping (authoritative)
+
+The mapping below mirrors the in-code source of truth:
+[`frontend/src/utils/legacyV1ItemIdMap.js`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacyV1ItemIdMap.js).
+Items without a confident v3 match are explicitly excluded from migration.
+
+| v1 itemId | v1 name | v3 item UUID | v3 name | Notes |
+| --- | --- | --- | --- | --- |
+| 0 | Real Printer 1 | — | — | No v3 item with matching name; excluded from migration. |
+| 1 | Benchy | 7892ffc6-c651-445f-946b-7edc998cf389 | Benchy |  |
+| 2 | hydroponics kit | 92261497-d605-4db1-8710-953cf73d765c | hydroponics kit |  |
+| 3 | white PLA filament | 58580f6f-f3be-4be0-80b9-f6f8bf0b05a6 | white PLA filament |  |
+| 4 | Edison Model M | 8f54a592-09de-4340-829b-7288897eb4c7 | Edison Model M |  |
+| 5 | portable solar panel | 02b32152-a7b2-458e-9643-7b754c722165 | portable solar panel |  |
+| 6 | 200 Wh battery pack | cfe87611-623a-45b0-9243-422cd8a73a16 | 200 Wh battery pack |  |
+| 7 | 500W wind turbine | — | — | No v3 item with matching name; excluded from migration. |
+| 8 | Benchy Award | fe46e236-5d03-4c95-9b38-68b045a0df03 | Benchy Award |  |
+| 9 | Real Hydroponics Tub 1 | — | — | No v3 item with matching name; excluded from migration. |
+| 10 | basil seeds | affa2f80-28f1-422e-a0c8-49e51ce65a1e | basil seeds |  |
+| 11 | 3D printed model rocket | 5322b85e-b47d-4ea4-b515-318f91abc7df | 3D printed model rocket |  |
+| 12 | green PLA filament | d3590107-25ff-4de5-af3a-46e2497bfc52 | green PLA filament |  |
+| 13 | hydroponic starter plug | 78a45c1f-a791-44f1-88f4-dc5059c66c89 | hydroponic starter plug |  |
+| 14 | hydroponics nutrients | — | — | No v3 item with matching name; excluded from migration. |
+| 15 | 3D printing kit | 9605048d-ea62-4b70-9bbc-ea1ad4baaf3e | 3D printing kit |  |
+| 16 | 5 gallon bucket | 0564d441-7367-412e-b709-dad770814a39 | 5 gallon bucket |  |
+| 17 | 5 gallon bucket of tap water (chlorinated) | 156d06b2-ff10-4265-9ae9-3b7753c0206e | 5 gallon bucket of tap water (chlorinated) |  |
+| 18 | Motor Award | 2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274 | Motor Award |  |
+| 19 | Rocket Award | 946b07b7-2b2c-4507-a725-edb270d8e910 | Rocket Award |  |
+| 20 | dCarbon | d88ef09c-9191-4c18-8628-a888bb9f926d | dCarbon |  |
+| 21 | Hypercar (80% charge) | 1498a7a1-2739-4943-a32f-4c277244a825 | Hypercar (80% charge) |  |
+| 22 | dWatt | 061fd221-404a-4bd1-9432-3e25b0f17a2c | dWatt |  |
+| 23 | Hypervan | c2e3bbb6-0ded-4923-98e1-37e5ac3c7d77 | Hypervan |  |
+| 24 | dUSD | 5247a603-294a-4a34-a884-1ae20969b2a1 | dUSD |  |
+| 25 | 5 gallon bucket of tap water (dechlorinated) | — | — | No v3 item with matching name; excluded from migration. |
+| 26 | soaked hydroponic starter plug | 545aeb15-7e8b-489d-be4a-af2a59f447e1 | soaked hydroponic starter plug |  |
+| 27 | basil seedling | 5712947f-716c-4f71-b28d-fcb811631080 | basil seedling |  |
+| 28 | sink | 799ace33-1336-46c0-904a-9f16778230f1 | sink |  |
+| 29 | smart plug | a5395e29-1862-4eb7-8517-5d161635e032 | smart plug |  |
+| 30 | 3D printed nosecone | 7ca9cad5-4bc2-420b-9733-24d1e38c2324 | 3D printed nosecone |  |
+| 31 | 3D printed body tube | 1eac8955-bb70-474b-b6b0-4002ff3aa09a | 3D printed body tube |  |
+| 32 | 3D printed fincan | 563956c2-17d1-4b82-8fce-48b07dc8a71b | 3D printed fincan |  |
+| 33 | 3D printed nosecone coupler | 05c339ee-f50b-419a-804a-341f850b85e9 | 3D printed nosecone coupler |  |
+| 34 | hobbyist solid rocket motor | 4d817f1c-d78d-4fac-a514-402bce330693 | hobbyist solid rocket motor |  |
+| 35 | superglue | 7bc8b73f-6e66-469d-865f-12d0cb36677a | superglue |  |
+| 36 | kevlar cord | — | — | No v3 item with matching name; excluded from migration. |
+| 37 | rocket igniter | d2f3e684-84e2-41f9-b39d-51ee224608ac | rocket igniter |  |
+| 38 | launch controller | ae343640-c7c0-4f7e-907b-17bd87574d9b | launch controller |  |
+| 39 | launch-capable model rocket | aaa5fbca-54a1-40a5-8461-24dc2ef81d4d | launch-capable model rocket |  |
+| 40 | damaged model rocket | 63362e5c-9897-4710-8ef6-26540fabd0ca | damaged model rocket |  |
+| 41 | Rocketeer Award | c754c1e7-244c-41ec-96d4-ad468b6b3e52 | Rocketeer Award |  |
+| 42 | harvestable basil plant | 79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be | harvestable basil plant |  |
+| 43 | hydroponic grow lamp | c8946a5f-caff-4e6d-9b9b-4dbf02bcd000 | hydroponic grow lamp |  |
+| 44 | Real Hydroponics Tub 1 (ready) | — | — | No v3 item with matching name; excluded from migration. |
+| 45 | Real Hydroponics Tub 1 (nutrient deficient) | — | — | No v3 item with matching name; excluded from migration. |
+| 46 | bundle of basil leaves | 5d48cefb-fc1f-4962-b2c6-9b014151d0ae | bundle of basil leaves |  |
+| 47 | harvested basil plant | 29190faf-8581-4769-b871-f0ee283840e1 | harvested basil plant |  |
+| 48 | Green Thumb Award | 5599c466-91e9-46fb-8d8b-11388e4f8f9c | Green Thumb Award |  |
+| 49 | Solarpunk Award | 5bba251a-d223-4e22-aa30-b65238b17516 | Solarpunk Award |  |
+| 50 | Completionist Award | 1394c366-5078-49cf-b24e-c748e8428234 | Completionist Award |  |
+| 51 | aquarium (150 L) | 83fe7eee-135e-4885-9ce0-9042b9fb860a | aquarium (150 L) |  |
+| 52 | aquarium (goldfish) (150 L) | 76307a8e-4e0e-4dfa-abc2-7917d384d82c | aquarium (goldfish) (150 L) |  |
+| 53 | goldfish | 40920981-bf9f-4b89-b887-bebe7006f7dc | goldfish |  |
+| 54 | goldfish food | 8807f2f1-3ca2-48da-9b2b-1915604a63e2 | goldfish food |  |
+| 55 | aquarium filter | 6fe61da2-6aa3-447e-aad5-c65b1b8da1f1 | aquarium filter |  |
+| 56 | aquarium heater | — | — | No v3 item with matching name; excluded from migration. |
+| 57 | aquarium light | — | — | No v3 item with matching name; excluded from migration. |
+| 58 | Thermometer | — | — | No v3 item with matching name; excluded from migration. |
+| 59 | pH strip | 13167d6a-5617-4931-8a6e-6f463c6b8835 | pH strip |  |
+| 60 | 7 pH freshwater aquarium (150 L) | ca7c1069-4ba3-4339-9a10-0b690a690e60 | 7 pH freshwater aquarium (150 L) |  |
+| 61 | dSolar | b02ecff5-1f7d-4247-a09d-7d6cd6bb218a | dSolar |  |
+| 62 | gravel | — | — | No v3 item with matching name; excluded from migration. |
+| 63 | aquarium net | ee7d437d-7426-47cd-b691-386dd20f4e47 | aquarium net |  |
+| 64 | dGoldfish | 36a1168f-0109-4a8c-b70b-45f8ca582297 | dGoldfish |  |
+| 65 | Fish Friend Award | a07b75e3-f828-4cb1-81d6-1ab0e9857a79 | Fish Friend Award |  |
+| 66 | parachute | 80a83ecc-bcd2-400e-a469-8488a6453bb8 | parachute |  |
+| 67 | launch-capable model rocket (parachute) | e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec | launch-capable model rocket (parachute) |  |
+| 68 | Rocket Descent (animated) | d660dc50-7afb-4a2f-9508-a42490aae5e4 | Rocket Descent (animated) |  |
+| 69 | dLaunch | eb9c2a75-a87a-4171-8bc3-088e75936bcf | dLaunch |  |
+| 70 | dOffset | b0ac46e6-6c60-48f0-b753-d9b6ad9935a6 | dOffset |  |
+| 71 | Tree Hugger Award | 96e11500-a2ce-4531-a1b5-3a92c44fcb9d | Tree Hugger Award |  |
+| 72 | dBI | 016d4758-d114-4e04-9e6a-853db93a2eee | dBI |  |
+| 73 | EV charger | 5258f098-6cae-4ee5-8888-435b08f1675a | EV charger |  |
+| 74 | Hypercar (20% charge) | 5e283c0b-fd3c-4884-ae32-9a237f02a40e | Hypercar (20% charge) |  |
+| 75 | Hypercar (animated) | 3486ebb3-d262-4e90-8873-b19ed69afee8 | Hypercar (animated) |  |
+| 76 | 1 kWh battery pack | 7246c1c8-f22e-4d31-acd3-967f91b8626a | 1 kWh battery pack |  |
+| 77 | The grass is always greener (still) | 11a2a77a-0c43-47a9-b13a-1412ac475ce2 | The grass is always greener (still) |  |
 
 ## DSPACE v2.1 save format (commit `d956e807c26006b98227a89ca5039e4ed71fe2df`)
 
@@ -337,13 +416,18 @@ copy/pastable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
 ### Seed 1: Minimal v2 save
 
 ```json
-{ "quests": {}, "inventory": { "24": 100, "20": 5.5 }, "processes": {}, "versionNumberString": "2" }
+{
+    "versionNumberString": "2.1",
+    "inventory": { "3": 12.5, "10": 2, "24": 100 },
+    "quests": {},
+    "processes": {}
+}
 ```
 
 **Expected v3 detection outcomes (verify in QA):**
 
 - **Banner + settings card:** v3 legacy detection inspects `gameState`/`gameStateBackup`, then
-  checks `versionNumberString` or `versionNumber` for a `1`/`2` prefix.  
+  checks `versionNumberString`/`versionNumber` or a v2-like shape (quests/inventory/processes).  
   (v3: `detectLegacyArtifacts` + `LegacySaveUpgrade`.)  
   <https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveDetection.ts>  
   <https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/svelte/LegacySaveUpgrade.svelte>
@@ -363,10 +447,12 @@ real v3 IDs as needed.
 
 ```json
 {
-    "quests": { "quest/launch": { "stepId": "midpoint" } },
-    "inventory": { "24": 42, "31": 1 },
-    "processes": { "processes/benchy": { "startedAt": 1700000000000, "duration": 86400000 } },
-    "versionNumberString": "2"
+    "versionNumberString": "2.1",
+    "inventory": { "3": 5, "11": 1 },
+    "quests": { "hydroponics/basil": { "stepId": "grown" } },
+    "processes": {
+        "processes/benchy": { "startedAt": 1672531200000, "duration": 86400000 }
+    }
 }
 ```
 
@@ -390,17 +476,19 @@ real v3 IDs as needed.
 
 ```json
 {
+    "versionNumberString": "2.1",
     "quests": {
-        "quest/messy": {
+        "welcome/howtodoquests": {
             "finished": true,
-            "itemsClaimed": ["quest/messy-1-0"]
+            "itemsClaimed": ["welcome/howtodoquests-start-0"]
         }
     },
-    "inventory": { "24": 12, "": null },
-    "processes": {},
-    "versionNumberString": "2",
-    "openAI": { "apiKey": "REDACTED" },
-    "extraLegacyKey": { "note": "ignored by v3" }
+    "inventory": { "": null, "3": 1.25, "85": 1 },
+    "processes": {
+        "processes/benchy": { "startedAt": 1672531200000, "finished": true, "result": "printed" }
+    },
+    "openAI": { "apiKey": "REDACTED (scan-secrets: ignore)" },
+    "unknownKey": { "note": "legacy export drift" }
 }
 ```
 
@@ -504,8 +592,9 @@ backup and fallback for unsupported environments.
 **Detection logic:**
 
 - V1 cookies are detected on the client with `detectV1CookieItems(document.cookie)`.
-- V2 localStorage detection reads `gameState` / `gameStateBackup` and checks that
-  `versionNumberString` (or `versionNumber`) starts with `1` or `2`.
+- V2 localStorage detection reads `gameState` / `gameStateBackup` and treats a parsed JSON object
+  as legacy if it has a v1/v2 version prefix **or** the expected v2 shape (quests/inventory/processes).
+  Corrupt JSON surfaces a warning without clearing data.
 - Shared detection entry point:
   [`frontend/src/utils/legacySaveDetection.ts`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveDetection.ts)
   (`detectLegacyArtifacts`).
@@ -520,9 +609,9 @@ backup and fallback for unsupported environments.
 
 **Cleanup behavior:**
 
-- V1 cleanup expires each detected `item-<id>` cookie (see
+- V1 cleanup expires each detected `item-<id>` **and** `currency-balance-<symbol>` cookie (see
   [`frontend/src/components/svelte/LegacySaveUpgrade.svelte`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/svelte/LegacySaveUpgrade.svelte)).
-  Other legacy cookies (ex: `currency-balance-<symbol>`, `quest-`, `checkpoint-`) are not cleared.
+  Other legacy cookies (ex: `quest-`, `checkpoint-`, `acceptedCookies`) are not cleared.
 - V2 cleanup deletes `gameState` / `gameStateBackup` during v2 → v3 migrations (when IndexedDB is
   in use) and also via the **Delete v2 localStorage** action in the Legacy Save Upgrade UI.
 
@@ -538,6 +627,9 @@ QA seeding writes known-good fixtures that match the above schemas.
   [`frontend/src/utils/legacySaveSeeding.ts`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveSeeding.ts)
   reads
   [`frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json).
+- **Profiles:** v1 seeding offers **minimal** and **maximal** profiles; v2.1 seeding offers
+  **minimal**, **in-progress**, and **messy** profiles. Only `localStorage["gameState"]` is written
+  for v2.1 profiles (no exporter or backup key reliance).
 
 After seeding, use [`/settings`](/settings) → **Legacy save upgrades** to merge or replace, and
 verify detection with the global legacy banner (shared detection logic).

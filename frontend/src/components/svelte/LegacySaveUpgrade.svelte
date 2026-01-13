@@ -39,7 +39,13 @@
 
     const filterLegacyItems = (items) =>
         (Array.isArray(items) ? items : [])
-            .map(({ id, count }) => ({ id, count: normalizeCount(count) }))
+            .map(({ id, count, source, legacyKey, currencySymbol }) => ({
+                id,
+                count: normalizeCount(count),
+                source,
+                legacyKey,
+                currencySymbol,
+            }))
             .filter(({ id, count }) => id && count > 0);
 
     const describeV1Issues = (issues) => {
@@ -64,12 +70,18 @@
         usingFallback: false,
         conflict: false,
         pendingLocalState: undefined,
+        v2ParseErrors: [],
+        legacyV2SourceKey: undefined,
     };
     let statusMessage = '';
     let errorMessage = '';
     let workingAction = '';
     let qaEnabled = false;
     $: showV2V3ConflictWarning = detection.hasLegacyV2 && detection.hasV3State;
+    $: disableV2Upgrades =
+        Boolean(workingAction) ||
+        !detection.indexedDbSupported ||
+        (detection.v2ParseErrors.length > 0 && !detection.pendingLocalState);
 
     const refreshStatus = async () => {
         detection = { ...detection, loading: true };
@@ -82,6 +94,8 @@
             usesLocalStorageFallback,
             legacyV2State,
             hasLegacyV2Keys,
+            legacyV2ParseErrors,
+            legacyV2SourceKey,
         } = inspection;
 
         const hasIndexedDbState = Boolean(indexedDbState);
@@ -97,6 +111,7 @@
             (!hasIndexedDbState || !statesMatch);
 
         const pendingLocalState = treatLocalAsLegacy ? legacyV2State : undefined;
+        const v2ParseErrors = Array.isArray(legacyV2ParseErrors) ? legacyV2ParseErrors : [];
         const usingFallback =
             usesLocalStorageFallback ||
             (!indexedDbSupported && (localStorageState || legacyV2State));
@@ -133,6 +148,8 @@
             pendingLocalState,
             localVsIndexedMismatch:
                 Boolean(legacyV2State) && Boolean(indexedDbState) && !statesMatch,
+            v2ParseErrors,
+            legacyV2SourceKey,
         };
     };
 
@@ -226,7 +243,11 @@
 
     const upgradeV2 = async (mode) => {
         if (!detection.pendingLocalState) {
-            statusMessage = 'No legacy v2 localStorage save detected.';
+            statusMessage =
+                detection.v2ParseErrors.length > 0
+                    ? 'Legacy v2 localStorage data could not be parsed. Fix the JSON before ' +
+                      'migrating.'
+                    : 'No legacy v2 localStorage save detected.';
             return;
         }
         await withStatus(mode === 'replace' ? 'replace-v2' : 'merge-v2', async () => {
@@ -315,7 +336,7 @@
                     <h3>V1 (cookie saves)</h3>
                     <p>
                         {v1Items.length
-                            ? `${v1Items.length} item cookies detected`
+                            ? `${v1Items.length} inventory cookies detected`
                             : 'No v1 cookies found'}
                     </p>
                 </div>
@@ -369,16 +390,37 @@
                     <p>
                         {#if detection.pendingLocalState}
                             Legacy v2 localStorage data detected
+                        {:else if detection.v2ParseErrors.length}
+                            Legacy v2 localStorage data detected (unreadable JSON)
                         {:else}
                             No standalone v2 localStorage save detected
                         {/if}
                     </p>
+                    {#if detection.legacyV2SourceKey && detection.pendingLocalState}
+                        <p class="muted">Using {detection.legacyV2SourceKey} for migration.</p>
+                    {/if}
                 </div>
                 {#if !detection.indexedDbSupported}
                     <p class="warning">
                         IndexedDB is unavailable in this browser. You can keep using localStorage,
                         but upgrading to v3 storage is disabled here.
                     </p>
+                {/if}
+                {#if detection.v2ParseErrors.length}
+                    <div class="warning-panel" role="alert">
+                        <p class="warning-title">Legacy v2 JSON parse errors</p>
+                        <p class="warning-body">
+                            Some legacy localStorage entries could not be parsed. Fix the JSON in
+                            DevTools or export a backup before migrating.
+                        </p>
+                        <ul class="warning-list">
+                            {#each detection.v2ParseErrors as parseError}
+                                <li>
+                                    <strong>{parseError.key}:</strong> {parseError.message}
+                                </li>
+                            {/each}
+                        </ul>
+                    </div>
                 {/if}
                 {#if detection.pendingLocalState}
                     {#if detection.hasV3State}
@@ -419,7 +461,7 @@
                                 : 'Merge legacy into current'}
                             onClick={() => upgradeV2('merge')}
                             inverted={true}
-                            disabled={Boolean(workingAction) || !detection.indexedDbSupported}
+                            disabled={disableV2Upgrades}
                         />
                         <Chip
                             text={workingAction === 'replace-v2'
@@ -427,7 +469,7 @@
                                 : 'Replace current save with v2'}
                             onClick={() => upgradeV2('replace')}
                             hazard={true}
-                            disabled={Boolean(workingAction) || !detection.indexedDbSupported}
+                            disabled={disableV2Upgrades}
                         />
                         <Chip
                             text={workingAction === 'discard-v2'
@@ -529,6 +571,13 @@
     .warning-body {
         margin: 0;
         color: #fcd34d;
+    }
+
+    .warning-list {
+        margin: 0;
+        padding-left: 1.25rem;
+        color: #fde68a;
+        font-size: 0.9rem;
     }
 
     .muted {
