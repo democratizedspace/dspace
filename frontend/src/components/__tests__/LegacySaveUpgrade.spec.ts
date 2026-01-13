@@ -44,7 +44,13 @@ describe('LegacySaveUpgrade', () => {
             cheatsAvailable: false,
         });
 
-        await findByText(/3 item cookies detected/i);
+        await findByText((content, element) => {
+            if (!element?.textContent) {
+                return false;
+            }
+
+            return element.textContent.toLowerCase().includes('3 item cookies detected');
+        });
 
         const mergeButton = await findByRole('button', {
             name: /merge v1 into current save/i,

@@ -271,7 +271,7 @@ Use the table below to validate mappings during QA and when auditing legacy save
 - **v3 migration target:** v3 moves legacy v2 localStorage data into IndexedDB; QA should verify
   the v2 → v3 upgrade flow rather than relying on v2 exports. (See v3 `importV2V3` in
   `frontend/src/utils/gameState.js`.)  
-  <https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/gameState.js>
+  `frontend/src/utils/gameState.js`
 - **Versioning is manual:** `versionNumberString` exists, but is only set by v2.1 importer/update
   helpers—not automatically on every save. (**Observed in audit output**; see v2.1
   `frontend/src/utils/gameState.js` + `frontend/src/components/svelte/Updater.svelte` in the
@@ -467,17 +467,17 @@ copy/pastable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
   accepts a `versionNumberString` prefix of `1`/`2` **or** a v2-shaped payload that includes
   `inventory`, `quests`, or `processes`.  
   (v3: `detectLegacyArtifacts` + `LegacySaveUpgrade`.)  
-  <https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveDetection.ts>  
-  <https://github.com/democratizedspace/dspace/blob/main/frontend/src/components/svelte/LegacySaveUpgrade.svelte>
+  `frontend/src/utils/legacySaveDetection.ts`  
+  `frontend/src/components/svelte/LegacySaveUpgrade.svelte`
 - **Merge:** `mergeLegacyStateIntoCurrent` adds positive inventory counts, fills missing
   quest/process entries, merges settings (incoming values override current ones), grants the v2
   upgrade trophy, and persists the merged state via `persistMigratedState`.  
-  <https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/gameState.js>
+  `frontend/src/utils/gameState.js`
 - **Replace:** `importV2V3` validates the legacy state (provided or read from `gameState`),
   sanitizes `inventory[""]`, ignores unknown keys, grants the v2 upgrade trophy, and persists via
   `persistMigratedState` (which sets `versionNumberString = "3"` and clears legacy localStorage
   when IndexedDB is in use).  
-  <https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/gameState.js>
+  `frontend/src/utils/gameState.js`
 
 ## QA: v2.1 → v3 migration checklist
 
@@ -523,14 +523,14 @@ copy/pastable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
 **Code references:**
 
 - Detection + legacy parsing:
-  [`frontend/src/utils/legacySaveDetection.ts`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveDetection.ts)
+  `frontend/src/utils/legacySaveDetection.ts`
   (`detectLegacyArtifacts`) and
-  [`frontend/src/utils/legacySaveParsing.js`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveParsing.js)
+  `frontend/src/utils/legacySaveParsing.js`
   (`readLegacyV2LocalStorage`).
 - Fixture seed data:
-  [`frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json).
+  `frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`.
 - Merge/replace logic:
-  [`frontend/src/utils/gameState.js`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/gameState.js)
+  `frontend/src/utils/gameState.js`
   (`importV2V3`, `mergeLegacyStateIntoCurrent`).
 
 **DevTools inspection:**
@@ -552,10 +552,10 @@ backup and fallback for unsupported environments.
 **Code references:**
 
 - IndexedDB constants and store layout:
-  [`frontend/src/utils/gameState/common.js`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/gameState/common.js)
+  `frontend/src/utils/gameState/common.js`
   (`DB_NAME`, `DB_VERSION`, `STATE_STORE`, `BACKUP_STORE`, `ROOT_KEY`).
 - Persistence + fallback behavior:
-  [`frontend/src/utils/gameState/common.js`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/gameState/common.js)
+  `frontend/src/utils/gameState/common.js`
   (`read`, `write`, `warnFallback`).
 
 **DevTools inspection:**
@@ -573,7 +573,7 @@ backup and fallback for unsupported environments.
   accepts either a `versionNumberString`/`versionNumber` prefix of `1`/`2` or a v2-shaped payload
   containing `inventory`, `quests`, or `processes`.
 - Shared detection entry point:
-  [`frontend/src/utils/legacySaveDetection.ts`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveDetection.ts)
+  `frontend/src/utils/legacySaveDetection.ts`
   (`detectLegacyArtifacts`).
 
 **Merge vs. replace semantics:**
@@ -587,7 +587,7 @@ backup and fallback for unsupported environments.
 **Cleanup behavior:**
 
 - V1 cleanup expires each detected `item-<id>` and `currency-balance-dUSD` cookie (see
-  [`frontend/src/components/svelte/LegacySaveUpgrade.svelte`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/components/svelte/LegacySaveUpgrade.svelte)).
+  `frontend/src/components/svelte/LegacySaveUpgrade.svelte`).
   Other legacy cookies (ex: `quest-`, `checkpoint-`) are not cleared.
 - V2 cleanup deletes `gameState` / `gameStateBackup` during v2 → v3 migrations (when IndexedDB is
   in use) and also via the **Delete v2 localStorage** action in the Legacy Save Upgrade UI.
@@ -597,13 +597,13 @@ backup and fallback for unsupported environments.
 QA seeding writes known-good fixtures that match the above schemas.
 
 - **V1 seed:**
-  [`frontend/src/utils/legacySaveSeeding.ts`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveSeeding.ts)
+  `frontend/src/utils/legacySaveSeeding.ts`
   reads
-  [`frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json).
+  `frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json`.
 - **V2 seed:**
-  [`frontend/src/utils/legacySaveSeeding.ts`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveSeeding.ts)
+  `frontend/src/utils/legacySaveSeeding.ts`
   reads
-  [`frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`](https://github.com/democratizedspace/dspace/blob/main/frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json).
+  `frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`.
 
 The `/settings` seeder exposes two v1 profiles (minimal + maximal) and three v2.1 profiles
 (minimal, in-progress, messy), and reports which keys were written after each seed action.
