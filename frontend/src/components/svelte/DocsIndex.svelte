@@ -59,14 +59,14 @@
         .map((section) => ({
             title: section.title,
             links: section.links
+                .filter((link) => matchLink(link, parsedQuery))
                 .map((link) => ({
                     ...link,
                     snippet:
                         parsedQuery.keywords.length && !parsedQuery.isHasPredicate
                             ? findDocSnippet(link, parsedQuery.keywords)
                             : null,
-                }))
-                .filter((link) => matchLink(link, parsedQuery)),
+                })),
         }))
         .filter((section) => section.links.length > 0);
 
@@ -171,7 +171,7 @@
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
-        align-items: center;
+        align-items: flex-start;
     }
 
     a {

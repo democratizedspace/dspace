@@ -54,7 +54,7 @@ test.describe('Docs search', () => {
         const searchInput = page.getByRole('searchbox', { name: /search docs/i });
         await searchInput.fill('turbine');
 
-        const solarLink = page.getByRole('link', { name: 'Solar power', exact: true });
+        const solarLink = page.getByRole('link', { name: 'Solar Power', exact: true });
         await expect(solarLink).toBeVisible();
 
         const snippet = solarLink.locator('..').locator('.doc-snippet');

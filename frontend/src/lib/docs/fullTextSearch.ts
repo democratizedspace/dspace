@@ -69,25 +69,60 @@ export const extractSnippet = (bodyText: string, keyword: string): SnippetParts 
     }
 
     const loweredKeyword = normalize(keyword);
-    const words = Array.from(bodyText.matchAll(WORD_REGEX), (match) => match[0]);
+    const loweredBodyText = bodyText.toLowerCase();
+    const matchStart = loweredBodyText.indexOf(loweredKeyword);
+
+    if (matchStart === -1) {
+        return null;
+    }
+
+    const matchEnd = matchStart + loweredKeyword.length;
+    const words = Array.from(bodyText.matchAll(WORD_REGEX), (match) => ({
+        word: match[0],
+        index: match.index ?? 0,
+        end: (match.index ?? 0) + match[0].length,
+    }));
 
     if (!words.length) {
         return null;
     }
 
-    const matchIndex = words.findIndex((word) => normalize(word).includes(loweredKeyword));
+    const findWordIndex = (position: number) =>
+        words.findIndex((word) => position >= word.index && position < word.end);
 
-    if (matchIndex === -1) {
+    let startWordIndex = findWordIndex(matchStart);
+    if (startWordIndex === -1) {
+        const nextWordIndex = words.findIndex((word) => word.index > matchStart);
+        startWordIndex = nextWordIndex > 0 ? nextWordIndex - 1 : nextWordIndex;
+    }
+
+    if (startWordIndex === -1) {
         return null;
     }
 
-    const start = Math.max(0, matchIndex - 2);
-    const end = Math.min(words.length, matchIndex + 3);
+    let endWordIndex = findWordIndex(matchEnd - 1);
+    if (endWordIndex === -1) {
+        for (let index = words.length - 1; index >= 0; index -= 1) {
+            if (words[index].index < matchEnd) {
+                endWordIndex = index;
+                break;
+            }
+        }
+    }
+    endWordIndex = endWordIndex === -1 ? startWordIndex : endWordIndex;
+
+    const start = Math.max(0, startWordIndex - 2);
+    const end = Math.min(words.length, endWordIndex + 3);
+
+    const matchWord =
+        startWordIndex === endWordIndex && matchEnd <= words[startWordIndex].end
+            ? words[startWordIndex].word
+            : bodyText.slice(matchStart, matchEnd);
 
     return {
-        before: words.slice(start, matchIndex),
-        match: words[matchIndex],
-        after: words.slice(matchIndex + 1, end),
+        before: words.slice(start, startWordIndex).map((word) => word.word),
+        match: matchWord,
+        after: words.slice(endWordIndex + 1, end).map((word) => word.word),
     };
 };
 

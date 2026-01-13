@@ -4,6 +4,7 @@ import {
     extractSnippet,
     findDocSnippet,
     parseDocsQuery,
+    stripMarkdownToText,
 } from '../docs/fullTextSearch';
 
 describe('parseDocsQuery', () => {
@@ -62,6 +63,16 @@ describe('extractSnippet', () => {
             after: [],
         });
     });
+
+    it('captures punctuation-heavy keywords', () => {
+        const snippet = extractSnippet('Use Node.js for the build-time guide.', 'node.js');
+
+        expect(snippet).toEqual({
+            before: ['Use'],
+            match: 'Node.js',
+            after: ['for', 'the'],
+        });
+    });
 });
 
 describe('findDocSnippet', () => {
@@ -75,5 +86,42 @@ describe('findDocSnippet', () => {
 
         expect(snippet?.keyword).toBe('solar');
         expect(snippet?.snippetHtml).toContain('<strong>Solar</strong>');
+    });
+});
+
+describe('stripMarkdownToText', () => {
+    it('removes frontmatter, code blocks, and inline code', () => {
+        const markdown = `---
+title: Demo
+---
+
+\`\`\`js
+console.log('skip');
+\`\`\`
+
+Use \`inline\` examples.`;
+
+        expect(stripMarkdownToText(markdown)).toBe('Use examples.');
+    });
+
+    it('keeps link and image text while stripping markup', () => {
+        const markdown = `
+![Alt text](image.png)
+[Link Label](https://example.com)
+`;
+
+        expect(stripMarkdownToText(markdown)).toBe('Alt text Link Label');
+    });
+
+    it('strips html tags, headings, blockquotes, and emphasis markers', () => {
+        const markdown = `
+# Heading
+> Quote with *emphasis* and **bold** text.
+<span>HTML</span>
+`;
+
+        expect(stripMarkdownToText(markdown)).toBe(
+            'Heading Quote with emphasis and bold text. HTML'
+        );
     });
 });
