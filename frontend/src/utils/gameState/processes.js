@@ -5,6 +5,39 @@ import { durationInSeconds } from '../../utils.js';
 // Using import assertions for JSON imports
 import processes from '../../generated/processes.json' assert { type: 'json' };
 
+const PAUSE_MODEL_VERSION = 2;
+
+const getElapsedInfo = (process, now = Date.now()) => {
+    if (!process || !process.startedAt) {
+        return null;
+    }
+
+    const elapsedBeforePause = Number.isFinite(process.elapsedBeforePause)
+        ? process.elapsedBeforePause
+        : 0;
+    const isPaused = process.pausedAt !== null && process.pausedAt !== undefined;
+    let segmentElapsed = 0;
+
+    if (isPaused) {
+        if (!process.pauseModelVersion) {
+            segmentElapsed = 0;
+        } else {
+            segmentElapsed = process.pausedAt - process.startedAt;
+        }
+    } else {
+        segmentElapsed = now - process.startedAt;
+    }
+
+    segmentElapsed = Math.max(0, segmentElapsed);
+
+    return {
+        elapsed: Math.max(0, elapsedBeforePause + segmentElapsed),
+        elapsedBeforePause,
+        segmentElapsed,
+        isPaused,
+    };
+};
+
 export const hasRequiredAndConsumedItems = (processId) => {
     const process = processes.find((p) => p.id === processId);
     if (!process) {
@@ -25,9 +58,10 @@ export const startProcess = (processId) => {
 
     gameState.processes[processId] = {
         startedAt: Date.now(),
-        duration: durationInSeconds(process.duration) * 1000,
+        duration: Math.round(durationInSeconds(process.duration) * 1000),
         pausedAt: null,
         elapsedBeforePause: 0,
+        pauseModelVersion: PAUSE_MODEL_VERSION,
     };
     saveGameState(gameState);
     burnItems(process.consumeItems);
@@ -48,21 +82,18 @@ export const getProcessState = (processId) => {
         return { state: ProcessStates.NOT_STARTED, progress: 0 };
     }
 
-    let elapsed = process.elapsedBeforePause || 0;
-    if (process.pausedAt) {
-        elapsed += process.pausedAt - process.startedAt;
-    } else {
-        elapsed += Date.now() - process.startedAt;
-    }
+    const elapsedInfo = getElapsedInfo(process);
+    const elapsed = elapsedInfo ? elapsedInfo.elapsed : 0;
 
-    let progress = Math.min(1, elapsed / process.duration);
+    const durationMs = Number.isFinite(process.duration) ? process.duration : 0;
+    let progress = durationMs > 0 ? Math.min(1, elapsed / durationMs) : 1;
     progress = progress < 0.001 ? 0 : progress;
 
     if (progress >= 1) {
         return { state: ProcessStates.FINISHED, progress: 100 };
     }
 
-    if (process.pausedAt) {
+    if (elapsedInfo?.isPaused) {
         return { state: ProcessStates.PAUSED, progress: progress * 100 };
     }
 
@@ -74,7 +105,11 @@ export const getProcessStartedAt = (processId) => {
 
     const process = gameState.processes[processId];
     if (process && process.startedAt) {
-        return process.startedAt;
+        const elapsedInfo = getElapsedInfo(process);
+        if (!elapsedInfo) {
+            return process.startedAt;
+        }
+        return Date.now() - elapsedInfo.elapsed;
     }
     return undefined;
 };
@@ -84,8 +119,10 @@ export const getProcessProgress = (processId) => {
 
     const process = gameState.processes[processId];
     if (!process || !process.startedAt) return 0;
-    const elapsed = Date.now() - process.startedAt;
-    const progress = Math.min(1, elapsed / process.duration);
+    const elapsedInfo = getElapsedInfo(process);
+    const durationMs = Number.isFinite(process.duration) ? process.duration : 0;
+    const elapsed = elapsedInfo ? elapsedInfo.elapsed : 0;
+    const progress = durationMs > 0 ? Math.min(1, elapsed / durationMs) : 1;
     return progress * 100;
 };
 
@@ -139,8 +176,8 @@ export const pauseProcess = (processId) => {
     const gameState = loadGameState();
     const process = gameState.processes[processId];
     const now = Date.now();
-    process.elapsedBeforePause = (process.elapsedBeforePause || 0) + (now - process.startedAt);
     process.pausedAt = now;
+    process.pauseModelVersion = PAUSE_MODEL_VERSION;
     saveGameState(gameState);
 };
 
@@ -150,8 +187,15 @@ export const resumeProcess = (processId) => {
     if (!process || process.pausedAt === null) {
         return;
     }
+
+    const isLegacyPaused = !process.pauseModelVersion && process.pausedAt;
+    const segmentElapsed = isLegacyPaused ? 0 : process.pausedAt - process.startedAt;
+    process.elapsedBeforePause =
+        (Number.isFinite(process.elapsedBeforePause) ? process.elapsedBeforePause : 0) +
+        Math.max(0, segmentElapsed);
     process.startedAt = Date.now();
     process.pausedAt = null;
+    process.pauseModelVersion = PAUSE_MODEL_VERSION;
     saveGameState(gameState);
 };
 
@@ -177,14 +221,15 @@ export const finishProcessNow = (processId) => {
     const durationMs =
         typeof process.duration === 'number'
             ? process.duration
-            : durationInSeconds(definition.duration) * 1000;
+            : Math.round(durationInSeconds(definition.duration) * 1000);
 
     gameState.processes[processId] = {
         ...process,
-        startedAt: Date.now() - durationMs,
+        startedAt: Date.now(),
         duration: durationMs,
         pausedAt: null,
         elapsedBeforePause: durationMs,
+        pauseModelVersion: PAUSE_MODEL_VERSION,
     };
 
     saveGameState(gameState);

@@ -1,32 +1,39 @@
 <script>
-    import { onMount, onDestroy } from 'svelte';
     import { prettyPrintDuration } from '../../utils.js';
 
     export let endDate;
     export let totalDurationInSeconds;
+    export let now;
 
-    let intervalId;
     let timeRemaining;
+    let endTimestamp;
 
-    const updateTimeRemaining = () => {
-        const timeDiffInSeconds = Math.round((endDate - Date.now()) / 1000);
+    const resolveEndDate = (value) => {
+        if (value instanceof Date) {
+            return value.getTime();
+        }
+        if (typeof value === 'string' || typeof value === 'number') {
+            return new Date(value).getTime();
+        }
+        return undefined;
+    };
+
+    $: endTimestamp = resolveEndDate(endDate);
+    $: {
+        const totalSeconds = Math.max(0, Number(totalDurationInSeconds) || 0);
+        const currentTime = typeof now === 'number' ? now : Date.now();
+        const timeDiffInSeconds =
+            typeof endTimestamp === 'number'
+                ? Math.round((endTimestamp - currentTime) / 1000)
+                : 0;
         if (timeDiffInSeconds > 0) {
             timeRemaining = prettyPrintDuration(timeDiffInSeconds, false);
-        } else if (totalDurationInSeconds > 0) {
-            timeRemaining = prettyPrintDuration(totalDurationInSeconds, false);
+        } else if (totalSeconds > 0) {
+            timeRemaining = prettyPrintDuration(totalSeconds, false);
         } else {
             timeRemaining = '0s';
         }
-    };
-
-    onMount(() => {
-        updateTimeRemaining();
-        intervalId = setInterval(updateTimeRemaining, 1000);
-    });
-
-    onDestroy(() => {
-        clearInterval(intervalId);
-    });
+    }
 </script>
 
 <p>{timeRemaining} remaining</p>
