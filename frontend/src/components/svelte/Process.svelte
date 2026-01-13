@@ -31,6 +31,7 @@
     let intervalId;
     let mounted = false;
     let totalDurationSeconds;
+    let currentTime = Date.now();
     let cheatsAvailable = false;
     let cheatsEnabled = false;
     let unsubscribeCheatsAvailability;
@@ -212,6 +213,7 @@
     };
 
     const updateState = () => {
+        currentTime = Date.now();
         if (isCustomProcess || !process) {
             state = ProcessStates.NOT_STARTED;
             processStartedAt = undefined;
@@ -447,10 +449,14 @@
                         </span>
                     </Chip>
                 {/if}
-                <ProgressBar startDate={processStartedAt} {totalDurationSeconds} />
+                <ProgressBar
+                    startDate={processStartedAt}
+                    {totalDurationSeconds}
+                    {currentTime}
+                />
                 <RemainingTime
                     endDate={processStartedAt + totalDurationSeconds * 1000}
-                    totalDurationInSeconds={totalDurationSeconds}
+                    {currentTime}
                 />
             {:else if state === ProcessStates.PAUSED}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
@@ -467,10 +473,14 @@
                         </span>
                     </Chip>
                 {/if}
-                <ProgressBar startDate={processStartedAt} {totalDurationSeconds} />
+                <ProgressBar
+                    startDate={processStartedAt}
+                    {totalDurationSeconds}
+                    {currentTime}
+                />
                 <RemainingTime
                     endDate={processStartedAt + totalDurationSeconds * 1000}
-                    totalDurationInSeconds={totalDurationSeconds}
+                    {currentTime}
                 />
             {:else}
                 <Chip text="Collect" onClick={onProcessComplete} inverted={true} />
