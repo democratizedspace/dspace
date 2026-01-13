@@ -1,0 +1,12 @@
+{
+  "id": "OUT-2026-01-13-custom-item-detail-blank",
+  "date": "2026-01-13",
+  "component": "frontend/inventory",
+  "rootCause": "The BuySell component assumed every item existed in the static inventory catalog, so custom items loaded from IndexedDB left the item reference undefined and crashed when reading price during render.",
+  "resolution": "Load custom items from IndexedDB when the catalog lookup fails, guard transactions when the item is missing, and derive price state reactively so custom item detail pages render without errors.",
+  "references": [
+    "frontend/src/components/svelte/BuySell.svelte",
+    "frontend/src/utils/customcontent.js",
+    "frontend/src/pages/inventory/item/ItemPage.svelte"
+  ]
+}
