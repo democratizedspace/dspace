@@ -2,28 +2,33 @@
  * @jest-environment jsdom
  */
 import 'fake-indexeddb/auto';
+import { db } from '../src/utils/customcontent.js';
 import {
-    db,
-    exportCustomContentString,
-    importCustomContentString,
-} from '../src/utils/customcontent.js';
+    BACKUP_SCHEMA_VERSION,
+    buildCustomContentBackupData,
+    restoreCustomContentBackup,
+} from '../src/utils/customContentBackup.js';
 
 describe('custom content backup', () => {
     test('export and import round trip', async () => {
-        const idItem = await db.items.add({ id: 'i1', name: 'backup item' });
+        const idItem = await db.items.add({
+            id: 'i1',
+            name: 'backup item',
+            image: 'data:image/png;base64,TEST',
+        });
         const idProcess = await db.processes.add({ id: 'p1', title: 'backup process' });
         const idQuest = await db.quests.add({
             id: 'q1',
             title: 'backup quest',
             description: 'd',
-            image: 'x',
+            image: 'data:image/png;base64,TEST',
         });
 
-        const backup = await exportCustomContentString();
+        const backup = await buildCustomContentBackupData();
 
         await indexedDB.deleteDatabase('CustomContent');
 
-        await importCustomContentString(backup);
+        await restoreCustomContentBackup(backup);
 
         const item = await db.items.get(idItem);
         const process = await db.processes.get(idProcess);
@@ -34,48 +39,87 @@ describe('custom content backup', () => {
     });
 
     test('import invalid data throws', async () => {
-        await expect(importCustomContentString('bad')).rejects.toThrow('Invalid backup data');
+        await expect(restoreCustomContentBackup({})).rejects.toThrow('Invalid backup data');
     });
 
     test('handles empty backup gracefully', async () => {
-        const empty = btoa(JSON.stringify({ items: [], processes: [], quests: [] }));
-        await importCustomContentString(empty);
+        const empty = {
+            schemaVersion: BACKUP_SCHEMA_VERSION,
+            timestamp: new Date().toISOString(),
+            counts: { items: 0, processes: 0, quests: 0, images: 0 },
+            items: [],
+            processes: [],
+            quests: [],
+            images: [],
+        };
+        await restoreCustomContentBackup(empty);
         const items = await db.list('item');
         expect(items).toEqual([]);
     });
 
-    test('export returns base64 string', async () => {
-        const str = await exportCustomContentString();
-        expect(typeof str).toBe('string');
-        expect(() => atob(str)).not.toThrow();
+    test('export returns schema data', async () => {
+        const backup = await buildCustomContentBackupData();
+        expect(backup.schemaVersion).toBe(BACKUP_SCHEMA_VERSION);
+        expect(Object.keys(backup).sort()).toEqual(
+            ['counts', 'images', 'items', 'processes', 'quests', 'schemaVersion', 'timestamp'].sort()
+        );
     });
 
-    test('exportCustomContentString uses stable schema', async () => {
-        const encoded = await exportCustomContentString();
-        const decoded = JSON.parse(atob(encoded));
-        expect(Object.keys(decoded).sort()).toEqual(['items', 'processes', 'quests']);
-    });
-
-    test('importCustomContentString does not overwrite main game state snapshots', async () => {
+    test('restore does not overwrite main game state snapshots', async () => {
         await indexedDB.deleteDatabase('CustomContent');
         const mainState = { inventory: { safe: 1 }, versionNumberString: '3.0' };
         const serialized = JSON.stringify(mainState);
         localStorage.setItem('gameState', serialized);
         localStorage.setItem('gameStateBackup', serialized);
 
-        const encoded = btoa(
-            JSON.stringify({
-                items: [{ id: 'i-safe', name: 'custom item' }],
-                processes: [],
-                quests: [],
-            })
-        );
+        const backup = {
+            schemaVersion: BACKUP_SCHEMA_VERSION,
+            timestamp: new Date().toISOString(),
+            counts: { items: 1, processes: 0, quests: 0, images: 1 },
+            items: [{ id: 'i-safe', name: 'custom item' }],
+            processes: [],
+            quests: [],
+            images: [
+                {
+                    id: 'item:i-safe:image',
+                    entityType: 'item',
+                    entityId: 'i-safe',
+                    dataUrl: 'data:image/png;base64,TEST',
+                },
+            ],
+        };
 
-        await importCustomContentString(encoded);
+        await restoreCustomContentBackup(backup);
 
         expect(localStorage.getItem('gameState')).toBe(serialized);
         expect(localStorage.getItem('gameStateBackup')).toBe(serialized);
         const imported = await db.items.get('i-safe');
         expect(imported?.name).toBe('custom item');
+    });
+
+    test('invalid image references do not partially apply changes', async () => {
+        const invalid = {
+            schemaVersion: BACKUP_SCHEMA_VERSION,
+            timestamp: new Date().toISOString(),
+            counts: { items: 1, processes: 0, quests: 0, images: 1 },
+            items: [{ id: 'i-invalid', name: 'custom item' }],
+            processes: [],
+            quests: [],
+            images: [
+                {
+                    id: 'item:missing:image',
+                    entityType: 'item',
+                    entityId: 'missing',
+                    dataUrl: 'data:image/png;base64,TEST',
+                },
+            ],
+        };
+
+        await expect(restoreCustomContentBackup(invalid)).rejects.toThrow(
+            'Missing item for image'
+        );
+
+        const items = await db.list('item');
+        expect(items).toEqual([]);
     });
 });

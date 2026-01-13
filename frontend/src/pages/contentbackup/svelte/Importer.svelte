@@ -1,50 +1,227 @@
 <script>
     import Chip from '../../../components/svelte/Chip.svelte';
-    import { importCustomContentString } from '../../../utils/customcontent.js';
+    import { restoreCustomContentBackupFromFile } from '../../../utils/customContentBackup.js';
 
-    let importString = '';
-    const importTextareaId = 'custom-content-backup-input';
-    const importTextareaLabelId = 'custom-content-backup-label';
-    const handleImport = async () => {
+    const fileInputId = 'custom-content-backup-file';
+    const dropzoneLabelId = 'custom-content-backup-dropzone-label';
+
+    let assets = [];
+    let status = 'idle';
+    let message = '';
+    let isDragging = false;
+
+    const updateAssets = (assetId, updates) => {
+        assets = assets.map((asset) =>
+            asset.id === assetId
+                ? {
+                      ...asset,
+                      ...updates,
+                  }
+                : asset
+        );
+    };
+
+    const isValidBackupFile = (file) => {
+        if (!file) {
+            return false;
+        }
+        const lowerName = file.name.toLowerCase();
+        return lowerName.endsWith('.json') || lowerName.endsWith('.dspace-backup');
+    };
+
+    const handleImportFile = async (file) => {
+        if (!isValidBackupFile(file)) {
+            status = 'error';
+            message = 'Please choose a valid backup file.';
+            return;
+        }
+
+        status = 'running';
+        message = '';
+        assets = [];
+
         try {
-            await importCustomContentString(importString);
-        } catch (err) {
-            console.error('Failed to import custom content:', err);
+            await restoreCustomContentBackupFromFile(file, {
+                onProgress: (event) => {
+                    if (event.type === 'plan') {
+                        assets = event.assets.map((asset) => ({
+                            id: asset.id,
+                            label: asset.label,
+                            status: 'pending',
+                        }));
+                    }
+                    if (event.type === 'asset') {
+                        updateAssets(event.assetId, { status: 'done' });
+                    }
+                    if (event.type === 'error') {
+                        updateAssets(event.assetId, { status: 'error' });
+                    }
+                },
+            });
+
+            status = 'success';
+            message = `Import complete: ${file.name}`;
+        } catch (error) {
+            status = 'error';
+            message =
+                error instanceof Error ? error.message : 'Import failed. Please try again.';
+        }
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target?.files?.[0];
+        if (file) {
+            handleImportFile(file);
+        }
+    };
+
+    const handleDrop = (event) => {
+        event.preventDefault();
+        isDragging = false;
+        const file = event.dataTransfer?.files?.[0];
+        if (file) {
+            handleImportFile(file);
         }
     };
 </script>
 
 <Chip text="">
-    <div class="vertical">
-        <p id={importTextareaLabelId}>Paste your custom content backup here:</p>
-        <div class="input-block">
-            <textarea
-                id={importTextareaId}
-                aria-labelledby={importTextareaLabelId}
-                bind:value={importString}
-            ></textarea>
-        </div>
-        <Chip text="Import" on:click={handleImport} inverted={true} />
-    </div>
+    <section class="vertical" data-hydrated="true">
+        <h2>Import custom content</h2>
+        <p id={dropzoneLabelId}>
+            Drag and drop your backup file here, or click to browse.
+        </p>
+        <label
+            for={fileInputId}
+            class:dragging={isDragging}
+            class="dropzone"
+            aria-labelledby={dropzoneLabelId}
+            on:dragover|preventDefault={() => (isDragging = true)}
+            on:dragleave={() => (isDragging = false)}
+            on:drop={handleDrop}
+        >
+            <input
+                id={fileInputId}
+                type="file"
+                accept=".json,.dspace-backup,application/json"
+                on:change={handleFileChange}
+            />
+            <span>Choose backup file</span>
+        </label>
+
+        {#if status === 'success'}
+            <p class="status success" role="status">{message}</p>
+        {:else if status === 'error'}
+            <p class="status error" role="alert">{message}</p>
+        {/if}
+
+        {#if assets.length > 0}
+            <div class="progress-list" aria-live="polite">
+                {#each assets as asset}
+                    <div class="progress-item" data-status={asset.status}>
+                        <div class="progress-header">
+                            <span>{asset.label}</span>
+                            <span class="status-label">
+                                {asset.status === 'done'
+                                    ? 'Done'
+                                    : asset.status === 'error'
+                                      ? 'Error'
+                                      : 'Queued'}
+                            </span>
+                        </div>
+                        <progress
+                            max="1"
+                            value={asset.status === 'done' || asset.status === 'error' ? 1 : 0}
+                        />
+                    </div>
+                {/each}
+            </div>
+        {/if}
+    </section>
 </Chip>
 
 <style>
+    h2 {
+        margin: 0;
+    }
+
     p {
         font-weight: normal;
     }
-    textarea {
-        width: 100%;
-        height: 200px;
-    }
-    .input-block {
-        background-color: #f5f5f5;
-        color: #000;
-        margin: 10px;
-        padding: 10px;
-        border-radius: 10px;
-    }
+
     .vertical {
         display: flex;
         flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .dropzone {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed #a5a5a5;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.6);
+        transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .dropzone.dragging {
+        border-color: #2f7af8;
+        background: rgba(47, 122, 248, 0.1);
+    }
+
+    .dropzone input {
+        display: none;
+    }
+
+    .status {
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        background: rgba(0, 0, 0, 0.08);
+        margin: 0;
+    }
+
+    .status.success {
+        background: rgba(0, 130, 60, 0.15);
+        color: #0b4d2a;
+    }
+
+    .status.error {
+        background: rgba(190, 0, 0, 0.15);
+        color: #5a0000;
+    }
+
+    .progress-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .progress-item {
+        background-color: #f5f5f5;
+        color: #000;
+        padding: 0.75rem;
+        border-radius: 0.75rem;
+    }
+
+    .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .status-label {
+        font-size: 0.85rem;
+        opacity: 0.7;
+    }
+
+    progress {
+        width: 100%;
+        height: 0.75rem;
     }
 </style>

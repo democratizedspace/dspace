@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { clearUserData, waitForHydration } from './test-helpers';
@@ -16,23 +15,69 @@ test.describe('Custom content backup', () => {
         await page.goto('/contentbackup');
         await waitForHydration(page);
 
-        const exporter = page.locator('code');
-        await expect(exporter).toBeVisible();
-        await expect(exporter).not.toHaveText(/^\s*$/);
-        await expect(page.getByRole('button', { name: /copy/i })).toBeVisible();
-
-        const importTextarea = page.getByRole('textbox', {
-            name: /paste your custom content backup here/i,
+        await page.evaluate(async () => {
+            await new Promise<void>((resolve, reject) => {
+                const request = indexedDB.open('CustomContent', 3);
+                request.onupgradeneeded = () => {
+                    const db = request.result;
+                    if (!db.objectStoreNames.contains('items')) {
+                        db.createObjectStore('items', { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('processes')) {
+                        db.createObjectStore('processes', { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('quests')) {
+                        db.createObjectStore('quests', { keyPath: 'id' });
+                    }
+                };
+                request.onerror = () => reject(request.error ?? new Error('open failed'));
+                request.onsuccess = () => {
+                    const db = request.result;
+                    const tx = db.transaction(['items', 'processes', 'quests'], 'readwrite');
+                    tx.objectStore('items').put({
+                        id: 'e2e-item',
+                        name: 'E2E Item',
+                        description: 'backup item',
+                        image: 'data:image/png;base64,TEST',
+                    });
+                    tx.objectStore('processes').put({
+                        id: 'e2e-process',
+                        title: 'E2E Process',
+                        duration: 60,
+                    });
+                    tx.objectStore('quests').put({
+                        id: 'e2e-quest',
+                        title: 'E2E Quest',
+                        description: 'backup quest',
+                        image: 'data:image/png;base64,TEST',
+                        custom: true,
+                    });
+                    tx.oncomplete = () => {
+                        db.close();
+                        resolve();
+                    };
+                    tx.onerror = () => {
+                        db.close();
+                        reject(tx.error ?? new Error('seed failed'));
+                    };
+                };
+            });
         });
-        await expect(importTextarea).toBeVisible();
 
-        const fixtureRaw = readFileSync(FIXTURE_PATH, 'utf-8');
-        const base64Payload = Buffer.from(fixtureRaw).toString('base64');
+        const prepareButton = page.getByRole('button', { name: /prepare backup/i });
+        await prepareButton.click();
+        await expect(prepareButton).toBeDisabled();
 
-        await importTextarea.fill(base64Payload);
-        await expect(importTextarea).toHaveValue(base64Payload);
+        await expect(page.getByText(/Item: E2E Item/i)).toBeVisible();
+        await expect(page.getByText(/Process: E2E Process/i)).toBeVisible();
+        await expect(page.getByText(/Quest: E2E Quest/i)).toBeVisible();
 
-        await page.getByRole('button', { name: /import/i }).click();
+        await expect(page.getByRole('button', { name: /download backup/i })).toBeVisible();
+
+        const fileInput = page.locator('input[type="file"]');
+        await fileInput.setInputFiles(FIXTURE_PATH);
+
+        await expect(page.getByRole('status')).toContainText('Import complete');
 
         await expect
             .poll(() =>
