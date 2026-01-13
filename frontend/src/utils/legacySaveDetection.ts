@@ -1,8 +1,10 @@
 import { isBrowser } from './ssr.js';
 import { readLegacyV2LocalStorage } from './legacySaveParsing.js';
+import { V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID } from './legacyV1ItemIdMap.js';
 
 const LEGACY_ITEM_COOKIE_REGEX = /^item-\d+$/;
 const LEGACY_CURRENCY_COOKIE_PREFIX = 'currency-balance-';
+const SUPPORTED_CURRENCY_SYMBOLS = new Set(Object.keys(V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID));
 
 type LegacyCookieIssue = {
     name: string;
@@ -82,6 +84,14 @@ export const detectV1CookieItems = (cookieString = '') => {
                     name: decodedName,
                     value: decodedValue,
                     reason: 'missing currency symbol',
+                });
+                return;
+            }
+            if (!SUPPORTED_CURRENCY_SYMBOLS.has(symbol)) {
+                invalidCurrency.push({
+                    name: decodedName,
+                    value: decodedValue,
+                    reason: 'unsupported currency symbol (ignored)',
                 });
                 return;
             }

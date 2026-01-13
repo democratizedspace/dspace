@@ -49,6 +49,24 @@ describe('legacy save seeding utilities', () => {
         });
     });
 
+    test('seedLegacyV1Save and seedLegacyV2LocalStorageSave return stable summaries', () => {
+        const v1Summary = seedLegacyV1Save('minimal');
+        const v2Summary = seedLegacyV2LocalStorageSave('minimal');
+
+        expect(v1Summary.cookies).toEqual([
+            'acceptedCookies',
+            'item-3',
+            'item-10',
+            'item-20',
+            'item-22',
+            'item-70',
+            'currency-balance-dUSD',
+        ]);
+        expect(v1Summary.localStorageKeys).toEqual([]);
+        expect(v2Summary.cookies).toEqual([]);
+        expect(v2Summary.localStorageKeys).toEqual(['gameState']);
+    });
+
     test('seedLegacyV1Save writes maximal localStorage keys', () => {
         seedLegacyV1Save('maximal');
 

@@ -91,12 +91,17 @@ describe('detectV1CookieItems', () => {
 
     test('parses currency balances and ignores invalid entries', () => {
         const result = detectV1CookieItems(
-            'currency-balance-dUSD=123.45; currency-balance-dUSDx=abc; item-3=1'
+            'currency-balance-dUSD=123.45; currency-balance-dUSDx=abc; currency-balance-eEUR=5; item-3=1'
         );
 
         expect(result.currencyBalances).toEqual([{ symbol: 'dUSD', balance: 123.45 }]);
         expect(result.invalidCurrency).toEqual([
             { name: 'currency-balance-dUSDx', value: 'abc', reason: 'non-numeric value' },
+            {
+                name: 'currency-balance-eEUR',
+                value: '5',
+                reason: 'unsupported currency symbol (ignored)',
+            },
         ]);
     });
 });

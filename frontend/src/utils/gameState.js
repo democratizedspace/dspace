@@ -151,6 +151,17 @@ const mapLegacyV1Items = (itemList, currencyBalances = []) => {
         mapped.push({ id: mappedId, parsedCount });
     });
 
+    if (
+        Array.isArray(currencyBalances) &&
+        currencyBalances.length > 0 &&
+        !V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID.dUSD
+    ) {
+        console.warn(
+            'Legacy currency migration skipped: dUSD item missing from v3 catalog mapping.'
+        );
+        return mapped;
+    }
+
     (Array.isArray(currencyBalances) ? currencyBalances : []).forEach(({ symbol, balance }) => {
         const mappedId = V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID[symbol];
         const parsedCount = normalizeCount(balance);
