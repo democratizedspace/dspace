@@ -22,10 +22,10 @@ test.describe('Docs search', () => {
         await expect(
             page.getByRole('link', { name: 'Quest Schema Requirements', exact: true })
         ).toBeVisible();
-        await expect(page.getByRole('link', { name: 'About', exact: true })).toHaveCount(0);
+        await expect(page.getByRole('link', { name: 'Solar power', exact: true })).toHaveCount(0);
 
         await searchInput.fill('');
-        await expect(page.getByRole('link', { name: 'About', exact: true })).toBeVisible();
+        await expect(page.getByRole('link', { name: 'Solar power', exact: true })).toBeVisible();
     });
 
     test('supports has: feature operators for docs content', async ({ page }) => {
@@ -54,7 +54,7 @@ test.describe('Docs search', () => {
         const searchInput = page.getByRole('searchbox', { name: /search docs/i });
         await searchInput.fill('turbine');
 
-        const solarLink = page.getByRole('link', { name: 'Solar Power', exact: true });
+        const solarLink = page.getByRole('link', { name: 'Solar power', exact: true });
         await expect(solarLink).toBeVisible();
 
         const snippet = solarLink.locator('..').locator('.doc-snippet');
