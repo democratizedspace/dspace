@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { exportGameStateString } from '../frontend/src/utils/gameState/common.js';
-import { exportCustomContentString } from '../frontend/src/utils/customcontent.js';
+import { prepareCustomContentBackup } from '../frontend/src/utils/customContentBackup.js';
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
 const readDoc = (relativePath: string) =>
@@ -107,16 +107,19 @@ describe('backups doc alignment', () => {
             processes: baseState.processes,
         });
 
-        const customExport = await exportCustomContentString();
-        const decodedCustom = decodeBase64Json(customExport);
+        const { blob } = await prepareCustomContentBackup();
+        const decodedCustom = JSON.parse(await blob.text());
         expect(decodedCustom).toMatchObject({
+            schemaVersion: expect.any(Number),
             items: expect.any(Array),
             processes: expect.any(Array),
             quests: expect.any(Array),
+            images: expect.any(Array),
         });
 
         expect(doc).toMatch(/Base64-encoded JSON snapshot/i);
         expect(doc).toMatch(/quest progress, inventory, and processes/i);
+        expect(doc).toMatch(/Download backup/i);
         expect(doc).toMatch(/items, quests, and processes/i);
     });
 });

@@ -31,12 +31,14 @@ control (password manager, notes app, or version-controlled gist).
 ## Exporting and importing custom content
 
 1. Open [Custom Content Backup](/contentbackup).
-2. Click **Copy** to export only user-created items, quests, and processes as a Base64-encoded JSON
-   string.
-3. To restore, paste the saved string and choose **Import**.
+2. Click **Prepare backup** to package user-created items, quests, processes, and their required
+   images into a portable file.
+3. When processing finishes, choose **Download backup** and store the file somewhere safe.
+4. To restore, drag and drop the backup file (or browse to it) and wait for the success message.
 
-The encoded JSON contains `items`, `processes`, and `quests` keys. Use this path if you want to move
-custom creations between profiles without touching your main save.
+The backup includes a JSON manifest with `schemaVersion`, timestamps, and the `items`, `processes`,
+`quests`, and `images` payloads. Use this path if you want to move custom creations between profiles
+without touching your main save.
 
 ## Automated backups with Cloud Sync
 
@@ -56,8 +58,7 @@ failsafe.
 
 ## Troubleshooting
 
-- **Import fails:** Ensure the string is complete (no trimmed whitespace) and comes from the matching
-  export path (gamesaves vs. custom content).
+- **Import fails:** Ensure the backup file is complete and comes from the matching export path
+  (gamesaves vs. custom content).
 - **Old backup, new client:** The schema is backward compatible. If a restore still fails, try a
   newer backup or contact support via the in-app **Help → Contact support** option.
-- **Clipboard blocked:** Manually select and copy the text area contents; the export remains valid.
