@@ -1,9 +1,9 @@
 <script>
     import { onMount } from 'svelte';
-    import Process from '../../components/svelte/Process.svelte';
     import Chip from '../../components/svelte/Chip.svelte';
     import processes from '../../generated/processes.json';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
+    import ProcessView from '../process/[slug]/ProcessView.svelte';
 
     let mounted = false;
     let customProcesses = [];
@@ -51,7 +51,7 @@
                 {#each allProcesses as process (normalizeProcessId(process?.id))}
                     {@const processId = normalizeProcessId(process?.id)}
                     <div class="process-row" data-process-id={processId}>
-                        <Process {processId} processData={process} />
+                        <ProcessView slug={processId} />
                     </div>
                 {/each}
             {/if}
