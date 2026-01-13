@@ -142,7 +142,10 @@ test('renders instant finish chip when cheats are enabled', async () => {
     expect(chip).toBeTruthy();
 
     await fireEvent.click(chip);
-    expect(finishProcessNow).toHaveBeenCalledWith('p1');
+    expect(finishProcessNow).toHaveBeenCalledWith(
+        'p1',
+        expect.objectContaining({ id: 'p1' })
+    );
 });
 
 test('renders instant finish chip for paused processes', async () => {
@@ -157,10 +160,13 @@ test('renders instant finish chip for paused processes', async () => {
     expect(chip).toBeTruthy();
 
     await fireEvent.click(chip);
-    expect(finishProcessNow).toHaveBeenCalledWith('p1');
+    expect(finishProcessNow).toHaveBeenCalledWith(
+        'p1',
+        expect.objectContaining({ id: 'p1' })
+    );
 });
 
-test('shows custom process note when rendering a custom process', async () => {
+test('renders custom process controls when rendering a custom process', async () => {
     const customProcess = {
         id: 'custom-1',
         title: 'Custom Process',
@@ -171,16 +177,19 @@ test('shows custom process note when rendering a custom process', async () => {
         custom: true,
     };
 
-    const { getByText, queryByTestId } = render(Process, {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+
+    const { getByText, queryByTestId, queryByText } = render(Process, {
         processId: 'custom-1',
         processData: customProcess,
     });
 
     await tick();
     expect(getByText('Duration: 5s')).toBeTruthy();
+    expect(getByText('Start')).toBeTruthy();
     expect(
-        getByText('Custom processes are displayed for reference and managed separately.')
-    ).toBeTruthy();
+        queryByText('Custom processes are displayed for reference and managed separately.')
+    ).toBeNull();
     expect(queryByTestId('qa-instant-finish-chip')).toBeNull();
 });
 
@@ -195,6 +204,8 @@ test('prefers provided process data over built-in catalog lookup', async () => {
         custom: true,
     };
 
+    stateInfo.state = ProcessStates.NOT_STARTED;
+
     const { getByText, queryByText } = render(Process, {
         processId: 'p1',
         processData: customOverride,
@@ -202,10 +213,7 @@ test('prefers provided process data over built-in catalog lookup', async () => {
 
     await tick();
     expect(getByText('Override Process')).toBeTruthy();
-    expect(
-        getByText('Custom processes are displayed for reference and managed separately.')
-    ).toBeTruthy();
-    expect(queryByText('Start')).toBeNull();
+    expect(queryByText('Start')).toBeTruthy();
 });
 
 test('renders fallback message when process details are unavailable', async () => {
