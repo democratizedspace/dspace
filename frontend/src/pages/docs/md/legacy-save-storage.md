@@ -172,25 +172,255 @@ machine-lock-0=1
 6. **Hand-off to v2 → v3:** v2 migration audit lives elsewhere; keep this run focused on v1 data
    before testing any v2 localStorage conversions.
 
+## DSPACE v2.1 save format (commit `d956e807c26006b98227a89ca5039e4ed71fe2df`)
+
+**High-level summary (v3-focused)**
+
+- **Primary save blob:** v2.1 persists everything in `localStorage["gameState"]` (single JSON blob).
+  There is **no IndexedDB usage** in v2.1. (Observed in audit output; see v2.1 links below.)
+- **Migration note:** v3 migrates from legacy localStorage into IndexedDB. Because v2.1 has
+  known exporter/importer bugs, **treat `gameState` as the source of truth** during v2 → v3 QA
+  (avoid validating against v2.1 exports).
+- **Versioning:** v2.1 does not auto-manage versions. `versionNumberString` is only set by the
+  v1 → v2 importer or the updater component.
+
+**Primary v2.1 source files (commit `d956e807...`):**
+
+- `gameState` load/save + base64 export:
+  [`frontend/src/utils/gameState/common.js`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/utils/gameState/common.js)
+- Version helpers + importer:
+  [`frontend/src/utils/gameState.js`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/utils/gameState.js)
+- Version updater component:
+  [`frontend/src/components/svelte/Updater.svelte`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/components/svelte/Updater.svelte)
+
+### localStorage schema table (authoritative)
+
+| Key (or pattern) | Example | Value format / schema | Meaning | Written by (v2.1 file + function) | Read by (v2.1 file + function) | Notes / edge cases |
+| --- | --- | --- | --- | --- | --- | --- |
+| `gameState` | `{ "quests": {}, "inventory": {}, "processes": {} }` | JSON object (see deep schema below) | Canonical v2.1 save | `frontend/src/utils/gameState/common.js` `saveGameState()` | `frontend/src/utils/gameState/common.js` `loadGameState()` | No built-in versioning. Exporter reads a module-level snapshot that can be stale. |
+| `avatarUrl` | `https://.../pfp.jpg` | String URL | Selected avatar | `frontend/src/components/svelte/AvatarPicker.svelte` | `frontend/src/components/svelte/Avatar.svelte`, `Menu.svelte`, `QuestChat.svelte` | Stored separately from `gameState`. |
+| `ethAddress` | `0x1234...` | String | Connected wallet address | `frontend/src/components/svelte/EthProfile.svelte` | `frontend/src/components/svelte/EthProfile.svelte` | Stored separately from `gameState`. |
+| `sessionStorage` | — | N/A | None found in v2.1 | — | — | No sessionStorage usage in the v2.1 audit. |
+
+**No IndexedDB:** `indexedDB` is not referenced in the v2.1 codebase (audit result).
+
+### `gameState` deep schema (explicit)
+
+```json
+{
+  "quests": {
+    "<questId>": {
+      "finished": true,
+      "stepId": "string-or-number",
+      "itemsClaimed": ["<questId>-<stepId>-<optionIndex>"]
+    }
+  },
+  "inventory": {
+    "<itemId>": 0.0
+  },
+  "processes": {
+    "<processId>": { "startedAt": 1700000000000, "duration": 600000 }
+  },
+  "versionNumberString": "1" | "2",
+  "openAI": { "apiKey": "string" }
+}
+```
+
+Notes:
+
+- **Inventory counts are floats** (counts are added/subtracted with `parseFloat` in v2.1).
+- **Process timers** use epoch milliseconds + duration in milliseconds.
+- **Quest `itemsClaimed`** is used as a per-step duplication guard in v2.1 (array of
+  `<questId>-<stepId>-<optionIndex>` keys).
+- **Extra keys are tolerated** in v2.1 (imports/cleanup can inject unexpected entries).
+
+### Cookie usage in v2.1 (and v1 residue)
+
+| Cookie key / pattern | Example | Used by v2.1? | Purpose | Evidence (v2.1 commit link) | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `acceptedCookies` | `acceptedCookies=true` | Legacy only | v1 cookie consent flag | [`frontend/src/utils.js`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/utils.js) | Not referenced elsewhere in v2.1 UI. |
+| `item-<id>` | `item-24=100` | **Yes** | v1 inventory cookie import | [`frontend/src/utils.js`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/utils.js) | Only v1 cookies read by v2.1 importer. |
+| `currency-balance-<symbol>` | `currency-balance-dUSD=5` | No | v1 currency helper exists | [`frontend/src/utils.js`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/utils.js) | v2.1 does not import these balances. |
+| `longTaskDone` | `longTaskDone=<date>` | Yes (isolated) | Task timer cookie | [`frontend/src/pages/task.astro`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/task.astro) | Only used on `/task`. |
+| *(cleanup: all cookies)* | — | Yes | Delete all cookies on v1 cleanup | [`frontend/src/pages/import/[newVersion]/[oldVersion]/done.astro`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/import/[newVersion]/[oldVersion]/done.astro) | Deletes **all cookies**, not just v1 keys. |
+
+## v1 → v2 importer behavior (v2.1)
+
+**Route + location**
+
+- Route: `/import/v2/v1`.
+- Astro page: `frontend/src/pages/import/[newVersion]/[oldVersion].astro` (loads importer).
+- Svelte importer UI: `frontend/src/pages/import/svelte/Importer.svelte`.
+
+**Trigger conditions + UI gating**
+
+- Importer reads cookies via `getCookieItems(cookie)` and blocks if `getVersionNumber() === "2"`.
+- Menu entry **Import from v1** is hidden if the player owns item 85 (Early Adopter Token) or 86
+  (Newcomer Token).
+
+**Inputs**
+
+- **Only** v1 `item-<id>` cookies (positive numeric values) are parsed and passed to import.
+- v1 currency cookies (`currency-balance-<symbol>`) are ignored by the importer.
+
+**Outputs**
+
+- Adds the **Early Adopter Token** (item 85) plus every imported cookie item.
+- Sets `versionNumberString = "2"`.
+- **No v1 data** path: if zero items are found, the UI offers the **Newcomer Token** (item 86)
+  instead of importing.
+- **Item ID mapping:** v2.1 uses the same numeric item IDs as v1; the importer does no remapping.
+
+**Scope exclusions (not imported)**
+
+- Currency balances (`currency-balance-*` cookies).
+- Quest progress or checkpoints.
+- Process timers.
+- `acceptedCookies` flag.
+
+**Known issues / pitfalls (v2.1)**
+
+- **Importer overwrite bug:** `importV1V2()` loads `gameState`, adds items, sets version, then
+  calls `saveGameState(gameState)` using the **pre-import snapshot**, which can overwrite the
+  new items and version flag.
+- **Cleanup writes an empty-id inventory entry** (`{ id: "" }`) during the “Remove v1” step.
+- **Cleanup deletes every cookie**, not just legacy v1 cookies.
+- **Base64 export can be stale:** `exportGameStateString()` reads a module-level snapshot that is
+  not updated after initialization.
+
+**Evidence links (v2.1 commit, pinned)**
+
+- Import route + cookie parsing:
+  [`frontend/src/pages/import/[newVersion]/[oldVersion].astro`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/import/[newVersion]/[oldVersion].astro),
+  [`frontend/src/utils.js`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/utils.js)
+- Importer UI behavior + newcomer item reward:
+  [`frontend/src/pages/import/svelte/Importer.svelte`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/import/svelte/Importer.svelte)
+- Import implementation + version flag:
+  [`frontend/src/utils/gameState.js`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/utils/gameState.js)
+- Menu gating for items 85/86:
+  [`frontend/src/config/menu.json`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/config/menu.json)
+- Cleanup cookie wipe + empty-id item:
+  [`frontend/src/pages/import/[newVersion]/[oldVersion]/done.astro`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/import/[newVersion]/[oldVersion]/done.astro),
+  [`frontend/src/pages/import/svelte/Cleanup.svelte`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/pages/import/svelte/Cleanup.svelte)
+- Base64 export snapshot:
+  [`frontend/src/utils/gameState/common.js`](https://github.com/democratizedspace/dspace/blob/d956e807c26006b98227a89ca5039e4ed71fe2df/frontend/src/utils/gameState/common.js)
+
+## Known v2.1 pitfalls relevant to v2 → v3 migration
+
+- **Stale exporter output:** v2.1 `exportGameStateString()` can return stale data. QA should
+  validate migration against `localStorage["gameState"]`, not against v2.1 exports.
+- **Importer overwrite bug:** some real users may have partial v2.1 states (missing items or
+  missing `versionNumberString`). v3 migration should tolerate missing or partial keys.
+- **Unknown keys:** v2.1 writes ad-hoc keys under `gameState` (including empty-string inventory
+  IDs from cleanup). v3 should ignore unknown keys safely.
+- **Cookie wipe:** v1 → v2 cleanup deletes every cookie, so v2.1 saves after import may have
+  missing or unexpected cookie artifacts.
+
+## v2.1 seed profiles for `/settings` (v2 localStorage)
+
+Seed these directly into `localStorage["gameState"]` to exercise the v2 → v3 upgrade UI.
+All profiles include `versionNumberString: "2"` so the v3 legacy banner can detect them.
+Detection uses `detectLegacyArtifacts`, which only flags v2 localStorage when the version string
+starts with `1` or `2`.
+
+### Minimal v2 save (int + float counts)
+
+```json
+{"quests":{},"inventory":{"24":100,"20":5.5},"processes":{},"versionNumberString":"2"}
+```
+
+**Expected v3 detection outcome**
+
+- **Legacy save banner** should appear (v2 localStorage detected).
+- `/settings` → **Legacy save upgrades** shows **V2 (localStorage saves)** with
+  “Legacy v2 localStorage data detected.”
+
+**Expected merge/replace**
+
+- **Merge:** inventory counts add to the current v3 inventory; existing quests/processes remain.
+- **Replace:** v3 save becomes the v2 inventory and empty quests/processes shown above.
+- **Wallet UI:** confirm dUSD (item 24) matches the inventory count (must verify in QA).
+
+### In-progress process save
+
+```json
+{
+  "quests": { "launch/intro": { "stepId": "2" } },
+  "inventory": { "24": 250, "3": 12 },
+  "processes": { "processes/benchy": { "startedAt": 1705600000000, "duration": 900000 } },
+  "versionNumberString": "2"
+}
+```
+
+**Expected v3 detection outcome**
+
+- Same banner + V2 card as the minimal profile.
+
+**Expected merge/replace**
+
+- **Merge:** inventory adds; existing v3 quests/processes are kept (v2 quest/process entries
+  only fill gaps).
+- **Replace:** v3 state becomes the v2 quest step + process timer above.
+- **Wallet UI:** confirm dUSD (item 24) matches the inventory count (must verify in QA).
+
+### “Messy real-world” save (unknown keys + cleanup artifact)
+
+```json
+{
+  "quests": { "hydroponics/start": { "finished": true, "itemsClaimed": ["hydroponics/start-1-0"] } },
+  "inventory": { "": null, "24": 42, "20": 0.25 },
+  "processes": {},
+  "versionNumberString": "2",
+  "openAI": { "apiKey": "REDACTED" },
+  "unexpectedKey": { "note": "legacy data drift" }
+}
+```
+
+**Expected v3 detection outcome**
+
+- Same banner + V2 card as above.
+
+**Expected merge/replace**
+
+- **Merge:** inventory adds only valid counts; unknown keys are ignored; quests/processes keep
+  existing v3 entries where present.
+- **Replace:** v3 state should ignore unknown keys and treat empty-string inventory as a
+  no-op (verify in QA).
+- **Wallet UI:** confirm dUSD (item 24) matches the inventory count (must verify in QA).
+
+> **Note:** Do not store real secrets in docs. The `openAI.apiKey` field is included to test
+> v2 parsing only.
+
+## QA: v2.1 → v3 migration checklist
+
+1. **Start clean:** clear IndexedDB + localStorage. Confirm **no legacy banner** appears.
+2. **Seed each v2 profile** above into `localStorage["gameState"]`; reload.
+3. **Verify detection UI** on `/settings` → **Legacy save upgrades**:
+    - V2 card reads **Legacy v2 localStorage data detected**.
+    - Legacy banner appears on non-settings pages.
+4. **Merge into existing v3 save:** ensure inventory counts are additive and existing quests +
+   processes are preserved (no overwrite).
+5. **Replace into existing v3 save:** ensure v3 state matches the legacy v2 payload exactly
+   (except for v3 defaults like settings/meta).
+6. **Persistence check:** confirm v3 writes to IndexedDB and **does not delete** v2 localStorage
+   unless the **Discard legacy v2 data** action is used. (Must verify in QA.)
+7. **Failure cases:**
+    - Invalid JSON in `gameState` should show a clear UX without crashing or deleting data
+      (must verify banner behavior).
+    - Partial `gameState` (missing quests/inventory/processes) should migrate with defaults.
+    - Large inventories / many items should still migrate successfully.
+
 ## V1 storage (cookies) vs v2/v3
 
 ### V2 storage (localStorage)
 
-**Schema:** A JSON object stored under two keys.
+**Schema:** v2.1 uses a single JSON blob in `localStorage["gameState"]`. See the
+**DSPACE v2.1 save format** section above for the authoritative schema and examples.
 
-- **Keys:** `gameState` and `gameStateBackup`.
-- **Payload:** JSON with `versionNumberString` beginning with `2`, plus `inventory`, `quests`,
-  `processes`, `settings`, and `_meta`.
-- **Example payload:**
-    ```json
-    {
-        "versionNumberString": "2.1",
-        "inventory": { "3": 120, "10": 2 },
-        "quests": { "welcome/howtodoquests": { "finished": true } },
-        "processes": { "processes/benchy": { "finished": true } },
-        "_meta": { "lastUpdated": 1672534800000 }
-    }
-    ```
+**Keys used in v3 detection:**
+
+- `gameState` (legacy v2 primary key).
+- `gameStateBackup` (v3 backup key; may be absent in v2.1).
 
 **Code references:**
 
