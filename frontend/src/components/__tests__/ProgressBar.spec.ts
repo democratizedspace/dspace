@@ -27,3 +27,27 @@ test('does not advance without parent updates', async () => {
     expect(getByText(/Progress:/).textContent).toBe(initialProgress);
     expect(getByText(/Time Left:/).textContent).toBe(initialTimeLeft);
 });
+
+test('marks duration zero as complete and dispatches once', async () => {
+    vi.useFakeTimers();
+    const startDate = new Date('2026-01-13T00:00:00.000Z');
+    vi.setSystemTime(startDate);
+
+    const { component, getByText } = render(ProgressBar, {
+        startDate,
+        totalDurationSeconds: 1,
+        currentTime: startDate.getTime(),
+    });
+
+    const onComplete = vi.fn();
+    component.$on('fillComplete', onComplete);
+
+    await tick();
+    expect(onComplete).toHaveBeenCalledTimes(0);
+
+    await component.$set({ totalDurationSeconds: 0 });
+    await tick();
+
+    expect(onComplete).toHaveBeenCalledTimes(1);
+    expect(getByText(/Progress:/).textContent).toContain('100.00%');
+});

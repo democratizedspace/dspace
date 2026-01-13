@@ -97,4 +97,19 @@ describe('process pause/resume timing', () => {
         expect(state.progress).toBeCloseTo(30, 0);
         expect(getProcessProgress('p1')).toBeCloseTo(30, 0);
     });
+
+    test('treats invalid records as not started', () => {
+        gameState.processes.p1 = {
+            startedAt: baseTime.getTime(),
+            duration: 0,
+            pausedAt: null,
+            elapsedBeforePause: 0,
+        };
+
+        const state = getProcessState('p1');
+        expect(state.state).toBe('not started');
+        expect(state.progress).toBe(0);
+        expect(getProcessStartedAt('p1')).toBeUndefined();
+        expect(getProcessProgress('p1')).toBe(0);
+    });
 });

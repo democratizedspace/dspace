@@ -42,7 +42,12 @@ export const ProcessStates = {
 };
 
 const computeProcessTiming = (process, now = Date.now()) => {
-    if (!process || !process.startedAt || !process.duration) {
+    if (
+        !process ||
+        !Number.isFinite(process.startedAt) ||
+        !Number.isFinite(process.duration) ||
+        process.duration <= 0
+    ) {
         return {
             elapsedMs: 0,
             progressRatio: 0,
@@ -83,7 +88,12 @@ export const getProcessState = (processId) => {
     const gameState = loadGameState();
 
     const process = gameState.processes[processId];
-    if (!process || !process.startedAt) {
+    if (
+        !process ||
+        !Number.isFinite(process.startedAt) ||
+        !Number.isFinite(process.duration) ||
+        process.duration <= 0
+    ) {
         return { state: ProcessStates.NOT_STARTED, progress: 0 };
     }
 
@@ -106,7 +116,12 @@ export const getProcessStartedAt = (processId) => {
     const gameState = loadGameState();
 
     const process = gameState.processes[processId];
-    if (process && process.startedAt) {
+    if (
+        process &&
+        Number.isFinite(process.startedAt) &&
+        Number.isFinite(process.duration) &&
+        process.duration > 0
+    ) {
         return computeProcessTiming(process).effectiveStartMs;
     }
     return undefined;
@@ -116,7 +131,14 @@ export const getProcessProgress = (processId) => {
     const gameState = loadGameState();
 
     const process = gameState.processes[processId];
-    if (!process || !process.startedAt) return 0;
+    if (
+        !process ||
+        !Number.isFinite(process.startedAt) ||
+        !Number.isFinite(process.duration) ||
+        process.duration <= 0
+    ) {
+        return 0;
+    }
     const { progressRatio } = computeProcessTiming(process);
     return progressRatio * 100;
 };

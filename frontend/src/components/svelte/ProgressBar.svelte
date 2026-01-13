@@ -23,10 +23,10 @@
             durationSeconds > 0
                 ? Math.min(elapsedMillis / 1000, durationSeconds)
                 : 0;
-        progressRatio = durationSeconds > 0 ? elapsedSeconds / durationSeconds : 0;
+        progressRatio = durationSeconds > 0 ? elapsedSeconds / durationSeconds : 1;
     }
 
-    $: if (!completed && progressRatio >= 1 && Number(totalDurationSeconds) > 0) {
+    $: if (!completed && progressRatio >= 1) {
         completed = true;
         dispatch('fillComplete');
     }
