@@ -81,7 +81,7 @@
         <p>Prepare a downloadable backup of your custom quests, items, and processes.</p>
         <Chip
             text={status === 'running' ? 'Preparing backup…' : 'Prepare backup'}
-            on:click={handlePrepareBackup}
+            onClick={handlePrepareBackup}
             inverted={true}
             disabled={status === 'running'}
         />
@@ -114,7 +114,7 @@
         {/if}
 
         {#if status === 'ready'}
-            <Chip text="Download backup" on:click={handleDownload} inverted={true} />
+            <Chip text="Download backup" onClick={handleDownload} inverted={true} />
         {/if}
     </section>
 </Chip>

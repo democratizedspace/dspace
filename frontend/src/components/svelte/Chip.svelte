@@ -15,6 +15,11 @@
     const dispatch = createEventDispatcher();
 
     const handleClick = (event) => {
+        if (disabled === true) {
+            event.preventDefault();
+            return;
+        }
+
         if (typeof onClick === 'function') {
             onClick(event);
         }
@@ -34,8 +39,8 @@
             class:hazard={hazard === true}
             class:cheat={cheat === true}
             on:click={handleClick}
-            {disabled}
-            aria-disabled={disabled}
+            disabled={disabled === true}
+            aria-disabled={disabled === true}
             aria-pressed={pressed}
             data-testid={dataTestId}
         >
