@@ -13,7 +13,7 @@ export const hasRequiredAndConsumedItems = (processId, processDefinition) => {
     if (!process) {
         return false;
     }
-    return hasItems(process.requireItems) && hasItems(process.consumeItems);
+    return hasItems(process.requireItems || []) && hasItems(process.consumeItems || []);
 };
 
 export const startProcess = (processId, processDefinition) => {
@@ -36,7 +36,9 @@ export const startProcess = (processId, processDefinition) => {
         elapsedBeforePause: 0,
     };
     saveGameState(gameState);
-    burnItems(process.consumeItems);
+    if (process.consumeItems) {
+        burnItems(process.consumeItems);
+    }
 };
 
 export const ProcessStates = {
@@ -106,7 +108,9 @@ export const finishProcess = (processId, processDefinition) => {
     }
     const createItems = process.createItems;
 
-    addItems(createItems);
+    if (createItems) {
+        addItems(createItems);
+    }
 
     const gameState = loadGameState();
     gameState.processes[processId] = undefined;
@@ -133,7 +137,9 @@ export const cancelProcess = (processId, processDefinition) => {
     // Return the consumed items to the player's inventory
     gameState.processes[processId] = undefined;
     saveGameState(gameState);
-    addItems(consumeItems);
+    if (consumeItems) {
+        addItems(consumeItems);
+    }
 };
 
 export const pauseProcess = (processId) => {
@@ -241,8 +247,8 @@ export const getProcessesForItem = (itemId) => {
     return processMap;
 };
 
-export const skipProcess = (processId) => {
-    const process = processes.find((p) => p.id === processId);
+export const skipProcess = (processId, processDefinition) => {
+    const process = resolveProcessDefinition(processId, processDefinition);
     if (!process) {
         return;
     }
@@ -251,11 +257,13 @@ export const skipProcess = (processId) => {
 
     // If the process is not started, burn the required items. Otherwise, they
     // have already been burned.
-    if (processState.state === ProcessStates.NOT_STARTED) {
+    if (processState.state === ProcessStates.NOT_STARTED && process.consumeItems) {
         burnItems(process.consumeItems);
     }
 
-    addItems(process.createItems);
+    if (process.createItems) {
+        addItems(process.createItems);
+    }
 
     const gameState = loadGameState();
     gameState.processes[processId] = undefined;

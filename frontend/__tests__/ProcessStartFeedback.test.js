@@ -144,7 +144,10 @@ describe('Process start feedback', () => {
         await fireEvent.click(getByTestId('process-start-button'));
         await tick();
 
-        expect(startProcess).toHaveBeenCalledWith('test-process');
+        expect(startProcess).toHaveBeenCalledWith(
+            'test-process',
+            expect.objectContaining({ id: 'test-process' })
+        );
     });
 
     it('pulses only the required section when consume items are satisfied', async () => {
