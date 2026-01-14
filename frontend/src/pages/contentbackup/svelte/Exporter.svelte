@@ -5,6 +5,7 @@
 
     let assets = [];
     let status = 'idle';
+    let isPreparing = false;
     let errorMessage = '';
     let backupBlob = null;
     let backupFilename = '';
@@ -21,10 +22,11 @@
     };
 
     const handlePrepareBackup = async () => {
-        if (status === 'running') {
+        if (isPreparing) {
             return;
         }
 
+        isPreparing = true;
         status = 'running';
         errorMessage = '';
         backupBlob = null;
@@ -58,6 +60,8 @@
             const message = error instanceof Error ? error.message : String(error);
             errorMessage = message;
             status = 'error';
+        } finally {
+            isPreparing = false;
         }
     };
 
@@ -80,10 +84,10 @@
         <h2>Export custom content</h2>
         <p>Prepare a downloadable backup of your custom quests, items, and processes.</p>
         <Chip
-            text={status === 'running' ? 'Preparing backup…' : 'Prepare backup'}
+            text={isPreparing ? 'Preparing backup…' : 'Prepare backup'}
             onClick={handlePrepareBackup}
             inverted={true}
-            disabled={status === 'running'}
+            disabled={isPreparing}
             dataTestId="contentbackup-prepare"
         />
 
