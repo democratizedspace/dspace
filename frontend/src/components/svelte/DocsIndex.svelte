@@ -211,14 +211,14 @@
         overflow: hidden;
     }
 
-    .doc-snippet * {
-        /* Ensure highlighted tokens wrap even inside inline elements. */
+    :global(.doc-snippet *) {
+        /* Ensure highlighted tokens wrap even inside inline elements rendered via @html. */
         overflow-wrap: anywhere;
         word-break: break-word;
         white-space: normal;
     }
 
-    .doc-snippet strong {
+    :global(.doc-snippet strong) {
         font-weight: 700;
         color: #ffffff;
     }
