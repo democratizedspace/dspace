@@ -33,7 +33,7 @@ test('marks duration zero as complete and dispatches once', async () => {
     const startDate = new Date('2026-01-13T00:00:00.000Z');
     vi.setSystemTime(startDate);
 
-    const { component, container, getByText } = render(ProgressBar, {
+    const { container, getByText, rerender } = render(ProgressBar, {
         startDate,
         totalDurationSeconds: 1,
         currentTime: startDate.getTime(),
@@ -49,7 +49,7 @@ test('marks duration zero as complete and dispatches once', async () => {
     await tick();
     expect(onComplete).toHaveBeenCalledTimes(0);
 
-    await component.$set({ totalDurationSeconds: 0 });
+    await rerender({ startDate, totalDurationSeconds: 0, currentTime: startDate.getTime() });
     await tick();
 
     expect(onComplete).toHaveBeenCalledTimes(1);

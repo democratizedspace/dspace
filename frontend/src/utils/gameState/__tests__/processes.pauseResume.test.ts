@@ -32,14 +32,23 @@ vi.mock('../../../generated/processes.json', () => ({
 const baseTime = new Date('2026-01-13T00:00:00.000Z');
 
 describe('process pause/resume timing', () => {
-    let gameState: { processes: Record<string, any> };
+    type ProcessRecord = {
+        startedAt?: number;
+        duration?: number;
+        pausedAt?: number | null;
+        elapsedBeforePause?: number;
+        pauseModelVersion?: number;
+    };
+    type GameState = { processes: Record<string, ProcessRecord> };
+
+    let gameState: GameState;
 
     beforeEach(() => {
         vi.useFakeTimers();
         vi.setSystemTime(baseTime);
         gameState = { processes: {} };
         loadGameStateMock.mockImplementation(() => gameState);
-        saveGameStateMock.mockImplementation((state) => {
+        saveGameStateMock.mockImplementation((state: GameState) => {
             gameState = state;
         });
     });
