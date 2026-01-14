@@ -61,6 +61,8 @@
             errorMessage = message;
             status = 'error';
         } finally {
+            await tick();
+            await new Promise((resolve) => setTimeout(resolve, 0));
             isPreparing = false;
         }
     };

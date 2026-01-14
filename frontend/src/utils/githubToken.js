@@ -6,7 +6,43 @@ export function isValidGitHubToken(token) {
     return patterns.some((p) => p.test(trimmed));
 }
 
+import { isBrowser } from './ssr.js';
 import { isGameStateReady, loadGameState, saveGameState, ready } from './gameState/common.js';
+
+const GAME_STATE_DB_NAME = 'dspaceGameState';
+const GAME_STATE_STORE = 'state';
+const GAME_STATE_ROOT_KEY = 'root';
+const GAME_STATE_DB_VERSION = 1;
+
+const persistGameStateToIndexedDb = async (state) => {
+    if (!isBrowser || !('indexedDB' in globalThis)) {
+        return;
+    }
+
+    await new Promise((resolve) => {
+        const request = indexedDB.open(GAME_STATE_DB_NAME, GAME_STATE_DB_VERSION);
+        request.onupgradeneeded = () => {
+            const db = request.result;
+            if (!db.objectStoreNames.contains(GAME_STATE_STORE)) {
+                db.createObjectStore(GAME_STATE_STORE);
+            }
+        };
+        request.onerror = () => resolve();
+        request.onsuccess = () => {
+            const db = request.result;
+            const tx = db.transaction(GAME_STATE_STORE, 'readwrite');
+            tx.objectStore(GAME_STATE_STORE).put(state, GAME_STATE_ROOT_KEY);
+            tx.oncomplete = () => {
+                db.close();
+                resolve();
+            };
+            tx.onerror = () => {
+                db.close();
+                resolve();
+            };
+        };
+    });
+};
 
 export async function loadGitHubToken() {
     if (!isGameStateReady()) {
@@ -24,6 +60,7 @@ export async function saveGitHubToken(token) {
     state.github = state.github || {};
     state.github.token = token;
     await saveGameState(state);
+    await persistGameStateToIndexedDb(loadGameState());
 }
 
 export async function clearGitHubToken() {
@@ -35,4 +72,5 @@ export async function clearGitHubToken() {
         state.github.token = '';
     }
     await saveGameState(state);
+    await persistGameStateToIndexedDb(loadGameState());
 }
