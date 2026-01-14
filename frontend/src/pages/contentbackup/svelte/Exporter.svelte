@@ -120,66 +120,80 @@
             dataTestId="contentbackup-prepare"
         />
 
-        {#if status === 'error'}
-            <p class="status error" role="alert">{errorMessage}</p>
-        {/if}
-
-        {#if assets.length > 0 && status !== 'ready'}
-            <div class="progress-list" aria-live="polite">
-                {#each assets as asset}
-                    <div class="progress-item" data-status={asset.status}>
-                        <div class="progress-header">
-                            <span>{formatProgressLabel(asset.label)}</span>
-                            <span class="status-label">
-                                {asset.status === 'done'
-                                    ? 'Done'
-                                    : asset.status === 'error'
-                                      ? 'Error'
-                                      : 'Queued'}
-                            </span>
+        {#if status !== 'idle'}
+            <div
+                class="status-panel"
+                data-testid={
+                    status === 'running'
+                        ? 'contentbackup-preparing'
+                        : status === 'ready'
+                          ? 'contentbackup-prepared'
+                          : status === 'error'
+                            ? 'contentbackup-error'
+                            : undefined
+                }
+                aria-live="polite"
+            >
+                {#if status === 'running'}
+                    <p class="status">Preparing backup…</p>
+                    {#if assets.length > 0}
+                        <div class="progress-list">
+                            {#each assets as asset}
+                                <div class="progress-item" data-status={asset.status}>
+                                    <div class="progress-header">
+                                        <span>{formatProgressLabel(asset.label)}</span>
+                                        <span class="status-label">
+                                            {asset.status === 'done'
+                                                ? 'Done'
+                                                : asset.status === 'error'
+                                                  ? 'Error'
+                                                  : 'Queued'}
+                                        </span>
+                                    </div>
+                                    <progress
+                                        max="1"
+                                        value={
+                                            asset.status === 'done' || asset.status === 'error'
+                                                ? 1
+                                                : 0
+                                        }
+                                    />
+                                </div>
+                            {/each}
                         </div>
-                        <progress
-                            max="1"
-                            value={asset.status === 'done' || asset.status === 'error' ? 1 : 0}
-                        />
+                    {/if}
+                {/if}
+
+                {#if status === 'error'}
+                    <p class="status error" role="alert">{errorMessage}</p>
+                {/if}
+
+                {#if status === 'ready' && preparedSummary}
+                    <div class="prepared-preview">
+                        <h3>Prepared content</h3>
+                        <ul>
+                            {#each preparedSummary.items as entry}
+                                <li class="summary-entry">
+                                    {entry.kind}: {entry.name}
+                                </li>
+                            {/each}
+                            {#each preparedSummary.processes as entry}
+                                <li class="summary-entry">
+                                    {entry.kind}: {entry.name}
+                                </li>
+                            {/each}
+                            {#each preparedSummary.quests as entry}
+                                <li class="summary-entry">
+                                    {entry.kind}: {entry.name}
+                                </li>
+                            {/each}
+                        </ul>
                     </div>
-                {/each}
+                {/if}
             </div>
         {/if}
 
         {#if status === 'ready'}
-            {#if preparedSummary}
-                <div
-                    class="prepared-preview"
-                    aria-live="polite"
-                    data-testid="contentbackup-prepared"
-                >
-                    <h3>Prepared content</h3>
-                    <ul>
-                        {#each preparedSummary.items as entry}
-                            <li class="summary-entry">
-                                <span class="summary-kind">{entry.kind}</span
-                                ><span class="summary-separator">: </span
-                                ><span class="summary-name">{entry.name}</span>
-                            </li>
-                        {/each}
-                        {#each preparedSummary.processes as entry}
-                            <li class="summary-entry">
-                                <span class="summary-kind">{entry.kind}</span
-                                ><span class="summary-separator">: </span
-                                ><span class="summary-name">{entry.name}</span>
-                            </li>
-                        {/each}
-                        {#each preparedSummary.quests as entry}
-                            <li class="summary-entry">
-                                <span class="summary-kind">{entry.kind}</span
-                                ><span class="summary-separator">: </span
-                                ><span class="summary-name">{entry.name}</span>
-                            </li>
-                        {/each}
-                    </ul>
-                </div>
-            {/if}
             <Chip text="Download backup" onClick={handleDownload} inverted={true} />
         {/if}
     </section>
@@ -203,6 +217,12 @@
 
     .panel {
         width: 100%;
+    }
+
+    .status-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
     }
 
     .status {

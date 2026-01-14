@@ -12,6 +12,12 @@ test.describe('Custom content backup', () => {
     });
 
     test('exports and imports custom content backups', async ({ page }) => {
+        page.on('response', (response) => {
+            if (response.status() === 404) {
+                console.log('E2E 404:', response.url());
+            }
+        });
+
         await page.goto('/contentbackup');
         await waitForHydration(page);
 
@@ -88,7 +94,28 @@ test.describe('Custom content backup', () => {
         await prepareButton.click();
         await expect(prepareButton).toBeDisabled();
 
+        await expect(page.getByTestId('contentbackup-preparing')).toBeVisible();
+
         const preparedPreview = page.getByTestId('contentbackup-prepared');
+        const errorPreview = page.getByTestId('contentbackup-error');
+        let status: 'prepared' | 'error';
+        try {
+            status = await Promise.race([
+                preparedPreview.waitFor({ state: 'visible', timeout: 60000 }).then(() => 'prepared'),
+                errorPreview.waitFor({ state: 'visible', timeout: 60000 }).then(() => 'error'),
+            ]);
+        } catch (error) {
+            const message = error instanceof Error ? error.message : String(error);
+            throw new Error(
+                `Timed out waiting for content backup to finish preparing within 60s. Last error: ${message}`
+            );
+        }
+
+        if (status === 'error') {
+            const errorText = await errorPreview.innerText();
+            throw new Error(`Content backup failed during prepare: ${errorText}`);
+        }
+
         await expect(preparedPreview).toContainText('Item: E2E Item');
         await expect(preparedPreview).toContainText('Process: E2E Process');
         await expect(preparedPreview).toContainText('Quest: E2E Quest');
