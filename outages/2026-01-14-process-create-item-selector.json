@@ -1,0 +1,13 @@
+{
+  "id": "process-create-item-selector-missing-custom-items",
+  "date": "2026-01-14",
+  "component": "processes/create",
+  "rootCause": "Process creation item selectors sourced only built-in inventory JSON and skipped IndexedDB custom items, so custom items never appeared in selector search results.",
+  "resolution": "Process creation selectors now load the shared merged item catalog (built-in plus IndexedDB custom items) and regression tests cover merged-item search.",
+  "references": [
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/src/utils/itemCatalog.js",
+    "frontend/e2e/process-item-selector-custom-items.spec.ts",
+    "frontend/__tests__/itemCatalog.test.js"
+  ]
+}

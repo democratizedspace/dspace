@@ -1,5 +1,6 @@
 <script>
     import { createEventDispatcher, onMount } from 'svelte';
+    import { filterItemsByQuery } from '../../utils/itemCatalog.js';
 
     const dispatch = createEventDispatcher();
 
@@ -18,21 +19,7 @@
 
     function handleInput(event) {
         searchQuery = event.target.value;
-        let filteredItems;
-        if (searchQuery.trim() === '') {
-            filteredItems = originalData; // Use original data when search bar is cleared
-        } else {
-            const words = searchQuery.toLowerCase().split(/\s+/);
-            filteredItems = originalData.filter((item) => {
-                const itemText = [
-                    item.id?.toLowerCase() ?? '',
-                    item.name?.toLowerCase() ?? '',
-                    item.description?.toLowerCase() ?? '',
-                    item.price?.toLowerCase() ?? '',
-                ].join(' ');
-                return words.every((word) => itemText.includes(word));
-            });
-        }
+        const filteredItems = filterItemsByQuery(originalData, searchQuery);
         dispatch('search', filteredItems);
     }
 </script>
