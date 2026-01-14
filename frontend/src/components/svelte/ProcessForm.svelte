@@ -6,6 +6,7 @@
     import { durationInSeconds, prettyPrintDuration } from '../../utils.js';
     import { createProcess } from '../../utils/customcontent.js';
     import { validateProcessData } from '../../utils/customProcessValidation.js';
+    import { getMergedItems } from '../../utils/itemCatalog.js';
 
     export let title = '';
     export let duration = '';
@@ -20,11 +21,13 @@
     let errorMessage = '';
     let lastCreatedProcessId = null;
     let isSubmitting = false;
+    let availableItems = items;
 
     const dispatch = createEventDispatcher();
 
-    onMount(() => {
+    onMount(async () => {
         isClientSide = true;
+        availableItems = await getMergedItems();
     });
 
     function addItemRequirement() {
@@ -259,7 +262,7 @@
                     {#each requireItems as item, index}
                         <div class="item-row">
                             <ItemSelector
-                                {items}
+                                items={availableItems}
                                 selectedItemId={item.id}
                                 label="Select Required Item"
                                 on:select={(e) => handleItemSelect(e, 'require', index)}
@@ -292,7 +295,7 @@
                     {#each consumeItems as item, index}
                         <div class="item-row">
                             <ItemSelector
-                                {items}
+                                items={availableItems}
                                 selectedItemId={item.id}
                                 label="Select Consumed Item"
                                 on:select={(e) => handleItemSelect(e, 'consume', index)}
@@ -325,7 +328,7 @@
                     {#each createItems as item, index}
                         <div class="item-row">
                             <ItemSelector
-                                {items}
+                                items={availableItems}
                                 selectedItemId={item.id}
                                 label="Select Created Item"
                                 on:select={(e) => handleItemSelect(e, 'create', index)}

@@ -105,6 +105,7 @@ const TEST_GROUPS = [
             'touch-menu.spec.ts',
             'ui-responsiveness.spec.ts',
             'wallet-page.spec.ts',
+            'process-item-selector-custom-items.spec.ts',
         ],
         parallel: false,
         workers: 1,

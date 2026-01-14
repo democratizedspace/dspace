@@ -1,0 +1,13 @@
+{
+  "id": "2026-01-14-process-create-custom-items",
+  "date": "2026-01-14",
+  "component": "processes/create item selector",
+  "rootCause": "The process creation item selectors were wired to the built-in item JSON only, so they never merged in custom items stored in IndexedDB.",
+  "resolution": "Process item selectors now use the shared merged item catalog (built-in + custom) and tests cover both the merged catalog utility and the end-to-end selector search.",
+  "references": [
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/src/utils/itemCatalog.js",
+    "frontend/e2e/process-item-selector-custom-items.spec.ts",
+    "frontend/__tests__/itemCatalog.test.js"
+  ]
+}

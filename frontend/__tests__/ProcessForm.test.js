@@ -7,6 +7,16 @@ jest.mock('../src/pages/inventory/json/items', () => [
     { id: 'item-3', name: 'Test Item 3', description: 'Description 3' },
 ]);
 
+jest.mock('../src/utils/itemCatalog.js', () => ({
+    getMergedItems: jest
+        .fn()
+        .mockResolvedValue([
+            { id: 'item-1', name: 'Test Item 1', description: 'Description 1' },
+            { id: 'item-2', name: 'Test Item 2', description: 'Description 2' },
+            { id: 'item-3', name: 'Test Item 3', description: 'Description 3' },
+        ]),
+}));
+
 const mockDb = {
     processes: {
         add: jest.fn().mockResolvedValue('process-123'),
