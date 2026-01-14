@@ -29,6 +29,9 @@
     let processStartedAt;
     let intervalId;
     let mounted = false;
+    let customProcess = null;
+    let customProcessLoadedForId = null;
+    let customProcessLoadingId = null;
     let totalDurationSeconds;
     let currentTime = Date.now();
     let cheatsAvailable = false;
@@ -281,6 +284,24 @@
         updateState();
     };
 
+    const loadCustomProcess = async (id) => {
+        if (!id || customProcessLoadingId === id || customProcessLoadedForId === id) {
+            return;
+        }
+
+        customProcessLoadingId = id;
+        try {
+            const { db, ENTITY_TYPES } = await import('../../utils/customcontent.js');
+            const loadedProcess = await db.get(ENTITY_TYPES.PROCESS, id);
+            customProcess = loadedProcess ?? null;
+        } catch (error) {
+            customProcess = null;
+        } finally {
+            customProcessLoadedForId = id;
+            customProcessLoadingId = null;
+        }
+    };
+
     onMount(() => {
         mounted = true;
         updateState();
@@ -318,8 +339,14 @@
             process = processData;
         } else if (builtInProcess) {
             process = builtInProcess;
+        } else if (customProcess && customProcess.id === processId) {
+            process = customProcess;
         } else {
             process = null;
+        }
+
+        if (!processData && !builtInProcess && mounted) {
+            void loadCustomProcess(processId);
         }
 
         if (process) {

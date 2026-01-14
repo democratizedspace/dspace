@@ -308,6 +308,64 @@ export const getProcessesForItem = (itemId) => {
     return processMap;
 };
 
+const buildProcessMapFromEntries = (entries) => {
+    return entries.reduce((map, [key, value]) => {
+        map[key] = Array.isArray(value) ? [...value] : [];
+        return map;
+    }, {});
+};
+
+const addProcessToMap = (map, type, processId) => {
+    if (!map[type]) {
+        map[type] = [];
+    }
+    if (!map[type].includes(processId)) {
+        map[type].push(processId);
+    }
+};
+
+const processReferencesItem = (items, itemId) =>
+    Array.isArray(items) && items.some((item) => item?.id === itemId);
+
+export const getProcessesForItemIncludingCustom = async (itemId) => {
+    const builtInMap = buildProcessMapFromEntries(Object.entries(getProcessesForItem(itemId)));
+    const processMap = { ...builtInMap };
+
+    try {
+        const { db, ENTITY_TYPES } = await import('../customcontent.js');
+        const customProcesses = await db.query(ENTITY_TYPES.PROCESS, (process) => {
+            if (!process) {
+                return false;
+            }
+            return (
+                processReferencesItem(process.requireItems, itemId) ||
+                processReferencesItem(process.consumeItems, itemId) ||
+                processReferencesItem(process.createItems, itemId)
+            );
+        });
+
+        customProcesses.forEach((process) => {
+            if (!process?.id) {
+                return;
+            }
+
+            if (processReferencesItem(process.requireItems, itemId)) {
+                addProcessToMap(processMap, ProcessItemTypes.REQUIRE_ITEM, process.id);
+            }
+            if (processReferencesItem(process.consumeItems, itemId)) {
+                addProcessToMap(processMap, ProcessItemTypes.CONSUME_ITEM, process.id);
+            }
+            if (processReferencesItem(process.createItems, itemId)) {
+                addProcessToMap(processMap, ProcessItemTypes.CREATE_ITEM, process.id);
+            }
+        });
+    } catch (error) {
+        console.warn('Unable to load custom processes for item:', error);
+    }
+
+    return processMap;
+};
+
 export const skipProcess = (processId, processDefinition) => {
     const process = resolveProcessDefinition(processId, processDefinition);
     if (!process) {

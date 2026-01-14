@@ -19,6 +19,8 @@ const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
 const startProcess = vi.hoisted(() => vi.fn());
+const dbGetMock = vi.hoisted(() => vi.fn());
+const ENTITY_TYPES = vi.hoisted(() => ({ PROCESS: 'process' }));
 
 const getProcessState = vi.mocked(getProcessStateMock);
 
@@ -110,6 +112,13 @@ vi.mock('../../lib/qaCheats', () => ({
     initializeQaCheats: vi.fn(),
 }));
 
+vi.mock('../../utils/customcontent.js', () => ({
+    db: {
+        get: (...args) => dbGetMock(...args),
+    },
+    ENTITY_TYPES,
+}));
+
 beforeEach(() => {
     cheatsAvailabilityStore.set(false);
     cheatsEnabledStore.set(false);
@@ -119,6 +128,7 @@ beforeEach(() => {
     getProcessStartedAtMock.mockReset();
     getProcessStartedAtMock.mockImplementation(() => Date.now());
     startProcess.mockClear();
+    dbGetMock.mockReset();
 });
 
 afterEach(() => {
@@ -359,6 +369,29 @@ test('prefers provided process data over built-in catalog lookup', async () => {
     await tick();
     expect(getByText('Override Process')).toBeTruthy();
     expect(getByText('Start')).toBeTruthy();
+});
+
+test('loads custom process details from indexeddb when not built-in', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+
+    const customProcess = {
+        id: 'custom-db',
+        title: 'Indexed Process',
+        duration: '12s',
+        requireItems: [],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    dbGetMock.mockResolvedValue(customProcess);
+
+    const { findByText } = render(Process, { processId: 'custom-db' });
+
+    const title = await findByText('Indexed Process');
+    expect(title).toBeTruthy();
+    expect(dbGetMock).toHaveBeenCalledWith(ENTITY_TYPES.PROCESS, 'custom-db');
 });
 
 test('renders fallback message when process details are unavailable', async () => {

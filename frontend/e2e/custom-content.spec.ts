@@ -5,6 +5,7 @@ import {
     fillProcessForm,
     ItemSelectorHelper,
 } from './test-helpers';
+import { ITEM_SELECTOR_OPTION_LOCATORS } from './utils/itemSelectors';
 
 test.describe('Custom Content Management', () => {
     test.setTimeout(120000); // 2 minutes for end-to-end tests
@@ -30,6 +31,52 @@ test.describe('Custom Content Management', () => {
         } catch (e) {
             // If we can't find a specific element, wait a bit to ensure hydration completes
             await page.waitForTimeout(2000);
+        }
+    }
+
+    async function findCustomEntityId(
+        page: Page,
+        storeName: 'items' | 'processes',
+        name: string
+    ): Promise<string | null> {
+        return page.evaluate(async ({ store, targetName }) => {
+            return await new Promise((resolve) => {
+                const request = indexedDB.open('CustomContent');
+                request.onerror = () => resolve(null);
+                request.onsuccess = () => {
+                    const db = request.result;
+                    const tx = db.transaction(store, 'readonly');
+                    const objectStore = tx.objectStore(store);
+                    const getAllRequest = objectStore.getAll();
+                    getAllRequest.onerror = () => resolve(null);
+                    getAllRequest.onsuccess = () => {
+                        const match = (getAllRequest.result ?? []).find(
+                            (entry) => entry?.name === targetName || entry?.title === targetName
+                        );
+                        resolve(match?.id ?? null);
+                    };
+                };
+            });
+        }, { store: storeName, targetName: name });
+    }
+
+    async function selectItemByName(page: Page, name: string): Promise<void> {
+        const selector = page.locator('.item-selector').last();
+        await expect(selector).toHaveAttribute('data-hydrated', 'true');
+
+        const toggle = selector.locator('button.select-button, button.edit-button, button').first();
+        await toggle.click();
+
+        const optionsLocator = selector.locator(ITEM_SELECTOR_OPTION_LOCATORS.join(', '));
+        await expect(optionsLocator.first()).toBeVisible();
+
+        const targetOption = optionsLocator.filter({ hasText: name }).first();
+        await expect(targetOption).toBeVisible();
+        await targetOption.click();
+
+        const quantityInput = selector.locator('input[type="number"]').first();
+        if ((await quantityInput.count()) > 0) {
+            await quantityInput.fill('1');
         }
     }
 
@@ -220,6 +267,52 @@ test.describe('Custom Content Management', () => {
         }
 
         expect(success).toBe(true);
+    });
+
+    test('shows custom process on the related item detail page', async ({ page }) => {
+        const uniqueItemName = `Process Item ${Date.now()}`;
+        const processTitle = `Item Process ${Date.now()}`;
+
+        await page.goto('/inventory/create');
+        await page.waitForLoadState('networkidle');
+
+        await page.fill('#name', uniqueItemName);
+        await page.fill('#description', 'Custom item for process linkage test');
+
+        await page.click('button.submit-button');
+        await page.waitForLoadState('networkidle');
+
+        const itemId = await findCustomEntityId(page, 'items', uniqueItemName);
+        expect(itemId).toBeTruthy();
+
+        await page.goto('/processes/create');
+        await page.waitForLoadState('networkidle');
+
+        const nameInput = page.locator('#name, #title').first();
+        await nameInput.fill(processTitle);
+        await page.fill('#duration', '10m');
+
+        const addRequiredButton = page.locator(
+            'button:has-text("Add Required Item"), button:has-text("Add Requirement")'
+        );
+        await addRequiredButton.first().click();
+        await selectItemByName(page, uniqueItemName);
+
+        const submitButton = page
+            .locator('button.submit-button, button:has-text("Create"), button:has-text("Save")')
+            .first();
+        await submitButton.click();
+        await page.waitForLoadState('networkidle');
+
+        const processId = await findCustomEntityId(page, 'processes', processTitle);
+        expect(processId).toBeTruthy();
+
+        await page.goto(`/inventory/item/${itemId}`);
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        await expect(page.locator('text=Processes:')).toBeVisible();
+        await expect(page.locator(`text=${processTitle}`)).toBeVisible();
     });
 
     test('should retrieve all custom content', async ({ page }) => {
