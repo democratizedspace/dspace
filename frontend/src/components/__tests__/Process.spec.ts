@@ -249,9 +249,7 @@ test('shows missing requirement feedback when two items are missing', async () =
     await fireEvent.click(getByTestId('process-start-button'));
 
     const feedback = getByTestId('process-start-feedback');
-    expect(feedback.textContent).toContain(
-        'Missing requirements: Test Item (1), Second Item (1)'
-    );
+    expect(feedback.textContent).toContain('Missing requirements: Test Item (1), Second Item (1)');
     expect(startProcess).not.toHaveBeenCalled();
 });
 
