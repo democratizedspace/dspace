@@ -3,7 +3,7 @@
     import ItemList from '../../components/svelte/ItemList.svelte';
     import Chip from '../../components/svelte/Chip.svelte';
     import items from './json/items';
-    import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
+    import { getMergedItems } from '../../utils/itemCatalog.js';
     import { onMount } from 'svelte';
 
     let showAllItems = false;
@@ -20,21 +20,15 @@
     onMount(async () => {
         isClientSide = true;
 
-        try {
-            const customItems = await db.list(ENTITY_TYPES.ITEM);
-            fullItemList = [...items, ...customItems];
-        } catch (error) {
-            console.warn('Failed to load custom items:', error);
-            fullItemList = items;
-        } finally {
-            // Initialize allItems with all available items from the items list
-            allItems = fullItemList.reduce((acc, item) => {
-                acc[item.id] = {
-                    count: $state.inventory[item.id] ? $state.inventory[item.id].count : 0,
-                };
-                return acc;
-            }, {});
-        }
+        fullItemList = await getMergedItems({ baseItems: items });
+
+        // Initialize allItems with all available items from the items list
+        allItems = fullItemList.reduce((acc, item) => {
+            acc[item.id] = {
+                count: $state.inventory[item.id] ? $state.inventory[item.id].count : 0,
+            };
+            return acc;
+        }, {});
     });
 
     // Reactive statement to update inventory when showAllItems or isClientSide changes

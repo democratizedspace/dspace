@@ -1,0 +1,10 @@
+{
+  "id": "process-create-item-selector-custom-items",
+  "date": "2026-01-14",
+  "component": "processes/create",
+  "rootCause": "Process item selectors sourced only the built-in item JSON and skipped custom items persisted in IndexedDB.",
+  "resolution": "Route process item selectors through the shared merged item catalog (built-in plus custom) and add regression coverage.",
+  "references": [
+    "internal:process-create-item-selector-custom-items"
+  ]
+}

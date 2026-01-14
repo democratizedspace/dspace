@@ -396,6 +396,38 @@ export async function createTestItems(page: Page, count = 2): Promise<string[]> 
     return itemIds;
 }
 
+export async function createCustomItem(
+    page: Page,
+    {
+        name,
+        description = 'Custom item created for automated testing.',
+        imageName = 'item-e2e.png',
+        imageBuffer = Buffer.from('89504e470d0a1a0a', 'hex'),
+    }: {
+        name: string;
+        description?: string;
+        imageName?: string;
+        imageBuffer?: Buffer;
+    }
+): Promise<void> {
+    await page.goto('/inventory/create');
+    await page.waitForLoadState('networkidle');
+    await waitForHydration(page);
+
+    await page.fill('#name', name);
+    await page.fill('#description', description);
+    await page.locator('#image').setInputFiles({
+        name: imageName,
+        mimeType: 'image/png',
+        buffer: imageBuffer,
+    });
+
+    await page.locator('button.submit-button, input[type="submit"]').click();
+    const successMessage = page.getByRole('status');
+    await expect(successMessage).toBeVisible();
+    await expect(successMessage).toContainText('Item created successfully');
+}
+
 /**
  * Finds and clicks a button using multiple selector strategies
  * @returns true if the button was found and clicked
