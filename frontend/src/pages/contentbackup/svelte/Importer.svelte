@@ -11,6 +11,17 @@
     let successFilename = '';
     let isDragging = false;
 
+    $: statusMessage =
+        status === 'running'
+            ? 'Importing…'
+            : status === 'success'
+              ? message || 'Import complete'
+              : status === 'error'
+                ? message || 'Import failed. Please try again.'
+                : 'Ready to import.';
+
+    $: statusTone = status === 'success' ? 'success' : status === 'error' ? 'error' : '';
+
     const updateAssets = (assetId, updates) => {
         assets = assets.map((asset) =>
             asset.id === assetId
@@ -114,16 +125,12 @@
             <span>Choose backup file</span>
         </label>
 
-        {#if status === 'success'}
-            <p class="status success" role="status" aria-live="polite">
-                <span>{message}</span>
-                {#if successFilename}
-                    <span class="status-detail"> — {successFilename}</span>
-                {/if}
-            </p>
-        {:else if status === 'error'}
-            <p class="status error" role="alert">{message}</p>
-        {/if}
+        <p class={`status ${statusTone}`} role="status" aria-live="polite" aria-atomic="true">
+            <span>{statusMessage}</span>
+            {#if status === 'success' && successFilename}
+                <span class="status-detail"> — {successFilename}</span>
+            {/if}
+        </p>
 
         {#if assets.length > 0}
             <div class="progress-list" aria-live="polite">
