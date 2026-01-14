@@ -25,7 +25,6 @@
     export let processData = null;
 
     let process;
-    let isCustomProcess = false;
     let state = getProcessState(processId).state;
     let processStartedAt;
     let intervalId;
@@ -213,7 +212,7 @@
     };
 
     const updateState = () => {
-        if (isCustomProcess || !process) {
+        if (!process) {
             state = ProcessStates.NOT_STARTED;
             processStartedAt = undefined;
             currentTime = Date.now();
@@ -230,10 +229,6 @@
     };
 
     const onProcessStart = () => {
-        if (isCustomProcess) {
-            return;
-        }
-
         const { missingEntries, targets, message } = getMissingRequirementInfo();
         if (missingEntries.length > 0) {
             if (isPulsing) {
@@ -251,57 +246,37 @@
         }
 
         clearInterval(intervalId);
-        startProcess(processId);
+        startProcess(processId, process);
         intervalId = setInterval(updateState, updateIntervalMs);
         updateState();
     };
 
     const onProcessCancel = () => {
-        if (isCustomProcess) {
-            return;
-        }
-
         clearInterval(intervalId);
-        cancelProcess(processId);
+        cancelProcess(processId, process);
         updateState();
     };
 
     const onProcessComplete = () => {
-        if (isCustomProcess) {
-            return;
-        }
-
         clearInterval(intervalId);
-        finishProcess(processId);
+        finishProcess(processId, process);
         updateState();
     };
 
     const onProcessPause = () => {
-        if (isCustomProcess) {
-            return;
-        }
-
         clearInterval(intervalId);
         pauseProcess(processId);
         updateState();
     };
 
     const onProcessResume = () => {
-        if (isCustomProcess) {
-            return;
-        }
-
         resumeProcess(processId);
         intervalId = setInterval(updateState, updateIntervalMs);
         updateState();
     };
 
     const onProcessInstantFinish = () => {
-        if (isCustomProcess) {
-            return;
-        }
-
-        finishProcessNow(processId);
+        finishProcessNow(processId, process);
         clearInterval(intervalId);
         updateState();
     };
@@ -309,9 +284,7 @@
     onMount(() => {
         mounted = true;
         updateState();
-        if (!isCustomProcess) {
-            intervalId = setInterval(updateState, updateIntervalMs);
-        }
+        intervalId = setInterval(updateState, updateIntervalMs);
 
         initializeQaCheats();
         unsubscribeCheatsAvailability = qaCheatsAvailability.subscribe((available) => {
@@ -343,13 +316,10 @@
 
         if (processData) {
             process = processData;
-            isCustomProcess = processData.custom !== false;
         } else if (builtInProcess) {
             process = builtInProcess;
-            isCustomProcess = Boolean(builtInProcess.custom);
         } else {
             process = null;
-            isCustomProcess = false;
         }
 
         if (process) {
@@ -363,10 +333,7 @@
             totalDurationSeconds = 0;
         }
 
-        if (intervalId && isCustomProcess) {
-            clearInterval(intervalId);
-            intervalId = null;
-        } else if (!intervalId && mounted && !isCustomProcess) {
+        if (!intervalId && mounted) {
             intervalId = setInterval(updateState, updateIntervalMs);
         }
 
@@ -410,11 +377,7 @@
 
             <h4>Duration: {process.duration}</h4>
 
-            {#if isCustomProcess}
-                <p class="custom-process-note">
-                    Custom processes are displayed for reference and managed separately.
-                </p>
-            {:else if state === ProcessStates.NOT_STARTED}
+            {#if state === ProcessStates.NOT_STARTED}
                 <div
                     class="start-action"
                     class:pulse={isPulsing}
@@ -517,12 +480,6 @@
         border-radius: 10px;
         padding: 2px 7px;
         font-size: 0.75rem;
-    }
-
-    .custom-process-note {
-        margin-top: 12px;
-        color: #d0f0d0;
-        font-size: 0.9rem;
     }
 
     .requirements-group {

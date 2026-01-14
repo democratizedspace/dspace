@@ -5,20 +5,26 @@ import { durationInSeconds } from '../../utils.js';
 // Using import assertions for JSON imports
 import processes from '../../generated/processes.json' assert { type: 'json' };
 
-export const hasRequiredAndConsumedItems = (processId) => {
-    const process = processes.find((p) => p.id === processId);
+const resolveProcessDefinition = (processId, processDefinition) =>
+    processDefinition ?? processes.find((p) => p.id === processId);
+
+export const hasRequiredAndConsumedItems = (processId, processDefinition) => {
+    const process = resolveProcessDefinition(processId, processDefinition);
     if (!process) {
         return false;
     }
-    return hasItems(process.requireItems) && hasItems(process.consumeItems);
+    return hasItems(process.requireItems || []) && hasItems(process.consumeItems || []);
 };
 
-export const startProcess = (processId) => {
+export const startProcess = (processId, processDefinition) => {
     const gameState = loadGameState();
 
-    const process = processes.find((p) => p.id === processId);
+    const process = resolveProcessDefinition(processId, processDefinition);
+    if (!process) {
+        return;
+    }
 
-    if (!hasRequiredAndConsumedItems(processId)) {
+    if (!hasRequiredAndConsumedItems(processId, process)) {
         console.log('Missing required items or consumed items');
         return;
     }
@@ -31,7 +37,9 @@ export const startProcess = (processId) => {
         pauseModelVersion: 2,
     };
     saveGameState(gameState);
-    burnItems(process.consumeItems);
+    if (process.consumeItems) {
+        burnItems(process.consumeItems);
+    }
 };
 
 export const ProcessStates = {
@@ -143,27 +151,29 @@ export const getProcessProgress = (processId) => {
     return progressRatio * 100;
 };
 
-export const finishProcess = (processId) => {
+export const finishProcess = (processId, processDefinition) => {
     if (getProcessState(processId).state !== ProcessStates.FINISHED) {
         return;
     }
 
-    const process = processes.find((p) => p.id === processId);
+    const process = resolveProcessDefinition(processId, processDefinition);
     if (!process) {
         return;
     }
     const createItems = process.createItems;
 
-    addItems(createItems);
+    if (createItems) {
+        addItems(createItems);
+    }
 
     const gameState = loadGameState();
     gameState.processes[processId] = undefined;
     saveGameState(gameState);
 };
 
-export const cancelProcess = (processId) => {
+export const cancelProcess = (processId, processDefinition) => {
     const gameState = loadGameState();
-    const process = processes.find((p) => p.id === processId);
+    const process = resolveProcessDefinition(processId, processDefinition);
 
     if (!process) {
         return;
@@ -181,7 +191,9 @@ export const cancelProcess = (processId) => {
     // Return the consumed items to the player's inventory
     gameState.processes[processId] = undefined;
     saveGameState(gameState);
-    addItems(consumeItems);
+    if (consumeItems) {
+        addItems(consumeItems);
+    }
 };
 
 export const pauseProcess = (processId) => {
@@ -215,20 +227,20 @@ export const resumeProcess = (processId) => {
     saveGameState(gameState);
 };
 
-export const finishProcessNow = (processId) => {
+export const finishProcessNow = (processId, processDefinition) => {
     const state = getProcessState(processId).state;
     if (state === ProcessStates.NOT_STARTED) {
         return;
     }
 
     if (state === ProcessStates.FINISHED) {
-        finishProcess(processId);
+        finishProcess(processId, processDefinition);
         return;
     }
 
     const gameState = loadGameState();
     const process = gameState.processes[processId];
-    const definition = processes.find((p) => p.id === processId);
+    const definition = resolveProcessDefinition(processId, processDefinition);
 
     if (!process || !definition) {
         return;
@@ -249,7 +261,7 @@ export const finishProcessNow = (processId) => {
     };
 
     saveGameState(gameState);
-    finishProcess(processId);
+    finishProcess(processId, definition);
 };
 
 export const ProcessItemTypes = {
@@ -296,8 +308,8 @@ export const getProcessesForItem = (itemId) => {
     return processMap;
 };
 
-export const skipProcess = (processId) => {
-    const process = processes.find((p) => p.id === processId);
+export const skipProcess = (processId, processDefinition) => {
+    const process = resolveProcessDefinition(processId, processDefinition);
     if (!process) {
         return;
     }
@@ -306,11 +318,13 @@ export const skipProcess = (processId) => {
 
     // If the process is not started, burn the required items. Otherwise, they
     // have already been burned.
-    if (processState.state === ProcessStates.NOT_STARTED) {
+    if (processState.state === ProcessStates.NOT_STARTED && process.consumeItems) {
         burnItems(process.consumeItems);
     }
 
-    addItems(process.createItems);
+    if (process.createItems) {
+        addItems(process.createItems);
+    }
 
     const gameState = loadGameState();
     gameState.processes[processId] = undefined;

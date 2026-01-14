@@ -22,7 +22,7 @@ vi.mock('../src/utils/gameState/processes.js', async () => {
 });
 
 describe('Process component custom data', () => {
-    it('renders custom process details without exposing start controls', () => {
+    it('renders custom process details with start controls', () => {
         const customProcess = {
             id: 'custom-process-1',
             title: 'Custom Habitat Cycle',
@@ -39,8 +39,7 @@ describe('Process component custom data', () => {
 
         getByText('Custom Habitat Cycle');
         getByText('Duration: 45m');
-        getByText('Custom processes are displayed for reference and managed separately.');
-        expect(queryByText('Start')).toBeNull();
+        expect(getByText('Start')).toBeTruthy();
         expect(queryByText('Collect')).toBeNull();
     });
 });

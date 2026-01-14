@@ -59,10 +59,18 @@ function resolveInternalRoute(routePath) {
       candidates.push(path.join(pagesDir, basePath, '[pathId]', '[questId].astro'));
     }
     
-    // Check for item routes (e.g., /inventory/item/37 -> /inventory/item/[itemId].astro)
+    // Check for item routes (e.g., /inventory/item/37 -> /inventory/item/[itemId]/index.astro)
     if (parts.length > 2 && parts[1]) {
+      candidates.push(path.join(pagesDir, basePath, parts[1], '[itemId]', 'index.astro'));
       candidates.push(path.join(pagesDir, basePath, parts[1], '[itemId].astro'));
+      candidates.push(path.join(pagesDir, basePath, parts[1], '[id]', 'index.astro'));
       candidates.push(path.join(pagesDir, basePath, parts[1], '[id].astro'));
+    }
+
+    // Check for nested item routes (e.g., /inventory/item/37/edit -> /inventory/item/[itemId]/edit.astro)
+    if (parts.length > 3 && parts[1]) {
+      candidates.push(path.join(pagesDir, basePath, parts[1], '[itemId]', `${parts[3]}.astro`));
+      candidates.push(path.join(pagesDir, basePath, parts[1], '[id]', `${parts[3]}.astro`));
     }
     
     // Check for process routes (e.g., /processes/launch-rocket -> /processes/[processId].astro)

@@ -1,31 +1,68 @@
 {
-    "gameState": {
-        "versionNumberString": "2.1",
-        "inventory": {
-            "0": 1,
-            "3": 120,
-            "10": 2,
-            "11": 1,
-            "85": 1
-        },
-        "quests": {
-            "welcome/howtodoquests": {
-                "finished": true,
-                "itemsClaimed": ["welcome/howtodoquests-start-0"]
-            },
-            "hydroponics/basil": {
-                "stepId": "grown"
+    "description": "Legacy v2.1 saves are stored in localStorage['gameState'] as a JSON blob.",
+    "profiles": {
+        "minimal": {
+            "label": "Minimal v2.1 gameState",
+            "gameState": {
+                "versionNumberString": "2.1",
+                "inventory": {
+                    "3": 120.5,
+                    "10": 2
+                },
+                "quests": {},
+                "processes": {}
             }
         },
-        "processes": {
-            "processes/benchy": {
-                "startedAt": 1672531200000,
-                "finished": true,
-                "result": "printed"
+        "inProgress": {
+            "label": "In-progress process v2.1 gameState",
+            "gameState": {
+                "versionNumberString": "2.1",
+                "inventory": {
+                    "3": 40,
+                    "11": 1
+                },
+                "quests": {
+                    "hydroponics/basil": {
+                        "stepId": "grown"
+                    }
+                },
+                "processes": {
+                    "processes/benchy": {
+                        "startedAt": 1672531200000,
+                        "duration": 3600000
+                    }
+                }
             }
         },
-        "_meta": {
-            "lastUpdated": 1672534800000
+        "messy": {
+            "label": "Messy v2.1 gameState (unknown keys)",
+            "gameState": {
+                "versionNumberString": "2.1",
+                "inventory": {
+                    "": 0,
+                    "0": 1,
+                    "85": 1
+                },
+                "quests": {
+                    "welcome/howtodoquests": {
+                        "finished": true,
+                        "itemsClaimed": ["welcome/howtodoquests-start-0"]
+                    }
+                },
+                "processes": {
+                    "processes/benchy": {
+                        "startedAt": 1672531200000,
+                        "finished": true,
+                        "result": "printed"
+                    }
+                },
+                "openAI": {
+                    "api\u004bey": "REDACTED"
+                },
+                "misc": {
+                    "flag": true
+                }
+            }
         }
     }
 }
