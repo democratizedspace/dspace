@@ -27,6 +27,12 @@
         return `${kind}: ${name}`;
     };
 
+    const formatProgressLabel = (label) =>
+        label
+            .replace(/^Item: /, 'Item record: ')
+            .replace(/^Process: /, 'Process record: ')
+            .replace(/^Quest: /, 'Quest record: ');
+
     const handlePrepareBackup = async () => {
         if (isPreparing) {
             return;
@@ -120,7 +126,7 @@
                 {#each assets as asset}
                     <div class="progress-item" data-status={asset.status}>
                         <div class="progress-header">
-                            <span>{asset.label}</span>
+                            <span>{formatProgressLabel(asset.label)}</span>
                             <span class="status-label">
                                 {asset.status === 'done'
                                     ? 'Done'
