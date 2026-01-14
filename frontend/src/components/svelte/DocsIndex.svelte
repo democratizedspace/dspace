@@ -211,11 +211,16 @@
         overflow: hidden;
     }
 
+    .doc-snippet * {
+        /* Ensure highlighted tokens wrap even inside inline elements. */
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        white-space: normal;
+    }
+
     .doc-snippet strong {
         font-weight: 700;
         color: #ffffff;
-        overflow-wrap: anywhere;
-        word-break: break-word;
     }
 
     a:hover,
