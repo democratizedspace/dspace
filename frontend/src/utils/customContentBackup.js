@@ -51,13 +51,13 @@ function formatAssetLabel(kind, entity) {
     const name = entity?.title || entity?.name || id;
     switch (kind) {
         case 'item':
-            return `Item: ${name}`;
+            return `Item record: ${name}`;
         case 'item-image':
             return `Item image: ${name}`;
         case 'process':
-            return `Process: ${name}`;
+            return `Process record: ${name}`;
         case 'quest':
-            return `Quest: ${name}`;
+            return `Quest record: ${name}`;
         case 'quest-image':
             return `Quest image: ${name}`;
         default:
