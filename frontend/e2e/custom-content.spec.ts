@@ -33,6 +33,79 @@ test.describe('Custom Content Management', () => {
         }
     }
 
+    async function findCustomItemId(page: Page, itemName: string): Promise<string | null> {
+        return page.evaluate(async (name) => {
+            const openRequest = indexedDB.open('CustomContent');
+            const db: IDBDatabase = await new Promise((resolve, reject) => {
+                openRequest.onsuccess = () => resolve(openRequest.result);
+                openRequest.onerror = () => reject(openRequest.error);
+            });
+
+            try {
+                const tx = db.transaction('items', 'readonly');
+                const store = tx.objectStore('items');
+                const request = store.getAll();
+                const items = await new Promise<Array<{ id?: string; name?: string }>>(
+                    (resolve, reject) => {
+                        request.onsuccess = () => resolve(request.result);
+                        request.onerror = () => reject(request.error);
+                    }
+                );
+
+                const normalizedName = name.trim().toLowerCase();
+                const match = items.find(
+                    (item) => (item.name ?? '').trim().toLowerCase() === normalizedName
+                );
+                return match?.id ?? null;
+            } finally {
+                db.close();
+            }
+        }, itemName);
+    }
+
+    async function insertCustomProcess(
+        page: Page,
+        processTitle: string,
+        itemId: string
+    ): Promise<string> {
+        return page.evaluate(async ({ title, targetItemId }) => {
+            const openRequest = indexedDB.open('CustomContent');
+            const db: IDBDatabase = await new Promise((resolve, reject) => {
+                openRequest.onsuccess = () => resolve(openRequest.result);
+                openRequest.onerror = () => reject(openRequest.error);
+            });
+
+            const processId =
+                typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+                    ? crypto.randomUUID()
+                    : `process-${Date.now()}`;
+
+            const record = {
+                id: processId,
+                title,
+                duration: '1m',
+                requireItems: [{ id: targetItemId, count: 1 }],
+                consumeItems: [],
+                createItems: [],
+                custom: true,
+                createdAt: new Date().toISOString(),
+            };
+
+            try {
+                await new Promise<void>((resolve, reject) => {
+                    const tx = db.transaction('processes', 'readwrite');
+                    const store = tx.objectStore('processes');
+                    store.put(record);
+                    tx.oncomplete = () => resolve();
+                    tx.onerror = () => reject(tx.error);
+                });
+                return processId;
+            } finally {
+                db.close();
+            }
+        }, { title: processTitle, targetItemId: itemId });
+    }
+
     test('should create a custom item', async ({ page }) => {
         // Navigate to the item creation page
         await page.goto('/inventory/create');
@@ -172,6 +245,35 @@ test.describe('Custom Content Management', () => {
                 expect(await nameInput.inputValue()).toBe(processTitle);
             }
         }
+    });
+
+    test('shows custom processes on the related item page', async ({ page }) => {
+        await page.goto('/inventory/create');
+        await page.waitForLoadState('networkidle');
+
+        const uniqueItemName = `Process Item ${Date.now()}`;
+        await page.fill('#name', uniqueItemName);
+        await page.fill('#description', 'Custom item for process discovery regression test.');
+
+        const submitButton = page.locator('button.submit-button, input[type="submit"]');
+        await submitButton.click();
+        await page.waitForLoadState('networkidle');
+
+        const itemId = await findCustomItemId(page, uniqueItemName);
+        expect(itemId).toBeTruthy();
+        if (!itemId) {
+            throw new Error('Custom item id was not found after creation.');
+        }
+
+        const processTitle = `Custom Process ${Date.now()}`;
+        await insertCustomProcess(page, processTitle, itemId);
+
+        await page.goto(`/inventory/item/${itemId}`);
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        await expect(page.getByText('Processes:')).toBeVisible();
+        await expect(page.getByRole('heading', { name: processTitle })).toBeVisible();
     });
 
     test('should create and view a custom quest', async ({ page }) => {

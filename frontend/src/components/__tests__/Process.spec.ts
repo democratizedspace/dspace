@@ -1,4 +1,4 @@
-import { render, fireEvent } from '@testing-library/svelte';
+import { render, fireEvent, waitFor } from '@testing-library/svelte';
 import Process from '../svelte/Process.svelte';
 import { vi, expect, test, beforeEach, afterEach } from 'vitest';
 import { tick } from 'svelte';
@@ -19,6 +19,7 @@ const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
 const startProcess = vi.hoisted(() => vi.fn());
+const customProcessGet = vi.hoisted(() => vi.fn());
 
 const getProcessState = vi.mocked(getProcessStateMock);
 
@@ -100,6 +101,15 @@ vi.mock('../../utils/gameState/processes.js', () => ({
     finishProcessNow,
 }));
 
+vi.mock('../../utils/customcontent.js', () => ({
+    db: {
+        get: (...args) => customProcessGet(...args),
+    },
+    ENTITY_TYPES: {
+        PROCESS: 'process',
+    },
+}));
+
 vi.mock('../../lib/qaCheats', () => ({
     qaCheatsAvailability: {
         subscribe: (...args) => cheatsAvailabilityStore.subscribe(...args),
@@ -119,6 +129,7 @@ beforeEach(() => {
     getProcessStartedAtMock.mockReset();
     getProcessStartedAtMock.mockImplementation(() => Date.now());
     startProcess.mockClear();
+    customProcessGet.mockReset();
 });
 
 afterEach(() => {
@@ -366,4 +377,27 @@ test('renders fallback message when process details are unavailable', async () =
 
     await tick();
     expect(getByText('Process details unavailable.')).toBeTruthy();
+});
+
+test('loads custom process data when missing from built-in catalog', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+
+    customProcessGet.mockResolvedValue({
+        id: 'custom-fetch-1',
+        title: 'Fetched Custom Process',
+        duration: '5s',
+        requireItems: [],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    });
+
+    const { getByText } = render(Process, { processId: 'custom-fetch-1' });
+
+    await waitFor(() => {
+        expect(getByText('Fetched Custom Process')).toBeTruthy();
+    });
+
+    expect(customProcessGet).toHaveBeenCalledWith('process', 'custom-fetch-1');
 });

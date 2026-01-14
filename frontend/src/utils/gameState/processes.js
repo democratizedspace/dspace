@@ -308,6 +308,75 @@ export const getProcessesForItem = (itemId) => {
     return processMap;
 };
 
+export const getProcessesForItemIncludingCustom = async (itemId) => {
+    const processMap = getProcessesForItem(itemId);
+    const processSets = {};
+
+    Object.entries(processMap).forEach(([type, ids]) => {
+        processSets[type] = new Set(ids);
+    });
+
+    try {
+        const { db, ENTITY_TYPES } = await import('../customcontent.js');
+        const customProcesses = await db.query(ENTITY_TYPES.PROCESS, (process) => {
+            if (!process) {
+                return false;
+            }
+
+            const matchesItem = (items) =>
+                Array.isArray(items) && items.some((item) => item?.id === itemId);
+
+            return (
+                matchesItem(process.requireItems) ||
+                matchesItem(process.consumeItems) ||
+                matchesItem(process.createItems)
+            );
+        });
+
+        const addProcessId = (type, processId) => {
+            if (!processId) {
+                return;
+            }
+            if (!processSets[type]) {
+                processSets[type] = new Set();
+            }
+            processSets[type].add(processId);
+        };
+
+        customProcesses.forEach((process) => {
+            if (Array.isArray(process.requireItems)) {
+                const hasItem = process.requireItems.some((item) => item?.id === itemId);
+                if (hasItem) {
+                    addProcessId(ProcessItemTypes.REQUIRE_ITEM, process.id);
+                }
+            }
+
+            if (Array.isArray(process.consumeItems)) {
+                const hasItem = process.consumeItems.some((item) => item?.id === itemId);
+                if (hasItem) {
+                    addProcessId(ProcessItemTypes.CONSUME_ITEM, process.id);
+                }
+            }
+
+            if (Array.isArray(process.createItems)) {
+                const hasItem = process.createItems.some((item) => item?.id === itemId);
+                if (hasItem) {
+                    addProcessId(ProcessItemTypes.CREATE_ITEM, process.id);
+                }
+            }
+        });
+    } catch (error) {
+        return processMap;
+    }
+
+    return Object.entries(processSets).reduce((acc, [type, ids]) => {
+        if (ids.size > 0) {
+            acc[type] = Array.from(ids);
+        }
+        return acc;
+    }, {});
+};
+
 export const skipProcess = (processId, processDefinition) => {
     const process = resolveProcessDefinition(processId, processDefinition);
     if (!process) {

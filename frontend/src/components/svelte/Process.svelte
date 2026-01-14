@@ -20,6 +20,7 @@
     import { getItemCounts } from '../../utils/gameState/inventory.js';
     import { getItemMetadata } from './compactItemListHelpers.js';
     import { initializeQaCheats, qaCheatsAvailability, qaCheatsEnabled } from '../../lib/qaCheats';
+    import { isBrowser } from '../../utils/ssr.js';
 
     export let processId;
     export let processData = null;
@@ -44,6 +45,9 @@
     let queuedPulseMessage = '';
     let requiresContainer;
     let consumesContainer;
+    let customProcess = null;
+    let customLookupAttemptedId = null;
+    let lastProcessId = processId;
 
     // Slightly longer than the 1s CSS animation to avoid timing races.
     const pulseDurationMs = 1050;
@@ -251,6 +255,30 @@
         updateState();
     };
 
+    const loadCustomProcess = async (id) => {
+        if (!isBrowser || !id) {
+            return;
+        }
+
+        if (customLookupAttemptedId === id) {
+            return;
+        }
+
+        customLookupAttemptedId = id;
+
+        try {
+            const { db, ENTITY_TYPES } = await import('../../utils/customcontent.js');
+            const fetched = await db.get(ENTITY_TYPES.PROCESS, id);
+            if (fetched?.id === id) {
+                customProcess = fetched;
+            }
+        } catch (error) {
+            if (customLookupAttemptedId === id) {
+                customProcess = null;
+            }
+        }
+    };
+
     const onProcessCancel = () => {
         clearInterval(intervalId);
         cancelProcess(processId, process);
@@ -314,12 +342,24 @@
     $: {
         const builtInProcess = processes.find((p) => p.id === processId);
 
+        if (processId !== lastProcessId) {
+            lastProcessId = processId;
+            customProcess = null;
+            customLookupAttemptedId = null;
+        }
+
         if (processData) {
             process = processData;
         } else if (builtInProcess) {
             process = builtInProcess;
+        } else if (customProcess && customProcess.id === processId) {
+            process = customProcess;
         } else {
             process = null;
+        }
+
+        if (!processData && !builtInProcess && processId) {
+            loadCustomProcess(processId);
         }
 
         if (process) {

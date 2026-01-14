@@ -3,7 +3,10 @@
     import { writable } from 'svelte/store';
     import Chip from '../../../components/svelte/Chip.svelte';
     import BuySell from '../../../components/svelte/BuySell.svelte';
-    import { getProcessesForItem, ProcessItemTypes } from '../../../utils/gameState/processes.js';
+    import {
+        getProcessesForItemIncludingCustom,
+        ProcessItemTypes,
+    } from '../../../utils/gameState/processes.js';
     import { getItemCounts } from '../../../utils/gameState/inventory.js';
     import { getQuestsForItem } from '../../../utils/itemDependencies.js';
     import { db, ENTITY_TYPES } from '../../../utils/customcontent.js';
@@ -20,10 +23,10 @@
 
     let item = items.find((item) => item.id === itemId);
 
-    const processes = getProcessesForItem(itemId);
+    let processes = {};
     const quests = getQuestsForItem(itemId);
 
-    const hasProcesses = Object.values(processes).some((arr) => arr.length);
+    $: hasProcesses = Object.values(processes).some((arr) => Array.isArray(arr) && arr.length);
     const hasQuests = quests.requires.length > 0 || quests.rewards.length > 0;
 
     onMount(async () => {
@@ -33,6 +36,11 @@
             } catch (error) {
                 item = null;
             }
+        }
+        try {
+            processes = await getProcessesForItemIncludingCustom(itemId);
+        } catch (error) {
+            processes = {};
         }
         const itemCount = getItemCounts([{ id: itemId }])[itemId];
         count.set(itemCount);
