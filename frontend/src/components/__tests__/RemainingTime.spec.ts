@@ -25,3 +25,14 @@ test('does not update without parent-driven rerenders', async () => {
 
     expect(getByText(/remaining/).textContent).toBe(initialText);
 });
+
+test('handles invalid end dates by showing zero remaining', () => {
+    const now = new Date('2026-01-13T00:00:00.000Z');
+
+    const { getByText } = render(RemainingTime, {
+        endDate: 'not-a-date',
+        currentTime: now,
+    });
+
+    expect(getByText(/remaining/).textContent).toBe(' remaining');
+});
