@@ -20,6 +20,11 @@ Each content type follows specific guidelines to ensure consistency, educational
 Management pages (`/quests/manage`, `/items/manage`, and `/processes/manage`) let you
 edit or delete custom entries stored locally in IndexedDB.
 
+Custom image uploads (items and quests) are processed locally at ingestion time: images are
+letterboxed into a 512×512 square with a white background and stored as lossy JPEGs targeting
+under 50KB. This keeps IndexedDB lean, speeds up exports/backups, and improves load times. For
+new ingestion points, reuse the shared helper at `frontend/src/utils/imageProcessing.js`.
+
 ## Getting Started
 
 Before creating any content, we recommend:

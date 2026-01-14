@@ -6,6 +6,14 @@ import '@testing-library/jest-dom';
 import { render, act, fireEvent, waitFor } from '@testing-library/svelte';
 import ItemForm from '../src/components/svelte/ItemForm.svelte';
 
+const downsampleMock = jest.fn().mockResolvedValue({
+    dataUrl: 'data:image/jpeg;base64,mockedBase64Data',
+    bytes: 40960,
+    width: 512,
+    height: 512,
+    qualityUsed: 0.8,
+});
+
 // Mock the database operations using Jest instead of Vitest
 jest.mock('../src/utils/indexeddb.js', () => ({
     addEntity: jest.fn().mockResolvedValue('mocked-item-id'),
@@ -14,6 +22,10 @@ jest.mock('../src/utils/indexeddb.js', () => ({
 
 jest.mock('../src/utils/gameState/inventory.js', () => ({
     addItems: jest.fn(),
+}));
+
+jest.mock('../src/utils/imageProcessing.js', () => ({
+    downsampleAndCompressToJpeg: (...args) => downsampleMock(...args),
 }));
 
 import { addEntity, updateEntity } from '../src/utils/indexeddb.js';
@@ -26,27 +38,12 @@ global.fetch = jest.fn(() =>
     })
 );
 
-// Mock File and FileReader for image uploads
+// Mock File for image uploads
 global.File = class File {
     constructor(bits, name, options) {
         this.name = name;
         this.size = bits.length;
         this.type = options?.type || '';
-    }
-};
-
-// Create a FileReader mock
-global.FileReader = class FileReader {
-    constructor() {
-        this.readAsDataURL = jest.fn((file) => {
-            // Simulate the file reading process
-            setTimeout(() => {
-                this.result = 'data:image/png;base64,mockedBase64Data';
-                if (typeof this.onload === 'function') {
-                    this.onload({ target: this });
-                }
-            }, 0);
-        });
     }
 };
 
@@ -73,6 +70,7 @@ describe('ItemForm Component', () => {
 
         // Reset mocks
         jest.clearAllMocks();
+        downsampleMock.mockClear();
     });
 
     afterEach(() => {
@@ -125,6 +123,10 @@ describe('ItemForm Component', () => {
             });
         });
 
+        await waitFor(() => {
+            expect(downsampleMock).toHaveBeenCalled();
+        });
+
         // Submit the form
         await act(async () => {
             fireEvent.click(getByText(/create item/i));
@@ -136,8 +138,7 @@ describe('ItemForm Component', () => {
                 expect.objectContaining({
                     name: 'Test Item',
                     description: 'This is a test item description',
-                    image: 'data:image/png;base64,mockedBase64Data',
-                    imageBlob: expect.any(File),
+                    image: 'data:image/jpeg;base64,mockedBase64Data',
                     dependencies: ['resource/filament', 'tool/nozzle'],
                 })
             );
@@ -165,6 +166,10 @@ describe('ItemForm Component', () => {
             fireEvent.change(getByLabelText(/upload an image/i), {
                 target: { files: [file] },
             });
+        });
+
+        await waitFor(() => {
+            expect(downsampleMock).toHaveBeenCalled();
         });
 
         await act(async () => {
@@ -204,6 +209,10 @@ describe('ItemForm Component', () => {
             fireEvent.change(getByLabelText(/upload an image/i), {
                 target: { files: [file] },
             });
+        });
+
+        await waitFor(() => {
+            expect(downsampleMock).toHaveBeenCalled();
         });
 
         await act(async () => {
@@ -337,6 +346,10 @@ describe('ItemForm Component', () => {
             fireEvent.change(getByLabelText(/upload an image/i), {
                 target: { files: [file] },
             });
+        });
+
+        await waitFor(() => {
+            expect(downsampleMock).toHaveBeenCalled();
         });
 
         expect(await findByAltText('Preview')).toBeInTheDocument();

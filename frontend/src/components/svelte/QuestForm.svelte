@@ -17,6 +17,7 @@
         createDefaultDialogueNode,
     } from '../../utils/questDefaults.js';
     import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
+    import { downsampleAndCompressToJpeg } from '../../utils/imageProcessing.js';
 
     export let isEdit = false;
     export let questId = null;
@@ -40,6 +41,7 @@
     let nodeDraftError = '';
     const MIN_TITLE_LENGTH = 3;
     const MIN_DESC_LENGTH = 10;
+    let isProcessingImage = false;
 
     let touched = { title: false, description: false };
 
@@ -211,16 +213,23 @@
         }
     });
 
-    function handleImageUpload(event) {
+    async function handleImageUpload(event) {
         const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previewUrl = e.target.result;
-            };
-            reader.readAsDataURL(file);
             image = file;
-            validateForm();
+            isProcessingImage = true;
+            try {
+                const processed = await downsampleAndCompressToJpeg(file);
+                previewUrl = processed.dataUrl;
+                validateForm();
+            } catch (error) {
+                console.error('Failed to process quest image:', error);
+                previewUrl = null;
+                image = null;
+                validateForm();
+            } finally {
+                isProcessingImage = false;
+            }
         } else {
             previewUrl = null;
             image = null;
@@ -747,34 +756,6 @@
         return Object.keys(errors).length === 0;
     }
 
-    function readFileAsDataUrl(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = (event) => resolve(event?.target?.result ?? '');
-            reader.onerror = (error) => reject(error);
-            reader.readAsDataURL(file);
-        });
-    }
-
-    async function uploadImage(file) {
-        if (!file) {
-            return previewUrl; // Return existing image URL if no new file
-        }
-
-        if (previewUrl && previewUrl.startsWith('data:image')) {
-            return previewUrl;
-        }
-
-        try {
-            const dataUrl = await readFileAsDataUrl(file);
-            previewUrl = dataUrl;
-            return dataUrl;
-        } catch (error) {
-            console.error('Error preparing quest image:', error);
-            return previewUrl;
-        }
-    }
-
     async function handlePreview() {
         const isValid = await validateForm();
         if (isValid) {
@@ -789,12 +770,20 @@
         const isValid = await validateForm();
         if (!isValid) return;
 
+        if (isProcessingImage) {
+            validationErrors = {
+                ...validationErrors,
+                image: 'Image is still processing. Please wait a moment.',
+            };
+            return;
+        }
+
         isSubmitting = true;
 
         try {
             // Upload image if there's a new one
             const { payload } = getQuestPayload();
-            const imageUrl = await uploadImage(image);
+            const imageUrl = previewUrl;
             const questData = {
                 ...payload,
                 image: imageUrl || payload.image || DEFAULT_QUEST_IMAGE,

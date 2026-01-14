@@ -9,6 +9,13 @@ import QuestForm from '../src/components/svelte/QuestForm.svelte';
 
 const questsAddMock = jest.fn();
 const listMock = jest.fn();
+const downsampleMock = jest.fn().mockResolvedValue({
+    dataUrl: 'data:image/jpeg;base64,TESTDATA',
+    bytes: 40960,
+    width: 512,
+    height: 512,
+    qualityUsed: 0.8,
+});
 
 jest.mock('../src/utils/customcontent.js', () => ({
     db: {
@@ -32,6 +39,10 @@ jest.mock('../src/utils/questHelpers.js', () => ({
     isQuestTitleUnique: () => true,
 }));
 
+jest.mock('../src/utils/imageProcessing.js', () => ({
+    downsampleAndCompressToJpeg: (...args) => downsampleMock(...args),
+}));
+
 function setupDom() {
     document.body.innerHTML = `
         <div id="app">
@@ -50,6 +61,7 @@ describe('QuestForm image uploads', () => {
         questsAddMock.mockResolvedValue('quest-123');
         listMock.mockReset();
         listMock.mockResolvedValue([]);
+        downsampleMock.mockReset();
         global.fetch = jest.fn(() =>
             Promise.resolve({
                 ok: true,
@@ -63,21 +75,6 @@ describe('QuestForm image uploads', () => {
                 this.type = options.type || '';
             }
         };
-        global.FileReader = class FileReader {
-            constructor() {
-                this.onload = null;
-                this.onerror = null;
-            }
-
-            readAsDataURL() {
-                setTimeout(() => {
-                    this.result = 'data:image/png;base64,TESTDATA';
-                    if (typeof this.onload === 'function') {
-                        this.onload({ target: this });
-                    }
-                }, 0);
-            }
-        };
         global.__SSR__ = false;
         global.__BROWSER__ = true;
     });
@@ -86,7 +83,6 @@ describe('QuestForm image uploads', () => {
         container.innerHTML = '';
         delete global.fetch;
         delete global.File;
-        delete global.FileReader;
     });
 
     it('stores quest images locally without calling a remote upload endpoint', async () => {
@@ -141,6 +137,10 @@ describe('QuestForm image uploads', () => {
         });
 
         await waitFor(() => {
+            expect(downsampleMock).toHaveBeenCalled();
+        });
+
+        await waitFor(() => {
             const preview = container.querySelector('.image-preview');
             expect(preview).toBeInTheDocument();
         });
@@ -152,7 +152,7 @@ describe('QuestForm image uploads', () => {
         await waitFor(() => expect(questsAddMock).toHaveBeenCalledTimes(1));
 
         const savedQuest = questsAddMock.mock.calls[0][0];
-        expect(savedQuest.image).toBe('data:image/png;base64,TESTDATA');
+        expect(savedQuest.image).toBe('data:image/jpeg;base64,TESTDATA');
         expect(global.fetch).not.toHaveBeenCalled();
     });
 });
