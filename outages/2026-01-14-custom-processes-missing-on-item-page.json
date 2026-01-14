@@ -10,6 +10,6 @@
     "frontend/src/pages/inventory/item/ItemPage.svelte",
     "frontend/src/components/__tests__/Process.spec.ts",
     "frontend/e2e/custom-content.spec.ts",
-    "https://github.com/democratizedspace/dspace/pull/PR-PLACEHOLDER"
+    "https://github.com/democratizedspace/dspace/pull/2856"
   ]
 }

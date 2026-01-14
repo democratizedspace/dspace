@@ -347,10 +347,15 @@ export const getProcessesForItemIncludingCustom = async (itemId) => {
         return builtInProcessMap;
     }
 
-    const customProcesses = await db.query(ENTITY_TYPES.PROCESS, (process) => {
-        const matches = getMatchingProcessBuckets(process, itemId);
-        return matches.require || matches.consume || matches.create;
-    });
+    let customProcesses;
+    try {
+        customProcesses = await db.query(ENTITY_TYPES.PROCESS, (process) => {
+            const matches = getMatchingProcessBuckets(process, itemId);
+            return matches.require || matches.consume || matches.create;
+        });
+    } catch (error) {
+        return builtInProcessMap;
+    }
 
     customProcesses.forEach((process) => {
         const matches = getMatchingProcessBuckets(process, itemId);

@@ -4,6 +4,7 @@
     import Chip from '../../../components/svelte/Chip.svelte';
     import BuySell from '../../../components/svelte/BuySell.svelte';
     import {
+        getProcessesForItem,
         getProcessesForItemIncludingCustom,
         ProcessItemTypes,
     } from '../../../utils/gameState/processes.js';
@@ -43,7 +44,7 @@
         try {
             processes = await getProcessesForItemIncludingCustom(itemId);
         } catch (error) {
-            processes = {};
+            processes = getProcessesForItem(itemId);
         }
         const itemCount = getItemCounts([{ id: itemId }])[itemId];
         count.set(itemCount);
