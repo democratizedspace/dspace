@@ -1,5 +1,4 @@
 import { getItems, getProcesses, getQuests, openCustomContentDB } from './indexeddb.js';
-import { db } from './customcontent.js';
 import { isBrowser } from './ssr.js';
 
 export const BACKUP_SCHEMA_VERSION = 1;
@@ -212,47 +211,31 @@ async function readStoreAll(store) {
     });
 }
 
+async function addToStore(store, entity) {
+    const request = store.add(entity);
+    return await new Promise((resolve, reject) => {
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error ?? new Error('IndexedDB write failed.'));
+    });
+}
+
 async function readCustomContentSnapshot() {
     if (!isBrowser || typeof indexedDB === 'undefined') {
         return null;
     }
 
-    return await new Promise((resolve, reject) => {
-        const request = indexedDB.open('CustomContent');
-
-        request.onupgradeneeded = () => {
-            const db = request.result;
-            if (!db.objectStoreNames.contains('items')) {
-                db.createObjectStore('items', { keyPath: 'id' });
-            }
-            if (!db.objectStoreNames.contains('processes')) {
-                db.createObjectStore('processes', { keyPath: 'id' });
-            }
-            if (!db.objectStoreNames.contains('quests')) {
-                db.createObjectStore('quests', { keyPath: 'id' });
-            }
-        };
-
-        request.onerror = () =>
-            reject(request.error ?? new Error('Unable to open custom content database.'));
-
-        request.onsuccess = async () => {
-            const db = request.result;
-            try {
-                const tx = db.transaction(['items', 'processes', 'quests'], 'readonly');
-                const [items, processes, quests] = await Promise.all([
-                    readStoreAll(tx.objectStore('items')),
-                    readStoreAll(tx.objectStore('processes')),
-                    readStoreAll(tx.objectStore('quests')),
-                ]);
-                resolve({ items, processes, quests });
-            } catch (error) {
-                reject(error);
-            } finally {
-                db.close();
-            }
-        };
-    });
+    const dbInstance = await openCustomContentDB();
+    try {
+        const tx = dbInstance.transaction(['items', 'processes', 'quests'], 'readonly');
+        const [items, processes, quests] = await Promise.all([
+            readStoreAll(tx.objectStore('items')),
+            readStoreAll(tx.objectStore('processes')),
+            readStoreAll(tx.objectStore('quests')),
+        ]);
+        return { items, processes, quests };
+    } finally {
+        dbInstance.close();
+    }
 }
 
 async function ensureCustomContentSchema() {
@@ -530,23 +513,43 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
     const plan = buildImportPlan(items, processes, quests, images);
     emitProgress(onProgress, { type: 'plan', assets: plan });
 
-    for (const asset of plan) {
-        try {
-            if (asset.kind === 'image') {
-                // Images are already applied during validation.
-            } else if (asset.kind === 'item') {
-                await db.items.add(asset.entity);
-            } else if (asset.kind === 'process') {
-                await db.processes.add(asset.entity);
-            } else if (asset.kind === 'quest') {
-                await db.quests.add(asset.entity);
+    const dbInstance = await openCustomContentDB();
+    try {
+        const tx = dbInstance.transaction(['items', 'processes', 'quests'], 'readwrite');
+        const stores = {
+            item: tx.objectStore('items'),
+            process: tx.objectStore('processes'),
+            quest: tx.objectStore('quests'),
+        };
+
+        for (const asset of plan) {
+            try {
+                if (asset.kind === 'image') {
+                    // Images are already applied during validation.
+                } else if (asset.kind === 'item') {
+                    await addToStore(stores.item, asset.entity);
+                } else if (asset.kind === 'process') {
+                    await addToStore(stores.process, asset.entity);
+                } else if (asset.kind === 'quest') {
+                    await addToStore(stores.quest, asset.entity);
+                }
+                emitProgress(onProgress, { type: 'asset', assetId: asset.id });
+            } catch (error) {
+                const message = error instanceof Error ? error.message : String(error);
+                emitProgress(onProgress, { type: 'error', assetId: asset.id, error: message });
+                throw new Error(`Failed to import ${asset.label}: ${message}`);
             }
-            emitProgress(onProgress, { type: 'asset', assetId: asset.id });
-        } catch (error) {
-            const message = error instanceof Error ? error.message : String(error);
-            emitProgress(onProgress, { type: 'error', assetId: asset.id, error: message });
-            throw new Error(`Failed to import ${asset.label}: ${message}`);
         }
+
+        await new Promise((resolve, reject) => {
+            tx.oncomplete = resolve;
+            tx.onerror = () =>
+                reject(tx.error ?? new Error('IndexedDB transaction failed during import.'));
+            tx.onabort = () =>
+                reject(tx.error ?? new Error('IndexedDB transaction aborted during import.'));
+        });
+    } finally {
+        dbInstance.close();
     }
 
     return {
