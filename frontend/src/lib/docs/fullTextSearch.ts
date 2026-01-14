@@ -115,10 +115,13 @@ const buildSnippetHtml = (snippet: SnippetParts) => {
     return parts.join(' ');
 };
 
+const buildSnippetText = (snippet: SnippetParts) =>
+    [...snippet.before, snippet.match, ...snippet.after].join(' ');
+
 export const findDocSnippet = (
     doc: { title: string; bodyText?: string },
     keywords: string[]
-): { keyword: string; snippetHtml: string } | null => {
+): { keyword: string; snippetHtml: string; snippetText: string } | null => {
     if (!doc.bodyText || !keywords.length) {
         return null;
     }
@@ -129,7 +132,11 @@ export const findDocSnippet = (
         const snippet = extractSnippet(doc.bodyText, keyword);
 
         if (snippet) {
-            return { keyword, snippetHtml: buildSnippetHtml(snippet) };
+            return {
+                keyword,
+                snippetHtml: buildSnippetHtml(snippet),
+                snippetText: buildSnippetText(snippet),
+            };
         }
     }
 

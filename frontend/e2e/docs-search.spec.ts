@@ -2,6 +2,9 @@ import { expect, test } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
 test.describe('Docs search', () => {
+    // Allow for sub-pixel rounding differences across browsers.
+    const subPixelTolerance = 1;
+
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
     });
@@ -63,5 +66,57 @@ test.describe('Docs search', () => {
 
         await searchInput.fill('');
         await expect(page.locator('.doc-snippet')).toHaveCount(0);
+    });
+
+    test('wraps long snippet tokens without overflowing layout', async ({ page }) => {
+        await page.goto('/docs');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const searchInput = page.getByRole('searchbox', { name: /search docs/i });
+        await searchInput.fill('github');
+
+        const docLink = page.getByRole('link', { name: 'Docs search', exact: true });
+        await expect(docLink).toBeVisible();
+
+        const snippet = docLink.locator('..').locator('.doc-snippet');
+        await expect(snippet).toBeVisible();
+        await expect(snippet).toHaveAttribute('title', /https:\/\/github\.com/);
+
+        const overflowWrap = await snippet.evaluate((el) => getComputedStyle(el).overflowWrap);
+        expect(overflowWrap).toMatch(/anywhere|break-word/);
+
+        const lineClamp = await snippet.evaluate((el) => getComputedStyle(el).webkitLineClamp);
+        expect(lineClamp).toBe('2');
+
+        const snippetBox = await snippet.boundingBox();
+        const containerBox = await docLink.locator('..').boundingBox();
+        expect(snippetBox).not.toBeNull();
+        expect(containerBox).not.toBeNull();
+        if (snippetBox && containerBox) {
+            expect(snippetBox.x + snippetBox.width).toBeLessThanOrEqual(
+                containerBox.x + containerBox.width + subPixelTolerance
+            );
+        }
+
+        const pageFits = await page.evaluate(
+            (tolerance) =>
+                document.documentElement.scrollWidth <=
+                document.documentElement.clientWidth + tolerance,
+            subPixelTolerance
+        );
+        expect(pageFits).toBeTruthy();
+
+        const docLinkBox = await docLink.locator('..').boundingBox();
+        expect(docLinkBox).not.toBeNull();
+
+        const viewportWidth =
+            page.viewportSize()?.width ?? (await page.evaluate(() => window.innerWidth));
+        if (docLinkBox) {
+            expect(docLinkBox.x).toBeGreaterThanOrEqual(0);
+            expect(docLinkBox.x + docLinkBox.width).toBeLessThanOrEqual(
+                viewportWidth + subPixelTolerance
+            );
+        }
     });
 });
