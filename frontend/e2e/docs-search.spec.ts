@@ -89,11 +89,23 @@ test.describe('Docs search', () => {
         const lineClamp = await snippet.evaluate((el) => getComputedStyle(el).webkitLineClamp);
         expect(lineClamp).toBe('2');
 
-        const fitsHorizontally = await snippet.evaluate(
-            (el, tolerance) => el.scrollWidth <= el.clientWidth + tolerance,
+        const snippetBox = await snippet.boundingBox();
+        const containerBox = await docLink.locator('..').boundingBox();
+        expect(snippetBox).not.toBeNull();
+        expect(containerBox).not.toBeNull();
+        if (snippetBox && containerBox) {
+            expect(snippetBox.x + snippetBox.width).toBeLessThanOrEqual(
+                containerBox.x + containerBox.width + subPixelTolerance
+            );
+        }
+
+        const pageFits = await page.evaluate(
+            (tolerance) =>
+                document.documentElement.scrollWidth <=
+                document.documentElement.clientWidth + tolerance,
             subPixelTolerance
         );
-        expect(fitsHorizontally).toBeTruthy();
+        expect(pageFits).toBeTruthy();
 
         const docLinkBox = await docLink.locator('..').boundingBox();
         expect(docLinkBox).not.toBeNull();
