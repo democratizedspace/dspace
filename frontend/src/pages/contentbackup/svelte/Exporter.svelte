@@ -22,10 +22,10 @@
         );
     };
 
-    const formatSummaryLabel = (kind, entity) => {
-        const name = entity?.title || entity?.name || entity?.id || 'Unknown';
-        return `${kind}: ${name}`;
-    };
+    const buildSummaryEntry = (kind, entity) => ({
+        kind,
+        name: entity?.title || entity?.name || entity?.id || 'Unknown',
+    });
 
     const formatProgressLabel = (label) => {
         const normalized = label
@@ -72,11 +72,11 @@
             backupBlob = result.blob;
             backupFilename = result.filename;
             preparedSummary = {
-                items: result.data.items.map((item) => formatSummaryLabel('Item', item)),
+                items: result.data.items.map((item) => buildSummaryEntry('Item', item)),
                 processes: result.data.processes.map((process) =>
-                    formatSummaryLabel('Process', process)
+                    buildSummaryEntry('Process', process)
                 ),
-                quests: result.data.quests.map((quest) => formatSummaryLabel('Quest', quest)),
+                quests: result.data.quests.map((quest) => buildSummaryEntry('Quest', quest)),
             };
             assets = [];
             status = 'ready';
@@ -156,14 +156,23 @@
                 >
                     <h3>Prepared content</h3>
                     <ul>
-                        {#each preparedSummary.items as label}
-                            <li>{label}</li>
+                        {#each preparedSummary.items as entry}
+                            <li>
+                                <span class="summary-kind">{entry.kind}:</span>
+                                <span class="summary-name">{entry.name}</span>
+                            </li>
                         {/each}
-                        {#each preparedSummary.processes as label}
-                            <li>{label}</li>
+                        {#each preparedSummary.processes as entry}
+                            <li>
+                                <span class="summary-kind">{entry.kind}:</span>
+                                <span class="summary-name">{entry.name}</span>
+                            </li>
                         {/each}
-                        {#each preparedSummary.quests as label}
-                            <li>{label}</li>
+                        {#each preparedSummary.quests as entry}
+                            <li>
+                                <span class="summary-kind">{entry.kind}:</span>
+                                <span class="summary-name">{entry.name}</span>
+                            </li>
                         {/each}
                     </ul>
                 </div>
@@ -226,6 +235,11 @@
     .prepared-preview ul {
         margin: 0;
         padding-left: 1.2rem;
+    }
+
+    .summary-kind {
+        font-weight: 600;
+        margin-right: 0.25rem;
     }
 
     .progress-item {
