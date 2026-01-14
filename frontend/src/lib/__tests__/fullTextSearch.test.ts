@@ -98,6 +98,22 @@ describe('findDocSnippet', () => {
 
         expect(snippet?.keyword).toBe('solar');
         expect(snippet?.snippetHtml).toContain('<strong>Solar</strong>');
+        expect(snippet?.snippetText).toBe('Solar arrays pair');
+    });
+
+    it('returns plain text snippets for punctuation-heavy matches', () => {
+        const longUrl =
+            'https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/svelte/' +
+            'DocsIndex.svelte';
+        const doc = {
+            title: 'Docs search',
+            bodyText: `Example long URL: ${longUrl}`,
+        };
+
+        const snippet = findDocSnippet(doc, ['github']);
+
+        expect(snippet?.snippetHtml).toContain('<strong>https://github.com');
+        expect(snippet?.snippetText).toContain(longUrl);
     });
 });
 

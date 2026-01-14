@@ -1,0 +1,13 @@
+{
+  "id": "docs-search-snippet-overflow",
+  "date": "2026-01-14",
+  "component": "frontend-docs-search",
+  "rootCause": "Docs search snippets rendered long unbroken tokens without wrap or clamp rules, so the flex items expanded beyond their containers and displaced doc links.",
+  "resolution": "Clamp snippets to two lines, allow breaking inside long tokens, constrain link wrappers with min/max-width, and surface full snippet text via a tooltip; added Docs search E2E coverage and a full-text snippet unit test.",
+  "references": [
+    "frontend/src/components/svelte/DocsIndex.svelte",
+    "frontend/src/lib/docs/fullTextSearch.ts",
+    "frontend/src/lib/__tests__/fullTextSearch.test.ts",
+    "frontend/e2e/docs-search.spec.ts"
+  ]
+}
