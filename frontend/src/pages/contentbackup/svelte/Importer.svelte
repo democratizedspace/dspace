@@ -8,6 +8,7 @@
     let assets = [];
     let status = 'idle';
     let message = '';
+    let successFilename = '';
     let isDragging = false;
 
     const updateAssets = (assetId, updates) => {
@@ -38,6 +39,7 @@
 
         status = 'running';
         message = '';
+        successFilename = '';
         assets = [];
 
         try {
@@ -60,10 +62,12 @@
             });
 
             status = 'success';
-            message = `Import complete: ${file.name}`;
+            message = 'Import complete';
+            successFilename = file.name;
         } catch (error) {
             status = 'error';
             message = error instanceof Error ? error.message : 'Import failed. Please try again.';
+            successFilename = '';
         }
     };
 
@@ -111,7 +115,12 @@
         </label>
 
         {#if status === 'success'}
-            <p class="status success" role="status">{message}</p>
+            <p class="status success" role="status" aria-live="polite">
+                <span>{message}</span>
+                {#if successFilename}
+                    <span class="status-detail"> — {successFilename}</span>
+                {/if}
+            </p>
         {:else if status === 'error'}
             <p class="status error" role="alert">{message}</p>
         {/if}

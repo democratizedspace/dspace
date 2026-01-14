@@ -121,7 +121,7 @@
             <p class="status error" role="alert">{errorMessage}</p>
         {/if}
 
-        {#if assets.length > 0}
+        {#if assets.length > 0 && status !== 'ready'}
             <div class="progress-list" aria-live="polite">
                 {#each assets as asset}
                     <div class="progress-item" data-status={asset.status}>
