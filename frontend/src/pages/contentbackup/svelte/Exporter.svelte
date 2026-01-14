@@ -29,9 +29,9 @@
 
     const formatProgressLabel = (label) => {
         const normalized = label
-            .replace(/^Item:\s*/i, 'Item record: ')
-            .replace(/^Process:\s*/i, 'Process record: ')
-            .replace(/^Quest:\s*/i, 'Quest record: ');
+            .replace(/Item:\s*/i, 'Item record: ')
+            .replace(/Process:\s*/i, 'Process record: ')
+            .replace(/Quest:\s*/i, 'Quest record: ');
 
         return normalized.replace(':', ' —');
     };
@@ -78,6 +78,7 @@
                 ),
                 quests: result.data.quests.map((quest) => formatSummaryLabel('Quest', quest)),
             };
+            assets = [];
             status = 'ready';
         } catch (error) {
             const message = error instanceof Error ? error.message : String(error);
