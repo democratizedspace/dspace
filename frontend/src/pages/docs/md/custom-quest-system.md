@@ -12,6 +12,8 @@ JSON files. This page outlines the workflow and links to detailed guides.
 
 - **QuestForm editor** – Create nodes, options, and upload images through a friendly UI that stores
   pictures locally as data URLs
+- **Image optimization** – Uploaded quest art is downsampled to 512×512 and JPEG-compressed
+  (targeting <50KB) so IndexedDB stays fast and lightweight
 - **Schema validation** – Every quest is checked against the official JSON schema
 - **Preview mode** – See how your quest plays before saving
 - **Contribution workflow** – Submit quests for review and automatically open a pull request

@@ -44,7 +44,12 @@ Every item requires the following basic properties:
 
 ### Implementation State
 
-Currently, the `ItemForm.svelte` component supports creating and editing items with the properties listed above. It uploads images, persists data to IndexedDB, and now includes a dependency editor so complex items can declare required ingredients without editing JSON manually.
+Currently, the `ItemForm.svelte` component supports creating and editing items with the
+properties listed above. It uploads images, downscales them to 512×512, JPEG-compresses
+them (targeting <50KB), and persists data to IndexedDB so backups and loads stay fast. The
+image processing lives in `frontend/src/utils/imageProcessing.js` so future upload points
+reuse the same helper, and the form includes a dependency editor so complex items can
+declare required ingredients without editing JSON manually.
 
 List any prerequisite item IDs in the **Dependencies** field using commas or new lines. The form trims whitespace, ignores blank rows, and the live preview immediately reflects the dependency list so you can verify relationships before saving.
 
