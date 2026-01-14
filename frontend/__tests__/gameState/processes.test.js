@@ -34,6 +34,7 @@ import {
     cancelProcess,
     pauseProcess,
     resumeProcess,
+    finishProcessNow,
     getProcessesForItem,
     skipProcess,
 } from '../../src/utils/gameState/processes.js';
@@ -75,10 +76,59 @@ describe('gameState - processes', () => {
         expect(hasRequiredAndConsumedItems('bar')).toBe(false);
     });
 
+    test('hasRequiredAndConsumedItems should use provided process definition', () => {
+        const definition = {
+            id: 'custom-1',
+            requireItems: [],
+            consumeItems: [],
+        };
+        expect(hasRequiredAndConsumedItems('custom-1', definition)).toBe(true);
+    });
+
+    test('hasRequiredAndConsumedItems should handle undefined item arrays', () => {
+        const definition = {
+            id: 'custom-2',
+            createItems: [{ id: 'custom-item', count: 1 }],
+        };
+        expect(hasRequiredAndConsumedItems('custom-2', definition)).toBe(true);
+    });
+
     test('startProcess should not start if any item is missing', () => {
         mockGameState.inventory['item-1'] = 0;
         startProcess('foo');
         expect(mockGameState.processes['foo']).toBeUndefined();
+    });
+
+    test('startProcess should use provided process definition', () => {
+        const definition = {
+            id: 'custom-1',
+            duration: '10s',
+            requireItems: [],
+            consumeItems: [],
+            createItems: [],
+        };
+        startProcess('custom-1', definition);
+        expect(mockGameState.processes['custom-1']).toEqual({
+            startedAt: expect.any(Number),
+            duration: expect.any(Number),
+            pausedAt: null,
+            elapsedBeforePause: 0,
+        });
+    });
+
+    test('startProcess should handle undefined consume items for custom processes', () => {
+        const definition = {
+            id: 'custom-2',
+            duration: '10s',
+            createItems: [{ id: 'custom-item', count: 1 }],
+        };
+        startProcess('custom-2', definition);
+        expect(mockGameState.processes['custom-2']).toEqual({
+            startedAt: expect.any(Number),
+            duration: expect.any(Number),
+            pausedAt: null,
+            elapsedBeforePause: 0,
+        });
     });
 
     test('startProcess should start correctly', () => {
@@ -177,6 +227,34 @@ describe('gameState - processes', () => {
         expect(mockGameState.inventory['3']).toBe(1);
     });
 
+    test('finishProcess should use provided process definition', () => {
+        const definition = {
+            id: 'custom-1',
+            duration: '10s',
+            requireItems: [],
+            consumeItems: [],
+            createItems: [{ id: 'custom-item', count: 2 }],
+        };
+        mockGameState.inventory['custom-item'] = 0;
+        startProcess('custom-1', definition);
+        mockGameState.processes['custom-1'].startedAt = Date.now() - 20000;
+        finishProcess('custom-1', definition);
+        expect(mockGameState.inventory['custom-item']).toBe(2);
+    });
+
+    test('finishProcess should handle undefined create items for custom processes', () => {
+        const definition = {
+            id: 'custom-2',
+            duration: '10s',
+            consumeItems: [{ id: 'custom-item', count: 1 }],
+        };
+        mockGameState.inventory['custom-item'] = 3;
+        startProcess('custom-2', definition);
+        mockGameState.processes['custom-2'].startedAt = Date.now() - 20000;
+        finishProcess('custom-2', definition);
+        expect(mockGameState.inventory['custom-item']).toBe(2);
+    });
+
     test('finishProcess should remove the process from the game state', () => {
         startProcess('foo');
         mockGameState.processes['foo'].startedAt = Date.now() - 20000;
@@ -217,6 +295,32 @@ describe('gameState - processes', () => {
         startProcess('foo');
         cancelProcess('foo');
         expect(mockGameState.inventory['item-2']).toBe(50);
+    });
+
+    test('cancelProcess should use provided process definition', () => {
+        const definition = {
+            id: 'custom-1',
+            duration: '10s',
+            requireItems: [],
+            consumeItems: [{ id: 'custom-item', count: 3 }],
+            createItems: [],
+        };
+        mockGameState.inventory['custom-item'] = 5;
+        startProcess('custom-1', definition);
+        cancelProcess('custom-1', definition);
+        expect(mockGameState.inventory['custom-item']).toBe(5);
+    });
+
+    test('cancelProcess should handle undefined consume items for custom processes', () => {
+        const definition = {
+            id: 'custom-2',
+            duration: '10s',
+            createItems: [{ id: 'custom-item', count: 1 }],
+        };
+        mockGameState.inventory['custom-item'] = 1;
+        startProcess('custom-2', definition);
+        cancelProcess('custom-2', definition);
+        expect(mockGameState.inventory['custom-item']).toBe(1);
     });
 
     test('pauseProcess should move process to paused state', () => {
@@ -292,5 +396,47 @@ describe('gameState - processes', () => {
         startProcess('foo');
         skipProcess('foo');
         expect(mockGameState.inventory['item-2']).toBe(47);
+    });
+
+    test('skipProcess should handle custom processes with undefined items', () => {
+        const definition = {
+            id: 'custom-3',
+            duration: '10s',
+            createItems: [{ id: 'custom-item', count: 2 }],
+        };
+        mockGameState.inventory['custom-item'] = 0;
+        startProcess('custom-3', definition);
+        skipProcess('custom-3', definition);
+        expect(mockGameState.inventory['custom-item']).toBe(2);
+        expect(mockGameState.processes['custom-3']).toBeUndefined();
+    });
+
+    test('finishProcessNow should use provided process definition', () => {
+        const definition = {
+            id: 'custom-1',
+            duration: '10s',
+            requireItems: [],
+            consumeItems: [],
+            createItems: [{ id: 'custom-item', count: 1 }],
+        };
+        mockGameState.inventory['custom-item'] = 0;
+        startProcess('custom-1', definition);
+        finishProcessNow('custom-1', definition);
+        expect(mockGameState.inventory['custom-item']).toBe(1);
+        expect(mockGameState.processes['custom-1']).toBeUndefined();
+    });
+
+    test('finishProcessNow should handle missing create items for custom processes', () => {
+        const definition = {
+            id: 'custom-2',
+            duration: '10s',
+            requireItems: [],
+            consumeItems: [{ id: 'custom-item', count: 2 }],
+        };
+        mockGameState.inventory['custom-item'] = 4;
+        startProcess('custom-2', definition);
+        finishProcessNow('custom-2', definition);
+        expect(mockGameState.inventory['custom-item']).toBe(2);
+        expect(mockGameState.processes['custom-2']).toBeUndefined();
     });
 });

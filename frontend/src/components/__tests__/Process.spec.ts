@@ -3,6 +3,7 @@ import Process from '../svelte/Process.svelte';
 import { vi, expect, test, beforeEach } from 'vitest';
 import { tick } from 'svelte';
 import { writable } from 'svelte/store';
+import { getProcessState as getProcessStateMock } from '../../utils/gameState/processes.js';
 
 const ProcessStates = vi.hoisted(() => ({
     NOT_STARTED: 'not started',
@@ -16,12 +17,30 @@ const getItemCountsMock = vi.hoisted(() => vi.fn(() => ({ 'item-1': 0 })));
 const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
+const startProcess = vi.hoisted(() => vi.fn());
+
+const getProcessState = vi.mocked(getProcessStateMock);
 
 vi.mock('../../pages/inventory/json/items', () => ({
     default: [
         {
             id: 'item-1',
             name: 'Test Item',
+            image: '/test.png',
+        },
+        {
+            id: 'item-2',
+            name: 'Second Item',
+            image: '/test.png',
+        },
+        {
+            id: 'item-3',
+            name: 'Third Item',
+            image: '/test.png',
+        },
+        {
+            id: 'item-4',
+            name: 'Fourth Item',
             image: '/test.png',
         },
     ],
@@ -69,7 +88,7 @@ vi.mock('../../generated/processes.json', () => ({
 }));
 
 vi.mock('../../utils/gameState/processes.js', () => ({
-    startProcess: vi.fn(),
+    startProcess,
     cancelProcess: vi.fn(),
     finishProcess: vi.fn(),
     getProcessState: vi.fn(() => stateInfo),
@@ -94,7 +113,9 @@ beforeEach(() => {
     cheatsAvailabilityStore.set(false);
     cheatsEnabledStore.set(false);
     stateInfo.state = ProcessStates.IN_PROGRESS;
+    getProcessState.mockReturnValue(stateInfo);
     finishProcessNow.mockClear();
+    startProcess.mockClear();
 });
 
 test('pauses and resumes a process while showing remaining time', async () => {
@@ -131,6 +152,107 @@ test('shows required items even when counts are zero', async () => {
     expect(normalizedText).not.toMatch(/0\s*\/\s*2/);
 });
 
+test('shows missing requirement feedback with singular "more" label', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-1': 0, 'item-2': 0, 'item-3': 0 });
+
+    const customProcess = {
+        id: 'custom-2',
+        title: 'Missing Requirements',
+        duration: '5s',
+        requireItems: [
+            { id: 'item-1', count: 1 },
+            { id: 'item-2', count: 1 },
+            { id: 'item-3', count: 1 },
+        ],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByTestId } = render(Process, {
+        processId: 'custom-2',
+        processData: customProcess,
+    });
+
+    await tick();
+    await fireEvent.click(getByTestId('process-start-button'));
+
+    const feedback = getByTestId('process-start-feedback');
+    expect(feedback.textContent).toContain('and 1 more');
+    expect(startProcess).not.toHaveBeenCalled();
+});
+
+test('shows missing requirement feedback with plural "more items" label', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({
+        'item-1': 0,
+        'item-2': 0,
+        'item-3': 0,
+        'item-4': 0,
+    });
+
+    const customProcess = {
+        id: 'custom-3',
+        title: 'Missing Requirements Plural',
+        duration: '5s',
+        requireItems: [
+            { id: 'item-1', count: 1 },
+            { id: 'item-2', count: 1 },
+            { id: 'item-3', count: 1 },
+            { id: 'item-4', count: 1 },
+        ],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByTestId } = render(Process, {
+        processId: 'custom-3',
+        processData: customProcess,
+    });
+
+    await tick();
+    await fireEvent.click(getByTestId('process-start-button'));
+
+    const feedback = getByTestId('process-start-feedback');
+    expect(feedback.textContent).toContain('and 2 more items');
+    expect(startProcess).not.toHaveBeenCalled();
+});
+
+test('shows missing requirement feedback when two items are missing', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-1': 0, 'item-2': 0 });
+
+    const customProcess = {
+        id: 'custom-4',
+        title: 'Missing Two Requirements',
+        duration: '5s',
+        requireItems: [
+            { id: 'item-1', count: 1 },
+            { id: 'item-2', count: 1 },
+        ],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByTestId } = render(Process, {
+        processId: 'custom-4',
+        processData: customProcess,
+    });
+
+    await tick();
+    await fireEvent.click(getByTestId('process-start-button'));
+
+    const feedback = getByTestId('process-start-feedback');
+    expect(feedback.textContent).toContain('Missing requirements: Test Item (1), Second Item (1)');
+    expect(startProcess).not.toHaveBeenCalled();
+});
+
 test('renders instant finish chip when cheats are enabled', async () => {
     cheatsAvailabilityStore.set(true);
     cheatsEnabledStore.set(true);
@@ -142,7 +264,13 @@ test('renders instant finish chip when cheats are enabled', async () => {
     expect(chip).toBeTruthy();
 
     await fireEvent.click(chip);
-    expect(finishProcessNow).toHaveBeenCalledWith('p1');
+    expect(finishProcessNow).toHaveBeenCalledWith(
+        'p1',
+        expect.objectContaining({
+            id: 'p1',
+            title: 'Test Process',
+        })
+    );
 });
 
 test('renders instant finish chip for paused processes', async () => {
@@ -157,10 +285,18 @@ test('renders instant finish chip for paused processes', async () => {
     expect(chip).toBeTruthy();
 
     await fireEvent.click(chip);
-    expect(finishProcessNow).toHaveBeenCalledWith('p1');
+    expect(finishProcessNow).toHaveBeenCalledWith(
+        'p1',
+        expect.objectContaining({
+            id: 'p1',
+            title: 'Test Process',
+        })
+    );
 });
 
-test('shows custom process note when rendering a custom process', async () => {
+test('renders custom process start controls when rendering a custom process', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
     const customProcess = {
         id: 'custom-1',
         title: 'Custom Process',
@@ -171,20 +307,22 @@ test('shows custom process note when rendering a custom process', async () => {
         custom: true,
     };
 
-    const { getByText, queryByTestId } = render(Process, {
+    const { getByText, getByTestId } = render(Process, {
         processId: 'custom-1',
         processData: customProcess,
     });
 
     await tick();
     expect(getByText('Duration: 5s')).toBeTruthy();
-    expect(
-        getByText('Custom processes are displayed for reference and managed separately.')
-    ).toBeTruthy();
-    expect(queryByTestId('qa-instant-finish-chip')).toBeNull();
+    const startButton = getByTestId('process-start-button');
+    expect(startButton).toBeTruthy();
+    await fireEvent.click(startButton);
+    expect(startProcess).toHaveBeenCalledWith('custom-1', customProcess);
 });
 
 test('prefers provided process data over built-in catalog lookup', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
     const customOverride = {
         id: 'p1',
         title: 'Override Process',
@@ -195,17 +333,14 @@ test('prefers provided process data over built-in catalog lookup', async () => {
         custom: true,
     };
 
-    const { getByText, queryByText } = render(Process, {
+    const { getByText } = render(Process, {
         processId: 'p1',
         processData: customOverride,
     });
 
     await tick();
     expect(getByText('Override Process')).toBeTruthy();
-    expect(
-        getByText('Custom processes are displayed for reference and managed separately.')
-    ).toBeTruthy();
-    expect(queryByText('Start')).toBeNull();
+    expect(getByText('Start')).toBeTruthy();
 });
 
 test('renders fallback message when process details are unavailable', async () => {
