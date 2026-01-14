@@ -34,6 +34,7 @@ export const startProcess = (processId, processDefinition) => {
         duration: durationInSeconds(process.duration) * 1000,
         pausedAt: null,
         elapsedBeforePause: 0,
+        pauseModelVersion: 2,
     };
     saveGameState(gameState);
     if (process.consumeItems) {
@@ -48,29 +49,71 @@ export const ProcessStates = {
     PAUSED: 'paused',
 };
 
+const computeProcessTiming = (process, now = Date.now()) => {
+    if (
+        !process ||
+        !Number.isFinite(process.startedAt) ||
+        !Number.isFinite(process.duration) ||
+        process.duration <= 0
+    ) {
+        return {
+            elapsedMs: 0,
+            progressRatio: 0,
+            isPaused: false,
+            effectiveStartMs: undefined,
+        };
+    }
+
+    const elapsedBeforePause = Number(process.elapsedBeforePause ?? 0);
+    const isPaused = process.pausedAt !== null && process.pausedAt !== undefined;
+    const hasLegacyPauseModel = !process.pauseModelVersion;
+    let segmentElapsed = 0;
+
+    if (isPaused) {
+        if (!hasLegacyPauseModel) {
+            segmentElapsed = Math.max(0, process.pausedAt - process.startedAt);
+        }
+    } else {
+        segmentElapsed = Math.max(0, now - process.startedAt);
+    }
+
+    const elapsedMs = elapsedBeforePause + segmentElapsed;
+    const durationMs = Math.max(0, Number(process.duration));
+    const progressRatio = durationMs > 0 ? Math.min(1, elapsedMs / durationMs) : 0;
+    const referenceTime = isPaused ? process.pausedAt : now;
+    const effectiveStartMs =
+        typeof referenceTime === 'number' ? referenceTime - elapsedMs : process.startedAt;
+
+    return {
+        elapsedMs,
+        progressRatio,
+        isPaused,
+        effectiveStartMs,
+    };
+};
+
 export const getProcessState = (processId) => {
     const gameState = loadGameState();
 
     const process = gameState.processes[processId];
-    if (!process || !process.startedAt) {
+    if (
+        !process ||
+        !Number.isFinite(process.startedAt) ||
+        !Number.isFinite(process.duration) ||
+        process.duration <= 0
+    ) {
         return { state: ProcessStates.NOT_STARTED, progress: 0 };
     }
 
-    let elapsed = process.elapsedBeforePause || 0;
-    if (process.pausedAt) {
-        elapsed += process.pausedAt - process.startedAt;
-    } else {
-        elapsed += Date.now() - process.startedAt;
-    }
-
-    let progress = Math.min(1, elapsed / process.duration);
+    const { progressRatio, isPaused } = computeProcessTiming(process);
+    let progress = progressRatio;
     progress = progress < 0.001 ? 0 : progress;
 
     if (progress >= 1) {
         return { state: ProcessStates.FINISHED, progress: 100 };
     }
 
-    if (process.pausedAt) {
+    if (isPaused) {
         return { state: ProcessStates.PAUSED, progress: progress * 100 };
     }
 
@@ -81,8 +124,13 @@ export const getProcessStartedAt = (processId) => {
     const gameState = loadGameState();
 
     const process = gameState.processes[processId];
-    if (process && process.startedAt) {
-        return process.startedAt;
+    if (
+        process &&
+        Number.isFinite(process.startedAt) &&
+        Number.isFinite(process.duration) &&
+        process.duration > 0
+    ) {
+        return computeProcessTiming(process).effectiveStartMs;
     }
     return undefined;
 };
@@ -91,10 +139,16 @@ export const getProcessProgress = (processId) => {
     const gameState = loadGameState();
 
     const process = gameState.processes[processId];
-    if (!process || !process.startedAt) return 0;
-    const elapsed = Date.now() - process.startedAt;
-    const progress = Math.min(1, elapsed / process.duration);
-    return progress * 100;
+    if (
+        !process ||
+        !Number.isFinite(process.startedAt) ||
+        !Number.isFinite(process.duration) ||
+        process.duration <= 0
+    ) {
+        return 0;
+    }
+    const { progressRatio } = computeProcessTiming(process);
+    return progressRatio * 100;
 };
 
 export const finishProcess = (processId, processDefinition) => {
@@ -151,8 +205,8 @@ export const pauseProcess = (processId) => {
     const gameState = loadGameState();
     const process = gameState.processes[processId];
     const now = Date.now();
-    process.elapsedBeforePause = (process.elapsedBeforePause || 0) + (now - process.startedAt);
     process.pausedAt = now;
+    process.pauseModelVersion = 2;
     saveGameState(gameState);
 };
 
@@ -162,8 +216,14 @@ export const resumeProcess = (processId) => {
     if (!process || process.pausedAt === null) {
         return;
     }
+    const isLegacyPauseModel = !process.pauseModelVersion;
+    const pausedSegment = Math.max(0, process.pausedAt - process.startedAt);
+    if (!isLegacyPauseModel) {
+        process.elapsedBeforePause = (process.elapsedBeforePause || 0) + pausedSegment;
+    }
     process.startedAt = Date.now();
     process.pausedAt = null;
+    process.pauseModelVersion = 2;
     saveGameState(gameState);
 };
 
@@ -193,10 +253,11 @@ export const finishProcessNow = (processId, processDefinition) => {
 
     gameState.processes[processId] = {
         ...process,
-        startedAt: Date.now() - durationMs,
+        startedAt: Date.now(),
         duration: durationMs,
         pausedAt: null,
         elapsedBeforePause: durationMs,
+        pauseModelVersion: 2,
     };
 
     saveGameState(gameState);
