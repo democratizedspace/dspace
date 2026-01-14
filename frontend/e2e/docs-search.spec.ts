@@ -64,4 +64,43 @@ test.describe('Docs search', () => {
         await searchInput.fill('');
         await expect(page.locator('.doc-snippet')).toHaveCount(0);
     });
+
+    test('wraps and clamps long snippet tokens without overflowing layout', async ({ page }) => {
+        await page.goto('/docs');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const searchInput = page.getByRole('searchbox', { name: /search docs/i });
+        await searchInput.fill('github');
+
+        const docsSearchLink = page.getByRole('link', { name: 'Docs search', exact: true });
+        await expect(docsSearchLink).toBeVisible();
+
+        const docLink = docsSearchLink.locator('..');
+        const snippet = docLink.locator('.doc-snippet');
+        await expect(snippet).toBeVisible();
+
+        const overflowWrap = await snippet.evaluate(
+            (el) => getComputedStyle(el).overflowWrap
+        );
+        expect(overflowWrap).toMatch(/anywhere|break-word/);
+
+        const lineClamp = await snippet.evaluate((el) => getComputedStyle(el).webkitLineClamp);
+        expect(lineClamp).toBe('2');
+
+        const noOverflow = await snippet.evaluate(
+            (el) => el.scrollWidth <= el.clientWidth + 1
+        );
+        expect(noOverflow).toBeTruthy();
+
+        const docLinkBox = await docLink.boundingBox();
+        const viewport = page.viewportSize();
+        expect(docLinkBox).not.toBeNull();
+        expect(viewport).not.toBeNull();
+
+        if (docLinkBox && viewport) {
+            expect(docLinkBox.x).toBeGreaterThanOrEqual(0);
+            expect(docLinkBox.x + docLinkBox.width).toBeLessThanOrEqual(viewport.width + 1);
+        }
+    });
 });

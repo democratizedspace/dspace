@@ -25,3 +25,6 @@ When a match comes from the body text, the docs list shows a short snippet under
 - The matched word is **bolded**.
 
 The snippet updates as you type and disappears when the search box is cleared.
+
+Example long URL:
+https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/svelte/DocsIndex.svelte
