@@ -3,6 +3,7 @@
     import ItemPreview from './ItemPreview.svelte';
     import { addItems } from '../../utils/gameState/inventory.js';
     import { db } from '../../utils/customcontent.js';
+    import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
 
     export let name = '';
     export let description = '';
@@ -21,6 +22,8 @@
     let submitSuccess = '';
     let savedItemId = null;
     let isSubmitting = false;
+    let isProcessingImage = false;
+    let processedImageUrl = null;
 
     function parseDependencies(value) {
         return value
@@ -29,38 +32,33 @@
             .filter(Boolean);
     }
 
-    function handleImageUpload(event) {
+    async function handleImageUpload(event) {
         const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previewUrl = e.target.result;
-            };
-            reader.readAsDataURL(file);
-            image = file;
-            delete validationErrors.image;
+            isProcessingImage = true;
+            try {
+                const { dataUrl } = await downsampleAndCompressToJpeg(file);
+                previewUrl = dataUrl;
+                processedImageUrl = dataUrl;
+                image = file;
+                delete validationErrors.image;
+            } catch (error) {
+                console.error('Image downsample failed', error);
+                validationErrors = {
+                    ...validationErrors,
+                    image: 'Image processing failed. Please try a different file.',
+                };
+                previewUrl = null;
+                processedImageUrl = null;
+                image = null;
+            } finally {
+                isProcessingImage = false;
+            }
         } else {
             previewUrl = null;
             image = null;
+            processedImageUrl = null;
         }
-    }
-
-    function readFileAsDataUrl(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const result = reader.result;
-                if (typeof result === 'string') {
-                    resolve(result);
-                    return;
-                }
-                reject(new Error('Image preview is invalid.'));
-            };
-            reader.onerror = () => {
-                reject(reader.error ?? new Error('Image preview failed to load.'));
-            };
-            reader.readAsDataURL(file);
-        });
     }
 
     function validateForm() {
@@ -90,20 +88,29 @@
             return;
         }
 
-        let imageUrl = previewUrl;
-        if (image instanceof File && (!imageUrl || imageUrl.startsWith('blob:'))) {
+        if (isProcessingImage) {
+            validationErrors = {
+                ...validationErrors,
+                image: 'Image is still processing. Please wait a moment.',
+            };
+            return;
+        }
+
+        let imageUrl = processedImageUrl || previewUrl;
+        if (!imageUrl && image instanceof File) {
             try {
-                imageUrl = await readFileAsDataUrl(image);
-                previewUrl = imageUrl;
+                const { dataUrl } = await downsampleAndCompressToJpeg(image);
+                imageUrl = dataUrl;
+                previewUrl = dataUrl;
+                processedImageUrl = dataUrl;
             } catch (error) {
                 validationErrors = {
                     ...validationErrors,
-                    image: 'Image preview failed. Please try again.',
+                    image: 'Image processing failed. Please try again.',
                 };
                 return;
             }
         }
-        const imageBlob = image instanceof File ? image : (itemData?.imageBlob ?? null);
 
         const parsedDependencies = parseDependencies(dependenciesInput);
         const hasDependenciesInput = dependenciesInput.trim().length > 0;
@@ -114,7 +121,6 @@
             ...(price && { price }),
             ...(unit && { unit }),
             ...(type && { type }),
-            ...(imageBlob && { imageBlob }),
             ...((hasDependenciesInput || (isEdit && itemData?.dependencies?.length)) && {
                 dependencies: parsedDependencies,
             }),
@@ -154,6 +160,7 @@
             unit = itemData.unit || '';
             type = itemData.type || '';
             previewUrl = itemData.image || null;
+            processedImageUrl = itemData.image || null;
             dependenciesInput = (itemData.dependencies || []).join('\n');
         }
     });

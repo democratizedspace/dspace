@@ -16,6 +16,16 @@ jest.mock('../src/utils/gameState/inventory.js', () => ({
     addItems: jest.fn(),
 }));
 
+jest.mock('../src/utils/imageDownsample.js', () => ({
+    downsampleAndCompressToJpeg: jest.fn().mockResolvedValue({
+        dataUrl: 'data:image/jpeg;base64,COMPRESSED',
+        bytes: 12345,
+        width: 512,
+        height: 512,
+        qualityUsed: 0.8,
+    }),
+}));
+
 import { addEntity, updateEntity } from '../src/utils/indexeddb.js';
 
 // Mock the browser's fetch API
@@ -32,21 +42,6 @@ global.File = class File {
         this.name = name;
         this.size = bits.length;
         this.type = options?.type || '';
-    }
-};
-
-// Create a FileReader mock
-global.FileReader = class FileReader {
-    constructor() {
-        this.readAsDataURL = jest.fn((file) => {
-            // Simulate the file reading process
-            setTimeout(() => {
-                this.result = 'data:image/png;base64,mockedBase64Data';
-                if (typeof this.onload === 'function') {
-                    this.onload({ target: this });
-                }
-            }, 0);
-        });
     }
 };
 
@@ -136,8 +131,7 @@ describe('ItemForm Component', () => {
                 expect.objectContaining({
                     name: 'Test Item',
                     description: 'This is a test item description',
-                    image: 'data:image/png;base64,mockedBase64Data',
-                    imageBlob: expect.any(File),
+                    image: 'data:image/jpeg;base64,COMPRESSED',
                     dependencies: ['resource/filament', 'tool/nozzle'],
                 })
             );

@@ -18,6 +18,13 @@ This guide describes how to submit your custom quests to become part of the offi
 
 You have two ways to submit your quest:
 
+## Quest Images
+
+When you upload a custom quest image in-game, the client downsamples it to a 512×512 JPEG and
+compresses it to target **< 50KB**. This keeps IndexedDB storage lean for faster exports and
+load times. Developers should use the shared helper at
+`frontend/src/utils/imageDownsample.js` for future custom image ingestion.
+
 ### Option 1: Bundle Submission (Recommended)
 
 If your quest requires custom items or processes, use the bundle submission workflow:

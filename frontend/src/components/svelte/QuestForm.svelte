@@ -17,6 +17,7 @@
         createDefaultDialogueNode,
     } from '../../utils/questDefaults.js';
     import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
+    import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
 
     export let isEdit = false;
     export let questId = null;
@@ -26,6 +27,8 @@
     let description = '';
     let image = null;
     let previewUrl = null;
+    let processedImageUrl = null;
+    let isProcessingImage = false;
     let showPreview = false;
     let requiresQuests = [];
     let allQuests = [];
@@ -171,6 +174,7 @@
                 dialogueNodes = mappedNodes.length > 0 ? mappedNodes : [createDialogueNodeState()];
                 if (questData.image) {
                     previewUrl = questData.image;
+                    processedImageUrl = questData.image;
                 }
             } catch (error) {
                 console.error('Error loading quest:', error);
@@ -211,20 +215,34 @@
         }
     });
 
-    function handleImageUpload(event) {
+    async function handleImageUpload(event) {
         const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previewUrl = e.target.result;
-            };
-            reader.readAsDataURL(file);
-            image = file;
-            validateForm();
+            isProcessingImage = true;
+            try {
+                const { dataUrl } = await downsampleAndCompressToJpeg(file);
+                previewUrl = dataUrl;
+                processedImageUrl = dataUrl;
+                image = file;
+                await validateForm();
+            } catch (error) {
+                console.error('Error preparing quest image:', error);
+                previewUrl = null;
+                processedImageUrl = null;
+                image = null;
+                await validateForm();
+                validationErrors = {
+                    ...validationErrors,
+                    image: 'Image processing failed. Please try a different file.',
+                };
+            } finally {
+                isProcessingImage = false;
+            }
         } else {
             previewUrl = null;
             image = null;
-            validateForm();
+            processedImageUrl = null;
+            await validateForm();
         }
     }
 
@@ -747,18 +765,13 @@
         return Object.keys(errors).length === 0;
     }
 
-    function readFileAsDataUrl(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = (event) => resolve(event?.target?.result ?? '');
-            reader.onerror = (error) => reject(error);
-            reader.readAsDataURL(file);
-        });
-    }
-
     async function uploadImage(file) {
         if (!file) {
             return previewUrl; // Return existing image URL if no new file
+        }
+
+        if (processedImageUrl && processedImageUrl.startsWith('data:image')) {
+            return processedImageUrl;
         }
 
         if (previewUrl && previewUrl.startsWith('data:image')) {
@@ -766,8 +779,9 @@
         }
 
         try {
-            const dataUrl = await readFileAsDataUrl(file);
+            const { dataUrl } = await downsampleAndCompressToJpeg(file);
             previewUrl = dataUrl;
+            processedImageUrl = dataUrl;
             return dataUrl;
         } catch (error) {
             console.error('Error preparing quest image:', error);
@@ -788,6 +802,11 @@
         // Validate form
         const isValid = await validateForm();
         if (!isValid) return;
+
+        if (isProcessingImage) {
+            dispatch('error', { message: 'Image is still processing. Please wait.' });
+            return;
+        }
 
         isSubmitting = true;
 
@@ -817,6 +836,7 @@
                 description = '';
                 image = null;
                 previewUrl = null;
+                processedImageUrl = null;
                 requiresQuests = [];
                 npc = DEFAULT_NPC_NAME;
                 startNodeId = DEFAULT_DIALOGUE_NODE_ID;
