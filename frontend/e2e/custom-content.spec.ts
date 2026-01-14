@@ -174,6 +174,81 @@ test.describe('Custom Content Management', () => {
         }
     });
 
+    test('should show a custom process on the related item detail page', async ({ page }) => {
+        // Create a custom item first
+        await page.goto('/inventory/create');
+        await page.waitForLoadState('networkidle');
+
+        const uniqueItemName = `Process Item ${Date.now()}`;
+        await page.fill('#name', uniqueItemName);
+        await page.fill('#description', 'Item used to validate custom process discovery');
+
+        await page.click('button.submit-button');
+        await page.waitForLoadState('networkidle');
+
+        // Find the item detail link from inventory list
+        await page.goto('/inventory');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const searchInput = page.locator('input[placeholder="Search items..."]');
+        if ((await searchInput.count()) > 0) {
+            await searchInput.fill(uniqueItemName);
+            await page.waitForTimeout(500);
+        }
+
+        const itemLink = page.locator(`a:has-text("${uniqueItemName}")`).first();
+        await expect(itemLink).toBeVisible({ timeout: 15000 });
+        const itemHref = await itemLink.getAttribute('href');
+        expect(itemHref).toBeTruthy();
+
+        // Create a custom process that requires the item
+        await page.goto('/processes/create');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const processTitle = `Process for ${uniqueItemName}`;
+        const titleInput = page.locator('#name, #title').first();
+        await titleInput.fill(processTitle);
+        await page.fill('#duration', '10m');
+
+        await page.click('button:has-text("Add Required Item")');
+
+        const requirementRow = page.locator('#required-items-section .item-row').last();
+        const selectorContainer = requirementRow.locator('.item-selector');
+        const selectorHelper = new ItemSelectorHelper(page, selectorContainer);
+        await selectorHelper.open();
+
+        const itemOption = selectorContainer.locator('button.item-row', {
+            hasText: uniqueItemName,
+        });
+        await expect(itemOption).toBeVisible({ timeout: 15000 });
+        await itemOption.click();
+
+        const countInput = requirementRow.locator('input[type="number"]');
+        if ((await countInput.count()) > 0) {
+            await countInput.fill('1');
+        }
+
+        const submitProcessButton = page
+            .locator(
+                'button.submit-button, button[type="submit"], input[type="submit"], button:has-text("Create"), button:has-text("Save")'
+            )
+            .first();
+        await submitProcessButton.click();
+        await page.waitForLoadState('networkidle');
+
+        // Navigate to the item detail page and validate the custom process appears
+        await page.goto(itemHref ?? '/inventory');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        await expect(page.locator('text=Processes:')).toBeVisible({ timeout: 15000 });
+        await expect(page.locator(`h3:has-text("${processTitle}")`)).toBeVisible({
+            timeout: 15000,
+        });
+    });
+
     test('should create and view a custom quest', async ({ page }) => {
         // Navigate to the quest creation page
         await page.goto('/quests/create');

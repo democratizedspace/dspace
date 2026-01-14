@@ -19,6 +19,7 @@ const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
 const startProcess = vi.hoisted(() => vi.fn());
+const dbGetMock = vi.hoisted(() => vi.fn());
 
 const getProcessState = vi.mocked(getProcessStateMock);
 
@@ -110,6 +111,15 @@ vi.mock('../../lib/qaCheats', () => ({
     initializeQaCheats: vi.fn(),
 }));
 
+vi.mock('../../utils/customcontent.js', () => ({
+    db: {
+        get: (...args) => dbGetMock(...args),
+    },
+    ENTITY_TYPES: {
+        PROCESS: 'process',
+    },
+}));
+
 beforeEach(() => {
     cheatsAvailabilityStore.set(false);
     cheatsEnabledStore.set(false);
@@ -119,6 +129,7 @@ beforeEach(() => {
     getProcessStartedAtMock.mockReset();
     getProcessStartedAtMock.mockImplementation(() => Date.now());
     startProcess.mockClear();
+    dbGetMock.mockReset();
 });
 
 afterEach(() => {
@@ -366,4 +377,30 @@ test('renders fallback message when process details are unavailable', async () =
 
     await tick();
     expect(getByText('Process details unavailable.')).toBeTruthy();
+});
+
+test('loads custom process definitions when missing from the built-in catalog', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+
+    const customProcess = {
+        id: 'custom-missing',
+        title: 'IndexedDB Process',
+        duration: '15s',
+        requireItems: [],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    dbGetMock.mockResolvedValue(customProcess);
+
+    const { getByText } = render(Process, { processId: 'custom-missing' });
+
+    await tick();
+    await Promise.resolve();
+    await tick();
+
+    expect(dbGetMock).toHaveBeenCalledWith('process', 'custom-missing');
+    expect(getByText('IndexedDB Process')).toBeTruthy();
 });

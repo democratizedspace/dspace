@@ -25,6 +25,11 @@
     export let processData = null;
 
     let process;
+    let builtInProcess;
+    let customProcess = null;
+    let customProcessId = null;
+    let customProcessAttemptedId = null;
+    let customProcessRequest = null;
     let state = getProcessState(processId).state;
     let processStartedAt;
     let intervalId;
@@ -281,6 +286,33 @@
         updateState();
     };
 
+    const loadCustomProcess = async (id) => {
+        if (!id || customProcessRequest || customProcessAttemptedId === id) {
+            return;
+        }
+
+        customProcessAttemptedId = id;
+        customProcessRequest = (async () => {
+            try {
+                const { db, ENTITY_TYPES } = await import('../../utils/customcontent.js');
+                const result = await db.get(ENTITY_TYPES.PROCESS, id);
+                if (customProcessId === id) {
+                    customProcess = result;
+                }
+            } catch (error) {
+                if (customProcessId === id) {
+                    customProcess = null;
+                }
+            } finally {
+                if (customProcessId === id) {
+                    customProcessRequest = null;
+                }
+            }
+        })();
+
+        await customProcessRequest;
+    };
+
     onMount(() => {
         mounted = true;
         updateState();
@@ -306,18 +338,31 @@
 
     beforeUpdate(updateState);
 
+    $: if (processId !== customProcessId) {
+        customProcessId = processId;
+        customProcess = null;
+        customProcessAttemptedId = null;
+        customProcessRequest = null;
+    }
+
     $: canInstantFinish =
         cheatsAvailable &&
         cheatsEnabled &&
         (state === ProcessStates.IN_PROGRESS || state === ProcessStates.PAUSED);
 
-    $: {
-        const builtInProcess = processes.find((p) => p.id === processId);
+    $: builtInProcess = processes.find((p) => p.id === processId);
 
+    $: if (mounted && !processData && !builtInProcess && processId) {
+        void loadCustomProcess(processId);
+    }
+
+    $: {
         if (processData) {
             process = processData;
         } else if (builtInProcess) {
             process = builtInProcess;
+        } else if (customProcess) {
+            process = customProcess;
         } else {
             process = null;
         }
