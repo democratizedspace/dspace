@@ -186,6 +186,8 @@
         color: black;
         text-decoration: none;
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         opacity: 0.85;
         transition: opacity 0.2s ease-in-out;
         min-width: 0;
@@ -197,6 +199,7 @@
         font-size: 0.85rem;
         color: rgba(255, 255, 255, 0.9);
         max-width: 100%;
+        /* Keep both for cross-browser long-token wrapping support. */
         overflow-wrap: anywhere;
         word-break: break-word;
         white-space: normal;

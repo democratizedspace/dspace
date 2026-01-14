@@ -2,6 +2,9 @@ import { expect, test } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
 test.describe('Docs search', () => {
+    // Allow for sub-pixel rounding differences across browsers.
+    const subPixelTolerance = 1;
+
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
     });
@@ -87,7 +90,8 @@ test.describe('Docs search', () => {
         expect(lineClamp).toBe('2');
 
         const fitsHorizontally = await snippet.evaluate(
-            (el) => el.scrollWidth <= el.clientWidth + 1
+            (el, tolerance) => el.scrollWidth <= el.clientWidth + tolerance,
+            subPixelTolerance
         );
         expect(fitsHorizontally).toBeTruthy();
 
@@ -98,7 +102,9 @@ test.describe('Docs search', () => {
             page.viewportSize()?.width ?? (await page.evaluate(() => window.innerWidth));
         if (docLinkBox) {
             expect(docLinkBox.x).toBeGreaterThanOrEqual(0);
-            expect(docLinkBox.x + docLinkBox.width).toBeLessThanOrEqual(viewportWidth + 1);
+            expect(docLinkBox.x + docLinkBox.width).toBeLessThanOrEqual(
+                viewportWidth + subPixelTolerance
+            );
         }
     });
 });
