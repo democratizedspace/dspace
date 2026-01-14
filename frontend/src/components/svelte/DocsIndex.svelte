@@ -198,7 +198,9 @@
         margin: 0;
         font-size: 0.85rem;
         color: rgba(255, 255, 255, 0.9);
+        min-width: 0;
         max-width: 100%;
+        align-self: stretch;
         /* Keep both for cross-browser long-token wrapping support. */
         overflow-wrap: anywhere;
         word-break: break-word;
@@ -212,6 +214,8 @@
     .doc-snippet strong {
         font-weight: 700;
         color: #ffffff;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     a:hover,
