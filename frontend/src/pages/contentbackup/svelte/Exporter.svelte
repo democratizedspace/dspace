@@ -27,7 +27,14 @@
         return `${kind}: ${name}`;
     };
 
-    const formatProgressLabel = (label) => label.replace(':', ' —');
+    const formatProgressLabel = (label) => {
+        const normalized = label
+            .replace(/^Item:\s*/i, 'Item record: ')
+            .replace(/^Process:\s*/i, 'Process record: ')
+            .replace(/^Quest:\s*/i, 'Quest record: ');
+
+        return normalized.replace(':', ' —');
+    };
     const handlePrepareBackup = async () => {
         if (isPreparing) {
             return;
