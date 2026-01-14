@@ -98,6 +98,19 @@ describe('findDocSnippet', () => {
 
         expect(snippet?.keyword).toBe('solar');
         expect(snippet?.snippetHtml).toContain('<strong>Solar</strong>');
+        expect(snippet?.snippetText).toBe('Solar arrays pair');
+    });
+
+    it('exposes a plain-text snippet for tooltip usage', () => {
+        const doc = {
+            title: 'Build guide',
+            bodyText: 'Reference https://example.com/node.js/docs for details.',
+        };
+
+        const snippet = findDocSnippet(doc, ['node.js']);
+
+        expect(snippet?.snippetText).toBe('Reference https://example.com/node.js/docs for');
+        expect(snippet?.snippetHtml).toContain('<strong>https://example.com/node.js/docs</strong>');
     });
 });
 

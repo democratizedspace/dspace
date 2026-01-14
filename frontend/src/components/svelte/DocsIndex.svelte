@@ -101,7 +101,7 @@
                                     {link.title}
                                 </a>
                                 {#if link.snippet}
-                                    <p class="doc-snippet">
+                                    <p class="doc-snippet" title={link.snippet.snippetText}>
                                         {@html link.snippet.snippetHtml}
                                     </p>
                                 {/if}
@@ -172,6 +172,8 @@
         flex-direction: column;
         gap: 0.25rem;
         align-items: flex-start;
+        min-width: 0;
+        max-width: 100%;
     }
 
     a {
@@ -186,12 +188,22 @@
         white-space: nowrap;
         opacity: 0.85;
         transition: opacity 0.2s ease-in-out;
+        min-width: 0;
+        max-width: 100%;
     }
 
     .doc-snippet {
         margin: 0;
         font-size: 0.85rem;
         color: rgba(255, 255, 255, 0.9);
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        white-space: normal;
+        max-width: 100%;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
     }
 
     .doc-snippet strong {
