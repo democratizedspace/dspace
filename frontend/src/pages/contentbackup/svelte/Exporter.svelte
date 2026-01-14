@@ -157,19 +157,13 @@
                     <h3>Prepared content</h3>
                     <ul>
                         {#each preparedSummary.items as entry}
-                            <li class="summary-entry">
-                                <strong class="summary-kind">{entry.kind}:</strong> {entry.name}
-                            </li>
+                            <li class="summary-entry">{entry.kind}: {entry.name}</li>
                         {/each}
                         {#each preparedSummary.processes as entry}
-                            <li class="summary-entry">
-                                <strong class="summary-kind">{entry.kind}:</strong> {entry.name}
-                            </li>
+                            <li class="summary-entry">{entry.kind}: {entry.name}</li>
                         {/each}
                         {#each preparedSummary.quests as entry}
-                            <li class="summary-entry">
-                                <strong class="summary-kind">{entry.kind}:</strong> {entry.name}
-                            </li>
+                            <li class="summary-entry">{entry.kind}: {entry.name}</li>
                         {/each}
                     </ul>
                 </div>
@@ -232,10 +226,6 @@
     .prepared-preview ul {
         margin: 0;
         padding-left: 1.2rem;
-    }
-
-    .summary-kind {
-        font-weight: 600;
     }
 
     .progress-item {
