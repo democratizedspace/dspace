@@ -141,7 +141,11 @@
 
         {#if status === 'ready'}
             {#if preparedSummary}
-                <div class="prepared-preview" aria-live="polite">
+                <div
+                    class="prepared-preview"
+                    aria-live="polite"
+                    data-testid="contentbackup-prepared"
+                >
                     <h3>Prepared content</h3>
                     <ul>
                         {#each preparedSummary.items as label}

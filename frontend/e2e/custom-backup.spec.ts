@@ -88,9 +88,10 @@ test.describe('Custom content backup', () => {
         await prepareButton.click();
         await expect(prepareButton).toBeDisabled();
 
-        await expect(page.getByText(/Item: E2E Item/i)).toBeVisible();
-        await expect(page.getByText(/Process: E2E Process/i)).toBeVisible();
-        await expect(page.getByText(/Quest: E2E Quest/i)).toBeVisible();
+        const preparedPreview = page.getByTestId('contentbackup-prepared');
+        await expect(preparedPreview).toContainText('Item: E2E Item');
+        await expect(preparedPreview).toContainText('Process: E2E Process');
+        await expect(preparedPreview).toContainText('Quest: E2E Quest');
 
         await expect(page.getByRole('button', { name: /download backup/i })).toBeVisible();
 
