@@ -33,6 +33,33 @@ test.describe('Custom Content Management', () => {
         }
     }
 
+    async function getCustomItemId(page: Page, name: string): Promise<string | null> {
+        return page.evaluate(async (itemName) => {
+            const openRequest = indexedDB.open('CustomContent');
+            const db: IDBDatabase = await new Promise((resolve, reject) => {
+                openRequest.onsuccess = () => resolve(openRequest.result);
+                openRequest.onerror = () => reject(openRequest.error);
+            });
+
+            try {
+                const tx = db.transaction('items', 'readonly');
+                const store = tx.objectStore('items');
+                const request = store.getAll();
+                const items = await new Promise<Array<{ id?: string; name?: string }>>(
+                    (resolve, reject) => {
+                        request.onsuccess = () => resolve(request.result);
+                        request.onerror = () => reject(request.error);
+                    }
+                );
+
+                const match = items.find((item) => (item.name ?? '').trim() === itemName);
+                return match?.id ?? null;
+            } finally {
+                db.close();
+            }
+        }, name);
+    }
+
     test('should create a custom item', async ({ page }) => {
         // Navigate to the item creation page
         await page.goto('/inventory/create');
@@ -172,6 +199,82 @@ test.describe('Custom Content Management', () => {
                 expect(await nameInput.inputValue()).toBe(processTitle);
             }
         }
+    });
+
+    test('shows custom processes on the related item detail page', async ({ page }) => {
+        const itemName = `Process Link Item ${Date.now()}`;
+
+        await page.goto('/inventory/create');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        await page.fill('#name', itemName);
+        await page.fill('#description', 'Item for process linking test');
+        await page.fill('#price', '50 dUSD');
+        await page.fill('#unit', 'unit');
+        await page.fill('#type', 'resource');
+
+        await page.click('button.submit-button');
+        await page.waitForLoadState('networkidle');
+
+        let itemId: string | null = null;
+        await expect
+            .poll(async () => {
+                itemId = await getCustomItemId(page, itemName);
+                return itemId;
+            }, { timeout: 15000 })
+            .not.toBeNull();
+        if (!itemId) {
+            throw new Error('Custom item id was not found for process linking test.');
+        }
+
+        const processTitle = `Linked Process ${Date.now()}`;
+        await page.goto('/processes/create');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        await page.fill('#name, #title', processTitle);
+        await page.fill('#duration', '10s');
+
+        const addRequiredButton = page
+            .locator(
+                'button:has-text("Add Required Item"), button:has-text("Add Requirement"), button:has-text("Require Item")'
+            )
+            .first();
+        await expect(addRequiredButton).toBeVisible();
+        await addRequiredButton.click();
+
+        const itemSelector = page.locator('.item-selector').last();
+        await expect(itemSelector).toBeVisible();
+
+        const selectorToggle = itemSelector
+            .locator('button.select-button, button.edit-button, button')
+            .first();
+        await selectorToggle.click();
+
+        const itemOption = itemSelector.locator('.item-row', { hasText: itemName }).first();
+        await expect(itemOption).toBeVisible({ timeout: 10000 });
+        await itemOption.click();
+
+        const quantityInput = itemSelector.locator('input[type="number"]').first();
+        if ((await quantityInput.count()) > 0) {
+            await quantityInput.fill('1');
+        }
+
+        const submitButton = page
+            .locator(
+                'button.submit-button, button:has-text("Create"), button:has-text("Save"), input[type="submit"]'
+            )
+            .first();
+        await submitButton.click();
+        await page.waitForLoadState('networkidle');
+
+        await page.goto(`/inventory/item/${itemId}`);
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        await expect(page.getByText('Processes:')).toBeVisible();
+        await expect(page.getByText(processTitle)).toBeVisible();
     });
 
     test('should create and view a custom quest', async ({ page }) => {

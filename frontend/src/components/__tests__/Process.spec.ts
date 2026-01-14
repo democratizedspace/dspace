@@ -19,6 +19,7 @@ const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
 const startProcess = vi.hoisted(() => vi.fn());
+const customContentGet = vi.hoisted(() => vi.fn());
 
 const getProcessState = vi.mocked(getProcessStateMock);
 
@@ -110,6 +111,15 @@ vi.mock('../../lib/qaCheats', () => ({
     initializeQaCheats: vi.fn(),
 }));
 
+vi.mock('../../utils/customcontent.js', () => ({
+    db: {
+        get: (...args) => customContentGet(...args),
+    },
+    ENTITY_TYPES: {
+        PROCESS: 'process',
+    },
+}));
+
 beforeEach(() => {
     cheatsAvailabilityStore.set(false);
     cheatsEnabledStore.set(false);
@@ -119,6 +129,7 @@ beforeEach(() => {
     getProcessStartedAtMock.mockReset();
     getProcessStartedAtMock.mockImplementation(() => Date.now());
     startProcess.mockClear();
+    customContentGet.mockReset();
 });
 
 afterEach(() => {
@@ -366,4 +377,23 @@ test('renders fallback message when process details are unavailable', async () =
 
     await tick();
     expect(getByText('Process details unavailable.')).toBeTruthy();
+});
+
+test('loads custom process data when not in built-in catalog', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    customContentGet.mockResolvedValue({
+        id: 'custom-lookup',
+        title: 'Loaded Custom Process',
+        duration: '12s',
+        requireItems: [],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    });
+
+    const { findByText } = render(Process, { processId: 'custom-lookup' });
+
+    expect(await findByText('Loaded Custom Process')).toBeTruthy();
+    expect(customContentGet).toHaveBeenCalledWith('process', 'custom-lookup');
 });

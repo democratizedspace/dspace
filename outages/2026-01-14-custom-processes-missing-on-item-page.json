@@ -1,0 +1,14 @@
+{
+  "id": "2026-01-14-custom-processes-missing-on-item-page",
+  "date": "2026-01-14",
+  "component": "inventory item detail -> process discovery/rendering",
+  "rootCause": "Item detail pages only indexed built-in process definitions and the Process component never attempted to load custom processes from IndexedDB by ID.",
+  "resolution": "Merged custom process discovery into the item-process lookup and taught Process rendering to load custom definitions from IndexedDB when not found in the built-in catalog.",
+  "references": [
+    "frontend/src/utils/gameState/processes.js",
+    "frontend/src/components/svelte/Process.svelte",
+    "frontend/src/pages/inventory/item/ItemPage.svelte",
+    "frontend/e2e/custom-content.spec.ts",
+    "PR: TBD"
+  ]
+}

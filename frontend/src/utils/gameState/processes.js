@@ -308,6 +308,64 @@ export const getProcessesForItem = (itemId) => {
     return processMap;
 };
 
+const addProcessIdToMap = (processMap, itemType, processId) => {
+    if (!processMap[itemType]) {
+        processMap[itemType] = new Set();
+    }
+    processMap[itemType].add(processId);
+};
+
+const mapProcessSetsToArrays = (processMap) =>
+    Object.fromEntries(
+        Object.entries(processMap).map(([key, value]) => [key, Array.from(value)])
+    );
+
+export const getProcessesForItemIncludingCustom = async (itemId) => {
+    const builtInMap = getProcessesForItem(itemId);
+    const mergedMap = {};
+
+    Object.entries(builtInMap).forEach(([itemType, processIds]) => {
+        processIds.forEach((processId) => addProcessIdToMap(mergedMap, itemType, processId));
+    });
+
+    if (!itemId) {
+        return mapProcessSetsToArrays(mergedMap);
+    }
+
+    try {
+        const { db, ENTITY_TYPES } = await import('../customcontent.js');
+        const matchesItem = (items) =>
+            Array.isArray(items) && items.some((item) => item?.id === itemId);
+
+        const customProcesses = await db.query(ENTITY_TYPES.PROCESS, (process) => {
+            if (!process) {
+                return false;
+            }
+            return (
+                matchesItem(process.requireItems) ||
+                matchesItem(process.consumeItems) ||
+                matchesItem(process.createItems)
+            );
+        });
+
+        customProcesses.forEach((process) => {
+            if (matchesItem(process.requireItems)) {
+                addProcessIdToMap(mergedMap, ProcessItemTypes.REQUIRE_ITEM, process.id);
+            }
+            if (matchesItem(process.consumeItems)) {
+                addProcessIdToMap(mergedMap, ProcessItemTypes.CONSUME_ITEM, process.id);
+            }
+            if (matchesItem(process.createItems)) {
+                addProcessIdToMap(mergedMap, ProcessItemTypes.CREATE_ITEM, process.id);
+            }
+        });
+    } catch (error) {
+        console.warn('Unable to load custom processes for item:', error);
+    }
+
+    return mapProcessSetsToArrays(mergedMap);
+};
+
 export const skipProcess = (processId, processDefinition) => {
     const process = resolveProcessDefinition(processId, processDefinition);
     if (!process) {

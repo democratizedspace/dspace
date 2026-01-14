@@ -25,6 +25,10 @@
     export let processData = null;
 
     let process;
+    let customProcess = null;
+    let customProcessId = null;
+    let customProcessLookupId = null;
+    let customProcessLoading = false;
     let state = getProcessState(processId).state;
     let processStartedAt;
     let intervalId;
@@ -281,6 +285,33 @@
         updateState();
     };
 
+    const loadCustomProcess = async (id) => {
+        if (!id || customProcessLoading || customProcessLookupId === id) {
+            return;
+        }
+
+        customProcessLookupId = id;
+        customProcessLoading = true;
+
+        try {
+            const { db, ENTITY_TYPES } = await import('../../utils/customcontent.js');
+            const loadedProcess = await db.get(ENTITY_TYPES.PROCESS, id);
+            if (customProcessLookupId === id) {
+                customProcess = loadedProcess;
+                customProcessId = id;
+            }
+        } catch (error) {
+            if (customProcessLookupId === id) {
+                customProcess = null;
+                customProcessId = null;
+            }
+        } finally {
+            if (customProcessLookupId === id) {
+                customProcessLoading = false;
+            }
+        }
+    };
+
     onMount(() => {
         mounted = true;
         updateState();
@@ -316,10 +347,20 @@
 
         if (processData) {
             process = processData;
+            customProcess = null;
+            customProcessId = null;
+            customProcessLookupId = null;
         } else if (builtInProcess) {
             process = builtInProcess;
+            customProcess = null;
+            customProcessId = null;
+            customProcessLookupId = null;
         } else {
-            process = null;
+            process = customProcessId === processId ? customProcess : null;
+
+            if (mounted && customProcessId !== processId && processId) {
+                loadCustomProcess(processId);
+            }
         }
 
         if (process) {
