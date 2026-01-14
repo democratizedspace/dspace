@@ -204,6 +204,57 @@ async function resolveImageData(entity) {
     return null;
 }
 
+async function readStoreAll(store) {
+    const request = store.getAll();
+    return await new Promise((resolve, reject) => {
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error ?? new Error('IndexedDB read failed.'));
+    });
+}
+
+async function readCustomContentSnapshot() {
+    if (!isBrowser || typeof indexedDB === 'undefined') {
+        return null;
+    }
+
+    return await new Promise((resolve, reject) => {
+        const request = indexedDB.open('CustomContent');
+
+        request.onupgradeneeded = () => {
+            const db = request.result;
+            if (!db.objectStoreNames.contains('items')) {
+                db.createObjectStore('items', { keyPath: 'id' });
+            }
+            if (!db.objectStoreNames.contains('processes')) {
+                db.createObjectStore('processes', { keyPath: 'id' });
+            }
+            if (!db.objectStoreNames.contains('quests')) {
+                db.createObjectStore('quests', { keyPath: 'id' });
+            }
+        };
+
+        request.onerror = () =>
+            reject(request.error ?? new Error('Unable to open custom content database.'));
+
+        request.onsuccess = async () => {
+            const db = request.result;
+            try {
+                const tx = db.transaction(['items', 'processes', 'quests'], 'readonly');
+                const [items, processes, quests] = await Promise.all([
+                    readStoreAll(tx.objectStore('items')),
+                    readStoreAll(tx.objectStore('processes')),
+                    readStoreAll(tx.objectStore('quests')),
+                ]);
+                resolve({ items, processes, quests });
+            } catch (error) {
+                reject(error);
+            } finally {
+                db.close();
+            }
+        };
+    });
+}
+
 function buildImageRecord(entityType, entityId, dataUrl) {
     return {
         id: `${entityType}:${entityId}:image`,
@@ -214,7 +265,17 @@ function buildImageRecord(entityType, entityId, dataUrl) {
 }
 
 export async function buildCustomContentBackupData({ onProgress } = {}) {
-    const [items, processes, quests] = await Promise.all([getItems(), getProcesses(), getQuests()]);
+    let snapshot = null;
+
+    try {
+        snapshot = await readCustomContentSnapshot();
+    } catch (error) {
+        snapshot = null;
+    }
+
+    const [items, processes, quests] = snapshot
+        ? [snapshot.items, snapshot.processes, snapshot.quests]
+        : await Promise.all([getItems(), getProcesses(), getQuests()]);
     const plan = buildBackupPlan(items, processes, quests);
 
     emitProgress(onProgress, { type: 'plan', assets: plan });
