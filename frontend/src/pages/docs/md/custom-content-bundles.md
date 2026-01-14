@@ -30,6 +30,13 @@ The easiest way to submit a bundle is through the in-game interface:
 4. Submit the bundle at [/bundles/submit](/bundles/submit)
 5. The system will create a pull request for review
 
+### Custom image uploads
+
+When you upload images for custom items or quests, the editor automatically downscales the
+image into a 512×512 JPEG (targeting <50KB). This keeps IndexedDB storage lean for faster
+loads and smaller backup exports. Developers should reuse the shared helper at
+`frontend/src/utils/images/downsample.js` for any future custom-image ingestion points.
+
 ## Command-Line Bundle Creation
 
 You can also create a bundle with the script:

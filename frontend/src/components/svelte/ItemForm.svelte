@@ -3,6 +3,7 @@
     import ItemPreview from './ItemPreview.svelte';
     import { addItems } from '../../utils/gameState/inventory.js';
     import { db } from '../../utils/customcontent.js';
+    import { downsampleAndCompressToJpeg } from '../../utils/images/downsample.js';
 
     export let name = '';
     export let description = '';
@@ -29,38 +30,27 @@
             .filter(Boolean);
     }
 
-    function handleImageUpload(event) {
+    async function handleImageUpload(event) {
         const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previewUrl = e.target.result;
-            };
-            reader.readAsDataURL(file);
-            image = file;
-            delete validationErrors.image;
+            try {
+                const processed = await downsampleAndCompressToJpeg(file);
+                previewUrl = processed.dataUrl;
+                image = processed.dataUrl;
+                delete validationErrors.image;
+            } catch (error) {
+                console.error('Failed to process item image', error);
+                validationErrors = {
+                    ...validationErrors,
+                    image: 'Image processing failed. Please try another file.',
+                };
+                previewUrl = null;
+                image = null;
+            }
         } else {
             previewUrl = null;
             image = null;
         }
-    }
-
-    function readFileAsDataUrl(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const result = reader.result;
-                if (typeof result === 'string') {
-                    resolve(result);
-                    return;
-                }
-                reject(new Error('Image preview is invalid.'));
-            };
-            reader.onerror = () => {
-                reject(reader.error ?? new Error('Image preview failed to load.'));
-            };
-            reader.readAsDataURL(file);
-        });
     }
 
     function validateForm() {
@@ -90,20 +80,7 @@
             return;
         }
 
-        let imageUrl = previewUrl;
-        if (image instanceof File && (!imageUrl || imageUrl.startsWith('blob:'))) {
-            try {
-                imageUrl = await readFileAsDataUrl(image);
-                previewUrl = imageUrl;
-            } catch (error) {
-                validationErrors = {
-                    ...validationErrors,
-                    image: 'Image preview failed. Please try again.',
-                };
-                return;
-            }
-        }
-        const imageBlob = image instanceof File ? image : (itemData?.imageBlob ?? null);
+        const imageUrl = image || previewUrl;
 
         const parsedDependencies = parseDependencies(dependenciesInput);
         const hasDependenciesInput = dependenciesInput.trim().length > 0;
@@ -114,7 +91,6 @@
             ...(price && { price }),
             ...(unit && { unit }),
             ...(type && { type }),
-            ...(imageBlob && { imageBlob }),
             ...((hasDependenciesInput || (isEdit && itemData?.dependencies?.length)) && {
                 dependencies: parsedDependencies,
             }),

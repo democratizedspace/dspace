@@ -32,6 +32,16 @@ jest.mock('../src/utils/questHelpers.js', () => ({
     isQuestTitleUnique: () => true,
 }));
 
+jest.mock('../src/utils/images/downsample.js', () => ({
+    downsampleAndCompressToJpeg: jest.fn().mockResolvedValue({
+        dataUrl: 'data:image/jpeg;base64,TESTDATA',
+        bytes: 42000,
+        width: 512,
+        height: 512,
+        qualityUsed: 0.82,
+    }),
+}));
+
 function setupDom() {
     document.body.innerHTML = `
         <div id="app">
@@ -152,7 +162,7 @@ describe('QuestForm image uploads', () => {
         await waitFor(() => expect(questsAddMock).toHaveBeenCalledTimes(1));
 
         const savedQuest = questsAddMock.mock.calls[0][0];
-        expect(savedQuest.image).toBe('data:image/png;base64,TESTDATA');
+        expect(savedQuest.image).toBe('data:image/jpeg;base64,TESTDATA');
         expect(global.fetch).not.toHaveBeenCalled();
     });
 });

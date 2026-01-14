@@ -17,6 +17,7 @@
         createDefaultDialogueNode,
     } from '../../utils/questDefaults.js';
     import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
+    import { downsampleAndCompressToJpeg } from '../../utils/images/downsample.js';
 
     export let isEdit = false;
     export let questId = null;
@@ -211,16 +212,23 @@
         }
     });
 
-    function handleImageUpload(event) {
+    async function handleImageUpload(event) {
         const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previewUrl = e.target.result;
-            };
-            reader.readAsDataURL(file);
-            image = file;
-            validateForm();
+            try {
+                const processed = await downsampleAndCompressToJpeg(file);
+                previewUrl = processed.dataUrl;
+                image = processed.dataUrl;
+                await validateForm();
+            } catch (error) {
+                console.error('Error preparing quest image:', error);
+                validationErrors = {
+                    ...validationErrors,
+                    image: 'Image processing failed. Please try another file.',
+                };
+                previewUrl = null;
+                image = null;
+            }
         } else {
             previewUrl = null;
             image = null;
@@ -747,33 +755,6 @@
         return Object.keys(errors).length === 0;
     }
 
-    function readFileAsDataUrl(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = (event) => resolve(event?.target?.result ?? '');
-            reader.onerror = (error) => reject(error);
-            reader.readAsDataURL(file);
-        });
-    }
-
-    async function uploadImage(file) {
-        if (!file) {
-            return previewUrl; // Return existing image URL if no new file
-        }
-
-        if (previewUrl && previewUrl.startsWith('data:image')) {
-            return previewUrl;
-        }
-
-        try {
-            const dataUrl = await readFileAsDataUrl(file);
-            previewUrl = dataUrl;
-            return dataUrl;
-        } catch (error) {
-            console.error('Error preparing quest image:', error);
-            return previewUrl;
-        }
-    }
 
     async function handlePreview() {
         const isValid = await validateForm();
@@ -794,7 +775,7 @@
         try {
             // Upload image if there's a new one
             const { payload } = getQuestPayload();
-            const imageUrl = await uploadImage(image);
+            const imageUrl = image || previewUrl;
             const questData = {
                 ...payload,
                 image: imageUrl || payload.image || DEFAULT_QUEST_IMAGE,

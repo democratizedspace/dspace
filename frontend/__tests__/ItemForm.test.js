@@ -16,6 +16,16 @@ jest.mock('../src/utils/gameState/inventory.js', () => ({
     addItems: jest.fn(),
 }));
 
+jest.mock('../src/utils/images/downsample.js', () => ({
+    downsampleAndCompressToJpeg: jest.fn().mockResolvedValue({
+        dataUrl: 'data:image/jpeg;base64,mockedCompressedImage',
+        bytes: 42000,
+        width: 512,
+        height: 512,
+        qualityUsed: 0.82,
+    }),
+}));
+
 import { addEntity, updateEntity } from '../src/utils/indexeddb.js';
 
 // Mock the browser's fetch API
@@ -136,8 +146,7 @@ describe('ItemForm Component', () => {
                 expect.objectContaining({
                     name: 'Test Item',
                     description: 'This is a test item description',
-                    image: 'data:image/png;base64,mockedBase64Data',
-                    imageBlob: expect.any(File),
+                    image: 'data:image/jpeg;base64,mockedCompressedImage',
                     dependencies: ['resource/filament', 'tool/nozzle'],
                 })
             );
