@@ -9,6 +9,7 @@
     let errorMessage = '';
     let backupBlob = null;
     let backupFilename = '';
+    let preparedSummary = null;
 
     const updateAssets = (assetId, updates) => {
         assets = assets.map((asset) =>
@@ -21,16 +22,23 @@
         );
     };
 
+    const formatSummaryLabel = (kind, entity) => {
+        const name = entity?.title || entity?.name || entity?.id || 'Unknown';
+        return `${kind}: ${name}`;
+    };
+
     const handlePrepareBackup = async () => {
         if (isPreparing) {
             return;
         }
 
+        const startedAt = Date.now();
         isPreparing = true;
         status = 'running';
         errorMessage = '';
         backupBlob = null;
         backupFilename = '';
+        preparedSummary = null;
         assets = [];
 
         await tick();
@@ -55,14 +63,24 @@
             });
             backupBlob = result.blob;
             backupFilename = result.filename;
+            preparedSummary = {
+                items: result.data.items.map((item) => formatSummaryLabel('Item', item)),
+                processes: result.data.processes.map((process) =>
+                    formatSummaryLabel('Process', process)
+                ),
+                quests: result.data.quests.map((quest) => formatSummaryLabel('Quest', quest)),
+            };
             status = 'ready';
         } catch (error) {
             const message = error instanceof Error ? error.message : String(error);
             errorMessage = message;
             status = 'error';
         } finally {
+            const elapsed = Date.now() - startedAt;
+            if (elapsed < 250) {
+                await new Promise((resolve) => setTimeout(resolve, 250 - elapsed));
+            }
             await tick();
-            await new Promise((resolve) => setTimeout(resolve, 0));
             isPreparing = false;
         }
     };
@@ -121,6 +139,22 @@
         {/if}
 
         {#if status === 'ready'}
+            {#if preparedSummary}
+                <div class="prepared-preview" aria-live="polite">
+                    <h3>Prepared content</h3>
+                    <ul>
+                        {#each preparedSummary.items as label}
+                            <li>{label}</li>
+                        {/each}
+                        {#each preparedSummary.processes as label}
+                            <li>{label}</li>
+                        {/each}
+                        {#each preparedSummary.quests as label}
+                            <li>{label}</li>
+                        {/each}
+                    </ul>
+                </div>
+            {/if}
             <Chip text="Download backup" onClick={handleDownload} inverted={true} />
         {/if}
     </section>
@@ -162,6 +196,23 @@
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
+    }
+
+    .prepared-preview {
+        background-color: #f5f5f5;
+        color: #000;
+        padding: 0.75rem;
+        border-radius: 0.75rem;
+    }
+
+    .prepared-preview h3 {
+        margin: 0 0 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .prepared-preview ul {
+        margin: 0;
+        padding-left: 1.2rem;
     }
 
     .progress-item {
