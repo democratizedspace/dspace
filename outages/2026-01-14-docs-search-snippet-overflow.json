@@ -1,0 +1,13 @@
+{
+  "id": "OUT-2026-01-14-docs-search-snippet-overflow",
+  "date": "2026-01-14",
+  "component": "frontend/docs",
+  "rootCause": "Docs search snippets allowed long unbroken tokens to render without wrapping, and the link/snippet container lacked shrink constraints, so long URLs could overflow the card and shove links out of place.",
+  "resolution": "Clamp snippets to two lines, allow wrapping within long tokens, enforce min/max width on the link container, and expose full snippet text via a tooltip for accessibility.",
+  "references": [
+    "frontend/src/components/svelte/DocsIndex.svelte",
+    "frontend/src/lib/docs/fullTextSearch.ts",
+    "frontend/e2e/docs-search.spec.ts",
+    "frontend/src/pages/docs/md/docs-search.md"
+  ]
+}
