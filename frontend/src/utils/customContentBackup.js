@@ -1,4 +1,4 @@
-import { getItems, getProcesses, getQuests } from './indexeddb.js';
+import { getItems, getProcesses, getQuests, openCustomContentDB } from './indexeddb.js';
 import { db } from './customcontent.js';
 import { isBrowser } from './ssr.js';
 
@@ -255,6 +255,25 @@ async function readCustomContentSnapshot() {
     });
 }
 
+async function ensureCustomContentSchema() {
+    if (!isBrowser || typeof indexedDB === 'undefined') {
+        return;
+    }
+
+    const dbInstance = await openCustomContentDB();
+    const requiredStores = ['meta', 'items', 'processes', 'quests'];
+    const missingStores = requiredStores.filter(
+        (storeName) => !dbInstance.objectStoreNames.contains(storeName)
+    );
+    dbInstance.close();
+
+    if (missingStores.length > 0) {
+        throw new Error(
+            `Custom content database is missing required stores: ${missingStores.join(', ')}`
+        );
+    }
+}
+
 function buildImageRecord(entityType, entityId, dataUrl) {
     return {
         id: `${entityType}:${entityId}:image`,
@@ -468,6 +487,8 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
     const processes = normalized.processes.map((process) => sanitizeEntity(process));
     const quests = normalized.quests.map((quest) => sanitizeEntity(quest));
     const images = normalized.images;
+
+    await ensureCustomContentSchema();
 
     const itemMap = new Map(items.map((item) => [item.id, item]));
     const questMap = new Map(quests.map((quest) => [quest.id, quest]));
