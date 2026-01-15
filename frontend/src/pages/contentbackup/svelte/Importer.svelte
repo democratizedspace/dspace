@@ -33,6 +33,17 @@
         );
     };
 
+    const formatAssetLabel = (label) => {
+        if (!label) {
+            return '';
+        }
+
+        return label
+            .replace(/Item:\s*/i, 'Item ')
+            .replace(/Process:\s*/i, 'Process ')
+            .replace(/Quest:\s*/i, 'Quest ');
+    };
+
     const isValidBackupFile = (file) => {
         if (!file) {
             return false;
@@ -137,7 +148,7 @@
                 {#each assets as asset}
                     <div class="progress-item" data-status={asset.status}>
                         <div class="progress-header">
-                            <span>{asset.label}</span>
+                            <span>{formatAssetLabel(asset.label)}</span>
                             <span class="status-label">
                                 {asset.status === 'done'
                                     ? 'Done'
