@@ -34,80 +34,104 @@ test.describe('Custom Content Management', () => {
     }
 
     async function findCustomItemIdByName(page: Page, name: string): Promise<string | null> {
-        return page.evaluate(async (itemName) => {
-            return new Promise((resolve) => {
-                const request = indexedDB.open('CustomContent');
+        try {
+            return await page.evaluate(async (itemName) => {
+                return new Promise((resolve) => {
+                    const request = indexedDB.open('CustomContent');
 
-                request.onerror = () => resolve(null);
-                request.onupgradeneeded = () => {
-                    request.result?.close();
-                    resolve(null);
-                };
-                request.onsuccess = () => {
-                    const db = request.result;
-                    const transaction = db.transaction('items', 'readonly');
-                    const store = transaction.objectStore('items');
-                    const getAllRequest = store.getAll();
-
-                    getAllRequest.onerror = () => {
-                        db.close();
+                    request.onerror = () => resolve(null);
+                    request.onupgradeneeded = () => {
+                        request.result?.close();
                         resolve(null);
                     };
-                    getAllRequest.onsuccess = () => {
-                        const items = getAllRequest.result ?? [];
-                        const normalizedName = itemName.trim().toLowerCase();
-                        const match = items.find(
-                            (item) =>
-                                (item?.name ?? '').trim().toLowerCase() === normalizedName
-                        );
-                        const matchedId = match?.id ?? null;
-                        db.close();
-                        resolve(matchedId);
+                    request.onsuccess = () => {
+                        const db = request.result;
+                        const transaction = db.transaction('items', 'readonly');
+                        const store = transaction.objectStore('items');
+                        const getAllRequest = store.getAll();
+
+                        getAllRequest.onerror = () => {
+                            db.close();
+                            resolve(null);
+                        };
+                        getAllRequest.onsuccess = () => {
+                            const items = getAllRequest.result ?? [];
+                            const normalizedName = itemName.trim().toLowerCase();
+                            const match = items.find(
+                                (item) =>
+                                    (item?.name ?? '').trim().toLowerCase() === normalizedName
+                            );
+                            const matchedId = match?.id ?? null;
+                            db.close();
+                            resolve(matchedId);
+                        };
                     };
-                };
-            });
-        }, name);
+                });
+            }, name);
+        } catch (error) {
+            const message = String(error);
+            if (
+                message.includes('Execution context was destroyed') ||
+                message.includes('Cannot find context with specified id') ||
+                message.includes('Target closed')
+            ) {
+                return null;
+            }
+            throw error;
+        }
     }
 
     async function findCustomProcessIdByTitle(
         page: Page,
         title: string
     ): Promise<string | null> {
-        return page.evaluate(async (processTitle) => {
-            return new Promise((resolve) => {
-                const request = indexedDB.open('CustomContent');
+        try {
+            return await page.evaluate(async (processTitle) => {
+                return new Promise((resolve) => {
+                    const request = indexedDB.open('CustomContent');
 
-                request.onerror = () => resolve(null);
-                request.onupgradeneeded = () => {
-                    request.result?.close();
-                    resolve(null);
-                };
-                request.onsuccess = () => {
-                    const db = request.result;
-                    const transaction = db.transaction('processes', 'readonly');
-                    const store = transaction.objectStore('processes');
-                    const getAllRequest = store.getAll();
-
-                    getAllRequest.onerror = () => {
-                        db.close();
+                    request.onerror = () => resolve(null);
+                    request.onupgradeneeded = () => {
+                        request.result?.close();
                         resolve(null);
                     };
-                    getAllRequest.onsuccess = () => {
-                        const processes = getAllRequest.result ?? [];
-                        const normalizedTitle = processTitle.trim().toLowerCase();
-                        const match = processes.find(
-                            (process) =>
-                                (process?.name ?? process?.title ?? '')
-                                    .trim()
-                                    .toLowerCase() === normalizedTitle
-                        );
-                        const matchedId = match?.id ?? null;
-                        db.close();
-                        resolve(matchedId);
+                    request.onsuccess = () => {
+                        const db = request.result;
+                        const transaction = db.transaction('processes', 'readonly');
+                        const store = transaction.objectStore('processes');
+                        const getAllRequest = store.getAll();
+
+                        getAllRequest.onerror = () => {
+                            db.close();
+                            resolve(null);
+                        };
+                        getAllRequest.onsuccess = () => {
+                            const processes = getAllRequest.result ?? [];
+                            const normalizedTitle = processTitle.trim().toLowerCase();
+                            const match = processes.find(
+                                (process) =>
+                                    (process?.name ?? process?.title ?? '')
+                                        .trim()
+                                        .toLowerCase() === normalizedTitle
+                            );
+                            const matchedId = match?.id ?? null;
+                            db.close();
+                            resolve(matchedId);
+                        };
                     };
-                };
-            });
-        }, title);
+                });
+            }, title);
+        } catch (error) {
+            const message = String(error);
+            if (
+                message.includes('Execution context was destroyed') ||
+                message.includes('Cannot find context with specified id') ||
+                message.includes('Target closed')
+            ) {
+                return null;
+            }
+            throw error;
+        }
     }
 
     test('should create a custom item', async ({ page }) => {
@@ -260,8 +284,16 @@ test.describe('Custom Content Management', () => {
         await page.fill('#name', uniqueItemName);
         await page.fill('#description', 'Item used to validate custom process discovery');
 
-        await page.click('button.submit-button');
-        await page.waitForLoadState('networkidle');
+        await Promise.all([
+            page.waitForURL(
+                (url) =>
+                    url.pathname.startsWith('/inventory') &&
+                    !url.pathname.endsWith('/inventory/create'),
+                { timeout: 15000 }
+            ),
+            page.click('button.submit-button'),
+        ]);
+        await waitForHydration(page);
 
         let itemId: string | null = null;
         await expect
@@ -310,8 +342,16 @@ test.describe('Custom Content Management', () => {
                 'button.submit-button, button[type="submit"], input[type="submit"], button:has-text("Create"), button:has-text("Save")'
             )
             .first();
-        await submitProcessButton.click();
-        await page.waitForLoadState('networkidle');
+        await Promise.all([
+            page.waitForURL(
+                (url) =>
+                    url.pathname.startsWith('/processes') &&
+                    !url.pathname.endsWith('/processes/create'),
+                { timeout: 15000 }
+            ),
+            submitProcessButton.click(),
+        ]);
+        await waitForHydration(page);
 
         await expect
             .poll(async () => findCustomProcessIdByTitle(page, processTitle), { timeout: 30000 })
