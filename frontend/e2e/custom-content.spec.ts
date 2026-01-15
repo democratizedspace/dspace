@@ -293,6 +293,7 @@ test.describe('Custom Content Management', () => {
             ),
             page.click('button.submit-button'),
         ]);
+        await page.waitForLoadState('networkidle', { timeout: 10000 });
         await waitForHydration(page);
 
         let itemId: string | null = null;
@@ -351,6 +352,7 @@ test.describe('Custom Content Management', () => {
             ),
             submitProcessButton.click(),
         ]);
+        await page.waitForLoadState('networkidle', { timeout: 10000 });
         await waitForHydration(page);
 
         await expect
