@@ -4,6 +4,6 @@ import QuestDetail from './svelte/QuestDetail.svelte';
 const { id } = Astro.params;
 ---
 
-<Page>
+<Page title="Quest" message="Complete the quest dialogue below.">
     <QuestDetail questId={id} client:load />
 </Page>

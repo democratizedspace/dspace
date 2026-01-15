@@ -13,6 +13,23 @@ const DEFAULT_RETRY_ATTEMPTS = 6;
 const DEFAULT_RETRY_DELAY_MS = 300;
 const DEFAULT_MAX_LOG_ATTEMPTS = 4;
 const DEFAULT_MAX_DURATION_MS = 10_000;
+const UUID_FALLBACK_TEMPLATE = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+
+function generateUuidFallback(): string {
+    return UUID_FALLBACK_TEMPLATE.replace(/[xy]/g, (character) => {
+        const random = (Math.random() * 16) | 0;
+        const value = character === 'x' ? random : (random & 0x3) | 0x8;
+        return value.toString(16);
+    });
+}
+
+function generateQuestId(): string {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    }
+
+    return generateUuidFallback();
+}
 
 async function wait(page: Page, ms: number): Promise<void> {
     if (typeof page.waitForTimeout === 'function') {
@@ -232,15 +249,12 @@ export async function seedCustomQuest(
     page: Page,
     quest: Record<string, unknown>
 ): Promise<string> {
-    const seededId = await page.evaluate(async (questData) => {
+    const resolvedQuestId =
+        (quest as { id?: string | number }).id ?? generateQuestId();
+
+    const seededId = await page.evaluate(async ({ questData, questId }) => {
         const databaseName = 'CustomContent';
         const databaseVersion = 3;
-
-        const questId =
-            questData.id ??
-            (typeof crypto !== 'undefined' && crypto.randomUUID
-                ? crypto.randomUUID()
-                : `${Date.now()}-${Math.random()}`);
 
         const preparedQuest = {
             ...questData,
@@ -281,7 +295,7 @@ export async function seedCustomQuest(
 
         db.close();
         return String(questId);
-    }, quest);
+    }, { questData: quest, questId: resolvedQuestId });
 
     return seededId;
 }

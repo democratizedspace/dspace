@@ -15,7 +15,7 @@
     onMount(async () => {
         try {
             // First try to load as a custom quest
-            const setQuest = (loadedQuest) => {
+            const normalizeAndSetQuest = (loadedQuest) => {
                 const normalized = normalizeQuest(loadedQuest);
                 if (!normalized) {
                     return false;
@@ -27,7 +27,7 @@
             };
 
             try {
-                if (setQuest(await getQuest(questId))) {
+                if (normalizeAndSetQuest(await getQuest(questId))) {
                     return;
                 }
                 throw new Error('Custom quest not found for string ID');
@@ -35,7 +35,7 @@
                 const numericId = Number.parseInt(questId, 10);
                 if (!Number.isNaN(numericId)) {
                     try {
-                        if (setQuest(await getQuest(numericId))) {
+                        if (normalizeAndSetQuest(await getQuest(numericId))) {
                             return;
                         }
                     } catch {
@@ -46,10 +46,7 @@
             }
 
             const builtInQuest = getBuiltInQuest(questId);
-            if (builtInQuest) {
-                if (setQuest(builtInQuest)) {
-                    return;
-                }
+            if (builtInQuest && normalizeAndSetQuest(builtInQuest)) {
                 return;
             }
 

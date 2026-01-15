@@ -54,4 +54,28 @@ describe('QuestDetail', () => {
             expect(screen.getByText('Continue')).toBeInTheDocument();
         });
     });
+
+    it('renders an error when dialogue is missing', async () => {
+        const customQuest = {
+            id: 'custom-quest-no-dialogue',
+            title: 'Custom Quest Without Dialogue',
+            description: 'Missing dialogue for testing.',
+            image: '/assets/quests/custom.png',
+            npc: '/assets/npc/dChat.jpg',
+            start: 'start',
+            requiresQuests: [],
+        };
+
+        vi.mocked(getQuest).mockResolvedValue(customQuest);
+        vi.mocked(getBuiltInQuest).mockReturnValue(null);
+
+        render(QuestDetail, { questId: customQuest.id });
+
+        await waitFor(() => {
+            expect(screen.getByText('Quest dialogue missing')).toBeInTheDocument();
+            expect(
+                screen.getByText('This quest does not have dialogue to display.')
+            ).toBeInTheDocument();
+        });
+    });
 });
