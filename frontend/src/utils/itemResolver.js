@@ -151,22 +151,17 @@ export async function getItemById(id) {
 }
 
 export async function getItemsByIds(ids = []) {
-    const results = [];
-
-    for (const id of ids) {
-        const resolved = await getItemById(id);
-        results.push(resolved);
-    }
-
-    return results;
+    return Promise.all(ids.map((id) => getItemById(id)));
 }
 
 export async function getItemMap(ids = []) {
     const map = new Map();
+    const keys = ids.map((id) => normalizeId(id));
+    const resolvedItems = await Promise.all(keys.map((key) => getItemById(key)));
 
-    for (const id of ids) {
-        const key = normalizeId(id);
-        const resolved = await getItemById(key);
+    for (let i = 0; i < keys.length; i += 1) {
+        const key = keys[i];
+        const resolved = resolvedItems[i];
 
         if (resolved) {
             map.set(key, resolved);

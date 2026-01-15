@@ -1,5 +1,8 @@
-const FALLBACK_NAME = 'Loading item…';
+import items from '../../pages/inventory/json/items';
+
+const FALLBACK_NAME = 'Unknown item';
 const FALLBACK_DESCRIPTION = 'Custom item';
+const builtInItems = new Map(items.map((item) => [String(item.id), item]));
 
 export function getItemMetadata(entry, itemMap) {
     const key =
@@ -10,12 +13,25 @@ export function getItemMetadata(entry, itemMap) {
         return knownItem;
     }
 
+    const builtInItem = builtInItems.get(key);
+    if (builtInItem) {
+        return {
+            id: key,
+            name: builtInItem.name || FALLBACK_NAME,
+            image: builtInItem.image || null,
+            description: builtInItem.description || FALLBACK_DESCRIPTION,
+            loading: false,
+            missing: false,
+            releaseImage: null,
+        };
+    }
+
     return {
         id: entry?.id ?? key,
         name: entry?.name || FALLBACK_NAME,
         image: entry?.image || null,
         description: entry?.description || FALLBACK_DESCRIPTION,
-        loading: true,
+        loading: Boolean(itemMap),
         missing: false,
         releaseImage: null,
     };
