@@ -1,0 +1,14 @@
+{
+  "id": "2026-01-14-process-edit-404",
+  "date": "2026-01-14",
+  "component": "frontend",
+  "longForm": "outages/2026-01-14-process-edit-404.md",
+  "rootCause": "The Astro route for /processes/[processId]/edit was missing, so edit links from the custom process manager resolved to the 404 page.",
+  "resolution": "Implemented the edit route with the shared process form, loaded existing custom process data, and added regression coverage to ensure edit pages render and persist updates.",
+  "references": [
+    "frontend/src/pages/processes/[processId]/edit.astro",
+    "frontend/src/pages/processes/svelte/EditProcess.svelte",
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/e2e/process-edit.spec.ts"
+  ]
+}

@@ -819,6 +819,70 @@ export async function addTestItems(page: Page): Promise<void> {
     });
 }
 
+export type CustomProcessRecord = {
+    id: string;
+    title: string;
+    duration: string;
+    requireItems?: Array<{ id: string; count: number }>;
+    consumeItems?: Array<{ id: string; count: number }>;
+    createItems?: Array<{ id: string; count: number }>;
+    custom?: boolean;
+    [key: string]: unknown;
+};
+
+export async function seedCustomProcess(
+    page: Page,
+    processRecord: CustomProcessRecord
+): Promise<void> {
+    await page.evaluate(async (process) => {
+        const openDatabase = () =>
+            new Promise<IDBDatabase>((resolve, reject) => {
+                const request = indexedDB.open('CustomContent', 3);
+
+                request.onupgradeneeded = () => {
+                    const db = request.result;
+                    if (!db.objectStoreNames.contains('meta')) {
+                        db.createObjectStore('meta');
+                    }
+                    if (!db.objectStoreNames.contains('items')) {
+                        db.createObjectStore('items', { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('processes')) {
+                        db.createObjectStore('processes', { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('quests')) {
+                        db.createObjectStore('quests', { keyPath: 'id' });
+                    }
+                };
+
+                request.onerror = () =>
+                    reject(
+                        request.error ??
+                            new Error('Failed to open IndexedDB database "CustomContent"')
+                    );
+                request.onsuccess = () => resolve(request.result);
+            });
+
+        const db = await openDatabase();
+
+        try {
+            await new Promise<void>((resolve, reject) => {
+                const tx = db.transaction('processes', 'readwrite');
+                const store = tx.objectStore('processes');
+
+                store.put(process);
+
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error ?? new Error('Process seed transaction failed'));
+                tx.onabort = () =>
+                    reject(tx.error ?? new Error('Process seed transaction was aborted'));
+            });
+        } finally {
+            db.close();
+        }
+    }, processRecord);
+}
+
 type Hookable = {
     beforeEach: (fn: ({ page }: { page: Page }) => Promise<void>) => void;
     afterEach: (fn: ({ page }: { page: Page }) => Promise<void>) => void;

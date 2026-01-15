@@ -10,14 +10,17 @@ jest.mock('../src/pages/inventory/json/items', () => [
 const mockDb = {
     processes: {
         add: jest.fn().mockResolvedValue('process-123'),
+        update: jest.fn().mockResolvedValue(true),
     },
 };
 
 const createProcessMock = jest.fn((...args) => mockDb.processes.add(...args));
+const updateProcessMock = jest.fn((...args) => mockDb.processes.update(...args));
 
 jest.mock('../src/utils/customcontent.js', () => ({
     db: mockDb,
     createProcess: (...args) => createProcessMock(...args),
+    updateProcess: (...args) => updateProcessMock(...args),
 }));
 
 const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
@@ -29,7 +32,9 @@ describe('ProcessForm Component', () => {
         container = document.createElement('div');
         document.body.appendChild(container);
         mockDb.processes.add.mockClear();
+        mockDb.processes.update.mockClear();
         createProcessMock.mockClear();
+        updateProcessMock.mockClear();
     });
 
     afterEach(() => {
@@ -97,6 +102,50 @@ describe('ProcessForm Component', () => {
             consumeItems: [{ id: 'item-2', count: 1 }],
             createItems: [{ id: 'item-3', count: 3 }],
         });
+    });
+
+    test('should update existing process when editing', async () => {
+        const component = new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-123',
+                    title: 'Existing Process',
+                    duration: '1h',
+                    requireItems: [{ id: 'item-1', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                    custom: true,
+                    extraField: 'keep-me',
+                },
+            },
+        });
+
+        await flushPromises();
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Updated Process';
+        titleInput.dispatchEvent(new Event('input'));
+
+        durationInput.value = '2h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(updateProcessMock).toHaveBeenCalledWith(
+            'process-123',
+            expect.objectContaining({
+                title: 'Updated Process',
+                duration: '2h',
+                extraField: 'keep-me',
+            })
+        );
     });
 
     test('should handle form submission with minimal fields', async () => {

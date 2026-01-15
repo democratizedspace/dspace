@@ -1,0 +1,11 @@
+---
+import Page from '../../../components/Page.astro';
+import EditProcess from '../svelte/EditProcess.svelte';
+
+const { processId } = Astro.params;
+const title = 'Edit Custom Process';
+---
+
+<Page title={title} message="Update the details of your custom process.">
+    <EditProcess {processId} client:load />
+</Page>
