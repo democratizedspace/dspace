@@ -813,4 +813,90 @@ describe('ProcessForm Component', () => {
             'Failed to save process.'
         );
     });
+
+    test('adds and removes item rows via buttons', async () => {
+        new ProcessForm({
+            target: container,
+        });
+
+        const buttons = Array.from(container.querySelectorAll('button'));
+        const addRequired = buttons.find((btn) => btn.textContent.includes('Add Required Item'));
+        const addConsumed = buttons.find((btn) => btn.textContent.includes('Add Consumed Item'));
+        const addCreated = buttons.find((btn) => btn.textContent.includes('Add Created Item'));
+
+        addRequired.click();
+        addConsumed.click();
+        addCreated.click();
+
+        await flushPromises();
+
+        expect(container.querySelectorAll('#required-items-section > .item-row')).toHaveLength(1);
+        expect(container.querySelectorAll('#consumed-items-section > .item-row')).toHaveLength(1);
+        expect(container.querySelectorAll('#created-items-section > .item-row')).toHaveLength(1);
+
+        container
+            .querySelector('#required-items-section > .item-row .remove-button')
+            .click();
+        container
+            .querySelector('#consumed-items-section > .item-row .remove-button')
+            .click();
+        container
+            .querySelector('#created-items-section > .item-row .remove-button')
+            .click();
+
+        await flushPromises();
+
+        expect(container.querySelectorAll('#required-items-section > .item-row')).toHaveLength(0);
+        expect(container.querySelectorAll('#consumed-items-section > .item-row')).toHaveLength(0);
+        expect(container.querySelectorAll('#created-items-section > .item-row')).toHaveLength(0);
+    });
+
+    test('selects items from selectors before submitting', async () => {
+        new ProcessForm({
+            target: container,
+        });
+
+        const buttons = Array.from(container.querySelectorAll('button'));
+        const addRequired = buttons.find((btn) => btn.textContent.includes('Add Required Item'));
+        const addConsumed = buttons.find((btn) => btn.textContent.includes('Add Consumed Item'));
+        const addCreated = buttons.find((btn) => btn.textContent.includes('Add Created Item'));
+
+        addRequired.click();
+        addConsumed.click();
+        addCreated.click();
+
+        await flushPromises();
+
+        const selectItem = (sectionId, itemName) => {
+            const section = container.querySelector(sectionId);
+            const optionButton = section.querySelector(
+                `button[aria-label="Select ${itemName}"]`
+            );
+            optionButton.click();
+        };
+
+        selectItem('#required-items-section', 'Test Item 1');
+        selectItem('#consumed-items-section', 'Test Item 2');
+        selectItem('#created-items-section', 'Test Item 3');
+
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+        const form = container.querySelector('form');
+
+        titleInput.value = 'Selected Items Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        await flushPromises();
+
+        expect(createProcessMock).toHaveBeenCalledWith({
+            title: 'Selected Items Process',
+            duration: '1h',
+            requireItems: [{ id: 'item-1', count: 1 }],
+            consumeItems: [{ id: 'item-2', count: 1 }],
+            createItems: [{ id: 'item-3', count: 1 }],
+        });
+    });
 });
