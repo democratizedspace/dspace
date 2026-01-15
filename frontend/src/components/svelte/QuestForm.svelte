@@ -897,6 +897,7 @@
             type="file"
             id="image"
             data-testid="image-file-input"
+            data-processing={isProcessingImage ? 'true' : 'false'}
             accept="image/*"
             on:change={handleImageUpload}
             class:error={validationErrors.image}

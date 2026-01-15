@@ -103,6 +103,8 @@ async function uploadGeneratedImage(
             return src;
         })
         .toMatch(/^data:image\/jpeg;base64,/);
+
+    await expect(input).toHaveAttribute('data-processing', 'false');
 }
 
 async function getCustomContentRecord(
