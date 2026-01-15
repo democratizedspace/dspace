@@ -395,12 +395,8 @@ test('loads custom process definitions when missing from the built-in catalog', 
 
     dbGetMock.mockResolvedValue(customProcess);
 
-    const { getByText } = render(Process, { processId: 'custom-missing' });
+    const { findByText } = render(Process, { processId: 'custom-missing' });
 
-    await tick();
-    await Promise.resolve();
-    await tick();
-
+    await findByText('IndexedDB Process');
     expect(dbGetMock).toHaveBeenCalledWith('process', 'custom-missing');
-    expect(getByText('IndexedDB Process')).toBeTruthy();
 });

@@ -352,7 +352,7 @@
 
     $: builtInProcess = processes.find((p) => p.id === processId);
 
-    $: if (mounted && !processData && !builtInProcess && processId) {
+    $: if (mounted && processId && !processData && !builtInProcess) {
         void loadCustomProcess(processId);
     }
 
