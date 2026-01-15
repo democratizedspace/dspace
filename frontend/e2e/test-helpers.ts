@@ -245,57 +245,56 @@ export async function clearUserData(page: Page): Promise<void> {
     await purgeClientState(page);
 }
 
-export async function seedCustomQuest(
-    page: Page,
-    quest: Record<string, unknown>
-): Promise<string> {
-    const resolvedQuestId =
-        (quest as { id?: string | number }).id ?? generateQuestId();
+export async function seedCustomQuest(page: Page, quest: Record<string, unknown>): Promise<string> {
+    const resolvedQuestId = (quest as { id?: string | number }).id ?? generateQuestId();
 
-    const seededId = await page.evaluate(async ({ questData, questId }) => {
-        const databaseName = 'CustomContent';
-        const databaseVersion = 3;
+    const seededId = await page.evaluate(
+        async ({ questData, questId }) => {
+            const databaseName = 'CustomContent';
+            const databaseVersion = 3;
 
-        const preparedQuest = {
-            ...questData,
-            id: questId,
-            entityType: 'quest',
-            custom: true,
-            createdAt: questData.createdAt ?? new Date().toISOString(),
-        };
-
-        const db = await new Promise<IDBDatabase>((resolve, reject) => {
-            const request = indexedDB.open(databaseName, databaseVersion);
-            request.onupgradeneeded = () => {
-                const upgradeDb = request.result;
-                if (!upgradeDb.objectStoreNames.contains('meta')) {
-                    upgradeDb.createObjectStore('meta');
-                }
-                if (!upgradeDb.objectStoreNames.contains('items')) {
-                    upgradeDb.createObjectStore('items', { keyPath: 'id' });
-                }
-                if (!upgradeDb.objectStoreNames.contains('processes')) {
-                    upgradeDb.createObjectStore('processes', { keyPath: 'id' });
-                }
-                if (!upgradeDb.objectStoreNames.contains('quests')) {
-                    upgradeDb.createObjectStore('quests', { keyPath: 'id' });
-                }
+            const preparedQuest = {
+                ...questData,
+                id: questId,
+                entityType: 'quest',
+                custom: true,
+                createdAt: questData.createdAt ?? new Date().toISOString(),
             };
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = () => reject(request.error);
-        });
 
-        await new Promise<void>((resolve, reject) => {
-            const tx = db.transaction('quests', 'readwrite');
-            const store = tx.objectStore('quests');
-            store.put(preparedQuest);
-            tx.oncomplete = () => resolve();
-            tx.onerror = () => reject(tx.error);
-        });
+            const db = await new Promise<IDBDatabase>((resolve, reject) => {
+                const request = indexedDB.open(databaseName, databaseVersion);
+                request.onupgradeneeded = () => {
+                    const upgradeDb = request.result;
+                    if (!upgradeDb.objectStoreNames.contains('meta')) {
+                        upgradeDb.createObjectStore('meta');
+                    }
+                    if (!upgradeDb.objectStoreNames.contains('items')) {
+                        upgradeDb.createObjectStore('items', { keyPath: 'id' });
+                    }
+                    if (!upgradeDb.objectStoreNames.contains('processes')) {
+                        upgradeDb.createObjectStore('processes', { keyPath: 'id' });
+                    }
+                    if (!upgradeDb.objectStoreNames.contains('quests')) {
+                        upgradeDb.createObjectStore('quests', { keyPath: 'id' });
+                    }
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
 
-        db.close();
-        return String(questId);
-    }, { questData: quest, questId: resolvedQuestId });
+            await new Promise<void>((resolve, reject) => {
+                const tx = db.transaction('quests', 'readwrite');
+                const store = tx.objectStore('quests');
+                store.put(preparedQuest);
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+
+            db.close();
+            return String(questId);
+        },
+        { questData: quest, questId: resolvedQuestId }
+    );
 
     return seededId;
 }

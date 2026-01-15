@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, seedCustomQuest } from './test-helpers';
+import { clearUserData, seedCustomQuest, waitForHydration } from './test-helpers';
 
 test.describe('Custom quest chat rendering', () => {
     test.beforeEach(async ({ page }) => {
@@ -32,10 +32,11 @@ test.describe('Custom quest chat rendering', () => {
         });
 
         await page.goto(`/quests/${questId}`);
+        await waitForHydration(page);
         await expect(page.locator('[data-testid="chat-panel"]')).toBeVisible();
         await expect(page.locator('text=Custom quest start node.')).toBeVisible();
 
-        const optionButton = page.locator('text=Proceed');
+        const optionButton = page.getByRole('button', { name: 'Proceed' });
         await expect(optionButton).toBeVisible();
         await optionButton.click();
 
