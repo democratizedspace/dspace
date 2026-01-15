@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { fileURLToPath } from 'url';
 import { clearUserData, ItemSelectorHelper, waitForHydration } from './test-helpers';
 
 test.describe('Process creation item selectors', () => {
@@ -18,10 +17,14 @@ test.describe('Process creation item selectors', () => {
         await page.fill('#description', 'Custom item used for process creation search.');
 
         const fileInput = page.locator('input[type="file"]');
-        const imagePath = fileURLToPath(
-            new URL('../test-data/test-image.jpg', import.meta.url)
-        );
-        await fileInput.setInputFiles(imagePath);
+        await fileInput.setInputFiles({
+            name: 'process-item.png',
+            mimeType: 'image/png',
+            buffer: Buffer.from(
+                'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO5nX7kAAAAASUVORK5CYII=',
+                'base64'
+            ),
+        });
 
         await page.click('button.submit-button');
         await expect(page.locator('.submit-message.success')).toBeVisible();
