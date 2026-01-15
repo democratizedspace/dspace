@@ -30,14 +30,22 @@ vi.mock('../../../../utils/itemDependencies.js', () => ({
     getQuestsForItem: () => ({ requires: [], rewards: [] }),
 }));
 
-vi.mock('../../../../utils/gameState/inventory.js', () => ({
-    getItemCounts: (...args) => getItemCountsMock(...args),
-}));
+vi.mock('../../../../utils/gameState/inventory.js', async (importOriginal) => {
+    const actual = await importOriginal();
+    return {
+        ...actual,
+        getItemCounts: (...args) => getItemCountsMock(...args),
+    };
+});
 
-vi.mock('../../../../utils/gameState/common.js', () => ({
-    ready: Promise.resolve(),
-    isGameStateReady: (...args) => isGameStateReadyMock(...args),
-}));
+vi.mock('../../../../utils/gameState/common.js', async (importOriginal) => {
+    const actual = await importOriginal();
+    return {
+        ...actual,
+        ready: Promise.resolve(),
+        isGameStateReady: (...args) => isGameStateReadyMock(...args),
+    };
+});
 
 const TEST_IMAGE =
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==';
