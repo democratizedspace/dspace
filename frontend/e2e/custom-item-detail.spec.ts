@@ -25,7 +25,7 @@ test.describe('Custom item detail view', () => {
         await page.goto('/');
         await waitForHydration(page);
         await page.evaluate(async (item) => {
-            await new Promise<void>((resolve) => {
+            await new Promise<void>((resolve, reject) => {
                 const request = indexedDB.open('CustomContent', 3);
 
                 request.onupgradeneeded = () => {
@@ -53,13 +53,20 @@ test.describe('Custom item detail view', () => {
                         resolve();
                     };
                     tx.onerror = () => {
+                        const error = tx.error;
                         db.close();
-                        resolve();
+                        reject(error ?? new Error('Failed to seed custom item store.'));
+                    };
+                    tx.onabort = () => {
+                        const error = tx.error;
+                        db.close();
+                        reject(error ?? new Error('Custom item seed transaction aborted.'));
                     };
                 };
 
-                request.onerror = () => resolve();
-                request.onblocked = () => resolve();
+                request.onerror = () =>
+                    reject(request.error ?? new Error('Failed to open CustomContent DB.'));
+                request.onblocked = () => reject(new Error('CustomContent DB open was blocked.'));
             });
         }, customItem);
 
