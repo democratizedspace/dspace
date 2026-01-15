@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
 import { writable } from 'svelte/store';
-import { vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import QuestDetail from '../src/pages/quests/svelte/QuestDetail.svelte';
 import { getQuest } from '../src/utils/customcontent.js';

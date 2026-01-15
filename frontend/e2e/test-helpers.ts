@@ -262,7 +262,7 @@ export async function seedCustomQuest(page: Page, quest: Record<string, unknown>
                 createdAt: questData.createdAt ?? new Date().toISOString(),
             };
 
-            const db = await new Promise<IDBDatabase>((resolve, reject) => {
+            const db = await new Promise<any>((resolve, reject) => {
                 const request = indexedDB.open(databaseName, databaseVersion);
                 request.onupgradeneeded = () => {
                     const upgradeDb = request.result;
@@ -308,7 +308,7 @@ export async function waitForQuestRecordByTitle(
     const resultHandle = await page.waitForFunction(
         async ({ questTitle }) => {
             const openRequest = indexedDB.open('CustomContent');
-            const db: IDBDatabase = await new Promise((resolve, reject) => {
+            const db = await new Promise<any>((resolve, reject) => {
                 openRequest.onsuccess = () => resolve(openRequest.result);
                 openRequest.onerror = () => reject(openRequest.error);
                 openRequest.onupgradeneeded = () => resolve(openRequest.result);
@@ -361,7 +361,7 @@ export async function waitForQuestRecordByTitle(
 async function customQuestExists(page: Page, questTitle: string): Promise<boolean> {
     return page.evaluate(async (title) => {
         const openRequest = indexedDB.open('CustomContent');
-        const db: IDBDatabase = await new Promise((resolve, reject) => {
+        const db = await new Promise<any>((resolve, reject) => {
             openRequest.onsuccess = () => resolve(openRequest.result);
             openRequest.onerror = () => reject(openRequest.error);
             openRequest.onupgradeneeded = () => resolve(openRequest.result);
