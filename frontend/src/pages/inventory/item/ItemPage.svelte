@@ -26,12 +26,11 @@
 
     let processes = {};
     const quests = getQuestsForItem(itemId);
+    let hasProcesses = false;
 
     const hasQuests = quests.requires.length > 0 || quests.rewards.length > 0;
 
-    $: hasProcesses = Object.values(processes).some(
-        (arr) => Array.isArray(arr) && arr.length > 0
-    );
+    $: hasProcesses = Object.values(processes).some((arr) => Array.isArray(arr) && arr.length > 0);
 
     onMount(async () => {
         if (!item) {

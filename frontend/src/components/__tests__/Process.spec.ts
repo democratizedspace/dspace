@@ -19,7 +19,7 @@ const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
 const startProcess = vi.hoisted(() => vi.fn());
-const dbGetMock = vi.hoisted(() => vi.fn());
+const dbGetMock = vi.hoisted(() => vi.fn<(entityType: string, id: string) => Promise<unknown>>());
 
 const getProcessState = vi.mocked(getProcessStateMock);
 
@@ -113,7 +113,7 @@ vi.mock('../../lib/qaCheats', () => ({
 
 vi.mock('../../utils/customcontent.js', () => ({
     db: {
-        get: (...args) => dbGetMock(...args),
+        get: (entityType: string, id: string) => dbGetMock(entityType, id),
     },
     ENTITY_TYPES: {
         PROCESS: 'process',
