@@ -33,6 +33,9 @@
         }
 
         const normalized = label
+            .replace(/Item record:\s*/i, 'Item ')
+            .replace(/Process record:\s*/i, 'Process ')
+            .replace(/Quest record:\s*/i, 'Quest ')
             .replace(/Item:\s*/i, 'Item ')
             .replace(/Process:\s*/i, 'Process ')
             .replace(/Quest:\s*/i, 'Quest ');
