@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
+import { writable } from 'svelte/store';
 import { vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import QuestDetail from '../src/pages/quests/svelte/QuestDetail.svelte';
@@ -12,7 +13,7 @@ type QuestState = {
     inventory: Record<string, number>;
 };
 
-let stateStore: Writable<QuestState>;
+let mockState: Writable<QuestState>;
 
 vi.mock('../src/utils/customcontent.js', () => ({
     getQuest: vi.fn(),
@@ -22,37 +23,30 @@ vi.mock('../src/utils/builtInQuests.js', () => ({
     getBuiltInQuest: vi.fn(),
 }));
 
-vi.mock('../src/utils/gameState/common.js', async () => {
-    const { writable } = await vi.importActual<typeof import('svelte/store')>('svelte/store');
-    const state = writable<QuestState>({ quests: {}, inventory: {} });
-    return { state };
-});
+vi.mock('../src/utils/gameState/common.js', () => ({
+    state: (mockState = writable<QuestState>({ quests: {}, inventory: {} })),
+}));
 
-vi.mock('../src/utils/gameState.js', async () => {
-    const { state } = await import('../src/utils/gameState/common.js');
-    return {
-        questFinished: vi.fn(() => false),
-        setCurrentDialogueStep: vi.fn((questId: string, stepId: string) => {
-            state.update((current: QuestState) => ({
-                ...current,
-                quests: {
-                    ...current.quests,
-                    [questId]: { stepId },
-                },
-            }));
-        }),
-        finishQuest: vi.fn(),
-        grantItems: vi.fn(),
-        getItemsGranted: vi.fn(() => false),
-    };
-});
+vi.mock('../src/utils/gameState.js', () => ({
+    questFinished: vi.fn(() => false),
+    setCurrentDialogueStep: vi.fn((questId: string, stepId: string) => {
+        mockState.update((current: QuestState) => ({
+            ...current,
+            quests: {
+                ...current.quests,
+                [questId]: { stepId },
+            },
+        }));
+    }),
+    finishQuest: vi.fn(),
+    grantItems: vi.fn(),
+    getItemsGranted: vi.fn(() => false),
+}));
 
 describe('QuestDetail', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
         vi.clearAllMocks();
-        const { state } = await import('../src/utils/gameState/common.js');
-        stateStore = state as Writable<QuestState>;
-        stateStore.set({ quests: {}, inventory: {} });
+        mockState.set({ quests: {}, inventory: {} });
     });
 
     it('renders QuestChat for custom quests with dialogue', async () => {
@@ -81,7 +75,7 @@ describe('QuestDetail', () => {
         vi.mocked(getQuest).mockResolvedValue(customQuest);
         vi.mocked(getBuiltInQuest).mockReturnValue(null);
 
-        render(QuestDetail, { questId: customQuest.id });
+        render(QuestDetail, { props: { questId: customQuest.id } });
 
         await waitFor(() => {
             expect(screen.getByTestId('chat-panel')).toBeInTheDocument();
@@ -114,7 +108,7 @@ describe('QuestDetail', () => {
         vi.mocked(getQuest).mockResolvedValue(customQuest);
         vi.mocked(getBuiltInQuest).mockReturnValue(null);
 
-        render(QuestDetail, { questId: customQuest.id });
+        render(QuestDetail, { props: { questId: customQuest.id } });
 
         await waitFor(() => {
             expect(screen.getByText('Quest dialogue missing')).toBeInTheDocument();

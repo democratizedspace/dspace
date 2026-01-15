@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { expect } from '@playwright/test';
 import type { Locator, Page } from '@playwright/test';
 
@@ -24,11 +25,11 @@ function generateUuidFallback(): string {
 }
 
 function generateQuestId(): string {
-    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-        return crypto.randomUUID();
+    try {
+        return randomUUID();
+    } catch {
+        return generateUuidFallback();
     }
-
-    return generateUuidFallback();
 }
 
 async function wait(page: Page, ms: number): Promise<void> {
