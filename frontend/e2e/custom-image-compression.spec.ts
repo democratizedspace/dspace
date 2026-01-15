@@ -211,22 +211,27 @@ test.describe('Custom image compression', () => {
         await uploadGeneratedImage(page, 654, 'solid');
         await page.click('button.submit-button');
 
+        let updatedImage: string | null = null;
         await expect
-            .poll(async () => getCustomContentRecord(page, 'items', 'name', itemName), {
-                timeout: 10_000,
-            })
-            .toBeTruthy();
+            .poll(
+                async () => {
+                    const record = (await getCustomContentRecord(
+                        page,
+                        'items',
+                        'name',
+                        itemName
+                    )) as { image?: string } | null;
+                    if (!record?.image || record.image === savedItem.image) {
+                        return null;
+                    }
+                    updatedImage = record.image;
+                    return updatedImage;
+                },
+                { timeout: 10_000 }
+            )
+            .not.toBeNull();
 
-        const updatedItem = (await getCustomContentRecord(
-            page,
-            'items',
-            'name',
-            itemName
-        )) as { image?: string };
-
-        const updatedImage = updatedItem.image as string;
         expect(updatedImage).toMatch(/^data:image\/jpeg;base64,/);
-        expect(updatedImage).not.toBe(savedItem.image);
 
         const updatedMetrics = await getImageMetrics(page, updatedImage);
         expectCompressedImage(updatedMetrics);
