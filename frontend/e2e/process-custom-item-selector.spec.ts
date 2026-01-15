@@ -8,6 +8,10 @@ test.describe('Process creation item selectors', () => {
 
     test('shows custom items in required item selector search', async ({ page }) => {
         const customItemName = 'Backflip Device';
+        const tinyPngBase64 = [
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8A',
+            'AwMCAO5nX7kAAAAASUVORK5CYII=',
+        ].join('');
 
         await page.goto('/inventory/create');
         await page.waitForLoadState('networkidle');
@@ -20,10 +24,7 @@ test.describe('Process creation item selectors', () => {
         await fileInput.setInputFiles({
             name: 'process-item.png',
             mimeType: 'image/png',
-            buffer: Buffer.from(
-                'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO5nX7kAAAAASUVORK5CYII=',
-                'base64'
-            ),
+            buffer: Buffer.from(tinyPngBase64, 'base64'),
         });
 
         await page.click('button.submit-button');
