@@ -4,36 +4,28 @@
     import QuestChat from './QuestChat.svelte';
     import Chip from '../../../components/svelte/Chip.svelte';
     import { getBuiltInQuest } from '../../../utils/builtInQuests.js';
+    import { normalizeQuestForChat } from '../../../utils/questNormalization.js';
 
     export let questId;
 
     let quest = null;
     let loading = true;
     let error = null;
-    let isCustomQuest = false;
-
     onMount(async () => {
         try {
-            // First try to load as a custom quest
-            const setCustomQuest = (customQuest) => {
-                if (!customQuest) {
+            const setQuest = (loadedQuest) => {
+                const normalized = normalizeQuestForChat(loadedQuest);
+                if (!normalized) {
                     return false;
                 }
 
-                quest = {
-                    id: customQuest.id,
-                    title: customQuest.title,
-                    description: customQuest.description,
-                    image: customQuest.image || '/assets/quests/howtodoquests.jpg',
-                    isCustom: true,
-                };
-                isCustomQuest = true;
+                quest = normalized;
                 loading = false;
                 return true;
             };
 
             try {
-                if (setCustomQuest(await getQuest(questId))) {
+                if (setQuest(await getQuest(questId))) {
                     return;
                 }
                 throw new Error('Custom quest not found for string ID');
@@ -41,7 +33,7 @@
                 const numericId = Number.parseInt(questId, 10);
                 if (!Number.isNaN(numericId)) {
                     try {
-                        if (setCustomQuest(await getQuest(numericId))) {
+                        if (setQuest(await getQuest(numericId))) {
                             return;
                         }
                     } catch {
@@ -52,10 +44,7 @@
             }
 
             const builtInQuest = getBuiltInQuest(questId);
-            if (builtInQuest) {
-                quest = builtInQuest;
-                isCustomQuest = false;
-                loading = false;
+            if (setQuest(builtInQuest)) {
                 return;
             }
 
@@ -84,21 +73,7 @@
             <Chip text="Back to Quests" href="/quests" inverted={true} />
         </div>
 
-        {#if isCustomQuest}
-            <div class="custom-quest">
-                <h1>{quest.title}</h1>
-                <div class="quest-content">
-                    {#if quest.image}
-                        <img src={quest.image} alt={quest.title} class="quest-image" />
-                    {/if}
-                    <div class="quest-info">
-                        <p class="description">{quest.description}</p>
-                    </div>
-                </div>
-            </div>
-        {:else}
-            <QuestChat {quest} pointer={quest.start} />
-        {/if}
+        <QuestChat {quest} pointer={quest.start} />
     {/if}
 </div>
 
@@ -126,52 +101,5 @@
         display: flex;
         justify-content: flex-start;
         margin-bottom: 1rem;
-    }
-
-    .custom-quest {
-        background: #2c5837;
-        border-radius: 12px;
-        border: 2px solid #007006;
-        padding: 2rem;
-        color: white;
-    }
-
-    h1 {
-        text-align: center;
-        margin-bottom: 1.5rem;
-        color: #00ff22;
-    }
-
-    .quest-content {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    .quest-image {
-        width: 100%;
-        max-height: 400px;
-        object-fit: cover;
-        border-radius: 8px;
-        border: 2px solid #007006;
-    }
-
-    .quest-info {
-        flex: 1;
-    }
-
-    .description {
-        font-size: 1.1rem;
-        line-height: 1.6;
-    }
-
-    @media (min-width: 768px) {
-        .quest-content {
-            flex-direction: row;
-        }
-
-        .quest-image {
-            width: 50%;
-        }
     }
 </style>

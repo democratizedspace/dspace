@@ -136,6 +136,7 @@ const TEST_GROUPS = [
             'tutorial-quest.spec.ts',
             'quests.spec.ts',
             'quests-width.spec.ts',
+            'custom-quest-chat.spec.ts',
             'quest-graph-visibility-toggle.spec.ts',
             'quest-graph-ancestry.spec.ts',
             'quest-graph-unreachable.spec.ts',

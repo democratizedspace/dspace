@@ -1,0 +1,13 @@
+{
+  "id": "OUT-2026-01-13-custom-quests-missing-chat",
+  "date": "2026-01-13",
+  "component": "frontend/quests",
+  "longForm": "outages/2026-01-13-custom-quests-missing-chat.md",
+  "rootCause": "The /quests/[id] route rendered a details-only view for custom quests, skipping QuestChat entirely.",
+  "resolution": "Normalized custom quests into the canonical quest shape and always render QuestChat when dialogue is available.",
+  "references": [
+    "frontend/src/pages/quests/svelte/QuestDetail.svelte",
+    "frontend/src/utils/questNormalization.js",
+    "frontend/e2e/custom-quest-chat.spec.ts"
+  ]
+}
