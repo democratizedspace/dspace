@@ -69,11 +69,13 @@ test.describe('Custom Content Management', () => {
                 });
             }, name);
         } catch (error) {
-            const message = String(error);
+            const message = String(error).toLowerCase();
             if (
-                message.includes('Execution context was destroyed') ||
-                message.includes('Cannot find context with specified id') ||
-                message.includes('Target closed')
+                message.includes('execution context was destroyed') ||
+                message.includes('most likely because of a navigation') ||
+                message.includes('cannot find context with specified id') ||
+                message.includes('target closed') ||
+                message.includes('navigation')
             ) {
                 return null;
             }
@@ -122,11 +124,13 @@ test.describe('Custom Content Management', () => {
                 });
             }, title);
         } catch (error) {
-            const message = String(error);
+            const message = String(error).toLowerCase();
             if (
-                message.includes('Execution context was destroyed') ||
-                message.includes('Cannot find context with specified id') ||
-                message.includes('Target closed')
+                message.includes('execution context was destroyed') ||
+                message.includes('most likely because of a navigation') ||
+                message.includes('cannot find context with specified id') ||
+                message.includes('target closed') ||
+                message.includes('navigation')
             ) {
                 return null;
             }
