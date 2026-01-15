@@ -12,9 +12,10 @@ async function generatePngDataUrl(
     page: Page,
     seed: number,
     style: GeneratedImageStyle,
-    dimensions: GeneratedImageDimensions
+    dimensions: GeneratedImageDimensions,
+    markerSize = 48
 ) {
-    return page.evaluate(async ({ seedValue, imageStyle, width, height }) => {
+    return page.evaluate(async ({ seedValue, imageStyle, width, height, markerSize }) => {
         const canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
@@ -45,26 +46,32 @@ async function generatePngDataUrl(
 
             ctx.putImageData(imageData, 0, 0);
         }
-        const markerSize = 48;
-        ctx.fillStyle = 'rgba(255,255,255,0.9)';
-        ctx.fillRect(
-            Math.max(0, (seedValue * 3) % (width - markerSize)),
-            Math.max(0, (seedValue * 5) % (height - markerSize)),
-            markerSize,
-            markerSize
-        );
+        const hue = (seedValue * 37) % 360;
+        ctx.fillStyle = `hsla(${hue}, 90%, 75%, 0.9)`;
+        const maxX = Math.max(0, width - markerSize);
+        const maxY = Math.max(0, height - markerSize);
+        const markerX = maxX > 0 ? (seedValue * 3) % maxX : 0;
+        const markerY = maxY > 0 ? (seedValue * 5) % maxY : 0;
+        ctx.fillRect(markerX, markerY, markerSize, markerSize);
 
         return canvas.toDataURL('image/png');
-    }, { seedValue: seed, imageStyle: style, width: dimensions.width, height: dimensions.height });
+    }, {
+        seedValue: seed,
+        imageStyle: style,
+        width: dimensions.width,
+        height: dimensions.height,
+        markerSize,
+    });
 }
 
 async function uploadGeneratedImage(
     page: Page,
     seed: number,
     style: GeneratedImageStyle,
-    dimensions: GeneratedImageDimensions = { width: 1600, height: 1200 }
+    dimensions: GeneratedImageDimensions = { width: 1600, height: 1200 },
+    markerSize?: number
 ) {
-    const dataUrl = await generatePngDataUrl(page, seed, style, dimensions);
+    const dataUrl = await generatePngDataUrl(page, seed, style, dimensions, markerSize);
     const base64Payload = dataUrl.split(',')[1] ?? '';
     const buffer = Buffer.from(base64Payload, 'base64');
 
@@ -225,7 +232,7 @@ test.describe('Custom image compression', () => {
 
         await page.goto(`/inventory/item/${itemId}/edit`);
 
-        await uploadGeneratedImage(page, 654, 'solid', { width: 1200, height: 1600 });
+        await uploadGeneratedImage(page, 654, 'solid', { width: 1200, height: 1600 }, 240);
         await page.click('button.submit-button');
 
         let updatedImage: string | null = null;
@@ -287,7 +294,7 @@ test.describe('Custom image compression', () => {
 
         await page.goto(`/quests/${questId}/edit`);
 
-        await uploadGeneratedImage(page, 789, 'solid', { width: 1400, height: 1000 });
+        await uploadGeneratedImage(page, 789, 'solid', { width: 1400, height: 1000 }, 220);
         await page.click('button.submit-button');
 
         await expect
