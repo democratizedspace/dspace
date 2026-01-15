@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import items from '../src/pages/inventory/json/items/index.js';
+import { waitForHydration } from './test-helpers';
 import { purgeClientStorage } from './utils/idb';
 
 test.describe('Custom item detail view', () => {
@@ -22,6 +23,7 @@ test.describe('Custom item detail view', () => {
 
     test('renders custom item metadata and icon on detail page', async ({ page }) => {
         await page.goto('/');
+        await waitForHydration(page);
         await page.evaluate(async (item) => {
             await new Promise<void>((resolve) => {
                 const request = indexedDB.open('CustomContent', 3);
@@ -62,9 +64,10 @@ test.describe('Custom item detail view', () => {
         }, customItem);
 
         await page.goto(`/inventory/item/${customId}`);
-        await page.waitForSelector('h2');
-
-        await expect(page.getByRole('heading', { level: 2 })).toHaveText('foobar');
+        await waitForHydration(page);
+        await expect(
+            page.getByRole('heading', { level: 2, name: 'foobar' })
+        ).toBeVisible();
 
         const heroImage = page.locator('img:not(.icon)').first();
         const iconImage = page.locator('img.icon').first();
@@ -77,9 +80,10 @@ test.describe('Custom item detail view', () => {
         const builtIn = items.find((item) => item.image) ?? items[0];
 
         await page.goto(`/inventory/item/${builtIn.id}`);
-        await page.waitForSelector('h2');
-
-        await expect(page.getByRole('heading', { level: 2 })).toHaveText(builtIn.name);
+        await waitForHydration(page);
+        await expect(
+            page.getByRole('heading', { level: 2, name: builtIn.name })
+        ).toBeVisible();
         await expect(page.locator('img:not(.icon)').first()).toHaveAttribute(
             'src',
             builtIn.image
