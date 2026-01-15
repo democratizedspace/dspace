@@ -1,3 +1,4 @@
+import path from 'path';
 import { test, expect } from '@playwright/test';
 import { clearUserData, ItemSelectorHelper, waitForHydration } from './test-helpers';
 
@@ -17,11 +18,8 @@ test.describe('Process creation item selectors', () => {
         await page.fill('#description', 'Custom item used for process creation search.');
 
         const fileInput = page.locator('input[type="file"]');
-        await fileInput.setInputFiles({
-            name: 'backflip-device.png',
-            mimeType: 'image/png',
-            buffer: Buffer.from('fake'),
-        });
+        const imagePath = path.resolve(__dirname, '../test-data/test-image.jpg');
+        await fileInput.setInputFiles(imagePath);
 
         await page.click('button.submit-button');
         await expect(page.locator('.submit-message.success')).toBeVisible();
@@ -52,9 +50,9 @@ test.describe('Process creation item selectors', () => {
         const selectorSearch = selectorContainer.getByRole('textbox', { name: 'Search items' });
         await selectorSearch.fill('backflip');
 
-        const option = selectorContainer.locator('button.item-row', {
-            hasText: customItemName,
+        const option = selectorContainer.getByRole('option', {
+            name: `Select ${customItemName}`,
         });
-        await expect(option.first()).toBeVisible();
+        await expect(option).toBeVisible();
     });
 });
