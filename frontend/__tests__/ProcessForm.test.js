@@ -628,4 +628,189 @@ describe('ProcessForm Component', () => {
             'Failed to save process.'
         );
     });
+
+    test('re-initializes edit fields when switching between create and edit modes', () => {
+        const component = new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-100',
+                    title: 'First Process',
+                    duration: '10m',
+                    requireItems: [{ id: 'item-1', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        return new Promise((resolve) => {
+            requestAnimationFrame(() => {
+                const titleInput = container.querySelector('#title');
+                expect(titleInput.value).toBe('First Process');
+
+                component.$$set({ isEdit: false });
+
+                component.$$set({
+                    isEdit: true,
+                    processData: {
+                        id: 'process-200',
+                        title: 'Second Process',
+                        duration: '20m',
+                        requireItems: [{ id: 'item-2', count: 2 }],
+                        consumeItems: [],
+                        createItems: [],
+                    },
+                });
+
+                requestAnimationFrame(() => {
+                    expect(titleInput.value).toBe('Second Process');
+                    resolve();
+                });
+            });
+        });
+    });
+
+    test('initializes empty item lists when process data has missing arrays', () => {
+        new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-201',
+                    title: 'Sparse Process',
+                    duration: '5m',
+                    requireItems: null,
+                    consumeItems: undefined,
+                    createItems: null,
+                },
+            },
+        });
+
+        return new Promise((resolve) => {
+            requestAnimationFrame(() => {
+                expect(container.querySelectorAll('.item-row')).toHaveLength(0);
+                resolve();
+            });
+        });
+    });
+
+    test('prevents submission for zero duration', async () => {
+        const component = new ProcessForm({
+            target: container,
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        let submittedData = null;
+        component.$on('submit', (event) => {
+            submittedData = event.detail;
+        });
+
+        titleInput.value = 'Zero Duration Process';
+        titleInput.dispatchEvent(new Event('input'));
+
+        durationInput.value = '0h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        component.$$set({ requireItems: [{ id: 'item-1', count: 1 }] });
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(submittedData).toBeFalsy();
+        expect(mockDb.processes.add).not.toHaveBeenCalled();
+    });
+
+    test('does not resubmit while save is in progress', async () => {
+        let resolveUpdate;
+        updateProcessMock.mockImplementationOnce(
+            () =>
+                new Promise((resolve) => {
+                    resolveUpdate = resolve;
+                })
+        );
+
+        const component = new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-300',
+                    title: 'Slow Process',
+                    duration: '1h',
+                    requireItems: [{ id: 'item-1', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        const form = container.querySelector('form');
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        expect(updateProcessMock).toHaveBeenCalledTimes(1);
+
+        resolveUpdate('process-300');
+        await flushPromises();
+    });
+
+    test('handles createProcess returning no id', async () => {
+        createProcessMock.mockResolvedValueOnce(null);
+
+        new ProcessForm({
+            target: container,
+            props: {
+                requireItems: [{ id: 'item-1', count: 1 }],
+            },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'No ID Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '15m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        await flushPromises();
+
+        expect(container.querySelector('.success-message')).toBeTruthy();
+        expect(container.querySelector('.success-link')).toBeFalsy();
+    });
+
+    test('shows error when createProcess fails', async () => {
+        createProcessMock.mockRejectedValueOnce(new Error('create failed'));
+
+        new ProcessForm({
+            target: container,
+            props: {
+                requireItems: [{ id: 'item-1', count: 1 }],
+            },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Failing Create';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '15m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        await flushPromises();
+
+        expect(container.querySelector('.form-error').textContent).toContain(
+            'Failed to save process.'
+        );
+    });
 });
