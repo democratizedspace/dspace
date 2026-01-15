@@ -1,0 +1,14 @@
+{
+  "id": "OUT-2026-01-14-process-edit-404",
+  "date": "2026-01-14",
+  "component": "frontend/processes",
+  "rootCause": "The /processes/{id}/edit route was missing, so custom process edit links resolved to a 404 despite the manage UI linking to the path.",
+  "resolution": "Added the process edit route with a shared create/edit form, plus a regression test that verifies the edit page pre-fills and persists updates.",
+  "references": [
+    "frontend/src/pages/processes/[processId]/edit.astro",
+    "frontend/src/pages/processes/svelte/EditProcess.svelte",
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/e2e/process-edit.spec.ts",
+    "https://staging.democratized.space/processes/8536efb6-fb4d-46ba-a52a-b13aaf75231e/edit"
+  ]
+}

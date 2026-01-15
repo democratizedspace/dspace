@@ -65,6 +65,7 @@ Astro uses file-based routing where files in `frontend/src/pages/` map to URL pa
 - `/processes/[processId]` - Individual process details
   - Examples: `/processes/launch-rocket`, `/processes/feed-goldfish`
 - `/processes/create` - Create new process
+- `/processes/[processId]/edit` - Edit custom process
 - `/processes/manage` - Manage processes
 
 ### Quests

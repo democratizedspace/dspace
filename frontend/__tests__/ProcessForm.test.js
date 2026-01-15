@@ -10,14 +10,17 @@ jest.mock('../src/pages/inventory/json/items', () => [
 const mockDb = {
     processes: {
         add: jest.fn().mockResolvedValue('process-123'),
+        update: jest.fn().mockResolvedValue('process-456'),
     },
 };
 
 const createProcessMock = jest.fn((...args) => mockDb.processes.add(...args));
+const updateProcessMock = jest.fn((...args) => mockDb.processes.update(...args));
 
 jest.mock('../src/utils/customcontent.js', () => ({
     db: mockDb,
     createProcess: (...args) => createProcessMock(...args),
+    updateProcess: (...args) => updateProcessMock(...args),
 }));
 
 const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
@@ -29,7 +32,9 @@ describe('ProcessForm Component', () => {
         container = document.createElement('div');
         document.body.appendChild(container);
         mockDb.processes.add.mockClear();
+        mockDb.processes.update.mockClear();
         createProcessMock.mockClear();
+        updateProcessMock.mockClear();
     });
 
     afterEach(() => {
@@ -428,6 +433,48 @@ describe('ProcessForm Component', () => {
         expect(durationInput.value).toBe('');
         expect(container.querySelectorAll('.item-row')).toHaveLength(0);
         expect(container.querySelector('.process-preview')).toBeFalsy();
+    });
+
+    test('should update a process in edit mode', async () => {
+        const processData = {
+            id: 'process-456',
+            title: 'Existing Process',
+            duration: '1h',
+            requireItems: [{ id: 'item-1', count: 1 }],
+            consumeItems: [],
+            createItems: [],
+            custom: true,
+        };
+
+        const component = new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData,
+            },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+
+        await flushPromises();
+
+        titleInput.value = 'Updated Process';
+        titleInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(createProcessMock).not.toHaveBeenCalled();
+        expect(mockDb.processes.update).toHaveBeenCalledWith(processData.id, {
+            title: 'Updated Process',
+            duration: '1h',
+            requireItems: [{ id: 'item-1', count: 1 }],
+            consumeItems: [],
+            createItems: [],
+        });
+        component.$destroy();
     });
 
     test('item count inputs enforce minimum of 1', () => {
