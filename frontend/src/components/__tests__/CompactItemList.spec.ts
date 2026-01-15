@@ -5,6 +5,7 @@ import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 const getItemCountsMock = vi.fn();
 const buildFullItemListMock = vi.fn();
 const isGameStateReadyMock = vi.fn();
+const getItemMapMock = vi.fn();
 let readyPromise: Promise<void> = Promise.resolve();
 let resolveReadyPromise = () => {};
 
@@ -23,6 +24,10 @@ vi.mock('../svelte/compactItemListHelpers.js', () => ({
     buildFullItemList: (...args) => buildFullItemListMock(...args),
 }));
 
+vi.mock('../../utils/itemResolver.js', () => ({
+    getItemMap: (...args) => getItemMapMock(...args),
+}));
+
 import CompactItemList from '../svelte/CompactItemList.svelte';
 
 describe('CompactItemList', () => {
@@ -30,6 +35,7 @@ describe('CompactItemList', () => {
         getItemCountsMock.mockReset();
         buildFullItemListMock.mockReset();
         isGameStateReadyMock.mockReset();
+        getItemMapMock.mockReset();
         resolveReadyPromise = () => {};
         readyPromise = new Promise((resolve) => {
             resolveReadyPromise = resolve;
@@ -52,6 +58,7 @@ describe('CompactItemList', () => {
         getItemCountsMock.mockImplementation((list) =>
             Object.fromEntries(list.map((item) => [item.id, item.count ?? 0]))
         );
+        getItemMapMock.mockResolvedValue(new Map());
         buildFullItemListMock.mockImplementation((list, totals) =>
             list.map((item) => ({ ...item, total: totals[item.id] ?? 0 }))
         );
@@ -92,6 +99,7 @@ describe('CompactItemList', () => {
 
         isGameStateReadyMock.mockReturnValue(true);
         getItemCountsMock.mockReturnValue({ repeat: 5 });
+        getItemMapMock.mockResolvedValue(new Map());
         buildFullItemListMock.mockImplementation((list, totals) =>
             list.map((item) => ({ ...item, total: totals[item.id] ?? 0 }))
         );
@@ -131,6 +139,7 @@ describe('CompactItemList', () => {
 
         isGameStateReadyMock.mockReturnValue(false);
         getItemCountsMock.mockImplementation(() => ({ alpha: isReady ? 5 : 0 }));
+        getItemMapMock.mockResolvedValue(new Map());
         buildFullItemListMock.mockImplementation((list, totals) =>
             list.map((item) => ({ ...item, total: totals[item.id] ?? 0 }))
         );

@@ -1,10 +1,11 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import { ready, isGameStateReady } from '../../utils/gameState/common.js';
     import { getItemCounts } from '../../utils/gameState/inventory.js';
     import { prettyPrintNumber } from '../../utils.js';
     import { buildFullItemList } from './compactItemListHelpers.js';
+    import { getItemMap } from '../../utils/itemResolver.js';
     import Chip from './Chip.svelte';
     import DelayedRender from './DelayedRender.svelte';
 
@@ -20,6 +21,8 @@
     let fullItemList = [];
     let isMounted = false;
     let countsReady = false;
+    let metadataMap = new Map();
+    let metadataRequestId = 0;
     const itemCounts = writable({});
     $: isEmpty = fullItemList.length === 0;
     const getStableItemId = (item) =>
@@ -44,6 +47,28 @@
 
         return `index-${index}`;
     };
+
+    const releaseItemImages = (items) => {
+        items.forEach((item) => item?.releaseImage?.());
+    };
+
+    const getIdsKey = (list) => list.map((item) => getStableItemId(item)).join('|');
+
+    let previousIdsKey = '';
+
+    async function loadItemMetadata() {
+        const requestId = ++metadataRequestId;
+        const ids = itemList.map((item) => item.id);
+        const map = await getItemMap(ids);
+
+        if (!isMounted || requestId !== metadataRequestId) {
+            releaseItemImages(Array.from(map.values()));
+            return;
+        }
+
+        releaseItemImages(fullItemList);
+        metadataMap = map;
+    }
 
     // Initial setup and cleanup on mount
     onMount(() => {
@@ -77,12 +102,24 @@
         };
     });
 
+    onDestroy(() => {
+        releaseItemImages(fullItemList);
+    });
+
     // Reactive updates
     $: {
         if (countsReady) {
             itemCounts.set(getItemCounts(itemList));
         }
-        fullItemList = buildFullItemList(itemList, $itemCounts);
+        fullItemList = buildFullItemList(itemList, $itemCounts, metadataMap);
+    }
+
+    $: if (isMounted) {
+        const nextIdsKey = getIdsKey(itemList);
+        if (nextIdsKey !== previousIdsKey) {
+            previousIdsKey = nextIdsKey;
+            loadItemMetadata();
+        }
     }
 </script>
 
@@ -93,17 +130,23 @@
                 <div class="vertical">
                     {#each fullItemList as item, index (getItemKey(item, index))}
                         <div class="horizontal">
-                            <DelayedRender delaySeconds={0.1}>
-                                <span slot="content">
-                                    <a href={`/inventory/item/${item.id}`}>
-                                        <img src={item.image} class="icon" alt={item.name} />
-                                    </a>
+                            {#if item.loading}
+                                <span class="icon placeholder" aria-label="Loading item image">
+                                    <span class="spinner" aria-hidden="true"></span>
                                 </span>
+                            {:else}
+                                <DelayedRender delaySeconds={0.1}>
+                                    <span slot="content">
+                                        <a href={`/inventory/item/${item.id}`}>
+                                            <img src={item.image} class="icon" alt={item.name} />
+                                        </a>
+                                    </span>
 
-                                <span slot="fallback">
-                                    <img src={item.image} class="icon" alt={item.name} />
-                                </span>
-                            </DelayedRender>
+                                    <span slot="fallback">
+                                        <img src={item.image} class="icon" alt={item.name} />
+                                    </span>
+                                </DelayedRender>
+                            {/if}
 
                             <p
                                 class:disabled={countsReady &&
@@ -208,6 +251,15 @@
         object-fit: cover;
         margin: 5px;
         border-radius: 20px;
+    }
+
+    .icon.placeholder {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px dashed rgba(255, 255, 255, 0.35);
+        box-sizing: border-box;
     }
 
     p {
