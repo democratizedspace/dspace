@@ -1,0 +1,18 @@
+{
+  "id": "custom-item-detail-metadata",
+  "date": "2026-01-14",
+  "component": "frontend/inventory",
+  "longForm": "outages/2026-01-14-custom-item-detail-metadata.md",
+  "rootCause": "The item detail page and compact list renderer only looked up item metadata in the static catalog, so custom items stored in IndexedDB fell back to UUIDs and default imagery.",
+  "resolution": "Added a unified item resolver that merges built-in and custom items, updated the item detail UI and compact list to use it with loading placeholders, and added regression tests for custom item rendering.",
+  "references": [
+    "frontend/src/utils/itemResolver.js",
+    "frontend/src/pages/inventory/item/ItemPage.svelte",
+    "frontend/src/components/svelte/CompactItemList.svelte",
+    "frontend/src/components/svelte/compactItemListHelpers.js",
+    "frontend/__tests__/itemResolver.test.js",
+    "frontend/__tests__/ItemPage.test.js",
+    "frontend/e2e/custom-item-detail.spec.ts",
+    "outages/2026-01-14-custom-item-detail-metadata.md"
+  ]
+}

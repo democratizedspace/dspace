@@ -5,6 +5,12 @@
     import { getItemCounts } from '../../utils/gameState/inventory.js';
     import { prettyPrintNumber } from '../../utils.js';
     import { buildFullItemList } from './compactItemListHelpers.js';
+    import {
+        getCachedItemMap,
+        getItemMap,
+        releaseItemImages,
+        retainItemImages,
+    } from '../../utils/itemResolver.js';
     import Chip from './Chip.svelte';
     import DelayedRender from './DelayedRender.svelte';
 
@@ -18,7 +24,10 @@
 
     // Local State
     let fullItemList = [];
+    let metadataMap = new Map();
     let isMounted = false;
+    let metadataRunId = 0;
+    let trackedIds = new Set();
     let countsReady = false;
     const itemCounts = writable({});
     $: isEmpty = fullItemList.length === 0;
@@ -43,6 +52,32 @@
         }
 
         return `index-${index}`;
+    };
+
+    const getItemIds = (list) =>
+        list
+            .map((item) => item?.id)
+            .filter((id) => typeof id === 'string' || typeof id === 'number');
+
+    const syncMetadataMap = (nextMap) => {
+        const nextIds = Array.from(nextMap.keys());
+        const isSame =
+            nextIds.length === trackedIds.size && nextIds.every((id) => trackedIds.has(id));
+        if (!isSame) {
+            releaseItemImages(Array.from(trackedIds));
+            retainItemImages(nextIds);
+            trackedIds = new Set(nextIds);
+        }
+        metadataMap = nextMap;
+    };
+
+    const resolveMetadata = async (list) => {
+        const runId = (metadataRunId += 1);
+        const resolvedMap = await getItemMap(getItemIds(list));
+        if (!isMounted || runId !== metadataRunId) {
+            return;
+        }
+        syncMetadataMap(resolvedMap);
     };
 
     // Initial setup and cleanup on mount
@@ -74,6 +109,7 @@
         return () => {
             isActive = false;
             clearInterval(intervalId);
+            releaseItemImages(Array.from(trackedIds));
         };
     });
 
@@ -82,8 +118,19 @@
         if (countsReady) {
             itemCounts.set(getItemCounts(itemList));
         }
-        fullItemList = buildFullItemList(itemList, $itemCounts);
     }
+
+    $: {
+        const ids = getItemIds(itemList);
+        if (isMounted) {
+            syncMetadataMap(getCachedItemMap(ids));
+            resolveMetadata(itemList);
+        } else {
+            metadataMap = getCachedItemMap(ids);
+        }
+    }
+
+    $: fullItemList = buildFullItemList(itemList, $itemCounts, metadataMap);
 </script>
 
 {#if isMounted}
@@ -96,12 +143,22 @@
                             <DelayedRender delaySeconds={0.1}>
                                 <span slot="content">
                                     <a href={`/inventory/item/${item.id}`}>
-                                        <img src={item.image} class="icon" alt={item.name} />
+                                        {#if item.image && !item.isLoading}
+                                            <img src={item.image} class="icon" alt={item.name} />
+                                        {:else}
+                                            <span class="icon icon-placeholder" aria-hidden="true"
+                                            ></span>
+                                        {/if}
                                     </a>
                                 </span>
 
                                 <span slot="fallback">
-                                    <img src={item.image} class="icon" alt={item.name} />
+                                    {#if item.image && !item.isLoading}
+                                        <img src={item.image} class="icon" alt={item.name} />
+                                    {:else}
+                                        <span class="icon icon-placeholder" aria-hidden="true"
+                                        ></span>
+                                    {/if}
                                 </span>
                             </DelayedRender>
 
@@ -179,7 +236,7 @@
                                         <span class="spinner" aria-hidden="true"></span>
                                     </span>
                                 {/if}
-                                x {item.name}
+                                x {item.isLoading ? 'Loading item…' : item.name}
                             </p>
                         </div>
                     {/each}
@@ -208,6 +265,11 @@
         object-fit: cover;
         margin: 5px;
         border-radius: 20px;
+    }
+
+    .icon-placeholder {
+        background-color: rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(0, 0, 0, 0.1);
     }
 
     p {

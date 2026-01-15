@@ -1,22 +1,30 @@
-import items from '../../pages/inventory/json/items';
+import { getCachedItemById } from '../../utils/itemResolver.js';
 
-export function getItemMetadata(entry) {
-    const knownItem = items.find((candidate) => candidate.id === entry.id);
-    if (knownItem) {
-        return knownItem;
+const normalizeId = (id) => (typeof id === 'string' || typeof id === 'number' ? String(id) : null);
+
+export function getItemMetadata(entry, metadataMap = new Map()) {
+    const key = normalizeId(entry?.id);
+    if (key && metadataMap.has(key)) {
+        return { ...metadataMap.get(key), isLoading: false };
+    }
+
+    const cached = getCachedItemById(entry?.id);
+    if (cached) {
+        return { ...cached, isLoading: false };
     }
 
     return {
-        id: entry.id,
-        name: entry.name || entry.id,
-        image: entry.image || '/favicon.ico',
-        description: entry.description || 'Custom item',
+        id: entry?.id,
+        name: entry?.name || 'Loading item…',
+        image: entry?.image ?? null,
+        description: entry?.description || '',
+        isLoading: true,
     };
 }
 
-export function buildFullItemList(itemList, totals = {}) {
+export function buildFullItemList(itemList, totals = {}, metadataMap = new Map()) {
     return itemList.map((item) => {
-        const metadata = getItemMetadata(item);
+        const metadata = getItemMetadata(item, metadataMap);
         const hasCount = Object.prototype.hasOwnProperty.call(item, 'count');
         const rawCount =
             hasCount && item.count !== undefined && item.count !== null ? Number(item.count) : null;

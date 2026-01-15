@@ -27,7 +27,8 @@ describe('compact item list helpers', () => {
         const customMeta = getItemMetadata({ id: 'custom-quest-item', name: 'Custom Quest Item' });
 
         expect(customMeta.name).toBe('Custom Quest Item');
-        expect(customMeta.image).toBe('/favicon.ico');
-        expect(customMeta.description).toBe('Custom item');
+        expect(customMeta.image).toBeNull();
+        expect(customMeta.description).toBe('');
+        expect(customMeta.isLoading).toBe(true);
     });
 });

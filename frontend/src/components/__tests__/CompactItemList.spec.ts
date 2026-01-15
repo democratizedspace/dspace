@@ -5,6 +5,10 @@ import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 const getItemCountsMock = vi.fn();
 const buildFullItemListMock = vi.fn();
 const isGameStateReadyMock = vi.fn();
+const getCachedItemMapMock = vi.fn();
+const getItemMapMock = vi.fn();
+const retainItemImagesMock = vi.fn();
+const releaseItemImagesMock = vi.fn();
 let readyPromise: Promise<void> = Promise.resolve();
 let resolveReadyPromise = () => {};
 
@@ -23,6 +27,13 @@ vi.mock('../svelte/compactItemListHelpers.js', () => ({
     buildFullItemList: (...args) => buildFullItemListMock(...args),
 }));
 
+vi.mock('../../utils/itemResolver.js', () => ({
+    getCachedItemMap: (...args) => getCachedItemMapMock(...args),
+    getItemMap: (...args) => getItemMapMock(...args),
+    retainItemImages: (...args) => retainItemImagesMock(...args),
+    releaseItemImages: (...args) => releaseItemImagesMock(...args),
+}));
+
 import CompactItemList from '../svelte/CompactItemList.svelte';
 
 describe('CompactItemList', () => {
@@ -30,10 +41,16 @@ describe('CompactItemList', () => {
         getItemCountsMock.mockReset();
         buildFullItemListMock.mockReset();
         isGameStateReadyMock.mockReset();
+        getCachedItemMapMock.mockReset();
+        getItemMapMock.mockReset();
+        retainItemImagesMock.mockReset();
+        releaseItemImagesMock.mockReset();
         resolveReadyPromise = () => {};
         readyPromise = new Promise((resolve) => {
             resolveReadyPromise = resolve;
         });
+        getCachedItemMapMock.mockReturnValue(new Map());
+        getItemMapMock.mockResolvedValue(new Map());
         vi.useFakeTimers();
     });
 
