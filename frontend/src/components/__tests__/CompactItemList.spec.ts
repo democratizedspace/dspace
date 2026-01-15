@@ -23,6 +23,11 @@ vi.mock('../svelte/compactItemListHelpers.js', () => ({
     buildFullItemList: (...args) => buildFullItemListMock(...args),
 }));
 
+vi.mock('../../utils/itemResolver.js', () => ({
+    getItemMap: vi.fn().mockResolvedValue(new Map()),
+    releaseItemImageUrls: vi.fn(),
+}));
+
 import CompactItemList from '../svelte/CompactItemList.svelte';
 
 describe('CompactItemList', () => {

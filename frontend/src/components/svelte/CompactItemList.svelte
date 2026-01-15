@@ -1,8 +1,9 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import { ready, isGameStateReady } from '../../utils/gameState/common.js';
     import { getItemCounts } from '../../utils/gameState/inventory.js';
+    import { getItemMap, releaseItemImageUrls } from '../../utils/itemResolver.js';
     import { prettyPrintNumber } from '../../utils.js';
     import { buildFullItemList } from './compactItemListHelpers.js';
     import Chip from './Chip.svelte';
@@ -20,6 +21,7 @@
     let fullItemList = [];
     let isMounted = false;
     let countsReady = false;
+    let itemMetadataMap = new Map();
     const itemCounts = writable({});
     $: isEmpty = fullItemList.length === 0;
     const getStableItemId = (item) =>
@@ -43,6 +45,30 @@
         }
 
         return `index-${index}`;
+    };
+    const getItemIds = (list) =>
+        Array.from(new Set(list.map((item) => getStableItemId(item)).filter(Boolean)));
+    let trackedItemIds = new Set();
+    let metadataRequestId = 0;
+
+    const updateItemMetadata = async (list) => {
+        const requestId = metadataRequestId + 1;
+        metadataRequestId = requestId;
+        const ids = getItemIds(list);
+        const previousIds = trackedItemIds;
+        trackedItemIds = new Set(ids);
+        const idsToRelease = Array.from(previousIds).filter((id) => !trackedItemIds.has(id));
+        if (idsToRelease.length) {
+            releaseItemImageUrls(idsToRelease);
+        }
+
+        const resolved = await getItemMap(ids, { trackUsage: true });
+        if (metadataRequestId !== requestId) {
+            releaseItemImageUrls(ids);
+            return;
+        }
+
+        itemMetadataMap = resolved;
     };
 
     // Initial setup and cleanup on mount
@@ -77,12 +103,22 @@
         };
     });
 
+    onDestroy(() => {
+        if (trackedItemIds.size) {
+            releaseItemImageUrls(Array.from(trackedItemIds));
+        }
+    });
+
     // Reactive updates
     $: {
         if (countsReady) {
             itemCounts.set(getItemCounts(itemList));
         }
-        fullItemList = buildFullItemList(itemList, $itemCounts);
+        fullItemList = buildFullItemList(itemList, $itemCounts, itemMetadataMap);
+    }
+
+    $: if (isMounted) {
+        updateItemMetadata(itemList);
     }
 </script>
 
@@ -93,33 +129,92 @@
                 <div class="vertical">
                     {#each fullItemList as item, index (getItemKey(item, index))}
                         <div class="horizontal">
-                            <DelayedRender delaySeconds={0.1}>
-                                <span slot="content">
-                                    <a href={`/inventory/item/${item.id}`}>
-                                        <img src={item.image} class="icon" alt={item.name} />
-                                    </a>
-                                </span>
+                            {#if item.isLoading || !item.image}
+                                <span
+                                    class="icon icon-placeholder"
+                                    aria-label="Loading item image"
+                                    aria-hidden={!item.isLoading}
+                                ></span>
+                            {:else}
+                                <DelayedRender delaySeconds={0.1}>
+                                    <span slot="content">
+                                        <a href={`/inventory/item/${item.id}`}>
+                                            <img
+                                                src={item.image}
+                                                class="icon"
+                                                alt={item.name}
+                                                data-item-id={item.id}
+                                            />
+                                        </a>
+                                    </span>
 
-                                <span slot="fallback">
-                                    <img src={item.image} class="icon" alt={item.name} />
-                                </span>
-                            </DelayedRender>
+                                    <span slot="fallback">
+                                        <img
+                                            src={item.image}
+                                            class="icon"
+                                            alt={item.name}
+                                            data-item-id={item.id}
+                                        />
+                                    </span>
+                                </DelayedRender>
+                            {/if}
 
                             <p
                                 class:disabled={countsReady &&
                                     (disabled || $itemCounts[item.id] < item.count)}
                                 class:inverted
                             >
-                                {#if countsReady}
-                                    {#if increase}
-                                        {prettyPrintNumber($itemCounts[item.id])}
+                                {#if item.isLoading}
+                                    <span class="count-placeholder" aria-label="Loading item">
+                                        <span class="spinner" aria-hidden="true"></span>
+                                    </span>
+                                    x Loading item…
+                                {:else}
+                                    {#if countsReady}
+                                        {#if increase}
+                                            {prettyPrintNumber($itemCounts[item.id])}
+                                            {#if item.count !== null}
+                                                <span class="qty">
+                                                    +{prettyPrintNumber(item.count)}
+                                                </span>
+                                            {/if}
+                                        {:else if decrease}
+                                            {prettyPrintNumber($itemCounts[item.id])}
+                                            {#if item.count !== null}
+                                                <span class="qty {!noRed ? 'neg' : ''}">
+                                                    −{prettyPrintNumber(item.count)}
+                                                </span>
+                                            {/if}
+                                        {:else if item.count !== null}
+                                            <span class="qty">
+                                                {prettyPrintNumber(item.count)}
+                                            </span>
+                                            /
+                                            <span class="qty">
+                                                {prettyPrintNumber($itemCounts[item.id])}
+                                            </span>
+                                        {:else}
+                                            {prettyPrintNumber($itemCounts[item.id])}
+                                        {/if}
+                                    {:else if increase}
+                                        <span
+                                            class="count-placeholder"
+                                            aria-label="Loading inventory count"
+                                        >
+                                            <span class="spinner" aria-hidden="true"></span>
+                                        </span>
                                         {#if item.count !== null}
                                             <span class="qty">
                                                 +{prettyPrintNumber(item.count)}
                                             </span>
                                         {/if}
                                     {:else if decrease}
-                                        {prettyPrintNumber($itemCounts[item.id])}
+                                        <span
+                                            class="count-placeholder"
+                                            aria-label="Loading inventory count"
+                                        >
+                                            <span class="spinner" aria-hidden="true"></span>
+                                        </span>
                                         {#if item.count !== null}
                                             <span class="qty {!noRed ? 'neg' : ''}">
                                                 −{prettyPrintNumber(item.count)}
@@ -130,56 +225,22 @@
                                             {prettyPrintNumber(item.count)}
                                         </span>
                                         /
-                                        <span class="qty">
-                                            {prettyPrintNumber($itemCounts[item.id])}
+                                        <span
+                                            class="count-placeholder"
+                                            aria-label="Loading inventory count"
+                                        >
+                                            <span class="spinner" aria-hidden="true"></span>
                                         </span>
                                     {:else}
-                                        {prettyPrintNumber($itemCounts[item.id])}
-                                    {/if}
-                                {:else if increase}
-                                    <span
-                                        class="count-placeholder"
-                                        aria-label="Loading inventory count"
-                                    >
-                                        <span class="spinner" aria-hidden="true"></span>
-                                    </span>
-                                    {#if item.count !== null}
-                                        <span class="qty">
-                                            +{prettyPrintNumber(item.count)}
+                                        <span
+                                            class="count-placeholder"
+                                            aria-label="Loading inventory count"
+                                        >
+                                            <span class="spinner" aria-hidden="true"></span>
                                         </span>
                                     {/if}
-                                {:else if decrease}
-                                    <span
-                                        class="count-placeholder"
-                                        aria-label="Loading inventory count"
-                                    >
-                                        <span class="spinner" aria-hidden="true"></span>
-                                    </span>
-                                    {#if item.count !== null}
-                                        <span class="qty {!noRed ? 'neg' : ''}">
-                                            −{prettyPrintNumber(item.count)}
-                                        </span>
-                                    {/if}
-                                {:else if item.count !== null}
-                                    <span class="qty">
-                                        {prettyPrintNumber(item.count)}
-                                    </span>
-                                    /
-                                    <span
-                                        class="count-placeholder"
-                                        aria-label="Loading inventory count"
-                                    >
-                                        <span class="spinner" aria-hidden="true"></span>
-                                    </span>
-                                {:else}
-                                    <span
-                                        class="count-placeholder"
-                                        aria-label="Loading inventory count"
-                                    >
-                                        <span class="spinner" aria-hidden="true"></span>
-                                    </span>
+                                    x {item.name}
                                 {/if}
-                                x {item.name}
                             </p>
                         </div>
                     {/each}
@@ -208,6 +269,11 @@
         object-fit: cover;
         margin: 5px;
         border-radius: 20px;
+    }
+
+    .icon-placeholder {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
     }
 
     p {

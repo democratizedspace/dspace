@@ -1,13 +1,12 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import Chip from '../../../components/svelte/Chip.svelte';
     import BuySell from '../../../components/svelte/BuySell.svelte';
     import { getProcessesForItem, ProcessItemTypes } from '../../../utils/gameState/processes.js';
     import { getItemCounts } from '../../../utils/gameState/inventory.js';
     import { getQuestsForItem } from '../../../utils/itemDependencies.js';
-    import { db, ENTITY_TYPES } from '../../../utils/customcontent.js';
-    import items from '../json/items';
+    import { getItemById, releaseItemImageUrls } from '../../../utils/itemResolver.js';
     import Process from '../../../components/svelte/Process.svelte';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
 
@@ -18,7 +17,9 @@
     const mounted = writable(false);
     const count = writable(0);
 
-    let item = items.find((item) => item.id === itemId);
+    let item = null;
+    let isLoading = true;
+    let notFound = false;
 
     const processes = getProcessesForItem(itemId);
     const quests = getQuestsForItem(itemId);
@@ -27,23 +28,43 @@
     const hasQuests = quests.requires.length > 0 || quests.rewards.length > 0;
 
     onMount(async () => {
-        if (!item) {
-            try {
-                item = await db.get(ENTITY_TYPES.ITEM, itemId);
-            } catch (error) {
-                item = null;
-            }
-        }
+        isLoading = true;
+        notFound = false;
+        item = await getItemById(itemId, { trackUsage: true });
+        isLoading = false;
+        notFound = !item;
         const itemCount = getItemCounts([{ id: itemId }])[itemId];
         count.set(itemCount);
         mounted.set(true);
     });
+
+    onDestroy(() => {
+        releaseItemImageUrls([itemId]);
+    });
 </script>
 
-{#if $mounted && item}
+{#if $mounted && isLoading}
     <Chip inverted={true} text="">
         <div class="vertical">
-            <img src={item.image} alt={item.name} />
+            <div class="image-placeholder" aria-label="Loading item image"></div>
+            <h2>Loading item…</h2>
+        </div>
+    </Chip>
+{:else if $mounted && notFound}
+    <Chip inverted={true} text="">
+        <div class="vertical">
+            <h2>Item not found</h2>
+            <p>We couldn't find this item in the catalog.</p>
+        </div>
+    </Chip>
+{:else if $mounted && item}
+    <Chip inverted={true} text="">
+        <div class="vertical">
+            {#if item.image}
+                <img src={item.image} alt={item.name} />
+            {:else}
+                <div class="image-placeholder" aria-label="Item image unavailable"></div>
+            {/if}
             <h2>{item.name}</h2>
             <CompactItemList {itemList} inverted={true} />
             {item.description}
@@ -101,6 +122,14 @@
         height: 200px;
         border-radius: 20px;
         margin: 10px;
+    }
+
+    .image-placeholder {
+        width: 200px;
+        height: 200px;
+        border-radius: 20px;
+        margin: 10px;
+        background: rgba(255, 255, 255, 0.2);
     }
 
     p {

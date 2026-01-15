@@ -1,0 +1,16 @@
+{
+  "id": "OUT-2026-01-15-custom-item-detail-metadata",
+  "date": "2026-01-15",
+  "component": "frontend/inventory",
+  "longForm": "outages/2026-01-15-custom-item-detail-metadata.md",
+  "rootCause": "The inventory item detail page and compact list looked up metadata exclusively from the built-in catalog, so custom item UUIDs were treated as unknown and fell back to IDs and default images.",
+  "resolution": "Added a unified item resolver that merges built-in and custom content metadata (including custom images) and updated the item detail/compact list rendering to wait for resolved data with regression coverage.",
+  "references": [
+    "frontend/src/utils/itemResolver.js",
+    "frontend/src/pages/inventory/item/ItemPage.svelte",
+    "frontend/src/components/svelte/CompactItemList.svelte",
+    "frontend/tests/itemResolver.test.ts",
+    "frontend/src/components/__tests__/CompactItemListResolver.spec.ts",
+    "frontend/e2e/custom-item-detail.spec.ts"
+  ]
+}
