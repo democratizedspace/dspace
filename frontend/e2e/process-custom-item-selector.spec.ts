@@ -1,5 +1,5 @@
-import path from 'path';
 import { test, expect } from '@playwright/test';
+import { fileURLToPath } from 'url';
 import { clearUserData, ItemSelectorHelper, waitForHydration } from './test-helpers';
 
 test.describe('Process creation item selectors', () => {
@@ -18,7 +18,9 @@ test.describe('Process creation item selectors', () => {
         await page.fill('#description', 'Custom item used for process creation search.');
 
         const fileInput = page.locator('input[type="file"]');
-        const imagePath = path.resolve(__dirname, '../test-data/test-image.jpg');
+        const imagePath = fileURLToPath(
+            new URL('../test-data/test-image.jpg', import.meta.url)
+        );
         await fileInput.setInputFiles(imagePath);
 
         await page.click('button.submit-button');
