@@ -28,12 +28,16 @@
     });
 
     const formatProgressLabel = (label) => {
-        const normalized = label
-            .replace(/Item:\s*/i, 'Item record: ')
-            .replace(/Process:\s*/i, 'Process record: ')
-            .replace(/Quest:\s*/i, 'Quest record: ');
+        if (!label) {
+            return 'Preparing asset';
+        }
 
-        return normalized.replace(':', ' —');
+        const normalized = label
+            .replace(/Item:\s*/i, 'Item ')
+            .replace(/Process:\s*/i, 'Process ')
+            .replace(/Quest:\s*/i, 'Quest ');
+
+        return `Preparing ${normalized}`.replace(/\s+/g, ' ').trim();
     };
     const handlePrepareBackup = async () => {
         if (isPreparing) {
