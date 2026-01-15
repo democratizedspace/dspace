@@ -24,6 +24,7 @@
     let lastSavedProcessId = null;
     let isSubmitting = false;
     let hasInitialized = false;
+    let initializedProcessId = null;
 
     const dispatch = createEventDispatcher();
 
@@ -38,13 +39,23 @@
         }));
 
     // Initialize editable form fields from process data on first load.
-    $: if (isEdit && processData && !hasInitialized) {
+    $: if (!isEdit) {
+        hasInitialized = false;
+        initializedProcessId = null;
+    }
+
+    $: if (
+        isEdit &&
+        processData &&
+        (!hasInitialized || (processData.id && processData.id !== initializedProcessId))
+    ) {
         title = processData.title ?? '';
         duration = processData.duration ?? '';
         requireItems = normalizeItemList(processData.requireItems);
         consumeItems = normalizeItemList(processData.consumeItems);
         createItems = normalizeItemList(processData.createItems);
         hasInitialized = true;
+        initializedProcessId = processData.id ?? initializedProcessId;
     }
 
     function addItemRequirement() {
@@ -249,8 +260,6 @@
                     <a class="success-link" href={`/processes/${lastSavedProcessId}`}>
                         View process
                     </a>
-                    <span class="success-separator">•</span>
-                    <a class="success-link" href="/processes/manage">Manage processes</a>
                 {/if}
             </div>
         {/if}
