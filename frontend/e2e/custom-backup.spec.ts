@@ -94,13 +94,14 @@ test.describe('Custom content backup', () => {
         await prepareButton.click();
         await expect(prepareButton).toBeDisabled();
 
-        await expect(page.getByTestId('contentbackup-preparing')).toBeVisible();
-
+        const preparingPreview = page.getByTestId('contentbackup-preparing');
         const preparedPreview = page.getByTestId('contentbackup-prepared');
         const errorPreview = page.getByTestId('contentbackup-error');
-        let status: 'prepared' | 'error';
+
+        let status: 'preparing' | 'prepared' | 'error';
         try {
             status = await Promise.race([
+                preparingPreview.waitFor({ state: 'visible', timeout: 60000 }).then(() => 'preparing'),
                 preparedPreview.waitFor({ state: 'visible', timeout: 60000 }).then(() => 'prepared'),
                 errorPreview.waitFor({ state: 'visible', timeout: 60000 }).then(() => 'error'),
             ]);
@@ -109,6 +110,20 @@ test.describe('Custom content backup', () => {
             throw new Error(
                 `Timed out waiting for content backup to finish preparing within 60s. Last error: ${message}`
             );
+        }
+
+        if (status === 'preparing') {
+            try {
+                status = await Promise.race([
+                    preparedPreview.waitFor({ state: 'visible', timeout: 60000 }).then(() => 'prepared'),
+                    errorPreview.waitFor({ state: 'visible', timeout: 60000 }).then(() => 'error'),
+                ]);
+            } catch (error) {
+                const message = error instanceof Error ? error.message : String(error);
+                throw new Error(
+                    `Timed out waiting for content backup to finish preparing within 60s. Last error: ${message}`
+                );
+            }
         }
 
         if (status === 'error') {

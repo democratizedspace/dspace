@@ -54,6 +54,13 @@
         assets = [];
 
         await tick();
+        await new Promise((resolve) => {
+            if (typeof requestAnimationFrame === 'function') {
+                requestAnimationFrame(() => resolve());
+            } else {
+                setTimeout(resolve, 0);
+            }
+        });
 
         try {
             const result = await buildCustomContentBackup({
