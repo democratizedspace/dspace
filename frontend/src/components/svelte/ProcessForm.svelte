@@ -37,13 +37,13 @@
             count: Number(item?.count ?? 1),
         }));
 
+    // Initialize editable form fields from process data on first load.
     $: if (isEdit && processData && !hasInitialized) {
         title = processData.title ?? '';
         duration = processData.duration ?? '';
         requireItems = normalizeItemList(processData.requireItems);
         consumeItems = normalizeItemList(processData.consumeItems);
         createItems = normalizeItemList(processData.createItems);
-        processId = processData.id ?? processId;
         hasInitialized = true;
     }
 

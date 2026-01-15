@@ -1,6 +1,6 @@
 {
-  "id": "OUT-2026-01-14-process-edit-404",
-  "date": "2026-01-14",
+  "id": "OUT-2026-01-15-process-edit-404",
+  "date": "2026-01-15",
   "component": "frontend/processes",
   "rootCause": "The /processes/{id}/edit route was missing, so custom process edit links returned a 404.",
   "resolution": "Added the missing edit route and shared create/edit process form logic, plus an end-to-end regression test for edit persistence.",

@@ -436,7 +436,7 @@ describe('ProcessForm Component', () => {
     });
 
     test('item count inputs enforce minimum of 1', () => {
-        const component = new ProcessForm({
+        new ProcessForm({
             target: container,
         });
 
