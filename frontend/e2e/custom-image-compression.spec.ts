@@ -5,25 +5,26 @@ const MAX_BYTES = 52 * 1024;
 const MAX_DIMENSION = 512;
 const MIN_DIMENSION = 256;
 
-async function seedNoiseImage(page: Page, inputSelector: string, seed = 1337) {
-    await page.evaluate(
-        async ({ selector, seedValue }) => {
-            const input = document.querySelector(selector);
-            if (!input) {
-                throw new Error(`Missing file input: ${selector}`);
-            }
+type GeneratedImageStyle = 'noise' | 'solid';
 
-            const width = 1600;
-            const height = 1200;
-            const canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
+async function generatePngDataUrl(page: Page, seed: number, style: GeneratedImageStyle) {
+    return page.evaluate(async ({ seedValue, imageStyle }) => {
+        const width = 1600;
+        const height = 1200;
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
 
-            const ctx = canvas.getContext('2d');
-            if (!ctx) {
-                throw new Error('Canvas context unavailable');
-            }
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            throw new Error('Canvas context unavailable');
+        }
 
+        if (imageStyle === 'solid') {
+            const hue = seedValue % 360;
+            ctx.fillStyle = `hsl(${hue}, 70%, 55%)`;
+            ctx.fillRect(0, 0, width, height);
+        } else {
             const imageData = ctx.createImageData(width, height);
             let state = seedValue;
             const nextByte = () => {
@@ -39,24 +40,29 @@ async function seedNoiseImage(page: Page, inputSelector: string, seed = 1337) {
             }
 
             ctx.putImageData(imageData, 0, 0);
+        }
 
-            const blob = await new Promise<Blob>((resolve, reject) =>
-                canvas.toBlob((result) => {
-                    if (result) {
-                        resolve(result);
-                    } else {
-                        reject(new Error('Failed to generate image blob'));
-                    }
-                }, 'image/png')
-            );
-            const file = new File([blob], `noise-${seedValue}.png`, { type: 'image/png' });
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            (input as HTMLInputElement).files = dataTransfer.files;
-            input.dispatchEvent(new Event('change', { bubbles: true }));
-        },
-        { selector: inputSelector, seedValue: seed }
-    );
+        return canvas.toDataURL('image/png');
+    }, { seedValue: seed, imageStyle: style });
+}
+
+async function uploadGeneratedImage(page: Page, seed: number, style: GeneratedImageStyle) {
+    const dataUrl = await generatePngDataUrl(page, seed, style);
+    const base64Payload = dataUrl.split(',')[1] ?? '';
+    const buffer = Buffer.from(base64Payload, 'base64');
+
+    let input = page.getByTestId('image-file-input');
+    if ((await input.count()) === 0) {
+        input = page.locator('input[type="file"]').first();
+    }
+
+    await input.setInputFiles({
+        name: `${style}-${seed}.png`,
+        mimeType: 'image/png',
+        buffer,
+    });
+
+    await expect(page.locator('.image-preview')).toBeVisible();
 }
 
 async function getCustomContentRecord(
@@ -146,8 +152,7 @@ async function createCustomItem(page: Page, itemName: string, seed: number) {
     await page.fill('#name', itemName);
     await page.fill('#description', 'Custom item with compressed image.');
 
-    await seedNoiseImage(page, 'input[type="file"]', seed);
-    await expect(page.locator('.image-preview')).toBeVisible();
+    await uploadGeneratedImage(page, seed, 'noise');
 
     await page.click('button.submit-button');
 
@@ -187,7 +192,7 @@ test.describe('Custom image compression', () => {
 
         await page.goto(`/inventory/item/${itemId}/edit`);
 
-        await seedNoiseImage(page, 'input[type="file"]', 654);
+        await uploadGeneratedImage(page, 654, 'noise');
         await page.click('button.submit-button');
 
         await expect
@@ -218,8 +223,7 @@ test.describe('Custom image compression', () => {
         await page.fill('#title', questTitle);
         await page.fill('#description', 'Custom quest with compressed image.');
 
-        await seedNoiseImage(page, 'input[type="file"]', 456);
-        await expect(page.locator('.image-preview')).toBeVisible();
+        await uploadGeneratedImage(page, 456, 'noise');
 
         await page.click('button.submit-button');
 
@@ -245,7 +249,7 @@ test.describe('Custom image compression', () => {
 
         await page.goto(`/quests/${questId}/edit`);
 
-        await seedNoiseImage(page, 'input[type="file"]', 789);
+        await uploadGeneratedImage(page, 789, 'solid');
         await page.click('button.submit-button');
 
         await expect

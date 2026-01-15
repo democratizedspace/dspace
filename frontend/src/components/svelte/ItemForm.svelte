@@ -199,6 +199,7 @@
         <input
             type="file"
             id="image"
+            data-testid="image-file-input"
             accept="image/*"
             on:change={handleImageUpload}
             class:error={validationErrors.image}
