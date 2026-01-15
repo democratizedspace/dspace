@@ -12,12 +12,14 @@ export function filterItemsByQuery(itemList = [], query = '') {
     }
 
     const words = normalizedQuery.split(/\s+/);
+    const normalizeValue = (value) => (value == null ? '' : String(value).toLowerCase());
     return itemList.filter((item) => {
+        const safeItem = item ?? {};
         const itemText = [
-            item.id?.toLowerCase?.() ?? '',
-            item.name?.toLowerCase?.() ?? '',
-            item.description?.toLowerCase?.() ?? '',
-            item.price?.toLowerCase?.() ?? '',
+            normalizeValue(safeItem.id),
+            normalizeValue(safeItem.name),
+            normalizeValue(safeItem.description),
+            normalizeValue(safeItem.price),
         ].join(' ');
         return words.every((word) => itemText.includes(word));
     });
