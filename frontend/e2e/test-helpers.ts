@@ -3,6 +3,27 @@ import type { Locator, Page } from '@playwright/test';
 
 export type { Page };
 
+export type CustomQuestSeed = {
+    id: string;
+    title: string;
+    description?: string;
+    image?: string;
+    npc?: string;
+    start?: string;
+    dialogue: Array<{
+        id: string;
+        text: string;
+        options: Array<{
+            type: string;
+            text: string;
+            goto?: string;
+        }>;
+    }>;
+    rewards?: Array<{ id: string; count: number }>;
+    requiresQuests?: string[];
+    createdAt?: string;
+};
+
 const CONNECTION_REFUSED_PATTERNS = [
     'ECONNREFUSED',
     'ERR_CONNECTION_REFUSED',
@@ -284,6 +305,73 @@ export async function waitForQuestRecordByTitle(
 
     const rawId: unknown = await resultHandle.jsonValue();
     return Number(rawId);
+}
+
+export async function seedCustomQuest(page: Page, quest: CustomQuestSeed): Promise<void> {
+    await page.addInitScript((record) => {
+        const request = indexedDB.open('CustomContent', 3);
+
+        request.onupgradeneeded = () => {
+            const db = request.result;
+            if (!db.objectStoreNames.contains('meta')) {
+                db.createObjectStore('meta');
+            }
+            if (!db.objectStoreNames.contains('items')) {
+                db.createObjectStore('items', { keyPath: 'id' });
+            }
+            if (!db.objectStoreNames.contains('processes')) {
+                db.createObjectStore('processes', { keyPath: 'id' });
+            }
+            if (!db.objectStoreNames.contains('quests')) {
+                db.createObjectStore('quests', { keyPath: 'id' });
+            }
+        };
+
+        request.onsuccess = () => {
+            const db = request.result;
+            const tx = db.transaction('quests', 'readwrite');
+            const store = tx.objectStore('quests');
+            store.put({
+                ...record,
+                entityType: 'quest',
+                custom: true,
+                createdAt: record.createdAt ?? new Date().toISOString(),
+            });
+            tx.oncomplete = () => db.close();
+            tx.onerror = () => db.close();
+        };
+    }, quest);
+
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.waitForFunction(
+        async ({ questId }) => {
+            const request = indexedDB.open('CustomContent');
+            const db: IDBDatabase = await new Promise((resolve, reject) => {
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+                request.onupgradeneeded = () => resolve(request.result);
+            });
+
+            try {
+                if (!db.objectStoreNames.contains('quests')) {
+                    return false;
+                }
+                const tx = db.transaction('quests', 'readonly');
+                const store = tx.objectStore('quests');
+                const getRequest = store.get(questId);
+                const questRecord = await new Promise((resolve, reject) => {
+                    getRequest.onsuccess = () => resolve(getRequest.result);
+                    getRequest.onerror = () => reject(getRequest.error);
+                });
+                return Boolean(questRecord);
+            } finally {
+                db.close();
+            }
+        },
+        { questId: quest.id }
+    );
 }
 
 async function customQuestExists(page: Page, questTitle: string): Promise<boolean> {

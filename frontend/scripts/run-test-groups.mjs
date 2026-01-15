@@ -156,6 +156,12 @@ const TEST_GROUPS = [
         workers: 2,
     },
     {
+        name: 'Custom Quest Chat',
+        files: ['custom-quest-chat.spec.ts'],
+        parallel: false,
+        workers: 1,
+    },
+    {
         name: 'Quest PR Validation',
         files: ['quest-pr-validation.spec.ts'],
         parallel: false,
