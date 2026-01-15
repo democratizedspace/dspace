@@ -450,7 +450,7 @@ describe('ProcessForm Component', () => {
     });
 
     test('initializes form fields when editing a process', () => {
-        const component = new ProcessForm({
+        new ProcessForm({
             target: container,
             props: {
                 isEdit: true,
