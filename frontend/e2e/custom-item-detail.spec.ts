@@ -65,9 +65,7 @@ test.describe('Custom item detail view', () => {
 
         await page.goto(`/inventory/item/${customId}`);
         await waitForHydration(page);
-        await expect(
-            page.getByRole('heading', { level: 2, name: 'foobar' })
-        ).toBeVisible();
+        await expect(page.getByRole('heading', { level: 2, name: 'foobar' })).toBeVisible();
 
         const heroImage = page.locator('img:not(.icon)').first();
         const iconImage = page.locator('img.icon').first();
@@ -84,9 +82,11 @@ test.describe('Custom item detail view', () => {
         await expect(
             page.getByRole('heading', { level: 2, name: builtIn.name })
         ).toBeVisible();
-        await expect(page.locator('img:not(.icon)').first()).toHaveAttribute(
-            'src',
-            builtIn.image
-        );
+
+        const heroImage = page.locator('img:not(.icon)').first();
+        const iconImage = page.locator('img.icon').first();
+
+        await expect(heroImage).toHaveAttribute('src', builtIn.image);
+        await expect(iconImage).toHaveAttribute('src', builtIn.image);
     });
 });
