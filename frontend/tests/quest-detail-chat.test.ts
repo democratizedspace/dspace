@@ -69,6 +69,7 @@ describe('QuestDetail', () => {
                     options: [{ type: 'finish', text: 'Finish' }],
                 },
             ],
+            rewards: [],
             requiresQuests: [],
         };
 
@@ -102,6 +103,7 @@ describe('QuestDetail', () => {
             image: '/assets/quests/custom.png',
             npc: '/assets/npc/dChat.jpg',
             start: 'start',
+            rewards: [],
             requiresQuests: [],
         };
 
