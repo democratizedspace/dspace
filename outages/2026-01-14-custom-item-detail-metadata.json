@@ -1,0 +1,17 @@
+{
+  "id": "OUT-2026-01-14-custom-item-detail-metadata",
+  "date": "2026-01-14",
+  "component": "frontend/inventory",
+  "longForm": "outages/2026-01-14-custom-item-detail-metadata.md",
+  "rootCause": "Item detail and compact list metadata resolved only from the built-in items catalog, ignoring custom items stored in IndexedDB.",
+  "resolution": "Added a unified item resolver for built-in and custom items, updated the item detail page and compact list rendering to use it, and added regression coverage for metadata/image rendering.",
+  "references": [
+    "frontend/src/utils/itemResolver.js",
+    "frontend/src/pages/inventory/item/ItemPage.svelte",
+    "frontend/src/components/svelte/CompactItemList.svelte",
+    "frontend/src/components/svelte/compactItemListHelpers.js",
+    "frontend/tests/itemResolver.test.ts",
+    "frontend/src/pages/inventory/item/__tests__/ItemPage.spec.ts",
+    "frontend/e2e/custom-item-detail.spec.ts"
+  ]
+}

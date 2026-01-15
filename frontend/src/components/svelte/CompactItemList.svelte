@@ -1,10 +1,11 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import { ready, isGameStateReady } from '../../utils/gameState/common.js';
     import { getItemCounts } from '../../utils/gameState/inventory.js';
     import { prettyPrintNumber } from '../../utils.js';
     import { buildFullItemList } from './compactItemListHelpers.js';
+    import { getItemMap, releaseItemImages, retainItemImages } from '../../utils/itemResolver.js';
     import Chip from './Chip.svelte';
     import DelayedRender from './DelayedRender.svelte';
 
@@ -20,6 +21,8 @@
     let fullItemList = [];
     let isMounted = false;
     let countsReady = false;
+    let itemMetadataMap = new Map();
+    let resolvedItemIds = [];
     const itemCounts = writable({});
     $: isEmpty = fullItemList.length === 0;
     const getStableItemId = (item) =>
@@ -45,6 +48,19 @@
         return `index-${index}`;
     };
 
+    async function updateItemMetadata() {
+        const ids = Array.from(
+            new Set(itemList.map((entry) => getStableItemId(entry)).filter(Boolean))
+        );
+        const metadata = await getItemMap(ids);
+        itemMetadataMap = metadata;
+
+        const nextResolvedIds = Array.from(metadata.keys());
+        releaseItemImages(resolvedItemIds.filter((id) => !nextResolvedIds.includes(id)));
+        retainItemImages(nextResolvedIds.filter((id) => !resolvedItemIds.includes(id)));
+        resolvedItemIds = nextResolvedIds;
+    }
+
     // Initial setup and cleanup on mount
     onMount(() => {
         isMounted = true;
@@ -57,6 +73,8 @@
             itemCounts.set(getItemCounts(itemList));
             intervalId = setInterval(() => itemCounts.set(getItemCounts(itemList)), 1000);
         };
+
+        updateItemMetadata();
 
         if (isGameStateReady()) {
             countsReady = true;
@@ -77,12 +95,20 @@
         };
     });
 
+    onDestroy(() => {
+        releaseItemImages(resolvedItemIds);
+    });
+
     // Reactive updates
+    $: if (isMounted) {
+        updateItemMetadata();
+    }
+
     $: {
         if (countsReady) {
             itemCounts.set(getItemCounts(itemList));
         }
-        fullItemList = buildFullItemList(itemList, $itemCounts);
+        fullItemList = buildFullItemList(itemList, $itemCounts, itemMetadataMap);
     }
 </script>
 
@@ -93,17 +119,29 @@
                 <div class="vertical">
                     {#each fullItemList as item, index (getItemKey(item, index))}
                         <div class="horizontal">
-                            <DelayedRender delaySeconds={0.1}>
-                                <span slot="content">
-                                    <a href={`/inventory/item/${item.id}`}>
-                                        <img src={item.image} class="icon" alt={item.name} />
-                                    </a>
-                                </span>
+                            {#if item.image}
+                                <DelayedRender delaySeconds={0.1}>
+                                    <span slot="content">
+                                        <a href={`/inventory/item/${item.id}`}>
+                                            <img src={item.image} class="icon" alt={item.name} />
+                                        </a>
+                                    </span>
 
-                                <span slot="fallback">
-                                    <img src={item.image} class="icon" alt={item.name} />
-                                </span>
-                            </DelayedRender>
+                                    <span slot="fallback">
+                                        <img src={item.image} class="icon" alt={item.name} />
+                                    </span>
+                                </DelayedRender>
+                            {:else}
+                                <a
+                                    href={`/inventory/item/${item.id}`}
+                                    class="icon-link"
+                                    aria-label={item.isLoading
+                                        ? 'Loading item'
+                                        : `View ${item.name}`}
+                                >
+                                    <span class="icon placeholder" aria-hidden="true"></span>
+                                </a>
+                            {/if}
 
                             <p
                                 class:disabled={countsReady &&
@@ -179,7 +217,7 @@
                                         <span class="spinner" aria-hidden="true"></span>
                                     </span>
                                 {/if}
-                                x {item.name}
+                                x {item.isLoading ? 'Loading item…' : item.name}
                             </p>
                         </div>
                     {/each}
@@ -210,6 +248,18 @@
         border-radius: 20px;
     }
 
+    .icon.placeholder {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px dashed rgba(255, 255, 255, 0.4);
+    }
+
+    .icon-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     p {
         margin: 0px;
         margin-top: 10px;
@@ -217,36 +267,5 @@
 
     .disabled {
         color: rgb(0, 0, 0);
-    }
-
-    .inverted {
-        color: rgb(255, 255, 255);
-    }
-
-    .qty.neg {
-        color: var(--red-500);
-        font-weight: 600;
-    }
-
-    .count-placeholder {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 2.4ch;
-    }
-
-    .spinner {
-        width: 0.7em;
-        height: 0.7em;
-        border-radius: 999px;
-        border: 2px solid var(--spinner-border-color, rgba(255, 255, 255, 0.35));
-        border-top-color: var(--spinner-border-top-color, rgba(255, 255, 255, 0.85));
-        animation: spin 0.75s linear infinite;
-    }
-
-    @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
     }
 </style>

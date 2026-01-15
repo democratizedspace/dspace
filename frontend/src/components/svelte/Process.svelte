@@ -19,6 +19,7 @@
     import CompactItemList from './CompactItemList.svelte';
     import { getItemCounts } from '../../utils/gameState/inventory.js';
     import { getItemMetadata } from './compactItemListHelpers.js';
+    import { getItemMap } from '../../utils/itemResolver.js';
     import { initializeQaCheats, qaCheatsAvailability, qaCheatsEnabled } from '../../lib/qaCheats';
 
     export let processId;
@@ -44,6 +45,8 @@
     let queuedPulseMessage = '';
     let requiresContainer;
     let consumesContainer;
+    let itemMetadataMap = new Map();
+    let lastMetadataKey = '';
 
     // Slightly longer than the 1s CSS animation to avoid timing races.
     const pulseDurationMs = 1050;
@@ -70,7 +73,7 @@
             const available = Number(counts[itemId] ?? 0);
             const deficit = Math.max(0, required - available);
             if (deficit > 0) {
-                const metadata = getItemMetadata(item);
+                const metadata = getItemMetadata(item, itemMetadataMap);
                 missing.push({
                     id: itemId,
                     name: metadata.name,
@@ -211,6 +214,22 @@
         }, pulseDurationMs);
     };
 
+    const updateItemMetadata = async (items = []) => {
+        const ids = items
+            .map((entry) => entry?.id)
+            .filter((id) => typeof id === 'string' || typeof id === 'number')
+            .map((id) => String(id));
+        const sortedIds = Array.from(new Set(ids)).sort();
+        const nextKey = sortedIds.join('|');
+
+        if (nextKey === lastMetadataKey) {
+            return;
+        }
+
+        lastMetadataKey = nextKey;
+        itemMetadataMap = await getItemMap(sortedIds);
+    };
+
     const updateState = () => {
         if (!process) {
             state = ProcessStates.NOT_STARTED;
@@ -331,6 +350,14 @@
             }
         } else {
             totalDurationSeconds = 0;
+        }
+
+        if (process && mounted) {
+            updateItemMetadata([
+                ...(process.requireItems ?? []),
+                ...(process.consumeItems ?? []),
+                ...(process.createItems ?? []),
+            ]);
         }
 
         if (!intervalId && mounted) {

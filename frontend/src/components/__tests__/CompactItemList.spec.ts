@@ -5,6 +5,9 @@ import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 const getItemCountsMock = vi.fn();
 const buildFullItemListMock = vi.fn();
 const isGameStateReadyMock = vi.fn();
+const getItemMapMock = vi.fn();
+const releaseItemImagesMock = vi.fn();
+const retainItemImagesMock = vi.fn();
 let readyPromise: Promise<void> = Promise.resolve();
 let resolveReadyPromise = () => {};
 
@@ -23,6 +26,12 @@ vi.mock('../svelte/compactItemListHelpers.js', () => ({
     buildFullItemList: (...args) => buildFullItemListMock(...args),
 }));
 
+vi.mock('../../utils/itemResolver.js', () => ({
+    getItemMap: (...args) => getItemMapMock(...args),
+    releaseItemImages: (...args) => releaseItemImagesMock(...args),
+    retainItemImages: (...args) => retainItemImagesMock(...args),
+}));
+
 import CompactItemList from '../svelte/CompactItemList.svelte';
 
 describe('CompactItemList', () => {
@@ -30,6 +39,10 @@ describe('CompactItemList', () => {
         getItemCountsMock.mockReset();
         buildFullItemListMock.mockReset();
         isGameStateReadyMock.mockReset();
+        getItemMapMock.mockReset();
+        releaseItemImagesMock.mockReset();
+        retainItemImagesMock.mockReset();
+        getItemMapMock.mockResolvedValue(new Map());
         resolveReadyPromise = () => {};
         readyPromise = new Promise((resolve) => {
             resolveReadyPromise = resolve;

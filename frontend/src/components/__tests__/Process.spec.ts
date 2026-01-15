@@ -19,32 +19,37 @@ const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
 const startProcess = vi.hoisted(() => vi.fn());
+const getItemMapMock = vi.hoisted(() => vi.fn());
+const releaseItemImagesMock = vi.hoisted(() => vi.fn());
+const retainItemImagesMock = vi.hoisted(() => vi.fn());
 
 const getProcessState = vi.mocked(getProcessStateMock);
 
+const testItems = vi.hoisted(() => [
+    {
+        id: 'item-1',
+        name: 'Test Item',
+        image: '/test.png',
+    },
+    {
+        id: 'item-2',
+        name: 'Second Item',
+        image: '/test.png',
+    },
+    {
+        id: 'item-3',
+        name: 'Third Item',
+        image: '/test.png',
+    },
+    {
+        id: 'item-4',
+        name: 'Fourth Item',
+        image: '/test.png',
+    },
+]);
+
 vi.mock('../../pages/inventory/json/items', () => ({
-    default: [
-        {
-            id: 'item-1',
-            name: 'Test Item',
-            image: '/test.png',
-        },
-        {
-            id: 'item-2',
-            name: 'Second Item',
-            image: '/test.png',
-        },
-        {
-            id: 'item-3',
-            name: 'Third Item',
-            image: '/test.png',
-        },
-        {
-            id: 'item-4',
-            name: 'Fourth Item',
-            image: '/test.png',
-        },
-    ],
+    default: testItems,
 }));
 
 vi.mock('../../utils/gameState/inventory.js', () => ({
@@ -100,6 +105,12 @@ vi.mock('../../utils/gameState/processes.js', () => ({
     finishProcessNow,
 }));
 
+vi.mock('../../utils/itemResolver.js', () => ({
+    getItemMap: (...args) => getItemMapMock(...args),
+    releaseItemImages: (...args) => releaseItemImagesMock(...args),
+    retainItemImages: (...args) => retainItemImagesMock(...args),
+}));
+
 vi.mock('../../lib/qaCheats', () => ({
     qaCheatsAvailability: {
         subscribe: (...args) => cheatsAvailabilityStore.subscribe(...args),
@@ -119,11 +130,16 @@ beforeEach(() => {
     getProcessStartedAtMock.mockReset();
     getProcessStartedAtMock.mockImplementation(() => Date.now());
     startProcess.mockClear();
+    getItemMapMock.mockResolvedValue(new Map(testItems.map((item) => [item.id, item])));
+    releaseItemImagesMock.mockClear();
+    retainItemImagesMock.mockClear();
 });
 
 afterEach(() => {
     vi.useRealTimers();
 });
+
+const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 test('pauses and resumes a process while showing remaining time', async () => {
     vi.useFakeTimers();
@@ -160,6 +176,8 @@ test('shows required items even when counts are zero', async () => {
 
     const { getByText } = render(Process, { processId: 'p2' });
 
+    await tick();
+    await flushPromises();
     await tick();
     const requireSection = getByText('Requires:').parentElement;
     const normalizedText = requireSection?.textContent?.replace(/\s+/g, ' ');
@@ -263,6 +281,8 @@ test('shows missing requirement feedback when two items are missing', async () =
         processData: customProcess,
     });
 
+    await tick();
+    await flushPromises();
     await tick();
     await fireEvent.click(getByTestId('process-start-button'));
 
