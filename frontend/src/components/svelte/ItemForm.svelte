@@ -40,7 +40,7 @@
                 const { dataUrl } = await downsampleAndCompressToJpeg(file);
                 previewUrl = dataUrl;
                 processedImageUrl = dataUrl;
-                image = file;
+                image = null;
                 delete validationErrors.image;
             } catch (error) {
                 console.error('Image downsample failed', error);

@@ -26,13 +26,23 @@ function getSizeSteps(maxSize, minSize, sizeStep) {
 
 async function loadImageSource(file) {
     if (typeof createImageBitmap === 'function') {
-        const bitmap = await createImageBitmap(file);
-        return {
-            source: bitmap,
-            width: bitmap.width,
-            height: bitmap.height,
-            cleanup: () => bitmap.close?.(),
-        };
+        try {
+            const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
+            return {
+                source: bitmap,
+                width: bitmap.width,
+                height: bitmap.height,
+                cleanup: () => bitmap.close?.(),
+            };
+        } catch {
+            const bitmap = await createImageBitmap(file);
+            return {
+                source: bitmap,
+                width: bitmap.width,
+                height: bitmap.height,
+                cleanup: () => bitmap.close?.(),
+            };
+        }
     }
 
     return new Promise((resolve, reject) => {
@@ -141,8 +151,12 @@ async function compressCanvas(canvas, options) {
     const targetBytes = options.targetBytes;
 
     let bestCandidate = null;
-    for (let quality = startQuality; quality >= minQuality; quality -= qualityStep) {
-        const nextQuality = clampQuality(quality);
+    for (
+        let currentQuality = startQuality;
+        currentQuality >= minQuality;
+        currentQuality -= qualityStep
+    ) {
+        const nextQuality = clampQuality(currentQuality);
         const blob = await canvasToBlob(canvas, nextQuality);
         if (!bestCandidate || blob.size < bestCandidate.blob.size) {
             bestCandidate = { blob, quality: nextQuality };

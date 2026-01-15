@@ -1,23 +1,22 @@
 /**
  * @jest-environment jsdom
  */
-import { beforeEach, afterEach, describe, it, expect } from 'vitest';
+import { beforeEach, afterEach, describe, it, expect, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import { render, act, fireEvent, waitFor } from '@testing-library/svelte';
 import ItemForm from '../src/components/svelte/ItemForm.svelte';
 
-// Mock the database operations using Jest instead of Vitest
-jest.mock('../src/utils/indexeddb.js', () => ({
-    addEntity: jest.fn().mockResolvedValue('mocked-item-id'),
-    updateEntity: jest.fn().mockResolvedValue('mocked-item-id'),
+vi.mock('../src/utils/indexeddb.js', () => ({
+    addEntity: vi.fn().mockResolvedValue('mocked-item-id'),
+    updateEntity: vi.fn().mockResolvedValue('mocked-item-id'),
 }));
 
-jest.mock('../src/utils/gameState/inventory.js', () => ({
-    addItems: jest.fn(),
+vi.mock('../src/utils/gameState/inventory.js', () => ({
+    addItems: vi.fn(),
 }));
 
-jest.mock('../src/utils/imageDownsample.js', () => ({
-    downsampleAndCompressToJpeg: jest.fn().mockResolvedValue({
+vi.mock('../src/utils/imageDownsample.js', () => ({
+    downsampleAndCompressToJpeg: vi.fn().mockResolvedValue({
         dataUrl: 'data:image/jpeg;base64,COMPRESSED',
         bytes: 12345,
         width: 512,
@@ -29,14 +28,14 @@ jest.mock('../src/utils/imageDownsample.js', () => ({
 import { addEntity, updateEntity } from '../src/utils/indexeddb.js';
 
 // Mock the browser's fetch API
-global.fetch = jest.fn(() =>
+global.fetch = vi.fn(() =>
     Promise.resolve({
         ok: true,
         json: () => Promise.resolve({ url: 'mocked-image-url' }),
     })
 );
 
-// Mock File and FileReader for image uploads
+// Mock File for image uploads
 global.File = class File {
     constructor(bits, name, options) {
         this.name = name;
@@ -67,7 +66,7 @@ describe('ItemForm Component', () => {
         container = setupDom();
 
         // Reset mocks
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     afterEach(() => {

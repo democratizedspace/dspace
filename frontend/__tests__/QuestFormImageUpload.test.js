@@ -1,39 +1,38 @@
 /**
  * @jest-environment jsdom
  */
-import { beforeEach, afterEach, describe, it, expect } from 'vitest';
+import { beforeEach, afterEach, describe, it, expect, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import { render, fireEvent, waitFor, act } from '@testing-library/svelte';
-import { jest } from 'vitest';
 import QuestForm from '../src/components/svelte/QuestForm.svelte';
 
-const questsAddMock = jest.fn();
-const listMock = jest.fn();
+const questsAddMock = vi.fn();
+const listMock = vi.fn();
 
-jest.mock('../src/utils/customcontent.js', () => ({
+vi.mock('../src/utils/customcontent.js', () => ({
     db: {
         quests: {
             add: questsAddMock,
-            update: jest.fn(),
-            get: jest.fn(),
-            delete: jest.fn(),
+            update: vi.fn(),
+            get: vi.fn(),
+            delete: vi.fn(),
         },
         list: listMock,
     },
     ENTITY_TYPES: { QUEST: 'quest' },
 }));
 
-jest.mock('../src/utils/customQuestValidation.js', () => ({
+vi.mock('../src/utils/customQuestValidation.js', () => ({
     validateQuestData: () => ({ valid: true, errors: [] }),
     validateQuestDependencies: () => true,
 }));
 
-jest.mock('../src/utils/questHelpers.js', () => ({
+vi.mock('../src/utils/questHelpers.js', () => ({
     isQuestTitleUnique: () => true,
 }));
 
-jest.mock('../src/utils/imageDownsample.js', () => ({
-    downsampleAndCompressToJpeg: jest.fn().mockResolvedValue({
+vi.mock('../src/utils/imageDownsample.js', () => ({
+    downsampleAndCompressToJpeg: vi.fn().mockResolvedValue({
         dataUrl: 'data:image/jpeg;base64,COMPRESSED',
         bytes: 12345,
         width: 512,
@@ -60,7 +59,7 @@ describe('QuestForm image uploads', () => {
         questsAddMock.mockResolvedValue('quest-123');
         listMock.mockReset();
         listMock.mockResolvedValue([]);
-        global.fetch = jest.fn(() =>
+        global.fetch = vi.fn(() =>
             Promise.resolve({
                 ok: true,
                 json: () => Promise.resolve({ url: 'https://example.com/uploaded.png' }),
@@ -81,7 +80,6 @@ describe('QuestForm image uploads', () => {
         container.innerHTML = '';
         delete global.fetch;
         delete global.File;
-        delete global.FileReader;
     });
 
     it('stores quest images locally without calling a remote upload endpoint', async () => {

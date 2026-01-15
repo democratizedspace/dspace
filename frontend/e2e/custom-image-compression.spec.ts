@@ -172,7 +172,7 @@ test.describe('Custom image compression', () => {
         const itemName = `Compressed Item ${Date.now()}`;
 
         const savedItem = await createCustomItem(page, itemName, 123);
-        expect(savedItem.image).toMatch(/^data:image\\/jpeg;base64,/);
+        expect(savedItem.image).toMatch(/^data:image\/jpeg;base64,/);
 
         const metrics = await getImageMetrics(page, savedItem.image as string);
         expectCompressedImage(metrics);
@@ -204,7 +204,7 @@ test.describe('Custom image compression', () => {
         )) as { image?: string };
 
         const updatedImage = updatedItem.image as string;
-        expect(updatedImage).toMatch(/^data:image\\/jpeg;base64,/);
+        expect(updatedImage).toMatch(/^data:image\/jpeg;base64,/);
         expect(updatedImage).not.toBe(savedItem.image);
 
         const updatedMetrics = await getImageMetrics(page, updatedImage);
@@ -235,7 +235,7 @@ test.describe('Custom image compression', () => {
             'title',
             questTitle
         )) as { id?: string | number; image?: string; questId?: string | number; questID?: string };
-        expect(savedQuest.image).toMatch(/^data:image\\/jpeg;base64,/);
+        expect(savedQuest.image).toMatch(/^data:image\/jpeg;base64,/);
 
         const initialMetrics = await getImageMetrics(page, savedQuest.image as string);
         expectCompressedImage(initialMetrics);
@@ -261,7 +261,7 @@ test.describe('Custom image compression', () => {
             questTitle
         )) as { image?: string };
         const updatedImage = updatedQuest.image as string;
-        expect(updatedImage).toMatch(/^data:image\\/jpeg;base64,/);
+        expect(updatedImage).toMatch(/^data:image\/jpeg;base64,/);
         expect(updatedImage).not.toBe(savedQuest.image);
 
         const updatedMetrics = await getImageMetrics(page, updatedImage);
