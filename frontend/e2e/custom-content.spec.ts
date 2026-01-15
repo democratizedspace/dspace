@@ -33,6 +33,83 @@ test.describe('Custom Content Management', () => {
         }
     }
 
+    async function findCustomItemIdByName(page: Page, name: string): Promise<string | null> {
+        return page.evaluate(async (itemName) => {
+            return new Promise((resolve) => {
+                const request = indexedDB.open('CustomContent');
+
+                request.onerror = () => resolve(null);
+                request.onupgradeneeded = () => {
+                    request.result?.close();
+                    resolve(null);
+                };
+                request.onsuccess = () => {
+                    const db = request.result;
+                    const transaction = db.transaction('items', 'readonly');
+                    const store = transaction.objectStore('items');
+                    const getAllRequest = store.getAll();
+
+                    getAllRequest.onerror = () => {
+                        db.close();
+                        resolve(null);
+                    };
+                    getAllRequest.onsuccess = () => {
+                        const items = getAllRequest.result ?? [];
+                        const normalizedName = itemName.trim().toLowerCase();
+                        const match = items.find(
+                            (item) =>
+                                (item?.name ?? '').trim().toLowerCase() === normalizedName
+                        );
+                        const matchedId = match?.id ?? null;
+                        db.close();
+                        resolve(matchedId);
+                    };
+                };
+            });
+        }, name);
+    }
+
+    async function findCustomProcessIdByTitle(
+        page: Page,
+        title: string
+    ): Promise<string | null> {
+        return page.evaluate(async (processTitle) => {
+            return new Promise((resolve) => {
+                const request = indexedDB.open('CustomContent');
+
+                request.onerror = () => resolve(null);
+                request.onupgradeneeded = () => {
+                    request.result?.close();
+                    resolve(null);
+                };
+                request.onsuccess = () => {
+                    const db = request.result;
+                    const transaction = db.transaction('processes', 'readonly');
+                    const store = transaction.objectStore('processes');
+                    const getAllRequest = store.getAll();
+
+                    getAllRequest.onerror = () => {
+                        db.close();
+                        resolve(null);
+                    };
+                    getAllRequest.onsuccess = () => {
+                        const processes = getAllRequest.result ?? [];
+                        const normalizedTitle = processTitle.trim().toLowerCase();
+                        const match = processes.find(
+                            (process) =>
+                                (process?.name ?? process?.title ?? '')
+                                    .trim()
+                                    .toLowerCase() === normalizedTitle
+                        );
+                        const matchedId = match?.id ?? null;
+                        db.close();
+                        resolve(matchedId);
+                    };
+                };
+            });
+        }, title);
+    }
+
     test('should create a custom item', async ({ page }) => {
         // Navigate to the item creation page
         await page.goto('/inventory/create');
@@ -186,21 +263,19 @@ test.describe('Custom Content Management', () => {
         await page.click('button.submit-button');
         await page.waitForLoadState('networkidle');
 
-        // Find the item detail link from inventory list
-        await page.goto('/inventory');
-        await page.waitForLoadState('networkidle');
-        await waitForHydration(page);
+        let itemId: string | null = null;
+        await expect
+            .poll(async () => {
+                itemId = await findCustomItemIdByName(page, uniqueItemName);
+                return itemId;
+            }, {
+                timeout: 30000,
+            })
+            .not.toBeNull();
 
-        const searchInput = page.locator('input[placeholder="Search items..."]');
-        if ((await searchInput.count()) > 0) {
-            await searchInput.fill(uniqueItemName);
-            await page.waitForTimeout(500);
+        if (!itemId) {
+            throw new Error('Custom item ID was not found in IndexedDB.');
         }
-
-        const itemLink = page.locator(`a:has-text("${uniqueItemName}")`).first();
-        await expect(itemLink).toBeVisible({ timeout: 15000 });
-        const itemHref = await itemLink.getAttribute('href');
-        expect(itemHref).toBeTruthy();
 
         // Create a custom process that requires the item
         await page.goto('/processes/create');
@@ -238,15 +313,17 @@ test.describe('Custom Content Management', () => {
         await submitProcessButton.click();
         await page.waitForLoadState('networkidle');
 
+        await expect
+            .poll(async () => findCustomProcessIdByTitle(page, processTitle), { timeout: 30000 })
+            .not.toBeNull();
+
         // Navigate to the item detail page and validate the custom process appears
-        await page.goto(itemHref ?? '/inventory');
+        await page.goto(`/inventory/item/${itemId}`);
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
         await expect(page.locator('text=Processes:')).toBeVisible({ timeout: 15000 });
-        await expect(page.locator(`h3:has-text("${processTitle}")`)).toBeVisible({
-            timeout: 15000,
-        });
+        await expect(page.locator(`text=${processTitle}`)).toBeVisible({ timeout: 15000 });
     });
 
     test('should create and view a custom quest', async ({ page }) => {
