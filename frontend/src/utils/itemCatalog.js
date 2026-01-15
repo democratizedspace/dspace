@@ -1,5 +1,5 @@
 import items from '../pages/inventory/json/items';
-import { db, ENTITY_TYPES } from './customcontent.js';
+import { onBrowserAsync } from './ssr.js';
 
 export function mergeItemLists(builtInItems = [], customItems = []) {
     return [...builtInItems, ...customItems];
@@ -25,11 +25,35 @@ export function filterItemsByQuery(itemList = [], query = '') {
 
 export async function getMergedItemCatalog({
     builtInItems = items,
-    customItemsLoader = () => db.list(ENTITY_TYPES.ITEM),
+    customItemsLoader,
     onError,
 } = {}) {
     try {
-        const customItems = await customItemsLoader();
+        const { items: customItems, error: customItemsError } = await onBrowserAsync(
+            async () => {
+                try {
+                    const list = customItemsLoader
+                        ? await customItemsLoader()
+                        : await (async () => {
+                              const { db, ENTITY_TYPES } = await import('./customcontent.js');
+                              return db.list(ENTITY_TYPES.ITEM);
+                          })();
+                    return { items: Array.isArray(list) ? list : [], error: null };
+                } catch (error) {
+                    return { items: [], error };
+                }
+            },
+            { items: [], error: null }
+        );
+
+        if (customItemsError) {
+            if (onError) {
+                onError(customItemsError);
+            } else {
+                console.warn('Failed to load custom items:', customItemsError);
+            }
+        }
+
         return mergeItemLists(builtInItems, customItems);
     } catch (error) {
         if (onError) {
