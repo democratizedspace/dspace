@@ -55,4 +55,23 @@ describe('itemResolver', () => {
         expect(resolved).toBeNull();
         expect(map.get('missing-item')?.missing).toBe(true);
     });
+
+    it('rechecks missing items after custom content is added', async () => {
+        const customId = 'custom-item-recheck';
+
+        const missing = await getItemById(customId);
+        expect(missing).toBeNull();
+
+        await db.items.add({
+            id: customId,
+            name: 'late arrival',
+            description: 'seeded after first lookup',
+            image: TEST_IMAGE,
+        });
+
+        const resolved = await getItemById(customId);
+        expect(resolved).not.toBeNull();
+        expect(resolved?.name).toBe('late arrival');
+        expect(resolved?.image).toBe(TEST_IMAGE);
+    });
 });

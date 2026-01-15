@@ -118,13 +118,12 @@ async function fetchItem(id) {
         .get(ENTITY_TYPES.ITEM, key)
         .then((item) => {
             const normalized = normalizeItem(item, key);
-            itemCache.set(key, normalized);
+            if (normalized) {
+                itemCache.set(key, normalized);
+            }
             return normalized;
         })
-        .catch(() => {
-            itemCache.set(key, null);
-            return null;
-        })
+        .catch(() => null)
         .finally(() => {
             pendingFetches.delete(key);
         });

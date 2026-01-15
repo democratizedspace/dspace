@@ -21,43 +21,47 @@ test.describe('Custom item detail view', () => {
     });
 
     test('renders custom item metadata and icon on detail page', async ({ page }) => {
-        await page.addInitScript(({ item }) => {
-            window['__customItemSeeded'] = false;
-            const request = indexedDB.open('CustomContent', 3);
+        await page.goto('/');
+        await page.evaluate(async (item) => {
+            await new Promise<void>((resolve) => {
+                const request = indexedDB.open('CustomContent', 3);
 
-            request.onupgradeneeded = () => {
-                const db = request.result;
-                if (!db.objectStoreNames.contains('meta')) {
-                    db.createObjectStore('meta');
-                }
-                if (!db.objectStoreNames.contains('items')) {
-                    db.createObjectStore('items', { keyPath: 'id' });
-                }
-                if (!db.objectStoreNames.contains('processes')) {
-                    db.createObjectStore('processes', { keyPath: 'id' });
-                }
-                if (!db.objectStoreNames.contains('quests')) {
-                    db.createObjectStore('quests', { keyPath: 'id' });
-                }
-            };
+                request.onupgradeneeded = () => {
+                    const db = request.result;
+                    if (!db.objectStoreNames.contains('meta')) {
+                        db.createObjectStore('meta');
+                    }
+                    if (!db.objectStoreNames.contains('items')) {
+                        db.createObjectStore('items', { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('processes')) {
+                        db.createObjectStore('processes', { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('quests')) {
+                        db.createObjectStore('quests', { keyPath: 'id' });
+                    }
+                };
 
-            request.onsuccess = () => {
-                const db = request.result;
-                const tx = db.transaction('items', 'readwrite');
-                tx.objectStore('items').put(item);
-                tx.oncomplete = () => {
-                    window['__customItemSeeded'] = true;
-                    db.close();
+                request.onsuccess = () => {
+                    const db = request.result;
+                    const tx = db.transaction('items', 'readwrite');
+                    tx.objectStore('items').put(item);
+                    tx.oncomplete = () => {
+                        db.close();
+                        resolve();
+                    };
+                    tx.onerror = () => {
+                        db.close();
+                        resolve();
+                    };
                 };
-                tx.onerror = () => {
-                    window['__customItemSeeded'] = true;
-                    db.close();
-                };
-            };
-        }, { item: customItem });
+
+                request.onerror = () => resolve();
+                request.onblocked = () => resolve();
+            });
+        }, customItem);
 
         await page.goto(`/inventory/item/${customId}`);
-        await page.waitForFunction(() => window['__customItemSeeded'] === true);
         await page.waitForSelector('h2');
 
         await expect(page.getByRole('heading', { level: 2 })).toHaveText('foobar');
