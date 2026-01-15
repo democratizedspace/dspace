@@ -51,6 +51,10 @@ async function uploadGeneratedImage(page: Page, seed: number, style: GeneratedIm
     const base64Payload = dataUrl.split(',')[1] ?? '';
     const buffer = Buffer.from(base64Payload, 'base64');
 
+    const preview = page.locator('.image-preview');
+    const previousPreviewSrc =
+        (await preview.count()) > 0 ? await preview.getAttribute('src') : null;
+
     let input = page.getByTestId('image-file-input');
     if ((await input.count()) === 0) {
         input = page.locator('input[type="file"]').first();
@@ -62,7 +66,19 @@ async function uploadGeneratedImage(page: Page, seed: number, style: GeneratedIm
         buffer,
     });
 
-    await expect(page.locator('.image-preview')).toBeVisible();
+    await expect(preview).toBeVisible();
+    await expect
+        .poll(async () => {
+            const src = await preview.getAttribute('src');
+            if (!src) {
+                return null;
+            }
+            if (previousPreviewSrc && src === previousPreviewSrc) {
+                return null;
+            }
+            return src;
+        })
+        .toMatch(/^data:image\/jpeg;base64,/);
 }
 
 async function getCustomContentRecord(
@@ -192,7 +208,7 @@ test.describe('Custom image compression', () => {
 
         await page.goto(`/inventory/item/${itemId}/edit`);
 
-        await uploadGeneratedImage(page, 654, 'noise');
+        await uploadGeneratedImage(page, 654, 'solid');
         await page.click('button.submit-button');
 
         await expect
