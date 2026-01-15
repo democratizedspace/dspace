@@ -525,4 +525,107 @@ describe('ProcessForm Component', () => {
         });
         expect(createProcessMock).not.toHaveBeenCalled();
     });
+
+    test('uses processId prop when editing without processData id', async () => {
+        const component = new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processId: 'process-999',
+                processData: {
+                    title: 'Missing ID Process',
+                    duration: '30m',
+                    requireItems: [{ id: 'item-1', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+
+        let submittedData = null;
+        component.$on('submit', (event) => {
+            submittedData = event.detail;
+        });
+
+        titleInput.value = 'Updated With Prop ID';
+        titleInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(updateProcessMock).toHaveBeenCalledWith('process-999', {
+            title: 'Updated With Prop ID',
+            duration: '30m',
+            requireItems: [{ id: 'item-1', count: 1 }],
+            consumeItems: [],
+            createItems: [],
+        });
+        expect(submittedData.get('id')).toBe('process-999');
+        expect(container.querySelector('.success-message').textContent).toContain(
+            'Process updated successfully!'
+        );
+    });
+
+    test('shows error when editing without a process id', async () => {
+        const component = new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+            },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Missing ID';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        component.$$set({ requireItems: [{ id: 'item-1', count: 1 }] });
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(updateProcessMock).not.toHaveBeenCalled();
+        expect(container.querySelector('.form-error').textContent).toContain(
+            'Failed to save process.'
+        );
+    });
+
+    test('shows error when updateProcess fails', async () => {
+        updateProcessMock.mockRejectedValueOnce(new Error('update failed'));
+
+        new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-500',
+                    title: 'Failing Process',
+                    duration: '10m',
+                    requireItems: [{ id: 'item-2', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        const form = container.querySelector('form');
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(updateProcessMock).toHaveBeenCalled();
+        expect(container.querySelector('.form-error').textContent).toContain(
+            'Failed to save process.'
+        );
+    });
 });
