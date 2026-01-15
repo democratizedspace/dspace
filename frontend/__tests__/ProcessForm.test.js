@@ -470,7 +470,7 @@ describe('ProcessForm Component', () => {
                 const titleInput = container.querySelector('#title');
                 const durationInput = container.querySelector('#duration');
                 const countInput = container.querySelector(
-                    '#required-items-section input[type=\"number\"]'
+                    '#required-items-section input[type="number"]'
                 );
 
                 expect(titleInput.value).toBe('Existing Process');
@@ -498,8 +498,8 @@ describe('ProcessForm Component', () => {
         });
 
         const form = container.querySelector('form');
-        const titleInput = container.querySelector('input[type=\"text\"]');
-        const durationInput = container.querySelector('input[placeholder=\"e.g. 1h 30m\"]');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
 
         let submittedData = null;
         component.$on('submit', (event) => {
