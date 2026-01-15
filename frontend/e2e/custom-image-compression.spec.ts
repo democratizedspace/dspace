@@ -6,11 +6,15 @@ const MAX_DIMENSION = 512;
 const MIN_DIMENSION = 256;
 
 type GeneratedImageStyle = 'noise' | 'solid';
+type GeneratedImageDimensions = { width: number; height: number };
 
-async function generatePngDataUrl(page: Page, seed: number, style: GeneratedImageStyle) {
-    return page.evaluate(async ({ seedValue, imageStyle }) => {
-        const width = 1600;
-        const height = 1200;
+async function generatePngDataUrl(
+    page: Page,
+    seed: number,
+    style: GeneratedImageStyle,
+    dimensions: GeneratedImageDimensions
+) {
+    return page.evaluate(async ({ seedValue, imageStyle, width, height }) => {
         const canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
@@ -41,13 +45,26 @@ async function generatePngDataUrl(page: Page, seed: number, style: GeneratedImag
 
             ctx.putImageData(imageData, 0, 0);
         }
+        const markerSize = 48;
+        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        ctx.fillRect(
+            Math.max(0, (seedValue * 3) % (width - markerSize)),
+            Math.max(0, (seedValue * 5) % (height - markerSize)),
+            markerSize,
+            markerSize
+        );
 
         return canvas.toDataURL('image/png');
-    }, { seedValue: seed, imageStyle: style });
+    }, { seedValue: seed, imageStyle: style, width: dimensions.width, height: dimensions.height });
 }
 
-async function uploadGeneratedImage(page: Page, seed: number, style: GeneratedImageStyle) {
-    const dataUrl = await generatePngDataUrl(page, seed, style);
+async function uploadGeneratedImage(
+    page: Page,
+    seed: number,
+    style: GeneratedImageStyle,
+    dimensions: GeneratedImageDimensions = { width: 1600, height: 1200 }
+) {
+    const dataUrl = await generatePngDataUrl(page, seed, style, dimensions);
     const base64Payload = dataUrl.split(',')[1] ?? '';
     const buffer = Buffer.from(base64Payload, 'base64');
 
@@ -208,7 +225,7 @@ test.describe('Custom image compression', () => {
 
         await page.goto(`/inventory/item/${itemId}/edit`);
 
-        await uploadGeneratedImage(page, 654, 'solid');
+        await uploadGeneratedImage(page, 654, 'solid', { width: 1200, height: 1600 });
         await page.click('button.submit-button');
 
         let updatedImage: string | null = null;
@@ -270,7 +287,7 @@ test.describe('Custom image compression', () => {
 
         await page.goto(`/quests/${questId}/edit`);
 
-        await uploadGeneratedImage(page, 789, 'solid');
+        await uploadGeneratedImage(page, 789, 'solid', { width: 1400, height: 1000 });
         await page.click('button.submit-button');
 
         await expect
