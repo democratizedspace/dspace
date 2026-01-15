@@ -228,6 +228,70 @@ export async function clearUserData(page: Page): Promise<void> {
     await purgeClientState(page);
 }
 
+export async function seedCustomProcess(
+    page: Page,
+    {
+        id,
+        title,
+        duration,
+        requireItems = [],
+        consumeItems = [],
+        createItems = [],
+    }: {
+        id?: string;
+        title: string;
+        duration: string;
+        requireItems?: Array<{ id: string; count: number }>;
+        consumeItems?: Array<{ id: string; count: number }>;
+        createItems?: Array<{ id: string; count: number }>;
+    }
+): Promise<string> {
+    const processId = id ?? `process-${Date.now()}`;
+
+    await page.evaluate(
+        async ({ processId, title, duration, requireItems, consumeItems, createItems }) => {
+            const openRequest = indexedDB.open('CustomContent');
+            const db: IDBDatabase = await new Promise((resolve, reject) => {
+                openRequest.onupgradeneeded = () => {
+                    const upgradedDb = openRequest.result;
+                    if (!upgradedDb.objectStoreNames.contains('processes')) {
+                        upgradedDb.createObjectStore('processes', { keyPath: 'id' });
+                    }
+                };
+                openRequest.onsuccess = () => resolve(openRequest.result);
+                openRequest.onerror = () =>
+                    reject(openRequest.error ?? new Error('Failed to open IndexedDB'));
+            });
+
+            try {
+                const tx = db.transaction('processes', 'readwrite');
+                const store = tx.objectStore('processes');
+                store.put({
+                    id: processId,
+                    entityType: 'process',
+                    custom: true,
+                    title,
+                    duration,
+                    requireItems,
+                    consumeItems,
+                    createItems,
+                    createdAt: new Date().toISOString(),
+                });
+
+                await new Promise<void>((resolve, reject) => {
+                    tx.oncomplete = () => resolve();
+                    tx.onerror = () => reject(tx.error ?? new Error('Failed to seed process'));
+                });
+            } finally {
+                db.close();
+            }
+        },
+        { processId, title, duration, requireItems, consumeItems, createItems }
+    );
+
+    return processId;
+}
+
 export async function waitForQuestRecordByTitle(
     page: Page,
     title: string,

@@ -4,7 +4,7 @@
     import ProcessPreview from './ProcessPreview.svelte';
     import items from '../../pages/inventory/json/items';
     import { durationInSeconds, prettyPrintDuration } from '../../utils.js';
-    import { createProcess } from '../../utils/customcontent.js';
+    import { createProcess, updateProcess } from '../../utils/customcontent.js';
     import { validateProcessData } from '../../utils/customProcessValidation.js';
 
     export let title = '';
@@ -12,20 +12,48 @@
     export let requireItems = [];
     export let consumeItems = [];
     export let createItems = [];
+    export let isEdit = false;
+    export let processData = null;
 
     let isClientSide = false;
     let showPreview = false;
     let validationErrors = {};
     let successMessage = '';
     let errorMessage = '';
-    let lastCreatedProcessId = null;
+    let lastSavedProcessId = null;
     let isSubmitting = false;
+    let hasInitialized = false;
 
     const dispatch = createEventDispatcher();
 
     onMount(() => {
         isClientSide = true;
     });
+
+    const normalizeExistingDuration = (value) => {
+        if (typeof value === 'number') {
+            return prettyPrintDuration(value);
+        }
+        if (typeof value === 'string') {
+            return value;
+        }
+        return '';
+    };
+
+    const normalizeFormItems = (itemsToNormalize = []) =>
+        itemsToNormalize.map((item) => ({
+            id: item?.id ?? '',
+            count: Number(item?.count ?? 0) || 0,
+        }));
+
+    $: if (isEdit && processData && !hasInitialized) {
+        title = processData.title || '';
+        duration = normalizeExistingDuration(processData.duration);
+        requireItems = normalizeFormItems(processData.requireItems);
+        consumeItems = normalizeFormItems(processData.consumeItems);
+        createItems = normalizeFormItems(processData.createItems);
+        hasInitialized = true;
+    }
 
     function addItemRequirement() {
         requireItems = [...requireItems, { id: '', count: 1 }];
@@ -158,14 +186,6 @@
         };
 
         try {
-            const createdId = await createProcess(
-                preparedProcess.title,
-                preparedProcess.duration,
-                preparedProcess.requireItems,
-                preparedProcess.consumeItems,
-                preparedProcess.createItems
-            );
-
             duration = normalizedDuration;
             requireItems = preparedProcess.requireItems;
             consumeItems = preparedProcess.consumeItems;
@@ -178,27 +198,49 @@
             formData.append('consumeItems', JSON.stringify(preparedProcess.consumeItems));
             formData.append('createItems', JSON.stringify(preparedProcess.createItems));
 
-            if (createdId != null) {
-                formData.append('id', String(createdId));
-                lastCreatedProcessId = createdId;
+            if (isEdit) {
+                if (!processData?.id) {
+                    throw new Error('Missing process ID for update.');
+                }
+                await updateProcess(processData.id, preparedProcess);
+                formData.append('id', String(processData.id));
+                lastSavedProcessId = processData.id;
+                successMessage = 'Process updated successfully.';
             } else {
-                lastCreatedProcessId = null;
+                const createdId = await createProcess(
+                    preparedProcess.title,
+                    preparedProcess.duration,
+                    preparedProcess.requireItems,
+                    preparedProcess.consumeItems,
+                    preparedProcess.createItems
+                );
+
+                if (createdId != null) {
+                    formData.append('id', String(createdId));
+                    lastSavedProcessId = createdId;
+                } else {
+                    lastSavedProcessId = null;
+                }
+
+                successMessage = 'Process created successfully!';
+
+                // Clear the form for next entry
+                title = '';
+                duration = '';
+                requireItems = [];
+                consumeItems = [];
+                createItems = [];
+                hasInitialized = false;
             }
 
-            successMessage = 'Process created successfully!';
             showPreview = false;
-
-            // Clear the form for next entry
-            title = '';
-            duration = '';
-            requireItems = [];
-            consumeItems = [];
-            createItems = [];
 
             dispatch('submit', formData);
         } catch (error) {
-            console.error('Failed to create process:', error);
-            errorMessage = 'Failed to save process. Please try again.';
+            console.error('Failed to save process:', error);
+            errorMessage = isEdit
+                ? 'Failed to update process. Please try again.'
+                : 'Failed to save process. Please try again.';
         } finally {
             isSubmitting = false;
         }
@@ -210,10 +252,12 @@
         {#if successMessage}
             <div class="success-message" role="status" aria-live="polite">
                 {successMessage}
-                {#if lastCreatedProcessId}
-                    <a class="success-link" href={`/processes/${lastCreatedProcessId}`}>
+                {#if lastSavedProcessId}
+                    <a class="success-link" href={`/processes/${lastSavedProcessId}`}>
                         View process
                     </a>
+                    <span class="separator">•</span>
+                    <a class="success-link" href="/processes/manage">Manage processes</a>
                 {/if}
             </div>
         {/if}
@@ -358,7 +402,7 @@
 
             <div class="form-submit">
                 <button type="submit" class="submit-button" disabled={isSubmitting}>
-                    {isSubmitting ? 'Saving…' : 'Create Process'}
+                    {isSubmitting ? 'Saving…' : isEdit ? 'Update Process' : 'Create Process'}
                 </button>
                 <button
                     type="button"
