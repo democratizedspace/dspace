@@ -8,6 +8,7 @@ import {
 
 test.describe('Custom Content Management', () => {
     test.setTimeout(120000); // 2 minutes for end-to-end tests
+    test.use({ serviceWorkers: 'block' });
 
     // Test IDs for cleanup
     const testIds = {
@@ -284,33 +285,44 @@ test.describe('Custom Content Management', () => {
         await page.fill('#name', uniqueItemName);
         await page.fill('#description', 'Item used to validate custom process discovery');
 
-        await Promise.all([
-            page.waitForURL(
-                (url) =>
-                    url.pathname.startsWith('/inventory') &&
-                    !url.pathname.endsWith('/inventory/create'),
-                { timeout: 15000 }
-            ),
-            page.click('button.submit-button'),
-        ]);
-        await page.waitForLoadState('networkidle', { timeout: 10000 });
+        await page.click('button.submit-button');
+        await page.waitForLoadState('domcontentloaded');
+        await page.waitForURL(/\/inventory(\/item\/[0-9a-f-]+)?/, { timeout: 20000 });
         await waitForHydration(page);
 
         let itemId: string | null = null;
-        await expect
-            .poll(
-                async () => {
-                    itemId = await findCustomItemIdByName(page, uniqueItemName);
-                    return itemId;
-                },
-                {
-                    timeout: 30000,
-                }
-            )
-            .not.toBeNull();
+        const itemUrlMatch = page.url().match(/\/inventory\/item\/([0-9a-f-]+)/);
+        if (itemUrlMatch?.[1]) {
+            itemId = itemUrlMatch[1];
+        } else {
+            await expect
+                .poll(
+                    async () => {
+                        if (
+                            page.isClosed() ||
+                            page.url().includes('/inventory/create') ||
+                            page.url().endsWith('/inventory/create')
+                        ) {
+                            return null;
+                        }
+                        itemId = await findCustomItemIdByName(page, uniqueItemName);
+                        return itemId;
+                    },
+                    {
+                        timeout: 30000,
+                    }
+                )
+                .not.toBeNull();
+        }
 
         if (!itemId) {
             throw new Error('Custom item ID was not found in IndexedDB.');
+        }
+
+        if (!page.url().includes(`/inventory/item/${itemId}`)) {
+            await page.goto(`/inventory/item/${itemId}`);
+            await page.waitForLoadState('domcontentloaded');
+            await waitForHydration(page);
         }
 
         // Create a custom process that requires the item
@@ -359,16 +371,33 @@ test.describe('Custom Content Management', () => {
         await waitForHydration(page);
 
         await expect
-            .poll(async () => findCustomProcessIdByTitle(page, processTitle), { timeout: 30000 })
+            .poll(
+                async () => {
+                    if (
+                        page.isClosed() ||
+                        page.url().includes('/processes/create') ||
+                        page.url().endsWith('/processes/create')
+                    ) {
+                        return null;
+                    }
+                    return findCustomProcessIdByTitle(page, processTitle);
+                },
+                { timeout: 30000 }
+            )
             .not.toBeNull();
 
         // Navigate to the item detail page and validate the custom process appears
-        await page.goto(`/inventory/item/${itemId}`);
-        await page.waitForLoadState('networkidle');
-        await waitForHydration(page);
+        if (!page.url().includes(`/inventory/item/${itemId}`)) {
+            await page.goto(`/inventory/item/${itemId}`);
+            await page.waitForLoadState('domcontentloaded');
+            await waitForHydration(page);
+        }
 
-        await expect(page.locator('text=Processes:')).toBeVisible({ timeout: 15000 });
-        await expect(page.locator(`text=${processTitle}`)).toBeVisible({ timeout: 15000 });
+        const processesSection = page.getByText('Processes:', { exact: true });
+        await expect(processesSection).toBeVisible({ timeout: 15000 });
+        await expect(page.getByText(processTitle, { exact: true })).toBeVisible({
+            timeout: 15000,
+        });
     });
 
     test('should create and view a custom quest', async ({ page }) => {
