@@ -1,6 +1,4 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
-import { writable } from 'svelte/store';
-import type { Writable } from 'svelte/store';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import QuestDetail from '../src/pages/quests/svelte/QuestDetail.svelte';
 import { getQuest } from '../src/utils/customcontent.js';
@@ -11,10 +9,34 @@ type QuestState = {
     inventory: Record<string, number>;
 };
 
-let mockState: Writable<QuestState>;
+type Store<T> = {
+    subscribe: (run: (value: T) => void) => () => void;
+    set: (value: T) => void;
+    update: (updater: (value: T) => T) => void;
+};
 
-vi.hoisted(() => {
-    mockState = writable<QuestState>({ quests: {}, inventory: {} });
+const { mockState } = vi.hoisted(() => {
+    const createStore = <T,>(initial: T): Store<T> => {
+        let value = initial;
+        const subscribers = new Set<(current: T) => void>();
+        const subscribe = (run: (current: T) => void) => {
+            run(value);
+            subscribers.add(run);
+            return () => subscribers.delete(run);
+        };
+        const set = (next: T) => {
+            value = next;
+            subscribers.forEach((run) => run(value));
+        };
+        const update = (updater: (current: T) => T) => {
+            set(updater(value));
+        };
+        return { subscribe, set, update };
+    };
+
+    return {
+        mockState: createStore<QuestState>({ quests: {}, inventory: {} }),
+    };
 });
 
 vi.mock('../src/utils/customcontent.js', () => ({
