@@ -130,6 +130,12 @@ const TEST_GROUPS = [
         workers: 1,
     },
     {
+        name: 'Custom Image Compression',
+        files: ['custom-image-compression.spec.ts'],
+        parallel: false,
+        workers: 1,
+    },
+    {
         name: 'Quest Tests',
         files: [
             'test-quest-chat.spec.ts',
