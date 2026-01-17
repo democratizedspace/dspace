@@ -77,6 +77,15 @@ test.describe('Custom Content Management', () => {
         }
     }
 
+    const itemImagePath = 'frontend/public/assets/220_ohm_resistor.jpg';
+
+    async function uploadItemImage(page: Page): Promise<void> {
+        const imageInput = page.locator('#image');
+        if ((await imageInput.count()) > 0) {
+            await imageInput.setInputFiles(itemImagePath);
+        }
+    }
+
     test('should create a custom item', async ({ page }) => {
         // Navigate to the item creation page
         await page.goto('/inventory/create');
@@ -94,6 +103,7 @@ test.describe('Custom Content Management', () => {
             '#description',
             'This is a test custom item created for automated testing.'
         );
+        await uploadItemImage(page);
         await page.fill('#price', '100 dUSD');
         await page.fill('#unit', 'kg');
         await page.fill('#type', 'resource');
@@ -277,6 +287,7 @@ test.describe('Custom Content Management', () => {
         const uniqueItemName = `Process Item ${Date.now()}`;
         await page.fill('#name', uniqueItemName);
         await page.fill('#description', 'Item used to validate custom process discovery');
+        await uploadItemImage(page);
         await page.fill('#price', '100 dUSD');
         await page.fill('#unit', 'kg');
         await page.fill('#type', 'resource');
@@ -456,6 +467,7 @@ test.describe('Custom Content Management', () => {
             const uniqueItemName = `Retrieval Test Item ${Date.now()}`;
             await page.fill('#name', uniqueItemName);
             await page.fill('#description', 'Created for testing retrieval functionality');
+            await uploadItemImage(page);
 
             // Submit the form
             const submitButton = page.locator('button.submit-button');
