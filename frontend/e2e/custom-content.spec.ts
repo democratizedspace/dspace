@@ -277,6 +277,9 @@ test.describe('Custom Content Management', () => {
         const uniqueItemName = `Process Item ${Date.now()}`;
         await page.fill('#name', uniqueItemName);
         await page.fill('#description', 'Item used to validate custom process discovery');
+        await page.fill('#price', '100 dUSD');
+        await page.fill('#unit', 'kg');
+        await page.fill('#type', 'resource');
 
         const submitItemButton = page
             .locator('button.submit-button, button[type="submit"], input[type="submit"]')
@@ -289,6 +292,7 @@ test.describe('Custom Content Management', () => {
         await submitItemButton.click();
         await itemNavigationPromise;
         await page.waitForLoadState('domcontentloaded');
+        await page.waitForLoadState('networkidle', { timeout: 10000 });
         await waitForHydration(page);
 
         let itemId: string | null = null;
