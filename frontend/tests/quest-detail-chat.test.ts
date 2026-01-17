@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
-import { writable } from 'svelte/store';
+import { writable, type Writable } from 'svelte/store';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import QuestDetail from '../src/pages/quests/svelte/QuestDetail.svelte';
 import { getQuest } from '../src/utils/customcontent.js';
@@ -11,9 +11,13 @@ type QuestState = {
     inventory: Record<string, number>;
 };
 
-const { mockState } = vi.hoisted(() => ({
-    mockState: writable<QuestState>({ quests: {}, inventory: {} }),
-}));
+let mockState: Writable<QuestState>;
+let mockReady: Promise<void>;
+
+vi.hoisted(() => {
+    mockState = writable<QuestState>({ quests: {}, inventory: {} });
+    mockReady = Promise.resolve();
+});
 
 vi.mock('../src/utils/customcontent.js', () => ({
     getQuest: vi.fn(),
@@ -25,6 +29,8 @@ vi.mock('../src/utils/builtInQuests.js', () => ({
 
 vi.mock('../src/utils/gameState/common.js', () => ({
     state: mockState,
+    ready: mockReady,
+    isGameStateReady: () => true,
 }));
 
 vi.mock('../src/utils/gameState.js', () => ({
