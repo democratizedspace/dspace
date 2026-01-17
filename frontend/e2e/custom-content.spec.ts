@@ -6,14 +6,16 @@ import {
     ItemSelectorHelper,
 } from './test-helpers';
 
-const inlineItemImagePayload = {
-    name: 'custom-item.png',
-    mimeType: 'image/png',
-    buffer: Buffer.from(
-        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/woAAgIBJ3QpJ8gAAAAASUVORK5CYII=',
-        'base64'
-    ),
-};
+const inlineItemImagePayloads = [
+    {
+        name: 'custom-item.png',
+        mimeType: 'image/png',
+        buffer: Buffer.from(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/woAAgIBJ3QpJ8gAAAAASUVORK5CYII=',
+            'base64'
+        ),
+    },
+];
 
 test.describe('Custom Content Management', () => {
     test.setTimeout(120000); // 2 minutes for end-to-end tests
@@ -89,7 +91,7 @@ test.describe('Custom Content Management', () => {
     async function uploadItemImage(page: Page): Promise<void> {
         const imageInput = page.locator('#image');
         if ((await imageInput.count()) > 0) {
-            await imageInput.setInputFiles(inlineItemImagePayload);
+            await imageInput.setInputFiles(inlineItemImagePayloads);
         }
     }
 
