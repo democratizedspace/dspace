@@ -86,9 +86,7 @@ test.describe('Custom item detail view', () => {
 
         await page.goto(`/inventory/item/${builtIn.id}`);
         await waitForHydration(page);
-        await expect(
-            page.getByRole('heading', { level: 2, name: builtIn.name })
-        ).toBeVisible();
+        await expect(page.getByRole('heading', { level: 2, name: builtIn.name })).toBeVisible();
 
         const heroImage = page.locator(`img:not(.icon)[alt="${builtIn.name}"]`).first();
         const iconImage = page.locator(`img.icon[alt="${builtIn.name}"]`).first();
