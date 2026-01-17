@@ -49,8 +49,8 @@ test.describe('Custom content preview', () => {
         });
 
         const img = preview.locator('img');
-        await expect(img).toBeVisible();
         await expect(fileInput).toHaveAttribute('data-processing', 'false');
+        await expect(img).toBeVisible();
         await expect.poll(async () => img.getAttribute('src')).toMatch(/^data:image\/jpeg;base64,/);
     });
 });
