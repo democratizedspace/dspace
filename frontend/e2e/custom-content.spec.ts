@@ -10,13 +10,6 @@ test.describe('Custom Content Management', () => {
     test.setTimeout(120000); // 2 minutes for end-to-end tests
     test.use({ serviceWorkers: 'block' });
 
-    // Test IDs for cleanup
-    const testIds = {
-        item: null as string | null,
-        process: null as string | null,
-        quest: null as string | null,
-    };
-
     // Use the imported clearUserData instead of redefining it
     test.beforeEach(async ({ page }) => {
         // Clear user data before each test

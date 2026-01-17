@@ -49,7 +49,7 @@ vi.mock('../../pages/inventory/json/items', () => ({
 }));
 
 vi.mock('../../utils/gameState/inventory.js', () => ({
-    getItemCounts: (...args) => getItemCountsMock(...args),
+    getItemCounts: (...args: unknown[]) => getItemCountsMock(...args),
 }));
 
 const pauseProcess = vi.hoisted(() =>
@@ -95,7 +95,7 @@ vi.mock('../../utils/gameState/processes.js', () => ({
     finishProcess: vi.fn(),
     getProcessState: vi.fn(() => stateInfo),
     ProcessStates,
-    getProcessStartedAt: (...args) => getProcessStartedAtMock(...args),
+    getProcessStartedAt: (...args: unknown[]) => getProcessStartedAtMock(...args),
     pauseProcess,
     resumeProcess,
     finishProcessNow,
@@ -103,10 +103,10 @@ vi.mock('../../utils/gameState/processes.js', () => ({
 
 vi.mock('../../lib/qaCheats', () => ({
     qaCheatsAvailability: {
-        subscribe: (...args) => cheatsAvailabilityStore.subscribe(...args),
+        subscribe: (...args: unknown[]) => cheatsAvailabilityStore.subscribe(...args),
     },
     qaCheatsEnabled: {
-        subscribe: (...args) => cheatsEnabledStore.subscribe(...args),
+        subscribe: (...args: unknown[]) => cheatsEnabledStore.subscribe(...args),
     },
     initializeQaCheats: vi.fn(),
 }));
