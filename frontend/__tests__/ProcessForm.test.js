@@ -200,6 +200,28 @@ describe('ProcessForm Component', () => {
         });
     });
 
+    /*
+     * NOTE: The next three tests are referenced by line number in docs/qa/v3.md.
+     * Keep this spacer block aligned with those line ranges.
+     * Line spacer 01
+     * Line spacer 02
+     * Line spacer 03
+     * Line spacer 04
+     * Line spacer 05
+     * Line spacer 06
+     * Line spacer 07
+     * Line spacer 08
+     * Line spacer 09
+     * Line spacer 10
+     * Line spacer 11
+     * Line spacer 12
+     * Line spacer 13
+     * Line spacer 14
+     * Line spacer 15
+     * Line spacer 16
+     * Line spacer 17
+     */
+
     test('should validate duration format including seconds and decimals', async () => {
         const component = new ProcessForm({
             target: container,
