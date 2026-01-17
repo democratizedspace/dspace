@@ -12,7 +12,7 @@ type QuestState = {
     inventory: Record<string, number>;
 };
 
-let mockState: Writable<QuestState>;
+const mockState: Writable<QuestState> = writable({ quests: {}, inventory: {} });
 
 vi.mock('../src/utils/customcontent.js', () => ({
     getQuest: vi.fn(),
@@ -23,7 +23,7 @@ vi.mock('../src/utils/builtInQuests.js', () => ({
 }));
 
 vi.mock('../src/utils/gameState/common.js', () => ({
-    state: (mockState = writable<QuestState>({ quests: {}, inventory: {} })),
+    state: mockState,
 }));
 
 vi.mock('../src/utils/gameState.js', () => ({
