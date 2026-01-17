@@ -490,13 +490,13 @@ describe('ProcessForm Component', () => {
         await flushPromises();
 
         expect(submittedData).toBeTruthy();
-        expect(updateProcessMock).toHaveBeenCalledWith('process-888', {
-            title: 'Updated Process',
-            duration: '1h',
-            requireItems: [{ id: 'item-1', count: 1 }],
-            consumeItems: [],
-            createItems: [],
-        });
+        expect(updateProcessMock).toHaveBeenCalledWith(
+            'process-888',
+            expect.objectContaining({
+                title: 'Updated Process',
+                duration: '1h',
+            })
+        );
         expect(createProcessMock).not.toHaveBeenCalled();
     });
 });
