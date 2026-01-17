@@ -28,17 +28,14 @@ function mockFileReader({ result = DEFAULT_DATA_URL, error = null } = {}) {
             this.result =
                 typeof result === 'function'
                     ? result(blob)
-                    : result ?? `data:${blob.type};base64,${Buffer.from('ok').toString('base64')}`;
+                    : (result ??
+                      `data:${blob.type};base64,${Buffer.from('ok').toString('base64')}`);
             this.onload?.();
         }
     };
 }
 
-function mockCanvas({
-    toBlobImpl,
-    toDataURLImpl,
-    withContext = true,
-} = {}) {
+function mockCanvas({ toBlobImpl, toDataURLImpl, withContext = true } = {}) {
     const context = withContext
         ? {
               fillStyle: '',
@@ -262,9 +259,7 @@ describe('downsampleAndCompressToJpeg', () => {
         const { downsampleAndCompressToJpeg } = require('../src/utils/imageDownsample.js');
         const file = new File(['demo'], 'demo.jpg', { type: 'image/jpeg' });
 
-        await expect(downsampleAndCompressToJpeg(file)).rejects.toThrow(
-            'Image failed to load.'
-        );
+        await expect(downsampleAndCompressToJpeg(file)).rejects.toThrow('Image failed to load.');
     });
 
     test('throws when compression yields no size steps', async () => {
@@ -294,9 +289,7 @@ describe('downsampleAndCompressToJpeg', () => {
         const { downsampleAndCompressToJpeg } = require('../src/utils/imageDownsample.js');
         const file = new File(['demo'], 'demo.jpg', { type: 'image/jpeg' });
 
-        await expect(downsampleAndCompressToJpeg(file)).rejects.toThrow(
-            'Unable to encode image.'
-        );
+        await expect(downsampleAndCompressToJpeg(file)).rejects.toThrow('Unable to encode image.');
     });
 
     test('throws when FileReader returns a non-string result', async () => {
