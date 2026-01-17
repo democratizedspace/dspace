@@ -285,9 +285,13 @@ test.describe('Custom Content Management', () => {
         await page.fill('#name', uniqueItemName);
         await page.fill('#description', 'Item used to validate custom process discovery');
 
-        await page.click('button.submit-button');
+        await Promise.all([
+            page.waitForURL((url) => !url.pathname.endsWith('/inventory/create'), {
+                timeout: 20000,
+            }),
+            page.click('button.submit-button'),
+        ]);
         await page.waitForLoadState('domcontentloaded');
-        await page.waitForURL(/\/inventory(\/item\/[0-9a-f-]+)?/, { timeout: 20000 });
         await waitForHydration(page);
 
         let itemId: string | null = null;
