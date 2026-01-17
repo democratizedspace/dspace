@@ -187,26 +187,23 @@
                 {#if status === 'ready' && preparedSummary}
                     <div class="prepared-preview">
                         <h3>Prepared content</h3>
-                        <div class="summary-list" role="list">
+                        <ul class="summary-list" role="list">
                             {#each preparedSummary.items as entry}
-                                <div class="summary-entry" role="listitem">
-                                    <span class="summary-label">{entry.kind}:</span>
-                                    <span class="summary-name">{entry.name}</span>
-                                </div>
+                                <li class="summary-entry" role="listitem">
+                                    {entry.kind}: {entry.name}
+                                </li>
                             {/each}
                             {#each preparedSummary.processes as entry}
-                                <div class="summary-entry" role="listitem">
-                                    <span class="summary-label">{entry.kind}:</span>
-                                    <span class="summary-name">{entry.name}</span>
-                                </div>
+                                <li class="summary-entry" role="listitem">
+                                    {entry.kind}: {entry.name}
+                                </li>
                             {/each}
                             {#each preparedSummary.quests as entry}
-                                <div class="summary-entry" role="listitem">
-                                    <span class="summary-label">{entry.kind}:</span>
-                                    <span class="summary-name">{entry.name}</span>
-                                </div>
+                                <li class="summary-entry" role="listitem">
+                                    {entry.kind}: {entry.name}
+                                </li>
                             {/each}
-                        </div>
+                        </ul>
                     </div>
                 {/if}
             </div>
@@ -275,8 +272,6 @@
     }
 
     .summary-entry {
-        display: flex;
-        gap: 0.35rem;
         font-weight: 600;
     }
 
@@ -284,6 +279,7 @@
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
+        list-style: none;
         margin: 0;
         padding: 0;
     }
