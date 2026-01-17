@@ -38,7 +38,8 @@
             .replace(/Quest record:\s*/i, 'Quest ')
             .replace(/Item:\s*/i, 'Item ')
             .replace(/Process:\s*/i, 'Process ')
-            .replace(/Quest:\s*/i, 'Quest ');
+            .replace(/Quest:\s*/i, 'Quest ')
+            .replace(/:\s*/g, ' ');
 
         return `Preparing ${normalized}`.replace(/\s+/g, ' ').trim();
     };
