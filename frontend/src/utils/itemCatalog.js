@@ -31,30 +31,24 @@ export async function getMergedItemCatalog({
     onError,
 } = {}) {
     try {
-        const { items: customItems, error: customItemsError } = await onBrowserAsync(
-            async () => {
-                try {
-                    const list = customItemsLoader
-                        ? await customItemsLoader()
-                        : await (async () => {
-                              const { db, ENTITY_TYPES } = await import('./customcontent.js');
-                              return db.list(ENTITY_TYPES.ITEM);
-                          })();
-                    return { items: Array.isArray(list) ? list : [], error: null };
-                } catch (error) {
-                    return { items: [], error };
+        const customItems = await onBrowserAsync(async () => {
+            try {
+                const list = customItemsLoader
+                    ? await customItemsLoader()
+                    : await (async () => {
+                          const { db, ENTITY_TYPES } = await import('./customcontent.js');
+                          return db.list(ENTITY_TYPES.ITEM);
+                      })();
+                return Array.isArray(list) ? list : [];
+            } catch (error) {
+                if (onError) {
+                    onError(error);
+                } else {
+                    console.warn('Failed to load custom items:', error);
                 }
-            },
-            { items: [], error: null }
-        );
-
-        if (customItemsError) {
-            if (onError) {
-                onError(customItemsError);
-            } else {
-                console.warn('Failed to load custom items:', customItemsError);
+                return [];
             }
-        }
+        }, []);
 
         return mergeItemLists(builtInItems, customItems);
     } catch (error) {
