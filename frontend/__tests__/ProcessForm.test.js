@@ -464,6 +464,39 @@ describe('ProcessForm Component', () => {
         expect(container.querySelector('.process-preview')).toBeFalsy();
     });
 
+    test('does not submit while a previous submission is in flight', async () => {
+        const component = new ProcessForm({
+            target: container,
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        component.$set({ requireItems: [{ id: 'item-1', count: 1 }] });
+
+        titleInput.value = 'In Flight Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '10m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        let resolveSave;
+        const savePromise = new Promise((resolve) => {
+            resolveSave = resolve;
+        });
+        mockDb.processes.add.mockImplementationOnce(() => savePromise);
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        expect(createProcessMock).toHaveBeenCalledTimes(1);
+
+        resolveSave('process-123');
+        await flushPromises();
+
+        expect(container.querySelector('.success-message')).toBeTruthy();
+    });
+
     test('item count inputs enforce minimum of 1', () => {
         new ProcessForm({
             target: container,
@@ -562,6 +595,29 @@ describe('ProcessForm Component', () => {
         expect(container.querySelectorAll('#required-items-section > .item-row')).toHaveLength(0);
         expect(container.querySelectorAll('#consumed-items-section > .item-row')).toHaveLength(0);
         expect(container.querySelectorAll('#created-items-section > .item-row')).toHaveLength(0);
+    });
+
+    test('normalizes edit data when item arrays are missing', async () => {
+        new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-321',
+                    title: 'Normalize Items',
+                    duration: '15m',
+                    requireItems: null,
+                    consumeItems: undefined,
+                    createItems: 'invalid',
+                },
+            },
+        });
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        expect(container.querySelector('#required-items-section .item-row')).toBeFalsy();
+        expect(container.querySelector('#consumed-items-section .item-row')).toBeFalsy();
+        expect(container.querySelector('#created-items-section .item-row')).toBeFalsy();
     });
 
     test('initializes form fields when editing a process', () => {
