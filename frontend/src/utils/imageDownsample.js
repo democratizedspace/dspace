@@ -27,7 +27,9 @@ function getSizeSteps(maxSize, minSize, sizeStep) {
 async function loadImageSource(file) {
     if (typeof createImageBitmap === 'function') {
         try {
-            const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
+            const bitmap = await createImageBitmap(file, {
+                imageOrientation: 'from-image',
+            });
             return {
                 source: bitmap,
                 width: bitmap.width,

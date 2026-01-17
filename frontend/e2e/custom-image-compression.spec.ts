@@ -16,53 +16,56 @@ async function generatePngDataUrl(
     dimensions: GeneratedImageDimensions,
     markerSize = 48
 ) {
-    return page.evaluate(async ({ seedValue, imageStyle, width, height, markerSize }) => {
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
+    return page.evaluate(
+        async ({ seedValue, imageStyle, width, height, markerSize }) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
 
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-            throw new Error('Canvas context unavailable');
-        }
-
-        if (imageStyle === 'solid') {
-            const hue = seedValue % 360;
-            ctx.fillStyle = `hsl(${hue}, 70%, 55%)`;
-            ctx.fillRect(0, 0, width, height);
-        } else {
-            const imageData = ctx.createImageData(width, height);
-            let state = seedValue;
-            const nextByte = () => {
-                state = (state * 1664525 + 1013904223) % 4294967296;
-                return state & 0xff;
-            };
-
-            for (let i = 0; i < imageData.data.length; i += 4) {
-                imageData.data[i] = nextByte();
-                imageData.data[i + 1] = nextByte();
-                imageData.data[i + 2] = nextByte();
-                imageData.data[i + 3] = 255;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+                throw new Error('Canvas context unavailable');
             }
 
-            ctx.putImageData(imageData, 0, 0);
-        }
-        const hue = (seedValue * 37) % 360;
-        ctx.fillStyle = `hsla(${hue}, 90%, 75%, 0.9)`;
-        const maxX = Math.max(0, width - markerSize);
-        const maxY = Math.max(0, height - markerSize);
-        const markerX = maxX > 0 ? (seedValue * 3) % maxX : 0;
-        const markerY = maxY > 0 ? (seedValue * 5) % maxY : 0;
-        ctx.fillRect(markerX, markerY, markerSize, markerSize);
+            if (imageStyle === 'solid') {
+                const hue = seedValue % 360;
+                ctx.fillStyle = `hsl(${hue}, 70%, 55%)`;
+                ctx.fillRect(0, 0, width, height);
+            } else {
+                const imageData = ctx.createImageData(width, height);
+                let state = seedValue;
+                const nextByte = () => {
+                    state = (state * 1664525 + 1013904223) % 4294967296;
+                    return state & 0xff;
+                };
 
-        return canvas.toDataURL('image/png');
-    }, {
-        seedValue: seed,
-        imageStyle: style,
-        width: dimensions.width,
-        height: dimensions.height,
-        markerSize,
-    });
+                for (let i = 0; i < imageData.data.length; i += 4) {
+                    imageData.data[i] = nextByte();
+                    imageData.data[i + 1] = nextByte();
+                    imageData.data[i + 2] = nextByte();
+                    imageData.data[i + 3] = 255;
+                }
+
+                ctx.putImageData(imageData, 0, 0);
+            }
+            const hue = (seedValue * 37) % 360;
+            ctx.fillStyle = `hsla(${hue}, 90%, 75%, 0.9)`;
+            const maxX = Math.max(0, width - markerSize);
+            const maxY = Math.max(0, height - markerSize);
+            const markerX = maxX > 0 ? (seedValue * 3) % maxX : 0;
+            const markerY = maxY > 0 ? (seedValue * 5) % maxY : 0;
+            ctx.fillRect(markerX, markerY, markerSize, markerSize);
+
+            return canvas.toDataURL('image/png');
+        },
+        {
+            seedValue: seed,
+            imageStyle: style,
+            width: dimensions.width,
+            height: dimensions.height,
+            markerSize,
+        }
+    );
 }
 
 async function uploadGeneratedImage(
