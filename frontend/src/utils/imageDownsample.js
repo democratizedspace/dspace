@@ -35,13 +35,8 @@ async function loadImageSource(file) {
                 cleanup: () => bitmap.close?.(),
             };
         } catch {
-            const bitmap = await createImageBitmap(file);
-            return {
-                source: bitmap,
-                width: bitmap.width,
-                height: bitmap.height,
-                cleanup: () => bitmap.close?.(),
-            };
+            // Fall through to <img> decoding to preserve EXIF orientation when
+            // createImageBitmap does not support the imageOrientation option.
         }
     }
 
@@ -98,7 +93,10 @@ function dataUrlToBlob(dataUrl) {
     }
     const mimeMatch = header.match(/data:([^;]+);base64/);
     const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
-    const binary = atob(data);
+    const binary =
+        typeof atob === 'function'
+            ? atob(data)
+            : Buffer.from(data, 'base64').toString('binary');
     const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i += 1) {
         bytes[i] = binary.charCodeAt(i);
