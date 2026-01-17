@@ -1,5 +1,25 @@
 import { test, expect } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
+
+async function createTestPngBuffer(page: Page) {
+    const dataUrl = await page.evaluate(() => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 32;
+        canvas.height = 32;
+        const context = canvas.getContext('2d');
+        if (!context) {
+            throw new Error('Canvas context unavailable');
+        }
+        context.fillStyle = '#3b82f6';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = '#f97316';
+        context.fillRect(8, 8, 16, 16);
+        return canvas.toDataURL('image/png');
+    });
+    const base64Payload = dataUrl.split(',')[1] ?? '';
+    return Buffer.from(base64Payload, 'base64');
+}
 
 test.describe('Custom content preview', () => {
     test.beforeEach(async ({ page }) => {
@@ -20,16 +40,17 @@ test.describe('Custom content preview', () => {
         await expect(preview).toContainText('Preview Item');
         await expect(preview).toContainText('Preview item description');
 
-        const fileInput = page.locator('input[type="file"]');
+        const fileInput = page.getByTestId('image-file-input');
+        const buffer = await createTestPngBuffer(page);
         await fileInput.setInputFiles({
             name: 'test.png',
             mimeType: 'image/png',
-            buffer: Buffer.from('fake'),
+            buffer,
         });
 
         const img = preview.locator('img');
         await expect(img).toBeVisible();
-        const src = await img.getAttribute('src');
-        expect(src).toContain('data:');
+        await expect(fileInput).toHaveAttribute('data-processing', 'false');
+        await expect.poll(async () => img.getAttribute('src')).toMatch(/^data:image\/jpeg;base64,/);
     });
 });
