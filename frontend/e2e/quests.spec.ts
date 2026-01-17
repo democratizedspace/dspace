@@ -1,7 +1,27 @@
 import { test, expect } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { purgeClientState, waitForHydration, waitForQuestRecordByTitle } from './test-helpers';
 
 const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+async function createTestPngBuffer(page: Page) {
+    const dataUrl = await page.evaluate(() => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 32;
+        canvas.height = 32;
+        const context = canvas.getContext('2d');
+        if (!context) {
+            throw new Error('Canvas context unavailable');
+        }
+        context.fillStyle = '#38bdf8';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = '#f97316';
+        context.fillRect(4, 4, 24, 24);
+        return canvas.toDataURL('image/png');
+    });
+    const base64Payload = dataUrl.split(',')[1] ?? '';
+    return Buffer.from(base64Payload, 'base64');
+}
 
 test.describe('Quest creation flow', () => {
     test.beforeEach(async ({ page }) => {
@@ -21,12 +41,19 @@ test.describe('Quest creation flow', () => {
             .fill(`${questDescription} Ensures stability during CI runs.`);
         await page.getByLabel('NPC Identifier*').fill('/assets/npc/dChat.jpg');
 
-        await page.locator('#image').setInputFiles({
+        const fileInput = page.getByTestId('image-file-input');
+        const buffer = await createTestPngBuffer(page);
+        await fileInput.setInputFiles({
             name: 'quest-e2e.png',
             mimeType: 'image/png',
-            buffer: Buffer.from('89504e470d0a1a0a', 'hex'),
+            buffer,
         });
-        await expect(page.locator('.image-preview')).toBeVisible();
+        const previewImage = page.locator('.image-preview');
+        await expect(fileInput).toHaveAttribute('data-processing', 'false');
+        await expect(previewImage).toBeVisible();
+        await expect
+            .poll(async () => previewImage.getAttribute('src'))
+            .toMatch(/^data:image\/jpeg;base64,/);
 
         await page.getByLabel('New node ID').fill('start');
         await page.getByLabel('Node text').fill('Welcome to the automated quest!');
