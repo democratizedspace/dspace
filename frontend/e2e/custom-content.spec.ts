@@ -1,3 +1,6 @@
+import { promises as fs } from 'fs';
+import os from 'os';
+import path from 'path';
 import { test, expect, Page } from '@playwright/test';
 import {
     clearUserData,
@@ -6,16 +9,10 @@ import {
     ItemSelectorHelper,
 } from './test-helpers';
 
-const inlineItemImagePayloads = [
-    {
-        name: 'custom-item.png',
-        mimeType: 'image/png',
-        buffer: Buffer.from(
-            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/woAAgIBJ3QpJ8gAAAAASUVORK5CYII=',
-            'base64'
-        ),
-    },
-];
+const inlineItemImageBuffer = Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/woAAgIBJ3QpJ8gAAAAASUVORK5CYII=',
+    'base64'
+);
 
 test.describe('Custom Content Management', () => {
     test.setTimeout(120000); // 2 minutes for end-to-end tests
@@ -91,7 +88,10 @@ test.describe('Custom Content Management', () => {
     async function uploadItemImage(page: Page): Promise<void> {
         const imageInput = page.locator('#image');
         if ((await imageInput.count()) > 0) {
-            await imageInput.setInputFiles(inlineItemImagePayloads);
+            const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'dspace-e2e-'));
+            const imagePath = path.join(tempDir, 'custom-item.png');
+            await fs.writeFile(imagePath, inlineItemImageBuffer);
+            await imageInput.setInputFiles(imagePath);
         }
     }
 
