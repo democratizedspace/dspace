@@ -1,3 +1,5 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { test, expect, Page } from '@playwright/test';
 import {
     clearUserData,
@@ -77,7 +79,13 @@ test.describe('Custom Content Management', () => {
         }
     }
 
-    const itemImagePath = 'frontend/public/assets/220_ohm_resistor.jpg';
+    const itemImagePath = path.resolve(
+        path.dirname(fileURLToPath(import.meta.url)),
+        '..',
+        'public',
+        'assets',
+        '220_ohm_resistor.jpg'
+    );
 
     async function uploadItemImage(page: Page): Promise<void> {
         const imageInput = page.locator('#image');
