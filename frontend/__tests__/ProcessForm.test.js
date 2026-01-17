@@ -478,6 +478,92 @@ describe('ProcessForm Component', () => {
         expect(countInput.getAttribute('min')).toBe('1');
     });
 
+    test('updates item IDs from selector events before submitting', async () => {
+        new ProcessForm({
+            target: container,
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Selector Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        const addButtons = container.querySelectorAll('.add-button');
+        addButtons[0].click();
+        addButtons[1].click();
+        addButtons[2].click();
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const requiredRow = container.querySelector('#required-items-section > .item-row');
+        const consumedRow = container.querySelector('#consumed-items-section > .item-row');
+        const createdRow = container.querySelector('#created-items-section > .item-row');
+
+        requiredRow
+            .querySelector('.item-selector')
+            .dispatchEvent(new CustomEvent('select', { detail: { itemId: 'item-1' } }));
+        consumedRow
+            .querySelector('.item-selector')
+            .dispatchEvent(new CustomEvent('select', { detail: { itemId: 'item-2' } }));
+        createdRow
+            .querySelector('.item-selector')
+            .dispatchEvent(new CustomEvent('select', { detail: { itemId: 'item-3' } }));
+
+        const requiredCount = requiredRow.querySelector('input[type="number"]');
+        const consumedCount = consumedRow.querySelector('input[type="number"]');
+        const createdCount = createdRow.querySelector('input[type="number"]');
+
+        requiredCount.value = '2';
+        requiredCount.dispatchEvent(new Event('input'));
+        consumedCount.value = '1';
+        consumedCount.dispatchEvent(new Event('input'));
+        createdCount.value = '3';
+        createdCount.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(createProcessMock).toHaveBeenCalledWith(
+            'Selector Process',
+            '1h',
+            [{ id: 'item-1', count: 2 }],
+            [{ id: 'item-2', count: 1 }],
+            [{ id: 'item-3', count: 3 }]
+        );
+    });
+
+    test('removes item rows when remove buttons are clicked', async () => {
+        new ProcessForm({
+            target: container,
+        });
+
+        const addButtons = container.querySelectorAll('.add-button');
+        addButtons[0].click();
+        addButtons[1].click();
+        addButtons[2].click();
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const requiredRow = container.querySelector('#required-items-section > .item-row');
+        const consumedRow = container.querySelector('#consumed-items-section > .item-row');
+        const createdRow = container.querySelector('#created-items-section > .item-row');
+
+        requiredRow.querySelector('.remove-button').click();
+        consumedRow.querySelector('.remove-button').click();
+        createdRow.querySelector('.remove-button').click();
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        expect(container.querySelectorAll('#required-items-section > .item-row')).toHaveLength(0);
+        expect(container.querySelectorAll('#consumed-items-section > .item-row')).toHaveLength(0);
+        expect(container.querySelectorAll('#created-items-section > .item-row')).toHaveLength(0);
+    });
+
     test('initializes form fields when editing a process', () => {
         new ProcessForm({
             target: container,
