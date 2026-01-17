@@ -15,7 +15,9 @@ type Store<T> = {
     update: (updater: (value: T) => T) => void;
 };
 
-const { mockState } = vi.hoisted(() => {
+let mockState: Store<QuestState>;
+
+vi.hoisted(() => {
     const createStore = <T,>(initial: T): Store<T> => {
         let value = initial;
         const subscribers = new Set<(current: T) => void>();
@@ -34,9 +36,7 @@ const { mockState } = vi.hoisted(() => {
         return { subscribe, set, update };
     };
 
-    return {
-        mockState: createStore<QuestState>({ quests: {}, inventory: {} }),
-    };
+    mockState = createStore<QuestState>({ quests: {}, inventory: {} });
 });
 
 vi.mock('../src/utils/customcontent.js', () => ({
