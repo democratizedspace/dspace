@@ -925,4 +925,62 @@ describe('ProcessForm Component', () => {
             'Failed to save process. Please try again.'
         );
     });
+
+    test('defaults missing item counts to 1 when initializing edit data', async () => {
+        new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-321',
+                    title: 'Count Defaults',
+                    duration: '15m',
+                    requireItems: [{ id: 'item-1' }],
+                    consumeItems: [{ id: 'item-2', count: null }],
+                    createItems: [{ id: 'item-3' }],
+                },
+            },
+        });
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const requiredCount = container.querySelector(
+            '#required-items-section input[type="number"]'
+        );
+        const consumedCount = container.querySelector(
+            '#consumed-items-section input[type="number"]'
+        );
+        const createdCount = container.querySelector(
+            '#created-items-section input[type="number"]'
+        );
+
+        expect(requiredCount.value).toBe('1');
+        expect(consumedCount.value).toBe('1');
+        expect(createdCount.value).toBe('1');
+    });
+
+    test('shows update button text in edit mode', () => {
+        new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-456',
+                    title: 'Edit Button',
+                    duration: '10m',
+                    requireItems: [{ id: 'item-1', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        return new Promise((resolve) => {
+            requestAnimationFrame(() => {
+                const submitButton = container.querySelector('.submit-button');
+                expect(submitButton.textContent).toContain('Update Process');
+                resolve();
+            });
+        });
+    });
 });
