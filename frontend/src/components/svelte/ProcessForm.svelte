@@ -2,7 +2,8 @@
     import { createEventDispatcher, onMount } from 'svelte';
     import ItemSelector from './ItemSelector.svelte';
     import ProcessPreview from './ProcessPreview.svelte';
-    import items from '../../pages/inventory/json/items';
+    import builtInItems from '../../pages/inventory/json/items';
+    import { getMergedItemCatalog } from '../../utils/itemCatalog.js';
     import { durationInSeconds, prettyPrintDuration } from '../../utils.js';
     import { createProcess, updateProcess } from '../../utils/customcontent.js';
     import { validateProcessData } from '../../utils/customProcessValidation.js';
@@ -25,11 +26,13 @@
     let isSubmitting = false;
     let hasInitialized = false;
     let initializedProcessId = null;
+    let items = builtInItems;
 
     const dispatch = createEventDispatcher();
 
-    onMount(() => {
+    onMount(async () => {
         isClientSide = true;
+        items = await getMergedItemCatalog({ builtInItems });
     });
 
     const normalizeItemList = (itemsToNormalize) =>

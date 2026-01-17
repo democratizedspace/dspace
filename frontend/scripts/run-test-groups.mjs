@@ -118,7 +118,11 @@ const TEST_GROUPS = [
     },
     {
         name: 'Process Tests',
-        files: ['process-creation.spec.ts', 'custom-content.spec.ts'],
+        files: [
+            'process-creation.spec.ts',
+            'process-custom-item-selector.spec.ts',
+            'custom-content.spec.ts',
+        ],
         grep: 'create a custom process',
         parallel: true,
         workers: 2,

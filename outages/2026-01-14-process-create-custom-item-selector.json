@@ -1,0 +1,14 @@
+{
+  "id": "OUT-2026-01-14-process-create-custom-item-selector",
+  "date": "2026-01-14",
+  "component": "frontend/processes",
+  "rootCause": "The process creation item selectors sourced only the built-in item JSON instead of the merged built-in plus custom IndexedDB catalog used by inventory.",
+  "resolution": "Process creation now loads the shared merged item catalog so custom items appear in required/consumed/created selectors, with regression tests covering the merge and UI search.",
+  "references": [
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/src/pages/inventory/Inventory.svelte",
+    "frontend/src/utils/itemCatalog.js",
+    "frontend/e2e/process-custom-item-selector.spec.ts",
+    "frontend/__tests__/itemCatalog.test.js"
+  ]
+}

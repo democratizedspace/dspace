@@ -1,11 +1,17 @@
 import ProcessForm from '../src/components/svelte/ProcessForm.svelte';
 
-// Mock the item registry import
-jest.mock('../src/pages/inventory/json/items', () => [
+const mockedItems = [
     { id: 'item-1', name: 'Test Item 1', description: 'Description 1' },
     { id: 'item-2', name: 'Test Item 2', description: 'Description 2' },
     { id: 'item-3', name: 'Test Item 3', description: 'Description 3' },
-]);
+];
+
+// Mock the item registry import
+jest.mock('../src/pages/inventory/json/items', () => mockedItems);
+
+jest.mock('../src/utils/itemCatalog.js', () => ({
+    getMergedItemCatalog: jest.fn().mockResolvedValue(mockedItems),
+}));
 
 const mockDb = {
     processes: {
