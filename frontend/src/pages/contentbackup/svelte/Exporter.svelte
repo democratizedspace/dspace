@@ -10,7 +10,6 @@
     let backupBlob = null;
     let backupFilename = '';
     let preparedSummary = null;
-    let preparedSummaryText = '';
 
     const updateAssets = (assetId, updates) => {
         assets = assets.map((asset) =>
@@ -45,19 +44,6 @@
         return `Preparing ${normalized}`.replace(/\s+/g, ' ').trim();
     };
 
-    const buildPreparedSummaryText = (summary) => {
-        if (!summary) {
-            return '';
-        }
-
-        const entries = [
-            ...summary.items.map((entry) => `${entry.kind}: ${entry.name}`),
-            ...summary.processes.map((entry) => `${entry.kind}: ${entry.name}`),
-            ...summary.quests.map((entry) => `${entry.kind}: ${entry.name}`),
-        ];
-
-        return entries.join(' • ');
-    };
     const handlePrepareBackup = async () => {
         if (isPreparing) {
             return;
@@ -70,7 +56,6 @@
         backupBlob = null;
         backupFilename = '';
         preparedSummary = null;
-        preparedSummaryText = '';
         assets = [];
 
         await tick();
@@ -109,7 +94,6 @@
                 ),
                 quests: result.data.quests.map((quest) => buildSummaryEntry('Quest', quest)),
             };
-            preparedSummaryText = buildPreparedSummaryText(preparedSummary);
             assets = [];
             status = 'ready';
         } catch (error) {
@@ -203,16 +187,15 @@
                 {#if status === 'ready' && preparedSummary}
                     <div class="prepared-preview">
                         <h3>Prepared content</h3>
-                        <p class="prepared-summary-text">{preparedSummaryText}</p>
                         <ul>
                             {#each preparedSummary.items as entry}
-                                <li class="summary-entry">{entry.kind} — {entry.name}</li>
+                                <li class="summary-entry">{entry.kind}: {entry.name}</li>
                             {/each}
                             {#each preparedSummary.processes as entry}
-                                <li class="summary-entry">{entry.kind} — {entry.name}</li>
+                                <li class="summary-entry">{entry.kind}: {entry.name}</li>
                             {/each}
                             {#each preparedSummary.quests as entry}
-                                <li class="summary-entry">{entry.kind} — {entry.name}</li>
+                                <li class="summary-entry">{entry.kind}: {entry.name}</li>
                             {/each}
                         </ul>
                     </div>
@@ -280,10 +263,6 @@
     .prepared-preview h3 {
         margin: 0 0 0.5rem;
         font-size: 0.95rem;
-    }
-
-    .prepared-summary-text {
-        margin: 0 0 0.5rem;
     }
 
     .prepared-preview ul {
