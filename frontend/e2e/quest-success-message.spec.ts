@@ -38,9 +38,9 @@ test('quest creation shows accessible success message with quest link', async ({
     });
 
     const previewImage = page.getByTestId('image-preview');
-    await expect(fileInput).toHaveAttribute('data-processing', 'false');
-    await expect(previewImage).toBeVisible();
     await expect(previewImage).toHaveAttribute('src', /^data:image\/jpeg;base64,/);
+    await expect(previewImage).toBeVisible();
+    await expect(fileInput).toHaveAttribute('data-processing', 'false');
 
     await page.getByRole('button', { name: 'Create Quest' }).click();
 

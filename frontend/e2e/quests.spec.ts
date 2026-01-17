@@ -49,9 +49,9 @@ test.describe('Quest creation flow', () => {
             buffer,
         });
         const previewImage = page.getByTestId('image-preview');
-        await expect(fileInput).toHaveAttribute('data-processing', 'false');
-        await expect(previewImage).toBeVisible();
         await expect(previewImage).toHaveAttribute('src', /^data:image\/jpeg;base64,/);
+        await expect(previewImage).toBeVisible();
+        await expect(fileInput).toHaveAttribute('data-processing', 'false');
 
         await page.getByLabel('New node ID').fill('start');
         await page.getByLabel('Node text').fill('Welcome to the automated quest!');

@@ -95,8 +95,14 @@ function dataUrlToBlob(dataUrl) {
     }
     const mimeMatch = header.match(/data:([^;]+);base64/);
     const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
-    const binary =
-        typeof atob === 'function' ? atob(data) : Buffer.from(data, 'base64').toString('binary');
+    let binary;
+    if (typeof atob === 'function') {
+        binary = atob(data);
+    } else if (typeof Buffer !== 'undefined') {
+        binary = Buffer.from(data, 'base64').toString('binary');
+    } else {
+        throw new Error('Base64 decoding is not available in this environment.');
+    }
     const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i += 1) {
         bytes[i] = binary.charCodeAt(i);
