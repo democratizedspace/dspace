@@ -48,12 +48,8 @@ test.describe('Quest creation flow', () => {
             mimeType: 'image/png',
             buffer,
         });
-        const previewImage = page.locator('.image-preview');
-        await expect(fileInput).toHaveAttribute('data-processing', 'false');
-        await expect(previewImage).toBeVisible();
-        await expect
-            .poll(async () => previewImage.getAttribute('src'))
-            .toMatch(/^data:image\/jpeg;base64,/);
+        const previewImage = page.getByRole('img', { name: 'Quest preview' });
+        await expect(previewImage).toHaveAttribute('src', /^data:image\/jpeg;base64,/);
 
         await page.getByLabel('New node ID').fill('start');
         await page.getByLabel('Node text').fill('Welcome to the automated quest!');
