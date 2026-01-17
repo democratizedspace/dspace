@@ -950,9 +950,7 @@ describe('ProcessForm Component', () => {
         const consumedCount = container.querySelector(
             '#consumed-items-section input[type="number"]'
         );
-        const createdCount = container.querySelector(
-            '#created-items-section input[type="number"]'
-        );
+        const createdCount = container.querySelector('#created-items-section input[type="number"]');
 
         expect(requiredCount.value).toBe('1');
         expect(consumedCount.value).toBe('1');
