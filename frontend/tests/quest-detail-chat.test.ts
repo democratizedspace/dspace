@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
 import type { Writable } from 'svelte/store';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -87,19 +86,19 @@ describe('QuestDetail', () => {
         render(QuestDetail, { props: { questId: customQuest.id } });
 
         await waitFor(() => {
-            expect(screen.getByTestId('chat-panel')).toBeInTheDocument();
+            expect(screen.getByTestId('chat-panel')).not.toBeNull();
         });
 
         await waitFor(() => {
-            expect(screen.getByText('Hello from the custom quest!')).toBeInTheDocument();
-            expect(screen.getByText('Continue')).toBeInTheDocument();
+            expect(screen.getByText('Hello from the custom quest!')).not.toBeNull();
+            expect(screen.getByText('Continue')).not.toBeNull();
         });
 
         const continueButton = screen.getByRole('button', { name: 'Continue' });
         await fireEvent.click(continueButton);
 
         await waitFor(() => {
-            expect(screen.getByText('Second node reached.')).toBeInTheDocument();
+            expect(screen.getByText('Second node reached.')).not.toBeNull();
         });
     });
 
@@ -121,8 +120,8 @@ describe('QuestDetail', () => {
         render(QuestDetail, { props: { questId: customQuest.id } });
 
         await waitFor(() => {
-            expect(screen.getByText('This custom quest ends immediately.')).toBeInTheDocument();
-            expect(screen.getByRole('button', { name: 'Finish quest' })).toBeInTheDocument();
+            expect(screen.getByText('This custom quest ends immediately.')).not.toBeNull();
+            expect(screen.getByRole('button', { name: 'Finish quest' })).not.toBeNull();
         });
     });
 });
