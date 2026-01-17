@@ -16,6 +16,27 @@ const DEFAULT_MAX_LOG_ATTEMPTS = 4;
 const DEFAULT_MAX_DURATION_MS = 10_000;
 const UUID_FALLBACK_TEMPLATE = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
 type CryptoLike = { randomUUID?: () => string };
+type IndexedDbDatabase = {
+    objectStoreNames: { contains: (name: string) => boolean } & Iterable<string>;
+    createObjectStore: (name: string, options?: { keyPath?: string }) => void;
+    transaction: (
+        storeNames: string | string[],
+        mode: 'readonly' | 'readwrite'
+    ) => {
+        objectStore: (name: string) => {
+            clear: () => void;
+            put: (value: unknown) => void;
+            getAll: () => {
+                onsuccess: (() => void) | null;
+                onerror: (() => void) | null;
+                result?: unknown;
+            };
+        };
+        oncomplete: (() => void) | null;
+        onerror: (() => void) | null;
+    };
+    close: () => void;
+};
 
 function generateUuidFallback(): string {
     return UUID_FALLBACK_TEMPLATE.replace(/[xy]/g, (character) => {
@@ -267,10 +288,10 @@ export async function seedCustomQuest(page: Page, quest: Record<string, unknown>
                 createdAt: questData.createdAt ?? new Date().toISOString(),
             };
 
-            const db = await new Promise<any>((resolve, reject) => {
+            const db = (await new Promise<unknown>((resolve, reject) => {
                 const request = indexedDB.open(databaseName, databaseVersion);
                 request.onupgradeneeded = () => {
-                    const upgradeDb = request.result;
+                    const upgradeDb = request.result as IndexedDbDatabase;
                     if (!upgradeDb.objectStoreNames.contains('meta')) {
                         upgradeDb.createObjectStore('meta');
                     }
@@ -286,7 +307,7 @@ export async function seedCustomQuest(page: Page, quest: Record<string, unknown>
                 };
                 request.onsuccess = () => resolve(request.result);
                 request.onerror = () => reject(request.error);
-            });
+            })) as IndexedDbDatabase;
 
             await new Promise<void>((resolve, reject) => {
                 const tx = db.transaction('quests', 'readwrite');
@@ -313,11 +334,11 @@ export async function waitForQuestRecordByTitle(
     const resultHandle = await page.waitForFunction(
         async ({ questTitle }) => {
             const openRequest = indexedDB.open('CustomContent');
-            const db = await new Promise<any>((resolve, reject) => {
+            const db = (await new Promise<unknown>((resolve, reject) => {
                 openRequest.onsuccess = () => resolve(openRequest.result);
                 openRequest.onerror = () => reject(openRequest.error);
                 openRequest.onupgradeneeded = () => resolve(openRequest.result);
-            });
+            })) as IndexedDbDatabase;
 
             try {
                 if (!db.objectStoreNames.contains('quests')) {
@@ -366,11 +387,11 @@ export async function waitForQuestRecordByTitle(
 async function customQuestExists(page: Page, questTitle: string): Promise<boolean> {
     return page.evaluate(async (title) => {
         const openRequest = indexedDB.open('CustomContent');
-        const db = await new Promise<any>((resolve, reject) => {
+        const db = (await new Promise<unknown>((resolve, reject) => {
             openRequest.onsuccess = () => resolve(openRequest.result);
             openRequest.onerror = () => reject(openRequest.error);
             openRequest.onupgradeneeded = () => resolve(openRequest.result);
-        });
+        })) as IndexedDbDatabase;
 
         try {
             if (!db.objectStoreNames.contains('quests')) {
