@@ -907,7 +907,12 @@
         {/if}
         {#if previewUrl}
             <div class="image-preview-container">
-                <img src={previewUrl} class="image-preview" alt="Quest preview" />
+                <img
+                    src={previewUrl}
+                    class="image-preview"
+                    alt="Quest preview"
+                    data-testid="image-preview"
+                />
             </div>
         {/if}
     </div>

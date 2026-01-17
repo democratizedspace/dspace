@@ -79,7 +79,7 @@ async function uploadGeneratedImage(
     const base64Payload = dataUrl.split(',')[1] ?? '';
     const buffer = Buffer.from(base64Payload, 'base64');
 
-    const preview = page.locator('.image-preview');
+    const preview = page.getByTestId('image-preview');
     const previousPreviewSrc =
         (await preview.count()) > 0 ? await preview.getAttribute('src') : null;
 

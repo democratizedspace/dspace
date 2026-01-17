@@ -48,7 +48,7 @@ test.describe('Quest creation flow', () => {
             mimeType: 'image/png',
             buffer,
         });
-        const previewImage = page.getByRole('img', { name: 'Quest preview' });
+        const previewImage = page.getByTestId('image-preview');
         await expect(fileInput).toHaveAttribute('data-processing', 'false');
         await expect(previewImage).toBeVisible();
         await expect(previewImage).toHaveAttribute('src', /^data:image\/jpeg;base64,/);
