@@ -278,12 +278,16 @@ test.describe('Custom Content Management', () => {
         await page.fill('#name', uniqueItemName);
         await page.fill('#description', 'Item used to validate custom process discovery');
 
-        await Promise.all([
-            page.waitForURL((url) => !url.pathname.endsWith('/inventory/create'), {
+        const submitItemButton = page
+            .locator('button.submit-button, button[type="submit"], input[type="submit"]')
+            .first();
+        const itemNavigationPromise = page
+            .waitForURL((url) => !url.pathname.endsWith('/inventory/create'), {
                 timeout: 20000,
-            }),
-            page.click('button.submit-button'),
-        ]);
+            })
+            .catch(() => null);
+        await submitItemButton.click();
+        await itemNavigationPromise;
         await page.waitForLoadState('domcontentloaded');
         await waitForHydration(page);
 
@@ -295,11 +299,7 @@ test.describe('Custom Content Management', () => {
             await expect
                 .poll(
                     async () => {
-                        if (
-                            page.isClosed() ||
-                            page.url().includes('/inventory/create') ||
-                            page.url().endsWith('/inventory/create')
-                        ) {
+                        if (page.isClosed()) {
                             return null;
                         }
                         itemId = await findCustomItemIdByName(page, uniqueItemName);
@@ -355,26 +355,23 @@ test.describe('Custom Content Management', () => {
                 'button.submit-button, button[type="submit"], input[type="submit"], button:has-text("Create"), button:has-text("Save")'
             )
             .first();
-        await Promise.all([
-            page.waitForURL(
+        const processNavigationPromise = page
+            .waitForURL(
                 (url) =>
                     url.pathname.startsWith('/processes') &&
                     !url.pathname.endsWith('/processes/create'),
                 { timeout: 15000 }
-            ),
-            submitProcessButton.click(),
-        ]);
+            )
+            .catch(() => null);
+        await submitProcessButton.click();
+        await processNavigationPromise;
         await page.waitForLoadState('networkidle', { timeout: 10000 });
         await waitForHydration(page);
 
         await expect
             .poll(
                 async () => {
-                    if (
-                        page.isClosed() ||
-                        page.url().includes('/processes/create') ||
-                        page.url().endsWith('/processes/create')
-                    ) {
+                    if (page.isClosed()) {
                         return null;
                     }
                     return findCustomProcessIdByTitle(page, processTitle);
