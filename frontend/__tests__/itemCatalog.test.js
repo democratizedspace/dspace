@@ -2,9 +2,7 @@ import { filterItemsByQuery, mergeItemLists } from '../src/utils/itemCatalog.js'
 
 describe('itemCatalog utilities', () => {
     test('merges built-in and custom items and finds custom entries by name', () => {
-        const builtInItems = [
-            { id: 'built-1', name: 'Solar Panel', description: 'Power' },
-        ];
+        const builtInItems = [{ id: 'built-1', name: 'Solar Panel', description: 'Power' }];
         const customItems = [
             { id: 'custom-1', name: 'Backflip Device', description: 'Does flips' },
         ];
