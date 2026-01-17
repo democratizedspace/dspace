@@ -95,7 +95,7 @@ describe('QuestDetail', () => {
         });
     });
 
-    it('renders an error when dialogue is missing', async () => {
+    it('renders default dialogue when dialogue is missing', async () => {
         const customQuest = {
             id: 'custom-quest-no-dialogue',
             title: 'Custom Quest Without Dialogue',
@@ -113,10 +113,8 @@ describe('QuestDetail', () => {
         render(QuestDetail, { props: { questId: customQuest.id } });
 
         await waitFor(() => {
-            expect(screen.getByText('Quest dialogue missing')).toBeInTheDocument();
-            expect(
-                screen.getByText('This quest does not have dialogue to display.')
-            ).toBeInTheDocument();
+            expect(screen.getByText('This custom quest ends immediately.')).toBeInTheDocument();
+            expect(screen.getByRole('button', { name: 'Finish quest' })).toBeInTheDocument();
         });
     });
 });
