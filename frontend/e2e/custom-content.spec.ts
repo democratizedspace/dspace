@@ -1,4 +1,3 @@
-import path from 'node:path';
 import { test, expect, Page } from '@playwright/test';
 import {
     clearUserData,
@@ -78,21 +77,16 @@ test.describe('Custom Content Management', () => {
         }
     }
 
-    const repoRoot = process.cwd().endsWith(`${path.sep}frontend`)
-        ? path.resolve(process.cwd(), '..')
-        : process.cwd();
-    const itemImagePath = path.resolve(
-        repoRoot,
-        'frontend',
-        'public',
-        'assets',
-        '220_ohm_resistor.jpg'
-    );
-
     async function uploadItemImage(page: Page): Promise<void> {
         const imageInput = page.locator('#image');
         if ((await imageInput.count()) > 0) {
-            await imageInput.setInputFiles(itemImagePath);
+            const pngBase64 =
+                'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/woAAgIBJ3QpJ8gAAAAASUVORK5CYII=';
+            await imageInput.setInputFiles({
+                name: 'custom-item.png',
+                mimeType: 'image/png',
+                buffer: Buffer.from(pngBase64, 'base64'),
+            });
         }
     }
 
