@@ -1,23 +1,18 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
-import { writable, type Writable } from 'svelte/store';
+import type { Writable } from 'svelte/store';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import QuestDetail from '../src/pages/quests/svelte/QuestDetail.svelte';
 import { getQuest } from '../src/utils/customcontent.js';
 import { getBuiltInQuest } from '../src/utils/builtInQuests.js';
+import { state as gameState } from '../src/utils/gameState/common.js';
 
 type QuestState = {
     quests: Record<string, { stepId: string }>;
     inventory: Record<string, number>;
 };
 
-let mockState: Writable<QuestState>;
-let mockReady: Promise<void>;
-
-vi.hoisted(() => {
-    mockState = writable<QuestState>({ quests: {}, inventory: {} });
-    mockReady = Promise.resolve();
-});
+const mockState = gameState as Writable<QuestState>;
 
 vi.mock('../src/utils/customcontent.js', () => ({
     getQuest: vi.fn(),
@@ -27,27 +22,34 @@ vi.mock('../src/utils/builtInQuests.js', () => ({
     getBuiltInQuest: vi.fn(),
 }));
 
-vi.mock('../src/utils/gameState/common.js', () => ({
-    state: mockState,
-    ready: mockReady,
-    isGameStateReady: () => true,
-}));
+vi.mock('../src/utils/gameState/common.js', async () => {
+    const { writable } = await import('svelte/store');
+    const state = writable<QuestState>({ quests: {}, inventory: {} });
+    return {
+        state,
+        ready: Promise.resolve(),
+        isGameStateReady: () => true,
+    };
+});
 
-vi.mock('../src/utils/gameState.js', () => ({
-    questFinished: vi.fn(() => false),
-    setCurrentDialogueStep: vi.fn((questId: string, stepId: string) => {
-        mockState.update((current: QuestState) => ({
-            ...current,
-            quests: {
-                ...current.quests,
-                [questId]: { stepId },
-            },
-        }));
-    }),
-    finishQuest: vi.fn(),
-    grantItems: vi.fn(),
-    getItemsGranted: vi.fn(() => false),
-}));
+vi.mock('../src/utils/gameState.js', async () => {
+    const { state } = await import('../src/utils/gameState/common.js');
+    return {
+        questFinished: vi.fn(() => false),
+        setCurrentDialogueStep: vi.fn((questId: string, stepId: string) => {
+            state.update((current: QuestState) => ({
+                ...current,
+                quests: {
+                    ...current.quests,
+                    [questId]: { stepId },
+                },
+            }));
+        }),
+        finishQuest: vi.fn(),
+        grantItems: vi.fn(),
+        getItemsGranted: vi.fn(() => false),
+    };
+});
 
 describe('QuestDetail', () => {
     beforeEach(() => {
