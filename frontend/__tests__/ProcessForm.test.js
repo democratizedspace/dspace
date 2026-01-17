@@ -289,7 +289,7 @@ describe('ProcessForm Component', () => {
         const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
 
         let submittedData = null;
-        component.$on('submit', (event) => {
+        component.$on('submit', (event) => { // should validate item counts
             submittedData = event.detail;
         });
 
