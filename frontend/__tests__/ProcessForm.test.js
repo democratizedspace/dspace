@@ -58,7 +58,6 @@ describe('ProcessForm Component', () => {
             target: container,
         });
 
-        const form = container.querySelector('form');
         const titleInput = container.querySelector('input[type="text"]');
         const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
 
@@ -331,7 +330,7 @@ describe('ProcessForm Component', () => {
     });
 
     test('shows preview when preview button clicked with valid data', () => {
-        const component = new ProcessForm({
+        new ProcessForm({
             target: container,
         });
 
