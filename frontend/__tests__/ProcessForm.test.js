@@ -527,4 +527,121 @@ describe('ProcessForm Component', () => {
         );
         expect(createProcessMock).not.toHaveBeenCalled();
     });
+
+    test('uses processId prop when editing without processData id', async () => {
+        const component = new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processId: 'process-999',
+                processData: {
+                    title: 'Prop ID Process',
+                    duration: '30m',
+                    requireItems: [{ id: 'item-1', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        let submittedData = null;
+        component.$on('submit', (event) => {
+            submittedData = event.detail;
+        });
+
+        titleInput.value = 'Prop ID Process Updated';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '30m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(submittedData).toBeTruthy();
+        expect(updateProcessMock).toHaveBeenCalledWith(
+            'process-999',
+            expect.objectContaining({
+                title: 'Prop ID Process Updated',
+                duration: '30m',
+            })
+        );
+        expect(container.querySelector('.success-message').textContent).toContain(
+            'Process updated successfully'
+        );
+        expect(container.querySelector('.success-link').getAttribute('href')).toBe(
+            '/processes/process-999'
+        );
+        expect(createProcessMock).not.toHaveBeenCalled();
+    });
+
+    test('shows an error when editing without a process id', async () => {
+        new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                requireItems: [{ id: 'item-1', count: 1 }],
+            },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Missing ID Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '15m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(updateProcessMock).not.toHaveBeenCalled();
+        expect(container.querySelector('.form-error').textContent).toBe(
+            'Failed to save process. Please try again.'
+        );
+    });
+
+    test('shows an error when update fails', async () => {
+        updateProcessMock.mockRejectedValueOnce(new Error('Update failed'));
+
+        new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processId: 'process-500',
+                processData: {
+                    id: 'process-500',
+                    title: 'Failing Update',
+                    duration: '10m',
+                    requireItems: [{ id: 'item-1', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Failing Update';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '10m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(updateProcessMock).toHaveBeenCalledTimes(1);
+        expect(container.querySelector('.form-error').textContent).toBe(
+            'Failed to save process. Please try again.'
+        );
+    });
 });
