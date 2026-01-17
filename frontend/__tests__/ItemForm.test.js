@@ -6,9 +6,16 @@ import '@testing-library/jest-dom';
 import { render, act, fireEvent, waitFor } from '@testing-library/svelte';
 import ItemForm from '../src/components/svelte/ItemForm.svelte';
 
-vi.mock('../src/utils/indexeddb.js', () => ({
-    addEntity: vi.fn().mockResolvedValue('mocked-item-id'),
-    updateEntity: vi.fn().mockResolvedValue('mocked-item-id'),
+const itemsAddMock = vi.fn().mockResolvedValue('mocked-item-id');
+const itemsUpdateMock = vi.fn().mockResolvedValue('mocked-item-id');
+
+vi.mock('../src/utils/customcontent.js', () => ({
+    db: {
+        items: {
+            add: itemsAddMock,
+            update: itemsUpdateMock,
+        },
+    },
 }));
 
 vi.mock('../src/utils/gameState/inventory.js', () => ({
@@ -24,8 +31,6 @@ vi.mock('../src/utils/imageDownsample.js', () => ({
         qualityUsed: 0.8,
     }),
 }));
-
-import { addEntity, updateEntity } from '../src/utils/indexeddb.js';
 
 // Mock the browser's fetch API
 global.fetch = vi.fn(() =>
@@ -67,6 +72,8 @@ describe('ItemForm Component', () => {
 
         // Reset mocks
         vi.clearAllMocks();
+        itemsAddMock.mockResolvedValue('mocked-item-id');
+        itemsUpdateMock.mockResolvedValue('mocked-item-id');
     });
 
     afterEach(() => {
@@ -126,7 +133,7 @@ describe('ItemForm Component', () => {
 
         // Check if database add was called with correct data
         await waitFor(() => {
-            expect(addEntity).toHaveBeenCalledWith(
+            expect(itemsAddMock).toHaveBeenCalledWith(
                 expect.objectContaining({
                     name: 'Test Item',
                     description: 'This is a test item description',
@@ -175,7 +182,7 @@ describe('ItemForm Component', () => {
     });
 
     it('shows an error message when saving fails', async () => {
-        addEntity.mockRejectedValueOnce(new Error('Database exploded'));
+        itemsAddMock.mockRejectedValueOnce(new Error('Database exploded'));
 
         const { getByLabelText, getByText, findByRole } = render(ItemForm, {
             target: container,
@@ -239,7 +246,7 @@ describe('ItemForm Component', () => {
         });
 
         await waitFor(() => {
-            expect(addEntity).toHaveBeenCalledWith(
+            expect(itemsAddMock).toHaveBeenCalledWith(
                 expect.objectContaining({
                     dependencies: ['item/one', 'item/two'],
                 })
@@ -268,7 +275,7 @@ describe('ItemForm Component', () => {
         });
 
         // Verify the database was not called
-        expect(addEntity).not.toHaveBeenCalled();
+        expect(itemsAddMock).not.toHaveBeenCalled();
     });
 
     it('handles edit mode correctly', async () => {
@@ -281,7 +288,7 @@ describe('ItemForm Component', () => {
             dependencies: ['resource/alloy'],
         };
 
-        // No additional mocking needed - updateEntity is already mocked
+        // No additional mocking needed - itemsUpdateMock is already mocked
 
         const { getByLabelText, getByText } = render(ItemForm, {
             target: container,
@@ -305,7 +312,7 @@ describe('ItemForm Component', () => {
 
         // Verify update was called with correct data
         await waitFor(() => {
-            expect(updateEntity).toHaveBeenCalledWith(
+            expect(itemsUpdateMock).toHaveBeenCalledWith(
                 expect.objectContaining({
                     id: existingItem.id,
                     name: existingItem.name,
