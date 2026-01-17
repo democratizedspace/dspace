@@ -187,17 +187,26 @@
                 {#if status === 'ready' && preparedSummary}
                     <div class="prepared-preview">
                         <h3>Prepared content</h3>
-                        <ul>
+                        <div class="summary-list" role="list">
                             {#each preparedSummary.items as entry}
-                                <li class="summary-entry">{entry.kind}: {entry.name}</li>
+                                <div class="summary-entry" role="listitem">
+                                    <span class="summary-label">{entry.kind}:</span>
+                                    <span class="summary-name">{entry.name}</span>
+                                </div>
                             {/each}
                             {#each preparedSummary.processes as entry}
-                                <li class="summary-entry">{entry.kind}: {entry.name}</li>
+                                <div class="summary-entry" role="listitem">
+                                    <span class="summary-label">{entry.kind}:</span>
+                                    <span class="summary-name">{entry.name}</span>
+                                </div>
                             {/each}
                             {#each preparedSummary.quests as entry}
-                                <li class="summary-entry">{entry.kind}: {entry.name}</li>
+                                <div class="summary-entry" role="listitem">
+                                    <span class="summary-label">{entry.kind}:</span>
+                                    <span class="summary-name">{entry.name}</span>
+                                </div>
                             {/each}
-                        </ul>
+                        </div>
                     </div>
                 {/if}
             </div>
@@ -265,13 +274,18 @@
         font-size: 0.95rem;
     }
 
-    .prepared-preview ul {
-        margin: 0;
-        padding-left: 1.2rem;
+    .summary-entry {
+        display: flex;
+        gap: 0.35rem;
+        font-weight: 600;
     }
 
-    .summary-entry {
-        font-weight: 600;
+    .summary-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        margin: 0;
+        padding: 0;
     }
 
     .progress-item {
