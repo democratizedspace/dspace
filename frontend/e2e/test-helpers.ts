@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import { expect } from '@playwright/test';
 import type { Locator, Page } from '@playwright/test';
 
@@ -15,6 +14,7 @@ const DEFAULT_RETRY_DELAY_MS = 300;
 const DEFAULT_MAX_LOG_ATTEMPTS = 4;
 const DEFAULT_MAX_DURATION_MS = 10_000;
 const UUID_FALLBACK_TEMPLATE = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+type CryptoLike = { randomUUID?: () => string };
 
 function generateUuidFallback(): string {
     return UUID_FALLBACK_TEMPLATE.replace(/[xy]/g, (character) => {
@@ -25,11 +25,17 @@ function generateUuidFallback(): string {
 }
 
 function generateQuestId(): string {
-    try {
-        return randomUUID();
-    } catch {
-        return generateUuidFallback();
+    const cryptoApi = (globalThis as { crypto?: CryptoLike }).crypto;
+
+    if (cryptoApi?.randomUUID) {
+        try {
+            return cryptoApi.randomUUID();
+        } catch {
+            // Fall back to Math.random-based UUID template below.
+        }
     }
+
+    return generateUuidFallback();
 }
 
 async function wait(page: Page, ms: number): Promise<void> {
