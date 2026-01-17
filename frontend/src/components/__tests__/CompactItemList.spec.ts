@@ -164,4 +164,59 @@ describe('CompactItemList', () => {
 
         unmount();
     });
+
+    test('renders placeholder icon when item metadata is loading', async () => {
+        const items = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 }];
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ alpha: 3 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue([
+            {
+                id: 'alpha',
+                name: 'Alpha',
+                image: '/alpha.png',
+                count: 1,
+                loading: true,
+            },
+        ]);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items },
+        });
+
+        await tick();
+
+        expect(container.querySelector('[aria-label="Loading item image"]')).not.toBeNull();
+        expect(container.querySelectorAll('.spinner')).toHaveLength(1);
+
+        unmount();
+    });
+
+    test('renders decrease counts with negative styling', async () => {
+        const items = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 2 }];
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ alpha: 5 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue([
+            {
+                id: 'alpha',
+                name: 'Alpha',
+                image: '/alpha.png',
+                count: 2,
+            },
+        ]);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items, decrease: true },
+        });
+
+        await tick();
+
+        expect(container.textContent).toContain('−2');
+        expect(container.querySelector('.qty.neg')).not.toBeNull();
+
+        unmount();
+    });
 });
