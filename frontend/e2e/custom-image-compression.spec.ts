@@ -284,12 +284,12 @@ test.describe('Custom image compression', () => {
             })
             .toBeTruthy();
 
-        const savedQuest = (await getCustomContentRecord(
-            page,
-            'quests',
-            'title',
-            questTitle
-        )) as { id?: string | number; image?: string; questId?: string | number; questID?: string };
+        const savedQuest = (await getCustomContentRecord(page, 'quests', 'title', questTitle)) as {
+            id?: string | number;
+            image?: string;
+            questId?: string | number;
+            questID?: string;
+        };
         expect(savedQuest.image).toMatch(/^data:image\/jpeg;base64,/);
 
         const initialMetrics = await getImageMetrics(page, savedQuest.image as string);
