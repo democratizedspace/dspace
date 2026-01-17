@@ -1,0 +1,16 @@
+{
+  "id": "OUT-2026-01-14-custom-item-detail-metadata",
+  "date": "2026-01-14",
+  "component": "frontend/inventory",
+  "longForm": "outages/2026-01-14-custom-item-detail-metadata.md",
+  "rootCause": "The item detail page and compact list only read from the built-in items catalog, so custom items stored in IndexedDB fell back to their UUID and the default image.",
+  "resolution": "Added a unified item resolver that merges built-in and custom items (including custom image handling) and updated the detail page + compact list to consume it with explicit loading/missing states.",
+  "references": [
+    "frontend/src/utils/itemResolver.js",
+    "frontend/src/pages/inventory/item/ItemPage.svelte",
+    "frontend/src/components/svelte/CompactItemList.svelte",
+    "frontend/tests/itemResolver.test.ts",
+    "frontend/src/pages/inventory/item/__tests__/ItemPage.spec.ts",
+    "frontend/e2e/custom-item-detail.spec.ts"
+  ]
+}
