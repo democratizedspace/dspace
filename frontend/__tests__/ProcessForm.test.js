@@ -407,6 +407,33 @@ describe('ProcessForm Component', () => {
         expect(createProcessMock).toHaveBeenCalledTimes(1);
     });
 
+    test('does not show a success link when createProcess returns null', async () => {
+        createProcessMock.mockResolvedValueOnce(null);
+
+        new ProcessForm({
+            target: container,
+            props: { requireItems: [{ id: 'item-1', count: 1 }] },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'No ID Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '15m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(container.querySelector('.success-message').textContent).toContain(
+            'Process created successfully'
+        );
+        expect(container.querySelector('.success-link')).toBeFalsy();
+    });
+
     test('clears the form and hides preview after successful submission', async () => {
         const component = new ProcessForm({
             target: container,
@@ -481,6 +508,48 @@ describe('ProcessForm Component', () => {
                 resolve();
             });
         });
+    });
+
+    test('reinitializes fields when edit process data changes', async () => {
+        const component = new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-111',
+                    title: 'Original',
+                    duration: '10m',
+                    requireItems: [{ id: 'item-1', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        component.$set({
+            processData: {
+                id: 'process-222',
+                title: 'Updated',
+                duration: '20m',
+                requireItems: [],
+                consumeItems: [],
+                createItems: [{ id: 'item-2', count: 3 }],
+            },
+        });
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const titleInput = container.querySelector('#title');
+        const durationInput = container.querySelector('#duration');
+        const createCountInput = container.querySelector(
+            '#created-items-section input[type="number"]'
+        );
+
+        expect(titleInput.value).toBe('Updated');
+        expect(durationInput.value).toBe('20m');
+        expect(createCountInput.value).toBe('3');
     });
 
     test('submits updates when editing a process', async () => {
