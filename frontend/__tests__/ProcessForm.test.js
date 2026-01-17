@@ -1,4 +1,5 @@
 import ProcessForm from '../src/components/svelte/ProcessForm.svelte';
+import { getMergedItemCatalog } from '../src/utils/itemCatalog.js';
 
 const mockedItems = [
     { id: 'item-1', name: 'Test Item 1', description: 'Description 1' },
@@ -57,6 +58,16 @@ describe('ProcessForm Component', () => {
         expect(component).toBeTruthy();
         expect(container.querySelector('form')).toBeTruthy();
         expect(container.querySelector('input[type="text"]')).toBeTruthy();
+    });
+
+    test('loads the merged item catalog on mount', async () => {
+        new ProcessForm({
+            target: container,
+        });
+
+        await flushPromises();
+
+        expect(getMergedItemCatalog).toHaveBeenCalledWith({ builtInItems: mockedItems });
     });
 
     test('should handle form submission with all fields', async () => {
@@ -294,6 +305,64 @@ describe('ProcessForm Component', () => {
 
         expect(submittedData).toBeTruthy();
         expect(submittedData.get('duration')).toBe('30m 30s');
+    });
+
+    test('uses schema validation messages for short titles', async () => {
+        new ProcessForm({
+            target: container,
+            props: { requireItems: [{ id: 'item-1', count: 1 }] },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Hi';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        await flushPromises();
+
+        const titleError = container.querySelector('#title + .error-message');
+        expect(titleError.textContent).toBeTruthy();
+        expect(createProcessMock).not.toHaveBeenCalled();
+    });
+
+    test('uses schema validation messages for invalid item IDs', async () => {
+        new ProcessForm({
+            target: container,
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Schema Items';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        const addButtons = container.querySelectorAll('.add-button');
+        addButtons[0].click();
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const requiredRow = container.querySelector('#required-items-section > .item-row');
+        const requiredCount = requiredRow.querySelector('input[type="number"]');
+
+        requiredCount.value = '1';
+        requiredCount.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        await flushPromises();
+
+        const errorMessages = Array.from(container.querySelectorAll('.error-message')).map(
+            (node) => node.textContent
+        );
+        expect(errorMessages.some((message) => message.length > 0)).toBe(true);
+        expect(createProcessMock).not.toHaveBeenCalled();
     });
 
     test('should validate item counts', async () => {
