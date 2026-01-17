@@ -111,14 +111,18 @@ const TEST_GROUPS = [
     },
     {
         name: 'Item Tests',
-        files: ['custom-content.spec.ts'],
+        files: ['custom-content.spec.ts', 'custom-item-detail.spec.ts'],
         grep: 'create a custom item|retrieve all custom content',
         parallel: true,
         workers: Math.min(MAX_WORKERS, 3), // Cap at 3 for this group
     },
     {
         name: 'Process Tests',
-        files: ['process-creation.spec.ts', 'custom-content.spec.ts'],
+        files: [
+            'process-creation.spec.ts',
+            'process-custom-item-selector.spec.ts',
+            'custom-content.spec.ts',
+        ],
         grep: 'create a custom process',
         parallel: true,
         workers: 2,
