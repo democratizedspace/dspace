@@ -88,29 +88,6 @@ test.describe('Custom Content Management', () => {
     async function uploadItemImage(page: Page): Promise<void> {
         const imageInput = page.locator('#image');
         if ((await imageInput.count()) > 0) {
-            const candidatePaths = [
-                path.resolve(process.cwd(), 'frontend/public/assets/220_ohm_resistor.jpg'),
-                path.resolve(process.cwd(), 'public/assets/220_ohm_resistor.jpg'),
-            ];
-            let resolvedPath: string | null = null;
-
-            for (const candidate of candidatePaths) {
-                try {
-                    await fs.access(candidate);
-                    resolvedPath = candidate;
-                    break;
-                } catch (error) {
-                    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
-                        throw error;
-                    }
-                }
-            }
-
-            if (resolvedPath) {
-                await imageInput.setInputFiles(resolvedPath);
-                return;
-            }
-
             const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'dspace-e2e-'));
             const imagePath = path.join(tempDir, 'custom-item.png');
             await fs.writeFile(imagePath, inlineItemImageBuffer);
