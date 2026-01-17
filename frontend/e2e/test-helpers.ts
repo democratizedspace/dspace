@@ -1,5 +1,6 @@
 import { expect } from '@playwright/test';
 import type { Locator, Page } from '@playwright/test';
+import { ITEM_SELECTOR_OPTION_LOCATORS } from './utils/itemSelectors';
 
 export type { Page };
 
@@ -113,8 +114,6 @@ export async function navigateWithRetry(
         ? lastError
         : new Error(`Failed to navigate to ${url}: ${String(lastError)}`);
 }
-
-import { ITEM_SELECTOR_OPTION_LOCATORS } from './utils/itemSelectors';
 
 /**
  * Utility functions to help with testing the DSpace application
