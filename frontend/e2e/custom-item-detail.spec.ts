@@ -74,7 +74,7 @@ test.describe('Custom item detail view', () => {
         await waitForHydration(page);
         await expect(page.getByRole('heading', { level: 2, name: 'foobar' })).toBeVisible();
 
-        const heroImage = page.getByRole('img', { name: customItem.name });
+        const heroImage = page.locator(`img:not(.icon)[alt="${customItem.name}"]`).first();
         const iconImage = page.locator(`img.icon[alt="${customItem.name}"]`).first();
 
         await expect(heroImage).toHaveAttribute('src', customItem.image);
@@ -90,7 +90,7 @@ test.describe('Custom item detail view', () => {
             page.getByRole('heading', { level: 2, name: builtIn.name })
         ).toBeVisible();
 
-        const heroImage = page.getByRole('img', { name: builtIn.name });
+        const heroImage = page.locator(`img:not(.icon)[alt="${builtIn.name}"]`).first();
         const iconImage = page.locator(`img.icon[alt="${builtIn.name}"]`).first();
 
         await expect(heroImage).toHaveAttribute('src', builtIn.image);
