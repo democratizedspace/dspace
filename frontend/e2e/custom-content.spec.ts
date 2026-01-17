@@ -1,6 +1,3 @@
-import { promises as fs } from 'fs';
-import os from 'os';
-import path from 'path';
 import { test, expect, Page } from '@playwright/test';
 import {
     clearUserData,
@@ -88,10 +85,11 @@ test.describe('Custom Content Management', () => {
     async function uploadItemImage(page: Page): Promise<void> {
         const imageInput = page.locator('#image');
         if ((await imageInput.count()) > 0) {
-            const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'dspace-e2e-'));
-            const imagePath = path.join(tempDir, 'custom-item.png');
-            await fs.writeFile(imagePath, inlineItemImageBuffer);
-            await imageInput.setInputFiles(imagePath);
+            await imageInput.setInputFiles({
+                name: 'custom-item.png',
+                mimeType: 'image/png',
+                buffer: inlineItemImageBuffer,
+            });
         }
     }
 
