@@ -189,17 +189,20 @@
                         <ul>
                             {#each preparedSummary.items as entry}
                                 <li class="summary-entry">
-                                    {entry.kind}: {entry.name}
+                                    <span class="summary-kind">{entry.kind}:</span>
+                                    <span class="summary-name">{entry.name}</span>
                                 </li>
                             {/each}
                             {#each preparedSummary.processes as entry}
                                 <li class="summary-entry">
-                                    {entry.kind}: {entry.name}
+                                    <span class="summary-kind">{entry.kind}:</span>
+                                    <span class="summary-name">{entry.name}</span>
                                 </li>
                             {/each}
                             {#each preparedSummary.quests as entry}
                                 <li class="summary-entry">
-                                    {entry.kind}: {entry.name}
+                                    <span class="summary-kind">{entry.kind}:</span>
+                                    <span class="summary-name">{entry.name}</span>
                                 </li>
                             {/each}
                         </ul>
@@ -276,7 +279,12 @@
     }
 
     .summary-entry {
-        display: block;
+        display: flex;
+        gap: 0.35rem;
+    }
+
+    .summary-kind {
+        font-weight: 600;
     }
 
     .progress-item {
