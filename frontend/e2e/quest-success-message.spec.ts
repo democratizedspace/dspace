@@ -1,25 +1,10 @@
 import { test, expect } from '@playwright/test';
-import type { Page } from '@playwright/test';
-import { purgeClientState, waitForHydration, waitForImagePreview } from './test-helpers';
-
-async function createTestPngBuffer(page: Page) {
-    const dataUrl = await page.evaluate(() => {
-        const canvas = document.createElement('canvas');
-        canvas.width = 32;
-        canvas.height = 32;
-        const context = canvas.getContext('2d');
-        if (!context) {
-            throw new Error('Canvas context unavailable');
-        }
-        context.fillStyle = '#4ade80';
-        context.fillRect(0, 0, canvas.width, canvas.height);
-        context.fillStyle = '#f97316';
-        context.fillRect(6, 6, 20, 20);
-        return canvas.toDataURL('image/png');
-    });
-    const base64Payload = dataUrl.split(',')[1] ?? '';
-    return Buffer.from(base64Payload, 'base64');
-}
+import {
+    createTestPngBuffer,
+    purgeClientState,
+    waitForHydration,
+    waitForImagePreview,
+} from './test-helpers';
 
 test('quest creation shows accessible success message with quest link', async ({ page }) => {
     await purgeClientState(page);
@@ -30,7 +15,11 @@ test('quest creation shows accessible success message with quest link', async ({
     await page.getByLabel('Description*').fill('Check success message');
 
     const fileInput = page.getByTestId('image-file-input');
-    const buffer = await createTestPngBuffer(page);
+    const buffer = await createTestPngBuffer(page, {
+        background: '#4ade80',
+        accent: '#f97316',
+        inset: 6,
+    });
     await fileInput.setInputFiles({
         name: 'success-image.png',
         mimeType: 'image/png',
