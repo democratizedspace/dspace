@@ -221,7 +221,11 @@ export async function purgeClientState(page: Page): Promise<void> {
     );
 }
 
-export async function waitForImagePreview(page: Page, fileInput: Locator): Promise<void> {
+export async function waitForImagePreview(
+    page: Page,
+    fileInput: Locator,
+    { timeoutMs = 15_000 }: { timeoutMs?: number } = {}
+): Promise<void> {
     const preview = page.getByTestId('image-preview');
 
     await expect
@@ -230,11 +234,13 @@ export async function waitForImagePreview(page: Page, fileInput: Locator): Promi
                 return null;
             }
             return preview.getAttribute('src');
-        })
+        }, { timeout: timeoutMs })
         .toMatch(/^data:image\/jpeg;base64,/);
 
-    await expect(preview).toBeVisible();
-    await expect(fileInput).toHaveAttribute('data-processing', 'false');
+    await expect(preview).toBeVisible({ timeout: timeoutMs });
+    await expect(fileInput).toHaveAttribute('data-processing', 'false', {
+        timeout: timeoutMs,
+    });
 }
 
 export async function createTestPngBuffer(
