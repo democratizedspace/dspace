@@ -1,4 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
+import fs from 'node:fs';
+import path from 'node:path';
 import {
     clearUserData,
     createTestItems,
@@ -85,6 +87,19 @@ test.describe('Custom Content Management', () => {
     async function uploadItemImage(page: Page): Promise<void> {
         const imageInput = page.locator('#image');
         if ((await imageInput.count()) > 0) {
+            const imageCandidates = [
+                path.resolve(process.cwd(), 'public/assets/220_ohm_resistor.jpg'),
+                path.resolve(process.cwd(), 'frontend/public/assets/220_ohm_resistor.jpg'),
+            ];
+            const existingImagePath = imageCandidates.find((candidate) =>
+                fs.existsSync(candidate)
+            );
+
+            if (existingImagePath) {
+                await imageInput.setInputFiles(existingImagePath);
+                return;
+            }
+
             await imageInput.setInputFiles({
                 name: 'custom-item.png',
                 mimeType: 'image/png',
