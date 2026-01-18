@@ -5,6 +5,7 @@ const originalGlobals = {
     Image: global.Image,
     FileReader: global.FileReader,
     atob: global.atob,
+    Buffer: global.Buffer,
     urlCreateObjectURL: global.URL?.createObjectURL,
     urlRevokeObjectURL: global.URL?.revokeObjectURL,
 };
@@ -116,6 +117,7 @@ beforeEach(() => {
     global.Image = originalGlobals.Image;
     global.FileReader = originalGlobals.FileReader;
     global.atob = originalGlobals.atob;
+    global.Buffer = originalGlobals.Buffer;
     if (global.URL) {
         global.URL.createObjectURL = originalGlobals.urlCreateObjectURL;
         global.URL.revokeObjectURL = originalGlobals.urlRevokeObjectURL;
@@ -129,6 +131,7 @@ afterEach(() => {
     global.Image = originalGlobals.Image;
     global.FileReader = originalGlobals.FileReader;
     global.atob = originalGlobals.atob;
+    global.Buffer = originalGlobals.Buffer;
     if (global.URL) {
         global.URL.createObjectURL = originalGlobals.urlCreateObjectURL;
         global.URL.revokeObjectURL = originalGlobals.urlRevokeObjectURL;
@@ -310,6 +313,22 @@ describe('downsampleAndCompressToJpeg', () => {
         );
     });
 
+    test('throws when FileReader fails to load', async () => {
+        global.createImageBitmap = jest.fn(async () => createBitmap());
+        mockFileReader({ error: new Error('Reader failed') });
+
+        const { canvas } = mockCanvas({
+            toBlobImpl: (cb, type) => cb(new Blob([new Uint8Array(4)], { type })),
+        });
+
+        mockCanvasElement(canvas);
+
+        const { downsampleAndCompressToJpeg } = require('../src/utils/imageDownsample.js');
+        const file = new File(['demo'], 'demo.jpg', { type: 'image/jpeg' });
+
+        await expect(downsampleAndCompressToJpeg(file)).rejects.toThrow('Reader failed');
+    });
+
     test('throws when data URL is invalid', async () => {
         global.createImageBitmap = jest.fn(async () => createBitmap());
         mockFileReader();
@@ -325,5 +344,24 @@ describe('downsampleAndCompressToJpeg', () => {
         const file = new File(['demo'], 'demo.jpg', { type: 'image/jpeg' });
 
         await expect(downsampleAndCompressToJpeg(file)).rejects.toThrow('Invalid data URL.');
+    });
+
+    test('throws when base64 decoding is unavailable', async () => {
+        global.createImageBitmap = jest.fn(async () => createBitmap());
+        const base64Payload = Buffer.from('data').toString('base64');
+        global.atob = undefined;
+        global.Buffer = undefined;
+        const { canvas } = mockCanvas({
+            toDataURLImpl: () => `data:image/jpeg;base64,${base64Payload}`,
+        });
+
+        mockCanvasElement(canvas);
+
+        const { downsampleAndCompressToJpeg } = require('../src/utils/imageDownsample.js');
+        const file = new File(['demo'], 'demo.jpg', { type: 'image/jpeg' });
+
+        await expect(downsampleAndCompressToJpeg(file)).rejects.toThrow(
+            'Base64 decoding is not available in this environment.'
+        );
     });
 });
