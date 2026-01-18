@@ -192,6 +192,9 @@ describe('ProcessForm Component', () => {
         await flushPromises();
 
         expect(submittedData).toBeFalsy();
+        expect(container.querySelector('.error-message').textContent).toBe(
+            'At least one item relationship is required'
+        );
         expect(createProcessMock).not.toHaveBeenCalled();
     });
 
@@ -921,6 +924,33 @@ describe('ProcessForm Component', () => {
         await flushPromises();
 
         expect(updateProcessMock).toHaveBeenCalledTimes(1);
+        expect(container.querySelector('.form-error').textContent).toBe(
+            'Failed to save process. Please try again.'
+        );
+    });
+
+    test('shows an error when create fails', async () => {
+        createProcessMock.mockRejectedValueOnce(new Error('Create failed'));
+
+        new ProcessForm({
+            target: container,
+            props: { requireItems: [{ id: 'item-1', count: 1 }] },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Failing Create';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '10m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(createProcessMock).toHaveBeenCalledTimes(1);
         expect(container.querySelector('.form-error').textContent).toBe(
             'Failed to save process. Please try again.'
         );
