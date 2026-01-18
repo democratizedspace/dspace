@@ -1,5 +1,3 @@
-import fs from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { test, expect, Page } from '@playwright/test';
 import {
     clearUserData,
@@ -12,24 +10,11 @@ const inlineItemImageBuffer = Buffer.from(
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/woAAgIBJ3QpJ8gAAAAASUVORK5CYII=',
     'base64'
 );
-const itemImageFile = (() => {
-    try {
-        const imagePath = fileURLToPath(
-            new URL('../public/assets/220_ohm_resistor.jpg', import.meta.url)
-        );
-        return {
-            name: 'custom-item.jpg',
-            mimeType: 'image/jpeg',
-            buffer: fs.readFileSync(imagePath),
-        };
-    } catch {
-        return {
-            name: 'custom-item.png',
-            mimeType: 'image/png',
-            buffer: inlineItemImageBuffer,
-        };
-    }
-})();
+const itemImageFile = {
+    name: 'custom-item.png',
+    mimeType: 'image/png',
+    buffer: inlineItemImageBuffer,
+};
 
 test.describe('Custom Content Management', () => {
     test.setTimeout(120000); // 2 minutes for end-to-end tests
