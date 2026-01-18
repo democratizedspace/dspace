@@ -189,17 +189,17 @@
                 {#if status === 'ready' && preparedSummary}
                     <div class="prepared-preview">
                         <h3>Prepared content</h3>
-                        <div class="summary-list" role="list">
+                        <ul class="summary-list">
                             {#each preparedSummary.items as entry}
-                                <p class="summary-entry" role="listitem">{entry.label}</p>
+                                <li class="summary-entry">{entry.label}</li>
                             {/each}
                             {#each preparedSummary.processes as entry}
-                                <p class="summary-entry" role="listitem">{entry.label}</p>
+                                <li class="summary-entry">{entry.label}</li>
                             {/each}
                             {#each preparedSummary.quests as entry}
-                                <p class="summary-entry" role="listitem">{entry.label}</p>
+                                <li class="summary-entry">{entry.label}</li>
                             {/each}
-                        </div>
+                        </ul>
                     </div>
                 {/if}
             </div>
@@ -278,6 +278,7 @@
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
+        list-style: none;
         margin: 0;
         padding: 0;
     }
