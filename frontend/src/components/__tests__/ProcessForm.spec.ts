@@ -172,6 +172,8 @@ test('submits updates in edit mode', async () => {
     });
 
     expect(await findByText('Process updated successfully!')).toBeTruthy();
+    const successLink = container.querySelector('.success-link') as HTMLAnchorElement;
+    expect(successLink?.getAttribute('href')).toBe('/processes/process-300');
 });
 
 test('uses processId prop when editing without a processData id', async () => {
@@ -232,6 +234,46 @@ test('shows an error when editing without a process id', async () => {
 
     expect(await findByText('Failed to save process. Please try again.')).toBeTruthy();
     expect(container.querySelector('.form-error')).toBeTruthy();
+});
+
+test('reinitializes edit fields when process data id changes', async () => {
+    const { component, getByLabelText, container } = render(ProcessForm, {
+        props: {
+            isEdit: true,
+            processData: {
+                id: 'process-610',
+                title: 'Original Process',
+                duration: '5m',
+                requireItems: [{ id: 'water', count: 1 }],
+                consumeItems: [],
+                createItems: [],
+            },
+        },
+    });
+
+    await waitFor(() => {
+        expect(getByLabelText('Title*').value).toBe('Original Process');
+    });
+
+    component.$set({
+        processData: {
+            id: 'process-611',
+            title: 'Updated Process',
+            duration: '20m',
+            requireItems: [],
+            consumeItems: [],
+            createItems: [{ id: 'water', count: 3 }],
+        },
+    });
+
+    await waitFor(() => {
+        expect(getByLabelText('Title*').value).toBe('Updated Process');
+        expect(getByLabelText('Duration*').value).toBe('20m');
+        const countInput = container.querySelector(
+            '#created-items-section input[type="number"]'
+        ) as HTMLInputElement;
+        expect(countInput.value).toBe('3');
+    });
 });
 
 test('reinitializes edit fields after toggling edit mode', async () => {
