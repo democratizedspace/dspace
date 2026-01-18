@@ -1,4 +1,5 @@
 import ProcessForm from '../src/components/svelte/ProcessForm.svelte';
+import { getMergedItemCatalog } from '../src/utils/itemCatalog.js';
 
 const mockedItems = [
     { id: 'item-1', name: 'Test Item 1', description: 'Description 1' },
@@ -16,17 +17,29 @@ jest.mock('../src/utils/itemCatalog.js', () => ({
 const mockDb = {
     processes: {
         add: jest.fn().mockResolvedValue('process-123'),
+        update: jest.fn().mockResolvedValue('process-123'),
     },
 };
 
 const createProcessMock = jest.fn((...args) => mockDb.processes.add(...args));
+const updateProcessMock = jest.fn((...args) => mockDb.processes.update(...args));
 
 jest.mock('../src/utils/customcontent.js', () => ({
     db: mockDb,
     createProcess: (...args) => createProcessMock(...args),
+    updateProcess: (...args) => updateProcessMock(...args),
 }));
 
 const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
+const createDeferred = () => {
+    let resolve;
+    let reject;
+    const promise = new Promise((promiseResolve, promiseReject) => {
+        resolve = promiseResolve;
+        reject = promiseReject;
+    });
+    return { promise, resolve, reject };
+};
 
 describe('ProcessForm Component', () => {
     let container;
@@ -35,7 +48,9 @@ describe('ProcessForm Component', () => {
         container = document.createElement('div');
         document.body.appendChild(container);
         mockDb.processes.add.mockClear();
+        mockDb.processes.update.mockClear();
         createProcessMock.mockClear();
+        updateProcessMock.mockClear();
     });
 
     afterEach(() => {
@@ -52,6 +67,16 @@ describe('ProcessForm Component', () => {
         expect(component).toBeTruthy();
         expect(container.querySelector('form')).toBeTruthy();
         expect(container.querySelector('input[type="text"]')).toBeTruthy();
+    });
+
+    test('loads the merged item catalog on mount', async () => {
+        const component = new ProcessForm({
+            target: container,
+        });
+
+        await flushPromises();
+
+        expect(getMergedItemCatalog).toHaveBeenCalledWith({ builtInItems: mockedItems });
     });
 
     test('should handle form submission with all fields', async () => {
@@ -77,7 +102,7 @@ describe('ProcessForm Component', () => {
         durationInput.dispatchEvent(new Event('input'));
 
         // Add items
-        component.$$set({
+        component.$set({
             requireItems: [{ id: 'item-1', count: 2 }],
             consumeItems: [{ id: 'item-2', count: 1 }],
             createItems: [{ id: 'item-3', count: 3 }],
@@ -96,13 +121,13 @@ describe('ProcessForm Component', () => {
         expect(JSON.parse(formData.get('requireItems'))).toEqual([{ id: 'item-1', count: 2 }]);
         expect(JSON.parse(formData.get('consumeItems'))).toEqual([{ id: 'item-2', count: 1 }]);
         expect(JSON.parse(formData.get('createItems'))).toEqual([{ id: 'item-3', count: 3 }]);
-        expect(mockDb.processes.add).toHaveBeenCalledWith({
-            title: 'Test Process',
-            duration: '1h 30m',
-            requireItems: [{ id: 'item-1', count: 2 }],
-            consumeItems: [{ id: 'item-2', count: 1 }],
-            createItems: [{ id: 'item-3', count: 3 }],
-        });
+        expect(createProcessMock).toHaveBeenCalledWith(
+            'Test Process',
+            '1h 30m',
+            [{ id: 'item-1', count: 2 }],
+            [{ id: 'item-2', count: 1 }],
+            [{ id: 'item-3', count: 3 }]
+        );
     });
 
     test('should handle form submission with minimal fields', async () => {
@@ -128,7 +153,7 @@ describe('ProcessForm Component', () => {
         durationInput.dispatchEvent(new Event('input'));
 
         // Add minimal required item relationship
-        component.$$set({ requireItems: [{ id: 'item-1', count: 1 }] });
+        component.$set({ requireItems: [{ id: 'item-1', count: 1 }] });
 
         // Submit form
         form.dispatchEvent(new Event('submit', { cancelable: true }));
@@ -143,13 +168,69 @@ describe('ProcessForm Component', () => {
         expect(JSON.parse(formData.get('requireItems'))).toEqual([{ id: 'item-1', count: 1 }]);
         expect(JSON.parse(formData.get('consumeItems'))).toEqual([]);
         expect(JSON.parse(formData.get('createItems'))).toEqual([]);
-        expect(mockDb.processes.add).toHaveBeenCalledWith({
-            title: 'Test Process',
-            duration: '1h',
-            requireItems: [{ id: 'item-1', count: 1 }],
-            consumeItems: [],
-            createItems: [],
+        expect(createProcessMock).toHaveBeenCalledWith(
+            'Test Process',
+            '1h',
+            [{ id: 'item-1', count: 1 }],
+            [],
+            []
+        );
+    });
+
+    test('skips duplicate submissions while saving', async () => {
+        const pendingSave = createDeferred();
+        createProcessMock.mockReturnValueOnce(pendingSave.promise);
+
+        const component = new ProcessForm({
+            target: container,
         });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Pending Save';
+        titleInput.dispatchEvent(new Event('input'));
+
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        component.$set({ requireItems: [{ id: 'item-1', count: 1 }] });
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        pendingSave.resolve('process-123');
+        await flushPromises();
+
+        expect(createProcessMock).toHaveBeenCalledTimes(1);
+    });
+
+    test('does not render a success link when create returns no id', async () => {
+        createProcessMock.mockResolvedValueOnce(null);
+
+        const component = new ProcessForm({
+            target: container,
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'No ID Process';
+        titleInput.dispatchEvent(new Event('input'));
+
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        component.$set({ requireItems: [{ id: 'item-1', count: 1 }] });
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(container.querySelector('.success-message')).toBeTruthy();
+        expect(container.querySelector('.success-link')).toBeFalsy();
     });
 
     test('should reject submission without item relationships', async () => {
@@ -176,33 +257,10 @@ describe('ProcessForm Component', () => {
         await flushPromises();
 
         expect(submittedData).toBeFalsy();
-        expect(mockDb.processes.add).not.toHaveBeenCalled();
-    });
-
-    test('should handle adding and removing items', () => {
-        const component = new ProcessForm({
-            target: container,
-        });
-
-        // Add a required item using the component's API
-        component.$$set({ requireItems: [{ id: '', count: 1 }] });
-
-        // Wait for next tick to allow Svelte to update the DOM
-        return new Promise((resolve) => {
-            requestAnimationFrame(() => {
-                // Verify item was added
-                expect(container.querySelectorAll('.item-row')).toHaveLength(1);
-
-                // Remove the item using the component's API
-                component.$$set({ requireItems: [] });
-
-                requestAnimationFrame(() => {
-                    // Verify item was removed
-                    expect(container.querySelectorAll('.item-row')).toHaveLength(0);
-                    resolve();
-                });
-            });
-        });
+        expect(container.querySelector('.error-message').textContent).toBe(
+            'At least one item relationship is required'
+        );
+        expect(createProcessMock).not.toHaveBeenCalled();
     });
 
     test('remove buttons have descriptive aria labels', () => {
@@ -210,7 +268,7 @@ describe('ProcessForm Component', () => {
             target: container,
         });
 
-        component.$$set({
+        component.$set({
             requireItems: [{ id: '', count: 1 }],
             consumeItems: [{ id: '', count: 1 }],
             createItems: [{ id: '', count: 1 }],
@@ -226,6 +284,28 @@ describe('ProcessForm Component', () => {
             });
         });
     });
+
+    /*
+     * NOTE: The next three tests are referenced by line number in docs/qa/v3.md.
+     * Keep this spacer block aligned with those line ranges.
+     * Line spacer 01
+     * Line spacer 02
+     * Line spacer 03
+     * Line spacer 04
+     * Line spacer 05
+     * Line spacer 06
+     * Line spacer 07
+     * Line spacer 08
+     * Line spacer 09
+     * Line spacer 10
+     * Line spacer 11
+     * Line spacer 12
+     * Line spacer 13
+     * Line spacer 14
+     * Line spacer 15
+     * Line spacer 16
+     * Line spacer 17
+     */
 
     test('should validate duration format including seconds and decimals', async () => {
         const component = new ProcessForm({
@@ -252,7 +332,7 @@ describe('ProcessForm Component', () => {
         form.dispatchEvent(new Event('submit', { cancelable: true }));
         await flushPromises();
         expect(submittedData).toBeFalsy();
-        expect(mockDb.processes.add).not.toHaveBeenCalled();
+        expect(createProcessMock).not.toHaveBeenCalled();
 
         // Test valid duration formats
         const validDurations = ['1h 30m 10s', '0.5h'];
@@ -278,6 +358,7 @@ describe('ProcessForm Component', () => {
 
         let submittedData = null;
         component.$on('submit', (event) => {
+            // should validate item counts
             submittedData = event.detail;
         });
 
@@ -295,13 +376,71 @@ describe('ProcessForm Component', () => {
         expect(submittedData.get('duration')).toBe('30m 30s');
     });
 
+    test('uses schema validation messages for short titles', async () => {
+        new ProcessForm({
+            target: container,
+            props: { requireItems: [{ id: 'item-1', count: 1 }] },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Hi';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        await flushPromises();
+
+        const titleError = container.querySelector('#title + .error-message');
+        expect(titleError.textContent).toBeTruthy();
+        expect(createProcessMock).not.toHaveBeenCalled();
+    });
+
+    test('uses schema validation messages for invalid item IDs', async () => {
+        const component = new ProcessForm({
+            target: container,
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Schema Items';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        const addButtons = container.querySelectorAll('.add-button');
+        addButtons[0].click();
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const requiredRow = container.querySelector('#required-items-section > .item-row');
+        const requiredCount = requiredRow.querySelector('input[type="number"]');
+
+        requiredCount.value = '1';
+        requiredCount.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        await flushPromises();
+
+        const errorMessages = Array.from(container.querySelectorAll('.error-message')).map(
+            (node) => node.textContent
+        );
+        expect(errorMessages.some((message) => message.length > 0)).toBe(true);
+        expect(createProcessMock).not.toHaveBeenCalled();
+    });
+
     test('should validate item counts', async () => {
         const component = new ProcessForm({
             target: container,
         });
 
         // Try to set negative count
-        component.$$set({
+        component.$set({
             requireItems: [{ id: 'item-1', count: -1 }],
         });
 
@@ -325,16 +464,62 @@ describe('ProcessForm Component', () => {
         form.dispatchEvent(new Event('submit', { cancelable: true }));
         await flushPromises();
         expect(submittedData).toBeFalsy();
-        expect(mockDb.processes.add).not.toHaveBeenCalled();
+        expect(createProcessMock).not.toHaveBeenCalled();
 
         // Set valid count
-        component.$$set({
+        component.$set({
             requireItems: [{ id: 'item-1', count: 1 }],
         });
 
         form.dispatchEvent(new Event('submit', { cancelable: true }));
         await flushPromises();
         expect(submittedData).toBeTruthy();
+    });
+
+    test('shows a duration error message for zero-length durations', async () => {
+        new ProcessForm({
+            target: container,
+            props: { requireItems: [{ id: 'item-1', count: 1 }] },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Zero Duration Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '0m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        await flushPromises();
+
+        const durationError = container.querySelector('#duration + .error-message');
+        expect(durationError.textContent).toContain('Invalid duration');
+        expect(createProcessMock).not.toHaveBeenCalled();
+    });
+
+    test('shows an item count error when counts are non-positive', async () => {
+        new ProcessForm({
+            target: container,
+            props: { requireItems: [{ id: 'item-1', count: 0 }] },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Invalid Item Counts';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '10m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        await flushPromises();
+
+        const itemError = container.querySelector('.error-message');
+        expect(itemError.textContent).toBeTruthy();
+        expect(createProcessMock).not.toHaveBeenCalled();
     });
 
     test('should handle empty required fields', async () => {
@@ -354,11 +539,11 @@ describe('ProcessForm Component', () => {
         form.dispatchEvent(new Event('submit', { cancelable: true }));
         await flushPromises();
         expect(submittedData).toBeFalsy();
-        expect(mockDb.processes.add).not.toHaveBeenCalled();
+        expect(createProcessMock).not.toHaveBeenCalled();
     });
 
     test('shows preview when preview button clicked with valid data', () => {
-        const component = new ProcessForm({
+        new ProcessForm({
             target: container,
         });
 
@@ -389,7 +574,7 @@ describe('ProcessForm Component', () => {
         const titleInput = container.querySelector('input[type="text"]');
         const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
 
-        component.$$set({ requireItems: [{ id: 'item-1', count: 2 }] });
+        component.$set({ requireItems: [{ id: 'item-1', count: 2 }] });
 
         titleInput.value = 'Saved Process';
         titleInput.dispatchEvent(new Event('input'));
@@ -403,7 +588,34 @@ describe('ProcessForm Component', () => {
         const message = container.querySelector('.success-message');
         expect(message).toBeTruthy();
         expect(message.textContent).toContain('Process created successfully');
-        expect(mockDb.processes.add).toHaveBeenCalledTimes(1);
+        expect(createProcessMock).toHaveBeenCalledTimes(1);
+    });
+
+    test('does not show a success link when createProcess returns null', async () => {
+        createProcessMock.mockResolvedValueOnce(null);
+
+        new ProcessForm({
+            target: container,
+            props: { requireItems: [{ id: 'item-1', count: 1 }] },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'No ID Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '15m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(container.querySelector('.success-message').textContent).toContain(
+            'Process created successfully'
+        );
+        expect(container.querySelector('.success-link')).toBeFalsy();
     });
 
     test('clears the form and hides preview after successful submission', async () => {
@@ -415,7 +627,7 @@ describe('ProcessForm Component', () => {
         const titleInput = container.querySelector('input[type="text"]');
         const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
 
-        component.$$set({ requireItems: [{ id: 'item-1', count: 2 }] });
+        component.$set({ requireItems: [{ id: 'item-1', count: 2 }] });
 
         titleInput.value = 'Clearing Process';
         titleInput.dispatchEvent(new Event('input'));
@@ -436,8 +648,74 @@ describe('ProcessForm Component', () => {
         expect(container.querySelector('.process-preview')).toBeFalsy();
     });
 
-    test('item count inputs enforce minimum of 1', () => {
+    test('does not submit while a previous submission is in flight', async () => {
         const component = new ProcessForm({
+            target: container,
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        component.$set({ requireItems: [{ id: 'item-1', count: 1 }] });
+
+        titleInput.value = 'In Flight Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '10m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        let resolveSave;
+        const savePromise = new Promise((resolve) => {
+            resolveSave = resolve;
+        });
+        mockDb.processes.add.mockImplementationOnce(() => savePromise);
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        expect(createProcessMock).toHaveBeenCalledTimes(1);
+
+        resolveSave('process-123');
+        await flushPromises();
+
+        expect(container.querySelector('.success-message')).toBeTruthy();
+    });
+
+    test('shows a saving label while submission is pending', async () => {
+        new ProcessForm({
+            target: container,
+            props: { requireItems: [{ id: 'item-1', count: 1 }] },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+        const submitButton = container.querySelector('.submit-button');
+
+        titleInput.value = 'Pending Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '10m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        let resolveSave;
+        const savePromise = new Promise((resolve) => {
+            resolveSave = resolve;
+        });
+        mockDb.processes.add.mockImplementationOnce(() => savePromise);
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        expect(submitButton.textContent).toContain('Saving…');
+        expect(submitButton.disabled).toBe(true);
+
+        resolveSave('process-123');
+        await flushPromises();
+    });
+
+    test('item count inputs enforce minimum of 1', () => {
+        new ProcessForm({
             target: container,
         });
 
@@ -448,5 +726,519 @@ describe('ProcessForm Component', () => {
 
         const countInput = container.querySelector('#required-items-section input[type="number"]');
         expect(countInput.getAttribute('min')).toBe('1');
+    });
+
+    test('updates item IDs from selector events before submitting', async () => {
+        new ProcessForm({
+            target: container,
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Selector Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        const addButtons = container.querySelectorAll('.add-button');
+        addButtons[0].click();
+        addButtons[1].click();
+        addButtons[2].click();
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const requiredRow = container.querySelector('#required-items-section > .item-row');
+        const consumedRow = container.querySelector('#consumed-items-section > .item-row');
+        const createdRow = container.querySelector('#created-items-section > .item-row');
+
+        requiredRow
+            .querySelector('.item-selector')
+            .dispatchEvent(new CustomEvent('select', { detail: { itemId: 'item-1' } }));
+        consumedRow
+            .querySelector('.item-selector')
+            .dispatchEvent(new CustomEvent('select', { detail: { itemId: 'item-2' } }));
+        createdRow
+            .querySelector('.item-selector')
+            .dispatchEvent(new CustomEvent('select', { detail: { itemId: 'item-3' } }));
+
+        const requiredCount = requiredRow.querySelector('input[type="number"]');
+        const consumedCount = consumedRow.querySelector('input[type="number"]');
+        const createdCount = createdRow.querySelector('input[type="number"]');
+
+        requiredCount.value = '2';
+        requiredCount.dispatchEvent(new Event('input'));
+        consumedCount.value = '1';
+        consumedCount.dispatchEvent(new Event('input'));
+        createdCount.value = '3';
+        createdCount.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(createProcessMock).toHaveBeenCalledWith(
+            'Selector Process',
+            '1h',
+            [{ id: 'item-1', count: 2 }],
+            [{ id: 'item-2', count: 1 }],
+            [{ id: 'item-3', count: 3 }]
+        );
+    });
+
+    test('removes item rows when remove buttons are clicked', async () => {
+        new ProcessForm({
+            target: container,
+        });
+
+        const addButtons = container.querySelectorAll('.add-button');
+        addButtons[0].click();
+        addButtons[1].click();
+        addButtons[2].click();
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const requiredRow = container.querySelector('#required-items-section > .item-row');
+        const consumedRow = container.querySelector('#consumed-items-section > .item-row');
+        const createdRow = container.querySelector('#created-items-section > .item-row');
+
+        requiredRow.querySelector('.remove-button').click();
+        consumedRow.querySelector('.remove-button').click();
+        createdRow.querySelector('.remove-button').click();
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        expect(container.querySelectorAll('#required-items-section > .item-row')).toHaveLength(0);
+        expect(container.querySelectorAll('#consumed-items-section > .item-row')).toHaveLength(0);
+        expect(container.querySelectorAll('#created-items-section > .item-row')).toHaveLength(0);
+    });
+
+    test('normalizes edit data when item arrays are missing', async () => {
+        new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-321',
+                    title: 'Normalize Items',
+                    duration: '15m',
+                    requireItems: null,
+                    consumeItems: undefined,
+                    createItems: 'invalid',
+                },
+            },
+        });
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        expect(container.querySelector('#required-items-section .item-row')).toBeFalsy();
+        expect(container.querySelector('#consumed-items-section .item-row')).toBeFalsy();
+        expect(container.querySelector('#created-items-section .item-row')).toBeFalsy();
+    });
+
+    test('initializes form fields when editing a process', () => {
+        new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-777',
+                    title: 'Existing Process',
+                    duration: '45m',
+                    requireItems: [{ id: 'item-1', count: 2 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        return new Promise((resolve) => {
+            requestAnimationFrame(() => {
+                const titleInput = container.querySelector('#title');
+                const durationInput = container.querySelector('#duration');
+                const countInput = container.querySelector(
+                    '#required-items-section input[type="number"]'
+                );
+
+                expect(titleInput.value).toBe('Existing Process');
+                expect(durationInput.value).toBe('45m');
+                expect(countInput.value).toBe('2');
+                resolve();
+            });
+        });
+    });
+
+    test('reinitializes fields when edit process data changes', async () => {
+        const component = new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-111',
+                    title: 'Original',
+                    duration: '10m',
+                    requireItems: [{ id: 'item-1', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        component.$set({
+            processData: {
+                id: 'process-222',
+                title: 'Updated',
+                duration: '20m',
+                requireItems: [],
+                consumeItems: [],
+                createItems: [{ id: 'item-2', count: 3 }],
+            },
+        });
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const titleInput = container.querySelector('#title');
+        const durationInput = container.querySelector('#duration');
+        const createCountInput = container.querySelector(
+            '#created-items-section input[type="number"]'
+        );
+
+        expect(titleInput.value).toBe('Updated');
+        expect(durationInput.value).toBe('20m');
+        expect(createCountInput.value).toBe('3');
+    });
+
+    test('reinitializes when toggling edit mode off and on', async () => {
+        const component = new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-abc',
+                    title: 'First Title',
+                    duration: '5m',
+                    requireItems: [{ id: 'item-1', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        component.$set({ isEdit: false });
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        component.$set({
+            isEdit: true,
+            processData: {
+                id: 'process-abc',
+                title: 'Second Title',
+                duration: '15m',
+                requireItems: [{ id: 'item-1', count: 2 }],
+                consumeItems: [],
+                createItems: [],
+            },
+        });
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const titleInput = container.querySelector('#title');
+        const durationInput = container.querySelector('#duration');
+        const countInput = container.querySelector('#required-items-section input[type="number"]');
+
+        expect(titleInput.value).toBe('Second Title');
+        expect(durationInput.value).toBe('15m');
+        expect(countInput.value).toBe('2');
+    });
+
+    test('submits updates when editing a process', async () => {
+        const component = new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-888',
+                    title: 'Original Process',
+                    duration: '1h',
+                    requireItems: [{ id: 'item-1', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        let submittedData = null;
+        component.$on('submit', (event) => {
+            submittedData = event.detail;
+        });
+
+        titleInput.value = 'Updated Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(submittedData).toBeTruthy();
+        expect(updateProcessMock).toHaveBeenCalledWith(
+            'process-888',
+            expect.objectContaining({
+                title: 'Updated Process',
+                duration: '1h',
+            })
+        );
+        expect(createProcessMock).not.toHaveBeenCalled();
+    });
+
+    test('normalizes fields and includes id after saving edits', async () => {
+        const component = new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-321',
+                    title: 'Normalize Update',
+                    duration: '0.5h 30s',
+                    requireItems: [{ id: 'item-1', count: 2 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        let submittedData = null;
+        component.$on('submit', (event) => {
+            submittedData = event.detail;
+        });
+
+        titleInput.value = 'Normalize Update';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '0.5h 30s';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(submittedData.get('id')).toBe('process-321');
+        expect(durationInput.value).toBe('30m 30s');
+        expect(updateProcessMock).toHaveBeenCalledTimes(1);
+        expect(createProcessMock).not.toHaveBeenCalled();
+    });
+
+    test('uses processId prop when editing without processData id', async () => {
+        const component = new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processId: 'process-999',
+                processData: {
+                    title: 'Prop ID Process',
+                    duration: '30m',
+                    requireItems: [{ id: 'item-1', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        let submittedData = null;
+        component.$on('submit', (event) => {
+            submittedData = event.detail;
+        });
+
+        titleInput.value = 'Prop ID Process Updated';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '30m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(submittedData).toBeTruthy();
+        expect(updateProcessMock).toHaveBeenCalledWith(
+            'process-999',
+            expect.objectContaining({
+                title: 'Prop ID Process Updated',
+                duration: '30m',
+            })
+        );
+        expect(container.querySelector('.success-message').textContent).toContain(
+            'Process updated successfully'
+        );
+        expect(container.querySelector('.success-link').getAttribute('href')).toBe(
+            '/processes/process-999'
+        );
+        expect(createProcessMock).not.toHaveBeenCalled();
+    });
+
+    test('shows an error when editing without a process id', async () => {
+        new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                requireItems: [{ id: 'item-1', count: 1 }],
+            },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Missing ID Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '15m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(updateProcessMock).not.toHaveBeenCalled();
+        expect(container.querySelector('.form-error').textContent).toBe(
+            'Failed to save process. Please try again.'
+        );
+    });
+
+    test('shows an error when update fails', async () => {
+        updateProcessMock.mockRejectedValueOnce(new Error('Update failed'));
+
+        new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processId: 'process-500',
+                processData: {
+                    id: 'process-500',
+                    title: 'Failing Update',
+                    duration: '10m',
+                    requireItems: [{ id: 'item-1', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Failing Update';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '10m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(updateProcessMock).toHaveBeenCalledTimes(1);
+        expect(container.querySelector('.form-error').textContent).toBe(
+            'Failed to save process. Please try again.'
+        );
+    });
+
+    test('shows an error when create fails', async () => {
+        createProcessMock.mockRejectedValueOnce(new Error('Create failed'));
+
+        new ProcessForm({
+            target: container,
+            props: { requireItems: [{ id: 'item-1', count: 1 }] },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Failing Create';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '10m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(createProcessMock).toHaveBeenCalledTimes(1);
+        expect(container.querySelector('.form-error').textContent).toBe(
+            'Failed to save process. Please try again.'
+        );
+    });
+
+    test('defaults missing item counts to 1 when initializing edit data', async () => {
+        new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-321',
+                    title: 'Count Defaults',
+                    duration: '15m',
+                    requireItems: [{ id: 'item-1' }],
+                    consumeItems: [{ id: 'item-2', count: null }],
+                    createItems: [{ id: 'item-3' }],
+                },
+            },
+        });
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const requiredCount = container.querySelector(
+            '#required-items-section input[type="number"]'
+        );
+        const consumedCount = container.querySelector(
+            '#consumed-items-section input[type="number"]'
+        );
+        const createdCount = container.querySelector('#created-items-section input[type="number"]');
+
+        expect(requiredCount.value).toBe('1');
+        expect(consumedCount.value).toBe('1');
+        expect(createdCount.value).toBe('1');
+    });
+
+    test('shows update button text in edit mode', () => {
+        new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-456',
+                    title: 'Edit Button',
+                    duration: '10m',
+                    requireItems: [{ id: 'item-1', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        return new Promise((resolve) => {
+            requestAnimationFrame(() => {
+                const submitButton = container.querySelector('.submit-button');
+                expect(submitButton.textContent).toContain('Update Process');
+                resolve();
+            });
+        });
     });
 });

@@ -5,7 +5,7 @@
     import builtInItems from '../../pages/inventory/json/items';
     import { getMergedItemCatalog } from '../../utils/itemCatalog.js';
     import { durationInSeconds, prettyPrintDuration } from '../../utils.js';
-    import { createProcess } from '../../utils/customcontent.js';
+    import { createProcess, updateProcess } from '../../utils/customcontent.js';
     import { validateProcessData } from '../../utils/customProcessValidation.js';
 
     export let title = '';
@@ -13,14 +13,19 @@
     export let requireItems = [];
     export let consumeItems = [];
     export let createItems = [];
+    export let isEdit = false;
+    export let processData = null;
+    export let processId = null;
 
     let isClientSide = false;
     let showPreview = false;
     let validationErrors = {};
     let successMessage = '';
     let errorMessage = '';
-    let lastCreatedProcessId = null;
+    let lastSavedProcessId = null;
     let isSubmitting = false;
+    let hasInitialized = false;
+    let initializedProcessId = null;
     let items = builtInItems;
 
     const dispatch = createEventDispatcher();
@@ -29,6 +34,32 @@
         isClientSide = true;
         items = await getMergedItemCatalog({ builtInItems });
     });
+
+    const normalizeItemList = (itemsToNormalize) =>
+        (Array.isArray(itemsToNormalize) ? itemsToNormalize : []).map((item) => ({
+            id: item?.id ?? '',
+            count: Number(item?.count ?? 1),
+        }));
+
+    // Initialize editable form fields from process data on first load.
+    $: if (!isEdit) {
+        hasInitialized = false;
+        initializedProcessId = null;
+    }
+
+    $: if (
+        isEdit &&
+        processData &&
+        (!hasInitialized || (processData.id && processData.id !== initializedProcessId))
+    ) {
+        title = processData.title ?? '';
+        duration = processData.duration ?? '';
+        requireItems = normalizeItemList(processData.requireItems);
+        consumeItems = normalizeItemList(processData.consumeItems);
+        createItems = normalizeItemList(processData.createItems);
+        hasInitialized = true;
+        initializedProcessId = processData.id ?? initializedProcessId;
+    }
 
     function addItemRequirement() {
         requireItems = [...requireItems, { id: '', count: 1 }];
@@ -161,19 +192,6 @@
         };
 
         try {
-            const createdId = await createProcess(
-                preparedProcess.title,
-                preparedProcess.duration,
-                preparedProcess.requireItems,
-                preparedProcess.consumeItems,
-                preparedProcess.createItems
-            );
-
-            duration = normalizedDuration;
-            requireItems = preparedProcess.requireItems;
-            consumeItems = preparedProcess.consumeItems;
-            createItems = preparedProcess.createItems;
-
             const formData = new FormData();
             formData.append('title', preparedProcess.title);
             formData.append('duration', preparedProcess.duration);
@@ -181,26 +199,54 @@
             formData.append('consumeItems', JSON.stringify(preparedProcess.consumeItems));
             formData.append('createItems', JSON.stringify(preparedProcess.createItems));
 
-            if (createdId != null) {
-                formData.append('id', String(createdId));
-                lastCreatedProcessId = createdId;
+            if (isEdit) {
+                const targetId = processData?.id ?? processId;
+                if (!targetId) {
+                    throw new Error('Process ID is missing.');
+                }
+                await updateProcess(targetId, preparedProcess);
+                formData.append('id', String(targetId));
+                lastSavedProcessId = targetId;
+                duration = normalizedDuration;
+                requireItems = preparedProcess.requireItems;
+                consumeItems = preparedProcess.consumeItems;
+                createItems = preparedProcess.createItems;
+                successMessage = 'Process updated successfully!';
             } else {
-                lastCreatedProcessId = null;
+                const createdId = await createProcess(
+                    preparedProcess.title,
+                    preparedProcess.duration,
+                    preparedProcess.requireItems,
+                    preparedProcess.consumeItems,
+                    preparedProcess.createItems
+                );
+
+                duration = normalizedDuration;
+                requireItems = preparedProcess.requireItems;
+                consumeItems = preparedProcess.consumeItems;
+                createItems = preparedProcess.createItems;
+
+                if (createdId != null) {
+                    formData.append('id', String(createdId));
+                    lastSavedProcessId = createdId;
+                } else {
+                    lastSavedProcessId = null;
+                }
+
+                successMessage = 'Process created successfully!';
+                showPreview = false;
+
+                // Clear the form for next entry
+                title = '';
+                duration = '';
+                requireItems = [];
+                consumeItems = [];
+                createItems = [];
             }
-
-            successMessage = 'Process created successfully!';
-            showPreview = false;
-
-            // Clear the form for next entry
-            title = '';
-            duration = '';
-            requireItems = [];
-            consumeItems = [];
-            createItems = [];
 
             dispatch('submit', formData);
         } catch (error) {
-            console.error('Failed to create process:', error);
+            console.error('Failed to save process:', error);
             errorMessage = 'Failed to save process. Please try again.';
         } finally {
             isSubmitting = false;
@@ -213,8 +259,8 @@
         {#if successMessage}
             <div class="success-message" role="status" aria-live="polite">
                 {successMessage}
-                {#if lastCreatedProcessId}
-                    <a class="success-link" href={`/processes/${lastCreatedProcessId}`}>
+                {#if lastSavedProcessId}
+                    <a class="success-link" href={`/processes/${lastSavedProcessId}`}>
                         View process
                     </a>
                 {/if}
@@ -361,7 +407,7 @@
 
             <div class="form-submit">
                 <button type="submit" class="submit-button" disabled={isSubmitting}>
-                    {isSubmitting ? 'Saving…' : 'Create Process'}
+                    {isSubmitting ? 'Saving…' : isEdit ? 'Update Process' : 'Create Process'}
                 </button>
                 <button
                     type="button"

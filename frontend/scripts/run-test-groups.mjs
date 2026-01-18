@@ -128,6 +128,12 @@ const TEST_GROUPS = [
         workers: 2,
     },
     {
+        name: 'Process Edit',
+        files: ['process-edit.spec.ts'],
+        parallel: true,
+        workers: 1,
+    },
+    {
         name: 'Process Preview',
         files: ['process-preview.spec.ts', 'process-hardening.spec.ts'],
         parallel: true,
