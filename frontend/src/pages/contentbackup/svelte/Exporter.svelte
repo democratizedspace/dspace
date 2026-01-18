@@ -190,17 +190,20 @@
                         <ul class="summary-list" role="list">
                             {#each preparedSummary.items as entry}
                                 <li class="summary-entry" role="listitem">
-                                    {entry.kind}: {entry.name}
+                                    <span class="summary-kind">{entry.kind}:</span>
+                                    <span class="summary-name">{entry.name}</span>
                                 </li>
                             {/each}
                             {#each preparedSummary.processes as entry}
                                 <li class="summary-entry" role="listitem">
-                                    {entry.kind}: {entry.name}
+                                    <span class="summary-kind">{entry.kind}:</span>
+                                    <span class="summary-name">{entry.name}</span>
                                 </li>
                             {/each}
                             {#each preparedSummary.quests as entry}
                                 <li class="summary-entry" role="listitem">
-                                    {entry.kind}: {entry.name}
+                                    <span class="summary-kind">{entry.kind}:</span>
+                                    <span class="summary-name">{entry.name}</span>
                                 </li>
                             {/each}
                         </ul>
