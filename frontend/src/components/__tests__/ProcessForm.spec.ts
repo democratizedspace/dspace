@@ -86,6 +86,28 @@ test('initializes edit fields from process data', async () => {
     });
 });
 
+test('normalizes missing item arrays when initializing edit data', async () => {
+    const { container } = render(ProcessForm, {
+        props: {
+            isEdit: true,
+            processData: {
+                id: 'process-210',
+                title: 'Normalize Items',
+                duration: '15m',
+                requireItems: null,
+                consumeItems: undefined,
+                createItems: 'invalid',
+            },
+        },
+    });
+
+    await waitFor(() => {
+        expect(container.querySelector('#required-items-section .item-row')).toBeNull();
+        expect(container.querySelector('#consumed-items-section .item-row')).toBeNull();
+        expect(container.querySelector('#created-items-section .item-row')).toBeNull();
+    });
+});
+
 test('submits updates in edit mode', async () => {
     const { getByLabelText, container, findByText } = render(ProcessForm, {
         props: {
@@ -123,6 +145,42 @@ test('submits updates in edit mode', async () => {
     expect(await findByText('Process updated successfully!')).toBeTruthy();
 });
 
+test('uses processId prop when editing without a processData id', async () => {
+    const { getByLabelText, container, findByText } = render(ProcessForm, {
+        props: {
+            isEdit: true,
+            processId: 'process-350',
+            processData: {
+                title: 'Prop ID Process',
+                duration: '20m',
+                requireItems: [{ id: 'water', count: 1 }],
+                consumeItems: [],
+                createItems: [],
+            },
+        },
+    });
+
+    const titleInput = getByLabelText('Title*');
+    const durationInput = getByLabelText('Duration*');
+    const form = container.querySelector('form') as HTMLFormElement;
+
+    await fireEvent.input(titleInput, { target: { value: 'Updated Prop ID Process' } });
+    await fireEvent.input(durationInput, { target: { value: '20m' } });
+    await fireEvent.submit(form);
+
+    await waitFor(() => {
+        expect(updateProcessMock).toHaveBeenCalledWith(
+            'process-350',
+            expect.objectContaining({
+                title: 'Updated Prop ID Process',
+                duration: '20m',
+            })
+        );
+    });
+
+    expect(await findByText('Process updated successfully!')).toBeTruthy();
+});
+
 test('shows an error when editing without a process id', async () => {
     const { getByLabelText, container, findByText } = render(ProcessForm, {
         props: {
@@ -145,4 +203,60 @@ test('shows an error when editing without a process id', async () => {
 
     expect(await findByText('Failed to save process. Please try again.')).toBeTruthy();
     expect(container.querySelector('.form-error')).toBeTruthy();
+});
+
+test('reinitializes edit fields after toggling edit mode', async () => {
+    const { component, getByLabelText } = render(ProcessForm, {
+        props: {
+            isEdit: true,
+            processData: {
+                id: 'process-400',
+                title: 'Original Title',
+                duration: '10m',
+                requireItems: [{ id: 'water', count: 1 }],
+                consumeItems: [],
+                createItems: [],
+            },
+        },
+    });
+
+    const titleInput = getByLabelText('Title*');
+
+    await waitFor(() => {
+        expect(titleInput.value).toBe('Original Title');
+    });
+
+    await fireEvent.input(titleInput, { target: { value: 'Modified Title' } });
+    expect(titleInput.value).toBe('Modified Title');
+
+    component.$set({ isEdit: false });
+    await waitFor(() => {
+        expect(titleInput.value).toBe('Modified Title');
+    });
+
+    component.$set({ isEdit: true });
+    await waitFor(() => {
+        expect(titleInput.value).toBe('Original Title');
+    });
+});
+
+test('does not show a success link when create returns null', async () => {
+    createProcessMock.mockResolvedValueOnce(null);
+
+    const { getByLabelText, container, findByText } = render(ProcessForm, {
+        props: {
+            requireItems: [{ id: 'water', count: 1 }],
+        },
+    });
+
+    const titleInput = getByLabelText('Title*');
+    const durationInput = getByLabelText('Duration*');
+    const form = container.querySelector('form') as HTMLFormElement;
+
+    await fireEvent.input(titleInput, { target: { value: 'No Link Process' } });
+    await fireEvent.input(durationInput, { target: { value: '10m' } });
+    await fireEvent.submit(form);
+
+    expect(await findByText('Process created successfully!')).toBeTruthy();
+    expect(container.querySelector('.success-link')).toBeNull();
 });
