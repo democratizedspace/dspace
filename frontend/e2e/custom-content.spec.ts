@@ -326,6 +326,21 @@ test.describe('Custom Content Management', () => {
         if (itemUrlMatch?.[1]) {
             itemId = itemUrlMatch[1];
         } else {
+            const viewItemLink = page.getByRole('link', { name: /view item/i });
+            try {
+                await expect(viewItemLink).toBeVisible({ timeout: 15000 });
+                const href = await viewItemLink.getAttribute('href');
+                const hrefMatch = href?.match(/\/inventory\/item\/([0-9a-f-]+)/);
+                if (hrefMatch?.[1]) {
+                    itemId = hrefMatch[1];
+                }
+            } catch (error) {
+                // Fall back to IndexedDB polling when the link is unavailable.
+                void error;
+            }
+        }
+
+        if (!itemId) {
             await expect
                 .poll(
                     async () => {
