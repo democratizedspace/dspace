@@ -7,9 +7,14 @@ const source = readFileSync(
 );
 
 describe('Custom content backup importer accessibility', () => {
-    it('includes a persistent accessible label for the import textarea', () => {
-        expect(source).toMatch(/const\s+importTextareaLabelId\s*=\s*'custom-content-backup-label'/);
-        expect(source).toMatch(/<p\s+id={importTextareaLabelId}>Paste your custom content backup here:/);
-        expect(source).toMatch(/<textarea[\s\S]*aria-labelledby={importTextareaLabelId}/);
+    it('includes a persistent accessible label for the import dropzone', () => {
+        expect(source).toMatch(
+            /const\s+dropzoneLabelId\s*=\s*'custom-content-backup-dropzone-label'/
+        );
+        expect(source).toMatch(
+            /<p\s+id={dropzoneLabelId}>\s*Drag and drop your backup file here, or click to browse\./
+        );
+        expect(source).toMatch(/aria-labelledby={dropzoneLabelId}/);
+        expect(source).toMatch(/type="file"/);
     });
 });
