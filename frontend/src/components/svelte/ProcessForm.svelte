@@ -466,10 +466,6 @@
         text-decoration: underline;
     }
 
-    .success-separator {
-        color: #d0ffd0;
-    }
-
     .success-link:focus-visible {
         outline: 2px solid #fff;
         outline-offset: 2px;
