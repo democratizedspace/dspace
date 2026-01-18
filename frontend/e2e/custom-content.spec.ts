@@ -85,18 +85,11 @@ test.describe('Custom Content Management', () => {
     async function uploadItemImage(page: Page): Promise<void> {
         const imageInput = page.locator('#image');
         if ((await imageInput.count()) > 0) {
-            try {
-                await imageInput.setInputFiles({
-                    name: 'custom-item.png',
-                    mimeType: 'image/png',
-                    buffer: inlineItemImageBuffer,
-                });
-            } catch (error) {
-                if (String(error).includes('ENOENT')) {
-                    return;
-                }
-                throw error;
-            }
+            await imageInput.setInputFiles({
+                name: 'custom-item.png',
+                mimeType: 'image/png',
+                buffer: inlineItemImageBuffer,
+            });
         }
     }
 
