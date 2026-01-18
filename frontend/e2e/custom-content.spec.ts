@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { test, expect, Page } from '@playwright/test';
 import {
     clearUserData,
@@ -15,6 +17,7 @@ const itemImageFile = {
     mimeType: 'image/png',
     buffer: inlineItemImageBuffer,
 };
+const itemImagePath = path.resolve(__dirname, '../public/assets/220_ohm_resistor.jpg');
 
 test.describe('Custom Content Management', () => {
     test.setTimeout(120000); // 2 minutes for end-to-end tests
@@ -90,7 +93,11 @@ test.describe('Custom Content Management', () => {
     async function uploadItemImage(page: Page): Promise<void> {
         const imageInput = page.locator('#image');
         if ((await imageInput.count()) > 0) {
-            await imageInput.setInputFiles(itemImageFile);
+            if (fs.existsSync(itemImagePath)) {
+                await imageInput.setInputFiles(itemImagePath);
+            } else {
+                await imageInput.setInputFiles(itemImageFile);
+            }
         }
     }
 
