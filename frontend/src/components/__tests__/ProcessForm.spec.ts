@@ -61,6 +61,35 @@ test('accepts uppercase duration units without validation errors', async () => {
     });
 });
 
+test('prevents duplicate submissions while save is pending', async () => {
+    let resolveSave: (value: string) => void;
+    const savePromise = new Promise<string>((resolve) => {
+        resolveSave = resolve;
+    });
+    createProcessMock.mockReturnValueOnce(savePromise);
+
+    const { getByLabelText, container, findByText } = render(ProcessForm, {
+        props: {
+            requireItems: [{ id: 'water', count: 1 }],
+        },
+    });
+
+    const titleInput = getByLabelText('Title*');
+    const durationInput = getByLabelText('Duration*');
+    const form = container.querySelector('form') as HTMLFormElement;
+
+    await fireEvent.input(titleInput, { target: { value: 'Queued Process' } });
+    await fireEvent.input(durationInput, { target: { value: '1h' } });
+
+    await fireEvent.submit(form);
+    await fireEvent.submit(form);
+
+    expect(createProcessMock).toHaveBeenCalledTimes(1);
+
+    resolveSave('process-999');
+    expect(await findByText('Process created successfully!')).toBeTruthy();
+});
+
 test('initializes edit fields from process data', async () => {
     const { getByLabelText, container } = render(ProcessForm, {
         props: {
@@ -259,4 +288,57 @@ test('does not show a success link when create returns null', async () => {
 
     expect(await findByText('Process created successfully!')).toBeTruthy();
     expect(container.querySelector('.success-link')).toBeNull();
+});
+
+test('hides the preview after a successful create', async () => {
+    const { getByLabelText, container, findByText } = render(ProcessForm, {
+        props: {
+            requireItems: [{ id: 'water', count: 1 }],
+        },
+    });
+
+    const titleInput = getByLabelText('Title*');
+    const durationInput = getByLabelText('Duration*');
+    const form = container.querySelector('form') as HTMLFormElement;
+    const previewButton = container.querySelector('button.preview-button') as HTMLButtonElement;
+
+    await fireEvent.input(titleInput, { target: { value: 'Preview Process' } });
+    await fireEvent.input(durationInput, { target: { value: '10m' } });
+    await fireEvent.click(previewButton);
+
+    expect(container.querySelector('.process-preview')).toBeTruthy();
+
+    await fireEvent.submit(form);
+
+    expect(await findByText('Process created successfully!')).toBeTruthy();
+    expect(container.querySelector('.process-preview')).toBeNull();
+});
+
+test('shows an error when update fails', async () => {
+    updateProcessMock.mockRejectedValueOnce(new Error('Update failed'));
+
+    const { getByLabelText, container, findByText } = render(ProcessForm, {
+        props: {
+            isEdit: true,
+            processData: {
+                id: 'process-500',
+                title: 'Failing Update',
+                duration: '10m',
+                requireItems: [{ id: 'water', count: 1 }],
+                consumeItems: [],
+                createItems: [],
+            },
+        },
+    });
+
+    const titleInput = getByLabelText('Title*');
+    const durationInput = getByLabelText('Duration*');
+    const form = container.querySelector('form') as HTMLFormElement;
+
+    await fireEvent.input(titleInput, { target: { value: 'Failing Update' } });
+    await fireEvent.input(durationInput, { target: { value: '10m' } });
+    await fireEvent.submit(form);
+
+    expect(await findByText('Failed to save process. Please try again.')).toBeTruthy();
+    expect(container.querySelector('.form-error')).toBeTruthy();
 });
