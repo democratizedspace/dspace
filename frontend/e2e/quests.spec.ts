@@ -1,5 +1,11 @@
 import { test, expect } from '@playwright/test';
-import { purgeClientState, waitForHydration, waitForQuestRecordByTitle } from './test-helpers';
+import {
+    createTestPngBuffer,
+    purgeClientState,
+    waitForHydration,
+    waitForImagePreview,
+    waitForQuestRecordByTitle,
+} from './test-helpers';
 
 const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -21,12 +27,18 @@ test.describe('Quest creation flow', () => {
             .fill(`${questDescription} Ensures stability during CI runs.`);
         await page.getByLabel('NPC Identifier*').fill('/assets/npc/dChat.jpg');
 
-        await page.locator('#image').setInputFiles({
+        const fileInput = page.getByTestId('image-file-input');
+        const buffer = await createTestPngBuffer(page, {
+            background: '#38bdf8',
+            accent: '#f97316',
+            inset: 4,
+        });
+        await fileInput.setInputFiles({
             name: 'quest-e2e.png',
             mimeType: 'image/png',
-            buffer: Buffer.from('89504e470d0a1a0a', 'hex'),
+            buffer,
         });
-        await expect(page.locator('.image-preview')).toBeVisible();
+        await waitForImagePreview(page, fileInput);
 
         await page.getByLabel('New node ID').fill('start');
         await page.getByLabel('Node text').fill('Welcome to the automated quest!');

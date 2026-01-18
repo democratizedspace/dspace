@@ -75,6 +75,11 @@ All items must now conform to the JSON schema located at `frontend/src/pages/inv
 
 ### Images
 
+When you upload a custom item image in-game, the client downsamples it to a 512×512 JPEG and
+compresses it to target **< 50KB**. This keeps IndexedDB storage small, speeds up backups,
+and improves load times. Developers should reuse the shared helper at
+`frontend/src/utils/imageDownsample.js` for any future custom image ingestion points.
+
 1. **Clear representation** - Should clearly show what the item is
 2. **Consistent style** - Match the visual style of existing items
 3. **Appropriate format** - Use PNG or JPG format, sized appropriately

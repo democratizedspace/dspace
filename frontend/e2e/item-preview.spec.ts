@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, createTestPngBuffer, waitForHydration } from './test-helpers';
 
 test.describe('Custom content preview', () => {
     test.beforeEach(async ({ page }) => {
@@ -20,16 +20,21 @@ test.describe('Custom content preview', () => {
         await expect(preview).toContainText('Preview Item');
         await expect(preview).toContainText('Preview item description');
 
-        const fileInput = page.locator('input[type="file"]');
+        const fileInput = page.getByTestId('image-file-input');
+        const buffer = await createTestPngBuffer(page, {
+            background: '#3b82f6',
+            accent: '#f97316',
+            inset: 8,
+        });
         await fileInput.setInputFiles({
             name: 'test.png',
             mimeType: 'image/png',
-            buffer: Buffer.from('fake'),
+            buffer,
         });
 
         const img = preview.locator('img');
+        await expect(fileInput).toHaveAttribute('data-processing', 'false');
         await expect(img).toBeVisible();
-        const src = await img.getAttribute('src');
-        expect(src).toContain('data:');
+        await expect.poll(async () => img.getAttribute('src')).toMatch(/^data:image\/jpeg;base64,/);
     });
 });

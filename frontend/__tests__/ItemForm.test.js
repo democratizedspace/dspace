@@ -1,52 +1,51 @@
 /**
  * @jest-environment jsdom
  */
-import { beforeEach, afterEach, describe, it, expect } from 'vitest';
+import { beforeEach, afterEach, describe, it, expect, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import { render, act, fireEvent, waitFor } from '@testing-library/svelte';
 import ItemForm from '../src/components/svelte/ItemForm.svelte';
 
-// Mock the database operations using Jest instead of Vitest
-jest.mock('../src/utils/indexeddb.js', () => ({
-    addEntity: jest.fn().mockResolvedValue('mocked-item-id'),
-    updateEntity: jest.fn().mockResolvedValue('mocked-item-id'),
+const itemsAddMock = vi.fn().mockResolvedValue('mocked-item-id');
+const itemsUpdateMock = vi.fn().mockResolvedValue('mocked-item-id');
+
+vi.mock('../src/utils/customcontent.js', () => ({
+    db: {
+        items: {
+            add: itemsAddMock,
+            update: itemsUpdateMock,
+        },
+    },
 }));
 
-jest.mock('../src/utils/gameState/inventory.js', () => ({
-    addItems: jest.fn(),
+vi.mock('../src/utils/gameState/inventory.js', () => ({
+    addItems: vi.fn(),
 }));
 
-import { addEntity, updateEntity } from '../src/utils/indexeddb.js';
+vi.mock('../src/utils/imageDownsample.js', () => ({
+    downsampleAndCompressToJpeg: vi.fn().mockResolvedValue({
+        dataUrl: 'data:image/jpeg;base64,COMPRESSED',
+        bytes: 12345,
+        width: 512,
+        height: 512,
+        qualityUsed: 0.8,
+    }),
+}));
 
 // Mock the browser's fetch API
-global.fetch = jest.fn(() =>
+global.fetch = vi.fn(() =>
     Promise.resolve({
         ok: true,
         json: () => Promise.resolve({ url: 'mocked-image-url' }),
     })
 );
 
-// Mock File and FileReader for image uploads
+// Mock File for image uploads
 global.File = class File {
     constructor(bits, name, options) {
         this.name = name;
         this.size = bits.length;
         this.type = options?.type || '';
-    }
-};
-
-// Create a FileReader mock
-global.FileReader = class FileReader {
-    constructor() {
-        this.readAsDataURL = jest.fn((file) => {
-            // Simulate the file reading process
-            setTimeout(() => {
-                this.result = 'data:image/png;base64,mockedBase64Data';
-                if (typeof this.onload === 'function') {
-                    this.onload({ target: this });
-                }
-            }, 0);
-        });
     }
 };
 
@@ -72,7 +71,9 @@ describe('ItemForm Component', () => {
         container = setupDom();
 
         // Reset mocks
-        jest.clearAllMocks();
+        vi.clearAllMocks();
+        itemsAddMock.mockResolvedValue('mocked-item-id');
+        itemsUpdateMock.mockResolvedValue('mocked-item-id');
     });
 
     afterEach(() => {
@@ -132,12 +133,11 @@ describe('ItemForm Component', () => {
 
         // Check if database add was called with correct data
         await waitFor(() => {
-            expect(addEntity).toHaveBeenCalledWith(
+            expect(itemsAddMock).toHaveBeenCalledWith(
                 expect.objectContaining({
                     name: 'Test Item',
                     description: 'This is a test item description',
-                    image: 'data:image/png;base64,mockedBase64Data',
-                    imageBlob: expect.any(File),
+                    image: 'data:image/jpeg;base64,COMPRESSED',
                     dependencies: ['resource/filament', 'tool/nozzle'],
                 })
             );
@@ -182,7 +182,7 @@ describe('ItemForm Component', () => {
     });
 
     it('shows an error message when saving fails', async () => {
-        addEntity.mockRejectedValueOnce(new Error('Database exploded'));
+        itemsAddMock.mockRejectedValueOnce(new Error('Database exploded'));
 
         const { getByLabelText, getByText, findByRole } = render(ItemForm, {
             target: container,
@@ -246,7 +246,7 @@ describe('ItemForm Component', () => {
         });
 
         await waitFor(() => {
-            expect(addEntity).toHaveBeenCalledWith(
+            expect(itemsAddMock).toHaveBeenCalledWith(
                 expect.objectContaining({
                     dependencies: ['item/one', 'item/two'],
                 })
@@ -275,7 +275,7 @@ describe('ItemForm Component', () => {
         });
 
         // Verify the database was not called
-        expect(addEntity).not.toHaveBeenCalled();
+        expect(itemsAddMock).not.toHaveBeenCalled();
     });
 
     it('handles edit mode correctly', async () => {
@@ -288,7 +288,7 @@ describe('ItemForm Component', () => {
             dependencies: ['resource/alloy'],
         };
 
-        // No additional mocking needed - updateEntity is already mocked
+        // No additional mocking needed - itemsUpdateMock is already mocked
 
         const { getByLabelText, getByText } = render(ItemForm, {
             target: container,
@@ -312,7 +312,7 @@ describe('ItemForm Component', () => {
 
         // Verify update was called with correct data
         await waitFor(() => {
-            expect(updateEntity).toHaveBeenCalledWith(
+            expect(itemsUpdateMock).toHaveBeenCalledWith(
                 expect.objectContaining({
                     id: existingItem.id,
                     name: existingItem.name,

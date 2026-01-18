@@ -1,5 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { purgeClientState, waitForHydration } from './test-helpers';
+import {
+    createTestPngBuffer,
+    purgeClientState,
+    waitForHydration,
+    waitForImagePreview,
+} from './test-helpers';
 
 test('quest creation shows accessible success message with quest link', async ({ page }) => {
     await purgeClientState(page);
@@ -9,14 +14,19 @@ test('quest creation shows accessible success message with quest link', async ({
     await page.getByLabel('Title*').fill('Success Quest');
     await page.getByLabel('Description*').fill('Check success message');
 
-    const fileInput = page.getByLabel('Upload an Image*');
+    const fileInput = page.getByTestId('image-file-input');
+    const buffer = await createTestPngBuffer(page, {
+        background: '#4ade80',
+        accent: '#f97316',
+        inset: 6,
+    });
     await fileInput.setInputFiles({
         name: 'success-image.png',
         mimeType: 'image/png',
-        buffer: Buffer.from('89504e470d0a1a0a', 'hex'),
+        buffer,
     });
 
-    await expect(page.getByRole('img', { name: 'Quest preview' })).toBeVisible();
+    await waitForImagePreview(page, fileInput);
 
     await page.getByRole('button', { name: 'Create Quest' }).click();
 

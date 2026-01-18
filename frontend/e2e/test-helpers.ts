@@ -221,6 +221,80 @@ export async function purgeClientState(page: Page): Promise<void> {
     );
 }
 
+export async function waitForImagePreview(
+    page: Page,
+    fileInput: Locator,
+    { timeoutMs = 30_000 }: { timeoutMs?: number } = {}
+): Promise<void> {
+    const resolvePreview = async (): Promise<Locator | null> => {
+        const previewByTestId = page.getByTestId('image-preview');
+        if ((await previewByTestId.count()) > 0) {
+            return previewByTestId;
+        }
+        const previewByClass = page.locator('.image-preview');
+        if ((await previewByClass.count()) > 0) {
+            return previewByClass;
+        }
+        return null;
+    };
+
+    await expect
+        .poll(async () => {
+            const preview = await resolvePreview();
+            if (!preview) {
+                return null;
+            }
+            return preview.first().getAttribute('src');
+        }, { timeout: timeoutMs })
+        .toMatch(/^data:image\/jpeg;base64,/);
+
+    const preview = (await resolvePreview()) ?? page.locator('.image-preview');
+    await expect(preview.first()).toBeVisible({ timeout: timeoutMs });
+    await expect(fileInput).toHaveAttribute('data-processing', 'false', {
+        timeout: timeoutMs,
+    });
+}
+
+export async function createTestPngBuffer(
+    page: Page,
+    {
+        size = 32,
+        background = '#38bdf8',
+        accent = '#f97316',
+        inset = 4,
+    }: { size?: number; background?: string; accent?: string; inset?: number } = {}
+): Promise<Buffer> {
+    const dataUrl = await page.evaluate(
+        ({ size: canvasSize, backgroundColor, accentColor, insetSize }) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = canvasSize;
+            canvas.height = canvasSize;
+            const context = canvas.getContext('2d');
+            if (!context) {
+                throw new Error('Canvas context unavailable');
+            }
+            context.fillStyle = backgroundColor;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            context.fillStyle = accentColor;
+            context.fillRect(
+                insetSize,
+                insetSize,
+                canvasSize - insetSize * 2,
+                canvasSize - insetSize * 2
+            );
+            return canvas.toDataURL('image/png');
+        },
+        {
+            size,
+            backgroundColor: background,
+            accentColor: accent,
+            insetSize: inset,
+        }
+    );
+    const base64Payload = dataUrl.split(',')[1] ?? '';
+    return Buffer.from(base64Payload, 'base64');
+}
+
 /**
  * Clears persisted user data for backwards compatibility with older helpers.
  */

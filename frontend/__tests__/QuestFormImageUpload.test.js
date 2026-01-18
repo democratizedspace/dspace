@@ -1,35 +1,44 @@
 /**
  * @jest-environment jsdom
  */
-import { beforeEach, afterEach, describe, it, expect } from 'vitest';
+import { beforeEach, afterEach, describe, it, expect, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import { render, fireEvent, waitFor, act } from '@testing-library/svelte';
-import { jest } from 'vitest';
 import QuestForm from '../src/components/svelte/QuestForm.svelte';
 
-const questsAddMock = jest.fn();
-const listMock = jest.fn();
+const questsAddMock = vi.fn();
+const listMock = vi.fn();
 
-jest.mock('../src/utils/customcontent.js', () => ({
+vi.mock('../src/utils/customcontent.js', () => ({
     db: {
         quests: {
             add: questsAddMock,
-            update: jest.fn(),
-            get: jest.fn(),
-            delete: jest.fn(),
+            update: vi.fn(),
+            get: vi.fn(),
+            delete: vi.fn(),
         },
         list: listMock,
     },
     ENTITY_TYPES: { QUEST: 'quest' },
 }));
 
-jest.mock('../src/utils/customQuestValidation.js', () => ({
+vi.mock('../src/utils/customQuestValidation.js', () => ({
     validateQuestData: () => ({ valid: true, errors: [] }),
     validateQuestDependencies: () => true,
 }));
 
-jest.mock('../src/utils/questHelpers.js', () => ({
+vi.mock('../src/utils/questHelpers.js', () => ({
     isQuestTitleUnique: () => true,
+}));
+
+vi.mock('../src/utils/imageDownsample.js', () => ({
+    downsampleAndCompressToJpeg: vi.fn().mockResolvedValue({
+        dataUrl: 'data:image/jpeg;base64,COMPRESSED',
+        bytes: 12345,
+        width: 512,
+        height: 512,
+        qualityUsed: 0.8,
+    }),
 }));
 
 function setupDom() {
@@ -50,7 +59,7 @@ describe('QuestForm image uploads', () => {
         questsAddMock.mockResolvedValue('quest-123');
         listMock.mockReset();
         listMock.mockResolvedValue([]);
-        global.fetch = jest.fn(() =>
+        global.fetch = vi.fn(() =>
             Promise.resolve({
                 ok: true,
                 json: () => Promise.resolve({ url: 'https://example.com/uploaded.png' }),
@@ -63,21 +72,6 @@ describe('QuestForm image uploads', () => {
                 this.type = options.type || '';
             }
         };
-        global.FileReader = class FileReader {
-            constructor() {
-                this.onload = null;
-                this.onerror = null;
-            }
-
-            readAsDataURL() {
-                setTimeout(() => {
-                    this.result = 'data:image/png;base64,TESTDATA';
-                    if (typeof this.onload === 'function') {
-                        this.onload({ target: this });
-                    }
-                }, 0);
-            }
-        };
         global.__SSR__ = false;
         global.__BROWSER__ = true;
     });
@@ -86,7 +80,6 @@ describe('QuestForm image uploads', () => {
         container.innerHTML = '';
         delete global.fetch;
         delete global.File;
-        delete global.FileReader;
     });
 
     it('stores quest images locally without calling a remote upload endpoint', async () => {
@@ -152,7 +145,7 @@ describe('QuestForm image uploads', () => {
         await waitFor(() => expect(questsAddMock).toHaveBeenCalledTimes(1));
 
         const savedQuest = questsAddMock.mock.calls[0][0];
-        expect(savedQuest.image).toBe('data:image/png;base64,TESTDATA');
+        expect(savedQuest.image).toBe('data:image/jpeg;base64,COMPRESSED');
         expect(global.fetch).not.toHaveBeenCalled();
     });
 });

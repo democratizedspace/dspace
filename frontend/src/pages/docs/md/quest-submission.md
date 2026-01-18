@@ -45,6 +45,13 @@ If your quest uses only existing items and processes:
 4. **Submit at** `/quests/submit` with your GitHub token
 5. **Respond to feedback** on the generated pull request
 
+## Quest Images
+
+When you upload a custom quest image in-game, the client downsamples it to a 512×512 JPEG and
+compresses it to target **< 50KB**. This keeps IndexedDB storage lean for faster exports and
+load times. Developers should use the shared helper at
+`frontend/src/utils/imageDownsample.js` for future custom image ingestion.
+
 ## Manual Submission (Advanced)
 
 For manual submissions via command-line:
