@@ -1,6 +1,11 @@
 import { test, expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
-import { purgeClientState, waitForHydration, waitForQuestRecordByTitle } from './test-helpers';
+import {
+    purgeClientState,
+    waitForHydration,
+    waitForImagePreview,
+    waitForQuestRecordByTitle,
+} from './test-helpers';
 
 const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -48,10 +53,7 @@ test.describe('Quest creation flow', () => {
             mimeType: 'image/png',
             buffer,
         });
-        const previewImage = page.getByTestId('image-preview');
-        await expect(previewImage).toHaveAttribute('src', /^data:image\/jpeg;base64,/);
-        await expect(previewImage).toBeVisible();
-        await expect(fileInput).toHaveAttribute('data-processing', 'false');
+        await waitForImagePreview(page, fileInput);
 
         await page.getByLabel('New node ID').fill('start');
         await page.getByLabel('Node text').fill('Welcome to the automated quest!');

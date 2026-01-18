@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
-import { purgeClientState, waitForHydration } from './test-helpers';
+import { purgeClientState, waitForHydration, waitForImagePreview } from './test-helpers';
 
 async function createTestPngBuffer(page: Page) {
     const dataUrl = await page.evaluate(() => {
@@ -37,10 +37,7 @@ test('quest creation shows accessible success message with quest link', async ({
         buffer,
     });
 
-    const previewImage = page.getByTestId('image-preview');
-    await expect(previewImage).toHaveAttribute('src', /^data:image\/jpeg;base64,/);
-    await expect(previewImage).toBeVisible();
-    await expect(fileInput).toHaveAttribute('data-processing', 'false');
+    await waitForImagePreview(page, fileInput);
 
     await page.getByRole('button', { name: 'Create Quest' }).click();
 

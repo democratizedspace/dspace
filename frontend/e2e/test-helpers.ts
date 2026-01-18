@@ -221,6 +221,22 @@ export async function purgeClientState(page: Page): Promise<void> {
     );
 }
 
+export async function waitForImagePreview(page: Page, fileInput: Locator): Promise<void> {
+    const preview = page.getByTestId('image-preview');
+
+    await expect
+        .poll(async () => {
+            if ((await preview.count()) === 0) {
+                return null;
+            }
+            return preview.getAttribute('src');
+        })
+        .toMatch(/^data:image\/jpeg;base64,/);
+
+    await expect(preview).toBeVisible();
+    await expect(fileInput).toHaveAttribute('data-processing', 'false');
+}
+
 /**
  * Clears persisted user data for backwards compatibility with older helpers.
  */
