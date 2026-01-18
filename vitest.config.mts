@@ -117,6 +117,7 @@ export default defineConfig({
       include: [
         'backend/**/*.ts',
         'common/**/*.ts',
+        'frontend/src/utils/imageDownsample.js',
         'frontend/src/components/**/*.svelte',
       ],
       exclude: ['**/node_modules/**', '**/generated/**', '**/*.d.ts'],
