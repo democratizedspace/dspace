@@ -846,6 +846,50 @@ describe('ProcessForm Component', () => {
         expect(createCountInput.value).toBe('3');
     });
 
+    test('reinitializes when toggling edit mode off and on', async () => {
+        const component = new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-abc',
+                    title: 'First Title',
+                    duration: '5m',
+                    requireItems: [{ id: 'item-1', count: 1 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        component.$set({ isEdit: false });
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        component.$set({
+            isEdit: true,
+            processData: {
+                id: 'process-abc',
+                title: 'Second Title',
+                duration: '15m',
+                requireItems: [{ id: 'item-1', count: 2 }],
+                consumeItems: [],
+                createItems: [],
+            },
+        });
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const titleInput = container.querySelector('#title');
+        const durationInput = container.querySelector('#duration');
+        const countInput = container.querySelector('#required-items-section input[type="number"]');
+
+        expect(titleInput.value).toBe('Second Title');
+        expect(durationInput.value).toBe('15m');
+        expect(countInput.value).toBe('2');
+    });
+
     test('submits updates when editing a process', async () => {
         const component = new ProcessForm({
             target: container,
