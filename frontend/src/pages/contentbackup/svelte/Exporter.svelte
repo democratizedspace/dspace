@@ -22,10 +22,12 @@
         );
     };
 
-    const buildSummaryEntry = (kind, entity) => ({
-        kind,
-        name: entity?.title || entity?.name || entity?.id || 'Unknown',
-    });
+    const buildSummaryEntry = (kind, entity) => {
+        const name = entity?.title || entity?.name || entity?.id || 'Unknown';
+        return {
+            label: `${kind}: ${name}`,
+        };
+    };
 
     const formatProgressLabel = (label) => {
         if (!label) {
@@ -189,19 +191,13 @@
                         <h3>Prepared content</h3>
                         <ul class="summary-list" role="list">
                             {#each preparedSummary.items as entry}
-                                <li class="summary-entry" role="listitem">
-                                    {entry.kind}: {entry.name}
-                                </li>
+                                <li class="summary-entry" role="listitem">{entry.label}</li>
                             {/each}
                             {#each preparedSummary.processes as entry}
-                                <li class="summary-entry" role="listitem">
-                                    {entry.kind}: {entry.name}
-                                </li>
+                                <li class="summary-entry" role="listitem">{entry.label}</li>
                             {/each}
                             {#each preparedSummary.quests as entry}
-                                <li class="summary-entry" role="listitem">
-                                    {entry.kind}: {entry.name}
-                                </li>
+                                <li class="summary-entry" role="listitem">{entry.label}</li>
                             {/each}
                         </ul>
                     </div>
