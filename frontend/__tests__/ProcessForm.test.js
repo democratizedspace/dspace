@@ -31,6 +31,15 @@ jest.mock('../src/utils/customcontent.js', () => ({
 }));
 
 const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
+const createDeferred = () => {
+    let resolve;
+    let reject;
+    const promise = new Promise((promiseResolve, promiseReject) => {
+        resolve = promiseResolve;
+        reject = promiseReject;
+    });
+    return { promise, resolve, reject };
+};
 
 describe('ProcessForm Component', () => {
     let container;
@@ -61,7 +70,7 @@ describe('ProcessForm Component', () => {
     });
 
     test('loads the merged item catalog on mount', async () => {
-        new ProcessForm({
+        const component = new ProcessForm({
             target: container,
         });
 
@@ -166,6 +175,62 @@ describe('ProcessForm Component', () => {
             [],
             []
         );
+    });
+
+    test('skips duplicate submissions while saving', async () => {
+        const pendingSave = createDeferred();
+        createProcessMock.mockReturnValueOnce(pendingSave.promise);
+
+        const component = new ProcessForm({
+            target: container,
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Pending Save';
+        titleInput.dispatchEvent(new Event('input'));
+
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        component.$set({ requireItems: [{ id: 'item-1', count: 1 }] });
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        pendingSave.resolve('process-123');
+        await flushPromises();
+
+        expect(createProcessMock).toHaveBeenCalledTimes(1);
+    });
+
+    test('does not render a success link when create returns no id', async () => {
+        createProcessMock.mockResolvedValueOnce(null);
+
+        const component = new ProcessForm({
+            target: container,
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'No ID Process';
+        titleInput.dispatchEvent(new Event('input'));
+
+        durationInput.value = '1h';
+        durationInput.dispatchEvent(new Event('input'));
+
+        component.$set({ requireItems: [{ id: 'item-1', count: 1 }] });
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(container.querySelector('.success-message')).toBeTruthy();
+        expect(container.querySelector('.success-link')).toBeFalsy();
     });
 
     test('should reject submission without item relationships', async () => {
@@ -335,7 +400,7 @@ describe('ProcessForm Component', () => {
     });
 
     test('uses schema validation messages for invalid item IDs', async () => {
-        new ProcessForm({
+        const component = new ProcessForm({
             target: container,
         });
 
