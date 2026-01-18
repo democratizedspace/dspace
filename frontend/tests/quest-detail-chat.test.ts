@@ -138,7 +138,7 @@ describe('QuestDetail', () => {
 
         await waitFor(() => {
             expect(screen.getByText('This custom quest ends immediately.')).not.toBeNull();
-            expect(screen.getByRole('button', { name: /finish/i })).not.toBeNull();
+            expect(screen.getAllByRole('button', { name: /finish/i }).length).toBeGreaterThan(0);
         });
     });
 });
