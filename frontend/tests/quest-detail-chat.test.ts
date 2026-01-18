@@ -15,27 +15,23 @@ type Store<T> = {
     update: (updater: (value: T) => T) => void;
 };
 
-function createStore<T>(initial: T): Store<T> {
-    let value = initial;
-    const subscribers = new Set<(current: T) => void>();
-    const subscribe = (run: (current: T) => void) => {
+const mockState = vi.hoisted(() => {
+    let value: QuestState = { quests: {}, inventory: {} };
+    const subscribers = new Set<(current: QuestState) => void>();
+    const subscribe = (run: (current: QuestState) => void) => {
         run(value);
         subscribers.add(run);
         return () => subscribers.delete(run);
     };
-    const set = (next: T) => {
+    const set = (next: QuestState) => {
         value = next;
         subscribers.forEach((run) => run(value));
     };
-    const update = (updater: (current: T) => T) => {
+    const update = (updater: (current: QuestState) => QuestState) => {
         set(updater(value));
     };
-    return { subscribe, set, update };
-}
-
-const { mockState } = vi.hoisted(() => ({
-    mockState: createStore<QuestState>({ quests: {}, inventory: {} }),
-}));
+    return { subscribe, set, update } as Store<QuestState>;
+});
 
 vi.mock('../src/utils/gameState/common.js', () => ({
     state: mockState,
