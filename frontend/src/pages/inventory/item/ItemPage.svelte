@@ -3,7 +3,11 @@
     import { writable } from 'svelte/store';
     import Chip from '../../../components/svelte/Chip.svelte';
     import BuySell from '../../../components/svelte/BuySell.svelte';
-    import { getProcessesForItem, ProcessItemTypes } from '../../../utils/gameState/processes.js';
+    import {
+        getProcessesForItem,
+        getProcessesForItemIncludingCustom,
+        ProcessItemTypes,
+    } from '../../../utils/gameState/processes.js';
     import { getItemCounts } from '../../../utils/gameState/inventory.js';
     import { getQuestsForItem } from '../../../utils/itemDependencies.js';
     import Process from '../../../components/svelte/Process.svelte';
@@ -22,11 +26,13 @@
     let itemNotFound = false;
     let releaseImage = null;
 
-    const processes = getProcessesForItem(itemId);
+    let processes = {};
     const quests = getQuestsForItem(itemId);
+    let hasProcesses = false;
 
-    const hasProcesses = Object.values(processes).some((arr) => arr.length);
     const hasQuests = quests.requires.length > 0 || quests.rewards.length > 0;
+
+    $: hasProcesses = Object.values(processes).some((arr) => Array.isArray(arr) && arr.length > 0);
 
     async function loadItem() {
         isLoading = true;
@@ -53,6 +59,11 @@
 
     onMount(async () => {
         await loadItem();
+        try {
+            processes = await getProcessesForItemIncludingCustom(itemId);
+        } catch (error) {
+            processes = getProcessesForItem(itemId);
+        }
         const itemCount = getItemCounts([{ id: itemId }])[itemId];
         count.set(itemCount);
         mounted.set(true);

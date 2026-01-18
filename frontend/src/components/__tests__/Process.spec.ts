@@ -19,6 +19,7 @@ const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
 const startProcess = vi.hoisted(() => vi.fn());
+const dbGetMock = vi.hoisted(() => vi.fn<(entityType: string, id: string) => Promise<unknown>>());
 
 const getProcessState = vi.mocked(getProcessStateMock);
 
@@ -48,7 +49,7 @@ vi.mock('../../pages/inventory/json/items', () => ({
 }));
 
 vi.mock('../../utils/gameState/inventory.js', () => ({
-    getItemCounts: (...args) => getItemCountsMock(...args),
+    getItemCounts: (...args: unknown[]) => getItemCountsMock(...args),
 }));
 
 const pauseProcess = vi.hoisted(() =>
@@ -94,7 +95,7 @@ vi.mock('../../utils/gameState/processes.js', () => ({
     finishProcess: vi.fn(),
     getProcessState: vi.fn(() => stateInfo),
     ProcessStates,
-    getProcessStartedAt: (...args) => getProcessStartedAtMock(...args),
+    getProcessStartedAt: (...args: unknown[]) => getProcessStartedAtMock(...args),
     pauseProcess,
     resumeProcess,
     finishProcessNow,
@@ -102,12 +103,21 @@ vi.mock('../../utils/gameState/processes.js', () => ({
 
 vi.mock('../../lib/qaCheats', () => ({
     qaCheatsAvailability: {
-        subscribe: (...args) => cheatsAvailabilityStore.subscribe(...args),
+        subscribe: (...args: unknown[]) => cheatsAvailabilityStore.subscribe(...args),
     },
     qaCheatsEnabled: {
-        subscribe: (...args) => cheatsEnabledStore.subscribe(...args),
+        subscribe: (...args: unknown[]) => cheatsEnabledStore.subscribe(...args),
     },
     initializeQaCheats: vi.fn(),
+}));
+
+vi.mock('../../utils/customcontent.js', () => ({
+    db: {
+        get: (entityType: string, id: string) => dbGetMock(entityType, id),
+    },
+    ENTITY_TYPES: {
+        PROCESS: 'process',
+    },
 }));
 
 beforeEach(() => {
@@ -119,6 +129,7 @@ beforeEach(() => {
     getProcessStartedAtMock.mockReset();
     getProcessStartedAtMock.mockImplementation(() => Date.now());
     startProcess.mockClear();
+    dbGetMock.mockReset();
 });
 
 afterEach(() => {
@@ -366,4 +377,26 @@ test('renders fallback message when process details are unavailable', async () =
 
     await tick();
     expect(getByText('Process details unavailable.')).toBeTruthy();
+});
+
+test('loads custom process definitions when missing from the built-in catalog', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+
+    const customProcess = {
+        id: 'custom-missing',
+        title: 'IndexedDB Process',
+        duration: '15s',
+        requireItems: [],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    dbGetMock.mockResolvedValue(customProcess);
+
+    const { findByText } = render(Process, { processId: 'custom-missing' });
+
+    await findByText('IndexedDB Process');
+    expect(dbGetMock).toHaveBeenCalledWith('process', 'custom-missing');
 });

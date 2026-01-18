@@ -308,6 +308,79 @@ export const getProcessesForItem = (itemId) => {
     return processMap;
 };
 
+const getMatchingProcessBuckets = (process, itemId) => {
+    const matchesItem = (items) =>
+        Array.isArray(items) && items.some((item) => item?.id === itemId);
+
+    return {
+        require: matchesItem(process?.requireItems),
+        consume: matchesItem(process?.consumeItems),
+        create: matchesItem(process?.createItems),
+    };
+};
+
+const addProcessIdToBucket = (processMap, bucket, processId) => {
+    if (!processId) {
+        return;
+    }
+
+    if (!processMap[bucket]) {
+        processMap[bucket] = new Set();
+    }
+
+    processMap[bucket].add(processId);
+};
+
+export const getProcessesForItemIncludingCustom = async (itemId) => {
+    const builtInProcessMap = getProcessesForItem(itemId);
+    const processBuckets = Object.values(ProcessItemTypes).reduce((acc, bucket) => {
+        acc[bucket] = new Set(builtInProcessMap[bucket] ?? []);
+        return acc;
+    }, {});
+
+    let db;
+    let ENTITY_TYPES;
+
+    try {
+        ({ db, ENTITY_TYPES } = await import('../customcontent.js'));
+    } catch (error) {
+        return builtInProcessMap;
+    }
+
+    let customProcesses;
+    try {
+        customProcesses = await db.query(ENTITY_TYPES.PROCESS, (process) => {
+            const matches = getMatchingProcessBuckets(process, itemId);
+            return matches.require || matches.consume || matches.create;
+        });
+    } catch (error) {
+        return builtInProcessMap;
+    }
+
+    customProcesses.forEach((process) => {
+        const matches = getMatchingProcessBuckets(process, itemId);
+        if (matches.require) {
+            addProcessIdToBucket(processBuckets, ProcessItemTypes.REQUIRE_ITEM, process.id);
+        }
+        if (matches.consume) {
+            addProcessIdToBucket(processBuckets, ProcessItemTypes.CONSUME_ITEM, process.id);
+        }
+        if (matches.create) {
+            addProcessIdToBucket(processBuckets, ProcessItemTypes.CREATE_ITEM, process.id);
+        }
+    });
+
+    const mergedMap = {};
+    Object.values(ProcessItemTypes).forEach((bucket) => {
+        const entries = Array.from(processBuckets[bucket] ?? []);
+        if (entries.length > 0) {
+            mergedMap[bucket] = entries;
+        }
+    });
+
+    return mergedMap;
+};
+
 export const skipProcess = (processId, processDefinition) => {
     const process = resolveProcessDefinition(processId, processDefinition);
     if (!process) {

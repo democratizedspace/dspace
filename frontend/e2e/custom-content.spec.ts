@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { test, expect, Page } from '@playwright/test';
 import {
     clearUserData,
@@ -6,15 +8,20 @@ import {
     ItemSelectorHelper,
 } from './test-helpers';
 
+const inlineItemImageBuffer = Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/woAAgIBJ3QpJ8gAAAAASUVORK5CYII=',
+    'base64'
+);
+const itemImageFile = {
+    name: 'custom-item.png',
+    mimeType: 'image/png',
+    buffer: inlineItemImageBuffer,
+};
+const itemImagePath = path.resolve(__dirname, '../public/assets/220_ohm_resistor.jpg');
+
 test.describe('Custom Content Management', () => {
     test.setTimeout(120000); // 2 minutes for end-to-end tests
-
-    // Test IDs for cleanup
-    const testIds = {
-        item: null as string | null,
-        process: null as string | null,
-        quest: null as string | null,
-    };
+    test.use({ serviceWorkers: 'block' });
 
     // Use the imported clearUserData instead of redefining it
     test.beforeEach(async ({ page }) => {
@@ -30,6 +37,67 @@ test.describe('Custom Content Management', () => {
         } catch (e) {
             // If we can't find a specific element, wait a bit to ensure hydration completes
             await page.waitForTimeout(2000);
+        }
+    }
+
+    async function findCustomItemIdByName(page: Page, name: string): Promise<string | null> {
+        try {
+            return await page.evaluate(async (itemName) => {
+                return new Promise((resolve) => {
+                    const request = indexedDB.open('CustomContent');
+
+                    request.onerror = () => resolve(null);
+                    request.onupgradeneeded = () => {
+                        request.result?.close();
+                        resolve(null);
+                    };
+                    request.onsuccess = () => {
+                        const db = request.result;
+                        const transaction = db.transaction('items', 'readonly');
+                        const store = transaction.objectStore('items');
+                        const getAllRequest = store.getAll();
+
+                        getAllRequest.onerror = () => {
+                            db.close();
+                            resolve(null);
+                        };
+                        getAllRequest.onsuccess = () => {
+                            const items = getAllRequest.result ?? [];
+                            const normalizedName = itemName.trim().toLowerCase();
+                            const match = items.find(
+                                (item) =>
+                                    (item?.name ?? '').trim().toLowerCase() === normalizedName
+                            );
+                            const matchedId = match?.id ?? null;
+                            db.close();
+                            resolve(matchedId);
+                        };
+                    };
+                });
+            }, name);
+        } catch (error) {
+            const message = String(error).toLowerCase();
+            if (
+                message.includes('execution context was destroyed') ||
+                message.includes('most likely because of a navigation') ||
+                message.includes('cannot find context with specified id') ||
+                message.includes('target closed') ||
+                message.includes('navigation')
+            ) {
+                return null;
+            }
+            throw error;
+        }
+    }
+
+    async function uploadItemImage(page: Page): Promise<void> {
+        const imageInput = page.locator('#image');
+        if ((await imageInput.count()) > 0) {
+            if (fs.existsSync(itemImagePath)) {
+                await imageInput.setInputFiles(itemImagePath);
+            } else {
+                await imageInput.setInputFiles(itemImageFile);
+            }
         }
     }
 
@@ -50,6 +118,7 @@ test.describe('Custom Content Management', () => {
             '#description',
             'This is a test custom item created for automated testing.'
         );
+        await uploadItemImage(page);
         await page.fill('#price', '100 dUSD');
         await page.fill('#unit', 'kg');
         await page.fill('#type', 'resource');
@@ -174,6 +243,202 @@ test.describe('Custom Content Management', () => {
         }
     });
 
+    async function findCustomProcessIdByTitle(page: Page, title: string): Promise<string | null> {
+        try {
+            return await page.evaluate(async (processTitle) => {
+                return new Promise((resolve) => {
+                    const request = indexedDB.open('CustomContent');
+
+                    request.onerror = () => resolve(null);
+                    request.onupgradeneeded = () => {
+                        request.result?.close();
+                        resolve(null);
+                    };
+                    request.onsuccess = () => {
+                        const db = request.result;
+                        const transaction = db.transaction('processes', 'readonly');
+                        const store = transaction.objectStore('processes');
+                        const getAllRequest = store.getAll();
+
+                        getAllRequest.onerror = () => {
+                            db.close();
+                            resolve(null);
+                        };
+                        getAllRequest.onsuccess = () => {
+                            const processes = getAllRequest.result ?? [];
+                            const normalizedTitle = processTitle.trim().toLowerCase();
+                            const match = processes.find(
+                                (process) =>
+                                    (process?.name ?? process?.title ?? '').trim().toLowerCase() ===
+                                    normalizedTitle
+                            );
+                            const matchedId = match?.id ?? null;
+                            db.close();
+                            resolve(matchedId);
+                        };
+                    };
+                });
+            }, title);
+        } catch (error) {
+            const message = String(error).toLowerCase();
+            if (
+                message.includes('execution context was destroyed') ||
+                message.includes('most likely because of a navigation') ||
+                message.includes('cannot find context with specified id') ||
+                message.includes('target closed') ||
+                message.includes('navigation')
+            ) {
+                return null;
+            }
+            throw error;
+        }
+    }
+
+    test('should show a custom process on the related item detail page', async ({ page }) => {
+        // Create a custom item first
+        await page.goto('/inventory/create');
+        await page.waitForLoadState('networkidle');
+
+        const uniqueItemName = `Process Item ${Date.now()}`;
+        await page.fill('#name', uniqueItemName);
+        await page.fill('#description', 'Item used to validate custom process discovery');
+        await uploadItemImage(page);
+        await page.fill('#price', '100 dUSD');
+        await page.fill('#unit', 'kg');
+        await page.fill('#type', 'resource');
+
+        const submitItemButton = page
+            .locator('button.submit-button, button[type="submit"], input[type="submit"]')
+            .first();
+        const itemNavigationPromise = page
+            .waitForURL((url) => !url.pathname.endsWith('/inventory/create'), {
+                timeout: 20000,
+            })
+            .catch(() => null);
+        await submitItemButton.click();
+        await itemNavigationPromise;
+        await page.waitForLoadState('domcontentloaded');
+        await page.waitForLoadState('networkidle', { timeout: 10000 });
+        await waitForHydration(page);
+
+        let itemId: string | null = null;
+        const itemUrlMatch = page.url().match(/\/inventory\/item\/([0-9a-f-]+)/);
+        if (itemUrlMatch?.[1]) {
+            itemId = itemUrlMatch[1];
+        } else {
+            const viewItemLink = page.getByRole('link', { name: /view item/i });
+            try {
+                await expect(viewItemLink).toBeVisible({ timeout: 15000 });
+                const href = await viewItemLink.getAttribute('href');
+                const hrefMatch = href?.match(/\/inventory\/item\/([0-9a-f-]+)/);
+                if (hrefMatch?.[1]) {
+                    itemId = hrefMatch[1];
+                }
+            } catch (error) {
+                // Fall back to IndexedDB polling when the link is unavailable.
+                void error;
+            }
+        }
+
+        if (!itemId) {
+            await expect
+                .poll(
+                    async () => {
+                        if (page.isClosed()) {
+                            return null;
+                        }
+                        itemId = await findCustomItemIdByName(page, uniqueItemName);
+                        return itemId;
+                    },
+                    {
+                        timeout: 30000,
+                    }
+                )
+                .not.toBeNull();
+        }
+
+        if (!itemId) {
+            throw new Error('Custom item ID was not found in IndexedDB.');
+        }
+
+        if (!page.url().includes(`/inventory/item/${itemId}`)) {
+            await page.goto(`/inventory/item/${itemId}`);
+            await page.waitForLoadState('domcontentloaded');
+            await waitForHydration(page);
+        }
+
+        // Create a custom process that requires the item
+        await page.goto('/processes/create');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const processTitle = `Process for ${uniqueItemName}`;
+        const titleInput = page.locator('#name, #title').first();
+        await titleInput.fill(processTitle);
+        await page.fill('#duration', '10m');
+
+        await page.click('button:has-text("Add Required Item")');
+
+        const requirementRow = page.locator('#required-items-section .item-row').last();
+        const selectorContainer = requirementRow.locator('.item-selector');
+        const selectorHelper = new ItemSelectorHelper(page, selectorContainer);
+        await selectorHelper.open();
+
+        const itemOption = selectorContainer.locator('button.item-row', {
+            hasText: uniqueItemName,
+        });
+        await expect(itemOption).toBeVisible({ timeout: 15000 });
+        await itemOption.click();
+
+        const countInput = requirementRow.locator('input[type="number"]');
+        if ((await countInput.count()) > 0) {
+            await countInput.fill('1');
+        }
+
+        const submitProcessButton = page
+            .locator(
+                'button.submit-button, button[type="submit"], input[type="submit"], button:has-text("Create"), button:has-text("Save")'
+            )
+            .first();
+        const processNavigationPromise = page
+            .waitForURL(
+                (url) =>
+                    url.pathname.startsWith('/processes') &&
+                    !url.pathname.endsWith('/processes/create'),
+                { timeout: 15000 }
+            )
+            .catch(() => null);
+        await submitProcessButton.click();
+        await processNavigationPromise;
+        await page.waitForLoadState('networkidle', { timeout: 10000 });
+        await waitForHydration(page);
+
+        await expect
+            .poll(
+                async () => {
+                    if (page.isClosed()) {
+                        return null;
+                    }
+                    return findCustomProcessIdByTitle(page, processTitle);
+                },
+                { timeout: 30000 }
+            )
+            .not.toBeNull();
+
+        // Navigate to the item detail page and validate the custom process appears
+        if (!page.url().includes(`/inventory/item/${itemId}`)) {
+            await page.goto(`/inventory/item/${itemId}`);
+            await page.waitForLoadState('domcontentloaded');
+            await waitForHydration(page);
+        }
+
+        const processesSection = page.getByText('Processes:', { exact: true });
+        await expect(processesSection).toBeVisible({ timeout: 15000 });
+        await expect(page.getByText(processTitle, { exact: true })).toBeVisible({
+            timeout: 15000,
+        });
+    });
+
     test('should create and view a custom quest', async ({ page }) => {
         // Navigate to the quest creation page
         await page.goto('/quests/create');
@@ -232,6 +497,7 @@ test.describe('Custom Content Management', () => {
             const uniqueItemName = `Retrieval Test Item ${Date.now()}`;
             await page.fill('#name', uniqueItemName);
             await page.fill('#description', 'Created for testing retrieval functionality');
+            await uploadItemImage(page);
 
             // Submit the form
             const submitButton = page.locator('button.submit-button');
