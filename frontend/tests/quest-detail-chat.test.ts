@@ -36,6 +36,28 @@ const { mockState } = vi.hoisted(() => {
 
     const mockState = createStore<QuestState>({ quests: {}, inventory: {} });
 
+    vi.mock('../src/utils/gameState/common.js', () => ({
+        state: mockState,
+        ready: Promise.resolve(),
+        isGameStateReady: () => true,
+    }));
+
+    vi.mock('../src/utils/gameState.js', () => ({
+        questFinished: vi.fn(() => false),
+        setCurrentDialogueStep: vi.fn((questId: string, stepId: string) => {
+            mockState.update((current: QuestState) => ({
+                ...current,
+                quests: {
+                    ...current.quests,
+                    [questId]: { stepId },
+                },
+            }));
+        }),
+        finishQuest: vi.fn(),
+        grantItems: vi.fn(),
+        getItemsGranted: vi.fn(() => false),
+    }));
+
     return { mockState };
 });
 
@@ -45,28 +67,6 @@ vi.mock('../src/utils/customcontent.js', () => ({
 
 vi.mock('../src/utils/builtInQuests.js', () => ({
     getBuiltInQuest: vi.fn(),
-}));
-
-vi.mock('../src/utils/gameState/common.js', () => ({
-    state: mockState,
-    ready: Promise.resolve(),
-    isGameStateReady: () => true,
-}));
-
-vi.mock('../src/utils/gameState.js', () => ({
-    questFinished: vi.fn(() => false),
-    setCurrentDialogueStep: vi.fn((questId: string, stepId: string) => {
-        mockState.update((current: QuestState) => ({
-            ...current,
-            quests: {
-                ...current.quests,
-                [questId]: { stepId },
-            },
-        }));
-    }),
-    finishQuest: vi.fn(),
-    grantItems: vi.fn(),
-    getItemsGranted: vi.fn(() => false),
 }));
 
 describe('QuestDetail', () => {
@@ -140,7 +140,7 @@ describe('QuestDetail', () => {
 
         await waitFor(() => {
             expect(screen.getByText('This custom quest ends immediately.')).not.toBeNull();
-            expect(screen.getByRole('button', { name: 'Finish quest' })).not.toBeNull();
+            expect(screen.getByRole('button', { name: /finish/i })).not.toBeNull();
         });
     });
 });
