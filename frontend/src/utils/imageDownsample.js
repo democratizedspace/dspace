@@ -98,8 +98,12 @@ function dataUrlToBlob(dataUrl) {
     let binary;
     if (typeof atob === 'function') {
         binary = atob(data);
-    } else if (typeof Buffer !== 'undefined') {
-        binary = Buffer.from(data, 'base64').toString('binary');
+    } else if (typeof Buffer !== 'undefined' && typeof Buffer.from === 'function') {
+        try {
+            binary = Buffer.from(data, 'base64').toString('binary');
+        } catch {
+            throw new Error('Base64 decoding is not available in this environment.');
+        }
     } else {
         throw new Error('Base64 decoding is not available in this environment.');
     }

@@ -368,7 +368,9 @@ describe('downsampleAndCompressToJpeg', () => {
         globalThis.createImageBitmap = vi.fn(async () => createBitmap());
         const base64Payload = Buffer.from('data').toString('base64');
         globalThis.atob = undefined;
-        globalThis.Buffer = undefined;
+        vi.spyOn(Buffer, 'from').mockImplementation(() => {
+            throw new Error('Buffer unavailable');
+        });
         const { canvas } = mockCanvas({
             toDataURLImpl: () => `data:image/jpeg;base64,${base64Payload}`,
         });
