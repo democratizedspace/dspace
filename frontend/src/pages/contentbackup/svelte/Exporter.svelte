@@ -192,22 +192,13 @@
                         <h3>Prepared content</h3>
                         <ul class="summary-list">
                             {#each preparedSummary.items as entry}
-                                <li class="summary-entry">
-                                    <span class="summary-label">{entry.kind}:</span>
-                                    <span class="summary-name">{entry.name}</span>
-                                </li>
+                                <li class="summary-entry">{entry.kind}: {entry.name}</li>
                             {/each}
                             {#each preparedSummary.processes as entry}
-                                <li class="summary-entry">
-                                    <span class="summary-label">{entry.kind}:</span>
-                                    <span class="summary-name">{entry.name}</span>
-                                </li>
+                                <li class="summary-entry">{entry.kind}: {entry.name}</li>
                             {/each}
                             {#each preparedSummary.quests as entry}
-                                <li class="summary-entry">
-                                    <span class="summary-label">{entry.kind}:</span>
-                                    <span class="summary-name">{entry.name}</span>
-                                </li>
+                                <li class="summary-entry">{entry.kind}: {entry.name}</li>
                             {/each}
                         </ul>
                     </div>
@@ -277,17 +268,6 @@
         font-size: 0.95rem;
     }
 
-    .summary-entry {
-        font-weight: 600;
-        display: flex;
-        gap: 0.35rem;
-        margin: 0;
-    }
-
-    .summary-label {
-        white-space: nowrap;
-    }
-
     .summary-list {
         display: flex;
         flex-direction: column;
@@ -295,6 +275,11 @@
         list-style: none;
         margin: 0;
         padding: 0;
+    }
+
+    .summary-entry {
+        font-weight: 600;
+        margin: 0;
     }
 
     .progress-item {
