@@ -25,7 +25,8 @@
     const buildSummaryEntry = (kind, entity) => {
         const name = entity?.title || entity?.name || entity?.id || 'Unknown';
         return {
-            label: `${kind}: ${name}`,
+            kind,
+            name,
         };
     };
 
@@ -191,13 +192,22 @@
                         <h3>Prepared content</h3>
                         <ul class="summary-list">
                             {#each preparedSummary.items as entry}
-                                <li class="summary-entry">{entry.label}</li>
+                                <li class="summary-entry">
+                                    <span class="summary-label">{entry.kind}:</span>
+                                    <span class="summary-name">{entry.name}</span>
+                                </li>
                             {/each}
                             {#each preparedSummary.processes as entry}
-                                <li class="summary-entry">{entry.label}</li>
+                                <li class="summary-entry">
+                                    <span class="summary-label">{entry.kind}:</span>
+                                    <span class="summary-name">{entry.name}</span>
+                                </li>
                             {/each}
                             {#each preparedSummary.quests as entry}
-                                <li class="summary-entry">{entry.label}</li>
+                                <li class="summary-entry">
+                                    <span class="summary-label">{entry.kind}:</span>
+                                    <span class="summary-name">{entry.name}</span>
+                                </li>
                             {/each}
                         </ul>
                     </div>
@@ -272,6 +282,10 @@
         display: flex;
         gap: 0.35rem;
         margin: 0;
+    }
+
+    .summary-label {
+        white-space: nowrap;
     }
 
     .summary-list {
