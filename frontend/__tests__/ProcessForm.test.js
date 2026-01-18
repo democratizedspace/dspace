@@ -891,6 +891,48 @@ describe('ProcessForm Component', () => {
         expect(createProcessMock).not.toHaveBeenCalled();
     });
 
+    test('normalizes fields and includes id after saving edits', async () => {
+        const component = new ProcessForm({
+            target: container,
+            props: {
+                isEdit: true,
+                processData: {
+                    id: 'process-321',
+                    title: 'Normalize Update',
+                    duration: '0.5h 30s',
+                    requireItems: [{ id: 'item-1', count: 2 }],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            },
+        });
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        let submittedData = null;
+        component.$on('submit', (event) => {
+            submittedData = event.detail;
+        });
+
+        titleInput.value = 'Normalize Update';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '0.5h 30s';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await flushPromises();
+
+        expect(submittedData.get('id')).toBe('process-321');
+        expect(durationInput.value).toBe('30m 30s');
+        expect(updateProcessMock).toHaveBeenCalledTimes(1);
+        expect(createProcessMock).not.toHaveBeenCalled();
+    });
+
     test('uses processId prop when editing without processData id', async () => {
         const component = new ProcessForm({
             target: container,
