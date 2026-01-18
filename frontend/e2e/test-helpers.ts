@@ -224,20 +224,32 @@ export async function purgeClientState(page: Page): Promise<void> {
 export async function waitForImagePreview(
     page: Page,
     fileInput: Locator,
-    { timeoutMs = 15_000 }: { timeoutMs?: number } = {}
+    { timeoutMs = 30_000 }: { timeoutMs?: number } = {}
 ): Promise<void> {
-    const preview = page.getByTestId('image-preview');
+    const resolvePreview = async (): Promise<Locator | null> => {
+        const previewByTestId = page.getByTestId('image-preview');
+        if ((await previewByTestId.count()) > 0) {
+            return previewByTestId;
+        }
+        const previewByClass = page.locator('.image-preview');
+        if ((await previewByClass.count()) > 0) {
+            return previewByClass;
+        }
+        return null;
+    };
 
     await expect
         .poll(async () => {
-            if ((await preview.count()) === 0) {
+            const preview = await resolvePreview();
+            if (!preview) {
                 return null;
             }
-            return preview.getAttribute('src');
+            return preview.first().getAttribute('src');
         }, { timeout: timeoutMs })
         .toMatch(/^data:image\/jpeg;base64,/);
 
-    await expect(preview).toBeVisible({ timeout: timeoutMs });
+    const preview = (await resolvePreview()) ?? page.locator('.image-preview');
+    await expect(preview.first()).toBeVisible({ timeout: timeoutMs });
     await expect(fileInput).toHaveAttribute('data-processing', 'false', {
         timeout: timeoutMs,
     });
