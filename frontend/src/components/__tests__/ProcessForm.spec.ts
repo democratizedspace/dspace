@@ -237,7 +237,7 @@ test('shows an error when editing without a process id', async () => {
 });
 
 test('reinitializes edit fields when process data id changes', async () => {
-    const { component, getByLabelText, container } = render(ProcessForm, {
+    const { rerender, getByLabelText, container } = render(ProcessForm, {
         props: {
             isEdit: true,
             processData: {
@@ -255,7 +255,8 @@ test('reinitializes edit fields when process data id changes', async () => {
         expect(getByLabelText('Title*').value).toBe('Original Process');
     });
 
-    component.$set({
+    await rerender({
+        isEdit: true,
         processData: {
             id: 'process-611',
             title: 'Updated Process',
@@ -277,7 +278,7 @@ test('reinitializes edit fields when process data id changes', async () => {
 });
 
 test('reinitializes edit fields after toggling edit mode', async () => {
-    const { component, getByLabelText } = render(ProcessForm, {
+    const { rerender, getByLabelText } = render(ProcessForm, {
         props: {
             isEdit: true,
             processData: {
@@ -300,12 +301,32 @@ test('reinitializes edit fields after toggling edit mode', async () => {
     await fireEvent.input(titleInput, { target: { value: 'Modified Title' } });
     expect(titleInput.value).toBe('Modified Title');
 
-    component.$set({ isEdit: false });
+    await rerender({
+        isEdit: false,
+        processData: {
+            id: 'process-400',
+            title: 'Original Title',
+            duration: '10m',
+            requireItems: [{ id: 'water', count: 1 }],
+            consumeItems: [],
+            createItems: [],
+        },
+    });
     await waitFor(() => {
         expect(titleInput.value).toBe('Modified Title');
     });
 
-    component.$set({ isEdit: true });
+    await rerender({
+        isEdit: true,
+        processData: {
+            id: 'process-400',
+            title: 'Original Title',
+            duration: '10m',
+            requireItems: [{ id: 'water', count: 1 }],
+            consumeItems: [],
+            createItems: [],
+        },
+    });
     await waitFor(() => {
         expect(titleInput.value).toBe('Original Title');
     });
