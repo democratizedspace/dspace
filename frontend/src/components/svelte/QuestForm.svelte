@@ -30,6 +30,7 @@
     let processedImageUrl = null;
     let isProcessingImage = false;
     let showPreview = false;
+    let isHydrated = false;
     let requiresQuests = [];
     let allQuests = [];
     let allItems = [];
@@ -156,6 +157,7 @@
 
     // If in edit mode, load the quest data
     onMount(async () => {
+        isHydrated = true;
         if (isEdit && questId) {
             try {
                 const questData = await db.quests.get(questId);
@@ -852,7 +854,11 @@
     }
 </script>
 
-<form on:submit={handleSubmit} class="quest-form">
+<form
+    on:submit={handleSubmit}
+    class="quest-form"
+    data-hydrated={isHydrated ? 'true' : 'false'}
+>
     <datalist id="quest-option-item-suggestions">
         {#each allItems as item (item.id)}
             <option value={item.id}>{item.name}</option>

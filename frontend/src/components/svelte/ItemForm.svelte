@@ -24,6 +24,7 @@
     let isSubmitting = false;
     let isProcessingImage = false;
     let processedImageUrl = null;
+    let isHydrated = false;
 
     function parseDependencies(value) {
         return value
@@ -153,6 +154,7 @@
     }
 
     onMount(() => {
+        isHydrated = true;
         if (isEdit && itemData) {
             name = itemData.name || '';
             description = itemData.description || '';
@@ -166,7 +168,12 @@
     });
 </script>
 
-<form on:submit={handleSubmit} enctype="multipart/form-data" class="item-form">
+<form
+    on:submit={handleSubmit}
+    enctype="multipart/form-data"
+    class="item-form"
+    data-hydrated={isHydrated ? 'true' : 'false'}
+>
     <div class="form-group">
         <label for="name">Name*</label>
         <input
