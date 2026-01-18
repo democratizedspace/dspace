@@ -149,6 +149,7 @@ const TEST_GROUPS = [
         name: 'Quest Tests',
         files: [
             'test-quest-chat.spec.ts',
+            'custom-quest-chat.spec.ts',
             'tutorial-quest.spec.ts',
             'quests.spec.ts',
             'quests-width.spec.ts',

@@ -1,5 +1,6 @@
 import { expect } from '@playwright/test';
 import type { Locator, Page } from '@playwright/test';
+import { ITEM_SELECTOR_OPTION_LOCATORS } from './utils/itemSelectors';
 
 export type { Page };
 
@@ -13,6 +14,51 @@ const DEFAULT_RETRY_ATTEMPTS = 6;
 const DEFAULT_RETRY_DELAY_MS = 300;
 const DEFAULT_MAX_LOG_ATTEMPTS = 4;
 const DEFAULT_MAX_DURATION_MS = 10_000;
+const UUID_FALLBACK_TEMPLATE = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+type CryptoLike = { randomUUID?: () => string };
+type IndexedDbDatabase = {
+    objectStoreNames: { contains: (name: string) => boolean } & Iterable<string>;
+    createObjectStore: (name: string, options?: { keyPath?: string }) => void;
+    transaction: (
+        storeNames: string | string[],
+        mode: 'readonly' | 'readwrite'
+    ) => {
+        objectStore: (name: string) => {
+            clear: () => void;
+            put: (value: unknown) => void;
+            getAll: () => {
+                onsuccess: (() => void) | null;
+                onerror: (() => void) | null;
+                result?: unknown;
+            };
+        };
+        oncomplete: (() => void) | null;
+        onerror: (() => void) | null;
+    };
+    close: () => void;
+};
+
+function generateUuidFallback(): string {
+    return UUID_FALLBACK_TEMPLATE.replace(/[xy]/g, (character) => {
+        const random = (Math.random() * 16) | 0;
+        const value = character === 'x' ? random : (random & 0x3) | 0x8;
+        return value.toString(16);
+    });
+}
+
+function generateQuestId(): string {
+    const cryptoApi = (globalThis as { crypto?: CryptoLike }).crypto;
+
+    if (cryptoApi?.randomUUID) {
+        try {
+            return cryptoApi.randomUUID();
+        } catch {
+            // Fall back to Math.random-based UUID template below.
+        }
+    }
+
+    return generateUuidFallback();
+}
 
 async function wait(page: Page, ms: number): Promise<void> {
     if (typeof page.waitForTimeout === 'function') {
@@ -89,8 +135,6 @@ export async function navigateWithRetry(
         ? lastError
         : new Error(`Failed to navigate to ${url}: ${String(lastError)}`);
 }
-
-import { ITEM_SELECTOR_OPTION_LOCATORS } from './utils/itemSelectors';
 
 /**
  * Utility functions to help with testing the DSpace application
@@ -302,6 +346,60 @@ export async function clearUserData(page: Page): Promise<void> {
     await purgeClientState(page);
 }
 
+export async function seedCustomQuest(page: Page, quest: Record<string, unknown>): Promise<string> {
+    const resolvedQuestId = (quest as { id?: string | number }).id ?? generateQuestId();
+
+    const seededId = await page.evaluate(
+        async ({ questData, questId }) => {
+            const databaseName = 'CustomContent';
+            const databaseVersion = 3;
+
+            const preparedQuest = {
+                ...questData,
+                id: questId,
+                entityType: 'quest',
+                custom: true,
+                createdAt: questData.createdAt ?? new Date().toISOString(),
+            };
+
+            const db = (await new Promise<unknown>((resolve, reject) => {
+                const request = indexedDB.open(databaseName, databaseVersion);
+                request.onupgradeneeded = () => {
+                    const upgradeDb = request.result as IndexedDbDatabase;
+                    if (!upgradeDb.objectStoreNames.contains('meta')) {
+                        upgradeDb.createObjectStore('meta');
+                    }
+                    if (!upgradeDb.objectStoreNames.contains('items')) {
+                        upgradeDb.createObjectStore('items', { keyPath: 'id' });
+                    }
+                    if (!upgradeDb.objectStoreNames.contains('processes')) {
+                        upgradeDb.createObjectStore('processes', { keyPath: 'id' });
+                    }
+                    if (!upgradeDb.objectStoreNames.contains('quests')) {
+                        upgradeDb.createObjectStore('quests', { keyPath: 'id' });
+                    }
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            })) as IndexedDbDatabase;
+
+            await new Promise<void>((resolve, reject) => {
+                const tx = db.transaction('quests', 'readwrite');
+                const store = tx.objectStore('quests');
+                store.put(preparedQuest);
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+
+            db.close();
+            return String(questId);
+        },
+        { questData: quest, questId: resolvedQuestId }
+    );
+
+    return seededId;
+}
+
 export async function waitForQuestRecordByTitle(
     page: Page,
     title: string,
@@ -310,11 +408,11 @@ export async function waitForQuestRecordByTitle(
     const resultHandle = await page.waitForFunction(
         async ({ questTitle }) => {
             const openRequest = indexedDB.open('CustomContent');
-            const db: IDBDatabase = await new Promise((resolve, reject) => {
+            const db = (await new Promise<unknown>((resolve, reject) => {
                 openRequest.onsuccess = () => resolve(openRequest.result);
                 openRequest.onerror = () => reject(openRequest.error);
                 openRequest.onupgradeneeded = () => resolve(openRequest.result);
-            });
+            })) as IndexedDbDatabase;
 
             try {
                 if (!db.objectStoreNames.contains('quests')) {
@@ -363,11 +461,11 @@ export async function waitForQuestRecordByTitle(
 async function customQuestExists(page: Page, questTitle: string): Promise<boolean> {
     return page.evaluate(async (title) => {
         const openRequest = indexedDB.open('CustomContent');
-        const db: IDBDatabase = await new Promise((resolve, reject) => {
+        const db = (await new Promise<unknown>((resolve, reject) => {
             openRequest.onsuccess = () => resolve(openRequest.result);
             openRequest.onerror = () => reject(openRequest.error);
             openRequest.onupgradeneeded = () => resolve(openRequest.result);
-        });
+        })) as IndexedDbDatabase;
 
         try {
             if (!db.objectStoreNames.contains('quests')) {

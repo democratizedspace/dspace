@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/svelte';
 import { describe, expect, it } from 'vitest';
 
@@ -37,8 +36,8 @@ describe('DocsIndex search operators', () => {
 
         const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
 
-        expect(searchBox).toBeInTheDocument();
-        expect(searchBox).toHaveAttribute('id', 'docs-search-input');
+        expect(searchBox).not.toBeNull();
+        expect(searchBox.getAttribute('id')).toBe('docs-search-input');
     });
 
     it('filters links using the search query', async () => {
@@ -48,12 +47,12 @@ describe('DocsIndex search operators', () => {
 
         await fireEvent.input(searchBox, { target: { value: 'quest' } });
 
-        expect(screen.queryByRole('link', { name: 'About' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('link', { name: 'About' })).toBeNull();
         expect(
             screen.getByRole('link', {
                 name: 'Quest Development Guidelines',
             })
-        ).toBeInTheDocument();
+        ).not.toBeNull();
     });
 
     it('applies has:link operator filters', async () => {
@@ -63,8 +62,8 @@ describe('DocsIndex search operators', () => {
 
         await fireEvent.input(searchBox, { target: { value: 'has:link' } });
 
-        expect(screen.getByRole('link', { name: 'About' })).toBeInTheDocument();
-        expect(screen.queryByRole('link', { name: 'Mission' })).not.toBeInTheDocument();
+        expect(screen.getByRole('link', { name: 'About' })).not.toBeNull();
+        expect(screen.queryByRole('link', { name: 'Mission' })).toBeNull();
     });
 
     it('combines text queries with has:image operator filters', async () => {
@@ -78,11 +77,11 @@ describe('DocsIndex search operators', () => {
             screen.getByRole('link', {
                 name: 'Quest Schema Requirements',
             })
-        ).toBeInTheDocument();
+        ).not.toBeNull();
         expect(
             screen.queryByRole('link', {
                 name: 'Quest Development Guidelines',
             })
-        ).not.toBeInTheDocument();
+        ).toBeNull();
     });
 });

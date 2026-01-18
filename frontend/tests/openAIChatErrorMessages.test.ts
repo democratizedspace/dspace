@@ -1,6 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import '@testing-library/jest-dom';
 
 vi.mock('../src/utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({
@@ -79,10 +78,10 @@ describe('OpenAIChat error messaging', () => {
         await sendMessage('Hello');
 
         await waitFor(() => expect(GPT5Chat).toHaveBeenCalled());
-        expect(await screen.findByText(/out of credits/i)).toBeInTheDocument();
+        expect(await screen.findByText(/out of credits/i)).not.toBeNull();
         expect(
             await screen.findByText(/openai could not generate a reply because this account/i)
-        ).toBeInTheDocument();
+        ).not.toBeNull();
     });
 
     it('surfaces invalid API key errors to the user', async () => {
@@ -95,6 +94,6 @@ describe('OpenAIChat error messaging', () => {
         await sendMessage('Hello again');
 
         await waitFor(() => expect(GPT5Chat).toHaveBeenCalled());
-        expect(await screen.findByText(/api key/i)).toBeInTheDocument();
+        expect(await screen.findByText(/api key/i)).not.toBeNull();
     });
 });

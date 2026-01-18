@@ -30,15 +30,20 @@
             npc = quest.npc;
 
             // Create reward items map
-            rewardItems = quest.rewards.map((reward) => {
-                let item = items.find((item) => item.id === reward.id);
-                return {
-                    id: reward.id,
-                    count: reward.count,
-                    image: item.image,
-                    name: item.name,
-                };
-            });
+            rewardItems = quest.rewards
+                .map((reward) => {
+                    const item = items.find((entry) => entry.id === reward.id);
+                    if (!item) {
+                        return null;
+                    }
+                    return {
+                        id: reward.id,
+                        count: reward.count,
+                        image: item.image,
+                        name: item.name,
+                    };
+                })
+                .filter(Boolean);
 
             // Initialize pointer if not set
             pointer = pointer || quest.start;
