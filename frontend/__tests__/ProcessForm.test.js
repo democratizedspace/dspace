@@ -411,6 +411,52 @@ describe('ProcessForm Component', () => {
         expect(submittedData).toBeTruthy();
     });
 
+    test('shows a duration error message for zero-length durations', async () => {
+        new ProcessForm({
+            target: container,
+            props: { requireItems: [{ id: 'item-1', count: 1 }] },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Zero Duration Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '0m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        await flushPromises();
+
+        const durationError = container.querySelector('#duration + .error-message');
+        expect(durationError.textContent).toContain('Invalid duration');
+        expect(createProcessMock).not.toHaveBeenCalled();
+    });
+
+    test('shows an item count error when counts are non-positive', async () => {
+        new ProcessForm({
+            target: container,
+            props: { requireItems: [{ id: 'item-1', count: 0 }] },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+
+        titleInput.value = 'Invalid Item Counts';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '10m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+        await flushPromises();
+
+        const itemError = container.querySelector('.error-message');
+        expect(itemError.textContent).toBeTruthy();
+        expect(createProcessMock).not.toHaveBeenCalled();
+    });
+
     test('should handle empty required fields', async () => {
         const component = new ProcessForm({
             target: container,
@@ -568,6 +614,39 @@ describe('ProcessForm Component', () => {
         await flushPromises();
 
         expect(container.querySelector('.success-message')).toBeTruthy();
+    });
+
+    test('shows a saving label while submission is pending', async () => {
+        new ProcessForm({
+            target: container,
+            props: { requireItems: [{ id: 'item-1', count: 1 }] },
+        });
+
+        const form = container.querySelector('form');
+        const titleInput = container.querySelector('input[type="text"]');
+        const durationInput = container.querySelector('input[placeholder="e.g. 1h 30m"]');
+        const submitButton = container.querySelector('.submit-button');
+
+        titleInput.value = 'Pending Process';
+        titleInput.dispatchEvent(new Event('input'));
+        durationInput.value = '10m';
+        durationInput.dispatchEvent(new Event('input'));
+
+        let resolveSave;
+        const savePromise = new Promise((resolve) => {
+            resolveSave = resolve;
+        });
+        mockDb.processes.add.mockImplementationOnce(() => savePromise);
+
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        expect(submitButton.textContent).toContain('Saving…');
+        expect(submitButton.disabled).toBe(true);
+
+        resolveSave('process-123');
+        await flushPromises();
     });
 
     test('item count inputs enforce minimum of 1', () => {
