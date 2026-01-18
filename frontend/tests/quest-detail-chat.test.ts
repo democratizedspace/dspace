@@ -15,51 +15,47 @@ type Store<T> = {
     update: (updater: (value: T) => T) => void;
 };
 
-const { mockState } = vi.hoisted(() => {
-    const createStore = <T,>(initial: T): Store<T> => {
-        let value = initial;
-        const subscribers = new Set<(current: T) => void>();
-        const subscribe = (run: (current: T) => void) => {
-            run(value);
-            subscribers.add(run);
-            return () => subscribers.delete(run);
-        };
-        const set = (next: T) => {
-            value = next;
-            subscribers.forEach((run) => run(value));
-        };
-        const update = (updater: (current: T) => T) => {
-            set(updater(value));
-        };
-        return { subscribe, set, update };
+const createStore = <T,>(initial: T): Store<T> => {
+    let value = initial;
+    const subscribers = new Set<(current: T) => void>();
+    const subscribe = (run: (current: T) => void) => {
+        run(value);
+        subscribers.add(run);
+        return () => subscribers.delete(run);
     };
+    const set = (next: T) => {
+        value = next;
+        subscribers.forEach((run) => run(value));
+    };
+    const update = (updater: (current: T) => T) => {
+        set(updater(value));
+    };
+    return { subscribe, set, update };
+};
 
-    const mockState = createStore<QuestState>({ quests: {}, inventory: {} });
+const mockState = vi.hoisted(() => createStore<QuestState>({ quests: {}, inventory: {} }));
 
-    vi.mock('../src/utils/gameState/common.js', () => ({
-        state: mockState,
-        ready: Promise.resolve(),
-        isGameStateReady: () => true,
-    }));
+vi.mock('../src/utils/gameState/common.js', () => ({
+    state: mockState,
+    ready: Promise.resolve(),
+    isGameStateReady: () => true,
+}));
 
-    vi.mock('../src/utils/gameState.js', () => ({
-        questFinished: vi.fn(() => false),
-        setCurrentDialogueStep: vi.fn((questId: string, stepId: string) => {
-            mockState.update((current: QuestState) => ({
-                ...current,
-                quests: {
-                    ...current.quests,
-                    [questId]: { stepId },
-                },
-            }));
-        }),
-        finishQuest: vi.fn(),
-        grantItems: vi.fn(),
-        getItemsGranted: vi.fn(() => false),
-    }));
-
-    return { mockState };
-});
+vi.mock('../src/utils/gameState.js', () => ({
+    questFinished: vi.fn(() => false),
+    setCurrentDialogueStep: vi.fn((questId: string, stepId: string) => {
+        mockState.update((current: QuestState) => ({
+            ...current,
+            quests: {
+                ...current.quests,
+                [questId]: { stepId },
+            },
+        }));
+    }),
+    finishQuest: vi.fn(),
+    grantItems: vi.fn(),
+    getItemsGranted: vi.fn(() => false),
+}));
 
 vi.mock('../src/utils/customcontent.js', () => ({
     getQuest: vi.fn(),
