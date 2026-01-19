@@ -283,13 +283,16 @@ export async function waitForImagePreview(
     };
 
     await expect
-        .poll(async () => {
-            const preview = await resolvePreview();
-            if (!preview) {
-                return null;
-            }
-            return preview.first().getAttribute('src');
-        }, { timeout: timeoutMs })
+        .poll(
+            async () => {
+                const preview = await resolvePreview();
+                if (!preview) {
+                    return null;
+                }
+                return preview.first().getAttribute('src');
+            },
+            { timeout: timeoutMs }
+        )
         .toMatch(/^data:image\/jpeg;base64,/);
 
     const preview = (await resolvePreview()) ?? page.locator('.image-preview');

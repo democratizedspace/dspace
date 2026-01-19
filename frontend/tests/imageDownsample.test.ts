@@ -234,12 +234,22 @@ describe('downsampleAndCompressToJpeg', () => {
     });
 
     it('throws when not running in a browser environment', async () => {
-        vi.doMock('../src/utils/ssr.js', () => ({ isBrowser: false }));
+        const originalWindow = globalThis.window;
+        const originalDocument = globalThis.document;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        delete (globalThis as any).window;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        delete (globalThis as any).document;
+        vi.resetModules();
         const { downsampleAndCompressToJpeg } = await import('../src/utils/imageDownsample.js');
 
         await expect(downsampleAndCompressToJpeg(null)).rejects.toThrow(
             'Image processing is only available in the browser.'
         );
+
+        globalThis.window = originalWindow;
+        globalThis.document = originalDocument;
+        vi.resetModules();
     });
 
     it('throws when file input is invalid', async () => {
@@ -368,17 +378,18 @@ describe('downsampleAndCompressToJpeg', () => {
         globalThis.createImageBitmap = vi.fn(async () => createBitmap());
         const base64Payload = Buffer.from('data').toString('base64');
         globalThis.atob = undefined;
-        vi.spyOn(Buffer, 'from').mockImplementation(() => {
-            throw new Error('Buffer unavailable');
-        });
+        mockFileReader({ result: `data:image/jpeg;base64,${base64Payload}` });
         const { canvas } = mockCanvas({
             toDataURLImpl: () => `data:image/jpeg;base64,${base64Payload}`,
         });
 
         mockCanvasElement(canvas as HTMLCanvasElement);
 
-        const { downsampleAndCompressToJpeg } = await import('../src/utils/imageDownsample.js');
         const file = new File(['demo'], 'demo.jpg', { type: 'image/jpeg' });
+        const { downsampleAndCompressToJpeg } = await import('../src/utils/imageDownsample.js');
+        vi.spyOn(Buffer, 'from').mockImplementation(() => {
+            throw new Error('Buffer unavailable');
+        });
 
         await expect(downsampleAndCompressToJpeg(file)).rejects.toThrow(
             'Base64 decoding is not available in this environment.'
