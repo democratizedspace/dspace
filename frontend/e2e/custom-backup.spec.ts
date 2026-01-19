@@ -46,6 +46,9 @@ test.describe('Custom content backup', () => {
                 const request = indexedDB.open('CustomContent', 3);
                 request.onupgradeneeded = () => {
                     const db = request.result;
+                    if (!db.objectStoreNames.contains('meta')) {
+                        db.createObjectStore('meta');
+                    }
                     if (!db.objectStoreNames.contains('items')) {
                         db.createObjectStore('items', { keyPath: 'id' });
                     }
@@ -54,6 +57,10 @@ test.describe('Custom content backup', () => {
                     }
                     if (!db.objectStoreNames.contains('quests')) {
                         db.createObjectStore('quests', { keyPath: 'id' });
+                    }
+                    const tx = request.transaction;
+                    if (tx) {
+                        tx.objectStore('meta').put(3, 'schemaVersion');
                     }
                 };
                 request.onerror = () => reject(request.error ?? new Error('open failed'));

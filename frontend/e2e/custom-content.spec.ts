@@ -389,6 +389,9 @@ test.describe('Custom Content Management', () => {
         const itemOption = selectorContainer.locator('button.item-row', {
             hasText: uniqueItemName,
         });
+        const searchInput = selectorContainer.locator('input[aria-label="Search items"]');
+        await expect(searchInput).toBeVisible({ timeout: 15000 });
+        await searchInput.fill(uniqueItemName);
         await expect(itemOption).toBeVisible({ timeout: 15000 });
         await itemOption.click();
 
