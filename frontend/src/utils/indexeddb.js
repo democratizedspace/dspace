@@ -83,6 +83,12 @@ function getTransaction(storeName, mode) {
     }
     return openCustomContentDB().then((db) => {
         const transaction = db.transaction([storeName], mode);
+        const closeDb = () => {
+            db.close();
+        };
+        transaction.oncomplete = closeDb;
+        transaction.onerror = closeDb;
+        transaction.onabort = closeDb;
         return transaction.objectStore(storeName);
     });
 }
