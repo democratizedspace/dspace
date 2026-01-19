@@ -1,5 +1,5 @@
 // import { log } from './devLog.js';
-import { runMigrations } from './migrations.js';
+import { DataIntegrityValidationError, runMigrations } from './migrations.js';
 import { isBrowser } from './ssr.js';
 
 // Legacy DB helpers (kept for backward compatibility)
@@ -287,6 +287,16 @@ export const openCustomContentDB = () => {
                 await runMigrations(db, CUSTOM_CONTENT_DB_VERSION);
                 resolve(db);
             } catch (err) {
+                const isDataIntegrityError =
+                    err instanceof DataIntegrityValidationError ||
+                    err?.name === 'DataIntegrityValidationError' ||
+                    err?.code === 'DATA_INTEGRITY_VALIDATION_FAILED';
+                if (isDataIntegrityError) {
+                    const details = err?.details ?? err;
+                    logIndexedDbIssue('Custom content validation failed; continuing with DB.', details);
+                    resolve(db);
+                    return;
+                }
                 reject(err);
             }
         };

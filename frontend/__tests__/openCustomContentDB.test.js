@@ -50,4 +50,36 @@ describe('openCustomContentDB', () => {
 
         await expect(promise).rejects.toBe(request.error);
     });
+
+    test('logs and resolves when data integrity validation fails', async () => {
+        const validationError = new migrations.DataIntegrityValidationError(
+            'Data integrity validation failed (1 record)',
+            [{ store: 'items', id: '1', errors: ['invalid'] }]
+        );
+        jest.spyOn(migrations, 'runMigrations').mockRejectedValue(validationError);
+        const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+        const db = {
+            objectStoreNames: { contains: jest.fn().mockReturnValue(false) },
+            createObjectStore: jest.fn(),
+        };
+        const request = {
+            onupgradeneeded: null,
+            onsuccess: null,
+            onerror: null,
+            result: db,
+            transaction: { objectStore: jest.fn(() => ({ put: jest.fn() })) },
+        };
+        global.indexedDB.open = jest.fn(() => request);
+
+        const promise = openCustomContentDB();
+        request.onupgradeneeded({ target: { result: db } });
+        request.onsuccess();
+
+        const resultDb = await promise;
+        expect(resultDb).toBe(db);
+        expect(warnSpy).toHaveBeenCalledWith(
+            'Custom content validation failed; continuing with DB.',
+            validationError.details
+        );
+    });
 });

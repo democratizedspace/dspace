@@ -18,7 +18,9 @@ vi.mock('../src/utils/customQuestValidation.js', () => ({
     validateQuestData: questValidator,
 }));
 
-const { runMigrations, getCurrentSchemaVersion } = await import('../src/utils/migrations.js');
+const { runMigrations, getCurrentSchemaVersion, DataIntegrityValidationError } = await import(
+    '../src/utils/migrations.js'
+);
 
 function openDb() {
     return new Promise((resolve, reject) => {
@@ -67,6 +69,15 @@ describe('migrations.runMigrations', () => {
 
     test('throws when validation fails', async () => {
         itemValidator.mockReturnValueOnce({ valid: false, errors: ['invalid'] });
-        await expect(runMigrations(db, 3)).rejects.toThrow('Data integrity validation failed');
+        try {
+            await runMigrations(db, 3);
+            throw new Error('Expected runMigrations to throw');
+        } catch (error) {
+            expect(error).toBeInstanceOf(DataIntegrityValidationError);
+            expect(error).toMatchObject({
+                code: 'DATA_INTEGRITY_VALIDATION_FAILED',
+                details: [{ store: 'items', id: '1', errors: ['invalid'] }],
+            });
+        }
     });
 });

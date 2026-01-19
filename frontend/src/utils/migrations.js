@@ -2,6 +2,15 @@ import { validateProcessData } from './customProcessValidation.js';
 import { validateQuestData } from './customQuestValidation.js';
 import { validateItemData } from './customItemValidation.js';
 
+export class DataIntegrityValidationError extends Error {
+    constructor(message, details) {
+        super(message);
+        this.name = 'DataIntegrityValidationError';
+        this.code = 'DATA_INTEGRITY_VALIDATION_FAILED';
+        this.details = details;
+    }
+}
+
 export const MIGRATIONS = {
     2: async (db) => {
         const stores = ['items', 'processes', 'quests'];
@@ -82,7 +91,12 @@ export async function runMigrations(db, targetVersion) {
     }
     const errors = await validateDataIntegrity(db);
     if (errors.length) {
-        throw new Error('Data integrity validation failed');
+        throw new DataIntegrityValidationError(
+            `Data integrity validation failed (${errors.length} record${
+                errors.length === 1 ? '' : 's'
+            })`,
+            errors
+        );
     }
 }
 
