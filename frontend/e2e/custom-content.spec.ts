@@ -382,6 +382,7 @@ test.describe('Custom Content Management', () => {
         await page.click('button:has-text("Add Required Item")');
 
         const requirementRow = page.locator('#required-items-section .item-row').last();
+        await expect(requirementRow).toBeVisible({ timeout: 15000 });
         const selectorContainer = requirementRow.locator('.item-selector');
         const selectorHelper = new ItemSelectorHelper(page, selectorContainer);
         await selectorHelper.open();

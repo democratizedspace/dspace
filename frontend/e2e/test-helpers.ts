@@ -624,6 +624,14 @@ export class ItemSelectorHelper {
                 ? this.page.locator(this.selectorContainer)
                 : this.selectorContainer;
 
+        try {
+            await expect(container).toHaveAttribute('data-hydrated', 'true', {
+                timeout: 15000,
+            });
+        } catch (error) {
+            console.log('Item selector did not hydrate before attempting to open');
+        }
+
         // First check if it's already expanded
         const expandedView = container.locator('.selector-expanded');
         const itemsList = container.locator('.items-list');
@@ -641,6 +649,7 @@ export class ItemSelectorHelper {
         const selectButton = container.locator('button');
 
         if ((await selectButton.count()) > 0) {
+            await expect(selectButton.first()).toBeVisible({ timeout: 5000 });
             // Take screenshot before clicking
             await this.page.screenshot({
                 path: './test-artifacts/screenshots/item-selector-before-click.png',
