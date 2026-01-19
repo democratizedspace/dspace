@@ -74,12 +74,18 @@ test.describe('Custom content backup', () => {
                     tx.objectStore('processes').put({
                         id: 'e2e-process',
                         title: 'E2E Process',
-                        duration: 60,
+                        duration: '10m',
+                        requireItems: [
+                            {
+                                id: 'e2e-item',
+                                count: 1,
+                            },
+                        ],
                     });
                     tx.objectStore('quests').put({
                         id: 'e2e-quest',
                         title: 'E2E Quest',
-                        description: 'backup quest',
+                        description: 'backup quest content',
                         image: 'data:image/png;base64,TEST',
                         custom: true,
                     });

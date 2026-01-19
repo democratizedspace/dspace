@@ -387,7 +387,15 @@ test.describe('Custom Content Management', () => {
         const requirementRow = page.locator('#required-items-section .item-row').last();
         const selectorContainer = requirementRow.locator('.item-selector');
         const selectorHelper = new ItemSelectorHelper(page, selectorContainer);
+        await expect(selectorContainer).toHaveAttribute('data-hydrated', 'true', {
+            timeout: 15000,
+        });
         await selectorHelper.open();
+
+        const searchInput = selectorContainer.locator('input[placeholder="Search..."]');
+        if ((await searchInput.count()) > 0) {
+            await searchInput.fill(uniqueItemName);
+        }
 
         const itemOption = selectorContainer.locator('button.item-row', {
             hasText: uniqueItemName,
