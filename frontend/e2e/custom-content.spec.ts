@@ -321,7 +321,7 @@ test.describe('Custom Content Management', () => {
         await itemNavigationPromise;
         await page.waitForLoadState('domcontentloaded');
         await page.waitForLoadState('networkidle', { timeout: 10000 });
-        await expect(page.getByRole('status')).toContainText('Item created successfully.', {
+        await expect(page.getByRole('status')).toContainText(/item created successfully/i, {
             timeout: 15000,
         });
         await waitForHydration(page);
@@ -398,9 +398,12 @@ test.describe('Custom Content Management', () => {
         });
         await selectorHelper.open();
 
-        const searchInput = selectorContainer.locator('input[placeholder="Search..."]');
-        if ((await searchInput.count()) > 0) {
-            await searchInput.fill(uniqueItemName);
+        const searchInputByRole = selectorContainer.getByRole('textbox', { name: /search/i });
+        const searchInputByPlaceholder = selectorContainer.locator('input[placeholder="Search..."]');
+        if ((await searchInputByRole.count()) > 0) {
+            await searchInputByRole.fill(uniqueItemName);
+        } else if ((await searchInputByPlaceholder.count()) > 0) {
+            await searchInputByPlaceholder.fill(uniqueItemName);
         }
 
         const itemOption = selectorContainer.locator('button.item-row', {

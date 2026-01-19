@@ -261,6 +261,10 @@ test.describe('Custom image compression', () => {
             )
             .not.toBeNull();
 
+        if (!updatedImage) {
+            throw new Error('updatedImage was null after poll');
+        }
+
         expect(updatedImage).toMatch(/^data:image\/jpeg;base64,/);
 
         const updatedMetrics = await getImageMetrics(page, updatedImage);
@@ -322,6 +326,10 @@ test.describe('Custom image compression', () => {
                 { timeout: 10_000 }
             )
             .not.toBeNull();
+
+        if (!updatedImage) {
+            throw new Error('updatedImage was null after poll');
+        }
 
         expect(updatedImage).toMatch(/^data:image\/jpeg;base64,/);
 
