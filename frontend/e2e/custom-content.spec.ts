@@ -386,12 +386,12 @@ test.describe('Custom Content Management', () => {
         const selectorHelper = new ItemSelectorHelper(page, selectorContainer);
         await selectorHelper.open();
 
-        const itemOption = selectorContainer.locator('button.item-row', {
-            hasText: uniqueItemName,
-        });
-        const searchInput = selectorContainer.locator('input[aria-label="Search items"]');
+        const searchInput = selectorContainer.getByRole('textbox', { name: 'Search items' });
         await expect(searchInput).toBeVisible({ timeout: 15000 });
         await searchInput.fill(uniqueItemName);
+        const itemOption = selectorContainer.getByRole('option', {
+            name: `Select ${uniqueItemName}`,
+        });
         await expect(itemOption).toBeVisible({ timeout: 15000 });
         await itemOption.click();
 

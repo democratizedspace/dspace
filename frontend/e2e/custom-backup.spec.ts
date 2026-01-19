@@ -76,7 +76,13 @@ test.describe('Custom content backup', () => {
                     tx.objectStore('processes').put({
                         id: 'e2e-process',
                         title: 'E2E Process',
-                        duration: 60,
+                        duration: '10m',
+                        requireItems: [
+                            {
+                                id: 'e2e-item',
+                                count: 1,
+                            },
+                        ],
                     });
                     tx.objectStore('quests').put({
                         id: 'e2e-quest',
