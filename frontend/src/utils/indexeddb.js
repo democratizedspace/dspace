@@ -83,13 +83,7 @@ function getTransaction(storeName, mode) {
     }
     return openCustomContentDB().then((db) => {
         const transaction = db.transaction([storeName], mode);
-        const closeDb = () => {
-            db.close();
-        };
-        transaction.oncomplete = closeDb;
-        transaction.onerror = closeDb;
-        transaction.onabort = closeDb;
-        return transaction.objectStore(storeName);
+        return { store: transaction.objectStore(storeName), transaction, db };
     });
 }
 
@@ -98,7 +92,7 @@ export function addEntity(entity) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(entity.entityType ?? entity.type);
-    return getTransaction(storeName, 'readwrite').then((store) => {
+    return getTransaction(storeName, 'readwrite').then(({ store, transaction, db }) => {
         return new Promise((resolve, reject) => {
             const request = store.add(entity);
             request.onsuccess = () => resolve(request.result);
@@ -107,6 +101,9 @@ export function addEntity(entity) {
                 logIndexedDbIssue('Add entity failed:', event.target.error);
                 reject(event.target.error);
             };
+            transaction.oncomplete = () => db.close();
+            transaction.onerror = () => db.close();
+            transaction.onabort = () => db.close();
         });
     });
 }
@@ -116,7 +113,7 @@ export function getEntity(id, entityType) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(entityType);
-    return getTransaction(storeName, 'readonly').then((store) => {
+    return getTransaction(storeName, 'readonly').then(({ store, transaction, db }) => {
         return new Promise((resolve, reject) => {
             const request = store.get(id);
             request.onsuccess = () => resolve(request.result);
@@ -125,6 +122,9 @@ export function getEntity(id, entityType) {
                 logIndexedDbIssue('Get entity failed:', event.target.error);
                 reject(event.target.error);
             };
+            transaction.oncomplete = () => db.close();
+            transaction.onerror = () => db.close();
+            transaction.onabort = () => db.close();
         });
     });
 }
@@ -134,7 +134,7 @@ export async function updateEntity(updatedEntity) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(updatedEntity.entityType ?? updatedEntity.type);
-    return getTransaction(storeName, 'readwrite').then((store) => {
+    return getTransaction(storeName, 'readwrite').then(({ store, transaction, db }) => {
         return new Promise((resolve, reject) => {
             const getRequest = store.get(updatedEntity.id);
 
@@ -161,6 +161,9 @@ export async function updateEntity(updatedEntity) {
             getRequest.onerror = (event) => {
                 reject(event.target.error);
             };
+            transaction.oncomplete = () => db.close();
+            transaction.onerror = () => db.close();
+            transaction.onabort = () => db.close();
         });
     });
 }
@@ -170,7 +173,7 @@ export function deleteEntity(id, entityType) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(entityType);
-    return getTransaction(storeName, 'readwrite').then((store) => {
+    return getTransaction(storeName, 'readwrite').then(({ store, transaction, db }) => {
         return new Promise((resolve, reject) => {
             const request = store.delete(id);
             request.onsuccess = () => resolve();
@@ -179,6 +182,9 @@ export function deleteEntity(id, entityType) {
                 logIndexedDbIssue('Delete entity failed:', event.target.error);
                 reject(event.target.error);
             };
+            transaction.oncomplete = () => db.close();
+            transaction.onerror = () => db.close();
+            transaction.onabort = () => db.close();
         });
     });
 }
