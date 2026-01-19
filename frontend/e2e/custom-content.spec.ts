@@ -321,6 +321,9 @@ test.describe('Custom Content Management', () => {
         await itemNavigationPromise;
         await page.waitForLoadState('domcontentloaded');
         await page.waitForLoadState('networkidle', { timeout: 10000 });
+        await expect(page.getByRole('status')).toContainText('Item created successfully.', {
+            timeout: 15000,
+        });
         await waitForHydration(page);
 
         let itemId: string | null = null;
@@ -389,6 +392,9 @@ test.describe('Custom Content Management', () => {
         const itemOption = selectorContainer.locator('button.item-row', {
             hasText: uniqueItemName,
         });
+        await expect
+            .poll(async () => (await itemOption.count()) > 0, { timeout: 30000 })
+            .toBe(true);
         await expect(itemOption).toBeVisible({ timeout: 15000 });
         await itemOption.click();
 
