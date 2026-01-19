@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-19-custom-content-prettier-format",
+  "date": "2026-01-19",
+  "component": "formatting checks",
+  "rootCause": "custom-content Playwright spec drifted from Prettier formatting, causing format:check to fail",
+  "resolution": "reformatted the custom-content spec with the frontend Prettier configuration",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts",
+    "scripts/tests/prettierFormatting.test.ts"
+  ]
+}
