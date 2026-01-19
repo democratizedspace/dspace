@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { test, expect, Page } from '@playwright/test';
 import {
     clearUserData,
@@ -17,7 +18,9 @@ const itemImageFile = {
     mimeType: 'image/png',
     buffer: inlineItemImageBuffer,
 };
-const itemImagePath = path.resolve(__dirname, '../public/assets/220_ohm_resistor.jpg');
+const itemImagePath = fileURLToPath(
+    new URL('../public/assets/220_ohm_resistor.jpg', import.meta.url)
+);
 
 test.describe('Custom Content Management', () => {
     test.setTimeout(120000); // 2 minutes for end-to-end tests
@@ -318,6 +321,9 @@ test.describe('Custom Content Management', () => {
         await itemNavigationPromise;
         await page.waitForLoadState('domcontentloaded');
         await page.waitForLoadState('networkidle', { timeout: 10000 });
+        await expect(page.getByRole('status')).toContainText(/item created successfully/i, {
+            timeout: 15000,
+        });
         await waitForHydration(page);
 
         let itemId: string | null = null;
@@ -378,14 +384,34 @@ test.describe('Custom Content Management', () => {
 
         await page.click('button:has-text("Add Required Item")');
 
-        const requirementRow = page.locator('#required-items-section .item-row').last();
+        const requirementRows = page.locator('#required-items-section .item-row');
+        await expect
+            .poll(async () => requirementRows.count(), { timeout: 15000 })
+            .toBeGreaterThan(0);
+        const requirementRow = requirementRows.last();
+        await expect(requirementRow).toBeVisible({ timeout: 15000 });
         const selectorContainer = requirementRow.locator('.item-selector');
         const selectorHelper = new ItemSelectorHelper(page, selectorContainer);
+        await expect(selectorContainer).toBeVisible({ timeout: 15000 });
+        await expect(selectorContainer).toHaveAttribute('data-hydrated', 'true', {
+            timeout: 15000,
+        });
         await selectorHelper.open();
+
+        const searchInputByRole = selectorContainer.getByRole('textbox', { name: /search/i });
+        const searchInputByPlaceholder = selectorContainer.locator('input[placeholder="Search..."]');
+        if ((await searchInputByRole.count()) > 0) {
+            await searchInputByRole.fill(uniqueItemName);
+        } else if ((await searchInputByPlaceholder.count()) > 0) {
+            await searchInputByPlaceholder.fill(uniqueItemName);
+        }
 
         const itemOption = selectorContainer.locator('button.item-row', {
             hasText: uniqueItemName,
         });
+        await expect
+            .poll(async () => (await itemOption.count()) > 0, { timeout: 30000 })
+            .toBe(true);
         await expect(itemOption).toBeVisible({ timeout: 15000 });
         await itemOption.click();
 

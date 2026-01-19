@@ -46,6 +46,9 @@ test.describe('Custom content backup', () => {
                 const request = indexedDB.open('CustomContent', 3);
                 request.onupgradeneeded = () => {
                     const db = request.result;
+                    if (!db.objectStoreNames.contains('meta')) {
+                        db.createObjectStore('meta');
+                    }
                     if (!db.objectStoreNames.contains('items')) {
                         db.createObjectStore('items', { keyPath: 'id' });
                     }
@@ -55,6 +58,8 @@ test.describe('Custom content backup', () => {
                     if (!db.objectStoreNames.contains('quests')) {
                         db.createObjectStore('quests', { keyPath: 'id' });
                     }
+                    const metaStore = request.transaction?.objectStore('meta');
+                    metaStore?.put(3, 'schemaVersion');
                 };
                 request.onerror = () => reject(request.error ?? new Error('open failed'));
                 request.onsuccess = () => {
@@ -69,12 +74,18 @@ test.describe('Custom content backup', () => {
                     tx.objectStore('processes').put({
                         id: 'e2e-process',
                         title: 'E2E Process',
-                        duration: 60,
+                        duration: '10m',
+                        requireItems: [
+                            {
+                                id: 'e2e-item',
+                                count: 1,
+                            },
+                        ],
                     });
                     tx.objectStore('quests').put({
                         id: 'e2e-quest',
                         title: 'E2E Quest',
-                        description: 'backup quest',
+                        description: 'backup quest content',
                         image: 'data:image/png;base64,TEST',
                         custom: true,
                     });
