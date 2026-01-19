@@ -84,7 +84,7 @@ function getTransaction(storeName, mode) {
     return openCustomContentDB().then((db) => {
         try {
             const transaction = db.transaction([storeName], mode);
-            return { store: transaction.objectStore(storeName), db };
+            return { store: transaction.objectStore(storeName), transaction, db };
         } catch (error) {
             db.close();
             throw error;
@@ -92,31 +92,76 @@ function getTransaction(storeName, mode) {
     });
 }
 
+function runTransactionWithResult({ transaction, db }, runner) {
+    return new Promise((resolve, reject) => {
+        let settled = false;
+        let result;
+
+        const finish = (handler, value) => {
+            if (settled) {
+                return;
+            }
+            settled = true;
+            handler(value);
+            db.close();
+        };
+
+        const fail = (error) => {
+            finish(reject, error);
+        };
+
+        transaction.oncomplete = () => {
+            finish(resolve, result);
+        };
+        transaction.onerror = (event) => {
+            fail(event.target?.error ?? event);
+        };
+        transaction.onabort = (event) => {
+            fail(event.target?.error ?? event);
+        };
+
+        try {
+            runner({
+                setResult: (value) => {
+                    result = value;
+                },
+                fail,
+            });
+        } catch (error) {
+            fail(error);
+        }
+    });
+}
+
+function runTransactionWithoutResult(transactionMeta, runner) {
+    return runTransactionWithResult(transactionMeta, runner);
+}
+
 export function addEntity(entity) {
     if (!hasIndexedDB()) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(entity.entityType ?? entity.type);
-    return getTransaction(storeName, 'readwrite').then(({ store, db }) => {
-        return new Promise((resolve, reject) => {
+    return getTransaction(storeName, 'readwrite').then((transactionMeta) =>
+        runTransactionWithResult(transactionMeta, ({ setResult, fail }) => {
+            const { store } = transactionMeta;
+            let request;
             try {
-                const request = store.add(entity);
-                request.onsuccess = () => {
-                    resolve(request.result);
-                    db.close();
-                };
-                /* istanbul ignore next */
-                request.onerror = (event) => {
-                    logIndexedDbIssue('Add entity failed:', event.target.error);
-                    reject(event.target.error);
-                    db.close();
-                };
+                request = store.add(entity);
             } catch (error) {
-                reject(error);
-                db.close();
+                fail(error);
+                return;
             }
-        });
-    });
+            request.onsuccess = () => {
+                setResult(request.result);
+            };
+            /* istanbul ignore next */
+            request.onerror = (event) => {
+                logIndexedDbIssue('Add entity failed:', event.target.error);
+                fail(event.target.error);
+            };
+        })
+    );
 }
 
 export function getEntity(id, entityType) {
@@ -124,26 +169,26 @@ export function getEntity(id, entityType) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(entityType);
-    return getTransaction(storeName, 'readonly').then(({ store, db }) => {
-        return new Promise((resolve, reject) => {
+    return getTransaction(storeName, 'readonly').then((transactionMeta) =>
+        runTransactionWithResult(transactionMeta, ({ setResult, fail }) => {
+            const { store } = transactionMeta;
+            let request;
             try {
-                const request = store.get(id);
-                request.onsuccess = () => {
-                    resolve(request.result);
-                    db.close();
-                };
-                /* istanbul ignore next */
-                request.onerror = (event) => {
-                    logIndexedDbIssue('Get entity failed:', event.target.error);
-                    reject(event.target.error);
-                    db.close();
-                };
+                request = store.get(id);
             } catch (error) {
-                reject(error);
-                db.close();
+                fail(error);
+                return;
             }
-        });
-    });
+            request.onsuccess = () => {
+                setResult(request.result);
+            };
+            /* istanbul ignore next */
+            request.onerror = (event) => {
+                logIndexedDbIssue('Get entity failed:', event.target.error);
+                fail(event.target.error);
+            };
+        })
+    );
 }
 
 export async function updateEntity(updatedEntity) {
@@ -151,22 +196,21 @@ export async function updateEntity(updatedEntity) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(updatedEntity.entityType ?? updatedEntity.type);
-    return getTransaction(storeName, 'readwrite').then(({ store, db }) => {
-        return new Promise((resolve, reject) => {
+    return getTransaction(storeName, 'readwrite').then((transactionMeta) =>
+        runTransactionWithResult(transactionMeta, ({ setResult, fail }) => {
+            const { store } = transactionMeta;
             let getRequest;
             try {
                 getRequest = store.get(updatedEntity.id);
             } catch (error) {
-                reject(error);
-                db.close();
+                fail(error);
                 return;
             }
 
             getRequest.onsuccess = () => {
                 const existingEntity = getRequest.result;
                 if (!existingEntity) {
-                    reject(new Error('Entity not found'));
-                    db.close();
+                    fail(new Error('Entity not found'));
                     return;
                 }
                 let updateRequest;
@@ -174,30 +218,26 @@ export async function updateEntity(updatedEntity) {
                     const mergedEntity = { ...existingEntity, ...updatedEntity };
                     updateRequest = store.put(mergedEntity);
                 } catch (error) {
-                    reject(error);
-                    db.close();
+                    fail(error);
                     return;
                 }
 
                 updateRequest.onsuccess = () => {
-                    resolve(updateRequest.result);
-                    db.close();
+                    setResult(updateRequest.result);
                 };
 
                 /* istanbul ignore next */
                 updateRequest.onerror = (event) => {
-                    reject(event.target.error);
-                    db.close();
+                    fail(event.target.error);
                 };
             };
 
             /* istanbul ignore next */
             getRequest.onerror = (event) => {
-                reject(event.target.error);
-                db.close();
+                fail(event.target.error);
             };
-        });
-    });
+        })
+    );
 }
 
 export function deleteEntity(id, entityType) {
@@ -205,26 +245,26 @@ export function deleteEntity(id, entityType) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(entityType);
-    return getTransaction(storeName, 'readwrite').then(({ store, db }) => {
-        return new Promise((resolve, reject) => {
+    return getTransaction(storeName, 'readwrite').then((transactionMeta) =>
+        runTransactionWithoutResult(transactionMeta, ({ setResult, fail }) => {
+            const { store } = transactionMeta;
+            let request;
             try {
-                const request = store.delete(id);
-                request.onsuccess = () => {
-                    resolve();
-                    db.close();
-                };
-                /* istanbul ignore next */
-                request.onerror = (event) => {
-                    logIndexedDbIssue('Delete entity failed:', event.target.error);
-                    reject(event.target.error);
-                    db.close();
-                };
+                request = store.delete(id);
             } catch (error) {
-                reject(error);
-                db.close();
+                fail(error);
+                return;
             }
-        });
-    });
+            request.onsuccess = () => {
+                setResult();
+            };
+            /* istanbul ignore next */
+            request.onerror = (event) => {
+                logIndexedDbIssue('Delete entity failed:', event.target.error);
+                fail(event.target.error);
+            };
+        })
+    );
 }
 
 /**
@@ -311,20 +351,25 @@ export const getSchemaVersion = async () => {
     if (!hasIndexedDB()) {
         return CUSTOM_CONTENT_DB_VERSION;
     }
-    const db = await openCustomContentDB();
-    const tx = db.transaction('meta', 'readonly');
-    const store = tx.objectStore('meta');
-    const request = store.get('schemaVersion');
-    return new Promise((resolve, reject) => {
-        request.onsuccess = () => {
-            resolve(request.result ?? CUSTOM_CONTENT_DB_VERSION);
-            db.close();
-        };
-        request.onerror = (event) => {
-            reject(event.target.error);
-            db.close();
-        };
-    });
+    return getTransaction('meta', 'readonly').then((transactionMeta) =>
+        runTransactionWithResult(transactionMeta, ({ setResult, fail }) => {
+            const { store } = transactionMeta;
+            let request;
+            try {
+                request = store.get('schemaVersion');
+            } catch (error) {
+                fail(error);
+                return;
+            }
+            request.onsuccess = () => {
+                setResult(request.result ?? CUSTOM_CONTENT_DB_VERSION);
+            };
+            /* istanbul ignore next */
+            request.onerror = (event) => {
+                fail(event.target.error);
+            };
+        })
+    );
 };
 
 // DB Transaction
@@ -333,21 +378,25 @@ export const saveItem = async (item) => {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     try {
-        const db = await openCustomContentDB();
-        const tx = db.transaction('items', 'readwrite');
-        const store = tx.objectStore('items');
-        store.put(item);
-        return new Promise((resolve, reject) => {
-            tx.oncomplete = () => {
-                resolve();
-                db.close();
-            };
-            /* istanbul ignore next */
-            tx.onerror = (event) => {
-                reject(event.target.error);
-                db.close();
-            };
-        });
+        return getTransaction('items', 'readwrite').then((transactionMeta) =>
+            runTransactionWithoutResult(transactionMeta, ({ setResult, fail }) => {
+                const { store } = transactionMeta;
+                let request;
+                try {
+                    request = store.put(item);
+                } catch (error) {
+                    fail(error);
+                    return;
+                }
+                request.onsuccess = () => {
+                    setResult();
+                };
+                /* istanbul ignore next */
+                request.onerror = (event) => {
+                    fail(event.target.error);
+                };
+            })
+        );
     } catch (error) {
         logIndexedDbIssue('Error saving item:', error);
         return Promise.reject(error);
@@ -364,15 +413,13 @@ export const getItems = async () => {
         const tx = db.transaction('items', 'readonly');
         const store = tx.objectStore('items');
         const request = store.getAll();
-        return new Promise((resolve, reject) => {
+        return runTransactionWithResult({ transaction: tx, db }, ({ setResult, fail }) => {
             request.onsuccess = () => {
-                resolve(request.result);
-                db.close();
+                setResult(request.result);
             };
             /* istanbul ignore next */
             request.onerror = (event) => {
-                reject(event.target.error);
-                db.close();
+                fail(event.target.error);
             };
         });
     } catch (error) {
@@ -391,15 +438,13 @@ export const getItem = async (id) => {
         const tx = db.transaction('items', 'readonly');
         const store = tx.objectStore('items');
         const request = store.get(id);
-        return new Promise((resolve, reject) => {
+        return runTransactionWithResult({ transaction: tx, db }, ({ setResult, fail }) => {
             request.onsuccess = () => {
-                resolve(request.result);
-                db.close();
+                setResult(request.result);
             };
             /* istanbul ignore next */
             request.onerror = (event) => {
-                reject(event.target.error);
-                db.close();
+                fail(event.target.error);
             };
         });
     } catch (error) {
@@ -414,21 +459,25 @@ export const deleteItem = async (id) => {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     try {
-        const db = await openCustomContentDB();
-        const tx = db.transaction('items', 'readwrite');
-        const store = tx.objectStore('items');
-        store.delete(id);
-        return new Promise((resolve, reject) => {
-            tx.oncomplete = () => {
-                resolve();
-                db.close();
-            };
-            /* istanbul ignore next */
-            tx.onerror = (event) => {
-                reject(event.target.error);
-                db.close();
-            };
-        });
+        return getTransaction('items', 'readwrite').then((transactionMeta) =>
+            runTransactionWithoutResult(transactionMeta, ({ setResult, fail }) => {
+                const { store } = transactionMeta;
+                let request;
+                try {
+                    request = store.delete(id);
+                } catch (error) {
+                    fail(error);
+                    return;
+                }
+                request.onsuccess = () => {
+                    setResult();
+                };
+                /* istanbul ignore next */
+                request.onerror = (event) => {
+                    fail(event.target.error);
+                };
+            })
+        );
     } catch (error) {
         logIndexedDbIssue('Error deleting item:', error);
         return Promise.reject(error);
@@ -441,21 +490,25 @@ export const saveProcess = async (process) => {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     try {
-        const db = await openCustomContentDB();
-        const tx = db.transaction('processes', 'readwrite');
-        const store = tx.objectStore('processes');
-        store.put(process);
-        return new Promise((resolve, reject) => {
-            tx.oncomplete = () => {
-                resolve();
-                db.close();
-            };
-            /* istanbul ignore next */
-            tx.onerror = (event) => {
-                reject(event.target.error);
-                db.close();
-            };
-        });
+        return getTransaction('processes', 'readwrite').then((transactionMeta) =>
+            runTransactionWithoutResult(transactionMeta, ({ setResult, fail }) => {
+                const { store } = transactionMeta;
+                let request;
+                try {
+                    request = store.put(process);
+                } catch (error) {
+                    fail(error);
+                    return;
+                }
+                request.onsuccess = () => {
+                    setResult();
+                };
+                /* istanbul ignore next */
+                request.onerror = (event) => {
+                    fail(event.target.error);
+                };
+            })
+        );
     } catch (error) {
         logIndexedDbIssue('Error saving process:', error);
         return Promise.reject(error);
@@ -472,15 +525,13 @@ export const getProcesses = async () => {
         const tx = db.transaction('processes', 'readonly');
         const store = tx.objectStore('processes');
         const request = store.getAll();
-        return new Promise((resolve, reject) => {
+        return runTransactionWithResult({ transaction: tx, db }, ({ setResult, fail }) => {
             request.onsuccess = () => {
-                resolve(request.result);
-                db.close();
+                setResult(request.result);
             };
             /* istanbul ignore next */
             request.onerror = (event) => {
-                reject(event.target.error);
-                db.close();
+                fail(event.target.error);
             };
         });
     } catch (error) {
@@ -499,15 +550,13 @@ export const getProcess = async (id) => {
         const tx = db.transaction('processes', 'readonly');
         const store = tx.objectStore('processes');
         const request = store.get(id);
-        return new Promise((resolve, reject) => {
+        return runTransactionWithResult({ transaction: tx, db }, ({ setResult, fail }) => {
             request.onsuccess = () => {
-                resolve(request.result);
-                db.close();
+                setResult(request.result);
             };
             /* istanbul ignore next */
             request.onerror = (event) => {
-                reject(event.target.error);
-                db.close();
+                fail(event.target.error);
             };
         });
     } catch (error) {
@@ -522,21 +571,25 @@ export const deleteProcess = async (id) => {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     try {
-        const db = await openCustomContentDB();
-        const tx = db.transaction('processes', 'readwrite');
-        const store = tx.objectStore('processes');
-        store.delete(id);
-        return new Promise((resolve, reject) => {
-            tx.oncomplete = () => {
-                resolve();
-                db.close();
-            };
-            /* istanbul ignore next */
-            tx.onerror = (event) => {
-                reject(event.target.error);
-                db.close();
-            };
-        });
+        return getTransaction('processes', 'readwrite').then((transactionMeta) =>
+            runTransactionWithoutResult(transactionMeta, ({ setResult, fail }) => {
+                const { store } = transactionMeta;
+                let request;
+                try {
+                    request = store.delete(id);
+                } catch (error) {
+                    fail(error);
+                    return;
+                }
+                request.onsuccess = () => {
+                    setResult();
+                };
+                /* istanbul ignore next */
+                request.onerror = (event) => {
+                    fail(event.target.error);
+                };
+            })
+        );
     } catch (error) {
         logIndexedDbIssue('Error deleting process:', error);
         return Promise.reject(error);
@@ -549,21 +602,25 @@ export const saveQuest = async (quest) => {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     try {
-        const db = await openCustomContentDB();
-        const tx = db.transaction('quests', 'readwrite');
-        const store = tx.objectStore('quests');
-        store.put(quest);
-        return new Promise((resolve, reject) => {
-            tx.oncomplete = () => {
-                resolve();
-                db.close();
-            };
-            /* istanbul ignore next */
-            tx.onerror = (event) => {
-                reject(event.target.error);
-                db.close();
-            };
-        });
+        return getTransaction('quests', 'readwrite').then((transactionMeta) =>
+            runTransactionWithoutResult(transactionMeta, ({ setResult, fail }) => {
+                const { store } = transactionMeta;
+                let request;
+                try {
+                    request = store.put(quest);
+                } catch (error) {
+                    fail(error);
+                    return;
+                }
+                request.onsuccess = () => {
+                    setResult();
+                };
+                /* istanbul ignore next */
+                request.onerror = (event) => {
+                    fail(event.target.error);
+                };
+            })
+        );
     } catch (error) {
         logIndexedDbIssue('Error saving quest:', error);
         return Promise.reject(error);
@@ -580,15 +637,13 @@ export const getQuests = async () => {
         const tx = db.transaction('quests', 'readonly');
         const store = tx.objectStore('quests');
         const request = store.getAll();
-        return new Promise((resolve, reject) => {
+        return runTransactionWithResult({ transaction: tx, db }, ({ setResult, fail }) => {
             request.onsuccess = () => {
-                resolve(request.result);
-                db.close();
+                setResult(request.result);
             };
             /* istanbul ignore next */
             request.onerror = (event) => {
-                reject(event.target.error);
-                db.close();
+                fail(event.target.error);
             };
         });
     } catch (error) {
@@ -607,15 +662,13 @@ export const getQuest = async (id) => {
         const tx = db.transaction('quests', 'readonly');
         const store = tx.objectStore('quests');
         const request = store.get(id);
-        return new Promise((resolve, reject) => {
+        return runTransactionWithResult({ transaction: tx, db }, ({ setResult, fail }) => {
             request.onsuccess = () => {
-                resolve(request.result);
-                db.close();
+                setResult(request.result);
             };
             /* istanbul ignore next */
             request.onerror = (event) => {
-                reject(event.target.error);
-                db.close();
+                fail(event.target.error);
             };
         });
     } catch (error) {
@@ -630,21 +683,25 @@ export const deleteQuest = async (id) => {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     try {
-        const db = await openCustomContentDB();
-        const tx = db.transaction('quests', 'readwrite');
-        const store = tx.objectStore('quests');
-        store.delete(id);
-        return new Promise((resolve, reject) => {
-            tx.oncomplete = () => {
-                resolve();
-                db.close();
-            };
-            /* istanbul ignore next */
-            tx.onerror = (event) => {
-                reject(event.target.error);
-                db.close();
-            };
-        });
+        return getTransaction('quests', 'readwrite').then((transactionMeta) =>
+            runTransactionWithoutResult(transactionMeta, ({ setResult, fail }) => {
+                const { store } = transactionMeta;
+                let request;
+                try {
+                    request = store.delete(id);
+                } catch (error) {
+                    fail(error);
+                    return;
+                }
+                request.onsuccess = () => {
+                    setResult();
+                };
+                /* istanbul ignore next */
+                request.onerror = (event) => {
+                    fail(event.target.error);
+                };
+            })
+        );
     } catch (error) {
         logIndexedDbIssue('Error deleting quest:', error);
         return Promise.reject(error);
