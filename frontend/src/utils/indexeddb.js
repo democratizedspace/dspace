@@ -287,6 +287,12 @@ export const openCustomContentDB = () => {
                 await runMigrations(db, CUSTOM_CONTENT_DB_VERSION);
                 resolve(db);
             } catch (err) {
+                const message = err?.message ?? String(err);
+                if (message.includes('Data integrity validation failed')) {
+                    logIndexedDbIssue('Custom content validation failed; continuing with DB.', err);
+                    resolve(db);
+                    return;
+                }
                 reject(err);
             }
         };
