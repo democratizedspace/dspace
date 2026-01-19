@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { test, expect, Page } from '@playwright/test';
 import {
     clearUserData,
@@ -8,6 +9,7 @@ import {
     ItemSelectorHelper,
 } from './test-helpers';
 
+const currentDir = path.dirname(fileURLToPath(import.meta.url));
 const inlineItemImageBuffer = Buffer.from(
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/woAAgIBJ3QpJ8gAAAAASUVORK5CYII=',
     'base64'
@@ -17,7 +19,7 @@ const itemImageFile = {
     mimeType: 'image/png',
     buffer: inlineItemImageBuffer,
 };
-const itemImagePath = path.resolve(__dirname, '../public/assets/220_ohm_resistor.jpg');
+const itemImagePath = path.resolve(currentDir, '../public/assets/220_ohm_resistor.jpg');
 
 test.describe('Custom Content Management', () => {
     test.setTimeout(120000); // 2 minutes for end-to-end tests
