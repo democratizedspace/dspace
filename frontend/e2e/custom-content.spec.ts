@@ -18,9 +18,9 @@ const itemImageFile = {
     mimeType: 'image/png',
     buffer: inlineItemImageBuffer,
 };
-const currentFilePath = fileURLToPath(import.meta.url);
-const currentDirPath = path.dirname(currentFilePath);
-const itemImagePath = path.resolve(currentDirPath, '../public/assets/220_ohm_resistor.jpg');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const itemImagePath = path.resolve(__dirname, '../public/assets/220_ohm_resistor.jpg');
 
 test.describe('Custom Content Management', () => {
     test.setTimeout(120000); // 2 minutes for end-to-end tests
