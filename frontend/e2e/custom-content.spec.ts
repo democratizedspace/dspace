@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { test, expect, Page } from '@playwright/test';
 import {
     clearUserData,
@@ -17,7 +18,9 @@ const itemImageFile = {
     mimeType: 'image/png',
     buffer: inlineItemImageBuffer,
 };
-const itemImagePath = path.resolve(__dirname, '../public/assets/220_ohm_resistor.jpg');
+const itemImagePath = fileURLToPath(
+    new URL('../public/assets/220_ohm_resistor.jpg', import.meta.url)
+);
 
 test.describe('Custom Content Management', () => {
     test.setTimeout(120000); // 2 minutes for end-to-end tests
