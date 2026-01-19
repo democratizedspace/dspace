@@ -84,7 +84,13 @@ function getTransaction(storeName, mode) {
     return openCustomContentDB().then((db) => {
         try {
             const transaction = db.transaction([storeName], mode);
-            return { store: transaction.objectStore(storeName), db };
+            const closeDb = () => {
+                db.close();
+            };
+            transaction.oncomplete = closeDb;
+            transaction.onerror = closeDb;
+            transaction.onabort = closeDb;
+            return transaction.objectStore(storeName);
         } catch (error) {
             db.close();
             throw error;
@@ -97,23 +103,20 @@ export function addEntity(entity) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(entity.entityType ?? entity.type);
-    return getTransaction(storeName, 'readwrite').then(({ store, db }) => {
+    return getTransaction(storeName, 'readwrite').then((store) => {
         return new Promise((resolve, reject) => {
             try {
                 const request = store.add(entity);
                 request.onsuccess = () => {
                     resolve(request.result);
-                    db.close();
                 };
                 /* istanbul ignore next */
                 request.onerror = (event) => {
                     logIndexedDbIssue('Add entity failed:', event.target.error);
                     reject(event.target.error);
-                    db.close();
                 };
             } catch (error) {
                 reject(error);
-                db.close();
             }
         });
     });
@@ -124,23 +127,20 @@ export function getEntity(id, entityType) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(entityType);
-    return getTransaction(storeName, 'readonly').then(({ store, db }) => {
+    return getTransaction(storeName, 'readonly').then((store) => {
         return new Promise((resolve, reject) => {
             try {
                 const request = store.get(id);
                 request.onsuccess = () => {
                     resolve(request.result);
-                    db.close();
                 };
                 /* istanbul ignore next */
                 request.onerror = (event) => {
                     logIndexedDbIssue('Get entity failed:', event.target.error);
                     reject(event.target.error);
-                    db.close();
                 };
             } catch (error) {
                 reject(error);
-                db.close();
             }
         });
     });
@@ -151,14 +151,13 @@ export async function updateEntity(updatedEntity) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(updatedEntity.entityType ?? updatedEntity.type);
-    return getTransaction(storeName, 'readwrite').then(({ store, db }) => {
+    return getTransaction(storeName, 'readwrite').then((store) => {
         return new Promise((resolve, reject) => {
             let getRequest;
             try {
                 getRequest = store.get(updatedEntity.id);
             } catch (error) {
                 reject(error);
-                db.close();
                 return;
             }
 
@@ -166,7 +165,6 @@ export async function updateEntity(updatedEntity) {
                 const existingEntity = getRequest.result;
                 if (!existingEntity) {
                     reject(new Error('Entity not found'));
-                    db.close();
                     return;
                 }
                 let updateRequest;
@@ -175,26 +173,22 @@ export async function updateEntity(updatedEntity) {
                     updateRequest = store.put(mergedEntity);
                 } catch (error) {
                     reject(error);
-                    db.close();
                     return;
                 }
 
                 updateRequest.onsuccess = () => {
                     resolve(updateRequest.result);
-                    db.close();
                 };
 
                 /* istanbul ignore next */
                 updateRequest.onerror = (event) => {
                     reject(event.target.error);
-                    db.close();
                 };
             };
 
             /* istanbul ignore next */
             getRequest.onerror = (event) => {
                 reject(event.target.error);
-                db.close();
             };
         });
     });
@@ -205,23 +199,20 @@ export function deleteEntity(id, entityType) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     const storeName = getStoreForEntityType(entityType);
-    return getTransaction(storeName, 'readwrite').then(({ store, db }) => {
+    return getTransaction(storeName, 'readwrite').then((store) => {
         return new Promise((resolve, reject) => {
             try {
                 const request = store.delete(id);
                 request.onsuccess = () => {
                     resolve();
-                    db.close();
                 };
                 /* istanbul ignore next */
                 request.onerror = (event) => {
                     logIndexedDbIssue('Delete entity failed:', event.target.error);
                     reject(event.target.error);
-                    db.close();
                 };
             } catch (error) {
                 reject(error);
-                db.close();
             }
         });
     });
