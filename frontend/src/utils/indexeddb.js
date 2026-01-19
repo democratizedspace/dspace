@@ -82,8 +82,13 @@ function getTransaction(storeName, mode) {
         return Promise.reject(new Error('IndexedDB is not supported'));
     }
     return openCustomContentDB().then((db) => {
-        const transaction = db.transaction([storeName], mode);
-        return { store: transaction.objectStore(storeName), db };
+        try {
+            const transaction = db.transaction([storeName], mode);
+            return { store: transaction.objectStore(storeName), db };
+        } catch (error) {
+            db.close();
+            throw error;
+        }
     });
 }
 
@@ -94,17 +99,22 @@ export function addEntity(entity) {
     const storeName = getStoreForEntityType(entity.entityType ?? entity.type);
     return getTransaction(storeName, 'readwrite').then(({ store, db }) => {
         return new Promise((resolve, reject) => {
-            const request = store.add(entity);
-            request.onsuccess = () => {
-                resolve(request.result);
+            try {
+                const request = store.add(entity);
+                request.onsuccess = () => {
+                    resolve(request.result);
+                    db.close();
+                };
+                /* istanbul ignore next */
+                request.onerror = (event) => {
+                    logIndexedDbIssue('Add entity failed:', event.target.error);
+                    reject(event.target.error);
+                    db.close();
+                };
+            } catch (error) {
+                reject(error);
                 db.close();
-            };
-            /* istanbul ignore next */
-            request.onerror = (event) => {
-                logIndexedDbIssue('Add entity failed:', event.target.error);
-                reject(event.target.error);
-                db.close();
-            };
+            }
         });
     });
 }
@@ -116,17 +126,22 @@ export function getEntity(id, entityType) {
     const storeName = getStoreForEntityType(entityType);
     return getTransaction(storeName, 'readonly').then(({ store, db }) => {
         return new Promise((resolve, reject) => {
-            const request = store.get(id);
-            request.onsuccess = () => {
-                resolve(request.result);
+            try {
+                const request = store.get(id);
+                request.onsuccess = () => {
+                    resolve(request.result);
+                    db.close();
+                };
+                /* istanbul ignore next */
+                request.onerror = (event) => {
+                    logIndexedDbIssue('Get entity failed:', event.target.error);
+                    reject(event.target.error);
+                    db.close();
+                };
+            } catch (error) {
+                reject(error);
                 db.close();
-            };
-            /* istanbul ignore next */
-            request.onerror = (event) => {
-                logIndexedDbIssue('Get entity failed:', event.target.error);
-                reject(event.target.error);
-                db.close();
-            };
+            }
         });
     });
 }
@@ -138,7 +153,14 @@ export async function updateEntity(updatedEntity) {
     const storeName = getStoreForEntityType(updatedEntity.entityType ?? updatedEntity.type);
     return getTransaction(storeName, 'readwrite').then(({ store, db }) => {
         return new Promise((resolve, reject) => {
-            const getRequest = store.get(updatedEntity.id);
+            let getRequest;
+            try {
+                getRequest = store.get(updatedEntity.id);
+            } catch (error) {
+                reject(error);
+                db.close();
+                return;
+            }
 
             getRequest.onsuccess = () => {
                 const existingEntity = getRequest.result;
@@ -147,8 +169,15 @@ export async function updateEntity(updatedEntity) {
                     db.close();
                     return;
                 }
-                const mergedEntity = { ...existingEntity, ...updatedEntity };
-                const updateRequest = store.put(mergedEntity);
+                let updateRequest;
+                try {
+                    const mergedEntity = { ...existingEntity, ...updatedEntity };
+                    updateRequest = store.put(mergedEntity);
+                } catch (error) {
+                    reject(error);
+                    db.close();
+                    return;
+                }
 
                 updateRequest.onsuccess = () => {
                     resolve(updateRequest.result);
@@ -178,17 +207,22 @@ export function deleteEntity(id, entityType) {
     const storeName = getStoreForEntityType(entityType);
     return getTransaction(storeName, 'readwrite').then(({ store, db }) => {
         return new Promise((resolve, reject) => {
-            const request = store.delete(id);
-            request.onsuccess = () => {
-                resolve();
+            try {
+                const request = store.delete(id);
+                request.onsuccess = () => {
+                    resolve();
+                    db.close();
+                };
+                /* istanbul ignore next */
+                request.onerror = (event) => {
+                    logIndexedDbIssue('Delete entity failed:', event.target.error);
+                    reject(event.target.error);
+                    db.close();
+                };
+            } catch (error) {
+                reject(error);
                 db.close();
-            };
-            /* istanbul ignore next */
-            request.onerror = (event) => {
-                logIndexedDbIssue('Delete entity failed:', event.target.error);
-                reject(event.target.error);
-                db.close();
-            };
+            }
         });
     });
 }
