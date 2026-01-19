@@ -385,11 +385,18 @@ test.describe('Custom Content Management', () => {
         const selectorHelper = new ItemSelectorHelper(page, selectorContainer);
         await selectorHelper.open();
 
+        const searchInput = selectorContainer.getByLabel('Search items');
+        await expect(searchInput).toBeVisible({ timeout: 15000 });
+        await searchInput.fill(uniqueItemName);
+
         const itemOption = selectorContainer.locator('button.item-row', {
             hasText: uniqueItemName,
         });
-        await expect(itemOption).toBeVisible({ timeout: 15000 });
-        await itemOption.click();
+        await expect
+            .poll(() => itemOption.count(), { timeout: 15000 })
+            .toBeGreaterThan(0);
+        await expect(itemOption.first()).toBeVisible({ timeout: 15000 });
+        await itemOption.first().click();
 
         const countInput = requirementRow.locator('input[type="number"]');
         if ((await countInput.count()) > 0) {

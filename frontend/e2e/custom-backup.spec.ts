@@ -46,6 +46,9 @@ test.describe('Custom content backup', () => {
                 const request = indexedDB.open('CustomContent', 3);
                 request.onupgradeneeded = () => {
                     const db = request.result;
+                    if (!db.objectStoreNames.contains('meta')) {
+                        db.createObjectStore('meta');
+                    }
                     if (!db.objectStoreNames.contains('items')) {
                         db.createObjectStore('items', { keyPath: 'id' });
                     }
@@ -59,7 +62,8 @@ test.describe('Custom content backup', () => {
                 request.onerror = () => reject(request.error ?? new Error('open failed'));
                 request.onsuccess = () => {
                     const db = request.result;
-                    const tx = db.transaction(['items', 'processes', 'quests'], 'readwrite');
+                    const tx = db.transaction(['meta', 'items', 'processes', 'quests'], 'readwrite');
+                    tx.objectStore('meta').put(3, 'schemaVersion');
                     tx.objectStore('items').put({
                         id: 'e2e-item',
                         name: 'E2E Item',

@@ -102,6 +102,7 @@ test.describe('Logout flow', () => {
         const tokenField = page.getByLabel(/GitHub Token/i);
         await tokenField.fill(token);
         await page.getByRole('button', { name: /save/i }).click();
+        await expect(page.getByTestId('sync-success')).toContainText('Token saved');
 
         await page.reload();
         await waitForHydration(page);
