@@ -15,10 +15,7 @@ type Store<T> = {
     update: (updater: (value: T) => T) => void;
 };
 
-let mockState: Store<QuestState>;
-let getMockStateValue: () => QuestState;
-
-vi.hoisted(() => {
+const { mockState, getMockStateValue } = vi.hoisted(() => {
     let value: QuestState = { quests: {}, inventory: {} };
     const subscribers = new Set<(current: QuestState) => void>();
     const subscribe = (run: (current: QuestState) => void) => {
@@ -33,8 +30,10 @@ vi.hoisted(() => {
     const update = (updater: (current: QuestState) => QuestState) => {
         set(updater(value));
     };
-    mockState = { subscribe, set, update } as Store<QuestState>;
-    getMockStateValue = () => value;
+    return {
+        mockState: { subscribe, set, update } as Store<QuestState>,
+        getMockStateValue: () => value,
+    };
 });
 
 vi.mock('../src/utils/gameState/common.js', () => ({

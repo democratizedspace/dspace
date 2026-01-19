@@ -142,15 +142,13 @@
         {#if status !== 'idle'}
             <div
                 class="status-panel"
-                data-testid={
-                    status === 'running'
-                        ? 'contentbackup-preparing'
-                        : status === 'ready'
-                          ? 'contentbackup-prepared'
-                          : status === 'error'
-                            ? 'contentbackup-error'
-                            : undefined
-                }
+                data-testid={status === 'running'
+                    ? 'contentbackup-preparing'
+                    : status === 'ready'
+                      ? 'contentbackup-prepared'
+                      : status === 'error'
+                        ? 'contentbackup-error'
+                        : undefined}
                 aria-live="polite"
             >
                 {#if status === 'running'}
@@ -171,11 +169,9 @@
                                     </div>
                                     <progress
                                         max="1"
-                                        value={
-                                            asset.status === 'done' || asset.status === 'error'
-                                                ? 1
-                                                : 0
-                                        }
+                                        value={asset.status === 'done' || asset.status === 'error'
+                                            ? 1
+                                            : 0}
                                     />
                                 </div>
                             {/each}

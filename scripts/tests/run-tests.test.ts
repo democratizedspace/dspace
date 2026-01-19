@@ -8,7 +8,10 @@ describe('runTests', () => {
     const write = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
     const code = runTests(exec, 'linux');
     expect(code).toBe(1);
-    expect(exec).toHaveBeenCalledWith('npm run test:root', { encoding: 'utf-8', stdio: 'pipe' });
+    expect(exec).toHaveBeenCalledWith(
+      'npm run test:root',
+      expect.objectContaining({ encoding: 'utf-8', stdio: 'pipe', maxBuffer: 200 * 1024 * 1024 })
+    );
     expect(exec).toHaveBeenCalledTimes(1);
     write.mockRestore();
   });

@@ -101,8 +101,12 @@ test.describe('Custom content backup', () => {
         let status: 'preparing' | 'prepared' | 'error';
         try {
             status = await Promise.race([
-                preparingPreview.waitFor({ state: 'visible', timeout: 60000 }).then(() => 'preparing'),
-                preparedPreview.waitFor({ state: 'visible', timeout: 60000 }).then(() => 'prepared'),
+                preparingPreview
+                    .waitFor({ state: 'visible', timeout: 60000 })
+                    .then(() => 'preparing'),
+                preparedPreview
+                    .waitFor({ state: 'visible', timeout: 60000 })
+                    .then(() => 'prepared'),
                 errorPreview.waitFor({ state: 'visible', timeout: 60000 }).then(() => 'error'),
             ]);
         } catch (error) {
@@ -115,7 +119,9 @@ test.describe('Custom content backup', () => {
         if (status === 'preparing') {
             try {
                 status = await Promise.race([
-                    preparedPreview.waitFor({ state: 'visible', timeout: 60000 }).then(() => 'prepared'),
+                    preparedPreview
+                        .waitFor({ state: 'visible', timeout: 60000 })
+                        .then(() => 'prepared'),
                     errorPreview.waitFor({ state: 'visible', timeout: 60000 }).then(() => 'error'),
                 ]);
             } catch (error) {
