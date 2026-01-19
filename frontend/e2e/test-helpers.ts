@@ -638,7 +638,9 @@ export class ItemSelectorHelper {
 
         // Look for any button that can expand the selector
         // Try different selectors to handle both old and new versions
-        const selectButton = container.locator('button');
+        const selectButton = container.locator(
+            'button.select-button, button.edit-button, button[aria-haspopup="listbox"]'
+        );
 
         if ((await selectButton.count()) > 0) {
             // Take screenshot before clicking
