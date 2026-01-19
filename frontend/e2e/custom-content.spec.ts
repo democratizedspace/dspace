@@ -389,6 +389,9 @@ test.describe('Custom Content Management', () => {
         const itemOption = selectorContainer.locator('button.item-row', {
             hasText: uniqueItemName,
         });
+        await expect
+            .poll(async () => itemOption.count(), { timeout: 15000 })
+            .toBeGreaterThan(0);
         await expect(itemOption).toBeVisible({ timeout: 15000 });
         await itemOption.click();
 
