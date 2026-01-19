@@ -309,15 +309,27 @@ test.describe('Custom image compression', () => {
             })
             .toBeTruthy();
 
-        const updatedQuest = (await getCustomContentRecord(
-            page,
-            'quests',
-            'title',
-            questTitle
-        )) as { image?: string };
-        const updatedImage = updatedQuest.image as string;
+        let updatedImage: string | null = null;
+        await expect
+            .poll(
+                async () => {
+                    const record = (await getCustomContentRecord(
+                        page,
+                        'quests',
+                        'title',
+                        questTitle
+                    )) as { image?: string } | null;
+                    if (!record?.image || record.image === savedQuest.image) {
+                        return null;
+                    }
+                    updatedImage = record.image;
+                    return updatedImage;
+                },
+                { timeout: 10_000 }
+            )
+            .not.toBeNull();
+
         expect(updatedImage).toMatch(/^data:image\/jpeg;base64,/);
-        expect(updatedImage).not.toBe(savedQuest.image);
 
         const updatedMetrics = await getImageMetrics(page, updatedImage);
         expectCompressedImage(updatedMetrics);
