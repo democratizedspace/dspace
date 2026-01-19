@@ -624,13 +624,25 @@ export class ItemSelectorHelper {
                 ? this.page.locator(this.selectorContainer)
                 : this.selectorContainer;
 
+        await expect(container).toBeVisible({ timeout: 15000 });
+        await expect
+            .poll(async () => await container.getAttribute('data-hydrated'), {
+                timeout: 15000,
+            })
+            .toBe('true');
+
         // First check if it's already expanded
         const expandedView = container.locator('.selector-expanded');
         const itemsList = container.locator('.items-list');
         const expansionLocator = container.locator('.selector-expanded, .items-list');
+        const expandedState = await container.getAttribute('data-expanded');
 
         // If either is visible, consider it expanded
-        if ((await expandedView.count()) > 0 || (await itemsList.count()) > 0) {
+        if (
+            expandedState === 'true' ||
+            (await expandedView.count()) > 0 ||
+            (await itemsList.count()) > 0
+        ) {
             console.log('Item selector already expanded');
             await expect(expansionLocator.first()).toBeVisible();
             return true;
@@ -642,6 +654,18 @@ export class ItemSelectorHelper {
             'button.select-button, button.edit-button, button[aria-haspopup="listbox"]'
         );
 
+        try {
+            await expect
+                .poll(async () => (await selectButton.count()) > 0, {
+                    timeout: 15000,
+                })
+                .toBe(true);
+        } catch (error) {
+            void error;
+            console.log('Could not open item selector');
+            return false;
+        }
+
         if ((await selectButton.count()) > 0) {
             // Take screenshot before clicking
             await this.page.screenshot({
@@ -651,7 +675,12 @@ export class ItemSelectorHelper {
             await selectButton.first().click();
             console.log('Clicked Select Item button');
 
-            await expect(expansionLocator.first()).toBeVisible();
+            await expect
+                .poll(async () => await container.getAttribute('data-expanded'), {
+                    timeout: 15000,
+                })
+                .toBe('true');
+            await expect(expansionLocator.first()).toBeVisible({ timeout: 15000 });
             return true;
         }
 
