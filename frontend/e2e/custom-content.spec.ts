@@ -384,9 +384,15 @@ test.describe('Custom Content Management', () => {
 
         await page.click('button:has-text("Add Required Item")');
 
-        const requirementRow = page.locator('#required-items-section .item-row').last();
+        const requirementRows = page.locator('#required-items-section .item-row');
+        await expect
+            .poll(async () => requirementRows.count(), { timeout: 15000 })
+            .toBeGreaterThan(0);
+        const requirementRow = requirementRows.last();
+        await expect(requirementRow).toBeVisible({ timeout: 15000 });
         const selectorContainer = requirementRow.locator('.item-selector');
         const selectorHelper = new ItemSelectorHelper(page, selectorContainer);
+        await expect(selectorContainer).toBeVisible({ timeout: 15000 });
         await expect(selectorContainer).toHaveAttribute('data-hydrated', 'true', {
             timeout: 15000,
         });

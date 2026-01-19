@@ -401,17 +401,35 @@ test.describe('Constellations Quest Creation', () => {
         await createButton.click();
         await page.waitForLoadState('networkidle');
 
-        // Step 2: find the created quest id in IndexedDB with a short poll
+        const successMessage = page.getByRole('status');
+        await expect(successMessage).toContainText('Quest created successfully', {
+            timeout: 15000,
+        });
+
+        const viewQuestLink = page.getByRole('link', { name: /view quest/i });
+
         let questId: QuestIdentifier | null = null;
-        await expect
-            .poll(
-                async () => {
-                    questId = await findQuestIdByTitle(page, questTitle);
-                    return questId;
-                },
-                { timeout: 10_000, intervals: [500, 750, 1000] }
-            )
-            .not.toBeNull();
+        if ((await viewQuestLink.count()) > 0) {
+            await expect(viewQuestLink).toBeVisible({ timeout: 15000 });
+            const href = await viewQuestLink.getAttribute('href');
+            const hrefMatch = href?.match(/\/quests\/([^/]+)/);
+            if (hrefMatch?.[1]) {
+                questId = hrefMatch[1];
+            }
+        }
+
+        // Step 2: find the created quest id in IndexedDB with a short poll
+        if (!questId) {
+            await expect
+                .poll(
+                    async () => {
+                        questId = await findQuestIdByTitle(page, questTitle);
+                        return questId;
+                    },
+                    { timeout: 10_000, intervals: [500, 750, 1000] }
+                )
+                .not.toBeNull();
+        }
 
         expect(questId).not.toBeNull();
 
