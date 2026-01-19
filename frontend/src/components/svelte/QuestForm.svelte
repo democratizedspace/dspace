@@ -854,11 +854,7 @@
     }
 </script>
 
-<form
-    on:submit={handleSubmit}
-    class="quest-form"
-    data-hydrated={isHydrated ? 'true' : 'false'}
->
+<form on:submit={handleSubmit} class="quest-form" data-hydrated={isHydrated ? 'true' : 'false'}>
     <datalist id="quest-option-item-suggestions">
         {#each allItems as item (item.id)}
             <option value={item.id}>{item.name}</option>

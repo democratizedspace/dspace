@@ -128,6 +128,7 @@ function mockCanvasElement(canvas: HTMLCanvasElement) {
 beforeEach(() => {
     vi.resetModules();
     vi.restoreAllMocks();
+    vi.doMock('../src/utils/ssr.js', () => ({ isBrowser: true }));
     globalThis.createImageBitmap = originalGlobals.createImageBitmap;
     globalThis.Image = originalGlobals.Image;
     globalThis.FileReader = originalGlobals.FileReader;
@@ -368,8 +369,12 @@ describe('downsampleAndCompressToJpeg', () => {
         globalThis.createImageBitmap = vi.fn(async () => createBitmap());
         const base64Payload = Buffer.from('data').toString('base64');
         globalThis.atob = undefined;
-        vi.spyOn(Buffer, 'from').mockImplementation(() => {
-            throw new Error('Buffer unavailable');
+        const originalBufferFrom = Buffer.from;
+        vi.spyOn(Buffer, 'from').mockImplementation((...args: Parameters<typeof Buffer.from>) => {
+            if (args[0] === base64Payload && args[1] === 'base64') {
+                throw new Error('Buffer unavailable');
+            }
+            return originalBufferFrom(...args);
         });
         const { canvas } = mockCanvas({
             toDataURLImpl: () => `data:image/jpeg;base64,${base64Payload}`,

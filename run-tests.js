@@ -33,7 +33,8 @@ function runTests(exec = execSync, platform = os.platform()) {
             console.log(`${colors.yellow}Running root unit tests...${colors.reset}`);
             const rootOutput = exec('npm run test:root', {
                 encoding: 'utf-8',
-                stdio: 'pipe'
+                stdio: 'pipe',
+                maxBuffer: 1024 * 1024 * 200
             });
             process.stdout.write(rootOutput);
             if (hasZeroTests(rootOutput)) {

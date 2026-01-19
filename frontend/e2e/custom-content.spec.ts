@@ -65,8 +65,7 @@ test.describe('Custom Content Management', () => {
                             const items = getAllRequest.result ?? [];
                             const normalizedName = itemName.trim().toLowerCase();
                             const match = items.find(
-                                (item) =>
-                                    (item?.name ?? '').trim().toLowerCase() === normalizedName
+                                (item) => (item?.name ?? '').trim().toLowerCase() === normalizedName
                             );
                             const matchedId = match?.id ?? null;
                             db.close();
