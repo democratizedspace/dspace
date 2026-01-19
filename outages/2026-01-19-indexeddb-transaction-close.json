@@ -1,0 +1,11 @@
+{
+  "id": "OUT-2026-01-19-indexeddb-transaction-close",
+  "date": "2026-01-19",
+  "component": "frontend/custom-content",
+  "rootCause": "Custom content IndexedDB transactions opened via getTransaction never closed their database handles, leaving connections open during test cleanup and causing item resolver lookups to hang until timeouts fired.",
+  "resolution": "Close IndexedDB handles when transactions complete, error, or abort so item lookups and database cleanup can finish promptly.",
+  "references": [
+    "frontend/src/utils/indexeddb.js",
+    "frontend/tests/itemResolver.test.ts"
+  ]
+}
