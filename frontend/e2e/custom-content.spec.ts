@@ -399,7 +399,9 @@ test.describe('Custom Content Management', () => {
         await selectorHelper.open();
 
         const searchInputByRole = selectorContainer.getByRole('textbox', { name: /search/i });
-        const searchInputByPlaceholder = selectorContainer.locator('input[placeholder="Search..."]');
+        const searchInputByPlaceholder = selectorContainer.locator(
+            'input[placeholder="Search..."]'
+        );
         if ((await searchInputByRole.count()) > 0) {
             await searchInputByRole.fill(uniqueItemName);
         } else if ((await searchInputByPlaceholder.count()) > 0) {
