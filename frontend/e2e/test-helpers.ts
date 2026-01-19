@@ -349,6 +349,69 @@ export async function clearUserData(page: Page): Promise<void> {
     await purgeClientState(page);
 }
 
+export async function ensureCustomContentDb(page: Page): Promise<void> {
+    await page.evaluate(async () => {
+        const requiredStores = ['meta', 'items', 'processes', 'quests'];
+        const databaseName = 'CustomContent';
+        const databaseVersion = 3;
+        const maxAttempts = 3;
+
+        const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+        const deleteDatabase = () =>
+            new Promise<void>((resolve) => {
+                const request = indexedDB.deleteDatabase(databaseName);
+                request.onsuccess = () => resolve();
+                request.onerror = () => resolve();
+                request.onblocked = () => resolve();
+            });
+
+        const openDatabase = () =>
+            new Promise<IDBDatabase>((resolve, reject) => {
+                const request = indexedDB.open(databaseName, databaseVersion);
+                request.onupgradeneeded = () => {
+                    const db = request.result;
+                    if (!db.objectStoreNames.contains('meta')) {
+                        db.createObjectStore('meta');
+                    }
+                    if (!db.objectStoreNames.contains('items')) {
+                        db.createObjectStore('items', { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('processes')) {
+                        db.createObjectStore('processes', { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('quests')) {
+                        db.createObjectStore('quests', { keyPath: 'id' });
+                    }
+                    const metaStore = request.transaction.objectStore('meta');
+                    metaStore.put(databaseVersion, 'schemaVersion');
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () =>
+                    reject(request.error ?? new Error('Failed to open CustomContent DB.'));
+                request.onblocked = () =>
+                    reject(new Error('CustomContent DB open was blocked.'));
+            });
+
+        for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+            const db = await openDatabase();
+            const missingStores = requiredStores.filter(
+                (storeName) => !db.objectStoreNames.contains(storeName)
+            );
+            db.close();
+
+            if (missingStores.length === 0) {
+                return;
+            }
+
+            await deleteDatabase();
+            await sleep(100);
+        }
+
+        throw new Error('CustomContent IndexedDB schema could not be initialized.');
+    });
+}
+
 export async function seedCustomQuest(page: Page, quest: Record<string, unknown>): Promise<string> {
     const resolvedQuestId = (quest as { id?: string | number }).id ?? generateQuestId();
 

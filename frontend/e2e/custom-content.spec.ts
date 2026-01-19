@@ -5,6 +5,7 @@ import { test, expect, Page } from '@playwright/test';
 import {
     clearUserData,
     createTestItems,
+    ensureCustomContentDb,
     fillProcessForm,
     ItemSelectorHelper,
 } from './test-helpers';
@@ -30,6 +31,7 @@ test.describe('Custom Content Management', () => {
     test.beforeEach(async ({ page }) => {
         // Clear user data before each test
         await clearUserData(page);
+        await ensureCustomContentDb(page);
     });
 
     // Helper function for waiting for hydration to complete
@@ -384,6 +386,9 @@ test.describe('Custom Content Management', () => {
         const requirementRow = page.locator('#required-items-section .item-row').last();
         const selectorContainer = requirementRow.locator('.item-selector');
         const selectorHelper = new ItemSelectorHelper(page, selectorContainer);
+        await expect(selectorContainer).toHaveAttribute('data-hydrated', 'true', {
+            timeout: 15000,
+        });
         await selectorHelper.open();
 
         const itemOption = selectorContainer.locator('button.item-row', {
