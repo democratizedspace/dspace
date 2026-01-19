@@ -303,21 +303,27 @@ test.describe('Custom image compression', () => {
         await uploadGeneratedImage(page, 789, 'solid', { width: 1400, height: 1000 }, 220);
         await page.click('button.submit-button');
 
+        let updatedImage: string | null = null;
         await expect
-            .poll(async () => getCustomContentRecord(page, 'quests', 'title', questTitle), {
-                timeout: 10_000,
-            })
-            .toBeTruthy();
+            .poll(
+                async () => {
+                    const record = (await getCustomContentRecord(
+                        page,
+                        'quests',
+                        'title',
+                        questTitle
+                    )) as { image?: string } | null;
+                    if (!record?.image || record.image === savedQuest.image) {
+                        return null;
+                    }
+                    updatedImage = record.image;
+                    return updatedImage;
+                },
+                { timeout: 10_000 }
+            )
+            .not.toBeNull();
 
-        const updatedQuest = (await getCustomContentRecord(
-            page,
-            'quests',
-            'title',
-            questTitle
-        )) as { image?: string };
-        const updatedImage = updatedQuest.image as string;
         expect(updatedImage).toMatch(/^data:image\/jpeg;base64,/);
-        expect(updatedImage).not.toBe(savedQuest.image);
 
         const updatedMetrics = await getImageMetrics(page, updatedImage);
         expectCompressedImage(updatedMetrics);
