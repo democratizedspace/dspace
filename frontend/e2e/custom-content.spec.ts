@@ -416,6 +416,11 @@ test.describe('Custom Content Management', () => {
             .toBe(true);
         await expect(itemOption).toBeVisible({ timeout: 15000 });
         await itemOption.click();
+        const selectedItemLabel = selectorContainer.locator('.selected-item h3');
+        await expect(selectedItemLabel).toHaveText(uniqueItemName, { timeout: 15000 });
+        await expect(selectorContainer).toHaveAttribute('data-expanded', 'false', {
+            timeout: 15000,
+        });
 
         const countInput = requirementRow.locator('input[type="number"]');
         if ((await countInput.count()) > 0) {

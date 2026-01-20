@@ -1,0 +1,10 @@
+{
+  "id": "2026-02-01-custom-process-create-selection",
+  "date": "2026-02-01",
+  "component": "frontend/e2e/custom-content",
+  "rootCause": "The custom process E2E flow submitted the process form immediately after clicking an item option without waiting for the selector to persist the chosen item, so validation rejected the empty required-item entry and no process was saved to IndexedDB.",
+  "resolution": "Wait for the item selector to collapse and confirm the selected item label before submitting the process form.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}
