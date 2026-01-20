@@ -99,6 +99,16 @@
         }
     }
 
+    function handleItemCountChange(itemType) {
+        if (itemType === 'require') {
+            requireItems = [...requireItems];
+        } else if (itemType === 'consume') {
+            consumeItems = [...consumeItems];
+        } else if (itemType === 'create') {
+            createItems = [...createItems];
+        }
+    }
+
     function validateDuration(duration) {
         // Accept durations like "1h 30m", "1H 30M", "45s", "0.5h" or any combination (both upper- and lowercase units)
         // cspell:ignore dhms DHMS
@@ -333,6 +343,7 @@
                                 bind:value={item.count}
                                 placeholder="Count"
                                 min="1"
+                                on:input={() => handleItemCountChange('require')}
                             />
                             <button
                                 type="button"
@@ -366,6 +377,7 @@
                                 bind:value={item.count}
                                 placeholder="Count"
                                 min="1"
+                                on:input={() => handleItemCountChange('consume')}
                             />
                             <button
                                 type="button"
@@ -399,6 +411,7 @@
                                 bind:value={item.count}
                                 placeholder="Count"
                                 min="1"
+                                on:input={() => handleItemCountChange('create')}
                             />
                             <button
                                 type="button"
