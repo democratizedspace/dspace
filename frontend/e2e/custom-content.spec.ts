@@ -376,6 +376,9 @@ test.describe('Custom Content Management', () => {
         await page.goto('/processes/create');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
+        await expect(
+            page.locator('div[data-hydrated="true"] form.process-form').first()
+        ).toBeVisible({ timeout: 15000 });
 
         const processTitle = `Process for ${uniqueItemName}`;
         const titleInput = page.locator('#name, #title').first();

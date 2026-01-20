@@ -1,0 +1,11 @@
+{
+  "id": "2026-02-01-process-form-hydration-race",
+  "date": "2026-02-01",
+  "component": "frontend/e2e/processes/create",
+  "rootCause": "Process creation e2e flows sometimes filled the form before the Svelte ProcessForm finished hydrating, so hydration reset the title/duration fields and validation blocked the submit, leaving no record in IndexedDB.",
+  "resolution": "Wait for the hydrated process form before filling fields so values persist through hydration and the process is saved consistently in CI.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts",
+    "frontend/e2e/test-helpers.ts"
+  ]
+}

@@ -731,6 +731,9 @@ export async function fillProcessForm(
     createdItems = 0
 ): Promise<boolean> {
     try {
+        const hydratedProcessForm = page.locator('div[data-hydrated="true"] form.process-form');
+        await expect(hydratedProcessForm.first()).toBeVisible({ timeout: 15000 });
+
         // Basic details with more flexible selectors
         const nameInput = page.locator('#name, #title').first();
         if ((await nameInput.count()) > 0) {
