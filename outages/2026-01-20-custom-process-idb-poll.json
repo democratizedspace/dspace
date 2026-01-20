@@ -1,0 +1,10 @@
+{
+  "id": "2026-01-20-custom-process-idb-poll",
+  "date": "2026-01-20",
+  "component": "e2e custom content tests",
+  "rootCause": "The custom content e2e helper opened IndexedDB without handling onupgradeneeded, immediately returning null during schema initialization and causing the custom process lookup poll to time out even after a successful process save.",
+  "resolution": "Opened the CustomContent database with schema setup on upgrade and waited for a successful connection before reading process/item records, plus added a process success assertion before polling.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

@@ -46,34 +46,45 @@ test.describe('Custom Content Management', () => {
     async function findCustomItemIdByName(page: Page, name: string): Promise<string | null> {
         try {
             return await page.evaluate(async (itemName) => {
-                return new Promise((resolve) => {
-                    const request = indexedDB.open('CustomContent');
-
-                    request.onerror = () => resolve(null);
+                const db = await new Promise((resolve, reject) => {
+                    const request = indexedDB.open('CustomContent', 3);
+                    request.onerror = () => reject(request.error);
                     request.onupgradeneeded = () => {
-                        request.result?.close();
+                        const upgradeDb = request.result;
+                        if (!upgradeDb.objectStoreNames.contains('meta')) {
+                            upgradeDb.createObjectStore('meta');
+                        }
+                        if (!upgradeDb.objectStoreNames.contains('items')) {
+                            upgradeDb.createObjectStore('items', { keyPath: 'id' });
+                        }
+                        if (!upgradeDb.objectStoreNames.contains('processes')) {
+                            upgradeDb.createObjectStore('processes', { keyPath: 'id' });
+                        }
+                        if (!upgradeDb.objectStoreNames.contains('quests')) {
+                            upgradeDb.createObjectStore('quests', { keyPath: 'id' });
+                        }
+                    };
+                    request.onsuccess = () => resolve(request.result);
+                });
+
+                return await new Promise((resolve) => {
+                    const transaction = db.transaction('items', 'readonly');
+                    const store = transaction.objectStore('items');
+                    const getAllRequest = store.getAll();
+
+                    getAllRequest.onerror = () => {
+                        db.close();
                         resolve(null);
                     };
-                    request.onsuccess = () => {
-                        const db = request.result;
-                        const transaction = db.transaction('items', 'readonly');
-                        const store = transaction.objectStore('items');
-                        const getAllRequest = store.getAll();
-
-                        getAllRequest.onerror = () => {
-                            db.close();
-                            resolve(null);
-                        };
-                        getAllRequest.onsuccess = () => {
-                            const items = getAllRequest.result ?? [];
-                            const normalizedName = itemName.trim().toLowerCase();
-                            const match = items.find(
-                                (item) => (item?.name ?? '').trim().toLowerCase() === normalizedName
-                            );
-                            const matchedId = match?.id ?? null;
-                            db.close();
-                            resolve(matchedId);
-                        };
+                    getAllRequest.onsuccess = () => {
+                        const items = getAllRequest.result ?? [];
+                        const normalizedName = itemName.trim().toLowerCase();
+                        const match = items.find(
+                            (item) => (item?.name ?? '').trim().toLowerCase() === normalizedName
+                        );
+                        const matchedId = match?.id ?? null;
+                        db.close();
+                        resolve(matchedId);
                     };
                 });
             }, name);
@@ -248,36 +259,47 @@ test.describe('Custom Content Management', () => {
     async function findCustomProcessIdByTitle(page: Page, title: string): Promise<string | null> {
         try {
             return await page.evaluate(async (processTitle) => {
-                return new Promise((resolve) => {
-                    const request = indexedDB.open('CustomContent');
-
-                    request.onerror = () => resolve(null);
+                const db = await new Promise((resolve, reject) => {
+                    const request = indexedDB.open('CustomContent', 3);
+                    request.onerror = () => reject(request.error);
                     request.onupgradeneeded = () => {
-                        request.result?.close();
+                        const upgradeDb = request.result;
+                        if (!upgradeDb.objectStoreNames.contains('meta')) {
+                            upgradeDb.createObjectStore('meta');
+                        }
+                        if (!upgradeDb.objectStoreNames.contains('items')) {
+                            upgradeDb.createObjectStore('items', { keyPath: 'id' });
+                        }
+                        if (!upgradeDb.objectStoreNames.contains('processes')) {
+                            upgradeDb.createObjectStore('processes', { keyPath: 'id' });
+                        }
+                        if (!upgradeDb.objectStoreNames.contains('quests')) {
+                            upgradeDb.createObjectStore('quests', { keyPath: 'id' });
+                        }
+                    };
+                    request.onsuccess = () => resolve(request.result);
+                });
+
+                return await new Promise((resolve) => {
+                    const transaction = db.transaction('processes', 'readonly');
+                    const store = transaction.objectStore('processes');
+                    const getAllRequest = store.getAll();
+
+                    getAllRequest.onerror = () => {
+                        db.close();
                         resolve(null);
                     };
-                    request.onsuccess = () => {
-                        const db = request.result;
-                        const transaction = db.transaction('processes', 'readonly');
-                        const store = transaction.objectStore('processes');
-                        const getAllRequest = store.getAll();
-
-                        getAllRequest.onerror = () => {
-                            db.close();
-                            resolve(null);
-                        };
-                        getAllRequest.onsuccess = () => {
-                            const processes = getAllRequest.result ?? [];
-                            const normalizedTitle = processTitle.trim().toLowerCase();
-                            const match = processes.find(
-                                (process) =>
-                                    (process?.name ?? process?.title ?? '').trim().toLowerCase() ===
-                                    normalizedTitle
-                            );
-                            const matchedId = match?.id ?? null;
-                            db.close();
-                            resolve(matchedId);
-                        };
+                    getAllRequest.onsuccess = () => {
+                        const processes = getAllRequest.result ?? [];
+                        const normalizedTitle = processTitle.trim().toLowerCase();
+                        const match = processes.find(
+                            (process) =>
+                                (process?.name ?? process?.title ?? '').trim().toLowerCase() ===
+                                normalizedTitle
+                        );
+                        const matchedId = match?.id ?? null;
+                        db.close();
+                        resolve(matchedId);
                     };
                 });
             }, title);
@@ -439,6 +461,9 @@ test.describe('Custom Content Management', () => {
         await processNavigationPromise;
         await page.waitForLoadState('networkidle', { timeout: 10000 });
         await waitForHydration(page);
+        await expect(page.getByRole('status')).toContainText(/process created successfully/i, {
+            timeout: 15000,
+        });
 
         await expect
             .poll(
