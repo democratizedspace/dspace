@@ -165,15 +165,6 @@
         return Object.keys(errors).length === 0;
     }
 
-    function sanitizeItemList(itemsToSanitize) {
-        return itemsToSanitize
-            .map((item) => ({
-                id: item?.id ?? '',
-                count: Number(item?.count ?? 0),
-            }))
-            .filter((item) => item.id && item.count > 0);
-    }
-
     async function handleSubmit(event) {
         event.preventDefault();
 
@@ -185,6 +176,20 @@
             return;
         }
 
+        const normalizedRequireItems = normalizeItemList(requireItems);
+        const normalizedConsumeItems = normalizeItemList(consumeItems);
+        const normalizedCreateItems = normalizeItemList(createItems);
+        const hasInvalidCounts = [
+            ...normalizedRequireItems,
+            ...normalizedConsumeItems,
+            ...normalizedCreateItems,
+        ].some((item) => item.id && (!Number.isFinite(item.count) || item.count <= 0));
+
+        if (hasInvalidCounts) {
+            validationErrors = { ...validationErrors, items: 'Item counts must be positive' };
+            return;
+        }
+
         successMessage = '';
         errorMessage = '';
         isSubmitting = true;
@@ -193,9 +198,9 @@
         const preparedProcess = {
             title: title.trim(),
             duration: normalizedDuration,
-            requireItems: sanitizeItemList(requireItems),
-            consumeItems: sanitizeItemList(consumeItems),
-            createItems: sanitizeItemList(createItems),
+            requireItems: normalizedRequireItems.filter((item) => item.id && item.count > 0),
+            consumeItems: normalizedConsumeItems.filter((item) => item.id && item.count > 0),
+            createItems: normalizedCreateItems.filter((item) => item.id && item.count > 0),
         };
 
         try {
