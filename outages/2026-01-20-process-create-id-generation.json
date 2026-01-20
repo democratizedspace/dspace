@@ -1,0 +1,12 @@
+{
+  "id": "2026-01-20-process-create-id-generation",
+  "date": "2026-01-20",
+  "component": "frontend/custom-content",
+  "rootCause": "Custom item and process creation relied on crypto.randomUUID without a fallback or awaited persistence, so environments without randomUUID or slower IndexedDB writes could drop process creation and leave the e2e flow unable to find the new process in IndexedDB.",
+  "resolution": "Use the shared UUID fallback generator for item/process IDs and await custom content writes before returning IDs so the creation flow persists reliably.",
+  "references": [
+    "frontend/src/utils/customcontent.js",
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

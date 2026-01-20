@@ -97,6 +97,14 @@ function generateItemId() {
     return generateUuidFallback();
 }
 
+function generateProcessId() {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    }
+
+    return generateUuidFallback();
+}
+
 function allocateFallbackId(entityType, providedId) {
     const counter = fallbackCounters.get(entityType) ?? 1;
 
@@ -425,7 +433,7 @@ export function deleteQuest(id) {
     return db.quests.delete(id);
 }
 
-export function createItem(
+export async function createItem(
     name,
     description,
     image = null,
@@ -433,8 +441,8 @@ export function createItem(
     unit = null,
     type = null
 ) {
-    const id = crypto.randomUUID();
-    db.items.add({ id, name, description, image, price, unit, type });
+    const id = generateItemId();
+    await db.items.add({ id, name, description, image, price, unit, type });
     return id;
 }
 
@@ -450,17 +458,16 @@ export function deleteItem(id) {
     return db.items.delete(id);
 }
 
-export function createProcess(
+export async function createProcess(
     title,
     duration,
     requireItems = [],
     consumeItems = [],
     createItems = []
 ) {
-    const id = crypto.randomUUID();
-    return db.processes
-        .add({ id, title, duration, requireItems, consumeItems, createItems })
-        .then(() => id);
+    const id = generateProcessId();
+    await db.processes.add({ id, title, duration, requireItems, consumeItems, createItems });
+    return id;
 }
 
 export function getProcess(id) {
