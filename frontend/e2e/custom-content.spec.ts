@@ -442,10 +442,17 @@ test.describe('Custom Content Management', () => {
         const processSuccessMessage = page
             .locator('.success-message, [role="status"]')
             .filter({ hasText: /process created successfully/i });
-        try {
-            await expect(processSuccessMessage).toBeVisible({ timeout: 15000 });
-        } catch (error) {
-            console.warn('Process success message missing; verifying IndexedDB state instead.', error);
+        const processSuccessVisible = await processSuccessMessage
+            .isVisible({ timeout: 15000 })
+            .catch(() => false);
+        if (!processSuccessVisible) {
+            // TODO(dspace#process-create-success): Remove once the UI reliably renders the message.
+            test.info().annotations.push({
+                type: 'warning',
+                description:
+                    'Process success message was missing; verifying process creation via IndexedDB instead.',
+            });
+            console.warn('Process success message missing; verifying IndexedDB state instead.');
         }
 
         await expect
