@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-20-item-form-image-processing-submit",
+  "date": "2026-01-20",
+  "component": "inventory item creation",
+  "rootCause": "The item form allowed submission while image downsampling was still running, so validation cleared the success message path and left tests/users without a status update.",
+  "resolution": "Item form submissions now await image processing completion and disable the submit button while processing so the success status and navigation links appear reliably.",
+  "references": [
+    "frontend/src/components/svelte/ItemForm.svelte",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

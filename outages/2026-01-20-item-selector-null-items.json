@@ -1,0 +1,12 @@
+{
+  "id": "2026-01-20-item-selector-null-items",
+  "date": "2026-01-20",
+  "component": "process item selector",
+  "rootCause": "The item selector assumed its items prop was always an array, which could collapse rendering when async catalog loading briefly produced a non-array value.",
+  "resolution": "The selector now normalizes incoming items to a safe array for filtering and selection, keeping the selector DOM available during async catalog updates.",
+  "references": [
+    "frontend/src/components/svelte/ItemSelector.svelte",
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

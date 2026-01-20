@@ -23,6 +23,7 @@
     let savedItemId = null;
     let isSubmitting = false;
     let isProcessingImage = false;
+    let imageProcessingPromise = null;
     let processedImageUrl = null;
     let isHydrated = false;
 
@@ -37,28 +38,33 @@
         const file = event.target.files[0];
         if (file) {
             isProcessingImage = true;
-            try {
-                const { dataUrl } = await downsampleAndCompressToJpeg(file);
-                previewUrl = dataUrl;
-                processedImageUrl = dataUrl;
-                image = null;
-                delete validationErrors.image;
-            } catch (error) {
-                console.error('Image downsample failed', error);
-                validationErrors = {
-                    ...validationErrors,
-                    image: 'Image processing failed. Please try a different file.',
-                };
-                previewUrl = null;
-                processedImageUrl = null;
-                image = null;
-            } finally {
-                isProcessingImage = false;
-            }
+            const processing = (async () => {
+                try {
+                    const { dataUrl } = await downsampleAndCompressToJpeg(file);
+                    previewUrl = dataUrl;
+                    processedImageUrl = dataUrl;
+                    image = null;
+                    delete validationErrors.image;
+                } catch (error) {
+                    console.error('Image downsample failed', error);
+                    validationErrors = {
+                        ...validationErrors,
+                        image: 'Image processing failed. Please try a different file.',
+                    };
+                    previewUrl = null;
+                    processedImageUrl = null;
+                    image = null;
+                } finally {
+                    isProcessingImage = false;
+                }
+            })();
+            imageProcessingPromise = processing;
+            await processing;
         } else {
             previewUrl = null;
             image = null;
             processedImageUrl = null;
+            imageProcessingPromise = null;
         }
     }
 
@@ -85,15 +91,10 @@
         submitError = '';
         submitSuccess = '';
         savedItemId = null;
-        if (!validateForm()) {
-            return;
+        if (imageProcessingPromise) {
+            await imageProcessingPromise;
         }
-
-        if (isProcessingImage) {
-            validationErrors = {
-                ...validationErrors,
-                image: 'Image is still processing. Please wait a moment.',
-            };
+        if (!validateForm()) {
             return;
         }
 
@@ -253,7 +254,7 @@
     </div>
 
     <div class="form-submit">
-        <button type="submit" class="submit-button" disabled={isSubmitting}>
+        <button type="submit" class="submit-button" disabled={isSubmitting || isProcessingImage}>
             {isSubmitting ? 'Saving…' : isEdit ? 'Update Item' : 'Create Item'}
         </button>
     </div>

@@ -8,9 +8,10 @@
     export let items = []; // Make items a prop instead of importing
 
     const dispatch = createEventDispatcher();
-    const filteredItems = writable(items);
+    const filteredItems = writable(Array.isArray(items) ? items : []);
     let isExpanded = !selectedItemId;
     let isClientSide = false;
+    let safeItems = Array.isArray(items) ? items : [];
 
     onMount(() => {
         isClientSide = true;
@@ -31,11 +32,13 @@
     }
 
     // Update filtered items when items prop changes
+    $: safeItems = Array.isArray(items) ? items : [];
+
     $: {
-        filteredItems.set(items);
+        filteredItems.set(safeItems);
     }
 
-    $: selectedItem = items.find((item) => item.id === selectedItemId);
+    $: selectedItem = safeItems.find((item) => item.id === selectedItemId);
 </script>
 
 <div
@@ -48,7 +51,7 @@
     {#if isClientSide}
         {#if isExpanded}
             <div class="selector-expanded" id="item-select-control" role="group" aria-label={label}>
-                <SearchBar data={items} on:search={handleSearch} />
+                <SearchBar data={safeItems} on:search={handleSearch} />
                 <div class="items-list" role="listbox">
                     {#each $filteredItems as item (item.id)}
                         <button
