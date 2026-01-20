@@ -525,6 +525,42 @@ test('adds a required item and updates selection via selector list clicks', asyn
     });
 });
 
+test('submits selected required item IDs after using the selector', async () => {
+    const { container, getByLabelText, findByText } = render(ProcessForm);
+
+    const addButtons = container.querySelectorAll('.add-button');
+    const addRequired = addButtons[0] as HTMLButtonElement;
+
+    await fireEvent.click(addRequired);
+
+    const requiredRow = await waitFor(() =>
+        container.querySelector('#required-items-section .item-row')
+    );
+
+    const selectWater = requiredRow?.querySelector(
+        '[aria-label="Select Water"]'
+    ) as HTMLButtonElement;
+
+    await fireEvent.click(selectWater);
+
+    await fireEvent.input(getByLabelText('Title*'), { target: { value: 'Water process' } });
+    await fireEvent.input(getByLabelText('Duration*'), { target: { value: '1h' } });
+
+    await fireEvent.submit(container.querySelector('form') as HTMLFormElement);
+
+    await waitFor(() => {
+        expect(createProcessMock).toHaveBeenCalledWith(
+            expect.objectContaining({
+                requireItems: [{ id: 'water', count: 1 }],
+                consumeItems: [],
+                createItems: [],
+            })
+        );
+    });
+
+    expect(await findByText('Process created successfully!')).toBeTruthy();
+});
+
 test('updates consumed and created item selections and removes consumed rows', async () => {
     const { container } = render(ProcessForm);
 
