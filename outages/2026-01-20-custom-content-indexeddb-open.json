@@ -1,0 +1,10 @@
+{
+  "id": "2026-01-20-custom-content-indexeddb-open",
+  "date": "2026-01-20",
+  "component": "frontend/e2e/custom-content",
+  "rootCause": "The custom content e2e helpers opened the CustomContent IndexedDB without an explicit version, so after test cleanup deleted the database the helper could recreate an empty v1 database without the items/processes stores and then return null even when the app persisted data to the versioned schema.",
+  "resolution": "Open the CustomContent database with the expected schema version and guard against missing object stores so the e2e polling reads the same schema as the app and no longer returns false negatives.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

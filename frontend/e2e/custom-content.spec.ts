@@ -43,19 +43,30 @@ test.describe('Custom Content Management', () => {
         }
     }
 
+    const customContentDbVersion = 3;
+
     async function findCustomItemIdByName(page: Page, name: string): Promise<string | null> {
         try {
-            return await page.evaluate(async (itemName) => {
+            return await page.evaluate(async ({ itemName, dbVersion }) => {
                 return new Promise((resolve) => {
-                    const request = indexedDB.open('CustomContent');
+                    const request = indexedDB.open('CustomContent', dbVersion);
 
                     request.onerror = () => resolve(null);
                     request.onupgradeneeded = () => {
-                        request.result?.close();
-                        resolve(null);
+                        const db = request.result;
+                        if (!db.objectStoreNames.contains('items')) {
+                            db.close();
+                            resolve(null);
+                            return;
+                        }
                     };
                     request.onsuccess = () => {
                         const db = request.result;
+                        if (!db.objectStoreNames.contains('items')) {
+                            db.close();
+                            resolve(null);
+                            return;
+                        }
                         const transaction = db.transaction('items', 'readonly');
                         const store = transaction.objectStore('items');
                         const getAllRequest = store.getAll();
@@ -76,7 +87,7 @@ test.describe('Custom Content Management', () => {
                         };
                     };
                 });
-            }, name);
+            }, { itemName: name, dbVersion: customContentDbVersion });
         } catch (error) {
             const message = String(error).toLowerCase();
             if (
@@ -247,17 +258,26 @@ test.describe('Custom Content Management', () => {
 
     async function findCustomProcessIdByTitle(page: Page, title: string): Promise<string | null> {
         try {
-            return await page.evaluate(async (processTitle) => {
+            return await page.evaluate(async ({ processTitle, dbVersion }) => {
                 return new Promise((resolve) => {
-                    const request = indexedDB.open('CustomContent');
+                    const request = indexedDB.open('CustomContent', dbVersion);
 
                     request.onerror = () => resolve(null);
                     request.onupgradeneeded = () => {
-                        request.result?.close();
-                        resolve(null);
+                        const db = request.result;
+                        if (!db.objectStoreNames.contains('processes')) {
+                            db.close();
+                            resolve(null);
+                            return;
+                        }
                     };
                     request.onsuccess = () => {
                         const db = request.result;
+                        if (!db.objectStoreNames.contains('processes')) {
+                            db.close();
+                            resolve(null);
+                            return;
+                        }
                         const transaction = db.transaction('processes', 'readonly');
                         const store = transaction.objectStore('processes');
                         const getAllRequest = store.getAll();
@@ -280,7 +300,7 @@ test.describe('Custom Content Management', () => {
                         };
                     };
                 });
-            }, title);
+            }, { processTitle: title, dbVersion: customContentDbVersion });
         } catch (error) {
             const message = String(error).toLowerCase();
             if (
