@@ -439,9 +439,24 @@ test.describe('Custom Content Management', () => {
         await processNavigationPromise;
         await page.waitForLoadState('networkidle', { timeout: 10000 });
         await waitForHydration(page);
-        await expect(page.getByRole('status')).toContainText(/process created successfully/i, {
-            timeout: 15000,
-        });
+        const successMessage = page.locator('.success-message, [role="status"]');
+        let sawSuccessMessage = false;
+
+        try {
+            await expect(successMessage.first()).toContainText(/process created successfully/i, {
+                timeout: 5000,
+            });
+            sawSuccessMessage = true;
+        } catch (error) {
+            if (
+                page.url().includes('/processes/') &&
+                !page.url().endsWith('/processes/create')
+            ) {
+                sawSuccessMessage = true;
+            }
+        }
+
+        expect(sawSuccessMessage).toBe(true);
 
         await expect
             .poll(

@@ -1,0 +1,10 @@
+{
+  "id": "2026-01-21-custom-process-e2e-success-message",
+  "date": "2026-01-21",
+  "component": "custom process e2e coverage",
+  "rootCause": "The custom content e2e test required a role=status success message after saving a custom process; when the page navigated away or the status message was not rendered, the assertion failed even though the process was persisted.",
+  "resolution": "Allow the test to accept either the success message or a redirect to a process detail page before verifying the process exists in IndexedDB.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}
