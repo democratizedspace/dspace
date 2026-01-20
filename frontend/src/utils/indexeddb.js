@@ -333,7 +333,10 @@ export const openCustomContentDB = () => {
                     err?.code === 'DATA_INTEGRITY_VALIDATION_FAILED';
                 if (isDataIntegrityError) {
                     const details = err?.details ?? err;
-                    logIndexedDbIssue('Custom content validation failed; continuing with DB.', details);
+                    logIndexedDbIssue(
+                        'Custom content validation failed; continuing with DB.',
+                        details
+                    );
                     resolve(db);
                     return;
                 }
