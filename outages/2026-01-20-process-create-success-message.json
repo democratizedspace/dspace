@@ -2,8 +2,8 @@
   "id": "2026-01-20-process-create-success-message",
   "date": "2026-01-20",
   "component": "frontend/processes/create",
-  "rootCause": "The custom process creation flow does not always surface a visible status message after saving, so the e2e test waiting on a role=\"status\" success string timed out even though the process persisted.",
-  "resolution": "Relax the e2e expectation to treat a missing status message as non-fatal while continuing to validate process creation via IndexedDB polling.",
+  "rootCause": "The process creation flow intermittently fails to render the success status message in CI after saving, so the e2e test waiting on the role=\"status\" success string timed out even when the process persisted.",
+  "resolution": "Update the e2e flow to require an IndexedDB persistence check when the success message is missing, failing the test if the process ID is not found within the bounded timeout.",
   "references": [
     "frontend/e2e/custom-content.spec.ts"
   ]
