@@ -23,6 +23,7 @@
     let savedItemId = null;
     let isSubmitting = false;
     let isProcessingImage = false;
+    let imageProcessingPromise = null;
     let processedImageUrl = null;
     let isHydrated = false;
 
@@ -37,8 +38,10 @@
         const file = event.target.files[0];
         if (file) {
             isProcessingImage = true;
+            const processingPromise = downsampleAndCompressToJpeg(file);
+            imageProcessingPromise = processingPromise;
             try {
-                const { dataUrl } = await downsampleAndCompressToJpeg(file);
+                const { dataUrl } = await processingPromise;
                 previewUrl = dataUrl;
                 processedImageUrl = dataUrl;
                 image = null;
@@ -54,11 +57,15 @@
                 image = null;
             } finally {
                 isProcessingImage = false;
+                if (imageProcessingPromise === processingPromise) {
+                    imageProcessingPromise = null;
+                }
             }
         } else {
             previewUrl = null;
             image = null;
             processedImageUrl = null;
+            imageProcessingPromise = null;
         }
     }
 
@@ -85,15 +92,16 @@
         submitError = '';
         submitSuccess = '';
         savedItemId = null;
-        if (!validateForm()) {
-            return;
+
+        if (isProcessingImage && imageProcessingPromise) {
+            try {
+                await imageProcessingPromise;
+            } catch (error) {
+                console.error('Image downsample failed during submit', error);
+            }
         }
 
-        if (isProcessingImage) {
-            validationErrors = {
-                ...validationErrors,
-                image: 'Image is still processing. Please wait a moment.',
-            };
+        if (!validateForm()) {
             return;
         }
 

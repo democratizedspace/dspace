@@ -1,0 +1,14 @@
+{
+  "id": "2026-01-20-inventory-missing-item-images",
+  "date": "2026-01-20",
+  "component": "inventory item catalog assets",
+  "rootCause": "Inventory JSON referenced image files that were never added to the public asset bundle, so item cards and selectors requested missing JPEGs and emitted 404s.",
+  "resolution": "Added a shared placeholder asset and repointed missing item image paths to the placeholder to prevent broken requests.",
+  "references": [
+    "frontend/public/assets/item-placeholder.svg",
+    "frontend/src/pages/inventory/json/items/aquarium.json",
+    "frontend/src/pages/inventory/json/items/awards.json",
+    "frontend/src/pages/inventory/json/items/misc.json",
+    "frontend/src/pages/inventory/json/items/tools.json"
+  ]
+}

@@ -306,7 +306,7 @@
                 <label for="required-items-section">Required Items</label>
                 <div id="required-items-section">
                     {#each requireItems as item, index}
-                        <div class="item-row">
+                        <div class="item-entry-row">
                             <ItemSelector
                                 {items}
                                 selectedItemId={item.id}
@@ -339,7 +339,7 @@
                 <label for="consumed-items-section">Consumed Items</label>
                 <div id="consumed-items-section">
                     {#each consumeItems as item, index}
-                        <div class="item-row">
+                        <div class="item-entry-row">
                             <ItemSelector
                                 {items}
                                 selectedItemId={item.id}
@@ -372,7 +372,7 @@
                 <label for="created-items-section">Created Items</label>
                 <div id="created-items-section">
                     {#each createItems as item, index}
-                        <div class="item-row">
+                        <div class="item-entry-row">
                             <ItemSelector
                                 {items}
                                 selectedItemId={item.id}
@@ -546,14 +546,14 @@
         outline-offset: 2px;
     }
 
-    .item-row {
+    .item-entry-row {
         display: flex;
         gap: 10px;
         margin-bottom: 10px;
         align-items: center;
     }
 
-    .item-row :global(.item-selector) {
+    .item-entry-row :global(.item-selector) {
         flex: 1;
         min-width: 0; /* Allows flex item to shrink below content size */
     }
@@ -654,7 +654,7 @@
             font-size: 14px;
         }
 
-        .item-row {
+        .item-entry-row {
             flex-direction: column;
             align-items: flex-start;
         }

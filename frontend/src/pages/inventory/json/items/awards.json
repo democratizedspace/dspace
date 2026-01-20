@@ -8,7 +8,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -27,7 +27,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-10",
@@ -46,7 +46,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-13",
@@ -65,7 +65,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-14",
@@ -84,7 +84,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-16",
@@ -103,7 +103,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -122,7 +122,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -135,7 +135,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -148,7 +148,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -161,7 +161,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -174,7 +174,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -193,7 +193,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -207,12 +207,12 @@
         "id": "fd8bdb69-0f29-469c-9383-93f97b6ea015",
         "name": "V2 Upgrade Trophy",
         "description": "Awarded for migrating a v2 localStorage save to the v3 IndexedDB format.",
-        "image": "/assets/v2_to_v3_upgrade_trophy.jpg",
+        "image": "/assets/item-placeholder.svg",
         "priceExemptionReason": "TROPHY",
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     }

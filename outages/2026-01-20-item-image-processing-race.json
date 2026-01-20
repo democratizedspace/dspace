@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-20-item-image-processing-race",
+  "date": "2026-01-20",
+  "component": "inventory item creation form",
+  "rootCause": "Item creation could submit while image compression was still running, so the submit handler cleared the success message and returned early without waiting for the preview URL to finish processing.",
+  "resolution": "Track the image compression promise and await it during submit before validating, ensuring the success status is rendered after creation.",
+  "references": [
+    "frontend/src/components/svelte/ItemForm.svelte",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

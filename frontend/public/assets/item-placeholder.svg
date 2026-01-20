@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Item image coming soon</title>
+  <desc id="desc">Placeholder art for inventory items without an image.</desc>
+  <rect width="512" height="512" fill="#1f7a1f" />
+  <rect x="24" y="24" width="464" height="464" fill="#2c5837" rx="32" />
+  <g fill="#d0ffd0" font-family="Arial, sans-serif" font-size="28" text-anchor="middle">
+    <text x="256" y="248">Item image</text>
+    <text x="256" y="292">coming soon</text>
+  </g>
+</svg>

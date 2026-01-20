@@ -2,13 +2,13 @@
     {
         "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
         "name": "aquarium (150 L)",
-        "description": "90×45×45 cm (150 L/40 gal) glass aquarium with 6 mm tempered panels; shipped empty without lid.",
+        "description": "90\u00d745\u00d745 cm (150 L/40 gal) glass aquarium with 6 mm tempered panels; shipped empty without lid.",
         "image": "/assets/aquarium_empty.jpg",
         "price": "120 dUSD",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -21,13 +21,13 @@
     {
         "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
         "name": "aquarium (goldfish) (150 L)",
-        "description": "90×45×45 cm (150 L) freshwater tank with 5 cm goldfish; includes water and sponge filter; no lid.",
+        "description": "90\u00d745\u00d745 cm (150 L) freshwater tank with 5 cm goldfish; includes water and sponge filter; no lid.",
         "image": "/assets/aquarium_goldfish.jpg",
         "price": "125 dUSD",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -40,13 +40,13 @@
     {
         "id": "40920981-bf9f-4b89-b887-bebe7006f7dc",
         "name": "goldfish",
-        "description": "Juvenile common goldfish (Carassius auratus) about 5 cm long; requires a dechlorinated 150 L+ aquarium kept at 18–22°C.",
+        "description": "Juvenile common goldfish (Carassius auratus) about 5 cm long; requires a dechlorinated 150 L+ aquarium kept at 18\u201322\u00b0C.",
         "image": "/assets/goldfish.jpg",
         "price": "5 dUSD",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-10",
@@ -66,7 +66,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-11",
@@ -85,7 +85,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-update-2025-08-11",
@@ -98,13 +98,13 @@
     {
         "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
         "name": "aquarium heater (150 W)",
-        "description": "Submersible 150 W heater with 20–30°C thermostat, auto shutoff and 1.5 m 120 V cord; warms 150 L.",
+        "description": "Submersible 150 W heater with 20\u201330\u00b0C thermostat, auto shutoff and 1.5 m 120 V cord; warms 150 L.",
         "image": "/assets/aquarium_heater_150w.jpg",
         "price": "22 dUSD",
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "✅",
+            "emoji": "\u2705",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -122,13 +122,13 @@
     {
         "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
         "name": "aquarium LED light (20 W)",
-        "description": "Clip-on 20 W LED light (6500 K) for 60–80 L freshwater tanks; 1.5 m cord with switch.",
+        "description": "Clip-on 20 W LED light (6500 K) for 60\u201380 L freshwater tanks; 1.5 m cord with switch.",
         "image": "/assets/aquarium_led_light_20w_clip_on.jpg",
         "price": "20 dUSD",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -140,14 +140,14 @@
     },
     {
         "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
-        "name": "aquarium thermometer (0–50°C)",
-        "description": "Stick-on strip thermometer for aquariums; 0–50°C range with ±1°C accuracy.",
+        "name": "aquarium thermometer (0\u201350\u00b0C)",
+        "description": "Stick-on strip thermometer for aquariums; 0\u201350\u00b0C range with \u00b11\u00b0C accuracy.",
         "image": "/assets/aquarium_stick_on_thermometer_strip.jpg",
         "price": "7 dUSD",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -167,14 +167,14 @@
     {
         "id": "75cec98f-fcf0-4d73-8d31-5a53571317b2",
         "name": "aquarium gravel (1 kg)",
-        "description": "1 kg bag of washed 5–10 mm river gravel for aquarium substrate; rinse before use.",
+        "description": "1 kg bag of washed 5\u201310 mm river gravel for aquarium substrate; rinse before use.",
         "image": "/assets/aquarium_gravel_bag_1kg.jpg",
         "price": "1 dUSD",
         "unit": "kg",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-24",
@@ -194,7 +194,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -228,7 +228,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -241,7 +241,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -254,14 +254,14 @@
     {
         "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
         "name": "Dwarf shrimp",
-        "description": "Neocaridina davidi (~1.5 cm) algae grazer for 20-26°C planted tanks.",
+        "description": "Neocaridina davidi (~1.5 cm) algae grazer for 20-26\u00b0C planted tanks.",
         "image": "/assets/dwarf_shrimp_glass_closeup.jpg",
         "price": "3 dUSD",
         "unit": "each",
         "hardening": {
             "passes": 1,
             "score": 70,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-refine-2025-08-12",
@@ -281,7 +281,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-13",
@@ -293,14 +293,14 @@
     },
     {
         "id": "8c0f72a2-db79-4238-b80f-97721def169f",
-        "name": "Heated Walstad aquarium (80 L, 26°C)",
-        "description": "80 L (21 gal) Walstad tank with a 150 W heater preset to 26°C; includes soil and sand cap.",
+        "name": "Heated Walstad aquarium (80 L, 26\u00b0C)",
+        "description": "80 L (21 gal) Walstad tank with a 150 W heater preset to 26\u00b0C; includes soil and sand cap.",
         "image": "/assets/walstad_heated_80L.jpg",
         "price": "120 dUSD",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -312,14 +312,14 @@
     },
     {
         "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
-        "name": "Heated Walstad aquarium with guppies (80 L, 26°C)",
-        "description": "80 L (21 gal) Walstad tank with soil and 150 W heater at 26°C; stocked with four guppies (1♂, 3♀).",
+        "name": "Heated Walstad aquarium with guppies (80 L, 26\u00b0C)",
+        "description": "80 L (21 gal) Walstad tank with soil and 150 W heater at 26\u00b0C; stocked with four guppies (1\u2642, 3\u2640).",
         "image": "/assets/walstad.jpg",
         "price": "126 dUSD",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-13",
@@ -332,13 +332,13 @@
     {
         "id": "5d5e4e29-94b7-4a03-b73d-7420841ae686",
         "name": "aquarium air pump",
-        "description": "5 W diaphragm air pump supplies ~3 L/min at 12 kPa for tanks ≤40 L; 1 m 120 V cord; <40 dB noise.",
+        "description": "5 W diaphragm air pump supplies ~3 L/min at 12 kPa for tanks \u226440 L; 1 m 120 V cord; <40 dB noise.",
         "image": "/assets/aquarium_air_pump_5w.jpg",
         "price": "15 dUSD",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-23",
@@ -351,13 +351,13 @@
     {
         "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
         "name": "Sponge filter",
-        "description": "Air-driven sponge filter for ≤40 L (10 gal) tanks; 5 cm foam; needs 4 mm airline and air pump.",
+        "description": "Air-driven sponge filter for \u226440 L (10 gal) tanks; 5 cm foam; needs 4 mm airline and air pump.",
         "image": "/assets/sponge_filter_for_small_aquarium.jpg",
         "price": "6 dUSD",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-14",
@@ -376,7 +376,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -384,12 +384,12 @@
         "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
         "name": "Restored sponge filter flow",
         "description": "Sponge filter reassembled, primed, and bubbling evenly after a rinse.",
-        "image": "/assets/rinse_sponge_filter_bucket.jpg",
+        "image": "/assets/item-placeholder.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -402,7 +402,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-05",
@@ -421,7 +421,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-04",
@@ -440,7 +440,7 @@
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "✅",
+            "emoji": "\u2705",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-05",
@@ -465,7 +465,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -484,7 +484,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -492,12 +492,12 @@
         "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
         "name": "Floating plant mat",
         "description": "Cluster of rinsed guppy grass spread across the water surface to soak up nutrients and shade fry.",
-        "image": "/assets/floating_plants.jpg",
+        "image": "/assets/item-placeholder.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -505,12 +505,12 @@
         "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
         "name": "Aquarium pH reading",
         "description": "Single pH strip result matched to the chart within 30 seconds of dipping.",
-        "image": "/assets/aquarium_ph_strip_test.jpg",
+        "image": "/assets/item-placeholder.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -523,7 +523,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -536,7 +536,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -549,7 +549,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -562,7 +562,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -575,7 +575,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -583,12 +583,12 @@
         "id": "bda9e450-499d-41d6-ab32-df73528dc68f",
         "name": "Dense fry cover",
         "description": "Floating tangle of hornwort and guppy grass packed at the surface to shelter newborn guppy fry.",
-        "image": "/assets/aquaria_guppy_breeding_plants.jpg",
+        "image": "/assets/item-placeholder.svg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -601,7 +601,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -614,7 +614,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     }

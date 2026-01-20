@@ -1,0 +1,12 @@
+{
+  "id": "2026-01-20-process-item-row-selector-conflict",
+  "date": "2026-01-20",
+  "component": "process form item requirements",
+  "rootCause": "Both the process form rows and item selector option buttons used the .item-row class, so automated selectors frequently latched onto option buttons instead of the form rows, leaving the expected selector container unreachable.",
+  "resolution": "Renamed the process form row class to .item-entry-row and updated styles and tests so locators reliably target the form rows.",
+  "references": [
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/e2e/custom-content.spec.ts",
+    "frontend/e2e/process-creation.spec.ts"
+  ]
+}

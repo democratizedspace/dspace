@@ -84,7 +84,9 @@ test.describe('Process Creation', () => {
             });
 
             // Get the item row
-            const itemRow = page.locator('.form-group:has-text("Created Items") .item-row').first();
+            const itemRow = page
+                .locator('.form-group:has-text("Created Items") .item-entry-row')
+                .first();
             if ((await itemRow.count()) > 0) {
                 console.log('Found the item row');
 

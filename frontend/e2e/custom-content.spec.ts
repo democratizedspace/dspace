@@ -384,7 +384,7 @@ test.describe('Custom Content Management', () => {
 
         await page.click('button:has-text("Add Required Item")');
 
-        const requirementRows = page.locator('#required-items-section .item-row');
+        const requirementRows = page.locator('#required-items-section .item-entry-row');
         await expect
             .poll(async () => requirementRows.count(), { timeout: 15000 })
             .toBeGreaterThan(0);

@@ -2,14 +2,14 @@
     {
         "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
         "name": "entry-level FDM 3D printer",
-        "description": "Entry-level FDM printer with a 220×220×250 mm build volume, heated bed, and 0.4 mm nozzle.",
+        "description": "Entry-level FDM printer with a 220\u00d7220\u00d7250 mm build volume, heated bed, and 0.4 mm nozzle.",
         "image": "/assets/entry_level_fdm_printer_220x220x250_heated_bed.jpg",
         "price": "220 dUSD",
         "type": "tool",
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "✅",
+            "emoji": "\u2705",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -34,7 +34,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -48,7 +48,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -62,7 +62,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -76,7 +76,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -90,7 +90,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -104,7 +104,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -118,7 +118,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -132,7 +132,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -140,13 +140,13 @@
         "id": "efcf79a5-1616-490e-add7-40f7fdb628b4",
         "name": "temperature tower sample",
         "description": "Stacked calibration tower labeled by nozzle temperature, showing gloss, bridging, and stringing per band.",
-        "image": "/assets/temperature_tower_calibration.jpg",
+        "image": "/assets/item-placeholder.svg",
         "price": "0.60 dUSD",
         "type": "tool",
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -160,7 +160,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -174,7 +174,7 @@
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "✅",
+            "emoji": "\u2705",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-11",
@@ -199,7 +199,7 @@
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "✅",
+            "emoji": "\u2705",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-05",
@@ -225,7 +225,7 @@
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "✅",
+            "emoji": "\u2705",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-05",
@@ -250,7 +250,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-13",
@@ -271,7 +271,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-14",
@@ -284,14 +284,14 @@
     {
         "id": "a8f184ec-c9d0-4a4b-b6a1-c58c1c297b26",
         "name": "heat gun",
-        "description": "1200 W heat gun with 300 °C and 600 °C settings and a built-in stand for shrinking tubing.",
+        "description": "1200 W heat gun with 300 \u00b0C and 600 \u00b0C settings and a built-in stand for shrinking tubing.",
         "image": "/assets/heat_gun_two_setting.jpg",
         "price": "20 dUSD",
         "type": "tool",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -304,7 +304,7 @@
     {
         "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
         "name": "digital multimeter",
-        "description": "Handheld multimeter with manual 20 V DC range, measures up to 600 V, 10 A and 2 MΩ. Includes test probes and replaceable fuse.",
+        "description": "Handheld multimeter with manual 20 V DC range, measures up to 600 V, 10 A and 2 M\u03a9. Includes test probes and replaceable fuse.",
         "image": "/assets/digital_multimeter_handheld_tool.jpg",
         "price": "20 dUSD",
         "type": "tool",
@@ -312,7 +312,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-05",
@@ -332,7 +332,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -352,7 +352,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -366,7 +366,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-09",
@@ -379,7 +379,7 @@
     {
         "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
         "name": "wire stripper",
-        "description": "Spring-loaded tool strips 24–10 AWG insulation; built-in cutter; 120 mm, 75 g.",
+        "description": "Spring-loaded tool strips 24\u201310 AWG insulation; built-in cutter; 120 mm, 75 g.",
         "image": "/assets/wire_stripper_multi_gauge.jpg",
         "price": "15 dUSD",
         "type": "tool",
@@ -387,7 +387,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-08",
@@ -400,14 +400,14 @@
     {
         "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0",
         "name": "utility cart",
-        "description": "Two-shelf steel cart, 90×50×80 cm, weighs 15 kg and holds up to 120 kg of lab equipment.",
+        "description": "Two-shelf steel cart, 90\u00d750\u00d780 cm, weighs 15 kg and holds up to 120 kg of lab equipment.",
         "image": "/assets/cart.jpg",
         "price": "80 dUSD",
         "type": "tool",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-11",
@@ -427,7 +427,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-09",
@@ -447,7 +447,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -461,7 +461,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -481,7 +481,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -501,7 +501,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-10",
@@ -521,7 +521,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -534,14 +534,14 @@
     {
         "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
         "name": "compost thermometer",
-        "description": "Stainless compost thermometer with 30 cm probe and 0–100 °C/32–212 °F dial to check pile core heat.",
+        "description": "Stainless compost thermometer with 30 cm probe and 0\u2013100 \u00b0C/32\u2013212 \u00b0F dial to check pile core heat.",
         "image": "/assets/compost_thermometer_30cm_probe.jpg",
         "price": "15 dUSD",
         "type": "tool",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -562,7 +562,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-14",
@@ -583,7 +583,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -604,7 +604,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -617,7 +617,7 @@
     {
         "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7",
         "name": "silicone soldering mat",
-        "description": "300 × 200 × 3 mm silicone work mat with screw trays; heat‑resistant to 500 °C (932 °F); ~180 g.",
+        "description": "300 \u00d7 200 \u00d7 3 mm silicone work mat with screw trays; heat\u2011resistant to 500\u202f\u00b0C (932\u202f\u00b0F); ~180 g.",
         "image": "/assets/silicone_soldering_mat_300x200.jpg",
         "price": "15 dUSD",
         "type": "tool",
@@ -625,7 +625,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-18",
@@ -646,7 +646,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-18",
@@ -659,14 +659,14 @@
     {
         "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
         "name": "compost moisture meter",
-        "description": "Analog probe with 20 cm stainless steel sensor that reads 0–100% moisture to gauge compost dampness.",
+        "description": "Analog probe with 20 cm stainless steel sensor that reads 0\u2013100% moisture to gauge compost dampness.",
         "image": "/assets/compost_moisture_meter_probe.jpg",
         "price": "18 dUSD",
         "type": "tool",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-16",
@@ -687,7 +687,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -702,7 +702,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-09-20",
@@ -715,7 +715,7 @@
     {
         "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb",
         "name": "compost sifter",
-        "description": "Wooden frame with 1 cm mesh to screen finished compost; 40×40 cm, 1 kg.",
+        "description": "Wooden frame with 1 cm mesh to screen finished compost; 40\u00d740 cm, 1 kg.",
         "image": "/assets/compost_sifter_wooden_frame.jpg",
         "price": "20 dUSD",
         "type": "tool",
@@ -723,7 +723,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -737,7 +737,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     }
