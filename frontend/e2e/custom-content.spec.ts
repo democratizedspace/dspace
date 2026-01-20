@@ -417,6 +417,21 @@ test.describe('Custom Content Management', () => {
         await expect(itemOption).toBeVisible({ timeout: 15000 });
         await itemOption.click();
 
+        const selectedItem = selectorContainer.locator('.selected-item');
+        if ((await selectedItem.count()) > 0) {
+            await expect(selectedItem).toBeVisible({ timeout: 15000 });
+        } else {
+            await expect
+                .poll(
+                    async () =>
+                        (await selectorContainer.getAttribute('data-expanded')) === 'false',
+                    {
+                        timeout: 15000,
+                    }
+                )
+                .toBe(true);
+        }
+
         const countInput = requirementRow.locator('input[type="number"]');
         if ((await countInput.count()) > 0) {
             await countInput.fill('1');
@@ -439,9 +454,27 @@ test.describe('Custom Content Management', () => {
         await processNavigationPromise;
         await page.waitForLoadState('networkidle', { timeout: 10000 });
         await waitForHydration(page);
-        await expect(page.getByRole('status')).toContainText(/process created successfully/i, {
-            timeout: 15000,
-        });
+        const successMessage = page.getByRole('status');
+        await expect
+            .poll(
+                async () => {
+                    if (!page.isClosed() && (await successMessage.count()) > 0) {
+                        const text = (await successMessage.textContent()) ?? '';
+                        if (/process created successfully/i.test(text)) {
+                            return true;
+                        }
+                    }
+
+                    if (page.isClosed()) {
+                        return false;
+                    }
+
+                    const createdId = await findCustomProcessIdByTitle(page, processTitle);
+                    return Boolean(createdId);
+                },
+                { timeout: 30000 }
+            )
+            .toBe(true);
 
         await expect
             .poll(

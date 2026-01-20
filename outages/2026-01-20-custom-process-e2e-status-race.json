@@ -1,0 +1,10 @@
+{
+  "id": "custom-process-e2e-status-race",
+  "date": "2026-01-20",
+  "component": "frontend/e2e/custom-content",
+  "rootCause": "The custom process E2E flow submitted immediately after selecting an item, but the ItemSelector UI had not finished collapsing, leaving the required item unset and preventing the success status from rendering.",
+  "resolution": "Wait for the selected item state to render and accept either the success status text or the IndexedDB entry as the creation signal.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}
