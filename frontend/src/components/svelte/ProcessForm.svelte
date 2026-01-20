@@ -1,5 +1,5 @@
 <script>
-    import { createEventDispatcher, onMount } from 'svelte';
+    import { createEventDispatcher, onMount, tick } from 'svelte';
     import ItemSelector from './ItemSelector.svelte';
     import ProcessPreview from './ProcessPreview.svelte';
     import builtInItems from '../../pages/inventory/json/items';
@@ -180,6 +180,8 @@
 
     async function handleSubmit(event) {
         event.preventDefault();
+
+        await tick();
 
         if (!validateForm()) {
             return;

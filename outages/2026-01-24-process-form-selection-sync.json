@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-24-process-form-selection-sync",
+  "date": "2026-01-24",
+  "component": "frontend/processes/create",
+  "rootCause": "The process creation form could validate before Svelte flushed item selector updates, so rapid submit clicks (as in Playwright) saw empty item relationships and aborted without persisting a custom process.",
+  "resolution": "Awaited a Svelte tick at submit time so item selection state is committed before validation and persistence, ensuring processes created in fast automation flows are saved to IndexedDB.",
+  "references": [
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}
