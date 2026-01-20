@@ -85,14 +85,20 @@
         createItems = createItems.filter((_, i) => i !== index);
     }
 
+    function updateItemSelection(itemsList, index, itemId) {
+        return itemsList.map((item, currentIndex) =>
+            currentIndex === index ? { ...item, id: itemId } : item
+        );
+    }
+
     function handleItemSelect(event, itemType, index) {
         const { itemId } = event.detail;
         if (itemType === 'require') {
-            requireItems[index].id = itemId;
+            requireItems = updateItemSelection(requireItems, index, itemId);
         } else if (itemType === 'consume') {
-            consumeItems[index].id = itemId;
+            consumeItems = updateItemSelection(consumeItems, index, itemId);
         } else if (itemType === 'create') {
-            createItems[index].id = itemId;
+            createItems = updateItemSelection(createItems, index, itemId);
         }
     }
 

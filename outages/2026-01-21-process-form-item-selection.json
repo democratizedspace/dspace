@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-process-form-item-selection",
+  "date": "2026-01-21",
+  "component": "frontend-process-form",
+  "rootCause": "Process item selections mutated array entries in place, which could skip Svelte reactivity and leave validation reading empty item IDs, blocking process creation and success messaging in end-to-end flows.",
+  "resolution": "Update item selection handling to immutably reassign the relevant item arrays so selected IDs persist and validation/persistence succeed.",
+  "references": [
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}
