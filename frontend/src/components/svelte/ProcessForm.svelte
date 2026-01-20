@@ -110,7 +110,10 @@
     function validateItems() {
         // Check if any item has negative or zero count
         const allItems = [...requireItems, ...consumeItems, ...createItems];
-        return allItems.every((item) => item.count > 0);
+        return allItems.every((item) => {
+            const count = Number(item?.count ?? 0);
+            return Number.isFinite(count) && count > 0;
+        });
     }
 
     function validateForm() {
@@ -128,12 +131,16 @@
             errors.items = 'Item counts must be positive';
         }
 
+        const normalizedRequireItems = normalizeItemList(requireItems);
+        const normalizedConsumeItems = normalizeItemList(consumeItems);
+        const normalizedCreateItems = normalizeItemList(createItems);
+
         const { valid, errors: schemaErrors } = validateProcessData({
             title,
             duration,
-            requireItems,
-            consumeItems,
-            createItems,
+            requireItems: normalizedRequireItems,
+            consumeItems: normalizedConsumeItems,
+            createItems: normalizedCreateItems,
         });
 
         if (!valid && schemaErrors) {
