@@ -89,10 +89,13 @@
         const { itemId } = event.detail;
         if (itemType === 'require') {
             requireItems[index].id = itemId;
+            requireItems = [...requireItems];
         } else if (itemType === 'consume') {
             consumeItems[index].id = itemId;
+            consumeItems = [...consumeItems];
         } else if (itemType === 'create') {
             createItems[index].id = itemId;
+            createItems = [...createItems];
         }
     }
 

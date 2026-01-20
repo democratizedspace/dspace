@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-20-process-form-item-selection-reactivity",
+  "date": "2026-01-20",
+  "component": "frontend/processes/create",
+  "rootCause": "Process form item selections mutated the require/consume/create arrays in place without reassigning them, so Svelte did not always propagate the selected item IDs to validation logic, leaving the form in an invalid state that blocked custom process creation in CI.",
+  "resolution": "Reassign the item arrays after selection updates so Svelte reactivity captures the chosen IDs and validation reliably passes for newly selected items.",
+  "references": [
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}
