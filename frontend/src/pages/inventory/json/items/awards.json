@@ -207,7 +207,7 @@
         "id": "fd8bdb69-0f29-469c-9383-93f97b6ea015",
         "name": "V2 Upgrade Trophy",
         "description": "Awarded for migrating a v2 localStorage save to the v3 IndexedDB format.",
-        "image": "/assets/v2_to_v3_upgrade_trophy.jpg",
+        "image": "/assets/missing-image-placeholder.svg",
         "priceExemptionReason": "TROPHY",
         "hardening": {
             "passes": 0,

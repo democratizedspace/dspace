@@ -24,6 +24,8 @@
     let isSubmitting = false;
     let isProcessingImage = false;
     let processedImageUrl = null;
+    let imageProcessingPromise = null;
+    let imageProcessingJobId = 0;
     let isHydrated = false;
 
     function parseDependencies(value) {
@@ -36,29 +38,45 @@
     async function handleImageUpload(event) {
         const file = event.target.files[0];
         if (file) {
+            const jobId = (imageProcessingJobId += 1);
             isProcessingImage = true;
-            try {
-                const { dataUrl } = await downsampleAndCompressToJpeg(file);
-                previewUrl = dataUrl;
-                processedImageUrl = dataUrl;
-                image = null;
-                delete validationErrors.image;
-            } catch (error) {
-                console.error('Image downsample failed', error);
-                validationErrors = {
-                    ...validationErrors,
-                    image: 'Image processing failed. Please try a different file.',
-                };
-                previewUrl = null;
-                processedImageUrl = null;
-                image = null;
-            } finally {
-                isProcessingImage = false;
-            }
+            imageProcessingPromise = (async () => {
+                try {
+                    const { dataUrl } = await downsampleAndCompressToJpeg(file);
+                    if (jobId !== imageProcessingJobId) {
+                        return;
+                    }
+                    previewUrl = dataUrl;
+                    processedImageUrl = dataUrl;
+                    image = null;
+                    const { image: _ignoredImageError, ...restErrors } = validationErrors;
+                    validationErrors = restErrors;
+                } catch (error) {
+                    console.error('Image downsample failed', error);
+                    if (jobId !== imageProcessingJobId) {
+                        return;
+                    }
+                    validationErrors = {
+                        ...validationErrors,
+                        image: 'Image processing failed. Please try a different file.',
+                    };
+                    previewUrl = null;
+                    processedImageUrl = null;
+                    image = null;
+                } finally {
+                    if (jobId === imageProcessingJobId) {
+                        isProcessingImage = false;
+                        imageProcessingPromise = null;
+                    }
+                }
+            })();
         } else {
+            imageProcessingJobId += 1;
             previewUrl = null;
             image = null;
             processedImageUrl = null;
+            imageProcessingPromise = null;
+            isProcessingImage = false;
         }
     }
 
@@ -85,15 +103,11 @@
         submitError = '';
         submitSuccess = '';
         savedItemId = null;
-        if (!validateForm()) {
-            return;
+        while (imageProcessingPromise) {
+            await imageProcessingPromise;
         }
 
-        if (isProcessingImage) {
-            validationErrors = {
-                ...validationErrors,
-                image: 'Image is still processing. Please wait a moment.',
-            };
+        if (!validateForm()) {
             return;
         }
 

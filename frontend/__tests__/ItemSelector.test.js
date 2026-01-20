@@ -51,7 +51,7 @@ describe('ItemSelector Component', () => {
         // Wait for Svelte to update
         await new Promise((resolve) => setTimeout(resolve, 0));
 
-        const visibleItems = container.querySelectorAll('.item-row');
+        const visibleItems = container.querySelectorAll('.item-option');
         expect(visibleItems.length).toBe(1);
         expect(visibleItems[0].textContent).toContain('Another Item');
     });
@@ -72,7 +72,7 @@ describe('ItemSelector Component', () => {
         });
 
         // Find and click the first item
-        const firstItem = container.querySelector('.item-row');
+        const firstItem = container.querySelector('.item-option');
         firstItem.click();
 
         expect(selectedId).toBe('item-1');
@@ -93,7 +93,7 @@ describe('ItemSelector Component', () => {
             selectedId = event.detail.itemId;
         });
 
-        const firstItem = container.querySelector('.item-row');
+        const firstItem = container.querySelector('.item-option');
         firstItem.dispatchEvent(new Event('touchstart'));
 
         expect(selectedId).toBe('item-1');
@@ -150,7 +150,7 @@ describe('ItemSelector Component', () => {
 
         const itemsList = container.querySelector('.items-list');
         expect(itemsList).toBeTruthy();
-        expect(container.querySelectorAll('.item-row')).toHaveLength(0);
+        expect(container.querySelectorAll('.item-option')).toHaveLength(0);
     });
 
     test('should handle invalid selectedItemId', () => {

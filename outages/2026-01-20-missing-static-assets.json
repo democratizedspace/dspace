@@ -1,0 +1,14 @@
+{
+  "id": "2026-01-20-missing-static-assets",
+  "date": "2026-01-20",
+  "component": "inventory item imagery",
+  "rootCause": "Several inventory item JSON entries referenced missing /assets/*.jpg files, leading Playwright runs to log 404 responses for those image requests.",
+  "resolution": "Added a lightweight placeholder asset and repointed the affected inventory item image paths to /assets/missing-image-placeholder.svg to eliminate the missing static requests.",
+  "references": [
+    "frontend/public/assets/missing-image-placeholder.svg",
+    "frontend/src/pages/inventory/json/items/aquarium.json",
+    "frontend/src/pages/inventory/json/items/awards.json",
+    "frontend/src/pages/inventory/json/items/misc.json",
+    "frontend/src/pages/inventory/json/items/tools.json"
+  ]
+}

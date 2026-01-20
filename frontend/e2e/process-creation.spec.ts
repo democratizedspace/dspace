@@ -107,7 +107,7 @@ test.describe('Process Creation', () => {
                         console.log('Expanded selector HTML:', await expandedSelector.innerHTML());
 
                         // Check for item rows
-                        const itemRows = expandedSelector.locator('.item-row');
+                        const itemRows = expandedSelector.locator('.item-option');
                         console.log(
                             `Found ${await itemRows.count()} item rows in the expanded selector`
                         );

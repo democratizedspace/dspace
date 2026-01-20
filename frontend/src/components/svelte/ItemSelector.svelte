@@ -53,7 +53,7 @@
                     {#each $filteredItems as item (item.id)}
                         <button
                             type="button"
-                            class="item-row"
+                            class="item-option"
                             class:selected={selectedItemId === item.id}
                             role="option"
                             on:click={() => handleItemSelect(item.id)}
@@ -154,7 +154,7 @@
         margin-top: 10px;
     }
 
-    .item-row {
+    .item-option {
         padding: 8px;
         cursor: pointer;
         border-radius: 4px;
@@ -165,16 +165,16 @@
         text-align: left;
     }
 
-    .item-row:focus {
+    .item-option:focus {
         outline: 2px solid #68d46d;
         outline-offset: 2px;
     }
 
-    .item-row:hover {
+    .item-option:hover {
         background: #3a6b3a;
     }
 
-    .item-row.selected {
+    .item-option.selected {
         background: #1a3d1a;
         border: 2px solid #68d46d;
     }
