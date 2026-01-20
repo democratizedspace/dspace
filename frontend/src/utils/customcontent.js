@@ -97,6 +97,14 @@ function generateItemId() {
     return generateUuidFallback();
 }
 
+function generateProcessId() {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    }
+
+    return generateUuidFallback();
+}
+
 function allocateFallbackId(entityType, providedId) {
     const counter = fallbackCounters.get(entityType) ?? 1;
 
@@ -356,6 +364,7 @@ export const db = {
         add: (process) => {
             // Ensure minimal process structure
             const preparedProcess = {
+                id: process.id ?? generateProcessId(),
                 title: process.title || 'Untitled Process',
                 duration: process.duration || 60, // Default to 1 minute
                 requireItems: process.requireItems || [],
@@ -457,7 +466,7 @@ export function createProcess(
     consumeItems = [],
     createItems = []
 ) {
-    const id = crypto.randomUUID();
+    const id = generateProcessId();
     return db.processes
         .add({ id, title, duration, requireItems, consumeItems, createItems })
         .then(() => id);
