@@ -455,9 +455,27 @@ export function createProcess(
     createItems = []
 ) {
     const id = generateProcessId();
+    const ensurePersisted = async () => {
+        const attempts = 5;
+        for (let attempt = 0; attempt < attempts; attempt += 1) {
+            const stored = await db.processes.get(id).catch(() => null);
+            if (stored) {
+                return true;
+            }
+            await new Promise((resolve) => setTimeout(resolve, 50));
+        }
+        return false;
+    };
+
     return db.processes
         .add({ id, title, duration, requireItems, consumeItems, createItems })
-        .then(() => id);
+        .then(async () => {
+            const persisted = await ensurePersisted();
+            if (!persisted) {
+                throw new Error('Process creation did not persist in IndexedDB.');
+            }
+            return id;
+        });
 }
 
 export function getProcess(id) {

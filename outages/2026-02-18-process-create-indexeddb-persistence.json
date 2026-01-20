@@ -1,0 +1,11 @@
+{
+  "id": "2026-02-18-process-create-indexeddb-persistence",
+  "date": "2026-02-18",
+  "component": "frontend/processes/create",
+  "rootCause": "Process creation resolved immediately after the IndexedDB add call without verifying persistence, so the custom-content e2e sometimes polled before the record was committed and timed out.",
+  "resolution": "Verify the newly created process is readable from IndexedDB with a short retry loop before resolving createProcess, ensuring the e2e poll can find the process once the form reports success.",
+  "references": [
+    "frontend/src/utils/customcontent.js",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}
