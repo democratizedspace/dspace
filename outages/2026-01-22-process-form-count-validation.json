@@ -1,6 +1,6 @@
 {
-  "id": "2026-01-22-process-form-count-validation",
-  "date": "2026-01-22",
+  "id": "2026-01-20-process-form-count-validation",
+  "date": "2026-01-20",
   "component": "process creation form validation",
   "rootCause": "ProcessForm validated item counts directly from bound inputs, which become strings after user edits, so AJV schema checks failed and prevented custom processes from saving to IndexedDB.",
   "resolution": "Normalize item counts to numbers for validation and enforce numeric count checks before submitting custom processes.",

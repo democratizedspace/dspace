@@ -111,7 +111,7 @@
         // Check if any item has negative or zero count
         const allItems = [...requireItems, ...consumeItems, ...createItems];
         return allItems.every((item) => {
-            const count = Number(item?.count ?? 0);
+            const count = Number(item?.count ?? 1);
             return Number.isFinite(count) && count > 0;
         });
     }
