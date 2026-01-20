@@ -81,7 +81,7 @@ function generateUuidFallback() {
     });
 }
 
-function generateQuestId() {
+function generateEntityId() {
     if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
         return crypto.randomUUID();
     }
@@ -89,21 +89,9 @@ function generateQuestId() {
     return generateUuidFallback();
 }
 
-function generateItemId() {
-    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-        return crypto.randomUUID();
-    }
-
-    return generateUuidFallback();
-}
-
-function generateProcessId() {
-    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-        return crypto.randomUUID();
-    }
-
-    return generateUuidFallback();
-}
+const generateQuestId = generateEntityId;
+const generateItemId = generateEntityId;
+const generateProcessId = generateEntityId;
 
 function allocateFallbackId(entityType, providedId) {
     const counter = fallbackCounters.get(entityType) ?? 1;
@@ -316,12 +304,12 @@ export const db = {
         add: (quest) => {
             // Ensure minimal quest structure
             const preparedQuest = {
+                ...quest,
                 id: quest.id ?? generateQuestId(),
                 title: quest.title || 'Untitled Quest',
                 description: quest.description || '',
                 image: quest.image || '/assets/quests/howtodoquests.jpg',
                 custom: true,
-                ...quest,
             };
 
             return db.add(ENTITY_TYPES.QUEST, preparedQuest);
@@ -364,6 +352,7 @@ export const db = {
         add: (process) => {
             // Ensure minimal process structure
             const preparedProcess = {
+                ...process,
                 id: process.id ?? generateProcessId(),
                 title: process.title || 'Untitled Process',
                 duration: process.duration || 60, // Default to 1 minute
@@ -371,7 +360,6 @@ export const db = {
                 consumeItems: process.consumeItems || [],
                 createItems: process.createItems || [],
                 custom: true,
-                ...process,
             };
 
             return db.add(ENTITY_TYPES.PROCESS, preparedProcess);
@@ -442,7 +430,7 @@ export function createItem(
     unit = null,
     type = null
 ) {
-    const id = crypto.randomUUID();
+    const id = generateItemId();
     db.items.add({ id, name, description, image, price, unit, type });
     return id;
 }
