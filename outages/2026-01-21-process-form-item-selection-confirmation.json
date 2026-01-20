@@ -1,5 +1,5 @@
 {
-  "id": "2026-01-21-process-form-item-selection-confirmation",
+  "id": "OUT-2026-01-21-process-form-item-selection-confirmation",
   "date": "2026-01-21",
   "component": "frontend/e2e",
   "rootCause": "The custom process e2e flow submitted the process form immediately after clicking a required item option without confirming the selector collapsed and the choice was applied, so intermittent UI timing left the required item unset and validation blocked saving the process in CI.",
