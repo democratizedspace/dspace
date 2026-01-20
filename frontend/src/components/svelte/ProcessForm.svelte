@@ -87,12 +87,16 @@
 
     function handleItemSelect(event, itemType, index) {
         const { itemId } = event.detail;
+        const updateList = (list) =>
+            list.map((item, currentIndex) =>
+                currentIndex === index ? { ...item, id: itemId } : item
+            );
         if (itemType === 'require') {
-            requireItems[index].id = itemId;
+            requireItems = updateList(requireItems);
         } else if (itemType === 'consume') {
-            consumeItems[index].id = itemId;
+            consumeItems = updateList(consumeItems);
         } else if (itemType === 'create') {
-            createItems[index].id = itemId;
+            createItems = updateList(createItems);
         }
     }
 

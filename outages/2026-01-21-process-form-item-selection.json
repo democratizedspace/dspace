@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-process-form-item-selection",
+  "date": "2026-01-21",
+  "component": "frontend/processes/create",
+  "rootCause": "The process form mutated nested item selection objects without reassigning the array, which could leave Svelte reactivity and validation seeing stale item IDs and prevent process creation in CI.",
+  "resolution": "Reassign the require/consume/create item arrays when an item is selected so Svelte reacts to the updated IDs and the form submits reliably.",
+  "references": [
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}
