@@ -41,6 +41,17 @@
             count: Number(item?.count ?? 1),
         }));
 
+    const coerceItemList = (itemsToNormalize) =>
+        Array.isArray(itemsToNormalize) ? itemsToNormalize : [];
+
+    const ensureItemEntry = (itemsToNormalize, index) => {
+        const list = [...coerceItemList(itemsToNormalize)];
+        if (!list[index]) {
+            list[index] = { id: '', count: 1 };
+        }
+        return list;
+    };
+
     // Initialize editable form fields from process data on first load.
     $: if (!isEdit) {
         hasInitialized = false;
@@ -62,15 +73,15 @@
     }
 
     function addItemRequirement() {
-        requireItems = [...requireItems, { id: '', count: 1 }];
+        requireItems = [...coerceItemList(requireItems), { id: '', count: 1 }];
     }
 
     function addItemConsumption() {
-        consumeItems = [...consumeItems, { id: '', count: 1 }];
+        consumeItems = [...coerceItemList(consumeItems), { id: '', count: 1 }];
     }
 
     function addItemCreation() {
-        createItems = [...createItems, { id: '', count: 1 }];
+        createItems = [...coerceItemList(createItems), { id: '', count: 1 }];
     }
 
     function removeItemRequirement(index) {
@@ -88,10 +99,13 @@
     function handleItemSelect(event, itemType, index) {
         const { itemId } = event.detail;
         if (itemType === 'require') {
+            requireItems = ensureItemEntry(requireItems, index);
             requireItems[index].id = itemId;
         } else if (itemType === 'consume') {
+            consumeItems = ensureItemEntry(consumeItems, index);
             consumeItems[index].id = itemId;
         } else if (itemType === 'create') {
+            createItems = ensureItemEntry(createItems, index);
             createItems[index].id = itemId;
         }
     }
@@ -109,7 +123,11 @@
 
     function validateItems() {
         // Check if any item has negative or zero count
-        const allItems = [...requireItems, ...consumeItems, ...createItems];
+        const allItems = [
+            ...coerceItemList(requireItems),
+            ...coerceItemList(consumeItems),
+            ...coerceItemList(createItems),
+        ];
         return allItems.every((item) => item.count > 0);
     }
 
@@ -159,7 +177,7 @@
     }
 
     function sanitizeItemList(itemsToSanitize) {
-        return itemsToSanitize
+        return coerceItemList(itemsToSanitize)
             .map((item) => ({
                 id: item?.id ?? '',
                 count: Number(item?.count ?? 0),

@@ -1,0 +1,10 @@
+{
+  "id": "item-form-image-processing-submit",
+  "date": "2026-01-20",
+  "component": "frontend ItemForm",
+  "rootCause": "ItemForm returned early when image downsampling was still running, so the submit handler never persisted the item or surfaced the success status used by E2E assertions.",
+  "resolution": "Track the image processing promise and await it during submit so validation and persistence run after the image is ready, ensuring the success message renders reliably.",
+  "references": [
+    "frontend/src/components/svelte/ItemForm.svelte"
+  ]
+}

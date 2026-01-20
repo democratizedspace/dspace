@@ -24,6 +24,7 @@
     let isSubmitting = false;
     let isProcessingImage = false;
     let processedImageUrl = null;
+    let imageProcessingPromise = null;
     let isHydrated = false;
 
     function parseDependencies(value) {
@@ -37,8 +38,10 @@
         const file = event.target.files[0];
         if (file) {
             isProcessingImage = true;
+            const processingPromise = downsampleAndCompressToJpeg(file);
+            imageProcessingPromise = processingPromise;
             try {
-                const { dataUrl } = await downsampleAndCompressToJpeg(file);
+                const { dataUrl } = await processingPromise;
                 previewUrl = dataUrl;
                 processedImageUrl = dataUrl;
                 image = null;
@@ -54,11 +57,15 @@
                 image = null;
             } finally {
                 isProcessingImage = false;
+                if (imageProcessingPromise === processingPromise) {
+                    imageProcessingPromise = null;
+                }
             }
         } else {
             previewUrl = null;
             image = null;
             processedImageUrl = null;
+            imageProcessingPromise = null;
         }
     }
 
@@ -85,15 +92,19 @@
         submitError = '';
         submitSuccess = '';
         savedItemId = null;
-        if (!validateForm()) {
-            return;
+        if (isProcessingImage && imageProcessingPromise) {
+            try {
+                await imageProcessingPromise;
+            } catch (error) {
+                validationErrors = {
+                    ...validationErrors,
+                    image: 'Image processing failed. Please try a different file.',
+                };
+                return;
+            }
         }
 
-        if (isProcessingImage) {
-            validationErrors = {
-                ...validationErrors,
-                image: 'Image is still processing. Please wait a moment.',
-            };
+        if (!validateForm()) {
             return;
         }
 

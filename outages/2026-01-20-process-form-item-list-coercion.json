@@ -1,0 +1,10 @@
+{
+  "id": "process-form-item-list-coercion",
+  "date": "2026-01-20",
+  "component": "frontend ProcessForm",
+  "rootCause": "ProcessForm assumed item relationship lists were always arrays, so undefined or non-array inputs could prevent required item rows (and their selectors) from rendering during creation flows.",
+  "resolution": "Coerce item relationship inputs to arrays and ensure a placeholder entry exists before selection, keeping required item rows renderable and selectors visible.",
+  "references": [
+    "frontend/src/components/svelte/ProcessForm.svelte"
+  ]
+}
