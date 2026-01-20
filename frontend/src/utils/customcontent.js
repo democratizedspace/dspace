@@ -97,6 +97,14 @@ function generateItemId() {
     return generateUuidFallback();
 }
 
+function generateProcessId() {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    }
+
+    return generateUuidFallback();
+}
+
 function allocateFallbackId(entityType, providedId) {
     const counter = fallbackCounters.get(entityType) ?? 1;
 
@@ -433,7 +441,7 @@ export function createItem(
     unit = null,
     type = null
 ) {
-    const id = crypto.randomUUID();
+    const id = generateItemId();
     db.items.add({ id, name, description, image, price, unit, type });
     return id;
 }
@@ -457,7 +465,7 @@ export function createProcess(
     consumeItems = [],
     createItems = []
 ) {
-    const id = crypto.randomUUID();
+    const id = generateProcessId();
     return db.processes
         .add({ id, title, duration, requireItems, consumeItems, createItems })
         .then(() => id);

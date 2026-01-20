@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-20-custom-process-id-generation",
+  "date": "2026-01-20",
+  "component": "custom content -> process creation",
+  "rootCause": "Custom process creation used crypto.randomUUID directly without a fallback, so environments without Web Crypto support threw before persisting the process and never rendered the success status used by the E2E test.",
+  "resolution": "Added guarded ID generation for custom processes (and aligned custom items) so creation succeeds even when crypto.randomUUID is unavailable.",
+  "references": [
+    "frontend/src/utils/customcontent.js",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}
