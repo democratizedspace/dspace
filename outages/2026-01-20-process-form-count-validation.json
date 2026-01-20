@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-20-process-form-count-validation",
+  "date": "2026-01-20",
+  "component": "process creation form validation",
+  "rootCause": "ProcessForm validated item counts directly from bound inputs, which become strings after user edits, so AJV schema checks failed; the process never persisted to IndexedDB and the e2e poll timed out.",
+  "resolution": "Normalize item counts to numbers for validation and block saves when normalization yields invalid counts before submitting custom processes.",
+  "references": [
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

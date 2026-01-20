@@ -439,6 +439,9 @@ test.describe('Custom Content Management', () => {
         await processNavigationPromise;
         await page.waitForLoadState('networkidle', { timeout: 10000 });
         await waitForHydration(page);
+        await expect(page.getByRole('status')).toContainText(/process created successfully/i, {
+            timeout: 15000,
+        });
 
         await expect
             .poll(
