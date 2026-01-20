@@ -1,0 +1,10 @@
+{
+  "id": "2026-01-20-custom-process-e2e-poll",
+  "date": "2026-01-20",
+  "component": "custom content e2e tests",
+  "rootCause": "The custom process/item detail e2e flow polled IndexedDB for a new process before confirming the item selector had committed the selection and the form reported success, causing intermittent null results and timeouts.",
+  "resolution": "Wait for the item selector to show the chosen item and for the process form success status before asserting the item detail page renders the process.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

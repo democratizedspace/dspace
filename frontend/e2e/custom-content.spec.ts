@@ -416,6 +416,9 @@ test.describe('Custom Content Management', () => {
             .toBe(true);
         await expect(itemOption).toBeVisible({ timeout: 15000 });
         await itemOption.click();
+        await expect(
+            selectorContainer.locator('.selected-item h3', { hasText: uniqueItemName })
+        ).toBeVisible({ timeout: 15000 });
 
         const countInput = requirementRow.locator('input[type="number"]');
         if ((await countInput.count()) > 0) {
@@ -440,17 +443,10 @@ test.describe('Custom Content Management', () => {
         await page.waitForLoadState('networkidle', { timeout: 10000 });
         await waitForHydration(page);
 
-        await expect
-            .poll(
-                async () => {
-                    if (page.isClosed()) {
-                        return null;
-                    }
-                    return findCustomProcessIdByTitle(page, processTitle);
-                },
-                { timeout: 30000 }
-            )
-            .not.toBeNull();
+        const processSuccessMessage = page.getByRole('status').filter({
+            hasText: /process created successfully/i,
+        });
+        await expect(processSuccessMessage).toBeVisible({ timeout: 20000 });
 
         // Navigate to the item detail page and validate the custom process appears
         if (!page.url().includes(`/inventory/item/${itemId}`)) {
