@@ -245,57 +245,6 @@ test.describe('Custom Content Management', () => {
         }
     });
 
-    async function findCustomProcessIdByTitle(page: Page, title: string): Promise<string | null> {
-        try {
-            return await page.evaluate(async (processTitle) => {
-                return new Promise((resolve) => {
-                    const request = indexedDB.open('CustomContent');
-
-                    request.onerror = () => resolve(null);
-                    request.onupgradeneeded = () => {
-                        request.result?.close();
-                        resolve(null);
-                    };
-                    request.onsuccess = () => {
-                        const db = request.result;
-                        const transaction = db.transaction('processes', 'readonly');
-                        const store = transaction.objectStore('processes');
-                        const getAllRequest = store.getAll();
-
-                        getAllRequest.onerror = () => {
-                            db.close();
-                            resolve(null);
-                        };
-                        getAllRequest.onsuccess = () => {
-                            const processes = getAllRequest.result ?? [];
-                            const normalizedTitle = processTitle.trim().toLowerCase();
-                            const match = processes.find(
-                                (process) =>
-                                    (process?.name ?? process?.title ?? '').trim().toLowerCase() ===
-                                    normalizedTitle
-                            );
-                            const matchedId = match?.id ?? null;
-                            db.close();
-                            resolve(matchedId);
-                        };
-                    };
-                });
-            }, title);
-        } catch (error) {
-            const message = String(error).toLowerCase();
-            if (
-                message.includes('execution context was destroyed') ||
-                message.includes('most likely because of a navigation') ||
-                message.includes('cannot find context with specified id') ||
-                message.includes('target closed') ||
-                message.includes('navigation')
-            ) {
-                return null;
-            }
-            throw error;
-        }
-    }
-
     test('should show a custom process on the related item detail page', async ({ page }) => {
         // Create a custom item first
         await page.goto('/inventory/create');
@@ -440,17 +389,14 @@ test.describe('Custom Content Management', () => {
         await page.waitForLoadState('networkidle', { timeout: 10000 });
         await waitForHydration(page);
 
-        await expect
-            .poll(
-                async () => {
-                    if (page.isClosed()) {
-                        return null;
-                    }
-                    return findCustomProcessIdByTitle(page, processTitle);
-                },
-                { timeout: 30000 }
-            )
-            .not.toBeNull();
+        const processStatus = page.getByRole('status');
+        await expect(processStatus).toContainText(/process created successfully/i, {
+            timeout: 15000,
+        });
+        const processLink = processStatus.getByRole('link', { name: /view process/i });
+        if ((await processLink.count()) > 0) {
+            await expect(processLink).toBeVisible();
+        }
 
         // Navigate to the item detail page and validate the custom process appears
         if (!page.url().includes(`/inventory/item/${itemId}`)) {

@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-20-custom-process-e2e-idb-poll",
+  "date": "2026-01-20",
+  "component": "frontend/e2e custom content process coverage",
+  "rootCause": "The end-to-end flow waited for a custom process by polling IndexedDB directly, but the process creation UI already surfaced success state and the IDB poll could return null despite a successful submit, causing the test to time out.",
+  "resolution": "Updated the test to wait for the process creation success message and optional view link before proceeding to assert the related item detail page rendering.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts",
+    "frontend/src/components/svelte/ProcessForm.svelte"
+  ]
+}
