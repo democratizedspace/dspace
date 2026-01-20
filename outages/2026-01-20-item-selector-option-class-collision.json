@@ -1,0 +1,14 @@
+{
+  "id": "2026-01-20-item-selector-option-class-collision",
+  "date": "2026-01-20",
+  "component": "process form item selector",
+  "rootCause": "Item selector option buttons reused the same .item-row class as process form rows, so selectors could resolve to option buttons instead of the row wrapper and fail to locate the selector container.",
+  "resolution": "Renamed item selector option styling to a dedicated .item-option class and updated Playwright helpers/selectors to avoid collisions with form rows.",
+  "references": [
+    "frontend/src/components/svelte/ItemSelector.svelte",
+    "frontend/e2e/custom-content.spec.ts",
+    "frontend/e2e/process-creation.spec.ts",
+    "frontend/e2e/test-helpers.ts",
+    "frontend/e2e/utils/itemSelectors.ts"
+  ]
+}

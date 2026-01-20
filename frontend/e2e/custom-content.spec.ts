@@ -408,7 +408,7 @@ test.describe('Custom Content Management', () => {
             await searchInputByPlaceholder.fill(uniqueItemName);
         }
 
-        const itemOption = selectorContainer.locator('button.item-row', {
+        const itemOption = selectorContainer.locator('button.item-option', {
             hasText: uniqueItemName,
         });
         await expect

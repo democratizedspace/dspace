@@ -673,7 +673,7 @@ export class ItemSelectorHelper {
         }
 
         // Look for item rows
-        const itemRows = container.locator('.item-row');
+        const itemRows = container.locator('.item-option');
         const count = await itemRows.count();
 
         console.log(`Found ${count} item rows`);
