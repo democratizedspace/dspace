@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-20-process-create-randomuuid-fallback",
+  "date": "2026-01-20",
+  "component": "frontend/processes/create",
+  "rootCause": "Process creation depended on crypto.randomUUID without a fallback, so environments lacking the API could throw before writing to IndexedDB and cause the custom content e2e flow to miss the new process.",
+  "resolution": "Introduce a process ID generator that falls back to the existing UUID template when crypto.randomUUID is unavailable, keeping process creation resilient in test runners.",
+  "references": [
+    "frontend/src/utils/customcontent.js",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}
