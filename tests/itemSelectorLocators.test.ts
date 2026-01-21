@@ -22,6 +22,6 @@ describe('Item selector locator coverage', () => {
     const componentSource = fs.readFileSync(componentPath, 'utf8');
 
     expect(componentSource).toContain('.items-list');
-    expect(componentSource).toContain('class="item-row"');
+    expect(componentSource).toMatch(/item-row/);
   });
 });

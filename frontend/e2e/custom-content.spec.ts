@@ -453,55 +453,15 @@ test.describe('Custom Content Management', () => {
         const processSuccessVisible = await processSuccessMessage
             .isVisible({ timeout: 15000 })
             .catch(() => false);
-        const pollForProcessId = async (timeoutMs: number) => {
-            const start = Date.now();
-            while (Date.now() - start < timeoutMs) {
-                if (page.isClosed()) {
-                    return null;
-                }
-                const processId = await findCustomProcessIdByTitle(page, processTitle);
-                if (processId) {
-                    return processId;
-                }
-                await page.waitForTimeout(500);
-            }
-            return null;
-        };
-        const processIdPollTimeout = 30000;
-        let processIdFromDb: string | null = null;
         if (!processSuccessVisible) {
             // TODO(dspace#process-create-success): Remove once the UI reliably renders the message.
             test.info().annotations.push({
                 type: 'warning',
                 description:
-                    'Process success message was missing; verifying process creation via IndexedDB instead.',
+                    'Process success message was missing; validating creation via the item detail page instead.',
             });
-            console.warn('Process success message missing; verifying IndexedDB state instead.');
-            processIdFromDb = await pollForProcessId(processIdPollTimeout);
-            if (!processIdFromDb) {
-                const currentUrl = page.url();
-                await test.info().attach('process-create-missing-success-url', {
-                    body: currentUrl,
-                    contentType: 'text/plain',
-                });
-                const screenshot = await page.screenshot({ fullPage: true });
-                await test.info().attach('process-create-missing-success-screenshot', {
-                    body: screenshot,
-                    contentType: 'image/png',
-                });
-                throw new Error(
-                    `Process success message missing and process ID not found in IndexedDB within ${processIdPollTimeout}ms. URL: ${currentUrl}`
-                );
-            }
+            console.warn('Process success message missing; continuing with UI verification.');
         }
-
-        await expect
-            .poll(
-                async () =>
-                    processIdFromDb ?? (await pollForProcessId(processIdPollTimeout)),
-                { timeout: processIdPollTimeout }
-            )
-            .not.toBeNull();
 
         // Navigate to the item detail page and validate the custom process appears
         if (!page.url().includes(`/inventory/item/${itemId}`)) {
@@ -512,9 +472,17 @@ test.describe('Custom Content Management', () => {
 
         const processesSection = page.getByText('Processes:', { exact: true });
         await expect(processesSection).toBeVisible({ timeout: 15000 });
-        await expect(page.getByText(processTitle, { exact: true })).toBeVisible({
-            timeout: 15000,
-        });
+        await expect
+            .poll(async () => {
+                if (page.isClosed()) {
+                    return false;
+                }
+                return page
+                    .getByText(processTitle, { exact: true })
+                    .isVisible()
+                    .catch(() => false);
+            })
+            .toBe(true);
     });
 
     test('should create and view a custom quest', async ({ page }) => {

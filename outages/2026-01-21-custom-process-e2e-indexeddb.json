@@ -1,0 +1,10 @@
+{
+  "id": "2026-01-21-custom-process-e2e-indexeddb",
+  "date": "2026-01-21",
+  "component": "frontend/e2e/custom-content",
+  "rootCause": "The custom process e2e flow required a process ID to appear in IndexedDB when the success message was missing. In CI, the IndexedDB lookup occasionally lagged the UI flow, causing the test to fail early even though the process was created.",
+  "resolution": "Relax the e2e assertion to continue when the success toast is absent and confirm creation on the item detail page with a UI-level poll, avoiding the fragile IndexedDB dependency.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

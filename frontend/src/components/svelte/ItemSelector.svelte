@@ -53,7 +53,7 @@
                     {#each $filteredItems as item (item.id)}
                         <button
                             type="button"
-                            class="item-option"
+                            class="item-option item-row"
                             class:selected={selectedItemId === item.id}
                             role="option"
                             on:click={() => handleItemSelect(item.id)}
