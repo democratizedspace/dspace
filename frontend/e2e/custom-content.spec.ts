@@ -430,11 +430,10 @@ test.describe('Custom Content Management', () => {
             await countInput.fill('1');
         }
 
-        const submitProcessButton = page
-            .locator(
-                'button.submit-button, button[type="submit"], input[type="submit"], button:has-text("Create"), button:has-text("Save")'
-            )
-            .first();
+        const processForm = page.locator('form.process-form');
+        await expect(processForm).toBeVisible({ timeout: 10000 });
+        const submitProcessButton = processForm.locator('button.submit-button[type="submit"]');
+        await expect(submitProcessButton).toHaveCount(1);
         const processNavigationPromise = page
             .waitForURL(
                 (url) =>
@@ -443,6 +442,7 @@ test.describe('Custom Content Management', () => {
                 { timeout: 15000 }
             )
             .catch(() => null);
+        await expect(submitProcessButton).toBeVisible({ timeout: 10000 });
         await submitProcessButton.click();
         await processNavigationPromise;
         await page.waitForLoadState('networkidle', { timeout: 10000 });
