@@ -1,9 +1,13 @@
 export const LEGACY_V2_STORAGE_KEYS = ['gameState', 'gameStateBackup'];
 
 const LEGACY_VERSION_PREFIXES = ['1', '2'];
+const CURRENT_META_KEY = '_meta';
 
 const isPlainObject = (value) =>
     value !== null && typeof value === 'object' && !Array.isArray(value);
+
+const hasCurrentMeta = (candidate) =>
+    Boolean(candidate) && isPlainObject(candidate[CURRENT_META_KEY]);
 
 const readLegacyVersion = (candidate) => {
     if (!candidate || typeof candidate !== 'object') return undefined;
@@ -72,6 +76,9 @@ export const parseLegacyV2Raw = (raw) => {
         }
 
         const version = readLegacyVersion(candidate);
+        if (hasCurrentMeta(candidate) && !hasLegacyVersion(version)) {
+            return { state: null, isLegacy: false, error: null };
+        }
         const isLegacy =
             hasLegacyVersion(version) || (!isCurrentVersion(version) && hasLegacyShape(candidate));
 

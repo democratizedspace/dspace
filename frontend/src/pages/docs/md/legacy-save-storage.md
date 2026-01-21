@@ -470,13 +470,14 @@ copy/pastable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
   `frontend/src/utils/legacySaveDetection.ts`  
   `frontend/src/components/svelte/LegacySaveUpgrade.svelte`
 - **Merge:** `mergeLegacyStateIntoCurrent` adds positive inventory counts, fills missing
-  quest/process entries, merges settings (incoming values override current ones), grants the v2
-  upgrade trophy, and persists the merged state via `persistMigratedState`.  
+  quest/process entries, merges settings (incoming values override current ones), and persists
+  the merged state via `persistMigratedState`. The Legacy Save Upgrade UI explicitly grants the
+  v2 upgrade trophy during this flow.  
   `frontend/src/utils/gameState.js`
 - **Replace:** `importV2V3` validates the legacy state (provided or read from `gameState`),
-  sanitizes `inventory[""]`, ignores unknown keys, grants the v2 upgrade trophy, and persists via
-  `persistMigratedState` (which sets `versionNumberString = "3"` and clears legacy localStorage
-  when IndexedDB is in use).  
+  sanitizes `inventory[""]`, ignores unknown keys, and persists via `persistMigratedState`
+  (which sets `versionNumberString = "3"` and clears legacy localStorage when IndexedDB is in
+  use). The Legacy Save Upgrade UI explicitly grants the v2 upgrade trophy during this flow.  
   `frontend/src/utils/gameState.js`
 
 ## QA: v2.1 → v3 migration checklist

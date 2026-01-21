@@ -61,11 +61,14 @@ describe('game state upgrades', () => {
             _meta: { lastUpdated: Date.now() },
         });
 
-        const merged = await mergeLegacyStateIntoCurrent({
-            inventory: { alpha: 2, beta: 1 },
-            quests: { legacy: { finished: true }, current: { finished: false } },
-            processes: { extra: { status: 'running' } },
-        });
+        const merged = await mergeLegacyStateIntoCurrent(
+            {
+                inventory: { alpha: 2, beta: 1 },
+                quests: { legacy: { finished: true }, current: { finished: false } },
+                processes: { extra: { status: 'running' } },
+            },
+            { grantTrophy: true }
+        );
 
         expect(merged.versionNumberString).toBe(VERSIONS.V3);
         const state = loadGameState();
@@ -87,7 +90,7 @@ describe('game state upgrades', () => {
             })
         );
 
-        const migrated = await importV2V3();
+        const migrated = await importV2V3(undefined, { grantTrophy: true });
 
         expect(migrated.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBe(1);
         const state = loadGameState();
@@ -102,15 +105,36 @@ describe('game state upgrades', () => {
             _meta: { lastUpdated: Date.now() },
         });
 
-        const merged = await mergeLegacyStateIntoCurrent({
-            inventory: { alpha: 2, beta: 1 },
-            quests: { legacy: { finished: true } },
-            processes: {},
-        });
+        const merged = await mergeLegacyStateIntoCurrent(
+            {
+                inventory: { alpha: 2, beta: 1 },
+                quests: { legacy: { finished: true } },
+                processes: {},
+            },
+            { grantTrophy: true }
+        );
 
         expect(merged.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBe(1);
         const state = loadGameState();
         expect(state.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBe(1);
+    });
+
+    test('importV2V3 ignores current v3 localStorage state without explicit upgrade', async () => {
+        localStorage.setItem(
+            'gameState',
+            JSON.stringify({
+                inventory: { 1: 3 },
+                quests: { q1: { finished: true } },
+                processes: {},
+                _meta: { lastUpdated: Date.now() },
+            })
+        );
+
+        const migrated = await importV2V3();
+
+        expect(migrated).toBeNull();
+        const state = loadGameState();
+        expect(state.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBeUndefined();
     });
 
     test('importV1V3 can replace existing state with converted items', async () => {
