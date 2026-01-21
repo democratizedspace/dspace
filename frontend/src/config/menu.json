@@ -45,6 +45,10 @@
         "pinned": true
     },
     {
+        "name": "Processes",
+        "href": "/processes"
+    },
+    {
         "name": "Import/export gamesaves",
         "href": "/gamesaves"
     },
