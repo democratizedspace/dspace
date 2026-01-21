@@ -71,6 +71,10 @@
         return normalized.filter((id) => id !== currentId);
     }
 
+    function getAvailableQuests() {
+        return allQuests.length > 0 ? allQuests : existingQuests;
+    }
+
     function normalizeOption(option) {
         const normalized = {
             ...option,
@@ -232,7 +236,7 @@
         }
     });
 
-    $: selectableQuests = allQuests.filter(
+    $: selectableQuests = getAvailableQuests().filter(
         (quest) => questIdToString(quest.id) !== questIdToString(questId)
     );
 
@@ -773,11 +777,15 @@
             }
         }
 
+        const selectableQuestIds = getAvailableQuests()
+            .filter((quest) => questIdToString(quest.id) !== questIdToString(questId))
+            .map((quest) => questIdToString(quest.id));
+
         if (
             payload.requiresQuests.length > 0 &&
             !validateQuestDependencies(
                 payload.requiresQuests.map((id) => questIdToString(id)),
-                selectableQuests.map((q) => questIdToString(q.id))
+                selectableQuestIds
             )
         ) {
             errors.requiresQuests = 'Unknown quest dependency';
