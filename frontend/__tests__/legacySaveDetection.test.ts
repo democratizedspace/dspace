@@ -52,6 +52,23 @@ describe('detectLegacyArtifacts', () => {
         expect(result.hasV2LocalStorage).toBe(false);
     });
 
+    test('ignores v3 snapshots that include fresh inventory', () => {
+        localStorage.setItem(
+            'gameState',
+            JSON.stringify({
+                versionNumberString: '3',
+                inventory: { customItem: 1 },
+                quests: {},
+                processes: {},
+            })
+        );
+
+        const result = detectLegacyArtifacts();
+
+        expect(result.hasV1Cookies).toBe(false);
+        expect(result.hasV2LocalStorage).toBe(false);
+    });
+
     test('returns false when no artifacts are present', () => {
         const result = detectLegacyArtifacts();
 
