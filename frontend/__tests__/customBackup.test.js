@@ -11,7 +11,7 @@ import {
     restoreCustomContentBackup,
 } from '../src/utils/customContentBackup.js';
 
-const fixturesDir = path.join(__dirname, '../tests/fixtures');
+const fixturesDir = path.join(__dirname, '../../tests/fixtures/custom-content-backup');
 
 const readFixture = (filename) => {
     const contents = fs.readFileSync(path.join(fixturesDir, filename), 'utf8');
@@ -65,6 +65,7 @@ describe('custom content backup', () => {
         const items = await db.list('item');
         expect(items).toEqual([]);
         expect(result.message).toContain('0 entities');
+        expect(result.message).toContain('items=0, processes=0, quests=0, images=0');
     });
 
     test('export returns schema data', async () => {
@@ -141,7 +142,7 @@ describe('custom content backup', () => {
 
     test('imports item-only backups with images', async () => {
         await indexedDB.deleteDatabase('CustomContent');
-        const backup = readFixture('custom-content-backup-item-only.json');
+        const backup = readFixture('dspace-custom-content-backup-20260121-000411.json');
 
         const result = await restoreCustomContentBackup(backup);
 
@@ -151,27 +152,31 @@ describe('custom content backup', () => {
 
         const imported = await db.items.get('custom-item-only');
         expect(imported?.name).toBe('Custom item only');
-        expect(imported?.image).toContain('data:image/jpeg;base64');
+        expect(imported?.image).toContain('data:image/png;base64');
     });
 
     test('imports item-only backups with missing sections', async () => {
         await indexedDB.deleteDatabase('CustomContent');
-        const backup = readFixture('custom-content-backup-item-only-missing-sections.json');
+        const backup = readFixture('dspace-custom-content-backup-20260121-000411.json');
+        const missingKeysBackup = JSON.parse(JSON.stringify(backup));
+        delete missingKeysBackup.processes;
+        delete missingKeysBackup.quests;
 
-        const result = await restoreCustomContentBackup(backup);
+        const result = await restoreCustomContentBackup(missingKeysBackup);
 
         expect(result.items).toBe(1);
         expect(result.processes).toBe(0);
         expect(result.images).toBe(1);
+        expect(result.message).toContain('Missing sections defaulted to empty');
 
-        const imported = await db.items.get('custom-item-only-missing-sections');
-        expect(imported?.name).toBe('Custom item missing sections');
-        expect(imported?.image).toContain('data:image/jpeg;base64');
+        const imported = await db.items.get('custom-item-only');
+        expect(imported?.name).toBe('Custom item only');
+        expect(imported?.image).toContain('data:image/png;base64');
     });
 
     test('imports backups that include processes', async () => {
         await indexedDB.deleteDatabase('CustomContent');
-        const backup = readFixture('custom-content-backup-with-process.json');
+        const backup = readFixture('dspace-custom-content-backup-20260121-002402.json');
 
         const result = await restoreCustomContentBackup(backup);
 
