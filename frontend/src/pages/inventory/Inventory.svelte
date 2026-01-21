@@ -8,6 +8,7 @@
 
     let showAllItems = false;
     let currentInventory = {};
+    let nonZeroInventory = {};
     let isClientSide = false;
     let allItems = {};
     let fullItemList = builtInItems;
@@ -16,27 +17,41 @@
         { text: 'Manage items', href: '/inventory/manage' },
     ];
 
+    const normalizeCount = (value) => {
+        const parsed = typeof value === 'number' ? value : value?.count;
+        if (typeof parsed !== 'number' || Number.isNaN(parsed)) {
+            return 0;
+        }
+        return parsed;
+    };
+
     // Use onMount to ensure this code only runs in the browser after hydration
     onMount(async () => {
         isClientSide = true;
 
         const mergedItems = await getMergedItemCatalog({ builtInItems });
         fullItemList = mergedItems;
-
-        // Initialize allItems with all available items from the items list
-        allItems = mergedItems.reduce((acc, item) => {
-            acc[item.id] = {
-                count: $state.inventory[item.id] ? $state.inventory[item.id].count : 0,
-            };
-            return acc;
-        }, {});
     });
 
     // Reactive statement to update inventory when showAllItems or isClientSide changes
     // The block ensures reactivity tracks both variables
     $: {
         if (isClientSide) {
-            currentInventory = showAllItems ? allItems : $state.inventory;
+            allItems = fullItemList.reduce((acc, item) => {
+                acc[item.id] = normalizeCount($state.inventory[item.id]);
+                return acc;
+            }, {});
+            nonZeroInventory = Object.entries($state.inventory ?? {}).reduce(
+                (acc, [id, count]) => {
+                    const normalized = normalizeCount(count);
+                    if (normalized > 0) {
+                        acc[id] = normalized;
+                    }
+                    return acc;
+                },
+                {}
+            );
+            currentInventory = showAllItems ? allItems : nonZeroInventory;
         }
     }
 </script>
