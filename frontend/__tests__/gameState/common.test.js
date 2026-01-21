@@ -41,6 +41,7 @@ describe('gameState - common utilities', () => {
         const exported = exportGameStateString();
         const decoded = decodeBase64Json(exported);
         expect(decoded.payload.inventory['1']).toBe(5);
+        expect(decoded.payload.versionNumberString).toBe('3');
         expect(decoded.schemaVersion).toBe(1);
         expect(decoded.providerHint).toBe('local-export');
     });
