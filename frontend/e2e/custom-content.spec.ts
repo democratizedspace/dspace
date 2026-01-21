@@ -431,9 +431,9 @@ test.describe('Custom Content Management', () => {
         }
 
         const processForm = page.locator('form.process-form');
-        const submitProcessButton = processForm
-            .locator('button.submit-button[type="submit"], button[type="submit"]')
-            .first();
+        await expect(processForm).toBeVisible({ timeout: 10000 });
+        const submitProcessButton = processForm.locator('button.submit-button[type="submit"]');
+        await expect(submitProcessButton).toHaveCount(1);
         const processNavigationPromise = page
             .waitForURL(
                 (url) =>
