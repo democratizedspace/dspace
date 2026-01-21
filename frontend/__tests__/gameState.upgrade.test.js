@@ -33,6 +33,13 @@ afterEach(async () => {
 });
 
 describe('game state upgrades', () => {
+    test('fresh v3 state does not include the V2 Upgrade Trophy', async () => {
+        const state = loadGameState();
+
+        expect(state.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBeUndefined();
+        expect(localStorage.getItem('gameState')).not.toContain(LEGACY_V2_UPGRADE_TROPHY_ID);
+    });
+
     test('importV2V3 migrates legacy localStorage data and stamps version', async () => {
         localStorage.setItem(
             'gameState',
