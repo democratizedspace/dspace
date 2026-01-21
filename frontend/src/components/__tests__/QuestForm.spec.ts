@@ -1,6 +1,7 @@
 import { render, fireEvent, waitFor } from '@testing-library/svelte';
 import { vi } from 'vitest';
 import QuestForm from '../svelte/QuestForm.svelte';
+import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
 
 vi.mock('../../utils/imageDownsample.js', () => ({
     downsampleAndCompressToJpeg: vi.fn().mockResolvedValue({
@@ -11,6 +12,14 @@ vi.mock('../../utils/imageDownsample.js', () => ({
         qualityUsed: 0.8,
     }),
 }));
+
+vi.mock('../../utils/questPersistence.js', async () => {
+    const actual = await vi.importActual('../../utils/questPersistence.js');
+    return {
+        ...actual,
+        syncExistingQuestsToIndexedDB: vi.fn(),
+    };
+});
 
 test('allows adding dialogue nodes and options', async () => {
     const { getByLabelText, getByText, getAllByLabelText, getAllByText } = render(QuestForm);
@@ -80,4 +89,27 @@ test('replaces the default finish option when adding a custom finish option', as
     const optionInputsAfter = getAllByLabelText(/^Text$/i);
     expect(optionInputsAfter).toHaveLength(1);
     expect((optionInputsAfter[0] as HTMLInputElement).value).toBe('Complete mission');
+});
+
+test('excludes the current quest from requirements while editing', async () => {
+    const existingQuests = [
+        { id: 'quest-1', title: 'Quest One' },
+        { id: 'quest-2', title: 'Quest Two' },
+    ];
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce(existingQuests);
+
+    const { getByLabelText } = render(QuestForm, {
+        props: {
+            existingQuests,
+            isEdit: true,
+            questId: 'quest-1',
+        },
+    });
+
+    const requirementsSelect = getByLabelText(/Quest Requirements/i) as HTMLSelectElement;
+
+    await waitFor(() => {
+        const optionValues = Array.from(requirementsSelect.options).map((option) => option.value);
+        expect(optionValues).toEqual(['quest-2']);
+    });
 });

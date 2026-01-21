@@ -1,0 +1,12 @@
+{
+  "id": "2026-02-20-quest-edit-requirements",
+  "date": "2026-02-20",
+  "component": "frontend/quests",
+  "rootCause": "The edit quest page did not preload the built-in quest catalog, so the dependency selector and validation only saw the current custom quest and rejected stored dependencies as unknown.",
+  "resolution": "Load the bundled quest catalog for edit mode and exclude the current quest from requirement options and dependency validation.",
+  "references": [
+    "frontend/src/pages/quests/[id]/edit.astro",
+    "frontend/src/components/svelte/QuestForm.svelte",
+    "frontend/src/components/__tests__/QuestForm.spec.ts"
+  ]
+}
