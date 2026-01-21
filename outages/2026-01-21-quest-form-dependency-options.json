@@ -1,0 +1,11 @@
+{
+  "id": "quest-form-dependency-options",
+  "date": "2026-01-21",
+  "component": "frontend:quest-form",
+  "rootCause": "The quest edit route provided an empty existingQuests list, so QuestForm only loaded the current custom quest from IndexedDB. This meant the requirements list only displayed the quest being edited, and dependency validation failed for built-in quests.",
+  "resolution": "The edit page now supplies built-in quests, and QuestForm filters out the current quest when listing dependencies and validating requirement IDs.",
+  "references": [
+    "frontend/src/pages/quests/[id]/edit.astro",
+    "frontend/src/components/svelte/QuestForm.svelte"
+  ]
+}

@@ -3,6 +3,10 @@ import Page from '../../../components/Page.astro';
 import QuestFormPage from '../../../components/svelte/QuestFormPage.svelte';
 
 const { id } = Astro.params;
+const questModules = import.meta.glob('../json/*/*.json', { eager: true });
+const quests = Object.entries(questModules)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([, mod]) => mod);
 ---
 
 <Page title="Edit Custom Quest">
@@ -10,6 +14,6 @@ const { id } = Astro.params;
         client:load
         isEdit={true}
         questId={id}
-        existingQuests={[]}
+        existingQuests={quests.map((q) => q.default)}
     />
 </Page>
