@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-qa-docs-link-drift",
+  "date": "2026-01-21",
+  "component": "docs/qa",
+  "rootCause": "Prettier formatting shifts in the custom content e2e spec moved test line numbers, leaving the QA docs links pointing at outdated ranges and failing the link freshness test.",
+  "resolution": "Refresh the QA documentation links to match the new line ranges for the referenced e2e tests.",
+  "references": [
+    "docs/qa/v3.md",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

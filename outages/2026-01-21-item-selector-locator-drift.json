@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-item-selector-locator-drift",
+  "date": "2026-01-21",
+  "component": "tests/e2e",
+  "rootCause": "The item selector locator guard test still expected the deprecated `item-row` class even though the ItemSelector component uses `item-option` and no longer exposes `item-row`.",
+  "resolution": "Update the locator coverage test to assert `item-option` presence and align the component source expectations with the current markup.",
+  "references": [
+    "tests/itemSelectorLocators.test.ts",
+    "frontend/src/components/svelte/ItemSelector.svelte"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "2026-01-21-frontend-prettier-drift",
+  "date": "2026-01-21",
+  "component": "frontend/lint",
+  "rootCause": "Four frontend test/spec files drifted from the frontend Prettier configuration, causing format checks in lint and build workflows to fail.",
+  "resolution": "Reformatted the impacted test and utility files with the frontend Prettier config to restore formatting compliance.",
+  "references": [
+    "frontend/__tests__/migrations.test.js",
+    "frontend/__tests__/offlineWorkerRegistration.test.js",
+    "frontend/e2e/custom-content.spec.ts",
+    "frontend/src/utils/legacySaveParsing.js"
+  ]
+}
