@@ -16,27 +16,46 @@
         { text: 'Manage items', href: '/inventory/manage' },
     ];
 
+    const getInventoryCount = (entry) => {
+        if (typeof entry === 'number') {
+            return entry;
+        }
+        if (entry && typeof entry.count === 'number') {
+            return entry.count;
+        }
+        return 0;
+    };
+
+    const getNonZeroInventory = (inventory) => {
+        return Object.entries(inventory ?? {}).reduce((acc, [id, entry]) => {
+            const count = getInventoryCount(entry);
+            if (count > 0) {
+                acc[id] = count;
+            }
+            return acc;
+        }, {});
+    };
+
     // Use onMount to ensure this code only runs in the browser after hydration
     onMount(async () => {
         isClientSide = true;
 
         const mergedItems = await getMergedItemCatalog({ builtInItems });
         fullItemList = mergedItems;
+    });
 
-        // Initialize allItems with all available items from the items list
-        allItems = mergedItems.reduce((acc, item) => {
-            acc[item.id] = {
-                count: $state.inventory[item.id] ? $state.inventory[item.id].count : 0,
-            };
+    $: if (isClientSide) {
+        allItems = fullItemList.reduce((acc, item) => {
+            acc[item.id] = getInventoryCount($state.inventory[item.id]);
             return acc;
         }, {});
-    });
+    }
 
     // Reactive statement to update inventory when showAllItems or isClientSide changes
     // The block ensures reactivity tracks both variables
     $: {
         if (isClientSide) {
-            currentInventory = showAllItems ? allItems : $state.inventory;
+            currentInventory = showAllItems ? allItems : getNonZeroInventory($state.inventory);
         }
     }
 </script>
