@@ -496,11 +496,9 @@ test.describe('Custom Content Management', () => {
         }
 
         await expect
-            .poll(
-                async () =>
-                    processIdFromDb ?? (await pollForProcessId(processIdPollTimeout)),
-                { timeout: processIdPollTimeout }
-            )
+            .poll(async () => processIdFromDb ?? (await pollForProcessId(processIdPollTimeout)), {
+                timeout: processIdPollTimeout,
+            })
             .not.toBeNull();
 
         // Navigate to the item detail page and validate the custom process appears

@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-qa-docs-link-drift",
+  "date": "2026-01-21",
+  "component": "docs/qa/v3",
+  "rootCause": "The QA checklist linked to a hard-coded line range in the custom-content e2e spec; after formatting changes, the line numbers moved and the link no longer pointed to the referenced test title.",
+  "resolution": "Adjusted the v3 QA checklist link to the updated line range for the custom quest creation test.",
+  "references": [
+    "docs/qa/v3.md",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

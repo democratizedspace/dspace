@@ -1,0 +1,12 @@
+{
+  "id": "2026-01-21-item-selector-locator-drift",
+  "date": "2026-01-21",
+  "component": "frontend/e2e/item-selectors",
+  "rootCause": "The item selector component uses \"item-option\" markup, but the locator coverage test still required \"item-row\" selectors, so the expected locator tokens no longer matched the actual component.",
+  "resolution": "Updated the locator coverage test to assert the current item-option selectors in the E2E helper list and component markup.",
+  "references": [
+    "tests/itemSelectorLocators.test.ts",
+    "frontend/e2e/utils/itemSelectors.ts",
+    "frontend/src/components/svelte/ItemSelector.svelte"
+  ]
+}

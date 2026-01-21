@@ -1,0 +1,10 @@
+{
+  "id": "2026-01-21-custom-content-prettier-drift",
+  "date": "2026-01-21",
+  "component": "frontend/e2e/custom-content",
+  "rootCause": "The custom content e2e spec was edited without running Prettier, leaving formatting that failed the frontend format check.",
+  "resolution": "Reformatted the custom content e2e spec with the frontend Prettier configuration to restore format compliance.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

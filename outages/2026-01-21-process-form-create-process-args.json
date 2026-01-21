@@ -1,0 +1,12 @@
+{
+  "id": "2026-01-21-process-form-create-process-args",
+  "date": "2026-01-21",
+  "component": "frontend/components/ProcessForm",
+  "rootCause": "ProcessForm still calls createProcess with positional arguments, but the unit test expected a single object payload, so the assertion failed even though the submission data was correct.",
+  "resolution": "Updated the ProcessForm test to assert the positional arguments so it aligns with the current createProcess signature.",
+  "references": [
+    "frontend/src/components/__tests__/ProcessForm.spec.ts",
+    "frontend/src/utils/customcontent.js",
+    "frontend/src/components/svelte/ProcessForm.svelte"
+  ]
+}
