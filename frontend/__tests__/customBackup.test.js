@@ -154,6 +154,21 @@ describe('custom content backup', () => {
         expect(imported?.image).toContain('data:image/jpeg;base64');
     });
 
+    test('imports item-only backups with missing sections', async () => {
+        await indexedDB.deleteDatabase('CustomContent');
+        const backup = readFixture('custom-content-backup-item-only-missing-sections.json');
+
+        const result = await restoreCustomContentBackup(backup);
+
+        expect(result.items).toBe(1);
+        expect(result.processes).toBe(0);
+        expect(result.images).toBe(1);
+
+        const imported = await db.items.get('custom-item-only-missing-sections');
+        expect(imported?.name).toBe('Custom item missing sections');
+        expect(imported?.image).toContain('data:image/jpeg;base64');
+    });
+
     test('imports backups that include processes', async () => {
         await indexedDB.deleteDatabase('CustomContent');
         const backup = readFixture('custom-content-backup-with-process.json');

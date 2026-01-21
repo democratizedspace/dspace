@@ -1,0 +1,26 @@
+{
+    "schemaVersion": 1,
+    "timestamp": "2026-01-21T00:04:11.000Z",
+    "counts": {
+        "items": 1,
+        "processes": 0,
+        "quests": 0,
+        "images": 1
+    },
+    "items": [
+        {
+            "id": "custom-item-only-missing-sections",
+            "name": "Custom item missing sections",
+            "description": "Fixture item with image but missing processes and quests.",
+            "image": "data:image/jpeg;base64,TEST"
+        }
+    ],
+    "images": [
+        {
+            "id": "item:custom-item-only-missing-sections:image",
+            "entityType": "item",
+            "entityId": "custom-item-only-missing-sections",
+            "dataUrl": "data:image/jpeg;base64,TEST"
+        }
+    ]
+}
