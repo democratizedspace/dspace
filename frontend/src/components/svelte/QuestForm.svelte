@@ -33,6 +33,9 @@
     let isHydrated = false;
     let requiresQuests = [];
     let allQuests = [];
+    $: dependencyQuests = questId
+        ? allQuests.filter((quest) => quest.id !== questId)
+        : allQuests;
     let allItems = [];
     let validationErrors = {};
     let isSubmitting = false;
@@ -757,7 +760,7 @@
             payload.requiresQuests.length > 0 &&
             !validateQuestDependencies(
                 payload.requiresQuests,
-                allQuests.map((q) => q.id)
+                dependencyQuests.map((q) => q.id)
             )
         ) {
             errors.requiresQuests = 'Unknown quest dependency';
@@ -922,7 +925,7 @@
     <div class="form-group">
         <label for="requires">Quest Requirements</label>
         <select id="requires" multiple on:change={handleRequirementsChange}>
-            {#each allQuests as q}
+            {#each dependencyQuests as q}
                 <option value={q.id} selected={requiresQuests.includes(q.id)}>
                     {q.title}
                 </option>

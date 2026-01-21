@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-quest-edit-dependency-list",
+  "date": "2026-01-21",
+  "component": "frontend/quests",
+  "rootCause": "The edit quest page did not preload the built-in quest catalog, so the dependency selector only reflected IndexedDB content and could include the quest being edited. That caused dependency validation to reject existing selections as unknown.",
+  "resolution": "Load the built-in quest catalog on the edit page and filter the current quest out of the dependency options and validation list.",
+  "references": [
+    "frontend/src/pages/quests/[id]/edit.astro",
+    "frontend/src/components/svelte/QuestForm.svelte"
+  ]
+}
