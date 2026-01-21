@@ -16,27 +16,50 @@
         { text: 'Manage items', href: '/inventory/manage' },
     ];
 
+    const resolveItemCount = (entry) => {
+        if (typeof entry === 'number') {
+            return entry;
+        }
+        if (entry && typeof entry === 'object') {
+            const count = Number(entry.count);
+            return Number.isFinite(count) ? count : 0;
+        }
+        return 0;
+    };
+
+    const buildAllItems = (inventorySource) => {
+        return fullItemList.reduce((acc, item) => {
+            acc[item.id] = resolveItemCount(inventorySource?.[item.id]);
+            return acc;
+        }, {});
+    };
+
+    const filterNonZeroInventory = (inventorySource) => {
+        return Object.entries(inventorySource ?? {}).reduce((acc, [id, entry]) => {
+            const count = resolveItemCount(entry);
+            if (count > 0) {
+                acc[id] = count;
+            }
+            return acc;
+        }, {});
+    };
+
     // Use onMount to ensure this code only runs in the browser after hydration
     onMount(async () => {
         isClientSide = true;
 
         const mergedItems = await getMergedItemCatalog({ builtInItems });
         fullItemList = mergedItems;
-
-        // Initialize allItems with all available items from the items list
-        allItems = mergedItems.reduce((acc, item) => {
-            acc[item.id] = {
-                count: $state.inventory[item.id] ? $state.inventory[item.id].count : 0,
-            };
-            return acc;
-        }, {});
     });
 
     // Reactive statement to update inventory when showAllItems or isClientSide changes
     // The block ensures reactivity tracks both variables
     $: {
         if (isClientSide) {
-            currentInventory = showAllItems ? allItems : $state.inventory;
+            allItems = buildAllItems($state.inventory);
+            currentInventory = showAllItems
+                ? allItems
+                : filterNonZeroInventory($state.inventory);
         }
     }
 </script>
