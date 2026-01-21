@@ -403,6 +403,63 @@ export async function seedCustomQuest(page: Page, quest: Record<string, unknown>
     return seededId;
 }
 
+export async function seedCustomProcess(
+    page: Page,
+    process: Record<string, unknown>
+): Promise<string> {
+    const resolvedProcessId = (process as { id?: string | number }).id ?? generateQuestId();
+
+    const seededId = await page.evaluate(
+        async ({ processData, processId }) => {
+            const databaseName = 'CustomContent';
+            const databaseVersion = 3;
+
+            const preparedProcess = {
+                ...processData,
+                id: processId,
+                entityType: 'process',
+                custom: true,
+                createdAt: processData.createdAt ?? new Date().toISOString(),
+            };
+
+            const db = (await new Promise<unknown>((resolve, reject) => {
+                const request = indexedDB.open(databaseName, databaseVersion);
+                request.onupgradeneeded = () => {
+                    const upgradeDb = request.result as IndexedDbDatabase;
+                    if (!upgradeDb.objectStoreNames.contains('meta')) {
+                        upgradeDb.createObjectStore('meta');
+                    }
+                    if (!upgradeDb.objectStoreNames.contains('items')) {
+                        upgradeDb.createObjectStore('items', { keyPath: 'id' });
+                    }
+                    if (!upgradeDb.objectStoreNames.contains('processes')) {
+                        upgradeDb.createObjectStore('processes', { keyPath: 'id' });
+                    }
+                    if (!upgradeDb.objectStoreNames.contains('quests')) {
+                        upgradeDb.createObjectStore('quests', { keyPath: 'id' });
+                    }
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            })) as IndexedDbDatabase;
+
+            await new Promise<void>((resolve, reject) => {
+                const tx = db.transaction('processes', 'readwrite');
+                const store = tx.objectStore('processes');
+                store.put(preparedProcess);
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+
+            db.close();
+            return String(processId);
+        },
+        { processData: process, processId: resolvedProcessId }
+    );
+
+    return seededId;
+}
+
 export async function waitForQuestRecordByTitle(
     page: Page,
     title: string,

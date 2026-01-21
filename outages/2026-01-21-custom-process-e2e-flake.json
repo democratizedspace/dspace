@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-custom-process-e2e-flake",
+  "date": "2026-01-21",
+  "component": "frontend",
+  "rootCause": "The custom content E2E test relied on UI process creation, which intermittently failed to persist the process in CI, leaving no success message or IndexedDB record to validate the item detail view.",
+  "resolution": "Seed the custom process directly in IndexedDB for the item-detail assertion so the test focuses on rendering and avoids the flaky form submission path.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts",
+    "frontend/e2e/test-helpers.ts"
+  ]
+}

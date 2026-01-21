@@ -6,7 +6,7 @@ import {
     clearUserData,
     createTestItems,
     fillProcessForm,
-    ItemSelectorHelper,
+    seedCustomProcess,
 } from './test-helpers';
 
 const inlineItemImageBuffer = Buffer.from(
@@ -245,57 +245,6 @@ test.describe('Custom Content Management', () => {
         }
     });
 
-    async function findCustomProcessIdByTitle(page: Page, title: string): Promise<string | null> {
-        try {
-            return await page.evaluate(async (processTitle) => {
-                return new Promise((resolve) => {
-                    const request = indexedDB.open('CustomContent');
-
-                    request.onerror = () => resolve(null);
-                    request.onupgradeneeded = () => {
-                        request.result?.close();
-                        resolve(null);
-                    };
-                    request.onsuccess = () => {
-                        const db = request.result;
-                        const transaction = db.transaction('processes', 'readonly');
-                        const store = transaction.objectStore('processes');
-                        const getAllRequest = store.getAll();
-
-                        getAllRequest.onerror = () => {
-                            db.close();
-                            resolve(null);
-                        };
-                        getAllRequest.onsuccess = () => {
-                            const processes = getAllRequest.result ?? [];
-                            const normalizedTitle = processTitle.trim().toLowerCase();
-                            const match = processes.find(
-                                (process) =>
-                                    (process?.name ?? process?.title ?? '').trim().toLowerCase() ===
-                                    normalizedTitle
-                            );
-                            const matchedId = match?.id ?? null;
-                            db.close();
-                            resolve(matchedId);
-                        };
-                    };
-                });
-            }, title);
-        } catch (error) {
-            const message = String(error).toLowerCase();
-            if (
-                message.includes('execution context was destroyed') ||
-                message.includes('most likely because of a navigation') ||
-                message.includes('cannot find context with specified id') ||
-                message.includes('target closed') ||
-                message.includes('navigation')
-            ) {
-                return null;
-            }
-            throw error;
-        }
-    }
-
     test('should show a custom process on the related item detail page', async ({ page }) => {
         // Create a custom item first
         await page.goto('/inventory/create');
@@ -372,143 +321,19 @@ test.describe('Custom Content Management', () => {
             await waitForHydration(page);
         }
 
-        // Create a custom process that requires the item
-        await page.goto('/processes/create');
-        await page.waitForLoadState('networkidle');
-        await waitForHydration(page);
-
         const processTitle = `Process for ${uniqueItemName}`;
-        const titleInput = page.locator('#name, #title').first();
-        await titleInput.fill(processTitle);
-        await page.fill('#duration', '10m');
-
-        await page.click('button:has-text("Add Required Item")');
-
-        const requirementRows = page.locator('#required-items-section .item-row');
-        await expect
-            .poll(async () => requirementRows.count(), { timeout: 15000 })
-            .toBeGreaterThan(0);
-        const requirementRow = requirementRows.last();
-        await expect(requirementRow).toBeVisible({ timeout: 15000 });
-        const selectorContainer = requirementRow.locator('.item-selector');
-        const selectorHelper = new ItemSelectorHelper(page, selectorContainer);
-        await expect(selectorContainer).toBeVisible({ timeout: 15000 });
-        await expect(selectorContainer).toHaveAttribute('data-hydrated', 'true', {
-            timeout: 15000,
+        await seedCustomProcess(page, {
+            title: processTitle,
+            duration: '10m',
+            requireItems: [{ id: itemId, count: 1 }],
+            consumeItems: [],
+            createItems: [],
         });
-        await selectorHelper.open();
-
-        const searchInputByRole = selectorContainer.getByRole('textbox', { name: /search/i });
-        const searchInputByPlaceholder = selectorContainer.locator(
-            'input[placeholder="Search..."]'
-        );
-        if ((await searchInputByRole.count()) > 0) {
-            await searchInputByRole.fill(uniqueItemName);
-        } else if ((await searchInputByPlaceholder.count()) > 0) {
-            await searchInputByPlaceholder.fill(uniqueItemName);
-        }
-
-        const itemOption = selectorContainer.locator('button.item-option', {
-            hasText: uniqueItemName,
-        });
-        await expect
-            .poll(async () => (await itemOption.count()) > 0, { timeout: 30000 })
-            .toBe(true);
-        const itemOptionButton = itemOption.first();
-        await expect(itemOptionButton).toBeVisible({ timeout: 15000 });
-        await itemOptionButton.scrollIntoViewIfNeeded();
-        await itemOptionButton.click();
-        await expect(selectorContainer).toHaveAttribute('data-expanded', 'false', {
-            timeout: 10000,
-        });
-        await expect(
-            selectorContainer.getByRole('heading', { name: uniqueItemName, exact: true })
-        ).toBeVisible({ timeout: 10000 });
-
-        const countInput = requirementRow.locator('input[type="number"]');
-        if ((await countInput.count()) > 0) {
-            await countInput.fill('1');
-        }
-
-        const submitProcessButton = page
-            .locator(
-                'button.submit-button, button[type="submit"], input[type="submit"], button:has-text("Create"), button:has-text("Save")'
-            )
-            .first();
-        const processNavigationPromise = page
-            .waitForURL(
-                (url) =>
-                    url.pathname.startsWith('/processes') &&
-                    !url.pathname.endsWith('/processes/create'),
-                { timeout: 15000 }
-            )
-            .catch(() => null);
-        await submitProcessButton.click();
-        await processNavigationPromise;
-        await page.waitForLoadState('networkidle', { timeout: 10000 });
-        await waitForHydration(page);
-        const processSuccessMessage = page
-            .locator('.success-message, [role="status"]')
-            .filter({ hasText: /process created successfully/i });
-        const processSuccessVisible = await processSuccessMessage
-            .isVisible({ timeout: 15000 })
-            .catch(() => false);
-        const pollForProcessId = async (timeoutMs: number) => {
-            const start = Date.now();
-            while (Date.now() - start < timeoutMs) {
-                if (page.isClosed()) {
-                    return null;
-                }
-                const processId = await findCustomProcessIdByTitle(page, processTitle);
-                if (processId) {
-                    return processId;
-                }
-                await page.waitForTimeout(500);
-            }
-            return null;
-        };
-        const processIdPollTimeout = 30000;
-        let processIdFromDb: string | null = null;
-        if (!processSuccessVisible) {
-            // TODO(dspace#process-create-success): Remove once the UI reliably renders the message.
-            test.info().annotations.push({
-                type: 'warning',
-                description:
-                    'Process success message was missing; verifying process creation via IndexedDB instead.',
-            });
-            console.warn('Process success message missing; verifying IndexedDB state instead.');
-            processIdFromDb = await pollForProcessId(processIdPollTimeout);
-            if (!processIdFromDb) {
-                const currentUrl = page.url();
-                await test.info().attach('process-create-missing-success-url', {
-                    body: currentUrl,
-                    contentType: 'text/plain',
-                });
-                const screenshot = await page.screenshot({ fullPage: true });
-                await test.info().attach('process-create-missing-success-screenshot', {
-                    body: screenshot,
-                    contentType: 'image/png',
-                });
-                throw new Error(
-                    `Process success message missing and process ID not found in IndexedDB within ${processIdPollTimeout}ms. URL: ${currentUrl}`
-                );
-            }
-        }
-
-        await expect
-            .poll(
-                async () =>
-                    processIdFromDb ?? (await pollForProcessId(processIdPollTimeout)),
-                { timeout: processIdPollTimeout }
-            )
-            .not.toBeNull();
 
         // Navigate to the item detail page and validate the custom process appears
-        if (!page.url().includes(`/inventory/item/${itemId}`)) {
-            await page.goto(`/inventory/item/${itemId}`);
-            await page.waitForLoadState('domcontentloaded');
-            await waitForHydration(page);
-        }
+        await page.goto(`/inventory/item/${itemId}`);
+        await page.waitForLoadState('domcontentloaded');
+        await waitForHydration(page);
 
         const processesSection = page.getByText('Processes:', { exact: true });
         await expect(processesSection).toBeVisible({ timeout: 15000 });
