@@ -19,6 +19,7 @@ const MORE_MENU_ROUTES = [
     '/stats',
     '/leaderboard',
     '/gamesaves',
+    '/processes',
     '/contentbackup',
     '/achievements',
     '/titles',
