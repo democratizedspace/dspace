@@ -26,6 +26,7 @@ describe('gameState - common utilities', () => {
             inventory: {},
             processes: {},
             settings: { showQuestGraphVisualizer: false },
+            versionNumberString: '3',
         });
         expect(typeof fresh._meta?.lastUpdated).toBe('number');
     });
@@ -61,6 +62,7 @@ describe('gameState - common utilities', () => {
             'processes',
             'quests',
             'settings',
+            'versionNumberString',
         ]);
     });
 
