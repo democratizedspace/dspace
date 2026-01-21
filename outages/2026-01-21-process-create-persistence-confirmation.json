@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-process-create-persistence-confirmation",
+  "date": "2026-01-21",
+  "component": "frontend/processes/create",
+  "rootCause": "The process creation flow relied on the initial save call alone, which left the e2e test unable to confirm persistence when the first IndexedDB write was delayed or dropped, resulting in missing process IDs during verification.",
+  "resolution": "After creating a process, confirm persistence via a follow-up read and re-save the process when it is not found so the record is reliably committed before tests assert on IndexedDB state.",
+  "references": [
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

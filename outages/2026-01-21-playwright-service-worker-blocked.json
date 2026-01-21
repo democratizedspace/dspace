@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-playwright-service-worker-blocked",
+  "date": "2026-01-21",
+  "component": "frontend/e2e/service-worker-update",
+  "rootCause": "Playwright was configured to block service workers globally, so the service worker update specs could never register a worker and always reported registered=false.",
+  "resolution": "Allow service workers for the service worker update suite so registrations and cache checks run against a live service worker.",
+  "references": [
+    "frontend/playwright.config.ts",
+    "frontend/e2e/service-worker-update.spec.ts"
+  ]
+}

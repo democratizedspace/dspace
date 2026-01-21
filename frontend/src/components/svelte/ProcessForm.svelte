@@ -5,7 +5,7 @@
     import builtInItems from '../../pages/inventory/json/items';
     import { getMergedItemCatalog } from '../../utils/itemCatalog.js';
     import { durationInSeconds, prettyPrintDuration } from '../../utils.js';
-    import { createProcess, updateProcess } from '../../utils/customcontent.js';
+    import { createProcess, db, getProcess, updateProcess } from '../../utils/customcontent.js';
     import { validateProcessData } from '../../utils/customProcessValidation.js';
 
     export let title = '';
@@ -245,6 +245,24 @@
                     preparedProcess.consumeItems,
                     preparedProcess.createItems
                 );
+
+                let persistedProcess = null;
+                try {
+                    persistedProcess = await getProcess(createdId);
+                } catch (error) {
+                    console.warn('Unable to confirm persisted process after creation:', error);
+                }
+
+                if (!persistedProcess) {
+                    await db.processes.add({
+                        id: createdId,
+                        title: preparedProcess.title,
+                        duration: preparedProcess.duration,
+                        requireItems: preparedProcess.requireItems,
+                        consumeItems: preparedProcess.consumeItems,
+                        createItems: preparedProcess.createItems,
+                    });
+                }
 
                 duration = normalizedDuration;
                 requireItems = preparedProcess.requireItems;
