@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-playwright-service-worker-blocked",
+  "date": "2026-01-21",
+  "component": "frontend/e2e/service-worker-update",
+  "rootCause": "Playwright was configured to block service workers by default, so the service-worker-update specs asserted registration while Chromium intentionally prevented it.",
+  "resolution": "Enable service workers for the service-worker-update spec so registration and cache validation run under the intended browser behavior.",
+  "references": [
+    "frontend/e2e/service-worker-update.spec.ts",
+    "frontend/playwright.config.ts"
+  ]
+}

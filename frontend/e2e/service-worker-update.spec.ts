@@ -173,6 +173,8 @@ async function isPageStyled(page: Page) {
 }
 
 test.describe('Service Worker Update', () => {
+    test.use({ serviceWorkers: 'allow' });
+
     test.beforeEach(async ({ page }) => {
         await resetServiceWorkers(page);
         await clearUserData(page);

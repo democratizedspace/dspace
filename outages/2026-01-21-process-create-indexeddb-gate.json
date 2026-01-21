@@ -1,0 +1,10 @@
+{
+  "id": "2026-01-21-process-create-indexeddb-gate",
+  "date": "2026-01-21",
+  "component": "frontend/e2e/custom-content",
+  "rootCause": "The custom process e2e flow treated an IndexedDB lookup timeout as a hard failure when the success message was missing, even though the process could still render on the item detail page, causing premature test failures.",
+  "resolution": "Allow the test to fall back to UI validation on the item detail page when the IndexedDB lookup does not resolve, keeping the final visibility check as the source of truth for process creation.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}
