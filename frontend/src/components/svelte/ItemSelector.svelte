@@ -51,30 +51,32 @@
                 <SearchBar data={items} on:search={handleSearch} />
                 <div class="items-list" role="listbox">
                     {#each $filteredItems as item (item.id)}
-                        <button
-                            type="button"
-                            class="item-option"
-                            class:selected={selectedItemId === item.id}
-                            role="option"
-                            on:click={() => handleItemSelect(item.id)}
-                            on:touchstart={() => handleItemSelect(item.id)}
-                            aria-selected={selectedItemId === item.id}
-                            aria-label={`Select ${item.name}`}
-                        >
-                            <div class="item-content">
-                                {#if item.image}
-                                    <img src={item.image} alt={item.name} />
-                                {/if}
-                                <div class="item-info">
-                                    <h3>{item.name}</h3>
-                                    {#if item.description}
-                                        <p class="description">
-                                            {item.description}
-                                        </p>
+                        <div class="item-row">
+                            <button
+                                type="button"
+                                class="item-option"
+                                class:selected={selectedItemId === item.id}
+                                role="option"
+                                on:click={() => handleItemSelect(item.id)}
+                                on:touchstart={() => handleItemSelect(item.id)}
+                                aria-selected={selectedItemId === item.id}
+                                aria-label={`Select ${item.name}`}
+                            >
+                                <div class="item-content">
+                                    {#if item.image}
+                                        <img src={item.image} alt={item.name} />
                                     {/if}
+                                    <div class="item-info">
+                                        <h3>{item.name}</h3>
+                                        {#if item.description}
+                                            <p class="description">
+                                                {item.description}
+                                            </p>
+                                        {/if}
+                                    </div>
                                 </div>
-                            </div>
-                        </button>
+                            </button>
+                        </div>
                     {/each}
                 </div>
             </div>

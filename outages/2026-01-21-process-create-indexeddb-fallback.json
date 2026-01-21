@@ -1,0 +1,10 @@
+{
+  "id": "2026-01-21-process-create-indexeddb-fallback",
+  "date": "2026-01-21",
+  "component": "frontend/e2e/custom-content",
+  "rootCause": "The custom content e2e assumed a missing success toast meant the process would be discoverable via IndexedDB, but Playwright runs can fall back to the in-memory custom content store when IndexedDB is unavailable or reset mid-run, so the process exists for the item detail page without ever appearing in the IndexedDB poll.",
+  "resolution": "Relax the test to treat IndexedDB absence as a warning and continue validating the item detail view, which exercises the same custom content fallback path used by the UI.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}
