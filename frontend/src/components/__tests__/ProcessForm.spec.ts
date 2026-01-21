@@ -550,11 +550,11 @@ test('submits selected required item IDs after using the selector', async () => 
 
     await waitFor(() => {
         expect(createProcessMock).toHaveBeenCalledWith(
-            expect.objectContaining({
-                requireItems: [{ id: 'water', count: 1 }],
-                consumeItems: [],
-                createItems: [],
-            })
+            'Water process',
+            '1h',
+            [{ id: 'water', count: 1 }],
+            [],
+            []
         );
     });
 

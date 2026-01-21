@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-custom-content-prettier",
+  "date": "2026-01-21",
+  "component": "frontend/e2e",
+  "rootCause": "The custom content Playwright spec drifted from frontend Prettier formatting, causing the format check in CI to fail.",
+  "resolution": "Reformatted the custom content e2e spec with the frontend Prettier configuration so format checks pass.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts",
+    "frontend/.prettierrc"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-process-form-test-assertion",
+  "date": "2026-01-21",
+  "component": "frontend/tests",
+  "rootCause": "The ProcessForm spec asserted that createProcess received an object payload, but the component submits positional arguments, causing unit tests to fail.",
+  "resolution": "Aligned the ProcessForm test to expect positional createProcess arguments matching the component implementation.",
+  "references": [
+    "frontend/src/components/__tests__/ProcessForm.spec.ts",
+    "frontend/src/components/svelte/ProcessForm.svelte"
+  ]
+}

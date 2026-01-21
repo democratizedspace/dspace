@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-qa-docs-link-drift",
+  "date": "2026-01-21",
+  "component": "docs/qa",
+  "rootCause": "Prettier formatting in the custom content Playwright spec shifted line numbers, leaving the QA docs link to the custom quest test pointing at the wrong range.",
+  "resolution": "Updated the QA documentation link to the current line range for the custom quest test.",
+  "references": [
+    "docs/qa/v3.md",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

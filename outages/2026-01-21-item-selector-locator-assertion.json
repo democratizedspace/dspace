@@ -1,0 +1,12 @@
+{
+  "id": "2026-01-21-item-selector-locator-assertion",
+  "date": "2026-01-21",
+  "component": "tests",
+  "rootCause": "The item selector locator coverage test expected legacy item-row markup even though the component uses item-option classes, causing the locator alignment check to fail.",
+  "resolution": "Updated the locator coverage test to assert against item-option selectors and the current ItemSelector markup.",
+  "references": [
+    "tests/itemSelectorLocators.test.ts",
+    "frontend/src/components/svelte/ItemSelector.svelte",
+    "frontend/e2e/utils/itemSelectors.ts"
+  ]
+}
