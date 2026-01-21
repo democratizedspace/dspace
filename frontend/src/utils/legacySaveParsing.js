@@ -28,6 +28,13 @@ const hasLegacyShape = (candidate) =>
             ('inventory' in candidate || 'quests' in candidate || 'processes' in candidate)
     );
 
+const hasV3Metadata = (candidate) => {
+    if (!candidate || typeof candidate !== 'object') return false;
+    if (!('_meta' in candidate)) return false;
+    const meta = candidate._meta;
+    return Boolean(meta && typeof meta === 'object' && typeof meta.lastUpdated === 'number');
+};
+
 const sanitizeInventory = (inventory) => {
     if (!isPlainObject(inventory)) return {};
     const sanitized = {};
@@ -72,6 +79,9 @@ export const parseLegacyV2Raw = (raw) => {
         }
 
         const version = readLegacyVersion(candidate);
+        if (!isCurrentVersion(version) && hasV3Metadata(candidate)) {
+            return { state: null, isLegacy: false, error: null };
+        }
         const isLegacy =
             hasLegacyVersion(version) || (!isCurrentVersion(version) && hasLegacyShape(candidate));
 
