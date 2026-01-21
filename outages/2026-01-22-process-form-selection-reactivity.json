@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-22-process-form-selection-reactivity",
+  "date": "2026-01-22",
+  "component": "frontend/processes/create",
+  "rootCause": "Process form item selections updated nested objects in place, which intermittently left the selected item ID out of the validation payload and blocked process creation during E2E runs.",
+  "resolution": "Replace in-place mutations with immutable updates for the selected item IDs so validation and persistence consistently see the chosen items.",
+  "references": [
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}
