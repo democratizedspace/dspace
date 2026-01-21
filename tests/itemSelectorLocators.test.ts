@@ -9,7 +9,7 @@ describe('Item selector locator coverage', () => {
     const locatorBlob = ITEM_SELECTOR_OPTION_LOCATORS.join(' ');
 
     expect(locatorBlob).toMatch(/items-list/);
-    expect(locatorBlob).toMatch(/item-row/);
+    expect(locatorBlob).toMatch(/item-option/);
 
     const componentPath = path.join(
       process.cwd(),
@@ -22,6 +22,6 @@ describe('Item selector locator coverage', () => {
     const componentSource = fs.readFileSync(componentPath, 'utf8');
 
     expect(componentSource).toContain('.items-list');
-    expect(componentSource).toContain('class="item-row"');
+    expect(componentSource).toContain('class="item-option"');
   });
 });

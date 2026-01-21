@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-qa-docs-link-line-drift",
+  "date": "2026-01-21",
+  "component": "QA documentation link freshness",
+  "rootCause": "Prettier reflowed the custom content Playwright spec, shifting line numbers without updating the QA documentation line anchors.",
+  "resolution": "Updated the v3 QA doc link to target the new line range for the custom quest test.",
+  "references": [
+    "docs/qa/v3.md",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

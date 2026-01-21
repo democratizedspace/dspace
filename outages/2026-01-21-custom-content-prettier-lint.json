@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-custom-content-prettier-lint",
+  "date": "2026-01-21",
+  "component": "frontend lint/format checks",
+  "rootCause": "The e2e/custom-content.spec.ts file drifted from frontend Prettier rules, so the lint workflow failed during format:check.",
+  "resolution": "Reformatted the custom content Playwright spec with the frontend Prettier configuration to satisfy format checks.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts",
+    ".github/workflows/tests.yml"
+  ]
+}
