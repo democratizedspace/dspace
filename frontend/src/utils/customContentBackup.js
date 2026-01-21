@@ -363,10 +363,20 @@ function normalizeBackupData(raw) {
         throw new Error('Unsupported backup schema version.');
     }
 
-    const items = Array.isArray(raw.items) ? raw.items : null;
-    const processes = Array.isArray(raw.processes) ? raw.processes : null;
-    const quests = Array.isArray(raw.quests) ? raw.quests : null;
-    const images = Array.isArray(raw.images) ? raw.images : null;
+    const missingSections = {
+        items: raw.items === undefined,
+        processes: raw.processes === undefined,
+        quests: raw.quests === undefined,
+        images: raw.images === undefined,
+    };
+    const items = missingSections.items ? [] : Array.isArray(raw.items) ? raw.items : null;
+    const processes = missingSections.processes
+        ? []
+        : Array.isArray(raw.processes)
+          ? raw.processes
+          : null;
+    const quests = missingSections.quests ? [] : Array.isArray(raw.quests) ? raw.quests : null;
+    const images = missingSections.images ? [] : Array.isArray(raw.images) ? raw.images : null;
 
     if (!items || !processes || !quests || !images) {
         throw new Error('Invalid backup data.');
@@ -380,20 +390,44 @@ function normalizeBackupData(raw) {
         processes,
         quests,
         images,
+        missingSections,
+    };
+}
+
+function buildImportSummary({ items, processes, quests, images, missingSections }) {
+    const counts = {
+        items: items.length,
+        processes: processes.length,
+        quests: quests.length,
+        images: images.length,
+    };
+    const total = counts.items + counts.processes + counts.quests + counts.images;
+    const missing = Object.entries(missingSections ?? {})
+        .filter(([, isMissing]) => isMissing)
+        .map(([section]) => section);
+    const missingLabel =
+        missing.length > 0 ? `Skipped ${missing.join(', ')} (not included in backup).` : '';
+    const countsLabel = [
+        `Items: ${counts.items}`,
+        `Processes: ${counts.processes}`,
+        `Quests: ${counts.quests}`,
+        `Images: ${counts.images}`,
+    ].join(', ');
+    const message =
+        total === 0
+            ? `Backup contains no importable content. ${countsLabel}. ${missingLabel}`.trim()
+            : `Import complete. ${countsLabel}. ${missingLabel}`.trim();
+
+    return {
+        total,
+        counts,
+        missing,
+        message,
     };
 }
 
 function buildImportPlan(items, processes, quests, images) {
     const assets = [];
-
-    images.forEach((image) => {
-        const name = image?.entityId ?? 'unknown';
-        assets.push({
-            id: `image:${image.entityType}:${image.entityId}`,
-            kind: 'image',
-            label: `Image: ${name}`,
-        });
-    });
 
     items.forEach((item) => {
         assets.push({
@@ -419,6 +453,15 @@ function buildImportPlan(items, processes, quests, images) {
             kind: 'quest',
             label: formatAssetLabel('quest', quest),
             entity: quest,
+        });
+    });
+
+    images.forEach((image) => {
+        const name = image?.entityId ?? 'unknown';
+        assets.push({
+            id: `image:${image.entityType}:${image.entityId}`,
+            kind: 'image',
+            label: `Image: ${name}`,
         });
     });
 
@@ -470,6 +513,13 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
     const processes = normalized.processes.map((process) => sanitizeEntity(process));
     const quests = normalized.quests.map((quest) => sanitizeEntity(quest));
     const images = normalized.images;
+    const summary = buildImportSummary({
+        items,
+        processes,
+        quests,
+        images,
+        missingSections: normalized.missingSections,
+    });
 
     await ensureCustomContentSchema();
 
@@ -557,6 +607,7 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
         processes: processes.length,
         quests: quests.length,
         images: images.length,
+        summary,
     };
 }
 

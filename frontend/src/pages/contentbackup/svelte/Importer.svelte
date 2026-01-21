@@ -65,7 +65,7 @@
         assets = [];
 
         try {
-            await restoreCustomContentBackupFromFile(file, {
+            const result = await restoreCustomContentBackupFromFile(file, {
                 onProgress: (event) => {
                     if (event.type === 'plan') {
                         assets = event.assets.map((asset) => ({
@@ -84,7 +84,7 @@
             });
 
             status = 'success';
-            message = 'Import complete';
+            message = result?.summary?.message ?? 'Import complete';
             successFilename = file.name;
         } catch (error) {
             status = 'error';
