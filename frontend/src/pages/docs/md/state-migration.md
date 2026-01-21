@@ -9,8 +9,10 @@ DSPACE v3 stores quests, inventory and processes in IndexedDB instead of `localS
 On first launch, the app checks for the legacy `gameState` key in `localStorage`. If it
 exists and no IndexedDB data has been saved yet, the `importV2V3` helper copies the old
 state into IndexedDB and clears the legacy keys. The migration runs automatically and
-needs no manual action. If IndexedDB is unavailable, the game falls back to
-`localStorage` and warns the player that storage space will be limited.
+needs no manual action. Automatic migration does not grant the v2 upgrade trophy; that
+award is only granted when the player explicitly upgrades via the settings flow. If
+IndexedDB is unavailable, the game falls back to `localStorage` and warns the player
+that storage space will be limited.
 
 > **Note:** New persistence features should favor IndexedDB end-to-end. Use
 > `localStorage` strictly as a resilience fallback when IndexedDB cannot be

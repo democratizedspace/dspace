@@ -262,10 +262,12 @@
         }
         await withStatus(mode === 'replace' ? 'replace-v2' : 'merge-v2', async () => {
             if (mode === 'replace') {
-                await importV2V3(detection.pendingLocalState);
+                await importV2V3(detection.pendingLocalState, { awardTrophy: true });
                 statusMessage = 'Replaced the current save with migrated v2 data.';
             } else {
-                await mergeLegacyStateIntoCurrent(detection.pendingLocalState);
+                await mergeLegacyStateIntoCurrent(detection.pendingLocalState, {
+                    awardTrophy: true,
+                });
                 statusMessage =
                     'Merged compatible legacy v2 data into your current save. Inventory was ' +
                     'combined; existing quests and processes were kept.';

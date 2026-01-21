@@ -234,9 +234,10 @@ export const importV1V3 = async (itemList, options = {}) => {
 };
 
 // v2 -> v3
-export const importV2V3 = async (legacyState) => {
+export const importV2V3 = async (legacyState, options = {}) => {
     // Only run in browser environment
     if (!isBrowser) return null;
+    const { awardTrophy = false } = options;
 
     let migrated = legacyState;
     if (!migrated) {
@@ -250,12 +251,15 @@ export const importV2V3 = async (legacyState) => {
     }
     if (!migrated) return null;
     const normalized = validateGameState(structuredClone(normalizeLegacyV2State(migrated)));
-    grantTrophyIfMissing(normalized, LEGACY_V2_UPGRADE_TROPHY_ID);
+    if (awardTrophy) {
+        grantTrophyIfMissing(normalized, LEGACY_V2_UPGRADE_TROPHY_ID);
+    }
     return persistMigratedState(normalized);
 };
 
-export const mergeLegacyStateIntoCurrent = async (legacyState) => {
+export const mergeLegacyStateIntoCurrent = async (legacyState, options = {}) => {
     if (!isBrowser || !legacyState || typeof legacyState !== 'object') return null;
+    const { awardTrophy = false } = options;
 
     const current = validateGameState(loadGameState());
     const incoming = validateGameState(structuredClone(normalizeLegacyV2State(legacyState)));
@@ -287,7 +291,9 @@ export const mergeLegacyStateIntoCurrent = async (legacyState) => {
         ...normalizeSettings(incoming.settings),
     });
 
-    grantTrophyIfMissing(merged, LEGACY_V2_UPGRADE_TROPHY_ID);
+    if (awardTrophy) {
+        grantTrophyIfMissing(merged, LEGACY_V2_UPGRADE_TROPHY_ID);
+    }
 
     return persistMigratedState(merged);
 };
@@ -295,7 +301,7 @@ export const mergeLegacyStateIntoCurrent = async (legacyState) => {
 // Auto-migrate legacy v2 state on first v3 load when localStorage data is present.
 try {
     if (isBrowser && localStorage.getItem('gameState')) {
-        importV2V3();
+        importV2V3(undefined, { awardTrophy: false });
     }
 } catch {
     /* ignore */
