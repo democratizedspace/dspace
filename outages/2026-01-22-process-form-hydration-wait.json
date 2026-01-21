@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-22-process-form-hydration-wait",
+  "date": "2026-01-22",
+  "component": "frontend/e2e/hydration",
+  "rootCause": "The hydration helper only checked for existing data-hydrated=true elements, so when the page initially rendered data-hydrated=\"false\" and later hydrated, tests could interact before Svelte event handlers were attached, preventing process creation from reaching IndexedDB.",
+  "resolution": "Wait until at least one data-hydrated marker flips to true (or none exist) before proceeding so e2e steps run after client hydration.",
+  "references": [
+    "frontend/e2e/test-helpers.ts",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

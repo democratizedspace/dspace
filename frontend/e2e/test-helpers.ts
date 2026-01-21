@@ -893,10 +893,15 @@ export async function waitForHydration(page: Page, target?: string): Promise<voi
         return;
     }
 
-    const hydratedMarker = page.locator('[data-hydrated="true"]');
-    if ((await hydratedMarker.count()) > 0) {
-        await expect(hydratedMarker.first()).toBeVisible();
-    }
+    await page.waitForFunction(() => {
+        const hydratedNodes = document.querySelectorAll('[data-hydrated]');
+        if (hydratedNodes.length === 0) {
+            return true;
+        }
+        return Array.from(hydratedNodes).some(
+            (node) => node.getAttribute('data-hydrated') === 'true'
+        );
+    });
 }
 
 export async function enableQuestGraphVisualizer(page: Page): Promise<void> {
