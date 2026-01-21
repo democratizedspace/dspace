@@ -28,6 +28,9 @@ const hasLegacyShape = (candidate) =>
             ('inventory' in candidate || 'quests' in candidate || 'processes' in candidate)
     );
 
+const hasV3Metadata = (candidate) =>
+    Boolean(candidate?._meta && typeof candidate._meta.lastUpdated === 'number');
+
 const sanitizeInventory = (inventory) => {
     if (!isPlainObject(inventory)) return {};
     const sanitized = {};
@@ -68,6 +71,10 @@ export const parseLegacyV2Raw = (raw) => {
                 : parsed;
 
         if (!isPlainObject(candidate)) {
+            return { state: null, isLegacy: false, error: null };
+        }
+
+        if (hasV3Metadata(candidate)) {
             return { state: null, isLegacy: false, error: null };
         }
 
