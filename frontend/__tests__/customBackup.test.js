@@ -2,12 +2,21 @@
  * @jest-environment jsdom
  */
 import 'fake-indexeddb/auto';
+import fs from 'fs';
+import path from 'path';
 import { db } from '../src/utils/customcontent.js';
 import {
     BACKUP_SCHEMA_VERSION,
     buildCustomContentBackupData,
     restoreCustomContentBackup,
 } from '../src/utils/customContentBackup.js';
+
+const fixturesDir = path.join(__dirname, '../tests/fixtures');
+
+const readFixture = (filename) => {
+    const contents = fs.readFileSync(path.join(fixturesDir, filename), 'utf8');
+    return JSON.parse(contents);
+};
 
 describe('custom content backup', () => {
     test('export and import round trip', async () => {
@@ -52,9 +61,10 @@ describe('custom content backup', () => {
             quests: [],
             images: [],
         };
-        await restoreCustomContentBackup(empty);
+        const result = await restoreCustomContentBackup(empty);
         const items = await db.list('item');
         expect(items).toEqual([]);
+        expect(result.message).toContain('0 entities');
     });
 
     test('export returns schema data', async () => {
@@ -127,5 +137,36 @@ describe('custom content backup', () => {
 
         const items = await db.list('item');
         expect(items).toEqual([]);
+    });
+
+    test('imports item-only backups with images', async () => {
+        await indexedDB.deleteDatabase('CustomContent');
+        const backup = readFixture('custom-content-backup-item-only.json');
+
+        const result = await restoreCustomContentBackup(backup);
+
+        expect(result.items).toBe(1);
+        expect(result.processes).toBe(0);
+        expect(result.images).toBe(1);
+
+        const imported = await db.items.get('custom-item-only');
+        expect(imported?.name).toBe('Custom item only');
+        expect(imported?.image).toContain('data:image/jpeg;base64');
+    });
+
+    test('imports backups that include processes', async () => {
+        await indexedDB.deleteDatabase('CustomContent');
+        const backup = readFixture('custom-content-backup-with-process.json');
+
+        const result = await restoreCustomContentBackup(backup);
+
+        expect(result.items).toBe(1);
+        expect(result.processes).toBe(1);
+        expect(result.images).toBe(1);
+
+        const item = await db.items.get('custom-item-with-process');
+        const process = await db.processes.get('process-1');
+        expect(item?.name).toBe('Custom item with process');
+        expect(process?.title).toBe('Fixture process');
     });
 });

@@ -363,14 +363,22 @@ function normalizeBackupData(raw) {
         throw new Error('Unsupported backup schema version.');
     }
 
-    const items = Array.isArray(raw.items) ? raw.items : null;
-    const processes = Array.isArray(raw.processes) ? raw.processes : null;
-    const quests = Array.isArray(raw.quests) ? raw.quests : null;
-    const images = Array.isArray(raw.images) ? raw.images : null;
+    const missingSections = [];
+    const readArray = (value, label) => {
+        if (value === undefined) {
+            missingSections.push(label);
+            return [];
+        }
+        if (!Array.isArray(value)) {
+            throw new Error('Invalid backup data.');
+        }
+        return value;
+    };
 
-    if (!items || !processes || !quests || !images) {
-        throw new Error('Invalid backup data.');
-    }
+    const items = readArray(raw.items, 'items');
+    const processes = readArray(raw.processes, 'processes');
+    const quests = readArray(raw.quests, 'quests');
+    const images = readArray(raw.images, 'images');
 
     return {
         schemaVersion: raw.schemaVersion,
@@ -380,20 +388,12 @@ function normalizeBackupData(raw) {
         processes,
         quests,
         images,
+        missingSections,
     };
 }
 
 function buildImportPlan(items, processes, quests, images) {
     const assets = [];
-
-    images.forEach((image) => {
-        const name = image?.entityId ?? 'unknown';
-        assets.push({
-            id: `image:${image.entityType}:${image.entityId}`,
-            kind: 'image',
-            label: `Image: ${name}`,
-        });
-    });
 
     items.forEach((item) => {
         assets.push({
@@ -422,7 +422,41 @@ function buildImportPlan(items, processes, quests, images) {
         });
     });
 
+    images.forEach((image) => {
+        const name = image?.entityId ?? 'unknown';
+        assets.push({
+            id: `image:${image.entityType}:${image.entityId}`,
+            kind: 'image',
+            label: `Image: ${name}`,
+        });
+    });
+
     return assets;
+}
+
+function buildImportSummary({ items, processes, quests, images, missingSections }) {
+    const totals = {
+        items,
+        processes,
+        quests,
+        images,
+    };
+    const totalCount = Object.values(totals).reduce((sum, value) => sum + value, 0);
+    const sectionSummary = `items=${items}, processes=${processes}, quests=${quests}, images=${images}`;
+    const missingSummary =
+        missingSections.length > 0
+            ? ` Missing sections defaulted to empty: ${missingSections.join(', ')}.`
+            : '';
+
+    if (totalCount === 0) {
+        return `Backup import finished with 0 entities (${sectionSummary}).${missingSummary}`;
+    }
+
+    if (missingSections.length > 0) {
+        return `Backup import finished (${sectionSummary}).${missingSummary}`;
+    }
+
+    return null;
 }
 
 function assertEntityHasId(entity, label) {
@@ -552,11 +586,20 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
         dbInstance.close();
     }
 
+    const summaryMessage = buildImportSummary({
+        items: items.length,
+        processes: processes.length,
+        quests: quests.length,
+        images: images.length,
+        missingSections: normalized.missingSections,
+    });
+
     return {
         items: items.length,
         processes: processes.length,
         quests: quests.length,
         images: images.length,
+        message: summaryMessage,
     };
 }
 
