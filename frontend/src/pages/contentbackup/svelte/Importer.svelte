@@ -11,6 +11,45 @@
     let successFilename = '';
     let isDragging = false;
 
+    const formatCount = (label, count) => `${label}: ${count}`;
+
+    const formatImportSummary = (summary) => {
+        const items = summary?.items ?? 0;
+        const processes = summary?.processes ?? 0;
+        const quests = summary?.quests ?? 0;
+        const images = summary?.images ?? 0;
+        const total = summary?.total ?? items + processes + quests + images;
+
+        if (total === 0) {
+            return {
+                message:
+                    'Nothing to import. The backup contains 0 items, 0 processes, 0 quests, and 0 images.',
+                total,
+            };
+        }
+
+        const summaryParts = [
+            formatCount('Items', items),
+            formatCount('Processes', processes),
+            formatCount('Quests', quests),
+            formatCount('Images', images),
+        ];
+
+        const missing = [];
+        if (items === 0) missing.push('items');
+        if (processes === 0) missing.push('processes');
+        if (quests === 0) missing.push('quests');
+        if (images === 0) missing.push('images');
+
+        const missingMessage =
+            missing.length > 0 ? ` No ${missing.join(', ')} found in the backup.` : '';
+
+        return {
+            message: `Import complete. ${summaryParts.join(', ')}.${missingMessage}`,
+            total,
+        };
+    };
+
     $: statusMessage =
         status === 'running'
             ? 'Importing…'
@@ -65,7 +104,7 @@
         assets = [];
 
         try {
-            await restoreCustomContentBackupFromFile(file, {
+            const summary = await restoreCustomContentBackupFromFile(file, {
                 onProgress: (event) => {
                     if (event.type === 'plan') {
                         assets = event.assets.map((asset) => ({
@@ -84,7 +123,7 @@
             });
 
             status = 'success';
-            message = 'Import complete';
+            message = formatImportSummary(summary).message;
             successFilename = file.name;
         } catch (error) {
             status = 'error';

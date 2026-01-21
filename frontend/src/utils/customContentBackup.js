@@ -64,6 +64,36 @@ function formatAssetLabel(kind, entity) {
     }
 }
 
+function normalizeBackupArray(value, label) {
+    if (value == null) {
+        return [];
+    }
+    if (!Array.isArray(value)) {
+        throw new Error(`Invalid ${label} data in backup.`);
+    }
+    return value;
+}
+
+function buildEntityMap(entities) {
+    const map = new Map();
+    entities.forEach((entity) => {
+        if (!entity || (typeof entity.id !== 'string' && typeof entity.id !== 'number')) {
+            return;
+        }
+        map.set(entity.id, entity);
+        if (typeof entity.id === 'number') {
+            map.set(String(entity.id), entity);
+        }
+        if (typeof entity.id === 'string') {
+            const parsed = Number(entity.id);
+            if (!Number.isNaN(parsed)) {
+                map.set(parsed, entity);
+            }
+        }
+    });
+    return map;
+}
+
 function buildBackupPlan(items, processes, quests) {
     const assets = [];
 
@@ -363,14 +393,10 @@ function normalizeBackupData(raw) {
         throw new Error('Unsupported backup schema version.');
     }
 
-    const items = Array.isArray(raw.items) ? raw.items : null;
-    const processes = Array.isArray(raw.processes) ? raw.processes : null;
-    const quests = Array.isArray(raw.quests) ? raw.quests : null;
-    const images = Array.isArray(raw.images) ? raw.images : null;
-
-    if (!items || !processes || !quests || !images) {
-        throw new Error('Invalid backup data.');
-    }
+    const items = normalizeBackupArray(raw.items, 'items');
+    const processes = normalizeBackupArray(raw.processes, 'processes');
+    const quests = normalizeBackupArray(raw.quests, 'quests');
+    const images = normalizeBackupArray(raw.images, 'images');
 
     return {
         schemaVersion: raw.schemaVersion,
@@ -473,8 +499,8 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
 
     await ensureCustomContentSchema();
 
-    const itemMap = new Map(items.map((item) => [item.id, item]));
-    const questMap = new Map(quests.map((quest) => [quest.id, quest]));
+    const itemMap = buildEntityMap(items);
+    const questMap = buildEntityMap(quests);
 
     items.forEach((item) => assertEntityHasId(item, 'item'));
     processes.forEach((process) => assertEntityHasId(process, 'process'));
@@ -552,12 +578,13 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
         dbInstance.close();
     }
 
-    return {
+    const result = {
         items: items.length,
         processes: processes.length,
         quests: quests.length,
         images: images.length,
     };
+    return { ...result, total: Object.values(result).reduce((sum, value) => sum + value, 0) };
 }
 
 export async function restoreCustomContentBackupFromFile(file, options = {}) {

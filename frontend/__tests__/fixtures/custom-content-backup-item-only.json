@@ -1,0 +1,27 @@
+{
+    "schemaVersion": 1,
+    "timestamp": "2026-01-21T00:04:11.000Z",
+    "counts": {
+        "items": 1,
+        "processes": 0,
+        "quests": 0,
+        "images": 1
+    },
+    "items": [
+        {
+            "id": "fixture-item-1",
+            "name": "Fixture Item",
+            "description": "Fixture item used for import regression coverage."
+        }
+    ],
+    "processes": [],
+    "quests": [],
+    "images": [
+        {
+            "id": "item:fixture-item-1:image",
+            "entityType": "item",
+            "entityId": "fixture-item-1",
+            "dataUrl": "data:image/jpeg;base64,TEST"
+        }
+    ]
+}

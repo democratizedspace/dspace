@@ -2,12 +2,23 @@
  * @jest-environment jsdom
  */
 import 'fake-indexeddb/auto';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { db } from '../src/utils/customcontent.js';
 import {
     BACKUP_SCHEMA_VERSION,
     buildCustomContentBackupData,
     restoreCustomContentBackup,
 } from '../src/utils/customContentBackup.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const ITEM_ONLY_FIXTURE_PATH = path.join(
+    __dirname,
+    'fixtures',
+    'custom-content-backup-item-only.json'
+);
 
 describe('custom content backup', () => {
     test('export and import round trip', async () => {
@@ -55,6 +66,22 @@ describe('custom content backup', () => {
         await restoreCustomContentBackup(empty);
         const items = await db.list('item');
         expect(items).toEqual([]);
+    });
+
+    test('imports item-only backup fixtures', async () => {
+        const fixture = JSON.parse(readFileSync(ITEM_ONLY_FIXTURE_PATH, 'utf8'));
+
+        const result = await restoreCustomContentBackup(fixture);
+
+        expect(result.items).toBe(1);
+        expect(result.processes).toBe(0);
+        expect(result.quests).toBe(0);
+        expect(result.images).toBe(1);
+        expect(result.total).toBe(2);
+
+        const imported = await db.items.get('fixture-item-1');
+        expect(imported?.name).toBe('Fixture Item');
+        expect(imported?.image).toBe('data:image/jpeg;base64,TEST');
     });
 
     test('export returns schema data', async () => {
