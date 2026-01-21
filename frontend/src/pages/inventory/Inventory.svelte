@@ -23,20 +23,24 @@
         const mergedItems = await getMergedItemCatalog({ builtInItems });
         fullItemList = mergedItems;
 
-        // Initialize allItems with all available items from the items list
-        allItems = mergedItems.reduce((acc, item) => {
-            acc[item.id] = {
-                count: $state.inventory[item.id] ? $state.inventory[item.id].count : 0,
-            };
-            return acc;
-        }, {});
     });
+
+    const getPositiveInventory = (inventory) => {
+        return Object.fromEntries(
+            Object.entries(inventory ?? {}).filter(([, count]) => Number(count) > 0)
+        );
+    };
 
     // Reactive statement to update inventory when showAllItems or isClientSide changes
     // The block ensures reactivity tracks both variables
     $: {
         if (isClientSide) {
-            currentInventory = showAllItems ? allItems : $state.inventory;
+            allItems = fullItemList.reduce((acc, item) => {
+                acc[item.id] = Number($state.inventory[item.id]) || 0;
+                return acc;
+            }, {});
+
+            currentInventory = showAllItems ? allItems : getPositiveInventory($state.inventory);
         }
     }
 </script>
