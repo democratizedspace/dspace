@@ -45,8 +45,9 @@
     });
 
     $: if (isClientSide) {
+        const inventory = $state.inventory;
         allItems = fullItemList.reduce((acc, item) => {
-            acc[item.id] = getInventoryCount($state.inventory[item.id]);
+            acc[item.id] = getInventoryCount(inventory[item.id]);
             return acc;
         }, {});
     }
@@ -55,7 +56,7 @@
     // The block ensures reactivity tracks both variables
     $: {
         if (isClientSide) {
-            currentInventory = showAllItems ? allItems : getNonZeroInventory($state.inventory);
+            currentInventory = showAllItems ? allItems : getNonZeroInventory(allItems);
         }
     }
 </script>
