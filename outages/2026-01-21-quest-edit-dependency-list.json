@@ -1,0 +1,12 @@
+{
+  "id": "2026-01-21-quest-edit-dependency-list",
+  "date": "2026-01-21",
+  "component": "frontend/quests/editor",
+  "rootCause": "The edit quest route did not preload the built-in quest list, so the dependency selector and validation only saw the currently edited custom quest from IndexedDB, treating other dependencies as unknown.",
+  "resolution": "Load the canonical quest catalog for the edit route and filter dependency options to exclude the current quest while validating against the full list.",
+  "references": [
+    "frontend/src/pages/quests/[id]/edit.astro",
+    "frontend/src/components/svelte/QuestForm.svelte",
+    "frontend/src/components/__tests__/QuestForm.spec.ts"
+  ]
+}

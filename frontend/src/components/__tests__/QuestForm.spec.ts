@@ -1,6 +1,7 @@
 import { render, fireEvent, waitFor } from '@testing-library/svelte';
 import { vi } from 'vitest';
 import QuestForm from '../svelte/QuestForm.svelte';
+import { db } from '../../utils/customcontent.js';
 
 vi.mock('../../utils/imageDownsample.js', () => ({
     downsampleAndCompressToJpeg: vi.fn().mockResolvedValue({
@@ -80,4 +81,48 @@ test('replaces the default finish option when adding a custom finish option', as
     const optionInputsAfter = getAllByLabelText(/^Text$/i);
     expect(optionInputsAfter).toHaveLength(1);
     expect((optionInputsAfter[0] as HTMLInputElement).value).toBe('Complete mission');
+});
+
+test('excludes the current quest from requirement options during edit', async () => {
+    const currentQuestId = 'custom-quest-1';
+    await db.quests.add({
+        id: currentQuestId,
+        title: 'Current Quest',
+        description: 'A quest being edited.',
+        image: '/assets/quests/howtodoquests.jpg',
+        npc: '/assets/npc/dChat.jpg',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'Hello!',
+                options: [{ type: 'finish', text: 'Finish quest' }],
+            },
+        ],
+        requiresQuests: ['alpha-quest'],
+    });
+
+    const existingQuests = [
+        { id: 'alpha-quest', title: 'Alpha Quest' },
+        { id: 'beta-quest', title: 'Beta Quest' },
+    ];
+
+    const { getByLabelText, queryByText } = render(QuestForm, {
+        props: {
+            isEdit: true,
+            questId: currentQuestId,
+            existingQuests,
+        },
+    });
+
+    await waitFor(() => {
+        expect(queryByText('Unknown quest dependency')).toBeNull();
+    });
+
+    const requirementsSelect = getByLabelText(/Quest Requirements/i) as HTMLSelectElement;
+    const optionLabels = Array.from(requirementsSelect.options).map((option) => option.textContent);
+
+    expect(optionLabels).toContain('Alpha Quest');
+    expect(optionLabels).toContain('Beta Quest');
+    expect(optionLabels).not.toContain('Current Quest');
 });

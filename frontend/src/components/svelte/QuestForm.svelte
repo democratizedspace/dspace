@@ -46,6 +46,7 @@
     const MIN_DESC_LENGTH = 10;
 
     let touched = { title: false, description: false };
+    let dependencyQuests = [];
 
     const dispatch = createEventDispatcher();
 
@@ -154,6 +155,16 @@
     if (dialogueNodes.length === 0) {
         dialogueNodes = [createDialogueNodeState()];
     }
+
+    function getDependencyQuests(quests = []) {
+        if (!isEdit || !questId) {
+            return quests;
+        }
+
+        return quests.filter((quest) => String(quest.id) !== String(questId));
+    }
+
+    $: dependencyQuests = getDependencyQuests(allQuests);
 
     // If in edit mode, load the quest data
     onMount(async () => {
@@ -757,7 +768,7 @@
             payload.requiresQuests.length > 0 &&
             !validateQuestDependencies(
                 payload.requiresQuests,
-                allQuests.map((q) => q.id)
+                dependencyQuests.map((quest) => quest.id)
             )
         ) {
             errors.requiresQuests = 'Unknown quest dependency';
@@ -922,7 +933,7 @@
     <div class="form-group">
         <label for="requires">Quest Requirements</label>
         <select id="requires" multiple on:change={handleRequirementsChange}>
-            {#each allQuests as q}
+            {#each dependencyQuests as q}
                 <option value={q.id} selected={requiresQuests.includes(q.id)}>
                     {q.title}
                 </option>
