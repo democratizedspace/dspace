@@ -14,6 +14,7 @@ const LS_BACKUP_KEY = 'gameStateBackup';
 const META_KEY = '_meta';
 const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
+const CURRENT_VERSION = '3';
 const isDev = Boolean(import.meta?.env?.DEV);
 
 const logPersistenceIssue = (message, error) => {
@@ -216,6 +217,7 @@ const initializeGameState = () => ({
     inventory: {},
     processes: {},
     settings: { ...DEFAULT_SETTINGS },
+    versionNumberString: CURRENT_VERSION,
     [META_KEY]: { lastUpdated: Date.now() },
 });
 
@@ -243,6 +245,9 @@ export const validateGameState = (state) => {
     }
     if (typeof state.processes !== 'object' || state.processes === null) {
         state.processes = {};
+    }
+    if (typeof state.versionNumberString !== 'string' || !state.versionNumberString) {
+        state.versionNumberString = CURRENT_VERSION;
     }
     state.settings = normalizeSettings(state.settings);
     ensureMeta(state);

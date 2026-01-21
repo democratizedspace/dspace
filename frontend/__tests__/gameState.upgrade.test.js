@@ -156,6 +156,21 @@ describe('game state upgrades', () => {
         expect(migrated.openAI).toBeUndefined();
     });
 
+    test('v3 localStorage saves are not treated as legacy v2 upgrades', async () => {
+        await saveGameState({
+            inventory: { alpha: 1 },
+            quests: { current: { finished: true } },
+            processes: {},
+            _meta: { lastUpdated: Date.now() },
+        });
+
+        const inspection = await inspectGameStateStorage();
+
+        expect(inspection.localStorageState.versionNumberString).toBe(VERSIONS.V3);
+        expect(inspection.hasLegacyV2Keys).toBe(false);
+        expect(inspection.legacyV2State).toBeNull();
+    });
+
     test('inspectGameStateStorage detects legacy v2 localStorage state', async () => {
         localStorage.setItem('gameState', JSON.stringify({ inventory: { 1: 1 } }));
 

@@ -469,6 +469,8 @@ copy/pastable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
   (v3: `detectLegacyArtifacts` + `LegacySaveUpgrade`.)  
   `frontend/src/utils/legacySaveDetection.ts`  
   `frontend/src/components/svelte/LegacySaveUpgrade.svelte`
+- **v3 saves:** current v3 state writes `versionNumberString = "3"` to localStorage so fresh v3
+  sessions are not misclassified as legacy v2 data during detection.
 - **Merge:** `mergeLegacyStateIntoCurrent` adds positive inventory counts, fills missing
   quest/process entries, merges settings (incoming values override current ones), grants the v2
   upgrade trophy, and persists the merged state via `persistMigratedState`.  
