@@ -45,7 +45,7 @@
     });
 
     $: if (isClientSide) {
-        const inventory = $state.inventory;
+        const inventory = $state.inventory ?? {};
         allItems = fullItemList.reduce((acc, item) => {
             acc[item.id] = getInventoryCount(inventory[item.id]);
             return acc;
