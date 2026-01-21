@@ -1,6 +1,7 @@
 import { render, fireEvent, waitFor } from '@testing-library/svelte';
 import { vi } from 'vitest';
 import QuestForm from '../svelte/QuestForm.svelte';
+import { db } from '../../utils/customcontent.js';
 import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
 
 vi.mock('../../utils/imageDownsample.js', () => ({
@@ -112,4 +113,78 @@ test('excludes the current quest from requirements while editing', async () => {
         const optionValues = Array.from(requirementsSelect.options).map((option) => option.value);
         expect(optionValues).toEqual(['quest-2']);
     });
+});
+
+test('filters self dependencies during edit mode validation', async () => {
+    const questId = 'quest-self';
+    const questData = {
+        id: questId,
+        title: 'Self Quest',
+        description: 'A description long enough.',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'Start',
+                options: [{ type: 'finish', text: 'Finish quest' }],
+            },
+        ],
+        requiresQuests: [questId, 'quest-other'],
+    };
+    await db.quests.add(questData);
+
+    const existingQuests = [
+        { id: questId, title: 'Self Quest' },
+        { id: 'quest-other', title: 'Other Quest' },
+    ];
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce(existingQuests);
+
+    const { getByLabelText, queryByText } = render(QuestForm, {
+        props: {
+            existingQuests,
+            isEdit: true,
+            questId,
+        },
+    });
+
+    const requirementsSelect = getByLabelText(/Quest Requirements/i) as HTMLSelectElement;
+
+    await waitFor(() => {
+        const optionValues = Array.from(requirementsSelect.options).map((option) => option.value);
+        expect(optionValues).toEqual(['quest-other']);
+        expect(queryByText('Unknown quest dependency')).toBeNull();
+    });
+});
+
+test('shows an error for unknown quest dependencies', async () => {
+    const questId = 'quest-invalid';
+    await db.quests.add({
+        id: questId,
+        title: 'Invalid Quest',
+        description: 'A description long enough.',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'Start',
+                options: [{ type: 'finish', text: 'Finish quest' }],
+            },
+        ],
+        requiresQuests: ['missing-quest'],
+    });
+
+    const existingQuests = [{ id: 'quest-valid', title: 'Valid Quest' }];
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce(existingQuests);
+
+    const { findByText } = render(QuestForm, {
+        props: {
+            existingQuests,
+            isEdit: true,
+            questId,
+        },
+    });
+
+    await findByText('Unknown quest dependency');
 });
