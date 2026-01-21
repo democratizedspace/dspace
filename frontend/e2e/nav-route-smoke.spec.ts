@@ -14,6 +14,7 @@ const TOP_NAV_ROUTES = [
 ];
 
 const MORE_MENU_ROUTES = [
+    '/processes',
     '/settings',
     '/cloudsync',
     '/stats',
