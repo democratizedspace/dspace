@@ -75,10 +75,10 @@ describe('game state upgrades', () => {
         expect(state.quests.legacy.finished).toBe(true);
         expect(state.processes.active.progress).toBe(50);
         expect(state.processes.extra.status).toBe('running');
-        expect(state.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBe(1);
+        expect(state.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBeUndefined();
     });
 
-    test('importV2V3 awards V2 Upgrade Trophy when migrating legacy state', async () => {
+    test('importV2V3 does not award V2 Upgrade Trophy without explicit upgrade', async () => {
         localStorage.setItem(
             'gameState',
             JSON.stringify({
@@ -89,12 +89,28 @@ describe('game state upgrades', () => {
 
         const migrated = await importV2V3();
 
+        expect(migrated.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBeUndefined();
+        const state = loadGameState();
+        expect(state.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBeUndefined();
+    });
+
+    test('importV2V3 awards V2 Upgrade Trophy when explicitly upgrading', async () => {
+        localStorage.setItem(
+            'gameState',
+            JSON.stringify({
+                inventory: { 1: 3 },
+                quests: { q1: { finished: true } },
+            })
+        );
+
+        const migrated = await importV2V3(undefined, { grantUpgradeTrophy: true });
+
         expect(migrated.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBe(1);
         const state = loadGameState();
         expect(state.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBe(1);
     });
 
-    test('mergeLegacyStateIntoCurrent awards V2 Upgrade Trophy when merging', async () => {
+    test('mergeLegacyStateIntoCurrent awards V2 Upgrade Trophy when explicitly upgrading', async () => {
         await saveGameState({
             inventory: { alpha: 1 },
             quests: { current: { finished: true } },
@@ -102,11 +118,14 @@ describe('game state upgrades', () => {
             _meta: { lastUpdated: Date.now() },
         });
 
-        const merged = await mergeLegacyStateIntoCurrent({
-            inventory: { alpha: 2, beta: 1 },
-            quests: { legacy: { finished: true } },
-            processes: {},
-        });
+        const merged = await mergeLegacyStateIntoCurrent(
+            {
+                inventory: { alpha: 2, beta: 1 },
+                quests: { legacy: { finished: true } },
+                processes: {},
+            },
+            { grantUpgradeTrophy: true }
+        );
 
         expect(merged.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBe(1);
         const state = loadGameState();

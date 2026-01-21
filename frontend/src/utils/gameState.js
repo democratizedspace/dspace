@@ -177,6 +177,10 @@ const grantTrophyIfMissing = (state, trophyId) => {
     }
 };
 
+const resolveUpgradeOptions = (options = {}) => ({
+    grantUpgradeTrophy: Boolean(options.grantUpgradeTrophy),
+});
+
 const persistMigratedState = async (state) => {
     const migrated = validateGameState(structuredClone(state));
     migrated.versionNumberString = VERSIONS.V3;
@@ -234,9 +238,10 @@ export const importV1V3 = async (itemList, options = {}) => {
 };
 
 // v2 -> v3
-export const importV2V3 = async (legacyState) => {
+export const importV2V3 = async (legacyState, options = {}) => {
     // Only run in browser environment
     if (!isBrowser) return null;
+    const { grantUpgradeTrophy } = resolveUpgradeOptions(options);
 
     let migrated = legacyState;
     if (!migrated) {
@@ -250,12 +255,15 @@ export const importV2V3 = async (legacyState) => {
     }
     if (!migrated) return null;
     const normalized = validateGameState(structuredClone(normalizeLegacyV2State(migrated)));
-    grantTrophyIfMissing(normalized, LEGACY_V2_UPGRADE_TROPHY_ID);
+    if (grantUpgradeTrophy) {
+        grantTrophyIfMissing(normalized, LEGACY_V2_UPGRADE_TROPHY_ID);
+    }
     return persistMigratedState(normalized);
 };
 
-export const mergeLegacyStateIntoCurrent = async (legacyState) => {
+export const mergeLegacyStateIntoCurrent = async (legacyState, options = {}) => {
     if (!isBrowser || !legacyState || typeof legacyState !== 'object') return null;
+    const { grantUpgradeTrophy } = resolveUpgradeOptions(options);
 
     const current = validateGameState(loadGameState());
     const incoming = validateGameState(structuredClone(normalizeLegacyV2State(legacyState)));
@@ -287,7 +295,9 @@ export const mergeLegacyStateIntoCurrent = async (legacyState) => {
         ...normalizeSettings(incoming.settings),
     });
 
-    grantTrophyIfMissing(merged, LEGACY_V2_UPGRADE_TROPHY_ID);
+    if (grantUpgradeTrophy) {
+        grantTrophyIfMissing(merged, LEGACY_V2_UPGRADE_TROPHY_ID);
+    }
 
     return persistMigratedState(merged);
 };
