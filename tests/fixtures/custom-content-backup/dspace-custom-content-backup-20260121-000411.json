@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "timestamp": "2026-01-21T00:04:11.000Z",
+  "counts": {
+    "items": 1,
+    "processes": 0,
+    "quests": 0,
+    "images": 1
+  },
+  "items": [
+    {
+      "id": 101,
+      "name": "Signal Relay Module",
+      "description": "Custom test item with a JPEG image.",
+      "category": "equipment"
+    }
+  ],
+  "processes": [],
+  "quests": [],
+  "images": [
+    {
+      "id": "item:101:image",
+      "entityType": "item",
+      "entityId": "101",
+      "dataUrl": "data:image/jpeg;base64,TEST"
+    }
+  ]
+}

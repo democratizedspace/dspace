@@ -2,6 +2,8 @@
  * @jest-environment jsdom
  */
 import 'fake-indexeddb/auto';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { db } from '../src/utils/customcontent.js';
 import {
     BACKUP_SCHEMA_VERSION,
@@ -42,7 +44,7 @@ describe('custom content backup', () => {
         await expect(restoreCustomContentBackup({})).rejects.toThrow('Invalid backup data');
     });
 
-    test('handles empty backup gracefully', async () => {
+    test('empty backup surfaces a clear message', async () => {
         const empty = {
             schemaVersion: BACKUP_SCHEMA_VERSION,
             timestamp: new Date().toISOString(),
@@ -52,7 +54,9 @@ describe('custom content backup', () => {
             quests: [],
             images: [],
         };
-        await restoreCustomContentBackup(empty);
+        await expect(restoreCustomContentBackup(empty)).rejects.toThrow(
+            'Backup contains no importable'
+        );
         const items = await db.list('item');
         expect(items).toEqual([]);
     });
@@ -103,6 +107,26 @@ describe('custom content backup', () => {
         expect(localStorage.getItem('gameStateBackup')).toBe(serialized);
         const imported = await db.items.get('i-safe');
         expect(imported?.name).toBe('custom item');
+    });
+
+    test('imports item-only backup fixture with images', async () => {
+        await indexedDB.deleteDatabase('CustomContent');
+        const fixturePath = join(
+            process.cwd(),
+            'tests',
+            'fixtures',
+            'custom-content-backup',
+            'dspace-custom-content-backup-20260121-000411.json'
+        );
+        const backup = JSON.parse(readFileSync(fixturePath, 'utf8'));
+
+        await restoreCustomContentBackup(backup);
+
+        const item = await db.items.get(101);
+        expect(item?.name).toBe('Signal Relay Module');
+        expect(item?.image).toContain('data:image/jpeg');
+        const processes = await db.list('process');
+        expect(processes).toEqual([]);
     });
 
     test('invalid image references do not partially apply changes', async () => {

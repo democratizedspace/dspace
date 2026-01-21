@@ -64,6 +64,22 @@ function formatAssetLabel(kind, entity) {
     }
 }
 
+function normalizeEntityId(value) {
+    if (value === null || value === undefined) {
+        return null;
+    }
+
+    if (typeof value === 'string') {
+        return value;
+    }
+
+    if (typeof value === 'number') {
+        return String(value);
+    }
+
+    return String(value);
+}
+
 function buildBackupPlan(items, processes, quests) {
     const assets = [];
 
@@ -363,14 +379,10 @@ function normalizeBackupData(raw) {
         throw new Error('Unsupported backup schema version.');
     }
 
-    const items = Array.isArray(raw.items) ? raw.items : null;
-    const processes = Array.isArray(raw.processes) ? raw.processes : null;
-    const quests = Array.isArray(raw.quests) ? raw.quests : null;
-    const images = Array.isArray(raw.images) ? raw.images : null;
-
-    if (!items || !processes || !quests || !images) {
-        throw new Error('Invalid backup data.');
-    }
+    const items = Array.isArray(raw.items) ? raw.items : [];
+    const processes = Array.isArray(raw.processes) ? raw.processes : [];
+    const quests = Array.isArray(raw.quests) ? raw.quests : [];
+    const images = Array.isArray(raw.images) ? raw.images : [];
 
     return {
         schemaVersion: raw.schemaVersion,
@@ -385,15 +397,6 @@ function normalizeBackupData(raw) {
 
 function buildImportPlan(items, processes, quests, images) {
     const assets = [];
-
-    images.forEach((image) => {
-        const name = image?.entityId ?? 'unknown';
-        assets.push({
-            id: `image:${image.entityType}:${image.entityId}`,
-            kind: 'image',
-            label: `Image: ${name}`,
-        });
-    });
 
     items.forEach((item) => {
         assets.push({
@@ -422,6 +425,15 @@ function buildImportPlan(items, processes, quests, images) {
         });
     });
 
+    images.forEach((image) => {
+        const name = image?.entityId ?? 'unknown';
+        assets.push({
+            id: `image:${image.entityType}:${image.entityId}`,
+            kind: 'image',
+            label: `Image: ${name}`,
+        });
+    });
+
     return assets;
 }
 
@@ -437,24 +449,29 @@ async function assertNoImportConflicts(items, processes, quests) {
         getProcesses(),
         getQuests(),
     ]);
-    const existingItemIds = new Set(existingItems.map((item) => item.id));
-    const existingProcessIds = new Set(existingProcesses.map((process) => process.id));
-    const existingQuestIds = new Set(existingQuests.map((quest) => quest.id));
+    const existingItemIds = new Set(existingItems.map((item) => normalizeEntityId(item.id)));
+    const existingProcessIds = new Set(
+        existingProcesses.map((process) => normalizeEntityId(process.id))
+    );
+    const existingQuestIds = new Set(existingQuests.map((quest) => normalizeEntityId(quest.id)));
 
     const conflicts = [];
 
     items.forEach((item) => {
-        if (existingItemIds.has(item.id)) {
+        const id = normalizeEntityId(item.id);
+        if (id && existingItemIds.has(id)) {
             conflicts.push(`item:${item.id}`);
         }
     });
     processes.forEach((process) => {
-        if (existingProcessIds.has(process.id)) {
+        const id = normalizeEntityId(process.id);
+        if (id && existingProcessIds.has(id)) {
             conflicts.push(`process:${process.id}`);
         }
     });
     quests.forEach((quest) => {
-        if (existingQuestIds.has(quest.id)) {
+        const id = normalizeEntityId(quest.id);
+        if (id && existingQuestIds.has(id)) {
             conflicts.push(`quest:${quest.id}`);
         }
     });
@@ -471,10 +488,19 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
     const quests = normalized.quests.map((quest) => sanitizeEntity(quest));
     const images = normalized.images;
 
+    const totalImportable = items.length + processes.length + quests.length + images.length;
+    if (totalImportable === 0) {
+        throw new Error(
+            'Backup contains no importable items, processes, quests, or images. ' +
+                `Items: ${items.length}, processes: ${processes.length}, ` +
+                `quests: ${quests.length}, images: ${images.length}.`
+        );
+    }
+
     await ensureCustomContentSchema();
 
-    const itemMap = new Map(items.map((item) => [item.id, item]));
-    const questMap = new Map(quests.map((quest) => [quest.id, quest]));
+    const itemMap = new Map(items.map((item) => [normalizeEntityId(item.id), item]));
+    const questMap = new Map(quests.map((quest) => [normalizeEntityId(quest.id), quest]));
 
     items.forEach((item) => assertEntityHasId(item, 'item'));
     processes.forEach((process) => assertEntityHasId(process, 'process'));
@@ -484,21 +510,26 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
         if (!image || typeof image !== 'object') {
             throw new Error('Invalid image record in backup.');
         }
-        if (!image.entityId || !image.entityType) {
+        if (image.entityId === undefined || image.entityId === null || !image.entityType) {
             throw new Error('Invalid image record in backup.');
         }
         if (typeof image.dataUrl !== 'string' || !isValidImageDataUrl(image.dataUrl)) {
             throw new Error('Invalid image data in backup.');
         }
 
+        const entityId = normalizeEntityId(image.entityId);
+        if (!entityId) {
+            throw new Error('Invalid image record in backup.');
+        }
+
         if (image.entityType === 'item') {
-            const item = itemMap.get(image.entityId);
+            const item = itemMap.get(entityId);
             if (!item) {
                 throw new Error(`Missing item for image ${image.entityId}.`);
             }
             item.image = image.dataUrl;
         } else if (image.entityType === 'quest') {
-            const quest = questMap.get(image.entityId);
+            const quest = questMap.get(entityId);
             if (!quest) {
                 throw new Error(`Missing quest for image ${image.entityId}.`);
             }
