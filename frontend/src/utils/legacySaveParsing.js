@@ -24,9 +24,15 @@ const isCurrentVersion = (version) => Boolean(version) && version.startsWith('3'
 const hasLegacyShape = (candidate) =>
     Boolean(
         candidate &&
-            typeof candidate === 'object' &&
-            ('inventory' in candidate || 'quests' in candidate || 'processes' in candidate)
+        typeof candidate === 'object' &&
+        ('inventory' in candidate || 'quests' in candidate || 'processes' in candidate)
     );
+
+const hasV3Meta = (candidate) => {
+    if (!candidate || typeof candidate !== 'object') return false;
+    const meta = candidate._meta;
+    return Boolean(meta && typeof meta === 'object' && typeof meta.lastUpdated === 'number');
+};
 
 const sanitizeInventory = (inventory) => {
     if (!isPlainObject(inventory)) return {};
@@ -72,8 +78,11 @@ export const parseLegacyV2Raw = (raw) => {
         }
 
         const version = readLegacyVersion(candidate);
+        const isV3State = isCurrentVersion(version) || hasV3Meta(candidate);
         const isLegacy =
-            hasLegacyVersion(version) || (!isCurrentVersion(version) && hasLegacyShape(candidate));
+            !isV3State &&
+            (hasLegacyVersion(version) ||
+                (!isCurrentVersion(version) && hasLegacyShape(candidate)));
 
         if (!isLegacy) {
             return { state: null, isLegacy: false, error: null };
