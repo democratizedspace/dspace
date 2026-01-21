@@ -51,4 +51,13 @@ describe('Menu accessibility', () => {
         expect(queryByRole('button', { name: 'Settings' })).toBeNull();
         expect(getByRole('link', { name: 'Settings' })).toHaveAttribute('href', '/settings');
     });
+
+    it('includes Processes in the More menu', async () => {
+        const { getByRole } = render(Menu, { pathname: '/' });
+
+        const toggle = getByRole('button', { name: /More/ });
+        await fireEvent.click(toggle);
+
+        expect(getByRole('link', { name: 'Processes' })).toHaveAttribute('href', '/processes');
+    });
 });
