@@ -414,8 +414,16 @@ test.describe('Custom Content Management', () => {
         await expect
             .poll(async () => (await itemOption.count()) > 0, { timeout: 30000 })
             .toBe(true);
-        await expect(itemOption).toBeVisible({ timeout: 15000 });
-        await itemOption.click();
+        const itemOptionButton = itemOption.first();
+        await expect(itemOptionButton).toBeVisible({ timeout: 15000 });
+        await itemOptionButton.scrollIntoViewIfNeeded();
+        await itemOptionButton.click();
+        await expect(selectorContainer).toHaveAttribute('data-expanded', 'false', {
+            timeout: 10000,
+        });
+        await expect(
+            selectorContainer.getByRole('heading', { name: uniqueItemName, exact: true })
+        ).toBeVisible({ timeout: 10000 });
 
         const countInput = requirementRow.locator('input[type="number"]');
         if ((await countInput.count()) > 0) {
