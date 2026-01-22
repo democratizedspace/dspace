@@ -201,4 +201,15 @@
         max-width: 100%;
         min-width: 0;
     }
+
+    @media only screen and (max-width: 639px) {
+        .container {
+            padding-inline: 1rem;
+        }
+
+        .quests-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+    }
 </style>
