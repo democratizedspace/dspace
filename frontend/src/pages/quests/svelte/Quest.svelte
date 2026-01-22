@@ -75,7 +75,7 @@
         min-width: 0;
     }
 
-    @media only screen and (max-width: 479px) {
+    @media only screen and (max-width: 640px) {
         .content {
             flex-direction: column;
         }
