@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey, Sydney again! Ready for a tidy phone stand? We'll tune the printer, then send a clean white PLA print.",
+            "text": "Hey, Sydney again! Ready for a tidy phone stand? We'll tune the printer, slice a simple stand, and print it in white PLA so the details pop and the surface stays smooth.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "prep",
-            "text": "Level the bed, purge to white PLA, and check the nozzle is clean. Ventilate the room and keep hair and sleeves away from the gantry.",
+            "text": "Start with safety: ventilate the room, tie back hair, and keep sleeves clear of the gantry. Heat the nozzle to PLA temps, wipe it clean, and paper-level the bed so you feel light drag at all four corners. Clean the build plate with isopropyl to help first-layer adhesion, then purge to white PLA until the filament comes out consistent and bubble-free.",
             "options": [
                 {
                     "type": "process",
@@ -60,7 +60,7 @@
         },
         {
             "id": "print",
-            "text": "Slice with 15% gyroid infill and a 0.28 mm draft profile. Watch the first layer, then let it finish undisturbed before flexing the bed to release.",
+            "text": "Open the Phone Stand STL from your community library inventory, then slice it with a 0.2 mm layer height, 3 perimeters, 5 top/bottom layers, and 15% gyroid infill. Orient the stand flat so the phone rests on solid perimeters; supports should stay off unless your slicer shows a true overhang. Enable a 3-5 mm brim if your printer struggles with adhesion, and if the first layer won't stick, re-clean the plate, increase the brim, or nudge the Z-offset down a touch. Use ~200°C nozzle and 60°C bed for PLA, then watch the first layer for full contact. Let the print finish undisturbed, cool completely, and flex the bed to release without prying.",
             "options": [
                 {
                     "type": "process",
@@ -82,7 +82,7 @@
         },
         {
             "id": "finish",
-            "text": "Great job! Let the print cool before removing it, then enjoy a sturdy stand for your phone. Remember to turn off the printer.",
+            "text": "Nice work! Test-fit your phone: the back should lean 60–70° and the lip should hold the phone without blocking the charging port. If it feels tight, sand the lip lightly; if it feels loose, scale the model up 1-2% and reprint. Power down the printer and log your settings for the next run.",
             "options": [
                 {
                     "type": "finish",
