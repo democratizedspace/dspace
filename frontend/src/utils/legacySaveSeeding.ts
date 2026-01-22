@@ -2,9 +2,11 @@ import { isBrowser } from './ssr.js';
 import v1Fixture from './legacySaveFixtures/legacy_v1_cookie_save.json' assert { type: 'json' };
 import v2Fixture from './legacySaveFixtures/legacy_v2_localstorage_save.json' assert { type: 'json' };
 import { LEGACY_V2_STORAGE_KEYS } from './legacySaveParsing.js';
+import { LEGACY_V1_ITEM_MAPPINGS } from './legacyV1ItemIdMap.js';
 
 const COOKIE_EXPIRY = 'Fri, 31 Dec 9999 23:59:59 GMT';
 const GAME_STATE_DB_NAME = 'dspaceGameState';
+const LEGACY_ITEM_COOKIE_REGEX = /^item-(\d+)$/;
 
 type CookieFixture = {
     name: string;
@@ -24,11 +26,39 @@ type LegacySeedSummary = {
     localStorageKeys: string[];
 };
 
+type LegacySeededItem = {
+    legacyId: number;
+    legacyCookie: string;
+    v1Name: string;
+    v3Name?: string;
+    v3Id?: string;
+};
+
 const getV1Profiles = () =>
     v1Fixture?.profiles && typeof v1Fixture.profiles === 'object' ? v1Fixture.profiles : {};
 
 const getV2Profiles = () =>
     v2Fixture?.profiles && typeof v2Fixture.profiles === 'object' ? v2Fixture.profiles : {};
+
+const getLegacyV1SeededItemIds = () => {
+    const profiles = getV1Profiles();
+    const itemIds = new Set<number>();
+
+    Object.values(profiles).forEach((profile) => {
+        const cookies = Array.isArray(profile?.cookies) ? profile.cookies : [];
+        cookies.forEach((cookie) => {
+            const name = cookie?.name ?? '';
+            const match = LEGACY_ITEM_COOKIE_REGEX.exec(name);
+            if (!match) return;
+            const parsedId = Number(match[1]);
+            if (!Number.isNaN(parsedId)) {
+                itemIds.add(parsedId);
+            }
+        });
+    });
+
+    return Array.from(itemIds).sort((a, b) => a - b);
+};
 
 export const LEGACY_V1_SEED_PROFILES = Object.entries(getV1Profiles()).map(([id, profile]) => ({
     id,
@@ -39,6 +69,19 @@ export const LEGACY_V2_SEED_PROFILES = Object.entries(getV2Profiles()).map(([id,
     id,
     label: profile?.label ?? id,
 }));
+
+export const LEGACY_V1_SEEDED_ITEMS: LegacySeededItem[] = getLegacyV1SeededItemIds().map(
+    (legacyId) => {
+        const mapping = LEGACY_V1_ITEM_MAPPINGS.find((entry) => entry.v1Id === legacyId);
+        return {
+            legacyId,
+            legacyCookie: `item-${legacyId}`,
+            v1Name: mapping?.v1Name ?? `Legacy item ${legacyId}`,
+            v3Name: mapping?.v3Name,
+            v3Id: mapping?.v3Id,
+        };
+    }
+);
 
 const isSecureContext = () =>
     typeof location !== 'undefined' && typeof location.protocol === 'string'

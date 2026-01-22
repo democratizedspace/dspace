@@ -10,6 +10,7 @@
     import {
         clearSeededLegacySaves,
         LEGACY_V1_SEED_PROFILES,
+        LEGACY_V1_SEEDED_ITEMS,
         LEGACY_V2_SEED_PROFILES,
         seedLegacyV1Save,
         seedLegacyV2LocalStorageSave,
@@ -135,6 +136,27 @@
                 Create or clear sample legacy saves to test the Legacy save upgrades flows. Actions
                 refresh the page so detection reruns immediately.
             </p>
+            <div class="qa-tools__seeded">
+                <h4>V1 seeded items (legacy → v3)</h4>
+                <ul>
+                    {#each LEGACY_V1_SEEDED_ITEMS as item}
+                        <li>
+                            <span class="qa-tools__seeded-legacy">{item.legacyCookie}</span>
+                            <span class="qa-tools__seeded-name">{item.v1Name}</span>
+                            {#if item.v3Name}
+                                <span class="qa-tools__seeded-arrow">→</span>
+                                <span class="qa-tools__seeded-name">{item.v3Name}</span>
+                            {/if}
+                            {#if item.v3Id}
+                                <span class="qa-tools__seeded-id">({item.v3Id})</span>
+                            {/if}
+                        </li>
+                    {/each}
+                </ul>
+                <p class="qa-tools__seeded-note">
+                    The v1 seed also sets a dUSD balance cookie to exercise currency migration.
+                </p>
+            </div>
         </div>
         <div class="qa-tools__actions">
             <div class="qa-tools__seed-group">
@@ -349,6 +371,62 @@
     .qa-tools__heading {
         display: grid;
         gap: 0.25rem;
+    }
+
+    .qa-tools__seeded {
+        margin-top: 0.5rem;
+        padding: 0.65rem 0.75rem;
+        border-radius: 10px;
+        border: 1px solid rgba(59, 130, 246, 0.25);
+        background: rgba(15, 23, 42, 0.35);
+        display: grid;
+        gap: 0.45rem;
+    }
+
+    .qa-tools__seeded h4 {
+        margin: 0;
+        color: #bfdbfe;
+    }
+
+    .qa-tools__seeded ul {
+        margin: 0;
+        padding-left: 1.1rem;
+        color: #e0f2ff;
+        display: grid;
+        gap: 0.25rem;
+    }
+
+    .qa-tools__seeded li {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        align-items: baseline;
+    }
+
+    .qa-tools__seeded-legacy {
+        font-weight: 700;
+        color: #fcd34d;
+    }
+
+    .qa-tools__seeded-name {
+        color: #e0f2ff;
+    }
+
+    .qa-tools__seeded-arrow {
+        color: #f97316;
+    }
+
+    .qa-tools__seeded-id {
+        font-family: 'SFMono-Regular', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+            'Liberation Mono', 'Courier New', monospace;
+        font-size: 0.85rem;
+        color: #93c5fd;
+    }
+
+    .qa-tools__seeded-note {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #fde68a;
     }
 
     .qa-tools h3 {
