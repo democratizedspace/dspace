@@ -1,6 +1,8 @@
 import { render, fireEvent, waitFor } from '@testing-library/svelte';
 import { vi } from 'vitest';
 import QuestForm from '../svelte/QuestForm.svelte';
+import { db } from '../../utils/customcontent.js';
+import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
 
 vi.mock('../../utils/imageDownsample.js', () => ({
     downsampleAndCompressToJpeg: vi.fn().mockResolvedValue({
@@ -11,6 +13,14 @@ vi.mock('../../utils/imageDownsample.js', () => ({
         qualityUsed: 0.8,
     }),
 }));
+
+vi.mock('../../utils/questPersistence.js', async () => {
+    const actual = await vi.importActual('../../utils/questPersistence.js');
+    return {
+        ...actual,
+        syncExistingQuestsToIndexedDB: vi.fn(),
+    };
+});
 
 test('allows adding dialogue nodes and options', async () => {
     const { getByLabelText, getByText, getAllByLabelText, getAllByText } = render(QuestForm);
@@ -80,4 +90,158 @@ test('replaces the default finish option when adding a custom finish option', as
     const optionInputsAfter = getAllByLabelText(/^Text$/i);
     expect(optionInputsAfter).toHaveLength(1);
     expect((optionInputsAfter[0] as HTMLInputElement).value).toBe('Complete mission');
+});
+
+test('excludes the current quest from requirements while editing', async () => {
+    const existingQuests = [
+        { id: 'quest-1', title: 'Quest One' },
+        { id: 'quest-2', title: 'Quest Two' },
+    ];
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce(existingQuests);
+
+    const { getByLabelText } = render(QuestForm, {
+        props: {
+            existingQuests,
+            isEdit: true,
+            questId: 'quest-1',
+        },
+    });
+
+    const requirementsSelect = getByLabelText(/Quest Requirements/i) as HTMLSelectElement;
+
+    await waitFor(() => {
+        const optionValues = Array.from(requirementsSelect.options).map((option) => option.value);
+        expect(optionValues).toEqual(['quest-2']);
+    });
+});
+
+test('filters self dependencies during edit mode validation', async () => {
+    const questId = 'quest-self';
+    const questData = {
+        id: questId,
+        title: 'Self Quest',
+        description: 'A description long enough.',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'Start',
+                options: [{ type: 'finish', text: 'Finish quest' }],
+            },
+        ],
+        requiresQuests: [questId, 'quest-other'],
+    };
+    await db.quests.add(questData);
+
+    const existingQuests = [
+        { id: questId, title: 'Self Quest' },
+        { id: 'quest-other', title: 'Other Quest' },
+    ];
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce(existingQuests);
+
+    const { getByLabelText, queryByText } = render(QuestForm, {
+        props: {
+            existingQuests,
+            isEdit: true,
+            questId,
+        },
+    });
+
+    const requirementsSelect = getByLabelText(/Quest Requirements/i) as HTMLSelectElement;
+
+    await waitFor(() => {
+        const optionValues = Array.from(requirementsSelect.options).map((option) => option.value);
+        expect(optionValues).toEqual(['quest-other']);
+        expect(queryByText('Unknown quest dependency')).toBeNull();
+    });
+});
+
+test('shows an error for unknown quest dependencies', async () => {
+    const questId = 'quest-invalid';
+    await db.quests.add({
+        id: questId,
+        title: 'Invalid Quest',
+        description: 'A description long enough.',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'Start',
+                options: [{ type: 'finish', text: 'Finish quest' }],
+            },
+        ],
+        requiresQuests: ['missing-quest'],
+    });
+
+    const existingQuests = [{ id: 'quest-valid', title: 'Valid Quest' }];
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce(existingQuests);
+
+    const { findByText } = render(QuestForm, {
+        props: {
+            existingQuests,
+            isEdit: true,
+            questId,
+        },
+    });
+
+    await findByText('Unknown quest dependency');
+});
+
+test('falls back to existing quests when syncing fails', async () => {
+    const existingQuests = [
+        { id: 'quest-1', title: 'Quest One' },
+        { id: 'quest-2', title: 'Quest Two' },
+    ];
+    vi.mocked(syncExistingQuestsToIndexedDB).mockRejectedValueOnce(new Error('Sync failed'));
+
+    const { getByLabelText } = render(QuestForm, {
+        props: {
+            existingQuests,
+            isEdit: true,
+            questId: null,
+        },
+    });
+
+    const requirementsSelect = getByLabelText(/Quest Requirements/i) as HTMLSelectElement;
+
+    await waitFor(() => {
+        const optionValues = Array.from(requirementsSelect.options).map((option) => option.value);
+        expect(optionValues).toEqual(['quest-1', 'quest-2']);
+    });
+});
+
+test('keeps selected quest requirements in create mode', async () => {
+    const existingQuests = [
+        { id: 'quest-1', title: 'Quest One' },
+        { id: 'quest-2', title: 'Quest Two' },
+    ];
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce(existingQuests);
+
+    const { getByLabelText } = render(QuestForm, {
+        props: {
+            existingQuests,
+            isEdit: false,
+            questId: null,
+        },
+    });
+
+    const requirementsSelect = getByLabelText(/Quest Requirements/i) as HTMLSelectElement;
+
+    await waitFor(() => {
+        expect(requirementsSelect.options).toHaveLength(2);
+    });
+
+    requirementsSelect.options[0].selected = true;
+    requirementsSelect.options[1].selected = true;
+
+    await fireEvent.change(requirementsSelect);
+
+    await waitFor(() => {
+        const selectedValues = Array.from(requirementsSelect.options)
+            .filter((option) => option.selected)
+            .map((option) => option.value);
+        expect(selectedValues).toEqual(['quest-1', 'quest-2']);
+    });
 });

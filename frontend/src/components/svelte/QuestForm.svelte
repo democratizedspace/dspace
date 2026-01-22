@@ -46,6 +46,7 @@
     const MIN_DESC_LENGTH = 10;
 
     let touched = { title: false, description: false };
+    let selectableQuests = [];
 
     const dispatch = createEventDispatcher();
 
@@ -55,6 +56,24 @@
         { value: 'process', label: 'Run process' },
         { value: 'grantsItems', label: 'Grant items' },
     ];
+
+    function questIdToString(id) {
+        return id == null ? '' : String(id);
+    }
+
+    function filterCurrentQuestDependencies(ids = []) {
+        const normalized = ids.map((id) => questIdToString(id)).filter(Boolean);
+        if (!isEdit || questId == null) {
+            return normalized;
+        }
+
+        const currentId = questIdToString(questId);
+        return normalized.filter((id) => id !== currentId);
+    }
+
+    function getAvailableQuests() {
+        return allQuests.length > 0 ? allQuests : existingQuests;
+    }
 
     function normalizeOption(option) {
         const normalized = {
@@ -163,7 +182,7 @@
                 const questData = await db.quests.get(questId);
                 title = questData.title;
                 description = questData.description;
-                requiresQuests = questData.requiresQuests || [];
+                requiresQuests = filterCurrentQuestDependencies(questData.requiresQuests || []);
                 npc = questData.npc || DEFAULT_NPC_NAME;
                 startNodeId = questData.start || DEFAULT_DIALOGUE_NODE_ID;
                 const mappedNodes = (questData.dialogue || []).map((node) =>
@@ -217,6 +236,10 @@
         }
     });
 
+    $: selectableQuests = getAvailableQuests().filter(
+        (quest) => questIdToString(quest.id) !== questIdToString(questId)
+    );
+
     async function handleImageUpload(event) {
         const file = event.target.files[0];
         if (file) {
@@ -249,7 +272,8 @@
     }
 
     function handleRequirementsChange(event) {
-        requiresQuests = Array.from(event.target.selectedOptions).map((opt) => opt.value);
+        const selected = Array.from(event.target.selectedOptions).map((opt) => opt.value);
+        requiresQuests = filterCurrentQuestDependencies(selected);
     }
 
     function handleTitleInput(event) {
@@ -753,11 +777,15 @@
             }
         }
 
+        const selectableQuestIds = getAvailableQuests()
+            .filter((quest) => questIdToString(quest.id) !== questIdToString(questId))
+            .map((quest) => questIdToString(quest.id));
+
         if (
             payload.requiresQuests.length > 0 &&
             !validateQuestDependencies(
-                payload.requiresQuests,
-                allQuests.map((q) => q.id)
+                payload.requiresQuests.map((id) => questIdToString(id)),
+                selectableQuestIds
             )
         ) {
             errors.requiresQuests = 'Unknown quest dependency';
@@ -922,8 +950,11 @@
     <div class="form-group">
         <label for="requires">Quest Requirements</label>
         <select id="requires" multiple on:change={handleRequirementsChange}>
-            {#each allQuests as q}
-                <option value={q.id} selected={requiresQuests.includes(q.id)}>
+            {#each selectableQuests as q}
+                <option
+                    value={questIdToString(q.id)}
+                    selected={requiresQuests.includes(questIdToString(q.id))}
+                >
                     {q.title}
                 </option>
             {/each}
