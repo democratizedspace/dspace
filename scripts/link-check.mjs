@@ -76,6 +76,11 @@ function resolveInternalRoute(routePath) {
     if (parts.length > 2) {
       candidates.push(path.join(pagesDir, basePath, '[pathId]', '[questId].astro'));
     }
+
+    // Check for nested docs routes (e.g., /docs/outages/2026-01-02 -> /docs/outages/[slug].astro)
+    if (basePath === 'docs' && parts.length > 2 && parts[1]) {
+      candidates.push(path.join(pagesDir, 'docs', parts[1], '[slug].astro'));
+    }
     
     // Check for item routes (e.g., /inventory/item/37 -> /inventory/item/[itemId]/index.astro)
     if (parts.length > 2 && parts[1]) {
