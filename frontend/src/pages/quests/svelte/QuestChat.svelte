@@ -93,7 +93,7 @@
         <div class="chat" data-testid="chat-panel">
             <div>
                 {#if $clientSideRendered && quest && dialogueMap}
-                    <div>
+                    <div class="banner-frame">
                         <img class="banner" src={quest.image} alt={quest.title} />
                     </div>
                     <div class="left">
@@ -187,20 +187,25 @@
         opacity: 1;
     }
 
-    .banner {
-        width: 120%;
-        height: 300px;
-        object-fit: cover;
-        margin-left: -10%;
-        margin-top: -10%;
+    .banner-frame {
+        width: min(100%, 512px);
+        aspect-ratio: 1 / 1;
+        max-height: 512px;
+        margin: 0 auto 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
     }
 
-    @media only screen and (max-width: 600px) {
-        .banner {
-            width: 120%;
-            margin: -10%;
-            margin-bottom: 0px;
-        }
+    .banner {
+        width: 100%;
+        height: 100%;
+        max-width: 512px;
+        max-height: 512px;
+        object-fit: cover;
+        border-radius: 16px;
+        border: none;
     }
 
     .left {
