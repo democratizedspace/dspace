@@ -3,6 +3,7 @@ import { sanitizeSaveForBackup } from '../../lib/cloudsync/githubGists';
 import { normalizeSettings, DEFAULT_SETTINGS } from '../settingsDefaults.js';
 import { isBrowser } from '../ssr.js';
 import { readLegacyV2LocalStorage } from '../legacySaveParsing.js';
+import { restoreCustomContentBackup } from '../customContentBackup.js';
 
 const DB_NAME = 'dspaceGameState';
 const DB_VERSION = 1;
@@ -332,17 +333,25 @@ export const closeGameStateDatabaseForTesting = async () => {
     }
 };
 
-const buildBackupEnvelope = (state, providerHint = LOCAL_EXPORT_PROVIDER) => ({
-    schemaVersion: BACKUP_SCHEMA_VERSION,
-    createdAt: new Date().toISOString(),
-    providerHint,
-    payload: sanitizeSaveForBackup(state),
-});
+const buildBackupEnvelope = (state, providerHint = LOCAL_EXPORT_PROVIDER, customContent) => {
+    const envelope = {
+        schemaVersion: BACKUP_SCHEMA_VERSION,
+        createdAt: new Date().toISOString(),
+        providerHint,
+        payload: sanitizeSaveForBackup(state),
+    };
+
+    if (customContent) {
+        envelope.customContent = customContent;
+    }
+
+    return envelope;
+};
 
 export const exportGameStateString = (options = {}) => {
-    const { providerHint = LOCAL_EXPORT_PROVIDER, stateOverride } = options;
+    const { providerHint = LOCAL_EXPORT_PROVIDER, stateOverride, customContent } = options;
     const sourceState = stateOverride ?? gameState;
-    const envelope = buildBackupEnvelope(sourceState, providerHint);
+    const envelope = buildBackupEnvelope(sourceState, providerHint, customContent);
     const jsonStr = JSON.stringify(envelope);
     if (typeof btoa === 'function') {
         return btoa(jsonStr);
@@ -386,6 +395,7 @@ export const importGameStateString = async (gameStateString) => {
     }
 
     let payload = imported;
+    const customContent = imported?.customContent;
 
     if (imported && typeof imported === 'object' && 'payload' in imported) {
         if (
@@ -401,6 +411,15 @@ export const importGameStateString = async (gameStateString) => {
     }
 
     await saveGameState(payload);
+
+    if (customContent && isBrowser) {
+        try {
+            await restoreCustomContentBackup(customContent, { overwriteExisting: true });
+        } catch (err) {
+            logPersistenceIssue('Custom content restore failed:', err);
+            throw err;
+        }
+    }
 };
 
 export const resetGameState = async () => {
