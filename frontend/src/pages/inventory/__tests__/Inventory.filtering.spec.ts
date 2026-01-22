@@ -1,6 +1,5 @@
 import { fireEvent, render, waitFor } from '@testing-library/svelte';
 import { describe, expect, it, vi } from 'vitest';
-import Inventory from '../Inventory.svelte';
 
 const mockItems = [
     {
@@ -53,6 +52,8 @@ vi.mock('../../../utils/gameState/common.js', async () => {
 vi.mock('../../../utils/gameState/inventory.js', () => ({
     getItemCount: () => 0,
 }));
+
+import Inventory from '../Inventory.svelte';
 
 describe('Inventory filtering', () => {
     it('hides zero-count items when show-all is unchecked (numeric inventory)', async () => {
