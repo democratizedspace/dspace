@@ -8,18 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey, Sydney again! Ready for a tidy phone stand? We'll tune the printer, then send a clean white PLA print.",
+            "text": "Sydney here. We're printing a desk phone stand the metaguild can rely on for comms. We'll tune the machine, slice a stable profile, and verify fit so it works in real life.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Let's prep first."
+                    "text": "Let's prep the printer."
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "Level the bed, purge to white PLA, and check the nozzle is clean. Ventilate the room and keep hair and sleeves away from the gantry.",
+            "text": "Clear the build plate, wipe with isopropyl, and keep loose sleeves away from the gantry. We want a cool, steady printer before we preheat.",
             "options": [
                 {
                     "type": "process",
@@ -47,20 +47,31 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "print",
+                    "goto": "slice",
                     "requiresItems": [
                         {
                             "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
                             "count": 1
                         }
                     ],
-                    "text": "Ready to slice and print."
+                    "text": "Bed is trammed and PLA is loaded."
+                }
+            ]
+        },
+        {
+            "id": "slice",
+            "text": "Grab a basic phone stand STL. Orient it so the backrest is flat on the plate, supports off, and add a 4 mm brim if your plate is slick. Slice at 0.2 mm layers, 3 perimeters, 4 top/bottom layers, 20% gyroid infill, 200 °C nozzle, 60 °C bed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Slicing complete. Start the print."
                 }
             ]
         },
         {
             "id": "print",
-            "text": "Slice with 15% gyroid infill and a 0.28 mm draft profile. Watch the first layer, then let it finish undisturbed before flexing the bed to release.",
+            "text": "Stay for the first layer. You want smooth, slightly squished lines with no gaps. If the lines look round, lower Z; if they're translucent and rough, raise Z a touch. Let the print finish, then cool the plate before removal.",
             "options": [
                 {
                     "type": "process",
@@ -69,20 +80,31 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "fit-check",
                     "requiresItems": [
                         {
                             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
                             "count": 1
                         }
                     ],
-                    "text": "The stand is finished and cooled!"
+                    "text": "Stand printed and cooled."
+                }
+            ]
+        },
+        {
+            "id": "fit-check",
+            "text": "Test fit your phone (with its case). The lip should catch the phone by at least 8 mm. If it rocks, add a thin felt pad or reprint with 105% scale. Trim any elephant's foot with a deburring pass.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Fit looks solid."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! Let the print cool before removing it, then enjoy a sturdy stand for your phone. Remember to turn off the printer.",
+            "text": "Nice work. Log the slice settings you used and stash the stand on your bench. Power down the printer and clear the plate for the next run.",
             "options": [
                 {
                     "type": "finish",
