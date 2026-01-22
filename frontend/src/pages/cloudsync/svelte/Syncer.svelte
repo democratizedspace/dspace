@@ -30,6 +30,7 @@
     let refreshing = false;
     let backups = [];
     let backupError = '';
+    let backupRequestId = 0;
 
     const announce = (text, type = '') => {
         message = text;
@@ -47,14 +48,20 @@
     const loadBackups = async (providedToken = token) => {
         const trimmedToken = providedToken?.trim?.();
         if (!trimmedToken) return;
+        const requestId = (backupRequestId += 1);
         refreshing = true;
         backupError = '';
         try {
-            backups = await fetchBackupList(trimmedToken);
+            const nextBackups = await fetchBackupList(trimmedToken);
+            if (requestId !== backupRequestId) return;
+            backups = nextBackups;
         } catch (err) {
+            if (requestId !== backupRequestId) return;
             backupError = err?.message || 'Unable to load backups right now.';
         } finally {
-            refreshing = false;
+            if (requestId === backupRequestId) {
+                refreshing = false;
+            }
         }
     };
 
@@ -113,6 +120,7 @@
             if (result?.id) {
                 backups = [result, ...backups];
             }
+            await loadBackups(trimmedToken);
         } catch (err) {
             announce('Upload failed', 'error');
         } finally {
