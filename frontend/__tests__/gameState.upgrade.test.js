@@ -163,6 +163,16 @@ describe('game state upgrades', () => {
         expect(state.quests.keep).toBeUndefined();
     });
 
+    test('importV1V3 awards V2 Upgrade Trophy when explicitly upgrading', async () => {
+        const migrated = await importV1V3([{ id: 'item-1', count: 2 }], {
+            grantUpgradeTrophy: true,
+        });
+
+        expect(migrated.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBe(1);
+        const state = loadGameState();
+        expect(state.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBe(1);
+    });
+
     test('importV2V3 sanitizes legacy inventory artifacts', async () => {
         localStorage.setItem(
             'gameState',
