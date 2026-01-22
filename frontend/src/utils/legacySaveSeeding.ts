@@ -5,6 +5,7 @@ import { LEGACY_V2_STORAGE_KEYS } from './legacySaveParsing.js';
 
 const COOKIE_EXPIRY = 'Fri, 31 Dec 9999 23:59:59 GMT';
 const GAME_STATE_DB_NAME = 'dspaceGameState';
+const QA_LEGACY_V2_SEED_FLAG = 'qa:legacy-v2-seeded';
 
 type CookieFixture = {
     name: string;
@@ -114,8 +115,12 @@ export const seedLegacyV2LocalStorageSave = (profileId = 'minimal'): LegacySeedS
 
     const serialized = JSON.stringify(state);
     localStorage.setItem('gameState', serialized);
+    localStorage.setItem(QA_LEGACY_V2_SEED_FLAG, 'true');
 
-    return buildSeedSummary(profileId, profile?.label ?? profileId, [], ['gameState']);
+    return buildSeedSummary(profileId, profile?.label ?? profileId, [], [
+        'gameState',
+        QA_LEGACY_V2_SEED_FLAG,
+    ]);
 };
 
 export const clearLegacyV1CookieSave = (): void => {
@@ -133,6 +138,7 @@ export const clearLegacyV2LocalStorageSave = (): void => {
     LEGACY_V2_STORAGE_KEYS.forEach((key) => {
         localStorage.removeItem(key);
     });
+    localStorage.removeItem(QA_LEGACY_V2_SEED_FLAG);
 };
 
 export const clearSeededLegacySaves = (): void => {
@@ -146,6 +152,7 @@ export const clearV3GameStateStorage = async (): Promise<boolean> => {
     LEGACY_V2_STORAGE_KEYS.forEach((key) => {
         localStorage.removeItem(key);
     });
+    localStorage.removeItem(QA_LEGACY_V2_SEED_FLAG);
 
     try {
         localStorage.removeItem('root');

@@ -1,0 +1,13 @@
+{
+  "id": "2026-01-22-legacy-v2-seed-auto-migrate",
+  "date": "2026-01-22",
+  "component": "frontend/settings/legacy-save-seeding",
+  "rootCause": "QA seeding wrote a v2 save into localStorage, but auto-migration ran on reload and converted the data to v3, clearing legacy detection.",
+  "resolution": "Mark QA-seeded v2 saves and skip auto-migration so detection and manual upgrade flows can inspect legacy data until cleared.",
+  "references": [
+    "frontend/src/utils/gameState.js",
+    "frontend/src/utils/legacySaveSeeding.ts",
+    "frontend/src/components/svelte/QaCheatsToggle.svelte",
+    "frontend/src/components/svelte/LegacySaveUpgrade.svelte"
+  ]
+}
