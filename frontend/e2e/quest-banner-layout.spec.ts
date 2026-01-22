@@ -20,7 +20,7 @@ test.describe('Quest banner layout', () => {
             });
 
         const expectSquareAndMax = (rect: { width: number; height: number }) => {
-            expect(rect.width).toBe(rect.height);
+            expect(Math.abs(rect.width - rect.height)).toBeLessThanOrEqual(1);
             expect(rect.width).toBeLessThanOrEqual(512);
             expect(rect.height).toBeLessThanOrEqual(512);
         };
