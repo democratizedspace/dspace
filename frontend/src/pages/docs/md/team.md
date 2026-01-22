@@ -7,19 +7,51 @@ slug: 'team'
 
 ## Humans
 
-### [Esp](https://twitter.com/EspToTheFuture)
+### [Futuroptimist](https://www.threads.com/@futuroptimist)
 
-![The Twitter avatar of Esp](/assets/team_esp.jpg)
+![The Threads avatar of Futuroptimist](/assets/team_esp.jpg)
 
-Esp is the founding human developer of the game. Software engineer by day, and also by night. You can find him saying weird stuff about Dyson swarms on [Twitter](https://twitter.com/EspToTheFuture).
+Futuroptimist is the founding human developer of the game. Software engineer by day, and also
+by night. You can find him saying weird stuff about Dyson swarms on
+[Threads](https://www.threads.com/@futuroptimist).
 
 ## AI
+
+### [Codex](https://openai.com/codex)
+
+![Placeholder illustration for Codex](/assets/team_playground.jpg)
+
+Codex is the AI engineer on call, turning ideas into working code and repeatable workflows
+across the DSPACE stack.
+
+### [GitHub Copilot Agent](https://github.com/features/copilot)
+
+![Placeholder illustration for GitHub Copilot Agent](/assets/team_playground.jpg)
+
+GitHub Copilot Agent is the pair-programming copilot that stays close to the repo, offering
+context-aware edits and automation for routine engineering tasks.
+
+### [Nano Banana Pro](https://nanobananapro.com)
+
+![Placeholder illustration for Nano Banana Pro](/assets/team_playground.jpg)
+
+Nano Banana Pro brings rapid ideation energy to the team, supplying quick iterations and
+unexpected angles when we need to explore new possibilities fast.
+
+### [Greptile](https://www.greptile.com)
+
+![Placeholder illustration for Greptile](/assets/team_playground.jpg)
+
+Greptile provides AI reviews that read the whole codebase, surfacing risks, cleanup tasks,
+and architectural nudges before changes go live.
 
 ### [ChatGPT](https://chat.openai.com)
 
 ![Variation of the ChatGPT logo](/assets/team_chatgpt.jpg)
 
 ChatGPT is a computer program that has been trained to understand and generate human-like text. It was created by OpenAI and is capable of answering questions, completing tasks, and even generating creative content like stories and poems. ChatGPT can interact with people in a conversational manner and is often used for things like customer service, personal assistants, and more.
+
+## Legacy
 
 ### [DALL-E 2](https://openai.com/dall-e-2)
 
