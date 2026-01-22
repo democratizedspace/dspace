@@ -30,4 +30,5 @@ test('auto-migration skips when QA seed flag is present', async () => {
 
     const stored = JSON.parse(localStorage.getItem('gameState'));
     expect(stored.versionNumberString).toBe('2.1');
+    expect(localStorage.getItem(LEGACY_V2_SEED_SKIP_KEY)).toBe('true');
 });
