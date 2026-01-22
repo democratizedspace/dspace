@@ -232,6 +232,7 @@ export const importV1V3 = async (itemList, options = {}) => {
 
     if (hasLegacyItems) {
         grantTrophyIfMissing(nextState, EARLY_ADOPTER_ID);
+        grantTrophyIfMissing(nextState, LEGACY_V2_UPGRADE_TROPHY_ID);
     }
 
     return persistMigratedState(nextState);
