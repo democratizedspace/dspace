@@ -9,6 +9,7 @@
     import Chip from './Chip.svelte';
     import {
         clearSeededLegacySaves,
+        getLegacyV1SeedItems,
         LEGACY_V1_SEED_PROFILES,
         LEGACY_V2_SEED_PROFILES,
         seedLegacyV1Save,
@@ -26,6 +27,7 @@
     let lastSeedSummary = null;
     let v1Profile = LEGACY_V1_SEED_PROFILES[0]?.id ?? 'minimal';
     let v2Profile = LEGACY_V2_SEED_PROFILES[0]?.id ?? 'minimal';
+    $: v1SeedItems = getLegacyV1SeedItems(v1Profile);
 
     let unsubscribeAvailability;
     let unsubscribeEnabled;
@@ -186,6 +188,29 @@
                 disabled={Boolean(workingAction)}
                 dataTestId="qa-clear-seeded"
             />
+        </div>
+        <div class="qa-tools__seeded-items">
+            <h4>V1 seeded items (selected profile)</h4>
+            <p class="qa-tools__seeded-items-description">
+                These are the v1 item cookies included with the selected seed profile and their v3
+                migration targets.
+            </p>
+            {#if v1SeedItems.length}
+                <ul class="qa-tools__seeded-items-list">
+                    {#each v1SeedItems as item}
+                        <li>
+                            <span class="qa-tools__seeded-item-label">
+                                v1 item-{item.v1Id} ({item.v1Name})
+                            </span>
+                            <span class="qa-tools__seeded-item-map">
+                                → v3 {item.v3Name} ({item.v3Id})
+                            </span>
+                        </li>
+                    {/each}
+                </ul>
+            {:else}
+                <p class="qa-tools__summary-empty">None</p>
+            {/if}
         </div>
         {#if lastSeedSummary}
             <div class="qa-tools__summary">
@@ -396,6 +421,39 @@
         color: #e0f2ff;
         padding: 0.45rem 0.6rem;
         font-size: 0.95rem;
+    }
+
+    .qa-tools__seeded-items {
+        border-radius: 12px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        background: rgba(15, 23, 42, 0.6);
+        padding: 0.85rem;
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .qa-tools__seeded-items-description {
+        margin: 0;
+        color: #cbd5f5;
+    }
+
+    .qa-tools__seeded-items-list {
+        margin: 0;
+        padding-left: 1.2rem;
+        display: grid;
+        gap: 0.4rem;
+        color: #e2e8f0;
+    }
+
+    .qa-tools__seeded-item-label {
+        font-weight: 600;
+        color: #bfdbfe;
+    }
+
+    .qa-tools__seeded-item-map {
+        display: block;
+        color: #fef3c7;
+        font-size: 0.9rem;
     }
 
     .qa-tools__summary {
