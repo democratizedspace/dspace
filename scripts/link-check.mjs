@@ -23,6 +23,7 @@ const githubPrefixes = [
   'http://github.com/democratizedspace/dspace/blob/v3/',
 ];
 const docsSlugSet = new Set();
+const repoRoot = process.cwd();
 
 const docsFiles = await glob('frontend/src/pages/docs/md/*.md');
 for (const file of docsFiles) {
@@ -108,6 +109,12 @@ function resolveInternalRoute(routePath) {
   return candidates.some(candidate => existsSync(candidate));
 }
 
+function stripHashAndQuery(value) {
+  const [beforeHash] = value.split('#');
+  const [beforeQuery] = beforeHash.split('?');
+  return beforeQuery;
+}
+
 for (const file of markdownFiles) {
   const content = await readFile(file, 'utf8');
   let match;
@@ -118,12 +125,16 @@ for (const file of markdownFiles) {
     if (rawLink.includes('://')) {
       const githubPrefix = githubPrefixes.find((prefix) => rawLink.startsWith(prefix));
       if (githubPrefix) {
-        const [githubTarget] = rawLink.split('#');
-        const githubPath = decodeURIComponent(githubTarget.slice(githubPrefix.length));
-        const normalizedGithubPath = path.normalize(githubPath);
+        const githubTarget = stripHashAndQuery(rawLink);
+        const githubPath = decodeURIComponent(
+          githubTarget.slice(githubPrefix.length).replace(/^\/+/, '')
+        );
+        const resolvedGithubPath = path.resolve(repoRoot, githubPath);
+        const relativeGithubPath = path.relative(repoRoot, resolvedGithubPath);
         if (
-          !normalizedGithubPath.startsWith('..') &&
-          existsSync(path.join(process.cwd(), normalizedGithubPath))
+          !relativeGithubPath.startsWith('..') &&
+          !path.isAbsolute(relativeGithubPath) &&
+          existsSync(resolvedGithubPath)
         ) {
           continue;
         }
@@ -136,7 +147,7 @@ for (const file of markdownFiles) {
     if (rawLink.startsWith('javascript:')) continue;
     if (rawLink.startsWith('<')) continue;
 
-    const [targetPath] = rawLink.split('#');
+    const targetPath = stripHashAndQuery(rawLink);
     if (!targetPath) continue;
 
     // Handle internal routes (starting with /)
