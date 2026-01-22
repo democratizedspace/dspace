@@ -131,8 +131,8 @@ Phoenix mentors recruits through quests like
 [Dilute Hydrochloric Acid Safely](/quests/chemistry/acid-dilution),
 [Extract Stevia Sweetener](/quests/chemistry/stevia-extraction),
 [Refine Stevia Crystals](/quests/chemistry/stevia-crystals),
-[Mix a Green Igniter](/quests/chemistry/green-igniter), and
-[Refuel the Hybrid Engine](/quests/rocketry/hybrid-refuel).
+[Prepare a Buffer Solution](/quests/chemistry/buffer-solution), and
+[Fuel Mixture Calibration](/quests/rocketry/fuel-mixture).
 They also remind everyone to [Wash Hands](/processes/wash-hands) before leaving the lab.
 
 ### Sample Dialogue
