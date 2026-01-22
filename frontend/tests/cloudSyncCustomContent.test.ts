@@ -7,7 +7,12 @@ import {
 import * as cloudSync from '../src/utils/cloudSync.js';
 import * as customContentBackup from '../src/utils/customContentBackup.js';
 import * as githubGists from '../src/lib/cloudsync/githubGists';
-import { getItems, getProcesses, getQuests, openCustomContentDB } from '../src/utils/indexeddb.js';
+import {
+    getItems,
+    getProcesses,
+    getQuests,
+    openCustomContentDB,
+} from '../src/utils/indexeddb.js';
 
 const decodeBackup = (value: string) => {
     const decoded =
@@ -21,7 +26,8 @@ const deleteCustomContentDatabase = () =>
     new Promise<void>((resolve, reject) => {
         const request = indexedDB.deleteDatabase('CustomContent');
         request.onsuccess = () => resolve();
-        request.onerror = () => reject(request.error ?? new Error('Failed to delete CustomContent'));
+        request.onerror = () =>
+            reject(request.error ?? new Error('Failed to delete CustomContent'));
         request.onblocked = () => resolve();
     });
 
@@ -52,8 +58,10 @@ const seedCustomContent = async () => {
 
     await new Promise<void>((resolve, reject) => {
         tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error ?? new Error('Failed to seed custom content'));
-        tx.onabort = () => reject(tx.error ?? new Error('Failed to seed custom content'));
+        tx.onerror = () =>
+            reject(tx.error ?? new Error('Failed to seed custom content'));
+        tx.onabort = () =>
+            reject(tx.error ?? new Error('Failed to seed custom content'));
     });
     db.close();
 };
@@ -85,8 +93,10 @@ const overwriteCustomContent = async () => {
 
     await new Promise<void>((resolve, reject) => {
         tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error ?? new Error('Failed to overwrite custom content'));
-        tx.onabort = () => reject(tx.error ?? new Error('Failed to overwrite custom content'));
+        tx.onerror = () =>
+            reject(tx.error ?? new Error('Failed to overwrite custom content'));
+        tx.onabort = () =>
+            reject(tx.error ?? new Error('Failed to overwrite custom content'));
     });
     db.close();
 };
@@ -183,7 +193,9 @@ describe('cloud sync custom content', () => {
             getProcesses(),
             getQuests(),
         ]);
-        expect(items.find((item) => item.id === 'custom-item-1')?.name).toBe('Cloud Sync Item');
+        expect(items.find((item) => item.id === 'custom-item-1')?.name).toBe(
+            'Cloud Sync Item'
+        );
         expect(processes.find((process) => process.id === 'custom-process-1')?.title).toBe(
             'Cloud Sync Process'
         );
