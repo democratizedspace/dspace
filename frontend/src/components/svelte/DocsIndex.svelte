@@ -162,18 +162,19 @@
 
     nav {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.5rem;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
     }
 
     .doc-link {
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
-        align-items: flex-start;
+        align-items: center;
         min-width: 0;
         max-width: 100%;
+        width: 100%;
     }
 
     a {
@@ -191,7 +192,8 @@
         opacity: 0.85;
         transition: opacity 0.2s ease-in-out;
         min-width: 0;
-        max-width: 100%;
+        max-width: 22rem;
+        width: 100%;
     }
 
     .doc-snippet {
