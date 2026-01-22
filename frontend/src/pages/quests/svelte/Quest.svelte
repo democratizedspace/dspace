@@ -59,6 +59,7 @@
         margin: -10px;
         object-fit: cover;
         border: 5px solid #68d46d;
+        box-sizing: border-box;
     }
 
     .quest-img-compact {
@@ -80,8 +81,9 @@
         }
 
         .quest-img {
-            width: 105%;
-            height: 105%;
+            width: 100%;
+            height: auto;
+            margin: 0;
         }
     }
 
