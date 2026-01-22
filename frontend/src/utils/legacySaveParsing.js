@@ -1,4 +1,5 @@
 export const LEGACY_V2_STORAGE_KEYS = ['gameState', 'gameStateBackup'];
+export const LEGACY_V2_SEED_SKIP_KEY = 'legacyV2Seeded';
 
 const LEGACY_VERSION_PREFIXES = ['1', '2'];
 
