@@ -8,18 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey, Sydney again! Ready for a tidy phone stand? We'll tune the printer, then send a clean white PLA print.",
+            "text": "Hey, Sydney again! People keep propping phones on toolboxes in the co-op, so let's make a stand that looks clean and actually holds.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Let's prep first."
+                    "text": "Let's prep the printer."
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "Level the bed, purge to white PLA, and check the nozzle is clean. Ventilate the room and keep hair and sleeves away from the gantry.",
+            "text": "First: safety and surface. Ventilate the room, tie hair back, and keep sleeves clear of the gantry. Wipe the bed with 90% isopropyl so the first layer sticks, then check the nozzle is clear.",
             "options": [
                 {
                     "type": "process",
@@ -47,20 +47,42 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "print",
+                    "goto": "model",
+                    "text": "Bed is clean and filament is loaded."
+                }
+            ]
+        },
+        {
+            "id": "model",
+            "text": "Grab the phone stand STL from the community library. Check your phone width and case thickness; we want a 2-3 mm lip so it doesn't slide. If your slicer supports scaling, scale the model to fit your phone width plus 2 mm of clearance.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "slice",
                     "requiresItems": [
                         {
                             "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
                             "count": 1
                         }
                     ],
-                    "text": "Ready to slice and print."
+                    "text": "Model looks good. Let's slice it."
+                }
+            ]
+        },
+        {
+            "id": "slice",
+            "text": "Slice for strength: 0.2 mm layers, 3 perimeters, 4 top/bottom layers, and 15% gyroid infill. Use a 3-5 mm brim if your corners lift. Supports are only needed if the overhang exceeds ~60°.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Slicer settings set. Ready to print."
                 }
             ]
         },
         {
             "id": "print",
-            "text": "Slice with 15% gyroid infill and a 0.28 mm draft profile. Watch the first layer, then let it finish undisturbed before flexing the bed to release.",
+            "text": "Preheat to your PLA profile (around 200°C hotend, 60°C bed). Watch the first layer: you want a smooth, slightly squished line with no gaps. Let it run without drafts or bumps.",
             "options": [
                 {
                     "type": "process",
@@ -69,20 +91,31 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "post",
                     "requiresItems": [
                         {
                             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
                             "count": 1
                         }
                     ],
-                    "text": "The stand is finished and cooled!"
+                    "text": "Print completed and cooled."
+                }
+            ]
+        },
+        {
+            "id": "post",
+            "text": "Let it cool fully, then flex the bed to release. Trim any stringing with a hobby knife. Test fit your phone: it should rest at a 15-20° angle and stay put when you tap the screen. Add a tiny felt pad if it slides.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Everything fits. Final check?"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! Let the print cool before removing it, then enjoy a sturdy stand for your phone. Remember to turn off the printer.",
+            "text": "Nice work! Power down the printer, log your settings for next time, and drop a photo in the co-op channel so others can remix the design.",
             "options": [
                 {
                     "type": "finish",
