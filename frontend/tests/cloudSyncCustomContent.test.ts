@@ -193,14 +193,12 @@ describe('cloud sync custom content', () => {
             getProcesses(),
             getQuests(),
         ]);
-        expect(items.find((item) => item.id === 'custom-item-1')?.name).toBe(
-            'Cloud Sync Item'
-        );
-        expect(processes.find((process) => process.id === 'custom-process-1')?.title).toBe(
-            'Cloud Sync Process'
-        );
-        expect(quests.find((quest) => quest.id === 'custom-quest-1')?.title).toBe(
-            'Cloud Sync Quest'
-        );
+        expect(items.find((item) => item.id === 'custom-item-1')?.name).toBe('Cloud Sync Item');
+        expect(
+            processes.find((process) => process.id === 'custom-process-1')?.title
+        ).toBe('Cloud Sync Process');
+        expect(
+            quests.find((quest) => quest.id === 'custom-quest-1')?.title
+        ).toBe('Cloud Sync Quest');
     });
 });
