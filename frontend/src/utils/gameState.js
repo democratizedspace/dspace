@@ -215,6 +215,7 @@ export const importV1V2 = (itemList) => {
 export const importV1V3 = async (itemList, options = {}) => {
     if (!isBrowser) return null;
     const { replaceExisting = false, currencyBalances = [] } = options;
+    const { grantUpgradeTrophy } = resolveUpgradeOptions(options);
 
     const normalizedItems = mapLegacyV1Items(itemList, currencyBalances);
 
@@ -232,6 +233,9 @@ export const importV1V3 = async (itemList, options = {}) => {
 
     if (hasLegacyItems) {
         grantTrophyIfMissing(nextState, EARLY_ADOPTER_ID);
+        if (grantUpgradeTrophy) {
+            grantTrophyIfMissing(nextState, LEGACY_V2_UPGRADE_TROPHY_ID);
+        }
     }
 
     return persistMigratedState(nextState);

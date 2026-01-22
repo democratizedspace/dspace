@@ -243,6 +243,7 @@
             await importV1V3(v1Items, {
                 replaceExisting: mode === 'replace',
                 currencyBalances: v1CurrencyBalances,
+                grantUpgradeTrophy: true,
             });
             const cleared = expireLegacyCookies();
             statusMessage =
