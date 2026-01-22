@@ -176,8 +176,8 @@ describe('game state upgrades', () => {
         expect(state.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBe(1);
     });
 
-    test('importV1V3 does not award V2 Upgrade Trophy without explicit upgrade', async () => {
-        const migrated = await importV1V3([{ id: '1', count: 2 }]);
+    test('importV1V3 does NOT award V2 Upgrade Trophy by default', async () => {
+        const migrated = await importV1V3([{ id: '1', count: 1 }]);
 
         expect(migrated.inventory[EARLY_ADOPTER_ID]).toBe(1);
         expect(migrated.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBeUndefined();
