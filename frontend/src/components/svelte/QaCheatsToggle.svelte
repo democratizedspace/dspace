@@ -202,9 +202,15 @@
                             <span class="qa-tools__seeded-item-label">
                                 v1 item-{item.v1Id} ({item.v1Name})
                             </span>
-                            <span class="qa-tools__seeded-item-map">
-                                → v3 {item.v3Name} ({item.v3Id})
-                            </span>
+                            {#if item.v3Id === 'UNMAPPED'}
+                                <span class="qa-tools__seeded-item-map">
+                                    → UNMAPPED (v3 id: {item.v3Id})
+                                </span>
+                            {:else}
+                                <span class="qa-tools__seeded-item-map">
+                                    → v3 {item.v3Name} ({item.v3Id})
+                                </span>
+                            {/if}
                         </li>
                     {/each}
                 </ul>

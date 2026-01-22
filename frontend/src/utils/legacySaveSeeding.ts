@@ -62,8 +62,17 @@ const buildLegacyV1SeedItems = (profileId: string): LegacyV1SeedItem[] => {
     });
 
     return Array.from(itemIds)
-        .map((id) => LEGACY_V1_ITEM_MAPPINGS.find((entry) => entry.v1Id === id))
-        .filter((entry): entry is LegacyV1SeedItem => Boolean(entry));
+        .sort((a, b) => a - b)
+        .map((id) => {
+            const mapping = LEGACY_V1_ITEM_MAPPINGS.find((entry) => entry.v1Id === id);
+
+            return {
+                v1Id: id,
+                v1Name: mapping?.v1Name ?? `Legacy item ${id}`,
+                v3Id: mapping?.v3Id ?? 'UNMAPPED',
+                v3Name: mapping?.v3Name ?? 'UNMAPPED',
+            };
+        });
 };
 
 export const getLegacyV1SeedItems = (profileId = 'minimal'): LegacyV1SeedItem[] =>
