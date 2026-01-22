@@ -80,8 +80,9 @@
         }
 
         .quest-img {
-            width: 105%;
-            height: 105%;
+            width: 100%;
+            height: auto;
+            margin: 0;
         }
     }
 
