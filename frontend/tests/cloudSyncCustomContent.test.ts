@@ -7,7 +7,12 @@ import {
 import * as cloudSync from '../src/utils/cloudSync.js';
 import * as customContentBackup from '../src/utils/customContentBackup.js';
 import * as githubGists from '../src/lib/cloudsync/githubGists';
-import { getItems, getProcesses, getQuests, openCustomContentDB } from '../src/utils/indexeddb.js';
+import {
+    getItems,
+    getProcesses,
+    getQuests,
+    openCustomContentDB,
+} from '../src/utils/indexeddb.js';
 
 const decodeBackup = (value: string) => {
     const decoded =
