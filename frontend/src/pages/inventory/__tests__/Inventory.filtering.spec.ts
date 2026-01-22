@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/svelte';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockItems = [
     {
@@ -25,13 +25,14 @@ const mockItems = [
     },
 ];
 
-vi.mock('../json/items', () => ({
-    default: mockItems,
+const mockRefs = vi.hoisted(() => ({
+    baseState: { inventory: {} },
+    state: null,
+    setInventory: () => undefined,
 }));
 
-vi.mock('../json/items/index.js', () => ({
-    default: mockItems,
-}));
+vi.mock('../json/items', () => ({ default: mockItems }));
+vi.mock('../json/items/index.js', () => ({ default: mockItems }));
 
 vi.mock('../../../utils/itemCatalog.js', () => ({
     getMergedItemCatalog: () => Promise.resolve(mockItems),
@@ -39,7 +40,9 @@ vi.mock('../../../utils/itemCatalog.js', () => ({
 
 vi.mock('../../../utils/gameState/common.js', async () => {
     const { writable } = await import('svelte/store');
-    const store = writable({ inventory: {} });
+    const store = writable(structuredClone(mockRefs.baseState));
+    mockRefs.state = store;
+    mockRefs.setInventory = (inventory) => store.set({ inventory });
 
     return {
         state: store,
@@ -57,14 +60,15 @@ afterEach(() => {
 });
 
 describe('Inventory filtering', () => {
+    beforeEach(() => {
+        mockRefs.setInventory(structuredClone(mockRefs.baseState.inventory));
+    });
+
     it('hides zero-count items when show-all is unchecked (numeric inventory)', async () => {
-        const { state } = await import('../../../utils/gameState/common.js');
-        state.set({
-            inventory: {
-                trophy: 1,
-                'custom-alpha': 0,
-                'custom-beta': 0,
-            },
+        mockRefs.setInventory({
+            trophy: 1,
+            'custom-alpha': 0,
+            'custom-beta': 0,
         });
 
         const { getByRole, getByText, queryByText } = render(Inventory);
@@ -85,13 +89,10 @@ describe('Inventory filtering', () => {
     });
 
     it('hides zero-count items when show-all is unchecked (object inventory)', async () => {
-        const { state } = await import('../../../utils/gameState/common.js');
-        state.set({
-            inventory: {
-                trophy: { count: 1 },
-                'custom-alpha': { count: 0 },
-                'custom-beta': { count: 0 },
-            },
+        mockRefs.setInventory({
+            trophy: { count: 1 },
+            'custom-alpha': { count: 0 },
+            'custom-beta': { count: 0 },
         });
 
         const { getByRole, getByText, queryByText } = render(Inventory);
