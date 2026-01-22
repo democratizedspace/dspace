@@ -9,38 +9,38 @@ slug: 'team'
 
 ### [Futuroptimist](https://www.threads.com/@futuroptimist)
 
-![The Threads avatar of Futuroptimist](/assets/team_esp.jpg)
+![The Threads avatar of Futuroptimist](/assets/team_futuroptimist.jpg)
 
 Futuroptimist is the founding human developer of the game. Software engineer by day, and also by night. You can find him saying weird stuff about Dyson swarms on [Threads](https://www.threads.com/@futuroptimist).
 
 ## AI
 
-### Codex
+### [OpenAI Codex](https://openai.com/codex)
 
-![Placeholder image for Codex](/assets/team_playground.jpg)
+![Placeholder image for OpenAI Codex](/assets/team_playground.jpg)
 
-Codex helps automate coding tasks and quickly explore implementation ideas, making it a handy
-companion for prototyping gameplay systems and content tooling.
+OpenAI Codex helps automate coding tasks and quickly explore implementation ideas, making it a
+handy companion for prototyping gameplay systems and content tooling.
 
-### GitHub Copilot Agent
+### [GitHub Copilot Agent](https://github.com/features/copilot)
 
 ![Placeholder image for GitHub Copilot Agent](/assets/team_playground.jpg)
 
 GitHub Copilot Agent assists with multi-step coding workflows, codebase navigation, and cleanup,
 which keeps the team focused on higher-level design and iteration.
 
-### Nano Banana Pro
+### [Nano Banana Pro](https://nanobananapro.com)
 
 ![Placeholder image for Nano Banana Pro](/assets/team_playground.jpg)
 
 Nano Banana Pro provides fast, lightweight creative experiments for asset ideation, giving the
 team a quick way to explore visual directions before polishing final art.
 
-### Greptile (for AI reviews)
+### [Greptile](https://greptile.com)
 
 ![Placeholder image for Greptile](/assets/team_playground.jpg)
 
-Greptile helps with AI-powered code reviews, catching inconsistencies and suggesting improvements
+Greptile is used for AI-powered code reviews, catching inconsistencies and suggesting improvements
 so the team can ship confidently.
 
 ### [ChatGPT](https://chat.openai.com)
