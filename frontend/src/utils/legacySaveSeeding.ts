@@ -24,6 +24,11 @@ type LegacySeedSummary = {
     localStorageKeys: string[];
 };
 
+type LegacySeedItem = {
+    id: string;
+    value: string | number;
+};
+
 const getV1Profiles = () =>
     v1Fixture?.profiles && typeof v1Fixture.profiles === 'object' ? v1Fixture.profiles : {};
 
@@ -39,6 +44,19 @@ export const LEGACY_V2_SEED_PROFILES = Object.entries(getV2Profiles()).map(([id,
     id,
     label: profile?.label ?? id,
 }));
+
+export const getLegacyV1SeededItems = (profileId = 'minimal'): LegacySeedItem[] => {
+    const profiles = getV1Profiles();
+    const profile = profiles?.[profileId];
+    const cookies = Array.isArray(profile?.cookies) ? (profile.cookies as CookieFixture[]) : [];
+
+    return cookies
+        .filter((entry) => entry?.name?.startsWith('item-'))
+        .map((entry) => ({
+            id: entry.name,
+            value: entry.value,
+        }));
+};
 
 const isSecureContext = () =>
     typeof location !== 'undefined' && typeof location.protocol === 'string'

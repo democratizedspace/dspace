@@ -9,6 +9,7 @@
     import Chip from './Chip.svelte';
     import {
         clearSeededLegacySaves,
+        getLegacyV1SeededItems,
         LEGACY_V1_SEED_PROFILES,
         LEGACY_V2_SEED_PROFILES,
         seedLegacyV1Save,
@@ -26,9 +27,12 @@
     let lastSeedSummary = null;
     let v1Profile = LEGACY_V1_SEED_PROFILES[0]?.id ?? 'minimal';
     let v2Profile = LEGACY_V2_SEED_PROFILES[0]?.id ?? 'minimal';
+    let v1SeededItems = [];
 
     let unsubscribeAvailability;
     let unsubscribeEnabled;
+
+    $: v1SeededItems = getLegacyV1SeededItems(v1Profile);
 
     const handleToggle = () => {
         setQaCheatsPreference(!enabled);
@@ -150,6 +154,21 @@
                         {/each}
                     </select>
                 </label>
+                <div class="qa-tools__seed-details" aria-live="polite">
+                    <span class="qa-tools__seed-title">Seeded v1 items</span>
+                    {#if v1SeededItems.length}
+                        <ul class="qa-tools__seed-list">
+                            {#each v1SeededItems as item}
+                                <li class="qa-tools__seed-item">
+                                    <span class="qa-tools__seed-item-id">{item.id}</span>
+                                    <span class="qa-tools__seed-item-amount">× {item.value}</span>
+                                </li>
+                            {/each}
+                        </ul>
+                    {:else}
+                        <p class="qa-tools__seed-empty">None configured</p>
+                    {/if}
+                </div>
                 <Chip
                     text={workingAction === 'seed-v1' ? 'Seeding v1…' : 'Seed v1 save'}
                     onClick={seedV1Save}
@@ -387,6 +406,55 @@
         text-transform: uppercase;
         letter-spacing: 0.04em;
         color: #93c5fd;
+    }
+
+    .qa-tools__seed-details {
+        display: grid;
+        gap: 0.35rem;
+        padding: 0.5rem 0.65rem;
+        border-radius: 8px;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        background: rgba(15, 23, 42, 0.5);
+    }
+
+    .qa-tools__seed-title {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #c7d2fe;
+        font-weight: 600;
+    }
+
+    .qa-tools__seed-list {
+        margin: 0;
+        padding-left: 1.1rem;
+        display: grid;
+        gap: 0.2rem;
+        color: #e2e8f0;
+        font-size: 0.9rem;
+    }
+
+    .qa-tools__seed-item {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        list-style: disc;
+    }
+
+    .qa-tools__seed-item-id {
+        font-weight: 600;
+        color: #bae6fd;
+    }
+
+    .qa-tools__seed-item-amount {
+        color: #f8fafc;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .qa-tools__seed-empty {
+        margin: 0;
+        color: #94a3b8;
+        font-size: 0.9rem;
     }
 
     .qa-tools__select {
