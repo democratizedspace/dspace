@@ -43,7 +43,7 @@ creation process.
 
 Install dependencies with `pnpm install` and use Node.js 20 LTS (`.nvmrc`) before running
 tests. For technical contributions, please review our
-[Developer Guide](../../../../../DEVELOPER_GUIDE.md)
+[Developer Guide](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md)
 first.
 
 ## Testing and Feedback
