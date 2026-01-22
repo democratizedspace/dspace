@@ -21,6 +21,7 @@ import {
 } from '../src/utils/legacyV1ItemIdMap.js';
 
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy').id;
+const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token').id;
 
 beforeEach(async () => {
     localStorage.clear();
@@ -161,6 +162,16 @@ describe('game state upgrades', () => {
         expect(state.inventory[V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID.dUSD]).toBe(5);
         expect(state.inventory.stale || 0).toBe(0);
         expect(state.quests.keep).toBeUndefined();
+    });
+
+    test('importV1V3 grants upgrade trophies when legacy items are imported', async () => {
+        const migrated = await importV1V3([{ id: '1', count: 1 }]);
+
+        expect(migrated.inventory[EARLY_ADOPTER_ID]).toBe(1);
+        expect(migrated.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBe(1);
+        const state = loadGameState();
+        expect(state.inventory[EARLY_ADOPTER_ID]).toBe(1);
+        expect(state.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBe(1);
     });
 
     test('importV2V3 sanitizes legacy inventory artifacts', async () => {

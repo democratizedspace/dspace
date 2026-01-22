@@ -177,6 +177,11 @@ const grantTrophyIfMissing = (state, trophyId) => {
     }
 };
 
+const grantTrophiesIfMissing = (state, trophyIds = []) => {
+    if (!Array.isArray(trophyIds)) return;
+    trophyIds.filter(Boolean).forEach((trophyId) => grantTrophyIfMissing(state, trophyId));
+};
+
 const resolveUpgradeOptions = (options = {}) => ({
     grantUpgradeTrophy: Boolean(options.grantUpgradeTrophy),
 });
@@ -231,7 +236,7 @@ export const importV1V3 = async (itemList, options = {}) => {
     });
 
     if (hasLegacyItems) {
-        grantTrophyIfMissing(nextState, EARLY_ADOPTER_ID);
+        grantTrophiesIfMissing(nextState, [EARLY_ADOPTER_ID, LEGACY_V2_UPGRADE_TROPHY_ID]);
     }
 
     return persistMigratedState(nextState);
