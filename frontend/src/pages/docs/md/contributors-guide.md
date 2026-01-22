@@ -15,7 +15,7 @@ checklist for full coverage.
 - Use Node.js 20 LTS (`nvm use`) and run `pnpm install` at the repo root.
 - Install Playwright browsers with `npx playwright install chromium` if
   you plan to run end-to-end tests locally.
-- Enable the [recommended VS Code extensions](https://github.com/democratizedspace/dspace/blob/v3/.vscode/extensions.json)
+- Enable the [recommended VS Code extensions](https://github.com/democratizedspace/dspace/blob/v3/frontend/.vscode/extensions.json)
   for linting, formatting, and Svelte language support.
 
 ## 2. Branching & workflow
@@ -37,7 +37,7 @@ Before pushing, run the scripts that CI enforces:
 - `npm run audit:ci`
 
 Use `SKIP_E2E=1` only when browsers are unavailable and call it out in your PR.
-Refer to the [Testing Guide](https://github.com/democratizedspace/dspace/blob/v3/TESTING.md) for component,
+Refer to the [Testing Guide](https://github.com/democratizedspace/dspace/blob/v3/frontend/TESTING.md) for component,
 integration, and
 Playwright best practices.
 
