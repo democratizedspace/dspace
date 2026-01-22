@@ -297,8 +297,15 @@ export const saveGameState = async (newState) => {
 
     // Persist the latest snapshots to localStorage immediately so data survives
     // page refreshes even if the pending IndexedDB writes are interrupted.
-    lsWrite(BACKUP_STORE, previousSnapshot);
-    lsWrite(STATE_STORE, gameState);
+    const legacyV2Read = !useLocalStorage ? readLegacyV2LocalStorage() : null;
+    const hasLegacyV2 =
+        !useLocalStorage &&
+        (Boolean(legacyV2Read?.state) || (legacyV2Read?.errors?.length ?? 0) > 0);
+
+    if (!hasLegacyV2) {
+        lsWrite(BACKUP_STORE, previousSnapshot);
+        lsWrite(STATE_STORE, gameState);
+    }
 
     writeQueue = writeQueue.then(async () => {
         await write(BACKUP_STORE, previousSnapshot, { skipLocalStorage: true }).catch(

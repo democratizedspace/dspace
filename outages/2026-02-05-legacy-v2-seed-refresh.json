@@ -1,0 +1,12 @@
+{
+  "id": "2026-02-05-legacy-v2-seed-refresh",
+  "date": "2026-02-05",
+  "component": "frontend/settings",
+  "rootCause": "saveGameState always mirrored the v3 snapshot into localStorage, which overwrote legacy v2 gameState data immediately after QA seeding, so detection never saw a legacy save.",
+  "resolution": "Preserve legacy v2 localStorage entries by skipping v3 localStorage writes when legacy data or parse errors are present and IndexedDB is in use.",
+  "references": [
+    "frontend/src/utils/gameState/common.js",
+    "frontend/src/components/svelte/LegacySaveUpgrade.svelte",
+    "frontend/src/components/svelte/QaCheatsToggle.svelte"
+  ]
+}
