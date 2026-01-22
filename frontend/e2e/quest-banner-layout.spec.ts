@@ -10,12 +10,16 @@ test.describe('Quest banner layout', () => {
 
         const getBannerRect = async () =>
             banner.evaluate((element) => {
+                const container = document.querySelector('[data-testid="chat-panel"]');
                 const rect = element.getBoundingClientRect();
-                const scrollX = window.scrollX || 0;
-                const scrollY = window.scrollY || 0;
+                const containerRect = container?.getBoundingClientRect();
+                const scrollX = container instanceof HTMLElement ? container.scrollLeft : window.scrollX || 0;
+                const scrollY = container instanceof HTMLElement ? container.scrollTop : window.scrollY || 0;
+                const offsetX = containerRect ? rect.x - containerRect.x : rect.x;
+                const offsetY = containerRect ? rect.y - containerRect.y : rect.y;
                 return {
-                    x: Math.round(rect.x + scrollX),
-                    y: Math.round(rect.y + scrollY),
+                    x: Math.round(offsetX + scrollX),
+                    y: Math.round(offsetY + scrollY),
                     width: Math.round(rect.width),
                     height: Math.round(rect.height),
                 };
