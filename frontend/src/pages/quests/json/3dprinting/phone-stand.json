@@ -1,25 +1,25 @@
 {
     "id": "3dprinting/phone-stand",
     "title": "Print a Phone Stand",
-    "description": "Practice 3D printing by making a handy phone stand.",
+    "description": "Practice 3D printing by making a stable phone stand you can reproduce at home.",
     "image": "/assets/quests/phone_stand_print.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey, Sydney again! Ready for a tidy phone stand? We'll tune the printer, then send a clean white PLA print.",
+            "text": "Sydney here. Our comms table needs a phone stand that won't wobble mid-briefing. We'll prep the printer, slice a simple stand, and print in clean white PLA.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Let's prep first."
+                    "text": "Let's prep the printer and bench."
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "Level the bed, purge to white PLA, and check the nozzle is clean. Ventilate the room and keep hair and sleeves away from the gantry.",
+            "text": "Clear the build plate, wipe it with isopropyl alcohol, and check for leftover filament. Paper-level the bed at all four corners, then purge to white PLA. Keep sleeves tied back and ventilate the room while the hotend is on.",
             "options": [
                 {
                     "type": "process",
@@ -29,7 +29,7 @@
                 {
                     "type": "process",
                     "process": "swap-white-pla-filament",
-                    "text": "Swap to white PLA and purge.",
+                    "text": "Load white PLA and purge until the flow is clean.",
                     "requiresItems": [
                         {
                             "id": "a42e441a-5569-490c-86e4-ce711117cd22",
@@ -47,20 +47,31 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "print",
+                    "goto": "slice",
                     "requiresItems": [
                         {
                             "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
                             "count": 1
                         }
                     ],
-                    "text": "Ready to slice and print."
+                    "text": "Bed is clean and PLA is loaded."
+                }
+            ]
+        },
+        {
+            "id": "slice",
+            "text": "Open the phone-stand STL in your slicer. Lay the back flat on the plate, rotate so the lip faces up, and use: 0.2 mm layers, 0.28 mm first layer, 3 walls, 5 top/bottom layers, 15% gyroid infill, and a 5 mm brim. Enable supports from build plate only if the lip overhang is steep on your model.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Sliced and ready to print."
                 }
             ]
         },
         {
             "id": "print",
-            "text": "Slice with 15% gyroid infill and a 0.28 mm draft profile. Watch the first layer, then let it finish undisturbed before flexing the bed to release.",
+            "text": "Preheat to 200°C nozzle / 60°C bed. Watch the first layer: it should be slightly squished but not translucent. If corners lift, pause and add more brim. Let the print finish, then wait for the bed to cool before flexing the plate to release the stand.",
             "options": [
                 {
                     "type": "process",
@@ -76,17 +87,17 @@
                             "count": 1
                         }
                     ],
-                    "text": "The stand is finished and cooled!"
+                    "text": "The stand is printed and cooled."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! Let the print cool before removing it, then enjoy a sturdy stand for your phone. Remember to turn off the printer.",
+            "text": "Deburr the edges with a hobby knife, test-fit your phone, and add adhesive feet if you want extra grip. Log the settings so the rest of the workshop can reproduce it, and power down the printer safely.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Sydney!"
+                    "text": "Stand delivered to the comms table."
                 }
             ]
         }
