@@ -59,6 +59,7 @@
         margin: -10px;
         object-fit: cover;
         border: 5px solid #68d46d;
+        box-sizing: border-box;
     }
 
     .quest-img-compact {
@@ -74,14 +75,15 @@
         min-width: 0;
     }
 
-    @media only screen and (max-width: 479px) {
+    @media only screen and (max-width: 640px) {
         .content {
             flex-direction: column;
         }
 
         .quest-img {
-            width: 105%;
-            height: 105%;
+            width: calc(100% - 20px);
+            height: auto;
+            margin: 0 10px;
         }
     }
 
@@ -95,7 +97,7 @@
         padding: 16px 24px;
     }
 
-    @media only screen and (max-width: 479px) {
+    @media only screen and (max-width: 640px) {
         .content-text {
             padding: 12px 16px;
         }
