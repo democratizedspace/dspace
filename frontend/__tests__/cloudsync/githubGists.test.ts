@@ -1,5 +1,9 @@
-import { describe, expect, it } from 'vitest';
-import { formatBackupFilename, sanitizeSaveForBackup } from '../../src/lib/cloudsync/githubGists';
+import { describe, expect, it, vi } from 'vitest';
+import {
+    formatBackupFilename,
+    listBackups,
+    sanitizeSaveForBackup,
+} from '../../src/lib/cloudsync/githubGists';
 
 describe('githubGists helpers', () => {
     it('formats filenames without colons using ISO timestamp', () => {
@@ -50,5 +54,24 @@ describe('githubGists helpers', () => {
         expect(sanitized.array[0].secretKey).toBeUndefined();
         expect(sanitized.array[0].keep).toBe('yep');
         expect(sanitized.array[1].credentialNotes).toBeUndefined();
+    });
+
+    it('requests backups with caching disabled', async () => {
+        const fetchMock = vi.fn().mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve([]),
+        });
+
+        await listBackups('ghp_test', fetchMock as unknown as typeof fetch);
+
+        expect(fetchMock).toHaveBeenCalledWith(
+            'https://api.github.com/gists?per_page=30',
+            expect.objectContaining({
+                cache: 'no-store',
+                headers: expect.objectContaining({
+                    'Cache-Control': 'no-cache',
+                }),
+            })
+        );
     });
 });

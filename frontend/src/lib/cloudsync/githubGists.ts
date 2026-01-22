@@ -91,9 +91,11 @@ export async function listBackups(token: string, fetchImpl?: typeof fetch) {
     const trimmedToken = token?.trim?.() ?? '';
 
     const response = await activeFetch('https://api.github.com/gists?per_page=30', {
+        cache: 'no-store',
         headers: {
             Authorization: `token ${trimmedToken}`,
             Accept: 'application/vnd.github+json',
+            'Cache-Control': 'no-cache',
         },
     });
 

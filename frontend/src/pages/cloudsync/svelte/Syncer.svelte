@@ -110,7 +110,8 @@
             gistId = '';
             await clearCloudGistId();
             announce('Upload successful', 'success');
-            if (result?.id) {
+            await loadBackups(trimmedToken);
+            if (result?.id && !backups.some((backup) => backup.id === result.id)) {
                 backups = [result, ...backups];
             }
         } catch (err) {
