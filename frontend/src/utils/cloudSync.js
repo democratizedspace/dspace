@@ -5,6 +5,7 @@ import {
     ready,
     exportGameStateString,
 } from './gameState/common.js';
+import { buildCustomContentBackupData } from './customContentBackup.js';
 import { loadGitHubToken } from './githubToken.js';
 import {
     BACKUP_DESCRIPTION,
@@ -28,16 +29,22 @@ async function clearCloudGistId() {
     await saveGameState(state);
 }
 
+async function buildCloudSyncPayload(state) {
+    const customContent = await buildCustomContentBackupData();
+    return exportGameStateString({
+        providerHint: 'github-gist',
+        stateOverride: state,
+        customContent,
+    });
+}
+
 async function uploadGameStateToGist(token) {
     if (!token) {
         token = await loadGitHubToken();
     }
     await ready;
     const state = loadGameState();
-    const content = exportGameStateString({
-        providerHint: 'github-gist',
-        stateOverride: state,
-    });
+    const content = await buildCloudSyncPayload(state);
     const result = await createBackupGist({
         token,
         content,
@@ -66,7 +73,10 @@ async function downloadGameStateFromGist(token, gistId) {
         files['dspace-save.json'];
     const content = backupFile?.content;
     if (!content) throw new Error('Invalid gist content');
-    await importGameStateString(content);
+    await importGameStateString(content, {
+        restoreCustomContent: true,
+        overwriteCustomContent: true,
+    });
 }
 
 async function fetchBackupList(token) {

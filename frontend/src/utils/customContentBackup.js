@@ -464,7 +464,43 @@ async function assertNoImportConflicts(items, processes, quests) {
     }
 }
 
-export async function restoreCustomContentBackup(data, { onProgress } = {}) {
+async function clearCustomContentStores() {
+    const dbInstance = await openCustomContentDB();
+    try {
+        const tx = dbInstance.transaction(['items', 'processes', 'quests'], 'readwrite');
+        const stores = {
+            items: tx.objectStore('items'),
+            processes: tx.objectStore('processes'),
+            quests: tx.objectStore('quests'),
+        };
+        const clearStore = (store) =>
+            new Promise((resolve, reject) => {
+                const request = store.clear();
+                request.onsuccess = () => resolve();
+                request.onerror = () =>
+                    reject(request.error ?? new Error('IndexedDB clear failed.'));
+            });
+        await Promise.all([
+            clearStore(stores.items),
+            clearStore(stores.processes),
+            clearStore(stores.quests),
+        ]);
+        await new Promise((resolve, reject) => {
+            tx.oncomplete = resolve;
+            tx.onerror = () =>
+                reject(tx.error ?? new Error('IndexedDB transaction failed during clear.'));
+            tx.onabort = () =>
+                reject(tx.error ?? new Error('IndexedDB transaction aborted during clear.'));
+        });
+    } finally {
+        dbInstance.close();
+    }
+}
+
+export async function restoreCustomContentBackup(
+    data,
+    { onProgress, overwriteExisting = false } = {}
+) {
     const normalized = normalizeBackupData(data);
     const items = normalized.items.map((item) => sanitizeEntity(item));
     const processes = normalized.processes.map((process) => sanitizeEntity(process));
@@ -508,7 +544,11 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
         }
     });
 
-    await assertNoImportConflicts(items, processes, quests);
+    if (overwriteExisting) {
+        await clearCustomContentStores();
+    } else {
+        await assertNoImportConflicts(items, processes, quests);
+    }
 
     const plan = buildImportPlan(items, processes, quests, images);
     emitProgress(onProgress, { type: 'plan', assets: plan });

@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import { sanitizeSaveForBackup } from '../../lib/cloudsync/githubGists';
+import { restoreCustomContentBackup } from '../customContentBackup.js';
 import { normalizeSettings, DEFAULT_SETTINGS } from '../settingsDefaults.js';
 import { isBrowser } from '../ssr.js';
 import { readLegacyV2LocalStorage } from '../legacySaveParsing.js';
@@ -340,9 +341,12 @@ const buildBackupEnvelope = (state, providerHint = LOCAL_EXPORT_PROVIDER) => ({
 });
 
 export const exportGameStateString = (options = {}) => {
-    const { providerHint = LOCAL_EXPORT_PROVIDER, stateOverride } = options;
+    const { providerHint = LOCAL_EXPORT_PROVIDER, stateOverride, customContent } = options;
     const sourceState = stateOverride ?? gameState;
     const envelope = buildBackupEnvelope(sourceState, providerHint);
+    if (customContent) {
+        envelope.customContent = customContent;
+    }
     const jsonStr = JSON.stringify(envelope);
     if (typeof btoa === 'function') {
         return btoa(jsonStr);
@@ -365,7 +369,8 @@ const decodeBase64 = (value) => {
     throw new Error('Base64 decoding is not supported in this environment');
 };
 
-export const importGameStateString = async (gameStateString) => {
+export const importGameStateString = async (gameStateString, options = {}) => {
+    const { restoreCustomContent = false, overwriteCustomContent = false } = options;
     if (typeof gameStateString !== 'string') {
         throw new TypeError('Expected serialized game state to be a string');
     }
@@ -386,6 +391,7 @@ export const importGameStateString = async (gameStateString) => {
     }
 
     let payload = imported;
+    let customContent = null;
 
     if (imported && typeof imported === 'object' && 'payload' in imported) {
         if (
@@ -398,8 +404,14 @@ export const importGameStateString = async (gameStateString) => {
         }
 
         payload = imported.payload;
+        customContent = imported.customContent ?? null;
     }
 
+    if (restoreCustomContent && customContent && isBrowser) {
+        await restoreCustomContentBackup(customContent, {
+            overwriteExisting: overwriteCustomContent,
+        });
+    }
     await saveGameState(payload);
 };
 
