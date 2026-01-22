@@ -6,17 +6,16 @@ slug: 'contributors-guide'
 # DSPACE Contributors Guide
 
 Welcome! This guide walks you through the essentials for shipping high-quality
-changes to DSPACE. Pair it with the [Developer Guide](../../../../../DEVELOPER_GUIDE.md)
-and the [`CONTRIBUTING.md`](../../../../../CONTRIBUTING.md) checklist for full
-coverage.
+changes to DSPACE. Pair it with the [Developer Guide][developer-guide] and the
+[`CONTRIBUTING.md`][contributing] checklist for full coverage.
 
 ## 1. Environment setup
 
 - Use Node.js 20 LTS (`nvm use`) and run `pnpm install` at the repo root.
 - Install Playwright browsers with `npx playwright install chromium` if
   you plan to run end-to-end tests locally.
-- Enable the [recommended VS Code extensions](../../../../.vscode/extensions.json)
-  for linting, formatting, and Svelte language support.
+- Enable the [recommended VS Code extensions][vscode-extensions] for linting,
+  formatting, and Svelte language support.
 
 ## 2. Branching & workflow
 
@@ -37,8 +36,7 @@ Before pushing, run the scripts that CI enforces:
 - `npm run audit:ci`
 
 Use `SKIP_E2E=1` only when browsers are unavailable and call it out in your PR.
-Refer to the [Testing Guide](../../../../TESTING.md) for component,
-integration, and
+Refer to the [Testing Guide][testing-guide] for component, integration, and
 Playwright best practices.
 
 ## 4. Documentation updates
@@ -59,3 +57,8 @@ Every feature or fix should update the relevant docs:
   benefit from your experience.
 
 Thanks for helping us democratize space exploration!
+
+[developer-guide]: https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md
+[contributing]: https://github.com/democratizedspace/dspace/blob/v3/CONTRIBUTING.md
+[vscode-extensions]: https://github.com/democratizedspace/dspace/blob/v3/.vscode/extensions.json
+[testing-guide]: https://github.com/democratizedspace/dspace/blob/v3/TESTING.md
