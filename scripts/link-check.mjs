@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { glob } from 'glob';
+import { parse } from 'yaml';
 
 const markdownFiles = await glob('**/*.md', {
   ignore: [
@@ -17,6 +18,24 @@ const markdownFiles = await glob('**/*.md', {
 
 const linkPattern = /\[[^\]]+\]\(([^)]+)\)/g;
 const broken = [];
+const githubPrefixes = [
+  'https://github.com/democratizedspace/dspace/blob/v3/',
+  'http://github.com/democratizedspace/dspace/blob/v3/',
+];
+const docsSlugSet = new Set();
+const repoRoot = process.cwd();
+
+const docsFiles = await glob('frontend/src/pages/docs/md/*.md');
+for (const file of docsFiles) {
+  const content = await readFile(file, 'utf8');
+  const match = content.match(/^\s*---\s*([\s\S]*?)\s*---/);
+  if (!match) continue;
+  const frontmatter = parse(match[1]);
+  const slug = String(frontmatter?.slug ?? '').trim();
+  if (slug) {
+    docsSlugSet.add(slug.toLowerCase());
+  }
+}
 
 // Map internal routes to their Astro/Svelte file locations
 function resolveInternalRoute(routePath) {
@@ -58,6 +77,11 @@ function resolveInternalRoute(routePath) {
     if (parts.length > 2) {
       candidates.push(path.join(pagesDir, basePath, '[pathId]', '[questId].astro'));
     }
+
+    // Check for nested docs routes (e.g., /docs/outages/2026-01-02 -> /docs/outages/[slug].astro)
+    if (basePath === 'docs' && parts.length > 2 && parts[1]) {
+      candidates.push(path.join(pagesDir, 'docs', parts[1], '[slug].astro'));
+    }
     
     // Check for item routes (e.g., /inventory/item/37 -> /inventory/item/[itemId]/index.astro)
     if (parts.length > 2 && parts[1]) {
@@ -85,6 +109,12 @@ function resolveInternalRoute(routePath) {
   return candidates.some(candidate => existsSync(candidate));
 }
 
+function stripHashAndQuery(value) {
+  const [beforeHash] = value.split('#');
+  const [beforeQuery] = beforeHash.split('?');
+  return beforeQuery;
+}
+
 for (const file of markdownFiles) {
   const content = await readFile(file, 'utf8');
   let match;
@@ -92,17 +122,45 @@ for (const file of markdownFiles) {
     const rawLink = match[1].trim();
     if (!rawLink) continue;
     if (rawLink.startsWith('#')) continue;
-    if (rawLink.includes('://')) continue;
+    if (rawLink.includes('://')) {
+      const githubPrefix = githubPrefixes.find((prefix) => rawLink.startsWith(prefix));
+      if (githubPrefix) {
+        const githubTarget = stripHashAndQuery(rawLink);
+        const githubPath = decodeURIComponent(
+          githubTarget.slice(githubPrefix.length).replace(/^\/+/, '')
+        );
+        const resolvedGithubPath = path.resolve(repoRoot, githubPath);
+        const relativeGithubPath = path.relative(repoRoot, resolvedGithubPath);
+        if (
+          !relativeGithubPath.startsWith('..') &&
+          !path.isAbsolute(relativeGithubPath) &&
+          existsSync(resolvedGithubPath)
+        ) {
+          continue;
+        }
+        broken.push({ file, link: rawLink });
+      }
+      continue;
+    }
     if (rawLink.startsWith('mailto:')) continue;
     if (rawLink.startsWith('data:')) continue;
     if (rawLink.startsWith('javascript:')) continue;
     if (rawLink.startsWith('<')) continue;
 
-    const [targetPath] = rawLink.split('#');
+    const targetPath = stripHashAndQuery(rawLink);
     if (!targetPath) continue;
 
     // Handle internal routes (starting with /)
     if (rawLink.startsWith('/')) {
+      if (rawLink.startsWith('/docs/')) {
+        const docsSlug = targetPath.replace(/^\/docs\//, '').replace(/\/$/, '');
+        if (docsSlug && !docsSlug.includes('/')) {
+          if (!docsSlugSet.has(docsSlug.toLowerCase())) {
+            broken.push({ file, link: rawLink });
+            continue;
+          }
+        }
+      }
       if (resolveInternalRoute(targetPath)) continue;
       
       // Check if it's a static asset
