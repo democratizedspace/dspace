@@ -190,7 +190,7 @@
             />
         </div>
         <div class="qa-tools__seeded-items">
-            <h4>V1 seeded items (selected profile)</h4>
+            <h4>V1 items in selected profile</h4>
             <p class="qa-tools__seeded-items-description">
                 These are the v1 item cookies included with the selected seed profile and their v3
                 migration targets.
