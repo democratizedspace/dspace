@@ -66,6 +66,7 @@
             { "label": "token.place API", "href": "/docs/token-place" },
             { "label": "Schema versioning", "href": "/docs/schema-versioning" },
             { "label": "UI lifecycle", "href": "/docs/ui-lifecycle" },
+            { "label": "Testing Guide", "href": "/docs/testing" },
             { "label": "Codex prompt library", "href": "/docs/prompts-codex" }
         ]
     }

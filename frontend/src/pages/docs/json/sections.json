@@ -152,6 +152,7 @@
                 "keywords": ["storage", "migration", "saves"]
             },
             { "title": "UI lifecycle", "href": "/docs/ui-lifecycle", "keywords": ["frontend"] },
+            { "title": "Testing Guide", "href": "/docs/testing", "keywords": ["dev", "tests"] },
             {
                 "title": "Codex prompt library",
                 "href": "/docs/prompts-codex",
