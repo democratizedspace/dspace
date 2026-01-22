@@ -75,15 +75,15 @@
         min-width: 0;
     }
 
-    @media only screen and (max-width: 640px) {
+    @media only screen and (max-width: 479px) {
         .content {
             flex-direction: column;
         }
 
         .quest-img {
-            width: 100%;
+            width: calc(100% - 20px);
             height: auto;
-            margin: 0;
+            margin: 0 10px;
         }
     }
 
