@@ -26,7 +26,6 @@ const mockItems = [
 ];
 
 const mockRefs = vi.hoisted(() => ({
-    baseState: { inventory: {} },
     state: null,
     setInventory: () => undefined,
 }));
@@ -40,7 +39,7 @@ vi.mock('../../../utils/itemCatalog.js', () => ({
 
 vi.mock('../../../utils/gameState/common.js', async () => {
     const { writable } = await import('svelte/store');
-    const store = writable(structuredClone(mockRefs.baseState));
+    const store = writable({ inventory: {} });
     mockRefs.state = store;
     mockRefs.setInventory = (inventory) => store.set({ inventory });
 
@@ -61,7 +60,7 @@ afterEach(() => {
 
 describe('Inventory filtering', () => {
     beforeEach(() => {
-        mockRefs.setInventory(structuredClone(mockRefs.baseState.inventory));
+        mockRefs.setInventory({});
     });
 
     it('hides zero-count items when show-all is unchecked (numeric inventory)', async () => {
