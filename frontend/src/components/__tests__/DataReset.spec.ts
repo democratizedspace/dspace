@@ -1,5 +1,6 @@
 import 'fake-indexeddb/auto';
 import { fireEvent, render, waitFor } from '@testing-library/svelte';
+import { tick } from 'svelte';
 import { vi } from 'vitest';
 import DataReset from '../svelte/DataReset.svelte';
 
@@ -13,6 +14,8 @@ type IndexedDBWithDatabases = IDBFactory & {
 
 const indexedDBWithDatabases = indexedDB as IndexedDBWithDatabases;
 const originalLocation = globalThis.location;
+const originalIndexedDB = globalThis.indexedDB;
+const flushMicrotasks = () => new Promise((resolve) => queueMicrotask(resolve));
 
 describe('DataReset', () => {
     beforeEach(() => {
@@ -204,5 +207,54 @@ describe('DataReset', () => {
         expect(writes.some((value) => value.includes('domain=app.example.com'))).toBe(true);
         expect(writes.some((value) => value.includes('domain=.example.com'))).toBe(true);
         expect(writes.some((value) => value.includes('path=/foo'))).toBe(true);
+    });
+
+    describe('reload behavior', () => {
+        beforeEach(() => {
+            delete (globalThis as any).indexedDB;
+            vi.useFakeTimers();
+        });
+
+        afterEach(() => {
+            Object.defineProperty(globalThis, 'indexedDB', {
+                value: originalIndexedDB,
+                configurable: true,
+            });
+            vi.useRealTimers();
+        });
+
+        it('reloads the page after a confirmed wipe', async () => {
+            vi.spyOn(window, 'confirm').mockReturnValue(true);
+            const reloadSpy = vi
+                .spyOn(window.location, 'reload')
+                .mockImplementation(() => undefined);
+
+            const { getByRole } = render(DataReset);
+
+            await fireEvent.click(getByRole('button', { name: /wipe all app data/i }));
+
+            await tick();
+            await flushMicrotasks();
+            vi.runAllTimers();
+
+            expect(reloadSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it('does not reload when the user cancels the wipe', async () => {
+            vi.spyOn(window, 'confirm').mockReturnValue(false);
+            const reloadSpy = vi
+                .spyOn(window.location, 'reload')
+                .mockImplementation(() => undefined);
+
+            const { getByRole } = render(DataReset);
+
+            await fireEvent.click(getByRole('button', { name: /wipe all app data/i }));
+
+            await tick();
+            await flushMicrotasks();
+            vi.runAllTimers();
+
+            expect(reloadSpy).not.toHaveBeenCalled();
+        });
     });
 });
