@@ -417,6 +417,7 @@ export const importGameStateString = async (gameStateString) => {
             await restoreCustomContentBackup(customContent, { overwriteExisting: true });
         } catch (err) {
             logPersistenceIssue('Custom content restore failed:', err);
+            throw err;
         }
     }
 };

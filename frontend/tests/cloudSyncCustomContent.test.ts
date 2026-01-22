@@ -51,6 +51,39 @@ const seedCustomContent = async () => {
     db.close();
 };
 
+const overwriteCustomContent = async () => {
+    const db = await openCustomContentDB();
+    const tx = db.transaction(['items', 'processes', 'quests'], 'readwrite');
+    tx.objectStore('items').put({
+        id: 'custom-item-1',
+        name: 'Conflicting Item',
+        custom: true,
+    });
+    tx.objectStore('processes').put({
+        id: 'custom-process-1',
+        title: 'Conflicting Process',
+        duration: 30,
+        custom: true,
+        requireItems: [],
+        consumeItems: [],
+        createItems: [],
+    });
+    tx.objectStore('quests').put({
+        id: 'custom-quest-1',
+        title: 'Conflicting Quest',
+        description: 'Conflicting custom quest.',
+        custom: true,
+        dialogue: [],
+    });
+
+    await new Promise<void>((resolve, reject) => {
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error ?? new Error('Failed to overwrite custom content'));
+        tx.onabort = () => reject(tx.error ?? new Error('Failed to overwrite custom content'));
+    });
+    db.close();
+};
+
 describe('cloud sync custom content', () => {
     beforeEach(async () => {
         await resetGameState();
@@ -82,5 +115,32 @@ describe('cloud sync custom content', () => {
         expect(items.map((item) => item.id)).toContain('custom-item-1');
         expect(processes.map((process) => process.id)).toContain('custom-process-1');
         expect(quests.map((quest) => quest.id)).toContain('custom-quest-1');
+    });
+
+    test('overwrites existing custom content during import', async () => {
+        await seedCustomContent();
+        const customContent = await buildCustomContentBackupData();
+        const encoded = exportGameStateString({
+            providerHint: 'github-gist',
+            customContent,
+        });
+
+        await overwriteCustomContent();
+        await importGameStateString(encoded);
+
+        const [items, processes, quests] = await Promise.all([
+            getItems(),
+            getProcesses(),
+            getQuests(),
+        ]);
+        expect(items.find((item) => item.id === 'custom-item-1')?.name).toBe(
+            'Cloud Sync Item'
+        );
+        expect(processes.find((process) => process.id === 'custom-process-1')?.title).toBe(
+            'Cloud Sync Process'
+        );
+        expect(quests.find((quest) => quest.id === 'custom-quest-1')?.title).toBe(
+            'Cloud Sync Quest'
+        );
     });
 });
