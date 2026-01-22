@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, expect, test, vi } from 'vitest';
+import { LEGACY_V2_SEED_SKIP_KEY } from '../src/utils/legacySaveParsing.js';
 
 const originalIndexedDB = globalThis.indexedDB;
 
@@ -7,6 +8,11 @@ const legacyState = {
     inventory: {},
     quests: {},
     processes: {},
+};
+
+const getStoredGameState = () => {
+    const raw = localStorage.getItem('gameState');
+    return raw ? JSON.parse(raw) : null;
 };
 
 beforeEach(() => {
@@ -22,13 +28,24 @@ afterEach(() => {
 
 test('auto-migration skips when QA seed flag is present', async () => {
     localStorage.setItem('gameState', JSON.stringify(legacyState));
-    const { LEGACY_V2_SEED_SKIP_KEY } = await import('../src/utils/legacySaveParsing.js');
     localStorage.setItem(LEGACY_V2_SEED_SKIP_KEY, 'true');
 
     await import('../src/utils/gameState.js');
-    await new Promise((resolve) => setTimeout(resolve, 0));
 
-    const stored = JSON.parse(localStorage.getItem('gameState'));
-    expect(stored.versionNumberString).toBe('2.1');
+    const stored = getStoredGameState();
+    expect(stored?.versionNumberString).toBe('2.1');
     expect(localStorage.getItem(LEGACY_V2_SEED_SKIP_KEY)).toBe('true');
+});
+
+test('auto-migration runs when QA seed flag is absent', async () => {
+    localStorage.setItem('gameState', JSON.stringify(legacyState));
+
+    await import('../src/utils/gameState.js');
+    const { ready } = await import('../src/utils/gameState/common.js');
+    await ready;
+    await Promise.resolve();
+
+    const stored = getStoredGameState();
+    expect(stored?.versionNumberString).toBe('3');
+    expect(localStorage.getItem(LEGACY_V2_SEED_SKIP_KEY)).toBeNull();
 });
