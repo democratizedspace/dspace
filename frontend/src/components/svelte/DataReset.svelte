@@ -159,6 +159,10 @@
         }
 
         isClearing = false;
+
+        if (typeof window !== 'undefined') {
+            window.location.reload();
+        }
     };
 </script>
 
