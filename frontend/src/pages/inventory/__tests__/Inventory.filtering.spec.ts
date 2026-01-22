@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/svelte';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const mockItems = [
+const mockItems = vi.hoisted(() => [
     {
         id: 'trophy',
         name: 'Trophy',
@@ -23,7 +23,7 @@ const mockItems = [
         image: '/images/custom-beta.png',
         category: 'Custom',
     },
-];
+]);
 
 const mockRefs = vi.hoisted(() => ({
     state: null,
