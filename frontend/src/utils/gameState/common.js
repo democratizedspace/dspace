@@ -3,6 +3,7 @@ import { sanitizeSaveForBackup } from '../../lib/cloudsync/githubGists';
 import { normalizeSettings, DEFAULT_SETTINGS } from '../settingsDefaults.js';
 import { isBrowser } from '../ssr.js';
 import { readLegacyV2LocalStorage } from '../legacySaveParsing.js';
+import { restoreCustomContentBackup } from '../customContentBackup.js';
 
 const DB_NAME = 'dspaceGameState';
 const DB_VERSION = 1;
@@ -339,10 +340,13 @@ const buildBackupEnvelope = (state, providerHint = LOCAL_EXPORT_PROVIDER) => ({
     payload: sanitizeSaveForBackup(state),
 });
 
-export const exportGameStateString = (options = {}) => {
+export const buildGameStateBackupEnvelope = (options = {}) => {
     const { providerHint = LOCAL_EXPORT_PROVIDER, stateOverride } = options;
     const sourceState = stateOverride ?? gameState;
-    const envelope = buildBackupEnvelope(sourceState, providerHint);
+    return buildBackupEnvelope(sourceState, providerHint);
+};
+
+export const encodeBackupEnvelope = (envelope) => {
     const jsonStr = JSON.stringify(envelope);
     if (typeof btoa === 'function') {
         return btoa(jsonStr);
@@ -353,19 +357,10 @@ export const exportGameStateString = (options = {}) => {
     throw new Error('Base64 encoding is not supported in this environment');
 };
 
-const decodeBase64 = (value) => {
-    if (typeof atob === 'function') {
-        return atob(value);
-    }
+export const exportGameStateString = (options = {}) =>
+    encodeBackupEnvelope(buildGameStateBackupEnvelope(options));
 
-    if (typeof Buffer !== 'undefined') {
-        return Buffer.from(value, 'base64').toString('utf8');
-    }
-
-    throw new Error('Base64 decoding is not supported in this environment');
-};
-
-export const importGameStateString = async (gameStateString) => {
+export const parseGameStateString = (gameStateString) => {
     if (typeof gameStateString !== 'string') {
         throw new TypeError('Expected serialized game state to be a string');
     }
@@ -386,6 +381,7 @@ export const importGameStateString = async (gameStateString) => {
     }
 
     let payload = imported;
+    let customContent = null;
 
     if (imported && typeof imported === 'object' && 'payload' in imported) {
         if (
@@ -398,9 +394,32 @@ export const importGameStateString = async (gameStateString) => {
         }
 
         payload = imported.payload;
+        customContent = imported.customContent ?? null;
     }
 
+    return { payload, customContent };
+};
+
+const decodeBase64 = (value) => {
+    if (typeof atob === 'function') {
+        return atob(value);
+    }
+
+    if (typeof Buffer !== 'undefined') {
+        return Buffer.from(value, 'base64').toString('utf8');
+    }
+
+    throw new Error('Base64 decoding is not supported in this environment');
+};
+
+export const importGameStateString = async (gameStateString) => {
+    const { payload, customContent } = parseGameStateString(gameStateString);
+
     await saveGameState(payload);
+
+    if (customContent && isBrowser) {
+        await restoreCustomContentBackup(customContent);
+    }
 };
 
 export const resetGameState = async () => {

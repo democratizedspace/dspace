@@ -3,7 +3,8 @@ import {
     loadGameState,
     saveGameState,
     ready,
-    exportGameStateString,
+    buildGameStateBackupEnvelope,
+    encodeBackupEnvelope,
 } from './gameState/common.js';
 import { loadGitHubToken } from './githubToken.js';
 import {
@@ -12,6 +13,48 @@ import {
     createBackupGist,
     listBackups,
 } from '../lib/cloudsync/githubGists';
+import {
+    BACKUP_SCHEMA_VERSION as CUSTOM_CONTENT_SCHEMA_VERSION,
+    buildCustomContentBackupData,
+} from './customContentBackup.js';
+import { db, ENTITY_TYPES } from './customcontent.js';
+
+const sanitizeCustomEntity = (entity) => {
+    if (!entity || typeof entity !== 'object') {
+        return entity;
+    }
+    const sanitized = { ...entity };
+    if ('imageBlob' in sanitized) {
+        delete sanitized.imageBlob;
+    }
+    return sanitized;
+};
+
+const buildFallbackCustomContentBackup = async () => {
+    const [items, processes, quests] = await Promise.all([
+        db.list(ENTITY_TYPES.ITEM),
+        db.list(ENTITY_TYPES.PROCESS),
+        db.list(ENTITY_TYPES.QUEST),
+    ]);
+    const sanitizedItems = items.map((item) => sanitizeCustomEntity(item));
+    const sanitizedProcesses = processes.map((process) => sanitizeCustomEntity(process));
+    const sanitizedQuests = quests.map((quest) => sanitizeCustomEntity(quest));
+
+    return {
+        schemaVersion: CUSTOM_CONTENT_SCHEMA_VERSION,
+        timestamp: new Date().toISOString(),
+        counts: {
+            items: sanitizedItems.length,
+            processes: sanitizedProcesses.length,
+            quests: sanitizedQuests.length,
+            images: 0,
+        },
+        items: sanitizedItems,
+        processes: sanitizedProcesses,
+        quests: sanitizedQuests,
+        images: [],
+    };
+};
 
 async function loadCloudGistId() {
     await ready;
@@ -34,10 +77,20 @@ async function uploadGameStateToGist(token) {
     }
     await ready;
     const state = loadGameState();
-    const content = exportGameStateString({
+    const envelope = buildGameStateBackupEnvelope({
         providerHint: 'github-gist',
         stateOverride: state,
     });
+    try {
+        envelope.customContent = await buildCustomContentBackupData();
+    } catch (error) {
+        console.warn(
+            'Failed to include custom content in cloud sync backup, using fallback:',
+            error
+        );
+        envelope.customContent = await buildFallbackCustomContentBackup();
+    }
+    const content = encodeBackupEnvelope(envelope);
     const result = await createBackupGist({
         token,
         content,
