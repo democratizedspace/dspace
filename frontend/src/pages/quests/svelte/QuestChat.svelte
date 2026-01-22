@@ -202,6 +202,8 @@
         height: 100%;
         object-fit: cover;
         margin: 0;
+        border-radius: 0;
+        border: none;
     }
 
     .left {
