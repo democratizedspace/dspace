@@ -195,6 +195,16 @@
         gap: 20px;
     }
 
+    @media only screen and (max-width: 639px) {
+        .container {
+            padding-inline: 1rem;
+        }
+
+        .quests-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
     .visualizer-slot {
         margin: 30px 0;
         width: 100%;
