@@ -11,8 +11,8 @@ import { getItems, getProcesses, getQuests, openCustomContentDB } from '../src/u
 
 const decodeBackup = (value: string) => JSON.parse(Buffer.from(value, 'base64').toString('utf8'));
 
-const deleteCustomContentDatabase = async () =>
-    await new Promise<void>((resolve, reject) => {
+const deleteCustomContentDatabase = () =>
+    new Promise<void>((resolve, reject) => {
         const request = indexedDB.deleteDatabase('CustomContent');
         request.onsuccess = () => resolve();
         request.onerror = () =>
