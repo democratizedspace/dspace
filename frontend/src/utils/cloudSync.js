@@ -12,6 +12,16 @@ import {
     createBackupGist,
     listBackups,
 } from '../lib/cloudsync/githubGists';
+import { buildCustomContentBackupData } from './customContentBackup.js';
+
+const buildCloudSyncCustomContent = async () => {
+    try {
+        return await buildCustomContentBackupData();
+    } catch (error) {
+        console.warn('Failed to build custom content backup for cloud sync:', error);
+        return null;
+    }
+};
 
 async function loadCloudGistId() {
     await ready;
@@ -34,9 +44,11 @@ async function uploadGameStateToGist(token) {
     }
     await ready;
     const state = loadGameState();
+    const customContent = await buildCloudSyncCustomContent();
     const content = exportGameStateString({
         providerHint: 'github-gist',
         stateOverride: state,
+        customContent: customContent || undefined,
     });
     const result = await createBackupGist({
         token,
