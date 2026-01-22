@@ -1,10 +1,12 @@
-import { beforeEach, describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import {
     exportGameStateString,
     importGameStateString,
     resetGameState,
 } from '../src/utils/gameState/common.js';
-import { buildCustomContentBackupData } from '../src/utils/customContentBackup.js';
+import * as cloudSync from '../src/utils/cloudSync.js';
+import * as customContentBackup from '../src/utils/customContentBackup.js';
+import * as githubGists from '../src/lib/cloudsync/githubGists';
 import { getItems, getProcesses, getQuests, openCustomContentDB } from '../src/utils/indexeddb.js';
 
 const decodeBackup = (value: string) => JSON.parse(Buffer.from(value, 'base64').toString('utf8'));
@@ -90,9 +92,52 @@ describe('cloud sync custom content', () => {
         await deleteCustomContentDatabase();
     });
 
+    test('uploads custom content in gist payload', async () => {
+        const customContent = {
+            items: [{ id: 'custom-item-1', name: 'Cloud Sync Item', custom: true }],
+            processes: [
+                {
+                    id: 'custom-process-1',
+                    title: 'Cloud Sync Process',
+                    duration: 60,
+                    custom: true,
+                    requireItems: [],
+                    consumeItems: [],
+                    createItems: [],
+                },
+            ],
+            quests: [
+                {
+                    id: 'custom-quest-1',
+                    title: 'Cloud Sync Quest',
+                    description: 'Custom quest stored via cloud sync.',
+                    custom: true,
+                    dialogue: [],
+                },
+            ],
+        };
+        const buildSpy = vi
+            .spyOn(customContentBackup, 'buildCustomContentBackupData')
+            .mockResolvedValue(customContent);
+        const createSpy = vi.spyOn(githubGists, 'createBackupGist').mockResolvedValue({
+            id: 'gist-id',
+        });
+
+        await cloudSync.uploadGameStateToGist('token');
+
+        expect(createSpy).toHaveBeenCalledTimes(1);
+        const { content } = createSpy.mock.calls[0][0];
+        const decoded = decodeBackup(content);
+
+        expect(decoded.customContent).toEqual(customContent);
+
+        buildSpy.mockRestore();
+        createSpy.mockRestore();
+    });
+
     test('includes custom content in exports and restores on import', async () => {
         await seedCustomContent();
-        const customContent = await buildCustomContentBackupData();
+        const customContent = await customContentBackup.buildCustomContentBackupData();
         const encoded = exportGameStateString({
             providerHint: 'github-gist',
             customContent,
@@ -119,7 +164,7 @@ describe('cloud sync custom content', () => {
 
     test('overwrites existing custom content during import', async () => {
         await seedCustomContent();
-        const customContent = await buildCustomContentBackupData();
+        const customContent = await customContentBackup.buildCustomContentBackupData();
         const encoded = exportGameStateString({
             providerHint: 'github-gist',
             customContent,

@@ -18,8 +18,9 @@ vi.mock('../src/utils/customQuestValidation.js', () => ({
     validateQuestData: questValidator,
 }));
 
-const { runMigrations, getCurrentSchemaVersion, DataIntegrityValidationError } =
-    await import('../src/utils/migrations.js');
+const { runMigrations, getCurrentSchemaVersion, DataIntegrityValidationError } = await import(
+    '../src/utils/migrations.js'
+);
 
 function openDb() {
     return new Promise((resolve, reject) => {
