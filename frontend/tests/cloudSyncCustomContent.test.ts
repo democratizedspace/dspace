@@ -9,7 +9,13 @@ import * as customContentBackup from '../src/utils/customContentBackup.js';
 import * as githubGists from '../src/lib/cloudsync/githubGists';
 import { getItems, getProcesses, getQuests, openCustomContentDB } from '../src/utils/indexeddb.js';
 
-const decodeBackup = (value: string) => JSON.parse(Buffer.from(value, 'base64').toString('utf8'));
+const decodeBackup = (value: string) => {
+    const decoded =
+        typeof atob === 'function'
+            ? atob(value)
+            : Buffer.from(value, 'base64').toString('utf8');
+    return JSON.parse(decoded);
+};
 
 const deleteCustomContentDatabase = () =>
     new Promise<void>((resolve, reject) => {
