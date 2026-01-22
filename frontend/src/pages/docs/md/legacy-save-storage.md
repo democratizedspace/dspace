@@ -580,7 +580,8 @@ backup and fallback for unsupported environments.
 **Merge vs. replace semantics:**
 
 - **V1 → V3:** `importV1V3` adds counts to the current inventory (merge) or rebuilds from scratch
-  (replace) and grants the **Early Adopter Token** trophy if any v1 items were imported.
+  (replace). When the `/settings` upgrade flow runs, it grants the **Early Adopter Token** and
+  **V2 Upgrade Trophy** if any v1 items were imported.
 - **V2 → V3:** `importV2V3` replaces the current save with the legacy state, and
   `mergeLegacyStateIntoCurrent` combines inventory while preserving existing quests/processes.
 - Both flows update `versionNumberString` to `3` and persist to IndexedDB.
