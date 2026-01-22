@@ -2,6 +2,7 @@ import { isBrowser } from './ssr.js';
 import v1Fixture from './legacySaveFixtures/legacy_v1_cookie_save.json' assert { type: 'json' };
 import v2Fixture from './legacySaveFixtures/legacy_v2_localstorage_save.json' assert { type: 'json' };
 import { LEGACY_V2_STORAGE_KEYS } from './legacySaveParsing.js';
+import { LEGACY_V1_ITEM_MAPPINGS } from './legacyV1ItemIdMap.js';
 
 const COOKIE_EXPIRY = 'Fri, 31 Dec 9999 23:59:59 GMT';
 const GAME_STATE_DB_NAME = 'dspaceGameState';
@@ -24,6 +25,13 @@ type LegacySeedSummary = {
     localStorageKeys: string[];
 };
 
+type LegacyV1SeedItem = {
+    v1Id: number;
+    v1Name: string;
+    v3Id: string;
+    v3Name: string;
+};
+
 const getV1Profiles = () =>
     v1Fixture?.profiles && typeof v1Fixture.profiles === 'object' ? v1Fixture.profiles : {};
 
@@ -39,6 +47,36 @@ export const LEGACY_V2_SEED_PROFILES = Object.entries(getV2Profiles()).map(([id,
     id,
     label: profile?.label ?? id,
 }));
+
+const buildLegacyV1SeedItems = (profileId: string): LegacyV1SeedItem[] => {
+    const profiles = getV1Profiles();
+    const profile = profiles?.[profileId];
+    const cookies = Array.isArray(profile?.cookies) ? (profile.cookies as CookieFixture[]) : [];
+    const itemIds = new Set<number>();
+    cookies.forEach(({ name }) => {
+        if (typeof name !== 'string' || !name.startsWith('item-')) return;
+        const rawId = Number(name.replace('item-', ''));
+        if (!Number.isNaN(rawId)) {
+            itemIds.add(rawId);
+        }
+    });
+
+    return Array.from(itemIds)
+        .sort((a, b) => a - b)
+        .map((id) => {
+            const mapping = LEGACY_V1_ITEM_MAPPINGS.find((entry) => entry.v1Id === id);
+
+            return {
+                v1Id: id,
+                v1Name: mapping?.v1Name ?? `Legacy item ${id}`,
+                v3Id: mapping?.v3Id ?? 'UNMAPPED',
+                v3Name: mapping?.v3Name ?? 'UNMAPPED',
+            };
+        });
+};
+
+export const getLegacyV1SeedItems = (profileId = 'minimal'): LegacyV1SeedItem[] =>
+    buildLegacyV1SeedItems(profileId);
 
 const isSecureContext = () =>
     typeof location !== 'undefined' && typeof location.protocol === 'string'
