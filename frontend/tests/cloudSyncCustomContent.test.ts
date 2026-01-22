@@ -7,18 +7,11 @@ import {
 import * as cloudSync from '../src/utils/cloudSync.js';
 import * as customContentBackup from '../src/utils/customContentBackup.js';
 import * as githubGists from '../src/lib/cloudsync/githubGists';
-import {
-    getItems,
-    getProcesses,
-    getQuests,
-    openCustomContentDB,
-} from '../src/utils/indexeddb.js';
+import { getItems, getProcesses, getQuests, openCustomContentDB } from '../src/utils/indexeddb.js';
 
 const decodeBackup = (value: string) => {
     const decoded =
-        typeof atob === 'function'
-            ? atob(value)
-            : Buffer.from(value, 'base64').toString('utf8');
+        typeof atob === 'function' ? atob(value) : Buffer.from(value, 'base64').toString('utf8');
     return JSON.parse(decoded);
 };
 
@@ -58,10 +51,8 @@ const seedCustomContent = async () => {
 
     await new Promise<void>((resolve, reject) => {
         tx.oncomplete = () => resolve();
-        tx.onerror = () =>
-            reject(tx.error ?? new Error('Failed to seed custom content'));
-        tx.onabort = () =>
-            reject(tx.error ?? new Error('Failed to seed custom content'));
+        tx.onerror = () => reject(tx.error ?? new Error('Failed to seed custom content'));
+        tx.onabort = () => reject(tx.error ?? new Error('Failed to seed custom content'));
     });
     db.close();
 };
@@ -93,10 +84,8 @@ const overwriteCustomContent = async () => {
 
     await new Promise<void>((resolve, reject) => {
         tx.oncomplete = () => resolve();
-        tx.onerror = () =>
-            reject(tx.error ?? new Error('Failed to overwrite custom content'));
-        tx.onabort = () =>
-            reject(tx.error ?? new Error('Failed to overwrite custom content'));
+        tx.onerror = () => reject(tx.error ?? new Error('Failed to overwrite custom content'));
+        tx.onabort = () => reject(tx.error ?? new Error('Failed to overwrite custom content'));
     });
     db.close();
 };
@@ -199,12 +188,10 @@ describe('cloud sync custom content', () => {
             getProcesses(),
             getQuests(),
         ]);
-        expect(items.find((item) => item.id === 'custom-item-1')?.name).toBe(
-            'Cloud Sync Item'
+        expect(items.find((item) => item.id === 'custom-item-1')?.name).toBe('Cloud Sync Item');
+        expect(processes.find((process) => process.id === 'custom-process-1')?.title).toBe(
+            'Cloud Sync Process'
         );
-        expect(
-            processes.find((process) => process.id === 'custom-process-1')?.title
-        ).toBe('Cloud Sync Process');
         expect(quests.find((quest) => quest.id === 'custom-quest-1')?.title).toBe(
             'Cloud Sync Quest'
         );
