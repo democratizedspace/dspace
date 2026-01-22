@@ -2,6 +2,7 @@ import { isBrowser } from './ssr.js';
 import v1Fixture from './legacySaveFixtures/legacy_v1_cookie_save.json' assert { type: 'json' };
 import v2Fixture from './legacySaveFixtures/legacy_v2_localstorage_save.json' assert { type: 'json' };
 import { LEGACY_V2_STORAGE_KEYS } from './legacySaveParsing.js';
+import { LEGACY_V1_ITEM_MAPPINGS } from './legacyV1ItemIdMap.js';
 
 const COOKIE_EXPIRY = 'Fri, 31 Dec 9999 23:59:59 GMT';
 const GAME_STATE_DB_NAME = 'dspaceGameState';
@@ -24,6 +25,8 @@ type LegacySeedSummary = {
     localStorageKeys: string[];
 };
 
+const LEGACY_V1_ITEM_COOKIE_REGEX = /^item-(\d+)$/;
+
 const getV1Profiles = () =>
     v1Fixture?.profiles && typeof v1Fixture.profiles === 'object' ? v1Fixture.profiles : {};
 
@@ -39,6 +42,30 @@ export const LEGACY_V2_SEED_PROFILES = Object.entries(getV2Profiles()).map(([id,
     id,
     label: profile?.label ?? id,
 }));
+
+const getV1SeededItemIds = () => {
+    const profiles = getV1Profiles();
+    const ids = new Set<number>();
+    Object.values(profiles).forEach((profile) => {
+        (Array.isArray(profile?.cookies) ? profile.cookies : []).forEach((entry) => {
+            const match = String(entry?.name ?? '').match(LEGACY_V1_ITEM_COOKIE_REGEX);
+            if (match) {
+                ids.add(Number.parseInt(match[1], 10));
+            }
+        });
+    });
+    return Array.from(ids).sort((a, b) => a - b);
+};
+
+export const LEGACY_V1_SEEDED_ITEMS = getV1SeededItemIds().map((v1Id) => {
+    const mapping = LEGACY_V1_ITEM_MAPPINGS.find((entry) => entry.v1Id === v1Id);
+    return {
+        v1Id,
+        v1Name: mapping?.v1Name ?? `item ${v1Id}`,
+        v3Id: mapping?.v3Id ?? null,
+        v3Name: mapping?.v3Name ?? 'Unknown item',
+    };
+});
 
 const isSecureContext = () =>
     typeof location !== 'undefined' && typeof location.protocol === 'string'

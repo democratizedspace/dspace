@@ -10,6 +10,7 @@
     import {
         clearSeededLegacySaves,
         LEGACY_V1_SEED_PROFILES,
+        LEGACY_V1_SEEDED_ITEMS,
         LEGACY_V2_SEED_PROFILES,
         seedLegacyV1Save,
         seedLegacyV2LocalStorageSave,
@@ -135,6 +136,20 @@
                 Create or clear sample legacy saves to test the Legacy save upgrades flows. Actions
                 refresh the page so detection reruns immediately.
             </p>
+            <div class="qa-tools__seeded-items">
+                <p class="qa-tools__summary-title">V1 seeded items (legacy → current)</p>
+                <ul class="qa-tools__seeded-list">
+                    {#each LEGACY_V1_SEEDED_ITEMS as item}
+                        <li>
+                            <span class="qa-tools__seeded-id">item-{item.v1Id}</span>
+                            <span class="qa-tools__seeded-name">({item.v1Name})</span>
+                            <span class="qa-tools__seeded-arrow">→</span>
+                            <span class="qa-tools__seeded-name">{item.v3Name}</span>
+                        </li>
+                    {/each}
+                </ul>
+                <p class="qa-tools__seeded-note">Also seeds a dUSD currency balance.</p>
+            </div>
         </div>
         <div class="qa-tools__actions">
             <div class="qa-tools__seed-group">
@@ -422,6 +437,46 @@
         margin: 0 0 0.35rem 0;
         font-weight: 600;
         color: #bfdbfe;
+    }
+
+    .qa-tools__seeded-items {
+        border-radius: 10px;
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        padding: 0.65rem 0.75rem;
+        display: grid;
+        gap: 0.5rem;
+        background: rgba(15, 23, 42, 0.4);
+    }
+
+    .qa-tools__seeded-list {
+        margin: 0;
+        padding-left: 1.1rem;
+        display: grid;
+        gap: 0.2rem;
+        color: #e2e8f0;
+    }
+
+    .qa-tools__seeded-id {
+        font-family:
+            'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+            'Liberation Mono', 'Courier New', monospace;
+        font-weight: 600;
+        color: #bfdbfe;
+    }
+
+    .qa-tools__seeded-name {
+        color: #fde68a;
+    }
+
+    .qa-tools__seeded-arrow {
+        margin: 0 0.35rem;
+        color: #f59e0b;
+    }
+
+    .qa-tools__seeded-note {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #fcd34d;
     }
 
     .qa-tools__summary-empty {
