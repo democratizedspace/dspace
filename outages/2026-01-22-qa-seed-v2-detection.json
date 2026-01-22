@@ -1,0 +1,13 @@
+{
+  "id": "2026-01-22-qa-seed-v2-detection",
+  "date": "2026-01-22",
+  "component": "settings/legacy-save-seeding",
+  "rootCause": "QA seeding wrote v2 data to localStorage, but subsequent v3 save writes overwrote the same keys before detection ran, so legacy v2 artifacts were erased on refresh.",
+  "resolution": "Persist seeded v2 localStorage data with a QA marker and skip v3 localStorage backups while the marker is present so legacy detection can find the seeded save.",
+  "references": [
+    "frontend/src/utils/gameState/common.js",
+    "frontend/src/utils/legacySaveSeeding.ts",
+    "frontend/src/utils/legacySaveParsing.js",
+    "/settings"
+  ]
+}

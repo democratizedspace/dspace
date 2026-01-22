@@ -1,7 +1,7 @@
 import { isBrowser } from './ssr.js';
 import v1Fixture from './legacySaveFixtures/legacy_v1_cookie_save.json' assert { type: 'json' };
 import v2Fixture from './legacySaveFixtures/legacy_v2_localstorage_save.json' assert { type: 'json' };
-import { LEGACY_V2_STORAGE_KEYS } from './legacySaveParsing.js';
+import { LEGACY_V2_SEED_MARKER_KEY, LEGACY_V2_STORAGE_KEYS } from './legacySaveParsing.js';
 
 const COOKIE_EXPIRY = 'Fri, 31 Dec 9999 23:59:59 GMT';
 const GAME_STATE_DB_NAME = 'dspaceGameState';
@@ -114,8 +114,14 @@ export const seedLegacyV2LocalStorageSave = (profileId = 'minimal'): LegacySeedS
 
     const serialized = JSON.stringify(state);
     localStorage.setItem('gameState', serialized);
+    localStorage.setItem('gameStateBackup', serialized);
+    localStorage.setItem(LEGACY_V2_SEED_MARKER_KEY, profileId);
 
-    return buildSeedSummary(profileId, profile?.label ?? profileId, [], ['gameState']);
+    return buildSeedSummary(profileId, profile?.label ?? profileId, [], [
+        'gameState',
+        'gameStateBackup',
+        LEGACY_V2_SEED_MARKER_KEY,
+    ]);
 };
 
 export const clearLegacyV1CookieSave = (): void => {
@@ -133,6 +139,7 @@ export const clearLegacyV2LocalStorageSave = (): void => {
     LEGACY_V2_STORAGE_KEYS.forEach((key) => {
         localStorage.removeItem(key);
     });
+    localStorage.removeItem(LEGACY_V2_SEED_MARKER_KEY);
 };
 
 export const clearSeededLegacySaves = (): void => {

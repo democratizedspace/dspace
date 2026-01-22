@@ -2,7 +2,7 @@ import { writable } from 'svelte/store';
 import { sanitizeSaveForBackup } from '../../lib/cloudsync/githubGists';
 import { normalizeSettings, DEFAULT_SETTINGS } from '../settingsDefaults.js';
 import { isBrowser } from '../ssr.js';
-import { readLegacyV2LocalStorage } from '../legacySaveParsing.js';
+import { LEGACY_V2_SEED_MARKER_KEY, readLegacyV2LocalStorage } from '../legacySaveParsing.js';
 import { restoreCustomContentBackup } from '../customContentBackup.js';
 
 const DB_NAME = 'dspaceGameState';
@@ -146,6 +146,16 @@ function lsWrite(store, value) {
         localStorage.setItem(lsKey(store), JSON.stringify(value));
     } catch (err) {
         logPersistenceIssue('Error writing to localStorage:', err);
+    }
+}
+
+function hasLegacySeedLock() {
+    if (!isBrowser) return false;
+    try {
+        return Boolean(localStorage.getItem(LEGACY_V2_SEED_MARKER_KEY));
+    } catch (err) {
+        logPersistenceIssue('Error checking legacy seed marker:', err);
+        return false;
     }
 }
 
@@ -295,10 +305,14 @@ export const saveGameState = async (newState) => {
     gameState = nextState;
     state.set(gameState);
 
+    const allowLocalStorageBackup = !hasLegacySeedLock() || useLocalStorage;
+
     // Persist the latest snapshots to localStorage immediately so data survives
     // page refreshes even if the pending IndexedDB writes are interrupted.
-    lsWrite(BACKUP_STORE, previousSnapshot);
-    lsWrite(STATE_STORE, gameState);
+    if (allowLocalStorageBackup) {
+        lsWrite(BACKUP_STORE, previousSnapshot);
+        lsWrite(STATE_STORE, gameState);
+    }
 
     writeQueue = writeQueue.then(async () => {
         await write(BACKUP_STORE, previousSnapshot, { skipLocalStorage: true }).catch(
