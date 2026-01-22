@@ -5,6 +5,7 @@ import {
     ready,
     exportGameStateString,
 } from './gameState/common.js';
+import { exportCustomContentString } from './customcontent.js';
 import { loadGitHubToken } from './githubToken.js';
 import {
     BACKUP_DESCRIPTION,
@@ -34,9 +35,17 @@ async function uploadGameStateToGist(token) {
     }
     await ready;
     const state = loadGameState();
+    let customContentBackup = null;
+    try {
+        customContentBackup = await exportCustomContentString();
+    } catch (error) {
+        const details = error instanceof Error ? error.message : String(error);
+        console.warn('Failed to export custom content for Cloud Sync:', details);
+    }
     const content = exportGameStateString({
         providerHint: 'github-gist',
         stateOverride: state,
+        customContentBackup,
     });
     const result = await createBackupGist({
         token,

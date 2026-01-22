@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import { sanitizeSaveForBackup } from '../../lib/cloudsync/githubGists';
+import { importCustomContentString } from '../customcontent.js';
 import { normalizeSettings, DEFAULT_SETTINGS } from '../settingsDefaults.js';
 import { isBrowser } from '../ssr.js';
 import { readLegacyV2LocalStorage } from '../legacySaveParsing.js';
@@ -340,9 +341,17 @@ const buildBackupEnvelope = (state, providerHint = LOCAL_EXPORT_PROVIDER) => ({
 });
 
 export const exportGameStateString = (options = {}) => {
-    const { providerHint = LOCAL_EXPORT_PROVIDER, stateOverride } = options;
+    const {
+        providerHint = LOCAL_EXPORT_PROVIDER,
+        stateOverride,
+        customContentBackup = null,
+    } = options;
     const sourceState = stateOverride ?? gameState;
-    const envelope = buildBackupEnvelope(sourceState, providerHint);
+    const payload =
+        typeof customContentBackup === 'string'
+            ? { ...sourceState, customContentBackup }
+            : sourceState;
+    const envelope = buildBackupEnvelope(payload, providerHint);
     const jsonStr = JSON.stringify(envelope);
     if (typeof btoa === 'function') {
         return btoa(jsonStr);
@@ -386,6 +395,7 @@ export const importGameStateString = async (gameStateString) => {
     }
 
     let payload = imported;
+    let customContentBackup = null;
 
     if (imported && typeof imported === 'object' && 'payload' in imported) {
         if (
@@ -400,7 +410,21 @@ export const importGameStateString = async (gameStateString) => {
         payload = imported.payload;
     }
 
+    if (payload && typeof payload === 'object' && 'customContentBackup' in payload) {
+        customContentBackup = payload.customContentBackup;
+        delete payload.customContentBackup;
+    }
+
     await saveGameState(payload);
+
+    if (typeof customContentBackup === 'string' && isBrowser) {
+        try {
+            await importCustomContentString(customContentBackup);
+        } catch (error) {
+            const details = error instanceof Error ? error.message : String(error);
+            console.warn('Failed to import custom content backup:', details);
+        }
+    }
 };
 
 export const resetGameState = async () => {
