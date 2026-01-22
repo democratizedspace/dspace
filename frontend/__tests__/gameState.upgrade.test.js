@@ -176,6 +176,16 @@ describe('game state upgrades', () => {
         expect(state.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBe(1);
     });
 
+    test('importV1V3 does not award V2 Upgrade Trophy without explicit upgrade', async () => {
+        const migrated = await importV1V3([{ id: '1', count: 2 }]);
+
+        expect(migrated.inventory[EARLY_ADOPTER_ID]).toBe(1);
+        expect(migrated.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBeUndefined();
+        const state = loadGameState();
+        expect(state.inventory[EARLY_ADOPTER_ID]).toBe(1);
+        expect(state.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBeUndefined();
+    });
+
     test('importV2V3 sanitizes legacy inventory artifacts', async () => {
         localStorage.setItem(
             'gameState',
