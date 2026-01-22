@@ -6,21 +6,25 @@ slug: 'contributors-guide'
 # DSPACE Contributors Guide
 
 Welcome! This guide walks you through the essentials for shipping high-quality
-changes to DSPACE. Pair it with the [Developer Guide](../../../../../DEVELOPER_GUIDE.md)
-and the [`CONTRIBUTING.md`](../../../../../CONTRIBUTING.md) checklist for full
-coverage.
+changes to DSPACE. Pair it with the [Developer
+Guide](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md)
+and the
+[`CONTRIBUTING.md`](https://github.com/democratizedspace/dspace/blob/v3/CONTRIBUTING.md)
+checklist for full coverage.
 
 ## 1. Environment setup
 
 - Use Node.js 20 LTS (`nvm use`) and run `pnpm install` at the repo root.
 - Install Playwright browsers with `npx playwright install chromium` if
   you plan to run end-to-end tests locally.
-- Enable the [recommended VS Code extensions](../../../../.vscode/extensions.json)
+- Enable the [recommended VS Code
+  extensions](https://github.com/democratizedspace/dspace/blob/v3/.vscode/extensions.json)
   for linting, formatting, and Svelte language support.
 
 ## 2. Branching & workflow
 
-1. Create a feature branch from `main` (for example, `git checkout -b feature/my-change`).
+1. Create a feature branch from `main` (for example,
+   `git checkout -b feature/my-change`).
 2. Keep pull requests focused on a single concern and include tests plus docs.
 3. Run `git diff --cached | ./scripts/scan-secrets.py` before every commit to
    avoid leaking credentials.
@@ -37,9 +41,9 @@ Before pushing, run the scripts that CI enforces:
 - `npm run audit:ci`
 
 Use `SKIP_E2E=1` only when browsers are unavailable and call it out in your PR.
-Refer to the [Testing Guide](../../../../TESTING.md) for component,
-integration, and
-Playwright best practices.
+Refer to the [Testing
+Guide](https://github.com/democratizedspace/dspace/blob/v3/TESTING.md) for
+component, integration, and Playwright best practices.
 
 ## 4. Documentation updates
 
