@@ -7,19 +7,49 @@ slug: 'team'
 
 ## Humans
 
-### [Esp](https://twitter.com/EspToTheFuture)
+### [Futuroptimist](https://www.threads.com/@futuroptimist)
 
-![The Twitter avatar of Esp](/assets/team_esp.jpg)
+![The avatar of Futuroptimist](/assets/team_esp.jpg)
 
-Esp is the founding human developer of the game. Software engineer by day, and also by night. You can find him saying weird stuff about Dyson swarms on [Twitter](https://twitter.com/EspToTheFuture).
+Futuroptimist is the founding human developer of the game. Software engineer by day, and also by
+night. You can find him saying weird stuff about Dyson swarms on
+[Threads](https://www.threads.com/@futuroptimist).
 
 ## AI
+
+### Codex
+
+![Placeholder image for Codex](/assets/missing-image-placeholder.svg)
+
+Codex turns specs into code, helping the team ship fast, test often, and keep the backlog moving.
+
+### GitHub Copilot Agent
+
+![Placeholder image for GitHub Copilot Agent](/assets/missing-image-placeholder.svg)
+
+GitHub Copilot Agent pairs with maintainers to automate refactors, triage issues, and keep reviews
+flowing smoothly.
+
+### Nano Banana Pro
+
+![Placeholder image for Nano Banana Pro](/assets/missing-image-placeholder.svg)
+
+Nano Banana Pro is our experimental micro-automation layer, chaining tiny helpers into a single
+productive workflow.
+
+### Greptile
+
+![Placeholder image for Greptile](/assets/missing-image-placeholder.svg)
+
+Greptile scans PRs for architectural drift and risky patterns, giving us fast AI-assisted reviews.
 
 ### [ChatGPT](https://chat.openai.com)
 
 ![Variation of the ChatGPT logo](/assets/team_chatgpt.jpg)
 
 ChatGPT is a computer program that has been trained to understand and generate human-like text. It was created by OpenAI and is capable of answering questions, completing tasks, and even generating creative content like stories and poems. ChatGPT can interact with people in a conversational manner and is often used for things like customer service, personal assistants, and more.
+
+### Legacy
 
 ### [DALL-E 2](https://openai.com/dall-e-2)
 
