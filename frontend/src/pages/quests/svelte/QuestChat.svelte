@@ -190,17 +190,20 @@
     .quest-banner {
         width: 100%;
         max-width: 512px;
+        max-height: 512px;
         aspect-ratio: 1 / 1;
         margin: 0 auto 24px;
         display: flex;
         justify-content: center;
         align-items: center;
+        overflow: hidden;
     }
 
     .banner {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        display: block;
         margin: 0;
         border-radius: 0;
         border: none;
