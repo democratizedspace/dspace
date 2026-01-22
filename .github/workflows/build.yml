@@ -33,7 +33,17 @@ jobs:
         run: |
           branch="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
           branch="${branch//\//-}"
+          branch="$(echo "$branch" | tr '[:upper:]' '[:lower:]')"
+          branch="$(echo "$branch" | sed -E 's/[^a-z0-9._-]+/-/g')"
+          branch="$(echo "$branch" | sed -E 's/^[^a-z0-9_]+//')"
+          if [ -z "$branch" ]; then
+            branch="ref"
+          fi
           short_sha="$(git rev-parse --short HEAD)"
+          max_branch_len=120
+          if [ "${#branch}" -gt "$max_branch_len" ]; then
+            branch="${branch:0:$max_branch_len}"
+          fi
           echo "branch_sha=${branch}-${short_sha}" >> "$GITHUB_OUTPUT"
 
       - name: Safety guard – fail if trying to push from non-trusted ref
