@@ -48,7 +48,7 @@ async function uploadGameStateToGist(token) {
     const content = exportGameStateString({
         providerHint: 'github-gist',
         stateOverride: state,
-        customContent: customContent || undefined,
+        customContent,
     });
     const result = await createBackupGist({
         token,

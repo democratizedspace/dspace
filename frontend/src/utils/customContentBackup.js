@@ -211,8 +211,8 @@ async function readStoreAll(store) {
     });
 }
 
-async function addToStore(store, entity) {
-    const request = store.add(entity);
+async function writeToStore(store, entity, { overwriteExisting } = {}) {
+    const request = overwriteExisting ? store.put(entity) : store.add(entity);
     return await new Promise((resolve, reject) => {
         request.onsuccess = () => resolve();
         request.onerror = () => reject(request.error ?? new Error('IndexedDB write failed.'));
@@ -464,7 +464,10 @@ async function assertNoImportConflicts(items, processes, quests) {
     }
 }
 
-export async function restoreCustomContentBackup(data, { onProgress } = {}) {
+export async function restoreCustomContentBackup(
+    data,
+    { onProgress, overwriteExisting = false } = {}
+) {
     const normalized = normalizeBackupData(data);
     const items = normalized.items.map((item) => sanitizeEntity(item));
     const processes = normalized.processes.map((process) => sanitizeEntity(process));
@@ -508,7 +511,9 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
         }
     });
 
-    await assertNoImportConflicts(items, processes, quests);
+    if (!overwriteExisting) {
+        await assertNoImportConflicts(items, processes, quests);
+    }
 
     const plan = buildImportPlan(items, processes, quests, images);
     emitProgress(onProgress, { type: 'plan', assets: plan });
@@ -527,11 +532,11 @@ export async function restoreCustomContentBackup(data, { onProgress } = {}) {
                 if (asset.kind === 'image') {
                     // Images are already applied during validation.
                 } else if (asset.kind === 'item') {
-                    await addToStore(stores.item, asset.entity);
+                    await writeToStore(stores.item, asset.entity, { overwriteExisting });
                 } else if (asset.kind === 'process') {
-                    await addToStore(stores.process, asset.entity);
+                    await writeToStore(stores.process, asset.entity, { overwriteExisting });
                 } else if (asset.kind === 'quest') {
-                    await addToStore(stores.quest, asset.entity);
+                    await writeToStore(stores.quest, asset.entity, { overwriteExisting });
                 }
                 emitProgress(onProgress, { type: 'asset', assetId: asset.id });
             } catch (error) {

@@ -414,7 +414,7 @@ export const importGameStateString = async (gameStateString) => {
 
     if (customContent && isBrowser) {
         try {
-            await restoreCustomContentBackup(customContent);
+            await restoreCustomContentBackup(customContent, { overwriteExisting: true });
         } catch (err) {
             logPersistenceIssue('Custom content restore failed:', err);
         }
