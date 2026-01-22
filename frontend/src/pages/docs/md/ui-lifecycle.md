@@ -53,6 +53,6 @@ hydration takes.
 - If a component behaves differently in tests versus the browser, ensure initialization logic is
   wrapped in `onMount`.
 
-For additional details on testing strategies, see
-[Testing Guide](../../../../TESTING.md) and the broader
-[Developer Guide](../../../../../DEVELOPER_GUIDE.md).
+For additional details on testing strategies, see the
+[Testing Guide](/docs/testing-guide) and the broader
+[Developer Guide](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md).
