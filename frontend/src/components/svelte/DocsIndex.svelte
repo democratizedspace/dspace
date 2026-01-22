@@ -175,7 +175,7 @@
         text-align: center;
         min-width: 0;
         max-width: 100%;
-        width: 100%;
+        justify-self: center;
     }
 
     a {
