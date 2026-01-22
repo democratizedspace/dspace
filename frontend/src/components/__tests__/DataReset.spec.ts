@@ -31,6 +31,10 @@ describe('DataReset', () => {
             value: originalLocation,
             configurable: true,
         });
+        Object.defineProperty(globalThis, 'indexedDB', {
+            value: originalIndexedDB,
+            configurable: true,
+        });
     });
 
     it('clears storage, cookies, and indexedDB databases', async () => {
@@ -185,6 +189,25 @@ describe('DataReset', () => {
         expect(deleteSpy).toHaveBeenCalled();
     });
 
+    it('handles unexpected errors by surfacing a warning and skipping reload', async () => {
+        Object.defineProperty(globalThis, 'indexedDB', {
+            value: null,
+            configurable: true,
+        });
+        vi.spyOn(window, 'confirm').mockReturnValue(true);
+        const reloadSpy = vi.spyOn(window.location, 'reload').mockImplementation(() => undefined);
+
+        const { getByRole, findByText } = render(DataReset);
+
+        await fireEvent.click(getByRole('button', { name: /wipe all app data/i }));
+
+        await findByText(
+            'Some local app data may not have been removed. Please try again or clear your browser data manually.'
+        );
+
+        expect(reloadSpy).not.toHaveBeenCalled();
+    });
+
     it('expires cookies across hostname and parent-domain combinations', async () => {
         Object.defineProperty(globalThis, 'location', {
             value: { hostname: 'app.example.com', pathname: '/foo/bar' },
@@ -216,10 +239,6 @@ describe('DataReset', () => {
         });
 
         afterEach(() => {
-            Object.defineProperty(globalThis, 'indexedDB', {
-                value: originalIndexedDB,
-                configurable: true,
-            });
             vi.useRealTimers();
         });
 
