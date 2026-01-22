@@ -131,7 +131,8 @@
 
     const wipeAppData = async () => {
         if (isClearing) return;
-        if (typeof window !== 'undefined') {
+        const shouldReload = typeof window !== 'undefined';
+        if (shouldReload) {
             const confirmed = window.confirm(
                 'This will remove all DSPACE data saved in this browser, including cookies, ' +
                     'localStorage, and IndexedDB. Continue?'
@@ -159,6 +160,10 @@
         }
 
         isClearing = false;
+
+        if (shouldReload && typeof window !== 'undefined') {
+            window.location.reload();
+        }
     };
 </script>
 
