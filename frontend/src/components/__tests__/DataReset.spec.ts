@@ -16,11 +16,13 @@ const indexedDBWithDatabases = indexedDB as IndexedDBWithDatabases;
 const originalLocation = globalThis.location;
 const originalIndexedDB = globalThis.indexedDB;
 const flushMicrotasks = () => new Promise((resolve) => queueMicrotask(resolve));
+let reloadSpy: ReturnType<typeof vi.spyOn>;
 
 describe('DataReset', () => {
     beforeEach(() => {
         localStorage.clear();
         document.cookie = '';
+        reloadSpy = vi.spyOn(window.location, 'reload').mockImplementation(() => undefined);
     });
 
     afterEach(() => {
@@ -195,7 +197,6 @@ describe('DataReset', () => {
             configurable: true,
         });
         vi.spyOn(window, 'confirm').mockReturnValue(true);
-        const reloadSpy = vi.spyOn(window.location, 'reload').mockImplementation(() => undefined);
 
         const { getByRole, findByText } = render(DataReset);
 
@@ -280,9 +281,6 @@ describe('DataReset', () => {
 
         it('reloads the page after a confirmed wipe', async () => {
             vi.spyOn(window, 'confirm').mockReturnValue(true);
-            const reloadSpy = vi
-                .spyOn(window.location, 'reload')
-                .mockImplementation(() => undefined);
 
             const { getByRole } = render(DataReset);
 
@@ -297,9 +295,6 @@ describe('DataReset', () => {
 
         it('does not reload when the user cancels the wipe', async () => {
             vi.spyOn(window, 'confirm').mockReturnValue(false);
-            const reloadSpy = vi
-                .spyOn(window.location, 'reload')
-                .mockImplementation(() => undefined);
 
             const { getByRole } = render(DataReset);
 
