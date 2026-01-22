@@ -161,19 +161,21 @@
     }
 
     nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.5rem;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: center;
+        gap: 0.75rem;
     }
 
     .doc-link {
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
-        align-items: flex-start;
+        align-items: center;
+        text-align: center;
         min-width: 0;
         max-width: 100%;
+        justify-self: center;
     }
 
     a {
