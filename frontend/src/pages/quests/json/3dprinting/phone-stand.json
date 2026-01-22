@@ -60,7 +60,7 @@
         },
         {
             "id": "print",
-            "text": "Slice the phone stand with a 0.2 mm layer height, 3 perimeters, 5 top/bottom layers, and 15% gyroid infill. Orient the stand so the phone rests on solid perimeters, not supports; enable a 3-5 mm brim if your printer struggles with adhesion. Use ~200°C nozzle and 60°C bed for PLA, then watch the first layer for full contact. Let the print finish undisturbed, cool completely, and flex the bed to release without prying.",
+            "text": "Open the Phone Stand STL from your community library inventory, then slice it with a 0.2 mm layer height, 3 perimeters, 5 top/bottom layers, and 15% gyroid infill. Orient the stand flat so the phone rests on solid perimeters; supports should stay off unless your slicer shows a true overhang. Enable a 3-5 mm brim if your printer struggles with adhesion, and if the first layer won't stick, re-clean the plate, increase the brim, or nudge the Z-offset down a touch. Use ~200°C nozzle and 60°C bed for PLA, then watch the first layer for full contact. Let the print finish undisturbed, cool completely, and flex the bed to release without prying.",
             "options": [
                 {
                     "type": "process",
