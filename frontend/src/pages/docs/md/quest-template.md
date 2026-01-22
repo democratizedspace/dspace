@@ -74,4 +74,4 @@ described in the [quest prompt guide][quest-prompt-guide].
 An automated Playwright example (`constellations-quest.spec.ts`) walks through creating this quest
 step by step if you prefer a hands-on reference.
 
-[quest-prompt-guide]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/quests.md
+[quest-prompt-guide]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/quests.md#quest-prompt-guide
