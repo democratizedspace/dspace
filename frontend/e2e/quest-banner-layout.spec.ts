@@ -9,17 +9,12 @@ test.describe('Quest banner layout', () => {
         await expect(banner).toBeVisible();
 
         const getBannerRect = async () =>
-            banner.evaluate((element) => {
-                const rect = element.getBoundingClientRect();
-                const scrollX = window.scrollX || 0;
-                const scrollY = window.scrollY || 0;
-                return {
-                    x: Math.round(rect.x + scrollX),
-                    y: Math.round(rect.y + scrollY),
-                    width: Math.round(rect.width),
-                    height: Math.round(rect.height),
-                };
-            });
+            banner.evaluate((element) => ({
+                x: Math.round(element.offsetLeft),
+                y: Math.round(element.offsetTop),
+                width: Math.round(element.offsetWidth),
+                height: Math.round(element.offsetHeight),
+            }));
 
         const expectSquareAndMax = (rect: { width: number; height: number }) => {
             expect(Math.abs(rect.width - rect.height)).toBeLessThanOrEqual(1);
