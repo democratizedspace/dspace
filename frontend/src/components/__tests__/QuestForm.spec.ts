@@ -188,3 +188,60 @@ test('shows an error for unknown quest dependencies', async () => {
 
     await findByText('Unknown quest dependency');
 });
+
+test('falls back to existing quests when syncing fails', async () => {
+    const existingQuests = [
+        { id: 'quest-1', title: 'Quest One' },
+        { id: 'quest-2', title: 'Quest Two' },
+    ];
+    vi.mocked(syncExistingQuestsToIndexedDB).mockRejectedValueOnce(new Error('Sync failed'));
+
+    const { getByLabelText } = render(QuestForm, {
+        props: {
+            existingQuests,
+            isEdit: true,
+            questId: null,
+        },
+    });
+
+    const requirementsSelect = getByLabelText(/Quest Requirements/i) as HTMLSelectElement;
+
+    await waitFor(() => {
+        const optionValues = Array.from(requirementsSelect.options).map((option) => option.value);
+        expect(optionValues).toEqual(['quest-1', 'quest-2']);
+    });
+});
+
+test('keeps selected quest requirements in create mode', async () => {
+    const existingQuests = [
+        { id: 'quest-1', title: 'Quest One' },
+        { id: 'quest-2', title: 'Quest Two' },
+    ];
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce(existingQuests);
+
+    const { getByLabelText } = render(QuestForm, {
+        props: {
+            existingQuests,
+            isEdit: false,
+            questId: null,
+        },
+    });
+
+    const requirementsSelect = getByLabelText(/Quest Requirements/i) as HTMLSelectElement;
+
+    await waitFor(() => {
+        expect(requirementsSelect.options).toHaveLength(2);
+    });
+
+    requirementsSelect.options[0].selected = true;
+    requirementsSelect.options[1].selected = true;
+
+    await fireEvent.change(requirementsSelect);
+
+    await waitFor(() => {
+        const selectedValues = Array.from(requirementsSelect.options)
+            .filter((option) => option.selected)
+            .map((option) => option.value);
+        expect(selectedValues).toEqual(['quest-1', 'quest-2']);
+    });
+});
