@@ -21,6 +21,7 @@ summarizes the required structure.
 | `npc`            | string | ✔️       | NPC image or identifier shown in dialogue                |
 | `start`          | string | ✔️       | ID of the first dialogue node                            |
 | `dialogue`       | array  | ✔️       | Ordered list of dialogue nodes                           |
+| `hardening`      | object | ✔️       | Content rating and safety metadata for the quest         |
 | `rewards`        | array  | ❌       | Items granted on completion                              |
 | `requiresQuests` | array  | ❌       | Quest IDs that must be finished first                    |
 
