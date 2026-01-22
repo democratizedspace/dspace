@@ -107,13 +107,24 @@ export async function listBackups(token: string, fetchImpl?: typeof fetch) {
     return payload
         .filter((gist) => {
             const hasDescription = gist?.description === BACKUP_DESCRIPTION;
-            const fileNames = Object.keys(gist?.files || {});
-            const hasBackupFile = fileNames.some((name) => name.startsWith(BACKUP_FILE_PREFIX));
+            const files = gist?.files || {};
+            const fileNames = new Set([
+                ...Object.keys(files),
+                ...Object.values(files)
+                    .map((file) => file?.filename)
+                    .filter(Boolean),
+            ]);
+            const hasBackupFile = [...fileNames].some((name) =>
+                name.startsWith(BACKUP_FILE_PREFIX)
+            );
             return hasDescription || hasBackupFile;
         })
         .map((gist) => {
             const files = gist?.files || {};
-            const filename = Object.keys(files).find((name) => name.startsWith(BACKUP_FILE_PREFIX));
+            const filename =
+                Object.values(files).find((file) => file?.filename?.startsWith(BACKUP_FILE_PREFIX))
+                    ?.filename ||
+                Object.keys(files).find((name) => name.startsWith(BACKUP_FILE_PREFIX));
             return {
                 id: gist?.id,
                 createdAt: gist?.created_at,
