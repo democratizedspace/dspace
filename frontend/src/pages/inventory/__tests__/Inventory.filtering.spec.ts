@@ -1,5 +1,5 @@
-import { fireEvent, render, waitFor } from '@testing-library/svelte';
-import { describe, expect, it, vi } from 'vitest';
+import { cleanup, fireEvent, render, waitFor } from '@testing-library/svelte';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const mockItems = [
     {
@@ -29,6 +29,10 @@ vi.mock('../json/items', () => ({
     default: mockItems,
 }));
 
+vi.mock('../json/items/index.js', () => ({
+    default: mockItems,
+}));
+
 vi.mock('../../../utils/itemCatalog.js', () => ({
     getMergedItemCatalog: () => Promise.resolve(mockItems),
 }));
@@ -48,6 +52,10 @@ vi.mock('../../../utils/gameState/inventory.js', () => ({
 
 import Inventory from '../Inventory.svelte';
 
+afterEach(() => {
+    cleanup();
+});
+
 describe('Inventory filtering', () => {
     it('hides zero-count items when show-all is unchecked (numeric inventory)', async () => {
         const { state } = await import('../../../utils/gameState/common.js');
@@ -59,7 +67,7 @@ describe('Inventory filtering', () => {
             },
         });
 
-        const { getByLabelText, getByText, queryByText } = render(Inventory);
+        const { getByRole, getByText, queryByText } = render(Inventory);
 
         await waitFor(() => {
             expect(getByText('Trophy')).toBeTruthy();
@@ -68,7 +76,7 @@ describe('Inventory filtering', () => {
         expect(queryByText('Custom Alpha')).toBeNull();
         expect(queryByText('Custom Beta')).toBeNull();
 
-        await fireEvent.click(getByLabelText('Show all items'));
+        await fireEvent.click(getByRole('checkbox', { name: 'Show all items' }));
 
         await waitFor(() => {
             expect(getByText('Custom Alpha')).toBeTruthy();
@@ -86,7 +94,7 @@ describe('Inventory filtering', () => {
             },
         });
 
-        const { getByLabelText, getByText, queryByText } = render(Inventory);
+        const { getByRole, getByText, queryByText } = render(Inventory);
 
         await waitFor(() => {
             expect(getByText('Trophy')).toBeTruthy();
@@ -95,7 +103,7 @@ describe('Inventory filtering', () => {
         expect(queryByText('Custom Alpha')).toBeNull();
         expect(queryByText('Custom Beta')).toBeNull();
 
-        await fireEvent.click(getByLabelText('Show all items'));
+        await fireEvent.click(getByRole('checkbox', { name: 'Show all items' }));
 
         await waitFor(() => {
             expect(getByText('Custom Alpha')).toBeTruthy();
