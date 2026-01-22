@@ -28,8 +28,8 @@ DSPACE is designed as an extensible platform where community members can create 
 
 Our [Content Development Guide](/docs/content-development) provides a comprehensive overview of
 all content creation options, workflows, and best practices. We also offer
-[Quest Prompts](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/quests.md), [Item Prompts](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/items.md), and
-[Process Prompts](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/processes.md) for those looking to leverage AI tools in their content
+[Quest Prompts](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/quests.md), [Item Prompts](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/items.md), and
+[Process Prompts](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/processes.md) for those looking to leverage AI tools in their content
 creation process.
 
 ## Code Contributions
