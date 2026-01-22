@@ -25,10 +25,6 @@ const mockItems = [
     },
 ];
 
-const mockState = vi.hoisted(() => ({
-    setInventory: (_inventory: Record<string, unknown>) => undefined,
-}));
-
 vi.mock('../json/items', () => ({
     default: mockItems,
 }));
@@ -40,9 +36,6 @@ vi.mock('../../../utils/itemCatalog.js', () => ({
 vi.mock('../../../utils/gameState/common.js', async () => {
     const { writable } = await import('svelte/store');
     const store = writable({ inventory: {} });
-    mockState.setInventory = (inventory: Record<string, unknown>) => {
-        store.set({ inventory });
-    };
 
     return {
         state: store,
@@ -57,10 +50,13 @@ import Inventory from '../Inventory.svelte';
 
 describe('Inventory filtering', () => {
     it('hides zero-count items when show-all is unchecked (numeric inventory)', async () => {
-        mockState.setInventory({
-            trophy: 1,
-            'custom-alpha': 0,
-            'custom-beta': 0,
+        const { state } = await import('../../../utils/gameState/common.js');
+        state.set({
+            inventory: {
+                trophy: 1,
+                'custom-alpha': 0,
+                'custom-beta': 0,
+            },
         });
 
         const { getByLabelText, getByText, queryByText } = render(Inventory);
@@ -81,10 +77,13 @@ describe('Inventory filtering', () => {
     });
 
     it('hides zero-count items when show-all is unchecked (object inventory)', async () => {
-        mockState.setInventory({
-            trophy: { count: 1 },
-            'custom-alpha': { count: 0 },
-            'custom-beta': { count: 0 },
+        const { state } = await import('../../../utils/gameState/common.js');
+        state.set({
+            inventory: {
+                trophy: { count: 1 },
+                'custom-alpha': { count: 0 },
+                'custom-beta': { count: 0 },
+            },
         });
 
         const { getByLabelText, getByText, queryByText } = render(Inventory);
