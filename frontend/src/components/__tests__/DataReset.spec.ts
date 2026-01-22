@@ -232,6 +232,42 @@ describe('DataReset', () => {
         expect(writes.some((value) => value.includes('path=/foo'))).toBe(true);
     });
 
+    it('clears cookies when location information is unavailable', async () => {
+        Object.defineProperty(globalThis, 'location', {
+            value: undefined,
+            configurable: true,
+        });
+
+        document.cookie = 'session=123; path=/';
+
+        const deleteSpy = vi
+            .spyOn(indexedDBWithDatabases, 'deleteDatabase')
+            .mockImplementation(() => {
+                const request = {
+                    onsuccess: null,
+                    onerror: null,
+                    onblocked: null,
+                } as unknown as IDBOpenDBRequest;
+
+                queueMicrotask(() => request.onerror?.(new Event('error')));
+
+                return request;
+            });
+
+        vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+        const { getByRole, findByText } = render(DataReset);
+
+        await fireEvent.click(getByRole('button', { name: /wipe all app data/i }));
+
+        await findByText(
+            'Some local app data may not have been removed. Please try again or clear your browser data manually.'
+        );
+
+        expect(deleteSpy).toHaveBeenCalled();
+        expect(document.cookie).not.toMatch(/session=123/);
+    });
+
     describe('reload behavior', () => {
         beforeEach(() => {
             delete (globalThis as any).indexedDB;
