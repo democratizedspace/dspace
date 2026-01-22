@@ -95,6 +95,7 @@ export async function listBackups(token: string, fetchImpl?: typeof fetch) {
             Authorization: `token ${trimmedToken}`,
             Accept: 'application/vnd.github+json',
         },
+        cache: 'no-store',
     });
 
     if (!response.ok) {
@@ -104,23 +105,28 @@ export async function listBackups(token: string, fetchImpl?: typeof fetch) {
     const payload = await response.json();
     if (!Array.isArray(payload)) return [];
 
+    const findBackupFilename = (files?: Record<string, { filename?: string }>) => {
+        if (!files || typeof files !== 'object') return undefined;
+        const keyMatch = Object.keys(files).find((name) => name.startsWith(BACKUP_FILE_PREFIX));
+        if (keyMatch) return keyMatch;
+        const valueMatch = Object.values(files).find((file) =>
+            file?.filename?.startsWith(BACKUP_FILE_PREFIX)
+        );
+        return valueMatch?.filename;
+    };
+
     return payload
         .filter((gist) => {
             const hasDescription = gist?.description === BACKUP_DESCRIPTION;
-            const fileNames = Object.keys(gist?.files || {});
-            const hasBackupFile = fileNames.some((name) => name.startsWith(BACKUP_FILE_PREFIX));
-            return hasDescription || hasBackupFile;
+            const filename = findBackupFilename(gist?.files);
+            return hasDescription || Boolean(filename);
         })
-        .map((gist) => {
-            const files = gist?.files || {};
-            const filename = Object.keys(files).find((name) => name.startsWith(BACKUP_FILE_PREFIX));
-            return {
-                id: gist?.id,
-                createdAt: gist?.created_at,
-                htmlUrl: gist?.html_url,
-                filename,
-            };
-        })
+        .map((gist) => ({
+            id: gist?.id,
+            createdAt: gist?.created_at,
+            htmlUrl: gist?.html_url,
+            filename: findBackupFilename(gist?.files),
+        }))
         .filter((item) => Boolean(item.id))
         .sort(
             (a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
