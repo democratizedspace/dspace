@@ -5,7 +5,7 @@ slug: 'quest-schema'
 
 # Quest Schema Requirements
 
-Every quest JSON file must conform to the [quest schema](../../quests/jsonSchemas/quest.json) to be
+Every quest JSON file must conform to the [quest schema](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/quests/jsonSchemas/quest.json) to be
 loaded by DSPACE. Review the [Quest Development Guidelines](/docs/quest-guidelines) for design tips
 and the [Quest Submission Guide](/docs/quest-submission) when you're ready to publish. This page
 summarizes the required structure.
@@ -21,6 +21,7 @@ summarizes the required structure.
 | `npc`            | string | ✔️       | NPC image or identifier shown in dialogue                |
 | `start`          | string | ✔️       | ID of the first dialogue node                            |
 | `dialogue`       | array  | ✔️       | Ordered list of dialogue nodes                           |
+| `hardening`      | object | ✔️       | Content rating and safety metadata for the quest         |
 | `rewards`        | array  | ❌       | Items granted on completion                              |
 | `requiresQuests` | array  | ❌       | Quest IDs that must be finished first                    |
 
