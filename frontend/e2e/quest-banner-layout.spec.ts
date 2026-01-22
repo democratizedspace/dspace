@@ -11,9 +11,11 @@ test.describe('Quest banner layout', () => {
         const getBannerRect = async () =>
             banner.evaluate((element) => {
                 const rect = element.getBoundingClientRect();
+                const scrollX = window.scrollX || 0;
+                const scrollY = window.scrollY || 0;
                 return {
-                    x: Math.round(rect.x),
-                    y: Math.round(rect.y),
+                    x: Math.round(rect.x + scrollX),
+                    y: Math.round(rect.y + scrollY),
                     width: Math.round(rect.width),
                     height: Math.round(rect.height),
                 };
