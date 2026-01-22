@@ -162,18 +162,19 @@
 
     nav {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.5rem;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
     }
 
     .doc-link {
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
-        align-items: flex-start;
+        align-items: center;
         min-width: 0;
         max-width: 100%;
+        width: 100%;
     }
 
     a {
@@ -200,7 +201,8 @@
         color: rgba(255, 255, 255, 0.9);
         min-width: 0;
         max-width: 100%;
-        align-self: stretch;
+        align-self: center;
+        text-align: center;
         /* Keep both for cross-browser long-token wrapping support. */
         overflow-wrap: anywhere;
         word-break: break-word;
