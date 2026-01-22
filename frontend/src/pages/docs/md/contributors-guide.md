@@ -6,8 +6,10 @@ slug: 'contributors-guide'
 # DSPACE Contributors Guide
 
 Welcome! This guide walks you through the essentials for shipping high-quality
-changes to DSPACE. Pair it with the [Developer Guide](../../../../../DEVELOPER_GUIDE.md)
-and the [`CONTRIBUTING.md`](../../../../../CONTRIBUTING.md) checklist for full
+changes to DSPACE. Pair it with the
+[Developer Guide](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md)
+and the [`CONTRIBUTING.md`](https://github.com/democratizedspace/dspace/blob/v3/CONTRIBUTING.md)
+checklist for full
 coverage.
 
 ## 1. Environment setup
@@ -37,7 +39,7 @@ Before pushing, run the scripts that CI enforces:
 - `npm run audit:ci`
 
 Use `SKIP_E2E=1` only when browsers are unavailable and call it out in your PR.
-Refer to the [Testing Guide](../../../../TESTING.md) for component,
+Refer to the [Testing Guide](/docs/testing-guide) for component,
 integration, and
 Playwright best practices.
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { execFileSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -17,6 +18,18 @@ const markdownFiles = await glob('**/*.md', {
 
 const linkPattern = /\[[^\]]+\]\(([^)]+)\)/g;
 const broken = [];
+const docsMarkdownFiles = await glob('frontend/src/pages/docs/md/*.md');
+const docsSlugs = new Set();
+
+for (const file of docsMarkdownFiles) {
+  const content = await readFile(file, 'utf8');
+  const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+  if (!frontmatterMatch) continue;
+  const slugMatch = frontmatterMatch[1].match(/^\s*slug:\s*['"]?([^'"\n]+)['"]?\s*$/m);
+  if (slugMatch) {
+    docsSlugs.add(slugMatch[1].trim().toLowerCase());
+  }
+}
 
 // Map internal routes to their Astro/Svelte file locations
 function resolveInternalRoute(routePath) {
@@ -45,6 +58,13 @@ function resolveInternalRoute(routePath) {
   const parts = normalizedPath.split('/');
   if (normalizedPath.length > 0 && parts[0]) {
     const basePath = parts[0];
+    if (basePath === 'docs' && parts.length > 1) {
+      const docSlug = parts[1].toLowerCase();
+      if (docsSlugs.has(docSlug)) {
+        return true;
+      }
+      return false;
+    }
     
     // Check for [slug] pattern (e.g., /docs/about -> /docs/[slug].astro)
     candidates.push(path.join(pagesDir, basePath, '[slug].astro'));
@@ -85,6 +105,58 @@ function resolveInternalRoute(routePath) {
   return candidates.some(candidate => existsSync(candidate));
 }
 
+function validateGithubLink(rawLink) {
+  let url;
+  try {
+    url = new URL(rawLink);
+  } catch {
+    return null;
+  }
+
+  if (url.hostname !== 'github.com') return null;
+  if (!url.pathname.startsWith('/democratizedspace/dspace/')) return null;
+
+  const repoPath = url.pathname.replace('/democratizedspace/dspace/', '');
+  const parts = repoPath.split('/').filter(Boolean);
+  if (parts.length < 2) return null;
+
+  const [resourceType, ref, ...resourcePathParts] = parts;
+  if (resourceType !== 'blob' && resourceType !== 'tree') return null;
+
+  if (resourceType === 'blob' && resourcePathParts.length === 0) {
+    return 'missing file path';
+  }
+
+  if (resourceType === 'tree' && resourcePathParts.length === 0) {
+    return null;
+  }
+
+  const repoRelativePath = decodeURIComponent(resourcePathParts.join('/'));
+  if (!repoRelativePath) return null;
+
+  const refToCheck = ['main', 'master', 'v3'].includes(ref) ? 'HEAD' : ref;
+  let gitObjectType;
+  try {
+    gitObjectType = execFileSync(
+      'git',
+      ['cat-file', '-t', `${refToCheck}:${repoRelativePath}`],
+      { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }
+    ).trim();
+  } catch {
+    return `missing ${resourceType} path`;
+  }
+
+  if (resourceType === 'blob' && gitObjectType !== 'blob') {
+    return 'expected file but found directory';
+  }
+
+  if (resourceType === 'tree' && gitObjectType !== 'tree') {
+    return 'expected directory but found file';
+  }
+
+  return null;
+}
+
 for (const file of markdownFiles) {
   const content = await readFile(file, 'utf8');
   let match;
@@ -92,7 +164,13 @@ for (const file of markdownFiles) {
     const rawLink = match[1].trim();
     if (!rawLink) continue;
     if (rawLink.startsWith('#')) continue;
-    if (rawLink.includes('://')) continue;
+    if (rawLink.includes('://')) {
+      const githubError = validateGithubLink(rawLink);
+      if (githubError) {
+        broken.push({ file, link: `${rawLink} (${githubError})` });
+      }
+      continue;
+    }
     if (rawLink.startsWith('mailto:')) continue;
     if (rawLink.startsWith('data:')) continue;
     if (rawLink.startsWith('javascript:')) continue;
