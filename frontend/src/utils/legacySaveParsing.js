@@ -37,9 +37,11 @@ const resolveLegacyV2ItemId = (rawId) => {
     const trimmed = String(rawId).trim();
     if (!trimmed) return null;
     if (UUID_REGEX.test(trimmed)) return trimmed;
-    const numeric = Number.parseInt(trimmed, 10);
-    if (Number.isFinite(numeric)) {
-        return V1_ITEM_ID_TO_V3_UUID[numeric] ?? null;
+    if (/^\d+$/.test(trimmed)) {
+        const numeric = Number.parseInt(trimmed, 10);
+        if (Number.isFinite(numeric)) {
+            return V1_ITEM_ID_TO_V3_UUID[numeric] ?? trimmed;
+        }
     }
     return null;
 };
