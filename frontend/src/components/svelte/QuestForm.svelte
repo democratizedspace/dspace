@@ -42,7 +42,6 @@
         missingStart: false,
         unreachableNodes: [],
     };
-    let simulationIssues = [];
     let npc = DEFAULT_NPC_NAME;
     let startNodeId = DEFAULT_DIALOGUE_NODE_ID;
     let dialogueNodes = [];
@@ -799,21 +798,7 @@
         }
 
         const summary = getQuestSimulationSummary(payload);
-        const issues = [];
-        if (summary.missingStart) {
-            issues.push('Start node is missing from the dialogue list.');
-        }
-        if (!summary.hasFinishPath) {
-            issues.push('No path reaches a finish option.');
-        }
-        if (summary.unreachableNodes.length > 0) {
-            issues.push(`Unreachable nodes: ${summary.unreachableNodes.join(', ')}`);
-        }
         simulationSummary = summary;
-        simulationIssues = issues;
-        if (issues.length > 0) {
-            errors.simulation = `Simulation failed. ${issues.join(' ')}`;
-        }
 
         validationErrors = errors;
         return Object.keys(errors).length === 0;
@@ -1381,12 +1366,6 @@
             <p class="simulation-detail">
                 Unreachable nodes: {simulationSummary.unreachableNodes.join(', ')}
             </p>
-        {/if}
-        {#if simulationIssues.length > 0}
-            <p class="simulation-detail">Issues: {simulationIssues.join(' ')}</p>
-        {/if}
-        {#if validationErrors.simulation}
-            <span class="error-message">{validationErrors.simulation}</span>
         {/if}
     </section>
 
