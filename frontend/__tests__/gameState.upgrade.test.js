@@ -102,6 +102,22 @@ describe('game state upgrades', () => {
         expect(state.inventory[dUsdId]).toBe(13.5);
     });
 
+    test('mergeLegacyStateIntoCurrent preserves unmapped legacy v2 numeric ids', async () => {
+        await saveGameState({
+            inventory: { alpha: 1 },
+            _meta: { lastUpdated: Date.now() },
+        });
+
+        const merged = await mergeLegacyStateIntoCurrent({
+            inventory: { 85: 4 },
+        });
+
+        expect(merged.versionNumberString).toBe(VERSIONS.V3);
+        const state = loadGameState();
+        expect(state.inventory['85']).toBe(4);
+        expect(state.inventory.alpha).toBe(1);
+    });
+
     test('importV2V3 does not award V2 Upgrade Trophy without explicit upgrade', async () => {
         localStorage.setItem(
             'gameState',
