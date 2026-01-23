@@ -34,9 +34,10 @@
     let showPreview = false;
     let isHydrated = false;
     let requiresQuests = [];
+    let rewards = [];
     let allQuests = [];
     let allItems = [];
-    let rewards = [];
+    let allProcesses = [];
     let validationErrors = {};
     let isSubmitting = false;
     let simulationSummary = {
@@ -62,6 +63,7 @@
     const MIN_DESC_LENGTH = 10;
 
     let touched = { title: false, description: false };
+    let availableQuests = [];
     let selectableQuests = [];
 
     const dispatch = createEventDispatcher();
@@ -87,8 +89,23 @@
         return normalized.filter((id) => id !== currentId);
     }
 
-    function getAvailableQuests() {
-        return allQuests.length > 0 ? allQuests : existingQuests;
+    async function loadQuestOptions() {
+        if (existingQuests.length === 0) {
+            try {
+                allQuests = await db.list(ENTITY_TYPES.QUEST);
+            } catch (error) {
+                console.error('Error loading quests:', error);
+                allQuests = [];
+            }
+            return;
+        }
+
+        try {
+            allQuests = await syncExistingQuestsToIndexedDB(existingQuests);
+        } catch (error) {
+            console.error('Error synchronizing existing quests:', error);
+            allQuests = existingQuests;
+        }
     }
 
     function normalizeOption(option) {
@@ -280,23 +297,8 @@
             startNodeId = dialogueNodes[0]?.id ?? DEFAULT_DIALOGUE_NODE_ID;
         }
 
-        if (existingQuests.length === 0) {
-            try {
-                allQuests = await db.list(ENTITY_TYPES.QUEST);
-                await validateForm();
-            } catch (error) {
-                console.error('Error loading quests:', error);
-            }
-        } else {
-            try {
-                allQuests = await syncExistingQuestsToIndexedDB(existingQuests);
-                await validateForm();
-            } catch (error) {
-                console.error('Error synchronizing existing quests:', error);
-                allQuests = existingQuests;
-                await validateForm();
-            }
-        }
+        await loadQuestOptions();
+        await validateForm();
 
         try {
             allItems = await db.list(ENTITY_TYPES.ITEM);
@@ -304,9 +306,17 @@
             console.error('Error loading items:', error);
             allItems = [];
         }
+
+        try {
+            allProcesses = await db.list(ENTITY_TYPES.PROCESS);
+        } catch (error) {
+            console.error('Error loading processes:', error);
+            allProcesses = [];
+        }
     });
 
-    $: selectableQuests = getAvailableQuests().filter(
+    $: availableQuests = allQuests.length > 0 ? allQuests : existingQuests;
+    $: selectableQuests = availableQuests.filter(
         (quest) => questIdToString(quest.id) !== questIdToString(questId)
     );
     $: npcSelectOptions =
@@ -895,7 +905,7 @@
             }
         }
 
-        const selectableQuestIds = getAvailableQuests()
+        const selectableQuestIds = availableQuests
             .filter((quest) => questIdToString(quest.id) !== questIdToString(questId))
             .map((quest) => questIdToString(quest.id));
 
@@ -1008,6 +1018,11 @@
     <datalist id="quest-option-item-suggestions">
         {#each allItems as item (item.id)}
             <option value={item.id}>{item.name}</option>
+        {/each}
+    </datalist>
+    <datalist id="quest-option-process-suggestions">
+        {#each allProcesses as process (process.id)}
+            <option value={process.id}>{process.title}</option>
         {/each}
     </datalist>
     <div class="form-group">
@@ -1266,6 +1281,7 @@
                                     <input
                                         id={`option-${node.id}-${optionIndex}-process`}
                                         type="text"
+                                        list="quest-option-process-suggestions"
                                         value={option.process}
                                         on:input={(event) =>
                                             updateOptionField(
@@ -1478,6 +1494,7 @@
                                 <input
                                     id={`option-process-${node.id}`}
                                     type="text"
+                                    list="quest-option-process-suggestions"
                                     value={node.newOption.process || ''}
                                     on:input={(event) =>
                                         updateOptionDraft(index, 'process', event.target.value)}

@@ -192,17 +192,17 @@
             />
         </div>
         <div class="qa-tools__seeded-items">
-            <h4>V1 items in selected profile</h4>
+            <h4>V1 items and currency in selected profile</h4>
             <p class="qa-tools__seeded-items-description">
-                These are the v1 item cookies included with the selected seed profile and their v3
-                migration targets.
+                These are the v1 item and currency cookies included with the selected seed profile
+                and their v3 migration targets.
             </p>
             {#if v1SeedItems.length}
                 <ul class="qa-tools__seeded-items-list">
                     {#each v1SeedItems as item}
                         <li>
                             <span class="qa-tools__seeded-item-label">
-                                v1 item-{item.v1Id} ({item.v1Name})
+                                v1 {item.v1Key} ({item.v1Name})
                             </span>
                             {#if item.v3Id === 'UNMAPPED'}
                                 <span class="qa-tools__seeded-item-map">

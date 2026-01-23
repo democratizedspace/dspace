@@ -1,11 +1,11 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
-    import items from '../../inventory/json/items';
     import QuestChatOption from './QuestChatOption.svelte';
     import { questFinished } from '../../../utils/gameState.js';
     import { state } from '../../../utils/gameState/common.js';
     import { isBrowser } from '../../../utils/ssr.js';
+    import { getItemMap } from '../../../utils/itemResolver.js';
 
     export let quest;
     export let pointer;
@@ -18,6 +18,46 @@
     let npc;
     let rewardItems = [];
     let dialogueMap;
+    let rewardRequestId = 0;
+    let rewardItemsKey = '';
+    let isMounted = false;
+
+    const releaseRewardImages = (items) => {
+        items.forEach((item) => item?.releaseImage?.());
+    };
+
+    const loadRewardItems = async () => {
+        const rewards = quest?.rewards ?? [];
+        const ids = rewards.map((reward) => reward?.id);
+        const requestId = ++rewardRequestId;
+        const itemMap = await getItemMap(ids);
+
+        if (!isMounted || requestId !== rewardRequestId) {
+            releaseRewardImages(Array.from(itemMap.values()));
+            return;
+        }
+
+        releaseRewardImages(rewardItems);
+        rewardItems = rewards
+            .map((reward) => {
+                const rewardId =
+                    typeof reward?.id === 'string' || typeof reward?.id === 'number'
+                        ? String(reward.id)
+                        : null;
+                if (!rewardId) {
+                    return null;
+                }
+                const item = itemMap.get(rewardId);
+                return {
+                    id: reward.id,
+                    count: reward.count,
+                    image: item?.image ?? '/favicon.ico',
+                    name: item?.name ?? 'Unknown item',
+                    releaseImage: item?.releaseImage ?? null,
+                };
+            })
+            .filter(Boolean);
+    };
 
     // Only access localStorage in browser environment to avoid SSR errors
     const avatar =
@@ -25,25 +65,11 @@
         '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
 
     onMount(() => {
+        rewardItemsKey = (quest?.rewards ?? []).map((reward) => reward?.id ?? '').join('|');
+        isMounted = true;
         // Initialize quest-related data after component is mounted
         if (quest) {
             npc = quest.npc;
-
-            // Create reward items map
-            rewardItems = quest.rewards
-                .map((reward) => {
-                    const item = items.find((entry) => entry.id === reward.id);
-                    if (!item) {
-                        return null;
-                    }
-                    return {
-                        id: reward.id,
-                        count: reward.count,
-                        image: item.image,
-                        name: item.name,
-                    };
-                })
-                .filter(Boolean);
 
             // Initialize pointer if not set
             pointer = pointer || quest.start;
@@ -58,6 +84,11 @@
         }
 
         clientSideRendered.set(true);
+        void loadRewardItems();
+    });
+
+    onDestroy(() => {
+        releaseRewardImages(rewardItems);
     });
 
     $: {
@@ -69,6 +100,14 @@
             if (questFinished(quest.id)) {
                 finished.set(true);
             }
+        }
+    }
+
+    $: if (isMounted) {
+        const nextKey = (quest?.rewards ?? []).map((reward) => reward?.id ?? '').join('|');
+        if (nextKey !== rewardItemsKey) {
+            rewardItemsKey = nextKey;
+            void loadRewardItems();
         }
     }
 </script>
