@@ -16,6 +16,7 @@
         DEFAULT_DIALOGUE_OPTION,
         createDefaultDialogueNode,
     } from '../../utils/questDefaults.js';
+    import { npcCatalog } from '../../data/npcs.js';
     import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
     import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
 
@@ -36,7 +37,12 @@
     let allItems = [];
     let validationErrors = {};
     let isSubmitting = false;
-    let npc = DEFAULT_NPC_NAME;
+    const npcOptions = npcCatalog.map((entry) => ({
+        value: entry.avatar,
+        label: entry.name,
+    }));
+    let npc = npcOptions[0]?.value ?? DEFAULT_NPC_NAME;
+    let npcSelectOptions = npcOptions;
     let startNodeId = DEFAULT_DIALOGUE_NODE_ID;
     let dialogueNodes = [];
     let newNodeId = '';
@@ -239,6 +245,10 @@
     $: selectableQuests = getAvailableQuests().filter(
         (quest) => questIdToString(quest.id) !== questIdToString(questId)
     );
+    $: npcSelectOptions =
+        npcOptions.some((option) => option.value === npc) || !npc
+            ? npcOptions
+            : [...npcOptions, { value: npc, label: `Custom (${npc})` }];
 
     async function handleImageUpload(event) {
         const file = event.target.files[0];
@@ -965,15 +975,17 @@
     </div>
 
     <div class="form-group">
-        <label for="npc">NPC Identifier*</label>
-        <input
+        <label for="npc">NPC*</label>
+        <select
             id="npc"
-            type="text"
             bind:value={npc}
-            placeholder="e.g. /assets/npc/dChat.jpg"
             class:error={validationErrors.npc}
-            on:input={handleNpcInput}
-        />
+            on:change={handleNpcInput}
+        >
+            {#each npcSelectOptions as option}
+                <option value={option.value}>{option.label}</option>
+            {/each}
+        </select>
         {#if validationErrors.npc}
             <span class="error-message">{validationErrors.npc}</span>
         {/if}

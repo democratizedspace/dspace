@@ -3,6 +3,7 @@ import { vi } from 'vitest';
 import QuestForm from '../svelte/QuestForm.svelte';
 import { db } from '../../utils/customcontent.js';
 import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
+import { npcCatalog } from '../../data/npcs.js';
 
 vi.mock('../../utils/imageDownsample.js', () => ({
     downsampleAndCompressToJpeg: vi.fn().mockResolvedValue({
@@ -58,6 +59,13 @@ test('shows image preview after upload', async () => {
     await waitFor(() => {
         expect(getByAltText('Quest preview')).toBeTruthy();
     });
+});
+
+test('renders NPC select options from the catalog', () => {
+    const { getByLabelText } = render(QuestForm);
+    const npcSelect = getByLabelText(/NPC/i) as HTMLSelectElement;
+    const optionValues = Array.from(npcSelect.options).map((option) => option.value);
+    expect(optionValues).toEqual(npcCatalog.map((entry) => entry.avatar));
 });
 
 test('rejects title with forbidden characters', async () => {
