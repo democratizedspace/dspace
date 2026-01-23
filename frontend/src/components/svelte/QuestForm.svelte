@@ -34,6 +34,7 @@
     let showPreview = false;
     let isHydrated = false;
     let requiresQuests = [];
+    let rewards = [];
     let allQuests = [];
     let allItems = [];
     let allProcesses = [];
