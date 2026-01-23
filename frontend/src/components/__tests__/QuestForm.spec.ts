@@ -305,14 +305,8 @@ test('handles item and process list failures gracefully', async () => {
         expect(processDatalist?.options).toHaveLength(0);
     });
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Error loading items:',
-        expect.any(Error)
-    );
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Error loading processes:',
-        expect.any(Error)
-    );
+    expect(consoleErrorSpy).toHaveBeenCalledWith('Error loading items:', expect.any(Error));
+    expect(consoleErrorSpy).toHaveBeenCalledWith('Error loading processes:', expect.any(Error));
 
     listSpy.mockRestore();
     consoleErrorSpy.mockRestore();
