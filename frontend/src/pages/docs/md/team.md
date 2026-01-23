@@ -17,28 +17,28 @@ Futuroptimist is the founding human developer of the game. Software engineer by 
 
 ### [OpenAI Codex](https://openai.com/codex)
 
-![Placeholder image for OpenAI Codex](/assets/team_playground.jpg)
+![Placeholder image for OpenAI Codex](/assets/team_codex.jpg)
 
 OpenAI Codex helps automate coding tasks and quickly explore implementation ideas, making it a
 handy companion for prototyping gameplay systems and content tooling.
 
 ### [GitHub Copilot Agent](https://github.com/features/copilot)
 
-![Placeholder image for GitHub Copilot Agent](/assets/team_playground.jpg)
+![Placeholder image for GitHub Copilot Agent](/assets/team_copilot_agent.jpg)
 
 GitHub Copilot Agent assists with multi-step coding workflows, codebase navigation, and cleanup,
 which keeps the team focused on higher-level design and iteration.
 
-### [Nano Banana Pro](https://nanobananapro.com)
+### [Nano Banana Pro](https://blog.google/innovation-and-ai/products/nano-banana-pro/)
 
-![Placeholder image for Nano Banana Pro](/assets/team_playground.jpg)
+![Placeholder image for Nano Banana Pro](/assets/team_nanobananapro.jpg)
 
 Nano Banana Pro provides fast, lightweight creative experiments for asset ideation, giving the
 team a quick way to explore visual directions before polishing final art.
 
 ### [Greptile](https://greptile.com)
 
-![Placeholder image for Greptile](/assets/team_playground.jpg)
+![Placeholder image for Greptile](/assets/team_greptile.jpg)
 
 Greptile is used for AI-powered code reviews, catching inconsistencies and suggesting improvements
 so the team can ship confidently.
