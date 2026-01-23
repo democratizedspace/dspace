@@ -76,27 +76,7 @@
         return allQuests.length > 0 ? allQuests : existingQuests;
     }
 
-    function mergeQuestLists(primary = [], secondary = []) {
-        const merged = new Map();
-        [...secondary, ...primary].forEach((quest) => {
-            if (!quest || quest.id == null) {
-                return;
-            }
-
-            const key = questIdToString(quest.id);
-            if (!key) {
-                return;
-            }
-
-            merged.set(key, quest);
-        });
-
-        return Array.from(merged.values());
-    }
-
     async function loadQuestOptions() {
-        let syncedQuests = existingQuests;
-
         if (existingQuests.length === 0) {
             try {
                 allQuests = await db.list(ENTITY_TYPES.QUEST);
@@ -108,18 +88,10 @@
         }
 
         try {
-            syncedQuests = await syncExistingQuestsToIndexedDB(existingQuests);
+            allQuests = await syncExistingQuestsToIndexedDB(existingQuests);
         } catch (error) {
             console.error('Error synchronizing existing quests:', error);
-            syncedQuests = existingQuests;
-        }
-
-        try {
-            const storedQuests = await db.list(ENTITY_TYPES.QUEST);
-            allQuests = mergeQuestLists(storedQuests, syncedQuests);
-        } catch (error) {
-            console.error('Error loading custom quests:', error);
-            allQuests = syncedQuests;
+            allQuests = existingQuests;
         }
     }
 

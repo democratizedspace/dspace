@@ -1,7 +1,7 @@
 import { render, fireEvent, waitFor } from '@testing-library/svelte';
 import { vi } from 'vitest';
 import QuestForm from '../svelte/QuestForm.svelte';
-import { db } from '../../utils/customcontent.js';
+import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
 import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
 
 vi.mock('../../utils/imageDownsample.js', () => ({
@@ -20,6 +20,11 @@ vi.mock('../../utils/questPersistence.js', async () => {
         ...actual,
         syncExistingQuestsToIndexedDB: vi.fn(),
     };
+});
+
+afterEach(async () => {
+    const quests = await db.list(ENTITY_TYPES.QUEST);
+    await Promise.all(quests.map((quest) => db.quests.delete(quest.id)));
 });
 
 test('allows adding dialogue nodes and options', async () => {
