@@ -18,6 +18,9 @@ This guide describes how to submit your custom quests to become part of the offi
 
 You have two ways to submit your quest:
 
+When building the quest in `/quests/create`, configure completion rewards in the **Quest Rewards**
+section by listing item IDs and quantities. Custom item IDs are supported for bundle submissions.
+
 ### Option 1: Bundle Submission (Recommended)
 
 If your quest requires custom items or processes, use the bundle submission workflow:

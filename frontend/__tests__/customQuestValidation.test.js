@@ -40,6 +40,26 @@ describe('validateQuestData', () => {
         expect(result.valid).toBe(true);
     });
 
+    test('quest with rewards passes', () => {
+        const result = validateQuestData({
+            title: 'Rewarded Quest',
+            description: 'Long enough description for validation.',
+            image: 'https://example.com/image.png',
+            rewards: [{ id: 'custom-item', count: 2 }],
+        });
+        expect(result.valid).toBe(true);
+    });
+
+    test('invalid rewards fail', () => {
+        const result = validateQuestData({
+            title: 'Rewarded Quest',
+            description: 'Long enough description for validation.',
+            image: 'https://example.com/image.png',
+            rewards: [{ id: '', count: 0 }],
+        });
+        expect(result.valid).toBe(false);
+    });
+
     test('missing title fails', () => {
         const result = validateQuestData({
             description: 'B',

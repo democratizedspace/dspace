@@ -32,6 +32,7 @@
     let showPreview = false;
     let isHydrated = false;
     let requiresQuests = [];
+    let rewards = [];
     let allQuests = [];
     let allItems = [];
     let validationErrors = {};
@@ -111,6 +112,17 @@
         return normalized;
     }
 
+    function normalizeItemEntry(entry) {
+        return {
+            id: entry?.id ?? '',
+            count: entry?.count ?? 1,
+        };
+    }
+
+    function normalizeItemList(items = []) {
+        return Array.isArray(items) ? items.map((item) => normalizeItemEntry(item)) : [];
+    }
+
     function createOptionDraft() {
         return normalizeOption({
             type: 'goto',
@@ -183,6 +195,7 @@
                 title = questData.title;
                 description = questData.description;
                 requiresQuests = filterCurrentQuestDependencies(questData.requiresQuests || []);
+                rewards = normalizeItemList(questData.rewards || []);
                 npc = questData.npc || DEFAULT_NPC_NAME;
                 startNodeId = questData.start || DEFAULT_DIALOGUE_NODE_ID;
                 const mappedNodes = (questData.dialogue || []).map((node) =>
@@ -404,6 +417,32 @@
         validateForm();
     }
 
+    function addRewardItem() {
+        rewards = [...rewards, normalizeItemEntry()];
+        validateForm();
+    }
+
+    function updateRewardItemField(rewardIndex, field, value) {
+        rewards = rewards.map((reward, idx) => {
+            if (idx !== rewardIndex) {
+                return reward;
+            }
+
+            if (field === 'count') {
+                const parsed = value === '' ? '' : Number(value);
+                return { ...reward, count: parsed };
+            }
+
+            return { ...reward, [field]: value };
+        });
+        validateForm();
+    }
+
+    function removeRewardItem(rewardIndex) {
+        rewards = rewards.filter((_, idx) => idx !== rewardIndex);
+        validateForm();
+    }
+
     function addOption(nodeIndex) {
         const node = dialogueNodes[nodeIndex];
         const draft = node.newOption;
@@ -588,11 +627,13 @@
 
     function getQuestPayload() {
         const serializedNodes = getSerializedDialogueNodes();
+        const questRewards = sanitizeItems(rewards);
         const payload = applyQuestDefaults({
             title: title.trim(),
             description: description.trim(),
             image: previewUrl || '',
             requiresQuests,
+            rewards: questRewards,
             npc: npc.trim(),
             start: startNodeId.trim(),
             dialogue: serializedNodes.filter((node) => node.id),
@@ -868,6 +909,7 @@
                 previewUrl = null;
                 processedImageUrl = null;
                 requiresQuests = [];
+                rewards = [];
                 npc = DEFAULT_NPC_NAME;
                 startNodeId = DEFAULT_DIALOGUE_NODE_ID;
                 dialogueNodes = [createDialogueNodeState()];
@@ -962,6 +1004,65 @@
         {#if validationErrors.requiresQuests}
             <span class="error-message">{validationErrors.requiresQuests}</span>
         {/if}
+    </div>
+
+    <div class="form-group reward-items">
+        <label>Quest Rewards</label>
+        <div class="option-items">
+            <div class="item-group">
+                {#if rewards.length === 0}
+                    <p class="item-hint">No rewards configured yet.</p>
+                {/if}
+                {#each rewards as reward, rewardIndex (rewardIndex)}
+                    <div class="item-row">
+                        <label class="sr-only" for={`reward-${rewardIndex}-id`}>
+                            Reward item ID
+                        </label>
+                        <input
+                            id={`reward-${rewardIndex}-id`}
+                            type="text"
+                            class="item-id-input"
+                            list="quest-option-item-suggestions"
+                            value={reward.id}
+                            on:input={(event) =>
+                                updateRewardItemField(rewardIndex, 'id', event.target.value)}
+                            data-testid={`reward-item-id-${rewardIndex}`}
+                        />
+                        <label class="sr-only" for={`reward-${rewardIndex}-count`}>
+                            Reward item count
+                        </label>
+                        <input
+                            id={`reward-${rewardIndex}-count`}
+                            type="number"
+                            min="1"
+                            value={reward.count ?? 1}
+                            on:input={(event) =>
+                                updateRewardItemField(rewardIndex, 'count', event.target.value)}
+                            data-testid={`reward-item-count-${rewardIndex}`}
+                        />
+                        <button
+                            type="button"
+                            class="remove-button"
+                            on:click={() => removeRewardItem(rewardIndex)}
+                            data-testid={`remove-reward-item-${rewardIndex}`}
+                        >
+                            Remove
+                        </button>
+                    </div>
+                {/each}
+                <button
+                    type="button"
+                    class="add-item-button"
+                    on:click={addRewardItem}
+                    data-testid="add-reward-item"
+                >
+                    Add reward item
+                </button>
+                <p class="item-hint">
+                    Use item IDs from the catalog or type a custom item ID to reward unique items.
+                </p>
+            </div>
+        </div>
     </div>
 
     <div class="form-group">
