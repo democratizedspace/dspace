@@ -227,9 +227,7 @@
     }
 
     .quest-banner {
-        width: 100%;
-        max-width: 512px;
-        max-height: 512px;
+        width: min(100%, 512px);
         aspect-ratio: 1 / 1;
         margin: 0 auto 24px;
         display: flex;
