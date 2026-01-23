@@ -44,6 +44,14 @@
     let nodeDraftError = '';
     const MIN_TITLE_LENGTH = 3;
     const MIN_DESC_LENGTH = 10;
+    let simulationResults = {
+        ok: true,
+        errors: [],
+        reachableCount: 0,
+        totalNodes: 0,
+        finishReachable: false,
+        startNode: '',
+    };
 
     let touched = { title: false, description: false };
     let selectableQuests = [];
@@ -609,6 +617,73 @@
         return { payload, serializedNodes };
     }
 
+    function runSimulationTests(serializedNodes = [], startNodeIdValue = '') {
+        const errors = [];
+        const nodeMap = new Map(serializedNodes.map((node) => [node.id, node]));
+        const totalNodes = serializedNodes.length;
+        const startNode = (startNodeIdValue || '').trim();
+
+        if (!startNode || !nodeMap.has(startNode)) {
+            errors.push('Start node is missing from the dialogue graph.');
+            return {
+                ok: false,
+                errors,
+                reachableCount: 0,
+                totalNodes,
+                finishReachable: false,
+                startNode,
+            };
+        }
+
+        const reachable = new Set();
+        const queue = [startNode];
+        while (queue.length > 0) {
+            const current = queue.shift();
+            if (!current || reachable.has(current)) {
+                continue;
+            }
+            reachable.add(current);
+            const node = nodeMap.get(current);
+            if (!node) {
+                continue;
+            }
+            for (const option of node.options || []) {
+                if (option.type === 'goto' && option.goto && nodeMap.has(option.goto)) {
+                    queue.push(option.goto);
+                }
+            }
+        }
+
+        const reachableCount = reachable.size;
+        const unreachableNodes = serializedNodes
+            .filter((node) => !reachable.has(node.id))
+            .map((node) => node.id)
+            .filter(Boolean);
+
+        if (unreachableNodes.length > 0) {
+            errors.push(`Unreachable nodes: ${unreachableNodes.join(', ')}`);
+        }
+
+        const finishReachable = serializedNodes.some(
+            (node) =>
+                reachable.has(node.id) &&
+                (node.options || []).some((option) => option.type === 'finish')
+        );
+
+        if (!finishReachable) {
+            errors.push('No finish option is reachable from the start node.');
+        }
+
+        return {
+            ok: errors.length === 0,
+            errors,
+            reachableCount,
+            totalNodes,
+            finishReachable,
+            startNode,
+        };
+    }
+
     async function validateForm() {
         const errors = {};
         const { payload, serializedNodes } = getQuestPayload();
@@ -789,6 +864,12 @@
             )
         ) {
             errors.requiresQuests = 'Unknown quest dependency';
+        }
+
+        const simulation = runSimulationTests(serializedNodes, payload.start);
+        simulationResults = simulation;
+        if (!simulation.ok) {
+            errors.simulation = 'Simulation tests failed';
         }
 
         validationErrors = errors;
@@ -1328,6 +1409,31 @@
         {/if}
     </section>
 
+    <section class="simulation-tests" aria-live="polite" data-testid="simulation-tests">
+        <div class="simulation-header">
+            <h2>Simulation tests</h2>
+            <span
+                class="simulation-status"
+                data-testid="simulation-status"
+                data-state={simulationResults.ok ? 'pass' : 'fail'}
+            >
+                {simulationResults.ok ? 'Passed' : 'Failed'}
+            </span>
+        </div>
+        <p class="simulation-summary">
+            {simulationResults.reachableCount} / {simulationResults.totalNodes} nodes reachable from
+            <strong>{simulationResults.startNode || 'start'}</strong>.
+        </p>
+        {#if simulationResults.errors.length > 0}
+            <ul class="simulation-errors" data-testid="simulation-errors">
+                {#each simulationResults.errors as error}
+                    <li>{error}</li>
+                {/each}
+            </ul>
+        {/if}
+        <p class="simulation-note">These checks run automatically and must pass before saving.</p>
+    </section>
+
     <div class="form-submit">
         <button type="submit" class="submit-button" disabled={isSubmitting}>
             {#if isSubmitting}
@@ -1461,6 +1567,68 @@
         display: flex;
         justify-content: flex-end;
         gap: 10px;
+    }
+
+    .simulation-tests {
+        margin-top: 20px;
+        padding: 16px;
+        border-radius: 10px;
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .simulation-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
+    .simulation-header h2 {
+        margin: 0;
+        color: #b8ffd2;
+        font-size: 18px;
+    }
+
+    .simulation-status {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-weight: bold;
+        font-size: 14px;
+        background: #2c5837;
+        border: 1px solid #4caf50;
+    }
+
+    .simulation-status[data-state='fail'] {
+        background: #5b1f1f;
+        border-color: #ff6b6b;
+        color: #ffecec;
+    }
+
+    .simulation-status[data-state='pass'] {
+        background: #1d4f2a;
+        border-color: #4caf50;
+        color: #e6ffe9;
+    }
+
+    .simulation-summary {
+        margin: 0 0 10px 0;
+        color: #e0ffe9;
+        font-size: 14px;
+    }
+
+    .simulation-errors {
+        margin: 0 0 10px;
+        padding-left: 20px;
+        color: #ffb3b3;
+        font-size: 14px;
+    }
+
+    .simulation-note {
+        margin: 0;
+        font-size: 13px;
+        color: #c8e6c9;
     }
 
     .submit-button {

@@ -18,6 +18,9 @@ This guide describes how to submit your custom quests to become part of the offi
 
 You have two ways to submit your quest:
 
+The quest editor at `/quests/create` runs automatic simulation tests (reachable nodes, finish
+paths). Watch the pass/fail status before you export or submit.
+
 ### Option 1: Bundle Submission (Recommended)
 
 If your quest requires custom items or processes, use the bundle submission workflow:
