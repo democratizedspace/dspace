@@ -1,7 +1,10 @@
+import { V1_ITEM_ID_TO_V3_UUID } from './legacyV1ItemIdMap.js';
+
 export const LEGACY_V2_STORAGE_KEYS = ['gameState', 'gameStateBackup'];
 export const LEGACY_V2_SEED_SKIP_KEY = 'legacyV2Seeded';
 
 const LEGACY_VERSION_PREFIXES = ['1', '2'];
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const isPlainObject = (value) =>
     value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -29,12 +32,33 @@ const hasLegacyShape = (candidate) =>
             ('inventory' in candidate || 'quests' in candidate || 'processes' in candidate)
     );
 
+const resolveLegacyV2ItemId = (rawId) => {
+    if (rawId === null || rawId === undefined) return null;
+    const trimmed = String(rawId).trim();
+    if (!trimmed) return null;
+    if (UUID_REGEX.test(trimmed)) return trimmed;
+    const numeric = Number.parseInt(trimmed, 10);
+    if (Number.isFinite(numeric)) {
+        return V1_ITEM_ID_TO_V3_UUID[numeric] ?? null;
+    }
+    return null;
+};
+
 const sanitizeInventory = (inventory) => {
     if (!isPlainObject(inventory)) return {};
     const sanitized = {};
     Object.entries(inventory).forEach(([key, value]) => {
-        if (!key) return;
-        sanitized[key] = value;
+        const resolvedId = resolveLegacyV2ItemId(key);
+        if (!resolvedId) return;
+        if (resolvedId in sanitized) {
+            const existing = Number.parseFloat(sanitized[resolvedId]);
+            const incoming = Number.parseFloat(value);
+            const existingValue = Number.isFinite(existing) ? existing : 0;
+            const incomingValue = Number.isFinite(incoming) ? incoming : 0;
+            sanitized[resolvedId] = existingValue + incomingValue;
+            return;
+        }
+        sanitized[resolvedId] = value;
     });
     return sanitized;
 };
