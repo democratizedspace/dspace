@@ -137,10 +137,7 @@ beforeEach(() => {
     dbGetMock.mockReset();
     getItemMapMock.mockResolvedValue(
         new Map([
-            [
-                'item-1',
-                { id: 'item-1', name: 'Test Item', image: '/test.png', releaseImage: null },
-            ],
+            ['item-1', { id: 'item-1', name: 'Test Item', image: '/test.png', releaseImage: null }],
             [
                 'item-2',
                 { id: 'item-2', name: 'Second Item', image: '/test.png', releaseImage: null },

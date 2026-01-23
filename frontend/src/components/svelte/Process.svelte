@@ -415,10 +415,7 @@
     }
 
     $: if (mounted && process) {
-        const requirementItems = [
-            ...(process.requireItems ?? []),
-            ...(process.consumeItems ?? []),
-        ];
+        const requirementItems = [...(process.requireItems ?? []), ...(process.consumeItems ?? [])];
         const nextKey = requirementItems.map((item) => item?.id ?? '').join('|');
         if (nextKey !== previousRequirementKey) {
             previousRequirementKey = nextKey;
