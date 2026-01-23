@@ -13,6 +13,7 @@ const mockItems = [
         title: 'Test Item',
         image: '/item.png',
         description: longDescription,
+        category: 'Tools',
     },
 ];
 const mockGetItemCount = jest.fn(() => 2);
@@ -29,12 +30,36 @@ describe('ItemCard component', () => {
     it('renders the full description without truncation', () => {
         const { getByText } = render(ItemCard, {
             props: {
-                itemId: 'item-1',
+                item: mockItems[0],
             },
         });
 
         const descriptionNode = getByText(longDescription);
         expect(descriptionNode.textContent).toBe(longDescription);
         expect(descriptionNode.textContent).not.toContain('...');
+    });
+
+    it('renders the category detail when present', () => {
+        const { getByText } = render(ItemCard, {
+            props: {
+                item: mockItems[0],
+            },
+        });
+
+        expect(getByText('Category:')).toBeTruthy();
+        expect(getByText('Tools')).toBeTruthy();
+    });
+
+    it('falls back to Uncategorized when category is missing', () => {
+        const { getByText } = render(ItemCard, {
+            props: {
+                item: {
+                    ...mockItems[0],
+                    category: undefined,
+                },
+            },
+        });
+
+        expect(getByText('Uncategorized')).toBeTruthy();
     });
 });
