@@ -428,3 +428,68 @@ test('shows no rewards when editing a quest without rewards', async () => {
 
     await findByText('No rewards configured');
 });
+
+test('defaults reward counts to 1 when editing incomplete reward entries', async () => {
+    const questId = 'quest-missing-reward-count';
+    await db.quests.add({
+        id: questId,
+        title: 'Missing Reward Count Quest',
+        description: 'A description long enough.',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'Start',
+                options: [{ type: 'finish', text: 'Finish quest' }],
+            },
+        ],
+        rewards: [{ id: 'custom/item-gamma', count: null }],
+    });
+
+    const { getByTestId } = render(QuestForm, {
+        props: {
+            isEdit: true,
+            questId,
+        },
+    });
+
+    await waitFor(() => {
+        expect((getByTestId('reward-item-id-0') as HTMLInputElement).value).toBe(
+            'custom/item-gamma'
+        );
+        expect((getByTestId('reward-item-count-0') as HTMLInputElement).value).toBe('1');
+    });
+});
+
+test('rounds reward counts when submitting', async () => {
+    const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('rounded-reward-quest');
+    const { getByLabelText, getByText, getByTestId } = render(QuestForm);
+
+    await fireEvent.input(getByLabelText(/Title/i), {
+        target: { value: 'Rounded Reward Quest' },
+    });
+    await fireEvent.input(getByLabelText(/Description/i), {
+        target: { value: 'A quest with rounded rewards.' },
+    });
+
+    await fireEvent.click(getByText('Add reward item'));
+    await fireEvent.input(getByTestId('reward-item-id-0'), {
+        target: { value: 'custom/item-round' },
+    });
+    await fireEvent.input(getByTestId('reward-item-count-0'), {
+        target: { value: '2.6' },
+    });
+
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
+    await fireEvent.submit(form as HTMLFormElement);
+
+    await waitFor(() => {
+        expect(addSpy).toHaveBeenCalledTimes(1);
+    });
+
+    const questPayload = addSpy.mock.calls[0]?.[0];
+    expect(questPayload.rewards).toEqual([{ id: 'custom/item-round', count: 3 }]);
+    addSpy.mockRestore();
+});
