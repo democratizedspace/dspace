@@ -2,10 +2,11 @@ import { isBrowser } from './ssr.js';
 import v1Fixture from './legacySaveFixtures/legacy_v1_cookie_save.json' assert { type: 'json' };
 import v2Fixture from './legacySaveFixtures/legacy_v2_localstorage_save.json' assert { type: 'json' };
 import { LEGACY_V2_SEED_SKIP_KEY, LEGACY_V2_STORAGE_KEYS } from './legacySaveParsing.js';
-import { LEGACY_V1_ITEM_MAPPINGS } from './legacyV1ItemIdMap.js';
+import { LEGACY_V1_ITEM_MAPPINGS, V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID } from './legacyV1ItemIdMap.js';
 
 const COOKIE_EXPIRY = 'Fri, 31 Dec 9999 23:59:59 GMT';
 const GAME_STATE_DB_NAME = 'dspaceGameState';
+const LEGACY_CURRENCY_COOKIE_PREFIX = 'currency-balance-';
 
 type CookieFixture = {
     name: string;
@@ -48,20 +49,37 @@ export const LEGACY_V2_SEED_PROFILES = Object.entries(getV2Profiles()).map(([id,
     label: profile?.label ?? id,
 }));
 
+const collectLegacyV1SeedCookies = (cookies: CookieFixture[]) => {
+    const itemIds = new Set<number>();
+    const currencySymbols = new Set<string>();
+
+    cookies.forEach(({ name }) => {
+        if (typeof name !== 'string') return;
+        if (name.startsWith('item-')) {
+            const rawId = Number(name.replace('item-', ''));
+            if (!Number.isNaN(rawId)) {
+                itemIds.add(rawId);
+            }
+            return;
+        }
+        if (name.startsWith(LEGACY_CURRENCY_COOKIE_PREFIX)) {
+            const symbol = name.slice(LEGACY_CURRENCY_COOKIE_PREFIX.length);
+            if (symbol) {
+                currencySymbols.add(symbol);
+            }
+        }
+    });
+
+    return { itemIds, currencySymbols };
+};
+
 const buildLegacyV1SeedItems = (profileId: string): LegacyV1SeedItem[] => {
     const profiles = getV1Profiles();
     const profile = profiles?.[profileId];
     const cookies = Array.isArray(profile?.cookies) ? (profile.cookies as CookieFixture[]) : [];
-    const itemIds = new Set<number>();
-    cookies.forEach(({ name }) => {
-        if (typeof name !== 'string' || !name.startsWith('item-')) return;
-        const rawId = Number(name.replace('item-', ''));
-        if (!Number.isNaN(rawId)) {
-            itemIds.add(rawId);
-        }
-    });
+    const { itemIds, currencySymbols } = collectLegacyV1SeedCookies(cookies);
 
-    return Array.from(itemIds)
+    const baseEntries = Array.from(itemIds)
         .sort((a, b) => a - b)
         .map((id) => {
             const mapping = LEGACY_V1_ITEM_MAPPINGS.find((entry) => entry.v1Id === id);
@@ -73,6 +91,24 @@ const buildLegacyV1SeedItems = (profileId: string): LegacyV1SeedItem[] => {
                 v3Name: mapping?.v3Name ?? 'UNMAPPED',
             };
         });
+
+    const currencyEntries = Array.from(currencySymbols)
+        .sort((a, b) => a.localeCompare(b))
+        .map((symbol) => {
+            const v3Id = V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID[symbol];
+            const mapping =
+                LEGACY_V1_ITEM_MAPPINGS.find((entry) => entry.v3Id === v3Id) ??
+                LEGACY_V1_ITEM_MAPPINGS.find((entry) => entry.v1Name === symbol);
+
+            return {
+                v1Id: mapping?.v1Id ?? Number.POSITIVE_INFINITY,
+                v1Name: mapping?.v1Name ?? symbol,
+                v3Id: mapping?.v3Id ?? v3Id ?? 'UNMAPPED',
+                v3Name: mapping?.v3Name ?? symbol,
+            };
+        });
+
+    return [...baseEntries, ...currencyEntries].sort((a, b) => a.v1Id - b.v1Id);
 };
 
 export const getLegacyV1SeedItems = (profileId = 'minimal'): LegacyV1SeedItem[] =>

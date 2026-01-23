@@ -4,9 +4,11 @@ import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import {
     clearSeededLegacySaves,
     clearV3GameStateStorage,
+    getLegacyV1SeedItems,
     seedLegacyV1Save,
     seedLegacyV2LocalStorageSave,
 } from '../src/utils/legacySaveSeeding';
+import { V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID } from '../src/utils/legacyV1ItemIdMap';
 
 const parseCookies = (): Record<string, string> => {
     if (!document.cookie) return {};
@@ -65,6 +67,14 @@ describe('legacy save seeding utilities', () => {
         expect(v1Summary.localStorageKeys).toEqual([]);
         expect(v2Summary.cookies).toEqual([]);
         expect(v2Summary.localStorageKeys).toEqual(['gameState']);
+    });
+
+    test('getLegacyV1SeedItems includes v1 currency balances', () => {
+        const seedItems = getLegacyV1SeedItems('minimal');
+        const dUsdEntry = seedItems.find((item) => item.v1Name === 'dUSD');
+
+        expect(dUsdEntry).toBeTruthy();
+        expect(dUsdEntry?.v3Id).toBe(V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID.dUSD);
     });
 
     test('seedLegacyV1Save writes maximal localStorage keys', () => {
