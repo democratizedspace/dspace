@@ -14,6 +14,7 @@ const ProcessStates = vi.hoisted(() => ({
 
 const stateInfo = vi.hoisted(() => ({ state: ProcessStates.IN_PROGRESS, progress: 0 }));
 const getItemCountsMock = vi.hoisted(() => vi.fn(() => ({ 'item-1': 0 })));
+const getItemMapMock = vi.hoisted(() => vi.fn());
 const getProcessStartedAtMock = vi.hoisted(() => vi.fn(() => Date.now()));
 const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
@@ -50,6 +51,10 @@ vi.mock('../../pages/inventory/json/items', () => ({
 
 vi.mock('../../utils/gameState/inventory.js', () => ({
     getItemCounts: (...args: unknown[]) => getItemCountsMock(...args),
+}));
+
+vi.mock('../../utils/itemResolver.js', () => ({
+    getItemMap: (...args: unknown[]) => getItemMapMock(...args),
 }));
 
 const pauseProcess = vi.hoisted(() =>
@@ -130,6 +135,26 @@ beforeEach(() => {
     getProcessStartedAtMock.mockImplementation(() => Date.now());
     startProcess.mockClear();
     dbGetMock.mockReset();
+    getItemMapMock.mockResolvedValue(
+        new Map([
+            [
+                'item-1',
+                { id: 'item-1', name: 'Test Item', image: '/test.png', releaseImage: null },
+            ],
+            [
+                'item-2',
+                { id: 'item-2', name: 'Second Item', image: '/test.png', releaseImage: null },
+            ],
+            [
+                'item-3',
+                { id: 'item-3', name: 'Third Item', image: '/test.png', releaseImage: null },
+            ],
+            [
+                'item-4',
+                { id: 'item-4', name: 'Fourth Item', image: '/test.png', releaseImage: null },
+            ],
+        ])
+    );
 });
 
 afterEach(() => {

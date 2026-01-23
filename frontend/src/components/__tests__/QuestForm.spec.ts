@@ -25,6 +25,8 @@ vi.mock('../../utils/questPersistence.js', async () => {
 afterEach(async () => {
     const quests = await db.list(ENTITY_TYPES.QUEST);
     await Promise.all(quests.map((quest) => db.quests.delete(quest.id)));
+    const processes = await db.list(ENTITY_TYPES.PROCESS);
+    await Promise.all(processes.map((process) => db.processes.delete(process.id)));
 });
 
 test('allows adding dialogue nodes and options', async () => {
@@ -196,6 +198,34 @@ test('includes custom quests in the requirements list', async () => {
     await waitFor(() => {
         const optionValues = Array.from(requirementsSelect.options).map((option) => option.value);
         expect(optionValues).toEqual(expect.arrayContaining(['quest-1', customQuestId]));
+    });
+});
+
+test('includes custom processes in the process datalist', async () => {
+    const customProcessId = 'custom-process';
+    await db.processes.add({
+        id: customProcessId,
+        title: 'Custom Process',
+        duration: 30,
+    });
+
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce([]);
+
+    render(QuestForm, {
+        props: {
+            existingQuests: [],
+            isEdit: false,
+            questId: null,
+        },
+    });
+
+    await waitFor(() => {
+        const datalist = document.querySelector(
+            '#quest-option-process-suggestions'
+        ) as HTMLDataListElement | null;
+        expect(datalist).toBeTruthy();
+        const optionValues = Array.from(datalist?.options ?? []).map((option) => option.value);
+        expect(optionValues).toContain(customProcessId);
     });
 });
 

@@ -219,4 +219,37 @@ describe('CompactItemList', () => {
 
         unmount();
     });
+
+    test('renders fallback metadata for unknown custom items', async () => {
+        const items = [{ id: 'custom-item', count: 1 }];
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ 'custom-item': 0 });
+        getItemMapMock.mockResolvedValue(
+            new Map([
+                [
+                    'custom-item',
+                    {
+                        id: 'custom-item',
+                        name: 'Unknown item',
+                        image: '/favicon.ico',
+                        releaseImage: null,
+                    },
+                ],
+            ])
+        );
+
+        const { buildFullItemList } = await vi.importActual('../svelte/compactItemListHelpers.js');
+        buildFullItemListMock.mockImplementation(buildFullItemList);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items },
+        });
+
+        await tick();
+
+        expect(container.textContent).toContain('Unknown item');
+
+        unmount();
+    });
 });
