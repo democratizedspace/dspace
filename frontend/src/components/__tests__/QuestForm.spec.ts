@@ -245,3 +245,35 @@ test('keeps selected quest requirements in create mode', async () => {
         expect(selectedValues).toEqual(['quest-1', 'quest-2']);
     });
 });
+
+test('submits quest rewards with custom item IDs', async () => {
+    const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('reward-quest');
+    const { getByLabelText, getByText, getByTestId } = render(QuestForm);
+
+    await fireEvent.input(getByLabelText(/Title/i), {
+        target: { value: 'Reward Quest' },
+    });
+    await fireEvent.input(getByLabelText(/Description/i), {
+        target: { value: 'A quest with a custom reward item.' },
+    });
+
+    await fireEvent.click(getByText('Add reward item'));
+    await fireEvent.input(getByTestId('reward-item-id-0'), {
+        target: { value: 'custom/item-alpha' },
+    });
+    await fireEvent.input(getByTestId('reward-item-count-0'), {
+        target: { value: '2' },
+    });
+
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
+    await fireEvent.submit(form as HTMLFormElement);
+
+    await waitFor(() => {
+        expect(addSpy).toHaveBeenCalledTimes(1);
+    });
+
+    const questPayload = addSpy.mock.calls[0]?.[0];
+    expect(questPayload.rewards).toEqual([{ id: 'custom/item-alpha', count: 2 }]);
+    addSpy.mockRestore();
+});

@@ -34,6 +34,16 @@ export function applyQuestDefaults(partial = {}) {
         ? partial.requiresQuests.filter((id) => typeof id === 'string' && id.trim() !== '')
         : [];
 
+    const rewards = Array.isArray(partial.rewards)
+        ? partial.rewards
+              .map((entry) => ({
+                  id: typeof entry?.id === 'string' ? entry.id.trim() : '',
+                  count: Number(entry?.count ?? 0),
+              }))
+              .filter((entry) => entry.id && Number.isFinite(entry.count) && entry.count > 0)
+              .map((entry) => ({ id: entry.id, count: Math.max(1, Math.round(entry.count)) }))
+        : [];
+
     const imageCandidate = typeof partial.image === 'string' ? partial.image.trim() : '';
     const image = imageCandidate || DEFAULT_QUEST_IMAGE;
 
@@ -46,6 +56,7 @@ export function applyQuestDefaults(partial = {}) {
         dialogue,
         start,
         requiresQuests,
+        rewards,
     };
 }
 
