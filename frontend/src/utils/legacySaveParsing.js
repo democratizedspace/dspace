@@ -52,15 +52,15 @@ const sanitizeInventory = (inventory) => {
     Object.entries(inventory).forEach(([key, value]) => {
         const resolvedId = resolveLegacyV2ItemId(key);
         if (!resolvedId) return;
+        const incoming = Number.parseFloat(value);
+        const incomingValue = Number.isFinite(incoming) ? incoming : 0;
         if (resolvedId in sanitized) {
             const existing = Number.parseFloat(sanitized[resolvedId]);
-            const incoming = Number.parseFloat(value);
             const existingValue = Number.isFinite(existing) ? existing : 0;
-            const incomingValue = Number.isFinite(incoming) ? incoming : 0;
             sanitized[resolvedId] = existingValue + incomingValue;
             return;
         }
-        sanitized[resolvedId] = value;
+        sanitized[resolvedId] = incomingValue;
     });
     return sanitized;
 };

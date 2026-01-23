@@ -94,7 +94,7 @@ describe('game state upgrades', () => {
         });
 
         const merged = await mergeLegacyStateIntoCurrent({
-            inventory: { 24: 2.5 },
+            inventory: { 24: '2.5' },
         });
 
         expect(merged.versionNumberString).toBe(VERSIONS.V3);
