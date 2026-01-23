@@ -277,3 +277,55 @@ test('submits quest rewards with custom item IDs', async () => {
     expect(questPayload.rewards).toEqual([{ id: 'custom/item-alpha', count: 2 }]);
     addSpy.mockRestore();
 });
+
+test('shows a validation error for invalid reward entries', async () => {
+    const { getByLabelText, getByText, findByText } = render(QuestForm);
+
+    await fireEvent.input(getByLabelText(/Title/i), {
+        target: { value: 'Reward Validation Quest' },
+    });
+    await fireEvent.input(getByLabelText(/Description/i), {
+        target: { value: 'A quest that validates rewards.' },
+    });
+
+    await fireEvent.click(getByText('Add reward item'));
+
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
+    await fireEvent.submit(form as HTMLFormElement);
+
+    await findByText('Rewards require an item and positive count');
+});
+
+test('loads existing rewards when editing a quest', async () => {
+    const questId = 'quest-with-reward';
+    await db.quests.add({
+        id: questId,
+        title: 'Rewarded Quest',
+        description: 'A description long enough.',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'Start',
+                options: [{ type: 'finish', text: 'Finish quest' }],
+            },
+        ],
+        rewards: [{ id: 'custom/item-beta', count: 3 }],
+    });
+
+    const { getByTestId } = render(QuestForm, {
+        props: {
+            isEdit: true,
+            questId,
+        },
+    });
+
+    await waitFor(() => {
+        expect((getByTestId('reward-item-id-0') as HTMLInputElement).value).toBe(
+            'custom/item-beta'
+        );
+        expect((getByTestId('reward-item-count-0') as HTMLInputElement).value).toBe('3');
+    });
+});
