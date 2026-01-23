@@ -11,8 +11,12 @@ const triggerSuccess = (request: IDBOpenDBRequest) => {
 type IndexedDBWithDatabases = IDBFactory & {
     databases?: () => Promise<Array<{ name?: string | null }>>;
 };
+type GlobalWithIndexedDB = typeof globalThis & {
+    indexedDB?: IDBFactory;
+};
 
 const indexedDBWithDatabases = indexedDB as IndexedDBWithDatabases;
+const globalWithIndexedDB = globalThis as GlobalWithIndexedDB;
 const originalLocation = globalThis.location;
 const originalIndexedDB = globalThis.indexedDB;
 const flushMicrotasks = () => new Promise((resolve) => queueMicrotask(resolve));
@@ -271,7 +275,7 @@ describe('DataReset', () => {
 
     describe('reload behavior', () => {
         beforeEach(() => {
-            delete (globalThis as any).indexedDB;
+            delete globalWithIndexedDB.indexedDB;
             vi.useFakeTimers();
         });
 
