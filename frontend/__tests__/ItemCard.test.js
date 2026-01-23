@@ -60,6 +60,7 @@ describe('ItemCard component', () => {
             },
         });
 
+        expect(getByText('Category:')).toBeTruthy();
         expect(getByText('Components')).toBeTruthy();
     });
 
@@ -74,6 +75,7 @@ describe('ItemCard component', () => {
             },
         });
 
+        expect(getByText('Category:')).toBeTruthy();
         expect(getByText('Custom')).toBeTruthy();
     });
 
@@ -87,6 +89,7 @@ describe('ItemCard component', () => {
             },
         });
 
+        expect(getByText('Category:')).toBeTruthy();
         expect(getByText('Uncategorized')).toBeTruthy();
     });
 });
