@@ -14,6 +14,7 @@ import {
     normalizeLegacyV2State,
     readLegacyV2LocalStorage,
 } from './legacySaveParsing.js';
+import { UUID_REGEX } from './uuid.js';
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy')?.id;
@@ -127,8 +128,6 @@ export const normalizeCount = (value) => {
     const parsed = Number.parseFloat(value);
     return Number.isFinite(parsed) ? parsed : 0;
 };
-
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const resolveLegacyV1ItemId = (rawId) => {
     if (rawId === null || rawId === undefined) return null;

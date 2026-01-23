@@ -94,12 +94,12 @@ describe('game state upgrades', () => {
         });
 
         const merged = await mergeLegacyStateIntoCurrent({
-            inventory: { 24: '2.5' },
+            inventory: { 24: '2.5', [dUsdId]: 1 },
         });
 
         expect(merged.versionNumberString).toBe(VERSIONS.V3);
         const state = loadGameState();
-        expect(state.inventory[dUsdId]).toBe(12.5);
+        expect(state.inventory[dUsdId]).toBe(13.5);
     });
 
     test('importV2V3 does not award V2 Upgrade Trophy without explicit upgrade', async () => {
