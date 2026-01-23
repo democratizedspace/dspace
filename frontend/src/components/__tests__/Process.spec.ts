@@ -423,3 +423,19 @@ test('loads custom process definitions when missing from the built-in catalog', 
     await findByText('IndexedDB Process');
     expect(dbGetMock).toHaveBeenCalledWith('process', 'custom-missing');
 });
+
+test('keeps fallback UI when custom process lookup fails', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    dbGetMock.mockRejectedValueOnce(new Error('Lookup failed'));
+
+    const { getByText } = render(Process, { processId: 'missing-custom' });
+
+    await waitFor(() => {
+        expect(dbGetMock).toHaveBeenCalledWith('process', 'missing-custom');
+    });
+
+    await waitFor(() => {
+        expect(getByText('Unknown process.')).toBeTruthy();
+    });
+});

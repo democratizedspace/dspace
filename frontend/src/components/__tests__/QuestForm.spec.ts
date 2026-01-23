@@ -185,6 +185,67 @@ test('includes custom quests in the requirements list', async () => {
     });
 });
 
+test('loads quests from IndexedDB when no existing quests are provided', async () => {
+    const customQuestId = 'custom-db-quest';
+    await db.quests.add({
+        id: customQuestId,
+        title: 'Indexed Quest',
+        description: 'A description long enough.',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'Start',
+                options: [{ type: 'finish', text: 'Finish quest' }],
+            },
+        ],
+    });
+
+    render(QuestForm, {
+        props: {
+            existingQuests: [],
+            isEdit: false,
+            questId: null,
+        },
+    });
+
+    const requirementsSelect = document.querySelector('#requires') as HTMLSelectElement | null;
+
+    await waitFor(() => {
+        const optionValues = Array.from(requirementsSelect?.options ?? []).map(
+            (option) => option.value
+        );
+        expect(optionValues).toContain(customQuestId);
+    });
+});
+
+test('handles quest load failures when no existing quests are provided', async () => {
+    const originalList = db.list.bind(db);
+    const listSpy = vi.spyOn(db, 'list').mockImplementation(async (entityType) => {
+        if (entityType === ENTITY_TYPES.QUEST) {
+            throw new Error('load failed');
+        }
+        return originalList(entityType);
+    });
+
+    const { getByLabelText } = render(QuestForm, {
+        props: {
+            existingQuests: [],
+            isEdit: false,
+            questId: null,
+        },
+    });
+
+    const requirementsSelect = getByLabelText(/Quest Requirements/i) as HTMLSelectElement;
+
+    await waitFor(() => {
+        expect(requirementsSelect.options).toHaveLength(0);
+    });
+
+    listSpy.mockRestore();
+});
+
 test('includes custom processes in the process datalist', async () => {
     const customProcessId = 'custom-process';
     await db.processes.add({
