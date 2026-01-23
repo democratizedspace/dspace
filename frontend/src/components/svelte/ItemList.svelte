@@ -25,7 +25,7 @@
         let baseResults = searchResults;
 
         if (categorySet.size > 0) {
-            baseResults = baseResults.filter((item) => categorySet.has(item.category));
+            baseResults = baseResults.filter((item) => categorySet.has(item.categoryLabel));
         }
 
         let result = [...baseResults];
@@ -102,8 +102,11 @@
         },
     ];
 
-    $: fullItemList = items.map((item) => ({ ...item }));
-    $: categories = [...new Set(fullItemList.map((item) => item.category))].sort();
+    $: fullItemList = items.map((item) => ({
+        ...item,
+        categoryLabel: item.category ?? 'Uncategorized',
+    }));
+    $: categories = [...new Set(fullItemList.map((item) => item.categoryLabel))].sort();
     $: {
         inventoryItemList = fullItemList.filter((item) => inventory[item.id] !== undefined);
         searchResults = inventoryItemList;

@@ -3,6 +3,8 @@
 
     export let item;
     export let count = undefined;
+
+    $: categoryLabel = item?.categoryLabel ?? item?.category ?? 'Uncategorized';
 </script>
 
 <div class="item">
@@ -14,6 +16,7 @@
             <div class="vertical">
                 <h4 class="name">{item.name}</h4>
                 <p class="description">{item.description}</p>
+                <p><strong>Category:</strong> {categoryLabel}</p>
                 <p><strong>Count:</strong> {count ?? getItemCount(item.id)}</p>
                 {#if item.price}
                     <p><strong>Price:</strong> {item.price}</p>
