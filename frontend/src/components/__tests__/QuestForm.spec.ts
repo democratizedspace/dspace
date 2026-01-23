@@ -65,7 +65,7 @@ test('renders NPC select options from the catalog', () => {
     const { getByLabelText } = render(QuestForm);
     const npcSelect = getByLabelText(/NPC/i) as HTMLSelectElement;
     const optionValues = Array.from(npcSelect.options).map((option) => option.value);
-    expect(optionValues).toEqual(npcCatalog.map((entry) => entry.id));
+    expect(optionValues).toEqual(npcCatalog.map((entry) => entry.avatar));
 });
 
 test('rejects title with forbidden characters', async () => {

@@ -38,11 +38,12 @@
     let validationErrors = {};
     let isSubmitting = false;
     const npcOptions = npcCatalog.map((entry) => ({
-        value: entry.id,
+        value: entry.avatar,
         label: entry.name,
     }));
     const npcById = new Map(npcCatalog.map((entry) => [entry.id, entry]));
     const npcByAvatar = new Map(npcCatalog.map((entry) => [entry.avatar, entry]));
+    const npcByName = new Map(npcCatalog.map((entry) => [entry.name.toLowerCase(), entry]));
     let npc = npcOptions[0]?.value ?? DEFAULT_NPC_NAME;
     let npcSelectOptions = npcOptions;
     let startNodeId = DEFAULT_DIALOGUE_NODE_ID;
@@ -184,13 +185,19 @@
             return npcOptions[0]?.value ?? DEFAULT_NPC_NAME;
         }
 
-        if (npcById.has(trimmed)) {
-            return trimmed;
-        }
-
         const matched = npcByAvatar.get(trimmed);
         if (matched) {
-            return matched.id;
+            return matched.avatar;
+        }
+
+        const matchedById = npcById.get(trimmed);
+        if (matchedById) {
+            return matchedById.avatar;
+        }
+
+        const matchedByName = npcByName.get(trimmed.toLowerCase());
+        if (matchedByName) {
+            return matchedByName.avatar;
         }
 
         return trimmed;
@@ -202,8 +209,22 @@
             return '';
         }
 
-        const matched = npcById.get(trimmed);
-        return matched ? matched.avatar : trimmed;
+        const matched = npcByAvatar.get(trimmed);
+        if (matched) {
+            return matched.avatar;
+        }
+
+        const matchedById = npcById.get(trimmed);
+        if (matchedById) {
+            return matchedById.avatar;
+        }
+
+        const matchedByName = npcByName.get(trimmed.toLowerCase());
+        if (matchedByName) {
+            return matchedByName.avatar;
+        }
+
+        return trimmed;
     }
 
     if (dialogueNodes.length === 0) {
