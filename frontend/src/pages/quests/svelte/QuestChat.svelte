@@ -91,7 +91,7 @@
         </div>
     {:else}
         <div class="chat" data-testid="chat-panel">
-            <div>
+            <div class="chat-body">
                 {#if $clientSideRendered && quest && dialogueMap}
                     <div class="quest-banner">
                         <img class="banner" src={quest.image} alt={quest.title} />
@@ -207,6 +207,10 @@
         margin: 0;
         border-radius: 0;
         border: none;
+    }
+
+    .chat-body {
+        width: 100%;
     }
 
     .left {
