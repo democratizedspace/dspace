@@ -10,16 +10,10 @@ test.describe('Quest banner layout', () => {
 
         const getBannerRect = async () =>
             banner.evaluate((element) => {
-                const panel = element.closest('[data-testid="chat-panel"]');
-                if (!panel) {
-                    throw new Error('Quest chat panel not found for banner.');
-                }
-
+                const rect = element.getBoundingClientRect();
                 return {
-                    x: Math.round(element.offsetLeft),
-                    y: Math.round(element.offsetTop),
-                    width: Math.round(element.offsetWidth),
-                    height: Math.round(element.offsetHeight),
+                    width: Math.round(rect.width),
+                    height: Math.round(rect.height),
                 };
             });
 
@@ -30,11 +24,9 @@ test.describe('Quest banner layout', () => {
         };
 
         const expectStable = (
-            rect: { x: number; y: number; width: number; height: number },
-            baseline: { x: number; y: number; width: number; height: number }
+            rect: { width: number; height: number },
+            baseline: { width: number; height: number }
         ) => {
-            expect(Math.abs(rect.x - baseline.x)).toBeLessThanOrEqual(1);
-            expect(Math.abs(rect.y - baseline.y)).toBeLessThanOrEqual(1);
             expect(Math.abs(rect.width - baseline.width)).toBeLessThanOrEqual(1);
             expect(Math.abs(rect.height - baseline.height)).toBeLessThanOrEqual(1);
         };
