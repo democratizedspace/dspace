@@ -2,6 +2,15 @@ export function getQuestSimulationSummary(quest) {
     const nodes = new Map();
     (quest.dialogue || []).forEach((node) => nodes.set(node.id, node));
     const startId = quest.start || 'start';
+    const missingStart = !nodes.has(startId);
+
+    if (missingStart) {
+        return {
+            hasFinishPath: false,
+            missingStart: true,
+            unreachableNodes: Array.from(nodes.keys()),
+        };
+    }
 
     const queue = [startId];
     const visited = new Set();
@@ -29,7 +38,7 @@ export function getQuestSimulationSummary(quest) {
 
     return {
         hasFinishPath,
-        missingStart: !nodes.has(startId),
+        missingStart,
         unreachableNodes,
     };
 }

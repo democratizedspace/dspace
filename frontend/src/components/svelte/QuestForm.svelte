@@ -615,6 +615,13 @@
         return { payload, serializedNodes };
     }
 
+    $: if (isHydrated) {
+        simulationSummary = getQuestSimulationSummary({
+            start: startNodeId.trim(),
+            dialogue: getSerializedDialogueNodes().filter((node) => node.id),
+        });
+    }
+
     async function validateForm() {
         const errors = {};
         const { payload, serializedNodes } = getQuestPayload();
