@@ -1,7 +1,7 @@
 import { render, fireEvent, waitFor } from '@testing-library/svelte';
-import { vi } from 'vitest';
+import { beforeEach, vi } from 'vitest';
 import QuestForm from '../svelte/QuestForm.svelte';
-import { db } from '../../utils/customcontent.js';
+import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
 import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
 import { npcCatalog } from '../../data/npcs.js';
 
@@ -22,6 +22,15 @@ vi.mock('../../utils/questPersistence.js', async () => {
         syncExistingQuestsToIndexedDB: vi.fn(),
     };
 });
+
+beforeEach(() => {
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValue([]);
+});
+
+const clearQuests = async () => {
+    const quests = await db.list(ENTITY_TYPES.QUEST);
+    await Promise.all(quests.map((quest) => db.quests.delete(quest.id)));
+};
 
 test('allows adding dialogue nodes and options', async () => {
     const { getByLabelText, getByText, getAllByLabelText, getAllByText } = render(QuestForm);
@@ -69,7 +78,7 @@ test('renders NPC select options from the catalog', () => {
 });
 
 test('adds a custom NPC option when editing a quest with a legacy NPC value', async () => {
-    await db.quests.clear();
+    await clearQuests();
     const questId = 'legacy-quest';
     const legacyNpc = 'Legacy NPC';
     await db.quests.add({
@@ -102,14 +111,12 @@ test('adds a custom NPC option when editing a quest with a legacy NPC value', as
         expect(optionValues).toContain(legacyNpc);
     });
 
-    const customOption = Array.from(npcSelect.options).find(
-        (option) => option.value === legacyNpc
-    );
+    const customOption = Array.from(npcSelect.options).find((option) => option.value === legacyNpc);
     expect(customOption?.textContent).toBe(`Custom (${legacyNpc})`);
 });
 
-test('maps NPC ids and names to avatar paths on submit', async () => {
-    await db.quests.clear();
+test('stores the selected NPC avatar on submit', async () => {
+    await clearQuests();
     const { getByLabelText } = render(QuestForm);
     const titleInput = getByLabelText(/Title/i);
     const descriptionInput = getByLabelText(/Description/i);
@@ -120,11 +127,11 @@ test('maps NPC ids and names to avatar paths on submit', async () => {
     await fireEvent.input(descriptionInput, {
         target: { value: 'This description is long enough.' },
     });
-    await fireEvent.change(npcSelect, { target: { value: 'dchat' } });
+    await fireEvent.change(npcSelect, { target: { value: npcCatalog[0].avatar } });
     await fireEvent.submit(form);
 
     await waitFor(async () => {
-        const createdQuest = (await db.quests.toArray()).find(
+        const createdQuest = (await db.list(ENTITY_TYPES.QUEST)).find(
             (quest) => quest.title === 'Catalog Quest'
         );
         expect(createdQuest?.npc).toBe(npcCatalog[0].avatar);
@@ -134,16 +141,14 @@ test('maps NPC ids and names to avatar paths on submit', async () => {
     await fireEvent.input(descriptionInput, {
         target: { value: 'Another description that is long enough.' },
     });
-    await fireEvent.change(npcSelect, { target: { value: 'Nova' } });
+    await fireEvent.change(npcSelect, { target: { value: npcCatalog[2].avatar } });
     await fireEvent.submit(form);
 
     await waitFor(async () => {
-        const createdQuest = (await db.quests.toArray()).find(
+        const createdQuest = (await db.list(ENTITY_TYPES.QUEST)).find(
             (quest) => quest.title === 'Catalog Quest Two'
         );
-        expect(createdQuest?.npc).toBe(
-            npcCatalog.find((entry) => entry.name === 'Nova')?.avatar
-        );
+        expect(createdQuest?.npc).toBe(npcCatalog[2].avatar);
     });
 
     await fireEvent.input(titleInput, { target: { value: 'Catalog Quest Three' } });
@@ -154,7 +159,7 @@ test('maps NPC ids and names to avatar paths on submit', async () => {
     await fireEvent.submit(form);
 
     await waitFor(async () => {
-        const createdQuest = (await db.quests.toArray()).find(
+        const createdQuest = (await db.list(ENTITY_TYPES.QUEST)).find(
             (quest) => quest.title === 'Catalog Quest Three'
         );
         expect(createdQuest?.npc).toBe(npcCatalog[1].avatar);
@@ -183,7 +188,7 @@ test.each([
         label: 'empty',
     },
 ])('normalizes NPC selection on edit ($label)', async ({ npcValue, expectedAvatar }) => {
-    await db.quests.clear();
+    await clearQuests();
     const questId = `normalized-${String(npcValue).trim() || 'empty'}`;
     await db.quests.add({
         id: questId,
