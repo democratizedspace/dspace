@@ -20,23 +20,36 @@ const globalWithIndexedDB = globalThis as GlobalWithIndexedDB;
 const originalLocation = globalThis.location;
 const originalIndexedDB = globalThis.indexedDB;
 const flushMicrotasks = () => new Promise((resolve) => queueMicrotask(resolve));
-let reloadSpy: ReturnType<typeof vi.spyOn>;
+let reloadSpy: ReturnType<typeof vi.fn>;
+const setWindowLocation = (value: Location | undefined) => {
+    try {
+        Object.defineProperty(window, 'location', {
+            configurable: true,
+            value,
+        });
+    } catch {
+        delete (window as { location?: Location }).location;
+        (window as Window).location = value as Location;
+    }
+};
 
 describe('DataReset', () => {
     beforeEach(() => {
         localStorage.clear();
         document.cookie = '';
-        reloadSpy = vi.spyOn(window.location, 'reload').mockImplementation(() => undefined);
+        reloadSpy = vi.fn();
+        const mockLocation = {
+            ...originalLocation,
+            reload: reloadSpy,
+        };
+        setWindowLocation(mockLocation);
     });
 
     afterEach(() => {
         vi.restoreAllMocks();
         localStorage.clear();
         document.cookie = '';
-        Object.defineProperty(globalThis, 'location', {
-            value: originalLocation,
-            configurable: true,
-        });
+        setWindowLocation(originalLocation);
         Object.defineProperty(globalThis, 'indexedDB', {
             value: originalIndexedDB,
             configurable: true,
@@ -214,10 +227,7 @@ describe('DataReset', () => {
     });
 
     it('expires cookies across hostname and parent-domain combinations', async () => {
-        Object.defineProperty(globalThis, 'location', {
-            value: { hostname: 'app.example.com', pathname: '/foo/bar' },
-            configurable: true,
-        });
+        setWindowLocation({ hostname: 'app.example.com', pathname: '/foo/bar' } as Location);
 
         document.cookie = 'session=123; path=/';
 
@@ -238,10 +248,7 @@ describe('DataReset', () => {
     });
 
     it('clears cookies when location information is unavailable', async () => {
-        Object.defineProperty(globalThis, 'location', {
-            value: undefined,
-            configurable: true,
-        });
+        setWindowLocation(undefined);
 
         document.cookie = 'session=123; path=/';
 
