@@ -305,6 +305,87 @@ test('shows missing requirement feedback when two items are missing', async () =
     expect(startProcess).not.toHaveBeenCalled();
 });
 
+test('merges missing requirement entries across require and consume lists', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-1': 0 });
+
+    const customProcess = {
+        id: 'custom-merge',
+        title: 'Merged Requirements',
+        duration: '5s',
+        requireItems: [{ id: 'item-1', count: 1 }],
+        consumeItems: [{ id: 'item-1', count: 3 }],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByTestId } = render(Process, {
+        processId: 'custom-merge',
+        processData: customProcess,
+    });
+
+    await tick();
+    await fireEvent.click(getByTestId('process-start-button'));
+
+    const feedback = getByTestId('process-start-feedback');
+    expect(feedback.textContent).toContain('Missing requirements: Test Item (3)');
+    expect(startProcess).not.toHaveBeenCalled();
+});
+
+test('scrolls missing requirements into view when not fully visible', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-1': 0 });
+
+    const customProcess = {
+        id: 'custom-scroll',
+        title: 'Scroll Requirements',
+        duration: '5s',
+        requireItems: [{ id: 'item-1', count: 1 }],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const originalInnerHeight = window.innerHeight;
+    const originalInnerWidth = window.innerWidth;
+    Object.defineProperty(window, 'innerHeight', { value: 100, configurable: true });
+    Object.defineProperty(window, 'innerWidth', { value: 100, configurable: true });
+
+    const { getByTestId } = render(Process, {
+        processId: 'custom-scroll',
+        processData: customProcess,
+    });
+
+    await tick();
+    const requiresContainer = getByTestId('process-requires');
+    const scrollSpy = vi.fn();
+    requiresContainer.scrollIntoView = scrollSpy;
+    requiresContainer.getBoundingClientRect = () =>
+        ({
+            top: -10,
+            left: 0,
+            bottom: 150,
+            right: 50,
+        }) as DOMRect;
+
+    await fireEvent.click(getByTestId('process-start-button'));
+
+    await waitFor(() => {
+        expect(scrollSpy).toHaveBeenCalled();
+    });
+
+    Object.defineProperty(window, 'innerHeight', {
+        value: originalInnerHeight,
+        configurable: true,
+    });
+    Object.defineProperty(window, 'innerWidth', {
+        value: originalInnerWidth,
+        configurable: true,
+    });
+});
+
 test('renders instant finish chip when cheats are enabled', async () => {
     cheatsAvailabilityStore.set(true);
     cheatsEnabledStore.set(true);

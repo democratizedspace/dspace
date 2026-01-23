@@ -274,6 +274,50 @@ test('includes custom processes in the process datalist', async () => {
     });
 });
 
+test('handles item and process list failures gracefully', async () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const listSpy = vi.spyOn(db, 'list').mockImplementation(async (entityType) => {
+        if (entityType === ENTITY_TYPES.ITEM) {
+            throw new Error('Items unavailable');
+        }
+        if (entityType === ENTITY_TYPES.PROCESS) {
+            throw new Error('Processes unavailable');
+        }
+        return [];
+    });
+
+    render(QuestForm, {
+        props: {
+            existingQuests: [],
+            isEdit: false,
+            questId: null,
+        },
+    });
+
+    await waitFor(() => {
+        const itemDatalist = document.querySelector(
+            '#quest-option-item-suggestions'
+        ) as HTMLDataListElement | null;
+        const processDatalist = document.querySelector(
+            '#quest-option-process-suggestions'
+        ) as HTMLDataListElement | null;
+        expect(itemDatalist?.options).toHaveLength(0);
+        expect(processDatalist?.options).toHaveLength(0);
+    });
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error loading items:',
+        expect.any(Error)
+    );
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error loading processes:',
+        expect.any(Error)
+    );
+
+    listSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
+});
+
 test('shows an error for unknown quest dependencies', async () => {
     const questId = 'quest-invalid';
     await db.quests.add({
