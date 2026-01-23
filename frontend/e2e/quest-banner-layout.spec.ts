@@ -9,12 +9,21 @@ test.describe('Quest banner layout', () => {
         await expect(banner).toBeVisible();
 
         const getBannerRect = async () =>
-            banner.evaluate((element) => ({
-                x: Math.round(element.offsetLeft),
-                y: Math.round(element.offsetTop),
-                width: Math.round(element.offsetWidth),
-                height: Math.round(element.offsetHeight),
-            }));
+            banner.evaluate((element) => {
+                const panel = element.closest('[data-testid="chat-panel"]');
+                if (!panel) {
+                    throw new Error('Quest chat panel not found for banner.');
+                }
+                const panelRect = panel.getBoundingClientRect();
+                const rect = element.getBoundingClientRect();
+
+                return {
+                    x: Math.round(rect.left - panelRect.left + panel.scrollLeft),
+                    y: Math.round(rect.top - panelRect.top + panel.scrollTop),
+                    width: Math.round(rect.width),
+                    height: Math.round(rect.height),
+                };
+            });
 
         const expectSquareAndMax = (rect: { width: number; height: number }) => {
             expect(Math.abs(rect.width - rect.height)).toBeLessThanOrEqual(1);
