@@ -50,7 +50,7 @@
     const npcById = new Map(npcCatalog.map((entry) => [entry.id, entry]));
     const npcByAvatar = new Map(npcCatalog.map((entry) => [entry.avatar, entry]));
     const npcByName = new Map(npcCatalog.map((entry) => [entry.name.toLowerCase(), entry]));
-    let npc = DEFAULT_NPC_NAME;
+    let npc = npcOptions[0]?.value ?? DEFAULT_NPC_NAME;
     let npcSelectOptions = npcOptions;
     let startNodeId = DEFAULT_DIALOGUE_NODE_ID;
     let dialogueNodes = [];
@@ -1042,7 +1042,7 @@
     </div>
 
     <div class="form-group">
-        <label for="npc">NPC*</label>
+        <label for="npc">NPC Identifier*</label>
         <select
             id="npc"
             bind:value={npc}
