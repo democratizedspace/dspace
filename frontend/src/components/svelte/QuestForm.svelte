@@ -18,6 +18,7 @@
     } from '../../utils/questDefaults.js';
     import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
     import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
+    import { npcOptions } from '../../data/npcs.js';
 
     export let isEdit = false;
     export let questId = null;
@@ -36,7 +37,8 @@
     let allItems = [];
     let validationErrors = {};
     let isSubmitting = false;
-    let npc = DEFAULT_NPC_NAME;
+    const defaultNpc = npcOptions[0]?.avatar ?? DEFAULT_NPC_NAME;
+    let npc = defaultNpc;
     let startNodeId = DEFAULT_DIALOGUE_NODE_ID;
     let dialogueNodes = [];
     let newNodeId = '';
@@ -183,7 +185,7 @@
                 title = questData.title;
                 description = questData.description;
                 requiresQuests = filterCurrentQuestDependencies(questData.requiresQuests || []);
-                npc = questData.npc || DEFAULT_NPC_NAME;
+                npc = questData.npc || defaultNpc;
                 startNodeId = questData.start || DEFAULT_DIALOGUE_NODE_ID;
                 const mappedNodes = (questData.dialogue || []).map((node) =>
                     createDialogueNodeState({
@@ -868,7 +870,7 @@
                 previewUrl = null;
                 processedImageUrl = null;
                 requiresQuests = [];
-                npc = DEFAULT_NPC_NAME;
+                npc = defaultNpc;
                 startNodeId = DEFAULT_DIALOGUE_NODE_ID;
                 dialogueNodes = [createDialogueNodeState()];
                 nodeDraftError = '';
@@ -965,15 +967,17 @@
     </div>
 
     <div class="form-group">
-        <label for="npc">NPC Identifier*</label>
-        <input
+        <label for="npc">NPC*</label>
+        <select
             id="npc"
-            type="text"
             bind:value={npc}
-            placeholder="e.g. /assets/npc/dChat.jpg"
             class:error={validationErrors.npc}
-            on:input={handleNpcInput}
-        />
+            on:change={handleNpcInput}
+        >
+            {#each npcOptions as npcOption}
+                <option value={npcOption.avatar}>{npcOption.name}</option>
+            {/each}
+        </select>
         {#if validationErrors.npc}
             <span class="error-message">{validationErrors.npc}</span>
         {/if}
