@@ -1,5 +1,5 @@
 import { render, fireEvent, waitFor } from '@testing-library/svelte';
-import { beforeEach, vi } from 'vitest';
+import { afterEach, beforeEach, vi } from 'vitest';
 import QuestForm from '../svelte/QuestForm.svelte';
 import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
 import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
@@ -23,6 +23,9 @@ vi.mock('../../utils/questPersistence.js', async () => {
     };
 });
 
+let listSpy: ReturnType<typeof vi.spyOn> | null = null;
+let consoleErrorSpy: ReturnType<typeof vi.spyOn> | null = null;
+
 beforeEach(async () => {
     vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValue([]);
 
@@ -30,6 +33,13 @@ beforeEach(async () => {
     await Promise.all(quests.map((quest) => db.quests.delete(quest.id)));
     const processes = await db.list(ENTITY_TYPES.PROCESS);
     await Promise.all(processes.map((process) => db.processes.delete(process.id)));
+});
+
+afterEach(() => {
+    listSpy?.mockRestore();
+    listSpy = null;
+    consoleErrorSpy?.mockRestore();
+    consoleErrorSpy = null;
 });
 
 const clearQuests = async () => {
@@ -442,7 +452,7 @@ test('loads quests from IndexedDB when no existing quests are provided', async (
 
 test('handles quest load failures when no existing quests are provided', async () => {
     const originalList = db.list.bind(db);
-    const listSpy = vi.spyOn(db, 'list').mockImplementation(async (entityType) => {
+    listSpy = vi.spyOn(db, 'list').mockImplementation(async (entityType) => {
         if (entityType === ENTITY_TYPES.QUEST) {
             throw new Error('load failed');
         }
@@ -462,8 +472,6 @@ test('handles quest load failures when no existing quests are provided', async (
     await waitFor(() => {
         expect(requirementsSelect.options).toHaveLength(0);
     });
-
-    listSpy.mockRestore();
 });
 
 test('includes custom processes in the process datalist', async () => {
@@ -495,8 +503,8 @@ test('includes custom processes in the process datalist', async () => {
 });
 
 test('handles item and process list failures gracefully', async () => {
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    const listSpy = vi.spyOn(db, 'list').mockImplementation(async (entityType) => {
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    listSpy = vi.spyOn(db, 'list').mockImplementation(async (entityType) => {
         if (entityType === ENTITY_TYPES.ITEM) {
             throw new Error('Items unavailable');
         }
@@ -525,11 +533,10 @@ test('handles item and process list failures gracefully', async () => {
         expect(processDatalist?.options).toHaveLength(0);
     });
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith('Error loading items:', expect.any(Error));
-    expect(consoleErrorSpy).toHaveBeenCalledWith('Error loading processes:', expect.any(Error));
-
-    listSpy.mockRestore();
-    consoleErrorSpy.mockRestore();
+    await waitFor(() => {
+        expect(consoleErrorSpy).toHaveBeenCalledWith('Error loading items:', expect.any(Error));
+        expect(consoleErrorSpy).toHaveBeenCalledWith('Error loading processes:', expect.any(Error));
+    });
 });
 
 test('shows an error for unknown quest dependencies', async () => {

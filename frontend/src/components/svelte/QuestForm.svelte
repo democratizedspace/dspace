@@ -63,6 +63,7 @@
     const MIN_DESC_LENGTH = 10;
 
     let touched = { title: false, description: false };
+    let availableQuests = [];
     let selectableQuests = [];
 
     const dispatch = createEventDispatcher();
@@ -86,10 +87,6 @@
 
         const currentId = questIdToString(questId);
         return normalized.filter((id) => id !== currentId);
-    }
-
-    function getAvailableQuests() {
-        return allQuests.length > 0 ? allQuests : existingQuests;
     }
 
     async function loadQuestOptions() {
@@ -318,7 +315,8 @@
         }
     });
 
-    $: selectableQuests = getAvailableQuests().filter(
+    $: availableQuests = allQuests.length > 0 ? allQuests : existingQuests;
+    $: selectableQuests = availableQuests.filter(
         (quest) => questIdToString(quest.id) !== questIdToString(questId)
     );
     $: npcSelectOptions =
@@ -907,7 +905,7 @@
             }
         }
 
-        const selectableQuestIds = getAvailableQuests()
+        const selectableQuestIds = availableQuests
             .filter((quest) => questIdToString(quest.id) !== questIdToString(questId))
             .map((quest) => questIdToString(quest.id));
 
