@@ -1,5 +1,5 @@
 const DEFAULT_QUEST_IMAGE = '/assets/quests/howtodoquests.jpg';
-const DEFAULT_NPC_NAME = 'Mission Control';
+const DEFAULT_NPC_NAME = '/assets/npc/dChat.jpg';
 const DEFAULT_DIALOGUE_NODE_ID = 'start';
 const DEFAULT_DIALOGUE_TEXT = 'This custom quest ends immediately.';
 const DEFAULT_DIALOGUE_OPTION = { type: 'finish', text: 'Finish quest' };
