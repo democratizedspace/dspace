@@ -18,6 +18,7 @@
     } from '../../utils/questDefaults.js';
     import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
     import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
+    import { getQuestSimulationSummary } from '../../utils/simulateQuest.js';
 
     export let isEdit = false;
     export let questId = null;
@@ -36,6 +37,12 @@
     let allItems = [];
     let validationErrors = {};
     let isSubmitting = false;
+    let simulationSummary = {
+        hasFinishPath: true,
+        missingStart: false,
+        unreachableNodes: [],
+    };
+    let simulationIssues = [];
     let npc = DEFAULT_NPC_NAME;
     let startNodeId = DEFAULT_DIALOGUE_NODE_ID;
     let dialogueNodes = [];
@@ -791,6 +798,23 @@
             errors.requiresQuests = 'Unknown quest dependency';
         }
 
+        const summary = getQuestSimulationSummary(payload);
+        const issues = [];
+        if (summary.missingStart) {
+            issues.push('Start node is missing from the dialogue list.');
+        }
+        if (!summary.hasFinishPath) {
+            issues.push('No path reaches a finish option.');
+        }
+        if (summary.unreachableNodes.length > 0) {
+            issues.push(`Unreachable nodes: ${summary.unreachableNodes.join(', ')}`);
+        }
+        simulationSummary = summary;
+        simulationIssues = issues;
+        if (issues.length > 0) {
+            errors.simulation = `Simulation failed. ${issues.join(' ')}`;
+        }
+
         validationErrors = errors;
         return Object.keys(errors).length === 0;
     }
@@ -1328,6 +1352,44 @@
         {/if}
     </section>
 
+    <section class="simulation-panel" aria-live="polite">
+        <h2>Simulation tests</h2>
+        <p class="simulation-subtitle">
+            Runs automatically to catch obvious logic errors before saving.
+        </p>
+        <ul class="simulation-list">
+            <li
+                class:pass={!simulationSummary.missingStart}
+                class:fail={simulationSummary.missingStart}
+            >
+                Start node exists
+            </li>
+            <li
+                class:pass={simulationSummary.hasFinishPath}
+                class:fail={!simulationSummary.hasFinishPath}
+            >
+                Finish path reachable
+            </li>
+            <li
+                class:pass={simulationSummary.unreachableNodes.length === 0}
+                class:fail={simulationSummary.unreachableNodes.length > 0}
+            >
+                All nodes reachable from start
+            </li>
+        </ul>
+        {#if simulationSummary.unreachableNodes.length > 0}
+            <p class="simulation-detail">
+                Unreachable nodes: {simulationSummary.unreachableNodes.join(', ')}
+            </p>
+        {/if}
+        {#if simulationIssues.length > 0}
+            <p class="simulation-detail">Issues: {simulationIssues.join(' ')}</p>
+        {/if}
+        {#if validationErrors.simulation}
+            <span class="error-message">{validationErrors.simulation}</span>
+        {/if}
+    </section>
+
     <div class="form-submit">
         <button type="submit" class="submit-button" disabled={isSubmitting}>
             {#if isSubmitting}
@@ -1495,6 +1557,57 @@
     .dialogue-builder h2 {
         margin-top: 0;
         color: #00ff88;
+    }
+
+    .simulation-panel {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 10px;
+        border: 2px solid #00b33c;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .simulation-panel h2 {
+        margin: 0 0 6px;
+        color: #00ff88;
+    }
+
+    .simulation-subtitle {
+        margin: 0 0 10px;
+        color: #c8e6c9;
+        font-size: 14px;
+    }
+
+    .simulation-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 8px;
+    }
+
+    .simulation-list li {
+        padding: 8px 10px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid transparent;
+        font-size: 14px;
+    }
+
+    .simulation-list li.pass {
+        border-color: #00b33c;
+        color: #c8ffd9;
+    }
+
+    .simulation-list li.fail {
+        border-color: #ff3e3e;
+        color: #ffd6d6;
+    }
+
+    .simulation-detail {
+        margin: 8px 0 0;
+        font-size: 13px;
+        color: #ffe8a3;
     }
 
     .new-node {
