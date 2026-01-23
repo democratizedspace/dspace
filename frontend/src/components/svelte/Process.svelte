@@ -241,7 +241,15 @@
         }
     };
 
-    const onProcessStart = () => {
+    const onProcessStart = async () => {
+        const requirementItems = [
+            ...(process?.requireItems ?? []),
+            ...(process?.consumeItems ?? []),
+        ];
+        if (requirementItems.length > 0 && requirementItemMap.size === 0) {
+            await loadRequirementItemMap(requirementItems);
+        }
+
         const { missingEntries, targets, message } = getMissingRequirementInfo();
         if (missingEntries.length > 0) {
             if (isPulsing) {
