@@ -297,6 +297,31 @@ test('shows a validation error for invalid reward entries', async () => {
     await findByText('Rewards require an item and positive count');
 });
 
+test('rejects rewards with non-numeric counts', async () => {
+    const { getByLabelText, getByText, getByTestId, findByText } = render(QuestForm);
+
+    await fireEvent.input(getByLabelText(/Title/i), {
+        target: { value: 'Reward Count Quest' },
+    });
+    await fireEvent.input(getByLabelText(/Description/i), {
+        target: { value: 'A quest that rejects non-numeric reward counts.' },
+    });
+
+    await fireEvent.click(getByText('Add reward item'));
+    await fireEvent.input(getByTestId('reward-item-id-0'), {
+        target: { value: 'custom/item-count' },
+    });
+    await fireEvent.input(getByTestId('reward-item-count-0'), {
+        target: { value: 'not-a-number' },
+    });
+
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
+    await fireEvent.submit(form as HTMLFormElement);
+
+    await findByText('Rewards require an item and positive count');
+});
+
 test('loads existing rewards when editing a quest', async () => {
     const questId = 'quest-with-reward';
     await db.quests.add({
