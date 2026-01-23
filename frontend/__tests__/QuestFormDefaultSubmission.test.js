@@ -98,4 +98,44 @@ describe('QuestForm default submissions', () => {
         expect(queryByText('Image is required')).not.toBeInTheDocument();
         expect(queryByText('NPC is required')).not.toBeInTheDocument();
     });
+
+    it('saves completion rewards for custom items', async () => {
+        const { getByLabelText, getByRole } = render(QuestForm, {
+            target: container,
+            props: { existingQuests: [] },
+        });
+
+        await waitFor(() => expect(listMock).toHaveBeenCalled());
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/title\*/i), {
+                target: { value: 'Rewards Quest' },
+            });
+            fireEvent.input(getByLabelText(/description\*/i), {
+                target: { value: 'Quest with completion rewards.' },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByRole('button', { name: /add completion reward/i }));
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/reward item id/i), {
+                target: { value: 'custom-reward-item' },
+            });
+            fireEvent.input(getByLabelText(/reward item count/i), {
+                target: { value: '2' },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByRole('button', { name: /create quest/i }));
+        });
+
+        await waitFor(() => expect(questsAddMock).toHaveBeenCalledTimes(1));
+        const savedQuest = questsAddMock.mock.calls[0][0];
+
+        expect(savedQuest.rewards).toEqual([{ id: 'custom-reward-item', count: 2 }]);
+    });
 });

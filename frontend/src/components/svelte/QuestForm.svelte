@@ -41,6 +41,7 @@
     let dialogueNodes = [];
     let newNodeId = '';
     let newNodeText = '';
+    let rewards = [];
     let nodeDraftError = '';
     const MIN_TITLE_LENGTH = 3;
     const MIN_DESC_LENGTH = 10;
@@ -185,6 +186,12 @@
                 requiresQuests = filterCurrentQuestDependencies(questData.requiresQuests || []);
                 npc = questData.npc || DEFAULT_NPC_NAME;
                 startNodeId = questData.start || DEFAULT_DIALOGUE_NODE_ID;
+                rewards = Array.isArray(questData.rewards)
+                    ? questData.rewards.map((entry) => ({
+                          id: entry?.id ?? '',
+                          count: entry?.count ?? 1,
+                      }))
+                    : [];
                 const mappedNodes = (questData.dialogue || []).map((node) =>
                     createDialogueNodeState({
                         id: node.id,
@@ -302,6 +309,32 @@
         dialogueNodes = dialogueNodes.map((node, idx) =>
             idx === index ? { ...node, text: value } : node
         );
+        validateForm();
+    }
+
+    function addRewardItem() {
+        rewards = [...rewards, { id: '', count: 1 }];
+        validateForm();
+    }
+
+    function updateRewardItemField(index, field, value) {
+        rewards = rewards.map((entry, idx) => {
+            if (idx !== index) {
+                return entry;
+            }
+
+            if (field === 'count') {
+                const parsed = value === '' ? '' : Number(value);
+                return { ...entry, count: parsed };
+            }
+
+            return { ...entry, [field]: value };
+        });
+        validateForm();
+    }
+
+    function removeRewardItem(index) {
+        rewards = rewards.filter((_, idx) => idx !== index);
         validateForm();
     }
 
@@ -588,6 +621,7 @@
 
     function getQuestPayload() {
         const serializedNodes = getSerializedDialogueNodes();
+        const sanitizedRewards = sanitizeItems(rewards);
         const payload = applyQuestDefaults({
             title: title.trim(),
             description: description.trim(),
@@ -596,6 +630,7 @@
             npc: npc.trim(),
             start: startNodeId.trim(),
             dialogue: serializedNodes.filter((node) => node.id),
+            rewards: sanitizedRewards,
         });
 
         if (payload.dialogue.length === 0) {
@@ -777,6 +812,14 @@
             }
         }
 
+        const invalidReward = rewards.some(
+            (item) => !(item?.id || '').trim() || !isPositiveNumber(item?.count)
+        );
+
+        if (invalidReward) {
+            errors.rewards = 'Reward items require an item and positive count';
+        }
+
         const selectableQuestIds = getAvailableQuests()
             .filter((quest) => questIdToString(quest.id) !== questIdToString(questId))
             .map((quest) => questIdToString(quest.id));
@@ -871,6 +914,7 @@
                 npc = DEFAULT_NPC_NAME;
                 startNodeId = DEFAULT_DIALOGUE_NODE_ID;
                 dialogueNodes = [createDialogueNodeState()];
+                rewards = [];
                 nodeDraftError = '';
             }
         } catch (error) {
@@ -978,6 +1022,60 @@
             <span class="error-message">{validationErrors.npc}</span>
         {/if}
     </div>
+
+    <section class="dialogue-builder">
+        <h2>Quest completion rewards</h2>
+        <p class="item-hint">
+            Add the items granted when the quest is completed. Custom item IDs are supported.
+        </p>
+        {#if rewards.length === 0}
+            <p class="item-hint">No completion rewards configured.</p>
+        {/if}
+        {#each rewards as rewardEntry, rewardIndex (rewardIndex)}
+            <div class="item-row">
+                <label
+                    class="sr-only"
+                    for={`quest-reward-${rewardIndex}-id`}
+                    >Reward item ID</label
+                >
+                <input
+                    id={`quest-reward-${rewardIndex}-id`}
+                    type="text"
+                    class="item-id-input"
+                    list="quest-option-item-suggestions"
+                    value={rewardEntry.id}
+                    on:input={(event) =>
+                        updateRewardItemField(rewardIndex, 'id', event.target.value)}
+                />
+                <label
+                    class="sr-only"
+                    for={`quest-reward-${rewardIndex}-count`}
+                    >Reward item count</label
+                >
+                <input
+                    id={`quest-reward-${rewardIndex}-count`}
+                    type="number"
+                    min="1"
+                    value={rewardEntry.count ?? 1}
+                    on:input={(event) =>
+                        updateRewardItemField(rewardIndex, 'count', event.target.value)}
+                />
+                <button
+                    type="button"
+                    class="remove-button"
+                    on:click={() => removeRewardItem(rewardIndex)}
+                >
+                    Remove
+                </button>
+            </div>
+        {/each}
+        <button type="button" class="add-item-button" on:click={addRewardItem}>
+            Add completion reward
+        </button>
+        {#if validationErrors.rewards}
+            <span class="error-message">{validationErrors.rewards}</span>
+        {/if}
+    </section>
 
     <section class="dialogue-builder">
         <h2>Dialogue</h2>
