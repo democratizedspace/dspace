@@ -18,6 +18,7 @@
     } from '../../utils/questDefaults.js';
     import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
     import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
+    import { npcCatalog } from '../../data/npcs.js';
 
     export let isEdit = false;
     export let questId = null;
@@ -966,14 +967,16 @@
 
     <div class="form-group">
         <label for="npc">NPC Identifier*</label>
-        <input
+        <select
             id="npc"
-            type="text"
             bind:value={npc}
-            placeholder="e.g. /assets/npc/dChat.jpg"
             class:error={validationErrors.npc}
-            on:input={handleNpcInput}
-        />
+            on:change={handleNpcInput}
+        >
+            {#each npcCatalog as npcOption}
+                <option value={npcOption.avatar}>{npcOption.name}</option>
+            {/each}
+        </select>
         {#if validationErrors.npc}
             <span class="error-message">{validationErrors.npc}</span>
         {/if}
