@@ -1,5 +1,5 @@
 import { render, fireEvent, waitFor } from '@testing-library/svelte';
-import { beforeEach, vi } from 'vitest';
+import { afterEach, beforeEach, vi } from 'vitest';
 import QuestForm from '../svelte/QuestForm.svelte';
 import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
 import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
@@ -23,8 +23,23 @@ vi.mock('../../utils/questPersistence.js', async () => {
     };
 });
 
-beforeEach(() => {
+let listSpy: ReturnType<typeof vi.spyOn> | null = null;
+let consoleErrorSpy: ReturnType<typeof vi.spyOn> | null = null;
+
+beforeEach(async () => {
     vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValue([]);
+
+    const quests = await db.list(ENTITY_TYPES.QUEST);
+    await Promise.all(quests.map((quest) => db.quests.delete(quest.id)));
+    const processes = await db.list(ENTITY_TYPES.PROCESS);
+    await Promise.all(processes.map((process) => db.processes.delete(process.id)));
+});
+
+afterEach(() => {
+    listSpy?.mockRestore();
+    listSpy = null;
+    consoleErrorSpy?.mockRestore();
+    consoleErrorSpy = null;
 });
 
 const clearQuests = async () => {
@@ -376,6 +391,151 @@ test('filters self dependencies during edit mode validation', async () => {
         const optionValues = Array.from(requirementsSelect.options).map((option) => option.value);
         expect(optionValues).toEqual(['quest-other']);
         expect(queryByText('Unknown quest dependency')).toBeNull();
+    });
+});
+
+test('includes custom quests in the requirements list', async () => {
+    const customQuestId = 'custom-quest';
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce([
+        { id: customQuestId, title: 'Custom Quest' },
+    ]);
+    const { getByLabelText } = render(QuestForm, {
+        props: {
+            existingQuests: [{ id: customQuestId, title: 'Custom Quest' }],
+            isEdit: false,
+            questId: null,
+        },
+    });
+
+    const requirementsSelect = getByLabelText(/Quest Requirements/i) as HTMLSelectElement;
+
+    await waitFor(() => {
+        const optionValues = Array.from(requirementsSelect.options).map((option) => option.value);
+        expect(optionValues).toEqual(expect.arrayContaining([customQuestId]));
+    });
+});
+
+test('loads quests from IndexedDB when no existing quests are provided', async () => {
+    const customQuestId = 'custom-db-quest';
+    await db.quests.add({
+        id: customQuestId,
+        title: 'Indexed Quest',
+        description: 'A description long enough.',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'Start',
+                options: [{ type: 'finish', text: 'Finish quest' }],
+            },
+        ],
+    });
+
+    render(QuestForm, {
+        props: {
+            existingQuests: [],
+            isEdit: false,
+            questId: null,
+        },
+    });
+
+    const requirementsSelect = document.querySelector('#requires') as HTMLSelectElement | null;
+
+    await waitFor(() => {
+        const optionValues = Array.from(requirementsSelect?.options ?? []).map(
+            (option) => option.value
+        );
+        expect(optionValues).toContain(customQuestId);
+    });
+});
+
+test('handles quest load failures when no existing quests are provided', async () => {
+    const originalList = db.list.bind(db);
+    listSpy = vi.spyOn(db, 'list').mockImplementation(async (entityType) => {
+        if (entityType === ENTITY_TYPES.QUEST) {
+            throw new Error('load failed');
+        }
+        return originalList(entityType);
+    });
+
+    const { getByLabelText } = render(QuestForm, {
+        props: {
+            existingQuests: [],
+            isEdit: false,
+            questId: null,
+        },
+    });
+
+    const requirementsSelect = getByLabelText(/Quest Requirements/i) as HTMLSelectElement;
+
+    await waitFor(() => {
+        expect(requirementsSelect.options).toHaveLength(0);
+    });
+});
+
+test('includes custom processes in the process datalist', async () => {
+    const customProcessId = 'custom-process';
+    await db.processes.add({
+        id: customProcessId,
+        title: 'Custom Process',
+        duration: 30,
+    });
+
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce([]);
+
+    render(QuestForm, {
+        props: {
+            existingQuests: [],
+            isEdit: false,
+            questId: null,
+        },
+    });
+
+    await waitFor(() => {
+        const datalist = document.querySelector(
+            '#quest-option-process-suggestions'
+        ) as HTMLDataListElement | null;
+        expect(datalist).toBeTruthy();
+        const optionValues = Array.from(datalist?.options ?? []).map((option) => option.value);
+        expect(optionValues).toContain(customProcessId);
+    });
+});
+
+test('handles item and process list failures gracefully', async () => {
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    listSpy = vi.spyOn(db, 'list').mockImplementation(async (entityType) => {
+        if (entityType === ENTITY_TYPES.ITEM) {
+            throw new Error('Items unavailable');
+        }
+        if (entityType === ENTITY_TYPES.PROCESS) {
+            throw new Error('Processes unavailable');
+        }
+        return [];
+    });
+
+    render(QuestForm, {
+        props: {
+            existingQuests: [],
+            isEdit: false,
+            questId: null,
+        },
+    });
+
+    await waitFor(() => {
+        const itemDatalist = document.querySelector(
+            '#quest-option-item-suggestions'
+        ) as HTMLDataListElement | null;
+        const processDatalist = document.querySelector(
+            '#quest-option-process-suggestions'
+        ) as HTMLDataListElement | null;
+        expect(itemDatalist?.options).toHaveLength(0);
+        expect(processDatalist?.options).toHaveLength(0);
+    });
+
+    await waitFor(() => {
+        expect(consoleErrorSpy).toHaveBeenCalledWith('Error loading items:', expect.any(Error));
+        expect(consoleErrorSpy).toHaveBeenCalledWith('Error loading processes:', expect.any(Error));
     });
 });
 
