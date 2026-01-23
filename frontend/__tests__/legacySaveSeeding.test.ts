@@ -83,6 +83,7 @@ describe('legacy save seeding utilities', () => {
         const parsed = JSON.parse(gameState || '{}');
         expect(parsed.versionNumberString).toBe('2.1');
         expect(parsed.inventory['3']).toBe(120.5);
+        expect(parsed.inventory['24']).toBe(250.25);
         expect(parsed.processes).toEqual({});
         expect(backup).toBeNull();
     });

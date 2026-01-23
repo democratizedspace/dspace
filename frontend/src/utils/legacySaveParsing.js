@@ -1,3 +1,5 @@
+import { V1_ITEM_ID_TO_V3_UUID } from './legacyV1ItemIdMap.js';
+
 export const LEGACY_V2_STORAGE_KEYS = ['gameState', 'gameStateBackup'];
 export const LEGACY_V2_SEED_SKIP_KEY = 'legacyV2Seeded';
 
@@ -29,12 +31,34 @@ const hasLegacyShape = (candidate) =>
             ('inventory' in candidate || 'quests' in candidate || 'processes' in candidate)
     );
 
+const normalizeLegacyV2Count = (value) => {
+    if (typeof value === 'number') return value;
+    if (typeof value === 'string' && value.trim()) {
+        const parsed = Number(value);
+        if (!Number.isNaN(parsed)) return parsed;
+    }
+    return value;
+};
+
+const isNumericKey = (key) => typeof key === 'string' && /^\d+$/.test(key);
+
 const sanitizeInventory = (inventory) => {
     if (!isPlainObject(inventory)) return {};
     const sanitized = {};
     Object.entries(inventory).forEach(([key, value]) => {
         if (!key) return;
-        sanitized[key] = value;
+        const mappedKey =
+            isNumericKey(key) && V1_ITEM_ID_TO_V3_UUID[key] ? V1_ITEM_ID_TO_V3_UUID[key] : key;
+        const normalizedValue = normalizeLegacyV2Count(value);
+        if (typeof normalizedValue === 'number') {
+            const currentValue = sanitized[mappedKey];
+            sanitized[mappedKey] =
+                (typeof currentValue === 'number' ? currentValue : 0) + normalizedValue;
+            return;
+        }
+        if (!(mappedKey in sanitized)) {
+            sanitized[mappedKey] = normalizedValue;
+        }
     });
     return sanitized;
 };

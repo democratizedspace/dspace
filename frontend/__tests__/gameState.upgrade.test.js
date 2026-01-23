@@ -54,7 +54,7 @@ describe('game state upgrades', () => {
 
         expect(migrated.versionNumberString).toBe(VERSIONS.V3);
         const state = loadGameState();
-        expect(state.inventory['1']).toBe(3);
+        expect(state.inventory[V1_ITEM_ID_TO_V3_UUID[1]]).toBe(3);
         expect(state.quests.q1.finished).toBe(true);
         expect(localStorage.getItem('gameState')).toContain(
             `"versionNumberString":"${VERSIONS.V3}"`
@@ -84,6 +84,31 @@ describe('game state upgrades', () => {
         expect(state.processes.active.progress).toBe(50);
         expect(state.processes.extra.status).toBe('running');
         expect(state.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBeUndefined();
+    });
+
+    test('mergeLegacyStateIntoCurrent maps v2 item ids and sums inventory counts', async () => {
+        const legacyItemId = V1_ITEM_ID_TO_V3_UUID[3];
+        const dUsdItemId = V1_ITEM_ID_TO_V3_UUID[24];
+
+        await saveGameState({
+            inventory: { [legacyItemId]: 5, [dUsdItemId]: 10 },
+            quests: {},
+            processes: {},
+            _meta: { lastUpdated: Date.now() },
+        });
+
+        const merged = await mergeLegacyStateIntoCurrent({
+            inventory: {
+                3: 2,
+                24: 3,
+                [legacyItemId]: 1,
+            },
+            quests: {},
+            processes: {},
+        });
+
+        expect(merged.inventory[legacyItemId]).toBe(8);
+        expect(merged.inventory[dUsdItemId]).toBe(13);
     });
 
     test('importV2V3 does not award V2 Upgrade Trophy without explicit upgrade', async () => {
@@ -201,7 +226,7 @@ describe('game state upgrades', () => {
         const migrated = await importV2V3();
 
         expect(migrated.inventory['']).toBeUndefined();
-        expect(migrated.inventory['1']).toBe(3);
+        expect(migrated.inventory[V1_ITEM_ID_TO_V3_UUID[1]]).toBe(3);
         expect(migrated.openAI).toBeUndefined();
     });
 
@@ -213,7 +238,7 @@ describe('game state upgrades', () => {
         expect(inspection.hasLegacyV2Keys).toBe(true);
         expect(inspection.legacyV2State).toEqual({
             quests: {},
-            inventory: { 1: 1 },
+            inventory: { [V1_ITEM_ID_TO_V3_UUID[1]]: 1 },
             processes: {},
         });
     });

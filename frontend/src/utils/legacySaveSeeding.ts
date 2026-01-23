@@ -32,6 +32,14 @@ type LegacyV1SeedItem = {
     v3Name: string;
 };
 
+type LegacyV2SeedItem = {
+    v2Id: string;
+    v2Name: string;
+    v3Id: string;
+    v3Name: string;
+    count: number | string;
+};
+
 const getV1Profiles = () =>
     v1Fixture?.profiles && typeof v1Fixture.profiles === 'object' ? v1Fixture.profiles : {};
 
@@ -77,6 +85,47 @@ const buildLegacyV1SeedItems = (profileId: string): LegacyV1SeedItem[] => {
 
 export const getLegacyV1SeedItems = (profileId = 'minimal'): LegacyV1SeedItem[] =>
     buildLegacyV1SeedItems(profileId);
+
+const buildLegacyV2SeedItems = (profileId: string): LegacyV2SeedItem[] => {
+    const profiles = getV2Profiles();
+    const profile = profiles?.[profileId];
+    const inventory =
+        profile?.gameState && typeof profile.gameState === 'object'
+            ? profile.gameState.inventory
+            : undefined;
+    if (!inventory || typeof inventory !== 'object') return [];
+
+    const entries = Object.entries(inventory)
+        .filter(([id]) => id)
+        .map(([id, count]) => {
+            const numericId = Number(id);
+            const mapping = Number.isNaN(numericId)
+                ? undefined
+                : LEGACY_V1_ITEM_MAPPINGS.find((entry) => entry.v1Id === numericId);
+
+            return {
+                v2Id: id,
+                v2Name: mapping?.v1Name ?? `Legacy item ${id}`,
+                v3Id: mapping?.v3Id ?? 'UNMAPPED',
+                v3Name: mapping?.v3Name ?? 'UNMAPPED',
+                count: typeof count === 'number' ? count : String(count),
+            };
+        });
+
+    return entries.sort((a, b) => {
+        const aNumeric = Number(a.v2Id);
+        const bNumeric = Number(b.v2Id);
+        const aIsNumeric = !Number.isNaN(aNumeric);
+        const bIsNumeric = !Number.isNaN(bNumeric);
+        if (aIsNumeric && bIsNumeric) return aNumeric - bNumeric;
+        if (aIsNumeric) return -1;
+        if (bIsNumeric) return 1;
+        return a.v2Id.localeCompare(b.v2Id);
+    });
+};
+
+export const getLegacyV2SeedItems = (profileId = 'minimal'): LegacyV2SeedItem[] =>
+    buildLegacyV2SeedItems(profileId);
 
 const isSecureContext = () =>
     typeof location !== 'undefined' && typeof location.protocol === 'string'
