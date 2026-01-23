@@ -39,49 +39,4 @@ export const npcCatalog = [
         name: 'Atlas',
         avatar: '/assets/npc/atlas.jpg',
     },
-    {
-        id: 'cedar',
-        name: 'Cedar',
-        avatar: '/assets/npc/atlas.jpg',
-    },
-    {
-        id: 'lyra',
-        name: 'Lyra',
-        avatar: '/assets/npc/nova.jpg',
-    },
-    {
-        id: 'helio',
-        name: 'Helio',
-        avatar: '/assets/npc/sydney.jpg',
-    },
-    {
-        id: 'nimbus',
-        name: 'Nimbus',
-        avatar: '/assets/npc/nova.jpg',
-    },
-    {
-        id: 'quill',
-        name: 'Quill',
-        avatar: '/assets/npc/orion.jpg',
-    },
-    {
-        id: 'echo',
-        name: 'Echo',
-        avatar: '/assets/npc/nova.jpg',
-    },
-    {
-        id: 'lumen',
-        name: 'Lumen',
-        avatar: '/assets/npc/vega.jpg',
-    },
-    {
-        id: 'patch',
-        name: 'Patch',
-        avatar: '/assets/npc/orion.jpg',
-    },
-    {
-        id: 'byte',
-        name: 'Byte',
-        avatar: '/assets/npc/orion.jpg',
-    },
 ];
