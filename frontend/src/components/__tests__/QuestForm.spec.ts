@@ -494,6 +494,40 @@ test('rounds reward counts when submitting', async () => {
     addSpy.mockRestore();
 });
 
+test('clears rewards after creating a quest', async () => {
+    const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('cleared-reward-quest');
+    const { getByLabelText, getByText, getByTestId, queryByTestId, findByText } = render(
+        QuestForm
+    );
+
+    await fireEvent.input(getByLabelText(/Title/i), {
+        target: { value: 'Reward Reset Quest' },
+    });
+    await fireEvent.input(getByLabelText(/Description/i), {
+        target: { value: 'A quest that clears rewards after submit.' },
+    });
+
+    await fireEvent.click(getByText('Add reward item'));
+    await fireEvent.input(getByTestId('reward-item-id-0'), {
+        target: { value: 'custom/item-reset' },
+    });
+    await fireEvent.input(getByTestId('reward-item-count-0'), {
+        target: { value: '3' },
+    });
+
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
+    await fireEvent.submit(form as HTMLFormElement);
+
+    await waitFor(() => {
+        expect(addSpy).toHaveBeenCalledTimes(1);
+    });
+
+    await findByText('No rewards configured');
+    expect(queryByTestId('reward-item-id-0')).toBeNull();
+    addSpy.mockRestore();
+});
+
 test('updates rewards when submitting an edited quest', async () => {
     const questId = 'quest-edit-reward';
     await db.quests.add({
