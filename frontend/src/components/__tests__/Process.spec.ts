@@ -401,7 +401,7 @@ test('renders fallback message when process details are unavailable', async () =
     const { getByText } = render(Process, { processId: 'missing-process' });
 
     await tick();
-    expect(getByText('Process details unavailable.')).toBeTruthy();
+    expect(getByText('Unknown process.')).toBeTruthy();
 });
 
 test('loads custom process definitions when missing from the built-in catalog', async () => {
