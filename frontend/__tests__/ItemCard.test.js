@@ -50,6 +50,19 @@ describe('ItemCard component', () => {
         expect(getByText('Tools')).toBeTruthy();
     });
 
+    it('renders the category label and value on the same line', () => {
+        const { container } = render(ItemCard, {
+            props: {
+                item: mockItems[0],
+            },
+        });
+
+        const categoryLine = Array.from(container.querySelectorAll('p')).find(
+            (node) => node.textContent === 'Category: Tools'
+        );
+        expect(categoryLine).toBeTruthy();
+    });
+
     it('renders the category label when present', () => {
         const { getByText } = render(ItemCard, {
             props: {
