@@ -36,6 +36,7 @@
     let requiresQuests = [];
     let allQuests = [];
     let allItems = [];
+    let rewards = [];
     let validationErrors = {};
     let isSubmitting = false;
     let simulationSummary = {
@@ -246,6 +247,12 @@
                 title = questData.title;
                 description = questData.description;
                 requiresQuests = filterCurrentQuestDependencies(questData.requiresQuests || []);
+                rewards = Array.isArray(questData.rewards)
+                    ? questData.rewards.map((entry) => ({
+                          id: entry?.id ?? '',
+                          count: entry?.count ?? 1,
+                      }))
+                    : [];
                 npc = resolveNpcSelection(questData.npc);
                 startNodeId = questData.start || DEFAULT_DIALOGUE_NODE_ID;
                 const mappedNodes = (questData.dialogue || []).map((node) =>
@@ -471,6 +478,32 @@
         validateForm();
     }
 
+    function addRewardItem() {
+        rewards = [...rewards, { id: '', count: 1 }];
+        validateForm();
+    }
+
+    function updateRewardItemField(itemIndex, field, value) {
+        rewards = rewards.map((item, idx) => {
+            if (idx !== itemIndex) {
+                return item;
+            }
+
+            if (field === 'count') {
+                const parsed = value === '' ? '' : Number(value);
+                return { ...item, count: parsed };
+            }
+
+            return { ...item, [field]: value };
+        });
+        validateForm();
+    }
+
+    function removeRewardItem(itemIndex) {
+        rewards = rewards.filter((_, idx) => idx !== itemIndex);
+        validateForm();
+    }
+
     function addOption(nodeIndex) {
         const node = dialogueNodes[nodeIndex];
         const draft = node.newOption;
@@ -655,11 +688,13 @@
 
     function getQuestPayload() {
         const serializedNodes = getSerializedDialogueNodes();
+        const sanitizedRewards = sanitizeItems(rewards);
         const payload = applyQuestDefaults({
             title: title.trim(),
             description: description.trim(),
             image: previewUrl || '',
             requiresQuests,
+            rewards: sanitizedRewards,
             npc: getNpcPayloadValue(npc),
             start: startNodeId.trim(),
             dialogue: serializedNodes.filter((node) => node.id),
@@ -851,6 +886,15 @@
             }
         }
 
+        if (!errors.rewards && rewards.length > 0) {
+            const invalidReward = rewards.some(
+                (item) => !(item?.id || '').trim() || !isPositiveNumber(item?.count)
+            );
+            if (invalidReward) {
+                errors.rewards = 'Rewards require an item and positive count';
+            }
+        }
+
         const selectableQuestIds = getAvailableQuests()
             .filter((quest) => questIdToString(quest.id) !== questIdToString(questId))
             .map((quest) => questIdToString(quest.id));
@@ -945,6 +989,7 @@
                 previewUrl = null;
                 processedImageUrl = null;
                 requiresQuests = [];
+                rewards = [];
                 npc = npcOptions[0]?.value ?? DEFAULT_NPC_NAME;
                 startNodeId = DEFAULT_DIALOGUE_NODE_ID;
                 dialogueNodes = [createDialogueNodeState()];
@@ -1038,6 +1083,58 @@
         </select>
         {#if validationErrors.requiresQuests}
             <span class="error-message">{validationErrors.requiresQuests}</span>
+        {/if}
+    </div>
+
+    <div class="form-group">
+        <h3 class="section-title">Quest Rewards</h3>
+        <p class="item-hint">
+            Add item IDs and quantities granted when the quest is completed. Custom item IDs are
+            supported.
+        </p>
+        {#if rewards.length === 0}
+            <p class="item-hint">No rewards configured</p>
+        {/if}
+        {#each rewards as rewardEntry, rewardIndex (rewardIndex)}
+            <div class="item-row">
+                <label class="sr-only" for={`quest-reward-${rewardIndex}-id`}>Reward item ID</label>
+                <input
+                    id={`quest-reward-${rewardIndex}-id`}
+                    type="text"
+                    class="item-id-input"
+                    list="quest-option-item-suggestions"
+                    value={rewardEntry.id}
+                    on:input={(event) =>
+                        updateRewardItemField(rewardIndex, 'id', event.target.value)}
+                    data-testid={`reward-item-id-${rewardIndex}`}
+                />
+                <label class="sr-only" for={`quest-reward-${rewardIndex}-count`}
+                    >Reward item count</label
+                >
+                <input
+                    id={`quest-reward-${rewardIndex}-count`}
+                    type="number"
+                    min="1"
+                    value={rewardEntry.count ?? 1}
+                    on:input={(event) =>
+                        updateRewardItemField(rewardIndex, 'count', event.target.value)}
+                    data-testid={`reward-item-count-${rewardIndex}`}
+                />
+                <button
+                    type="button"
+                    class="remove-button"
+                    on:click={() => removeRewardItem(rewardIndex)}
+                    data-testid={`remove-reward-item-${rewardIndex}`}
+                >
+                    Remove
+                </button>
+            </div>
+        {/each}
+        <button type="button" class="add-item-button" on:click={addRewardItem}>
+            Add reward item
+        </button>
+        {#if validationErrors.rewards}
+            <span class="error-message">{validationErrors.rewards}</span>
         {/if}
     </div>
 
@@ -1487,6 +1584,13 @@
         color: white;
     }
 
+    .section-title {
+        margin: 0 0 6px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+    }
+
     input,
     textarea {
         width: 95%;
@@ -1759,6 +1863,19 @@
 
     .add-item-button:hover {
         background-color: #003366;
+    }
+
+    .remove-button {
+        background-color: #aa1b1b;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+
+    .remove-button:hover {
+        background-color: #800f0f;
     }
 
     .sr-only {

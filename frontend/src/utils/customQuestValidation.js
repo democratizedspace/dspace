@@ -67,6 +67,17 @@ export const customQuestSchema = {
             items: { type: 'string' },
             uniqueItems: true,
         },
+        rewards: {
+            type: 'array',
+            items: {
+                type: 'object',
+                properties: {
+                    id: { type: 'string', minLength: 1 },
+                    count: { type: 'number', minimum: 1 },
+                },
+                required: ['id', 'count'],
+            },
+        },
     },
     required: ['title', 'description', 'image'],
 };
