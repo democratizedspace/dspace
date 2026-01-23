@@ -493,3 +493,56 @@ test('rounds reward counts when submitting', async () => {
     expect(questPayload.rewards).toEqual([{ id: 'custom/item-round', count: 3 }]);
     addSpy.mockRestore();
 });
+
+test('updates rewards when submitting an edited quest', async () => {
+    const questId = 'quest-edit-reward';
+    await db.quests.add({
+        id: questId,
+        title: 'Edit Reward Quest',
+        description: 'A description long enough.',
+        npc: 'npc',
+        start: 'start',
+        image: 'data:image/jpeg;base64,EXISTING',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'Start',
+                options: [{ type: 'finish', text: 'Finish quest' }],
+            },
+        ],
+        rewards: [{ id: 'custom/item-edit', count: 2 }],
+    });
+
+    const updateSpy = vi.spyOn(db.quests, 'update').mockResolvedValueOnce(1);
+    const { getByTestId } = render(QuestForm, {
+        props: {
+            isEdit: true,
+            questId,
+        },
+    });
+
+    await waitFor(() => {
+        expect(getByTestId('reward-item-count-0')).toBeTruthy();
+    });
+
+    await fireEvent.input(getByTestId('reward-item-count-0'), {
+        target: { value: '4' },
+    });
+
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
+    await fireEvent.submit(form as HTMLFormElement);
+
+    await waitFor(() => {
+        expect(updateSpy).toHaveBeenCalledTimes(1);
+    });
+
+    expect(updateSpy).toHaveBeenCalledWith(
+        questId,
+        expect.objectContaining({
+            rewards: [{ id: 'custom/item-edit', count: 4 }],
+            updatedAt: expect.any(String),
+        })
+    );
+    updateSpy.mockRestore();
+});
