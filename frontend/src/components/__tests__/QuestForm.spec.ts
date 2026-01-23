@@ -145,6 +145,74 @@ test('maps NPC ids and names to avatar paths on submit', async () => {
             npcCatalog.find((entry) => entry.name === 'Nova')?.avatar
         );
     });
+
+    await fireEvent.input(titleInput, { target: { value: 'Catalog Quest Three' } });
+    await fireEvent.input(descriptionInput, {
+        target: { value: 'A third description that is long enough.' },
+    });
+    await fireEvent.change(npcSelect, { target: { value: npcCatalog[1].avatar } });
+    await fireEvent.submit(form);
+
+    await waitFor(async () => {
+        const createdQuest = (await db.quests.toArray()).find(
+            (quest) => quest.title === 'Catalog Quest Three'
+        );
+        expect(createdQuest?.npc).toBe(npcCatalog[1].avatar);
+    });
+});
+
+test.each([
+    {
+        npcValue: npcCatalog[0].avatar,
+        expectedAvatar: npcCatalog[0].avatar,
+        label: 'avatar',
+    },
+    {
+        npcValue: npcCatalog[1].id,
+        expectedAvatar: npcCatalog[1].avatar,
+        label: 'id',
+    },
+    {
+        npcValue: npcCatalog[2].name,
+        expectedAvatar: npcCatalog[2].avatar,
+        label: 'name',
+    },
+    {
+        npcValue: '  ',
+        expectedAvatar: npcCatalog[0].avatar,
+        label: 'empty',
+    },
+])('normalizes NPC selection on edit ($label)', async ({ npcValue, expectedAvatar }) => {
+    await db.quests.clear();
+    const questId = `normalized-${String(npcValue).trim() || 'empty'}`;
+    await db.quests.add({
+        id: questId,
+        title: 'Normalized Quest',
+        description: 'A description long enough.',
+        npc: npcValue,
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'Start',
+                options: [{ type: 'finish', text: 'Finish quest' }],
+            },
+        ],
+    });
+
+    const { getByLabelText } = render(QuestForm, {
+        props: {
+            isEdit: true,
+            questId,
+            existingQuests: [{ id: questId, title: 'Normalized Quest' }],
+        },
+    });
+
+    const npcSelect = getByLabelText(/NPC/i) as HTMLSelectElement;
+
+    await waitFor(() => {
+        expect(npcSelect.value).toBe(expectedAvatar);
+    });
 });
 
 test('rejects title with forbidden characters', async () => {
