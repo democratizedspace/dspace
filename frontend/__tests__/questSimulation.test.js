@@ -4,7 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const { globSync } = require('glob');
-const { questHasFinishPath } = require('../src/utils/simulateQuest.js');
+const { questHasFinishPath, getQuestSimulationSummary } = require('../src/utils/simulateQuest.js');
 
 const questFile = path.join(__dirname, '../test-data/constellations-quest.json');
 const loopQuestFile = path.join(__dirname, '../test-data/loop-quest.json');
@@ -42,6 +42,13 @@ describe('Quest simulation', () => {
     test('quest requiring GitHub token still has finish path', () => {
         const quest = JSON.parse(fs.readFileSync(githubFinishQuestFile));
         expect(questHasFinishPath(quest)).toBe(true);
+    });
+
+    test('simulation summary reports missing start and unreachable nodes', () => {
+        const quest = JSON.parse(fs.readFileSync(missingStartFile));
+        const summary = getQuestSimulationSummary(quest);
+        expect(summary.missingStart).toBe(true);
+        expect(summary.unreachableNodes.length).toBeGreaterThan(0);
     });
 
     test('all canonical quests have a path to finish', () => {
