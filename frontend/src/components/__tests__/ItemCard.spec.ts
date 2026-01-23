@@ -36,4 +36,34 @@ describe('ItemCard', () => {
         expect(getByText('Category:')).toBeTruthy();
         expect(getByText('Uncategorized')).toBeTruthy();
     });
+
+    test('renders the category label when provided', () => {
+        const item = {
+            id: 'gamma',
+            name: 'Gamma',
+            description: 'Gamma desc',
+            image: '/gamma.png',
+            categoryLabel: 'Components',
+        };
+
+        const { getByText } = render(ItemCard, { props: { item, count: 1 } });
+
+        expect(getByText('Category:')).toBeTruthy();
+        expect(getByText('Components')).toBeTruthy();
+    });
+
+    test('renders Custom when the item is custom without a category', () => {
+        const item = {
+            id: 'delta',
+            name: 'Delta',
+            description: 'Delta desc',
+            image: '/delta.png',
+            custom: true,
+        };
+
+        const { getByText } = render(ItemCard, { props: { item, count: 1 } });
+
+        expect(getByText('Category:')).toBeTruthy();
+        expect(getByText('Custom')).toBeTruthy();
+    });
 });
