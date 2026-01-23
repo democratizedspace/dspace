@@ -131,6 +131,8 @@
 
     const wipeAppData = async () => {
         if (isClearing) return;
+        let shouldReload = false;
+        const reloadDelayMs = 2000;
         if (typeof window !== 'undefined') {
             const confirmed = window.confirm(
                 'This will remove all DSPACE data saved in this browser, including cookies, ' +
@@ -138,6 +140,7 @@
             );
 
             if (!confirmed) return;
+            shouldReload = true;
         }
 
         isClearing = true;
@@ -152,13 +155,20 @@
             statusMessage = hadError
                 ? 'Some local app data may not have been removed. Please try again or clear your browser data manually.'
                 : 'All local app data was removed.';
+            if (hadError) {
+                shouldReload = false;
+            }
         } catch (error) {
             console.error('Failed to wipe all app data', error);
             statusMessage =
                 'Some local app data may not have been removed. Please try again or clear your browser data manually.';
+            shouldReload = false;
         }
 
         isClearing = false;
+        if (shouldReload && typeof window !== 'undefined') {
+            setTimeout(() => window.location.reload(), reloadDelayMs);
+        }
     };
 </script>
 

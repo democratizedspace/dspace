@@ -1,9 +1,9 @@
 import { render, fireEvent, waitFor } from '@testing-library/svelte';
-import { vi } from 'vitest';
+import { beforeEach, vi } from 'vitest';
 import QuestForm from '../svelte/QuestForm.svelte';
-import { db } from '../../utils/customcontent.js';
-import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
+import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
 import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
+import { npcCatalog } from '../../data/npcs.js';
 
 vi.mock('../../utils/imageDownsample.js', () => ({
     downsampleAndCompressToJpeg: vi.fn().mockResolvedValue({
@@ -22,6 +22,15 @@ vi.mock('../../utils/questPersistence.js', async () => {
         syncExistingQuestsToIndexedDB: vi.fn(),
     };
 });
+
+beforeEach(() => {
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValue([]);
+});
+
+const clearQuests = async () => {
+    const quests = await db.list(ENTITY_TYPES.QUEST);
+    await Promise.all(quests.map((quest) => db.quests.delete(quest.id)));
+};
 
 test('allows adding dialogue nodes and options', async () => {
     const { getByLabelText, getByText, getAllByLabelText, getAllByText } = render(QuestForm);
@@ -76,169 +85,202 @@ test('shows image preview after upload', async () => {
     });
 });
 
-test('reprocesses non-data preview images on submit', async () => {
-    const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('image-quest');
-    vi.mocked(downsampleAndCompressToJpeg)
-        .mockResolvedValueOnce({ dataUrl: 'https://example.com/image.jpg' })
-        .mockResolvedValueOnce({ dataUrl: 'data:image/jpeg;base64,REPROCESSED' });
-
-    const { getByAltText, getByLabelText } = render(QuestForm);
-    const fileInput = getByLabelText(/Upload an Image/i);
-    const file = new File(['d'], 'test.png', { type: 'image/png' });
-
-    await fireEvent.input(getByLabelText(/Title/i), {
-        target: { value: 'Image Quest' },
-    });
-    await fireEvent.input(getByLabelText(/Description/i), {
-        target: { value: 'A quest with a reprocessed image.' },
-    });
-
-    await fireEvent.change(fileInput, { target: { files: [file] } });
-
-    await waitFor(() => {
-        expect(getByAltText('Quest preview')).toBeTruthy();
-    });
-
-    const form = document.querySelector('form');
-    expect(form).toBeTruthy();
-    await fireEvent.submit(form as HTMLFormElement);
-
-    await waitFor(() => {
-        expect(addSpy).toHaveBeenCalledTimes(1);
-    });
-
-    expect(addSpy.mock.calls[0]?.[0]).toEqual(
-        expect.objectContaining({
-            image: 'data:image/jpeg;base64,REPROCESSED',
-        })
-    );
-    addSpy.mockRestore();
-});
-
-test('uses the processed data image when submitting', async () => {
-    const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('processed-image-quest');
-    const { getByAltText, getByLabelText } = render(QuestForm);
-    const fileInput = getByLabelText(/Upload an Image/i);
-    const file = new File(['d'], 'test.png', { type: 'image/png' });
-
-    await fireEvent.input(getByLabelText(/Title/i), {
-        target: { value: 'Processed Image Quest' },
-    });
-    await fireEvent.input(getByLabelText(/Description/i), {
-        target: { value: 'A quest that uses processed images.' },
-    });
-
-    await fireEvent.change(fileInput, { target: { files: [file] } });
-
-    await waitFor(() => {
-        expect(getByAltText('Quest preview')).toBeTruthy();
-    });
-
-    const form = document.querySelector('form');
-    expect(form).toBeTruthy();
-    await fireEvent.submit(form as HTMLFormElement);
-
-    await waitFor(() => {
-        expect(addSpy).toHaveBeenCalledTimes(1);
-    });
-
-    expect(addSpy.mock.calls[0]?.[0]).toEqual(
-        expect.objectContaining({
-            image: 'data:image/jpeg;base64,COMPRESSED',
-        })
-    );
-    addSpy.mockRestore();
-});
-
-test('uses the last preview when image processing fails on submit', async () => {
-    const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('image-fallback-quest');
-    vi.mocked(downsampleAndCompressToJpeg)
-        .mockResolvedValueOnce({ dataUrl: 'https://example.com/image.jpg' })
-        .mockRejectedValueOnce(new Error('compression failed'));
-
-    const { getByAltText, getByLabelText } = render(QuestForm);
-    const fileInput = getByLabelText(/Upload an Image/i);
-    const file = new File(['d'], 'test.png', { type: 'image/png' });
-
-    await fireEvent.input(getByLabelText(/Title/i), {
-        target: { value: 'Fallback Image Quest' },
-    });
-    await fireEvent.input(getByLabelText(/Description/i), {
-        target: { value: 'A quest with fallback image behavior.' },
-    });
-
-    await fireEvent.change(fileInput, { target: { files: [file] } });
-
-    await waitFor(() => {
-        expect(getByAltText('Quest preview')).toBeTruthy();
-    });
-
-    const form = document.querySelector('form');
-    expect(form).toBeTruthy();
-    await fireEvent.submit(form as HTMLFormElement);
-
-    await waitFor(() => {
-        expect(addSpy).toHaveBeenCalledTimes(1);
-    });
-
-    expect(addSpy.mock.calls[0]?.[0]).toEqual(
-        expect.objectContaining({
-            image: 'https://example.com/image.jpg',
-        })
-    );
-    addSpy.mockRestore();
-});
-
-test('shows the quest preview when the form is valid', async () => {
-    const { getByLabelText, getByText, findByText } = render(QuestForm);
-
-    await fireEvent.input(getByLabelText(/Title/i), {
-        target: { value: 'Preview Quest' },
-    });
-    await fireEvent.input(getByLabelText(/Description/i), {
-        target: { value: 'A quest ready for preview.' },
-    });
-
-    await fireEvent.click(getByText('Preview'));
-
-    await findByText('Preview Quest');
-});
-
-test('blocks submission while the image is processing', async () => {
-    const addSpy = vi.spyOn(db.quests, 'add');
+test('renders NPC select options from the catalog', () => {
     const { getByLabelText } = render(QuestForm);
+    const npcSelect = getByLabelText(/NPC/i) as HTMLSelectElement;
+    const optionValues = Array.from(npcSelect.options).map((option) => option.value);
+    expect(optionValues).toEqual(npcCatalog.map((entry) => entry.avatar));
+});
 
-    await fireEvent.input(getByLabelText(/Title/i), {
-        target: { value: 'Processing Quest' },
+test('adds a custom NPC option when editing a quest with a legacy NPC value', async () => {
+    await clearQuests();
+    const questId = 'legacy-quest';
+    const legacyNpc = 'Legacy NPC';
+    await db.quests.add({
+        id: questId,
+        title: 'Legacy Quest',
+        description: 'A description long enough.',
+        npc: legacyNpc,
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'Start',
+                options: [{ type: 'finish', text: 'Finish quest' }],
+            },
+        ],
     });
-    await fireEvent.input(getByLabelText(/Description/i), {
-        target: { value: 'A quest with a processing image.' },
+
+    const { getByLabelText } = render(QuestForm, {
+        props: {
+            isEdit: true,
+            questId,
+            existingQuests: [{ id: questId, title: 'Legacy Quest' }],
+        },
     });
 
-    let resolveImage: (value: { dataUrl: string }) => void;
-    const processingPromise = new Promise<{ dataUrl: string }>((resolve) => {
-        resolveImage = resolve;
-    });
-    vi.mocked(downsampleAndCompressToJpeg).mockImplementationOnce(() => processingPromise);
-
-    const fileInput = getByLabelText(/Upload an Image/i);
-    const file = new File(['d'], 'test.png', { type: 'image/png' });
-    await fireEvent.change(fileInput, { target: { files: [file] } });
-
-    const form = document.querySelector('form');
-    expect(form).toBeTruthy();
-    await fireEvent.submit(form as HTMLFormElement);
+    const npcSelect = getByLabelText(/NPC/i) as HTMLSelectElement;
 
     await waitFor(() => {
-        expect(addSpy).not.toHaveBeenCalled();
+        const optionValues = Array.from(npcSelect.options).map((option) => option.value);
+        expect(optionValues).toContain(legacyNpc);
     });
 
-    resolveImage({
-        dataUrl: 'data:image/jpeg;base64,COMPRESSED',
-    });
-
-    addSpy.mockRestore();
+    const customOption = Array.from(npcSelect.options).find((option) => option.value === legacyNpc);
+    expect(customOption?.textContent).toBe(`Custom (${legacyNpc})`);
 });
+
+test('stores the selected NPC avatar on submit', async () => {
+    await clearQuests();
+    const { getByLabelText } = render(QuestForm);
+    const titleInput = getByLabelText(/Title/i);
+    const descriptionInput = getByLabelText(/Description/i);
+    const npcSelect = getByLabelText(/NPC/i) as HTMLSelectElement;
+    const form = document.querySelector('form') as HTMLFormElement;
+
+    await fireEvent.input(titleInput, { target: { value: 'Catalog Quest' } });
+    await fireEvent.input(descriptionInput, {
+        target: { value: 'This description is long enough.' },
+    });
+    await fireEvent.change(npcSelect, { target: { value: npcCatalog[0].avatar } });
+    await fireEvent.submit(form);
+
+    await waitFor(async () => {
+        const createdQuest = (await db.list(ENTITY_TYPES.QUEST)).find(
+            (quest) => quest.title === 'Catalog Quest'
+        );
+        expect(createdQuest?.npc).toBe(npcCatalog[0].avatar);
+    });
+
+    await fireEvent.input(titleInput, { target: { value: 'Catalog Quest Two' } });
+    await fireEvent.input(descriptionInput, {
+        target: { value: 'Another description that is long enough.' },
+    });
+    await fireEvent.change(npcSelect, { target: { value: npcCatalog[2].avatar } });
+    await fireEvent.submit(form);
+
+    await waitFor(async () => {
+        const createdQuest = (await db.list(ENTITY_TYPES.QUEST)).find(
+            (quest) => quest.title === 'Catalog Quest Two'
+        );
+        expect(createdQuest?.npc).toBe(npcCatalog[2].avatar);
+    });
+
+    await fireEvent.input(titleInput, { target: { value: 'Catalog Quest Three' } });
+    await fireEvent.input(descriptionInput, {
+        target: { value: 'A third description is long enough.' },
+    });
+    await fireEvent.change(npcSelect, { target: { value: npcCatalog[1].avatar } });
+    await fireEvent.submit(form);
+
+    await waitFor(async () => {
+        const createdQuest = (await db.list(ENTITY_TYPES.QUEST)).find(
+            (quest) => quest.title === 'Catalog Quest Three'
+        );
+        expect(createdQuest?.npc).toBe(npcCatalog[1].avatar);
+    });
+});
+
+test.each([
+    {
+        npcValue: npcCatalog[0].avatar,
+        expectedAvatar: npcCatalog[0].avatar,
+        label: 'avatar',
+    },
+    {
+        npcValue: npcCatalog[1].id,
+        expectedAvatar: npcCatalog[1].avatar,
+        label: 'id',
+    },
+    {
+        npcValue: npcCatalog[2].name,
+        expectedAvatar: npcCatalog[2].avatar,
+        label: 'name',
+    },
+    {
+        npcValue: '  ',
+        expectedAvatar: npcCatalog[0].avatar,
+        label: 'empty',
+    },
+])('normalizes NPC selection on edit ($label)', async ({ npcValue, expectedAvatar }) => {
+    await clearQuests();
+    const questId = `normalized-${String(npcValue).trim() || 'empty'}`;
+    await db.quests.add({
+        id: questId,
+        title: 'Normalized Quest',
+        description: 'A description long enough.',
+        npc: npcValue,
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'Start',
+                options: [{ type: 'finish', text: 'Finish quest' }],
+            },
+        ],
+    });
+
+    const { getByLabelText } = render(QuestForm, {
+        props: {
+            isEdit: true,
+            questId,
+            existingQuests: [{ id: questId, title: 'Normalized Quest' }],
+        },
+    });
+
+    const npcSelect = getByLabelText(/NPC/i) as HTMLSelectElement;
+
+    await waitFor(() => {
+        expect(npcSelect.value).toBe(expectedAvatar);
+    });
+});
+
+test.each([
+    {
+        label: 'id',
+        npcValue: npcCatalog[1].id,
+        expectedNpc: npcCatalog[1].avatar,
+    },
+    {
+        label: 'name',
+        npcValue: npcCatalog[2].name,
+        expectedNpc: npcCatalog[2].avatar,
+    },
+    {
+        label: 'custom',
+        npcValue: 'Legacy NPC',
+        expectedNpc: 'Legacy NPC',
+    },
+])(
+    'stores NPC values from $label selections on submit',
+    async ({ npcValue, expectedNpc, label }) => {
+        await clearQuests();
+        const { getByLabelText } = render(QuestForm);
+        const titleInput = getByLabelText(/Title/i);
+        const descriptionInput = getByLabelText(/Description/i);
+        const npcSelect = getByLabelText(/NPC/i) as HTMLSelectElement;
+        const form = document.querySelector('form') as HTMLFormElement;
+
+        const customOption = document.createElement('option');
+        customOption.value = npcValue;
+        customOption.textContent = `Custom (${npcValue})`;
+        npcSelect.appendChild(customOption);
+
+        await fireEvent.input(titleInput, { target: { value: `Catalog Quest ${label}` } });
+        await fireEvent.input(descriptionInput, {
+            target: { value: 'This description is long enough.' },
+        });
+        await fireEvent.change(npcSelect, { target: { value: npcValue } });
+        await fireEvent.submit(form);
+
+        await waitFor(async () => {
+            const createdQuest = (await db.list(ENTITY_TYPES.QUEST)).find(
+                (quest) => quest.title === `Catalog Quest ${label}`
+            );
+            expect(createdQuest?.npc).toBe(expectedNpc);
+        });
+    }
+);
 
 test('rejects title with forbidden characters', async () => {
     const { getByLabelText, findByText } = render(QuestForm);

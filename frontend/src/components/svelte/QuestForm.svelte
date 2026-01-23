@@ -16,8 +16,10 @@
         DEFAULT_DIALOGUE_OPTION,
         createDefaultDialogueNode,
     } from '../../utils/questDefaults.js';
+    import { npcCatalog } from '../../data/npcs.js';
     import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
     import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
+    import { getQuestSimulationSummary } from '../../utils/simulateQuest.js';
 
     export let isEdit = false;
     export let questId = null;
@@ -37,7 +39,20 @@
     let rewards = [];
     let validationErrors = {};
     let isSubmitting = false;
-    let npc = DEFAULT_NPC_NAME;
+    let simulationSummary = {
+        hasFinishPath: true,
+        missingStart: false,
+        unreachableNodes: [],
+    };
+    const npcOptions = npcCatalog.map((entry) => ({
+        value: entry.avatar,
+        label: entry.name,
+    }));
+    const npcById = new Map(npcCatalog.map((entry) => [entry.id, entry]));
+    const npcByAvatar = new Map(npcCatalog.map((entry) => [entry.avatar, entry]));
+    const npcByName = new Map(npcCatalog.map((entry) => [entry.name.toLowerCase(), entry]));
+    let npc = npcOptions[0]?.value ?? DEFAULT_NPC_NAME;
+    let npcSelectOptions = npcOptions;
     let startNodeId = DEFAULT_DIALOGUE_NODE_ID;
     let dialogueNodes = [];
     let newNodeId = '';
@@ -171,6 +186,54 @@
         };
     }
 
+    function resolveNpcSelection(value) {
+        const trimmed = typeof value === 'string' ? value.trim() : '';
+        if (!trimmed) {
+            return npcOptions[0]?.value ?? DEFAULT_NPC_NAME;
+        }
+
+        const matched = npcByAvatar.get(trimmed);
+        if (matched) {
+            return matched.avatar;
+        }
+
+        const matchedById = npcById.get(trimmed);
+        if (matchedById) {
+            return matchedById.avatar;
+        }
+
+        const matchedByName = npcByName.get(trimmed.toLowerCase());
+        if (matchedByName) {
+            return matchedByName.avatar;
+        }
+
+        return trimmed;
+    }
+
+    function getNpcPayloadValue(value) {
+        const trimmed = typeof value === 'string' ? value.trim() : '';
+        if (!trimmed) {
+            return '';
+        }
+
+        const matched = npcByAvatar.get(trimmed);
+        if (matched) {
+            return matched.avatar;
+        }
+
+        const matchedById = npcById.get(trimmed);
+        if (matchedById) {
+            return matchedById.avatar;
+        }
+
+        const matchedByName = npcByName.get(trimmed.toLowerCase());
+        if (matchedByName) {
+            return matchedByName.avatar;
+        }
+
+        return trimmed;
+    }
+
     if (dialogueNodes.length === 0) {
         dialogueNodes = [createDialogueNodeState()];
     }
@@ -190,7 +253,7 @@
                           count: entry?.count ?? 1,
                       }))
                     : [];
-                npc = questData.npc || DEFAULT_NPC_NAME;
+                npc = resolveNpcSelection(questData.npc);
                 startNodeId = questData.start || DEFAULT_DIALOGUE_NODE_ID;
                 const mappedNodes = (questData.dialogue || []).map((node) =>
                     createDialogueNodeState({
@@ -246,6 +309,10 @@
     $: selectableQuests = getAvailableQuests().filter(
         (quest) => questIdToString(quest.id) !== questIdToString(questId)
     );
+    $: npcSelectOptions =
+        npcOptions.some((option) => option.value === npc) || !npc
+            ? npcOptions
+            : [...npcOptions, { value: npc, label: `Custom (${npc})` }];
 
     async function handleImageUpload(event) {
         const file = event.target.files[0];
@@ -628,7 +695,7 @@
             image: previewUrl || '',
             requiresQuests,
             rewards: sanitizedRewards,
-            npc: npc.trim(),
+            npc: getNpcPayloadValue(npc),
             start: startNodeId.trim(),
             dialogue: serializedNodes.filter((node) => node.id),
         });
@@ -642,6 +709,13 @@
         }
 
         return { payload, serializedNodes };
+    }
+
+    $: if (isHydrated) {
+        simulationSummary = getQuestSimulationSummary({
+            start: startNodeId.trim(),
+            dialogue: getSerializedDialogueNodes().filter((node) => node.id),
+        });
     }
 
     async function validateForm() {
@@ -835,6 +909,9 @@
             errors.requiresQuests = 'Unknown quest dependency';
         }
 
+        const summary = getQuestSimulationSummary(payload);
+        simulationSummary = summary;
+
         validationErrors = errors;
         return Object.keys(errors).length === 0;
     }
@@ -913,7 +990,7 @@
                 processedImageUrl = null;
                 requiresQuests = [];
                 rewards = [];
-                npc = DEFAULT_NPC_NAME;
+                npc = npcOptions[0]?.value ?? DEFAULT_NPC_NAME;
                 startNodeId = DEFAULT_DIALOGUE_NODE_ID;
                 dialogueNodes = [createDialogueNodeState()];
                 nodeDraftError = '';
@@ -1063,14 +1140,16 @@
 
     <div class="form-group">
         <label for="npc">NPC Identifier*</label>
-        <input
+        <select
             id="npc"
-            type="text"
             bind:value={npc}
-            placeholder="e.g. /assets/npc/dChat.jpg"
             class:error={validationErrors.npc}
-            on:input={handleNpcInput}
-        />
+            on:change={handleNpcInput}
+        >
+            {#each npcSelectOptions as option}
+                <option value={option.value}>{option.label}</option>
+            {/each}
+        </select>
         {#if validationErrors.npc}
             <span class="error-message">{validationErrors.npc}</span>
         {/if}
@@ -1425,6 +1504,38 @@
         {/if}
     </section>
 
+    <section class="simulation-panel" aria-live="polite">
+        <h2>Simulation tests</h2>
+        <p class="simulation-subtitle">
+            Runs automatically to catch obvious logic errors before saving.
+        </p>
+        <ul class="simulation-list">
+            <li
+                class:pass={!simulationSummary.missingStart}
+                class:fail={simulationSummary.missingStart}
+            >
+                Start node exists
+            </li>
+            <li
+                class:pass={simulationSummary.hasFinishPath}
+                class:fail={!simulationSummary.hasFinishPath}
+            >
+                Finish path reachable
+            </li>
+            <li
+                class:pass={simulationSummary.unreachableNodes.length === 0}
+                class:fail={simulationSummary.unreachableNodes.length > 0}
+            >
+                All nodes reachable from start
+            </li>
+        </ul>
+        {#if simulationSummary.unreachableNodes.length > 0}
+            <p class="simulation-detail">
+                Unreachable nodes: {simulationSummary.unreachableNodes.join(', ')}
+            </p>
+        {/if}
+    </section>
+
     <div class="form-submit">
         <button type="submit" class="submit-button" disabled={isSubmitting}>
             {#if isSubmitting}
@@ -1599,6 +1710,57 @@
     .dialogue-builder h2 {
         margin-top: 0;
         color: #00ff88;
+    }
+
+    .simulation-panel {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 10px;
+        border: 2px solid #00b33c;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .simulation-panel h2 {
+        margin: 0 0 6px;
+        color: #00ff88;
+    }
+
+    .simulation-subtitle {
+        margin: 0 0 10px;
+        color: #c8e6c9;
+        font-size: 14px;
+    }
+
+    .simulation-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 8px;
+    }
+
+    .simulation-list li {
+        padding: 8px 10px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid transparent;
+        font-size: 14px;
+    }
+
+    .simulation-list li.pass {
+        border-color: #00b33c;
+        color: #c8ffd9;
+    }
+
+    .simulation-list li.fail {
+        border-color: #ff3e3e;
+        color: #ffd6d6;
+    }
+
+    .simulation-detail {
+        margin: 8px 0 0;
+        font-size: 13px;
+        color: #ffe8a3;
     }
 
     .new-node {

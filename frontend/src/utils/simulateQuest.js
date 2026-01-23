@@ -1,10 +1,20 @@
-export function questHasFinishPath(quest) {
+export function getQuestSimulationSummary(quest) {
     const nodes = new Map();
     (quest.dialogue || []).forEach((node) => nodes.set(node.id, node));
     const startId = quest.start || 'start';
+    const missingStart = !nodes.has(startId);
+
+    if (missingStart) {
+        return {
+            hasFinishPath: false,
+            missingStart: true,
+            unreachableNodes: Array.from(nodes.keys()),
+        };
+    }
 
     const queue = [startId];
     const visited = new Set();
+    let hasFinishPath = false;
 
     while (queue.length > 0) {
         const nodeId = queue.shift();
@@ -15,12 +25,24 @@ export function questHasFinishPath(quest) {
         const options = node.options || [];
         for (const opt of options) {
             if (opt.type === 'finish') {
-                return true;
+                hasFinishPath = true;
             }
             if (opt.goto) {
                 queue.push(opt.goto);
             }
         }
     }
-    return false;
+
+    const allNodeIds = Array.from(nodes.keys());
+    const unreachableNodes = allNodeIds.filter((id) => !visited.has(id));
+
+    return {
+        hasFinishPath,
+        missingStart,
+        unreachableNodes,
+    };
+}
+
+export function questHasFinishPath(quest) {
+    return getQuestSimulationSummary(quest).hasFinishPath;
 }

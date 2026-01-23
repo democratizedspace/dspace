@@ -128,7 +128,7 @@ Every quest JSON file must include:
 -   `title`: Display title of the quest
 -   `description`: Brief description explaining the quest purpose
 -   `image`: Path to quest image
--   `npc`: Path to NPC avatar image
+-   `npc`: Path to NPC avatar image (choose from the NPC list in [/docs/npcs](/docs/npcs))
 -   `start`: ID of the starting dialogue node
 -   `dialogue`: Array of dialogue nodes, each containing:
     -   `id`: Node identifier
