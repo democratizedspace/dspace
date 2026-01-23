@@ -7,6 +7,7 @@
         validateQuestDependencies,
     } from '../../utils/customQuestValidation.js';
     import { isQuestTitleUnique } from '../../utils/questHelpers.js';
+    import { runQuestSimulation } from '../../utils/questSimulation.js';
     import {
         applyQuestDefaults,
         DEFAULT_DIALOGUE_NODE_ID,
@@ -36,6 +37,7 @@
     let allItems = [];
     let validationErrors = {};
     let isSubmitting = false;
+    let simulationResults = { status: 'idle', issues: [] };
     let npc = DEFAULT_NPC_NAME;
     let startNodeId = DEFAULT_DIALOGUE_NODE_ID;
     let dialogueNodes = [];
@@ -791,6 +793,19 @@
             errors.requiresQuests = 'Unknown quest dependency';
         }
 
+        if (!errors.dialogue && !errors.startNode && serializedNodes.length > 0) {
+            const simulation = runQuestSimulation(serializedNodes, payload.start);
+            simulationResults = simulation;
+            if (simulation.status === 'fail') {
+                errors.simulation = 'Simulation tests failed. Resolve the issues below.';
+            }
+        } else {
+            simulationResults = {
+                status: 'blocked',
+                issues: [],
+            };
+        }
+
         validationErrors = errors;
         return Object.keys(errors).length === 0;
     }
@@ -1328,6 +1343,54 @@
         {/if}
     </section>
 
+    <section class="simulation-panel" aria-live="polite">
+        <div class="simulation-header">
+            <h2>Simulation tests</h2>
+            <span class={`simulation-badge ${simulationResults.status}`}>
+                {#if simulationResults.status === 'pass'}
+                    ✅ Passed
+                {:else if simulationResults.status === 'fail'}
+                    ⚠️ Needs attention
+                {:else if simulationResults.status === 'blocked'}
+                    ⛔ Fix dialogue errors
+                {:else}
+                    ⏳ Not run
+                {/if}
+            </span>
+        </div>
+        <p class="simulation-description">
+            The editor simulates dialogue flow to make sure players can reach a finish option and
+            avoid dead-ends.
+        </p>
+        {#if simulationResults.status === 'pass'}
+            <p class="simulation-pass">All simulation checks passed.</p>
+        {:else if simulationResults.status === 'fail'}
+            <ul class="simulation-issues">
+                {#each simulationResults.issues as issue (issue.type)}
+                    <li>
+                        {issue.message}
+                        {#if issue.nodes && issue.nodes.length > 0}
+                            <span class="simulation-nodes"
+                                >({issue.nodes.join(', ')})</span
+                            >
+                        {/if}
+                    </li>
+                {/each}
+            </ul>
+        {:else if simulationResults.status === 'blocked'}
+            <p class="simulation-blocked">
+                Fix the dialogue errors above to run the simulation checks.
+            </p>
+        {:else}
+            <p class="simulation-idle">
+                Add dialogue nodes and options to run the simulation checks.
+            </p>
+        {/if}
+        {#if validationErrors.simulation}
+            <span class="error-message">{validationErrors.simulation}</span>
+        {/if}
+    </section>
+
     <div class="form-submit">
         <button type="submit" class="submit-button" disabled={isSubmitting}>
             {#if isSubmitting}
@@ -1495,6 +1558,88 @@
     .dialogue-builder h2 {
         margin-top: 0;
         color: #00ff88;
+    }
+
+    .simulation-panel {
+        margin-top: 20px;
+        padding: 16px;
+        border-radius: 10px;
+        border: 2px solid #007006;
+        background: rgba(0, 0, 0, 0.12);
+    }
+
+    .simulation-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .simulation-header h2 {
+        margin: 0;
+        color: #00ff88;
+    }
+
+    .simulation-badge {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: bold;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .simulation-badge.pass {
+        background: rgba(0, 96, 30, 0.7);
+        color: #d8ffe8;
+    }
+
+    .simulation-badge.fail {
+        background: rgba(140, 60, 0, 0.7);
+        color: #fff4e2;
+    }
+
+    .simulation-badge.blocked {
+        background: rgba(120, 0, 0, 0.65);
+        color: #ffecec;
+    }
+
+    .simulation-badge.idle {
+        background: rgba(0, 0, 0, 0.4);
+        color: #cfe9d8;
+    }
+
+    .simulation-description {
+        margin: 8px 0 12px;
+        color: #c8e6c9;
+        font-size: 14px;
+    }
+
+    .simulation-issues {
+        margin: 0;
+        padding-left: 18px;
+        color: #fff3cd;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .simulation-nodes {
+        display: inline-block;
+        margin-left: 4px;
+        color: #ffe2b5;
+    }
+
+    .simulation-pass {
+        margin: 0;
+        color: #b7ffcb;
+        font-weight: bold;
+    }
+
+    .simulation-blocked,
+    .simulation-idle {
+        margin: 0;
+        color: #c8e6c9;
     }
 
     .new-node {
