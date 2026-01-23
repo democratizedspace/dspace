@@ -4,9 +4,11 @@ import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import {
     clearSeededLegacySaves,
     clearV3GameStateStorage,
+    getLegacyV1SeedItems,
     seedLegacyV1Save,
     seedLegacyV2LocalStorageSave,
 } from '../src/utils/legacySaveSeeding';
+import { V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID } from '../src/utils/legacyV1ItemIdMap.js';
 
 const parseCookies = (): Record<string, string> => {
     if (!document.cookie) return {};
@@ -72,6 +74,18 @@ describe('legacy save seeding utilities', () => {
 
         expect(localStorage.getItem('process-3dprint-benchy-starttime')).toBe('1700000000000');
         expect(localStorage.getItem('machine-lock-0')).toBe('1');
+    });
+
+    test('getLegacyV1SeedItems includes currency balances for v1 profiles', () => {
+        const seedItems = getLegacyV1SeedItems('minimal');
+        const currencyItem = seedItems.find((item) => item.v1Key === 'currency-balance-dUSD');
+
+        expect(currencyItem).toMatchObject({
+            v1Key: 'currency-balance-dUSD',
+            v1Name: 'dUSD',
+            v3Id: V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID.dUSD,
+            v3Name: 'dUSD',
+        });
     });
 
     test('seedLegacyV2LocalStorageSave writes serialized state to gameState', () => {
