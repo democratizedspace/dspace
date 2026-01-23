@@ -220,6 +220,50 @@ test.each([
     });
 });
 
+test.each([
+    {
+        label: 'id',
+        npcValue: npcCatalog[1].id,
+        expectedNpc: npcCatalog[1].avatar,
+    },
+    {
+        label: 'name',
+        npcValue: npcCatalog[2].name,
+        expectedNpc: npcCatalog[2].avatar,
+    },
+    {
+        label: 'custom',
+        npcValue: 'Legacy NPC',
+        expectedNpc: 'Legacy NPC',
+    },
+])('stores NPC values from $label selections on submit', async ({ npcValue, expectedNpc, label }) => {
+    await clearQuests();
+    const { getByLabelText } = render(QuestForm);
+    const titleInput = getByLabelText(/Title/i);
+    const descriptionInput = getByLabelText(/Description/i);
+    const npcSelect = getByLabelText(/NPC/i) as HTMLSelectElement;
+    const form = document.querySelector('form') as HTMLFormElement;
+
+    const customOption = document.createElement('option');
+    customOption.value = npcValue;
+    customOption.textContent = `Custom (${npcValue})`;
+    npcSelect.appendChild(customOption);
+
+    await fireEvent.input(titleInput, { target: { value: `Catalog Quest ${label}` } });
+    await fireEvent.input(descriptionInput, {
+        target: { value: 'This description is long enough.' },
+    });
+    await fireEvent.change(npcSelect, { target: { value: npcValue } });
+    await fireEvent.submit(form);
+
+    await waitFor(async () => {
+        const createdQuest = (await db.list(ENTITY_TYPES.QUEST)).find(
+            (quest) => quest.title === `Catalog Quest ${label}`
+        );
+        expect(createdQuest?.npc).toBe(expectedNpc);
+    });
+});
+
 test('rejects title with forbidden characters', async () => {
     const { getByLabelText, findByText } = render(QuestForm);
     const titleInput = getByLabelText(/Title/i);
