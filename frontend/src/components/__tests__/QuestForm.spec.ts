@@ -521,9 +521,7 @@ test('rounds reward counts when submitting', async () => {
 
 test('clears rewards after creating a quest', async () => {
     const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('cleared-reward-quest');
-    const { getByLabelText, getByText, getByTestId, queryByTestId, findByText } = render(
-        QuestForm
-    );
+    const { getByLabelText, getByText, getByTestId, queryByTestId, findByText } = render(QuestForm);
 
     await fireEvent.input(getByLabelText(/Title/i), {
         target: { value: 'Reward Reset Quest' },
