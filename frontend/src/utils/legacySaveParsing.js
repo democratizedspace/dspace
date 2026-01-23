@@ -25,8 +25,8 @@ const isCurrentVersion = (version) => Boolean(version) && version.startsWith('3'
 const hasLegacyShape = (candidate) =>
     Boolean(
         candidate &&
-            typeof candidate === 'object' &&
-            ('inventory' in candidate || 'quests' in candidate || 'processes' in candidate)
+        typeof candidate === 'object' &&
+        ('inventory' in candidate || 'quests' in candidate || 'processes' in candidate)
     );
 
 const sanitizeInventory = (inventory) => {

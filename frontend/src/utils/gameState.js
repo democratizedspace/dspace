@@ -130,7 +130,7 @@ export const normalizeCount = (value) => {
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-const resolveLegacyV1ItemId = (rawId) => {
+const resolveLegacyItemId = (rawId) => {
     if (rawId === null || rawId === undefined) return null;
     const trimmed = String(rawId).trim();
     if (!trimmed) return null;
@@ -146,7 +146,7 @@ const mapLegacyV1Items = (itemList, currencyBalances = []) => {
     const mapped = [];
 
     (Array.isArray(itemList) ? itemList : []).forEach(({ id, count }) => {
-        const mappedId = resolveLegacyV1ItemId(id);
+        const mappedId = resolveLegacyItemId(id);
         const parsedCount = normalizeCount(count);
         if (!mappedId || parsedCount <= 0) return;
         mapped.push({ id: mappedId, parsedCount });
@@ -168,6 +168,20 @@ const mapLegacyV1Items = (itemList, currencyBalances = []) => {
         const parsedCount = normalizeCount(balance);
         if (!mappedId || parsedCount <= 0) return;
         mapped.push({ id: mappedId, parsedCount });
+    });
+
+    return mapped;
+};
+
+const mapLegacyInventory = (inventory) => {
+    const mapped = {};
+    if (!inventory || typeof inventory !== 'object') return mapped;
+
+    Object.entries(inventory).forEach(([id, count]) => {
+        const mappedId = resolveLegacyItemId(id);
+        const parsedCount = normalizeCount(count);
+        if (!mappedId || parsedCount <= 0) return;
+        mapped[mappedId] = (mapped[mappedId] || 0) + parsedCount;
     });
 
     return mapped;
@@ -266,6 +280,7 @@ export const importV2V3 = async (legacyState, options = {}) => {
     }
     if (!migrated) return null;
     const normalized = validateGameState(structuredClone(normalizeLegacyV2State(migrated)));
+    normalized.inventory = mapLegacyInventory(normalized.inventory);
     if (grantUpgradeTrophy) {
         grantTrophyIfMissing(normalized, LEGACY_V2_UPGRADE_TROPHY_ID);
     }
@@ -281,7 +296,8 @@ export const mergeLegacyStateIntoCurrent = async (legacyState, options = {}) => 
     const merged = validateGameState(structuredClone(current));
 
     merged.inventory = merged.inventory ?? {};
-    Object.entries(incoming.inventory || {}).forEach(([id, count]) => {
+    const incomingInventory = mapLegacyInventory(incoming.inventory);
+    Object.entries(incomingInventory).forEach(([id, count]) => {
         const parsedCount = normalizeCount(count);
         if (parsedCount <= 0) return;
         merged.inventory[id] = (merged.inventory[id] || 0) + parsedCount;

@@ -420,7 +420,7 @@ copy/pastable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
 ```json
 {
     "versionNumberString": "2.1",
-    "inventory": { "3": 120.5, "10": 2 },
+    "inventory": { "3": 120.5, "6": 1.5, "10": 2, "16": 4, "24": 250.75 },
     "quests": {},
     "processes": {}
 }
@@ -431,7 +431,7 @@ copy/pastable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
 ```json
 {
     "versionNumberString": "2.1",
-    "inventory": { "3": 40, "11": 1 },
+    "inventory": { "3": 40, "11": 1, "14": 3.5, "24": 80, "66": 2 },
     "quests": { "hydroponics/basil": { "stepId": "grown" } },
     "processes": { "processes/benchy": { "startedAt": 1672531200000, "duration": 3600000 } }
 }
@@ -442,7 +442,7 @@ copy/pastable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
 ```json
 {
     "versionNumberString": "2.1",
-    "inventory": { "": 0, "0": 1, "85": 1 },
+    "inventory": { "": 0, "0": 1, "7": 2, "24": 12.25, "85": 1 },
     "quests": {
         "welcome/howtodoquests": {
             "finished": true,
