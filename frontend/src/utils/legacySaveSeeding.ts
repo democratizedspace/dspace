@@ -2,7 +2,8 @@ import { isBrowser } from './ssr.js';
 import v1Fixture from './legacySaveFixtures/legacy_v1_cookie_save.json' assert { type: 'json' };
 import v2Fixture from './legacySaveFixtures/legacy_v2_localstorage_save.json' assert { type: 'json' };
 import { LEGACY_V2_SEED_SKIP_KEY, LEGACY_V2_STORAGE_KEYS } from './legacySaveParsing.js';
-import { LEGACY_V1_ITEM_MAPPINGS } from './legacyV1ItemIdMap.js';
+import items from '../pages/inventory/json/items';
+import { LEGACY_V1_ITEM_MAPPINGS, V1_ITEM_ID_TO_V3_UUID } from './legacyV1ItemIdMap.js';
 
 const COOKIE_EXPIRY = 'Fri, 31 Dec 9999 23:59:59 GMT';
 const GAME_STATE_DB_NAME = 'dspaceGameState';
@@ -30,6 +31,31 @@ type LegacyV1SeedItem = {
     v1Name: string;
     v3Id: string;
     v3Name: string;
+};
+
+type LegacyV2SeedItem = {
+    v2Id: number | string;
+    v2Name: string;
+    v3Id: string;
+    v3Name: string;
+    count: number;
+};
+
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const V3_ITEM_NAME_BY_ID = new Map(items.map((item) => [item.id, item.name]));
+
+const resolveLegacyV2ItemId = (rawId: string) => {
+    const trimmed = String(rawId).trim();
+    if (!trimmed) return null;
+    if (UUID_REGEX.test(trimmed)) return trimmed;
+    const numeric = Number.parseInt(trimmed, 10);
+    if (!Number.isFinite(numeric)) return null;
+    return V1_ITEM_ID_TO_V3_UUID[numeric] ?? null;
+};
+
+const normalizeSeedCount = (value: unknown) => {
+    const parsed = Number.parseFloat(String(value));
+    return Number.isFinite(parsed) ? parsed : 0;
 };
 
 const getV1Profiles = () =>
@@ -77,6 +103,44 @@ const buildLegacyV1SeedItems = (profileId: string): LegacyV1SeedItem[] => {
 
 export const getLegacyV1SeedItems = (profileId = 'minimal'): LegacyV1SeedItem[] =>
     buildLegacyV1SeedItems(profileId);
+
+const buildLegacyV2SeedItems = (profileId: string): LegacyV2SeedItem[] => {
+    const profiles = getV2Profiles();
+    const profile = profiles?.[profileId];
+    const inventory =
+        profile?.gameState && typeof profile.gameState === 'object'
+            ? profile.gameState.inventory
+            : undefined;
+    if (!inventory || typeof inventory !== 'object') return [];
+
+    return Object.entries(inventory)
+        .filter(([key]) => Boolean(key))
+        .map(([key, value]) => {
+            const numericId = Number.parseInt(key, 10);
+            const mapping = Number.isFinite(numericId)
+                ? LEGACY_V1_ITEM_MAPPINGS.find((entry) => entry.v1Id === numericId)
+                : null;
+            const v3Id = resolveLegacyV2ItemId(key) ?? 'UNMAPPED';
+            const v3Name =
+                V3_ITEM_NAME_BY_ID.get(v3Id) ?? mapping?.v3Name ?? (v3Id ? 'Unknown item' : '');
+            return {
+                v2Id: Number.isFinite(numericId) ? numericId : key,
+                v2Name: mapping?.v1Name ?? `Legacy item ${key}`,
+                v3Id,
+                v3Name: v3Id === 'UNMAPPED' ? 'UNMAPPED' : v3Name,
+                count: normalizeSeedCount(value),
+            };
+        })
+        .sort((a, b) => {
+            if (typeof a.v2Id === 'number' && typeof b.v2Id === 'number') {
+                return a.v2Id - b.v2Id;
+            }
+            return String(a.v2Id).localeCompare(String(b.v2Id));
+        });
+};
+
+export const getLegacyV2SeedItems = (profileId = 'minimal'): LegacyV2SeedItem[] =>
+    buildLegacyV2SeedItems(profileId);
 
 const isSecureContext = () =>
     typeof location !== 'undefined' && typeof location.protocol === 'string'

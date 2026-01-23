@@ -10,6 +10,7 @@
     import {
         clearSeededLegacySaves,
         getLegacyV1SeedItems,
+        getLegacyV2SeedItems,
         LEGACY_V1_SEED_PROFILES,
         LEGACY_V2_SEED_PROFILES,
         seedLegacyV1Save,
@@ -28,6 +29,7 @@
     let v1Profile = LEGACY_V1_SEED_PROFILES[0]?.id ?? 'minimal';
     let v2Profile = LEGACY_V2_SEED_PROFILES[0]?.id ?? 'minimal';
     $: v1SeedItems = getLegacyV1SeedItems(v1Profile);
+    $: v2SeedItems = getLegacyV2SeedItems(v2Profile);
 
     let unsubscribeAvailability;
     let unsubscribeEnabled;
@@ -201,6 +203,35 @@
                         <li>
                             <span class="qa-tools__seeded-item-label">
                                 v1 item-{item.v1Id} ({item.v1Name})
+                            </span>
+                            {#if item.v3Id === 'UNMAPPED'}
+                                <span class="qa-tools__seeded-item-map">
+                                    → UNMAPPED (v3 id: {item.v3Id})
+                                </span>
+                            {:else}
+                                <span class="qa-tools__seeded-item-map">
+                                    → v3 {item.v3Name} ({item.v3Id})
+                                </span>
+                            {/if}
+                        </li>
+                    {/each}
+                </ul>
+            {:else}
+                <p class="qa-tools__summary-empty">None</p>
+            {/if}
+        </div>
+        <div class="qa-tools__seeded-items">
+            <h4>V2 items in selected profile</h4>
+            <p class="qa-tools__seeded-items-description">
+                These are the v2 inventory entries included with the selected seed profile, their
+                quantities, and v3 migration targets.
+            </p>
+            {#if v2SeedItems.length}
+                <ul class="qa-tools__seeded-items-list">
+                    {#each v2SeedItems as item}
+                        <li>
+                            <span class="qa-tools__seeded-item-label">
+                                v2 item-{item.v2Id} ({item.v2Name}) × {item.count}
                             </span>
                             {#if item.v3Id === 'UNMAPPED'}
                                 <span class="qa-tools__seeded-item-map">

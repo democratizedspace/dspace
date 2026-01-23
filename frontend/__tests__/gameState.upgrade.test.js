@@ -54,7 +54,7 @@ describe('game state upgrades', () => {
 
         expect(migrated.versionNumberString).toBe(VERSIONS.V3);
         const state = loadGameState();
-        expect(state.inventory['1']).toBe(3);
+        expect(state.inventory[V1_ITEM_ID_TO_V3_UUID[1]]).toBe(3);
         expect(state.quests.q1.finished).toBe(true);
         expect(localStorage.getItem('gameState')).toContain(
             `"versionNumberString":"${VERSIONS.V3}"`
@@ -62,28 +62,50 @@ describe('game state upgrades', () => {
     });
 
     test('mergeLegacyStateIntoCurrent preserves progress and merges missing fields', async () => {
+        const firstItemId = V1_ITEM_ID_TO_V3_UUID[1];
+        const secondItemId = V1_ITEM_ID_TO_V3_UUID[3];
         await saveGameState({
-            inventory: { alpha: 1 },
+            inventory: { [firstItemId]: 1 },
             quests: { current: { finished: true } },
             processes: { active: { progress: 50 } },
             _meta: { lastUpdated: Date.now() },
         });
 
         const merged = await mergeLegacyStateIntoCurrent({
-            inventory: { alpha: 2, beta: 1 },
+            inventory: { [firstItemId]: 2, [secondItemId]: 1 },
             quests: { legacy: { finished: true }, current: { finished: false } },
             processes: { extra: { status: 'running' } },
         });
 
         expect(merged.versionNumberString).toBe(VERSIONS.V3);
         const state = loadGameState();
-        expect(state.inventory.alpha).toBe(3);
-        expect(state.inventory.beta).toBe(1);
+        expect(state.inventory[firstItemId]).toBe(3);
+        expect(state.inventory[secondItemId]).toBe(1);
         expect(state.quests.current.finished).toBe(true);
         expect(state.quests.legacy.finished).toBe(true);
         expect(state.processes.active.progress).toBe(50);
         expect(state.processes.extra.status).toBe('running');
         expect(state.inventory[LEGACY_V2_UPGRADE_TROPHY_ID]).toBeUndefined();
+    });
+
+    test('mergeLegacyStateIntoCurrent maps legacy v2 inventory ids and sums counts', async () => {
+        const legacyItemId = V1_ITEM_ID_TO_V3_UUID[3];
+
+        await saveGameState({
+            inventory: { [legacyItemId]: 2 },
+            quests: {},
+            processes: {},
+            _meta: { lastUpdated: Date.now() },
+        });
+
+        const merged = await mergeLegacyStateIntoCurrent({
+            inventory: { 3: 5 },
+            quests: {},
+            processes: {},
+        });
+
+        expect(merged.inventory[legacyItemId]).toBe(7);
+        expect(loadGameState().inventory[legacyItemId]).toBe(7);
     });
 
     test('importV2V3 does not award V2 Upgrade Trophy without explicit upgrade', async () => {
@@ -201,7 +223,7 @@ describe('game state upgrades', () => {
         const migrated = await importV2V3();
 
         expect(migrated.inventory['']).toBeUndefined();
-        expect(migrated.inventory['1']).toBe(3);
+        expect(migrated.inventory[V1_ITEM_ID_TO_V3_UUID[1]]).toBe(3);
         expect(migrated.openAI).toBeUndefined();
     });
 

@@ -134,12 +134,15 @@ const resolveLegacyV1ItemId = (rawId) => {
     if (rawId === null || rawId === undefined) return null;
     const trimmed = String(rawId).trim();
     if (!trimmed) return null;
+    if (UUID_REGEX.test(trimmed)) {
+        return trimmed;
+    }
     const match = trimmed.match(/^item-(\d+)$/);
     const numeric = Number.parseInt(match ? match[1] : trimmed, 10);
     if (Number.isFinite(numeric)) {
         return V1_ITEM_ID_TO_V3_UUID[numeric] ?? null;
     }
-    return UUID_REGEX.test(trimmed) ? trimmed : null;
+    return null;
 };
 
 const mapLegacyV1Items = (itemList, currencyBalances = []) => {
@@ -170,6 +173,17 @@ const mapLegacyV1Items = (itemList, currencyBalances = []) => {
         mapped.push({ id: mappedId, parsedCount });
     });
 
+    return mapped;
+};
+
+const mapLegacyV2Inventory = (inventory) => {
+    const mapped = {};
+    Object.entries(inventory ?? {}).forEach(([id, count]) => {
+        const mappedId = resolveLegacyV1ItemId(id);
+        const parsedCount = normalizeCount(count);
+        if (!mappedId || parsedCount <= 0) return;
+        mapped[mappedId] = (mapped[mappedId] || 0) + parsedCount;
+    });
     return mapped;
 };
 
@@ -266,6 +280,7 @@ export const importV2V3 = async (legacyState, options = {}) => {
     }
     if (!migrated) return null;
     const normalized = validateGameState(structuredClone(normalizeLegacyV2State(migrated)));
+    normalized.inventory = mapLegacyV2Inventory(normalized.inventory);
     if (grantUpgradeTrophy) {
         grantTrophyIfMissing(normalized, LEGACY_V2_UPGRADE_TROPHY_ID);
     }
@@ -279,6 +294,7 @@ export const mergeLegacyStateIntoCurrent = async (legacyState, options = {}) => 
     const current = validateGameState(loadGameState());
     const incoming = validateGameState(structuredClone(normalizeLegacyV2State(legacyState)));
     const merged = validateGameState(structuredClone(current));
+    incoming.inventory = mapLegacyV2Inventory(incoming.inventory);
 
     merged.inventory = merged.inventory ?? {};
     Object.entries(incoming.inventory || {}).forEach(([id, count]) => {

@@ -7,7 +7,10 @@
                 "versionNumberString": "2.1",
                 "inventory": {
                     "3": 120.5,
-                    "10": 2
+                    "10": 2,
+                    "12": 7.5,
+                    "24": 425,
+                    "76": 1
                 },
                 "quests": {},
                 "processes": {}
