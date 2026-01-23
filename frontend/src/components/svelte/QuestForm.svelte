@@ -38,9 +38,11 @@
     let validationErrors = {};
     let isSubmitting = false;
     const npcOptions = npcCatalog.map((entry) => ({
-        value: entry.avatar,
+        value: entry.id,
         label: entry.name,
     }));
+    const npcById = new Map(npcCatalog.map((entry) => [entry.id, entry]));
+    const npcByAvatar = new Map(npcCatalog.map((entry) => [entry.avatar, entry]));
     let npc = npcOptions[0]?.value ?? DEFAULT_NPC_NAME;
     let npcSelectOptions = npcOptions;
     let startNodeId = DEFAULT_DIALOGUE_NODE_ID;
@@ -176,6 +178,34 @@
         };
     }
 
+    function resolveNpcSelection(value) {
+        const trimmed = typeof value === 'string' ? value.trim() : '';
+        if (!trimmed) {
+            return npcOptions[0]?.value ?? DEFAULT_NPC_NAME;
+        }
+
+        if (npcById.has(trimmed)) {
+            return trimmed;
+        }
+
+        const matched = npcByAvatar.get(trimmed);
+        if (matched) {
+            return matched.id;
+        }
+
+        return trimmed;
+    }
+
+    function getNpcPayloadValue(value) {
+        const trimmed = typeof value === 'string' ? value.trim() : '';
+        if (!trimmed) {
+            return '';
+        }
+
+        const matched = npcById.get(trimmed);
+        return matched ? matched.avatar : trimmed;
+    }
+
     if (dialogueNodes.length === 0) {
         dialogueNodes = [createDialogueNodeState()];
     }
@@ -189,7 +219,7 @@
                 title = questData.title;
                 description = questData.description;
                 requiresQuests = filterCurrentQuestDependencies(questData.requiresQuests || []);
-                npc = questData.npc || DEFAULT_NPC_NAME;
+                npc = resolveNpcSelection(questData.npc);
                 startNodeId = questData.start || DEFAULT_DIALOGUE_NODE_ID;
                 const mappedNodes = (questData.dialogue || []).map((node) =>
                     createDialogueNodeState({
@@ -603,7 +633,7 @@
             description: description.trim(),
             image: previewUrl || '',
             requiresQuests,
-            npc: npc.trim(),
+            npc: getNpcPayloadValue(npc),
             start: startNodeId.trim(),
             dialogue: serializedNodes.filter((node) => node.id),
         });
@@ -878,7 +908,7 @@
                 previewUrl = null;
                 processedImageUrl = null;
                 requiresQuests = [];
-                npc = DEFAULT_NPC_NAME;
+                npc = npcOptions[0]?.value ?? DEFAULT_NPC_NAME;
                 startNodeId = DEFAULT_DIALOGUE_NODE_ID;
                 dialogueNodes = [createDialogueNodeState()];
                 nodeDraftError = '';
