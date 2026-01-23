@@ -227,21 +227,22 @@
     }
 
     .quest-banner {
-        width: 100%;
-        max-width: 512px;
-        max-height: 512px;
+        width: min(512px, 100%);
         aspect-ratio: 1 / 1;
         margin: 0 auto 24px;
         display: flex;
         justify-content: center;
         align-items: center;
         overflow: hidden;
+        box-sizing: border-box;
     }
 
     .banner {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        max-width: 100%;
+        max-height: 100%;
         display: block;
         margin: 0;
         border-radius: 0;
