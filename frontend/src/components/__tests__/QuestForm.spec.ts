@@ -329,3 +329,48 @@ test('loads existing rewards when editing a quest', async () => {
         expect((getByTestId('reward-item-count-0') as HTMLInputElement).value).toBe('3');
     });
 });
+
+test('removes reward items and shows the empty state', async () => {
+    const { getByText, getByTestId, queryByTestId, findByText } = render(QuestForm);
+
+    await fireEvent.click(getByText('Add reward item'));
+    expect(getByTestId('reward-item-id-0')).toBeTruthy();
+
+    await fireEvent.click(getByTestId('remove-reward-item-0'));
+
+    await findByText('No rewards configured');
+    expect(queryByTestId('reward-item-id-0')).toBeNull();
+});
+
+test('clears reward validation errors after fixing inputs', async () => {
+    const { getByLabelText, getByText, getByTestId, findByText, queryByText } = render(QuestForm);
+
+    await fireEvent.input(getByLabelText(/Title/i), {
+        target: { value: 'Reward Fix Quest' },
+    });
+    await fireEvent.input(getByLabelText(/Description/i), {
+        target: { value: 'A quest that fixes reward validation.' },
+    });
+
+    await fireEvent.click(getByText('Add reward item'));
+
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
+    await fireEvent.submit(form as HTMLFormElement);
+
+    await findByText('Rewards require an item and positive count');
+
+    await fireEvent.input(getByTestId('reward-item-id-0'), {
+        target: { value: 'custom/item-fixed' },
+    });
+    await fireEvent.input(getByTestId('reward-item-count-0'), {
+        target: { value: '' },
+    });
+    await fireEvent.input(getByTestId('reward-item-count-0'), {
+        target: { value: '1' },
+    });
+
+    await waitFor(() => {
+        expect(queryByText('Rewards require an item and positive count')).toBeNull();
+    });
+});
