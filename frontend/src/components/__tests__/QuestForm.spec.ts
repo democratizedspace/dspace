@@ -245,3 +245,65 @@ test('keeps selected quest requirements in create mode', async () => {
         expect(selectedValues).toEqual(['quest-1', 'quest-2']);
     });
 });
+
+test('includes custom quests in requirements list', async () => {
+    await db.quests.add({
+        id: 'custom-quest',
+        title: 'Custom Quest',
+        description: 'A description long enough.',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'Start',
+                options: [{ type: 'finish', text: 'Finish quest' }],
+            },
+        ],
+    });
+
+    const existingQuests = [{ id: 'quest-1', title: 'Quest One' }];
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce(existingQuests);
+
+    const { getByLabelText } = render(QuestForm, {
+        props: {
+            existingQuests,
+            isEdit: false,
+            questId: null,
+        },
+    });
+
+    const requirementsSelect = getByLabelText(/Quest Requirements/i) as HTMLSelectElement;
+
+    await waitFor(() => {
+        const optionValues = Array.from(requirementsSelect.options).map((option) => option.value);
+        expect(optionValues).toEqual(expect.arrayContaining(['quest-1', 'custom-quest']));
+    });
+});
+
+test('suggests custom processes in the process picker', async () => {
+    await db.processes.add({
+        id: 'custom-process',
+        title: 'Custom Process',
+        duration: 120,
+        requireItems: [],
+        consumeItems: [],
+        createItems: [],
+    });
+
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce([]);
+
+    render(QuestForm, {
+        props: {
+            existingQuests: [],
+            isEdit: false,
+            questId: null,
+        },
+    });
+
+    await waitFor(() => {
+        const datalist = document.querySelector('#quest-option-process-suggestions');
+        const option = datalist?.querySelector('option[value="custom-process"]');
+        expect(option).toBeTruthy();
+    });
+});

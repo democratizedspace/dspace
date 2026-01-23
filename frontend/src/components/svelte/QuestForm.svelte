@@ -7,6 +7,8 @@
         validateQuestDependencies,
     } from '../../utils/customQuestValidation.js';
     import { isQuestTitleUnique } from '../../utils/questHelpers.js';
+    import builtInItems from '../../pages/inventory/json/items';
+    import builtInProcesses from '../../generated/processes.json';
     import {
         applyQuestDefaults,
         DEFAULT_DIALOGUE_NODE_ID,
@@ -34,6 +36,7 @@
     let requiresQuests = [];
     let allQuests = [];
     let allItems = [];
+    let allProcesses = [];
     let validationErrors = {};
     let isSubmitting = false;
     let npc = DEFAULT_NPC_NAME;
@@ -57,8 +60,27 @@
         { value: 'grantsItems', label: 'Grant items' },
     ];
 
-    function questIdToString(id) {
+    function normalizeEntityId(id) {
         return id == null ? '' : String(id);
+    }
+
+    function mergeEntitiesById(...lists) {
+        const merged = new Map();
+        lists.flat().forEach((entry) => {
+            if (!entry || entry.id == null) {
+                return;
+            }
+            const key = normalizeEntityId(entry.id);
+            if (!key) {
+                return;
+            }
+            merged.set(key, entry);
+        });
+        return Array.from(merged.values());
+    }
+
+    function questIdToString(id) {
+        return normalizeEntityId(id);
     }
 
     function filterCurrentQuestDependencies(ids = []) {
@@ -210,29 +232,44 @@
             startNodeId = dialogueNodes[0]?.id ?? DEFAULT_DIALOGUE_NODE_ID;
         }
 
+        let syncedQuests = [];
         if (existingQuests.length === 0) {
             try {
-                allQuests = await db.list(ENTITY_TYPES.QUEST);
-                await validateForm();
+                syncedQuests = await db.list(ENTITY_TYPES.QUEST);
             } catch (error) {
                 console.error('Error loading quests:', error);
             }
         } else {
             try {
-                allQuests = await syncExistingQuestsToIndexedDB(existingQuests);
-                await validateForm();
+                syncedQuests = await syncExistingQuestsToIndexedDB(existingQuests);
             } catch (error) {
                 console.error('Error synchronizing existing quests:', error);
-                allQuests = existingQuests;
-                await validateForm();
+                syncedQuests = existingQuests;
             }
         }
 
+        let storedQuests = [];
         try {
-            allItems = await db.list(ENTITY_TYPES.ITEM);
+            storedQuests = await db.list(ENTITY_TYPES.QUEST);
         } catch (error) {
-            console.error('Error loading items:', error);
-            allItems = [];
+            console.error('Error loading stored quests:', error);
+            storedQuests = [];
+        }
+
+        allQuests = mergeEntitiesById(existingQuests, syncedQuests, storedQuests);
+        await validateForm();
+
+        try {
+            const [customItems, customProcesses] = await Promise.all([
+                db.list(ENTITY_TYPES.ITEM),
+                db.list(ENTITY_TYPES.PROCESS),
+            ]);
+            allItems = mergeEntitiesById(builtInItems, customItems);
+            allProcesses = mergeEntitiesById(builtInProcesses, customProcesses);
+        } catch (error) {
+            console.error('Error loading items or processes:', error);
+            allItems = mergeEntitiesById(builtInItems);
+            allProcesses = mergeEntitiesById(builtInProcesses);
         }
     });
 
@@ -888,6 +925,11 @@
             <option value={item.id}>{item.name}</option>
         {/each}
     </datalist>
+    <datalist id="quest-option-process-suggestions">
+        {#each allProcesses as process (process.id)}
+            <option value={process.id}>{process.title}</option>
+        {/each}
+    </datalist>
     <div class="form-group">
         <label for="title">Title*</label>
         <input
@@ -1090,6 +1132,7 @@
                                     <input
                                         id={`option-${node.id}-${optionIndex}-process`}
                                         type="text"
+                                        list="quest-option-process-suggestions"
                                         value={option.process}
                                         on:input={(event) =>
                                             updateOptionField(
@@ -1302,6 +1345,7 @@
                                 <input
                                     id={`option-process-${node.id}`}
                                     type="text"
+                                    list="quest-option-process-suggestions"
                                     value={node.newOption.process || ''}
                                     on:input={(event) =>
                                         updateOptionDraft(index, 'process', event.target.value)}
