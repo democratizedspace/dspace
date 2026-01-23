@@ -1,11 +1,11 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
-    import items from '../../inventory/json/items';
     import QuestChatOption from './QuestChatOption.svelte';
     import { questFinished } from '../../../utils/gameState.js';
     import { state } from '../../../utils/gameState/common.js';
     import { isBrowser } from '../../../utils/ssr.js';
+    import { getItemMap } from '../../../utils/itemResolver.js';
 
     export let quest;
     export let pointer;
@@ -17,6 +17,10 @@
     // Move these declarations inside onMount to ensure quest is defined
     let npc;
     let rewardItems = [];
+
+    const releaseRewardImages = () => {
+        rewardItems.forEach((item) => item?.releaseImage?.());
+    };
     let dialogueMap;
 
     // Only access localStorage in browser environment to avoid SSR errors
@@ -24,26 +28,33 @@
         (isBrowser ? localStorage.getItem('avatarUrl') : null) ||
         '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
 
-    onMount(() => {
+    onMount(async () => {
         // Initialize quest-related data after component is mounted
         if (quest) {
             npc = quest.npc;
 
-            // Create reward items map
-            rewardItems = quest.rewards
-                .map((reward) => {
-                    const item = items.find((entry) => entry.id === reward.id);
-                    if (!item) {
-                        return null;
-                    }
-                    return {
-                        id: reward.id,
-                        count: reward.count,
-                        image: item.image,
-                        name: item.name,
-                    };
-                })
-                .filter(Boolean);
+            const rewards = Array.isArray(quest.rewards) ? quest.rewards : [];
+            if (rewards.length > 0) {
+                const rewardMap = await getItemMap(rewards.map((reward) => reward.id));
+                releaseRewardImages();
+                rewardItems = rewards
+                    .map((reward) => {
+                        const item = rewardMap.get(String(reward.id));
+                        if (!item) {
+                            return null;
+                        }
+                        return {
+                            id: reward.id,
+                            count: reward.count,
+                            image: item.image,
+                            name: item.name,
+                            releaseImage: item.releaseImage,
+                        };
+                    })
+                    .filter(Boolean);
+            } else {
+                rewardItems = [];
+            }
 
             // Initialize pointer if not set
             pointer = pointer || quest.start;
@@ -58,6 +69,10 @@
         }
 
         clientSideRendered.set(true);
+    });
+
+    onDestroy(() => {
+        releaseRewardImages();
     });
 
     $: {

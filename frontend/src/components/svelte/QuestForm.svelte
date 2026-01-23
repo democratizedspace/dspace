@@ -18,6 +18,7 @@
     } from '../../utils/questDefaults.js';
     import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
     import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
+    import processes from '../../generated/processes.json';
 
     export let isEdit = false;
     export let questId = null;
@@ -34,6 +35,7 @@
     let requiresQuests = [];
     let allQuests = [];
     let allItems = [];
+    let allProcesses = [];
     let validationErrors = {};
     let isSubmitting = false;
     let npc = DEFAULT_NPC_NAME;
@@ -59,6 +61,23 @@
 
     function questIdToString(id) {
         return id == null ? '' : String(id);
+    }
+
+    function mergeById(primary = [], fallback = []) {
+        const merged = new Map();
+        const pushEntity = (entity) => {
+            if (!entity || entity.id == null) {
+                return;
+            }
+            const key = questIdToString(entity.id);
+            if (!merged.has(key)) {
+                merged.set(key, entity);
+            }
+        };
+
+        primary.forEach(pushEntity);
+        fallback.forEach(pushEntity);
+        return Array.from(merged.values());
     }
 
     function filterCurrentQuestDependencies(ids = []) {
@@ -219,7 +238,8 @@
             }
         } else {
             try {
-                allQuests = await syncExistingQuestsToIndexedDB(existingQuests);
+                const syncedQuests = await syncExistingQuestsToIndexedDB(existingQuests);
+                allQuests = mergeById(syncedQuests, existingQuests);
                 await validateForm();
             } catch (error) {
                 console.error('Error synchronizing existing quests:', error);
@@ -233,6 +253,14 @@
         } catch (error) {
             console.error('Error loading items:', error);
             allItems = [];
+        }
+
+        try {
+            const storedProcesses = await db.list(ENTITY_TYPES.PROCESS);
+            allProcesses = mergeById(storedProcesses, processes);
+        } catch (error) {
+            console.error('Error loading processes:', error);
+            allProcesses = mergeById([], processes);
         }
     });
 
@@ -860,6 +888,7 @@
                 const newQuestId = await db.quests.add(questData);
 
                 dispatch('success', { message: 'Quest created successfully', id: newQuestId });
+                allQuests = mergeById([{ ...questData, id: newQuestId, custom: true }], allQuests);
 
                 // Reset form after successful submission
                 title = '';
@@ -886,6 +915,11 @@
     <datalist id="quest-option-item-suggestions">
         {#each allItems as item (item.id)}
             <option value={item.id}>{item.name}</option>
+        {/each}
+    </datalist>
+    <datalist id="quest-option-process-suggestions">
+        {#each allProcesses as process (process.id)}
+            <option value={process.id}>{process.title}</option>
         {/each}
     </datalist>
     <div class="form-group">
@@ -1091,6 +1125,7 @@
                                         id={`option-${node.id}-${optionIndex}-process`}
                                         type="text"
                                         value={option.process}
+                                        list="quest-option-process-suggestions"
                                         on:input={(event) =>
                                             updateOptionField(
                                                 index,
@@ -1303,6 +1338,7 @@
                                     id={`option-process-${node.id}`}
                                     type="text"
                                     value={node.newOption.process || ''}
+                                    list="quest-option-process-suggestions"
                                     on:input={(event) =>
                                         updateOptionDraft(index, 'process', event.target.value)}
                                 />
