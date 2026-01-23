@@ -1,4 +1,4 @@
-import { render, fireEvent } from '@testing-library/svelte';
+import { render, fireEvent, waitFor } from '@testing-library/svelte';
 import Process from '../svelte/Process.svelte';
 import { vi, expect, test, beforeEach, afterEach } from 'vitest';
 import { tick } from 'svelte';
@@ -193,14 +193,15 @@ test('shows required items even when counts are zero', async () => {
 
     const { getByText } = render(Process, { processId: 'p2' });
 
-    await tick();
-    const requireSection = getByText('Requires:').parentElement;
-    const normalizedText = requireSection?.textContent?.replace(/\s+/g, ' ');
+    await waitFor(() => {
+        const requireSection = getByText('Requires:').parentElement;
+        const normalizedText = requireSection?.textContent?.replace(/\s+/g, ' ');
 
-    expect(normalizedText).toContain('Requires:');
-    expect(normalizedText).toMatch(/2\s*\/\s*0/);
-    expect(normalizedText).toMatch(/Test Item/);
-    expect(normalizedText).not.toMatch(/0\s*\/\s*2/);
+        expect(normalizedText).toContain('Requires:');
+        expect(normalizedText).toMatch(/2\s*\/\s*0/);
+        expect(normalizedText).toMatch(/Test Item/);
+        expect(normalizedText).not.toMatch(/0\s*\/\s*2/);
+    });
 });
 
 test('shows missing requirement feedback with singular "more" label', async () => {
