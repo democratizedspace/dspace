@@ -7,6 +7,7 @@
         validateQuestDependencies,
     } from '../../utils/customQuestValidation.js';
     import { isQuestTitleUnique } from '../../utils/questHelpers.js';
+    import { simulateQuest } from '../../utils/simulateQuest.js';
     import {
         applyQuestDefaults,
         DEFAULT_DIALOGUE_NODE_ID,
@@ -42,6 +43,7 @@
     let newNodeId = '';
     let newNodeText = '';
     let nodeDraftError = '';
+    let simulationReport = null;
     const MIN_TITLE_LENGTH = 3;
     const MIN_DESC_LENGTH = 10;
 
@@ -791,6 +793,11 @@
             errors.requiresQuests = 'Unknown quest dependency';
         }
 
+        simulationReport = simulateQuest(payload);
+        if (simulationReport.issues.length > 0) {
+            errors.simulation = 'Simulation checks failed';
+        }
+
         validationErrors = errors;
         return Object.keys(errors).length === 0;
     }
@@ -981,6 +988,33 @@
 
     <section class="dialogue-builder">
         <h2>Dialogue</h2>
+        <div class="simulation-status" data-testid="quest-simulation-status">
+            <div class="simulation-header">
+                <h3>Simulation checks</h3>
+                <span
+                    class:simulation-pass={simulationReport && simulationReport.issues.length === 0}
+                    class:simulation-fail={simulationReport && simulationReport.issues.length > 0}
+                    data-testid="quest-simulation-outcome"
+                >
+                    {#if simulationReport}
+                        {simulationReport.issues.length === 0 ? 'Pass' : 'Needs attention'}
+                    {:else}
+                        Waiting for inputs...
+                    {/if}
+                </span>
+            </div>
+            <p class="simulation-copy">
+                We run a lightweight simulation as you edit to catch unreachable nodes, missing
+                finish paths, or broken goto links before you publish.
+            </p>
+            {#if simulationReport && simulationReport.issues.length > 0}
+                <ul class="simulation-issues">
+                    {#each simulationReport.issues as issue}
+                        <li>{issue}</li>
+                    {/each}
+                </ul>
+            {/if}
+        </div>
         <div class="new-node">
             <div class="form-group">
                 <label for="new-node-id">New node ID</label>
@@ -1326,6 +1360,9 @@
         {#if validationErrors.dialogue}
             <span class="error-message">{validationErrors.dialogue}</span>
         {/if}
+        {#if validationErrors.simulation}
+            <span class="error-message">{validationErrors.simulation}</span>
+        {/if}
     </section>
 
     <div class="form-submit">
@@ -1495,6 +1532,62 @@
     .dialogue-builder h2 {
         margin-top: 0;
         color: #00ff88;
+    }
+
+    .simulation-status {
+        border: 2px solid #00b33c;
+        border-radius: 10px;
+        padding: 12px;
+        margin-bottom: 16px;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .simulation-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .simulation-header h3 {
+        margin: 0;
+        color: #c2ffe0;
+        font-size: 18px;
+    }
+
+    .simulation-copy {
+        margin: 8px 0 0;
+        font-size: 14px;
+        color: #d5f5dc;
+    }
+
+    .simulation-issues {
+        margin: 10px 0 0;
+        padding-left: 20px;
+        color: #ffbaba;
+        font-size: 14px;
+    }
+
+    .simulation-pass,
+    .simulation-fail {
+        font-weight: bold;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .simulation-pass {
+        background: rgba(0, 179, 60, 0.2);
+        color: #69ff9b;
+        border: 1px solid #00b33c;
+    }
+
+    .simulation-fail {
+        background: rgba(255, 62, 62, 0.2);
+        color: #ff9b9b;
+        border: 1px solid #ff3e3e;
     }
 
     .new-node {

@@ -23,6 +23,8 @@ You have two ways to submit your quest:
 If your quest requires custom items or processes, use the bundle submission workflow:
 
 1. **Create your quest** using the in-game editor at `/quests/create`
+   - Watch the **Simulation checks** panel to catch missing finish paths, unreachable nodes, or
+     broken `goto` links before you submit.
 2. **Create related items** at `/items/create` if needed
 3. **Create related processes** at `/processes/create` if needed
 4. **Package everything into a bundle** following the [Custom Content Bundles](/docs/custom-bundles) format
@@ -34,6 +36,8 @@ If your quest requires custom items or processes, use the bundle submission work
 If your quest uses only existing items and processes:
 
 1. **Create your quest** using the in-game editor at `/quests/create`
+   - Watch the **Simulation checks** panel to catch missing finish paths, unreachable nodes, or
+     broken `goto` links before you submit.
 2. **Validate** the quest structure by running:
     ```bash
     npm run test:ci -- questValidation
