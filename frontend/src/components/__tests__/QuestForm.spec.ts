@@ -245,3 +245,40 @@ test('keeps selected quest requirements in create mode', async () => {
         expect(selectedValues).toEqual(['quest-1', 'quest-2']);
     });
 });
+
+test('adds newly created custom quests to requirements list', async () => {
+    const existingQuests = [{ id: 'quest-1', title: 'Quest One' }];
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce(existingQuests);
+
+    const { getByLabelText } = render(QuestForm, {
+        props: {
+            existingQuests,
+            isEdit: false,
+            questId: null,
+        },
+    });
+
+    const requirementsSelect = getByLabelText(/Quest Requirements/i) as HTMLSelectElement;
+
+    await waitFor(() => {
+        expect(requirementsSelect.options).toHaveLength(1);
+    });
+
+    await fireEvent.input(getByLabelText(/Title/i), {
+        target: { value: 'New custom quest' },
+    });
+    await fireEvent.input(getByLabelText(/Description/i), {
+        target: { value: 'This is a new custom quest description.' },
+    });
+
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
+    await fireEvent.submit(form as HTMLFormElement);
+
+    await waitFor(() => {
+        const optionLabels = Array.from(requirementsSelect.options).map(
+            (option) => option.textContent
+        );
+        expect(optionLabels).toEqual(expect.arrayContaining(['Quest One', 'New custom quest']));
+    });
+});
