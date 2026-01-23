@@ -2,7 +2,7 @@ import { isBrowser } from './ssr.js';
 import v1Fixture from './legacySaveFixtures/legacy_v1_cookie_save.json' assert { type: 'json' };
 import v2Fixture from './legacySaveFixtures/legacy_v2_localstorage_save.json' assert { type: 'json' };
 import { LEGACY_V2_SEED_SKIP_KEY, LEGACY_V2_STORAGE_KEYS } from './legacySaveParsing.js';
-import { LEGACY_V1_ITEM_MAPPINGS } from './legacyV1ItemIdMap.js';
+import { LEGACY_V1_ITEM_MAPPINGS, V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID } from './legacyV1ItemIdMap.js';
 
 const COOKIE_EXPIRY = 'Fri, 31 Dec 9999 23:59:59 GMT';
 const GAME_STATE_DB_NAME = 'dspaceGameState';
@@ -26,6 +26,7 @@ type LegacySeedSummary = {
 };
 
 type LegacyV1SeedItem = {
+    source: 'item' | 'currency';
     v1Id: number;
     v1Name: string;
     v3Id: string;
@@ -53,26 +54,52 @@ const buildLegacyV1SeedItems = (profileId: string): LegacyV1SeedItem[] => {
     const profile = profiles?.[profileId];
     const cookies = Array.isArray(profile?.cookies) ? (profile.cookies as CookieFixture[]) : [];
     const itemIds = new Set<number>();
+    const currencySymbols = new Set<string>();
     cookies.forEach(({ name }) => {
-        if (typeof name !== 'string' || !name.startsWith('item-')) return;
-        const rawId = Number(name.replace('item-', ''));
-        if (!Number.isNaN(rawId)) {
-            itemIds.add(rawId);
+        if (typeof name !== 'string') return;
+        if (name.startsWith('item-')) {
+            const rawId = Number(name.replace('item-', ''));
+            if (!Number.isNaN(rawId)) {
+                itemIds.add(rawId);
+            }
+            return;
+        }
+        if (name.startsWith('currency-balance-')) {
+            const symbol = name.replace('currency-balance-', '').trim();
+            if (symbol) {
+                currencySymbols.add(symbol);
+            }
         }
     });
 
-    return Array.from(itemIds)
+    const itemEntries = Array.from(itemIds)
         .sort((a, b) => a - b)
         .map((id) => {
             const mapping = LEGACY_V1_ITEM_MAPPINGS.find((entry) => entry.v1Id === id);
 
             return {
+                source: 'item',
                 v1Id: id,
                 v1Name: mapping?.v1Name ?? `Legacy item ${id}`,
                 v3Id: mapping?.v3Id ?? 'UNMAPPED',
                 v3Name: mapping?.v3Name ?? 'UNMAPPED',
             };
         });
+
+    const currencyEntries = Array.from(currencySymbols)
+        .sort()
+        .map((symbol) => {
+            const mappedId = V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID[symbol];
+            return {
+                source: 'currency',
+                v1Id: -1,
+                v1Name: symbol,
+                v3Id: mappedId ?? 'UNMAPPED',
+                v3Name: symbol,
+            };
+        });
+
+    return [...itemEntries, ...currencyEntries];
 };
 
 export const getLegacyV1SeedItems = (profileId = 'minimal'): LegacyV1SeedItem[] =>
