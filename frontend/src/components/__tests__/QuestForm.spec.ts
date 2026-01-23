@@ -374,3 +374,57 @@ test('clears reward validation errors after fixing inputs', async () => {
         expect(queryByText('Rewards require an item and positive count')).toBeNull();
     });
 });
+
+test('clears reward validation when removing invalid rewards', async () => {
+    const { getByLabelText, getByText, getByTestId, findByText, queryByText } = render(QuestForm);
+
+    await fireEvent.input(getByLabelText(/Title/i), {
+        target: { value: 'Reward Remove Quest' },
+    });
+    await fireEvent.input(getByLabelText(/Description/i), {
+        target: { value: 'A quest that removes invalid rewards.' },
+    });
+
+    await fireEvent.click(getByText('Add reward item'));
+
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
+    await fireEvent.submit(form as HTMLFormElement);
+
+    await findByText('Rewards require an item and positive count');
+
+    await fireEvent.click(getByTestId('remove-reward-item-0'));
+
+    await waitFor(() => {
+        expect(queryByText('Rewards require an item and positive count')).toBeNull();
+        expect(queryByText('No rewards configured')).toBeTruthy();
+    });
+});
+
+test('shows no rewards when editing a quest without rewards', async () => {
+    const questId = 'quest-without-rewards';
+    await db.quests.add({
+        id: questId,
+        title: 'No Reward Quest',
+        description: 'A description long enough.',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'Start',
+                options: [{ type: 'finish', text: 'Finish quest' }],
+            },
+        ],
+        rewards: null,
+    });
+
+    const { findByText } = render(QuestForm, {
+        props: {
+            isEdit: true,
+            questId,
+        },
+    });
+
+    await findByText('No rewards configured');
+});
