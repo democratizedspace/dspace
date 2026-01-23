@@ -162,6 +162,7 @@ const TEST_GROUPS = [
             'quest-graph-download.spec.ts',
             'quest-grant-items.spec.ts',
             'quest-hardening.spec.ts',
+            'quest-banner-layout.spec.ts',
             'constellations-quest.spec.ts',
             'custom-content.spec.ts',
             'quest-form-validation.spec.ts',

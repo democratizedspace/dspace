@@ -130,9 +130,9 @@
         </div>
     {:else}
         <div class="chat" data-testid="chat-panel">
-            <div>
+            <div class="chat-body">
                 {#if $clientSideRendered && quest && dialogueMap}
-                    <div>
+                    <div class="quest-banner">
                         <img class="banner" src={quest.image} alt={quest.title} />
                     </div>
                     <div class="left">
@@ -226,20 +226,30 @@
         opacity: 1;
     }
 
-    .banner {
-        width: 120%;
-        height: 300px;
-        object-fit: cover;
-        margin-left: -10%;
-        margin-top: -10%;
+    .quest-banner {
+        width: 100%;
+        max-width: 512px;
+        max-height: 512px;
+        aspect-ratio: 1 / 1;
+        margin: 0 auto 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
     }
 
-    @media only screen and (max-width: 600px) {
-        .banner {
-            width: 120%;
-            margin: -10%;
-            margin-bottom: 0px;
-        }
+    .banner {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        margin: 0;
+        border-radius: 0;
+        border: none;
+    }
+
+    .chat-body {
+        width: 100%;
     }
 
     .left {

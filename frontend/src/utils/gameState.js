@@ -9,7 +9,11 @@ import { isBrowser } from './ssr.js';
 import items from '../pages/inventory/json/items';
 import { normalizeSettings } from './settingsDefaults.js';
 import { V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID, V1_ITEM_ID_TO_V3_UUID } from './legacyV1ItemIdMap.js';
-import { normalizeLegacyV2State, readLegacyV2LocalStorage } from './legacySaveParsing.js';
+import {
+    LEGACY_V2_SEED_SKIP_KEY,
+    normalizeLegacyV2State,
+    readLegacyV2LocalStorage,
+} from './legacySaveParsing.js';
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy')?.id;
@@ -185,10 +189,13 @@ const persistMigratedState = async (state) => {
     const migrated = validateGameState(structuredClone(state));
     migrated.versionNumberString = VERSIONS.V3;
 
-    if (isBrowser && !isUsingLocalStorage()) {
+    if (isBrowser) {
         try {
-            localStorage.removeItem('gameState');
-            localStorage.removeItem('gameStateBackup');
+            localStorage.removeItem(LEGACY_V2_SEED_SKIP_KEY);
+            if (!isUsingLocalStorage()) {
+                localStorage.removeItem('gameState');
+                localStorage.removeItem('gameStateBackup');
+            }
         } catch {
             /* ignore */
         }
@@ -308,7 +315,11 @@ export const mergeLegacyStateIntoCurrent = async (legacyState, options = {}) => 
 
 // Auto-migrate legacy v2 state on first v3 load when localStorage data is present.
 try {
-    if (isBrowser && localStorage.getItem('gameState')) {
+    if (
+        isBrowser &&
+        localStorage.getItem('gameState') &&
+        !localStorage.getItem(LEGACY_V2_SEED_SKIP_KEY)
+    ) {
         importV2V3();
     }
 } catch {

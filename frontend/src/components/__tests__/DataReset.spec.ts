@@ -1,6 +1,7 @@
 import 'fake-indexeddb/auto';
 import { fireEvent, render, waitFor } from '@testing-library/svelte';
-import { vi } from 'vitest';
+import { tick } from 'svelte';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import DataReset from '../svelte/DataReset.svelte';
 
 const triggerSuccess = (request: IDBOpenDBRequest) => {
@@ -10,22 +11,47 @@ const triggerSuccess = (request: IDBOpenDBRequest) => {
 type IndexedDBWithDatabases = IDBFactory & {
     databases?: () => Promise<Array<{ name?: string | null }>>;
 };
+type GlobalWithIndexedDB = typeof globalThis & {
+    indexedDB?: IDBFactory;
+};
 
 const indexedDBWithDatabases = indexedDB as IndexedDBWithDatabases;
+const globalWithIndexedDB = globalThis as GlobalWithIndexedDB;
 const originalLocation = globalThis.location;
+const originalIndexedDB = globalThis.indexedDB;
+const flushMicrotasks = () => new Promise((resolve) => queueMicrotask(resolve));
+let reloadSpy: ReturnType<typeof vi.fn>;
+const setWindowLocation = (value: Location | undefined) => {
+    try {
+        Object.defineProperty(window, 'location', {
+            configurable: true,
+            value,
+        });
+    } catch {
+        delete (window as { location?: Location }).location;
+        (window as Window).location = value as Location;
+    }
+};
 
 describe('DataReset', () => {
     beforeEach(() => {
         localStorage.clear();
         document.cookie = '';
+        reloadSpy = vi.fn();
+        const mockLocation = {
+            ...originalLocation,
+            reload: reloadSpy,
+        };
+        setWindowLocation(mockLocation);
     });
 
     afterEach(() => {
         vi.restoreAllMocks();
         localStorage.clear();
         document.cookie = '';
-        Object.defineProperty(globalThis, 'location', {
-            value: originalLocation,
+        setWindowLocation(originalLocation);
+        Object.defineProperty(globalThis, 'indexedDB', {
+            value: originalIndexedDB,
             configurable: true,
         });
     });
@@ -182,11 +208,26 @@ describe('DataReset', () => {
         expect(deleteSpy).toHaveBeenCalled();
     });
 
-    it('expires cookies across hostname and parent-domain combinations', async () => {
-        Object.defineProperty(globalThis, 'location', {
-            value: { hostname: 'app.example.com', pathname: '/foo/bar' },
+    it('handles unexpected errors by surfacing a warning and skipping reload', async () => {
+        Object.defineProperty(globalThis, 'indexedDB', {
+            value: null,
             configurable: true,
         });
+        vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+        const { getByRole, findByText } = render(DataReset);
+
+        await fireEvent.click(getByRole('button', { name: /wipe all app data/i }));
+
+        await findByText(
+            'Some local app data may not have been removed. Please try again or clear your browser data manually.'
+        );
+
+        expect(reloadSpy).not.toHaveBeenCalled();
+    });
+
+    it('expires cookies across hostname and parent-domain combinations', async () => {
+        setWindowLocation({ hostname: 'app.example.com', pathname: '/foo/bar' } as Location);
 
         document.cookie = 'session=123; path=/';
 
@@ -204,5 +245,77 @@ describe('DataReset', () => {
         expect(writes.some((value) => value.includes('domain=app.example.com'))).toBe(true);
         expect(writes.some((value) => value.includes('domain=.example.com'))).toBe(true);
         expect(writes.some((value) => value.includes('path=/foo'))).toBe(true);
+    });
+
+    it('clears cookies when location information is unavailable', async () => {
+        setWindowLocation(undefined);
+
+        document.cookie = 'session=123; path=/';
+
+        const deleteSpy = vi
+            .spyOn(indexedDBWithDatabases, 'deleteDatabase')
+            .mockImplementation(() => {
+                const request = {
+                    onsuccess: null,
+                    onerror: null,
+                    onblocked: null,
+                } as unknown as IDBOpenDBRequest;
+
+                queueMicrotask(() => request.onerror?.(new Event('error')));
+
+                return request;
+            });
+
+        vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+        const { getByRole, findByText } = render(DataReset);
+
+        await fireEvent.click(getByRole('button', { name: /wipe all app data/i }));
+
+        await findByText(
+            'Some local app data may not have been removed. Please try again or clear your browser data manually.'
+        );
+
+        expect(deleteSpy).toHaveBeenCalled();
+        expect(document.cookie).not.toMatch(/session=123/);
+    });
+
+    describe('reload behavior', () => {
+        beforeEach(() => {
+            delete globalWithIndexedDB.indexedDB;
+            vi.useFakeTimers();
+        });
+
+        afterEach(() => {
+            vi.useRealTimers();
+        });
+
+        it('reloads the page after a confirmed wipe', async () => {
+            vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+            const { getByRole } = render(DataReset);
+
+            await fireEvent.click(getByRole('button', { name: /wipe all app data/i }));
+
+            await tick();
+            await flushMicrotasks();
+            vi.runAllTimers();
+
+            expect(reloadSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it('does not reload when the user cancels the wipe', async () => {
+            vi.spyOn(window, 'confirm').mockReturnValue(false);
+
+            const { getByRole } = render(DataReset);
+
+            await fireEvent.click(getByRole('button', { name: /wipe all app data/i }));
+
+            await tick();
+            await flushMicrotasks();
+            vi.runAllTimers();
+
+            expect(reloadSpy).not.toHaveBeenCalled();
+        });
     });
 });
