@@ -50,6 +50,33 @@ describe('ItemCard component', () => {
         expect(getByText('Tools')).toBeTruthy();
     });
 
+    it('renders the category label when present', () => {
+        const { getByText } = render(ItemCard, {
+            props: {
+                item: {
+                    ...mockItems[0],
+                    categoryLabel: 'Components',
+                },
+            },
+        });
+
+        expect(getByText('Components')).toBeTruthy();
+    });
+
+    it('renders Custom when the item is custom without a category', () => {
+        const { getByText } = render(ItemCard, {
+            props: {
+                item: {
+                    ...mockItems[0],
+                    category: undefined,
+                    custom: true,
+                },
+            },
+        });
+
+        expect(getByText('Custom')).toBeTruthy();
+    });
+
     it('falls back to Uncategorized when category is missing', () => {
         const { getByText } = render(ItemCard, {
             props: {
