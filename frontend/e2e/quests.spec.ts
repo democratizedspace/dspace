@@ -25,7 +25,7 @@ test.describe('Quest creation flow', () => {
         await page
             .getByLabel('Description*')
             .fill(`${questDescription} Ensures stability during CI runs.`);
-        await page.getByLabel('NPC Identifier*').fill('/assets/npc/dChat.jpg');
+        await page.getByLabel('NPC Identifier*').selectOption('/assets/npc/dChat.jpg');
 
         const fileInput = page.getByTestId('image-file-input');
         const buffer = await createTestPngBuffer(page, {
