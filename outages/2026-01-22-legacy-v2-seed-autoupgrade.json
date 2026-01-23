@@ -1,0 +1,13 @@
+{
+  "id": "2026-01-22-legacy-v2-seed-autoupgrade",
+  "date": "2026-01-22",
+  "component": "settings legacy save seeding",
+  "rootCause": "The v2 seed action writes a legacy localStorage save, but the auto-migration on module load immediately imported and cleared it, so detection found no legacy data after refresh.",
+  "resolution": "Skip automatic v2 migration when the QA seed flag is present, and clear the flag after migration or when seeded data is cleared.",
+  "references": [
+    "frontend/src/utils/gameState.js",
+    "frontend/src/utils/legacySaveSeeding.ts",
+    "frontend/src/utils/legacySaveParsing.js",
+    "frontend/__tests__/legacyV2SeedSkip.test.js"
+  ]
+}
