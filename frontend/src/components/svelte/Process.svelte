@@ -19,6 +19,7 @@
     import CompactItemList from './CompactItemList.svelte';
     import { getItemCounts } from '../../utils/gameState/inventory.js';
     import { getItemMetadata } from './compactItemListHelpers.js';
+    import { getItemMap } from '../../utils/itemResolver.js';
     import { initializeQaCheats, qaCheatsAvailability, qaCheatsEnabled } from '../../lib/qaCheats';
 
     export let processId;
@@ -49,10 +50,17 @@
     let queuedPulseMessage = '';
     let requiresContainer;
     let consumesContainer;
+    let requirementItemMap = new Map();
+    let requirementItemRequestId = 0;
+    let previousRequirementKey = '';
 
     // Slightly longer than the 1s CSS animation to avoid timing races.
     const pulseDurationMs = 1050;
     const updateIntervalMs = 100;
+
+    const releaseItemImages = (items) => {
+        items.forEach((item) => item?.releaseImage?.());
+    };
 
     // Collect item deficits for a specific requirement list.
     const getMissingEntries = (items) => {
@@ -75,7 +83,7 @@
             const available = Number(counts[itemId] ?? 0);
             const deficit = Math.max(0, required - available);
             if (deficit > 0) {
-                const metadata = getItemMetadata(item);
+                const metadata = getItemMetadata(item, requirementItemMap);
                 missing.push({
                     id: itemId,
                     name: metadata.name,
@@ -233,7 +241,15 @@
         }
     };
 
-    const onProcessStart = () => {
+    const onProcessStart = async () => {
+        const requirementItems = [
+            ...(process?.requireItems ?? []),
+            ...(process?.consumeItems ?? []),
+        ];
+        if (requirementItems.length > 0 && requirementItemMap.size === 0) {
+            await loadRequirementItemMap(requirementItems);
+        }
+
         const { missingEntries, targets, message } = getMissingRequirementInfo();
         if (missingEntries.length > 0) {
             if (isPulsing) {
@@ -286,6 +302,26 @@
         updateState();
     };
 
+    const loadRequirementItemMap = async (items) => {
+        const ids = items
+            .map((item) =>
+                typeof item?.id === 'string' || typeof item?.id === 'number'
+                    ? String(item.id)
+                    : null
+            )
+            .filter(Boolean);
+        const requestId = ++requirementItemRequestId;
+        const map = await getItemMap(ids);
+
+        if (requestId !== requirementItemRequestId) {
+            releaseItemImages(Array.from(map.values()));
+            return;
+        }
+
+        releaseItemImages(Array.from(requirementItemMap.values()));
+        requirementItemMap = map;
+    };
+
     const loadCustomProcess = async (id) => {
         if (!id || customProcessRequest || customProcessAttemptedId === id) {
             return;
@@ -332,6 +368,7 @@
         clearTimeout(pulseTimeoutId);
         requiresContainer = null;
         consumesContainer = null;
+        releaseItemImages(Array.from(requirementItemMap.values()));
         unsubscribeCheatsAvailability?.();
         unsubscribeCheatsEnabled?.();
     });
@@ -383,6 +420,15 @@
         }
 
         updateState();
+    }
+
+    $: if (mounted && process) {
+        const requirementItems = [...(process.requireItems ?? []), ...(process.consumeItems ?? [])];
+        const nextKey = requirementItems.map((item) => item?.id ?? '').join('|');
+        if (nextKey !== previousRequirementKey) {
+            previousRequirementKey = nextKey;
+            void loadRequirementItemMap(requirementItems);
+        }
     }
 </script>
 
@@ -492,7 +538,7 @@
         </div>
     </Chip>
 {:else if mounted}
-    <div class="process-error">Process details unavailable.</div>
+    <div class="process-error">Unknown process.</div>
 {/if}
 
 <style>
