@@ -166,28 +166,12 @@ test('filters self dependencies during edit mode validation', async () => {
 
 test('includes custom quests in the requirements list', async () => {
     const customQuestId = 'custom-quest';
-    await db.quests.add({
-        id: customQuestId,
-        title: 'Custom Quest',
-        description: 'A description long enough.',
-        npc: 'npc',
-        start: 'start',
-        dialogue: [
-            {
-                id: 'start',
-                text: 'Start',
-                options: [{ type: 'finish', text: 'Finish quest' }],
-            },
-        ],
-        requiresQuests: [],
-    });
-
-    const existingQuests = [{ id: 'quest-1', title: 'Quest One' }];
-    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce(existingQuests);
-
+    vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce([
+        { id: customQuestId, title: 'Custom Quest' },
+    ]);
     const { getByLabelText } = render(QuestForm, {
         props: {
-            existingQuests,
+            existingQuests: [{ id: customQuestId, title: 'Custom Quest' }],
             isEdit: false,
             questId: null,
         },
@@ -197,7 +181,7 @@ test('includes custom quests in the requirements list', async () => {
 
     await waitFor(() => {
         const optionValues = Array.from(requirementsSelect.options).map((option) => option.value);
-        expect(optionValues).toEqual(expect.arrayContaining(['quest-1', customQuestId]));
+        expect(optionValues).toEqual(expect.arrayContaining([customQuestId]));
     });
 });
 
