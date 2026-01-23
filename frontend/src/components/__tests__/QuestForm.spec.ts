@@ -2,6 +2,7 @@ import { render, fireEvent, waitFor } from '@testing-library/svelte';
 import { vi } from 'vitest';
 import QuestForm from '../svelte/QuestForm.svelte';
 import { db } from '../../utils/customcontent.js';
+import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
 import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
 
 vi.mock('../../utils/imageDownsample.js', () => ({
@@ -48,6 +49,21 @@ test('allows adding dialogue nodes and options', async () => {
     expect(latestOptionInput.value).toBe('Proceed to end');
 });
 
+test('updates and removes existing dialogue nodes', async () => {
+    const { getByLabelText, getByText, queryByText } = render(QuestForm);
+
+    const dialogueText = getByLabelText(/Dialogue text/i) as HTMLTextAreaElement;
+    await fireEvent.input(dialogueText, { target: { value: 'Updated dialogue' } });
+
+    expect(dialogueText.value).toBe('Updated dialogue');
+
+    await fireEvent.click(getByText('Remove node'));
+
+    await waitFor(() => {
+        expect(queryByText('Remove node')).toBeNull();
+    });
+});
+
 test('shows image preview after upload', async () => {
     const { getByLabelText, getByAltText } = render(QuestForm);
     const fileInput = getByLabelText(/Upload an Image/i);
@@ -58,6 +74,170 @@ test('shows image preview after upload', async () => {
     await waitFor(() => {
         expect(getByAltText('Quest preview')).toBeTruthy();
     });
+});
+
+test('reprocesses non-data preview images on submit', async () => {
+    const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('image-quest');
+    vi.mocked(downsampleAndCompressToJpeg)
+        .mockResolvedValueOnce({ dataUrl: 'https://example.com/image.jpg' })
+        .mockResolvedValueOnce({ dataUrl: 'data:image/jpeg;base64,REPROCESSED' });
+
+    const { getByAltText, getByLabelText } = render(QuestForm);
+    const fileInput = getByLabelText(/Upload an Image/i);
+    const file = new File(['d'], 'test.png', { type: 'image/png' });
+
+    await fireEvent.input(getByLabelText(/Title/i), {
+        target: { value: 'Image Quest' },
+    });
+    await fireEvent.input(getByLabelText(/Description/i), {
+        target: { value: 'A quest with a reprocessed image.' },
+    });
+
+    await fireEvent.change(fileInput, { target: { files: [file] } });
+
+    await waitFor(() => {
+        expect(getByAltText('Quest preview')).toBeTruthy();
+    });
+
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
+    await fireEvent.submit(form as HTMLFormElement);
+
+    await waitFor(() => {
+        expect(addSpy).toHaveBeenCalledTimes(1);
+    });
+
+    expect(addSpy.mock.calls[0]?.[0]).toEqual(
+        expect.objectContaining({
+            image: 'data:image/jpeg;base64,REPROCESSED',
+        })
+    );
+    addSpy.mockRestore();
+});
+
+test('uses the processed data image when submitting', async () => {
+    const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('processed-image-quest');
+    const { getByAltText, getByLabelText } = render(QuestForm);
+    const fileInput = getByLabelText(/Upload an Image/i);
+    const file = new File(['d'], 'test.png', { type: 'image/png' });
+
+    await fireEvent.input(getByLabelText(/Title/i), {
+        target: { value: 'Processed Image Quest' },
+    });
+    await fireEvent.input(getByLabelText(/Description/i), {
+        target: { value: 'A quest that uses processed images.' },
+    });
+
+    await fireEvent.change(fileInput, { target: { files: [file] } });
+
+    await waitFor(() => {
+        expect(getByAltText('Quest preview')).toBeTruthy();
+    });
+
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
+    await fireEvent.submit(form as HTMLFormElement);
+
+    await waitFor(() => {
+        expect(addSpy).toHaveBeenCalledTimes(1);
+    });
+
+    expect(addSpy.mock.calls[0]?.[0]).toEqual(
+        expect.objectContaining({
+            image: 'data:image/jpeg;base64,COMPRESSED',
+        })
+    );
+    addSpy.mockRestore();
+});
+
+test('uses the last preview when image processing fails on submit', async () => {
+    const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('image-fallback-quest');
+    vi.mocked(downsampleAndCompressToJpeg)
+        .mockResolvedValueOnce({ dataUrl: 'https://example.com/image.jpg' })
+        .mockRejectedValueOnce(new Error('compression failed'));
+
+    const { getByAltText, getByLabelText } = render(QuestForm);
+    const fileInput = getByLabelText(/Upload an Image/i);
+    const file = new File(['d'], 'test.png', { type: 'image/png' });
+
+    await fireEvent.input(getByLabelText(/Title/i), {
+        target: { value: 'Fallback Image Quest' },
+    });
+    await fireEvent.input(getByLabelText(/Description/i), {
+        target: { value: 'A quest with fallback image behavior.' },
+    });
+
+    await fireEvent.change(fileInput, { target: { files: [file] } });
+
+    await waitFor(() => {
+        expect(getByAltText('Quest preview')).toBeTruthy();
+    });
+
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
+    await fireEvent.submit(form as HTMLFormElement);
+
+    await waitFor(() => {
+        expect(addSpy).toHaveBeenCalledTimes(1);
+    });
+
+    expect(addSpy.mock.calls[0]?.[0]).toEqual(
+        expect.objectContaining({
+            image: 'https://example.com/image.jpg',
+        })
+    );
+    addSpy.mockRestore();
+});
+
+test('shows the quest preview when the form is valid', async () => {
+    const { getByLabelText, getByText, findByText } = render(QuestForm);
+
+    await fireEvent.input(getByLabelText(/Title/i), {
+        target: { value: 'Preview Quest' },
+    });
+    await fireEvent.input(getByLabelText(/Description/i), {
+        target: { value: 'A quest ready for preview.' },
+    });
+
+    await fireEvent.click(getByText('Preview'));
+
+    await findByText('Preview Quest');
+});
+
+test('blocks submission while the image is processing', async () => {
+    const addSpy = vi.spyOn(db.quests, 'add');
+    const { getByLabelText } = render(QuestForm);
+
+    await fireEvent.input(getByLabelText(/Title/i), {
+        target: { value: 'Processing Quest' },
+    });
+    await fireEvent.input(getByLabelText(/Description/i), {
+        target: { value: 'A quest with a processing image.' },
+    });
+
+    let resolveImage: (value: { dataUrl: string }) => void;
+    const processingPromise = new Promise<{ dataUrl: string }>((resolve) => {
+        resolveImage = resolve;
+    });
+    vi.mocked(downsampleAndCompressToJpeg).mockImplementationOnce(() => processingPromise);
+
+    const fileInput = getByLabelText(/Upload an Image/i);
+    const file = new File(['d'], 'test.png', { type: 'image/png' });
+    await fireEvent.change(fileInput, { target: { files: [file] } });
+
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
+    await fireEvent.submit(form as HTMLFormElement);
+
+    await waitFor(() => {
+        expect(addSpy).not.toHaveBeenCalled();
+    });
+
+    resolveImage({
+        dataUrl: 'data:image/jpeg;base64,COMPRESSED',
+    });
+
+    addSpy.mockRestore();
 });
 
 test('rejects title with forbidden characters', async () => {
@@ -548,6 +728,28 @@ test('clears rewards after creating a quest', async () => {
 
     await findByText('No rewards configured');
     expect(queryByTestId('reward-item-id-0')).toBeNull();
+    addSpy.mockRestore();
+});
+
+test('dispatches an error when quest creation fails', async () => {
+    const addSpy = vi.spyOn(db.quests, 'add').mockRejectedValueOnce(new Error('Boom'));
+    const { getByLabelText } = render(QuestForm);
+
+    await fireEvent.input(getByLabelText(/Title/i), {
+        target: { value: 'Failed Quest' },
+    });
+    await fireEvent.input(getByLabelText(/Description/i), {
+        target: { value: 'A quest that fails to save.' },
+    });
+
+    const form = document.querySelector('form');
+    expect(form).toBeTruthy();
+    await fireEvent.submit(form as HTMLFormElement);
+
+    await waitFor(() => {
+        expect(addSpy).toHaveBeenCalledTimes(1);
+    });
+
     addSpy.mockRestore();
 });
 
