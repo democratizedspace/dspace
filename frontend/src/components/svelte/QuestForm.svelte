@@ -1703,6 +1703,19 @@
         background-color: #003366;
     }
 
+    .remove-button {
+        background-color: #aa1b1b;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+
+    .remove-button:hover {
+        background-color: #800f0f;
+    }
+
     .sr-only {
         position: absolute;
         width: 1px;
