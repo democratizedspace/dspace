@@ -53,37 +53,6 @@ const toNumericStatus = (status) => {
     return status;
 };
 
-const isModelAccessError = (error) => {
-    if (!error || typeof error !== 'object') return false;
-
-    const status = toNumericStatus(
-        error.status ??
-            error.statusCode ??
-            error.response?.status ??
-            error.cause?.status ??
-            error.error?.status
-    );
-    const code = error.code ?? error?.error?.code ?? error?.response?.data?.error?.code;
-    const message = typeof error.message === 'string' ? error.message.toLowerCase() : '';
-    const hasMissingModelMessage =
-        message.includes('model') &&
-        (message.includes('not found') || message.includes('does not exist'));
-
-    if (code === 'model_not_found') {
-        return true;
-    }
-
-    if (status === 404 && hasMissingModelMessage) {
-        return true;
-    }
-
-    if (status === 403 && code === 'model_not_found') {
-        return true;
-    }
-
-    return hasMissingModelMessage;
-};
-
 const extractErrorDetails = (error) => {
     const status =
         error?.status ??
@@ -102,6 +71,31 @@ const extractErrorDetails = (error) => {
         undefined;
 
     return { status, code, type, message };
+};
+
+const isModelAccessError = (error) => {
+    if (!error || typeof error !== 'object') return false;
+
+    const { status, code, message } = extractErrorDetails(error);
+    const numericStatus = toNumericStatus(status);
+    const normalizedMessage = typeof message === 'string' ? message.toLowerCase() : '';
+    const hasMissingModelMessage =
+        normalizedMessage.includes('model') &&
+        (normalizedMessage.includes('not found') || normalizedMessage.includes('does not exist'));
+
+    if (code === 'model_not_found') {
+        return true;
+    }
+
+    if (numericStatus === 404 && hasMissingModelMessage) {
+        return true;
+    }
+
+    if (numericStatus === 403 && code === 'model_not_found') {
+        return true;
+    }
+
+    return hasMissingModelMessage;
 };
 
 export const describeOpenAIError = (error) => {
