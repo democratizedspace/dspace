@@ -164,4 +164,17 @@ describe('legacy save seeding utilities', () => {
         expect(localStorage.getItem('gameStateBackup')).toBeNull();
         expect(localStorage.getItem('legacyV2Seeded')).toBeNull();
     });
+
+    test('clearV3GameStateStorage removes empty legacy storage values', async () => {
+        localStorage.setItem('gameState', '');
+        localStorage.setItem('gameStateBackup', '');
+        localStorage.setItem('legacyV2Seeded', 'true');
+
+        const cleared = await clearV3GameStateStorage();
+
+        expect(cleared).toBe(true);
+        expect(localStorage.getItem('gameState')).toBeNull();
+        expect(localStorage.getItem('gameStateBackup')).toBeNull();
+        expect(localStorage.getItem('legacyV2Seeded')).toBeNull();
+    });
 });
