@@ -98,7 +98,10 @@ test.describe('Token.place chat error banners', () => {
         await installTokenPlaceStub(page, 'provider-error');
         await seedTokenPlaceEnabledState(page);
 
-        const { chatPanel, spinner } = await sendMessage(page, 'Trigger token.place provider error');
+        const { chatPanel, spinner } = await sendMessage(
+            page,
+            'Trigger token.place provider error'
+        );
 
         const banner = chatPanel.locator('.chat-error');
         await expect(banner).toHaveAttribute('data-error-type', 'provider');
