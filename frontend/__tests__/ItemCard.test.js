@@ -135,6 +135,20 @@ describe('ItemCard component', () => {
         expect(getByText('Uncategorized')).toBeTruthy();
     });
 
+    it('renders the price line when price is provided', () => {
+        const { getByText } = render(ItemCard, {
+            props: {
+                item: {
+                    ...mockItems[0],
+                    price: '5',
+                },
+            },
+        });
+
+        expect(getByText('Price:')).toBeTruthy();
+        expect(getByText('5')).toBeTruthy();
+    });
+
     it('uses getItemCount when no count prop is provided', () => {
         const { getByText } = render(ItemCard, {
             props: {
