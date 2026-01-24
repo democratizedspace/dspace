@@ -3,6 +3,7 @@
     import {
         defaultOpenAIErrorMessage,
         describeOpenAIError,
+        getOpenAIErrorSummary,
         GPT5Chat,
     } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
@@ -22,6 +23,7 @@
     let showSpinner = false;
     let hydrated = false;
     let messageCounter = 0;
+    let errorBanner = null;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -80,6 +82,7 @@
         addMessage(userMessage);
         const historyForApi = [...$messageHistory];
         showSpinner = true;
+        errorBanner = null;
 
         try {
             const aiResponse = await GPT5Chat(historyForApi, {
@@ -97,6 +100,7 @@
             addMessage(aiMessage);
         } catch (error) {
             console.error('OpenAI chat request failed', error);
+            errorBanner = getOpenAIErrorSummary(error);
             const fallback = describeOpenAIError(error) || defaultOpenAIErrorMessage;
             addMessage({
                 role: 'assistant',
@@ -128,6 +132,7 @@
         messageHistory.set([]);
         messages.set([]);
         showSpinner = false;
+        errorBanner = null;
         message.set('');
         await tick();
         addWelcomeMessage(nextPersona);
@@ -147,6 +152,11 @@
     data-provider="openai"
     data-hydrated={hydrated ? 'true' : 'false'}
 >
+    {#if errorBanner}
+        <div class="chat-error" role="alert" data-error-type={errorBanner.type}>
+            {errorBanner.message}
+        </div>
+    {/if}
     <div class="persona-selector">
         <label for="chat-persona">Talk to</label>
         <select id="chat-persona" bind:value={$activePersonaId} on:change={handlePersonaChange}>
@@ -249,6 +259,18 @@
         font-size: 0.9rem;
         text-align: left;
         color: rgba(0, 0, 0, 0.8);
+    }
+
+    .chat-error {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(248, 113, 113, 0.6);
+        background: rgba(254, 226, 226, 0.9);
+        color: #7f1d1d;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        margin-bottom: 0.5rem;
     }
 
     .chat-container {
