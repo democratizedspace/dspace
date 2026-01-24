@@ -397,7 +397,7 @@
                             disabled={Boolean(workingAction)}
                         />
                         <Chip
-                            text="Delete v1 cookies"
+                            text="Delete v1 cookie data"
                             onClick={() =>
                                 withStatus('delete-v1-cookies', async () => {
                                     const cleared = expireLegacyCookies();
@@ -485,7 +485,7 @@
                         />
                         <Chip
                             text={workingAction === 'discard-v2'
-                                ? 'Removing legacy data…'
+                                ? 'Deleting v2 localStorage data…'
                                 : 'Delete v2 localStorage data'}
                             onClick={discardLegacyV2}
                             inverted={true}
