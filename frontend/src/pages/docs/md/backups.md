@@ -53,6 +53,8 @@ failsafe.
   expected progress and items.
 - **Keep both modes:** Even with Cloud Sync enabled, keep occasional manual exports so you have an
   offline backup.
+- **Legacy QA:** Clearing v3 saves from **Settings** only resets IndexedDB data; legacy v2
+  localStorage remains until you discard it separately.
 
 ## Troubleshooting
 
