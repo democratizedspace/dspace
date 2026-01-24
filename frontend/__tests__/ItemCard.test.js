@@ -77,6 +77,21 @@ describe('ItemCard component', () => {
         expect(getByText('Components')).toBeTruthy();
     });
 
+    it('prefers categoryLabel over category when both are present', () => {
+        const { getByText, queryByText } = render(ItemCard, {
+            props: {
+                item: {
+                    ...mockItems[0],
+                    categoryLabel: 'Components',
+                },
+            },
+        });
+
+        expect(getByText('Category:')).toBeTruthy();
+        expect(getByText('Components')).toBeTruthy();
+        expect(queryByText('Tools')).toBeNull();
+    });
+
     it('prefers category over custom fallback when both are present', () => {
         const { getByText } = render(ItemCard, {
             props: {
@@ -118,5 +133,17 @@ describe('ItemCard component', () => {
 
         expect(getByText('Category:')).toBeTruthy();
         expect(getByText('Uncategorized')).toBeTruthy();
+    });
+
+    it('uses getItemCount when no count prop is provided', () => {
+        const { getByText } = render(ItemCard, {
+            props: {
+                item: mockItems[0],
+            },
+        });
+
+        expect(getByText('Count:')).toBeTruthy();
+        expect(getByText('2')).toBeTruthy();
+        expect(mockGetItemCount).toHaveBeenCalledWith('item-1');
     });
 });
