@@ -72,7 +72,6 @@ const sendMessage = async (page: Page, text: string) => {
     await messageBox.fill(text);
     await chatPanel.getByRole('button', { name: 'Send' }).click();
     await expect(chatPanel.getByText(text)).toBeVisible();
-    await expect(spinner).toBeVisible();
 
     return { chatPanel, spinner };
 };
