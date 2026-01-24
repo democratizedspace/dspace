@@ -223,8 +223,8 @@
         <div class="qa-tools__seeded-items">
             <h4>V2 items in selected profile</h4>
             <p class="qa-tools__seeded-items-description">
-                These are the v2 inventory entries included with the selected seed profile and
-                their v3 migration targets.
+                These are the v2 inventory entries included with the selected seed profile and their
+                v3 migration targets.
             </p>
             {#if v2SeedItems.length}
                 <ul class="qa-tools__seeded-items-list">
