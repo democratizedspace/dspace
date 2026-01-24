@@ -3,6 +3,7 @@
     import {
         defaultOpenAIErrorMessage,
         describeOpenAIError,
+        getOpenAIErrorNotice,
         GPT5Chat,
     } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
@@ -22,6 +23,7 @@
     let showSpinner = false;
     let hydrated = false;
     let messageCounter = 0;
+    let errorNotice = null;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -70,6 +72,7 @@
     }
 
     async function submitMessage() {
+        errorNotice = null;
         const userMessage = {
             role: 'user',
             content: $message,
@@ -98,6 +101,7 @@
         } catch (error) {
             console.error('OpenAI chat request failed', error);
             const fallback = describeOpenAIError(error) || defaultOpenAIErrorMessage;
+            errorNotice = getOpenAIErrorNotice(error);
             addMessage({
                 role: 'assistant',
                 content: fallback,
@@ -129,6 +133,7 @@
         messages.set([]);
         showSpinner = false;
         message.set('');
+        errorNotice = null;
         await tick();
         addWelcomeMessage(nextPersona);
     }
@@ -147,6 +152,12 @@
     data-provider="openai"
     data-hydrated={hydrated ? 'true' : 'false'}
 >
+    {#if errorNotice}
+        <div class="error-banner" role="alert" aria-live="polite">
+            <strong>{errorNotice.title}</strong>
+            <p>{errorNotice.message}</p>
+        </div>
+    {/if}
     <div class="persona-selector">
         <label for="chat-persona">Talk to</label>
         <select id="chat-persona" bind:value={$activePersonaId} on:change={handlePersonaChange}>
@@ -210,6 +221,26 @@
         align-items: center;
         gap: 0.5rem;
         width: 100%;
+    }
+
+    .error-banner {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 8px;
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        color: #7f1d1d;
+        text-align: left;
+    }
+
+    .error-banner strong {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .error-banner p {
+        margin: 0;
     }
 
     .persona-selector label {

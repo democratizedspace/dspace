@@ -137,6 +137,38 @@ export const describeOpenAIError = (error) => {
     return defaultOpenAIErrorMessage;
 };
 
+export const getOpenAIErrorNotice = (error) => {
+    const { status, code, type, message } = extractErrorDetails(error);
+    const numericStatus = toNumericStatus(status);
+    const normalizedMessage = message?.toLowerCase() ?? '';
+    let title = 'Chat error';
+
+    if (numericStatus === 401) {
+        title = 'OpenAI authentication error';
+    } else if (numericStatus === 429 || code === 'rate_limit_exceeded') {
+        if (
+            normalizedMessage.includes('quota') ||
+            code === 'insufficient_quota' ||
+            type === 'insufficient_quota'
+        ) {
+            title = 'OpenAI quota exceeded';
+        } else {
+            title = 'OpenAI rate limit';
+        }
+    } else if (numericStatus === 403 || code === 'insufficient_permissions') {
+        title = 'OpenAI permissions error';
+    } else if (typeof numericStatus === 'number' && numericStatus >= 500) {
+        title = 'OpenAI service error';
+    } else if (normalizedMessage.includes('network') || normalizedMessage.includes('fetch')) {
+        title = 'Network error';
+    }
+
+    return {
+        title,
+        message: describeOpenAIError(error) || defaultOpenAIErrorMessage,
+    };
+};
+
 async function createChatResponse(openai, input) {
     const models = [defaultModel, ...fallbackModels];
 

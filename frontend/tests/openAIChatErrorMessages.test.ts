@@ -78,10 +78,9 @@ describe('OpenAIChat error messaging', () => {
         await sendMessage('Hello');
 
         await waitFor(() => expect(GPT5Chat).toHaveBeenCalled());
-        expect(await screen.findByText(/out of credits/i)).not.toBeNull();
-        expect(
-            await screen.findByText(/openai could not generate a reply because this account/i)
-        ).not.toBeNull();
+        const alert = await screen.findByRole('alert');
+        expect(alert.textContent).toMatch(/openai quota exceeded/i);
+        expect(alert.textContent).toMatch(/out of credits/i);
     });
 
     it('surfaces invalid API key errors to the user', async () => {
@@ -94,6 +93,8 @@ describe('OpenAIChat error messaging', () => {
         await sendMessage('Hello again');
 
         await waitFor(() => expect(GPT5Chat).toHaveBeenCalled());
-        expect(await screen.findByText(/api key/i)).not.toBeNull();
+        const alert = await screen.findByRole('alert');
+        expect(alert.textContent).toMatch(/authentication error/i);
+        expect(alert.textContent).toMatch(/api key/i);
     });
 });
