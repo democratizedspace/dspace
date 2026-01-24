@@ -375,7 +375,7 @@
                 {#if v1Items.length || v1CurrencyBalances.length}
                     {#if detection.hasV3State}
                         <p class="warning">
-                            Current v3 data exists. Choose whether to merge v1 items into it or
+                            Current v3 data exists. Choose whether to merge v1 data into it or
                             replace it entirely.
                         </p>
                     {/if}
@@ -419,9 +419,9 @@
                     <h3>V2 (localStorage saves)</h3>
                     <p>
                         {#if detection.pendingLocalState}
-                            Legacy v2 localStorage data detected
+                            Legacy v2 localStorage save detected
                         {:else}
-                            No standalone v2 localStorage save detected
+                            No v2 localStorage save detected
                         {/if}
                     </p>
                 </div>
@@ -437,8 +437,8 @@
                 {#if detection.pendingLocalState}
                     {#if detection.hasV3State}
                         <p class="warning">
-                            Both legacy localStorage data and a current v3 save exist. Choose to
-                            merge or replace to avoid mixed state.
+                            Current v3 data exists. Choose whether to merge v2 data into it or
+                            replace it entirely.
                         </p>
                     {/if}
                     {#if showV2V3ConflictWarning}
@@ -470,7 +470,7 @@
                         <Chip
                             text={workingAction === 'merge-v2'
                                 ? 'Merging v2…'
-                                : 'Merge legacy into current'}
+                                : 'Merge v2 into current save'}
                             onClick={() => upgradeV2('merge')}
                             inverted={true}
                             disabled={Boolean(workingAction) || !detection.indexedDbSupported}
@@ -486,7 +486,7 @@
                         <Chip
                             text={workingAction === 'discard-v2'
                                 ? 'Removing legacy data…'
-                                : 'Discard legacy v2 data'}
+                                : 'Delete v2 localStorage data'}
                             onClick={discardLegacyV2}
                             inverted={true}
                             disabled={Boolean(workingAction)}
@@ -494,7 +494,7 @@
                     </div>
                 {:else}
                     <p class="muted">
-                        Legacy v2 data is not present or already matches the current v3 save.
+                        No v2 localStorage data is available to import.
                     </p>
                 {/if}
             </div>
