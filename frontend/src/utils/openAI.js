@@ -131,6 +131,15 @@ export const getOpenAIErrorSummary = (error) => {
         };
     }
 
+    if (isModelAccessError(error)) {
+        return {
+            type: 'permission',
+            message:
+                'OpenAI denied access to the requested model. Try another model or check your ' +
+                'OpenAI account permissions.',
+        };
+    }
+
     if (numericStatus === 403 || code === 'insufficient_permissions') {
         return {
             type: 'permission',

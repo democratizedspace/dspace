@@ -90,6 +90,9 @@ test.describe('Chat message flow', () => {
         await installChatStub(page, 'network-error');
         const { chatPanel, spinner } = await sendMessage(page, 'Trigger a network failure');
 
+        const banner = chatPanel.locator('.chat-error');
+        await expect(banner).toHaveAttribute('data-error-type', 'network');
+        await expect(banner).toContainText(NETWORK_ERROR_MESSAGE);
         await expect(chatPanel.getByText(NETWORK_ERROR_MESSAGE)).toBeVisible();
         await expect(spinner).not.toBeVisible();
     });
@@ -98,6 +101,9 @@ test.describe('Chat message flow', () => {
         await installChatStub(page, 'rate-limit');
         const { chatPanel, spinner } = await sendMessage(page, 'Trigger a rate limit');
 
+        const banner = chatPanel.locator('.chat-error');
+        await expect(banner).toHaveAttribute('data-error-type', 'rate_limit');
+        await expect(banner).toContainText(RATE_LIMIT_MESSAGE);
         await expect(chatPanel.getByText(RATE_LIMIT_MESSAGE)).toBeVisible();
         await expect(spinner).not.toBeVisible();
     });

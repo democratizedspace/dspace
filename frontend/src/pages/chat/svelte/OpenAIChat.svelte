@@ -270,6 +270,7 @@
         color: #7f1d1d;
         font-size: 0.95rem;
         line-height: 1.4;
+        margin-bottom: 0.5rem;
     }
 
     .chat-container {
