@@ -336,6 +336,7 @@
                                 {items}
                                 selectedItemId={item.id}
                                 label="Select Required Item"
+                                controlId={`required-item-${index}`}
                                 on:select={(e) => handleItemSelect(e, 'require', index)}
                             />
                             <input
@@ -370,6 +371,7 @@
                                 {items}
                                 selectedItemId={item.id}
                                 label="Select Consumed Item"
+                                controlId={`consumed-item-${index}`}
                                 on:select={(e) => handleItemSelect(e, 'consume', index)}
                             />
                             <input
@@ -404,6 +406,7 @@
                                 {items}
                                 selectedItemId={item.id}
                                 label="Select Created Item"
+                                controlId={`created-item-${index}`}
                                 on:select={(e) => handleItemSelect(e, 'create', index)}
                             />
                             <input

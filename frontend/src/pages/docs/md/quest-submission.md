@@ -24,6 +24,7 @@ If your quest requires custom items or processes, use the bundle submission work
 
 1. **Create your quest** using the in-game editor at `/quests/create`
     - Configure quest completion rewards, including any custom item IDs you plan to bundle
+    - Use the item and process pickers to select built-in or custom catalog entries
 2. **Create related items** at `/items/create` if needed
 3. **Create related processes** at `/processes/create` if needed
 4. **Package everything into a bundle** following the [Custom Content Bundles](/docs/custom-bundles) format
@@ -36,6 +37,7 @@ If your quest uses only existing items and processes:
 
 1. **Create your quest** using the in-game editor at `/quests/create`
     - Add quest completion rewards for any items you want to grant on finish
+    - Select run-process options from the process picker to capture duration details
 2. **Validate** the quest structure by running:
     ```bash
     npm run test:ci -- questValidation
