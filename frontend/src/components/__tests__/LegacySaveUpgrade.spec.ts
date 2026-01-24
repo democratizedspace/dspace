@@ -159,7 +159,9 @@ describe('LegacySaveUpgrade', () => {
             cheatsAvailable: false,
         });
 
-        const discardButton = await findByRole('button', { name: /discard legacy v2 data/i });
+        const discardButton = await findByRole('button', {
+            name: /delete v2 localstorage data/i,
+        });
         await fireEvent.click(discardButton);
 
         await findByText(/Removed legacy v2 localStorage data/i);
