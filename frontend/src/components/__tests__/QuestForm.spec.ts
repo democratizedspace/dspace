@@ -47,6 +47,32 @@ const clearQuests = async () => {
     await Promise.all(quests.map((quest) => db.quests.delete(quest.id)));
 };
 
+const addCustomItem = async (id: string, name: string) => {
+    await db.items.add({
+        id,
+        name,
+        description: `${name} description`,
+        image: null,
+    });
+};
+
+const selectItemByName = async (
+    helpers: {
+        getByLabelText: (label: RegExp | string) => HTMLElement;
+        findByText: (text: string) => Promise<HTMLElement>;
+    },
+    name: string
+) => {
+    const searchInput = helpers.getByLabelText('Search items');
+    await fireEvent.input(searchInput, { target: { value: name } });
+    const itemHeading = await helpers.findByText(name);
+    const itemButton = itemHeading.closest('button');
+    if (!itemButton) {
+        throw new Error(`Could not find item button for ${name}`);
+    }
+    await fireEvent.click(itemButton);
+};
+
 test('allows adding dialogue nodes and options', async () => {
     const { getByLabelText, getByText, getAllByLabelText, getAllByText } = render(QuestForm);
 
@@ -474,17 +500,17 @@ test('handles quest load failures when no existing quests are provided', async (
     });
 });
 
-test('includes custom processes in the process datalist', async () => {
+test('includes custom processes in the process selector', async () => {
     const customProcessId = 'custom-process';
     await db.processes.add({
         id: customProcessId,
         title: 'Custom Process',
-        duration: 30,
+        duration: '30m',
     });
 
     vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce([]);
 
-    render(QuestForm, {
+    const { getAllByLabelText, findByText } = render(QuestForm, {
         props: {
             existingQuests: [],
             isEdit: false,
@@ -492,14 +518,21 @@ test('includes custom processes in the process datalist', async () => {
         },
     });
 
-    await waitFor(() => {
-        const datalist = document.querySelector(
-            '#quest-option-process-suggestions'
-        ) as HTMLDataListElement | null;
-        expect(datalist).toBeTruthy();
-        const optionValues = Array.from(datalist?.options ?? []).map((option) => option.value);
-        expect(optionValues).toContain(customProcessId);
+    const typeSelects = getAllByLabelText(/Type/i);
+    await fireEvent.change(typeSelects[typeSelects.length - 1], {
+        target: { value: 'process' },
     });
+
+    const searchInput = await waitFor(() =>
+        document.querySelector('input[aria-label="Search processes"]')
+    );
+    expect(searchInput).toBeTruthy();
+
+    await fireEvent.input(searchInput as HTMLInputElement, {
+        target: { value: 'Custom Process' },
+    });
+
+    await findByText('Custom Process');
 });
 
 test('handles item and process list failures gracefully', async () => {
@@ -520,17 +553,6 @@ test('handles item and process list failures gracefully', async () => {
             isEdit: false,
             questId: null,
         },
-    });
-
-    await waitFor(() => {
-        const itemDatalist = document.querySelector(
-            '#quest-option-item-suggestions'
-        ) as HTMLDataListElement | null;
-        const processDatalist = document.querySelector(
-            '#quest-option-process-suggestions'
-        ) as HTMLDataListElement | null;
-        expect(itemDatalist?.options).toHaveLength(0);
-        expect(processDatalist?.options).toHaveLength(0);
     });
 
     await waitFor(() => {
@@ -630,7 +652,11 @@ test('keeps selected quest requirements in create mode', async () => {
 
 test('submits quest rewards with custom item IDs', async () => {
     const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('reward-quest');
-    const { getByLabelText, getByText, getByTestId } = render(QuestForm);
+    const rewardItemId = 'custom/item-alpha';
+    const rewardItemName = 'Custom Item Alpha';
+    await addCustomItem(rewardItemId, rewardItemName);
+
+    const { getByLabelText, getByText, findByText } = render(QuestForm);
 
     await fireEvent.input(getByLabelText(/Title/i), {
         target: { value: 'Reward Quest' },
@@ -640,10 +666,8 @@ test('submits quest rewards with custom item IDs', async () => {
     });
 
     await fireEvent.click(getByText('Add reward item'));
-    await fireEvent.input(getByTestId('reward-item-id-0'), {
-        target: { value: 'custom/item-alpha' },
-    });
-    await fireEvent.input(getByTestId('reward-item-count-0'), {
+    await selectItemByName({ getByLabelText, findByText }, rewardItemName);
+    await fireEvent.input(document.querySelector('[data-testid="reward-item-count-0"]')!, {
         target: { value: '2' },
     });
 
@@ -656,7 +680,7 @@ test('submits quest rewards with custom item IDs', async () => {
     });
 
     const questPayload = addSpy.mock.calls[0]?.[0];
-    expect(questPayload.rewards).toEqual([{ id: 'custom/item-alpha', count: 2 }]);
+    expect(questPayload.rewards).toEqual([{ id: rewardItemId, count: 2 }]);
     addSpy.mockRestore();
 });
 
@@ -680,7 +704,11 @@ test('shows a validation error for invalid reward entries', async () => {
 });
 
 test('rejects rewards with non-numeric counts', async () => {
-    const { getByLabelText, getByText, getByTestId, findByText } = render(QuestForm);
+    const rewardItemId = 'custom/item-count';
+    const rewardItemName = 'Custom Item Count';
+    await addCustomItem(rewardItemId, rewardItemName);
+
+    const { getByLabelText, getByText, findByText } = render(QuestForm);
 
     await fireEvent.input(getByLabelText(/Title/i), {
         target: { value: 'Reward Count Quest' },
@@ -690,10 +718,8 @@ test('rejects rewards with non-numeric counts', async () => {
     });
 
     await fireEvent.click(getByText('Add reward item'));
-    await fireEvent.input(getByTestId('reward-item-id-0'), {
-        target: { value: 'custom/item-count' },
-    });
-    await fireEvent.input(getByTestId('reward-item-count-0'), {
+    await selectItemByName({ getByLabelText, findByText }, rewardItemName);
+    await fireEvent.input(document.querySelector('[data-testid="reward-item-count-0"]')!, {
         target: { value: 'not-a-number' },
     });
 
@@ -706,6 +732,9 @@ test('rejects rewards with non-numeric counts', async () => {
 
 test('loads existing rewards when editing a quest', async () => {
     const questId = 'quest-with-reward';
+    const rewardItemId = 'custom/item-beta';
+    const rewardItemName = 'Custom Item Beta';
+    await addCustomItem(rewardItemId, rewardItemName);
     await db.quests.add({
         id: questId,
         title: 'Rewarded Quest',
@@ -719,38 +748,40 @@ test('loads existing rewards when editing a quest', async () => {
                 options: [{ type: 'finish', text: 'Finish quest' }],
             },
         ],
-        rewards: [{ id: 'custom/item-beta', count: 3 }],
+        rewards: [{ id: rewardItemId, count: 3 }],
     });
 
-    const { getByTestId } = render(QuestForm, {
+    const { findByText, getByTestId } = render(QuestForm, {
         props: {
             isEdit: true,
             questId,
         },
     });
 
+    await findByText(rewardItemName);
     await waitFor(() => {
-        expect((getByTestId('reward-item-id-0') as HTMLInputElement).value).toBe(
-            'custom/item-beta'
-        );
         expect((getByTestId('reward-item-count-0') as HTMLInputElement).value).toBe('3');
     });
 });
 
 test('removes reward items and shows the empty state', async () => {
-    const { getByText, getByTestId, queryByTestId, findByText } = render(QuestForm);
+    const { getByText, getByTestId, queryByLabelText, findByText } = render(QuestForm);
 
     await fireEvent.click(getByText('Add reward item'));
-    expect(getByTestId('reward-item-id-0')).toBeTruthy();
+    expect(queryByLabelText('Search items')).toBeTruthy();
 
     await fireEvent.click(getByTestId('remove-reward-item-0'));
 
     await findByText('No rewards configured');
-    expect(queryByTestId('reward-item-id-0')).toBeNull();
+    expect(queryByLabelText('Search items')).toBeNull();
 });
 
 test('clears reward validation errors after fixing inputs', async () => {
-    const { getByLabelText, getByText, getByTestId, findByText, queryByText } = render(QuestForm);
+    const rewardItemId = 'custom/item-fixed';
+    const rewardItemName = 'Custom Item Fixed';
+    await addCustomItem(rewardItemId, rewardItemName);
+
+    const { getByLabelText, getByText, findByText, queryByText } = render(QuestForm);
 
     await fireEvent.input(getByLabelText(/Title/i), {
         target: { value: 'Reward Fix Quest' },
@@ -767,13 +798,11 @@ test('clears reward validation errors after fixing inputs', async () => {
 
     await findByText('Rewards require an item and positive count');
 
-    await fireEvent.input(getByTestId('reward-item-id-0'), {
-        target: { value: 'custom/item-fixed' },
-    });
-    await fireEvent.input(getByTestId('reward-item-count-0'), {
+    await selectItemByName({ getByLabelText, findByText }, rewardItemName);
+    await fireEvent.input(document.querySelector('[data-testid="reward-item-count-0"]')!, {
         target: { value: '' },
     });
-    await fireEvent.input(getByTestId('reward-item-count-0'), {
+    await fireEvent.input(document.querySelector('[data-testid="reward-item-count-0"]')!, {
         target: { value: '1' },
     });
 
@@ -838,6 +867,9 @@ test('shows no rewards when editing a quest without rewards', async () => {
 
 test('defaults reward counts to 1 when editing incomplete reward entries', async () => {
     const questId = 'quest-missing-reward-count';
+    const rewardItemId = 'custom/item-gamma';
+    const rewardItemName = 'Custom Item Gamma';
+    await addCustomItem(rewardItemId, rewardItemName);
     await db.quests.add({
         id: questId,
         title: 'Missing Reward Count Quest',
@@ -851,27 +883,29 @@ test('defaults reward counts to 1 when editing incomplete reward entries', async
                 options: [{ type: 'finish', text: 'Finish quest' }],
             },
         ],
-        rewards: [{ id: 'custom/item-gamma', count: null }],
+        rewards: [{ id: rewardItemId, count: null }],
     });
 
-    const { getByTestId } = render(QuestForm, {
+    const { getByTestId, findByText } = render(QuestForm, {
         props: {
             isEdit: true,
             questId,
         },
     });
 
+    await findByText(rewardItemName);
     await waitFor(() => {
-        expect((getByTestId('reward-item-id-0') as HTMLInputElement).value).toBe(
-            'custom/item-gamma'
-        );
         expect((getByTestId('reward-item-count-0') as HTMLInputElement).value).toBe('1');
     });
 });
 
 test('rounds reward counts when submitting', async () => {
     const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('rounded-reward-quest');
-    const { getByLabelText, getByText, getByTestId } = render(QuestForm);
+    const rewardItemId = 'custom/item-round';
+    const rewardItemName = 'Custom Item Round';
+    await addCustomItem(rewardItemId, rewardItemName);
+
+    const { getByLabelText, getByText, findByText } = render(QuestForm);
 
     await fireEvent.input(getByLabelText(/Title/i), {
         target: { value: 'Rounded Reward Quest' },
@@ -881,10 +915,8 @@ test('rounds reward counts when submitting', async () => {
     });
 
     await fireEvent.click(getByText('Add reward item'));
-    await fireEvent.input(getByTestId('reward-item-id-0'), {
-        target: { value: 'custom/item-round' },
-    });
-    await fireEvent.input(getByTestId('reward-item-count-0'), {
+    await selectItemByName({ getByLabelText, findByText }, rewardItemName);
+    await fireEvent.input(document.querySelector('[data-testid="reward-item-count-0"]')!, {
         target: { value: '2.6' },
     });
 
@@ -897,13 +929,17 @@ test('rounds reward counts when submitting', async () => {
     });
 
     const questPayload = addSpy.mock.calls[0]?.[0];
-    expect(questPayload.rewards).toEqual([{ id: 'custom/item-round', count: 3 }]);
+    expect(questPayload.rewards).toEqual([{ id: rewardItemId, count: 3 }]);
     addSpy.mockRestore();
 });
 
 test('clears rewards after creating a quest', async () => {
     const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('cleared-reward-quest');
-    const { getByLabelText, getByText, getByTestId, queryByTestId, findByText } = render(QuestForm);
+    const rewardItemId = 'custom/item-reset';
+    const rewardItemName = 'Custom Item Reset';
+    await addCustomItem(rewardItemId, rewardItemName);
+
+    const { getByLabelText, getByText, queryByLabelText, findByText } = render(QuestForm);
 
     await fireEvent.input(getByLabelText(/Title/i), {
         target: { value: 'Reward Reset Quest' },
@@ -913,10 +949,8 @@ test('clears rewards after creating a quest', async () => {
     });
 
     await fireEvent.click(getByText('Add reward item'));
-    await fireEvent.input(getByTestId('reward-item-id-0'), {
-        target: { value: 'custom/item-reset' },
-    });
-    await fireEvent.input(getByTestId('reward-item-count-0'), {
+    await selectItemByName({ getByLabelText, findByText }, rewardItemName);
+    await fireEvent.input(document.querySelector('[data-testid="reward-item-count-0"]')!, {
         target: { value: '3' },
     });
 
@@ -929,7 +963,7 @@ test('clears rewards after creating a quest', async () => {
     });
 
     await findByText('No rewards configured');
-    expect(queryByTestId('reward-item-id-0')).toBeNull();
+    expect(queryByLabelText('Search items')).toBeNull();
     addSpy.mockRestore();
 });
 
@@ -957,6 +991,9 @@ test('dispatches an error when quest creation fails', async () => {
 
 test('updates rewards when submitting an edited quest', async () => {
     const questId = 'quest-edit-reward';
+    const rewardItemId = 'custom/item-edit';
+    const rewardItemName = 'Custom Item Edit';
+    await addCustomItem(rewardItemId, rewardItemName);
     await db.quests.add({
         id: questId,
         title: 'Edit Reward Quest',
@@ -971,20 +1008,18 @@ test('updates rewards when submitting an edited quest', async () => {
                 options: [{ type: 'finish', text: 'Finish quest' }],
             },
         ],
-        rewards: [{ id: 'custom/item-edit', count: 2 }],
+        rewards: [{ id: rewardItemId, count: 2 }],
     });
 
     const updateSpy = vi.spyOn(db.quests, 'update').mockResolvedValueOnce(1);
-    const { getByTestId } = render(QuestForm, {
+    const { getByTestId, findByText } = render(QuestForm, {
         props: {
             isEdit: true,
             questId,
         },
     });
 
-    await waitFor(() => {
-        expect(getByTestId('reward-item-count-0')).toBeTruthy();
-    });
+    await findByText(rewardItemName);
 
     await fireEvent.input(getByTestId('reward-item-count-0'), {
         target: { value: '4' },
@@ -1001,7 +1036,7 @@ test('updates rewards when submitting an edited quest', async () => {
     expect(updateSpy).toHaveBeenCalledWith(
         questId,
         expect.objectContaining({
-            rewards: [{ id: 'custom/item-edit', count: 4 }],
+            rewards: [{ id: rewardItemId, count: 4 }],
             updatedAt: expect.any(String),
         })
     );

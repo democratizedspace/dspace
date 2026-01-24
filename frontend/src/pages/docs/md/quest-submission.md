@@ -23,7 +23,8 @@ You have two ways to submit your quest:
 If your quest requires custom items or processes, use the bundle submission workflow:
 
 1. **Create your quest** using the in-game editor at `/quests/create`
-    - Configure quest completion rewards, including any custom item IDs you plan to bundle
+    - Use the item picker to select reward items and counts
+    - Use the process picker when adding "Run process" dialogue options
 2. **Create related items** at `/items/create` if needed
 3. **Create related processes** at `/processes/create` if needed
 4. **Package everything into a bundle** following the [Custom Content Bundles](/docs/custom-bundles) format

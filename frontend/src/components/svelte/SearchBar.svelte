@@ -4,6 +4,8 @@
     const dispatch = createEventDispatcher();
 
     export let data = [];
+    export let placeholder = 'Search...';
+    export let ariaLabel = 'Search items';
 
     let searchQuery = '';
     let originalData = []; // Store a copy of the original data
@@ -23,12 +25,13 @@
             filteredItems = originalData; // Use original data when search bar is cleared
         } else {
             const words = searchQuery.toLowerCase().split(/\s+/);
+            const normalize = (value) => (value == null ? '' : String(value).toLowerCase());
             filteredItems = originalData.filter((item) => {
                 const itemText = [
-                    item.id?.toLowerCase() ?? '',
-                    item.name?.toLowerCase() ?? '',
-                    item.description?.toLowerCase() ?? '',
-                    item.price?.toLowerCase() ?? '',
+                    normalize(item.id),
+                    normalize(item.name),
+                    normalize(item.description),
+                    normalize(item.price),
                 ].join(' ');
                 return words.every((word) => itemText.includes(word));
             });
@@ -42,8 +45,8 @@
         <input
             type="text"
             bind:value={searchQuery}
-            placeholder="Search..."
-            aria-label="Search items"
+            {placeholder}
+            aria-label={ariaLabel}
             on:input={handleInput}
         />
     {:else}
