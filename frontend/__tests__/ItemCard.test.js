@@ -27,6 +27,10 @@ jest.mock('../../utils/gameState/inventory.js', () => ({ getItemCount: mockGetIt
 jest.mock('../src/utils/gameState/inventory.js', () => ({ getItemCount: mockGetItemCount }));
 
 describe('ItemCard component', () => {
+    beforeEach(() => {
+        mockGetItemCount.mockClear();
+    });
+
     it('renders the full description without truncation', () => {
         const { getByText } = render(ItemCard, {
             props: {
@@ -159,5 +163,18 @@ describe('ItemCard component', () => {
         expect(getByText('Count:')).toBeTruthy();
         expect(getByText('2')).toBeTruthy();
         expect(mockGetItemCount).toHaveBeenCalledWith('item-1');
+    });
+
+    it('renders the provided count without calling getItemCount', () => {
+        const { getByText } = render(ItemCard, {
+            props: {
+                item: mockItems[0],
+                count: 7,
+            },
+        });
+
+        expect(getByText('Count:')).toBeTruthy();
+        expect(getByText('7')).toBeTruthy();
+        expect(mockGetItemCount).not.toHaveBeenCalled();
     });
 });
