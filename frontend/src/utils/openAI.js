@@ -64,9 +64,16 @@ const isModelAccessError = (error) => {
             error.error?.status
     );
     const code = error.code ?? error?.error?.code ?? error?.response?.data?.error?.code;
-    const message = typeof error.message === 'string' ? error.message.toLowerCase() : undefined;
+    const message = typeof error.message === 'string' ? error.message.toLowerCase() : '';
+    const hasMissingModelMessage =
+        message.includes('model') &&
+        (message.includes('not found') || message.includes('does not exist'));
 
-    if (status === 404) {
+    if (code === 'model_not_found') {
+        return true;
+    }
+
+    if (status === 404 && hasMissingModelMessage) {
         return true;
     }
 
@@ -74,11 +81,7 @@ const isModelAccessError = (error) => {
         return true;
     }
 
-    if (code === 'model_not_found') {
-        return true;
-    }
-
-    return Boolean(message) && message.includes('model') && message.includes('does not exist');
+    return hasMissingModelMessage;
 };
 
 const extractErrorDetails = (error) => {
