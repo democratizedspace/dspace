@@ -61,7 +61,7 @@ describe('ProcessSelector Component', () => {
         });
 
         component.$on('select', (event) => {
-            selectedId = event.detail.itemId;
+            selectedId = event.detail.processId;
         });
 
         await new Promise((resolve) => setTimeout(resolve, 0));

@@ -1125,6 +1125,7 @@
                     items={allItems}
                     selectedItemId={rewardEntry.id}
                     label="Select reward item"
+                    allowCustomId
                     testId={`reward-item-selector-${rewardIndex}`}
                     on:select={(event) =>
                         updateRewardItemField(rewardIndex, 'id', event.detail.itemId)}
@@ -1285,13 +1286,14 @@
                                         processes={allProcesses}
                                         selectedProcessId={option.process}
                                         label="Select process"
+                                        allowCustomId
                                         testId={`option-process-selector-${index}-${optionIndex}`}
                                         on:select={(event) =>
                                             updateOptionField(
                                                 index,
                                                 optionIndex,
                                                 'process',
-                                                event.detail.itemId
+                                                event.detail.processId
                                             )}
                                     />
                                 {/if}
@@ -1315,6 +1317,7 @@
                                                 items={allItems}
                                                 selectedItemId={itemEntry.id}
                                                 label="Select required item"
+                                                allowCustomId
                                                 testId={`requires-item-selector-${index}-${optionIndex}-${reqIndex}`}
                                                 on:select={(event) =>
                                                     updateOptionItemField(
@@ -1387,6 +1390,7 @@
                                                     items={allItems}
                                                     selectedItemId={grantEntry.id}
                                                     label="Select grant item"
+                                                    allowCustomId
                                                     testId={`grants-item-selector-${index}-${optionIndex}-${grantIndex}`}
                                                     on:select={(event) =>
                                                         updateOptionItemField(
@@ -1483,9 +1487,14 @@
                                     processes={allProcesses}
                                     selectedProcessId={node.newOption.process || ''}
                                     label="Select process"
+                                    allowCustomId
                                     testId={`option-process-selector-${index}-draft`}
                                     on:select={(event) =>
-                                        updateOptionDraft(index, 'process', event.detail.itemId)}
+                                        updateOptionDraft(
+                                            index,
+                                            'process',
+                                            event.detail.processId
+                                        )}
                                 />
                             {/if}
                             <button

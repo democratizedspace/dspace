@@ -166,4 +166,35 @@ describe('ItemSelector Component', () => {
         const selectedItem = container.querySelector('.selected-item');
         expect(selectedItem).toBeFalsy();
     });
+
+    test('should allow selecting a custom item ID', async () => {
+        let selectedId = null;
+        const component = new ItemSelector({
+            target: container,
+            props: {
+                items: mockItems,
+                selectedItemId: '',
+                label: 'Select Item',
+                allowCustomId: true,
+            },
+        });
+
+        component.$on('select', (event) => {
+            selectedId = event.detail.itemId;
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        const customInput = container.querySelector('.custom-id-input input');
+        const customButton = container.querySelector('.custom-id-input button');
+        customInput.value = 'custom-item-42';
+        customInput.dispatchEvent(new Event('input'));
+        customButton.click();
+
+        expect(selectedId).toBe('custom-item-42');
+        const selectedItem = container.querySelector('.selected-item');
+        expect(selectedItem).toBeTruthy();
+        expect(selectedItem.textContent).toContain('custom-item-42');
+        expect(selectedItem.textContent).toContain('Custom ID');
+    });
 });

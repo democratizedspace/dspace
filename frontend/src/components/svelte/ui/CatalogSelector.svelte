@@ -14,12 +14,17 @@
     export let getDescription = (item) => item?.description ?? '';
     export let getImage = (item) => item?.image ?? '';
     export let getMeta = (item) => '';
+    export let allowCustomId = false;
+    export let customIdLabel = 'Custom ID';
+    export let customIdPlaceholder = 'Enter custom ID';
+    export let customIdButtonLabel = 'Use ID';
 
     const dispatch = createEventDispatcher();
     const filteredItems = writable([]);
     let isExpanded = !selectedId;
     let isClientSide = false;
     let normalizedItems = [];
+    let customId = '';
 
     $: normalizedItems = (Array.isArray(items) ? items : []).map((item) => ({
         item,
@@ -45,6 +50,15 @@
         dispatch('select', { itemId, item: selectedItem });
     }
 
+    function handleCustomSelect() {
+        const trimmedId = customId.trim();
+        if (!trimmedId) {
+            return;
+        }
+        handleSelect(trimmedId);
+        customId = '';
+    }
+
     function toggleExpanded() {
         isExpanded = !isExpanded;
     }
@@ -54,6 +68,7 @@
     }
 
     $: selectedItem = normalizedItems.find((item) => item.id === selectedId);
+    $: isCustomSelection = Boolean(allowCustomId && selectedId && !selectedItem);
 </script>
 
 <div
@@ -99,17 +114,37 @@
                         </button>
                     {/each}
                 </div>
+                {#if allowCustomId}
+                    <div class="custom-id">
+                        <label class="custom-id-label">{customIdLabel}</label>
+                        <div class="custom-id-input">
+                            <input
+                                type="text"
+                                placeholder={customIdPlaceholder}
+                                bind:value={customId}
+                                aria-label={customIdLabel}
+                                on:keydown={(event) =>
+                                    event.key === 'Enter' ? handleCustomSelect() : undefined}
+                            />
+                            <button type="button" on:click={handleCustomSelect}>
+                                {customIdButtonLabel}
+                            </button>
+                        </div>
+                    </div>
+                {/if}
             </div>
-        {:else if selectedItem}
+        {:else if selectedItem || isCustomSelection}
             <div class="selected-item" id="item-select-control">
                 <div class="item-content">
-                    {#if selectedItem.image}
+                    {#if selectedItem?.image}
                         <img src={selectedItem.image} alt={selectedItem.name} />
                     {/if}
                     <div class="item-info">
-                        <h3>{selectedItem.name}</h3>
-                        {#if selectedItem.meta}
+                        <h3>{selectedItem?.name ?? selectedId}</h3>
+                        {#if selectedItem?.meta}
                             <p class="meta">{selectedItem.meta}</p>
+                        {:else if isCustomSelection}
+                            <p class="meta">Custom ID</p>
                         {/if}
                     </div>
                 </div>
@@ -237,6 +272,44 @@
         margin: 4px 0 0 0;
         font-size: 12px;
         color: #b8f0b8;
+    }
+
+    .custom-id {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid #2f5b2f;
+    }
+
+    .custom-id-label {
+        display: block;
+        font-weight: bold;
+        font-size: 14px;
+        margin-bottom: 6px;
+        color: #d0ffd0;
+    }
+
+    .custom-id-input {
+        display: flex;
+        gap: 8px;
+    }
+
+    .custom-id-input input {
+        flex: 1;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #68d46d;
+        background: #163316;
+        color: #d0ffd0;
+    }
+
+    .custom-id-input button {
+        padding: 8px 12px;
+        border-radius: 4px;
+        border: none;
+        background: #2f5b2f;
+        color: #d0ffd0;
+        cursor: pointer;
+        font-weight: bold;
     }
 
     .selected-item {

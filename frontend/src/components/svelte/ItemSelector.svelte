@@ -6,6 +6,10 @@
     export let label = 'Select Item';
     export let items = [];
     export let testId = '';
+    export let allowCustomId = false;
+    export let customIdLabel = 'Custom item ID';
+    export let customIdPlaceholder = 'Enter custom item ID';
+    export let customIdButtonLabel = 'Use custom ID';
 
     const dispatch = createEventDispatcher();
 
@@ -24,6 +28,10 @@
     getName={(item) => item?.name ?? ''}
     getDescription={(item) => item?.description ?? ''}
     getImage={(item) => item?.image ?? ''}
+    {allowCustomId}
+    {customIdLabel}
+    {customIdPlaceholder}
+    {customIdButtonLabel}
     {testId}
     on:select={handleSelect}
 />
