@@ -155,9 +155,10 @@ quests.
 > **Note:** The quest editor now lets you build branching dialogue directly in the browser. The current
 > implementation in `QuestForm.svelte` supports quest metadata (title, description, image), selecting
 > required quests, defining an NPC, creating dialogue nodes with `goto` or `finish` options, and
-> configuring process actions or item gates on each option. You can choose the start node and manage
-> options without writing JSON, and the preview still updates live for uploaded images. The form
-> remains mobile‑responsive and stacks action buttons on small screens.
+> configuring process actions or item gates on each option with built-in pickers that show item and
+> process details. You can choose the start node and manage options without writing JSON, and the
+> preview still updates live for uploaded images. The form remains mobile‑responsive and stacks
+> action buttons on small screens.
 
 The editor focuses on the fundamentals today and exposes controls to gate dialogue options on
 specific items or grant rewards inline. You can run `npm run generate-quest --template basic`

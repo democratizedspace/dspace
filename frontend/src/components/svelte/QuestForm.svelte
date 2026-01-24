@@ -2,6 +2,8 @@
     import { createEventDispatcher, onMount } from 'svelte';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
     import QuestPreview from './QuestPreview.svelte';
+    import ItemSelector from './ItemSelector.svelte';
+    import ProcessSelector from './ProcessSelector.svelte';
     import {
         validateQuestData,
         validateQuestDependencies,
@@ -1015,16 +1017,6 @@
 </script>
 
 <form on:submit={handleSubmit} class="quest-form" data-hydrated={isHydrated ? 'true' : 'false'}>
-    <datalist id="quest-option-item-suggestions">
-        {#each allItems as item (item.id)}
-            <option value={item.id}>{item.name}</option>
-        {/each}
-    </datalist>
-    <datalist id="quest-option-process-suggestions">
-        {#each allProcesses as process (process.id)}
-            <option value={process.id}>{process.title}</option>
-        {/each}
-    </datalist>
     <div class="form-group">
         <label for="title">Title*</label>
         <input
@@ -1104,28 +1096,25 @@
     <div class="form-group">
         <h3 class="section-title">Quest Rewards</h3>
         <p class="item-hint">
-            Add item IDs and quantities granted when the quest is completed. Custom item IDs are
-            supported.
+            Choose items and quantities granted when the quest is completed. Custom items you have
+            created are listed alongside built-in items.
         </p>
         {#if rewards.length === 0}
             <p class="item-hint">No rewards configured</p>
         {/if}
         {#each rewards as rewardEntry, rewardIndex (rewardIndex)}
             <div class="item-row">
-                <label class="sr-only" for={`quest-reward-${rewardIndex}-id`}>Reward item ID</label>
-                <input
-                    id={`quest-reward-${rewardIndex}-id`}
-                    type="text"
-                    class="item-id-input"
-                    list="quest-option-item-suggestions"
-                    value={rewardEntry.id}
-                    on:input={(event) =>
-                        updateRewardItemField(rewardIndex, 'id', event.target.value)}
-                    data-testid={`reward-item-id-${rewardIndex}`}
+                <ItemSelector
+                    items={allItems}
+                    selectedItemId={rewardEntry.id}
+                    label="Reward item"
+                    testId={`reward-item-selector-${rewardIndex}`}
+                    on:select={(event) =>
+                        updateRewardItemField(rewardIndex, 'id', event.detail.itemId)}
                 />
-                <label class="sr-only" for={`quest-reward-${rewardIndex}-count`}
-                    >Reward item count</label
-                >
+                <label class="sr-only" for={`quest-reward-${rewardIndex}-count`}>
+                    Reward item count
+                </label>
                 <input
                     id={`quest-reward-${rewardIndex}-count`}
                     type="number"
@@ -1275,20 +1264,17 @@
                                             )}
                                     />
                                 {:else if option.type === 'process'}
-                                    <label for={`option-${node.id}-${optionIndex}-process`}
-                                        >Process ID</label
-                                    >
-                                    <input
-                                        id={`option-${node.id}-${optionIndex}-process`}
-                                        type="text"
-                                        list="quest-option-process-suggestions"
-                                        value={option.process}
-                                        on:input={(event) =>
+                                    <ProcessSelector
+                                        processes={allProcesses}
+                                        selectedProcessId={option.process}
+                                        label="Process"
+                                        testId={`option-process-selector-${index}-${optionIndex}`}
+                                        on:select={(event) =>
                                             updateOptionField(
                                                 index,
                                                 optionIndex,
                                                 'process',
-                                                event.target.value
+                                                event.detail.processId
                                             )}
                                     />
                                 {/if}
@@ -1308,27 +1294,20 @@
                                     {/if}
                                     {#each option.requiresItems as itemEntry, reqIndex (reqIndex)}
                                         <div class="item-row">
-                                            <label
-                                                class="sr-only"
-                                                for={`option-${node.id}-${optionIndex}-requires-${reqIndex}-id`}
-                                                >Required item ID</label
-                                            >
-                                            <input
-                                                id={`option-${node.id}-${optionIndex}-requires-${reqIndex}-id`}
-                                                type="text"
-                                                class="item-id-input"
-                                                list="quest-option-item-suggestions"
-                                                value={itemEntry.id}
-                                                on:input={(event) =>
+                                            <ItemSelector
+                                                items={allItems}
+                                                selectedItemId={itemEntry.id}
+                                                label="Required item"
+                                                testId={`option-required-item-selector-${index}-${optionIndex}-${reqIndex}`}
+                                                on:select={(event) =>
                                                     updateOptionItemField(
                                                         index,
                                                         optionIndex,
                                                         'requiresItems',
                                                         reqIndex,
                                                         'id',
-                                                        event.target.value
+                                                        event.detail.itemId
                                                     )}
-                                                data-testid={`requires-item-id-${index}-${optionIndex}-${reqIndex}`}
                                             />
                                             <label
                                                 class="sr-only"
@@ -1387,27 +1366,20 @@
                                         {/if}
                                         {#each option.grantsItems as grantEntry, grantIndex (grantIndex)}
                                             <div class="item-row">
-                                                <label
-                                                    class="sr-only"
-                                                    for={`option-${node.id}-${optionIndex}-grants-${grantIndex}-id`}
-                                                    >Granted item ID</label
-                                                >
-                                                <input
-                                                    id={`option-${node.id}-${optionIndex}-grants-${grantIndex}-id`}
-                                                    type="text"
-                                                    class="item-id-input"
-                                                    list="quest-option-item-suggestions"
-                                                    value={grantEntry.id}
-                                                    on:input={(event) =>
+                                                <ItemSelector
+                                                    items={allItems}
+                                                    selectedItemId={grantEntry.id}
+                                                    label="Grant item"
+                                                    testId={`option-grant-item-selector-${index}-${optionIndex}-${grantIndex}`}
+                                                    on:select={(event) =>
                                                         updateOptionItemField(
                                                             index,
                                                             optionIndex,
                                                             'grantsItems',
                                                             grantIndex,
                                                             'id',
-                                                            event.target.value
+                                                            event.detail.itemId
                                                         )}
-                                                    data-testid={`grants-item-id-${index}-${optionIndex}-${grantIndex}`}
                                                 />
                                                 <label
                                                     class="sr-only"
@@ -1490,14 +1462,13 @@
                                         updateOptionDraft(index, 'goto', event.target.value)}
                                 />
                             {:else if (node.newOption.type || 'goto') === 'process'}
-                                <label for={`option-process-${node.id}`}>Process ID</label>
-                                <input
-                                    id={`option-process-${node.id}`}
-                                    type="text"
-                                    list="quest-option-process-suggestions"
-                                    value={node.newOption.process || ''}
-                                    on:input={(event) =>
-                                        updateOptionDraft(index, 'process', event.target.value)}
+                                <ProcessSelector
+                                    processes={allProcesses}
+                                    selectedProcessId={node.newOption.process || ''}
+                                    label="Process"
+                                    testId={`option-process-draft-selector-${index}`}
+                                    on:select={(event) =>
+                                        updateOptionDraft(index, 'process', event.detail.processId)}
                                 />
                             {/if}
                             <button
@@ -1856,10 +1827,6 @@
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 8px;
         align-items: center;
-    }
-
-    .item-id-input {
-        width: 100%;
     }
 
     .item-hint {

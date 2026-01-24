@@ -47,6 +47,37 @@ const clearQuests = async () => {
     await Promise.all(quests.map((quest) => db.quests.delete(quest.id)));
 };
 
+const addCustomItem = async (id: string, name: string) => {
+    await db.items.add({
+        id,
+        name,
+        description: `${name} description`,
+    });
+};
+
+const selectItemOption = async (testId: string, itemName: string) => {
+    await waitFor(() => {
+        const selector = document.querySelector(`[data-testid="${testId}"]`);
+        expect(selector).toBeTruthy();
+    });
+
+    const selector = document.querySelector(`[data-testid="${testId}"]`);
+    if (!selector) {
+        throw new Error(`Missing selector ${testId}`);
+    }
+
+    await waitFor(() => {
+        const options = selector.querySelectorAll('.item-option');
+        expect(options.length).toBeGreaterThan(0);
+    });
+
+    const option = Array.from(selector.querySelectorAll('.item-option')).find((entry) =>
+        entry.textContent?.includes(itemName)
+    );
+    expect(option).toBeTruthy();
+    await fireEvent.click(option as Element);
+};
+
 test('allows adding dialogue nodes and options', async () => {
     const { getByLabelText, getByText, getAllByLabelText, getAllByText } = render(QuestForm);
 
@@ -474,17 +505,18 @@ test('handles quest load failures when no existing quests are provided', async (
     });
 });
 
-test('includes custom processes in the process datalist', async () => {
+test('includes custom processes in the process selector', async () => {
     const customProcessId = 'custom-process';
     await db.processes.add({
         id: customProcessId,
         title: 'Custom Process',
-        duration: 30,
+        description: 'Custom process description',
+        duration: '30m',
     });
 
     vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValueOnce([]);
 
-    render(QuestForm, {
+    const { getAllByLabelText } = render(QuestForm, {
         props: {
             existingQuests: [],
             isEdit: false,
@@ -493,12 +525,22 @@ test('includes custom processes in the process datalist', async () => {
     });
 
     await waitFor(() => {
-        const datalist = document.querySelector(
-            '#quest-option-process-suggestions'
-        ) as HTMLDataListElement | null;
-        expect(datalist).toBeTruthy();
-        const optionValues = Array.from(datalist?.options ?? []).map((option) => option.value);
-        expect(optionValues).toContain(customProcessId);
+        const typeSelects = getAllByLabelText(/Type/i) as HTMLSelectElement[];
+        expect(typeSelects.length).toBeGreaterThan(0);
+        typeSelects[0].value = 'process';
+        typeSelects[0].dispatchEvent(new Event('change'));
+    });
+
+    await waitFor(() => {
+        const selector = document.querySelector(
+            '[data-testid="option-process-selector-0-0"]'
+        ) as HTMLElement | null;
+        expect(selector).toBeTruthy();
+        const optionText = Array.from(selector?.querySelectorAll('.item-option') ?? [])
+            .map((option) => option.textContent ?? '')
+            .join(' ');
+        expect(optionText).toContain('Custom Process');
+        expect(optionText).toContain('Duration: 30m');
     });
 });
 
@@ -523,14 +565,35 @@ test('handles item and process list failures gracefully', async () => {
     });
 
     await waitFor(() => {
-        const itemDatalist = document.querySelector(
-            '#quest-option-item-suggestions'
-        ) as HTMLDataListElement | null;
-        const processDatalist = document.querySelector(
-            '#quest-option-process-suggestions'
-        ) as HTMLDataListElement | null;
-        expect(itemDatalist?.options).toHaveLength(0);
-        expect(processDatalist?.options).toHaveLength(0);
+        const addRewardButton = document.querySelector('button.add-item-button');
+        expect(addRewardButton).toBeTruthy();
+    });
+
+    const addRewardButton = document.querySelector('button.add-item-button') as HTMLButtonElement;
+    await fireEvent.click(addRewardButton);
+
+    await waitFor(() => {
+        const rewardSelector = document.querySelector(
+            '[data-testid="reward-item-selector-0"]'
+        ) as HTMLElement | null;
+        expect(rewardSelector).toBeTruthy();
+        expect(rewardSelector?.querySelectorAll('.item-option')).toHaveLength(0);
+    });
+
+    const typeSelects = Array.from(document.querySelectorAll('select')) as HTMLSelectElement[];
+    const optionTypeSelect = typeSelects.find((select) => select.id.includes('-type'));
+    expect(optionTypeSelect).toBeTruthy();
+    if (optionTypeSelect) {
+        optionTypeSelect.value = 'process';
+        optionTypeSelect.dispatchEvent(new Event('change'));
+    }
+
+    await waitFor(() => {
+        const processSelector = document.querySelector(
+            '[data-testid="option-process-selector-0-0"]'
+        ) as HTMLElement | null;
+        expect(processSelector).toBeTruthy();
+        expect(processSelector?.querySelectorAll('.item-option')).toHaveLength(0);
     });
 
     await waitFor(() => {
@@ -629,6 +692,7 @@ test('keeps selected quest requirements in create mode', async () => {
 });
 
 test('submits quest rewards with custom item IDs', async () => {
+    await addCustomItem('custom/item-alpha', 'Custom Alpha');
     const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('reward-quest');
     const { getByLabelText, getByText, getByTestId } = render(QuestForm);
 
@@ -640,9 +704,7 @@ test('submits quest rewards with custom item IDs', async () => {
     });
 
     await fireEvent.click(getByText('Add reward item'));
-    await fireEvent.input(getByTestId('reward-item-id-0'), {
-        target: { value: 'custom/item-alpha' },
-    });
+    await selectItemOption('reward-item-selector-0', 'Custom Alpha');
     await fireEvent.input(getByTestId('reward-item-count-0'), {
         target: { value: '2' },
     });
@@ -680,6 +742,7 @@ test('shows a validation error for invalid reward entries', async () => {
 });
 
 test('rejects rewards with non-numeric counts', async () => {
+    await addCustomItem('custom/item-count', 'Custom Count Item');
     const { getByLabelText, getByText, getByTestId, findByText } = render(QuestForm);
 
     await fireEvent.input(getByLabelText(/Title/i), {
@@ -690,9 +753,7 @@ test('rejects rewards with non-numeric counts', async () => {
     });
 
     await fireEvent.click(getByText('Add reward item'));
-    await fireEvent.input(getByTestId('reward-item-id-0'), {
-        target: { value: 'custom/item-count' },
-    });
+    await selectItemOption('reward-item-selector-0', 'Custom Count Item');
     await fireEvent.input(getByTestId('reward-item-count-0'), {
         target: { value: 'not-a-number' },
     });
@@ -705,6 +766,7 @@ test('rejects rewards with non-numeric counts', async () => {
 });
 
 test('loads existing rewards when editing a quest', async () => {
+    await addCustomItem('custom/item-beta', 'Custom Beta');
     const questId = 'quest-with-reward';
     await db.quests.add({
         id: questId,
@@ -730,9 +792,8 @@ test('loads existing rewards when editing a quest', async () => {
     });
 
     await waitFor(() => {
-        expect((getByTestId('reward-item-id-0') as HTMLInputElement).value).toBe(
-            'custom/item-beta'
-        );
+        const selector = getByTestId('reward-item-selector-0');
+        expect(selector.textContent).toContain('Custom Beta');
         expect((getByTestId('reward-item-count-0') as HTMLInputElement).value).toBe('3');
     });
 });
@@ -741,15 +802,16 @@ test('removes reward items and shows the empty state', async () => {
     const { getByText, getByTestId, queryByTestId, findByText } = render(QuestForm);
 
     await fireEvent.click(getByText('Add reward item'));
-    expect(getByTestId('reward-item-id-0')).toBeTruthy();
+    expect(getByTestId('reward-item-selector-0')).toBeTruthy();
 
     await fireEvent.click(getByTestId('remove-reward-item-0'));
 
     await findByText('No rewards configured');
-    expect(queryByTestId('reward-item-id-0')).toBeNull();
+    expect(queryByTestId('reward-item-selector-0')).toBeNull();
 });
 
 test('clears reward validation errors after fixing inputs', async () => {
+    await addCustomItem('custom/item-fixed', 'Custom Fixed');
     const { getByLabelText, getByText, getByTestId, findByText, queryByText } = render(QuestForm);
 
     await fireEvent.input(getByLabelText(/Title/i), {
@@ -767,9 +829,7 @@ test('clears reward validation errors after fixing inputs', async () => {
 
     await findByText('Rewards require an item and positive count');
 
-    await fireEvent.input(getByTestId('reward-item-id-0'), {
-        target: { value: 'custom/item-fixed' },
-    });
+    await selectItemOption('reward-item-selector-0', 'Custom Fixed');
     await fireEvent.input(getByTestId('reward-item-count-0'), {
         target: { value: '' },
     });
@@ -837,6 +897,7 @@ test('shows no rewards when editing a quest without rewards', async () => {
 });
 
 test('defaults reward counts to 1 when editing incomplete reward entries', async () => {
+    await addCustomItem('custom/item-gamma', 'Custom Gamma');
     const questId = 'quest-missing-reward-count';
     await db.quests.add({
         id: questId,
@@ -862,14 +923,13 @@ test('defaults reward counts to 1 when editing incomplete reward entries', async
     });
 
     await waitFor(() => {
-        expect((getByTestId('reward-item-id-0') as HTMLInputElement).value).toBe(
-            'custom/item-gamma'
-        );
+        expect(getByTestId('reward-item-selector-0').textContent).toContain('Custom Gamma');
         expect((getByTestId('reward-item-count-0') as HTMLInputElement).value).toBe('1');
     });
 });
 
 test('rounds reward counts when submitting', async () => {
+    await addCustomItem('custom/item-round', 'Custom Round');
     const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('rounded-reward-quest');
     const { getByLabelText, getByText, getByTestId } = render(QuestForm);
 
@@ -881,9 +941,7 @@ test('rounds reward counts when submitting', async () => {
     });
 
     await fireEvent.click(getByText('Add reward item'));
-    await fireEvent.input(getByTestId('reward-item-id-0'), {
-        target: { value: 'custom/item-round' },
-    });
+    await selectItemOption('reward-item-selector-0', 'Custom Round');
     await fireEvent.input(getByTestId('reward-item-count-0'), {
         target: { value: '2.6' },
     });
@@ -902,6 +960,7 @@ test('rounds reward counts when submitting', async () => {
 });
 
 test('clears rewards after creating a quest', async () => {
+    await addCustomItem('custom/item-reset', 'Custom Reset');
     const addSpy = vi.spyOn(db.quests, 'add').mockResolvedValueOnce('cleared-reward-quest');
     const { getByLabelText, getByText, getByTestId, queryByTestId, findByText } = render(QuestForm);
 
@@ -913,9 +972,7 @@ test('clears rewards after creating a quest', async () => {
     });
 
     await fireEvent.click(getByText('Add reward item'));
-    await fireEvent.input(getByTestId('reward-item-id-0'), {
-        target: { value: 'custom/item-reset' },
-    });
+    await selectItemOption('reward-item-selector-0', 'Custom Reset');
     await fireEvent.input(getByTestId('reward-item-count-0'), {
         target: { value: '3' },
     });
@@ -929,7 +986,7 @@ test('clears rewards after creating a quest', async () => {
     });
 
     await findByText('No rewards configured');
-    expect(queryByTestId('reward-item-id-0')).toBeNull();
+    expect(queryByTestId('reward-item-selector-0')).toBeNull();
     addSpy.mockRestore();
 });
 
@@ -956,6 +1013,7 @@ test('dispatches an error when quest creation fails', async () => {
 });
 
 test('updates rewards when submitting an edited quest', async () => {
+    await addCustomItem('custom/item-edit', 'Custom Edit');
     const questId = 'quest-edit-reward';
     await db.quests.add({
         id: questId,

@@ -4,6 +4,15 @@
     const dispatch = createEventDispatcher();
 
     export let data = [];
+    export let searchLabel = 'Search items';
+    export let searchPlaceholder = 'Search...';
+    export let getSearchText = (item) =>
+        [
+            item.id?.toLowerCase() ?? '',
+            item.name?.toLowerCase() ?? '',
+            item.description?.toLowerCase() ?? '',
+            item.price?.toLowerCase() ?? '',
+        ].join(' ');
 
     let searchQuery = '';
     let originalData = []; // Store a copy of the original data
@@ -24,12 +33,7 @@
         } else {
             const words = searchQuery.toLowerCase().split(/\s+/);
             filteredItems = originalData.filter((item) => {
-                const itemText = [
-                    item.id?.toLowerCase() ?? '',
-                    item.name?.toLowerCase() ?? '',
-                    item.description?.toLowerCase() ?? '',
-                    item.price?.toLowerCase() ?? '',
-                ].join(' ');
+                const itemText = String(getSearchText(item) ?? '').toLowerCase();
                 return words.every((word) => itemText.includes(word));
             });
         }
@@ -42,8 +46,8 @@
         <input
             type="text"
             bind:value={searchQuery}
-            placeholder="Search..."
-            aria-label="Search items"
+            placeholder={searchPlaceholder}
+            aria-label={searchLabel}
             on:input={handleInput}
         />
     {:else}
