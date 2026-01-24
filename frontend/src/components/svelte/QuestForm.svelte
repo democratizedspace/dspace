@@ -1490,11 +1490,7 @@
                                     allowCustomId
                                     testId={`option-process-selector-${index}-draft`}
                                     on:select={(event) =>
-                                        updateOptionDraft(
-                                            index,
-                                            'process',
-                                            event.detail.processId
-                                        )}
+                                        updateOptionDraft(index, 'process', event.detail.processId)}
                                 />
                             {/if}
                             <button
