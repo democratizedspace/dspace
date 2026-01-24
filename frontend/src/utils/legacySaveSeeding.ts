@@ -267,11 +267,6 @@ export const clearSeededLegacySaves = (): void => {
 export const clearV3GameStateStorage = async (): Promise<boolean> => {
     if (!isBrowser) return false;
 
-    LEGACY_V2_STORAGE_KEYS.forEach((key) => {
-        localStorage.removeItem(key);
-    });
-    localStorage.removeItem(LEGACY_V2_SEED_SKIP_KEY);
-
     try {
         localStorage.removeItem('root');
         localStorage.removeItem('state');
