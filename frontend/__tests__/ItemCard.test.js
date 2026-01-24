@@ -77,6 +77,20 @@ describe('ItemCard component', () => {
         expect(getByText('Components')).toBeTruthy();
     });
 
+    it('prefers category over custom fallback when both are present', () => {
+        const { getByText } = render(ItemCard, {
+            props: {
+                item: {
+                    ...mockItems[0],
+                    custom: true,
+                },
+            },
+        });
+
+        expect(getByText('Category:')).toBeTruthy();
+        expect(getByText('Tools')).toBeTruthy();
+    });
+
     it('renders Custom when the item is custom without a category', () => {
         const { getByText } = render(ItemCard, {
             props: {
