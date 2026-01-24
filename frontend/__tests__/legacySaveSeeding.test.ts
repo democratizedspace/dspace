@@ -138,12 +138,14 @@ describe('legacy save seeding utilities', () => {
             'gameStateBackup',
             JSON.stringify({ versionNumberString: '2.1', inventory: { 1: 1 } })
         );
+        localStorage.setItem('legacyV2Seeded', 'true');
 
         const clearedLegacy = await clearV3GameStateStorage();
 
         expect(clearedLegacy).toBe(true);
         expect(localStorage.getItem('gameState')).not.toBeNull();
         expect(localStorage.getItem('gameStateBackup')).not.toBeNull();
+        expect(localStorage.getItem('legacyV2Seeded')).toBe('true');
 
         localStorage.setItem(
             'gameState',
@@ -153,11 +155,13 @@ describe('legacy save seeding utilities', () => {
             'gameStateBackup',
             JSON.stringify({ versionNumberString: '3.0', inventory: { 1: 1 } })
         );
+        localStorage.setItem('legacyV2Seeded', 'true');
 
         const clearedV3 = await clearV3GameStateStorage();
 
         expect(clearedV3).toBe(true);
         expect(localStorage.getItem('gameState')).toBeNull();
         expect(localStorage.getItem('gameStateBackup')).toBeNull();
+        expect(localStorage.getItem('legacyV2Seeded')).toBeNull();
     });
 });
