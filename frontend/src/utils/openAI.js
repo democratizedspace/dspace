@@ -96,12 +96,19 @@ const extractErrorDetails = (error) => {
 };
 
 export const describeOpenAIError = (error) => {
+    return getOpenAIErrorSummary(error).message;
+};
+
+export const getOpenAIErrorSummary = (error) => {
     const { status, code, type, message } = extractErrorDetails(error);
     const numericStatus = toNumericStatus(status);
     const normalizedMessage = message?.toLowerCase() ?? '';
 
     if (numericStatus === 401) {
-        return 'OpenAI rejected your API key. Update your key in Settings and try again.';
+        return {
+            type: 'auth',
+            message: 'OpenAI rejected your API key. Update your key in Settings and try again.',
+        };
     }
 
     if (numericStatus === 429 || code === 'rate_limit_exceeded') {
@@ -110,31 +117,44 @@ export const describeOpenAIError = (error) => {
             code === 'insufficient_quota' ||
             type === 'insufficient_quota'
         ) {
-            return (
-                'OpenAI could not generate a reply because this account is out of credits. ' +
-                'Add billing or wait for your quota to reset, then try again.'
-            );
+            return {
+                type: 'quota',
+                message:
+                    'OpenAI could not generate a reply because this account is out of credits. ' +
+                    'Add billing or wait for your quota to reset, then try again.',
+            };
         }
 
-        return 'OpenAI rate limited this request. Please wait a few seconds and try again.';
+        return {
+            type: 'rate_limit',
+            message: 'OpenAI rate limited this request. Please wait a few seconds and try again.',
+        };
     }
 
     if (numericStatus === 403 || code === 'insufficient_permissions') {
-        return (
-            'OpenAI denied access to the requested model. Try another model or check your ' +
-            'OpenAI account permissions.'
-        );
+        return {
+            type: 'permission',
+            message:
+                'OpenAI denied access to the requested model. Try another model or check your ' +
+                'OpenAI account permissions.',
+        };
     }
 
     if (typeof numericStatus === 'number' && numericStatus >= 500) {
-        return 'OpenAI is unavailable right now. Please try again in a moment.';
+        return {
+            type: 'server',
+            message: 'OpenAI is unavailable right now. Please try again in a moment.',
+        };
     }
 
     if (normalizedMessage.includes('network') || normalizedMessage.includes('fetch')) {
-        return 'We could not reach OpenAI. Check your connection and try again.';
+        return {
+            type: 'network',
+            message: 'We could not reach OpenAI. Check your connection and try again.',
+        };
     }
 
-    return defaultOpenAIErrorMessage;
+    return { type: 'unknown', message: defaultOpenAIErrorMessage };
 };
 
 async function createChatResponse(openai, input) {

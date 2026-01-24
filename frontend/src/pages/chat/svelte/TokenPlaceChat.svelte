@@ -10,6 +10,7 @@
     const messageHistory = writable([]);
     let showSpinner = false;
     let messageCounter = 0;
+    let errorBanner = null;
     // Default dChat persona; callers can override for other NPCs/personas.
     export let welcomeMessage =
         "Hello, adventurer! I'm dChat! I'm here to answer any questions you may have about DSPACE or nearly any other topic. I may accidentally generate incorrect information, so please double-check anything I say.";
@@ -31,6 +32,43 @@
         messages.update((all) => [...all, timestampedMessage]);
     }
 
+    function getTokenPlaceErrorSummary(error) {
+        const message = error?.message || '';
+        const normalizedMessage = message.toLowerCase();
+
+        if (normalizedMessage.includes('disabled')) {
+            return {
+                type: 'disabled',
+                message:
+                    'token.place chat is disabled. Enable it in Settings or set the token.place ' +
+                    'flag for this environment.',
+            };
+        }
+
+        if (
+            normalizedMessage.includes('failed to fetch') ||
+            normalizedMessage.includes('network') ||
+            normalizedMessage.includes('fetch')
+        ) {
+            return {
+                type: 'network',
+                message: 'We could not reach token.place. Check your connection and try again.',
+            };
+        }
+
+        if (normalizedMessage.includes('api request failed')) {
+            return {
+                type: 'provider',
+                message: 'token.place returned an error. Please try again in a moment.',
+            };
+        }
+
+        return {
+            type: 'unknown',
+            message: 'token.place hit an unexpected error. Please try again shortly.',
+        };
+    }
+
     async function submitMessage() {
         const userMessage = {
             role: 'user',
@@ -41,6 +79,7 @@
         addMessage(userMessage);
         const historyForApi = [...$messageHistory];
         showSpinner = true;
+        errorBanner = null;
 
         try {
             const aiResponse = await tokenPlaceChat(historyForApi);
@@ -55,6 +94,7 @@
             addMessage(aiMessage);
         } catch (error) {
             console.error(error);
+            errorBanner = getTokenPlaceErrorSummary(error);
             addMessage({
                 role: 'assistant',
                 content: "Sorry, I'm having some trouble and can't generate a response.",
@@ -94,6 +134,11 @@
 </script>
 
 <div class="chat" data-testid="chat-panel" data-provider="token-place">
+    {#if errorBanner}
+        <div class="chat-error" role="alert" data-error-type={errorBanner.type}>
+            {errorBanner.message}
+        </div>
+    {/if}
     <div class="vertical">
         <textarea
             class="message-textarea"
@@ -129,6 +174,18 @@
         justify-content: center;
         align-items: center;
         width: 100%;
+    }
+
+    .chat-error {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(248, 113, 113, 0.6);
+        background: rgba(254, 226, 226, 0.9);
+        color: #7f1d1d;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        margin-bottom: 0.5rem;
     }
 
     .chat-container {
