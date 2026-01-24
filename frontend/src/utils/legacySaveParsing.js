@@ -1,3 +1,5 @@
+import { resolveLegacyV2ItemBase } from './legacyV2ItemResolution.js';
+
 export const LEGACY_V2_STORAGE_KEYS = ['gameState', 'gameStateBackup'];
 export const LEGACY_V2_SEED_SKIP_KEY = 'legacyV2Seeded';
 
@@ -33,8 +35,17 @@ const sanitizeInventory = (inventory) => {
     if (!isPlainObject(inventory)) return {};
     const sanitized = {};
     Object.entries(inventory).forEach(([key, value]) => {
-        if (!key) return;
-        sanitized[key] = value;
+        const resolved = resolveLegacyV2ItemBase(key);
+        if (!resolved) return;
+        const incoming = Number.parseFloat(value);
+        const incomingValue = Number.isFinite(incoming) ? incoming : 0;
+        if (resolved.v3Id in sanitized) {
+            const existing = Number.parseFloat(sanitized[resolved.v3Id]);
+            const existingValue = Number.isFinite(existing) ? existing : 0;
+            sanitized[resolved.v3Id] = existingValue + incomingValue;
+            return;
+        }
+        sanitized[resolved.v3Id] = incomingValue;
     });
     return sanitized;
 };
