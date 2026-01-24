@@ -129,14 +129,52 @@ describe('legacy save seeding utilities', () => {
         expect(localStorage.getItem('gameStateBackup')).toBeNull();
     });
 
-    test('clearV3GameStateStorage deletes v3 IndexedDB and localStorage keys', async () => {
-        localStorage.setItem('gameState', JSON.stringify({ inventory: { 1: 1 } }));
-        localStorage.setItem('gameStateBackup', JSON.stringify({ inventory: { 1: 1 } }));
+    test('clearV3GameStateStorage deletes v3 localStorage keys without removing legacy v2', async () => {
+        localStorage.setItem(
+            'gameState',
+            JSON.stringify({ versionNumberString: '2.1', inventory: { 1: 1 } })
+        );
+        localStorage.setItem(
+            'gameStateBackup',
+            JSON.stringify({ versionNumberString: '2.1', inventory: { 1: 1 } })
+        );
+        localStorage.setItem('legacyV2Seeded', 'true');
+
+        const clearedLegacy = await clearV3GameStateStorage();
+
+        expect(clearedLegacy).toBe(true);
+        expect(localStorage.getItem('gameState')).not.toBeNull();
+        expect(localStorage.getItem('gameStateBackup')).not.toBeNull();
+        expect(localStorage.getItem('legacyV2Seeded')).toBe('true');
+
+        localStorage.setItem(
+            'gameState',
+            JSON.stringify({ versionNumberString: '3.0', inventory: { 1: 1 } })
+        );
+        localStorage.setItem(
+            'gameStateBackup',
+            JSON.stringify({ versionNumberString: '3.0', inventory: { 1: 1 } })
+        );
+        localStorage.setItem('legacyV2Seeded', 'true');
+
+        const clearedV3 = await clearV3GameStateStorage();
+
+        expect(clearedV3).toBe(true);
+        expect(localStorage.getItem('gameState')).toBeNull();
+        expect(localStorage.getItem('gameStateBackup')).toBeNull();
+        expect(localStorage.getItem('legacyV2Seeded')).toBeNull();
+    });
+
+    test('clearV3GameStateStorage removes empty legacy storage values', async () => {
+        localStorage.setItem('gameState', '');
+        localStorage.setItem('gameStateBackup', '');
+        localStorage.setItem('legacyV2Seeded', 'true');
 
         const cleared = await clearV3GameStateStorage();
 
         expect(cleared).toBe(true);
         expect(localStorage.getItem('gameState')).toBeNull();
         expect(localStorage.getItem('gameStateBackup')).toBeNull();
+        expect(localStorage.getItem('legacyV2Seeded')).toBeNull();
     });
 });

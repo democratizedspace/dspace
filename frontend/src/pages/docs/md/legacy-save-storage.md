@@ -593,6 +593,8 @@ backup and fallback for unsupported environments.
   Other legacy cookies (ex: `quest-`, `checkpoint-`) are not cleared.
 - V2 cleanup deletes `gameState` / `gameStateBackup` during v2 → v3 migrations (when IndexedDB is
   in use) and also via the **Delete v2 localStorage** action in the Legacy Save Upgrade UI.
+- The **Clear v3 save for testing** action only removes v3 persistence data; it preserves legacy
+  v2 `gameState` / `gameStateBackup` entries if they still contain v2-formatted saves.
 
 ## QA seeding
 
