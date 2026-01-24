@@ -1,3 +1,7 @@
+<script context="module">
+    let catalogSelectorId = 0;
+</script>
+
 <script>
     import { createEventDispatcher, onMount } from 'svelte';
     import { writable } from 'svelte/store';
@@ -9,6 +13,7 @@
     export let buttonLabel = 'Select Item';
     export let rootClass = '';
     export let testId = '';
+    export let controlId = '';
     export let getId = (item) => item?.id ?? '';
     export let getName = (item) => item?.name ?? '';
     export let getDescription = (item) => item?.description ?? '';
@@ -25,6 +30,9 @@
     let isClientSide = false;
     let normalizedItems = [];
     let customId = '';
+    const fallbackControlId = `catalog-selector-${catalogSelectorId++}`;
+    $: resolvedControlId = controlId || (testId ? `${testId}-control` : fallbackControlId);
+    $: customInputId = `${resolvedControlId}-custom-id`;
 
     $: normalizedItems = (Array.isArray(items) ? items : []).map((item) => ({
         item,
@@ -77,11 +85,11 @@
     data-hydrated={isClientSide ? 'true' : 'false'}
     data-expanded={isExpanded ? 'true' : 'false'}
 >
-    <label for="item-select-control">{label}</label>
+    <label for={resolvedControlId}>{label}</label>
 
     {#if isClientSide}
         {#if isExpanded}
-            <div class="selector-expanded" id="item-select-control" role="group" aria-label={label}>
+            <div class="selector-expanded" id={resolvedControlId} role="group" aria-label={label}>
                 <SearchBar data={normalizedItems} on:search={handleSearch} />
                 <div class="items-list" role="listbox">
                     {#each $filteredItems as normalized (normalized.id)}
@@ -116,10 +124,13 @@
                 </div>
                 {#if allowCustomId}
                     <div class="custom-id">
-                        <label class="custom-id-label">{customIdLabel}</label>
+                        <label class="custom-id-label" for={customInputId}>
+                            {customIdLabel}
+                        </label>
                         <div class="custom-id-input">
                             <input
                                 type="text"
+                                id={customInputId}
                                 placeholder={customIdPlaceholder}
                                 bind:value={customId}
                                 aria-label={customIdLabel}
@@ -134,7 +145,7 @@
                 {/if}
             </div>
         {:else if selectedItem || isCustomSelection}
-            <div class="selected-item" id="item-select-control">
+            <div class="selected-item" id={resolvedControlId}>
                 <div class="item-content">
                     {#if selectedItem?.image}
                         <img src={selectedItem.image} alt={selectedItem.name} />
@@ -163,7 +174,7 @@
             <button
                 type="button"
                 class="select-button"
-                id="item-select-control"
+                id={resolvedControlId}
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
                 on:click={toggleExpanded}
@@ -173,7 +184,7 @@
             </button>
         {/if}
     {:else}
-        <div class="loading-selector" id="item-select-control">Loading selector...</div>
+        <div class="loading-selector" id={resolvedControlId}>Loading selector...</div>
     {/if}
 </div>
 

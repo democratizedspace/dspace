@@ -10,6 +10,7 @@
     export let customIdLabel = 'Custom item ID';
     export let customIdPlaceholder = 'Enter custom item ID';
     export let customIdButtonLabel = 'Use custom ID';
+    $: controlId = testId ? `${testId}-control` : '';
 
     const dispatch = createEventDispatcher();
 
@@ -32,6 +33,7 @@
     {customIdLabel}
     {customIdPlaceholder}
     {customIdButtonLabel}
+    {controlId}
     {testId}
     on:select={handleSelect}
 />

@@ -10,6 +10,7 @@
     export let customIdLabel = 'Custom process ID';
     export let customIdPlaceholder = 'Enter custom process ID';
     export let customIdButtonLabel = 'Use custom ID';
+    $: controlId = testId ? `${testId}-control` : '';
 
     const dispatch = createEventDispatcher();
 
@@ -40,6 +41,7 @@
     {customIdLabel}
     {customIdPlaceholder}
     {customIdButtonLabel}
+    {controlId}
     {testId}
     on:select={handleSelect}
 />
