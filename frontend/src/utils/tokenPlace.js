@@ -51,6 +51,77 @@ export const isTokenPlaceEnabled = (options = {}) => {
     return stateEnabled === true;
 };
 
+const toNumericStatus = (status) => {
+    if (typeof status === 'string') {
+        return Number(status);
+    }
+
+    return status;
+};
+
+export const getTokenPlaceErrorInfo = (error) => {
+    const numericStatus = toNumericStatus(
+        error?.status ?? error?.statusCode ?? error?.response?.status ?? error?.cause?.status
+    );
+    const normalizedMessage = error?.message?.toLowerCase() ?? '';
+
+    if (normalizedMessage.includes('disabled')) {
+        return {
+            title: 'Chat disabled',
+            message:
+                'token.place chat is disabled. Enable it in Settings or set ' +
+                'VITE_TOKEN_PLACE_ENABLED=true to continue.',
+        };
+    }
+
+    if (numericStatus === 401) {
+        return {
+            title: 'Authentication error',
+            message: 'token.place rejected this request. Verify the endpoint and try again.',
+        };
+    }
+
+    if (numericStatus === 403) {
+        return {
+            title: 'Access denied',
+            message: 'token.place denied this request. Check your access settings and try again.',
+        };
+    }
+
+    if (numericStatus === 429) {
+        return {
+            title: 'Rate limited',
+            message: 'token.place rate limited this request. Please wait and try again.',
+        };
+    }
+
+    if (typeof numericStatus === 'number' && numericStatus >= 500) {
+        return {
+            title: 'token.place server error',
+            message: 'token.place is unavailable right now. Please try again in a moment.',
+        };
+    }
+
+    if (normalizedMessage.includes('network') || normalizedMessage.includes('fetch')) {
+        return {
+            title: 'Network error',
+            message: 'We could not reach token.place. Check your connection and try again.',
+        };
+    }
+
+    if (normalizedMessage.includes('api request failed')) {
+        return {
+            title: 'token.place error',
+            message: 'token.place responded with an error. Please try again.',
+        };
+    }
+
+    return {
+        title: 'Chat error',
+        message: "Sorry, I'm having some trouble and can't generate a response.",
+    };
+};
+
 export const tokenPlaceChat = async (messages, { signal } = {}) => {
     await ready;
     const envUrl = getEnvUrl();
@@ -58,9 +129,11 @@ export const tokenPlaceChat = async (messages, { signal } = {}) => {
     const enabled = isTokenPlaceEnabled({ state });
 
     if (!enabled) {
-        throw new Error(
+        const error = new Error(
             'token.place is disabled. Set VITE_TOKEN_PLACE_ENABLED=true or set tokenPlace.enabled=true in game settings.'
         );
+        error.code = 'token_place_disabled';
+        throw error;
     }
 
     const baseUrl = state.tokenPlace?.url || envUrl || DEFAULT_URL;
@@ -102,7 +175,9 @@ export const tokenPlaceChat = async (messages, { signal } = {}) => {
                 details = response.statusText;
             }
         }
-        throw new Error(`token.place API request failed: ${details}`);
+        const error = new Error(`token.place API request failed: ${details}`);
+        error.status = response.status;
+        throw error;
     }
 
     const data = await response.json();

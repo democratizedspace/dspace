@@ -2,7 +2,7 @@
     import { onMount, tick } from 'svelte';
     import {
         defaultOpenAIErrorMessage,
-        describeOpenAIError,
+        getOpenAIErrorInfo,
         GPT5Chat,
     } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
@@ -22,6 +22,7 @@
     let showSpinner = false;
     let hydrated = false;
     let messageCounter = 0;
+    let errorNotice = null;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -80,6 +81,7 @@
         addMessage(userMessage);
         const historyForApi = [...$messageHistory];
         showSpinner = true;
+        errorNotice = null;
 
         try {
             const aiResponse = await GPT5Chat(historyForApi, {
@@ -97,7 +99,8 @@
             addMessage(aiMessage);
         } catch (error) {
             console.error('OpenAI chat request failed', error);
-            const fallback = describeOpenAIError(error) || defaultOpenAIErrorMessage;
+            errorNotice = getOpenAIErrorInfo(error);
+            const fallback = errorNotice?.message || defaultOpenAIErrorMessage;
             addMessage({
                 role: 'assistant',
                 content: fallback,
@@ -167,6 +170,12 @@
     </div>
 
     <div class="vertical">
+        {#if errorNotice}
+            <div class="chat-error" role="alert">
+                <p class="chat-error-title">{errorNotice.title}</p>
+                <p class="chat-error-message">{errorNotice.message}</p>
+            </div>
+        {/if}
         <textarea
             class="message-textarea"
             bind:value={$message}
@@ -264,6 +273,28 @@
         justify-content: center;
         align-items: center;
         width: 100%;
+    }
+
+    .chat-error {
+        width: 100%;
+        border-radius: 8px;
+        padding: 12px 16px;
+        background: rgba(185, 28, 28, 0.12);
+        border: 1px solid rgba(185, 28, 28, 0.4);
+        color: #7f1d1d;
+        margin-bottom: 12px;
+        text-align: left;
+    }
+
+    .chat-error-title {
+        margin: 0 0 4px;
+        font-weight: 700;
+        font-size: 0.95rem;
+    }
+
+    .chat-error-message {
+        margin: 0;
+        font-size: 0.9rem;
     }
 
     .spinner-container {
