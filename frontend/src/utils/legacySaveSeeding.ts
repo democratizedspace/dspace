@@ -1,7 +1,11 @@
 import { isBrowser } from './ssr.js';
 import v1Fixture from './legacySaveFixtures/legacy_v1_cookie_save.json' assert { type: 'json' };
 import v2Fixture from './legacySaveFixtures/legacy_v2_localstorage_save.json' assert { type: 'json' };
-import { LEGACY_V2_SEED_SKIP_KEY, LEGACY_V2_STORAGE_KEYS } from './legacySaveParsing.js';
+import {
+    LEGACY_V2_SEED_SKIP_KEY,
+    LEGACY_V2_STORAGE_KEYS,
+    parseLegacyV2Raw,
+} from './legacySaveParsing.js';
 import { LEGACY_V1_ITEM_MAPPINGS, V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID } from './legacyV1ItemIdMap.js';
 import { resolveLegacyV2ItemBase } from './legacyV2ItemResolution.js';
 import items from '../pages/inventory/json/items';
@@ -268,9 +272,13 @@ export const clearV3GameStateStorage = async (): Promise<boolean> => {
     if (!isBrowser) return false;
 
     LEGACY_V2_STORAGE_KEYS.forEach((key) => {
-        localStorage.removeItem(key);
+        const raw = localStorage.getItem(key);
+        if (!raw) return;
+        const parsed = parseLegacyV2Raw(raw);
+        if (!parsed.isLegacy) {
+            localStorage.removeItem(key);
+        }
     });
-    localStorage.removeItem(LEGACY_V2_SEED_SKIP_KEY);
 
     try {
         localStorage.removeItem('root');

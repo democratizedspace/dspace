@@ -129,13 +129,34 @@ describe('legacy save seeding utilities', () => {
         expect(localStorage.getItem('gameStateBackup')).toBeNull();
     });
 
-    test('clearV3GameStateStorage deletes v3 IndexedDB and localStorage keys', async () => {
-        localStorage.setItem('gameState', JSON.stringify({ inventory: { 1: 1 } }));
-        localStorage.setItem('gameStateBackup', JSON.stringify({ inventory: { 1: 1 } }));
+    test('clearV3GameStateStorage deletes v3 localStorage keys without removing legacy v2', async () => {
+        localStorage.setItem(
+            'gameState',
+            JSON.stringify({ versionNumberString: '2.1', inventory: { 1: 1 } })
+        );
+        localStorage.setItem(
+            'gameStateBackup',
+            JSON.stringify({ versionNumberString: '2.1', inventory: { 1: 1 } })
+        );
 
-        const cleared = await clearV3GameStateStorage();
+        const clearedLegacy = await clearV3GameStateStorage();
 
-        expect(cleared).toBe(true);
+        expect(clearedLegacy).toBe(true);
+        expect(localStorage.getItem('gameState')).not.toBeNull();
+        expect(localStorage.getItem('gameStateBackup')).not.toBeNull();
+
+        localStorage.setItem(
+            'gameState',
+            JSON.stringify({ versionNumberString: '3.0', inventory: { 1: 1 } })
+        );
+        localStorage.setItem(
+            'gameStateBackup',
+            JSON.stringify({ versionNumberString: '3.0', inventory: { 1: 1 } })
+        );
+
+        const clearedV3 = await clearV3GameStateStorage();
+
+        expect(clearedV3).toBe(true);
         expect(localStorage.getItem('gameState')).toBeNull();
         expect(localStorage.getItem('gameStateBackup')).toBeNull();
     });
