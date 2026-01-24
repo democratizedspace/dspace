@@ -264,13 +264,13 @@
         await withStatus(mode === 'replace' ? 'replace-v2' : 'merge-v2', async () => {
             if (mode === 'replace') {
                 await importV2V3(detection.pendingLocalState, { grantUpgradeTrophy: true });
-                statusMessage = 'Replaced the current save with migrated v2 data.';
+                statusMessage = 'Replaced current save with converted v2 data.';
             } else {
                 await mergeLegacyStateIntoCurrent(detection.pendingLocalState, {
                     grantUpgradeTrophy: true,
                 });
                 statusMessage =
-                    'Merged compatible legacy v2 data into your current save. Inventory was ' +
+                    'Merged v2 data into your current save. Inventory was ' +
                     'combined; existing quests and processes were kept.';
             }
         });
@@ -287,7 +287,7 @@
             localStorage.removeItem('gameState');
             localStorage.removeItem('gameStateBackup');
             statusMessage =
-                'Removed legacy v2 localStorage data. Your current v3 save remains in IndexedDB.';
+                'Deleted v2 localStorage data. Your current v3 save remains in IndexedDB.';
         });
     };
 
@@ -375,7 +375,7 @@
                 {#if v1Items.length || v1CurrencyBalances.length}
                     {#if detection.hasV3State}
                         <p class="warning">
-                            Current v3 data exists. Choose whether to merge v1 items into it or
+                            Current v3 data exists. Choose whether to merge v1 data into it or
                             replace it entirely.
                         </p>
                     {/if}
@@ -419,9 +419,9 @@
                     <h3>V2 (localStorage saves)</h3>
                     <p>
                         {#if detection.pendingLocalState}
-                            Legacy v2 localStorage data detected
+                            V2 localStorage data detected
                         {:else}
-                            No standalone v2 localStorage save detected
+                            No v2 localStorage data detected
                         {/if}
                     </p>
                 </div>
@@ -437,13 +437,13 @@
                 {#if detection.pendingLocalState}
                     {#if detection.hasV3State}
                         <p class="warning">
-                            Both legacy localStorage data and a current v3 save exist. Choose to
-                            merge or replace to avoid mixed state.
+                            Current v3 data exists. Choose whether to merge v2 data into it or
+                            replace it entirely.
                         </p>
                     {/if}
                     {#if showV2V3ConflictWarning}
                         <div class="warning-panel" role="alert">
-                            <p class="warning-title">Legacy + v3 save conflict detected</p>
+                            <p class="warning-title">V2 + v3 save conflict detected</p>
                             <p class="warning-body">
                                 A v2 localStorage save and a v3 IndexedDB save both exist. Importing
                                 could overwrite or merge data. Back up your v3 save first. For QA,
@@ -470,7 +470,7 @@
                         <Chip
                             text={workingAction === 'merge-v2'
                                 ? 'Merging v2…'
-                                : 'Merge legacy into current'}
+                                : 'Merge v2 into current save'}
                             onClick={() => upgradeV2('merge')}
                             inverted={true}
                             disabled={Boolean(workingAction) || !detection.indexedDbSupported}
@@ -485,8 +485,8 @@
                         />
                         <Chip
                             text={workingAction === 'discard-v2'
-                                ? 'Removing legacy data…'
-                                : 'Discard legacy v2 data'}
+                                ? 'Deleting v2 data…'
+                                : 'Delete v2 localStorage data'}
                             onClick={discardLegacyV2}
                             inverted={true}
                             disabled={Boolean(workingAction)}
@@ -494,7 +494,8 @@
                     </div>
                 {:else}
                     <p class="muted">
-                        Legacy v2 data is not present or already matches the current v3 save.
+                        No v2 localStorage data is available to import, or it already matches the
+                        current v3 save.
                     </p>
                 {/if}
             </div>
