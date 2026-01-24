@@ -15,12 +15,16 @@ describe('ItemCard', () => {
             description: 'Alpha desc',
             image: '/alpha.png',
             category: 'Resource',
+            categoryLabel: 'Materials',
+            custom: true,
         };
 
-        const { getByText } = render(ItemCard, { props: { item, count: 1 } });
+        const { getByText, queryByText } = render(ItemCard, { props: { item, count: 1 } });
 
         expect(getByText('Category:')).toBeTruthy();
-        expect(getByText('Resource')).toBeTruthy();
+        expect(getByText('Materials')).toBeTruthy();
+        expect(queryByText('Resource')).toBeNull();
+        expect(queryByText('Custom')).toBeNull();
     });
 
     test('renders Uncategorized when category is missing', () => {
