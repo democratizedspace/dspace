@@ -375,15 +375,15 @@
                 {#if v1Items.length || v1CurrencyBalances.length}
                     {#if detection.hasV3State}
                         <p class="warning">
-                            Current v3 data exists. Choose whether to merge v1 items into it or
-                            replace it entirely.
+                            Current v3 data exists. Choose whether to merge legacy v1 data into it
+                            or replace it entirely.
                         </p>
                     {/if}
                     <div class="actions">
                         <Chip
                             text={workingAction === 'merge-v1'
                                 ? 'Merging v1…'
-                                : 'Merge v1 into current save'}
+                                : 'Merge legacy v1 into current save'}
                             onClick={() => upgradeV1('merge')}
                             inverted={true}
                             disabled={Boolean(workingAction)}
@@ -391,13 +391,13 @@
                         <Chip
                             text={workingAction === 'replace-v1'
                                 ? 'Replacing with v1…'
-                                : 'Replace current save with v1'}
+                                : 'Replace current save with legacy v1'}
                             onClick={() => upgradeV1('replace')}
                             hazard={true}
                             disabled={Boolean(workingAction)}
                         />
                         <Chip
-                            text="Delete v1 cookies"
+                            text="Delete legacy v1 cookies"
                             onClick={() =>
                                 withStatus('delete-v1-cookies', async () => {
                                     const cleared = expireLegacyCookies();
@@ -437,8 +437,8 @@
                 {#if detection.pendingLocalState}
                     {#if detection.hasV3State}
                         <p class="warning">
-                            Both legacy localStorage data and a current v3 save exist. Choose to
-                            merge or replace to avoid mixed state.
+                            Current v3 data exists. Choose whether to merge legacy v2 data into it
+                            or replace it entirely.
                         </p>
                     {/if}
                     {#if showV2V3ConflictWarning}
@@ -470,7 +470,7 @@
                         <Chip
                             text={workingAction === 'merge-v2'
                                 ? 'Merging v2…'
-                                : 'Merge legacy into current'}
+                                : 'Merge legacy v2 into current save'}
                             onClick={() => upgradeV2('merge')}
                             inverted={true}
                             disabled={Boolean(workingAction) || !detection.indexedDbSupported}
@@ -478,7 +478,7 @@
                         <Chip
                             text={workingAction === 'replace-v2'
                                 ? 'Replacing with v2…'
-                                : 'Replace current save with v2'}
+                                : 'Replace current save with legacy v2'}
                             onClick={() => upgradeV2('replace')}
                             hazard={true}
                             disabled={Boolean(workingAction) || !detection.indexedDbSupported}
@@ -486,7 +486,7 @@
                         <Chip
                             text={workingAction === 'discard-v2'
                                 ? 'Removing legacy data…'
-                                : 'Discard legacy v2 data'}
+                                : 'Delete legacy v2 data'}
                             onClick={discardLegacyV2}
                             inverted={true}
                             disabled={Boolean(workingAction)}
