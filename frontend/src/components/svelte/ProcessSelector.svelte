@@ -1,0 +1,36 @@
+<script>
+    import { createEventDispatcher } from 'svelte';
+    import CatalogSelector from './ui/CatalogSelector.svelte';
+
+    export let selectedProcessId = '';
+    export let label = 'Select Process';
+    export let processes = [];
+    export let testId = '';
+
+    const dispatch = createEventDispatcher();
+
+    function handleSelect(event) {
+        selectedProcessId = event.detail.itemId;
+        dispatch('select', event.detail);
+    }
+
+    const formatDuration = (duration) => {
+        if (duration == null || duration === '') {
+            return '';
+        }
+        return `Duration: ${duration}`;
+    };
+</script>
+
+<CatalogSelector
+    items={processes}
+    selectedId={selectedProcessId}
+    {label}
+    buttonLabel="Select Process"
+    getId={(process) => process?.id ?? ''}
+    getName={(process) => process?.title ?? ''}
+    getDescription={(process) => process?.description ?? ''}
+    getMeta={(process) => formatDuration(process?.duration)}
+    {testId}
+    on:select={handleSelect}
+/>

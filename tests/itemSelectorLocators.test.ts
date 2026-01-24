@@ -17,7 +17,8 @@ describe('Item selector locator coverage', () => {
       'src',
       'components',
       'svelte',
-      'ItemSelector.svelte'
+      'ui',
+      'CatalogSelector.svelte'
     );
     const componentSource = fs.readFileSync(componentPath, 'utf8');
 
