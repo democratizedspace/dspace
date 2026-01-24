@@ -56,8 +56,14 @@ const toNumericStatus = (status) => {
 const isModelAccessError = (error) => {
     if (!error || typeof error !== 'object') return false;
 
-    const status = toNumericStatus(error.status ?? error.statusCode);
-    const code = error.code ?? error?.error?.code;
+    const status = toNumericStatus(
+        error.status ??
+            error.statusCode ??
+            error.response?.status ??
+            error.cause?.status ??
+            error.error?.status
+    );
+    const code = error.code ?? error?.error?.code ?? error?.response?.data?.error?.code;
     const message = typeof error.message === 'string' ? error.message.toLowerCase() : undefined;
 
     if (status === 404) {
