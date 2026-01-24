@@ -15,6 +15,7 @@ import {
     V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID,
     V1_ITEM_ID_TO_V3_UUID,
 } from '../../utils/legacyV1ItemIdMap.js';
+import * as legacySaveSeeding from '../../utils/legacySaveSeeding';
 
 const EARLY_ADOPTER_ID = items.find((item) => item.name === 'Early Adopter Token')?.id;
 
@@ -103,6 +104,9 @@ describe('LegacySaveUpgrade', () => {
         document.documentElement.dataset.cheatsAvailable = 'true';
         initializeQaCheats(true);
         setQaCheatsPreference(true);
+        const clearSpy = vi
+            .spyOn(legacySaveSeeding, 'clearV3GameStateStorage')
+            .mockResolvedValue(true);
 
         const originalLocation = window.location;
         const reloadMock = vi.fn();
@@ -134,10 +138,12 @@ describe('LegacySaveUpgrade', () => {
         await fireEvent.click(clearButton);
 
         await findByText(/Cleared v3 IndexedDB save for QA testing/i);
+        expect(clearSpy).toHaveBeenCalled();
         vi.runAllTimers();
         expect(reloadMock).toHaveBeenCalled();
 
         vi.useRealTimers();
+        clearSpy.mockRestore();
         try {
             Object.defineProperty(window, 'location', {
                 configurable: true,
@@ -159,7 +165,9 @@ describe('LegacySaveUpgrade', () => {
             cheatsAvailable: false,
         });
 
-        const discardButton = await findByRole('button', { name: /discard legacy v2 data/i });
+        const discardButton = await findByRole('button', {
+            name: /delete v2 localstorage data/i,
+        });
         await fireEvent.click(discardButton);
 
         await findByText(/Removed legacy v2 localStorage data/i);
