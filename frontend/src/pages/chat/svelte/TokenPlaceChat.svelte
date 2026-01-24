@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import { tokenPlaceChat } from '../../../utils/tokenPlace.js';
+    import { getTokenPlaceErrorInfo, tokenPlaceChat } from '../../../utils/tokenPlace.js';
     import { writable } from 'svelte/store';
     import { messages, countTokens } from '../../../stores/chat.js';
     import Message from './Message.svelte';
@@ -10,6 +10,7 @@
     const messageHistory = writable([]);
     let showSpinner = false;
     let messageCounter = 0;
+    let errorBanner = null;
     // Default dChat persona; callers can override for other NPCs/personas.
     export let welcomeMessage =
         "Hello, adventurer! I'm dChat! I'm here to answer any questions you may have about DSPACE or nearly any other topic. I may accidentally generate incorrect information, so please double-check anything I say.";
@@ -38,6 +39,7 @@
             tokens: countTokens($message),
             timestamp: Date.now(),
         };
+        errorBanner = null;
         addMessage(userMessage);
         const historyForApi = [...$messageHistory];
         showSpinner = true;
@@ -55,6 +57,7 @@
             addMessage(aiMessage);
         } catch (error) {
             console.error(error);
+            errorBanner = getTokenPlaceErrorInfo(error);
             addMessage({
                 role: 'assistant',
                 content: "Sorry, I'm having some trouble and can't generate a response.",
@@ -94,6 +97,12 @@
 </script>
 
 <div class="chat" data-testid="chat-panel" data-provider="token-place">
+    {#if errorBanner}
+        <div class="error-banner" role="alert">
+            <strong>{errorBanner.title}</strong>
+            <span>{errorBanner.message}</span>
+        </div>
+    {/if}
     <div class="vertical">
         <textarea
             class="message-textarea"
@@ -129,6 +138,24 @@
         justify-content: center;
         align-items: center;
         width: 100%;
+    }
+
+    .error-banner {
+        width: 100%;
+        background: rgba(127, 29, 29, 0.12);
+        border: 1px solid rgba(127, 29, 29, 0.35);
+        color: #7f1d1d;
+        border-radius: 10px;
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 0.95rem;
+        margin-bottom: 16px;
+    }
+
+    .error-banner strong {
+        font-size: 1rem;
     }
 
     .chat-container {

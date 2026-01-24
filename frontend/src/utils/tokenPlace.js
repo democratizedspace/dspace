@@ -51,6 +51,67 @@ export const isTokenPlaceEnabled = (options = {}) => {
     return stateEnabled === true;
 };
 
+export const getTokenPlaceErrorInfo = (error) => {
+    if (!error || typeof error !== 'object') {
+        return {
+            type: 'unknown',
+            title: 'Unexpected error',
+            message: 'token.place returned an unexpected error. Please try again.',
+        };
+    }
+
+    const status = error.status ?? error.statusCode;
+    const normalizedMessage =
+        typeof error.message === 'string' ? error.message.toLowerCase() : '';
+
+    if (error.type === 'disabled' || normalizedMessage.includes('disabled')) {
+        return {
+            type: 'disabled',
+            title: 'Chat disabled',
+            message:
+                'token.place is disabled. Enable it in Settings or set VITE_TOKEN_PLACE_ENABLED=true.',
+        };
+    }
+
+    if (status === 429 || error.type === 'rate_limit') {
+        return {
+            type: 'rate_limit',
+            title: 'Rate limited',
+            message: 'token.place rate limited this request. Please wait and try again.',
+        };
+    }
+
+    if (typeof status === 'number' && status >= 500) {
+        return {
+            type: 'server',
+            title: 'Service unavailable',
+            message: 'token.place is unavailable right now. Please try again in a moment.',
+        };
+    }
+
+    if (error.name === 'TypeError' || normalizedMessage.includes('network')) {
+        return {
+            type: 'network',
+            title: 'Network error',
+            message: 'We could not reach token.place. Check your connection and try again.',
+        };
+    }
+
+    if (typeof status === 'number' && status >= 400) {
+        return {
+            type: 'request',
+            title: 'Request rejected',
+            message: 'token.place rejected this request. Please check your settings and try again.',
+        };
+    }
+
+    return {
+        type: 'unknown',
+        title: 'Unexpected error',
+        message: 'token.place returned an unexpected error. Please try again.',
+    };
+};
+
 export const tokenPlaceChat = async (messages, { signal } = {}) => {
     await ready;
     const envUrl = getEnvUrl();
@@ -58,9 +119,11 @@ export const tokenPlaceChat = async (messages, { signal } = {}) => {
     const enabled = isTokenPlaceEnabled({ state });
 
     if (!enabled) {
-        throw new Error(
+        const disabledError = new Error(
             'token.place is disabled. Set VITE_TOKEN_PLACE_ENABLED=true or set tokenPlace.enabled=true in game settings.'
         );
+        disabledError.type = 'disabled';
+        throw disabledError;
     }
 
     const baseUrl = state.tokenPlace?.url || envUrl || DEFAULT_URL;
@@ -102,7 +165,13 @@ export const tokenPlaceChat = async (messages, { signal } = {}) => {
                 details = response.statusText;
             }
         }
-        throw new Error(`token.place API request failed: ${details}`);
+        const requestError = new Error(`token.place API request failed: ${details}`);
+        requestError.status = response.status;
+        requestError.details = details;
+        if (response.status === 429) {
+            requestError.type = 'rate_limit';
+        }
+        throw requestError;
     }
 
     const data = await response.json();

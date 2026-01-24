@@ -3,6 +3,7 @@
     import {
         defaultOpenAIErrorMessage,
         describeOpenAIError,
+        getOpenAIErrorInfo,
         GPT5Chat,
     } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
@@ -22,6 +23,7 @@
     let showSpinner = false;
     let hydrated = false;
     let messageCounter = 0;
+    let errorBanner = null;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -77,6 +79,7 @@
             timestamp: Date.now(),
         };
 
+        errorBanner = null;
         addMessage(userMessage);
         const historyForApi = [...$messageHistory];
         showSpinner = true;
@@ -97,6 +100,8 @@
             addMessage(aiMessage);
         } catch (error) {
             console.error('OpenAI chat request failed', error);
+            const errorInfo = getOpenAIErrorInfo(error);
+            errorBanner = errorInfo;
             const fallback = describeOpenAIError(error) || defaultOpenAIErrorMessage;
             addMessage({
                 role: 'assistant',
@@ -147,6 +152,12 @@
     data-provider="openai"
     data-hydrated={hydrated ? 'true' : 'false'}
 >
+    {#if errorBanner}
+        <div class="error-banner" role="alert">
+            <strong>{errorBanner.title}</strong>
+            <span>{errorBanner.message}</span>
+        </div>
+    {/if}
     <div class="persona-selector">
         <label for="chat-persona">Talk to</label>
         <select id="chat-persona" bind:value={$activePersonaId} on:change={handlePersonaChange}>
@@ -202,6 +213,23 @@
         align-items: center;
         width: 100%;
         gap: 1.5rem;
+    }
+
+    .error-banner {
+        width: 100%;
+        background: rgba(127, 29, 29, 0.12);
+        border: 1px solid rgba(127, 29, 29, 0.35);
+        color: #7f1d1d;
+        border-radius: 10px;
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 0.95rem;
+    }
+
+    .error-banner strong {
+        font-size: 1rem;
     }
 
     .persona-selector {
