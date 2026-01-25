@@ -150,22 +150,38 @@ Quest data is validated against a JSON schema. Titles and descriptions reject
 link, or a root-relative path. Quest titles must be unique across all existing
 quests.
 
-### Current Implementation State
+### Current Implementation State (In-Game Editor)
 
-> **Note:** The quest editor now lets you build branching dialogue directly in the browser. The current
-> implementation in `QuestForm.svelte` supports quest metadata (title, description, image), selecting
-> required quests, defining an NPC, creating dialogue nodes with `goto` or `finish` options, and
-> configuring process actions or item gates on each option. You can choose the start node and manage
-> options without writing JSON, and the preview still updates live for uploaded images. The form
-> remains mobile‑responsive and stacks action buttons on small screens.
+The live quest editor at [/quests/create](/quests/create) reflects the `QuestForm.svelte` behavior.
+When you create a quest in-game, you will:
 
-The editor focuses on the fundamentals today and exposes controls to gate dialogue options on
-specific items or grant rewards inline. You can run `npm run generate-quest --template basic`
-(or `branching`) to scaffold a template JSON file with placeholder dialogue.
+1. **Enter metadata** — title (min 3 characters) and description (min 10 characters).
+2. **Pick an NPC** — choose a known NPC (or type a custom value) to set the `npc` avatar.
+3. **Set a quest image** — upload an image to generate a downsampled JPEG data URL, or keep the
+   default fallback image. Uploaded images are resized to a square (default 512px) and compressed
+   to target ~50KB for IndexedDB storage.
+4. **Define dialogue nodes** — each node needs a unique ID, text, and at least one option.
+5. **Choose option types** — options can `goto` another node, `finish` the quest, `process` a
+   process ID, or `grantsItems`. Options can also `requiresItems` to gate choices.
+6. **Select requirements and rewards** — use **Quest Requirements** for `requiresQuests`, and the
+   rewards panel for completion rewards.
+7. **Pick a start node** — the start node must exist in the dialogue set.
+8. **Preview + save** — use Preview to validate flow, then save.
 
--   Item requirement and reward configuration for dialogue options
--   Process action selection
--   Preview functionality to test dialogue flow
+The editor validates quest dependencies against the built-in quest list and enforces unique titles.
+The same form powers the edit route at [/quests/[id]/edit](/quests/[id]/edit), which loads quest
+data from the custom content database.
+
+### Storage and Persistence (Custom Quests)
+
+Custom quests are stored locally in the **CustomContent** IndexedDB database, in the `quests`
+object store. Each quest is saved with a generated UUID, `custom: true`, and timestamps
+(`createdAt`/`updatedAt`). If IndexedDB is unavailable, the editor falls back to an in-memory map,
+so custom quests will be lost on refresh or tab close.
+
+Built-in quests are not stored in CustomContent, so only custom quests can be edited or deleted
+from the manage flow. Use the custom content backup tools at
+[/contentbackup](/contentbackup) to export or restore local quests.
 
 ### Testing Your Quest
 

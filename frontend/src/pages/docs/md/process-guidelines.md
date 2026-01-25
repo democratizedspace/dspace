@@ -53,17 +53,34 @@ Duration must follow the pattern `(\d+h\s*)?(\d+m\s*)?(\d+s\s*)?` (units are cas
 
 Fractional values are allowed, so `0.5h` will be interpreted as thirty minutes. Submitted values are normalized; for example, `0.5h 30s` becomes `30m 30s` on save.
 
-### Implementation State
+### Implementation State (In-Game Editor)
 
-The current `ProcessForm.svelte` component supports creating processes with all the
-properties listed above. It includes item selection interfaces for each of the three item
-relationship types. Numeric count inputs enforce a minimum of 1 so processes can't use zero or
-negative quantities. A built-in preview shows how the process will appear once created, and form
-validation now accepts seconds and fractional durations in addition to hours and minutes. Unit
-tests also confirm uppercase duration suffixes are accepted alongside lowercase ones. The form is
-also mobile-friendly with controls and submit buttons stacked vertically on small screens. You can
-toggle **Preview** to test your settings before committing them. End-to-end tests now confirm the
-preview renders correctly after valid input.
+Custom processes are created at [/processes/create](/processes/create) using `ProcessForm.svelte`.
+The editor mirrors the schema requirements and normalizes data on save:
+
+1. **Enter a title and duration** — duration accepts `d`, `h`, `m`, and `s` units (case-insensitive)
+   with optional decimals (e.g., `0.5h`).
+2. **Add item relationships** — choose items for required, consumed, and created lists, each with
+   positive counts.
+3. **Preview + save** — Preview shows the final card and validates required fields.
+
+On save, durations are normalized with `prettyPrintDuration`, so inputs such as `0.5h 30s` will be
+stored as a canonical string like `30m 30s`. The form prevents zero or negative item counts and
+requires at least one relationship across `requireItems`, `consumeItems`, or `createItems`.
+
+### Editing Custom Processes
+
+Only custom processes can be edited. Use [/processes/manage](/processes/manage) to find a custom
+process and click **Edit**, which opens [/processes/[processId]/edit](/processes/[processId]/edit).
+Built-in processes are read-only.
+
+### Storage and Persistence (Custom Processes)
+
+Custom processes are stored locally in the **CustomContent** IndexedDB database, in the
+`processes` object store. Each process is saved with `custom: true`, a generated UUID, and
+timestamps. If IndexedDB is unavailable, the editor falls back to an in-memory store, which means
+custom processes will not persist after a refresh. Use [/contentbackup](/contentbackup) to export
+or restore custom process data.
 
 ## Process Categories
 

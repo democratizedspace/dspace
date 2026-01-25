@@ -42,21 +42,41 @@ Every item requires the following basic properties:
 - **unit**: Measurement unit for the item (e.g., kg, L, watts) (optional)
 - **type**: Classification or category (optional)
 
-### Implementation State
+### Implementation State (In-Game Editor)
 
-Currently, the `ItemForm.svelte` component supports creating and editing items with the properties listed above. It uploads images, persists data to IndexedDB, and now includes a dependency editor so complex items can declare required ingredients without editing JSON manually.
+Custom items are created in the in-game editor at [/inventory/create](/inventory/create) (or the
+standalone route [/items/create](/items/create)). The editor is powered by `ItemForm.svelte` and
+enforces the same structure used by the item schema.
 
-List any prerequisite item IDs in the **Dependencies** field using commas or new lines. The form trims whitespace, ignores blank rows, and the live preview immediately reflects the dependency list so you can verify relationships before saving.
+When creating an item, you will:
 
-As you fill out the form, an `ItemPreview` component displays a live preview so you can
-confirm the details before submitting. The layout automatically adjusts on small screens
-so form fields expand to the full width for easier touch input, and action buttons stack
-vertically on narrow displays. You can safely experiment with different values before
-saving—no data is written until you click **Create Item**.
+1. **Enter required fields** — name and description are required.
+2. **Upload an image** — images are required and are downsampled to a square JPEG (default 512px)
+   with a ~50KB target size for IndexedDB storage.
+3. **Fill optional fields** — price, unit, and type are optional.
+4. **Add dependencies (optional)** — list prerequisite item IDs using commas or new lines. The
+   form trims whitespace and ignores blank rows.
+5. **Preview + save** — the live preview updates as you type; data is saved only on submit.
 
-The form provides inline validation messages if you attempt to submit without a name, description, or image, helping ensure items meet basic requirements before saving. Automated Playwright tests verify that the preview appears when entering text and that uploaded images render correctly. This ensures cross-browser compatibility of the custom item workflow.
+After saving, the new custom item is stored locally and added to your inventory with a count of 0
+so it can be referenced by processes and quests.
 
-All items must now conform to the JSON schema located at `frontend/src/pages/inventory/jsonSchemas/item.json`. Run the `itemValidation` test to ensure any additions meet the schema requirements.
+### Editing Custom Items
+
+Only custom items can be edited. Use [/inventory/manage](/inventory/manage) to locate a custom
+item and click **Edit**, which opens [/inventory/item/[itemId]/edit](/inventory/item/[itemId]/edit).
+Built-in items are read-only.
+
+### Storage and Persistence (Custom Items)
+
+Custom items are stored locally in the **CustomContent** IndexedDB database, in the `items`
+object store. Each item is saved with `custom: true`, a generated UUID, and timestamps. If
+IndexedDB is unavailable, the editor falls back to an in-memory store, so custom items will not
+persist across reloads. Inventory counts live in the game state database (`dspaceGameState`),
+which also falls back to localStorage when IndexedDB is unavailable.
+
+All items must conform to the JSON schema located at `frontend/src/pages/inventory/jsonSchemas/item.json`.
+Run the `itemValidation` test to ensure any additions meet the schema requirements.
 
 ## Item Best Practices
 
