@@ -8,16 +8,38 @@
     } from '../../utils/gameState/common.js';
     import { normalizeSettings } from '../../utils/settingsDefaults.js';
 
-    const SETTINGS_KEY = 'showQuestGraphVisualizer';
+    const TOGGLES = [
+        {
+            key: 'showQuestGraphVisualizer',
+            title: 'Show quest dependency map on /quests',
+            description: 'Show an interactive dependency map on the Quests page.',
+            ariaLabel: 'Show quest dependency map on the quests page',
+            testId: 'quest-graph-visualizer-toggle',
+        },
+        {
+            key: 'showChatDebugData',
+            title: 'Show full chat payload on /chat',
+            description:
+                'Highlight the RAG context and main messages that power the chat prompt.',
+            ariaLabel: 'Show debug chat payload on the chat page',
+            testId: 'chat-debug-toggle',
+        },
+    ];
 
     let hydrated = false;
-    let enabled = false;
+    let enabled = {
+        showQuestGraphVisualizer: false,
+        showChatDebugData: false,
+    };
     let loading = true;
     let unsubscribe;
 
     const syncFromState = (value) => {
         const normalized = normalizeSettings(value?.settings);
-        enabled = normalized[SETTINGS_KEY];
+        enabled = {
+            showQuestGraphVisualizer: normalized.showQuestGraphVisualizer,
+            showChatDebugData: normalized.showChatDebugData,
+        };
     };
 
     onMount(async () => {
@@ -33,13 +55,13 @@
         unsubscribe?.();
     });
 
-    const persistSetting = async (nextValue) => {
+    const persistSetting = async (key, nextValue) => {
         await ready;
         const current = loadGameState();
         const normalized = normalizeSettings(current.settings);
         const nextSettings = {
             ...normalized,
-            [SETTINGS_KEY]: Boolean(nextValue),
+            [key]: Boolean(nextValue),
         };
 
         await saveGameState({
@@ -48,37 +70,40 @@
         });
     };
 
-    const toggle = async () => {
-        const next = !enabled;
-        enabled = next;
-        await persistSetting(next);
+    const toggle = async (key) => {
+        const next = !enabled[key];
+        enabled = { ...enabled, [key]: next };
+        await persistSetting(key, next);
     };
 </script>
 
 <section class="panel" data-hydrated={hydrated ? 'true' : 'false'}>
     <div class="heading">
-        <h2>Quest dependency graph</h2>
-        <p>Show an interactive dependency map on the Quests page.</p>
+        <h2>Debug</h2>
+        <p>Enable debug overlays and tooling for testing and validation.</p>
     </div>
 
-    <label class="toggle">
-        <div class="toggle__label">
-            <span class="title">Show quest dependency map on /quests</span>
-        </div>
-        <button
-            type="button"
-            class="toggle__control"
-            class:enabled
-            aria-pressed={enabled}
-            aria-label="Show quest dependency map on the quests page"
-            disabled={loading}
-            on:click={toggle}
-            data-testid="quest-graph-visualizer-toggle"
-        >
-            <span aria-hidden="true" class="toggle__thumb"></span>
-            <span class="toggle__state">{enabled ? 'On' : 'Off'}</span>
-        </button>
-    </label>
+    {#each TOGGLES as toggleItem (toggleItem.key)}
+        <label class="toggle">
+            <div class="toggle__label">
+                <span class="title">{toggleItem.title}</span>
+                <span class="description">{toggleItem.description}</span>
+            </div>
+            <button
+                type="button"
+                class="toggle__control"
+                class:enabled={enabled[toggleItem.key]}
+                aria-pressed={enabled[toggleItem.key]}
+                aria-label={toggleItem.ariaLabel}
+                disabled={loading}
+                on:click={() => toggle(toggleItem.key)}
+                data-testid={toggleItem.testId}
+            >
+                <span aria-hidden="true" class="toggle__thumb"></span>
+                <span class="toggle__state">{enabled[toggleItem.key] ? 'On' : 'Off'}</span>
+            </button>
+        </label>
+    {/each}
 </section>
 
 <style>
@@ -128,6 +153,11 @@
     .title {
         font-weight: 600;
         color: #e2e8f0;
+    }
+
+    .description {
+        font-size: 0.9rem;
+        color: #cbd5e1;
     }
 
     .toggle__control {

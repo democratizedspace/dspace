@@ -186,13 +186,9 @@ async function createChatResponse(openai, input) {
     }
 }
 
-export const GPT5Chat = async (messages, options = {}) => {
+export const buildChatPayload = async (messages, options = {}) => {
     await ready;
     const gameState = loadGameState();
-    const apiKey = gameState.openAI?.apiKey || '';
-    const OpenAIClient = resolveOpenAIClient();
-    const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
-
     const persona = options.persona || defaultPersona;
     const systemMessage = {
         role: 'system',
@@ -228,6 +224,22 @@ export const GPT5Chat = async (messages, options = {}) => {
         }
         combinedMessages = [...combinedMessages, ...userMessages];
     }
+
+    const debugEntries = combinedMessages.map((message) => ({
+        role: message.role,
+        content: message.content,
+        contextType: knowledgeMessage === message ? 'rag' : 'main',
+    }));
+
+    return { combinedMessages, debugEntries };
+};
+
+export const GPT5Chat = async (messages, options = {}) => {
+    const { combinedMessages } = await buildChatPayload(messages, options);
+    const gameState = loadGameState();
+    const apiKey = gameState.openAI?.apiKey || ''; // scan-secrets: ignore
+    const OpenAIClient = resolveOpenAIClient();
+    const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
 

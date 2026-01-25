@@ -1,11 +1,18 @@
 <script>
-    import { onMount, tick } from 'svelte';
+    import { onDestroy, onMount, tick } from 'svelte';
     import {
         defaultOpenAIErrorMessage,
         describeOpenAIError,
         getOpenAIErrorSummary,
+        buildChatPayload,
         GPT5Chat,
     } from '../../../utils/openAI.js';
+    import {
+        loadGameState,
+        ready,
+        state as gameStateStore,
+    } from '../../../utils/gameState/common.js';
+    import { normalizeSettings } from '../../../utils/settingsDefaults.js';
     import { writable } from 'svelte/store';
     import {
         messages,
@@ -24,6 +31,9 @@
     let hydrated = false;
     let messageCounter = 0;
     let errorBanner = null;
+    let showDebug = false;
+    let debugPayload = [];
+    let settingsUnsubscribe;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -81,6 +91,10 @@
 
         addMessage(userMessage);
         const historyForApi = [...$messageHistory];
+        const { debugEntries } = await buildChatPayload(historyForApi, {
+            persona: currentPersona,
+        });
+        debugPayload = debugEntries;
         showSpinner = true;
         errorBanner = null;
 
@@ -140,9 +154,20 @@
 
     onMount(async () => {
         hydrated = true;
+        await ready;
+        const syncSettings = (value) => {
+            const normalized = normalizeSettings(value?.settings);
+            showDebug = normalized.showChatDebugData;
+        };
+        syncSettings(loadGameState());
+        settingsUnsubscribe = gameStateStore.subscribe((value) => syncSettings(value));
         if ($messageHistory.length === 0) {
             addWelcomeMessage();
         }
+    });
+
+    onDestroy(() => {
+        settingsUnsubscribe?.();
     });
 </script>
 
@@ -190,6 +215,31 @@
         <div class="spinner-container" style="display: {showSpinner ? 'flex' : 'none'}">
             <Spinner />
         </div>
+        {#if showDebug}
+            <section class="chat-debug" aria-live="polite">
+                <div class="chat-debug__header">
+                    <h3>Debug: chat prompt payload</h3>
+                    <div class="chat-debug__legend">
+                        <span class="debug-pill debug-pill--rag">RAG context</span>
+                        <span class="debug-pill debug-pill--main">Main messages</span>
+                    </div>
+                </div>
+                {#if debugPayload.length}
+                    <div class="chat-debug__entries">
+                        {#each debugPayload as entry, index (index)}
+                            <div class={`chat-debug__entry chat-debug__entry--${entry.contextType}`}>
+                                <div class="chat-debug__meta">{entry.role}</div>
+                                <pre>{entry.content}</pre>
+                            </div>
+                        {/each}
+                    </div>
+                {:else}
+                    <p class="chat-debug__empty">
+                        Send a message to capture the current payload.
+                    </p>
+                {/if}
+            </section>
+        {/if}
         {#if $messageHistory.length}
             {#each $messageHistory.slice().reverse() as message (message.id)}
                 <Message
@@ -278,6 +328,7 @@
         flex-direction: column;
         align-items: flex-start;
         width: 100%;
+        gap: 1rem;
     }
 
     .vertical {
@@ -317,5 +368,101 @@
         padding: 10px;
         font-size: 16px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-debug {
+        width: 100%;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        border-radius: 12px;
+        padding: 1rem;
+        background: #f8fafc;
+        color: #0f172a;
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .chat-debug__header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .chat-debug__header h3 {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    .chat-debug__legend {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .debug-pill {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        border: 1px solid transparent;
+    }
+
+    .debug-pill--rag {
+        background: rgba(244, 114, 182, 0.15);
+        border-color: rgba(244, 114, 182, 0.45);
+        color: #9d174d;
+    }
+
+    .debug-pill--main {
+        background: rgba(59, 130, 246, 0.12);
+        border-color: rgba(59, 130, 246, 0.4);
+        color: #1e3a8a;
+    }
+
+    .chat-debug__entries {
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .chat-debug__entry {
+        border-radius: 10px;
+        padding: 0.75rem;
+        border: 1px solid rgba(148, 163, 184, 0.4);
+        background: #fff;
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .chat-debug__entry--rag {
+        background: rgba(244, 114, 182, 0.08);
+        border-color: rgba(244, 114, 182, 0.4);
+    }
+
+    .chat-debug__entry--main {
+        background: rgba(59, 130, 246, 0.08);
+        border-color: rgba(59, 130, 246, 0.35);
+    }
+
+    .chat-debug__meta {
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: #334155;
+    }
+
+    .chat-debug__entry pre {
+        margin: 0;
+        font-size: 0.85rem;
+        line-height: 1.4;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .chat-debug__empty {
+        margin: 0;
+        color: #64748b;
+        font-size: 0.9rem;
     }
 </style>
