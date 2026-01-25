@@ -1,16 +1,26 @@
 import '@testing-library/jest-dom';
 import { render, fireEvent } from '@testing-library/svelte';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { writable } from 'svelte/store';
 import { tick } from 'svelte';
 import FinishOption from '../src/pages/quests/svelte/option/FinishOption.svelte';
 
 const { stateStore, finishQuestMock, getStateSnapshot } = vi.hoisted(() => {
-    const stateStore = writable({ inventory: {} as Record<string, number> });
     let snapshot = { inventory: {} as Record<string, number> };
-    stateStore.subscribe((value) => {
-        snapshot = value;
-    });
+    const subscribers = new Set<(value: typeof snapshot) => void>();
+    const stateStore = {
+        subscribe: (run: (value: typeof snapshot) => void) => {
+            run(snapshot);
+            subscribers.add(run);
+            return () => subscribers.delete(run);
+        },
+        set: (value: typeof snapshot) => {
+            snapshot = value;
+            subscribers.forEach((run) => run(snapshot));
+        },
+        update: (updater: (value: typeof snapshot) => typeof snapshot) => {
+            stateStore.set(updater(snapshot));
+        },
+    };
 
     return {
         stateStore,
