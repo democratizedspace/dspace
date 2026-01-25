@@ -1,329 +1,340 @@
-# DSPACE v3 Design: Discoverability & QA Tooling
+# DSPACE v3 Design: RAG Discoverability + Hallucination Mitigation (Chat)
 
-**Status:** Draft  
-**Audience:** Maintainers + contributors implementing UI + data tooling  
-**Scope:** `/docs` full-text search + `/quests` quest dependency graph visualizer (read-only QA tooling)
+**Status:** Draft (grounded to current v3 implementation)  
+**Audience:** Maintainers + contributors working on chat UX, RAG context, and QA  
+**Scope:** `/chat` and dChat knowledge-base grounding in v3 (OpenAI first, token.place later)
 
 ## Why this exists
 
-DSPACE has two “find the thing” problems:
+The v3 chat experience already ships with a curated knowledge summary, but it is **not** true
+retrieval or RAG in the vector sense. The current system is a deterministic “context packer” that
+concatenates a subset of quests, items, processes, achievements, and live player state into the
+system prompt. That makes the assistant helpful, but it has three shortcomings:
 
-1) **Docs discoverability:** the `/docs` index can’t surface docs when the search term only appears in the *body* of a doc (e.g., “turbine” not finding a Solar Power doc that mentions it).  
-2) **Quest QA & balance:** authors and QA need a way to *see* quest dependencies, verify progression, and detect authoring mistakes (missing deps, unreachable nodes, cycles).
+1) **Discoverability:** users cannot see *what sources* the assistant used, which makes it harder
+   to trust or debug answers.
+2) **Hallucination mitigation:** QA expects “don’t invent” guardrails and explicit uncertainty.
+   Today only the default dChat persona has that language.
+3) **Coverage drift:** QA policy expects `/docs`, routes, and release notes to be part of the
+   grounding context, but the current knowledge pack does not include them.
 
-This design covers a pair of features that solve those problems while staying consistent with:
-- deterministic outputs (so QA comparisons don’t feel random),
-- performance constraints (don’t trash page load / interactivity),
-- accessibility (keyboard-first navigation where applicable),
-- minimal dependency footprint unless it clearly pays rent.
-
----
-
-## Shared principles
-
-### Deterministic by default
-Any ordering that affects visible results (search results, snippets, node ordering, layout tie-breaks) must be stable across reloads given the same inputs.
-
-### Do heavy work once, then reuse
-- Build indices/graphs once per page load (or at build-time), then query in-memory.
-- Prefer lazy hydration / dynamic imports for heavyweight client libraries.
-
-### Progressive enhancement
-Core pages must remain usable without the enhancement:
-- `/docs` should still list docs even if full-text indexing fails.
-- `/quests` should still show Active/Completed lists even if the visualizer fails to hydrate.
+This design doc tightens the spec to match reality, then proposes a small, repo-consistent
+augmentation that makes sources visible, guards against hallucinations, and aligns with QA policy
+without introducing heavyweight infrastructure.
 
 ---
-
-# Part A — `/docs` client-side full-text search
-
-## Problem statement
-The `/docs` index currently filters by doc titles and static keywords only. Players cannot find information when the relevant term appears only in the body text. We need **client-side full-text search** over title + body text, with a **contextual snippet**, while preserving existing `has:` operator filtering.  
 
 ## Goals
-- Queries match **doc titles + body text** by default.
-- Preserve `has:` behavior for feature filters.
-- Provide a snippet that is:
-  - contextual (shows the match in-place),
-  - deterministic,
-  - updates as the user types,
-  - disappears when the input is empty.
+
+- Make the current RAG context **discoverable** in the chat UI (show sources used per reply).
+- Align system prompts with the QA “don’t invent facts” rule across all personas.
+- Add a lightweight docs/routes grounding layer that fits the existing client-only architecture.
+- Keep the implementation small and deterministic; no server-side retrieval in v3.
 
 ## Non-goals
-- Server-side search.
-- Full-text ranking / BM25 / fuzzy matching (v1 keeps it simple).
 
-## UX specification
-
-### Search scope
-- Default queries match doc titles and body text.
-- Operators:
-  - if a query contains `has:` predicates, **keep existing feature filtering** behavior
-  - and **do not show body-text snippets** for those queries.
-
-### Snippets
-- Show *one* snippet line under each matched doc link when the query has keywords.
-- Snippet shows the **first matching keyword** (deterministic selection) with **up to two words before and after** the match.
-- The matched word is bolded.
-- Snippet updates as the user types; snippet disappears when input is empty.
-
-## Data + index
-
-### Index construction (in-memory, on `/docs` load)
-Build a lightweight search index entry for each doc:
-- `title`: existing doc title string
-- `bodyText`: doc markdown stripped to plain text
-- `features`: existing feature list used by `has:` operator
-
-### Markdown → plain text
-A lightweight “stripper” avoids adding parsing dependencies:
-- remove fenced code blocks and inline code
-- strip markdown links/images but keep their visible text
-- remove heading markers, blockquote prefixes, emphasis markers
-- remove HTML tags
-- collapse whitespace
-
-## Query parsing & matching
-
-### Tokenization
-- split query on whitespace
-- ignore empty tokens
-- lowercase normalize
-- separate `has:` operators from “keywords”
-- sort keywords alphabetically (for deterministic snippet keyword selection)
-
-### Match rule
-A doc matches if:
-- **all keywords** appear in *any* searchable value (`title`, existing doc keywords if present, `bodyText`), AND
-- **all `has:` operators** exist in the doc’s `features`.
-
-## Snippet extraction (deterministic)
-Given a doc `bodyText` and keyword list:
-1) Choose snippet keyword = first (alphabetically) keyword that appears in `bodyText`.
-2) Tokenize `bodyText` by whitespace into “word tokens”, but only keep tokens whose stripped core has at least one letter/number.
-   - stripping means remove leading/trailing non-alphanumeric characters for matching
-   - render original token so punctuation remains visible (e.g., `turbine.`)
-3) Find the **first** occurrence (left-to-right) of that keyword in the filtered word tokens.
-4) Extract up to **two** tokens before and after the match.
-5) Render snippet with the matched word bolded.
-
-### Pseudocode (sketch)
-~~~text
-keywords = sortAlpha(parseKeywords(query))
-if keywords empty: no snippet
-
-k = first keyword where bodyLower contains k
-words = filterTokens(bodyText)
-i = first index where normalize(words[i]) contains k
-snippetTokens = words[max(0,i-2) : min(len, i+3)]
-render snippetTokens with words[i] bolded
-~~~
-
-## Performance considerations
-- Index built once per `/docs` page load from local markdown content.
-- Search is in-memory across the docs list size (expected small-to-moderate).
-- String normalization and keyword sorting are linear in query/doc size.
-
-## Test plan
-- Unit tests:
-  - query parsing (`has:` extraction + keyword normalization)
-  - deterministic keyword selection
-  - snippet extraction (punctuation handling, +/-2 window)
-- E2E test on `/docs`:
-  - term found only in body text yields a result + snippet
-  - clearing input removes snippets
+- Vector search, embeddings, or external vector databases.
+- Server-side RAG pipeline or new backend services in v3.
+- Streaming responses or tool calls (not in current chat flow).
 
 ---
 
-# Part B — `/quests` Quest Dependency Graph Visualizer (v3)
+## Current Architecture (as-is)
 
-## Context
-We want an in-game visualization of all quests and their dependency relationships, rooted at `howtodoquests.json`, to support QA and game balance. The dependency graph is ideally a DAG, but authoring mistakes can create cycles; the tool must detect and surface these issues.
+### Chat UI + message flow
+- The `/chat` page hydrates the Svelte chat integrations via
+  `frontend/src/pages/chat/index.astro` and `frontend/src/pages/chat/svelte/Integrations.svelte`.
+- OpenAI chat renders in `frontend/src/pages/chat/svelte/OpenAIChat.svelte` and calls
+  `GPT5Chat` from `frontend/src/utils/openAI.js` with the message history.
+- token.place chat (gated by feature flags) renders in
+  `frontend/src/pages/chat/svelte/TokenPlaceChat.svelte` and calls `tokenPlaceChat` from
+  `frontend/src/utils/tokenPlace.js`.
 
-**Placement:** insert the visualizer **between Active Quests** and **Completed Quests** on `/quests`.
+### Retrieval / “RAG” context (current)
+- The only retrieval mechanism is **string assembly** inside
+  `frontend/src/utils/dchatKnowledge.js` via `buildDchatKnowledge(gameState)`.
+- Sources used today:
+  - Items catalog: `frontend/src/pages/inventory/json/items/index.js`
+  - Processes catalog: `frontend/src/generated/processes.json`
+  - Quests catalog: `frontend/src/pages/quests/json/**/*.json` via `import.meta.glob`
+  - Achievements: `frontend/src/utils/achievements.js`
+  - Live player state: `loadGameState()` in `frontend/src/utils/gameState/common.js`
+- The summary is capped with hard limits (ex: `MAX_ITEMS`, `MAX_PROCESSES`, `MAX_QUESTS`) and
+  truncated descriptions; there is **no chunking** and **no ranking** beyond sorting.
+- The summary is injected as a **system message** with the prefix
+  `DSPACE knowledge base:` in `frontend/src/utils/openAI.js`.
 
-**Platforms:** must work on mobile (narrow) and desktop (including ultrawide), with keyboard-first navigation plus on-screen controls.
+### Prompting + response shape
+- Persona system prompts are defined in `frontend/src/data/npcPersonas.js` and passed into
+  `GPT5Chat` as the system message. Only the **dChat persona** currently includes explicit
+  “If you’re unsure, say you don’t know” language.
+- `GPT5Chat` calls our OpenAI client via `openai.responses.create` (a project-level abstraction
+  over the OpenAI Chat Completions API) and returns **only the output text** string (no citations,
+  no metadata).
+- token.place chat builds a simple system + user message list and returns a string reply.
 
-## Goals
-1) Accurate dependency graph rooted at `howtodoquests.json`, showing all downstream quests.
-2) Deterministic ordering of nodes/edges for stable QA comparisons.
-3) Two complementary views:
-   - **Navigator view** (level-based, scalable to small screens)
-   - **Map view** (full interactive graph, desktop-friendly)
-4) QA diagnostics:
-   - unreachable quests
-   - missing dependency references
-   - cycles
-   - multi-parent nodes clearly highlighted
-5) Performance: do not meaningfully degrade `/quests`.
+### Error handling + uncertainty
+- OpenAI errors are mapped to user-facing copy in `frontend/src/utils/openAI.js` and surfaced
+  by `OpenAIChat.svelte`.
+- token.place errors are caught in `TokenPlaceChat.svelte` with a generic fallback message.
+- There is **no UI affordance** to show what sources were used or how much context was present.
 
-## Non-goals (v1)
-- Editing quest dependencies in the UI.
-- Perfect “minimal edge crossing” layouts everywhere.
-- Rendering every node at once on mobile.
-
-## Data model
-- Node: quest JSON file (stable canonical key)
-- Edge: `A -> B` if quest `B.requiresQuests` includes `A`
-- Root: `howtodoquests.json`
-
-### Canonical node key
-Canonical key = quest file path relative to `frontend/src/pages/quests/json/`, e.g.:
-- `welcome/howtodoquests.json`
-- `aquaria/log-water-parameters.json`
-
-Store per node:
-- `canonicalKey`
-- `basename`
-- `group` (first folder segment)
-- `title` (quest title, fallback basename)
-- `requires` (resolved canonical keys)
-- `requiredBy` (reverse edges)
-
-## Graph build + validation
-
-### Inputs
-Load all quest JSON definitions from:
-- `frontend/src/pages/quests/json/**/*.json`
-
-### Resolver indices
-Build lookup maps:
-- `byCanonicalPath[canonicalKey] -> node`
-- `byBasename[basename] -> [canonicalKey...]` (can be ambiguous)
-- `byQuestId[id] -> canonicalKey` (if quest JSON has `id`)
-
-### Resolving `requiresQuests[]`
-Each `requiresQuests` entry may be:
-- a filename (`howtodoquests.json`)
-- a relative path (`welcome/howtodoquests.json`)
-- optionally a quest internal `id`
-
-Resolution order:
-1) exact canonicalKey match
-2) canonicalKey match after normalization
-3) quest id match
-4) basename match *only if unique*
-5) else: mark dependency as **missing** or **ambiguous**
-
-### Reachability + diagnostics
-- Compute `reachableFromRoot` via DFS/BFS from root.
-- `unreachable = allNodes - reachableFromRoot`
-- Detect cycles on reachable subgraph using DFS recursion stack.
-- Record cycle paths for diagnostics output.
-
-### Stable depth for Navigator view
-If no cycles:
-- topological approach with `depth[node] = max(depth[parent] + 1)`.
-
-If cycles exist:
-- compute “best effort” depths by **ignoring deterministic feedback edges** for layout purposes only, but always surface cycle diagnostics.
-
-#### Deterministic cycle breaking (layout only)
-For each detected cycle, ignore the edge with lexicographically greatest `(fromKey + '->' + toKey)` when computing depth/layout.
-
-## UI: two-mode visualizer
-
-### Mode A — Navigator (default on mobile)
-**Purpose:** scalable exploration without rendering the entire graph.
-
-Core concepts:
-- focused node
-- parent shelf (direct requires)
-- current depth shelf (all quests at focused depth)
-- child shelf (direct requiredBy)
-
-Why shelves?
-Multi-parent graphs can have parents far above `depth-1`; “depth-1 only” hides real parents.
-
-Shelf ordering (deterministic):
-1) group asc
-2) title asc
-3) canonicalKey asc
-
-Node card:
-- title
-- group tag
-- badges:
-  - `multi-parent` if `requires.length > 1`
-  - `root` for `howtodoquests.json`
-  - optionally: completed/unlocked/locked if player state is accessible
-
-Keyboard navigation:
-- ArrowLeft/ArrowRight: move within current depth shelf; scroll-snap into view
-- ArrowUp: focus first parent; `Shift+ArrowUp` cycles parents
-- ArrowDown: focus first child; `Shift+ArrowDown` cycles children
-- Enter: drill to child; if multiple, open chooser overlay
-- Escape: close overlays / clear search
-- Ctrl/Cmd+K: open “Jump to quest” search
-
-On-screen controls:
-Compact control bar pinned to the bottom of the visualizer container (not viewport):
-- ◀ ▶ ▲ ▼
-- Search
-- Root button
-
-### Mode B — Map (full DAG)
-**Purpose:** see the whole structure and cross-links, find “spaghetti.”
-
-Renderer:
-- Cytoscape.js
-- start with `dagre` layout
-- optional later: ELK layered layout toggle if needed
-
-Interactions:
-- zoom (scroll/pinch), pan (drag)
-- click node sets focused node and highlights direct parents/children
-- toggles:
-  - show/hide unreachable
-  - show/hide edges
-  - optional: ancestors/descendants highlighting
-
-SSR/hydration constraints:
-- dynamically import Cytoscape inside `onMount()` (never run on server)
-- hydrate via Astro `client:visible` so it loads only when scrolled into view
-- initialize Cytoscape only when Map tab is opened
-
-## Diagnostics panel (QA power tools)
-Compute diagnostics always; show collapsed by default.
-
-Report:
-- missing dependency references
-- ambiguous dependency references
-- unreachable quests
-- cycles (paths with canonical keys + titles)
-
-UX:
-- each diagnostic item clickable → jumps focus to relevant node
-- “Copy report” button outputs plain text JSON
-
-## Performance plan
-- Build graph once (server-side or build-time) and pass to Svelte as one JSON blob.
-- Lazy hydrate (`client:visible`).
-- Navigator renders small shelves only.
-- Map initializes Cytoscape only when Map tab opens.
-- If ELK later, consider a Web Worker for layout.
-
-## Implementation stages
-1) Graph builder + JSON export (+ unit tests)
-2) Navigator view (+ keybinds, search, diagnostics)
-3) Map view (Cytoscape + dagre, selection sync)
-4) QA polish (badges, optional player-state overlays)
-5) Optional ELK toggle (only if dagre insufficient)
-
-## Proposed files (adjust to repo conventions)
-- `frontend/src/lib/quests/questGraph.ts`
-- `frontend/src/components/quests/QuestGraphVisualizer.svelte`
-- `frontend/src/components/quests/QuestGraphNavigator.svelte`
-- `frontend/src/components/quests/QuestGraphMap.svelte`
-- Astro wrapper inserted into `/quests` between Active and Completed
+### Telemetry
+- Chat-related telemetry is limited to `console.error` in the client. There is no structured
+  RAG logging or “context used” trace.
 
 ---
 
-## Folder index (`docs/design/`)
-This folder currently contains design notes for:
-- `docs-full-text-search.md` — `/docs` full-text search + snippet UX + algorithm
-- `quest_depency_graph_visualizer.md` — `/quests` quest dependency graph visualizer (Navigator + Map + diagnostics)
+## Consistency with QA policy (docs/qa/v3.md)
 
-(Consider renaming `quest_depency_graph_visualizer.md` → `quest_dependency_graph_visualizer.md` for spelling consistency in a future tidy-up.)
+QA’s AI chat section is explicit about both *polite failure* and *grounded answers*.
+Relevant excerpts:
+
+> Goal: reduce “confident but wrong” game answers before v3 launch. Focus on content grounding,
+> context coverage, and clear “I don’t know” behavior when the answer is not in context.
+This design satisfies it by making the knowledge summary explicit and adding deterministic sources
+in the chat UI, so uncertainty and coverage are visible to QA (file touchpoints:
+`frontend/src/utils/dchatKnowledge.js`, `frontend/src/utils/openAI.js`,
+`frontend/src/pages/chat/svelte/OpenAIChat.svelte`).
+
+> - [ ] RAG includes `/docs` markdown sources from `frontend/src/pages/docs/md/` (especially custom
+>       content, quests, processes, and inventory docs).
+> - [ ] RAG includes a route/map index (ex: `docs/ROUTES.md` and/or a generated sitemap) to avoid
+>       invented URLs.
+This design satisfies it by extending the knowledge summary with `/docs` titles + slugs and the
+route index (file touchpoints: `frontend/src/utils/dchatKnowledge.js`, `docs/ROUTES.md`,
+`frontend/src/pages/docs/json/sections.json`).
+
+> - [ ] System prompt explicitly forbids inventing items, quests, processes, or routes that are not
+>       in context; require “check docs” or ask a clarifying question instead.
+> - [ ] System prompt includes an explicit “never invent game facts” rule, points to
+>       `docs/ROUTES.md` or asks for a save snapshot when unsure, and is versioned/synced between
+>       staging and prod.
+This design satisfies it by appending a shared “never invent” guardrail to every persona prompt
+so every provider uses the same uncertainty language (file touchpoints:
+`frontend/src/data/npcPersonas.js`, `frontend/src/utils/openAI.js`).
+
+> - [ ] If context is missing, model responds with uncertainty + asks a clarifying question or
+>       suggests the exact doc page to consult.
+This design satisfies it by requiring the guardrail sentence to explicitly instruct “I don’t know”
+responses and by surfacing source lists so QA can confirm when context is missing (file
+touchpoints: `frontend/src/data/npcPersonas.js`, `frontend/src/pages/chat/svelte/Message.svelte`).
+
+> - [ ] Quest graph diagnostics surface and export reports (Map + Diagnostics tabs)
+This design satisfies the *debug visibility* expectation by proposing a minimal, opt-in chat
+diagnostics hook that exposes context metadata when telemetry is enabled (file touchpoints:
+`frontend/src/utils/openAI.js`, `frontend/src/pages/chat/svelte/OpenAIChat.svelte`).
+
+> - [ ] E2E tests pass (Playwright or equivalent)
+This design satisfies it by adding a deterministic “Sources used” UI assertion to the existing
+Playwright suite (file touchpoints: `frontend/e2e/chat-rag-context.spec.ts`).
+
+Today’s implementation partially satisfies the “fail politely” rule via error mapping, but
+**does not satisfy** the RAG coverage and “don’t invent” guardrails for all personas. This
+spec aligns the design doc to QA by:
+
+1) Adding **docs + routes** to the knowledge summary.
+2) Standardizing the **uncertainty + “don’t invent”** language for every persona prompt.
+3) Surfacing **context sources** in the UI so QA can verify grounding.
+
+### If QA doc is outdated
+**What’s missing today:** QA policy does not spell out that v3 “RAG” is a **client-only,
+deterministic knowledge summary** nor that source visibility is expected via UI disclosures
+instead of server logs. It also doesn’t yet acknowledge the planned “Sources used” block or
+lightweight chat diagnostics.
+
+**What Stage 2/3 proposes:** Stage 2 adds `/docs` + routes into the summary; Stage 3 adds
+`contextSources` in the UI and a telemetry-gated diagnostics hook.
+
+**Minimal QA doc tweak (if repo stays client-only):** Add a note under 9.4 that “RAG” means
+local summary assembly (no vector DB), require the docs/routes index to be included, and allow
+UI-level source disclosures + telemetry-gated metadata for QA validation.
 
 ---
+
+## Design: RAG Discoverability + Hallucination Mitigation
+
+### 1) Add a Source Registry to the Knowledge Builder
+
+**Change:** update `buildDchatKnowledge` to return **both** a summary string and a structured
+source list.
+
+Proposed return shape:
+```ts
+{
+  summary: string;
+  sources: Array<{
+    type: 'item' | 'process' | 'quest' | 'achievement' | 'doc' | 'route' | 'state';
+    id: string;
+    label: string;
+    url?: string;
+    detail?: string;
+  }>;
+}
+```
+
+**Why this fits:** `buildDchatKnowledge` already iterates the catalogs and game state, so it
+can emit a parallel `sources` list without new infra. It stays deterministic and local.
+
+**Compatibility note:** this is a breaking change to the current string-only return shape.
+Consider a staged migration (e.g., `buildDchatKnowledgeWithSources` or a feature-flagged
+return shape) so callers like `GPT5Chat` can be updated incrementally.
+
+**Where:** `frontend/src/utils/dchatKnowledge.js` (new helper to append sources while summarizing).
+
+### 2) Extend Context Coverage with `/docs` + routes
+
+**Docs grounding (lightweight):**
+- Use the existing docs index consumed by the live `/docs` page:
+  `frontend/src/pages/docs/json/sections.json` (imported by
+  `frontend/src/pages/docs/index.astro`).
+- Emit a short “Docs index” summary (titles + slugs) and add each doc to the `sources` list.
+
+**Routes grounding:**
+- Include the canonical route list from `docs/ROUTES.md` in the knowledge summary as a short
+  section.
+- Add a `route` source entry for each route group to avoid invented URLs.
+
+These changes align with QA’s RAG coverage requirements without introducing embeddings.
+
+**Rule:** If a source isn’t currently present in-repo, this spec **must** say so and treat it
+as a proposal (not an existing dependency).
+
+### 3) Standardize “don’t invent” prompts across personas
+
+**Change:** add a shared guardrail sentence to *every* persona system prompt (not just dChat).
+
+Suggested sentence to append:
+> “Never invent quests, items, processes, routes, or player state. If you’re unsure, say you
+> don’t know and point to the relevant `/docs` page or ask a clarifying question.”
+
+**Where:** `frontend/src/data/npcPersonas.js` (append to each persona’s `systemPrompt`).
+
+### 4) Cite sources in the UI (discoverability)
+
+**Change:** extend chat message data to carry `contextSources` on assistant replies.
+
+- Add a versioned helper (e.g., `GPT5ChatV2`) in `frontend/src/utils/openAI.js` that returns
+  `{ text, contextSources }`, while keeping the existing `GPT5Chat` string-returning API for
+  backward compatibility during migration.
+- Update `OpenAIChat.svelte` to attach `contextSources` to the assistant message object.
+- Render a collapsible “Sources used” block in `Message.svelte` (or a new subcomponent).
+
+**Why:** this gives QA and players visibility into *what context* the model saw without
+parsing the model response itself.
+
+### 4.1) Sources + citations contract (single place)
+
+**Contract (proposed):**
+- `GPT5ChatV2` returns:
+  ```ts
+  {
+    text: string;
+    contextSources: Array<{ type: string; id: string; label: string; url?: string }>;
+  }
+  ```
+- `OpenAIChat.svelte` stores the data on the assistant message as:
+  ```ts
+  {
+    role: 'assistant';
+    content: string;
+    contextSources?: Array<{ type: string; id: string; label: string; url?: string }>;
+  }
+  ```
+- `Message.svelte` renders a collapsed disclosure labeled “Sources used” and lists sources in
+  deterministic order (e.g., type then label) from the knowledge builder output. The list is
+  **not** derived from the model response, and the UI does not accept LLM self-reported
+  citations unless a structured response format is introduced later (optional Stage 4).
+
+### 5) Minimal telemetry + debug hooks
+
+**Goal:** enable QA to inspect context without leaking secrets.
+
+Proposal (opt-in):
+- When `telemetry.enabled` is true in the runtime config endpoint (currently served at
+  `/config.json`), store the last request’s `contextSources` + summary length in
+  `window.__DSpaceChatDiagnostics` for QA.
+- Keep contents **metadata only** (no raw API keys or full message text).
+
+**Where:** `frontend/src/utils/openAI.js` and/or `OpenAIChat.svelte`.
+
+---
+
+## Implementation Plan
+
+### Stage 1 — Source registry + persona guardrails
+**Changes:**
+- Update `buildDchatKnowledge` to return `{ summary, sources }`.
+- Add shared “don’t invent” guardrails to all persona prompts.
+
+**Acceptance criteria:**
+- Chat requests still include a single system prompt + knowledge summary.
+- Source list includes items, quests, processes, achievements, and state snapshots.
+- Persona prompts in `npcPersonas.js` all include the explicit uncertainty language.
+
+### Stage 2 — Docs + routes grounding
+**Changes:**
+- Add docs index + routes list to `buildDchatKnowledge` summary.
+- Add corresponding `sources` entries.
+
+**Acceptance criteria:**
+- Knowledge summary contains `/docs` titles + slugs and route index data.
+- QA probes about custom content, routes, and v3 release notes are answerable
+  without invented URLs.
+
+### Stage 3 — UI citations + diagnostics
+**Changes:**
+- Introduce `GPT5ChatV2` (or similar) response shape and update
+  `OpenAIChat.svelte` message objects to use it.
+- Render “Sources used” in `Message.svelte` (collapsed by default).
+- Add `window.__DSpaceChatDiagnostics` when telemetry is enabled.
+
+**Acceptance criteria:**
+- Each assistant reply shows a deterministic list of sources used for that turn.
+- QA can inspect source lists in the UI and via diagnostics.
+
+---
+
+## Testing Plan (repo-aligned)
+
+### Unit tests
+- `frontend/__tests__/dchatKnowledge.test.js` (or new file):
+  - Ensures `buildDchatKnowledge` returns `summary` + `sources`.
+  - Verifies docs + routes entries appear when enabled.
+- Update `tests/gpt5ChatResponses.test.ts` (existing) to assert the new return shape and
+  `contextSources` propagation.
+
+### Simple eval harness plan (deterministic)
+- Extend `tests/gpt5ChatResponses.test.ts` with golden fixtures that assert:
+  - The generated prompt includes a knowledge summary and a shared “never invent” guardrail.
+  - `contextSources` propagates from `buildDchatKnowledge` through `GPT5ChatV2` to the returned
+    response object.
+  - When context is absent (mock empty summary + sources), the prompt contract includes the
+    “don’t know / ask clarifying question” instruction.
+- Keep the harness purely unit-level: strict schema assertions and serialized fixtures only,
+  no new services or infrastructure.
+
+### E2E tests (Playwright)
+- Extend `frontend/e2e/chat-rag-context.spec.ts`:
+  - Verify that a “Sources used” block renders and contains item/quest/process IDs.
+
+---
+
+## Failure Modes Checklist
+
+- **Retrieval mismatch:** sources list does not reflect summary content.
+- **Prompt injection:** user messages try to override system prompt; guardrails must remain
+  first system message.
+- **Missing source docs:** docs/routes list missing or stale; ensure `ROUTES.md` is updated.
+- **State hallucination:** assistant claims access to inventory or quests when no game state is
+  present in local storage.
+- **Provider mismatch:** token.place lacks the expanded knowledge summary; document this
+  difference explicitly until v3.1.
+
+---
+
+## Notes on scope
+
+This design intentionally avoids backend RAG or embeddings for v3. The aim is to **make the
+existing context visible and aligned with QA expectations**, then incrementally add lightweight
+sources (docs + routes) without changing the client-only architecture.
