@@ -26,7 +26,7 @@ The easiest way to submit a bundle is through the in-game interface:
     - Items: [/inventory/create](/inventory/create)
     - Processes: [/processes/create](/processes/create)
     - Quests: [/quests/create](/quests/create)
-2. Export your custom content from [/contentbackup](/contentbackup) (Prepare backup → Download)
+2. Export your custom content from [/contentbackup](/contentbackup) (Prepare backup → Download backup)
 3. Combine them into a bundle JSON following the format above
 4. Submit the bundle at [/bundles/submit](/bundles/submit)
 5. The system will create a pull request for review

@@ -184,11 +184,22 @@ available, so changes will not persist after refresh).
 **Edit a quest**
 
 1. Open `/quests/manage`.
-2. Click **Edit** on a custom quest (built-in quests are read-only).
+2. Click **Edit** on a custom quest (built-in quests are read-only); this routes to
+   `/quests/[id]/edit`.
 3. Update the fields and save to update the local IndexedDB record.
 
-Images are stored as downsampled JPEG data URLs, titles must be unique, and the editor surfaces a
-simulation warning if dialogue paths do not reach a finish option (but it does not block saving).
+**Validation and image handling**
+
+- Titles must be unique and at least 3 characters; descriptions must be at least 10 characters.
+- NPC selection is required.
+- Dialogue node IDs must be unique, nodes require text, and each node needs at least one option.
+- Goto options must target existing node IDs; process options require a process ID.
+- Required and granted item rows must include an item ID and positive count (the same applies to
+  quest reward items).
+- Image uploads are downsampled into square JPEG data URLs (target ~50KB). If you leave the image
+  blank on a new quest, the editor uses `/assets/quests/howtodoquests.jpg` as the default.
+- The simulation summary warns if dialogue paths cannot reach a finish option, but it does not
+  block saving.
 
 ### Testing Your Quest
 

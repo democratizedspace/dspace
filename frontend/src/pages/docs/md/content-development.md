@@ -47,15 +47,23 @@ IndexedDB is unavailable, which means the data will not persist after refresh).
     - Items: `/inventory/manage`
     - Processes: `/processes/manage`
 2. Click **Edit** on the custom entry (built-in content is read-only).
-3. Update the fields and save. The entry is updated in the same IndexedDB store.
+3. The edit routes resolve to `/quests/[id]/edit`, `/inventory/item/[itemId]/edit`, and
+   `/processes/[processId]/edit`.
+4. Update the fields and save. The entry is updated in the same IndexedDB store.
 
 **Quest editor specifics**
 
-- The quest form requires a unique title and a description, plus a start node and dialogue nodes.
-- You can add dialogue options of type **goto**, **finish**, **process**, or **grantsItems**, and
-  optionally require or grant items per option.
-- NPC selection accepts built-in NPCs or a custom avatar path; the form normalizes IDs and names.
-- Quest images are stored as data URLs and are downsampled to JPEG before saving.
+- Title (min 3 chars) and description (min 10 chars) are required, and titles must be unique across
+  existing quests.
+- Dialogue nodes need unique IDs, non-empty text, and at least one option. Options can be **goto**,
+  **finish**, **process**, or **grantsItems**.
+    - Goto options must point to an existing node ID.
+    - Process options require a process ID.
+    - Required or granted item rows need an item ID and a positive count.
+- The NPC picker is populated from the built-in catalog; when editing an existing quest with a
+  custom NPC value, the select includes a “Custom (…)” entry for it.
+- Quest images are stored as data URLs and are downsampled to square JPEGs (target ~50KB) before
+  saving.
 
 **Item editor specifics**
 
@@ -69,6 +77,23 @@ IndexedDB is unavailable, which means the data will not persist after refresh).
   (requires/consumes/creates).
 - Durations are normalized to a canonical format after saving (for example, `1h 30m`).
 - Item counts must be positive, and empty rows are ignored on save.
+
+**Storage details**
+
+Custom content persists to the `CustomContent` IndexedDB database. The schema includes:
+
+- Object stores: `meta`, `items`, `processes`, and `quests`
+- `meta` stores the `schemaVersion` key
+
+When custom content is saved through the editors:
+
+- IDs are generated with `crypto.randomUUID()` (or a UUID fallback) when missing.
+- `custom: true` and `createdAt` are set on new records; `updatedAt` is set on edits.
+- Items default `category` to `Custom` when not provided.
+- Processes default `duration` to `60` seconds if missing (the form provides a normalized duration).
+
+If IndexedDB is unavailable, custom content falls back to an in-memory store (not localStorage),
+which is cleared on refresh.
 
 **Export + backup**
 
