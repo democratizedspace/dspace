@@ -484,6 +484,34 @@ describe('getOpenAIErrorSummary', () => {
         expect(result.message).toMatch(/could not reach/i);
     });
 
+    it('labels network errors when the error name indicates a network failure', () => {
+        const error = new Error('Request failed');
+        error.name = 'NetworkError';
+
+        const result = getOpenAIErrorSummary(error);
+
+        expect(result.type).toBe('network');
+        expect(result.message).toMatch(/could not reach/i);
+    });
+
+    it('labels network errors when the message contains load failed', () => {
+        const error = new Error('Load failed while fetching the resource.');
+
+        const result = getOpenAIErrorSummary(error);
+
+        expect(result.type).toBe('network');
+        expect(result.message).toMatch(/could not reach/i);
+    });
+
+    it('labels network errors when the message contains networkerror', () => {
+        const error = new Error('NetworkError when attempting to fetch resource.');
+
+        const result = getOpenAIErrorSummary(error);
+
+        expect(result.type).toBe('network');
+        expect(result.message).toMatch(/could not reach/i);
+    });
+
     it('falls back to unknown for unexpected errors', () => {
         const result = getOpenAIErrorSummary(new Error('mystery'));
 
