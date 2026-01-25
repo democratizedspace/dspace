@@ -5,7 +5,9 @@ slug: 'content-development'
 
 # DSPACE Content Development Guide
 
-DSPACE is designed to be an extensible platform where community members can create and contribute various types of content. This guide serves as the central hub for all content development documentation, providing links to detailed guidelines for each content type.
+DSPACE is designed to be an extensible platform where community members can create and contribute
+various types of content. This guide serves as the central hub for all content development
+documentation, providing links to detailed guidelines for each content type.
 
 ## Overview
 
@@ -15,10 +17,63 @@ The DSPACE ecosystem supports several types of custom content:
 2. **Items**: Virtual resources, tools, and components used throughout the game
 3. **Processes**: Activities that transform, create, or utilize items
 
-Each content type follows specific guidelines to ensure consistency, educational value, and alignment with DSPACE's mission of democratizing space exploration through practical, hands-on learning.
+Each content type follows specific guidelines to ensure consistency, educational value, and
+alignment with DSPACE's mission of democratizing space exploration through practical, hands-on
+learning.
 
-Management pages (`/quests/manage`, `/items/manage`, and `/processes/manage`) let you
+Management pages (`/quests/manage`, `/inventory/manage`, and `/processes/manage`) let you
 edit or delete custom entries stored locally in IndexedDB.
+
+### In-game custom content editors (current behavior)
+
+Use the in-game editors to create and update custom quests, items, and processes. These editors
+write to your browser's IndexedDB-backed custom content database (with an in-memory fallback if
+IndexedDB is unavailable, which means the data will not persist after refresh).
+
+**Create new content**
+
+1. Open the editor:
+    - Quests: `/quests/create`
+    - Items: `/inventory/create`
+    - Processes: `/processes/create`
+2. Fill out the required fields. Each form validates required fields before saving.
+3. Save the entry to store it locally. The editor shows a success message with a link to view the
+   new item, process, or quest.
+
+**Edit existing content**
+
+1. Open the management page:
+    - Quests: `/quests/manage`
+    - Items: `/inventory/manage`
+    - Processes: `/processes/manage`
+2. Click **Edit** on the custom entry (built-in content is read-only).
+3. Update the fields and save. The entry is updated in the same IndexedDB store.
+
+**Quest editor specifics**
+
+- The quest form requires a unique title and a description, plus a start node and dialogue nodes.
+- You can add dialogue options of type **goto**, **finish**, **process**, or **grantsItems**, and
+  optionally require or grant items per option.
+- NPC selection accepts built-in NPCs or a custom avatar path; the form normalizes IDs and names.
+- Quest images are stored as data URLs and are downsampled to JPEG before saving.
+
+**Item editor specifics**
+
+- Items require a name, description, and image (stored as a compressed JPEG data URL).
+- Optional fields include price, unit, type, and dependencies (comma- or newline-separated IDs).
+- Saving a new item adds it to your local inventory catalog with a custom category label.
+
+**Process editor specifics**
+
+- Processes require a title, duration, and at least one item relationship
+  (requires/consumes/creates).
+- Durations are normalized to a canonical format after saving (for example, `1h 30m`).
+- Item counts must be positive, and empty rows are ignored on save.
+
+**Export + backup**
+
+Custom quests, items, and processes can be exported via the custom content backup page at
+`/contentbackup`, which prepares a JSON bundle for download (used for submissions and backups).
 
 ## Getting Started
 
@@ -33,7 +88,8 @@ Before creating any content, we recommend:
 
 ### [Quest Development Guidelines](/docs/quest-guidelines)
 
-Comprehensive instructions for creating engaging, educational quests that guide players through practical space-related activities. Topics include:
+Comprehensive instructions for creating engaging, educational quests that guide players through
+practical space-related activities. Topics include:
 
 - Quest philosophy and educational goals
 - Quest categories and progression paths
@@ -47,7 +103,8 @@ Comprehensive instructions for creating engaging, educational quests that guide 
 
 ### [Item Development Guidelines](/docs/item-guidelines)
 
-Detailed guide for creating virtual items that represent resources, tools, and components. Topics include:
+Detailed guide for creating virtual items that represent resources, tools, and components. Topics
+include:
 
 - Item categories and classification
 - Properties and attributes
