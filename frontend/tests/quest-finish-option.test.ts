@@ -36,6 +36,27 @@ vi.mock('../src/utils/githubToken.js', () => ({
     isValidGitHubToken: vi.fn(() => false),
 }));
 
+vi.mock('../src/utils/itemResolver.js', () => ({
+    getItemMap: vi.fn(async (ids = []) => {
+        const namesById: Record<string, string> = {
+            'item-1': 'Required Widget',
+            'reward-1': 'Reward Widget',
+        };
+
+        return new Map(
+            ids.map((id: string) => [
+                String(id),
+                {
+                    id: String(id),
+                    name: namesById[String(id)] ?? `Item ${id}`,
+                    image: `/images/${id}.png`,
+                    releaseImage: null,
+                },
+            ])
+        );
+    }),
+}));
+
 describe('FinishOption quest requirements', () => {
     beforeEach(() => {
         finishQuestMock.mockClear();
@@ -52,14 +73,36 @@ describe('FinishOption quest requirements', () => {
             requiresItems: [{ id: 'item-1', count: 1 }],
         };
 
-        const { getByRole, getByText } = render(FinishOption, { props: { quest, option } });
+        const { getByRole, getByText, findByAltText } = render(FinishOption, {
+            props: { quest, option },
+        });
 
         const button = getByRole('button', { name: 'Finish quest' });
         expect(button).toBeDisabled();
         expect(getByText('Requires:')).toBeInTheDocument();
+        expect(await findByAltText('Required Widget')).toBeInTheDocument();
 
         await fireEvent.click(button);
         expect(finishQuestMock).not.toHaveBeenCalled();
+    });
+
+    it('shows no requirements and stays enabled when no items are required', () => {
+        const quest = {
+            id: 'quest-1',
+            rewards: [{ id: 'reward-1', count: 1 }],
+        };
+        const option = {
+            text: 'Finish quest',
+        };
+
+        const { getByRole, queryByText, queryByAltText } = render(FinishOption, {
+            props: { quest, option },
+        });
+
+        const button = getByRole('button', { name: 'Finish quest' });
+        expect(button).toBeEnabled();
+        expect(queryByText('Requires:')).not.toBeInTheDocument();
+        expect(queryByAltText('Required Widget')).not.toBeInTheDocument();
     });
 
     it('enables finish option when inventory meets requirements', async () => {
