@@ -192,6 +192,7 @@
     .item-selector {
         width: 100%;
         margin-bottom: 10px;
+        min-width: 0;
     }
 
     label {
@@ -254,6 +255,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        min-width: 0;
     }
 
     .item-content img {
@@ -271,6 +273,9 @@
         margin: 0;
         font-size: 14px;
         color: white;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .description {
@@ -331,6 +336,16 @@
         padding: 8px;
         border-radius: 4px;
         border: 2px solid #007006;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .selected-item .item-content {
+        flex: 1 1 160px;
+    }
+
+    .selected-item .edit-button {
+        flex-shrink: 0;
     }
 
     .edit-button,

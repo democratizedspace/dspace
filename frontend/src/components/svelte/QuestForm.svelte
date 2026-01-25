@@ -1846,7 +1846,7 @@
 
     .item-row {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        grid-template-columns: minmax(240px, 1fr) minmax(80px, 120px) auto;
         gap: 8px;
         align-items: center;
     }
@@ -1882,6 +1882,18 @@
 
     .remove-button:hover {
         background-color: #800f0f;
+    }
+
+    @media (max-width: 640px) {
+        .item-row {
+            grid-template-columns: 1fr;
+            align-items: stretch;
+        }
+
+        .item-row input[type='number'],
+        .item-row .remove-button {
+            width: 100%;
+        }
     }
 
     .sr-only {
