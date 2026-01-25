@@ -71,6 +71,22 @@
         isExpanded = !isExpanded;
     }
 
+    let ignoreNextClick = false;
+
+    function handleToggleClick() {
+        if (ignoreNextClick) {
+            ignoreNextClick = false;
+            return;
+        }
+        toggleExpanded();
+    }
+
+    function handleToggleTouch(event) {
+        ignoreNextClick = true;
+        event.preventDefault();
+        toggleExpanded();
+    }
+
     $: {
         filteredItems.set(normalizedItems);
     }
@@ -164,8 +180,8 @@
                     class="edit-button"
                     aria-haspopup="listbox"
                     aria-expanded={isExpanded}
-                    on:click={toggleExpanded}
-                    on:touchstart|preventDefault={toggleExpanded}
+                    on:click={handleToggleClick}
+                    on:touchstart={handleToggleTouch}
                 >
                     Edit
                 </button>
@@ -177,8 +193,8 @@
                 id={resolvedControlId}
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
-                on:click={toggleExpanded}
-                on:touchstart|preventDefault={toggleExpanded}
+                on:click={handleToggleClick}
+                on:touchstart={handleToggleTouch}
             >
                 {buttonLabel}
             </button>
