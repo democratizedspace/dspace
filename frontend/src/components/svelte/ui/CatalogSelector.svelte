@@ -71,27 +71,13 @@
         isExpanded = !isExpanded;
     }
 
-    let ignoreToggleClick = false;
-    let ignoreToggleClickTimeout;
-
     function handleToggleClick() {
-        if (ignoreToggleClick) {
-            return;
-        }
         toggleExpanded();
     }
 
     function handleTouchToggle(event) {
-        if (event.pointerType && event.pointerType !== 'touch') {
-            return;
-        }
         event.preventDefault();
-        ignoreToggleClick = true;
-        clearTimeout(ignoreToggleClickTimeout);
         toggleExpanded();
-        ignoreToggleClickTimeout = setTimeout(() => {
-            ignoreToggleClick = false;
-        }, 300);
     }
 
     $: {
@@ -187,7 +173,7 @@
                     aria-haspopup="listbox"
                     aria-expanded={isExpanded}
                     on:click={handleToggleClick}
-                    on:pointerup={handleTouchToggle}
+                    on:touchstart={handleTouchToggle}
                 >
                     Edit
                 </button>
@@ -200,7 +186,7 @@
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
                 on:click={handleToggleClick}
-                on:pointerup={handleTouchToggle}
+                on:touchstart={handleTouchToggle}
             >
                 {buttonLabel}
             </button>
