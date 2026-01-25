@@ -152,6 +152,83 @@ UI-level source disclosures + telemetry-gated metadata for QA validation.
 
 ---
 
+## Failure modes → fixes (QA 9.4.2 alignment)
+
+Each fix below maps to a QA checkbox in `docs/qa/v3.md` and is scoped for v3’s client-only
+architecture.
+
+### Custom content blind spot
+**Problem:** The assistant implies custom content requires repo edits and omits the in-game editor.
+
+**Fix approach:**
+1) Add the custom content docs (editor/import/export/backup) to the knowledge summary so the model
+   sees the in-game flow. (Files: `frontend/src/pages/docs/json/sections.json`,
+   `frontend/src/utils/dchatKnowledge.js`.)
+2) Append a persona guardrail sentence that explicitly instructs: “Custom content is created in
+   the in-game editor; link to `/docs`.” (Files: `frontend/src/data/npcPersonas.js`.)
+3) Update QA probes to verify the answer includes the editor + backup options and a `/docs` link.
+
+### Stale content drift
+**Problem:** The assistant claims deferred features are active or repeats v2-era behavior.
+
+**Fix approach:**
+1) Add v3 release notes/changelog to the knowledge summary, and include a short “deferred in v3”
+   bullet list (token.place). (Files: `docs/changelog`, `frontend/src/utils/dchatKnowledge.js`.)
+2) Add a guardrail clause: “If a feature is deferred, say so explicitly and reference v3 notes.”
+3) Add a QA regression probe (token.place status + v3-only mechanics).
+
+### Non-reasoning model regression
+**Problem:** The non-reasoning `/chat` model guesses instead of saying “I don’t know.”
+
+**Fix approach:**
+1) Standardize the “don’t invent / ask a clarifying question” guardrail across all personas so
+   the non-reasoning model gets the same instruction. (File: `frontend/src/data/npcPersonas.js`.)
+2) Add a unit assertion that the guardrail is included for every persona and passed to the
+   OpenAI client. (Files: `tests/gpt5ChatResponses.test.ts` or new test.)
+3) Run 2–3 QA probes with the non-reasoning model config and record behavior.
+
+### Made-up game state
+**Problem:** The assistant invents inventory/quests without access to the user’s save.
+
+**Fix approach:**
+1) Add explicit prompt language: “You cannot see a user’s save unless provided.” (File:
+   `frontend/src/data/npcPersonas.js`.)
+2) Ensure the knowledge summary clearly separates global catalog data from live player state and
+   can be empty when no save is loaded. (File: `frontend/src/utils/dchatKnowledge.js`.)
+3) QA probe: ask “What’s in my inventory?” and verify it requests a snapshot.
+
+### Incorrect routes/UX
+**Problem:** The assistant invents routes or misstates navigation.
+
+**Fix approach:**
+1) Include `docs/ROUTES.md` (or a generated route index) in the knowledge summary. (Files:
+   `docs/ROUTES.md`, `frontend/src/utils/dchatKnowledge.js`.)
+2) Add a prompt reminder: “Only link routes listed in ROUTES.md.” (File:
+   `frontend/src/data/npcPersonas.js`.)
+3) QA probes: “Where do I edit quests?” and “What are the current routes?” must reference known
+   routes only.
+
+### Incorrect data semantics
+**Problem:** The assistant swaps requires/consumes/creates or misstates durations.
+
+**Fix approach:**
+1) Add a short glossary snippet to the knowledge summary covering requires/consumes/creates and
+   duration format. (File: `frontend/src/utils/dchatKnowledge.js`.)
+2) Ensure processes docs are included in the docs index and used as the canonical reference.
+3) QA probes verify the model points to the processes docs and uses correct terminology.
+
+### Overconfident precision
+**Problem:** The assistant supplies exact numbers without sources.
+
+**Fix approach:**
+1) Add a guardrail clause: “If a number is not in context, say unknown.” (File:
+   `frontend/src/data/npcPersonas.js`.)
+2) Surface sources in the UI so QA can verify numbers are grounded. (Files:
+   `frontend/src/pages/chat/svelte/Message.svelte`, `frontend/src/utils/openAI.js`.)
+3) QA probes with numeric questions must show a source or admit uncertainty.
+
+---
+
 ## Design: RAG Discoverability + Hallucination Mitigation
 
 ### 1) Add a Source Registry to the Knowledge Builder
