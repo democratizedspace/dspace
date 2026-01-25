@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
-import { render, fireEvent, cleanup } from '@testing-library/svelte';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, fireEvent } from '@testing-library/svelte';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { writable } from 'svelte/store';
 import { tick } from 'svelte';
 import FinishOption from '../src/pages/quests/svelte/option/FinishOption.svelte';
@@ -63,10 +63,6 @@ describe('FinishOption quest requirements', () => {
         stateStore.set({ inventory: {} });
     });
 
-    afterEach(() => {
-        cleanup();
-    });
-
     it('disables finish option and shows required items when missing inventory', async () => {
         const quest = {
             id: 'quest-1',
@@ -77,14 +73,14 @@ describe('FinishOption quest requirements', () => {
             requiresItems: [{ id: 'item-1', count: 1 }],
         };
 
-        const { getByRole, getByText, findByAltText } = render(FinishOption, {
+        const { getByRole, getByText, findByText } = render(FinishOption, {
             props: { quest, option },
         });
 
         const button = getByRole('button', { name: /Finish quest/ });
         expect(button).toBeDisabled();
         expect(getByText('Requires:')).toBeInTheDocument();
-        expect(await findByAltText('Required Widget')).toBeInTheDocument();
+        expect(await findByText(/Required Widget/)).toBeInTheDocument();
 
         await fireEvent.click(button);
         expect(finishQuestMock).not.toHaveBeenCalled();
@@ -99,14 +95,14 @@ describe('FinishOption quest requirements', () => {
             text: 'Finish quest',
         };
 
-        const { getByRole, queryByText, queryByAltText } = render(FinishOption, {
+        const { getByRole, queryByText } = render(FinishOption, {
             props: { quest, option },
         });
 
         const button = getByRole('button', { name: /Finish quest/ });
         expect(button).toBeEnabled();
         expect(queryByText('Requires:')).not.toBeInTheDocument();
-        expect(queryByAltText('Required Widget')).not.toBeInTheDocument();
+        expect(queryByText(/Required Widget/)).not.toBeInTheDocument();
     });
 
     it('enables finish option when inventory meets requirements', async () => {
