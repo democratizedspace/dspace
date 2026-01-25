@@ -55,6 +55,7 @@
     function handleSelect(itemId) {
         selectedId = itemId;
         isExpanded = false;
+        ignoreClickUntil = 0;
         const selectedItem = normalizedItems.find((item) => item.id === itemId)?.item ?? null;
         dispatch('select', { itemId, item: selectedItem });
     }
