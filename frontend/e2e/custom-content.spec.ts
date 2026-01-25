@@ -121,7 +121,8 @@ test.describe('Custom Content Management', () => {
             'This is a test custom item created for automated testing.'
         );
         await uploadItemImage(page);
-        await page.fill('#price', '100 dUSD');
+        await page.fill('#price-amount', '100');
+        await page.selectOption('#price-currency', 'dUSD');
         await page.fill('#unit', 'kg');
         await page.fill('#type', 'resource');
 
@@ -305,7 +306,8 @@ test.describe('Custom Content Management', () => {
         await page.fill('#name', uniqueItemName);
         await page.fill('#description', 'Item used to validate custom process discovery');
         await uploadItemImage(page);
-        await page.fill('#price', '100 dUSD');
+        await page.fill('#price-amount', '100');
+        await page.selectOption('#price-currency', 'dUSD');
         await page.fill('#unit', 'kg');
         await page.fill('#type', 'resource');
 
@@ -643,7 +645,8 @@ test.describe('Custom Content Management', () => {
         const uniqueItemName = `Integration Test Item ${Date.now()}`;
         await page.fill('#name', uniqueItemName);
         await page.fill('#description', 'Custom item for the integration test');
-        await page.fill('#price', '200 dUSD');
+        await page.fill('#price-amount', '200');
+        await page.selectOption('#price-currency', 'dUSD');
         await page.fill('#unit', 'piece');
         await page.fill('#type', 'component');
 
