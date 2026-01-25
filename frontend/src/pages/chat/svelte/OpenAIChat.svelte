@@ -170,6 +170,7 @@
             showDebug = nextNormalized.showChatDebugPayload;
             if (!showDebug) {
                 debugExpanded = false;
+                debugMessages = [];
             }
         });
         if ($messageHistory.length === 0) {
