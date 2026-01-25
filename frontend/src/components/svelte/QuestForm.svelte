@@ -1846,7 +1846,7 @@
 
     .item-row {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        grid-template-columns: minmax(220px, 1fr) minmax(80px, 120px) minmax(100px, 120px);
         gap: 8px;
         align-items: center;
     }
@@ -1882,6 +1882,17 @@
 
     .remove-button:hover {
         background-color: #800f0f;
+    }
+
+    @media (max-width: 720px) {
+        .item-row {
+            grid-template-columns: 1fr;
+            align-items: stretch;
+        }
+
+        .item-row .remove-button {
+            justify-self: flex-start;
+        }
     }
 
     .sr-only {
