@@ -1,5 +1,6 @@
 export const DEFAULT_SETTINGS = {
     showQuestGraphVisualizer: false,
+    showChatPromptDebug: false,
 };
 
 export const normalizeSettings = (settings = {}) => {
@@ -11,5 +12,6 @@ export const normalizeSettings = (settings = {}) => {
     return {
         ...base,
         showQuestGraphVisualizer: Boolean(base.showQuestGraphVisualizer),
+        showChatPromptDebug: Boolean(base.showChatPromptDebug),
     };
 };

@@ -5,8 +5,9 @@
         describeOpenAIError,
         getOpenAIErrorSummary,
         GPT5Chat,
+        buildChatPayload,
     } from '../../../utils/openAI.js';
-    import { writable } from 'svelte/store';
+    import { derived, writable } from 'svelte/store';
     import {
         messages,
         countTokens,
@@ -15,6 +16,8 @@
         activePersonaId,
         setActivePersona,
     } from '../../../stores/chat.js';
+    import { state as gameState } from '../../../utils/gameState/common.js';
+    import { normalizeSettings } from '../../../utils/settingsDefaults.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -27,6 +30,11 @@
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
+
+    const debugPromptEnabled = derived(gameState, ($gameState) => {
+        const normalized = normalizeSettings($gameState?.settings);
+        return normalized.showChatPromptDebug;
+    });
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -71,6 +79,21 @@
         addMessage(welcome);
     }
 
+    function buildDebugSegments(payload) {
+        if (!payload?.combinedMessages?.length) {
+            return [];
+        }
+
+        return payload.combinedMessages.map((entry) => {
+            const isRag = payload.knowledgeMessage && entry === payload.knowledgeMessage;
+            return {
+                type: isRag ? 'rag' : 'main',
+                label: entry.role,
+                content: entry.content,
+            };
+        });
+    }
+
     async function submitMessage() {
         const userMessage = {
             role: 'user',
@@ -83,6 +106,10 @@
         const historyForApi = [...$messageHistory];
         showSpinner = true;
         errorBanner = null;
+        const debugPayload = await buildChatPayload(historyForApi, {
+            persona: currentPersona,
+        });
+        const debugSegments = buildDebugSegments(debugPayload);
 
         try {
             const aiResponse = await GPT5Chat(historyForApi, {
@@ -95,6 +122,7 @@
                 avatarUrl: getPersonaAvatar(currentPersona),
                 avatarAlt: getPersonaAlt(currentPersona),
                 timestamp: Date.now(),
+                debugSegments,
             };
 
             addMessage(aiMessage);
@@ -109,6 +137,7 @@
                 avatarUrl: getPersonaAvatar(currentPersona),
                 avatarAlt: getPersonaAlt(currentPersona),
                 timestamp: Date.now(),
+                debugSegments,
             });
         }
 
@@ -198,6 +227,8 @@
                     timestamp={message.timestamp}
                     avatarUrl={message.avatarUrl}
                     avatarAlt={message.avatarAlt}
+                    debugSegments={message.debugSegments}
+                    showDebug={$debugPromptEnabled}
                 />
             {/each}
         {/if}

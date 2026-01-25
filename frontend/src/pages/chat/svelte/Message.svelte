@@ -13,6 +13,8 @@
     export let timestamp;
     export let avatarUrl = null;
     export let avatarAlt = 'NPC portrait';
+    export let debugSegments = null;
+    export let showDebug = false;
 
     let messageHtml;
     const md = new Remarkable({
@@ -111,6 +113,17 @@
                 Copied to clipboard
             </div>
         {/if}
+        {#if showDebug && debugSegments?.length}
+            <div class="debug-prompt" aria-label="Chat prompt debug payload">
+                <div class="debug-header">Prompt payload</div>
+                {#each debugSegments as segment}
+                    <div class={`debug-block ${segment.type}`}>
+                        <div class="debug-label">{segment.label}</div>
+                        <pre>{segment.content}</pre>
+                    </div>
+                {/each}
+            </div>
+        {/if}
     </div>
 </div>
 
@@ -205,6 +218,61 @@
         padding: 10px 20px;
         border-radius: 5px;
         text-align: center;
+    }
+
+    .debug-prompt {
+        margin-top: 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        background: rgba(15, 23, 42, 0.08);
+        padding: 10px;
+        display: grid;
+        gap: 8px;
+        color: #0f172a;
+    }
+
+    .debug-header {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #0f172a;
+    }
+
+    .debug-block {
+        border-radius: 6px;
+        padding: 8px;
+        border: 1px solid transparent;
+        display: grid;
+        gap: 4px;
+        font-size: 0.85rem;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .debug-block pre {
+        margin: 0;
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .debug-block.main {
+        background: rgba(59, 130, 246, 0.12);
+        border-color: rgba(37, 99, 235, 0.4);
+    }
+
+    .debug-block.rag {
+        background: rgba(217, 70, 239, 0.12);
+        border-color: rgba(192, 38, 211, 0.4);
+    }
+
+    .debug-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #0f172a;
     }
 
     .avatar-spacer {
