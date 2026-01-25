@@ -21,7 +21,12 @@ vi.mock('../src/data/npcPersonas.js', () => ({
     ],
 }));
 
-import { defaultOpenAIErrorMessage, describeOpenAIError, GPT5Chat } from '../src/utils/openAI.js';
+import {
+    defaultOpenAIErrorMessage,
+    describeOpenAIError,
+    getOpenAIErrorSummary,
+    GPT5Chat,
+} from '../src/utils/openAI.js';
 
 class MockResponseClient {
     constructor(resolver) {
@@ -408,5 +413,119 @@ describe('describeOpenAIError', () => {
         const result = describeOpenAIError(new Error('unexpected'));
 
         expect(result).toBe(defaultOpenAIErrorMessage);
+    });
+});
+
+describe('getOpenAIErrorSummary', () => {
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    it('labels authentication failures as auth errors', () => {
+        const error = new Error('Invalid API key');
+        error.status = 401;
+
+        const result = getOpenAIErrorSummary(error);
+
+        expect(result.type).toBe('auth');
+        expect(result.message).toMatch(/api key/i);
+    });
+
+    it('labels quota exhaustion as quota errors', () => {
+        const error = new Error('You exceeded your current quota');
+        error.status = 429;
+        error.code = 'insufficient_quota';
+        error.error = { type: 'insufficient_quota' };
+
+        const result = getOpenAIErrorSummary(error);
+
+        expect(result.type).toBe('quota');
+        expect(result.message).toMatch(/out of credits/i);
+    });
+
+    it('labels rate limiting as rate limit errors', () => {
+        const error = new Error('Rate limit exceeded');
+        error.status = 429;
+
+        const result = getOpenAIErrorSummary(error);
+
+        expect(result.type).toBe('rate_limit');
+        expect(result.message).toMatch(/rate limited/i);
+    });
+
+    it('labels model access failures as permission errors', () => {
+        const error = new Error('The model does not exist');
+        error.status = 404;
+        error.code = 'model_not_found';
+
+        const result = getOpenAIErrorSummary(error);
+
+        expect(result.type).toBe('permission');
+        expect(result.message).toMatch(/denied access/i);
+    });
+
+    it('labels server outages as server errors', () => {
+        const error = new Error('Server error');
+        error.status = 503;
+
+        const result = getOpenAIErrorSummary(error);
+
+        expect(result.type).toBe('server');
+        expect(result.message).toMatch(/unavailable/i);
+    });
+
+    it('labels offline failures as network errors', () => {
+        vi.stubGlobal('navigator', { onLine: false });
+        const error = new Error('Failed to fetch');
+
+        const result = getOpenAIErrorSummary(error);
+
+        expect(result.type).toBe('network');
+        expect(result.message).toMatch(/could not reach/i);
+    });
+
+    it('labels network errors when the error name indicates a network failure', () => {
+        const error = new Error('Request failed');
+        error.name = 'NetworkError';
+
+        const result = getOpenAIErrorSummary(error);
+
+        expect(result.type).toBe('network');
+        expect(result.message).toMatch(/could not reach/i);
+    });
+
+    it('labels network errors when the message contains load failed', () => {
+        const error = new Error('Load failed while fetching the resource.');
+
+        const result = getOpenAIErrorSummary(error);
+
+        expect(result.type).toBe('network');
+        expect(result.message).toMatch(/could not reach/i);
+    });
+
+    it('labels network errors when the message contains networkerror', () => {
+        const error = new Error('NetworkError when attempting to fetch resource.');
+
+        const result = getOpenAIErrorSummary(error);
+
+        expect(result.type).toBe('network');
+        expect(result.message).toMatch(/could not reach/i);
+    });
+
+    it('labels empty TypeError failures as network errors', () => {
+        const error = new Error('');
+        error.name = 'TypeError';
+
+        const result = getOpenAIErrorSummary(error);
+
+        expect(result.type).toBe('network');
+        expect(result.message).toMatch(/could not reach/i);
+    });
+
+    it('falls back to unknown for unexpected errors', () => {
+        const result = getOpenAIErrorSummary(new Error('mystery'));
+
+        expect(result.type).toBe('unknown');
+        expect(result.message).toBe(defaultOpenAIErrorMessage);
     });
 });
