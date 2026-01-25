@@ -31,6 +31,100 @@ without introducing heavyweight infrastructure.
 - Add a lightweight docs/routes grounding layer that fits the existing client-only architecture.
 - Keep the implementation small and deterministic; no server-side retrieval in v3.
 
+## Known failure modes (QA 9.4.2) and concrete fixes
+
+This section translates the QA “hallucination failure modes” into **specific remediation work**
+that v3 can ship without introducing server-side RAG. Each item lists the fix and the concrete
+repo touchpoints that implement it.
+
+### 1) Custom content blind spot
+**Problem:** replies imply custom content only exists via repo edits and skip the in-game editor,
+import/export, and backup flows.
+
+**Fix (v3):**
+- Extend the knowledge summary with `/docs` entries that cover the custom content editor,
+  import/export, and backup workflows. Use `frontend/src/pages/docs/json/sections.json` to source
+  titles/slugs, and add a short “Custom content” subsection in the knowledge summary that points
+  to the correct `/docs` pages.
+- Append a guardrail sentence to every persona prompt that explicitly mentions “in-game editor”
+  and “import/export/backup” as first-class pathways (not just repo edits).
+- UI: surface “Sources used” so QA can confirm the custom content docs were actually present.
+
+**Touchpoints:** `frontend/src/utils/dchatKnowledge.js`,
+`frontend/src/pages/docs/json/sections.json`, `frontend/src/data/npcPersonas.js`,
+`frontend/src/pages/chat/svelte/Message.svelte`.
+
+### 2) Stale content drift
+**Problem:** responses describe deferred/removed features (e.g., token.place as active in v3) or
+v2-era mechanics.
+
+**Fix (v3):**
+- Add a “Release notes + version banner” segment to the knowledge summary (from v3 release docs
+  under `frontend/src/pages/docs/md/changelog/` or a curated summary file).
+- Add a “version guardrail” line in persona prompts: “If a feature is marked deferred in the v3
+  release notes, say it is not active.”
+- Ensure knowledge pack is generated from the v3 branch and uses staging/prod URLs only.
+
+**Touchpoints:** `frontend/src/utils/dchatKnowledge.js`,
+`frontend/src/pages/docs/md/changelog/`, `frontend/src/data/npcPersonas.js`.
+
+### 3) Non-reasoning model regression
+**Problem:** the non-reasoning `/chat` model guesses instead of refusing or asking for context.
+
+**Fix (v3):**
+- Standardize the “don’t invent” guardrail across all personas (including any non-reasoning
+  model configuration).
+- Add a QA-only probe script (or E2E spec) that runs 2–3 prompts against the non-reasoning model
+  and asserts an “I don’t know” or doc-pointer response.
+
+**Touchpoints:** `frontend/src/data/npcPersonas.js`, `frontend/e2e/` (new spec).
+
+### 4) Made-up game state
+**Problem:** replies invent balances, inventory, quests, or achievements without user-provided
+save context.
+
+**Fix (v3):**
+- Include a “player state visibility” line in the system prompt: “You cannot see player saves
+  unless the user provides a save snapshot.”
+- If `buildDchatKnowledge` includes state, annotate it as “sampled from the current session”
+  and store a `state` source entry so QA can verify when it was present.
+
+**Touchpoints:** `frontend/src/utils/dchatKnowledge.js`,
+`frontend/src/data/npcPersonas.js`.
+
+### 5) Incorrect routes / UX
+**Problem:** the assistant references nonexistent URLs or wrong menu locations.
+
+**Fix (v3):**
+- Inject `docs/ROUTES.md` into the knowledge summary and add structured `route` sources to the
+  `contextSources` list so UI can render verified URLs.
+- Add a prompt reminder: “Only reference routes present in the route index.”
+
+**Touchpoints:** `docs/ROUTES.md`, `frontend/src/utils/dchatKnowledge.js`,
+`frontend/src/data/npcPersonas.js`.
+
+### 6) Incorrect data semantics
+**Problem:** the assistant swaps requires/consumes/creates semantics or misstates durations.
+
+**Fix (v3):**
+- Add a “Process semantics” summary paragraph to the knowledge pack (from `/docs` processes
+  documentation) and include the exact terms “requires/consumes/creates” in the prompt.
+- Ensure the knowledge pack includes any duration normalization notes so answers are grounded.
+
+**Touchpoints:** `frontend/src/utils/dchatKnowledge.js`,
+`frontend/src/pages/docs/md/` (process docs), `frontend/src/data/npcPersonas.js`.
+
+### 7) Overconfident precision
+**Problem:** the assistant provides exact counts or durations without context.
+
+**Fix (v3):**
+- Add a guardrail that forbids exact numeric claims unless the relevant source is present in the
+  context sources list. If missing, it must respond with uncertainty and suggest the doc page.
+- UI: show “Sources used” so QA can confirm that numerical answers were grounded.
+
+**Touchpoints:** `frontend/src/data/npcPersonas.js`,
+`frontend/src/pages/chat/svelte/Message.svelte`.
+
 ## Non-goals
 
 - Vector search, embeddings, or external vector databases.
