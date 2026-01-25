@@ -1,7 +1,7 @@
 <script>
     import Chip from '../../../../components/svelte/Chip.svelte';
     import CompactItemList from '../../../../components/svelte/CompactItemList.svelte';
-    import { writable } from 'svelte/store';
+    import { get, writable } from 'svelte/store';
     import { finishQuest } from '../../../../utils/gameState.js';
     import { state } from '../../../../utils/gameState/common.js';
     import { loadGitHubToken, isValidGitHubToken } from '../../../../utils/githubToken.js';
@@ -10,7 +10,9 @@
 
     export let quest, option;
     let githubConnected = false;
-    const itemRequirementsMet = writable(areItemRequirementsMet(option.requiresItems));
+    const itemRequirementsMet = writable(
+        areItemRequirementsMet(option.requiresItems, get(state)?.inventory)
+    );
     let isDisabled = false;
 
     async function checkConnection() {
@@ -26,18 +28,14 @@
         finishQuest(quest.id, quest.rewards || []);
     }
 
-    $: {
-        if ($state) {
-            itemRequirementsMet.set(
-                areItemRequirementsMet(option.requiresItems, $state.inventory)
-            );
-        }
-    }
+    $: itemRequirementsMet.set(
+        areItemRequirementsMet(option.requiresItems, $state?.inventory)
+    );
 
     $: isDisabled = (option.requiresGitHub && !githubConnected) || !$itemRequirementsMet;
 </script>
 
-<Chip text={option.text} onClick={() => onClick()} disabled={isDisabled}>
+<Chip text={option.text} onClick={onClick} disabled={isDisabled}>
     <div class="vertical">
         Finish this quest and receive the following items:
         <CompactItemList itemList={quest.rewards || []} increase={true} />

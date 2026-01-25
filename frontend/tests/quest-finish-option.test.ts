@@ -31,6 +31,11 @@ vi.mock('../src/utils/gameState.js', () => ({
     finishQuest: finishQuestMock,
 }));
 
+vi.mock('../src/utils/githubToken.js', () => ({
+    loadGitHubToken: vi.fn(() => ''),
+    isValidGitHubToken: vi.fn(() => false),
+}));
+
 describe('FinishOption quest requirements', () => {
     beforeEach(() => {
         finishQuestMock.mockClear();
@@ -47,7 +52,7 @@ describe('FinishOption quest requirements', () => {
             requiresItems: [{ id: 'item-1', count: 1 }],
         };
 
-        const { getByRole, getByText } = render(FinishOption, { quest, option });
+        const { getByRole, getByText } = render(FinishOption, { props: { quest, option } });
 
         const button = getByRole('button', { name: 'Finish quest' });
         expect(button).toBeDisabled();
@@ -67,7 +72,7 @@ describe('FinishOption quest requirements', () => {
             requiresItems: [{ id: 'item-1', count: 1 }],
         };
 
-        const { getByRole } = render(FinishOption, { quest, option });
+        const { getByRole } = render(FinishOption, { props: { quest, option } });
         const button = getByRole('button', { name: 'Finish quest' });
 
         stateStore.set({ inventory: { 'item-1': 1 } });

@@ -3,12 +3,10 @@ export function areItemRequirementsMet(requirements = [], inventory = {}) {
         return true;
     }
 
-    if (!inventory) {
-        return false;
-    }
+    const normalizedInventory = inventory ?? {};
 
     return requirements.every((item) => {
-        const available = inventory[item.id] ?? 0;
+        const available = normalizedInventory[item.id] ?? 0;
         return available >= item.count;
     });
 }
