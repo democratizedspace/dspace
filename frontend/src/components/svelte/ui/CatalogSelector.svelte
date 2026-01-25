@@ -85,6 +85,9 @@
         ignoreNextClick = true;
         event.preventDefault();
         toggleExpanded();
+        setTimeout(() => {
+            ignoreNextClick = false;
+        }, 0);
     }
 
     $: {
