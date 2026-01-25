@@ -68,6 +68,7 @@ const extractErrorDetails = (error) => {
         error?.error?.message ??
         error?.response?.data?.error?.message ??
         error?.message ??
+        error?.cause?.message ??
         undefined;
 
     return { status, code, type, message };
@@ -106,6 +107,8 @@ export const getOpenAIErrorSummary = (error) => {
     const { status, code, type, message } = extractErrorDetails(error);
     const numericStatus = toNumericStatus(status);
     const normalizedMessage = message?.toLowerCase() ?? '';
+    const normalizedName = error?.name?.toLowerCase() ?? '';
+    const isOffline = typeof navigator !== 'undefined' && navigator.onLine === false;
 
     if (numericStatus === 401) {
         return {
@@ -159,7 +162,14 @@ export const getOpenAIErrorSummary = (error) => {
         };
     }
 
-    if (normalizedMessage.includes('network') || normalizedMessage.includes('fetch')) {
+    if (
+        isOffline ||
+        normalizedName.includes('network') ||
+        normalizedMessage.includes('network') ||
+        normalizedMessage.includes('fetch') ||
+        normalizedMessage.includes('load failed') ||
+        normalizedMessage.includes('networkerror')
+    ) {
         return {
             type: 'network',
             message: 'We could not reach OpenAI. Check your connection and try again.',
