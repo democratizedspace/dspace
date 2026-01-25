@@ -67,12 +67,8 @@
         customId = '';
     }
 
-    function toggleExpanded() {
-        isExpanded = !isExpanded;
-    }
-
     function handleToggleClick() {
-        toggleExpanded();
+        isExpanded = true;
     }
 
     $: {
