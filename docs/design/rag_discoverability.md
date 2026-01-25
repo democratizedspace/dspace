@@ -157,7 +157,8 @@ UI-level source disclosures + telemetry-gated metadata for QA validation.
 ### 0) Failure-mode fixes (v3 release checklist alignment)
 
 This section turns the QA “known failure modes” into concrete, shippable fixes for v3. Each
-subsection describes what to add, where it lives, and how QA can validate it.
+subsection describes what to add, where it lives, and how QA can validate it. The seven items
+below map 1:1 to the QA 9.4.2 checklist and are additive to the staged design plan that follows.
 
 #### A) Custom content blind spot (PR-only answers)
 **Problem:** The model claims custom content is only possible via PRs or repo edits and omits the
