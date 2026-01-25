@@ -30,6 +30,8 @@
     let isClientSide = false;
     let normalizedItems = [];
     let customId = '';
+    let ignoreNextClick = false;
+    let ignoreClickTimeout;
     const fallbackControlId = `catalog-selector-${catalogSelectorId++}`;
     $: resolvedControlId = controlId || (testId ? `${testId}-control` : fallbackControlId);
     $: customInputId = `${resolvedControlId}-custom-id`;
@@ -72,11 +74,22 @@
     }
 
     function handleToggleClick() {
+        if (ignoreNextClick) {
+            ignoreNextClick = false;
+            return;
+        }
         toggleExpanded();
     }
 
     function handleTouchToggle(event) {
         event.preventDefault();
+        ignoreNextClick = true;
+        if (ignoreClickTimeout) {
+            clearTimeout(ignoreClickTimeout);
+        }
+        ignoreClickTimeout = setTimeout(() => {
+            ignoreNextClick = false;
+        }, 400);
         toggleExpanded();
     }
 
