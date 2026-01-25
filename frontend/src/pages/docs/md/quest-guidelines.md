@@ -191,7 +191,7 @@ available, so changes will not persist after refresh).
 **Validation and image handling**
 
 - Titles must be unique and at least 3 characters; descriptions must be at least 10 characters.
-- NPC selection is required.
+- NPC selection defaults to **Mission Control** if left blank.
 - Dialogue node IDs must be unique, nodes require text, and each node needs at least one option.
 - Goto options must target existing node IDs; process options require a process ID.
 - Required and granted item rows must include an item ID and positive count (the same applies to

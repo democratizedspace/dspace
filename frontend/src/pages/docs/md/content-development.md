@@ -60,14 +60,15 @@ IndexedDB is unavailable, which means the data will not persist after refresh).
     - Goto options must point to an existing node ID.
     - Process options require a process ID.
     - Required or granted item rows need an item ID and a positive count.
-- The NPC picker is populated from the built-in catalog; when editing an existing quest with a
-  custom NPC value, the select includes a “Custom (…)” entry for it.
+- The NPC picker uses the built-in catalog; if you load a quest with a custom NPC value, the select
+  includes a “Custom (…)” entry for it. Blank NPC values are defaulted to **Mission Control**.
 - Quest images are stored as data URLs and are downsampled to square JPEGs (target ~50KB) before
-  saving.
+  saving. If you leave the image blank on a new quest, the editor uses
+  `/assets/quests/howtodoquests.jpg`.
 
 **Item editor specifics**
 
-- Items require a name, description, and image (stored as a compressed JPEG data URL).
+- Items require a name, description, and image; images are stored as compressed JPEG data URLs.
 - Optional fields include price, unit, type, and dependencies (comma- or newline-separated IDs).
 - Saving a new item adds it to your local inventory catalog with a custom category label.
 
@@ -75,22 +76,26 @@ IndexedDB is unavailable, which means the data will not persist after refresh).
 
 - Processes require a title, duration, and at least one item relationship
   (requires/consumes/creates).
-- Durations are normalized to a canonical format after saving (for example, `1h 30m`).
+- Durations accept shorthand like `1h 30m`, `45s`, or `0.5h` and are normalized after saving (for
+  example, `1h 30m`).
 - Item counts must be positive, and empty rows are ignored on save.
 
 **Storage details**
 
 Custom content persists to the `CustomContent` IndexedDB database. The schema includes:
 
-- Object stores: `meta`, `items`, `processes`, and `quests`
-- `meta` stores the `schemaVersion` key
+- Object stores: `meta`, `items`, `processes`, and `quests` (each entity store uses `id` as the key).
+- `meta` stores the `schemaVersion` key.
 
 When custom content is saved through the editors:
 
 - IDs are generated with `crypto.randomUUID()` (or a UUID fallback) when missing.
 - `custom: true` and `createdAt` are set on new records; `updatedAt` is set on edits.
+- Quests default `title` to `Untitled Quest`, `description` to an empty string, and `image` to
+  `/assets/quests/howtodoquests.jpg` if those values are missing.
 - Items default `category` to `Custom` when not provided.
-- Processes default `duration` to `60` seconds if missing (the form provides a normalized duration).
+- Processes default `duration` to `60` seconds if missing (the editor provides a normalized
+  duration).
 
 If IndexedDB is unavailable, custom content falls back to an in-memory store (not localStorage),
 which is cleared on refresh.
