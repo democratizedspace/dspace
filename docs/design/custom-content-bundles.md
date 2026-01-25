@@ -145,9 +145,12 @@ validation step and the PR exporter use identical rules.
 
 Example mapping (subject to confirmation with current repo layout):
 
-- Quests: `frontend/src/pages/quests/json/{pathId}/{questId}.json`
-- Items: `frontend/src/pages/inventory/json/items/{category}.json` or per-item JSON if needed
-- Processes: `frontend/src/pages/processes/{processId}/index.json` (or existing layout)
+- Quests: `frontend/src/pages/quests/json/{category}/{questId}.json` where `{category}` matches the
+  existing folder layout (e.g., `hydroponics`, `robotics`) rather than a new schema.
+- Items: `frontend/src/pages/inventory/json/items/{category}.json` (items are grouped by category
+  files such as `misc.json`, `tools.json`, `hydroponics.json`).
+- Processes: `frontend/src/pages/processes/{category}/{processId}.json` aligned with the current
+  category folders (e.g., `hardening/assemble-rocket.json`).
 - Images: `assets/custom/{type}/{id}.{ext}`
 
 ## Security and compliance
