@@ -187,8 +187,8 @@ available, so changes will not persist after refresh).
 2. Click **Edit** on a custom quest (built-in quests are read-only).
 3. Update the fields and save to update the local IndexedDB record.
 
-Images are stored as downsampled JPEG data URLs, titles must be unique, and the editor validates
-that dialogue paths reach a finish option before saving.
+Images are stored as downsampled JPEG data URLs, titles must be unique, and the editor surfaces a
+simulation warning if dialogue paths do not reach a finish option (but it does not block saving).
 
 ### Testing Your Quest
 
