@@ -54,20 +54,31 @@ const toNumericStatus = (status) => {
 };
 
 const extractErrorDetails = (error) => {
+    const errorCause = error?.cause ?? error?.error?.cause ?? undefined;
     const status =
         error?.status ??
         error?.statusCode ??
         error?.response?.status ??
         error?.cause?.status ??
+        errorCause?.status ??
         error?.error?.status;
     const code =
-        error?.code ?? error?.error?.code ?? error?.response?.data?.error?.code ?? undefined;
+        error?.code ??
+        error?.error?.code ??
+        error?.response?.data?.error?.code ??
+        errorCause?.code ??
+        undefined;
     const type =
-        error?.error?.type ?? error?.response?.data?.error?.type ?? error?.type ?? undefined;
+        error?.error?.type ??
+        error?.response?.data?.error?.type ??
+        error?.type ??
+        errorCause?.type ??
+        undefined;
     const message =
         error?.error?.message ??
         error?.response?.data?.error?.message ??
         error?.message ??
+        errorCause?.message ??
         undefined;
 
     return { status, code, type, message };
@@ -105,7 +116,14 @@ export const describeOpenAIError = (error) => {
 export const getOpenAIErrorSummary = (error) => {
     const { status, code, type, message } = extractErrorDetails(error);
     const numericStatus = toNumericStatus(status);
-    const normalizedMessage = message?.toLowerCase() ?? '';
+    const normalizedMessage = [message, error?.cause?.message]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+    const normalizedName = [error?.name, error?.cause?.name]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
 
     if (numericStatus === 401) {
         return {
@@ -159,7 +177,12 @@ export const getOpenAIErrorSummary = (error) => {
         };
     }
 
-    if (normalizedMessage.includes('network') || normalizedMessage.includes('fetch')) {
+    if (
+        normalizedMessage.includes('network') ||
+        normalizedMessage.includes('fetch') ||
+        normalizedName.includes('network') ||
+        normalizedName.includes('fetch')
+    ) {
         return {
             type: 'network',
             message: 'We could not reach OpenAI. Check your connection and try again.',
