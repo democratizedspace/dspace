@@ -79,11 +79,8 @@
         toggleExpanded();
     }
 
-    function handlePointerToggle(event) {
-        if (event.pointerType !== 'touch') {
-            return;
-        }
-        ignoreClickUntil = Date.now() + 500;
+    function handleTouchToggle() {
+        ignoreClickUntil = Date.now() + 800;
         toggleExpanded();
     }
 
@@ -180,7 +177,7 @@
                     aria-haspopup="listbox"
                     aria-expanded={isExpanded}
                     on:click={handleToggleClick}
-                    on:pointerup={handlePointerToggle}
+                    on:touchstart|preventDefault={handleTouchToggle}
                 >
                     Edit
                 </button>
@@ -193,7 +190,7 @@
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
                 on:click={handleToggleClick}
-                on:pointerup={handlePointerToggle}
+                on:touchstart|preventDefault={handleTouchToggle}
             >
                 {buttonLabel}
             </button>
