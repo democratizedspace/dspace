@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
-import { render, fireEvent } from '@testing-library/svelte';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, fireEvent, cleanup } from '@testing-library/svelte';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { writable } from 'svelte/store';
 import { tick } from 'svelte';
 import FinishOption from '../src/pages/quests/svelte/option/FinishOption.svelte';
@@ -61,6 +61,10 @@ describe('FinishOption quest requirements', () => {
     beforeEach(() => {
         finishQuestMock.mockClear();
         stateStore.set({ inventory: {} });
+    });
+
+    afterEach(() => {
+        cleanup();
     });
 
     it('disables finish option and shows required items when missing inventory', async () => {
