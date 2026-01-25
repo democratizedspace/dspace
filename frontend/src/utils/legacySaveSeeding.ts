@@ -284,12 +284,8 @@ export const clearV3GameStateStorage = async (): Promise<boolean> => {
         localStorage.removeItem(key);
         removedV3Keys = true;
     });
-    if (removedV3Keys) {
-        if (hasLegacyV2Data) {
-            localStorage.setItem(LEGACY_V2_SEED_SKIP_KEY, 'true');
-        } else {
-            localStorage.removeItem(LEGACY_V2_SEED_SKIP_KEY);
-        }
+    if (removedV3Keys && !hasLegacyV2Data) {
+        localStorage.removeItem(LEGACY_V2_SEED_SKIP_KEY);
     }
 
     try {
