@@ -11,7 +11,7 @@
     export let description = '';
     export let image = null;
     export let previewUrl = null;
-    export let price = '';
+    let price = '';
     export let unit = '';
     export let type = '';
     export let isEdit = false;
@@ -53,7 +53,13 @@
         )
         .map((item) => item.name);
 
-    $: price = priceAmount && priceCurrency ? `${priceAmount} ${priceCurrency}` : '';
+    $: normalizedPriceAmount =
+        priceAmount === null || priceAmount === undefined ? '' : String(priceAmount).trim();
+    $: normalizedPriceCurrency = priceCurrency ? priceCurrency.trim() : '';
+    $: price =
+        normalizedPriceAmount && normalizedPriceCurrency
+            ? `${normalizedPriceAmount} ${normalizedPriceCurrency}`
+            : '';
 
     function parseDependencies(value) {
         return value
@@ -118,14 +124,13 @@
         if (!image && !previewUrl) {
             errors.image = 'Image is required';
         }
-        const trimmedPriceAmount = priceAmount.trim();
-        const hasPriceAmount = trimmedPriceAmount.length > 0;
-        const hasPriceCurrency = priceCurrency.trim().length > 0;
+        const hasPriceAmount = normalizedPriceAmount.length > 0;
+        const hasPriceCurrency = normalizedPriceCurrency.length > 0;
         if (hasPriceAmount || hasPriceCurrency) {
             if (!hasPriceAmount) {
                 errors.priceAmount = 'Price amount is required';
             } else {
-                const parsedPrice = Number(trimmedPriceAmount);
+                const parsedPrice = Number(normalizedPriceAmount);
                 if (!Number.isFinite(parsedPrice) || parsedPrice <= 0) {
                     errors.priceAmount = 'Price must be a positive number';
                 }
@@ -172,13 +177,12 @@
 
         const parsedDependencies = parseDependencies(dependenciesInput);
         const hasDependenciesInput = dependenciesInput.trim().length > 0;
-        const trimmedPriceAmount = priceAmount.trim();
-        const hasPriceAmount = trimmedPriceAmount.length > 0;
-        const hasPriceCurrency = priceCurrency.trim().length > 0;
-        const parsedPrice = hasPriceAmount ? Number(trimmedPriceAmount) : null;
+        const hasPriceAmount = normalizedPriceAmount.length > 0;
+        const hasPriceCurrency = normalizedPriceCurrency.length > 0;
+        const parsedPrice = hasPriceAmount ? Number(normalizedPriceAmount) : null;
         const computedPrice =
             hasPriceAmount && hasPriceCurrency && Number.isFinite(parsedPrice) && parsedPrice > 0
-                ? `${parsedPrice} ${priceCurrency}`
+                ? `${parsedPrice} ${normalizedPriceCurrency}`
                 : '';
         const payload = {
             name,
@@ -307,7 +311,7 @@
                     type="number"
                     id="price-amount"
                     bind:value={priceAmount}
-                    min="0"
+                    min="0.01"
                     step="any"
                     inputmode="decimal"
                     placeholder="e.g. 100"
