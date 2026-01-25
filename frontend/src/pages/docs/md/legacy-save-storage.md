@@ -594,7 +594,8 @@ backup and fallback for unsupported environments.
 - V2 cleanup deletes `gameState` / `gameStateBackup` during v2 → v3 migrations (when IndexedDB is
   in use) and also via the **Delete v2 localStorage** action in the Legacy Save Upgrade UI.
 - The **Clear v3 save for testing** action only removes v3 persistence data; it preserves legacy
-  v2 `gameState` / `gameStateBackup` entries if they still contain v2-formatted saves.
+  v2 `gameState` / `gameStateBackup` entries if they still contain v2-formatted saves, and it
+  retains the QA seed flag to prevent auto-migration on reload.
 
 ## QA seeding
 

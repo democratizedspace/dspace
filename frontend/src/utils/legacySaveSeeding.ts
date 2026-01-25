@@ -272,16 +272,21 @@ export const clearV3GameStateStorage = async (): Promise<boolean> => {
     if (!isBrowser) return false;
 
     let removedV3Keys = false;
+    let hasLegacyV2Keys = false;
     LEGACY_V2_STORAGE_KEYS.forEach((key) => {
         const raw = localStorage.getItem(key);
         if (raw === null) return;
         const parsed = parseLegacyV2Raw(raw);
-        if (!parsed.isLegacy) {
-            localStorage.removeItem(key);
-            removedV3Keys = true;
+        if (parsed.isLegacy) {
+            hasLegacyV2Keys = true;
+            return;
         }
+        localStorage.removeItem(key);
+        removedV3Keys = true;
     });
-    if (removedV3Keys) {
+    if (hasLegacyV2Keys) {
+        localStorage.setItem(LEGACY_V2_SEED_SKIP_KEY, 'true');
+    } else if (removedV3Keys) {
         localStorage.removeItem(LEGACY_V2_SEED_SKIP_KEY);
     }
 
