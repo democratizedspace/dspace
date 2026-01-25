@@ -30,7 +30,6 @@
     let isClientSide = false;
     let normalizedItems = [];
     let customId = '';
-    let ignoreClickUntil = 0;
     const fallbackControlId = `catalog-selector-${catalogSelectorId++}`;
     $: resolvedControlId = controlId || (testId ? `${testId}-control` : fallbackControlId);
     $: customInputId = `${resolvedControlId}-custom-id`;
@@ -55,7 +54,6 @@
     function handleSelect(itemId) {
         selectedId = itemId;
         isExpanded = false;
-        ignoreClickUntil = 0;
         const selectedItem = normalizedItems.find((item) => item.id === itemId)?.item ?? null;
         dispatch('select', { itemId, item: selectedItem });
     }
@@ -74,14 +72,6 @@
     }
 
     function handleToggleClick() {
-        if (Date.now() < ignoreClickUntil) {
-            return;
-        }
-        toggleExpanded();
-    }
-
-    function handleTouchToggle() {
-        ignoreClickUntil = Date.now() + 800;
         toggleExpanded();
     }
 
@@ -178,7 +168,6 @@
                     aria-haspopup="listbox"
                     aria-expanded={isExpanded}
                     on:click={handleToggleClick}
-                    on:touchstart|preventDefault={handleTouchToggle}
                 >
                     Edit
                 </button>
@@ -191,7 +180,6 @@
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
                 on:click={handleToggleClick}
-                on:touchstart|preventDefault={handleTouchToggle}
             >
                 {buttonLabel}
             </button>
