@@ -72,6 +72,8 @@
     }
 
     let ignoreNextClick = false;
+    let ignoreNextClickTimeout = null;
+    const ignoreNextClickDelayMs = 500;
 
     function handleToggleClick() {
         if (ignoreNextClick) {
@@ -83,11 +85,15 @@
 
     function handleToggleTouch(event) {
         ignoreNextClick = true;
+        if (ignoreNextClickTimeout) {
+            clearTimeout(ignoreNextClickTimeout);
+        }
         event.preventDefault();
         toggleExpanded();
-        setTimeout(() => {
+        ignoreNextClickTimeout = setTimeout(() => {
             ignoreNextClick = false;
-        }, 0);
+            ignoreNextClickTimeout = null;
+        }, ignoreNextClickDelayMs);
     }
 
     $: {
