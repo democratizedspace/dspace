@@ -339,7 +339,7 @@
     }
 
     .selected-item .item-info h3 {
-        word-break: break-word;
+        overflow-wrap: anywhere;
     }
 
     .edit-button,
