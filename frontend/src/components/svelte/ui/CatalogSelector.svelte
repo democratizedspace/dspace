@@ -324,13 +324,22 @@
     }
 
     .selected-item {
-        display: flex;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
         align-items: center;
-        justify-content: space-between;
+        gap: 8px;
         background: #2f5b2f;
         padding: 8px;
         border-radius: 4px;
         border: 2px solid #007006;
+    }
+
+    .selected-item .item-content {
+        min-width: 0;
+    }
+
+    .item-info h3 {
+        word-break: break-word;
     }
 
     .edit-button,
@@ -353,5 +362,15 @@
     .select-button {
         width: 100%;
         padding: 10px;
+    }
+
+    @media (max-width: 520px) {
+        .selected-item {
+            grid-template-columns: 1fr;
+        }
+
+        .edit-button {
+            width: 100%;
+        }
     }
 </style>
