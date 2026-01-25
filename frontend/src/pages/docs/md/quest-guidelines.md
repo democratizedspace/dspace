@@ -181,11 +181,13 @@ Before submitting a quest, verify:
 
 ### Preferred: In-game editor submission
 
-1. Use the in-game editor from the **Play → Manage Quests** menu to create or edit your quest.
-2. Test using the built-in preview feature to confirm dialogue flow and reward logic.
-3. Click **Submit** to open an authenticated pull request directly from the game.
-4. Track review feedback in the linked GitHub pull request and iterate in the editor.
-5. Once approved, the quest deploys to all players automatically.
+1. Open `/quests/create` to make a new quest, or use **Manage Quests → Edit** to reach
+   `/quests/{id}/edit` for an existing custom quest.
+2. Fill in quest metadata, define dialogue nodes, and configure rewards + prerequisites using the
+   form controls. Uploaded images are downsampled to 512×512 JPEG data URLs for local storage.
+3. Save the quest to persist it locally in IndexedDB (`CustomContent` → `quests`).
+4. Preview and validate the dialogue flow before submission.
+5. Submit the quest (or a bundle) from the in-game submission forms to open an authenticated PR.
 
 ### Manual JSON contribution
 

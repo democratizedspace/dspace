@@ -189,7 +189,7 @@ The recommended way to contribute processes is through the **custom content bund
     - After saving your process, navigate to [/processes/manage](/processes/manage)
     - Locate your process in the list and use the export functionality to download the JSON
     - Save the exported JSON file - this will be included in your content bundle
-3. Create any related items at [/items/create](/items/create) and export them similarly
+3. Create any related items at [/inventory/create](/inventory/create) and export them similarly
 4. Create any related quests at [/quests/create](/quests/create) and export them similarly
 5. Package everything into a bundle JSON (see [Custom Content Bundles](/docs/custom-bundles))
 6. Submit the bundle for review at [/bundles/submit](/bundles/submit)

@@ -22,7 +22,7 @@ Each array contains standard objects that follow the existing schemas for quests
 The easiest way to submit a bundle is through the in-game interface:
 
 1. Create your custom content using the in-game editors:
-    - Items: [/items/create](/items/create)
+    - Items: [/inventory/create](/inventory/create)
     - Processes: [/processes/create](/processes/create)
     - Quests: [/quests/create](/quests/create)
 2. Export your custom content from the management pages

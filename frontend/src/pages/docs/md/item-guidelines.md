@@ -152,7 +152,7 @@ When creating custom items, consider how they might connect to:
 
 The recommended way to contribute items is through the **custom content bundle workflow**, which keeps related quests, items, and processes together:
 
-1. Create item through the in-game interface at [/items/create](/items/create)
+1. Create item through the in-game interface at [/inventory/create](/inventory/create)
 2. Export your created item as JSON from the management page:
     - After saving your item, navigate to [/inventory/manage](/inventory/manage)
     - Locate your newly created item in the list and use the export functionality to download the JSON

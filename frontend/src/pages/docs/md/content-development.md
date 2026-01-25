@@ -17,7 +17,7 @@ The DSPACE ecosystem supports several types of custom content:
 
 Each content type follows specific guidelines to ensure consistency, educational value, and alignment with DSPACE's mission of democratizing space exploration through practical, hands-on learning.
 
-Management pages (`/quests/manage`, `/items/manage`, and `/processes/manage`) let you
+Management pages (`/quests/manage`, `/inventory/manage`, and `/processes/manage`) let you
 edit or delete custom entries stored locally in IndexedDB.
 
 ## Getting Started
@@ -68,6 +68,52 @@ Instructions for creating processes that transform or utilize items. Topics incl
 ### [Custom Content Bundles](/docs/custom-bundles)
 
 Bundle related quests, items, and processes into a single JSON file to keep submissions in sync.
+
+## In-game Custom Content Workflow (Quests, Items, Processes)
+
+Custom content is created entirely in the browser and saved locally before you export or submit it.
+The sections below reflect the **current** editor behavior and routes.
+
+### Quests (`/quests/create` and `/quests/{id}/edit`)
+
+1. **Open the quest editor** at `/quests/create` (or use **Manage Quests → Edit** to reach
+   `/quests/{id}/edit` for an existing custom quest).
+2. **Fill in metadata**: title, description, NPC avatar, and a quest image. The image uploader
+   downsamples to a 512×512 JPEG and stores a data URL for faster IndexedDB storage.
+3. **Define dialogue nodes**: add nodes, set the start node, and configure options (`goto`, `finish`,
+   run a process, grant items, and require items for gated options).
+4. **Set rewards and quest prerequisites** using the built-in selectors.
+5. **Save** to persist the quest locally. New custom quests receive a UUID-style ID and are marked
+   `custom: true`.
+
+### Items (`/inventory/create` and `/inventory/item/{id}/edit`)
+
+1. **Open the item form** at `/inventory/create` (or edit via **Manage Items → Edit**).
+2. **Provide required fields**: name, description, and an image. Images are also downsampled to a
+   512×512 JPEG data URL before saving.
+3. **Optional fields**: price, unit, type, and dependencies.
+4. **Save** to create the item. New items are added to the player inventory with count `0` so they
+   can be referenced immediately by quests or processes.
+
+### Processes (`/processes/create` and `/processes/{id}/edit`)
+
+1. **Open the process form** at `/processes/create` (or edit via **Manage Processes → Edit**).
+2. **Set the title and duration**. Durations accept inputs like `1h 30m` or `45s` and are normalized
+   to a canonical format when saved.
+3. **Define item relationships**: Required items (not consumed), Consumed items (removed on start),
+   and Created items (awarded on completion). At least one relationship is required and all counts
+   must be positive.
+4. **Save** to persist the process locally and preview it immediately.
+
+## Data Storage Strategy (Custom Content)
+
+- **Primary storage**: IndexedDB database named `CustomContent` with object stores for `items`,
+  `processes`, and `quests`. Each entry is stored with creation timestamps and a `custom: true` flag.
+- **Edit behavior**: updates overwrite the existing entry and set `updatedAt` timestamps.
+- **Fallback behavior**: if IndexedDB is unavailable, the app falls back to an in-memory store for
+  the session so edits still work (but won’t persist after refresh).
+- **Export/backup**: use `/contentbackup` or custom content bundle export to generate Base64-encoded
+  JSON snapshots that can be imported later or submitted via PR.
 
 ## AI Assistance for Content Creation
 
