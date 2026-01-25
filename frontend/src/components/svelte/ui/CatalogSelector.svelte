@@ -71,8 +71,24 @@
         isExpanded = !isExpanded;
     }
 
+    let ignoreToggleClick = false;
+    let ignoreToggleClickTimeout;
+
     function handleToggleClick() {
+        if (ignoreToggleClick) {
+            return;
+        }
         toggleExpanded();
+    }
+
+    function handleTouchToggle(event) {
+        event.preventDefault();
+        ignoreToggleClick = true;
+        clearTimeout(ignoreToggleClickTimeout);
+        toggleExpanded();
+        ignoreToggleClickTimeout = setTimeout(() => {
+            ignoreToggleClick = false;
+        }, 300);
     }
 
     $: {
@@ -168,6 +184,7 @@
                     aria-haspopup="listbox"
                     aria-expanded={isExpanded}
                     on:click={handleToggleClick}
+                    on:touchend={handleTouchToggle}
                 >
                     Edit
                 </button>
@@ -180,6 +197,7 @@
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
                 on:click={handleToggleClick}
+                on:touchend={handleTouchToggle}
             >
                 {buttonLabel}
             </button>
