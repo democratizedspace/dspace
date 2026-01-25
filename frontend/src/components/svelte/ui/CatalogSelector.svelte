@@ -164,6 +164,7 @@
                     aria-haspopup="listbox"
                     aria-expanded={isExpanded}
                     on:click={handleToggleClick}
+                    on:touchstart={handleToggleClick}
                 >
                     Edit
                 </button>
@@ -176,6 +177,7 @@
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
                 on:click={handleToggleClick}
+                on:touchstart={handleToggleClick}
             >
                 {buttonLabel}
             </button>
