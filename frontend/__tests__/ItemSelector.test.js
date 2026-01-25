@@ -138,6 +138,28 @@ describe('ItemSelector Component', () => {
         expect(itemsList).toBeTruthy();
     });
 
+    test('should toggle item list visibility on touch', async () => {
+        const component = new ItemSelector({
+            target: container,
+            props: {
+                items: mockItems,
+                selectedItemId: 'item-2',
+                label: 'Select Item',
+            },
+        });
+
+        let itemsList = container.querySelector('.items-list');
+        expect(itemsList).toBeFalsy();
+
+        const editButton = container.querySelector('.edit-button');
+        expect(editButton).toBeTruthy();
+        editButton.dispatchEvent(new Event('touchstart'));
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        itemsList = container.querySelector('.items-list');
+        expect(itemsList).toBeTruthy();
+    });
+
     test('should handle empty items array', () => {
         const component = new ItemSelector({
             target: container,
