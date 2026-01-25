@@ -38,7 +38,7 @@ Every item requires the following basic properties:
 - **name**: Descriptive name of the item (required)
 - **description**: Detailed explanation of the item's purpose and use (required)
     - **image**: Visual representation of the item (required)
-- **price**: Value in game currency (optional)
+- **price**: Value in game currency (optional). Enter a positive amount and select the currency; the form stores the combined string (e.g., `25 dUSD`).
 - **unit**: Measurement unit for the item (e.g., kg, L, watts) (optional)
 - **type**: Classification or category (optional)
 

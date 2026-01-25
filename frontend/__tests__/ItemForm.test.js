@@ -94,6 +94,8 @@ describe('ItemForm Component', () => {
             expect(getByLabelText(/name/i)).toBeInTheDocument();
             expect(getByLabelText(/description/i)).toBeInTheDocument();
             expect(getByLabelText(/upload an image/i)).toBeInTheDocument();
+            expect(getByLabelText(/price \(optional\)/i)).toBeInTheDocument();
+            expect(getByLabelText(/price currency/i)).toBeInTheDocument();
         });
     });
 
@@ -278,12 +280,57 @@ describe('ItemForm Component', () => {
         expect(itemsAddMock).not.toHaveBeenCalled();
     });
 
+    it('combines price amount and currency for submission', async () => {
+        const { getByLabelText, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Priced Item' },
+            });
+
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Item with price' },
+            });
+
+            fireEvent.input(getByLabelText(/price \(optional\)/i), {
+                target: { value: '12.5' },
+            });
+
+            fireEvent.change(getByLabelText(/price currency/i), {
+                target: { value: 'dUSD' },
+            });
+
+            const file = new File(['mock content'], 'price.jpg', { type: 'image/jpeg' });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        await waitFor(() => {
+            expect(itemsAddMock).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    price: '12.5 dUSD',
+                })
+            );
+        });
+    });
+
     it('handles edit mode correctly', async () => {
         // Setup edit mode with existing item data
         const existingItem = {
             id: 'item-123',
             name: 'Existing Item',
             description: 'Existing item description',
+            price: '10 dUSD',
             image: 'existing-image-url',
             dependencies: ['resource/alloy'],
         };
@@ -303,6 +350,8 @@ describe('ItemForm Component', () => {
             expect(getByLabelText(/name/i).value).toBe(existingItem.name);
             expect(getByLabelText(/description/i).value).toBe(existingItem.description);
             expect(getByLabelText(/dependencies/i).value).toBe('resource/alloy');
+            expect(getByLabelText(/price \(optional\)/i).value).toBe('10');
+            expect(getByLabelText(/price currency/i).value).toBe('dUSD');
         });
 
         // Submit form without changes
@@ -313,15 +362,177 @@ describe('ItemForm Component', () => {
         // Verify update was called with correct data
         await waitFor(() => {
             expect(itemsUpdateMock).toHaveBeenCalledWith(
+                existingItem.id,
                 expect.objectContaining({
-                    id: existingItem.id,
                     name: existingItem.name,
                     description: existingItem.description,
                     image: existingItem.image,
                     dependencies: existingItem.dependencies,
+                    price: existingItem.price,
                 })
             );
         });
+    });
+
+    it('requires a currency when a price amount is entered', async () => {
+        const { getByLabelText, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Currency Required Item' },
+            });
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Missing currency' },
+            });
+            fireEvent.input(getByLabelText(/price \(optional\)/i), {
+                target: { value: '5' },
+            });
+            const file = new File(['mock content'], 'currency-required.jpg', {
+                type: 'image/jpeg',
+            });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        await waitFor(() => {
+            expect(getByText(/select a currency/i)).toBeInTheDocument();
+        });
+        expect(itemsAddMock).not.toHaveBeenCalled();
+    });
+
+    it('requires a price amount when only a currency is selected', async () => {
+        const { getByLabelText, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Amount Required Item' },
+            });
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Missing amount' },
+            });
+            fireEvent.change(getByLabelText(/price currency/i), {
+                target: { value: 'dUSD' },
+            });
+            const file = new File(['mock content'], 'amount-required.jpg', {
+                type: 'image/jpeg',
+            });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        await waitFor(() => {
+            expect(getByText(/price amount is required/i)).toBeInTheDocument();
+        });
+        expect(itemsAddMock).not.toHaveBeenCalled();
+    });
+
+    it('rejects zero or negative price amounts', async () => {
+        const { getByLabelText, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Invalid Price Item' },
+            });
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Invalid price values' },
+            });
+            fireEvent.change(getByLabelText(/price currency/i), {
+                target: { value: 'dUSD' },
+            });
+            const file = new File(['mock content'], 'invalid-price.jpg', {
+                type: 'image/jpeg',
+            });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/price \(optional\)/i), {
+                target: { value: '0' },
+            });
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        await waitFor(() => {
+            expect(getByText(/price must be a positive number/i)).toBeInTheDocument();
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/price \(optional\)/i), {
+                target: { value: '-3' },
+            });
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        await waitFor(() => {
+            expect(getByText(/price must be a positive number/i)).toBeInTheDocument();
+        });
+        expect(itemsAddMock).not.toHaveBeenCalled();
+    });
+
+    it('rejects non-numeric price amounts', async () => {
+        const { getByLabelText, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Non Numeric Price Item' },
+            });
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Non numeric price' },
+            });
+            fireEvent.change(getByLabelText(/price currency/i), {
+                target: { value: 'dUSD' },
+            });
+            fireEvent.input(getByLabelText(/price \(optional\)/i), {
+                target: { value: 'abc' },
+            });
+            const file = new File(['mock content'], 'non-numeric.jpg', {
+                type: 'image/jpeg',
+            });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        await waitFor(() => {
+            expect(getByText(/price must be a positive number/i)).toBeInTheDocument();
+        });
+        expect(itemsAddMock).not.toHaveBeenCalled();
     });
 
     it('shows image preview after upload', async () => {

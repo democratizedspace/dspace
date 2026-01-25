@@ -1,15 +1,17 @@
 <script>
     import { createEventDispatcher, onMount } from 'svelte';
     import ItemPreview from './ItemPreview.svelte';
+    import items from '../../pages/inventory/json/items';
     import { addItems } from '../../utils/gameState/inventory.js';
     import { db } from '../../utils/customcontent.js';
     import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
+    import { getPriceStringComponents } from '../../utils.js';
 
     export let name = '';
     export let description = '';
     export let image = null;
     export let previewUrl = null;
-    export let price = '';
+    let price = '';
     export let unit = '';
     export let type = '';
     export let isEdit = false;
@@ -27,6 +29,37 @@
     let imageProcessingPromise = null;
     let imageProcessingJobId = 0;
     let isHydrated = false;
+    let priceAmount = '';
+    let priceCurrency = '';
+
+    const currencyAllowlist = new Set([
+        'dCarbon',
+        'dWatt',
+        'dUSD',
+        'dSolar',
+        'dWind',
+        'dLaunch',
+        'dOffset',
+        'dBI',
+        'dPrint',
+    ]);
+    const currencyDenylist = new Set(['Early Adopter Token', 'Newcomer Token']);
+    const currencyOptions = items
+        .filter(
+            (item) =>
+                item.category === 'Digital Currency & Tokens' &&
+                currencyAllowlist.has(item.name) &&
+                !currencyDenylist.has(item.name)
+        )
+        .map((item) => item.name);
+
+    $: normalizedPriceAmount =
+        priceAmount === null || priceAmount === undefined ? '' : String(priceAmount).trim();
+    $: normalizedPriceCurrency = priceCurrency ? priceCurrency.trim() : '';
+    $: price =
+        normalizedPriceAmount && normalizedPriceCurrency
+            ? `${normalizedPriceAmount} ${normalizedPriceCurrency}`
+            : '';
 
     function parseDependencies(value) {
         return value
@@ -91,6 +124,21 @@
         if (!image && !previewUrl) {
             errors.image = 'Image is required';
         }
+        const hasPriceAmount = normalizedPriceAmount.length > 0;
+        const hasPriceCurrency = normalizedPriceCurrency.length > 0;
+        if (hasPriceAmount || hasPriceCurrency) {
+            if (!hasPriceAmount) {
+                errors.priceAmount = 'Price amount is required';
+            } else {
+                const parsedPrice = Number(normalizedPriceAmount);
+                if (!Number.isFinite(parsedPrice) || parsedPrice <= 0) {
+                    errors.priceAmount = 'Price must be a positive number';
+                }
+            }
+            if (!hasPriceCurrency) {
+                errors.priceCurrency = 'Select a currency';
+            }
+        }
         validationErrors = errors;
         return Object.keys(errors).length === 0;
     }
@@ -129,11 +177,18 @@
 
         const parsedDependencies = parseDependencies(dependenciesInput);
         const hasDependenciesInput = dependenciesInput.trim().length > 0;
+        const hasPriceAmount = normalizedPriceAmount.length > 0;
+        const hasPriceCurrency = normalizedPriceCurrency.length > 0;
+        const parsedPrice = hasPriceAmount ? Number(normalizedPriceAmount) : null;
+        const computedPrice =
+            hasPriceAmount && hasPriceCurrency && Number.isFinite(parsedPrice) && parsedPrice > 0
+                ? `${parsedPrice} ${normalizedPriceCurrency}`
+                : '';
         const payload = {
             name,
             description,
             image: imageUrl,
-            ...(price && { price }),
+            ...(computedPrice && { price: computedPrice }),
             ...(unit && { unit }),
             ...(type && { type }),
             ...((hasDependenciesInput || (isEdit && itemData?.dependencies?.length)) && {
@@ -172,7 +227,14 @@
         if (isEdit && itemData) {
             name = itemData.name || '';
             description = itemData.description || '';
-            price = itemData.price || '';
+            const { price: parsedPrice, symbol } = getPriceStringComponents(itemData.price);
+            if (parsedPrice > 0 && symbol) {
+                priceAmount = String(parsedPrice);
+                priceCurrency = symbol;
+            } else {
+                priceAmount = '';
+                priceCurrency = '';
+            }
             unit = itemData.unit || '';
             type = itemData.type || '';
             previewUrl = itemData.image || null;
@@ -242,8 +304,41 @@
     </div>
 
     <div class="form-group">
-        <label for="price">Price (optional)</label>
-        <input type="text" id="price" bind:value={price} placeholder="e.g. 100 dUSD" />
+        <label for="price-amount">Price (optional)</label>
+        <div class="price-inputs">
+            <div class="price-input">
+                <input
+                    type="number"
+                    id="price-amount"
+                    bind:value={priceAmount}
+                    min="0.01"
+                    step="any"
+                    inputmode="decimal"
+                    placeholder="e.g. 100"
+                    class:error={validationErrors.priceAmount}
+                />
+                {#if validationErrors.priceAmount}
+                    <span class="error-message">{validationErrors.priceAmount}</span>
+                {/if}
+            </div>
+            <div class="price-input">
+                <select
+                    id="price-currency"
+                    bind:value={priceCurrency}
+                    aria-label="Price currency"
+                    class:error={validationErrors.priceCurrency}
+                >
+                    <option value="">Select currency</option>
+                    {#each currencyOptions as currency}
+                        <option value={currency}>{currency}</option>
+                    {/each}
+                </select>
+                {#if validationErrors.priceCurrency}
+                    <span class="error-message">{validationErrors.priceCurrency}</span>
+                {/if}
+            </div>
+        </div>
+        <p class="helper-text">Enter a positive amount and choose a currency.</p>
     </div>
 
     <div class="form-group">
@@ -327,7 +422,8 @@
     }
 
     input,
-    textarea {
+    textarea,
+    select {
         width: 100%;
         box-sizing: border-box;
         padding: 10px;
@@ -342,7 +438,8 @@
     }
 
     input:focus,
-    textarea:focus {
+    textarea:focus,
+    select:focus {
         border-color: #0f0;
         box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
         outline: 3px solid #0f0;
@@ -367,6 +464,7 @@
 
     input.error,
     textarea.error,
+    select.error,
     input[type='file'].error {
         border-color: #ff3e3e;
     }
@@ -382,6 +480,18 @@
         font-size: 14px;
         color: #c4f5c6;
         margin-top: 6px;
+    }
+
+    .price-inputs {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .price-input {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
     }
 
     .image-preview-container {
