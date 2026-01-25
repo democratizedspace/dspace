@@ -82,6 +82,9 @@
     }
 
     function handleTouchToggle(event) {
+        if (event.pointerType && event.pointerType !== 'touch') {
+            return;
+        }
         event.preventDefault();
         ignoreToggleClick = true;
         clearTimeout(ignoreToggleClickTimeout);
@@ -184,7 +187,7 @@
                     aria-haspopup="listbox"
                     aria-expanded={isExpanded}
                     on:click={handleToggleClick}
-                    on:touchend={handleTouchToggle}
+                    on:pointerup={handleTouchToggle}
                 >
                     Edit
                 </button>
@@ -197,7 +200,7 @@
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
                 on:click={handleToggleClick}
-                on:touchend={handleTouchToggle}
+                on:pointerup={handleTouchToggle}
             >
                 {buttonLabel}
             </button>
