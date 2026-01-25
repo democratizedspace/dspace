@@ -154,6 +154,103 @@ UI-level source disclosures + telemetry-gated metadata for QA validation.
 
 ## Design: RAG Discoverability + Hallucination Mitigation
 
+### 0) Failure-mode fixes (v3 release checklist alignment)
+
+This section turns the QA “known failure modes” into concrete, shippable fixes for v3. Each
+subsection describes what to add, where it lives, and how QA can validate it.
+
+#### A) Custom content blind spot (PR-only answers)
+**Problem:** The model claims custom content is only possible via PRs or repo edits and omits the
+in-game editor, import/export, and backup workflows.
+
+**Fix:**
+- **Knowledge coverage:** add the custom content docs + routes to the knowledge summary so the
+  model sees the editor, backup, and import/export flows in context. Source the docs index from
+  `frontend/src/pages/docs/json/sections.json` and include `/docs` entries for custom content and
+  quest submission guidance, plus the `/contentbackup` and `/quests/manage` routes from
+  `docs/ROUTES.md`.
+- **Prompt guardrail:** append “Never invent quests/items/processes/routes; if unsure, say you
+  don’t know and point to `/docs`” to every persona prompt so the system message explicitly
+  requires doc-backed answers.
+- **UI disclosure:** show “Sources used” so QA can confirm custom content docs were in-context.
+
+**QA validation:** prompt “How do I add custom content?” should mention the in-game editor and
+backup/import/export workflows with a `/docs` reference, and should not claim PRs are required.
+
+#### B) Stale content drift (v2/v3 mismatch)
+**Problem:** The model describes deferred or removed features (e.g., token.place as active in v3).
+
+**Fix:**
+- **Knowledge coverage:** include the v3 changelog or release notes in the context summary, and
+  ensure the doc index references the current `/docs/changelog` entry.
+- **Prompt guardrail:** add a sentence to all personas that the assistant must reference the v3
+  docs and avoid describing deferred features as active.
+- **Source hygiene:** prefer docs from the v3 branch and remove older staging URLs from the
+  knowledge pack.
+
+**QA validation:** prompt “Is token.place active?” should answer “not in v3” and cite the v3 docs.
+
+#### C) Non-reasoning model regression (guessing)
+**Problem:** The non-reasoning `/chat` configuration guesses instead of saying “I don’t know.”
+
+**Fix:**
+- **Shared guardrail:** make the “don’t invent / ask a clarifying question” sentence part of the
+  system prompt for *all* personas and providers so the non-reasoning model has the same rule.
+- **Regression probes:** add 2–3 scripted prompt checks that expect a clarifying question or a
+  doc reference when context is missing, and run them against the non-reasoning config.
+
+**QA validation:** non-reasoning probes should respond with uncertainty + doc pointers, not guesses.
+
+#### D) Made-up game state (invented inventory/quests)
+**Problem:** The model claims it can see a user’s balances, inventory, or quest progress without a
+provided save.
+
+**Fix:**
+- **Guardrail:** explicitly forbid claiming access to player state unless a save snapshot or game
+  state is provided. Require a clarification request when state is absent.
+- **Context labeling:** when `buildDchatKnowledge` includes game state, label it as “Snapshot:
+  user-provided state” to make the presence/absence obvious to the model.
+- **UI disclosure:** show whether “state” was a source in the “Sources used” list.
+
+**QA validation:** prompt “What’s in my inventory?” should refuse or request a save snapshot.
+
+#### E) Incorrect routes/UX (invented pages or menu paths)
+**Problem:** The model recommends routes or menus that don’t exist.
+
+**Fix:**
+- **Route index grounding:** include `docs/ROUTES.md` (or a generated route list) in the context
+  summary and add `route` entries to the source list.
+- **Answering rule:** system prompt should instruct the assistant to reference `/docs` or
+  `docs/ROUTES.md` when giving URLs or navigation steps.
+- **Doc additions:** ensure docs for key flows (custom content, backups, chat) list the actual
+  routes used in the UI.
+
+**QA validation:** prompt “What are the current game routes?” should cite `docs/ROUTES.md`.
+
+#### F) Incorrect data semantics (requires/consumes/creates mixups)
+**Problem:** The model swaps process semantics or misstates duration behavior.
+
+**Fix:**
+- **Docs grounding:** ensure the processes doc includes precise definitions of
+  requires/consumes/creates and duration normalization; include it in the knowledge summary.
+- **Prompt reminder:** add a short line to the guardrail sentence: “If you mention process
+  semantics, ensure they match the docs.”
+- **Source emphasis:** include the process semantics doc in sources so QA can verify coverage.
+
+**QA validation:** prompts about process recipes should match the doc semantics exactly.
+
+#### G) Overconfident precision (exact numbers without sources)
+**Problem:** The model gives exact counts, durations, or drop rates without grounding.
+
+**Fix:**
+- **Guardrail:** require explicit source backing when giving exact numbers; otherwise respond with
+  ranges or uncertainty.
+- **Context limitation:** keep the knowledge summary trimmed to only known facts; avoid synthesizing
+  exact numbers from partial context.
+- **UI disclosure:** “Sources used” makes it clear when exact numbers are (or are not) available.
+
+**QA validation:** if no source provides exact values, the model should avoid precision.
+
 ### 1) Add a Source Registry to the Knowledge Builder
 
 **Change:** update `buildDchatKnowledge` to return **both** a summary string and a structured
