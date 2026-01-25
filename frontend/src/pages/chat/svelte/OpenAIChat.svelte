@@ -33,6 +33,7 @@
     let errorBanner = null;
     let showDebug = false;
     let debugMessages = [];
+    let debugExpanded = false;
     let settingsUnsubscribe;
 
     $: currentPersona = $activePersona;
@@ -93,14 +94,20 @@
         const historyForApi = [...$messageHistory];
         showSpinner = true;
         errorBanner = null;
-        const debugPayload = await buildChatPrompt(historyForApi, {
-            persona: currentPersona,
-        });
-        debugMessages = debugPayload.debugMessages;
+        let debugPayload;
+        if (showDebug) {
+            debugPayload = await buildChatPrompt(historyForApi, {
+                persona: currentPersona,
+            });
+            debugMessages = debugPayload.debugMessages;
+        } else {
+            debugMessages = [];
+        }
 
         try {
             const aiResponse = await GPT5Chat(historyForApi, {
                 persona: currentPersona,
+                promptPayload: debugPayload,
             });
             const aiMessage = {
                 role: 'assistant',
@@ -161,6 +168,9 @@
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
             const nextNormalized = normalizeSettings(value?.settings);
             showDebug = nextNormalized.showChatDebugPayload;
+            if (!showDebug) {
+                debugExpanded = false;
+            }
         });
         if ($messageHistory.length === 0) {
             addWelcomeMessage();
@@ -232,29 +242,42 @@
     {#if showDebug}
         <div class="debug-panel" data-testid="chat-debug-panel">
             <div class="debug-heading">
-                <h3>Chat prompt debug</h3>
-                <p>Displays the full prompt payload, with RAG content highlighted.</p>
-            </div>
-            {#if debugMessages.length}
-                <div class="debug-list">
-                    {#each debugMessages as debugMessage, index (index)}
-                        <div
-                            class="debug-message"
-                            class:rag={debugMessage.kind === 'rag'}
-                            class:main={debugMessage.kind === 'main'}
-                        >
-                            <div class="debug-meta">
-                                <span class="debug-role">{debugMessage.role}</span>
-                                <span class="debug-kind">
-                                    {debugMessage.kind === 'rag' ? 'RAG' : 'Main'}
-                                </span>
-                            </div>
-                            <pre>{debugMessage.content}</pre>
-                        </div>
-                    {/each}
+                <div>
+                    <h3>Chat prompt debug</h3>
+                    <p>Displays the full prompt payload, with RAG content highlighted.</p>
                 </div>
-            {:else}
-                <p class="debug-empty">Send a message to view the prompt payload.</p>
+                <button
+                    class="debug-toggle"
+                    type="button"
+                    on:click={() => {
+                        debugExpanded = !debugExpanded;
+                    }}
+                >
+                    {debugExpanded ? 'Hide prompt' : 'Show prompt'}
+                </button>
+            </div>
+            {#if debugExpanded}
+                {#if debugMessages.length}
+                    <div class="debug-list">
+                        {#each debugMessages as debugMessage, index (index)}
+                            <div
+                                class="debug-message"
+                                class:rag={debugMessage.kind === 'rag'}
+                                class:main={debugMessage.kind === 'main'}
+                            >
+                                <div class="debug-meta">
+                                    <span class="debug-role">{debugMessage.role}</span>
+                                    <span class="debug-kind">
+                                        {debugMessage.kind === 'rag' ? 'RAG' : 'Main'}
+                                    </span>
+                                </div>
+                                <pre>{debugMessage.content}</pre>
+                            </div>
+                        {/each}
+                    </div>
+                {:else}
+                    <p class="debug-empty">Send a message to view the prompt payload.</p>
+                {/if}
             {/if}
         </div>
     {/if}
@@ -387,8 +410,10 @@
     }
 
     .debug-heading {
-        display: grid;
-        gap: 0.25rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.75rem;
     }
 
     .debug-heading h3 {
@@ -400,6 +425,21 @@
         margin: 0;
         font-size: 0.9rem;
         color: #cbd5e1;
+    }
+
+    .debug-toggle {
+        height: 32px;
+        margin: 0;
+        padding: 0 0.75rem;
+        font-size: 0.85rem;
+        background: #1e293b;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        border-radius: 999px;
+        color: #e2e8f0;
+    }
+
+    .debug-toggle:hover {
+        background: #334155;
     }
 
     .debug-list {

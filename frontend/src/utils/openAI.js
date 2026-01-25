@@ -236,7 +236,8 @@ export const buildChatPrompt = async (messages, options = {}) => {
 };
 
 export const GPT5Chat = async (messages, options = {}) => {
-    const { combinedMessages, gameState } = await buildChatPrompt(messages, options);
+    const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
+    const { combinedMessages, gameState } = promptPayload;
     const apiKey = gameState.openAI?.apiKey || ''; // scan-secrets: ignore
     const OpenAIClient = resolveOpenAIClient();
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
