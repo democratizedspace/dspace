@@ -512,6 +512,16 @@ describe('getOpenAIErrorSummary', () => {
         expect(result.message).toMatch(/could not reach/i);
     });
 
+    it('labels empty TypeError failures as network errors', () => {
+        const error = new Error('');
+        error.name = 'TypeError';
+
+        const result = getOpenAIErrorSummary(error);
+
+        expect(result.type).toBe('network');
+        expect(result.message).toMatch(/could not reach/i);
+    });
+
     it('falls back to unknown for unexpected errors', () => {
         const result = getOpenAIErrorSummary(new Error('mystery'));
 

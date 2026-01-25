@@ -30,7 +30,10 @@ const installChatStub = async (page: Page, mode: StubMode) => {
                 await new Promise((resolve) => setTimeout(resolve, 150));
 
                 if (stubMode === 'network-error') {
-                    throw new Error('Network connection failed');
+                    const error = new TypeError('');
+                    // @ts-expect-error non-standard property for tests
+                    error.cause = new TypeError('');
+                    throw error;
                 }
 
                 if (stubMode === 'rate-limit') {
@@ -150,6 +153,9 @@ test.describe('Chat message flow', () => {
         await expect(
             chatPanel.locator('.message-bubble.assistant').getByText(NETWORK_ERROR_MESSAGE)
         ).toBeVisible();
+        await expect(
+            chatPanel.locator('.message-bubble.assistant').getByText(FALLBACK_MESSAGE)
+        ).toHaveCount(0);
         await expect(spinner).not.toBeVisible();
     });
 

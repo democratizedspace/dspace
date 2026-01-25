@@ -108,7 +108,13 @@ export const getOpenAIErrorSummary = (error) => {
     const numericStatus = toNumericStatus(status);
     const normalizedMessage = message?.toLowerCase() ?? '';
     const normalizedName = error?.name?.toLowerCase() ?? '';
+    const normalizedCauseMessage = error?.cause?.message?.toLowerCase() ?? '';
+    const normalizedCauseName = error?.cause?.name?.toLowerCase() ?? '';
     const isOffline = typeof navigator !== 'undefined' && navigator.onLine === false;
+    const isTypeErrorWithoutMessage =
+        normalizedName === 'typeerror' && !normalizedMessage && numericStatus == null;
+    const isCauseTypeErrorWithoutMessage =
+        normalizedCauseName === 'typeerror' && !normalizedCauseMessage && numericStatus == null;
 
     if (numericStatus === 401) {
         return {
@@ -164,11 +170,18 @@ export const getOpenAIErrorSummary = (error) => {
 
     if (
         isOffline ||
+        isTypeErrorWithoutMessage ||
+        isCauseTypeErrorWithoutMessage ||
         normalizedName.includes('network') ||
+        normalizedCauseName.includes('network') ||
         normalizedMessage.includes('network') ||
+        normalizedCauseMessage.includes('network') ||
         normalizedMessage.includes('fetch') ||
+        normalizedCauseMessage.includes('fetch') ||
         normalizedMessage.includes('load failed') ||
-        normalizedMessage.includes('networkerror')
+        normalizedCauseMessage.includes('load failed') ||
+        normalizedMessage.includes('networkerror') ||
+        normalizedCauseMessage.includes('networkerror')
     ) {
         return {
             type: 'network',
