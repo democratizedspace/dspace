@@ -169,9 +169,8 @@ in-game editor, import/export, and backup workflows.
   `frontend/src/pages/docs/json/sections.json` and include `/docs` entries for custom content and
   quest submission guidance, plus the `/contentbackup` and `/quests/manage` routes from
   `docs/ROUTES.md`.
-- **Prompt guardrail:** append “Never invent quests/items/processes/routes; if unsure, say you
-  don’t know and point to `/docs`” to every persona prompt so the system message explicitly
-  requires doc-backed answers.
+- **Prompt guardrail:** append the shared hallucination guardrail sentence defined later in this
+  doc to every persona prompt so the system message explicitly requires doc-backed answers.
 - **UI disclosure:** show “Sources used” so QA can confirm custom content docs were in-context.
 
 **QA validation:** prompt “How do I add custom content?” should mention the in-game editor and
@@ -209,8 +208,8 @@ provided save.
 - **Guardrail:** explicitly forbid claiming access to player state unless a save snapshot or game
   state is provided. Require a clarification request when state is absent.
 - **Context labeling:** when `buildDchatKnowledge` includes game state, label it as “Snapshot:
-  user-provided state” to make the presence/absence obvious to the model.
-- **UI disclosure:** show whether “state” was a source in the “Sources used” list.
+  local game state” to make the presence/absence obvious to the model.
+- **UI disclosure:** show whether local game state was a source in the “Sources used” list.
 
 **QA validation:** prompt “What’s in my inventory?” should refuse or request a save snapshot.
 
