@@ -177,4 +177,22 @@ describe('legacy save seeding utilities', () => {
         expect(localStorage.getItem('gameStateBackup')).toBeNull();
         expect(localStorage.getItem('legacyV2Seeded')).toBeNull();
     });
+
+    test('clearV3GameStateStorage preserves legacy v2 state when mixed with v3 data', async () => {
+        localStorage.setItem(
+            'gameState',
+            JSON.stringify({ versionNumberString: '2.1', inventory: { 1: 1 } })
+        );
+        localStorage.setItem(
+            'gameStateBackup',
+            JSON.stringify({ versionNumberString: '3.1', inventory: { 1: 1 } })
+        );
+
+        const cleared = await clearV3GameStateStorage();
+
+        expect(cleared).toBe(true);
+        expect(localStorage.getItem('gameState')).not.toBeNull();
+        expect(localStorage.getItem('gameStateBackup')).toBeNull();
+        expect(localStorage.getItem('legacyV2Seeded')).toBe('true');
+    });
 });
