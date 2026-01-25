@@ -73,14 +73,14 @@ describe('FinishOption quest requirements', () => {
             requiresItems: [{ id: 'item-1', count: 1 }],
         };
 
-        const { getByRole, getByText, findByText } = render(FinishOption, {
+        const { getByRole, getByText, findByAltText } = render(FinishOption, {
             props: { quest, option },
         });
 
         const button = getByRole('button', { name: /Finish quest/ });
         expect(button).toBeDisabled();
         expect(getByText('Requires:')).toBeInTheDocument();
-        expect(await findByText(/Required Widget/)).toBeInTheDocument();
+        expect(await findByAltText('Required Widget')).toBeInTheDocument();
 
         await fireEvent.click(button);
         expect(finishQuestMock).not.toHaveBeenCalled();
@@ -95,14 +95,14 @@ describe('FinishOption quest requirements', () => {
             text: 'Finish quest',
         };
 
-        const { getByRole, queryByText } = render(FinishOption, {
+        const { getByRole, queryByText, queryByAltText } = render(FinishOption, {
             props: { quest, option },
         });
 
         const button = getByRole('button', { name: /Finish quest/ });
         expect(button).toBeEnabled();
         expect(queryByText('Requires:')).not.toBeInTheDocument();
-        expect(queryByText(/Required Widget/)).not.toBeInTheDocument();
+        expect(queryByAltText('Required Widget')).not.toBeInTheDocument();
     });
 
     it('enables finish option when inventory meets requirements', async () => {
