@@ -137,6 +137,55 @@ spec aligns the design doc to QA by:
 2) Standardizing the **uncertainty + “don’t invent”** language for every persona prompt.
 3) Surfacing **context sources** in the UI so QA can verify grounding.
 
+### Solutions for QA failure modes (9.4.2)
+The QA checklist now treats hallucination modes as **fixes to implement**. Below are
+concrete solutions that map to those fixes.
+
+1) **Custom content blind spots**
+   - **Add docs coverage:** include `/docs` pages for the custom content editor, import/export,
+     and backup flows in the knowledge summary and sources list.
+   - **Prompt guardrail:** require the assistant to state that custom content can be created
+     via the in-game editor and import/export; do not imply “PR-only” changes.
+   - **QA validation:** use the “How do I add custom content?” probe to ensure the response
+     links to `/docs` and mentions the editor + import/export paths.
+
+2) **Stale content drift**
+   - **Release notes grounding:** add v3 release notes/changelog entries to the summary so the
+     model can assert which features are active vs deferred.
+   - **Prompt rule:** add an explicit clause: “If a feature is deferred (ex: token.place), say
+     it is inactive in v3 and point to the release notes.”
+   - **QA validation:** probe “Is token.place active?” and confirm the answer matches v3 notes.
+
+3) **Non-reasoning model regression**
+   - **Shared guardrails:** enforce identical “don’t invent” language across all persona
+     prompts regardless of reasoning model selection.
+   - **Probe loop:** run 2–3 non-reasoning prompts; if any response guesses, tighten
+     guardrails or add a dedicated “uncertainty sentence” appended to system prompts.
+
+4) **Made-up game state**
+   - **State access disclaimer:** add a standard line: “I cannot see your save unless you
+     provide a snapshot; ask me to interpret it.”
+   - **UI + docs tie-in:** surface the “Sources used” list to show when no save context was
+     present, and recommend the save/import docs as next steps.
+
+5) **Incorrect routes/UX**
+   - **Routes grounding:** embed `docs/ROUTES.md` into the knowledge summary with a compact
+     index of canonical routes.
+   - **Response rule:** only reference routes in the index and point to `/docs` for
+     navigation paths.
+
+6) **Incorrect data semantics**
+   - **Semantic primer:** include the “requires/consumes/creates + duration” rules in the
+     summary so the model can restate them accurately.
+   - **QA validation:** run the “Processes doc examples” probe from QA and ensure the answer
+     matches the documented semantics.
+
+7) **Overconfident precision**
+   - **Precision guardrail:** add a policy: “Exact counts, durations, or drop rates require a
+     cited source; otherwise answer with uncertainty or a range.”
+   - **UI enforcement:** pair exact answers with “Sources used” in the UI so QA can verify
+     grounding for precise numbers.
+
 ### If QA doc is outdated
 **What’s missing today:** QA policy does not spell out that v3 “RAG” is a **client-only,
 deterministic knowledge summary** nor that source visibility is expected via UI disclosures
