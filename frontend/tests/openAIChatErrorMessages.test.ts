@@ -4,8 +4,15 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('../src/utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({
         openAI: {},
+        settings: {
+            showChatDebugPayload: false,
+            showQuestGraphVisualizer: false,
+        },
     })),
     ready: Promise.resolve(),
+    state: {
+        subscribe: vi.fn(() => () => {}),
+    },
 }));
 
 vi.mock('../src/utils/dchatKnowledge.js', () => ({

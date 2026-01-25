@@ -8,16 +8,19 @@
     } from '../../utils/gameState/common.js';
     import { normalizeSettings } from '../../utils/settingsDefaults.js';
 
-    const SETTINGS_KEY = 'showQuestGraphVisualizer';
+    const QUEST_GRAPH_KEY = 'showQuestGraphVisualizer';
+    const CHAT_DEBUG_KEY = 'showChatDebugPayload';
 
     let hydrated = false;
-    let enabled = false;
+    let questGraphEnabled = false;
+    let chatDebugEnabled = false;
     let loading = true;
     let unsubscribe;
 
     const syncFromState = (value) => {
         const normalized = normalizeSettings(value?.settings);
-        enabled = normalized[SETTINGS_KEY];
+        questGraphEnabled = normalized[QUEST_GRAPH_KEY];
+        chatDebugEnabled = normalized[CHAT_DEBUG_KEY];
     };
 
     onMount(async () => {
@@ -33,13 +36,13 @@
         unsubscribe?.();
     });
 
-    const persistSetting = async (nextValue) => {
+    const persistSetting = async (key, nextValue) => {
         await ready;
         const current = loadGameState();
         const normalized = normalizeSettings(current.settings);
         const nextSettings = {
             ...normalized,
-            [SETTINGS_KEY]: Boolean(nextValue),
+            [key]: Boolean(nextValue),
         };
 
         await saveGameState({
@@ -48,35 +51,62 @@
         });
     };
 
-    const toggle = async () => {
-        const next = !enabled;
-        enabled = next;
-        await persistSetting(next);
+    const toggleQuestGraph = async () => {
+        const next = !questGraphEnabled;
+        questGraphEnabled = next;
+        await persistSetting(QUEST_GRAPH_KEY, next);
+    };
+
+    const toggleChatDebug = async () => {
+        const next = !chatDebugEnabled;
+        chatDebugEnabled = next;
+        await persistSetting(CHAT_DEBUG_KEY, next);
     };
 </script>
 
 <section class="panel" data-hydrated={hydrated ? 'true' : 'false'}>
     <div class="heading">
-        <h2>Quest dependency graph</h2>
-        <p>Show an interactive dependency map on the Quests page.</p>
+        <h2>Debug</h2>
+        <p>Optional debugging tools for inspecting DSPACE behavior.</p>
     </div>
 
     <label class="toggle">
         <div class="toggle__label">
             <span class="title">Show quest dependency map on /quests</span>
+            <span class="subtitle">Interactive dependency map for quests.</span>
         </div>
         <button
             type="button"
             class="toggle__control"
-            class:enabled
-            aria-pressed={enabled}
+            class:enabled={questGraphEnabled}
+            aria-pressed={questGraphEnabled}
             aria-label="Show quest dependency map on the quests page"
             disabled={loading}
-            on:click={toggle}
+            on:click={toggleQuestGraph}
             data-testid="quest-graph-visualizer-toggle"
         >
             <span aria-hidden="true" class="toggle__thumb"></span>
-            <span class="toggle__state">{enabled ? 'On' : 'Off'}</span>
+            <span class="toggle__state">{questGraphEnabled ? 'On' : 'Off'}</span>
+        </button>
+    </label>
+
+    <label class="toggle">
+        <div class="toggle__label">
+            <span class="title">Show chat prompt debug on /chat</span>
+            <span class="subtitle">Highlights RAG content and main prompt inputs.</span>
+        </div>
+        <button
+            type="button"
+            class="toggle__control"
+            class:enabled={chatDebugEnabled}
+            aria-pressed={chatDebugEnabled}
+            aria-label="Show chat prompt debug on the chat page"
+            disabled={loading}
+            on:click={toggleChatDebug}
+            data-testid="chat-debug-prompt-toggle"
+        >
+            <span aria-hidden="true" class="toggle__thumb"></span>
+            <span class="toggle__state">{chatDebugEnabled ? 'On' : 'Off'}</span>
         </button>
     </label>
 </section>
@@ -128,6 +158,11 @@
     .title {
         font-weight: 600;
         color: #e2e8f0;
+    }
+
+    .subtitle {
+        font-size: 0.85rem;
+        color: #cbd5e1;
     }
 
     .toggle__control {
