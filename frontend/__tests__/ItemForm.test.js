@@ -115,6 +115,14 @@ describe('ItemForm Component', () => {
                 target: { value: 'This is a test item description' },
             });
 
+            fireEvent.input(getByLabelText(/price/i), {
+                target: { value: '12' },
+            });
+
+            fireEvent.change(getByLabelText(/currency/i), {
+                target: { value: 'dWatt' },
+            });
+
             fireEvent.input(getByLabelText(/dependencies/i), {
                 target: { value: 'resource/filament, tool/nozzle' },
             });
@@ -138,10 +146,46 @@ describe('ItemForm Component', () => {
                     name: 'Test Item',
                     description: 'This is a test item description',
                     image: 'data:image/jpeg;base64,COMPRESSED',
+                    price: '12 dWatt',
                     dependencies: ['resource/filament', 'tool/nozzle'],
                 })
             );
         });
+    });
+
+    it('blocks submission when the price is not a positive number', async () => {
+        const { getByLabelText, getByText, findByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Negative Price Item' },
+            });
+
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Has an invalid price' },
+            });
+
+            fireEvent.input(getByLabelText(/price/i), {
+                target: { value: '-3' },
+            });
+
+            const file = new File(['mock content'], 'negative.jpg', { type: 'image/jpeg' });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        expect(await findByText(/price must be a positive number/i)).toBeInTheDocument();
+        expect(itemsAddMock).not.toHaveBeenCalled();
     });
 
     it('shows success feedback with links after creating an item', async () => {
@@ -285,6 +329,7 @@ describe('ItemForm Component', () => {
             name: 'Existing Item',
             description: 'Existing item description',
             image: 'existing-image-url',
+            price: '8 dUSD',
             dependencies: ['resource/alloy'],
         };
 
@@ -302,6 +347,8 @@ describe('ItemForm Component', () => {
         await waitFor(() => {
             expect(getByLabelText(/name/i).value).toBe(existingItem.name);
             expect(getByLabelText(/description/i).value).toBe(existingItem.description);
+            expect(getByLabelText(/price/i).value).toBe('8');
+            expect(getByLabelText(/currency/i).value).toBe('dUSD');
             expect(getByLabelText(/dependencies/i).value).toBe('resource/alloy');
         });
 
@@ -318,6 +365,7 @@ describe('ItemForm Component', () => {
                     name: existingItem.name,
                     description: existingItem.description,
                     image: existingItem.image,
+                    price: existingItem.price,
                     dependencies: existingItem.dependencies,
                 })
             );

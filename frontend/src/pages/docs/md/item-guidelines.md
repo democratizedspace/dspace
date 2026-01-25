@@ -38,7 +38,7 @@ Every item requires the following basic properties:
 - **name**: Descriptive name of the item (required)
 - **description**: Detailed explanation of the item's purpose and use (required)
     - **image**: Visual representation of the item (required)
-- **price**: Value in game currency (optional)
+- **price**: Value in game currency (optional, use a number plus currency like `15 dUSD`)
 - **unit**: Measurement unit for the item (e.g., kg, L, watts) (optional)
 - **type**: Classification or category (optional)
 
@@ -116,7 +116,7 @@ When creating custom items, consider how they might connect to:
     "name": "Recycled Aluminum (100g)",
     "description": "Lightweight aluminum recovered from waste materials. Used in manufacturing various components for space habitats.",
     "image": "/assets/recycled-aluminum.jpg",
-    "price": "15",
+    "price": "15 dUSD",
     "unit": "100g",
     "type": "resource"
 }
@@ -129,7 +129,7 @@ When creating custom items, consider how they might connect to:
     "name": "Multimeter",
     "description": "A device for measuring electrical voltage, current, and resistance. Essential for testing and troubleshooting electronic circuits.",
     "image": "/assets/launch_controller.jpg",
-    "price": "250",
+    "price": "250 dUSD",
     "unit": "unit",
     "type": "tool"
 }
@@ -142,7 +142,7 @@ When creating custom items, consider how they might connect to:
     "name": "Solar Cell Junction Box",
     "description": "A protective enclosure for solar panel electrical connections. Shields connections from moisture and environmental damage.",
     "image": "/assets/junction-box.jpg",
-    "price": "45",
+    "price": "45 dUSD",
     "unit": "unit",
     "type": "component"
 }
