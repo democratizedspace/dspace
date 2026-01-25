@@ -271,20 +271,14 @@ export const clearSeededLegacySaves = (): void => {
 export const clearV3GameStateStorage = async (): Promise<boolean> => {
     if (!isBrowser) return false;
 
-    let removedV3Keys = false;
     LEGACY_V2_STORAGE_KEYS.forEach((key) => {
         const raw = localStorage.getItem(key);
         if (raw === null) return;
         const parsed = parseLegacyV2Raw(raw);
         if (!parsed.isLegacy) {
             localStorage.removeItem(key);
-            removedV3Keys = true;
         }
     });
-    if (removedV3Keys) {
-        localStorage.removeItem(LEGACY_V2_SEED_SKIP_KEY);
-    }
-
     try {
         localStorage.removeItem('root');
         localStorage.removeItem('state');
