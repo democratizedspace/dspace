@@ -81,7 +81,7 @@ describe('FinishOption quest requirements', () => {
             props: { quest, option },
         });
 
-        const button = getByRole('button', { name: 'Finish quest' });
+        const button = getByRole('button', { name: /Finish quest/ });
         expect(button).toBeDisabled();
         expect(getByText('Requires:')).toBeInTheDocument();
         expect(await findByAltText('Required Widget')).toBeInTheDocument();
@@ -103,7 +103,7 @@ describe('FinishOption quest requirements', () => {
             props: { quest, option },
         });
 
-        const button = getByRole('button', { name: 'Finish quest' });
+        const button = getByRole('button', { name: /Finish quest/ });
         expect(button).toBeEnabled();
         expect(queryByText('Requires:')).not.toBeInTheDocument();
         expect(queryByAltText('Required Widget')).not.toBeInTheDocument();
@@ -120,7 +120,7 @@ describe('FinishOption quest requirements', () => {
         };
 
         const { getByRole } = render(FinishOption, { props: { quest, option } });
-        const button = getByRole('button', { name: 'Finish quest' });
+        const button = getByRole('button', { name: /Finish quest/ });
 
         stateStore.set({ inventory: { 'item-1': 1 } });
         await tick();
