@@ -49,7 +49,7 @@ jest.mock('../src/utils/gameState/common.js', () => ({
     ready: Promise.resolve(),
 }));
 
-const { GPT5Chat } = require('../src/utils/openAI.js');
+const { buildChatPrompt, GPT5Chat } = require('../src/utils/openAI.js');
 
 describe('gpt-5 chat responses utility', () => {
     beforeEach(() => {
@@ -118,5 +118,12 @@ describe('gpt-5 chat responses utility', () => {
     test('returns response content', async () => {
         const result = await GPT5Chat([]);
         expect(result).toBe('mocked reply');
+    });
+
+    test('buildChatPrompt labels RAG content for debug', async () => {
+        const { debugMessages } = await buildChatPrompt([]);
+        const ragMessages = debugMessages.filter((message) => message.kind === 'rag');
+        expect(ragMessages).toHaveLength(1);
+        expect(ragMessages[0].content).toContain('DSPACE knowledge base:');
     });
 });

@@ -25,7 +25,7 @@ describe('gameState - common utilities', () => {
             quests: {},
             inventory: {},
             processes: {},
-            settings: { showQuestGraphVisualizer: false },
+            settings: { showChatDebugPayload: false, showQuestGraphVisualizer: false },
             versionNumberString: '3',
         });
         expect(typeof fresh._meta?.lastUpdated).toBe('number');
@@ -106,7 +106,7 @@ describe('gameState - common utilities', () => {
             quests: {},
             inventory: {},
             processes: {},
-            settings: { showQuestGraphVisualizer: false },
+            settings: { showChatDebugPayload: false, showQuestGraphVisualizer: false },
         });
         expect(typeof validated._meta?.lastUpdated).toBe('number');
     });
