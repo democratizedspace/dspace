@@ -186,33 +186,40 @@ async function createChatResponse(openai, input) {
     }
 }
 
-export const GPT5Chat = async (messages, options = {}) => {
-    await ready;
-    const gameState = loadGameState();
-    const apiKey = gameState.openAI?.apiKey || '';
-    const OpenAIClient = resolveOpenAIClient();
-    const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
-
+export const buildChatMessages = (messages = [], options = {}) => {
     const persona = options.persona || defaultPersona;
+    const gameState = options.gameState || loadGameState();
+    const knowledgeSummary =
+        typeof options.knowledgeSummary === 'string'
+            ? options.knowledgeSummary
+            : buildDchatKnowledge(gameState);
     const systemMessage = {
         role: 'system',
         content: persona?.systemPrompt || fallbackSystemPrompt,
+        source: 'system',
     };
 
-    const knowledgeSummary = buildDchatKnowledge(gameState);
     const knowledgeMessage = knowledgeSummary
         ? {
               role: 'system',
               content: `DSPACE knowledge base:\n${knowledgeSummary}`,
+              source: 'rag',
           }
         : null;
 
     const openingMessage = {
         role: 'assistant',
         content: persona?.welcomeMessage || fallbackWelcomeMessage,
+        source: 'opening',
     };
 
-    const userMessages = [...messages];
+    const userMessages = Array.isArray(messages)
+        ? messages.map((message) => ({
+              ...message,
+              source: message.source || 'conversation',
+          }))
+        : [];
+
     let combinedMessages = [...userMessages];
 
     if (combinedMessages.length === 0) {
@@ -229,7 +236,23 @@ export const GPT5Chat = async (messages, options = {}) => {
         combinedMessages = [...combinedMessages, ...userMessages];
     }
 
-    const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+    return combinedMessages;
+};
+
+export const GPT5Chat = async (messages, options = {}) => {
+    await ready;
+    const gameState = loadGameState();
+    const apiKey = gameState.openAI?.apiKey || ''; // scan-secrets: ignore
+    const OpenAIClient = resolveOpenAIClient();
+    const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
+
+    const persona = options.persona || defaultPersona;
+    const combinedMessages = buildChatMessages(messages, { persona, gameState });
+
+    const response = await createChatResponse(
+        openai,
+        combinedMessages.map((message) => toResponseMessage(message))
+    );
 
     return toOutputText(response);
 };

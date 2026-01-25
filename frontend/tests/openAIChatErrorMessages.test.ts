@@ -1,12 +1,18 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+vi.mock('../src/utils/gameState/common.js', async () => {
+    const { writable } = await import('svelte/store');
+    const gameStateStore = writable({ settings: {} });
 
-vi.mock('../src/utils/gameState/common.js', () => ({
-    loadGameState: vi.fn(() => ({
-        openAI: {},
-    })),
-    ready: Promise.resolve(),
-}));
+    return {
+        loadGameState: vi.fn(() => ({
+            openAI: {},
+            settings: {},
+        })),
+        ready: Promise.resolve(),
+        state: gameStateStore,
+    };
+});
 
 vi.mock('../src/utils/dchatKnowledge.js', () => ({
     buildDchatKnowledge: vi.fn(() => 'knowledge'),

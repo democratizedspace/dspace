@@ -8,16 +8,19 @@
     } from '../../utils/gameState/common.js';
     import { normalizeSettings } from '../../utils/settingsDefaults.js';
 
-    const SETTINGS_KEY = 'showQuestGraphVisualizer';
+    const QUEST_GRAPH_SETTING = 'showQuestGraphVisualizer';
+    const CHAT_DEBUG_SETTING = 'showChatDebugData';
 
     let hydrated = false;
-    let enabled = false;
+    let questGraphEnabled = false;
+    let chatDebugEnabled = false;
     let loading = true;
     let unsubscribe;
 
     const syncFromState = (value) => {
         const normalized = normalizeSettings(value?.settings);
-        enabled = normalized[SETTINGS_KEY];
+        questGraphEnabled = normalized[QUEST_GRAPH_SETTING];
+        chatDebugEnabled = normalized[CHAT_DEBUG_SETTING];
     };
 
     onMount(async () => {
@@ -33,13 +36,13 @@
         unsubscribe?.();
     });
 
-    const persistSetting = async (nextValue) => {
+    const persistSetting = async (settingKey, nextValue) => {
         await ready;
         const current = loadGameState();
         const normalized = normalizeSettings(current.settings);
         const nextSettings = {
             ...normalized,
-            [SETTINGS_KEY]: Boolean(nextValue),
+            [settingKey]: Boolean(nextValue),
         };
 
         await saveGameState({
@@ -48,35 +51,64 @@
         });
     };
 
-    const toggle = async () => {
-        const next = !enabled;
-        enabled = next;
-        await persistSetting(next);
+    const toggleQuestGraph = async () => {
+        const next = !questGraphEnabled;
+        questGraphEnabled = next;
+        await persistSetting(QUEST_GRAPH_SETTING, next);
+    };
+
+    const toggleChatDebug = async () => {
+        const next = !chatDebugEnabled;
+        chatDebugEnabled = next;
+        await persistSetting(CHAT_DEBUG_SETTING, next);
     };
 </script>
 
 <section class="panel" data-hydrated={hydrated ? 'true' : 'false'}>
     <div class="heading">
-        <h2>Quest dependency graph</h2>
-        <p>Show an interactive dependency map on the Quests page.</p>
+        <h2>Debug tools</h2>
+        <p>Toggle extra diagnostics and debug views across the UI.</p>
     </div>
 
     <label class="toggle">
         <div class="toggle__label">
-            <span class="title">Show quest dependency map on /quests</span>
+            <span class="title">Quest dependency map</span>
+            <span class="description">Show an interactive dependency map on /quests.</span>
         </div>
         <button
             type="button"
             class="toggle__control"
-            class:enabled
-            aria-pressed={enabled}
+            class:enabled={questGraphEnabled}
+            aria-pressed={questGraphEnabled}
             aria-label="Show quest dependency map on the quests page"
             disabled={loading}
-            on:click={toggle}
+            on:click={toggleQuestGraph}
             data-testid="quest-graph-visualizer-toggle"
         >
             <span aria-hidden="true" class="toggle__thumb"></span>
-            <span class="toggle__state">{enabled ? 'On' : 'Off'}</span>
+            <span class="toggle__state">{questGraphEnabled ? 'On' : 'Off'}</span>
+        </button>
+    </label>
+
+    <label class="toggle">
+        <div class="toggle__label">
+            <span class="title">Chat debug payload</span>
+            <span class="description">
+                Show full chat prompts with RAG context highlighted on /chat.
+            </span>
+        </div>
+        <button
+            type="button"
+            class="toggle__control"
+            class:enabled={chatDebugEnabled}
+            aria-pressed={chatDebugEnabled}
+            aria-label="Show the chat debug payload on the chat page"
+            disabled={loading}
+            on:click={toggleChatDebug}
+            data-testid="chat-debug-payload-toggle"
+        >
+            <span aria-hidden="true" class="toggle__thumb"></span>
+            <span class="toggle__state">{chatDebugEnabled ? 'On' : 'Off'}</span>
         </button>
     </label>
 </section>
@@ -128,6 +160,11 @@
     .title {
         font-weight: 600;
         color: #e2e8f0;
+    }
+
+    .description {
+        font-size: 0.85rem;
+        color: #cbd5e1;
     }
 
     .toggle__control {

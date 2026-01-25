@@ -1,9 +1,10 @@
 <script>
-    import { onMount, tick } from 'svelte';
+    import { onDestroy, onMount, tick } from 'svelte';
     import {
         defaultOpenAIErrorMessage,
         describeOpenAIError,
         getOpenAIErrorSummary,
+        buildChatMessages,
         GPT5Chat,
     } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
@@ -15,6 +16,12 @@
         activePersonaId,
         setActivePersona,
     } from '../../../stores/chat.js';
+    import {
+        loadGameState,
+        ready,
+        state as gameStateStore,
+    } from '../../../utils/gameState/common.js';
+    import { normalizeSettings } from '../../../utils/settingsDefaults.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -24,6 +31,9 @@
     let hydrated = false;
     let messageCounter = 0;
     let errorBanner = null;
+    let showDebugPayload = false;
+    let debugMessages = [];
+    let unsubscribe;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -69,6 +79,11 @@
             timestamp: Date.now(),
         };
         addMessage(welcome);
+    }
+
+    function updateDebugSetting(value) {
+        const normalized = normalizeSettings(value?.settings);
+        showDebugPayload = normalized.showChatDebugData;
     }
 
     async function submitMessage() {
@@ -139,11 +154,27 @@
     }
 
     onMount(async () => {
+        await ready;
+        updateDebugSetting(loadGameState());
+        unsubscribe = gameStateStore.subscribe((value) => updateDebugSetting(value));
         hydrated = true;
         if ($messageHistory.length === 0) {
             addWelcomeMessage();
         }
     });
+
+    onDestroy(() => {
+        unsubscribe?.();
+    });
+
+    $: if (hydrated && showDebugPayload) {
+        debugMessages = buildChatMessages($messageHistory, {
+            persona: currentPersona,
+            gameState: loadGameState(),
+        });
+    } else if (!showDebugPayload && debugMessages.length) {
+        debugMessages = [];
+    }
 </script>
 
 <div
@@ -202,6 +233,37 @@
             {/each}
         {/if}
     </div>
+
+    {#if showDebugPayload}
+        <section class="debug-panel" data-testid="chat-debug-panel">
+            <div class="debug-heading">
+                <h3>Debug payload</h3>
+                <p>
+                    Shows the full prompt, with RAG context highlighted separately from the main
+                    conversation.
+                </p>
+            </div>
+            <div class="debug-messages">
+                {#each debugMessages as debugMessage, index (index)}
+                    <div
+                        class={`debug-message ${
+                            debugMessage.source === 'rag'
+                                ? 'debug-message--rag'
+                                : 'debug-message--main'
+                        }`}
+                    >
+                        <div class="debug-message__meta">
+                            <span class="debug-message__role">{debugMessage.role}</span>
+                            <span class="debug-message__source">
+                                {debugMessage.source === 'rag' ? 'RAG context' : 'Main content'}
+                            </span>
+                        </div>
+                        <pre>{debugMessage.content}</pre>
+                    </div>
+                {/each}
+            </div>
+        </section>
+    {/if}
 </div>
 
 <style>
@@ -294,6 +356,82 @@
         align-items: center;
         width: 100%;
         margin-top: 20px;
+    }
+
+    .debug-panel {
+        width: 100%;
+        background: #0f172a;
+        color: #e2e8f0;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        display: grid;
+        gap: 1rem;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .debug-heading {
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .debug-heading h3 {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    .debug-heading p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #cbd5e1;
+    }
+
+    .debug-messages {
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .debug-message {
+        border-radius: 0.6rem;
+        padding: 0.75rem;
+        border: 1px solid transparent;
+    }
+
+    .debug-message--main {
+        background: rgba(15, 118, 110, 0.2);
+        border-color: rgba(94, 234, 212, 0.4);
+    }
+
+    .debug-message--rag {
+        background: rgba(59, 130, 246, 0.18);
+        border-color: rgba(96, 165, 250, 0.5);
+    }
+
+    .debug-message__meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.5rem;
+        color: #e2e8f0;
+    }
+
+    .debug-message__role {
+        color: #e2e8f0;
+    }
+
+    .debug-message__source {
+        color: #cbd5e1;
+    }
+
+    .debug-message pre {
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-size: 0.85rem;
+        font-family: 'SFMono-Regular', SFMono-Regular, ui-monospace, monospace;
     }
 
     button {
