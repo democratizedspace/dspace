@@ -4,6 +4,7 @@
     import { addItems } from '../../utils/gameState/inventory.js';
     import { db } from '../../utils/customcontent.js';
     import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
+    import inventoryItems from '../../pages/inventory/json/items/index.js';
 
     export let name = '';
     export let description = '';
@@ -27,12 +28,37 @@
     let imageProcessingPromise = null;
     let imageProcessingJobId = 0;
     let isHydrated = false;
+    let priceAmount = '';
+    let priceCurrency = '';
+
+    const currencyDenylist = new Set(['Early Adopter Token', 'Newcomer Token']);
+    const currencyOptions = inventoryItems
+        .filter((item) => item.category === 'Digital Currency & Tokens')
+        .map((item) => item.name)
+        .filter((name) => !currencyDenylist.has(name));
+
+    $: formattedPrice =
+        priceAmount.trim() && priceCurrency.trim()
+            ? `${priceAmount.trim()} ${priceCurrency.trim()}`
+            : '';
 
     function parseDependencies(value) {
         return value
             .split(/[\n,]/)
             .map((entry) => entry.trim())
             .filter(Boolean);
+    }
+
+    function parsePrice(value) {
+        const trimmed = value?.trim() ?? '';
+        if (!trimmed) {
+            return { amount: '', currency: '' };
+        }
+        const match = trimmed.match(/^([0-9]+(?:\.[0-9]+)?)\s+(.+)$/);
+        if (!match) {
+            return { amount: trimmed, currency: '' };
+        }
+        return { amount: match[1], currency: match[2].trim() };
     }
 
     async function handleImageUpload(event) {
@@ -91,6 +117,19 @@
         if (!image && !previewUrl) {
             errors.image = 'Image is required';
         }
+        const amountValue = priceAmount.trim();
+        const currencyValue = priceCurrency.trim();
+        if (amountValue || currencyValue) {
+            const numericAmount = Number(amountValue);
+            if (!amountValue) {
+                errors.priceAmount = 'Price amount is required when selecting a currency.';
+            } else if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
+                errors.priceAmount = 'Price must be a positive number.';
+            }
+            if (!currencyValue) {
+                errors.priceCurrency = 'Currency is required when entering a price.';
+            }
+        }
         validationErrors = errors;
         return Object.keys(errors).length === 0;
     }
@@ -129,6 +168,7 @@
 
         const parsedDependencies = parseDependencies(dependenciesInput);
         const hasDependenciesInput = dependenciesInput.trim().length > 0;
+        price = formattedPrice;
         const payload = {
             name,
             description,
@@ -178,6 +218,11 @@
             previewUrl = itemData.image || null;
             processedImageUrl = itemData.image || null;
             dependenciesInput = (itemData.dependencies || []).join('\n');
+            const parsedPrice = parsePrice(price);
+            priceAmount = parsedPrice.amount;
+            priceCurrency = currencyOptions.includes(parsedPrice.currency)
+                ? parsedPrice.currency
+                : '';
         }
     });
 </script>
@@ -242,8 +287,33 @@
     </div>
 
     <div class="form-group">
-        <label for="price">Price (optional)</label>
-        <input type="text" id="price" bind:value={price} placeholder="e.g. 100 dUSD" />
+        <label for="price-amount">Price (optional)</label>
+        <input
+            type="number"
+            id="price-amount"
+            bind:value={priceAmount}
+            min="0"
+            step="any"
+            placeholder="e.g. 100"
+            class:error={validationErrors.priceAmount}
+        />
+        {#if validationErrors.priceAmount}
+            <span class="error-message">{validationErrors.priceAmount}</span>
+        {/if}
+        <label for="price-currency" class="nested-label">Currency</label>
+        <select
+            id="price-currency"
+            bind:value={priceCurrency}
+            class:error={validationErrors.priceCurrency}
+        >
+            <option value="">Select currency</option>
+            {#each currencyOptions as currency}
+                <option value={currency}>{currency}</option>
+            {/each}
+        </select>
+        {#if validationErrors.priceCurrency}
+            <span class="error-message">{validationErrors.priceCurrency}</span>
+        {/if}
     </div>
 
     <div class="form-group">
@@ -292,7 +362,7 @@
         {name}
         {description}
         imageUrl={previewUrl}
-        {price}
+        price={formattedPrice}
         {unit}
         {type}
         dependencies={parseDependencies(dependenciesInput)}
@@ -327,7 +397,8 @@
     }
 
     input,
-    textarea {
+    textarea,
+    select {
         width: 100%;
         box-sizing: border-box;
         padding: 10px;
@@ -342,7 +413,8 @@
     }
 
     input:focus,
-    textarea:focus {
+    textarea:focus,
+    select:focus {
         border-color: #0f0;
         box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
         outline: 3px solid #0f0;
@@ -367,6 +439,7 @@
 
     input.error,
     textarea.error,
+    select.error,
     input[type='file'].error {
         border-color: #ff3e3e;
     }
@@ -382,6 +455,10 @@
         font-size: 14px;
         color: #c4f5c6;
         margin-top: 6px;
+    }
+
+    .nested-label {
+        margin-top: 10px;
     }
 
     .image-preview-container {
@@ -460,7 +537,8 @@
         }
 
         input,
-        textarea {
+        textarea,
+        select {
             width: 100%;
             font-size: 14px;
         }
