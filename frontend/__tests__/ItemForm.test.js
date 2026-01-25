@@ -94,6 +94,8 @@ describe('ItemForm Component', () => {
             expect(getByLabelText(/name/i)).toBeInTheDocument();
             expect(getByLabelText(/description/i)).toBeInTheDocument();
             expect(getByLabelText(/upload an image/i)).toBeInTheDocument();
+            expect(getByLabelText(/price \(optional\)/i)).toBeInTheDocument();
+            expect(getByLabelText(/price currency/i)).toBeInTheDocument();
         });
     });
 
@@ -278,12 +280,57 @@ describe('ItemForm Component', () => {
         expect(itemsAddMock).not.toHaveBeenCalled();
     });
 
+    it('combines price amount and currency for submission', async () => {
+        const { getByLabelText, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Priced Item' },
+            });
+
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Item with price' },
+            });
+
+            fireEvent.input(getByLabelText(/price \(optional\)/i), {
+                target: { value: '12.5' },
+            });
+
+            fireEvent.change(getByLabelText(/price currency/i), {
+                target: { value: 'dUSD' },
+            });
+
+            const file = new File(['mock content'], 'price.jpg', { type: 'image/jpeg' });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        await waitFor(() => {
+            expect(itemsAddMock).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    price: '12.5 dUSD',
+                })
+            );
+        });
+    });
+
     it('handles edit mode correctly', async () => {
         // Setup edit mode with existing item data
         const existingItem = {
             id: 'item-123',
             name: 'Existing Item',
             description: 'Existing item description',
+            price: '10 dUSD',
             image: 'existing-image-url',
             dependencies: ['resource/alloy'],
         };
@@ -303,6 +350,8 @@ describe('ItemForm Component', () => {
             expect(getByLabelText(/name/i).value).toBe(existingItem.name);
             expect(getByLabelText(/description/i).value).toBe(existingItem.description);
             expect(getByLabelText(/dependencies/i).value).toBe('resource/alloy');
+            expect(getByLabelText(/price \(optional\)/i).value).toBe('10');
+            expect(getByLabelText(/price currency/i).value).toBe('dUSD');
         });
 
         // Submit form without changes
