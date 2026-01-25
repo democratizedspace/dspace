@@ -327,10 +327,17 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
         background: #2f5b2f;
         padding: 8px;
         border-radius: 4px;
         border: 2px solid #007006;
+    }
+
+    .selected-item .item-content {
+        flex: 1 1 200px;
+        min-width: 0;
     }
 
     .edit-button,
@@ -353,5 +360,15 @@
     .select-button {
         width: 100%;
         padding: 10px;
+    }
+
+    @media (max-width: 640px) {
+        .selected-item {
+            align-items: flex-start;
+        }
+
+        .edit-button {
+            width: 100%;
+        }
     }
 </style>
