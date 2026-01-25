@@ -384,7 +384,7 @@
         "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
         "name": "Restored sponge filter flow",
         "description": "Sponge filter reassembled, primed, and bubbling evenly after a rinse.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/restored_sponge_filter_flow_bubbling.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -492,7 +492,7 @@
         "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
         "name": "Floating plant mat",
         "description": "Cluster of rinsed guppy grass spread across the water surface to soak up nutrients and shade fry.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/floating_plant_mat_guppy_grass.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -505,7 +505,7 @@
         "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
         "name": "Aquarium pH reading",
         "description": "Single pH strip result matched to the chart within 30 seconds of dipping.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/aquarium_ph_strip_reading.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -583,7 +583,7 @@
         "id": "bda9e450-499d-41d6-ab32-df73528dc68f",
         "name": "Dense fry cover",
         "description": "Floating tangle of hornwort and guppy grass packed at the surface to shelter newborn guppy fry.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/dense_fry_cover_hornwort_guppy_grass.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,

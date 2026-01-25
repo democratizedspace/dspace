@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/micro_servo_pair_metal_gears_horns.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "micro servo pair",
+    "item_id": "dc5897f0-acec-4c3b-ad4d-535054e768f6",
+    "entity_type": "item",
+    "prompt": "A matched pair of compact 9g micro servos placed side-by-side on an anti-static mat, with several servo horns and small screws neatly arranged nearby. One servo is shown with a partially visible gear train through a small cutaway window or translucent casing detail (no branding), hinting at metal gears and suitability for precision experiments like thrust vectoring.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future electronics bench aesthetic: soft cinematic lighting, realistic brushed metal and matte plastic textures, no logos, and no readable labels. Keep the pair centered and clean so it reads clearly as an inventory item representing two micro servos plus horns.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

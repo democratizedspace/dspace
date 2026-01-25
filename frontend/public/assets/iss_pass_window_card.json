@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/iss_pass_window_card.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "ISS pass window",
+    "item_id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+    "entity_type": "item",
+    "prompt": "A compact mission-planning card and small notebook page laid out on a workbench, showing a simplified sky-arc diagram and a highlighted viewing window for an upcoming space-station flyover. The card includes a minimal compass-rose graphic, a clean elevation curve, and a few unlabeled tick marks, with a handheld star-spotting monocular and a simple tripod nearby to imply stargazing prep without relying on readable text.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk workshop aesthetic (2040s): soft cinematic lighting, clean materials, realistic paper texture and matte plastics, no brand logos, no readable text or UI labels. Keep the composition uncluttered and icon-friendly, with the planning card as the clear focal subject.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

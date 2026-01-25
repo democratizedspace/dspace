@@ -371,7 +371,7 @@
         "id": "025862b3-8377-4396-ab32-aa572bdc3260",
         "name": "layered compost bucket",
         "description": "5 gal bucket drilled for airflow with alternating kitchen scraps and dry browns, damp like a wrung sponge and capped with shredded paper.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/layered_compost_bucket_aerated.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -385,7 +385,7 @@
         "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
         "name": "active compost bucket",
         "description": "Freshly turned compost bucket with loosened mix, a dry carbon cap, and warm core ready for monitoring.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/active_compost_bucket_warm_core.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -399,7 +399,7 @@
         "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
         "name": "cured compost bucket",
         "description": "Bucket of compost that has cooled after its hot phase, smelling earthy and ready to be screened.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/cured_compost_bucket_cooled.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -413,7 +413,7 @@
         "id": "5e165cbc-f4f2-4e9d-ac92-9588ff1ac9c1",
         "name": "screened compost blend",
         "description": "Fine, clump-free compost shaken through a sifter, ready for seedlings or top-dressing beds.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/screened_compost_blend_fine.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -859,7 +859,7 @@
         "id": "dc5897f0-acec-4c3b-ad4d-535054e768f6",
         "name": "micro servo pair",
         "description": "Matched 9 g servos with metal gears and servo horns for thrust-vectoring experiments.",
-        "image": "/assets/micro_servo_pair_with_horns.jpg",
+        "image": "/assets/micro_servo_pair_metal_gears_horns.jpg",
         "price": "18 dUSD",
         "unit": "pair",
         "category": "Electronics & Robotics"
@@ -1191,7 +1191,7 @@
         "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
         "name": "thermistor logging rig",
         "description": "An Arduino Uno wired with a 10k NTC thermistor voltage divider for continuous temperature logging.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/thermistor_logging_rig_arduino_voltage_divider.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
     },
@@ -1231,7 +1231,7 @@
         "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
         "name": "ultrasonic distance sensor",
         "description": "5 V ultrasonic rangefinder module with trigger/echo pins and 2 cm–4 m sensing range.",
-        "image": "/assets/micro_servo_pair_with_horns.jpg",
+        "image": "/assets/ultrasonic_distance_sensor_module.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
     },
@@ -1239,7 +1239,7 @@
         "id": "f22293ab-0553-4f6f-8377-093f2a1351c8",
         "name": "pan-tilt servo bracket",
         "description": "Stacked mini-servo bracket with hardware for sweeping lightweight sensors in two axes.",
-        "image": "/assets/micro_servo_pair_with_horns.jpg",
+        "image": "/assets/pan_tilt_mini_servo_bracket.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
     },
@@ -1247,7 +1247,7 @@
         "id": "054d7c58-0e39-4f60-b072-e62cd5e879cf",
         "name": "pan-tilt ultrasonic rig",
         "description": "Two-servo pan-tilt assembly wired to an Arduino with an ultrasonic module mounted and centered.",
-        "image": "/assets/micro_servo_pair_with_horns.jpg",
+        "image": "/assets/pan_tilt_ultrasonic_rig_assembled.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
     },
@@ -1255,7 +1255,7 @@
         "id": "9f2109f5-59c8-4309-8a6c-3c60be744985",
         "name": "ultrasonic sweep map",
         "description": "Logged point cloud from a 180° ultrasonic sweep showing obstacles and clear arcs.",
-        "image": "/assets/micro_servo_pair_with_horns.jpg",
+        "image": "/assets/ultrasonic_sweep_obstacle_map.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
     },
@@ -1263,7 +1263,7 @@
         "id": "f69a6eb1-3ef5-4f3e-97e8-5e5f395c2363",
         "name": "two-servo arm kit",
         "description": "Laser-cut links, hardware, and a micro gripper plate sized for two hobby servos.",
-        "image": "/assets/micro_servo_pair_with_horns.jpg",
+        "image": "/assets/two_servo_arm_kit_parts_layout.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
     },
@@ -1271,7 +1271,7 @@
         "id": "8efbfdc9-3725-46b4-baaf-9b070ca99a5d",
         "name": "assembled servo arm",
         "description": "Two-servo arm with gripper assembled and wired, ready for motion tuning.",
-        "image": "/assets/micro_servo_pair_with_horns.jpg",
+        "image": "/assets/assembled_two_servo_gripper_arm.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
     },
@@ -1279,7 +1279,7 @@
         "id": "b73ddc8a-b0cf-43ee-8d1e-189e50ac3d96",
         "name": "calibrated servo arm",
         "description": "Two-servo arm with travel limits and gripper speeds tuned from a calibration sketch.",
-        "image": "/assets/micro_servo_pair_with_horns.jpg",
+        "image": "/assets/calibrated_two_servo_arm_limits.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
     },
@@ -1315,7 +1315,7 @@
         "id": "269d2cfb-25de-417b-8e29-64e80aff934c",
         "name": "3D printed cable clip set",
         "description": "Pack of four PLA cable clips that snap over a desk edge to route USB and charging leads.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/3d_printed_cable_clip_set_pla.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "3D Printing & Fabrication"
     },
@@ -1331,7 +1331,7 @@
         "id": "3721d5e0-a148-4f67-9150-55492873a576",
         "name": "3D printed filament spool holder",
         "description": "Printed base and upright arms that cradle a filament spool so it feeds smoothly toward the extruder.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/3d_printed_filament_spool_holder.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "3D Printing & Fabrication"
     },
@@ -1642,7 +1642,7 @@
         "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
         "name": "local DSPACE checkout",
         "description": "A synced DSPACE repository with dependencies installed and caches warmed for testing.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/local_dspace_checkout_workspace.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1674,7 +1674,7 @@
         "id": "fc89727c-8fd9-4b40-a186-40a0c56c6063",
         "name": "TLS certificate bundle",
         "description": "Fresh RSA and ECDSA certificates with renewal hooks configured for the cluster ingress.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/tls_certificate_bundle_keys.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1736,7 +1736,7 @@
         "id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
         "name": "stacked star trail photo",
         "description": "A processed spiral of trails built from aligned long exposures and color-balanced foreground.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/stacked_star_trail_spiral_photo.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -1744,7 +1744,7 @@
         "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
         "name": "aurora viewing plan",
         "description": "Forecast notes listing Kp index, cloud cover, and the hour you'll step outside.",
-        "image": "/assets/hardbound_mission_logbook.jpg",
+        "image": "/assets/aurora_viewing_plan_notebook.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1784,7 +1784,7 @@
         "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
         "name": "ISS pass window",
         "description": "Start time, direction, and elevation for the next visible ISS flyover from your location.",
-        "image": "/assets/hardbound_mission_logbook.jpg",
+        "image": "/assets/iss_pass_window_card.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1864,7 +1864,7 @@
         "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
         "name": "stevia tasting solution",
         "description": "A 1% dilution of stevia crystals prepared in clean glassware for sensory testing.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/stevia_tasting_solution_1pct.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -2111,7 +2111,7 @@
         "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
         "name": "temperature log CSV",
         "description": "Hourly temperature readings with timestamps exported from your thermistor logging rig.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/temperature_log_csv_export.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2119,7 +2119,7 @@
         "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
         "name": "temperature line chart",
         "description": "A simple Matplotlib graph showing your logged temperature readings over time.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/temperature_line_chart_matplotlib_style.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2127,7 +2127,7 @@
         "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
         "name": "annotated temperature graph",
         "description": "A cleaned plot with rolling averages and high/low annotations to make trends pop.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/annotated_temperature_graph_plot.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2135,7 +2135,7 @@
         "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
         "name": "live temperature JSON endpoint",
         "description": "A lightweight API route that serves the latest thermistor reading as JSON on your network.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/live_temperature_json_endpoint_api.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2143,7 +2143,7 @@
         "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
         "name": "live temperature dashboard",
         "description": "An auto-refreshing web page that charts your live JSON endpoint for anyone on the LAN.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/live_temperature_dashboard_webpage.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2253,7 +2253,7 @@
         "id": "70bb8d86-2c4e-4330-9705-371891934686",
         "name": "mission logbook",
         "description": "A5 (148 × 210 mm) hardbound logbook with 200 pre-numbered pages for recording mission events and maintenance notes.",
-        "image": "/assets/hardbound_mission_logbook.jpg",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
         "price": "8 dUSD",
         "hardening": {
             "passes": 1,

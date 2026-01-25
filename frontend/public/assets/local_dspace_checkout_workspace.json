@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/local_dspace_checkout_workspace.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "local DSPACE checkout",
+    "item_id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
+    "entity_type": "item",
+    "prompt": "A clean developer workstation scene showing a laptop with a code editor-like layout, a terminal-like pane, and a file-tree-like sidebar—rendered as abstract shapes and lines with no readable text. Nearby are a small stack of sticky notes, a USB cable, and a simple repo-folder icon printed on a card, conveying “synced repo, dependencies installed, caches warmed” without relying on words.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk desk aesthetic: soft cinematic lighting, realistic materials, no brand logos, and no readable text anywhere on screens. Keep the composition uncluttered and focused on the concept of a ready-to-test local project checkout.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

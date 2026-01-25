@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/hardbound_mission_logbook_a5.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "mission logbook",
+    "item_id": "70bb8d86-2c4e-4330-9705-371891934686",
+    "entity_type": "item",
+    "prompt": "An A5 hardbound mission logbook resting open on a tidy workbench, showing neatly ruled pages with subtle pre-numbered markers (not readable), a ribbon bookmark, and a pen clipped to the cover. Nearby are small maintenance items—a torque driver bit set, a labeled-but-unreadable equipment tag, and a compact sensor module—to communicate that this book is used for recording mission events and maintenance notes.\n\nUltra-detailed, photorealistic 512×512 image with a clean near-future lab/workshop vibe: soft cinematic lighting, realistic leatherette cover texture, crisp paper fibers, no brand logos, and no readable text. Keep the logbook centered and visually unambiguous as an icon-like inventory item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

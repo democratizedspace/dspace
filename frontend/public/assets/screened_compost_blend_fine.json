@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/screened_compost_blend_fine.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "screened compost blend",
+    "item_id": "5e165cbc-f4f2-4e9d-ac92-9588ff1ac9c1",
+    "entity_type": "item",
+    "prompt": "A bin of fine, clump-free compost after screening, shown as dark, crumbly soil-like material with a uniform texture. A metal mesh sifter rests nearby with a small pile of larger leftover bits off to the side, clearly indicating the compost was shaken through a screen and is now ready for seedlings or top-dressing.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk garden/workbench aesthetic: soft cinematic lighting, realistic soil granularity, no logos, and no readable text. Keep the screened compost as the focal subject, clean and non-gross.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

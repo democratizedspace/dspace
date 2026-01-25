@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/annotated_temperature_graph_plot.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "annotated temperature graph",
+    "item_id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+    "entity_type": "item",
+    "prompt": "A cleaned temperature plot displayed on a tablet or monitor, showing a smooth line with a faint rolling-average overlay and a few simple marker dots indicating highs and lows. Annotations are shown as minimalist arrows and circles without readable numbers or words, making the “trends pop” visually while keeping it textless; a small sensor probe and notebook sit nearby to imply this came from a logging setup.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future lab/desk setting: soft cinematic lighting, realistic screen reflections, no brand logos, and no readable UI labels. Keep the plot clean, uncluttered, and immediately recognizable as an annotated temperature graph.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

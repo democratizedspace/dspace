@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/calibrated_two_servo_arm_limits.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "calibrated servo arm",
+    "item_id": "b73ddc8a-b0cf-43ee-8d1e-189e50ac3d96",
+    "entity_type": "item",
+    "prompt": "A two-servo robotic arm on a small calibration stand, with subtle physical limit markers visible on the joints (colored tape dots or etched notches, no text) and the gripper positioned at a precise stop. A simple tuning setup sits nearby: a ruler-like gauge with unlabeled tick marks, a small hex driver, and a microcontroller connected via cable, implying travel limits and speed tuning from a calibration sketch.\n\nUltra-detailed, photorealistic 512×512 image in a clean near-future maker-lab aesthetic: soft cinematic lighting, realistic metal and plastic textures, no logos, and no readable labels. Keep the composition clear and focused on the “calibrated limits” idea through physical cues rather than text.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

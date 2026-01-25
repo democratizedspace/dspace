@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/thermistor_logging_rig_arduino_voltage_divider.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "thermistor logging rig",
+    "item_id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+    "entity_type": "item",
+    "prompt": "A compact thermistor logging rig on a workbench: a microcontroller board wired to a breadboard showing a simple voltage divider with a 10k NTC thermistor and a resistor, plus neatly routed jumper wires. A probe-style thermistor lead extends toward a small cup of water or a metal block to imply temperature measurement, and a USB cable connects to a nearby laptop.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future maker-lab aesthetic: soft cinematic lighting, realistic PCB and breadboard textures, no brand logos, and no readable text on screens or boards. Keep the wiring clear and tidy so the setup reads instantly as “continuous temperature logging hardware.”",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

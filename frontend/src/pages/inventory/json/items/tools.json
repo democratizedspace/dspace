@@ -140,7 +140,7 @@
         "id": "efcf79a5-1616-490e-add7-40f7fdb628b4",
         "name": "temperature tower sample",
         "description": "Stacked calibration tower labeled by nozzle temperature, showing gloss, bridging, and stringing per band.",
-        "image": "/assets/missing-image-placeholder.svg",
+        "image": "/assets/temperature_tower_calibration_sample.jpg",
         "price": "0.60 dUSD",
         "type": "tool",
         "hardening": {

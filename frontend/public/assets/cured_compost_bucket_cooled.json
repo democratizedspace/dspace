@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/cured_compost_bucket_cooled.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "cured compost bucket",
+    "item_id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+    "entity_type": "item",
+    "prompt": "A compost bucket after the hot phase, shown open with a calm, earthy-looking mix inside—darker, stable, and slightly fluffy rather than steaming. A simple compost thermometer probe rests nearby on the bench, and the bucket exterior shows ventilation holes and a tidy lid, conveying that it has cooled and is ready to be screened.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk backyard/workshop setting: soft cinematic lighting, realistic organic texture without grossness, no logos, and no readable text. Keep the cooled compost bucket centered and clearly “finished curing.”",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

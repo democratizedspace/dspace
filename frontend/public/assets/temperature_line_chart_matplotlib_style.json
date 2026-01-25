@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/temperature_line_chart_matplotlib_style.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "temperature line chart",
+    "item_id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+    "entity_type": "item",
+    "prompt": "A simple temperature line chart displayed on a screen or printed card, showing a single clean line trending over time with a subtle grid and a few unlabeled tick marks. The chart is intentionally minimal and textless, visually communicating “logged temperature readings over time” without any readable axis labels; a sensor probe and small data-logger box sit nearby to link it to measurement.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future lab/desk aesthetic: soft cinematic lighting, realistic paper or screen reflections, no brand logos, and no readable text. Keep the chart centered and uncluttered so it reads clearly as a temperature time-series graph.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/assembled_two_servo_gripper_arm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "assembled servo arm",
+    "item_id": "8efbfdc9-3725-46b4-baaf-9b070ca99a5d",
+    "entity_type": "item",
+    "prompt": "A compact two-servo robotic arm segment on a workbench, with a small gripper attached at the end and wiring neatly bundled along the links. The arm is shown in a neutral pose, with a simple test jig nearby (a small cube object to pinch) to communicate that it’s assembled, wired, and ready for motion tuning.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future maker workshop: soft cinematic lighting, realistic fasteners and servo horns, no brand logos, no readable labels, and no text overlays. Keep the arm centered and visually clear as an assembled servo-driven gripper arm.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

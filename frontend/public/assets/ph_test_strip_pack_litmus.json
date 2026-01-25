@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/ph_test_strip_pack_litmus.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "pH test strip pack",
+    "item_id": "092dae11-237a-43cc-b342-246aabbba258",
+    "entity_type": "item",
+    "prompt": "A compact flip-top pack of litmus-style pH test strips on a hydroponics bench, with a few strips fanned out beside a small sample vial of nutrient solution. One strip shows a clear gradient of color blocks (no readable numbers) to imply a 4–9 pH range, and a small dropper pipette rests nearby to make the testing process visually obvious.\n\nUltra-detailed, photorealistic 512×512 image with a clean near-future hydroponics aesthetic: soft cinematic lighting, realistic paper strip texture and color, no brand logos, and no readable text. Keep the pack and strips centered and uncluttered so it reads instantly as a pH test strip kit.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

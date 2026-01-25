@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/live_temperature_dashboard_webpage.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "live temperature dashboard",
+    "item_id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+    "entity_type": "item",
+    "prompt": "A live temperature dashboard displayed on a laptop on a desk, showing a clean auto-refreshing chart with a moving line, a small sparkline panel, and a few circular status indicators. The UI is intentionally generic and textless—no readable labels—while nearby hardware (a small sensor probe cable and a compact microcontroller) implies the dashboard is pulling live data from a local network endpoint.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk tech workspace: soft cinematic lighting, realistic screen reflections, no brand logos, and no readable text. Keep the chart clear and central so it reads as “live dashboard” rather than a static screenshot.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/two_servo_arm_kit_parts_layout.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "two-servo arm kit",
+    "item_id": "f69a6eb1-3ef5-4f3e-97e8-5e5f395c2363",
+    "entity_type": "item",
+    "prompt": "A neatly arranged two-servo arm kit laid out on a clean work surface: laser-cut linkage pieces, a small gripper plate, screws, standoffs, and servo horns organized in a tidy grid. Two micro servos sit at the top of the layout, and a small assembly diagram is present only as faint, unreadable line art, conveying “kit of parts” rather than a fully assembled arm.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future workshop aesthetic: soft cinematic lighting, crisp detail on small hardware, no brand logos, and no readable text. The composition should be clean and icon-friendly, emphasizing the completeness of the kit and the two-servo focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  
