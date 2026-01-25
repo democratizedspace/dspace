@@ -30,8 +30,7 @@
     let isClientSide = false;
     let normalizedItems = [];
     let customId = '';
-    let ignoreNextClick = false;
-    let ignoreClickTimeout;
+    let ignoreClickUntil = 0;
     const fallbackControlId = `catalog-selector-${catalogSelectorId++}`;
     $: resolvedControlId = controlId || (testId ? `${testId}-control` : fallbackControlId);
     $: customInputId = `${resolvedControlId}-custom-id`;
@@ -74,22 +73,17 @@
     }
 
     function handleToggleClick() {
-        if (ignoreNextClick) {
-            ignoreNextClick = false;
+        if (Date.now() < ignoreClickUntil) {
             return;
         }
         toggleExpanded();
     }
 
-    function handleTouchToggle(event) {
-        event.preventDefault();
-        ignoreNextClick = true;
-        if (ignoreClickTimeout) {
-            clearTimeout(ignoreClickTimeout);
+    function handlePointerToggle(event) {
+        if (event.pointerType !== 'touch') {
+            return;
         }
-        ignoreClickTimeout = setTimeout(() => {
-            ignoreNextClick = false;
-        }, 400);
+        ignoreClickUntil = Date.now() + 500;
         toggleExpanded();
     }
 
@@ -186,7 +180,7 @@
                     aria-haspopup="listbox"
                     aria-expanded={isExpanded}
                     on:click={handleToggleClick}
-                    on:touchstart={handleTouchToggle}
+                    on:pointerup={handlePointerToggle}
                 >
                     Edit
                 </button>
@@ -199,7 +193,7 @@
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
                 on:click={handleToggleClick}
-                on:touchstart={handleTouchToggle}
+                on:pointerup={handlePointerToggle}
             >
                 {buttonLabel}
             </button>
