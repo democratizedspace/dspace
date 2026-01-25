@@ -47,6 +47,8 @@ entity is expected to have:
 ### Image handling
 
 - The 512x512 optimized images are stored as blobs in IndexedDB.
+- These 512x512 assets are downsampled and compressed from arbitrary-size uploads; the optimized
+  bytes are what get committed to the repo.
 - During PR creation, these blobs are converted to base64 and written into the repo under the
   same assets path conventions used for built-in content (e.g., `assets/` or a new
   `frontend/src/pages/.../images/` directory as defined in the export mapping).
@@ -152,6 +154,9 @@ Example mapping (subject to confirmation with current repo layout):
 - Processes: `frontend/src/pages/processes/{category}/{processId}.json` aligned with the current
   category folders (e.g., `hardening/assemble-rocket.json`).
 - Images: `assets/custom/{type}/{id}.{ext}`
+
+Note: the exact in-repo paths must be validated against the current repo layout; treat the
+examples above as tentative until verified.
 
 ## Security and compliance
 
