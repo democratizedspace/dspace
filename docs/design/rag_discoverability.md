@@ -90,12 +90,44 @@ without introducing heavyweight infrastructure.
 QA’s AI chat section is explicit about both *polite failure* and *grounded answers*.
 Relevant excerpts:
 
-- “**Principle: chat must either work, or fail politely with clear errors and no broken UI.**”
-- “**RAG includes `/docs` markdown sources...**”
-- “System prompt explicitly forbids inventing items, quests, processes, or routes... require
-  ‘check docs’ or ask a clarifying question instead.”
-- “If context is missing, model responds with uncertainty + asks a clarifying question or
-  suggests the exact doc page to consult.”
+> Goal: reduce “confident but wrong” game answers before v3 launch. Focus on content grounding,
+> context coverage, and clear “I don’t know” behavior when the answer is not in context.
+This design satisfies it by making the knowledge summary explicit and adding deterministic sources
+in the chat UI, so uncertainty and coverage are visible to QA (file touchpoints:
+`frontend/src/utils/dchatKnowledge.js`, `frontend/src/utils/openAI.js`,
+`frontend/src/pages/chat/svelte/OpenAIChat.svelte`).
+
+> - [ ] RAG includes `/docs` markdown sources from `frontend/src/pages/docs/md/` (especially custom
+>       content, quests, processes, and inventory docs).
+> - [ ] RAG includes a route/map index (ex: `docs/ROUTES.md` and/or a generated sitemap) to avoid
+>       invented URLs.
+This design satisfies it by extending the knowledge summary with `/docs` titles + slugs and the
+route index (file touchpoints: `frontend/src/utils/dchatKnowledge.js`, `docs/ROUTES.md`,
+`frontend/src/pages/docs/json/sections.json`).
+
+> - [ ] System prompt explicitly forbids inventing items, quests, processes, or routes that are not
+>       in context; require “check docs” or ask a clarifying question instead.
+> - [ ] System prompt includes an explicit “never invent game facts” rule, points to
+>       `docs/ROUTES.md` or asks for a save snapshot when unsure, and is versioned/synced between
+>       staging and prod.
+This design satisfies it by appending a shared “never invent” guardrail to every persona prompt
+so every provider uses the same uncertainty language (file touchpoints:
+`frontend/src/data/npcPersonas.js`, `frontend/src/utils/openAI.js`).
+
+> - [ ] If context is missing, model responds with uncertainty + asks a clarifying question or
+>       suggests the exact doc page to consult.
+This design satisfies it by requiring the guardrail sentence to explicitly instruct “I don’t know”
+responses and by surfacing source lists so QA can confirm when context is missing (file
+touchpoints: `frontend/src/data/npcPersonas.js`, `frontend/src/pages/chat/svelte/Message.svelte`).
+
+> - [ ] Quest graph diagnostics surface and export reports (Map + Diagnostics tabs)
+This design satisfies the *debug visibility* expectation by proposing a minimal, opt-in chat
+diagnostics hook that exposes context metadata when telemetry is enabled (file touchpoints:
+`frontend/src/utils/openAI.js`, `frontend/src/pages/chat/svelte/OpenAIChat.svelte`).
+
+> - [ ] E2E tests pass (Playwright or equivalent)
+This design satisfies it by adding a deterministic “Sources used” UI assertion to the existing
+Playwright suite (file touchpoints: `frontend/e2e/chat-rag-context.spec.ts`).
 
 Today’s implementation partially satisfies the “fail politely” rule via error mapping, but
 **does not satisfy** the RAG coverage and “don’t invent” guardrails for all personas. This
@@ -105,8 +137,18 @@ spec aligns the design doc to QA by:
 2) Standardizing the **uncertainty + “don’t invent”** language for every persona prompt.
 3) Surfacing **context sources** in the UI so QA can verify grounding.
 
-**Optional QA doc update (if desired):** Clarify that v3 “RAG” is a deterministic knowledge
-summary (not vector retrieval) while preserving the requirement for `/docs` and routes.
+### If QA doc is outdated
+**What’s missing today:** QA policy does not spell out that v3 “RAG” is a **client-only,
+deterministic knowledge summary** nor that source visibility is expected via UI disclosures
+instead of server logs. It also doesn’t yet acknowledge the planned “Sources used” block or
+lightweight chat diagnostics.
+
+**What Stage 2/3 proposes:** Stage 2 adds `/docs` + routes into the summary; Stage 3 adds
+`contextSources` in the UI and a telemetry-gated diagnostics hook.
+
+**Minimal QA doc tweak (if repo stays client-only):** Add a note under 9.4 that “RAG” means
+local summary assembly (no vector DB), require the docs/routes index to be included, and allow
+UI-level source disclosures + telemetry-gated metadata for QA validation.
 
 ---
 
@@ -143,16 +185,20 @@ return shape) so callers like `GPT5Chat` can be updated incrementally.
 ### 2) Extend Context Coverage with `/docs` + routes
 
 **Docs grounding (lightweight):**
-- Load docs metadata using `import.meta.glob` on `frontend/src/pages/docs/md/*.md` or reuse the
-  existing docs index from `frontend/src/pages/docs/sections.json`.
+- Use the existing docs index consumed by the live `/docs` page:
+  `frontend/src/pages/docs/json/sections.json` (imported by
+  `frontend/src/pages/docs/index.astro`).
 - Emit a short “Docs index” summary (titles + slugs) and add each doc to the `sources` list.
 
 **Routes grounding:**
-- Include the canonical route list from `docs/ROUTES.md` (or a prebuilt route map exported at
-  build time) in the knowledge summary as a short section.
+- Include the canonical route list from `docs/ROUTES.md` in the knowledge summary as a short
+  section.
 - Add a `route` source entry for each route group to avoid invented URLs.
 
 These changes align with QA’s RAG coverage requirements without introducing embeddings.
+
+**Rule:** If a source isn’t currently present in-repo, this spec **must** say so and treat it
+as a proposal (not an existing dependency).
 
 ### 3) Standardize “don’t invent” prompts across personas
 
@@ -169,13 +215,36 @@ Suggested sentence to append:
 **Change:** extend chat message data to carry `contextSources` on assistant replies.
 
 - Add a versioned helper (e.g., `GPT5ChatV2`) in `frontend/src/utils/openAI.js` that returns
-  `{ text, sources }`, while keeping the existing `GPT5Chat` string-returning API for
+  `{ text, contextSources }`, while keeping the existing `GPT5Chat` string-returning API for
   backward compatibility during migration.
-- Update `OpenAIChat.svelte` to attach `sources` to the assistant message object.
+- Update `OpenAIChat.svelte` to attach `contextSources` to the assistant message object.
 - Render a collapsible “Sources used” block in `Message.svelte` (or a new subcomponent).
 
 **Why:** this gives QA and players visibility into *what context* the model saw without
 parsing the model response itself.
+
+### 4.1) Sources + citations contract (single place)
+
+**Contract (proposed):**
+- `GPT5ChatV2` returns:
+  ```ts
+  {
+    text: string;
+    contextSources: Array<{ type: string; id: string; label: string; url?: string }>;
+  }
+  ```
+- `OpenAIChat.svelte` stores the data on the assistant message as:
+  ```ts
+  {
+    role: 'assistant';
+    content: string;
+    contextSources?: Array<{ type: string; id: string; label: string; url?: string }>;
+  }
+  ```
+- `Message.svelte` renders a collapsed disclosure labeled “Sources used” and lists sources in
+  deterministic order (e.g., type then label) from the knowledge builder output. The list is
+  **not** derived from the model response, and the UI does not accept LLM self-reported
+  citations unless a structured response format is introduced later (optional Stage 4).
 
 ### 5) Minimal telemetry + debug hooks
 
@@ -234,6 +303,16 @@ Proposal (opt-in):
   - Verifies docs + routes entries appear when enabled.
 - Update `tests/gpt5ChatResponses.test.ts` (existing) to assert the new return shape and
   `contextSources` propagation.
+
+### Simple eval harness plan (deterministic)
+- Extend `tests/gpt5ChatResponses.test.ts` with golden fixtures that assert:
+  - The generated prompt includes a knowledge summary and a shared “never invent” guardrail.
+  - `contextSources` propagates from `buildDchatKnowledge` through `GPT5ChatV2` to the returned
+    response object.
+  - When context is absent (mock empty summary + sources), the prompt contract includes the
+    “don’t know / ask clarifying question” instruction.
+- Keep the harness purely unit-level: strict schema assertions and serialized fixtures only,
+  no new services or infrastructure.
 
 ### E2E tests (Playwright)
 - Extend `frontend/e2e/chat-rag-context.spec.ts`:
