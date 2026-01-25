@@ -7,5 +7,4 @@
     "prompt": "A CSV-style export depicted as a tidy data grid on a tablet screen, showing rows and columns of numeric-looking blocks and timestamp-like shapes, but with all characters rendered unreadable. A small thermistor probe cable and a microcontroller sit beside the device, making it clear this is an export of hourly temperature readings from a logging rig.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future lab/desk setting: soft cinematic lighting, realistic screen reflections, no brand logos, and no readable text. Keep the data grid central and visually recognizable as a “CSV export” without actual legible characters.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}

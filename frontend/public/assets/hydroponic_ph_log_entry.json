@@ -7,5 +7,4 @@
     "prompt": "A timestamp-style pH log entry shown as a physical clipboard sheet or tablet-like slate on a hydroponics bench, featuring a simple chart with a highlighted target band and a dot marking a successful reading in the 5.5–6.5 zone—rendered as shapes and lines with no readable text. Nearby are a sample cup, a used pH strip, and a small stirring rod to imply the measurement and adjustment process.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future lab aesthetic: soft cinematic lighting, clean surfaces, no brand logos, and absolutely no readable words or UI labels. Keep the log visual and icon-like, with the chart and marked point as the clear focal cue.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}

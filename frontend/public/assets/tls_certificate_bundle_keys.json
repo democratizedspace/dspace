@@ -7,5 +7,4 @@
     "prompt": "A tidy security-themed still life on a desk: a small lock-shaped hardware token, a pair of abstract key-card shapes, and a tablet showing a certificate-chain diagram rendered as clean boxes and connecting lines with no readable text. Subtle cues suggest multiple certificate types (two distinct key icons and two different color-coded chain paths), communicating a “bundle” of fresh certs with renewal hooks configured.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk infrastructure workspace: soft cinematic lighting, clean materials, no brand logos, and no readable text or UI labels. Keep the composition calm and icon-like, clearly reading as “TLS certificates / security bundle.”",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}

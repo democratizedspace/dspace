@@ -7,5 +7,4 @@
     "prompt": "A compact thermistor logging rig on a workbench: a microcontroller board wired to a breadboard showing a simple voltage divider with a 10k NTC thermistor and a resistor, plus neatly routed jumper wires. A probe-style thermistor lead extends toward a small cup of water or a metal block to imply temperature measurement, and a USB cable connects to a nearby laptop.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future maker-lab aesthetic: soft cinematic lighting, realistic PCB and breadboard textures, no brand logos, and no readable text on screens or boards. Keep the wiring clear and tidy so the setup reads instantly as “continuous temperature logging hardware.”",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}

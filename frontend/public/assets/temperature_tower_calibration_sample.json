@@ -7,5 +7,4 @@
     "prompt": "A stacked 3D-print calibration tower sample on a workbench, composed of distinct height bands with visible changes in surface finish, bridging performance, and stringing across sections. Instead of readable labels, each band is marked by simple embossed geometric icons (dots, triangles, squares) to imply different nozzle temperatures; the tower’s glossy vs matte transitions, clean bridges, and occasional wisps of stringing make the calibration purpose visually obvious.\n\nUltra-detailed, photorealistic 512×512 image in a clean near-future maker workshop aesthetic: soft cinematic lighting, realistic filament texture and layer lines, no brand logos, and no readable text. Keep the tower centered and clearly legible as a “temperature calibration” print sample.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}

@@ -7,5 +7,4 @@
     "prompt": "A stacked mini-servo pan-tilt bracket assembly on a workbench, showing two perpendicular mounting plates with a micro servo seated in each axis and cleanly routed screws and standoffs. A lightweight sensor mount plate is attached at the front (empty or with a tiny generic sensor), making it obvious this bracket is meant for sweeping small sensors in two axes.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker workshop feel: soft cinematic lighting, realistic anodized metal or high-quality polymer parts, no logos, and no readable text. Keep the bracket centered and clearly identifiable as a pan-tilt servo mount.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}

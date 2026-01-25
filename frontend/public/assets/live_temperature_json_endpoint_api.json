@@ -7,5 +7,4 @@
     "prompt": "A small networked sensor setup on a desk with a laptop showing a clean, minimal API response panel: a single highlighted numeric value and a timestamp-like block rendered as abstract shapes without readable characters. An ethernet cable and a tiny router-like device sit nearby, reinforcing that the latest thermistor reading is being served over the local network as JSON.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk tech workspace: soft cinematic lighting, realistic cables and electronics, no brand logos, and no readable text on screen. Keep the scene simple and focused on the concept of a “live JSON endpoint” feeding current sensor data.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}
