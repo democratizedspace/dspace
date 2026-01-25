@@ -338,7 +338,7 @@
         min-width: 0;
     }
 
-    .item-info h3 {
+    .selected-item .item-info h3 {
         word-break: break-word;
     }
 
