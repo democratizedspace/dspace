@@ -7,8 +7,19 @@ const LONG_REPLY =
 const FALLBACK_MESSAGE = "Sorry, I'm having some trouble and can't generate a response.";
 const NETWORK_ERROR_MESSAGE = /could not reach openai/i;
 const RATE_LIMIT_MESSAGE = /openai rate limited/i;
+const AUTH_ERROR_MESSAGE = /api key/i;
+const PERMISSION_ERROR_MESSAGE = /denied access/i;
+const SERVER_ERROR_MESSAGE = /unavailable right now/i;
 
-type StubMode = 'success' | 'network-error' | 'rate-limit' | 'abort';
+type StubMode =
+    | 'success'
+    | 'network-error'
+    | 'rate-limit'
+    | 'auth-error'
+    | 'permission-error'
+    | 'server-error'
+    | 'unknown-error'
+    | 'abort';
 
 const installChatStub = async (page: Page, mode: StubMode) => {
     await page.addInitScript(
@@ -25,6 +36,33 @@ const installChatStub = async (page: Page, mode: StubMode) => {
                     // @ts-expect-error non-standard property for tests
                     error.status = 429;
                     throw error;
+                }
+
+                if (stubMode === 'auth-error') {
+                    const error = new Error('Incorrect API key provided');
+                    // @ts-expect-error non-standard property for tests
+                    error.status = 401;
+                    throw error;
+                }
+
+                if (stubMode === 'permission-error') {
+                    const error = new Error('The model `gpt-5.2` does not exist');
+                    // @ts-expect-error non-standard property for tests
+                    error.status = 404;
+                    // @ts-expect-error non-standard property for tests
+                    error.code = 'model_not_found';
+                    throw error;
+                }
+
+                if (stubMode === 'server-error') {
+                    const error = new Error('Internal server error');
+                    // @ts-expect-error non-standard property for tests
+                    error.status = 503;
+                    throw error;
+                }
+
+                if (stubMode === 'unknown-error') {
+                    throw new Error('Unexpected crash');
                 }
 
                 if (stubMode === 'abort') {
@@ -108,6 +146,58 @@ test.describe('Chat message flow', () => {
         await expect(banner).toContainText(RATE_LIMIT_MESSAGE);
         await expect(
             chatPanel.locator('.message-bubble.assistant').getByText(RATE_LIMIT_MESSAGE)
+        ).toBeVisible();
+        await expect(spinner).not.toBeVisible();
+    });
+
+    test('surfaces invalid API key errors with a banner', async ({ page }) => {
+        await installChatStub(page, 'auth-error');
+        const { chatPanel, spinner } = await sendMessage(page, 'Trigger an auth error');
+
+        const banner = chatPanel.locator('.chat-error');
+        await expect(banner).toHaveAttribute('data-error-type', 'auth');
+        await expect(banner).toContainText(AUTH_ERROR_MESSAGE);
+        await expect(
+            chatPanel.locator('.message-bubble.assistant').getByText(AUTH_ERROR_MESSAGE)
+        ).toBeVisible();
+        await expect(spinner).not.toBeVisible();
+    });
+
+    test('surfaces model access errors with a banner', async ({ page }) => {
+        await installChatStub(page, 'permission-error');
+        const { chatPanel, spinner } = await sendMessage(page, 'Trigger a model access error');
+
+        const banner = chatPanel.locator('.chat-error');
+        await expect(banner).toHaveAttribute('data-error-type', 'permission');
+        await expect(banner).toContainText(PERMISSION_ERROR_MESSAGE);
+        await expect(
+            chatPanel.locator('.message-bubble.assistant').getByText(PERMISSION_ERROR_MESSAGE)
+        ).toBeVisible();
+        await expect(spinner).not.toBeVisible();
+    });
+
+    test('surfaces provider outages with a banner', async ({ page }) => {
+        await installChatStub(page, 'server-error');
+        const { chatPanel, spinner } = await sendMessage(page, 'Trigger a server outage');
+
+        const banner = chatPanel.locator('.chat-error');
+        await expect(banner).toHaveAttribute('data-error-type', 'server');
+        await expect(banner).toContainText(SERVER_ERROR_MESSAGE);
+        await expect(
+            chatPanel.locator('.message-bubble.assistant').getByText(SERVER_ERROR_MESSAGE)
+        ).toBeVisible();
+        await expect(spinner).not.toBeVisible();
+    });
+
+    test('surfaces unknown errors with the fallback message', async ({ page }) => {
+        await installChatStub(page, 'unknown-error');
+        const { chatPanel, spinner } = await sendMessage(page, 'Trigger an unknown error');
+
+        const banner = chatPanel.locator('.chat-error');
+        await expect(banner).toHaveAttribute('data-error-type', 'unknown');
+        await expect(banner).toContainText(FALLBACK_MESSAGE);
+        await expect(
+            chatPanel.locator('.message-bubble.assistant').getByText(FALLBACK_MESSAGE)
         ).toBeVisible();
         await expect(spinner).not.toBeVisible();
     });

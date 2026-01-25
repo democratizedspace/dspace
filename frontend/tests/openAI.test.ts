@@ -404,6 +404,15 @@ describe('describeOpenAIError', () => {
         expect(result).toMatch(/unavailable/i);
     });
 
+    it('treats empty TypeError messages as network errors', () => {
+        const error = new Error('');
+        error.name = 'TypeError';
+
+        const result = describeOpenAIError(error);
+
+        expect(result).toMatch(/could not reach openai/i);
+    });
+
     it('falls back to the default message for unknown errors', () => {
         const result = describeOpenAIError(new Error('unexpected'));
 
