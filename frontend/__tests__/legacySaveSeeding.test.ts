@@ -184,7 +184,7 @@ describe('legacy save seeding utilities', () => {
         expect(localStorage.getItem('legacyV2Seeded')).toBe('true');
     });
 
-    test('clearV3GameStateStorage does not add legacy seed flag for unseeded v2 data', async () => {
+    test('clearV3GameStateStorage preserves legacy v2 data and marks seeded after clearing v3', async () => {
         localStorage.setItem(
             'gameState',
             JSON.stringify({ versionNumberString: '2.1', inventory: { 1: 1 } })
@@ -199,7 +199,7 @@ describe('legacy save seeding utilities', () => {
         expect(cleared).toBe(true);
         expect(localStorage.getItem('gameState')).not.toBeNull();
         expect(localStorage.getItem('gameStateBackup')).toBeNull();
-        expect(localStorage.getItem('legacyV2Seeded')).toBeNull();
+        expect(localStorage.getItem('legacyV2Seeded')).toBe('true');
     });
 
     test('clearV3GameStateStorage removes empty legacy storage values', async () => {
