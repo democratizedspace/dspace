@@ -17,8 +17,63 @@ The DSPACE ecosystem supports several types of custom content:
 
 Each content type follows specific guidelines to ensure consistency, educational value, and alignment with DSPACE's mission of democratizing space exploration through practical, hands-on learning.
 
-Management pages (`/quests/manage`, `/items/manage`, and `/processes/manage`) let you
+Management pages (`/quests/manage`, `/inventory/manage`, and `/processes/manage`) let you
 edit or delete custom entries stored locally in IndexedDB.
+
+## In-game custom content workflow (create + edit)
+
+DSPACE includes three in-game editors that save custom content locally. These editors are the
+canonical way to create or update quests, items, and processes without touching JSON files.
+
+### Custom items (/inventory/create → /inventory/item/[itemId]/edit)
+
+1. Open [/inventory/create](/inventory/create) and fill in the required fields (**Name**,
+   **Description**, **Image**).
+2. Optional fields (**Price**, **Unit**, **Type**, **Dependencies**) can be added as needed.
+   Dependency IDs can be separated by commas or new lines.
+3. When you upload an image, the client downsamples it to a 512×512 JPEG and targets
+   < 50 KB for consistent storage and backup sizes.
+4. Click **Create Item** to save. The item is written to IndexedDB and immediately available in
+   item pickers (including process and quest editors). A newly created item also receives a
+   default inventory count of 0 so it shows up in the inventory list.
+5. To edit an item, open [/inventory/manage](/inventory/manage) and select **Edit** to visit
+   `/inventory/item/[itemId]/edit`. The same form is reused for updates.
+
+### Custom processes (/processes/create → /processes/[processId]/edit)
+
+1. Open [/processes/create](/processes/create) and enter a **Title** plus a **Duration**
+   (e.g., `1h 30m`, `45s`). The form normalizes durations to the canonical format on save.
+2. Add at least one relationship across **Required**, **Consumed**, or **Created** items.
+   Item counts must be positive numbers.
+3. Use **Preview** to validate the process before saving.
+4. Click **Create Process** to persist it. The process is stored in IndexedDB and appears in
+   process selectors inside quest dialogue options.
+5. For edits, open [/processes/manage](/processes/manage) and choose **Edit** to reach
+   `/processes/[processId]/edit`. The edit form mirrors the create workflow.
+
+### Custom quests (/quests/create → /quests/[questId]/edit)
+
+1. Open [/quests/create](/quests/create) and provide a **Title**, **Description**, **Image**,
+   and **NPC**. The editor downscales images in the same way as items.
+2. Choose **Quest Requirements** from the existing quest list. The picker includes built-in
+   quests plus any custom quests stored locally.
+3. Build dialogue nodes in the visual editor. Every node needs a unique ID, dialogue text,
+   and at least one option. Option types include **Go to node**, **Finish quest**,
+   **Run process**, and **Grant items**.
+4. Option gates can require items, and option rewards can grant items. Item and process
+   selectors include both built-in and custom content.
+5. Click **Preview** to validate dialogue flow before saving.
+6. Save the quest. The editor writes the quest to IndexedDB so it appears immediately in
+   the quest list. To edit later, visit [/quests/manage](/quests/manage) and choose **Edit**
+   to open `/quests/[questId]/edit`.
+
+## Custom content storage strategy
+
+Custom items, processes, and quests are stored in the browser's IndexedDB database named
+`CustomContent` using separate object stores (`items`, `processes`, `quests`). Each record is
+tagged with `custom: true` and gets `createdAt`/`updatedAt` timestamps when saved. If IndexedDB is
+unavailable (for example, in restricted/private browsing), the game falls back to an in-memory
+store for the current session, so data will not persist after a refresh.
 
 ## Getting Started
 

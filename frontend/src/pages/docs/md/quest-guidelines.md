@@ -152,20 +152,27 @@ quests.
 
 ### Current Implementation State
 
-> **Note:** The quest editor now lets you build branching dialogue directly in the browser. The current
-> implementation in `QuestForm.svelte` supports quest metadata (title, description, image), selecting
-> required quests, defining an NPC, creating dialogue nodes with `goto` or `finish` options, and
-> configuring process actions or item gates on each option. You can choose the start node and manage
-> options without writing JSON, and the preview still updates live for uploaded images. The form
-> remains mobile‑responsive and stacks action buttons on small screens.
+The quest editor is available now at [/quests/create](/quests/create) and supports full
+branching dialogue authoring without editing JSON directly. The editor workflow matches the
+runtime rules:
 
-The editor focuses on the fundamentals today and exposes controls to gate dialogue options on
-specific items or grant rewards inline. You can run `npm run generate-quest --template basic`
-(or `branching`) to scaffold a template JSON file with placeholder dialogue.
+1. **Quest metadata** — enter a title, description, NPC identifier, and image. Uploaded images are
+   downsampled to 512×512 JPEGs for consistent storage.
+2. **Quest requirements** — select prerequisite quests from the existing catalog (built-in quests
+   plus any custom quests stored locally).
+3. **Dialogue builder** — every dialogue node needs a unique ID, text, and at least one option.
+   Options can **Go to node**, **Finish quest**, **Run process**, or **Grant items**.
+4. **Item/process selectors** — option-level item gates and rewards can reference both built-in and
+   custom items, and process actions can reference built-in or custom processes.
+5. **Preview + validation** — the preview uses the same validation rules as the save action,
+   ensuring dialogue paths are reachable and option targets exist.
 
--   Item requirement and reward configuration for dialogue options
--   Process action selection
--   Preview functionality to test dialogue flow
+Edits follow the same workflow at `/quests/[questId]/edit` (reachable from
+[/quests/manage](/quests/manage)). For storage details, see the
+[Content Development Guide](/docs/content-development).
+
+You can still run `npm run generate-quest --template basic` (or `branching`) to scaffold a JSON
+template when working outside the in-game editor.
 
 ### Testing Your Quest
 

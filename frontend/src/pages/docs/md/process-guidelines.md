@@ -180,6 +180,23 @@ The UI displays different controls depending on the state:
 - PAUSED: Progress bar, remaining time, "Resume" and "Cancel" buttons
 - FINISHED: "Collect" button
 
+## In-game process editor behavior
+
+The in-game editor at [/processes/create](/processes/create) mirrors the real runtime rules for
+processes:
+
+1. **Title + Duration required** — durations accept combined units (`1h 30m`, `45s`, `0.5h`) and
+   are normalized to a canonical format when saved.
+2. **Item relationships required** — you must define at least one required, consumed, or created
+   item. Counts must be positive numbers.
+3. **Custom + built-in items** — item pickers include both built-in inventory items and any custom
+   items stored locally.
+4. **Preview before save** — the preview button uses the same validation rules as the save action.
+
+Edits follow the same validation rules at `/processes/[processId]/edit`, which you can access from
+[/processes/manage](/processes/manage). For the underlying storage strategy, see the
+[Content Development Guide](/docs/content-development).
+
 ## Contribution Workflow
 
 The recommended way to contribute processes is through the **custom content bundle workflow**, which keeps related quests, items, and processes together:
@@ -189,7 +206,7 @@ The recommended way to contribute processes is through the **custom content bund
     - After saving your process, navigate to [/processes/manage](/processes/manage)
     - Locate your process in the list and use the export functionality to download the JSON
     - Save the exported JSON file - this will be included in your content bundle
-3. Create any related items at [/items/create](/items/create) and export them similarly
+3. Create any related items at [/inventory/create](/inventory/create) and export them similarly
 4. Create any related quests at [/quests/create](/quests/create) and export them similarly
 5. Package everything into a bundle JSON (see [Custom Content Bundles](/docs/custom-bundles))
 6. Submit the bundle for review at [/bundles/submit](/bundles/submit)

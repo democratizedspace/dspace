@@ -44,7 +44,9 @@ Every item requires the following basic properties:
 
 ### Implementation State
 
-Currently, the `ItemForm.svelte` component supports creating and editing items with the properties listed above. It uploads images, persists data to IndexedDB, and now includes a dependency editor so complex items can declare required ingredients without editing JSON manually.
+Currently, the `ItemForm.svelte` component supports creating and editing items with the properties
+listed above. It uploads images, persists data to IndexedDB, and includes a dependency editor so
+complex items can declare required ingredients without editing JSON manually.
 
 List any prerequisite item IDs in the **Dependencies** field using commas or new lines. The form trims whitespace, ignores blank rows, and the live preview immediately reflects the dependency list so you can verify relationships before saving.
 
@@ -54,7 +56,15 @@ so form fields expand to the full width for easier touch input, and action butto
 vertically on narrow displays. You can safely experiment with different values before
 saving—no data is written until you click **Create Item**.
 
-The form provides inline validation messages if you attempt to submit without a name, description, or image, helping ensure items meet basic requirements before saving. Automated Playwright tests verify that the preview appears when entering text and that uploaded images render correctly. This ensures cross-browser compatibility of the custom item workflow.
+The form provides inline validation messages if you attempt to submit without a name, description,
+or image, helping ensure items meet basic requirements before saving. Automated Playwright tests
+verify that the preview appears when entering text and that uploaded images render correctly. This
+ensures cross-browser compatibility of the custom item workflow.
+
+Use [/inventory/manage](/inventory/manage) to edit or delete existing custom items. The edit
+workflow opens `/inventory/item/[itemId]/edit` and reuses the same form, so updates follow the
+same validation and image handling rules described above. See the [Content Development
+Guide](/docs/content-development) for the full create/edit workflow and storage details.
 
 All items must now conform to the JSON schema located at `frontend/src/pages/inventory/jsonSchemas/item.json`. Run the `itemValidation` test to ensure any additions meet the schema requirements.
 
@@ -152,7 +162,7 @@ When creating custom items, consider how they might connect to:
 
 The recommended way to contribute items is through the **custom content bundle workflow**, which keeps related quests, items, and processes together:
 
-1. Create item through the in-game interface at [/items/create](/items/create)
+1. Create item through the in-game interface at [/inventory/create](/inventory/create)
 2. Export your created item as JSON from the management page:
     - After saving your item, navigate to [/inventory/manage](/inventory/manage)
     - Locate your newly created item in the list and use the export functionality to download the JSON
