@@ -68,8 +68,9 @@ without introducing heavyweight infrastructure.
 - Persona system prompts are defined in `frontend/src/data/npcPersonas.js` and passed into
   `GPT5Chat` as the system message. Only the **dChat persona** currently includes explicit
   “If you’re unsure, say you don’t know” language.
-- `GPT5Chat` uses the OpenAI Responses API (`openai.responses.create`) and returns **only the
-  output text** string (no citations, no metadata).
+- `GPT5Chat` calls our OpenAI client via `openai.responses.create` (a project-level abstraction
+  over the OpenAI Chat Completions API) and returns **only the output text** string (no citations,
+  no metadata).
 - token.place chat builds a simple system + user message list and returns a string reply.
 
 ### Error handling + uncertainty
@@ -133,13 +134,17 @@ Proposed return shape:
 **Why this fits:** `buildDchatKnowledge` already iterates the catalogs and game state, so it
 can emit a parallel `sources` list without new infra. It stays deterministic and local.
 
+**Compatibility note:** this is a breaking change to the current string-only return shape.
+Consider a staged migration (e.g., `buildDchatKnowledgeWithSources` or a feature-flagged
+return shape) so callers like `GPT5Chat` can be updated incrementally.
+
 **Where:** `frontend/src/utils/dchatKnowledge.js` (new helper to append sources while summarizing).
 
 ### 2) Extend Context Coverage with `/docs` + routes
 
 **Docs grounding (lightweight):**
 - Load docs metadata using `import.meta.glob` on `frontend/src/pages/docs/md/*.md` or reuse the
-  existing docs index from `frontend/src/pages/docs/sections.json` / `frontend/src/pages/docs/json/sections.json`.
+  existing docs index from `frontend/src/pages/docs/sections.json`.
 - Emit a short “Docs index” summary (titles + slugs) and add each doc to the `sources` list.
 
 **Routes grounding:**
@@ -163,7 +168,9 @@ Suggested sentence to append:
 
 **Change:** extend chat message data to carry `contextSources` on assistant replies.
 
-- Update `GPT5Chat` in `frontend/src/utils/openAI.js` to return `{ text, sources }`.
+- Add a versioned helper (e.g., `GPT5ChatV2`) in `frontend/src/utils/openAI.js` that returns
+  `{ text, sources }`, while keeping the existing `GPT5Chat` string-returning API for
+  backward compatibility during migration.
 - Update `OpenAIChat.svelte` to attach `sources` to the assistant message object.
 - Render a collapsible “Sources used” block in `Message.svelte` (or a new subcomponent).
 
@@ -175,8 +182,9 @@ parsing the model response itself.
 **Goal:** enable QA to inspect context without leaking secrets.
 
 Proposal (opt-in):
-- When `telemetry.enabled` is true in `/config.json`, store the last request’s
-  `contextSources` + summary length in `window.__DSpaceChatDiagnostics` for QA.
+- When `telemetry.enabled` is true in the runtime config endpoint (currently served at
+  `/config.json`), store the last request’s `contextSources` + summary length in
+  `window.__DSpaceChatDiagnostics` for QA.
 - Keep contents **metadata only** (no raw API keys or full message text).
 
 **Where:** `frontend/src/utils/openAI.js` and/or `OpenAIChat.svelte`.
@@ -207,7 +215,8 @@ Proposal (opt-in):
 
 ### Stage 3 — UI citations + diagnostics
 **Changes:**
-- Extend `GPT5Chat` response shape and `OpenAIChat.svelte` message objects.
+- Introduce `GPT5ChatV2` (or similar) response shape and update
+  `OpenAIChat.svelte` message objects to use it.
 - Render “Sources used” in `Message.svelte` (collapsed by default).
 - Add `window.__DSpaceChatDiagnostics` when telemetry is enabled.
 
@@ -223,7 +232,7 @@ Proposal (opt-in):
 - `frontend/__tests__/dchatKnowledge.test.js` (or new file):
   - Ensures `buildDchatKnowledge` returns `summary` + `sources`.
   - Verifies docs + routes entries appear when enabled.
-- Update `tests/gpt5ChatResponses.test.ts` to assert the new return shape and
+- Update `tests/gpt5ChatResponses.test.ts` (existing) to assert the new return shape and
   `contextSources` propagation.
 
 ### E2E tests (Playwright)
