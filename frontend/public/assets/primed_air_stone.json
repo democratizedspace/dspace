@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/primed_air_stone.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "primed air stone",
+    "item_id": "bd887124-605d-4268-8a6c-684cb48de1a6",
+    "entity_type": "item",
+    "prompt": "A porous air stone connected to a small air pump via clear tubing, sitting in a shallow test container as an even curtain of fine bubbles rises across its face. The setup looks like a quick bench test for uniform diffusion, with no labels or branding visible.\n\nUltra-detailed, photorealistic 512×512 with a near-future hydroponics workstation aesthetic: soft cinematic lighting, clean surfaces, no logos, no readable text, no overlays. Frame the bubbling air stone clearly so the “even bubbles” result is unmistakable at icon scale.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

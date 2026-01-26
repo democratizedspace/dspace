@@ -1,10 +1,11 @@
 {
-    "filename": "/assets/mission_log_entry_page.jpg",
+    "filename": "/assets/https_service_check.jpg",
     "entity": "frontend/src/pages/inventory/json/items/misc.json",
     "item_name": "HTTPS service check",
     "item_id": "d3d0a7bd-e338-48f1-86ab-ddcc3626cecc",
     "entity_type": "item",
-    "prompt": "A mission log page notes an HTTPS curl check, OCSP status, and renewal date in blurred handwriting with a tiny lock icon doodle. A laptop and Pi cluster are out of focus in the background, hinting the log was taken after a live probe. The 512×512 solarpunk scene is warm, with no readable text or logos.",
+    "prompt": "A notebook open to a verification checklist page, with a small tablet-like device in soft focus showing abstract status indicators (no readable UI text). Next to the notebook are a short ethernet cable, a tiny padlock icon charm, and a compact multitool—suggesting a secure HTTPS service check without any legible output.\n\nUltra-detailed, photorealistic 512×512 in a clean near-future ops workstation: soft cinematic lighting, minimal clutter, no logos, no readable text, no overlays. Make the notebook and “checklist” vibe the unmistakable focal point.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-}
+  }
+  

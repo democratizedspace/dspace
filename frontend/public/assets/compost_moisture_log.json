@@ -1,10 +1,11 @@
 {
-    "filename": "/assets/mission_log_entry_page.jpg",
+    "filename": "/assets/compost_moisture_log.jpg",
     "entity": "frontend/src/pages/inventory/json/items/misc.json",
     "item_name": "compost moisture log",
     "item_id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
     "entity_type": "item",
-    "prompt": "An open logbook page shows hand-written moisture readings, squeeze-test notes, and probe depths. A compost moisture meter rests on the notebook, angled toward the viewer.\n\nThe 512×512 photorealistic solarpunk scene keeps the notebook in focus with blurred garden tools behind it. There are no readable words, logos, or faces.",
+    "prompt": "A compost bucket monitoring setup on a garage workbench: a notebook opened to a page of moisture readings (illegible), a soil moisture probe laid beside it, and a small handful of compost material in a tray for a squeeze test. The scene clearly communicates “moisture measurement and notes” without any readable writing.\n\nUltra-detailed, photorealistic 512×512 with a near-future DIY sustainability aesthetic: soft cinematic lighting, clean tools, no logos, no readable text, no overlays. Frame the open notebook and probe as the main focal elements for icon clarity.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-}
+  }
+  

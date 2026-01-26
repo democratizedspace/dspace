@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/pure_sine_inverter_300w.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "300 W pure sine inverter",
+    "item_id": "082481a4-5e40-43e6-8542-0e64a3bd92d7",
+    "entity_type": "item",
+    "prompt": "A compact 300 W pure sine inverter on a workbench, showing two grounded AC outlets on its face and thick DC leads exiting the other side. A small inline fuse and a battery pack are visible in soft focus, emphasizing safe power conversion without any brand markings or readable labels.\n\nUltra-detailed, photorealistic 512×512 with a near-future off-grid workshop aesthetic: soft cinematic lighting, clean cable management, no logos, no readable text, no overlays. Frame the inverter prominently so its outlets and compact form read clearly as an icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

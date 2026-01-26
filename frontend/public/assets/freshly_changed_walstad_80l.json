@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/freshly_changed_walstad_80l.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Freshly changed aquarium (80 L)",
+    "item_id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+    "entity_type": "item",
+    "prompt": "An 80 L planted aquarium immediately after a water change: the waterline is fresh and clear, small ripples show recent refill, and a gravel-vac tube and bucket sit off to the side in soft focus. Plants look upright and healthy, with a subtle sense of “just maintained.”\n\nUltra-detailed, photorealistic 512×512 with a near-future home aquaria aesthetic: soft cinematic lighting, clean tools, no logos, no readable text, no overlays. Keep the aquarium as the main subject with gentle cues (bucket/tube) that indicate a completed water change.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

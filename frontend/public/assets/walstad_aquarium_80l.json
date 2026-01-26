@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/walstad_aquarium_80l.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Walstad aquarium (80 L)",
+    "item_id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+    "entity_type": "item",
+    "prompt": "A lush 80 L Walstad-style planted aquarium viewed at a slight angle, with dense live plants, natural substrate layers, and gentle surface movement. The tank looks low-tech and biologically balanced, with no visible heavy equipment; a small notebook and water test tools sit nearby in soft focus.\n\nUltra-detailed, photorealistic 512×512 with a grounded near-future home biolab aesthetic: soft cinematic lighting, clean environment, no logos, no readable text, no overlays. Compose so the tank’s plants and natural substrate clearly communicate “Walstad method” at icon scale.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/aurora_sighting_log.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "aurora sighting log",
+    "item_id": "682c9b29-b16f-4cf1-aaad-861a4aa133f4",
+    "entity_type": "item",
+    "prompt": "An open logbook page with a simple hand-drawn ribbon of aurora colors across the top margin (greens and purples implied), and a few lines of compact handwritten notes beneath it, intentionally illegible. A red-lens flashlight and insulated gloves rest near the book, suggesting cold-weather skywatching.\n\nUltra-detailed, photorealistic 512×512 in a clean near-future field-kit style: soft cinematic lighting, no logos, no readable text, no harsh overlays. Keep the log entry page centered and uncluttered so it reads clearly as an “aurora log.”",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

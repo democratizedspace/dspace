@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/glued_birdhouse_shell.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Glued birdhouse shell",
+    "item_id": "c97f9b74-4d4f-4e83-993c-5df76e9d026e",
+    "entity_type": "item",
+    "prompt": "A partially assembled birdhouse shell with walls and roof glued in place, sitting on a workbench with clamps nearby. A small sanding block and a handful of screws or hooks are visible in soft focus, implying the next steps (sanding and hardware) without any readable packaging text.\n\nUltra-detailed, photorealistic 512×512 with a grounded near-future DIY workshop aesthetic: soft cinematic lighting, clean background, no logos, no readable text, no overlays. Keep the glued birdhouse form centered and clearly recognizable at icon scale.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/wired_wind_turbine_500w.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "wired 500 W wind turbine",
+    "item_id": "34540aad-4c25-4268-a158-a291283bc7a0",
+    "entity_type": "item",
+    "prompt": "A small rooftop-mounted 500 W three-blade horizontal-axis wind turbine with its brake mechanism visible, wired down to a compact charge controller and DC bus junction box. The wiring is neatly clipped and weatherproofed, emphasizing a tested, anchored installation.\n\nUltra-detailed, photorealistic 512×512 with a grounded near-future renewable-energy aesthetic: soft natural lighting, realistic materials, no logos, no readable text, no overlays. Compose so the turbine and the visible wiring/charge controller connection read clearly at icon scale.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

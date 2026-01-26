@@ -1,10 +1,11 @@
 {
-    "filename": "/assets/mission_log_entry_page.jpg",
+    "filename": "/assets/auto_update_health_report.jpg",
     "entity": "frontend/src/pages/inventory/json/items/misc.json",
     "item_name": "auto-update health report",
     "item_id": "afd6a926-bd21-4242-ba79-d25fc152de03",
     "entity_type": "item",
-    "prompt": "A mission log page lists a blurred unattended-upgrades dry-run summary, held package count, and reboot window with a bold checkmark. A Pi cluster and laptop sit out of focus nearby. The 512×512 photorealistic solarpunk desk is uncluttered and free of readable text or logos.",
+    "prompt": "A system maintenance health report printed on clean paper, clipped to a slim clipboard beside a small single-board computer cluster in soft focus. The page shows a structured checklist layout with status icons and short lines, but all text is intentionally unreadable and generic.\n\nUltra-detailed, photorealistic 512×512 with a near-future maker lab aesthetic: soft cinematic lighting, tidy cables, no logos, no readable text, no overlays. Center the clipboard page so it reads as “health report” instantly.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-}
+  }
+  

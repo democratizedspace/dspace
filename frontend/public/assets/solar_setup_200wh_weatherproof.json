@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/solar_setup_200wh_weatherproof.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Solar setup (200 Wh)",
+    "item_id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+    "entity_type": "item",
+    "prompt": "A compact weatherproof enclosure opened to reveal a neatly organized 200 Wh battery pack and a charge controller, with a folded 200 W solar panel leaning nearby. Thick cables with grommet pass-throughs and tidy terminals indicate a ready-to-use portable solar setup.\n\nUltra-detailed, photorealistic 512×512 with a near-future off-grid aesthetic: soft cinematic lighting, clean wiring, no logos, no readable text, no overlays. Keep the enclosure interior and key components centered for instant readability at icon scale.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

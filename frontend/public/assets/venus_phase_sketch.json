@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/venus_phase_sketch.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Venus phase sketch",
+    "item_id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
+    "entity_type": "item",
+    "prompt": "A sketchbook page showing a careful pencil drawing of Venus as a bright crescent phase, with a small circular inset indicating the telescope view. A compact eyepiece case and a soft cloth sit nearby; the page includes faint, illegible timestamp scribbles but no readable characters.\n\nUltra-detailed, photorealistic 512×512 with a grounded near-future astronomy workstation aesthetic: soft cinematic lighting, clean tools, no logos, no readable text, no overlays. Keep the crescent sketch crisp and centered for icon readability.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

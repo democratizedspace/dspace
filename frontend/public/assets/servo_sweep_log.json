@@ -1,12 +1,11 @@
 {
-    "filename": "/assets/servo_motor_small_hobby.jpg",
+    "filename": "/assets/servo_sweep_log.jpg",
     "entity": "frontend/src/pages/inventory/json/items/misc.json",
     "item_name": "servo sweep log",
     "item_id": "8a4ccbcf-ee7d-42ff-bfd8-2ed242379872",
     "entity_type": "item",
-    "prompt": "A short notebook page and laptop screen both show a simple plot of a servo sweeping smoothly between two angles, with handwritten notes about endstop angles and current draw. The tested servo rig sits nearby with its horn centered, USB cable coiled, and no loose wires. Everything looks documented and ready for reuse.\n\nSet this in a bright, organized solarpunk workspace; make the 512\u00d7512 photorealistic image free of logos or readable text while keeping the focus on the sweep log and the tidy servo setup.",
-    "image_model": "Z-Image Turbo",
-    "resolution": "512x512",
-    "steps": 4,
-    "cfg": 1.0
-}
+    "prompt": "A small hobby servo on a bench next to a notebook page showing a simple sweep plot and endstop markers (all notes illegible). The servo horn is attached, and a thin signal cable runs to a compact microcontroller board off to the side, suggesting a baseline jitter and range test.\n\nUltra-detailed, photorealistic 512×512 with a near-future maker lab aesthetic: soft cinematic lighting, tidy wiring, no logos, no readable text, no overlays. Keep the servo and the plotted “sweep log” page clearly visible and icon-friendly.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

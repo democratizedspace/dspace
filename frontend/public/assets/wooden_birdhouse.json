@@ -4,7 +4,8 @@
     "item_name": "Birdhouse",
     "item_id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8",
     "entity_type": "item",
-    "prompt": "A small wooden birdhouse with a pitched roof hangs from a sturdy branch or simple metal hook, its single round entrance hole centered on the front face above a tiny perch. The wood is unfinished or lightly stained, with visible grain and a simple rectangular body that looks hand-built rather than ornate. In the background, soft greenery and a hint of a backyard fence suggest that this is meant for common backyard birds to use as a shelter and nesting spot.\n\nThe scene is set in a near-future solarpunk backyard with lush plants, soft natural light, and perhaps a glimpse of solar panels or rainwater collection in the distance. The 512×512 image is photorealistic with gentle stylization, no logos or text, and a composition that keeps the birdhouse clearly in focus while the rest of the yard and garden fades into a pleasant, slightly blurred backdrop.",
+    "prompt": "A simple wooden backyard birdhouse with a small round entrance hole and a sloped roof, shown cleanly against a soft outdoor background. The wood grain and basic construction are clearly visible, conveying a small shelter for birds without any decorative logos or text.\n\nUltra-detailed, photorealistic 512×512 with a grounded near-future backyard craft aesthetic: soft natural lighting, gentle bokeh, no logos, no readable text, no overlays. Keep the birdhouse centered and uncluttered so it reads clearly as an icon.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-}
+  }
+  

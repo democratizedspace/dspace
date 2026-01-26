@@ -1,10 +1,11 @@
 {
-    "filename": "/assets/mission_log_entry_page.jpg",
+    "filename": "/assets/local_test_report.jpg",
     "entity": "frontend/src/pages/inventory/json/items/misc.json",
     "item_name": "local test report",
     "item_id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
     "entity_type": "item",
-    "prompt": "An open notebook page shows blurred checkmarks for lint, type-check, coverage, and two Playwright shards with a timestamp in the margin. A laptop and mug sit nearby, hinting the log was copied from a successful local run. The 512×512 solarpunk workspace is warm and tidy with no readable text or logos.",
+    "prompt": "A printed and stapled local test report packet on a developer workbench, with a laptop in soft focus behind it and a small pile of sticky tabs marking sections. The top page shows multiple dense blocks of faux code-like lines, small charts, and checkmark icons, but the text is intentionally illegible and non-specific.\n\nUltra-detailed, photorealistic 512×512 in a clean near-future workshop setting: soft cinematic lighting, minimal clutter, no brand marks, no readable text. The paper stack is centered and crisp so it reads as “test report” at icon scale.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-}
+  }
+  

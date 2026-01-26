@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/charge_controller_profile_set.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "charge controller profile set",
+    "item_id": "22a50cfd-4433-4ce7-bbed-e4038338191b",
+    "entity_type": "item",
+    "prompt": "A solar charge controller configuration scene: a small controller on a bench with a notebook open to a settings checklist page (illegible), and labeled-looking but unreadable dial positions and wiring check marks. Nearby are a temperature sensor lead and ring terminals, suggesting LiFePO4 profile setup and verification.\n\nUltra-detailed, photorealistic 512×512 with a near-future off-grid electronics aesthetic: soft cinematic lighting, clean cable management, no logos, no readable text, no overlays. Keep the controller and the “profile checklist” notebook page as the clear focal elements.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

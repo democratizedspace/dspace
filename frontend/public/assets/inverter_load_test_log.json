@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/inverter_load_test_log.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "load-tested inverter",
+    "item_id": "2e6f7453-6b8a-4e04-8ea6-1ddba490019f",
+    "entity_type": "item",
+    "prompt": "A mounted inverter setup being load-tested: the inverter is fixed to a panel, a small AC load device is plugged in, and a digital multimeter probes the output (display unreadable). A notebook beside the setup shows a quick test checklist and voltage notes, intentionally illegible, conveying “verified under load.”\n\nUltra-detailed, photorealistic 512×512 with a near-future off-grid bench-test aesthetic: soft cinematic lighting, tidy wiring, no logos, no readable text, no overlays. Focus on the inverter, plugged load, and measurement tools for immediate readability.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

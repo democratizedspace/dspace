@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/dark_sky_kit_packed.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "dark-sky kit packed",
+    "item_id": "0ce0d0d4-d734-4099-b903-92e9b1c52b05",
+    "entity_type": "item",
+    "prompt": "A compact dark-sky kit bundled on a bench: a small red flashlight, folded layered clothing, and a charged phone-like device tucked into a pouch with a zipper. A pair of gloves and a simple checklist card are visible, with no readable text, clearly conveying “packed and ready for aurora watching.”\n\nUltra-detailed, photorealistic 512×512 with a near-future outdoor-prep aesthetic: soft cinematic lighting, clean materials, no logos, no readable text, no overlays. Keep the red flashlight and packed bundle centered so it reads well as an icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  

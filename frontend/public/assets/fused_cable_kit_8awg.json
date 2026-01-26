@@ -1,0 +1,11 @@
+{
+    "filename": "/assets/fused_cable_kit_8awg.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "8 AWG fused cable kit",
+    "item_id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+    "entity_type": "item",
+    "prompt": "A neatly arranged 8 AWG fused cable kit on a bench: red and black leads with crimped ring terminals, an inline MIDI-style fuse holder, and a torque wrench socket nearby. The cables are coiled cleanly with heat-shrink details visible; no printed markings or labels are readable.\n\nUltra-detailed, photorealistic 512×512 with a near-future maker/workshop aesthetic: soft cinematic lighting, clean surfaces, no logos, no readable text, no overlays. Compose so the fuse holder and thick ring terminals are clearly identifiable at icon scale.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
+  
