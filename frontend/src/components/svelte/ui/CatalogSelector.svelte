@@ -163,6 +163,7 @@
                     class="edit-button"
                     aria-haspopup="listbox"
                     aria-expanded={isExpanded}
+                    on:touchstart|preventDefault={toggleExpanded}
                     on:click={toggleExpanded}
                 >
                     Edit
@@ -175,6 +176,7 @@
                 id={resolvedControlId}
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
+                on:touchstart|preventDefault={toggleExpanded}
                 on:click={toggleExpanded}
             >
                 {buttonLabel}
