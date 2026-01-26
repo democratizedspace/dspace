@@ -4,10 +4,11 @@
     import CompactItemList from '../../../../components/svelte/CompactItemList.svelte';
     import { setCurrentDialogueStep } from '../../../../utils/gameState.js';
     import { state } from '../../../../utils/gameState/common.js';
+    import { areItemRequirementsMet } from './itemRequirements.js';
 
     export let option, questId;
 
-    const itemRequirementsMet = writable(option.requiresItems === undefined ? true : false);
+    const itemRequirementsMet = writable(areItemRequirementsMet(option.requiresItems));
 
     function onClick() {
         if ($itemRequirementsMet) {
@@ -17,16 +18,7 @@
 
     $: {
         if ($state) {
-            if (option.requiresItems) {
-                let met = true;
-                for (let item of option.requiresItems) {
-                    if (!$state.inventory[item.id] || $state.inventory[item.id] < item.count) {
-                        met = false;
-                        break;
-                    }
-                }
-                itemRequirementsMet.set(met);
-            }
+            itemRequirementsMet.set(areItemRequirementsMet(option.requiresItems, $state.inventory));
         }
     }
 </script>
