@@ -28,14 +28,12 @@
         finishQuest(quest.id, quest.rewards || []);
     }
 
-    $: itemRequirementsMet.set(
-        areItemRequirementsMet(option.requiresItems, $state?.inventory)
-    );
+    $: itemRequirementsMet.set(areItemRequirementsMet(option.requiresItems, $state?.inventory));
 
     $: isDisabled = (option.requiresGitHub && !githubConnected) || !$itemRequirementsMet;
 </script>
 
-<Chip text={option.text} onClick={onClick} disabled={isDisabled}>
+<Chip text={option.text} {onClick} disabled={isDisabled}>
     <div class="vertical">
         Finish this quest and receive the following items:
         <CompactItemList itemList={quest.rewards || []} increase={true} />
