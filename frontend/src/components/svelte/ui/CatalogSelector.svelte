@@ -30,6 +30,8 @@
     let isClientSide = false;
     let normalizedItems = [];
     let customId = '';
+    let suppressClick = false;
+    let suppressClickTimeout;
     const fallbackControlId = `catalog-selector-${catalogSelectorId++}`;
     $: resolvedControlId = controlId || (testId ? `${testId}-control` : fallbackControlId);
     $: customInputId = `${resolvedControlId}-custom-id`;
@@ -67,7 +69,20 @@
         customId = '';
     }
 
-    function toggleExpanded() {
+    function toggleExpanded(event) {
+        if (event?.type === 'click' && suppressClick) {
+            suppressClick = false;
+            return;
+        }
+
+        if (event?.type === 'touchstart') {
+            suppressClick = true;
+            clearTimeout(suppressClickTimeout);
+            suppressClickTimeout = setTimeout(() => {
+                suppressClick = false;
+            }, 500);
+        }
+
         isExpanded = true;
     }
 
@@ -165,7 +180,7 @@
                     aria-haspopup="listbox"
                     aria-expanded={isExpanded}
                     on:click={toggleExpanded}
-                    on:touchstart|preventDefault={toggleExpanded}
+                    on:touchstart={toggleExpanded}
                 >
                     Edit
                 </button>
@@ -178,7 +193,7 @@
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
                 on:click={toggleExpanded}
-                on:touchstart|preventDefault={toggleExpanded}
+                on:touchstart={toggleExpanded}
             >
                 {buttonLabel}
             </button>
