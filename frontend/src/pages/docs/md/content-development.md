@@ -5,7 +5,9 @@ slug: 'content-development'
 
 # DSPACE Content Development Guide
 
-DSPACE is designed to be an extensible platform where community members can create and contribute various types of content. This guide serves as the central hub for all content development documentation, providing links to detailed guidelines for each content type.
+DSPACE is designed to be an extensible platform where community members can create and contribute
+various types of content. This guide serves as the central hub for all content development
+documentation, providing links to detailed guidelines for each content type.
 
 ## Overview
 
@@ -15,10 +17,93 @@ The DSPACE ecosystem supports several types of custom content:
 2. **Items**: Virtual resources, tools, and components used throughout the game
 3. **Processes**: Activities that transform, create, or utilize items
 
-Each content type follows specific guidelines to ensure consistency, educational value, and alignment with DSPACE's mission of democratizing space exploration through practical, hands-on learning.
+Each content type follows specific guidelines to ensure consistency, educational value, and
+alignment with DSPACE's mission of democratizing space exploration through practical, hands-on
+learning.
 
-Management pages (`/quests/manage`, `/items/manage`, and `/processes/manage`) let you
+Management pages (`/quests/manage`, `/inventory/manage`, and `/processes/manage`) let you
 edit or delete custom entries stored locally in IndexedDB.
+
+### In-game custom content editors (current behavior)
+
+Use the in-game editors to create and update custom quests, items, and processes. These editors
+write to your browser's IndexedDB-backed custom content database (with an in-memory fallback if
+IndexedDB is unavailable, which means the data will not persist after refresh).
+
+**Create new content**
+
+1. Open the editor:
+    - Quests: `/quests/create`
+    - Items: `/inventory/create`
+    - Processes: `/processes/create`
+2. Fill out the required fields. Each form validates required fields before saving.
+3. Save the entry to store it locally. The editor shows a success message with a link to view the
+   new item, process, or quest.
+
+**Edit existing content**
+
+1. Open the management page:
+    - Quests: `/quests/manage`
+    - Items: `/inventory/manage`
+    - Processes: `/processes/manage`
+2. Click **Edit** on the custom entry (built-in content is read-only).
+3. The edit routes resolve to `/quests/[id]/edit`, `/inventory/item/[itemId]/edit`, and
+   `/processes/[processId]/edit`.
+4. Update the fields and save. The entry is updated in the same IndexedDB store.
+
+**Quest editor specifics**
+
+- Title (min 3 chars) and description (min 10 chars) are required, and titles must be unique across
+  existing quests.
+- Dialogue nodes need unique IDs, non-empty text, and at least one option. Options can be **goto**,
+  **finish**, **process**, or **grantsItems**.
+    - Goto options must point to an existing node ID.
+    - Process options require a process ID.
+    - Required or granted item rows need an item ID and a positive count.
+- The NPC picker uses the built-in catalog; if you load a quest with a custom NPC value, the select
+  includes a “Custom (…)” entry for it. Blank NPC values are defaulted to **Mission Control**.
+- Quest images are stored as data URLs and are downsampled to square JPEGs (target ~50KB) before
+  saving. If you leave the image blank on a new quest, the editor uses
+  `/assets/quests/howtodoquests.jpg`.
+
+**Item editor specifics**
+
+- Items require a name, description, and image; images are stored as compressed JPEG data URLs.
+- Optional fields include price, unit, type, and dependencies (comma- or newline-separated IDs).
+- Saving a new item adds it to your local inventory catalog with a custom category label.
+
+**Process editor specifics**
+
+- Processes require a title, duration, and at least one item relationship
+  (requires/consumes/creates).
+- Durations accept shorthand like `1h 30m`, `45s`, or `0.5h` and are normalized after saving (for
+  example, `1h 30m`).
+- Item counts must be positive, and empty rows are ignored on save.
+
+**Storage details**
+
+Custom content persists to the `CustomContent` IndexedDB database. The schema includes:
+
+- Object stores: `meta`, `items`, `processes`, and `quests` (each entity store uses `id` as the key).
+- `meta` stores the `schemaVersion` key.
+
+When custom content is saved through the editors:
+
+- IDs are generated with `crypto.randomUUID()` (or a UUID fallback) when missing.
+- `custom: true` and `createdAt` are set on new records; `updatedAt` is set on edits.
+- Quests default `title` to `Untitled Quest`, `description` to an empty string, and `image` to
+  `/assets/quests/howtodoquests.jpg` if those values are missing.
+- Items default `category` to `Custom` when not provided.
+- Processes default `duration` to `60` seconds if missing (the editor provides a normalized
+  duration).
+
+If IndexedDB is unavailable, custom content falls back to an in-memory store (not localStorage),
+which is cleared on refresh.
+
+**Export + backup**
+
+Custom quests, items, and processes can be exported via the custom content backup page at
+`/contentbackup`, which prepares a JSON bundle for download (used for submissions and backups).
 
 ## Getting Started
 
@@ -33,7 +118,8 @@ Before creating any content, we recommend:
 
 ### [Quest Development Guidelines](/docs/quest-guidelines)
 
-Comprehensive instructions for creating engaging, educational quests that guide players through practical space-related activities. Topics include:
+Comprehensive instructions for creating engaging, educational quests that guide players through
+practical space-related activities. Topics include:
 
 - Quest philosophy and educational goals
 - Quest categories and progression paths
@@ -47,7 +133,8 @@ Comprehensive instructions for creating engaging, educational quests that guide 
 
 ### [Item Development Guidelines](/docs/item-guidelines)
 
-Detailed guide for creating virtual items that represent resources, tools, and components. Topics include:
+Detailed guide for creating virtual items that represent resources, tools, and components. Topics
+include:
 
 - Item categories and classification
 - Properties and attributes

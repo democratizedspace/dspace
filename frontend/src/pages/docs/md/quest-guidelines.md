@@ -167,6 +167,40 @@ specific items or grant rewards inline. You can run `npm run generate-quest --te
 -   Process action selection
 -   Preview functionality to test dialogue flow
 
+### In-game editor flow (create + edit)
+
+Use the in-game quest editor to create and update custom quests that are stored locally in your
+browser's IndexedDB custom content database (with an in-memory fallback if IndexedDB is not
+available, so changes will not persist after refresh).
+
+**Create a quest**
+
+1. Open `/quests/create`.
+2. Fill out the quest metadata (title, description, image, NPC).
+3. Add dialogue nodes and options (goto, finish, process, or grantsItems) and choose the start
+   node.
+4. Save the quest to store it locally and receive a link to view it.
+
+**Edit a quest**
+
+1. Open `/quests/manage`.
+2. Click **Edit** on a custom quest (built-in quests are read-only); this routes to
+   `/quests/[id]/edit`.
+3. Update the fields and save to update the local IndexedDB record.
+
+**Validation and image handling**
+
+- Titles must be unique and at least 3 characters; descriptions must be at least 10 characters.
+- NPC selection defaults to **Mission Control** if left blank.
+- Dialogue node IDs must be unique, nodes require text, and each node needs at least one option.
+- Goto options must target existing node IDs; process options require a process ID.
+- Required and granted item rows must include an item ID and positive count (the same applies to
+  quest reward items).
+- Image uploads are downsampled into square JPEG data URLs (target ~50KB). If you leave the image
+  blank on a new quest, the editor uses `/assets/quests/howtodoquests.jpg` as the default.
+- The simulation summary warns if dialogue paths cannot reach a finish option, but it does not
+  block saving.
+
 ### Testing Your Quest
 
 Before submitting a quest, verify:
