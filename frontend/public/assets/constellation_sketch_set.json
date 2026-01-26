@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/constellation_sketch_set.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "constellation sketch set",
+    "item_id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+    "entity_type": "item",
+    "prompt": "A logbook page featuring three simple stick-figure constellation sketches—Orion, Ursa Major, and Cassiopeia—each drawn with dots and connecting lines, plus small orientation arrows. A small red-lens light and a planisphere sit nearby; any notes are intentionally illegible.\n\nUltra-detailed, photorealistic 512×512 with a near-future stargazing kit aesthetic: soft low-light illumination, clean materials, no logos, no readable text, no overlays. Keep the constellation shapes bold and unmistakable at icon scale.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

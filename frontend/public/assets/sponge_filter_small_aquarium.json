@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/sponge_filter_small_aquarium.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Sponge filter",
+    "item_id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+    "entity_type": "item",
+    "prompt": "An air-driven sponge filter sized for a small aquarium: a dark cylindrical foam sponge with a rigid uplift tube and a small air inlet at the base. A short piece of 4 mm airline tubing and a simple check valve sit beside it, indicating how it connects to an air pump.\n\nUltra-detailed, photorealistic 512×512 with a clean near-future home aquaria aesthetic: soft cinematic lighting, minimal clutter, no logos, no readable text, no overlays. Center the sponge filter so its foam texture and tube silhouette read clearly at icon scale.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

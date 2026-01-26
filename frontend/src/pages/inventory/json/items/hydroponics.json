@@ -160,14 +160,14 @@
         "id": "3b094479-ed97-46d6-8cab-ea91752972dd",
         "name": "soaked air stone",
         "description": "Porous air stone fully soaked in dechlorinated water and purged of ceramic dust.",
-        "image": "/assets/porous_ceramic_air_stone_5cm.jpg",
+        "image": "/assets/soaked_air_stone.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
         "id": "bd887124-605d-4268-8a6c-684cb48de1a6",
         "name": "primed air stone",
         "description": "Air stone tested on a pump with even bubbles across the face, ready for reservoir duty.",
-        "image": "/assets/porous_ceramic_air_stone_5cm.jpg",
+        "image": "/assets/primed_air_stone.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
@@ -491,7 +491,7 @@
         "id": "9f91173d-2609-4127-896d-7578078135db",
         "name": "porous air stone",
         "description": "Porous 5 cm (2 in) ceramic air stone that diffuses air bubbles in hydroponic reservoirs.",
-        "image": "/assets/porous_ceramic_air_stone_5cm.jpg",
+        "image": "/assets/porous_air_stone_5cm.jpg",
         "price": "3.00 dUSD",
         "unit": "each",
         "hardening": {

@@ -1,10 +1,10 @@
 {
-    "filename": "/assets/mission_log_entry_page.jpg",
+    "filename": "/assets/stevia_tasting_notes.jpg",
     "entity": "frontend/src/pages/inventory/json/items/misc.json",
     "item_name": "stevia tasting notes",
     "item_id": "fe146f9d-d912-4841-bf1f-1675c3aa93f3",
     "entity_type": "item",
-    "prompt": "An open notebook page shows blurred tasting notes with columns for sweetness, onset, and aftertaste, plus a tiny checkmark beside “blind sample.” A pen rests across the page, and the background hints at clean glassware without any readable text. The 512×512 solarpunk workspace is warmly lit, calm, and free of logos or faces.",
+    "prompt": "A tasting notebook open to a structured notes page with small rating dots and short lines (all illegible), next to a few unlabeled sample cups and a small spoon on a clean kitchen-lab counter. A simple timer and a glass of water sit nearby, suggesting a blind sweetness test without any readable labels.\n\nUltra-detailed, photorealistic 512×512 with a near-future home lab aesthetic: soft cinematic lighting, clean surfaces, no logos, no readable text, no overlays. Keep the notebook and sample cups centered and uncluttered for icon clarity.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
 }

@@ -4,7 +4,7 @@
     "item_name": "red flashlight",
     "item_id": "9a72fb16-fc69-45c5-beca-f25c27028977",
     "entity_type": "item",
-    "prompt": "A compact handheld flashlight with a red lens cap lies on a tabletop, casting a soft red beam across the surface. The body is simple and cylindrical with a textured grip, and the end cap is slightly open to hint at a 9 V battery compartment without showing specific branding. The red light gently illuminates a map or notebook nearby, clearly suggesting that it is meant to preserve night vision rather than flood an area with bright white light.\n\nThe scene is a near-future solarpunk outdoor-prep or observation nook with dim ambient lighting, a window showing a dark sky or starfield, and a few neatly arranged tools and notebooks in the blurred background. The 512×512 image is photorealistic with gentle stylization, no logos or text on the flashlight, and a composition that centers the red beam, lens, and compact body while the surrounding environment remains softly out of focus, emphasizing low-light, night-vision-friendly use.",
+    "prompt": "A handheld flashlight with a red lens cap on a clean surface, turned on to cast a soft red glow across a nearby map and notebook edge. A 9 V battery and a small screwdriver lie beside it, implying simple power and maintenance without any branding.\n\nUltra-detailed, photorealistic 512×512 with a grounded near-future stargazing aesthetic: soft cinematic lighting, minimal clutter, no logos, no readable text, no overlays. Make the red lens and gentle glow the unmistakable focal point at icon scale.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
 }

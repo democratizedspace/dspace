@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/mounted_inverter_300w.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "mounted 300 W inverter",
+    "item_id": "466cb507-6beb-4c20-967b-4f1fda1d6463",
+    "entity_type": "item",
+    "prompt": "A 300 W inverter mounted securely within a compact power bay beside a small battery pack, with thick fused leads and ring terminals fastened to a distribution block. A torque marker dab and cable strain relief are visible, emphasizing careful installation and safety; no brand labels or readable markings.\n\nUltra-detailed, photorealistic 512×512 with a clean near-future portable power aesthetic: soft cinematic lighting, neat cable routing, no logos, no readable text, no overlays. Keep the mounted inverter and fused wiring as the clear focal point.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

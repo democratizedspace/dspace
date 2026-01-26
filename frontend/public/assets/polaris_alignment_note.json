@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/polaris_alignment_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Polaris alignment note",
+    "item_id": "6102f07b-384b-437f-b78f-d1e9b5431e97",
+    "entity_type": "item",
+    "prompt": "A notebook page on a small outdoor observing table, showing a pencil sketch of the Big Dipper and two pointer lines leading toward a marked point representing Polaris. A compact compass and a simple inclinometer sit beside the notebook, implying azimuth and orientation measurements; the page contains only illegible scribbles, no readable labels.\n\nUltra-detailed, photorealistic 512×512 with a near-future night-sky kit aesthetic: soft low-light illumination, gentle contrast, no brand logos, no readable text, no UI overlays. Compose so the star sketch and pointer lines are instantly recognizable at icon size.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -216,7 +216,7 @@
         "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
         "name": "Walstad aquarium (80 L)",
         "description": "A planted tank using the low-tech Walstad method.",
-        "image": "/assets/walstad_80L.jpg",
+        "image": "/assets/walstad_aquarium_80l.jpg",
         "price": "80 dUSD"
     },
     {
@@ -352,7 +352,7 @@
         "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
         "name": "Sponge filter",
         "description": "Air-driven sponge filter for ≤40 L (10 gal) tanks; 5 cm foam; needs 4 mm airline and air pump.",
-        "image": "/assets/sponge_filter_for_small_aquarium.jpg",
+        "image": "/assets/sponge_filter_small_aquarium.jpg",
         "price": "6 dUSD",
         "hardening": {
             "passes": 1,
@@ -371,7 +371,7 @@
         "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
         "name": "Rinsed sponge filter core",
         "description": "Sponge filter media squeezed clean in dechlorinated tank water and kept wet to preserve bacteria.",
-        "image": "/assets/sponge_filter_for_small_aquarium.jpg",
+        "image": "/assets/rinsed_sponge_filter_core.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -518,7 +518,7 @@
         "id": "9c392043-4067-4f49-8038-38eef00e0b24",
         "name": "Logged pH entry",
         "description": "Dated logbook entry capturing the most recent aquarium pH strip result.",
-        "image": "/assets/paperwork.jpg",
+        "image": "/assets/aquarium_ph_log_entry.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -544,7 +544,7 @@
         "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
         "name": "Logged water parameters",
         "description": "Notebook entry with ammonia, nitrite, nitrate, and pH values plus date and time.",
-        "image": "/assets/paperwork.jpg",
+        "image": "/assets/aquarium_water_parameters_log.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -570,7 +570,7 @@
         "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
         "name": "Freshly changed aquarium (80 L)",
         "description": "Walstad tank refilled with temperature-matched dechlorinated water after a gravel-vac water change.",
-        "image": "/assets/walstad_80L.jpg",
+        "image": "/assets/freshly_changed_walstad_80l.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,

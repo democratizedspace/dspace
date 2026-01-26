@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/wind_turbine_500w_kit.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "500 W wind turbine",
+    "item_id": "743681a7-d2e7-465c-af07-43665079bf4d",
+    "entity_type": "item",
+    "prompt": "A compact 500 W wind turbine kit laid out for assembly: three blades, a small nacelle, mounting hardware, and an integrated compact controller module arranged neatly on a bench. The parts are clean and modern, with no branding, clearly communicating “kit” rather than an installed turbine.\n\nUltra-detailed, photorealistic 512×512 with a near-future renewable DIY aesthetic: soft cinematic lighting, tidy layout, no logos, no readable text, no overlays. Keep the blade set and nacelle centered and uncluttered for icon clarity.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

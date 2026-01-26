@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/porous_air_stone_5cm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "porous air stone",
+    "item_id": "9f91173d-2609-4127-896d-7578078135db",
+    "entity_type": "item",
+    "prompt": "A 5 cm porous ceramic air stone on a clean bench, with its textured surface and central barb fitting clearly visible. A short piece of clear airline tubing sits beside it, emphasizing how it connects to an air pump for reservoir aeration.\n\nUltra-detailed, photorealistic 512×512 with a near-future hydroponics lab aesthetic: soft cinematic lighting, minimal clutter, no logos, no readable text, no overlays. Keep the air stone centered and sharply focused for easy recognition at icon scale.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

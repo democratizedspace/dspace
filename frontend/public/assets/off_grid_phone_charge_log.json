@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/off_grid_phone_charge_log.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "off-grid phone charge log",
+    "item_id": "2a9083b7-8578-45e3-8d76-7a298462f847",
+    "entity_type": "item",
+    "prompt": "A notebook open to a charging log entry page (illegible) beside a smartphone connected via cable to a portable power pack, with a folded solar panel visible in soft focus. A small cable strain relief clip and cool-touch connectors are emphasized through clean, careful placement.\n\nUltra-detailed, photorealistic 512×512 with a near-future off-grid kit aesthetic: soft cinematic lighting, tidy setup, no logos, no readable text, no overlays. Center the notebook and charging connection so the “logged successful phone charge” reads instantly.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

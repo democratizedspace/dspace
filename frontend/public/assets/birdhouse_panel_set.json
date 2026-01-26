@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/birdhouse_panel_set.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Birdhouse panel set",
+    "item_id": "0e6f2e1c-1e8a-4c05-b1db-38f1eec6f64a",
+    "entity_type": "item",
+    "prompt": "A birdhouse panel set laid out neatly on a workbench: front and back panels, side walls, roof pieces, and a floor piece arranged like a kit, with a small clamp and wood glue bottle shape in soft focus (no branding). The entrance-hole panel is clearly visible, indicating the final form.\n\nUltra-detailed, photorealistic 512×512 with a clean near-future workshop aesthetic: soft cinematic lighting, tidy layout, no logos, no readable text, no overlays. Compose so the pre-cut panels are the crisp focal point and read as “ready to assemble.”",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

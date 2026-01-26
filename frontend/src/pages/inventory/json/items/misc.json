@@ -115,7 +115,7 @@
         "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
         "name": "portable solar kit (wired)",
         "description": "200 W folding panel, 30 A PWM controller, and 200 Wh LiFePO4 pack wired with MC4 leads, ring terminals, and strain relief for quick off-grid deployment.",
-        "image": "/assets/solar_setup_200wh_portable_kit.jpg",
+        "image": "/assets/portable_solar_kit_wired_200wh.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -129,7 +129,7 @@
         "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
         "name": "8 AWG fused cable kit",
         "description": "1 m 8 AWG red/black leads with crimped ring terminals and 60 A MIDI fuse holder for safely feeding 12 V systems, from charge controllers to inverters.",
-        "image": "/assets/outlet.jpg",
+        "image": "/assets/fused_cable_kit_8awg.jpg",
         "price": "25 dUSD",
         "hardening": {
             "passes": 0,
@@ -143,7 +143,7 @@
         "id": "082481a4-5e40-43e6-8542-0e64a3bd92d7",
         "name": "300 W pure sine inverter",
         "description": "12 V DC to 120 V AC inverter rated for 300 W continuous, with low-voltage cutoff, cooling fan, and grounded AC outlets.",
-        "image": "/assets/outlet.jpg",
+        "image": "/assets/pure_sine_inverter_300w.jpg",
         "price": "90 dUSD",
         "type": "tool",
         "hardening": {
@@ -158,7 +158,7 @@
         "id": "466cb507-6beb-4c20-967b-4f1fda1d6463",
         "name": "mounted 300 W inverter",
         "description": "300 W pure sine inverter mounted within 30 cm of a 200 Wh battery pack using fused 8 AWG ring leads and torque-checked lugs.",
-        "image": "/assets/outlet.jpg",
+        "image": "/assets/mounted_inverter_300w.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -172,7 +172,7 @@
         "id": "2e6f7453-6b8a-4e04-8ea6-1ddba490019f",
         "name": "load-tested inverter",
         "description": "Mounted 300 W inverter verified under a 150 W AC load with stable 120 V output and acceptable DC voltage sag.",
-        "image": "/assets/outlet.jpg",
+        "image": "/assets/inverter_load_test_log.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -186,7 +186,7 @@
         "id": "2a9083b7-8578-45e3-8d76-7a298462f847",
         "name": "off-grid phone charge log",
         "description": "Notebook entry confirming a full smartphone charge from the portable solar kit, cable strain relief, and cool-to-touch connectors.",
-        "image": "/assets/solar_setup_200wh_portable_kit.jpg",
+        "image": "/assets/off_grid_phone_charge_log.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -200,7 +200,7 @@
         "id": "22a50cfd-4433-4ce7-bbed-e4038338191b",
         "name": "charge controller profile set",
         "description": "Documented LiFePO4 settings for a 30 A controller: battery type, 14.4 V absorb, 13.6 V float, and temperature-compensated wiring check.",
-        "image": "/assets/solar_charge_controller.jpg",
+        "image": "/assets/charge_controller_profile_set.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -261,7 +261,7 @@
         "name": "500 W wind turbine",
         "description": "500 W three-blade horizontal-axis wind turbine kit with integrated charge controller providing 24 V DC output.",
         "price": "700 dUSD",
-        "image": "/assets/turbine_500w_rooftop_kit.jpg",
+        "image": "/assets/wind_turbine_500w_kit.jpg",
         "hardening": {
             "passes": 1,
             "score": 70,
@@ -280,7 +280,7 @@
         "id": "34540aad-4c25-4268-a158-a291283bc7a0",
         "name": "wired 500 W wind turbine",
         "description": "Anchored 500 W turbine with brake tested and DC output wired through a charge controller to your DC bus.",
-        "image": "/assets/turbine_500w_rooftop_kit.jpg",
+        "image": "/assets/wired_wind_turbine_500w.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Energy & Power"
     },
@@ -427,7 +427,7 @@
         "id": "e034d081-a29e-4040-830f-a192304db50d",
         "name": "compost temperature log",
         "description": "One page noting core temperatures, probe depth, and time for an active compost bucket.",
-        "image": "/assets/mission_log_entry_page.jpg",
+        "image": "/assets/compost_temperature_log.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -441,7 +441,7 @@
         "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
         "name": "compost moisture log",
         "description": "Moisture readings with probe depth and notes on squeeze test for a bucket compost run.",
-        "image": "/assets/mission_log_entry_page.jpg",
+        "image": "/assets/compost_moisture_log.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -1017,7 +1017,7 @@
         "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
         "name": "Solar charge controller",
         "description": "30 A PWM controller for 12/24 V batteries; prevents overcharge and reverse current.",
-        "image": "/assets/solar_charge_controller.jpg",
+        "image": "/assets/solar_charge_controller_30a_pwm.jpg",
         "price": "30 dUSD",
         "type": "tool",
         "category": "Energy & Power"
@@ -1034,7 +1034,7 @@
         "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
         "name": "Solar setup (200 Wh)",
         "description": "A 200 W solar panel, charge controller, and 200 Wh battery pack in a weatherproof enclosure. Ready to use!",
-        "image": "/assets/solar_setup_200wh_portable_kit.jpg",
+        "image": "/assets/solar_setup_200wh_weatherproof.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Energy & Power"
     },
@@ -1199,7 +1199,7 @@
         "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
         "name": "Servo Motor",
         "description": "A small motor with control circuitry for precise movement.",
-        "image": "/assets/servo_motor_small_hobby.jpg",
+        "image": "/assets/servo_motor_small.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
     },
@@ -1215,7 +1215,7 @@
         "id": "b3857812-f50c-4880-810d-c929698599b3",
         "name": "servo test rig",
         "description": "Breadboarded Arduino Uno, wired hobby servo, and strain relief ready for motion tests.",
-        "image": "/assets/servo_motor_small_hobby.jpg",
+        "image": "/assets/servo_test_rig.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
     },
@@ -1223,7 +1223,7 @@
         "id": "8a4ccbcf-ee7d-42ff-bfd8-2ed242379872",
         "name": "servo sweep log",
         "description": "Baseline sweep recording that captures endstop positions and jitter for a tuned hobby servo.",
-        "image": "/assets/servo_motor_small_hobby.jpg",
+        "image": "/assets/servo_sweep_log.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
     },
@@ -1435,7 +1435,7 @@
         "id": "0e6f2e1c-1e8a-4c05-b1db-38f1eec6f64a",
         "name": "Birdhouse panel set",
         "description": "Pre-cut front, back, sides, roof, and floor pieces ready to assemble into a birdhouse.",
-        "image": "/assets/wooden_birdhouse.jpg",
+        "image": "/assets/birdhouse_panel_set.jpg",
         "price": "10 dUSD"
     },
     {
@@ -1450,7 +1450,7 @@
         "id": "c97f9b74-4d4f-4e83-993c-5df76e9d026e",
         "name": "Glued birdhouse shell",
         "description": "Walls and roof glued into a birdhouse form, waiting for sanding and final hardware.",
-        "image": "/assets/wooden_birdhouse.jpg",
+        "image": "/assets/glued_birdhouse_shell.jpg",
         "price": "14 dUSD"
     },
     {
@@ -1609,7 +1609,7 @@
         "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
         "name": "Pi cluster node",
         "description": "A Raspberry Pi assembled with HAT, SSD and cooling.",
-        "image": "/assets/pi_cluster_node_with_hat_and_ssd.jpg",
+        "image": "/assets/pi_cluster_node_hat_ssd.jpg",
         "dependencies": ["129", "131"],
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
@@ -1650,7 +1650,7 @@
         "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
         "name": "local test report",
         "description": "Captured logs from lint, type-check, coverage, and Playwright shards on the current branch.",
-        "image": "/assets/mission_log_entry_page.jpg",
+        "image": "/assets/local_test_report.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1658,7 +1658,7 @@
         "id": "d8346735-7f1c-4309-a400-6cf6801534f7",
         "name": "unattended-upgrades config",
         "description": "Pinned apt lists, reboot window, and log rotation settings deployed across the Pi cluster.",
-        "image": "/assets/pi_cluster_node_with_hat_and_ssd.jpg",
+        "image": "/assets/pi_cluster_unattended_upgrades_config.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1666,7 +1666,7 @@
         "id": "afd6a926-bd21-4242-ba79-d25fc152de03",
         "name": "auto-update health report",
         "description": "Verification log showing unattended-upgrades dry run, held packages, and reboot status.",
-        "image": "/assets/mission_log_entry_page.jpg",
+        "image": "/assets/auto_update_health_report.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1682,7 +1682,7 @@
         "id": "d3d0a7bd-e338-48f1-86ab-ddcc3626cecc",
         "name": "HTTPS service check",
         "description": "Logged curl and OCSP results confirming the cluster is serving renewed certificates.",
-        "image": "/assets/mission_log_entry_page.jpg",
+        "image": "/assets/https_service_check.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1752,7 +1752,7 @@
         "id": "0ce0d0d4-d734-4099-b903-92e9b1c52b05",
         "name": "dark-sky kit packed",
         "description": "Red flashlight, layered clothing, and a charged phone bundled for safe aurora watching.",
-        "image": "/assets/red_flashlight_50_lumen.jpg",
+        "image": "/assets/dark_sky_kit_packed.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -1760,7 +1760,7 @@
         "id": "682c9b29-b16f-4cf1-aaad-861a4aa133f4",
         "name": "aurora sighting log",
         "description": "Mission log entry with the aurora's time, color, and where you watched from.",
-        "image": "/assets/mission_log_entry_page.jpg",
+        "image": "/assets/aurora_sighting_log.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1768,7 +1768,7 @@
         "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
         "name": "seasonal star hop plan",
         "description": "Plotted arrows from bright seasonal stars to the constellations you're practicing tonight.",
-        "image": "/assets/planisphere_star_chart.jpg",
+        "image": "/assets/seasonal_star_hop_plan.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1776,7 +1776,7 @@
         "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
         "name": "constellation sketch set",
         "description": "Logbook page of traced stick figures for Orion, Ursa Major, and Cassiopeia with orientation arrows.",
-        "image": "/assets/mission_log_entry_page.jpg",
+        "image": "/assets/constellation_sketch_set.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1800,7 +1800,7 @@
         "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
         "name": "ISS pass log",
         "description": "Mission log entry noting the ISS pass time, brightness, and horizon-to-horizon track.",
-        "image": "/assets/mission_log_entry_page.jpg",
+        "image": "/assets/iss_pass_log.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1808,7 +1808,7 @@
         "id": "6102f07b-384b-437f-b78f-d1e9b5431e97",
         "name": "Polaris alignment note",
         "description": "A quick sketch of the Big Dipper's pointer stars leading to Polaris, plus azimuth from your observing spot.",
-        "image": "/assets/mission_log_entry_page.jpg",
+        "image": "/assets/polaris_alignment_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1816,7 +1816,7 @@
         "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
         "name": "Venus observation window",
         "description": "Planisphere and app check noting when Venus is high enough to show a clear crescent or gibbous phase.",
-        "image": "/assets/planisphere_star_chart.jpg",
+        "image": "/assets/venus_observation_window_planisphere.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1824,7 +1824,7 @@
         "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
         "name": "Venus phase sketch",
         "description": "Pencil sketch of Venus's illuminated slice with date, time, and telescope magnification.",
-        "image": "/assets/mission_log_entry_page.jpg",
+        "image": "/assets/venus_phase_sketch.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -1872,7 +1872,7 @@
         "id": "fe146f9d-d912-4841-bf1f-1675c3aa93f3",
         "name": "stevia tasting notes",
         "description": "Logged sweetness, onset, and aftertaste impressions from a blind stevia test.",
-        "image": "/assets/mission_log_entry_page.jpg",
+        "image": "/assets/stevia_tasting_notes.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2273,7 +2273,7 @@
         "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
         "name": "completionist trophy log entry",
         "description": "Logbook page noting the Completionist Award II serial, photo location, and display shelf.",
-        "image": "/assets/mission_log_entry_page.jpg",
+        "image": "/assets/completionist_trophy_log_entry.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2370,7 +2370,7 @@
         "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
         "name": "mission log entry",
         "description": "One handwritten entry recording a mission event in the logbook.",
-        "image": "/assets/mission_log_entry_page.jpg",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     }
