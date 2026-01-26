@@ -46,6 +46,13 @@ const html = outage ? DOMPurify.sanitize(fixMarkdownText(outage.compiledContent(
         display: block;
     }
 
+    .content :global(img) {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0.75rem auto;
+    }
+
     p.content {
         margin: 0;
     }
