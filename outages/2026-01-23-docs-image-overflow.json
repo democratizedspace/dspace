@@ -1,0 +1,12 @@
+{
+  "id": "docs-image-overflow",
+  "date": "2026-01-23",
+  "component": "frontend-docs-markdown",
+  "rootCause": "Markdown images in docs pages inherited no responsive sizing, so wide assets rendered at intrinsic width and overflowed mobile viewports.",
+  "resolution": "Constrain rendered docs and outage markdown images to max-width 100% with auto height and centered display to preserve aspect ratio on small screens.",
+  "references": [
+    "frontend/src/pages/docs/[slug].astro",
+    "frontend/src/pages/docs/outages/[slug].astro",
+    "https://staging.democratized.space/docs/team"
+  ]
+}

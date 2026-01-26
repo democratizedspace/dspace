@@ -96,7 +96,7 @@ const newDocUrl = slugString
                 <span>-></span>
                 <Chip text={title} href={`/docs/${slug}`} />
             </div>
-            <span set:html={html} />
+            <span class="content" set:html={html} />
         </Page>
     ) : (
         <Page title="Doc not found" columns="1">
@@ -113,11 +113,18 @@ const newDocUrl = slugString
 }
 
 <style>
-    span {
+    .content {
         background-color: white;
         color: black; 
         padding: 10px;
         border-radius: 20px;
         overflow: auto;
+    }
+
+    .content :global(img) {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
     }
 </style>
