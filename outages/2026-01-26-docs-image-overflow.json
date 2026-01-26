@@ -1,0 +1,11 @@
+{
+  "id": "docs-image-overflow",
+  "date": "2026-01-26",
+  "component": "frontend-docs",
+  "rootCause": "Docs markdown images did not enforce max-width or responsive sizing, so large screenshots overflowed the mobile content column.",
+  "resolution": "Constrain docs markdown media to max-width: 100% with auto height and center alignment so images and figures scale to the viewport.",
+  "references": [
+    "frontend/src/pages/docs/[slug].astro",
+    "/docs/team"
+  ]
+}

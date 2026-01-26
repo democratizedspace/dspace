@@ -115,9 +115,23 @@ const newDocUrl = slugString
 <style>
     span {
         background-color: white;
-        color: black; 
+        color: black;
         padding: 10px;
         border-radius: 20px;
         overflow: auto;
+    }
+
+    span :global(img) {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        margin: 0 auto;
+    }
+
+    span :global(picture),
+    span :global(figure) {
+        display: block;
+        max-width: 100%;
+        margin: 0 auto;
     }
 </style>
