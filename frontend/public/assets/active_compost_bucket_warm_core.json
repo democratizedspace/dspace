@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/active_compost_bucket_warm_core.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "active compost bucket",
+    "item_id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
+    "entity_type": "item",
+    "prompt": "A freshly turned compost bucket on a workbench, shown open with a loosened, aerated mix and a visible dry carbon cap of shredded browns on top. Subtle steam-like warmth is implied only by gentle condensation and a soft heat shimmer near the surface (not dramatic), and a compost thermometer probe is inserted slightly into the center to suggest a warm core being monitored.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk backyard/workshop setting: soft cinematic lighting, realistic organic textures without grossness, no logos, and no readable text. Keep the bucket centered and clearly “active, recently turned, ready for monitoring.”",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

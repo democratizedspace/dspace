@@ -139,14 +139,14 @@
         "id": "cad7d051-e3fb-4f1c-9d72-358076ee732e",
         "name": "hydroponic pH log",
         "description": "Timestamped entry showing the reservoir at 5.5–6.5 pH after adjustment and verification.",
-        "image": "/assets/hydroponic_ph_test_strip_pack.jpg",
+        "image": "/assets/hydroponic_ph_log_entry.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
         "id": "15ff1896-7a19-4060-bfb3-77b62ec4fd5a",
         "name": "rinsed hydroponic root zone",
         "description": "Grow media thoroughly flushed with fresh water to clear salts before recharging nutrients.",
-        "image": "/assets/hydroponics_tub_healthy_ready_plants.jpg",
+        "image": "/assets/rinsed_hydroponic_grow_media.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
@@ -174,7 +174,7 @@
         "id": "68e50400-fa25-4459-9633-2304a67096c9",
         "name": "peroxide rinse bath",
         "description": "Diluted 3% hydrogen peroxide solution in a clean bucket for sanitizing hydro gear.",
-        "image": "/assets/hydrogen_peroxide_3pct_amber_bottle.jpg",
+        "image": "/assets/peroxide_rinse_bath_bucket.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
@@ -279,7 +279,7 @@
         "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
         "name": "hydroponics tub (ready)",
         "description": "A hydroponic tub that is ready to be used. Contains a nutrient solution suitable for most leafy greens.",
-        "image": "/assets/hydroponics_tub_healthy_ready_plants.jpg",
+        "image": "/assets/hydroponics_tub_ready_nutrient_solution.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
@@ -359,7 +359,7 @@
         "id": "092dae11-237a-43cc-b342-246aabbba258",
         "name": "pH test strip pack",
         "description": "50 litmus strips for checking hydroponic nutrient solution between pH 4 and 9.",
-        "image": "/assets/hydroponic_ph_test_strip_pack.jpg",
+        "image": "/assets/ph_test_strip_pack_litmus.jpg",
         "price": "5 dUSD",
         "unit": "pack",
         "hardening": {
@@ -471,7 +471,7 @@
         "id": "50f2080e-7dd5-4c8d-a764-dfaa02ca59c3",
         "name": "hydrogen peroxide (3%)",
         "description": "250 mL amber bottle of 3% hydrogen peroxide for sanitizing hydroponic equipment; child-resistant cap.",
-        "image": "/assets/hydrogen_peroxide_3pct_amber_bottle.jpg",
+        "image": "/assets/hydrogen_peroxide_3pct_sanitizer_bottle.jpg",
         "price": "1.50 dUSD",
         "unit": "250 mL bottle",
         "hardening": {

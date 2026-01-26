@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/temperature_log_csv_export.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "temperature log CSV",
+    "item_id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+    "entity_type": "item",
+    "prompt": "A CSV-style export depicted as a tidy data grid on a tablet screen, showing rows and columns of numeric-looking blocks and timestamp-like shapes, but with all characters rendered unreadable. A small thermistor probe cable and a microcontroller sit beside the device, making it clear this is an export of hourly temperature readings from a logging rig.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future lab/desk setting: soft cinematic lighting, realistic screen reflections, no brand logos, and no readable text. Keep the data grid central and visually recognizable as a “CSV export” without actual legible characters.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

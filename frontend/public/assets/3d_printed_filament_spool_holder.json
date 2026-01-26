@@ -4,7 +4,7 @@
     "item_name": "3D printed filament spool holder",
     "item_id": "3721d5e0-a148-4f67-9150-55492873a576",
     "entity_type": "item",
-    "prompt": "A 3D printed filament spool holder sits on a bench: a sturdy base with upright arms and a smooth axle ready to cradle a filament spool. Beside it, an entry-level FDM printer is mid-print on a second holder component, with a skirt visible on the build plate. A finished holder in use supports a spool so filament feeds cleanly toward the extruder. The workspace is a neat, solarpunk-style maker area with warm lighting, organized tools, and no logos or readable text.",
+    "prompt": "A 3D-printed filament spool holder on a workbench: a sturdy printed base with two upright arms cradling a generic filament spool on a smooth axle. The spool is shown feeding filament toward an off-frame printer direction, with the filament strand gently tensioned and aligned, clearly communicating smoother feeding and reduced drag.\n\nUltra-detailed, photorealistic 512×512 image in a clean near-future maker workshop aesthetic: soft cinematic lighting, realistic print layer lines, no brand logos, and no readable text. Keep the holder and spool centered with a simple background so it reads instantly as a spool-holder accessory.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
 }

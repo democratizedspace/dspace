@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/floating_plant_mat_guppy_grass.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Floating plant mat",
+    "item_id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+    "entity_type": "item",
+    "prompt": "A dense cluster of rinsed guppy grass spread across the surface of an aquarium, forming a floating mat that shades the water below. The mat is shown from a slight top angle with visible fine stems and needle-like leaves, gentle surface ripples, and a few tiny bubbles caught in the greenery; beneath the mat, faint silhouettes of small fry-sized fish are hinted at in soft focus.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future solarpunk home-aquaria aesthetic: soft cinematic lighting, clean glass and water reflections, natural greens, no brand logos, and no readable text. Keep the composition clear and icon-friendly, with the floating plant mat as the unmistakable subject.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

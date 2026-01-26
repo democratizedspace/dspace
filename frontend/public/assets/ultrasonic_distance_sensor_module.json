@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/ultrasonic_distance_sensor_module.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "ultrasonic distance sensor",
+    "item_id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
+    "entity_type": "item",
+    "prompt": "A standalone 5V ultrasonic rangefinder module photographed on a clean anti-static mat, showing two circular transducer “eyes” on the front and a small pin header along the edge. A few jumper wires and a breadboard sit softly out of focus behind it to imply trigger/echo connections and hobby electronics use, without any visible brand markings.\n\nUltra-detailed, photorealistic 512×512 image in a tidy near-future electronics bench style: soft cinematic lighting, realistic PCB texture and solder joints, no logos, and no readable text. Keep the sensor module centered and uncluttered so it reads instantly as an ultrasonic distance sensor.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
