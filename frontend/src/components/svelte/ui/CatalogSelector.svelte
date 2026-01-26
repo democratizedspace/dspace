@@ -98,6 +98,7 @@
                             class="item-option"
                             class:selected={selectedId === normalized.id}
                             role="option"
+                            on:touchstart={() => handleSelect(normalized.id)}
                             on:click={() => handleSelect(normalized.id)}
                             aria-selected={selectedId === normalized.id}
                             aria-label={`Select ${normalized.name}`}
@@ -163,7 +164,7 @@
                     class="edit-button"
                     aria-haspopup="listbox"
                     aria-expanded={isExpanded}
-                    on:touchstart|preventDefault={toggleExpanded}
+                    on:touchstart={toggleExpanded}
                     on:click={toggleExpanded}
                 >
                     Edit
@@ -176,7 +177,7 @@
                 id={resolvedControlId}
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
-                on:touchstart|preventDefault={toggleExpanded}
+                on:touchstart={toggleExpanded}
                 on:click={toggleExpanded}
             >
                 {buttonLabel}
