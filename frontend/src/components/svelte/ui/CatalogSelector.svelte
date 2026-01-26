@@ -99,6 +99,7 @@
                             class:selected={selectedId === normalized.id}
                             role="option"
                             on:click={() => handleSelect(normalized.id)}
+                            on:touchstart={() => handleSelect(normalized.id)}
                             aria-selected={selectedId === normalized.id}
                             aria-label={`Select ${normalized.name}`}
                         >
@@ -164,6 +165,7 @@
                     aria-haspopup="listbox"
                     aria-expanded={isExpanded}
                     on:click={toggleExpanded}
+                    on:touchstart={toggleExpanded}
                 >
                     Edit
                 </button>
@@ -176,6 +178,7 @@
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
                 on:click={toggleExpanded}
+                on:touchstart={toggleExpanded}
             >
                 {buttonLabel}
             </button>
