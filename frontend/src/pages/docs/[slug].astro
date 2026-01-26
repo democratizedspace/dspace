@@ -120,4 +120,14 @@ const newDocUrl = slugString
         border-radius: 20px;
         overflow: auto;
     }
+
+    span :global(img),
+    span :global(picture),
+    span :global(svg),
+    span :global(video),
+    span :global(iframe) {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
 </style>

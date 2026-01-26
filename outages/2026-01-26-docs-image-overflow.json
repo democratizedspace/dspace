@@ -1,0 +1,10 @@
+{
+  "id": "docs-image-overflow",
+  "date": "2026-01-26",
+  "component": "frontend-docs",
+  "rootCause": "Docs markdown rendered images without a max-width constraint, so large portrait assets could overflow the mobile content container.",
+  "resolution": "Added global doc-content media styles so images and embedded media scale to the container width while preserving aspect ratio.",
+  "references": [
+    "frontend/src/pages/docs/[slug].astro"
+  ]
+}
