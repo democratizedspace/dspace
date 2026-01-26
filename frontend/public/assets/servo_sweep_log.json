@@ -7,5 +7,4 @@
     "prompt": "A small hobby servo on a bench next to a notebook page showing a simple sweep plot and endstop markers (all notes illegible). The servo horn is attached, and a thin signal cable runs to a compact microcontroller board off to the side, suggesting a baseline jitter and range test.\n\nUltra-detailed, photorealistic 512×512 with a near-future maker lab aesthetic: soft cinematic lighting, tidy wiring, no logos, no readable text, no overlays. Keep the servo and the plotted “sweep log” page clearly visible and icon-friendly.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}

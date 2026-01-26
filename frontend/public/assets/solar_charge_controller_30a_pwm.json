@@ -7,5 +7,4 @@
     "prompt": "A compact 30 A PWM solar charge controller on a clean bench, with terminal blocks visible and neatly inserted wires for panel and battery connections. Small indicator LEDs glow softly, and a simple wiring diagram card sits nearby (unreadable), emphasizing safe charge regulation.\n\nUltra-detailed, photorealistic 512×512 with a grounded near-future renewable-energy aesthetic: soft cinematic lighting, tidy cabling, no logos, no readable text, no overlays. Center the controller so its terminals and compact form read clearly at icon scale.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}

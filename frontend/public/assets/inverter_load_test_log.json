@@ -7,5 +7,4 @@
     "prompt": "A mounted inverter setup being load-tested: the inverter is fixed to a panel, a small AC load device is plugged in, and a digital multimeter probes the output (display unreadable). A notebook beside the setup shows a quick test checklist and voltage notes, intentionally illegible, conveying “verified under load.”\n\nUltra-detailed, photorealistic 512×512 with a near-future off-grid bench-test aesthetic: soft cinematic lighting, tidy wiring, no logos, no readable text, no overlays. Focus on the inverter, plugged load, and measurement tools for immediate readability.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
-  
+}
