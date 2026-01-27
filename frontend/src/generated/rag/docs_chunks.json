@@ -410,42 +410,42 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/content-development:quest-development-guidelinesdocsquest-guidelines:4:0",
+    "id": "doc:/docs/content-development:quest-development-guidelines:4:0",
     "path": "frontend/src/pages/docs/md/content-development.md",
     "slug": "/docs/content-development",
     "title": "Content Development Guide",
-    "heading": "[Quest Development Guidelines](/docs/quest-guidelines)",
-    "anchor": "quest-development-guidelinesdocsquest-guidelines",
+    "heading": "Quest Development Guidelines",
+    "anchor": "quest-development-guidelines",
     "text": "Comprehensive instructions for creating engaging, educational quests that guide players through practical space-related activities. Topics include:\n - Quest philosophy and educational goals - Quest categories and progression paths - Dialogue structure and NPC interactions - Technical requirements and JSON structure - Submission and review process - Example JSON in the Quest Template - Field definitions in the Quest Schema Requirements - Step-by-step Quest Submission Guide - Full workflow in the Quest Contribution Guidelines",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/content-development:item-development-guidelinesdocsitem-guidelines:5:0",
+    "id": "doc:/docs/content-development:item-development-guidelines:5:0",
     "path": "frontend/src/pages/docs/md/content-development.md",
     "slug": "/docs/content-development",
     "title": "Content Development Guide",
-    "heading": "[Item Development Guidelines](/docs/item-guidelines)",
-    "anchor": "item-development-guidelinesdocsitem-guidelines",
+    "heading": "Item Development Guidelines",
+    "anchor": "item-development-guidelines",
     "text": "Detailed guide for creating virtual items that represent resources, tools, and components. Topics include:\n - Item categories and classification - Properties and attributes - Relationship to processes and quests - Best practices for naming and descriptions - Technical implementation details",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/content-development:process-development-guidelinesdocsprocess-guidelines:6:0",
+    "id": "doc:/docs/content-development:process-development-guidelines:6:0",
     "path": "frontend/src/pages/docs/md/content-development.md",
     "slug": "/docs/content-development",
     "title": "Content Development Guide",
-    "heading": "[Process Development Guidelines](/docs/process-guidelines)",
-    "anchor": "process-development-guidelinesdocsprocess-guidelines",
+    "heading": "Process Development Guidelines",
+    "anchor": "process-development-guidelines",
     "text": "Instructions for creating processes that transform or utilize items. Topics include:\n - Process structure and duration formatting - Item requirements, consumption, and production - Balancing time and rewards - Process states and lifecycle - Creating process chains for progression",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/content-development:custom-content-bundlesdocscustom-bundles:7:0",
+    "id": "doc:/docs/content-development:custom-content-bundles:7:0",
     "path": "frontend/src/pages/docs/md/content-development.md",
     "slug": "/docs/content-development",
     "title": "Content Development Guide",
-    "heading": "[Custom Content Bundles](/docs/custom-bundles)",
-    "anchor": "custom-content-bundlesdocscustom-bundles",
+    "heading": "Custom Content Bundles",
+    "anchor": "custom-content-bundles",
     "text": "Bundle related quests, items, and processes into a single JSON file to keep submissions in sync.",
     "kind": "doc"
   },
@@ -570,12 +570,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/contributors-guide:2-branching-workflow:2:0",
+    "id": "doc:/docs/contributors-guide:2-branching--workflow:2:0",
     "path": "frontend/src/pages/docs/md/contributors-guide.md",
     "slug": "/docs/contributors-guide",
     "title": "Contributors Guide",
     "heading": "2. Branching & workflow",
-    "anchor": "2-branching-workflow",
+    "anchor": "2-branching--workflow",
     "text": "1. Create a feature branch from (for example, ). 2. Keep pull requests focused on a single concern and include tests plus docs. 3. Run before every commit to avoid leaking credentials. 4. Follow the pull request guide for message structure and review tips.",
     "kind": "doc"
   },
@@ -600,12 +600,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/contributors-guide:5-support-community:5:0",
+    "id": "doc:/docs/contributors-guide:5-support--community:5:0",
     "path": "frontend/src/pages/docs/md/contributors-guide.md",
     "slug": "/docs/contributors-guide",
     "title": "Contributors Guide",
     "heading": "5. Support & community",
-    "anchor": "5-support-community",
+    "anchor": "5-support--community",
     "text": "- Join the Discord channel for pairing and review requests. - Tag issues with when you notice approachable tasks. - Share lessons learned in the notebooks so future contributors benefit from your experience.\n Thanks for helping us democratize space exploration!",
     "kind": "doc"
   },
@@ -1170,12 +1170,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/legacy-save-storage:legacy-saves-storage-migrations:0:0",
+    "id": "doc:/docs/legacy-save-storage:legacy-saves--storage-migrations:0:0",
     "path": "frontend/src/pages/docs/md/legacy-save-storage.md",
     "slug": "/docs/legacy-save-storage",
     "title": "Legacy saves & storage migrations",
     "heading": "Legacy saves & storage migrations",
-    "anchor": "legacy-saves-storage-migrations",
+    "anchor": "legacy-saves--storage-migrations",
     "text": "This doc explains how DSPACE stores game state across v1 (cookies + localStorage), v2 (localStorage), and v3 (IndexedDB), plus how the legacy upgrade flow detects and migrates older formats.",
     "kind": "doc"
   },
@@ -1190,12 +1190,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/legacy-save-storage:dspace-v1-save-format-commit-fc840def24c5140411d2892f468960acb8250681:2:0",
+    "id": "doc:/docs/legacy-save-storage:dspace-v1-save-format-commit-:2:0",
     "path": "frontend/src/pages/docs/md/legacy-save-storage.md",
     "slug": "/docs/legacy-save-storage",
     "title": "Legacy saves & storage migrations",
-    "heading": "DSPACE v1 save format (commit `fc840def24c5140411d2892f468960acb8250681`)",
-    "anchor": "dspace-v1-save-format-commit-fc840def24c5140411d2892f468960acb8250681",
+    "heading": "DSPACE v1 save format (commit )",
+    "anchor": "dspace-v1-save-format-commit-",
     "text": "High-level summary\n - Storage split: v1 writes inventory + quest progress into cookies and uses localStorage for process timers and machine locks. - v3 detection: v3 checks cookies/localStorage for legacy artifacts; the migration scope for v1 is items + currency balances (v1 cookies plus ). - Why skip quests/process timers: v1 quest IDs are numeric ( , , ), while v2/v3 use slug routes (ex: ). Process timers also depend on v1 process IDs/machine IDs that do not map 1:1. Treat quest/progress/process timers as out-of-scope for the default v1 migration, even if the cookies exist.\n Primary v1 source files (commit ):\n - Cookie acceptance + redirect UX: - Cookie helpers + wallet balance functions: - Inventory cookie reads/writes: - Quest finish + checkpoint cookies: (contains ), (contains ) - Process timers + machine locks: - Process cooldown cookies: - Item catalog (source of truth):",
     "kind": "doc"
   },
@@ -1220,12 +1220,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/legacy-save-storage:cookie-write-gate-acceptedcookies-redirect-ux:5:0",
+    "id": "doc:/docs/legacy-save-storage:cookie-write-gate--redirect-ux:5:0",
     "path": "frontend/src/pages/docs/md/legacy-save-storage.md",
     "slug": "/docs/legacy-save-storage",
     "title": "Legacy saves & storage migrations",
-    "heading": "Cookie write gate: `acceptedCookies` + redirect UX",
-    "anchor": "cookie-write-gate-acceptedcookies-redirect-ux",
+    "heading": "Cookie write gate: + redirect UX",
+    "anchor": "cookie-write-gate--redirect-ux",
     "text": "- v1 sets in , which is linked from the prompt. The accepted page optionally renders a “Go back” link using the query param. This is the only place that writes . - Quest completion + checkpoint cookies are only written when returns , which is why the v1 UI prompts users to accept cookies before tracking progress.",
     "kind": "doc"
   },
@@ -1240,12 +1240,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/legacy-save-storage:v1-seed-profiles-for-settings:7:0",
+    "id": "doc:/docs/legacy-save-storage:v1-seed-profiles-for:7:0",
     "path": "frontend/src/pages/docs/md/legacy-save-storage.md",
     "slug": "/docs/legacy-save-storage",
     "title": "Legacy saves & storage migrations",
-    "heading": "V1 seed profiles for `/settings`",
-    "anchor": "v1-seed-profiles-for-settings",
+    "heading": "V1 seed profiles for",
+    "anchor": "v1-seed-profiles-for",
     "text": "Use these profiles to seed sample v1 data (manual DevTools or the seeder UI). They are implementation-ready key/value sets that mirror the v1 format above.",
     "kind": "doc"
   },
@@ -1260,52 +1260,52 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/legacy-save-storage:maximal-seed-cookies-localstorage:9:0",
+    "id": "doc:/docs/legacy-save-storage:maximal-seed-cookies--localstorage:9:0",
     "path": "frontend/src/pages/docs/md/legacy-save-storage.md",
     "slug": "/docs/legacy-save-storage",
     "title": "Legacy saves & storage migrations",
     "heading": "Maximal seed (cookies + localStorage)",
-    "anchor": "maximal-seed-cookies-localstorage",
+    "anchor": "maximal-seed-cookies--localstorage",
     "text": "Cookies to set:\n \n LocalStorage to set:\n \n Expected v3 detection outcomes:\n - Same as minimal seed for banner + V1 card (v1 detection keys are cookie-based). - No or cookies are seeded by default; if you add them manually they remain out of scope for migration. - and localStorage keys are not migrated; they exist solely for timer/lock state in v1 and should not affect v3 detection.",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/legacy-save-storage:v1-v3-item-id-mapping-authoritative:10:0",
+    "id": "doc:/docs/legacy-save-storage:v1--v3-item-id-mapping-authoritative:10:0",
     "path": "frontend/src/pages/docs/md/legacy-save-storage.md",
     "slug": "/docs/legacy-save-storage",
     "title": "Legacy saves & storage migrations",
     "heading": "v1 → v3 item ID mapping (authoritative)",
-    "anchor": "v1-v3-item-id-mapping-authoritative",
+    "anchor": "v1--v3-item-id-mapping-authoritative",
     "text": "The v1 numeric item IDs are mapped to v3 UUID item IDs during migration. The canonical mapping lives in and is consumed by the v1 migration helper. Use the table below to validate mappings during QA and when auditing legacy saves.\n | v1 itemId | v1 name | v3 item UUID | v3 name | Notes | | --------- | -------------------------------------------- | ------------------------------------ | ------------------------------------------ | ---------------------------------------------------------------------- | | 0 | Real Printer 1 | 8aa6dc27-dc42-4622-ac88-cbd57f48625f | entry-level FDM 3D printer | Renamed to 'entry-level FDM 3D printer' in v3 catalog. | | 1 | Benchy | 7892ffc6-c651-445f-946b-7edc998cf389 | Benchy | | | 2 | hydroponics kit | 92261497-d605-4db1-8710-953cf73d765c | hydroponics kit | | | 3 | white PLA filament | 58580f6f-f3be-4be0-80b9-f6f8bf0b05a6 | white PLA filament | | | 4 | Edison Model M | 8f54a592-09de-4340-829b-7288897eb4c7 | Edison Model M | | | 5 | portable solar panel | 02b32152-a7b2-458e-9643-7b754c722165 | portable solar panel | | | 6 | 200 Wh battery pack | cfe87611-623a-45b0-9243-422cd8a73a16 | 200 Wh battery pack | | | 7 | 500W wind turbine | 743681a7-d2e7-465c-af07-43665079bf4d | 500 W wind turbine | Renamed to '500 W wind turbine' in v3 catalog. | | 8 | Benchy Award | fe46e236-5d03-4c95-9b38-68b045a0df03 | Benchy Award | | | 9 | Real Hydroponics Tub 1 | 11aa585c-fdeb-41ba-9191-be4bcdaa23c4 | Beginner hydroponics tub | Renamed to 'Beginner hydroponics tub' in v3 catalog. | | 10 | basil seeds | affa2f80-28f1-422e-a0c8-49e51ce65a1e | basil seeds | | | 11 | 3D printed model rocket | 5322b85e-b47d-4ea4-b515-318f91abc7df | 3D printed model rocket | | | 12 | green PLA filament | d3590107-25ff-4de5-af3a-46e2497bfc52 | green PLA filament | | | 13 | hydroponic starter plug | 78a45c1f-a791-44f1-88f4-dc5059c66c89 | hydroponic starter plug | | | 14 | hydroponics nutrients | ef5a843f-0a9d-41e2-b2bc-81fc9f99a150 | hydroponic nutrient concentrate (1 L) | Renamed to 'hydroponic nutrient concentrate (1 L)' in v3 catalog. | | 15 | 3D printing kit | 9605048d-ea62-4b70-9bbc-ea1ad4baaf3e | 3D printing kit | | | 16 | 5 gallon bucket | 0564d441-7367-412e-b709-dad770814a39 | 5 gallon bucket | | | 17 | 5 gallon bucket of tap water (chlorinated) | 156d06b2-ff10-4265-9ae9-3b7753c0206e | 5 gallon bucket of tap water (chlorinated) | | | 18 | Motor Award | 2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274 | Motor Award | | | 19 | Rocket Award | 946b07b7-2b2c-4507-a725-edb270d8e910 | Rocket Award | | | 20 | dCarbon | d88ef09c-9191-4c18-8628-a888bb9f926d | dCarbon | | | 21 | Hypercar (80% charge) | 1498a7a1-2739-4943-a32f-4c277244a825 | Hypercar (80% charge) | | | 22 | dWatt | 061fd221-404a-4bd1-9432-3e25b0f17a2c | dWatt | | | 23 | Hypervan | c2e3bbb6-0ded-4923-98e1-37e5ac3c7d77 | Hypervan | | | 24 | dUSD | 5247a603-294a-4a34-a884-1ae20969b2a1 | dUSD | | | 25 | 5 gallon bucket of tap water (dechlorinated) | 71efa72a-8c87-4dc2-8e2c-9119bb28fe50 | 5 gallon bucket of dechlorinated tap water | Renamed to '5 gallon bucket of dechlorinated tap water' in v3 catalog. | | 26 | soaked hydroponic starter plug | 545aeb15-7e8b-489d-be4a-af2a59f447e1 | soaked hydroponic starter plug | | | 27 | basil seedling | 5712947f-716c-4f71-b28d-fcb811631080 | basil seedling | | | 28 | sink | 799ace33-1336-46c0-904a-9f16778230f1 | sink | | | 29 | smart plug | a5395e29-1862-4eb7-8517-5d161635e032 | smart plug | | | 30 | 3D printed nosecone | 7ca9cad5-4bc2-420b-9733-24d1e38c2324 | 3D printed nosecone | | | 31 | 3D printed body tube | 1eac8955-bb70-474b-b6b0-4002ff3aa09a | 3D printed body tube | | | 32 | 3D printed fincan | 563956c2-17d1-4b82-8fce-48b07dc8a71b | 3D printed fincan | | | 33 | 3D printed nosecone coupler | 05c339ee-f50b-419a-804a-341f850b85e9 | 3D printed nosecone coupler | | | 34 | hobbyist solid rocket motor | 4d817f1c-d78d-4fac-a514-402bce330693 | hobbyist solid rocket motor | | | 35 | superglue | 7bc8b73f-6e66-469d-865f-12d0cb36677a | superglue | | | 36 | kevlar cord | 0484a3ab-92e7-42fa-a5e6-25a4afe841d6 | kevlar shock cord | Renamed to 'kevlar shock cord' in v3 catalog. | | 37 | rocket igniter | d2f3e684-84e2-41f9-b39d-51ee224608ac | rocket igniter | | | 38 | launch controller | ae343640-c7c0-4f7e-907b-17bd87574d9b | launch controller | | | 39 | launch-capable model rocket | aaa5fbca-54a1-40a5-8461-24dc2ef81d4d | launch-capable model rocket | | | 40 | damaged model rocket | 63362e5c-9897-4710-8ef6-26540fabd0ca | damaged model rocket | | | 41 | Rocketeer Award | c754c1e7-244c-41ec-96d4-ad468b6b3e52 | Rocketeer Award | | | 42 | harvestable basil plant | 79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be | harvestable basil plant | | | 43 | hydroponic grow lamp | c8946a5f-caff-4e6d-9b9b-4dbf02bcd000 | hydroponic grow lamp | | | 44 | Real Hydroponics Tub 1 (ready) | fc2bb989-f192-4891-8bde-78ae631dae78 | hydroponics tub (ready) | Renamed to 'hydroponics tub (ready)' in v3 catalog. | | 45 | Real Hydroponics Tub 1 (nutrient deficient) | dc765172-c2e4-40dd-bb5a-a399bf6d6d77 | hydroponics tub (nutrient deficient) | Renamed to 'hydroponics tub (nutrient deficient)' in v3 catalog. | | 46 | bundle of basil leaves | 5d48cefb-fc1f-4962-b2c6-9b014151d0ae | bundle of basil leaves | | | 47 | harvested basil plant | 29190faf-8581-4769-b871-f0ee283840e1 | harvested basil plant | | | 48 | Green Thumb Award | 5599c466-91e9-46fb-8d8b-11388e4f8f9c | Green Thumb Award | | | 49 | Solarpunk Award | 5bba251a-d223-4e22-aa30-b65238b17516 | Solarpunk Award | | | 50 | Completionist Award | 1394c366-5078-49cf-b24e-c748e8428234 | Completionist Award | | | 51 | aquarium (150 L) | 83fe7eee-135e-4885-9ce0-9042b9fb860a | aquarium (150 L) | | | 52 | aquarium (goldfish) (150 L) | 76307a8e-4e0e-4dfa-abc2-7917d384d82c | aquarium (goldfish) (150 L) | | | 53 | goldfish | 40920981-bf9f-4b89-b887-bebe7006f7dc | goldfish | | | 54 | goldfish food | 8807f2f1-3ca2-48da-9b2b-1915604a63e2 | goldfish food | | | 55 | aquarium filter | 6fe61da2-6aa3-447e-aad5-c65b1b8da1f1 | aquarium",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/legacy-save-storage:v1-v3-item-id-mapping-authoritative:10:1",
+    "id": "doc:/docs/legacy-save-storage:v1--v3-item-id-mapping-authoritative:10:1",
     "path": "frontend/src/pages/docs/md/legacy-save-storage.md",
     "slug": "/docs/legacy-save-storage",
     "title": "Legacy saves & storage migrations",
     "heading": "v1 → v3 item ID mapping (authoritative)",
-    "anchor": "v1-v3-item-id-mapping-authoritative",
+    "anchor": "v1--v3-item-id-mapping-authoritative",
     "text": "filter | | | 56 | aquarium heater | 0b85f058-38f2-4e9a-93e9-d47441608619 | aquarium heater (150 W) | Renamed to 'aquarium heater (150 W)' in v3 catalog. | | 57 | aquarium light | 62757412-be94-48c0-a1c0-8fad9bdb8c4a | aquarium LED light (20 W) | Renamed to 'aquarium LED light (20 W)' in v3 catalog. | | 58 | Thermometer | 8e81b5e5-4aee-402c-bd04-fed9188f8c07 | aquarium thermometer (0–50°C) | Renamed to 'aquarium thermometer (0–50°C)' in v3 catalog. | | 59 | pH strip | 13167d6a-5617-4931-8a6e-6f463c6b8835 | pH strip | | | 60 | 7 pH freshwater aquarium (150 L) | ca7c1069-4ba3-4339-9a10-0b690a690e60 | 7 pH freshwater aquarium (150 L) | | | 61 | dSolar | b02ecff5-1f7d-4247-a09d-7d6cd6bb218a | dSolar | | | 62 | gravel | 75cec98f-fcf0-4d73-8d31-5a53571317b2 | aquarium gravel (1 kg) | Renamed to 'aquarium gravel (1 kg)' in v3 catalog. | | 63 | aquarium net | ee7d437d-7426-47cd-b691-386dd20f4e47 | aquarium net | | | 64 | dGoldfish | 36a1168f-0109-4a8c-b70b-45f8ca582297 | dGoldfish | | | 65 | Fish Friend Award | a07b75e3-f828-4cb1-81d6-1ab0e9857a79 | Fish Friend Award | | | 66 | parachute | 80a83ecc-bcd2-400e-a469-8488a6453bb8 | parachute | | | 67 | launch-capable model rocket (parachute) | e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec | launch-capable model rocket (parachute) | | | 68 | Rocket Descent (animated) | d660dc50-7afb-4a2f-9508-a42490aae5e4 | Rocket Descent (animated) | | | 69 | dLaunch | eb9c2a75-a87a-4171-8bc3-088e75936bcf | dLaunch | | | 70 | dOffset | b0ac46e6-6c60-48f0-b753-d9b6ad9935a6 | dOffset | | | 71 | Tree Hugger Award | 96e11500-a2ce-4531-a1b5-3a92c44fcb9d | Tree Hugger Award | | | 72 | dBI | 016d4758-d114-4e04-9e6a-853db93a2eee | dBI | | | 73 | EV charger | 5258f098-6cae-4ee5-8888-435b08f1675a | EV charger | | | 74 | Hypercar (20% charge) | 5e283c0b-fd3c-4884-ae32-9a237f02a40e | Hypercar (20% charge) | | | 75 | Hypercar (animated) | 3486ebb3-d262-4e90-8873-b19ed69afee8 | Hypercar (animated) | | | 76 | 1 kWh battery pack | 7246c1c8-f22e-4d31-acd3-967f91b8626a | 1 kWh battery pack | | | 77 | The grass is always greener (still) | 11a2a77a-0c43-47a9-b13a-1412ac475ce2 | The grass is always greener (still) | |",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/legacy-save-storage:qa-v1-v3-migration-checklist:11:0",
+    "id": "doc:/docs/legacy-save-storage:qa-v1--v3-migration-checklist:11:0",
     "path": "frontend/src/pages/docs/md/legacy-save-storage.md",
     "slug": "/docs/legacy-save-storage",
     "title": "Legacy saves & storage migrations",
     "heading": "QA: v1 → v3 migration checklist",
-    "anchor": "qa-v1-v3-migration-checklist",
+    "anchor": "qa-v1--v3-migration-checklist",
     "text": "1. Start clean: clear IndexedDB + localStorage + cookies. Confirm no legacy banner appears. 2. Seed minimal v1 cookies (above), reload, and confirm the Legacy save detected banner appears on non-settings pages and links to . 3. Check V1 detection UI: in → Legacy save upgrades, confirm: - The V1 card lists item counts from cookies. - is surfaced as a dUSD balance and marked for migration. - Quest/progress cookies (if present) remain ignored by default. 4. Merge v1 into v3: click Merge v1 into current save. - Inventory gains the seeded items. - dUSD balances are migrated from . - Detected and cookies are expired after merge; reloading should remove the V1 banner. - If you re-seed the cookies and merge again, counts should increase again (merge is additive). 5. Maximal seed case: repeat with the maximal profile and confirm the same results, plus ensure process timers and machine locks remain ignored. 6. Hand-off to v2.1 → v3: after finishing v1 validation, continue with the v2.1 → v3 QA checklist in the section below. That section is the canonical v2.1 migration guide and supersedes any earlier high-level v2 migration notes.",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/legacy-save-storage:dspace-v21-save-format-commit-d956e807c26006b98227a89ca5039e4ed71fe2df:12:0",
+    "id": "doc:/docs/legacy-save-storage:dspace-v21-save-format-commit-:12:0",
     "path": "frontend/src/pages/docs/md/legacy-save-storage.md",
     "slug": "/docs/legacy-save-storage",
     "title": "Legacy saves & storage migrations",
-    "heading": "DSPACE v2.1 save format (commit `d956e807c26006b98227a89ca5039e4ed71fe2df`)",
-    "anchor": "dspace-v21-save-format-commit-d956e807c26006b98227a89ca5039e4ed71fe2df",
+    "heading": "DSPACE v2.1 save format (commit )",
+    "anchor": "dspace-v21-save-format-commit-",
     "text": "Source note: This section is based on the audited v2.1 commit output provided for this doc update. Where details are not directly verified in this checkout, they are explicitly labeled Observed in audit output and paired with pinned file paths for review.",
     "kind": "doc"
   },
@@ -1330,12 +1330,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/legacy-save-storage:c-gamestate-deep-schema-explicit:15:0",
+    "id": "doc:/docs/legacy-save-storage:c-deep-schema-explicit:15:0",
     "path": "frontend/src/pages/docs/md/legacy-save-storage.md",
     "slug": "/docs/legacy-save-storage",
     "title": "Legacy saves & storage migrations",
-    "heading": "C) `gameState` deep schema (explicit)",
-    "anchor": "c-gamestate-deep-schema-explicit",
+    "heading": "C) deep schema (explicit)",
+    "anchor": "c-deep-schema-explicit",
     "text": "- Inventory counts are floats: values are parsed with , so fractional counts are valid. (Observed in audit output.) - Process timers: stores and in epoch milliseconds. (Observed in audit output.) - Quest duplication guard: is used as a per-step guard to prevent re-granting rewards. (Observed in audit output.) - Extra keys tolerated: v2.1 can persist extra keys under ; validate v3 migration in QA to ensure unknown keys are ignored safely. (Observed in audit output.) - Cleanup artifact: the v2.1 import cleanup can write an empty-string inventory key. Treat as a historical artifact; observed values include . (Observed in audit output.)",
     "kind": "doc"
   },
@@ -1350,32 +1350,32 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/legacy-save-storage:v1-v21-importer-behavior-v21:17:0",
+    "id": "doc:/docs/legacy-save-storage:v1--v21-importer-behavior-v21:17:0",
     "path": "frontend/src/pages/docs/md/legacy-save-storage.md",
     "slug": "/docs/legacy-save-storage",
     "title": "Legacy saves & storage migrations",
     "heading": "v1 → v2.1 importer behavior (v2.1)",
-    "anchor": "v1-v21-importer-behavior-v21",
+    "anchor": "v1--v21-importer-behavior-v21",
     "text": "This section documents the historical v1→v2 importer so v3 QA does not assume ideal behavior. All details below are Observed in audit output unless otherwise noted.\n Route + entry points\n - Route: (audit path: ) - Svelte UI: (audit snapshot) - Migration helper: (audit snapshot)\n Trigger conditions + UI gating\n - Importer blocks if returns . (See in the audit snapshot.) - The menu entry “Import from v1” is hidden when the user owns item 85 (Early Adopter Token) or 86 (Newcomer Token). (See in the audit snapshot.)\n Inputs\n - Only v1 cookies are read ( ); v1 currency cookies and other legacy state are ignored. (Observed in audit output.) - No item ID remapping: v2.1 retains numeric item IDs and the importer assumes IDs match v1. (Observed in audit output.)\n Outputs\n - Adds items from cookies plus the Early Adopter Token (85), sets , and writes the save. (See in the audit snapshot.) - If no v1 data exists, the UI grants Newcomer Token (86) instead. (Observed in audit output.)\n Scope exclusions (not imported)\n - v1 currency balances ( ) - v1 quest cookies ( , ) - v1 process timers ( / localStorage) - \n Known issues / pitfalls (v2.1)\n - Importer overwrite bug: calls , then , then calls using the pre-import snapshot, likely overwriting the imported items + version. (See in the audit snapshot.) - Cleanup writes empty inventory id: writes an empty-id item to gameState. (See in the audit snapshot.) - Cleanup deletes all cookies: v2.1 import completion removes every cookie. (See in the audit snapshot.) - Base64 exporter can be stale: uses a module-level snapshot that is not refreshed after initialization. (See in the audit snapshot.)",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/legacy-save-storage:known-v21-pitfalls-relevant-to-v2-v3-migration:18:0",
+    "id": "doc:/docs/legacy-save-storage:known-v21-pitfalls-relevant-to-v2--v3-migration:18:0",
     "path": "frontend/src/pages/docs/md/legacy-save-storage.md",
     "slug": "/docs/legacy-save-storage",
     "title": "Legacy saves & storage migrations",
     "heading": "Known v2.1 pitfalls relevant to v2 → v3 migration",
-    "anchor": "known-v21-pitfalls-relevant-to-v2-v3-migration",
+    "anchor": "known-v21-pitfalls-relevant-to-v2--v3-migration",
     "text": "Treat these as migration warnings and QA requirements, not guarantees of v3 behavior.\n - Exporter can be stale: validate migration using , not the v2.1 base64 export. (Observed in audit output.) - Importer overwrite bug: some real saves may be missing items or version flags after import. Validate v3 migration against partial , , or data in QA. (Observed in audit output.) - Unknown keys in gameState: v2.1 does not enforce a strict schema; validate v3 migration against unknown keys in QA. (Observed in audit output.) - Cleanup artifacts: import cleanup can leave and erase all cookies, so post-import saves may have odd artifacts or missing v1 residue. (Observed in audit output.)",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/legacy-save-storage:v21-seed-profiles-for-settings-v2-localstorage:19:0",
+    "id": "doc:/docs/legacy-save-storage:v21-seed-profiles-for-v2-localstorage:19:0",
     "path": "frontend/src/pages/docs/md/legacy-save-storage.md",
     "slug": "/docs/legacy-save-storage",
     "title": "Legacy saves & storage migrations",
-    "heading": "v2.1 seed profiles for `/settings` (v2 localStorage)",
-    "anchor": "v21-seed-profiles-for-settings-v2-localstorage",
+    "heading": "v2.1 seed profiles for (v2 localStorage)",
+    "anchor": "v21-seed-profiles-for-v2-localstorage",
     "text": "Use these to seed in DevTools or the seeder. All JSON is copy/pastable. Do not use real secrets (use or placeholders).",
     "kind": "doc"
   },
@@ -1390,12 +1390,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/legacy-save-storage:qa-v21-v3-migration-checklist:23:0",
+    "id": "doc:/docs/legacy-save-storage:qa-v21--v3-migration-checklist:23:0",
     "path": "frontend/src/pages/docs/md/legacy-save-storage.md",
     "slug": "/docs/legacy-save-storage",
     "title": "Legacy saves & storage migrations",
     "heading": "QA: v2.1 → v3 migration checklist",
-    "anchor": "qa-v21-v3-migration-checklist",
+    "anchor": "qa-v21--v3-migration-checklist",
     "text": "1. Start clean: clear IndexedDB + localStorage. Confirm no legacy banner appears on v3. 2. Seed each v2.1 profile above in (no backup required); reload. 3. Verify detection UI: → Legacy save upgrades shows “Legacy v2 localStorage data detected.” 4. Merge into existing v3 save: validate additive inventory behavior and that quests/processes are preserved (no overwrites). 5. Replace into existing v3 save: validate replacement behavior and that the v3 save is written to IndexedDB after import. 6. Legacy data cleanup: removes and when IndexedDB is in use; confirm that behavior matches runtime storage mode (localStorage-only environments retain legacy keys). 7. Failure cases: - Corrupt JSON in → expect clear UX, no crash, no data deletion. - Partial (missing , , or ) → defaults restored, migration proceeds safely. - Huge counts / many items → migration completes without timeouts.",
     "kind": "doc"
   },
@@ -1420,12 +1420,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/legacy-save-storage:detection-upgrade-flow:26:0",
+    "id": "doc:/docs/legacy-save-storage:detection--upgrade-flow:26:0",
     "path": "frontend/src/pages/docs/md/legacy-save-storage.md",
     "slug": "/docs/legacy-save-storage",
     "title": "Legacy saves & storage migrations",
     "heading": "Detection & upgrade flow",
-    "anchor": "detection-upgrade-flow",
+    "anchor": "detection--upgrade-flow",
     "text": "Detection logic:\n - V1 cookies are detected on the client with (parses and ). - V2 localStorage detection reads / , parses JSON safely, and accepts either a / prefix of / or a v2-shaped payload containing , , or . - Shared detection entry point: ( ).\n Merge vs. replace semantics:\n - V1 → V3: adds counts to the current inventory (merge) or rebuilds from scratch (replace). When the upgrade flow runs, it grants the Early Adopter Token and V2 Upgrade Trophy if any v1 items were imported. - V2 → V3: replaces the current save with the legacy state, and combines inventory while preserving existing quests/processes. - Both flows update to and persist to IndexedDB.\n Cleanup behavior:\n - V1 cleanup expires each detected and cookie (see ). Other legacy cookies (ex: , ) are not cleared. - V2 cleanup deletes / during v2 → v3 migrations (when IndexedDB is in use) and also via the Delete v2 localStorage action in the Legacy Save Upgrade UI. - The Clear v3 save for testing action only removes v3 persistence data; it preserves legacy v2 / entries if they still contain v2-formatted saves.",
     "kind": "doc"
   },
@@ -1680,32 +1680,32 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/new-quests:3dprinting:21:0",
+    "id": "doc:/docs/new-quests:3dprinting-1:21:0",
     "path": "frontend/src/pages/docs/md/new-quests.md",
     "slug": "/docs/new-quests",
     "title": "New Quests in v3",
     "heading": "3dprinting",
-    "anchor": "3dprinting",
+    "anchor": "3dprinting-1",
     "text": "- 3dprinting/benchy10 - 3dprinting/benchy100 - 3dprinting/benchy25",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/new-quests:energy:22:0",
+    "id": "doc:/docs/new-quests:energy-1:22:0",
     "path": "frontend/src/pages/docs/md/new-quests.md",
     "slug": "/docs/new-quests",
     "title": "New Quests in v3",
     "heading": "energy",
-    "anchor": "energy",
+    "anchor": "energy-1",
     "text": "- energy/dSolar-100kW - energy/dSolar-10kW - energy/dSolar-1kW - energy/dWatt-1e3 - energy/dWatt-1e4 - energy/dWatt-1e5 - energy/dWatt-1e6 - energy/dWatt-1e7",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/new-quests:hydroponics:23:0",
+    "id": "doc:/docs/new-quests:hydroponics-1:23:0",
     "path": "frontend/src/pages/docs/md/new-quests.md",
     "slug": "/docs/new-quests",
     "title": "New Quests in v3",
     "heading": "hydroponics",
-    "anchor": "hydroponics",
+    "anchor": "hydroponics-1",
     "text": "- hydroponics/bucket10",
     "kind": "doc"
   },
@@ -1720,72 +1720,72 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/new-quests:aquaria:25:0",
+    "id": "doc:/docs/new-quests:aquaria-1:25:0",
     "path": "frontend/src/pages/docs/md/new-quests.md",
     "slug": "/docs/new-quests",
     "title": "New Quests in v3",
     "heading": "aquaria",
-    "anchor": "aquaria",
+    "anchor": "aquaria-1",
     "text": "- aquaria/goldfish",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/new-quests:completionist:26:0",
+    "id": "doc:/docs/new-quests:completionist-1:26:0",
     "path": "frontend/src/pages/docs/md/new-quests.md",
     "slug": "/docs/new-quests",
     "title": "New Quests in v3",
     "heading": "completionist",
-    "anchor": "completionist",
+    "anchor": "completionist-1",
     "text": "- completionist/v2",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/new-quests:energy:27:0",
+    "id": "doc:/docs/new-quests:energy-2:27:0",
     "path": "frontend/src/pages/docs/md/new-quests.md",
     "slug": "/docs/new-quests",
     "title": "New Quests in v3",
     "heading": "energy",
-    "anchor": "energy",
+    "anchor": "energy-2",
     "text": "- energy/solar - energy/solar-1kWh",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/new-quests:hydroponics:28:0",
+    "id": "doc:/docs/new-quests:hydroponics-2:28:0",
     "path": "frontend/src/pages/docs/md/new-quests.md",
     "slug": "/docs/new-quests",
     "title": "New Quests in v3",
     "heading": "hydroponics",
-    "anchor": "hydroponics",
+    "anchor": "hydroponics-2",
     "text": "- hydroponics/basil",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/new-quests:rocketry:29:0",
+    "id": "doc:/docs/new-quests:rocketry-1:29:0",
     "path": "frontend/src/pages/docs/md/new-quests.md",
     "slug": "/docs/new-quests",
     "title": "New Quests in v3",
     "heading": "rocketry",
-    "anchor": "rocketry",
+    "anchor": "rocketry-1",
     "text": "- rocketry/firstlaunch - rocketry/parachute",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/new-quests:ubi:30:0",
+    "id": "doc:/docs/new-quests:ubi-1:30:0",
     "path": "frontend/src/pages/docs/md/new-quests.md",
     "slug": "/docs/new-quests",
     "title": "New Quests in v3",
     "heading": "ubi",
-    "anchor": "ubi",
+    "anchor": "ubi-1",
     "text": "- ubi/basicincome",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/new-quests:welcome:31:0",
+    "id": "doc:/docs/new-quests:welcome-1:31:0",
     "path": "frontend/src/pages/docs/md/new-quests.md",
     "slug": "/docs/new-quests",
     "title": "New Quests in v3",
     "heading": "welcome",
-    "anchor": "welcome",
+    "anchor": "welcome-1",
     "text": "- welcome/howtodoquests",
     "kind": "doc"
   },
@@ -1830,12 +1830,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:4:0",
+    "id": "doc:/docs/npcs:sample-dialogue-1:4:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-1",
     "text": "- \"I'm Sydney—FDM rigs are my playground.\" - \"Bed off-kilter? Slide paper under the nozzle and level it.\" - \"Claim your printer and we'll tune it together.\" - \"Phone stand time: load PLA and hit print.\" - \"Nice work—hands free for the next build.\"",
     "kind": "doc"
   },
@@ -1850,12 +1850,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:6:0",
+    "id": "doc:/docs/npcs:sample-dialogue-2:6:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-2",
     "text": "- \"Hey friend! I'm Nova! I'm sure you've met some of my colleagues!\" - \"Luckily I've already launched this exact rocket before! I estimate around 35 meters in perfect conditions.\" - \"Nahhh, you're good! According to the FAA, without additional paperwork, the rocket may weigh no more than 1500 grams.\" - \"Well first you've gotta print the rocket!\" - \"Before launch, check the wind; even a breeze can skew the trajectory.\" - \"Sure, but where's the fun in that? You've got that fancy little 3D printer Sydney gave you.\"",
     "kind": "doc"
   },
@@ -1870,12 +1870,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:8:0",
+    "id": "doc:/docs/npcs:sample-dialogue-3:8:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-3",
     "text": "- \"Hey there! I'm Hydro, your local hydroponics expert!\" - \"Oh I could talk for hours, but the short version? Roots bathe in nutrient-rich water.\" - \"Excellent! First things first, I need you to accept this hydroponics tub.\" - \"Now that you've got your hydroponics tub, you'll need some dechlorinated water.\" - \"I know, right? It's almost like the gamedev is awkwardly reusing existing game systems.\" - \"Let's try stevia next. Its leaves are unbelievably sweet!\" - \"If the pH drifts, a splash of lemon juice or baking soda can nudge it back on track.\" - \"Yellow leaves? Check nutrient levels; a pinch of minerals usually sets things right.\"",
     "kind": "doc"
   },
@@ -1890,12 +1890,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:10:0",
+    "id": "doc:/docs/npcs:sample-dialogue-4:10:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-4",
     "text": "- \"Hey there! I'm Orion. Want to see how easy electronics can be? Let's build a simple LED circuit together.\" - \"You'll need an LED, a 330 ohm resistor, a breadboard, and a battery pack or USB power source.\" - \"Place the LED on the breadboard and connect the resistor in series with the long leg.\" - \"Hey there! Orion here. Ready to make this LED blink with a microcontroller? Set up on a non-conductive surface and keep power disconnected while wiring.\" - \"Plug the board into the laptop with the USB cable, open the Arduino IDE, load the Blink example, select the correct board and port, then hit Upload.\" - \"Need a server check? I'm happy to spin up a fresh Pi and deploy the stack.\"",
     "kind": "doc"
   },
@@ -1910,12 +1910,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:12:0",
+    "id": "doc:/docs/npcs:sample-dialogue-5:12:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-5",
     "text": "- \"Vega here—Walstad tanks give plants what they need, nothing more.\" - \"Start with a 40 L tank, organic soil capped in gravel, and hardy stems.\" - \"Once cycled, a handful of dwarf shrimp keeps algae down.\" - \"Guppies breed fast; thick hornwort hides the fry.\" - \"Log pH weekly so you spot swings before the fish do.\"",
     "kind": "doc"
   },
@@ -1930,12 +1930,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:14:0",
+    "id": "doc:/docs/npcs:sample-dialogue-6:14:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-6",
     "text": "- \"Phoenix here—lab coat on, let's keep it green.\" - \"Acid into water, slow and steady.\" - \"Sugar fuel beats perchlorates for clean thrust.\" - \"Label that beaker; mystery mixes belong in myths.\" - \"Spent solvent? We reclaim or neutralize—nothing down the drain.\" - \"Hey, I'm Phoenix—chemistry without pollution is my specialty.\" - \"Safety goggles on; propellant fumes bite harder than dragons.\" - \"We test in micro batches so a bad mix only scorches a spoon.\" - \"Keep the oxidizer chilled; warm tanks turn engines into fireworks.\" - \"Log every measurement; precision beats luck in the lab.\" - \"When the exhaust runs clear, you know we've done it right.\" - \"Next up, we'll brew propellant that pushes rockets without scorching the skies.\" - \"Spent fuel? We'll distill what's usable and neutralize the rest.\"",
     "kind": "doc"
   },
@@ -1950,12 +1950,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:16:0",
+    "id": "doc:/docs/npcs:sample-dialogue-7:16:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-7",
     "text": "- \"Need a hand? I'm Atlas—built for muscle and finesse.\" - \"Clear the path and keep your back straight; I'll take the weight.\" - \"Lift on my count: one, two, three.\" - \"Set it down gently; glass likes patience.\" - \"Call anytime you need more torque.\" - \"Need leverage? I always carry an extra fulcrum.\"",
     "kind": "doc"
   },
@@ -1970,12 +1970,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:18:0",
+    "id": "doc:/docs/npcs:sample-dialogue-8:18:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-8",
     "text": "- \"Guild carpenter Cedar here. Bench secured? Good—now we can cut.\" - \"Measure twice, cut once; the tape never lies.\" - \"Let the saw chew while your fingers stay clear.\" - \"Sand that birdhouse so the wrens leave with all their feathers.\" - \"Step stool's next; every rung teaches balance and patience.\" - \"A wipe of oil and the grain tells its story.\" - \"Clamp the board; wandering wood wrecks cuts.\"",
     "kind": "doc"
   },
@@ -1990,12 +1990,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:20:0",
+    "id": "doc:/docs/npcs:sample-dialogue-9:20:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-9",
     "text": "- \"Evening! I'm Lyra, your star navigator.\" - \"Polaris anchors the sky; find it and you're oriented.\" - \"City glow spoils the view—set the scope under dark skies.\" - \"Need coordinates? I've charted them since I could hold a compass.\" - \"A 15-second exposure will snag that comet tail.\" - \"Check the star chart—if a dot's missing, we might have found a new comet.\" - \"Two burns make a Hohmann transfer; easy once you see it.\" - \"If the mount drifts, tweak the RA knob until the star freezes.\"",
     "kind": "doc"
   },
@@ -2010,12 +2010,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:22:0",
+    "id": "doc:/docs/npcs:sample-dialogue-10:22:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-10",
     "text": "- \"Sun's up! I'm Helio. Let's put that star to work for you.\" - \"Start by unfolding the panel and angling it toward the brightest patch of sky.\" - \"See that meter? If it's in the green, you're charging at peak efficiency.\" - \"Track the sun with that dial—every degree boosts your charge.\" - \"A cloud rolled in—no worries, the battery will bridge the gap.\" - \"Shade from a single leaf can tank output, so keep the array clear.\" - \"Keep the cells clean and they'll power your adventures for years.\" - \"If the charge dips, track usage to hunt the phantom drain.\"",
     "kind": "doc"
   },
@@ -2030,12 +2030,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:24:0",
+    "id": "doc:/docs/npcs:sample-dialogue-11:24:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-11",
     "text": "- \"Call me Nimbus—skies are my spreadsheet.\" - \"An anemometer never lies; take a reading before you light the fuse.\" - \"Pressure falling? That squall will hit before your second stage.\" - \"We scrub launches if gusts top 20 knots; rockets prefer calm applause.\" - \"Log your data; today's breeze becomes tomorrow's forecast.\"",
     "kind": "doc"
   },
@@ -2050,12 +2050,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:26:0",
+    "id": "doc:/docs/npcs:sample-dialogue-12:26:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-12",
     "text": "- \"Another tale for the ledger? Sign here.\" - \"Details matter; rumors fade.\" - \"Your diagram's logged—future builders will thank you.\" - \"That relic predates the guild; handle it gently.\" - \"Past mission data? I've cataloged every triumph and misstep.\"",
     "kind": "doc"
   },
@@ -2070,12 +2070,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:28:0",
+    "id": "doc:/docs/npcs:sample-dialogue-13:28:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-13",
     "text": "- \"This is Echo on comms; I read you loud and clear.\" - \"Ping the relay buoy—if it blinks green, the link's solid.\" - \"Getting static? Rotate your antenna toward the station.\" - \"We log every packet; lose one and I'll know.\" - \"Need eyes on the horizon? I'll swing a drone that way.\" - \"Storm rolling in; hop to channel two if comms crackle.\"",
     "kind": "doc"
   },
@@ -2090,12 +2090,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:30:0",
+    "id": "doc:/docs/npcs:sample-dialogue-14:30:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-14",
     "text": "- \"Hey, I'm Lumen. Let's get that scrape cleaned up.\" - \"Pressure and a bandage—most bleeding stops right there.\" - \"Hydration is your friend; drink before you feel thirsty.\" - \"Stitches? No worries, I've got a steady hand.\" - \"Ping me if anything aches later; I log every symptom.\"",
     "kind": "doc"
   },
@@ -2110,12 +2110,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:32:0",
+    "id": "doc:/docs/npcs:sample-dialogue-15:32:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-15",
     "text": "- \"Hiya! Patch here—spot a loose bolt?\" - \"Hold still; this micro-welder won't sting.\" - \"I scavenged this gasket from an airlock door; works like new.\" - \"Call me when the gears start grinding; tinkering's my idea of fun.\"\n - \"Got a stripped screw? I'll machine a new head on the fly.\"",
     "kind": "doc"
   },
@@ -2130,12 +2130,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/npcs:sample-dialogue:34:0",
+    "id": "doc:/docs/npcs:sample-dialogue-16:34:0",
     "path": "frontend/src/pages/docs/md/npcs.md",
     "slug": "/docs/npcs",
     "title": "NPCs",
     "heading": "Sample Dialogue",
-    "anchor": "sample-dialogue",
+    "anchor": "sample-dialogue-16",
     "text": "- \"Call me Byte—if it's on the network, I can trace it.\" - \"Run linters before you push; sloppy code invites gremlins.\" - \"Encrypted channels only; plain text is for pirates.\" - \"Found a breach? Pull the plug and I'll seal the hole.\" - \"Logs tell the story; let's read them before the attackers do.\" - \"Zero-trust isn't hype—it's how we sleep at night.\"\n img { float: left; width: 150px; margin: 10px; border-radius: 20px; }\n p { font-size: 1.3rem; }",
     "kind": "doc"
   },
@@ -2200,12 +2200,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/outages/2025-12-02-v3-ui-regressions:lessons-follow-ups:3:0",
+    "id": "doc:/docs/outages/2025-12-02-v3-ui-regressions:lessons--follow-ups:3:0",
     "path": "frontend/src/pages/docs/md/outages/2025-12-02-v3-ui-regressions.md",
     "slug": "/docs/outages/2025-12-02-v3-ui-regressions",
     "title": "2025-12-02 – v3 UI regressions",
     "heading": "Lessons / Follow-ups",
-    "anchor": "lessons-follow-ups",
+    "anchor": "lessons--follow-ups",
     "text": "- Pair structural UI changes with regression tests that assert layout regions and navigation entries. - Keep navigation in sync with the active feature set to avoid dead ends. - Persist user-facing preferences (like theme) in one place and hydrate them before rendering to prevent flashes of incorrect styles.",
     "kind": "doc"
   },
@@ -2250,12 +2250,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/outages/2025-12-03-service-worker-stale-cache:lessons-follow-ups:4:0",
+    "id": "doc:/docs/outages/2025-12-03-service-worker-stale-cache:lessons--follow-ups:4:0",
     "path": "frontend/src/pages/docs/md/outages/2025-12-03-service-worker-stale-cache.md",
     "slug": "/docs/outages/2025-12-03-service-worker-stale-cache",
     "title": "2025-12-03 – Service worker stale cache",
     "heading": "Lessons / Follow-ups",
-    "anchor": "lessons-follow-ups",
+    "anchor": "lessons--follow-ups",
     "text": "- Service workers must change between deployments to trigger browser update detection. - Build-time injection is more reliable than runtime for cache versioning. - E2E tests should verify the complete service worker lifecycle, not just unit-level behavior. - Cache version mismatches between HTML and assets will cause 404s if the SW doesn't update. - Always test deployment scenarios in staging to catch cache invalidation issues before production.",
     "kind": "doc"
   },
@@ -2664,7 +2664,7 @@
     "path": "frontend/src/pages/docs/md/processes.md",
     "slug": "/docs/processes",
     "title": "Processes",
-    "heading": "NOT_STARTED",
+    "heading": "NOTSTARTED",
     "anchor": "notstarted",
     "text": "In this state, a process is waiting to be started. You can start a process by clicking the Start button. If you do not have the required items, the Start button will do nothing. When you click Start, the items in the Consumes list will be removed from your inventory and the process will begin.",
     "kind": "doc"
@@ -2674,7 +2674,7 @@
     "path": "frontend/src/pages/docs/md/processes.md",
     "slug": "/docs/processes",
     "title": "Processes",
-    "heading": "IN_PROGRESS",
+    "heading": "INPROGRESS",
     "anchor": "inprogress",
     "text": "In this state, the process is active. You have the option to terminate an active process by clicking the Cancel button. If you cancel a process, your items will be returned to you. A countdown to the process's completion and a progress bar are also displayed in this state.",
     "kind": "doc"
@@ -2704,7 +2704,7 @@
     "path": "frontend/src/pages/docs/md/prompts-codex.md",
     "slug": "/docs/prompts-codex",
     "title": "Codex Prompt Library",
-    "heading": "Codex prompt library for the _dspace_ repo",
+    "heading": "Codex prompt library for the dspace repo",
     "anchor": "codex-prompt-library-for-the-dspace-repo",
     "text": "All detailed Codex prompt guides now live in the repository under . This page stays in the in-game handbook as a quick index so contributors can jump straight to the canonical Markdown files and keep them in sync. Need a prompt fast? Browse the list below, open the linked Markdown file in GitHub, and copy the snippet you need. Each guide follows the same conventions: scope work to one or two files, be explicit about tests to run, stop the prompt when the spec is complete, and scan staged changes with before committing.",
     "kind": "doc"
@@ -2930,12 +2930,12 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/quest-guidelines:in-game-editor-flow-create-edit:15:0",
+    "id": "doc:/docs/quest-guidelines:in-game-editor-flow-create--edit:15:0",
     "path": "frontend/src/pages/docs/md/quest-guidelines.md",
     "slug": "/docs/quest-guidelines",
     "title": "Quest Development Guidelines",
     "heading": "In-game editor flow (create + edit)",
-    "anchor": "in-game-editor-flow-create-edit",
+    "anchor": "in-game-editor-flow-create--edit",
     "text": "Use the in-game quest editor to create and update custom quests that are stored locally in your browser's IndexedDB custom content database (with an in-memory fallback if IndexedDB is not available, so changes will not persist after refresh).\n Create a quest\n 1. Open . 2. Fill out the quest metadata (title, description, image, NPC). 3. Add dialogue nodes and options (goto, finish, process, or grantsItems) and choose the start node. 4. Save the quest to store it locally and receive a link to view it.\n Edit a quest\n 1. Open . 2. Click Edit on a custom quest (built-in quests are read-only); this routes to . 3. Update the fields and save to update the local IndexedDB record.\n Validation and image handling\n - Titles must be unique and at least 3 characters; descriptions must be at least 10 characters. - NPC selection defaults to Mission Control if left blank. - Dialogue node IDs must be unique, nodes require text, and each node needs at least one option. - Goto options must target existing node IDs; process options require a process ID. - Required and granted item rows must include an item ID and positive count (the same applies to quest reward items). - Image uploads are downsampled into square JPEG data URLs (target 50KB). If you leave the image blank on a new quest, the editor uses as the default. - The simulation summary warns if dialogue paths cannot reach a finish option, but it does not block saving.",
     "kind": "doc"
   },
@@ -3420,82 +3420,82 @@
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/team:futuroptimisthttpswwwthreadscomfuturoptimist:0:0",
+    "id": "doc:/docs/team:futuroptimist:0:0",
     "path": "frontend/src/pages/docs/md/team.md",
     "slug": "/docs/team",
     "title": "Meet the team",
-    "heading": "[Futuroptimist](https://www.threads.com/@futuroptimist)",
-    "anchor": "futuroptimisthttpswwwthreadscomfuturoptimist",
+    "heading": "Futuroptimist",
+    "anchor": "futuroptimist",
     "text": "The Threads avatar of Futuroptimist\n Futuroptimist is the founding human developer of the game. Software engineer by day, and also by night. You can find him saying weird stuff about Dyson swarms on Threads.",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/team:openai-codexhttpsopenaicomcodex:1:0",
+    "id": "doc:/docs/team:openai-codex:1:0",
     "path": "frontend/src/pages/docs/md/team.md",
     "slug": "/docs/team",
     "title": "Meet the team",
-    "heading": "[OpenAI Codex](https://openai.com/codex)",
-    "anchor": "openai-codexhttpsopenaicomcodex",
+    "heading": "OpenAI Codex",
+    "anchor": "openai-codex",
     "text": "Placeholder image for OpenAI Codex\n OpenAI Codex helps automate coding tasks and quickly explore implementation ideas, making it a handy companion for prototyping gameplay systems and content tooling.",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/team:github-copilot-agenthttpsgithubcomfeaturescopilot:2:0",
+    "id": "doc:/docs/team:github-copilot-agent:2:0",
     "path": "frontend/src/pages/docs/md/team.md",
     "slug": "/docs/team",
     "title": "Meet the team",
-    "heading": "[GitHub Copilot Agent](https://github.com/features/copilot)",
-    "anchor": "github-copilot-agenthttpsgithubcomfeaturescopilot",
+    "heading": "GitHub Copilot Agent",
+    "anchor": "github-copilot-agent",
     "text": "Placeholder image for GitHub Copilot Agent\n GitHub Copilot Agent assists with multi-step coding workflows, codebase navigation, and cleanup, which keeps the team focused on higher-level design and iteration.",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/team:nano-banana-prohttpsbloggoogleinnovation-and-aiproductsnano-banana-pro:3:0",
+    "id": "doc:/docs/team:nano-banana-pro:3:0",
     "path": "frontend/src/pages/docs/md/team.md",
     "slug": "/docs/team",
     "title": "Meet the team",
-    "heading": "[Nano Banana Pro](https://blog.google/innovation-and-ai/products/nano-banana-pro/)",
-    "anchor": "nano-banana-prohttpsbloggoogleinnovation-and-aiproductsnano-banana-pro",
+    "heading": "Nano Banana Pro",
+    "anchor": "nano-banana-pro",
     "text": "Placeholder image for Nano Banana Pro\n Nano Banana Pro provides fast, lightweight creative experiments for asset ideation, giving the team a quick way to explore visual directions before polishing final art.",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/team:greptilehttpsgreptilecom:4:0",
+    "id": "doc:/docs/team:greptile:4:0",
     "path": "frontend/src/pages/docs/md/team.md",
     "slug": "/docs/team",
     "title": "Meet the team",
-    "heading": "[Greptile](https://greptile.com)",
-    "anchor": "greptilehttpsgreptilecom",
+    "heading": "Greptile",
+    "anchor": "greptile",
     "text": "Placeholder image for Greptile\n Greptile is used for AI-powered code reviews, catching inconsistencies and suggesting improvements so the team can ship confidently.",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/team:chatgpthttpschatopenaicom:5:0",
+    "id": "doc:/docs/team:chatgpt:5:0",
     "path": "frontend/src/pages/docs/md/team.md",
     "slug": "/docs/team",
     "title": "Meet the team",
-    "heading": "[ChatGPT](https://chat.openai.com)",
-    "anchor": "chatgpthttpschatopenaicom",
+    "heading": "ChatGPT",
+    "anchor": "chatgpt",
     "text": "Variation of the ChatGPT logo\n ChatGPT is a computer program that has been trained to understand and generate human-like text. It was created by OpenAI and is capable of answering questions, completing tasks, and even generating creative content like stories and poems. ChatGPT can interact with people in a conversational manner and is often used for things like customer service, personal assistants, and more.",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/team:dall-e-2httpsopenaicomdall-e-2:6:0",
+    "id": "doc:/docs/team:dall-e-2:6:0",
     "path": "frontend/src/pages/docs/md/team.md",
     "slug": "/docs/team",
     "title": "Meet the team",
-    "heading": "[DALL-E 2](https://openai.com/dall-e-2)",
-    "anchor": "dall-e-2httpsopenaicomdall-e-2",
+    "heading": "DALL-E 2",
+    "anchor": "dall-e-2",
     "text": "Variation of the DALL-E 2 logo\n DALL-E is an AI system that has been trained to generate original images from textual descriptions. It was developed by OpenAI and can create diverse and imaginative pictures from just a few words. For example, if you asked DALL-E to 'create an image of a toaster riding a bicycle', it would generate an entirely new image of exactly that! DALL-E's ability to generate unique and creative images makes it useful for fields such as advertising, product design, and more.",
     "kind": "doc"
   },
   {
-    "id": "doc:/docs/team:scenariohttpsscenariocom:7:0",
+    "id": "doc:/docs/team:scenario:7:0",
     "path": "frontend/src/pages/docs/md/team.md",
     "slug": "/docs/team",
     "title": "Meet the team",
-    "heading": "[Scenario](https://scenario.com)",
-    "anchor": "scenariohttpsscenariocom",
+    "heading": "Scenario",
+    "anchor": "scenario",
     "text": "Variation of the Scenario logo\n Scenario is a generative model web app that allows users to train AI models to create specific objects and styles. With an easy-to-use interface, users can upload their own data and train models to generate outputs that match their desired styles and objects. For example, if you wanted to train a model to generate different variations of cats, you could upload pictures of cats and fine-tune the model until it generates new, original images of cats that match the styles and characteristics you want. The versatility of Scenario makes it a useful tool for artists, designers, and anyone looking to generate unique and custom outputs.",
     "kind": "doc"
   },
@@ -3638,6 +3638,26 @@
     "anchor": "user-journeys",
     "text": "This document tracks major journeys in DSPACE and whether a Playwright test covers each path. Tests under are placeholders for journeys without automation; when a journey gains coverage, move its spec into with to preserve history. Entries are sorted alphabetically by journey name, and new journeys should include a placeholder spec in until coverage exists.\n | Journey | Playwright coverage | Test file | | -------------------------- | ------------------- | ------------------------------------------------- | | About page loads | Yes | | | Authentication flow | Yes | | | Built-in quest details | Yes | | | Changelog page loads | Yes | | | Chat persona switching | Yes | | | Cloud sync | Yes | | | Constellations quest | Yes | | | Cookie consent flow | Yes | | | Custom backup | Yes | | | Custom content integration | Yes | | | Dark mode toggle | Yes | | | Docs landing page loads | Yes | | | Docs navigation | Yes | | | Docs search | Yes | | | Error pages | Yes | | | Failover status page | Yes | | | Glossary page loads | Yes | | | Home page loads | Yes | | | Item preview | Yes | | | Legacy data import | Yes | | | Logout flow | Yes | | | Manage items | Yes | | | Manage processes | Yes | | | Manage quests | Yes | | | Manage quests search | Yes | | | Mobile item form | Yes | | | Mobile process form | Yes | | | Mobile quest form | Yes | | | Page structure | Yes | | | Process creation | Yes | | | Process preview | Yes | | | Profile avatar selection | Yes | | | Profile page loads | Yes | | | Quest chat | Yes | | | Quest form validation | Yes | | | Quest list navigation | Yes | | | Quest PR form | Yes | | | Quest PR validation | Yes | | | Quest success message | Yes | | | Settings page loads | Yes | | | Shop workflow | Yes | | | Svelte component hydration | Yes | | | Touch item selector | Yes | | | Touch menu navigation | Yes | | | Tutorial quest run | Yes | | | UI responsiveness | Yes | | | User journeys doc loads | Yes | |",
     "kind": "doc"
+  },
+  {
+    "id": "changelog:/changelog:changelog:0:0",
+    "path": "frontend/src/pages/docs/md/changelog.md",
+    "slug": "/changelog",
+    "title": "Changelog",
+    "heading": "Changelog",
+    "anchor": "changelog",
+    "text": "Stay up to date with the latest improvements to DSPACE. Every entry links to a full set of release notes so you can dive into gameplay updates, docs refreshes, and tooling changes as they land.",
+    "kind": "changelog"
+  },
+  {
+    "id": "changelog:/changelog:changelog:2:0",
+    "path": "frontend/src/pages/docs/md/changelog.md",
+    "slug": "/changelog",
+    "title": "Changelog",
+    "heading": "Looking for older notes?",
+    "anchor": "changelog",
+    "text": "Browse the dated entries in this folder to revisit the full history of DSPACE updates. You can also skim the complete changelog archive to scroll through every release in one place. Each update highlights the quests, systems, and developer tools that shipped in that window.",
+    "kind": "changelog"
   },
   {
     "id": "changelog:/changelog:20221003:0:0",

@@ -5,6 +5,7 @@ import MiniSearch from 'minisearch';
 import { glob } from 'glob';
 import yaml from 'yaml';
 import { execSync } from 'node:child_process';
+import GithubSlugger from 'github-slugger';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,6 +15,13 @@ const DOCS_DIR = path.join(repoRoot, 'frontend/src/pages/docs/md');
 const ROUTES_PATH = path.join(repoRoot, 'docs/ROUTES.md');
 const CHANGELOG_DIR = path.join(DOCS_DIR, 'changelog');
 const OUTPUT_DIR = path.join(repoRoot, 'frontend/src/generated/rag');
+const CHANGELOG_CANDIDATES = [
+    path.join(repoRoot, 'docs/CHANGELOG.md'),
+    path.join(repoRoot, 'docs/changelog.md'),
+    path.join(repoRoot, 'docs/release-notes.md'),
+    path.join(repoRoot, 'frontend/src/pages/docs/md/changelog*.md'),
+    path.join(repoRoot, 'frontend/src/pages/docs/md/changelog/*.md'),
+];
 
 const MAX_CHUNK_LENGTH = 6000;
 const CHUNK_SPLIT_MIN = 2000;
@@ -51,19 +59,6 @@ const parseFrontmatter = (content) => {
 };
 
 const normalizeHeading = (value) => String(value || '').trim();
-
-const slugifyHeading = (value) => {
-    const normalized = normalizeHeading(value)
-        .normalize('NFKD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase();
-
-    return normalized
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '');
-};
 
 const stripMarkdownToText = (markdown) => {
     if (!markdown) {
@@ -187,14 +182,24 @@ const splitMarkdownIntoSections = (markdown) => {
 
 const resolveDocSlug = (frontmatter, filePath) => {
     const slug = String(frontmatter?.slug ?? '').trim();
+    if (!slug) {
+        throw new Error(`Missing docs slug in ${path.relative(repoRoot, filePath)}`);
+    }
+    return slug.toLowerCase();
+};
+
+const resolveChangelogSlug = (frontmatter, filePath) => {
+    const slug = String(frontmatter?.slug ?? '').trim();
     if (slug) {
         return slug.toLowerCase();
     }
+
     return path.basename(filePath, path.extname(filePath)).toLowerCase();
 };
 
 const resolveDocSlugBase = (frontmatter, filePath) => {
     const slugValue = resolveDocSlug(frontmatter, filePath);
+
     if (slugValue.startsWith('/docs/')) {
         return slugValue;
     }
@@ -205,10 +210,33 @@ const resolveDocSlugBase = (frontmatter, filePath) => {
     const relativePath = path.relative(DOCS_DIR, filePath);
     const normalizedRelative = relativePath.split(path.sep).join('/');
     const relativeDir = path.posix.dirname(normalizedRelative);
-    const nestedSlug =
-        relativeDir === '.' ? slugValue : `${relativeDir}/${slugValue}`;
 
-    return `/docs/${nestedSlug}`;
+    if (relativeDir === '.') {
+        return `/docs/${slugValue}`;
+    }
+
+    if (relativeDir === 'outages') {
+        return `/docs/outages/${slugValue}`;
+    }
+
+    throw new Error(
+        `Unhandled docs route for ${path.relative(repoRoot, filePath)} (dir: ${relativeDir})`
+    );
+};
+
+const resolveHeadingText = (heading) => stripMarkdownToText(heading);
+
+const resolveSectionAnchor = ({ slugger, heading, anchorBase }) => {
+    if (anchorBase) {
+        return anchorBase;
+    }
+
+    const normalizedHeading = normalizeHeading(resolveHeadingText(heading));
+    if (!normalizedHeading) {
+        return 'top';
+    }
+
+    return slugger.slug(normalizedHeading) || 'top';
 };
 
 const resolveDocTitle = (frontmatter, content) => {
@@ -232,12 +260,13 @@ const chunkDocument = ({
     const title = resolveDocTitle(frontmatter, content);
     const slug = slugBase;
     const pathRelative = path.relative(repoRoot, filePath).split(path.sep).join('/');
+    const slugger = new GithubSlugger();
 
     const chunks = [];
 
     sections.forEach((section, sectionIndex) => {
-        const heading = normalizeHeading(section.heading) || title;
-        const anchor = anchorBase || slugifyHeading(section.heading) || 'top';
+        const heading = normalizeHeading(resolveHeadingText(section.heading)) || title;
+        const anchor = resolveSectionAnchor({ slugger, heading: section.heading, anchorBase });
         const plainText = stripMarkdownToText(section.content);
         const textChunks = splitTextByLength(plainText || '');
 
@@ -259,20 +288,73 @@ const chunkDocument = ({
     return chunks;
 };
 
+const discoverChangelogSources = async () => {
+    const sources = new Set();
+
+    for (const candidate of CHANGELOG_CANDIDATES) {
+        if (candidate.includes('*')) {
+            const matches = await glob(candidate, { nodir: true });
+            matches.forEach((match) => sources.add(match));
+            continue;
+        }
+
+        try {
+            const stat = await fs.stat(candidate);
+            if (stat.isFile()) {
+                sources.add(candidate);
+            }
+        } catch (error) {
+            // Ignore missing optional candidates.
+        }
+    }
+
+    const sorted = Array.from(sources).sort();
+
+    if (!sorted.length) {
+        throw new Error(
+            `No changelog or release notes sources found. Checked: ${CHANGELOG_CANDIDATES.join(
+                ', '
+            )}`
+        );
+    }
+
+    return sorted;
+};
+
+const isV3ChangelogSource = ({ filePath, frontmatter, body }) => {
+    const lowerPath = filePath.toLowerCase();
+    if (lowerPath.includes('v3')) {
+        return true;
+    }
+
+    const frontmatterText = [
+        frontmatter?.version,
+        frontmatter?.tagline,
+        frontmatter?.summary,
+        frontmatter?.title,
+    ]
+        .filter(Boolean)
+        .join(' ');
+
+    if (/\bv3\b/i.test(frontmatterText)) {
+        return true;
+    }
+
+    const hasV3Header = body
+        .split('\n')
+        .some((line) => /^#{1,6}\s+.*\bv3\b/i.test(line));
+
+    return hasV3Header;
+};
+
 const gatherDocs = async () => {
     await ensureFileExists(ROUTES_PATH, 'Routes index');
 
     const docFiles = await glob(path.join(DOCS_DIR, '**/*.md'), { nodir: true });
-    const changelogFiles = await glob(path.join(CHANGELOG_DIR, '*.md'), { nodir: true });
-
-    if (!changelogFiles.length) {
-        throw new Error(`No changelog entries found in ${CHANGELOG_DIR}`);
-    }
-
-    const v3ChangelogPath = path.join(CHANGELOG_DIR, '20260301.md');
-    await ensureFileExists(v3ChangelogPath, 'v3 changelog');
+    const changelogFiles = await discoverChangelogSources();
 
     const chunks = [];
+    const v3ChangelogSources = [];
 
     const sortedDocFiles = docFiles.sort();
     for (const filePath of sortedDocFiles) {
@@ -295,11 +377,14 @@ const gatherDocs = async () => {
         );
     }
 
-    const sortedChangelogFiles = changelogFiles.sort();
-    for (const filePath of sortedChangelogFiles) {
+    for (const filePath of changelogFiles) {
         const raw = await readFileSafe(filePath);
         const { frontmatter, body } = parseFrontmatter(raw);
-        const entrySlug = resolveDocSlug(frontmatter, filePath);
+        const entrySlug = resolveChangelogSlug(frontmatter, filePath);
+        const qualifiesAsV3 = isV3ChangelogSource({ filePath, frontmatter, body });
+        if (qualifiesAsV3) {
+            v3ChangelogSources.push(filePath);
+        }
         const slugBase = '/changelog';
 
         chunks.push(
@@ -311,6 +396,14 @@ const gatherDocs = async () => {
                 slugBase,
                 anchorBase: entrySlug,
             })
+        );
+    }
+
+    if (!v3ChangelogSources.length) {
+        throw new Error(
+            `No v3 changelog or release notes sources found in: ${changelogFiles
+                .map((filePath) => path.relative(repoRoot, filePath))
+                .join(', ')}`
         );
     }
 
@@ -326,7 +419,7 @@ const gatherDocs = async () => {
         })
     );
 
-    return chunks;
+    return { chunks, changelogFiles, v3ChangelogSources };
 };
 
 const buildIndex = (chunks) => {
@@ -352,7 +445,7 @@ const getGitSha = () => {
     }
 };
 
-const writeArtifacts = async (chunks, index) => {
+const writeArtifacts = async (chunks, index, metaSources) => {
     await fs.mkdir(OUTPUT_DIR, { recursive: true });
 
     const chunksPath = path.join(OUTPUT_DIR, 'docs_chunks.json');
@@ -365,6 +458,7 @@ const writeArtifacts = async (chunks, index) => {
             docs: path.relative(repoRoot, DOCS_DIR).split(path.sep).join('/'),
             changelog: path.relative(repoRoot, CHANGELOG_DIR).split(path.sep).join('/'),
         },
+        sources: metaSources,
         counts: {
             totalChunks: chunks.length,
             docs: chunks.filter((chunk) => chunk.kind === 'doc').length,
@@ -382,7 +476,7 @@ const writeArtifacts = async (chunks, index) => {
 };
 
 const main = async () => {
-    const chunks = await gatherDocs();
+    const { chunks, changelogFiles, v3ChangelogSources } = await gatherDocs();
 
     const filtered = chunks
         .map((chunk) => ({
@@ -396,7 +490,14 @@ const main = async () => {
     }
 
     const index = buildIndex(filtered);
-    await writeArtifacts(filtered, index);
+    await writeArtifacts(filtered, index, {
+        changelog: changelogFiles.map((filePath) =>
+            path.relative(repoRoot, filePath).split(path.sep).join('/')
+        ),
+        v3Changelog: v3ChangelogSources.map((filePath) =>
+            path.relative(repoRoot, filePath).split(path.sep).join('/')
+        ),
+    });
 
     console.log(
         `Generated ${filtered.length} chunks into ${path.relative(repoRoot, OUTPUT_DIR)}/`
