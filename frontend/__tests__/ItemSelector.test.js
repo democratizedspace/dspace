@@ -1,4 +1,3 @@
-import { fireEvent } from '@testing-library/dom';
 import ItemSelector from '../src/components/svelte/ItemSelector.svelte';
 
 describe('ItemSelector Component', () => {
@@ -112,29 +111,6 @@ describe('ItemSelector Component', () => {
         const editButton = container.querySelector('.edit-button');
         expect(editButton).toBeTruthy();
         editButton.click();
-
-        await new Promise((resolve) => setTimeout(resolve, 0));
-        itemsList = container.querySelector('.items-list');
-        expect(itemsList).toBeTruthy();
-    });
-
-    test('touch interaction opens the listbox without immediately closing', async () => {
-        new ItemSelector({
-            target: container,
-            props: {
-                items: mockItems,
-                selectedItemId: 'item-2',
-                label: 'Select Item',
-            },
-        });
-
-        let itemsList = container.querySelector('.items-list');
-        expect(itemsList).toBeFalsy();
-
-        const editButton = container.querySelector('.edit-button');
-        expect(editButton).toBeTruthy();
-        await fireEvent.touchStart(editButton);
-        await fireEvent.click(editButton);
 
         await new Promise((resolve) => setTimeout(resolve, 0));
         itemsList = container.querySelector('.items-list');

@@ -67,27 +67,8 @@
         customId = '';
     }
 
-    let ignoreNextClick = false;
-
     function toggleExpanded() {
         isExpanded = !isExpanded;
-    }
-
-    function handleTouchStart(event) {
-        ignoreNextClick = true;
-        isExpanded = true;
-        event.preventDefault();
-        setTimeout(() => {
-            ignoreNextClick = false;
-        }, 400);
-    }
-
-    function handleClick() {
-        if (ignoreNextClick) {
-            ignoreNextClick = false;
-            return;
-        }
-        toggleExpanded();
     }
 
     $: {
@@ -118,7 +99,6 @@
                             class:selected={selectedId === normalized.id}
                             role="option"
                             on:click={() => handleSelect(normalized.id)}
-                            on:touchstart={() => handleSelect(normalized.id)}
                             aria-selected={selectedId === normalized.id}
                             aria-label={`Select ${normalized.name}`}
                         >
@@ -183,8 +163,7 @@
                     class="edit-button"
                     aria-haspopup="listbox"
                     aria-expanded={isExpanded}
-                    on:click={handleClick}
-                    on:touchstart={handleTouchStart}
+                    on:click={toggleExpanded}
                 >
                     Edit
                 </button>
@@ -196,8 +175,7 @@
                 id={resolvedControlId}
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
-                on:click={handleClick}
-                on:touchstart={handleTouchStart}
+                on:click={toggleExpanded}
             >
                 {buttonLabel}
             </button>
