@@ -56,7 +56,7 @@
     ],
     "20260301": [
         {
-            "type": "date",
+            "type": "formatting",
             "description": "Shifted the v3 release date from February 1 to March 1 per QA schedule.",
             "date": "2026-01-27"
         }
