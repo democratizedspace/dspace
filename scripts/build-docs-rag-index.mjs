@@ -39,7 +39,7 @@ const parseFrontmatter = (content) => {
         return { frontmatter: {}, body: content };
     }
 
-    const endIndex = content.indexOf('\n---');
+    const endIndex = content.indexOf('\n---\n', 3);
     if (endIndex === -1) {
         return { frontmatter: {}, body: content };
     }
@@ -81,7 +81,10 @@ const stripMarkdownToText = (markdown) => {
     text = text.replace(/^\s*#+\s*/gm, '');
     text = text.replace(/^\s*>\s*/gm, '');
     text = text.replace(/[*_~]+/g, '');
-    text = text.replace(/\s+/g, ' ').trim();
+    text = text.replace(/\n{2,}/g, '\n\n');
+    text = text.replace(/\n(?!\n)/g, ' ');
+    text = text.replace(/[ \t]+/g, ' ');
+    text = text.replace(/\n\n+/g, '\n\n').trim();
 
     return text;
 };
@@ -190,6 +193,24 @@ const resolveDocSlug = (frontmatter, filePath) => {
     return path.basename(filePath, path.extname(filePath)).toLowerCase();
 };
 
+const resolveDocSlugBase = (frontmatter, filePath) => {
+    const slugValue = resolveDocSlug(frontmatter, filePath);
+    if (slugValue.startsWith('/docs/')) {
+        return slugValue;
+    }
+    if (slugValue.startsWith('/')) {
+        return `/docs${slugValue}`;
+    }
+
+    const relativePath = path.relative(DOCS_DIR, filePath);
+    const normalizedRelative = relativePath.split(path.sep).join('/');
+    const relativeDir = path.posix.dirname(normalizedRelative);
+    const nestedSlug =
+        relativeDir === '.' ? slugValue : `${relativeDir}/${slugValue}`;
+
+    return `/docs/${nestedSlug}`;
+};
+
 const resolveDocTitle = (frontmatter, content) => {
     const title = String(frontmatter?.title ?? '').trim();
     if (title) {
@@ -261,8 +282,7 @@ const gatherDocs = async () => {
 
         const raw = await readFileSafe(filePath);
         const { frontmatter, body } = parseFrontmatter(raw);
-        const slugValue = resolveDocSlug(frontmatter, filePath);
-        const slugBase = `/docs/${slugValue}`;
+        const slugBase = resolveDocSlugBase(frontmatter, filePath);
 
         chunks.push(
             ...chunkDocument({

@@ -50,6 +50,9 @@ function runTests(exec = execSync, platform = os.platform()) {
         console.log(`${colors.yellow}Validating hardening metadata...${colors.reset}`);
         exec('npm run hardening:validate', { stdio: 'inherit' });
 
+        console.log(`${colors.yellow}Validating docs RAG artifacts...${colors.reset}`);
+        exec('npm run test:docs-rag', { stdio: 'inherit' });
+
         const scripts = {
             win32: {
                 message: `${colors.yellow}Detected Windows OS, running PowerShell script...${colors.reset}`,
