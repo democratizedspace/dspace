@@ -68,32 +68,21 @@
     }
 
     let ignoreNextClick = false;
-    let ignoreClickTimeout;
 
     function toggleExpanded() {
         isExpanded = !isExpanded;
     }
 
-    function resetIgnoreNextClick(delay = 400) {
+    function handleTouchStart(event) {
         ignoreNextClick = true;
-        if (ignoreClickTimeout) {
-            clearTimeout(ignoreClickTimeout);
-        }
-        ignoreClickTimeout = setTimeout(() => {
-            ignoreNextClick = false;
-            ignoreClickTimeout = undefined;
-        }, delay);
-    }
-
-    function handleTriggerPointerDown(event) {
-        if (event.pointerType !== 'touch') {
-            return;
-        }
-        resetIgnoreNextClick();
         isExpanded = true;
+        event.preventDefault();
+        setTimeout(() => {
+            ignoreNextClick = false;
+        }, 400);
     }
 
-    function handleTriggerClick() {
+    function handleClick() {
         if (ignoreNextClick) {
             ignoreNextClick = false;
             return;
@@ -194,8 +183,8 @@
                     class="edit-button"
                     aria-haspopup="listbox"
                     aria-expanded={isExpanded}
-                    on:click={handleTriggerClick}
-                    on:pointerdown|preventDefault={handleTriggerPointerDown}
+                    on:click={handleClick}
+                    on:touchstart={handleTouchStart}
                 >
                     Edit
                 </button>
@@ -207,8 +196,8 @@
                 id={resolvedControlId}
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
-                on:click={handleTriggerClick}
-                on:pointerdown|preventDefault={handleTriggerPointerDown}
+                on:click={handleClick}
+                on:touchstart={handleTouchStart}
             >
                 {buttonLabel}
             </button>

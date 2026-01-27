@@ -63,7 +63,7 @@ describe('CatalogSelector Component', () => {
         expect(container.querySelector('.items-list')).toBeFalsy();
 
         const editButton = container.querySelector('.edit-button');
-        await fireEvent.pointerDown(editButton, { pointerType: 'touch' });
+        await fireEvent.touchStart(editButton);
         await fireEvent.click(editButton);
 
         await new Promise((resolve) => setTimeout(resolve, 0));

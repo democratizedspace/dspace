@@ -133,7 +133,7 @@ describe('ItemSelector Component', () => {
 
         const editButton = container.querySelector('.edit-button');
         expect(editButton).toBeTruthy();
-        await fireEvent.pointerDown(editButton, { pointerType: 'touch' });
+        await fireEvent.touchStart(editButton);
         await fireEvent.click(editButton);
 
         await new Promise((resolve) => setTimeout(resolve, 0));
