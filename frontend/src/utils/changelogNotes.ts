@@ -98,6 +98,14 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
             linkLabel: 'February 1, 2026 changelog',
         },
     ],
+    '20260201': [
+        {
+            message:
+                'Note: token.place support was deferred after this changelog. DSPACE v3 continues to use OpenAI, with token.place integration planned for v3.1.',
+            href: '/docs/token-place',
+            linkLabel: 'token.place integration doc',
+        },
+    ],
 };
 
 function escapeHtml(value: string): string {
