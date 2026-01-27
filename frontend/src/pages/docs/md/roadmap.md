@@ -11,32 +11,29 @@ change, timelines are subject to delays, and some things may be reprioritized.
 Multiplayer remains a long-term research area; updates will follow once prototypes reach
 community testing.
 
+- guilds
+
 ## 2026
 
+- v3 launch (March 2026)
+- custom quests (launching with v3)
+- smarter dChat (launching with v3)
+- 10x more quests (launching with v3)
 - Top-down isometric base building remains deferred from the 2024 roadmap while we focus on
-  shipping supporting systems first.
+  shipping supporting systems first, with a target of late 2026.
 
 ## 2025
 
-Focusing on maintenance and prep work for the larger features slated for 2026 and beyond.
+The bulk of the year was spent developing v3 for the features slated for 2026 and beyond.
 
 ## 2024
 
-- [x] guilds (Metaguild recruitment, donation board, and NPC wings live)
-- [x] 10x more quests (246 quests delivered, exceeding the 220-quest goal)
+Focusing on maintenance and prep work for the larger features slated for 2026 and beyond.
 
 ## 2023
 
 - [x] in-game guided model rocket hop (servo + camera upgrade)
 - [x] AI-enabled NPCs (chat now supports persona-powered conversations)
-
-## September 2023
-
-- [x] smarter dChat (knowledge of the game, the items, your inventory, etc.)
-
-## August 2023
-
-- [x] [custom quests](/docs/custom-quest-system)
 
 ## July 2023
 
