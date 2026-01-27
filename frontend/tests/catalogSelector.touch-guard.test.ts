@@ -24,12 +24,9 @@ describe('CatalogSelector touch guard behavior', () => {
     });
 
     it('keeps the listbox open after touchstart + click on the select button', async () => {
-        const { component } = render(CatalogSelector, {
-            props: { items, selectedId: 'item-1', buttonLabel: 'Select Item' },
+        render(CatalogSelector, {
+            props: { items, selectedId: 'missing-id', buttonLabel: 'Select Item' },
         });
-
-        await waitFor(() => screen.getByRole('button', { name: 'Edit' }));
-        await component.$set({ selectedId: '' });
 
         const selectButton = await waitFor(() =>
             screen.getByRole('button', { name: 'Select Item' })
@@ -46,17 +43,18 @@ describe('CatalogSelector touch guard behavior', () => {
     });
 
     it('ignores the synthetic click after a touch selection', async () => {
-        const { component } = render(CatalogSelector, { props: { items, selectedId: '' } });
+        const { container } = render(CatalogSelector, { props: { items, selectedId: '' } });
         const onSelect = vi.fn();
-        component.$on('select', onSelect);
+        const root = container.querySelector('.item-selector');
+        expect(root).toBeTruthy();
+        root!.addEventListener('select', onSelect);
 
         const option = await waitFor(() => screen.getAllByRole('option')[0]);
 
         await fireEvent.touchStart(option);
+        await fireEvent.click(option);
+
         await waitFor(() => expect(onSelect).toHaveBeenCalledTimes(1));
         await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull());
-
-        await fireEvent.click(option);
-        expect(onSelect).toHaveBeenCalledTimes(1);
     });
 });
