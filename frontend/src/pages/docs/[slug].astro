@@ -93,8 +93,10 @@ const newDocUrl = slugString
         <Page title={doc.frontmatter.title} columns="1">
             <div class="breadcrumbs">
                 <Chip text="Docs" href="/docs" />
-                <span class="breadcrumb-separator" aria-hidden="true">→</span>
-                <Chip text={title} href={`/docs/${slug}`} />
+                <div class="breadcrumb-trail">
+                    <span class="breadcrumb-separator" aria-hidden="true">→</span>
+                    <Chip text={title} href={`/docs/${slug}`} />
+                </div>
             </div>
             <div class="doc-content" set:html={html} />
         </Page>
@@ -130,6 +132,13 @@ const newDocUrl = slugString
         align-items: center;
         justify-content: center;
         line-height: 1;
+    }
+
+    .breadcrumb-trail {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        flex-wrap: nowrap;
     }
 
     .doc-content {
