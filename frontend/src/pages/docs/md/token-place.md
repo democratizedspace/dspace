@@ -6,6 +6,8 @@ slug: 'token-place'
 DSPACE v3 ships with OpenAI as the active AI provider. Support for the
 [token.place](https://token.place) API is planned for v3.1 once the token.place v1 API is
 available.
+Historical changelog entries may still mention token.place activation; the integration remains
+planned for v3.1.
 
 When v3.1 lands, the API endpoint will default to `https://token.place/api` and the integration
 will remain **disabled by default** to keep staging and local builds on OpenAI unless you
