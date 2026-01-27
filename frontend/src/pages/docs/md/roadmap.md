@@ -25,11 +25,11 @@ now retargeted to 2026.
 
 ## 2025
 
-The bulk of the year is dedicated to building and stabilizing DSPACE v3 for 2026 delivery.
+The bulk of 2025 was spent developing and stabilizing DSPACE v3 for 2026 delivery.
 
 ## 2024
 
-Steady improvements while groundwork for v3 ramped up.
+Maintenance and groundwork leading into v3.
 
 ## 2023
 
