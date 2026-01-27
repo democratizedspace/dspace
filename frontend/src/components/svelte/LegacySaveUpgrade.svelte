@@ -70,6 +70,8 @@
     };
     let statusMessage = '';
     let errorMessage = '';
+
+    const v2ReloadDelayMs = 2000;
     let workingAction = '';
     let qaEnabled = false;
     $: showV2V3ConflictWarning = detection.hasLegacyV2 && detection.hasV3State;
@@ -231,6 +233,18 @@
         }
     };
 
+    const clearLegacyV2Storage = () => {
+        localStorage.removeItem('gameState');
+        localStorage.removeItem('gameStateBackup');
+    };
+
+    const scheduleReload = () => {
+        if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('legacy-upgrade-refresh'));
+            window.setTimeout(() => window.location.reload(), v2ReloadDelayMs);
+        }
+    };
+
     const upgradeV1 = async (mode) => {
         if (!v1Items.length && !v1CurrencyBalances.length) {
             statusMessage =
@@ -273,6 +287,9 @@
                     'Merged compatible legacy v2 data into your current save. Inventory was ' +
                     'combined; existing quests and processes were kept.';
             }
+            clearLegacyV2Storage();
+            statusMessage += ' Reloading…';
+            scheduleReload();
         });
     };
 
@@ -284,8 +301,7 @@
             return;
         }
         await withStatus('discard-v2', async () => {
-            localStorage.removeItem('gameState');
-            localStorage.removeItem('gameStateBackup');
+            clearLegacyV2Storage();
             statusMessage =
                 'Removed legacy v2 localStorage data. Your current v3 save remains in IndexedDB.';
         });

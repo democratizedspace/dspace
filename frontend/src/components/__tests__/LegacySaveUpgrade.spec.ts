@@ -123,7 +123,6 @@ describe('LegacySaveUpgrade', () => {
             delete (window as { location?: Location }).location;
             (window as Window).location = mockLocation;
         }
-
         vi.useFakeTimers();
 
         const { findByRole, findByText } = render(LegacySaveUpgrade, {
@@ -152,6 +151,60 @@ describe('LegacySaveUpgrade', () => {
         } catch {
             delete (window as { location?: Location }).location;
             (window as Window).location = originalLocation;
+        }
+    });
+
+    test('merging v2 into current save clears legacy localStorage and reloads', async () => {
+        const legacyProfile = legacyV2Fixtures.profiles.minimal.gameState;
+        localStorage.setItem('gameState', JSON.stringify(legacyProfile));
+
+        const originalLocation = window.location;
+        const reloadMock = vi.fn();
+        const mockLocation = {
+            ...originalLocation,
+            reload: reloadMock,
+        };
+        try {
+            Object.defineProperty(window, 'location', {
+                configurable: true,
+                value: mockLocation,
+            });
+        } catch {
+            delete (window as { location?: Location }).location;
+            (window as Window).location = mockLocation;
+        }
+        vi.useFakeTimers();
+        try {
+            const { findByRole } = render(LegacySaveUpgrade, {
+                legacyV1Items: [],
+                legacyCookieKeys: [],
+                cheatsAvailable: false,
+            });
+
+            await vi.runAllTimersAsync();
+
+            const mergeButton = await findByRole('button', {
+                name: /merge v2 into current save/i,
+            });
+            await fireEvent.click(mergeButton);
+
+            await vi.runAllTimersAsync();
+
+            await waitFor(() => {
+                expect(localStorage.getItem('gameState')).toBeNull();
+            });
+            expect(reloadMock).toHaveBeenCalled();
+        } finally {
+            vi.useRealTimers();
+            try {
+                Object.defineProperty(window, 'location', {
+                    configurable: true,
+                    value: originalLocation,
+                });
+            } catch {
+                delete (window as { location?: Location }).location;
+                (window as Window).location = originalLocation;
+            }
         }
     });
 
