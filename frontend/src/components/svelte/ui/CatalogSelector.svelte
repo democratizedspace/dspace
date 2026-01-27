@@ -51,7 +51,17 @@
         filteredItems.set(event.detail);
     }
 
-    function handleSelect(itemId) {
+    let ignoreNextClick = false;
+    let ignoreNextSelectClick = false;
+
+    function handleSelect(itemId, meta = {}) {
+        if (meta.source === 'touch') {
+            ignoreNextSelectClick = true;
+        } else if (meta.source === 'click' && ignoreNextSelectClick) {
+            ignoreNextSelectClick = false;
+            return;
+        }
+
         selectedId = itemId;
         isExpanded = false;
         const selectedItem = normalizedItems.find((item) => item.id === itemId)?.item ?? null;
@@ -67,7 +77,18 @@
         customId = '';
     }
 
-    function toggleExpanded() {
+    function toggleExpanded(event) {
+        if (event?.type === 'touchstart') {
+            ignoreNextClick = true;
+            isExpanded = !isExpanded;
+            return;
+        }
+
+        if (event?.type === 'click' && ignoreNextClick) {
+            ignoreNextClick = false;
+            return;
+        }
+
         isExpanded = !isExpanded;
     }
 
@@ -98,8 +119,8 @@
                             class="item-option"
                             class:selected={selectedId === normalized.id}
                             role="option"
-                            on:click={() => handleSelect(normalized.id)}
-                            on:touchstart={() => handleSelect(normalized.id)}
+                            on:click={() => handleSelect(normalized.id, { source: 'click' })}
+                            on:touchstart={() => handleSelect(normalized.id, { source: 'touch' })}
                             aria-selected={selectedId === normalized.id}
                             aria-label={`Select ${normalized.name}`}
                         >
