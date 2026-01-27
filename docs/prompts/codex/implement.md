@@ -62,7 +62,7 @@ REQUEST:
 5. Refresh related documentation or changelog entries to reflect the shipped behavior. When
    touching the changelog, do **not** create a new dated file—append your notes to the most
    recent future-dated entry instead (for example,
-   [`frontend/src/pages/docs/md/changelog/20260201.md`](../../../frontend/src/pages/docs/md/changelog/20260201.md)
+   [`frontend/src/pages/docs/md/changelog/20260301.md`](../../../frontend/src/pages/docs/md/changelog/20260301.md)
    on the `v3` branch). Never rewrite the body of published changelog markdown; use
    `frontend/src/utils/changelogNotes.ts` to append clarifying notes and reserve direct edits for
    spelling, whitespace, or broken link fixes recorded in
