@@ -10,6 +10,11 @@
     import { qaCheatsEnabled } from '../../lib/qaCheats';
     import { clearV3GameStateStorage } from '../../utils/legacySaveSeeding';
     import { detectLegacyArtifacts } from '../../utils/legacySaveDetection';
+    import {
+        LEGACY_V2_SEED_SKIP_KEY,
+        LEGACY_V2_STORAGE_KEYS,
+        parseLegacyV2Raw,
+    } from '../../utils/legacySaveParsing.js';
     import Chip from './Chip.svelte';
 
     export let legacyV1Items = [];
@@ -72,6 +77,7 @@
     let errorMessage = '';
     let workingAction = '';
     let qaEnabled = false;
+    const mergeReloadDelayMs = 2000;
     $: showV2V3ConflictWarning = detection.hasLegacyV2 && detection.hasV3State;
 
     const describeV2Issues = (issues) => {
@@ -162,6 +168,23 @@
             localVsIndexedMismatch:
                 Boolean(legacyV2State) && Boolean(indexedDbState) && !statesMatch,
         };
+    };
+
+    const clearLegacyV2LocalStorage = () => {
+        if (typeof localStorage === 'undefined') return false;
+        let cleared = false;
+        LEGACY_V2_STORAGE_KEYS.forEach((key) => {
+            const raw = localStorage.getItem(key);
+            if (!raw) return;
+            const parsed = parseLegacyV2Raw(raw);
+            if (!parsed.isLegacy) return;
+            localStorage.removeItem(key);
+            cleared = true;
+        });
+        if (cleared) {
+            localStorage.removeItem(LEGACY_V2_SEED_SKIP_KEY);
+        }
+        return cleared;
     };
 
     const expireLegacyCookies = () => {
@@ -269,9 +292,14 @@
                 await mergeLegacyStateIntoCurrent(detection.pendingLocalState, {
                     grantUpgradeTrophy: true,
                 });
+                clearLegacyV2LocalStorage();
                 statusMessage =
                     'Merged compatible legacy v2 data into your current save. Inventory was ' +
-                    'combined; existing quests and processes were kept.';
+                    'combined; existing quests and processes were kept. Refreshing…';
+                if (typeof window !== 'undefined') {
+                    window.dispatchEvent(new CustomEvent('legacy-upgrade-refresh'));
+                    window.setTimeout(() => window.location.reload(), mergeReloadDelayMs);
+                }
             }
         });
     };
