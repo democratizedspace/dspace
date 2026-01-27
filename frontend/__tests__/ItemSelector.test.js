@@ -94,7 +94,7 @@ describe('ItemSelector Component', () => {
         });
 
         const firstItem = container.querySelector('.item-option');
-        firstItem.dispatchEvent(new Event('touchstart'));
+        firstItem.dispatchEvent(new Event('touchstart', { bubbles: true, cancelable: true }));
 
         expect(selectedId).toBe('item-1');
     });

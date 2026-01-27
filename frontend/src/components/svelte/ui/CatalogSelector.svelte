@@ -51,7 +51,17 @@
         filteredItems.set(event.detail);
     }
 
-    function handleSelect(itemId) {
+    let ignoreNextClick = false;
+    let ignoreNextSelectClick = false;
+
+    function handleSelect(itemId, meta = {}) {
+        if (meta.source === 'touch') {
+            ignoreNextSelectClick = true;
+        } else if (meta.source === 'click' && ignoreNextSelectClick) {
+            ignoreNextSelectClick = false;
+            return;
+        }
+
         selectedId = itemId;
         isExpanded = false;
         const selectedItem = normalizedItems.find((item) => item.id === itemId)?.item ?? null;
@@ -67,7 +77,18 @@
         customId = '';
     }
 
-    function toggleExpanded() {
+    function toggleExpanded(event) {
+        if (event?.type === 'touchstart') {
+            ignoreNextClick = true;
+            isExpanded = !isExpanded;
+            return;
+        }
+
+        if (event?.type === 'click' && ignoreNextClick) {
+            ignoreNextClick = false;
+            return;
+        }
+
         isExpanded = !isExpanded;
     }
 
@@ -98,8 +119,8 @@
                             class="item-option"
                             class:selected={selectedId === normalized.id}
                             role="option"
-                            on:click={() => handleSelect(normalized.id)}
-                            on:touchstart={() => handleSelect(normalized.id)}
+                            on:click={() => handleSelect(normalized.id, { source: 'click' })}
+                            on:touchstart={() => handleSelect(normalized.id, { source: 'touch' })}
                             aria-selected={selectedId === normalized.id}
                             aria-label={`Select ${normalized.name}`}
                         >
@@ -324,13 +345,22 @@
     }
 
     .selected-item {
-        display: flex;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
         align-items: center;
-        justify-content: space-between;
+        gap: 8px;
         background: #2f5b2f;
         padding: 8px;
         border-radius: 4px;
         border: 2px solid #007006;
+    }
+
+    .selected-item .item-content {
+        min-width: 0;
+    }
+
+    .selected-item .item-info h3 {
+        overflow-wrap: anywhere;
     }
 
     .edit-button,
@@ -353,5 +383,15 @@
     .select-button {
         width: 100%;
         padding: 10px;
+    }
+
+    @media (max-width: 520px) {
+        .selected-item {
+            grid-template-columns: 1fr;
+        }
+
+        .edit-button {
+            width: 100%;
+        }
     }
 </style>
