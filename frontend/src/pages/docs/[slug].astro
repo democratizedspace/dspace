@@ -91,12 +91,12 @@ const newDocUrl = slugString
 {
     doc ? (
         <Page title={doc.frontmatter.title} columns="1">
-            <div>
+            <div class="breadcrumbs">
                 <Chip text="Docs" href="/docs" />
-                <span>-></span>
+                <span class="breadcrumb-separator" aria-hidden="true">→</span>
                 <Chip text={title} href={`/docs/${slug}`} />
             </div>
-            <span set:html={html} />
+            <div class="doc-content" set:html={html} />
         </Page>
     ) : (
         <Page title="Doc not found" columns="1">
@@ -113,16 +113,34 @@ const newDocUrl = slugString
 }
 
 <style>
-    span {
+    .breadcrumbs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .breadcrumb-separator {
+        background-color: white;
+        color: black;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+    }
+
+    .doc-content {
         background-color: white;
         color: black;
         padding: 10px;
         border-radius: 20px;
         overflow: auto;
-        display: block;
     }
 
-    span :global(img) {
+    .doc-content :global(img) {
         max-width: 100%;
         height: auto;
         display: block;
