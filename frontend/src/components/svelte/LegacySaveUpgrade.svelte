@@ -273,6 +273,7 @@
                     'Merged compatible legacy v2 data into your current save. Inventory was ' +
                     'combined; existing quests and processes were kept.';
             }
+            scheduleLegacyUpgradeRefresh(2000);
         });
     };
 
@@ -297,11 +298,14 @@
             statusMessage = cleared
                 ? 'Cleared v3 IndexedDB save for QA testing. Reloading…'
                 : 'Unable to confirm v3 save deletion. Reload and verify manually.';
-            if (typeof window !== 'undefined') {
-                window.dispatchEvent(new CustomEvent('legacy-upgrade-refresh'));
-                window.setTimeout(() => window.location.reload(), 50);
-            }
+            scheduleLegacyUpgradeRefresh(50);
         });
+    };
+
+    const scheduleLegacyUpgradeRefresh = (delayMs) => {
+        if (typeof window === 'undefined') return;
+        window.dispatchEvent(new CustomEvent('legacy-upgrade-refresh'));
+        window.setTimeout(() => window.location.reload(), delayMs);
     };
 
     const handleExternalRefresh = () => {

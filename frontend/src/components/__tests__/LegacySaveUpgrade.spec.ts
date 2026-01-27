@@ -173,4 +173,54 @@ describe('LegacySaveUpgrade', () => {
         await findByText(/Removed legacy v2 localStorage data/i);
         expect(localStorage.getItem('gameState')).toBeNull();
     });
+
+    test('reloads after merging legacy v2 data into the current save', async () => {
+        const legacyProfile = legacyV2Fixtures.profiles.minimal.gameState;
+        localStorage.setItem('gameState', JSON.stringify(legacyProfile));
+
+        const originalLocation = window.location;
+        const reloadMock = vi.fn();
+        const mockLocation = {
+            ...originalLocation,
+            reload: reloadMock,
+        };
+        try {
+            Object.defineProperty(window, 'location', {
+                configurable: true,
+                value: mockLocation,
+            });
+        } catch {
+            delete (window as { location?: Location }).location;
+            (window as Window).location = mockLocation;
+        }
+
+        vi.useFakeTimers();
+
+        const { findByRole, findByText } = render(LegacySaveUpgrade, {
+            legacyV1Items: [],
+            legacyCookieKeys: [],
+            cheatsAvailable: false,
+        });
+
+        const mergeButton = await findByRole('button', {
+            name: /merge v2 into current save/i,
+        });
+        await fireEvent.click(mergeButton);
+
+        await findByText(/Merged compatible legacy v2 data into your current save/i);
+
+        vi.runAllTimers();
+        expect(reloadMock).toHaveBeenCalled();
+
+        vi.useRealTimers();
+        try {
+            Object.defineProperty(window, 'location', {
+                configurable: true,
+                value: originalLocation,
+            });
+        } catch {
+            delete (window as { location?: Location }).location;
+            (window as Window).location = originalLocation;
+        }
+    });
 });
