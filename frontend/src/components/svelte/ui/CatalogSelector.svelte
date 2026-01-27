@@ -99,6 +99,7 @@
                             class:selected={selectedId === normalized.id}
                             role="option"
                             on:click={() => handleSelect(normalized.id)}
+                            on:touchstart|preventDefault={() => handleSelect(normalized.id)}
                             aria-selected={selectedId === normalized.id}
                             aria-label={`Select ${normalized.name}`}
                         >

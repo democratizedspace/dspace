@@ -78,6 +78,27 @@ describe('ItemSelector Component', () => {
         expect(selectedId).toBe('item-1');
     });
 
+    test('should emit select event on touch', () => {
+        let selectedId = null;
+        const component = new ItemSelector({
+            target: container,
+            props: {
+                items: mockItems,
+                selectedItemId: '',
+                label: 'Select Item',
+            },
+        });
+
+        component.$on('select', (event) => {
+            selectedId = event.detail.itemId;
+        });
+
+        const firstItem = container.querySelector('.item-option');
+        firstItem.dispatchEvent(new Event('touchstart', { bubbles: true, cancelable: true }));
+
+        expect(selectedId).toBe('item-1');
+    });
+
     test('should show selected item when selectedItemId is provided', () => {
         const component = new ItemSelector({
             target: container,
