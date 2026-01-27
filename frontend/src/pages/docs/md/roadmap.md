@@ -10,18 +10,18 @@ change, timelines are subject to delays, and some things may be reprioritized.
 
 - [ ] guilds (Metaguild recruitment, donation board, and NPC wings)
 - [ ] Multiplayer remains a long-term research area; updates will follow once prototypes reach
-  community testing.
+  community testing
 
 ## 2026
 
 The v3 milestones below were previously listed across the 2023-2024 roadmap entries and are
 now retargeted to 2026.
 
-- [ ] DSPACE v3 ships (targeting March 2026).
-- [ ] [custom quests](/docs/custom-quest-system) launch alongside v3.
-- [ ] smarter dChat (knowledge of the game, the items, your inventory, etc.).
-- [ ] 10x more quests.
-- [ ] Top-down isometric base building targets late 2026 after the v3 foundation is live.
+- [ ] DSPACE v3 ships (targeting March 2026)
+- [ ] [custom quests](/docs/custom-quest-system) launch alongside v3
+- [ ] smarter dChat (knowledge of the game, the items, your inventory, etc.)
+- [ ] 10x more quests
+- [ ] Top-down isometric base building targets late 2026 after the v3 foundation is live
 
 ## 2025
 
