@@ -53,5 +53,12 @@
             "description": "Updated GPT-3.5 model reference to GPT-5 for current naming",
             "date": "2026-01-07"
         }
+    ],
+    "20260301": [
+        {
+            "type": "date",
+            "description": "Shifted the v3 release date from February 1 to March 1 per QA schedule.",
+            "date": "2026-01-27"
+        }
     ]
 }
