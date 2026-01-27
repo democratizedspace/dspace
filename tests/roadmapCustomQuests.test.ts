@@ -13,10 +13,10 @@ describe('roadmap custom quests entry', () => {
     'roadmap.md'
   );
 
-  it('reflects that the custom quest system has shipped', () => {
+  it('reflects that the custom quest system is planned', () => {
     const content = readFileSync(roadmapPath, 'utf8');
 
-    expect(content).not.toMatch(/-\s+\[ \]\s+\[?custom quests/i);
-    expect(content).toMatch(/-\s+\[x\]\s+\[custom quests\]\(\/docs\/custom-quest-system\)/i);
+    expect(content).not.toMatch(/-\s+\[x\]\s+\[?custom quests/i);
+    expect(content).toMatch(/-\s+\[ \]\s+\[custom quests\]\(\/docs\/custom-quest-system\)/i);
   });
 });

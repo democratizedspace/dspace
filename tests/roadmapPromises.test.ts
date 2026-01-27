@@ -13,11 +13,10 @@ const roadmapPath = join(
 );
 
 describe('roadmap promises', () => {
-  it('tracks base building as deferred without promising a checkbox', () => {
+  it('tracks base building as a planned v3 milestone', () => {
     const content = readFileSync(roadmapPath, 'utf8');
 
-    expect(content).not.toMatch(/^- \[ \] top-down isometric base building/m);
-    expect(content.toLowerCase()).toContain('top-down isometric base building');
-    expect(content.toLowerCase()).toContain('deferred');
+    expect(content).toMatch(/-\s+\[ \]\s+Top-down isometric base building/i);
+    expect(content.toLowerCase()).toContain('late 2026');
   });
 });
