@@ -176,7 +176,7 @@ describe('LegacySaveUpgrade', () => {
         }
         vi.useFakeTimers();
         try {
-            const { findByRole } = render(LegacySaveUpgrade, {
+            const { findByRole, queryByText } = render(LegacySaveUpgrade, {
                 legacyV1Items: [],
                 legacyCookieKeys: [],
                 cheatsAvailable: false,
@@ -196,6 +196,7 @@ describe('LegacySaveUpgrade', () => {
                 expect(legacyRead.state).toBeNull();
                 expect(legacyRead.errors).toHaveLength(0);
             });
+            expect(queryByText(/save conflict detected/i)).toBeNull();
             expect(reloadMock).toHaveBeenCalled();
         } finally {
             vi.useRealTimers();

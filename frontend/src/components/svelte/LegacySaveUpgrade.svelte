@@ -246,6 +246,7 @@
                 localStorage.removeItem(key);
             }
         });
+        localStorage.removeItem('legacyV2Seeded');
     };
 
     const scheduleReload = () => {
