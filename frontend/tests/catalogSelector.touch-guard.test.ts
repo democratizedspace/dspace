@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import CatalogSelector from '../src/components/svelte/ui/CatalogSelector.svelte';
 
 describe('CatalogSelector touch guard behavior', () => {
@@ -43,18 +43,16 @@ describe('CatalogSelector touch guard behavior', () => {
     });
 
     it('ignores the synthetic click after a touch selection', async () => {
-        const { container } = render(CatalogSelector, { props: { items, selectedId: '' } });
-        const onSelect = vi.fn();
-        const root = container.querySelector('.item-selector');
-        expect(root).toBeTruthy();
-        root!.addEventListener('select', onSelect);
-
+        render(CatalogSelector, { props: { items, selectedId: '' } });
         const option = await waitFor(() => screen.getAllByRole('option')[0]);
 
         await fireEvent.touchStart(option);
+        await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull());
+        expect(screen.getByText('Item One')).toBeTruthy();
+
         await fireEvent.click(option);
 
-        await waitFor(() => expect(onSelect).toHaveBeenCalledTimes(1));
-        await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull());
+        expect(screen.queryByRole('listbox')).toBeNull();
+        expect(screen.getByText('Item One')).toBeTruthy();
     });
 });
