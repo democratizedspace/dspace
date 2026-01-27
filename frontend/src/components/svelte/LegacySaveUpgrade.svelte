@@ -6,10 +6,11 @@
         mergeLegacyStateIntoCurrent,
         normalizeCount,
     } from '../../utils/gameState.js';
-    import { inspectGameStateStorage } from '../../utils/gameState/common.js';
+    import { inspectGameStateStorage, isUsingLocalStorage } from '../../utils/gameState/common.js';
     import { qaCheatsEnabled } from '../../lib/qaCheats';
     import { clearV3GameStateStorage } from '../../utils/legacySaveSeeding';
     import { detectLegacyArtifacts } from '../../utils/legacySaveDetection';
+    import { LEGACY_V2_STORAGE_KEYS, parseLegacyV2Raw } from '../../utils/legacySaveParsing.js';
     import Chip from './Chip.svelte';
 
     export let legacyV1Items = [];
@@ -234,8 +235,17 @@
     };
 
     const clearLegacyV2Storage = () => {
-        localStorage.removeItem('gameState');
-        localStorage.removeItem('gameStateBackup');
+        if (typeof localStorage === 'undefined') return;
+        if (isUsingLocalStorage()) return;
+
+        LEGACY_V2_STORAGE_KEYS.forEach((key) => {
+            const raw = localStorage.getItem(key);
+            if (!raw) return;
+            const parsed = parseLegacyV2Raw(raw);
+            if (parsed.isLegacy || parsed.error) {
+                localStorage.removeItem(key);
+            }
+        });
     };
 
     const scheduleReload = () => {

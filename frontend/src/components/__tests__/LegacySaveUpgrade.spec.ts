@@ -16,6 +16,7 @@ import {
     V1_ITEM_ID_TO_V3_UUID,
 } from '../../utils/legacyV1ItemIdMap.js';
 import * as legacySaveSeeding from '../../utils/legacySaveSeeding';
+import { readLegacyV2LocalStorage } from '../../utils/legacySaveParsing.js';
 
 const EARLY_ADOPTER_ID = items.find((item) => item.name === 'Early Adopter Token')?.id;
 
@@ -191,7 +192,9 @@ describe('LegacySaveUpgrade', () => {
             await vi.runAllTimersAsync();
 
             await waitFor(() => {
-                expect(localStorage.getItem('gameState')).toBeNull();
+                const legacyRead = readLegacyV2LocalStorage();
+                expect(legacyRead.state).toBeNull();
+                expect(legacyRead.errors).toHaveLength(0);
             });
             expect(reloadMock).toHaveBeenCalled();
         } finally {
