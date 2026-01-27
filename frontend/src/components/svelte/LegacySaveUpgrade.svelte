@@ -72,6 +72,8 @@
     let errorMessage = '';
     let workingAction = '';
     let qaEnabled = false;
+    let suppressLegacyV2AfterMerge = false;
+    const v2MergeReloadDelayMs = 2000;
     $: showV2V3ConflictWarning = detection.hasLegacyV2 && detection.hasV3State;
 
     const describeV2Issues = (issues) => {
@@ -136,7 +138,7 @@
             )}.`;
         }
 
-        if (legacyV2ParseIssues?.length) {
+        if (legacyV2ParseIssues?.length && !suppressLegacyV2AfterMerge) {
             v2Notice = `Legacy v2 data could not be parsed: ${describeV2Issues(
                 legacyV2ParseIssues
             )}.`;
@@ -150,7 +152,7 @@
             (!hasIndexedDbState && !usingFallback && hasLegacyV2Keys) ||
             (!hasIndexedDbState && artifacts.hasV2LocalStorage);
 
-        detection = {
+        const nextDetection = {
             loading: false,
             hasV3State,
             hasLegacyV2,
@@ -162,6 +164,15 @@
             localVsIndexedMismatch:
                 Boolean(legacyV2State) && Boolean(indexedDbState) && !statesMatch,
         };
+        detection = suppressLegacyV2AfterMerge
+            ? {
+                  ...nextDetection,
+                  hasLegacyV2: false,
+                  conflict: hasV1Artifacts && hasV3State,
+                  pendingLocalState: undefined,
+                  localVsIndexedMismatch: false,
+              }
+            : nextDetection;
     };
 
     const expireLegacyCookies = () => {
@@ -272,6 +283,10 @@
                 statusMessage =
                     'Merged compatible legacy v2 data into your current save. Inventory was ' +
                     'combined; existing quests and processes were kept.';
+                suppressLegacyV2AfterMerge = true;
+                if (typeof window !== 'undefined') {
+                    window.setTimeout(() => window.location.reload(), v2MergeReloadDelayMs);
+                }
             }
         });
     };
