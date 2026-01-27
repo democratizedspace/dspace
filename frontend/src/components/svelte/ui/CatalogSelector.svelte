@@ -67,8 +67,38 @@
         customId = '';
     }
 
+    let ignoreNextClick = false;
+    let ignoreClickTimeout;
+
     function toggleExpanded() {
+        isExpanded = !isExpanded;
+    }
+
+    function resetIgnoreNextClick(delay = 400) {
+        ignoreNextClick = true;
+        if (ignoreClickTimeout) {
+            clearTimeout(ignoreClickTimeout);
+        }
+        ignoreClickTimeout = setTimeout(() => {
+            ignoreNextClick = false;
+            ignoreClickTimeout = undefined;
+        }, delay);
+    }
+
+    function handleTriggerPointerDown(event) {
+        if (event.pointerType !== 'touch') {
+            return;
+        }
+        resetIgnoreNextClick();
         isExpanded = true;
+    }
+
+    function handleTriggerClick() {
+        if (ignoreNextClick) {
+            ignoreNextClick = false;
+            return;
+        }
+        toggleExpanded();
     }
 
     $: {
@@ -164,8 +194,8 @@
                     class="edit-button"
                     aria-haspopup="listbox"
                     aria-expanded={isExpanded}
-                    on:click={toggleExpanded}
-                    on:touchstart|preventDefault|stopPropagation={toggleExpanded}
+                    on:click={handleTriggerClick}
+                    on:pointerdown|preventDefault={handleTriggerPointerDown}
                 >
                     Edit
                 </button>
@@ -177,8 +207,8 @@
                 id={resolvedControlId}
                 aria-haspopup="listbox"
                 aria-expanded={isExpanded}
-                on:click={toggleExpanded}
-                on:touchstart|preventDefault|stopPropagation={toggleExpanded}
+                on:click={handleTriggerClick}
+                on:pointerdown|preventDefault={handleTriggerPointerDown}
             >
                 {buttonLabel}
             </button>

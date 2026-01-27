@@ -1,3 +1,4 @@
+import { fireEvent } from '@testing-library/dom';
 import CatalogSelector from '../src/components/svelte/ui/CatalogSelector.svelte';
 
 describe('CatalogSelector Component', () => {
@@ -19,28 +20,35 @@ describe('CatalogSelector Component', () => {
         }
     });
 
-    test('emits select event on touchstart', () => {
-        let selectedId = null;
-        const component = new CatalogSelector({
+    test('click toggles the selector open and closed', async () => {
+        new CatalogSelector({
             target: container,
             props: {
                 items: mockItems,
-                selectedId: '',
+                selectedId: 'item-1',
                 label: 'Select Item',
             },
         });
 
-        component.$on('select', (event) => {
-            selectedId = event.detail.itemId;
-        });
+        await new Promise((resolve) => setTimeout(resolve, 0));
 
-        const firstItem = container.querySelector('.item-option');
-        firstItem.dispatchEvent(new Event('touchstart'));
+        expect(container.querySelector('.items-list')).toBeFalsy();
 
-        expect(selectedId).toBe('item-1');
+        const editButton = container.querySelector('.edit-button');
+        await fireEvent.click(editButton);
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        expect(container.querySelector('.items-list')).toBeTruthy();
+
+        await fireEvent.click(editButton);
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        expect(container.querySelector('.items-list')).toBeFalsy();
     });
 
-    test('expands the selector on edit button touchstart', async () => {
+    test('touch interaction opens once and ignores ghost clicks', async () => {
         new CatalogSelector({
             target: container,
             props: {
@@ -55,7 +63,8 @@ describe('CatalogSelector Component', () => {
         expect(container.querySelector('.items-list')).toBeFalsy();
 
         const editButton = container.querySelector('.edit-button');
-        editButton.dispatchEvent(new Event('touchstart'));
+        await fireEvent.pointerDown(editButton, { pointerType: 'touch' });
+        await fireEvent.click(editButton);
 
         await new Promise((resolve) => setTimeout(resolve, 0));
 

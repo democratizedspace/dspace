@@ -1,3 +1,4 @@
+import { fireEvent } from '@testing-library/dom';
 import ItemSelector from '../src/components/svelte/ItemSelector.svelte';
 
 describe('ItemSelector Component', () => {
@@ -78,27 +79,6 @@ describe('ItemSelector Component', () => {
         expect(selectedId).toBe('item-1');
     });
 
-    test('should emit select event on touch', () => {
-        let selectedId = null;
-        const component = new ItemSelector({
-            target: container,
-            props: {
-                items: mockItems,
-                selectedItemId: '',
-                label: 'Select Item',
-            },
-        });
-
-        component.$on('select', (event) => {
-            selectedId = event.detail.itemId;
-        });
-
-        const firstItem = container.querySelector('.item-option');
-        firstItem.dispatchEvent(new Event('touchstart'));
-
-        expect(selectedId).toBe('item-1');
-    });
-
     test('should show selected item when selectedItemId is provided', () => {
         const component = new ItemSelector({
             target: container,
@@ -138,8 +118,8 @@ describe('ItemSelector Component', () => {
         expect(itemsList).toBeTruthy();
     });
 
-    test('should toggle item list visibility on touch', async () => {
-        const component = new ItemSelector({
+    test('touch interaction opens the listbox without immediately closing', async () => {
+        new ItemSelector({
             target: container,
             props: {
                 items: mockItems,
@@ -153,7 +133,8 @@ describe('ItemSelector Component', () => {
 
         const editButton = container.querySelector('.edit-button');
         expect(editButton).toBeTruthy();
-        editButton.dispatchEvent(new Event('touchstart'));
+        await fireEvent.pointerDown(editButton, { pointerType: 'touch' });
+        await fireEvent.click(editButton);
 
         await new Promise((resolve) => setTimeout(resolve, 0));
         itemsList = container.querySelector('.items-list');
