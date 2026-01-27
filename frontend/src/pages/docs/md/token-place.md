@@ -3,13 +3,15 @@ title: 'token.place Integration'
 slug: 'token-place'
 ---
 
-DSPACE uses the [token.place](https://token.place) API for in-game AI features like chat.
-The `tokenPlaceChat` utility sends messages to the service and returns the model's reply.
+DSPACE will support the [token.place](https://token.place) API for in-game AI features like chat
+starting in v3.1. The `tokenPlaceChat` utility is already wired for this integration, but the
+service is not yet available because token.place API v1 is still in development.
 
-The API endpoint defaults to `https://token.place/api`, but token.place is **disabled by default**
-to keep staging and local builds on OpenAI unless you explicitly opt in.
+The API endpoint defaults to `https://token.place/api`, but token.place remains
+**disabled by default** to keep staging and local builds on OpenAI until the v3.1 rollout when
+the API launches.
 
-You can enable token.place in two ways:
+When the API launches, you can enable token.place in two ways:
 
 - **Environment variable**: set `VITE_TOKEN_PLACE_ENABLED=true`. You can also point to a custom URL
   with `VITE_TOKEN_PLACE_URL`.
