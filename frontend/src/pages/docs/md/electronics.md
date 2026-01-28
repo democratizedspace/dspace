@@ -21,13 +21,19 @@ systems, and data logging.
 - [Read a Thermistor](/quests/electronics/thermistor-reading)
 - [Build a Light Sensor](/quests/electronics/light-sensor)
 
-## Key gear and supplies
+## Key gear
 
-- Digital multimeter and GFCI outlet tester
-- Soldering iron kit, solder wick, desoldering pump, and flux pen
-- Wire strippers, cutters, and heat-shrink tubing
+- Digital multimeter, soldering iron kit, and solderless breadboard
+- Lead-free solder spool, solder wick, and desoldering pump for rework
+- 220 Ohm Resistor, Thermistor (10k NTC), and Photoresistor for sensor builds
 
-## Good practices
+## Common pitfalls
 
-- Always verify power is off before soldering or rewiring a circuit.
-- Label your test leads and keep a small log of sensor calibration values.
+- Powering circuits before checking polarity or continuity
+- Creating cold solder joints by moving parts before they cool
+- Forgetting current limits on LEDs and sensor dividers
+
+## Next steps
+
+- Take your sensor circuits into [Programming](/docs/programming) quests for logging.
+- Combine actuators and sensors in [Robotics](/docs/robotics).

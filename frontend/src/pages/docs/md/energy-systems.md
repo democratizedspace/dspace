@@ -21,13 +21,19 @@ off-grid reliability.
 - [Charge a Device Off-Grid](/quests/energy/offgrid-charger)
 - [Build a Hand Crank Generator](/quests/energy/hand-crank-generator)
 
-## Key gear and supplies
+## Key gear
 
-- Battery packs, fused cable kits, and pure sine inverters
-- Charge controller profiles and smart plugs for monitoring
-- Portable solar panels and wind turbine kits
+- 200 Wh battery pack or 1 kWh battery pack for storage capacity goals
+- 300 W pure sine inverter and Solar charge controller for conversion and charging
+- Portable solar panel, 500 W wind turbine, and hand crank generator assembly for sources
 
-## Good practices
+## Common pitfalls
 
-- Log voltage checks after every wiring change.
-- Keep spare fuses and verify torque on ring terminals.
+- Mixing battery chemistries or voltages without matching charge profiles
+- Skipping fuses or undervaluing cable size on DC runs
+- Tracking generation but not logging load usage over time
+
+## Next steps
+
+- Deepen production skills with [Solar power](/docs/solar).
+- Review safety practices in [Electricity](/docs/electricity).

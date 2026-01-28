@@ -21,13 +21,19 @@ Expect a mix of visual observation, photography, and light-pollution tracking.
 - [Photograph the ISS](/quests/astronomy/iss-photo)
 - [Capture Star Trails](/quests/astronomy/star-trails)
 
-## Key gear and supplies
+## Key gear
 
-- Magnifying lenses for objective and eyepiece builds
-- Cardboard mailing tube to mount optics safely
-- Camera tripod and long-exposure capable camera
+- Basic telescope or DIY optics with a 50 mm magnifying lens and 20 mm magnifying lens
+- Planisphere star chart and red flashlight to preserve night vision
+- Camera tripod for long exposures and stable sketches
 
-## Good practices
+## Common pitfalls
 
-- Check local light-pollution conditions and log them before longer sessions.
-- Use a steady tripod or mount for any exposure longer than a few seconds.
+- Observing before your eyes adapt to the dark or without a red light
+- Forgetting to stabilize the tripod, leading to blurry star trails
+- Not noting timestamps or sky conditions, which makes comparisons harder later
+
+## Next steps
+
+- Build a repeatable observation log and archive photos from each session.
+- Use [Programming](/docs/programming) to chart your observation cadence and results.

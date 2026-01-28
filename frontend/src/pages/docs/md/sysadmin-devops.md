@@ -21,7 +21,20 @@ ship updates, and automate backups.
 - [Set Up a CI Pipeline](/quests/devops/ci-pipeline)
 - [Configure Firewall Rules](/quests/devops/firewall-rules)
 
-## Good practices
+## Key gear
 
-- Keep a change log for configuration edits and update it during every quest.
-- Verify backups and alerting before relying on them.
+- Laptop Computer for SSH sessions and configuration work
+- Raspberry Pi 5 board for local testing and automation
+- External backup SSD for snapshots and recovery drills
+- PoE+ switch for managed network lab setups
+
+## Common pitfalls
+
+- Making changes without capturing the current configuration state
+- Leaving SSH exposed without key-based auth or firewall rules
+- Skipping backup restores to verify that they actually work
+
+## Next steps
+
+- Pair deployments with [Backups](/docs/backups) guidance.
+- Review hosting basics in [Self-hosting](/docs/self-hosting).

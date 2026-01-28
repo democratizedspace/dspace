@@ -21,12 +21,19 @@ charts. The focus is practical telemetry for sensors and systems.
 - [Set Temperature Alert](/quests/programming/temp-alert)
 - [Email Temperature Alert](/quests/programming/temp-email)
 
-## Key gear and supplies
+## Key gear
 
-- Temperature log CSV exports and live JSON endpoints
-- Charted outputs (line charts, annotated graphs, dashboards)
+- Thermistor logging rig and temperature log CSV exports
+- Live temperature JSON endpoint and live temperature dashboard output
+- Temperature line chart and annotated temperature graph for reporting
 
-## Good practices
+## Common pitfalls
 
-- Store raw data before aggregating so you can rerun analysis later.
-- Document API routes and update intervals in your quest notes.
+- Overwriting raw logs instead of appending with timestamps
+- Building alerts without verifying sensor calibration first
+- Forgetting to document API routes and refresh intervals
+
+## Next steps
+
+- Deploy your dashboards with reliability practices from [Sysadmin & DevOps](/docs/sysadmin-devops).
+- Integrate new sensors from [Electronics](/docs/electronics).

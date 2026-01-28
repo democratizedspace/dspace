@@ -4,7 +4,7 @@ slug: 'composting'
 ---
 
 Composting quests teach you to turn organic scraps into stable soil amendments. The skill focuses
-on the "bucket compost" method, which is compact and measurable.
+on the bucket compost method, which is compact and measurable.
 
 ## What you learn
 
@@ -19,13 +19,20 @@ on the "bucket compost" method, which is compact and measurable.
 - [Turn Your Compost Bucket](/quests/composting/turn-pile)
 - [Sift Finished Compost](/quests/composting/sift-compost)
 
-## Key gear and supplies
+## Key gear
 
-- 5 gallon bucket and a compost thermometer
-- Moisture meter and log sheets for readings
-- Compost sifter for finishing passes
+- 5 gallon bucket with airflow holes for a compact compost vessel
+- Compost thermometer and compost moisture meter for core readings
+- Compost temperature log and compost moisture log to track trends
+- Compost sifter to screen finished material
 
-## Good practices
+## Common pitfalls
 
-- Aim for "wrung sponge" moisture and log readings after every turn.
-- Screen compost before using it in hydroponic or soil mixes.
+- Running too wet or too dry (aim for the "wrung sponge" feel)
+- Skipping turns, which slows decomposition and creates odors
+- Using compost before it cools and cures fully
+
+## Next steps
+
+- Aim for a screened compost blend before top-dressing beds or pots.
+- Use the same logging habits in [Hydroponics](/docs/hydroponics) and other grow skills.

@@ -3,8 +3,9 @@ title: 'Aquaria'
 slug: 'aquaria'
 ---
 
-Aquaria quests focus on building and caring for freshwater tanks, from Walstad setups to fish
-husbandry. The skills emphasize water quality, temperature stability, and gentle maintenance.
+Aquaria quests focus on building and caring for freshwater tanks, from Walstad setups to steady
+fish husbandry. The skills emphasize water quality, temperature stability, and gentle
+maintenance routines.
 
 ## What you learn
 
@@ -21,14 +22,20 @@ husbandry. The skills emphasize water quality, temperature stability, and gentle
 - [Perform a partial water change](/quests/aquaria/water-change)
 - [Add guppies](/quests/aquaria/guppy)
 
-## Key gear and supplies
+## Key gear
 
-- Aquarium tank, stand, and gravel substrate
-- Heater, sponge filter, air pump, and airline tubing
-- Aquarium test kit, thermometer strip, and water conditioner
-- Gravel vacuum, net, and waterproof logbook
+- Aquarium (150 L) with a stable stand and aquarium gravel (1 kg) for substrate
+- Aquarium heater (150 W), aquarium LED light (20 W), and aquarium thermometer (0–50°C)
+- Aquarium liquid test kit, water conditioner, and a water test logbook
+- Gravel vacuum and aquarium net for maintenance days
 
-## Good practices
+## Common pitfalls
 
-- Match new water temperature before top-offs or water changes.
-- Log readings in a notebook so trends are visible before issues emerge.
+- Adding fish before the tank has cycled or before water parameters are stable
+- Skipping dechlorination or mismatching water temperatures during changes
+- Replacing filter media all at once instead of rinsing and reusing it
+
+## Next steps
+
+- Keep weekly logs so you can compare readings after each quest cycle.
+- Pair tank monitoring with data tracking practices from [Programming](/docs/programming).

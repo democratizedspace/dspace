@@ -21,12 +21,19 @@ useful shop fixtures and furniture.
 - [Apply a Wood Finish](/quests/woodworking/apply-finish)
 - [Build a simple workbench](/quests/woodworking/workbench)
 
-## Key gear and supplies
+## Key gear
 
-- Tape measure, claw hammer, and paintbrushes for finish work
-- A clean workspace with clamps and a stable surface
+- Workbench with a stable, flat surface for measuring and assembly
+- Handsaw, tape measure, and claw hammer (16 oz) for core cuts
+- Sandpaper pack and paintbrush for smoothing and finish coats
 
-## Good practices
+## Common pitfalls
 
-- Measure twice, cut once, and label each part before assembly.
-- Sand between finish coats to keep surfaces smooth.
+- Cutting without confirming measurements or marking reference faces
+- Rushing assembly before dry-fitting parts together
+- Applying finish before dust is cleared from the surface
+
+## Next steps
+
+- Keep a cut list and finish schedule in your quest log for repeat builds.
+- Build jigs or brackets with [3D printing](/docs/3dprinting).

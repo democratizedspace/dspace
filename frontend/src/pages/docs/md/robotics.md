@@ -21,12 +21,19 @@ skills for small robots.
 - [Add Obstacle Avoidance](/quests/robotics/obstacle-avoidance)
 - [Navigate a Simple Maze](/quests/robotics/maze-navigation)
 
-## Key gear and supplies
+## Key gear
 
-- Precision screwdriver set, wire cutters, and anti-static wrist strap
-- Sensor components from the electronics inventory (photoresistors, thermistors, resistors)
+- Servo Motor and micro servo pair for motion testing
+- Ultrasonic distance sensor and pan-tilt ultrasonic rig for navigation practice
+- Two-servo arm kit or assembled servo arm for grasping exercises
 
-## Good practices
+## Common pitfalls
 
-- Start with slow servo sweeps before running full motion tests.
-- Log calibration values for reflectance sensors and rangefinders.
+- Powering servos from logic pins instead of a stable supply
+- Skipping calibration steps before obstacle-avoidance quests
+- Letting wiring snag on moving parts during motion tests
+
+## Next steps
+
+- Expand sensors and actuators through [Electronics](/docs/electronics).
+- Use [Programming](/docs/programming) to log robot runs and tuning data.

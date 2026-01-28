@@ -21,13 +21,19 @@ and maintaining clean supplies.
 - [Stop a Nosebleed](/quests/firstaid/stop-nosebleed)
 - [Practice Basic CPR](/quests/firstaid/learn-cpr)
 
-## Key gear and supplies
+## Key gear
 
-- Adhesive bandages, sterile gauze, antiseptic wipes, and antibiotic ointment
-- Nitrile gloves, safety goggles, and biohazard waste bags
-- CPR training gear and a clean work surface
+- First aid kit stocked with adhesive bandages, sterile gauze pads, and antiseptic wipes
+- Nitrile gloves (pair) and biohazard waste bags for clean handling
+- CPR pocket mask and CPR training manikin for safe practice
 
-## Good practices
+## Common pitfalls
 
-- Replace expired supplies on a schedule and log disposal.
-- Wash hands and sanitize surfaces before treating wounds.
+- Using expired supplies or forgetting to restock after a quest
+- Skipping hand hygiene and glove changes between treatments
+- Practicing CPR without a barrier device or cleaning the manikin
+
+## Next steps
+
+- Build a restock cadence and add reminders to your quest log.
+- Pair first aid readiness with shop safety in [Woodworking](/docs/woodworking).

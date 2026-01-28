@@ -21,12 +21,19 @@ healthy over time.
 - [Monitor Heat Pump Energy Use](/quests/geothermal/monitor-heat-pump-energy)
 - [Purge Air from Ground Loop](/quests/geothermal/purge-loop-air)
 
-## Key gear and supplies
+## Key gear
 
-- Thermistor sensors and calibration equipment
-- Temperature log files and monitoring dashboards
+- Thermistor logging rig and digital multimeter for sensor verification
+- Temperature log CSV and temperature line chart to compare trends
+- Clean calibration notes stored with your ground-loop records
 
-## Good practices
+## Common pitfalls
 
-- Take readings at consistent times so seasonal comparisons are meaningful.
-- Document any maintenance before and after clearing air from the loop.
+- Sampling at inconsistent times, which hides seasonal patterns
+- Moving sensors between locations without noting offsets
+- Clearing air from the loop without logging before-and-after readings
+
+## Next steps
+
+- Keep a seasonal baseline and revisit it after each maintenance quest.
+- Compare your thermal performance to energy logs in [Energy Systems](/docs/energy-systems).
