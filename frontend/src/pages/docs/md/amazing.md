@@ -5,9 +5,17 @@ slug: 'amazing'
 
 <img class="amazing" src="/assets/amazing1.jpg">
 
-Amazing is an in-game organization that helps connect buyers and sellers. The entire organization is automated by AI and robots, and it is verifiably carbon negative. Transportation and logistics are handled by a fleet of autonomous vehicles and drones, ensuring efficient and environmentally conscious delivery of goods and services.
+Amazing is the in-lore distribution layer that fulfills item buys and sells across DSPACE. It
+connects buyers and sellers, handles transportation, and keeps logistics verifiably carbon
+negative through automation, AI, and a fleet of autonomous vehicles and drones.
 
-Amazing is designed to be a [hyperstructure](https://jacob.energy/hyperstructures.html). It is a protocol that is unstoppable, free, valuable, expansive, permissionless, positive sum, and credibly neutral.
+Today, Amazing exists only as worldbuilding. There is no in-game mechanic for shipping yet:
+items bought or sold in /inventory are added or removed immediately. In a future update, we plan
+to introduce a realtime shipping loop (see /docs/realtime) that makes fulfillment feel tangible.
+
+Amazing is designed to be a [hyperstructure](https://jacob.energy/hyperstructures.html). It is a
+protocol that is unstoppable, free, valuable, expansive, permissionless, positive sum, and
+credibly neutral.
 
 ## How it works
 
