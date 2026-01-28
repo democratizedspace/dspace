@@ -18,7 +18,8 @@ Authentication appears in the following places today:
 - **Cloud Sync** at `/cloudsync` (reads/writes private GitHub gists for backups).
 - **Quest options that require GitHub** (options flagged with `requiresGitHub` stay disabled until
   a valid token is saved).
-- **Settings → Log out** (clears saved GitHub credentials from this device).
+- **Settings → Log out** (clears saved GitHub credentials, Cloud Sync gist ID, and avatar URL from
+  this device).
 
 ## Personal Access Tokens
 
@@ -60,5 +61,5 @@ and Cloud Sync will work seamlessly.
 ## Logging out
 
 If you're using a shared machine, open the **Settings** page and click **Log out** to clear the
-saved GitHub token, Cloud Sync gist ID, and related local preferences from the device. This removes
-access to your synced data until you sign in again.
+saved GitHub token, Cloud Sync gist ID, and stored `avatarUrl` from the device. This removes access
+to your synced data until you sign in again.
