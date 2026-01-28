@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Water tests only help if we write them down. Gloves on, liquid kit ready, and let's capture today's ammonia, nitrite, nitrate, and pH.",
+            "text": "Water tests only matter if we write them down. Gloves on, kit ready, and let's capture today's ammonia, nitrite, nitrate, and pH.",
             "options": [
                 {
                     "type": "goto",
@@ -23,7 +23,7 @@
         },
         {
             "id": "measure",
-            "text": "Rinse the vials in tank water, fill to the line, add the right drops, and wait the full time for each reagent before reading. Keep gloves on so skin oils stay out of the sample.",
+            "text": "Rinse the vials in tank water, fill to the line, add the right drops, and wait the full time for each reagent. Keep gloves on so skin oils stay out of the sample.",
             "options": [
                 {
                     "type": "process",
@@ -69,7 +69,7 @@
         },
         {
             "id": "finish",
-            "text": "Great recordkeeping! If numbers creep up, you can schedule a water change or adjust feeding before the fish even notice.",
+            "text": "Good recordkeeping. If numbers creep up, schedule a water change or adjust feeding before the fish even notice.",
             "options": [
                 {
                     "type": "finish",

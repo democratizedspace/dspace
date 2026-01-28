@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Atlas here. Vega said you need this empty 80 liter tank on the stand. Clear the path and lift with your legs.",
+            "text": "Atlas on deck. Vega needs this empty 80 liter tank on the stand. Clear the path and lift with your legs.",
             "options": [
                 {
                     "type": "goto",
@@ -29,7 +29,7 @@
         },
         {
             "id": "lift",
-            "text": "I'll take most of the weight. On three—one, two, three. Keep the tank level and your back straight.",
+            "text": "Load rated. I'll take most of the weight. On three—one, two, three. Keep the tank level and your back straight.",
             "options": [
                 {
                     "type": "goto",
@@ -40,7 +40,7 @@
         },
         {
             "id": "place",
-            "text": "Set it down gently; check the stand is level before letting go.",
+            "text": "Set it down gently. Check the stand is level before letting go.",
             "options": [
                 {
                     "type": "goto",

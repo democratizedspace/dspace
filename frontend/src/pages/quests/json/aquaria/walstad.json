@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hi there! I'm Vega. Ready to build a Walstad tank that can run lean? We'll layer soil, cap it, and plant before we ever reach for livestock.",
+            "text": "Vega here. Ready to build a Walstad tank that runs lean? We'll layer soil, cap it, and plant before we ever add livestock.",
             "options": [
                 {
                     "type": "goto",
@@ -53,7 +53,7 @@
         },
         {
             "id": "stage",
-            "text": "Roll the stand to level ground, place the tank, and lay out soil, gravel, plants, light, and your conditioner with a clean bucket. Keep the intake cords dry.",
+            "text": "Roll the stand to level ground, place the tank, and lay out soil, gravel, plants, light, and conditioner with a clean bucket. Keep the intake cords dry.",
             "options": [
                 {
                     "type": "process",
@@ -75,7 +75,7 @@
         },
         {
             "id": "build",
-            "text": "Add the soil layer, cap with rinsed gravel, tuck in guppy grass and duckweed, then fill gently with the dechlorinated bucket so you don't blast the substrate. Aim the light for an 8-hour timer.",
+            "text": "Add the soil layer, cap with rinsed gravel, tuck in guppy grass and duckweed, then fill gently with the dechlorinated bucket so you don't disturb the substrate. Aim the light for an 8-hour timer.",
             "options": [
                 {
                     "type": "process",
@@ -97,7 +97,7 @@
         },
         {
             "id": "thermo",
-            "text": "Dry the outside glass near eye level and pick a spot for the strip thermometer so you can attach it in the next quest and track swings without dunking probes.",
+            "text": "Dry the outside glass near eye level and pick a spot for the strip thermometer so you can track swings without dunking probes.",
             "options": [
                 {
                     "type": "goto",
@@ -114,7 +114,7 @@
         },
         {
             "id": "finish",
-            "text": "Great start. Let the tank settle and test before stocking. Keep feeding the light daily and resist adding fish until ammonia and nitrite stay at zero.",
+            "text": "Great start. Let the tank settle and test before stocking. Keep the light steady and wait until ammonia and nitrite stay at zero.",
             "options": [
                 {
                     "type": "finish",

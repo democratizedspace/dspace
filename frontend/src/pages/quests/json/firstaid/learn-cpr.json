@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Place the manikin on a firm surface. Put on nitrile gloves, set the pocket mask and open antiseptic wipes from your first aid kit. Check for hazards, call emergency services, then begin.",
+            "text": "Safety first, hero: check for hazards, call emergency services, then place the manikin on a firm surface. Gloves on, pocket mask ready, antiseptic wipes opened. dChat's hype mode is off for this one.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "steps",
-            "text": "With the manikin on its back, place the heel of one hand on the chest center and interlock your fingers. Keep arms straight and push 2 inches deep at 100–120 compressions per minute, letting the chest rise fully. After 30 compressions, tilt the head, seal the mask and give two breaths if trained. Stop if anything seems unsafe.",
+            "text": "Place the heel of one hand on the chest center, interlock your fingers, arms straight. Push 2 inches deep at 100–120 compressions per minute and let the chest rise fully. After 30 compressions, tilt the head, seal the mask, and give two breaths if trained. Stop if anything seems unsafe.",
             "options": [
                 {
                     "type": "process",

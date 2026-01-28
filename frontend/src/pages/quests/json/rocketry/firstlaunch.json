@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey friend! I'm Nova! I'm sure you've met some of my colleagues! I work pretty closely with Sydney and Phoenix. I'm here to help you launch your first model rocket! Are you ready?",
+            "text": "Nova here—rocketry lead. I work with Sydney and Phoenix, and today we're launching your first model rocket. Ready to light the fuse?",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "height",
-            "text": "Luckily I've already launched this exact rocket before! I estimate around 35 meters in perfect conditions, but this can vary a lot based on wind and other factors.",
+            "text": "I've flown this exact design. Expect about 35 meters in calm air, but wind and air density can swing that number.",
             "options": [
                 {
                     "type": "goto",
@@ -30,7 +30,7 @@
         },
         {
             "id": "paperwork",
-            "text": "Nahhh, you're good! According to the FAA, without additional paperwork, the rocket may weigh no more than 1500 grams, with a maximum weight of 125g of propellant. We're looking at roughly 90 grams for the rocket body and 18 grams for the solid rocket motor. Just need to find a nice open space to launch it!",
+            "text": "We're clear under FAA hobby limits: under 1500 grams total and under 125 g of propellant. We're around 90 g for the body and 18 g for the motor. Find a wide, open launch area and we're good.",
             "options": [
                 {
                     "type": "goto",
@@ -41,7 +41,7 @@
         },
         {
             "id": "print",
-            "text": "First things first, you'll need to 3D print the rocket itself. It's a quick job with lightweight PLA filament and should only take about an hour.",
+            "text": "First step: 3D print the airframe. Lightweight PLA, about an hour on the starter printer.",
             "options": [
                 {
                     "type": "goto",
@@ -52,7 +52,7 @@
         },
         {
             "id": "fun",
-            "text": "Sure, but where's the fun in that? You've got that fancy little 3D printer Sydney gave you, don't you? All you need to do is print 4 pieces and the rest is glue and assembly! Obviously it gets way more complicated than that but we're going for the MVP -- the minimum viable product. You can always come back and make it better later!",
+            "text": "You could buy one, but printing teaches the airframe. Use the printer Sydney gave you. Four parts, then glue and assembly. This is MVP rocketry—upgrades come after we stick the landing.",
             "options": [
                 {
                     "type": "goto",
@@ -63,7 +63,7 @@
         },
         {
             "id": "components",
-            "text": "Even for this MVP, it's good to keep modularity in mind. Not only does this mitigate the risk of a large print failing and wasting a bunch of filament and time, but it also allows you to iterate on the design more easily. For this rocket, we're going to print a nosecone, a body tube, a fincan, and a nosecone coupler, which attaches the nosecone to the body tube. Print those 4 components and then we'll proceed! You can only print one component at a time using a single printer, so either print those 4 in series, or buy more printers to parallelize! The choice is up to you! I'm in no rush.",
+            "text": "Modularity saves time and filament. Print a nosecone, body tube, fincan, and a nosecone coupler that joins the nosecone to the body tube. One printer means one part at a time, unless you scale up. I'm in no rush.",
             "options": [
                 {
                     "type": "process",
@@ -112,7 +112,7 @@
         },
         {
             "id": "assemble",
-            "text": "It's time for assembly!! There are a few more things you'll need: a solid rocket motor, some superglue, and some Kevlar shock cord! You know how to buy those, right? I'm sure you do. I'll wait here while you go get them and assemble this thing. Here, use this handy schematic!",
+            "text": "Assembly time. You'll need a solid rocket motor, superglue, and a Kevlar shock cord. Grab them, then use this schematic to assemble the airframe.",
             "options": [
                 {
                     "type": "process",
@@ -134,7 +134,7 @@
         },
         {
             "id": "launch",
-            "text": "We're nearly there! You'll also need a launch pad, a rocket igniter, and a launch controller. The launch pad ensures the rocket launches straight up, and the launch controller is what actually ignites the rocket motor. The igniter is the part you insert in the bottom of your rocket motor. You've already bought plenty of stuff at this point, so I'll just give you some spares I have laying around. Here you go!",
+            "text": "Almost there. You'll need a launch pad, igniter, and launch controller. The pad keeps the trajectory straight; the controller fires the motor. I'll loan you spares.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -177,7 +177,7 @@
         },
         {
             "id": "go",
-            "text": "We sure are, buddy! Let's go launch this thing! Just place the rocket on the launchpad, insert the igniter, and connect the igniter to your launch controller. You should have plenty of wire to launch from a safe distance. Once you're ready, press the launch button on the controller and watch it go!",
+            "text": "We are go. Place the rocket on the pad, insert the igniter, connect to the controller, and back up to a safe distance. When you're ready, press launch and watch it fly.",
             "options": [
                 {
                     "type": "process",
@@ -199,7 +199,7 @@
         },
         {
             "id": "done",
-            "text": "That's ok, this is still a massive success! You're on your way to being a rocketeer! I'm so proud of you! Here, take this as a token of my appreciation. We'll improve on this design later and try to recover it for reuse. But for now, bask in the glory of your first rocket launch!",
+            "text": "That was a success, even without recovery. You're officially a rocketeer. Take this token—and next iteration, we'll tune for reuse. For now, enjoy your first launch.",
             "options": [
                 {
                     "type": "finish",

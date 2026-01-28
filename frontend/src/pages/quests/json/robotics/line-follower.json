@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's take your servo skills further. We'll build a tiny robot that follows a dark line on the floor.",
+            "text": "Let's level up your servo skills. We'll build a tiny bot that tracks a dark line on the floor.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "parts",
-            "text": "You'll need two infrared sensors, a pair of continuous-rotation servos, and an Arduino. Mount everything on a small chassis.",
+            "text": "You'll need two infrared sensors, a pair of continuous-rotation servos, and an Arduino. Mount everything on a small chassis and keep the wiring tidy.",
             "options": [
                 {
                     "type": "goto",
@@ -36,7 +36,7 @@
         },
         {
             "id": "code",
-            "text": "Upload a simple PID loop that adjusts motor speed based on the sensors. Place the bot on a black line and watch it drive!",
+            "text": "Upload a simple PID loop that adjusts motor speed based on the sensor readings. Place the bot on a black line and tune until it stays locked on.",
             "options": [
                 {
                     "type": "finish",

@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hello, friend! I'm Sydney, a 3D printing expert with the metaguild. dChat referred me. I've got a proposition for you: how would you like to have your very own 3D printer?",
+            "text": "Sydney here. dChat sent me. I can outfit you with a 3D printer—ready to own one?",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "enthusiastic",
-            "text": "Fantastic! A 3D printer is an invaluable tool! It can be used to quickly prototype new designs, print decor, and even build robots!! I've taken the liberty of fully assembling and calibrating it for you. So, what do you say?",
+            "text": "Good. It prototypes parts fast, prints fixtures, and keeps you moving. I've already assembled and calibrated it. You in?",
             "options": [
                 {
                     "type": "goto",
@@ -30,7 +30,7 @@
         },
         {
             "id": "grant",
-            "text": "First things first, I need you to accept the 3D printer. Just take it and we'll proceed. Oh, and I threw in some filament! That filament gets melted at a high temperature and laid down one layer at a time. It may take a while to print stuff at first, but over time you'll be able tweak settings and make it run way faster! Plus, this is a cheap beginner model. There are way more powerful printers out there if you've got the cash!",
+            "text": "Step one: accept the printer. I tossed in filament too. PLA melts hot and lays down one layer at a time—slow at first, faster once you tune it. This is a starter model; upgrades exist when you're ready.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -65,7 +65,7 @@
         },
         {
             "id": "benchy",
-            "text": "For your test print, I recommend printing a Benchy. It's a small boat model often used to validate 3D printer setups. Once you've successfully printed Benchy, we'll know your 3D printer is ready for action. It's gonna take a bit of time so feel free to go talk to my associates or grab a coffee or something.",
+            "text": "First print: Benchy. It's the baseline boat test. Once it prints clean, your setup is ready. It'll take a bit—grab a coffee while it runs.",
             "options": [
                 {
                     "type": "process",
@@ -87,7 +87,7 @@
         },
         {
             "id": "finish",
-            "text": "Great job! You're all set to use your 3D printer for your space exploration adventures (or whatever else tickles your fancy). If you need help or tips on 3D printing, feel free to reach out. Good luck! Oh and here's a little something. There's more where that came from! If you're interested in more free dUSD, dChat's got you covered!",
+            "text": "Nice work. You're cleared to print mission gear (and whatever else). Ping me for troubleshooting. Here's a little dUSD—dChat can help you earn more.",
             "options": [
                 {
                     "type": "finish",
