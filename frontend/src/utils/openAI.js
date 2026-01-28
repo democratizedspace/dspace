@@ -51,7 +51,10 @@ const sharedSystemGuardrail =
 
 const applySystemGuardrail = (prompt) => {
     if (!prompt) return sharedSystemGuardrail;
-    if (prompt.toLowerCase().includes(sharedSystemGuardrail.toLowerCase())) return prompt;
+    const normalizedPrompt = prompt.toLowerCase();
+    const hasNeverInvent = normalizedPrompt.includes('never invent');
+    const hasGuardedDomain = /(quests|items|processes|routes|player state)/i.test(prompt);
+    if (hasNeverInvent && hasGuardedDomain) return prompt;
     return `${prompt}\n\n${sharedSystemGuardrail}`;
 };
 
@@ -249,6 +252,10 @@ export const buildChatPrompt = async (messages, options = {}) => {
           }
         : null;
 
+    if (knowledgeMessage && docsRagPayload.excerptsText) {
+        knowledgeMessage.content = `${knowledgeMessage.content}\n\n${docsRagPayload.excerptsText}`;
+    }
+
     const openingMessage = {
         role: 'assistant',
         content: persona?.welcomeMessage || fallbackWelcomeMessage,
@@ -262,7 +269,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         if (knowledgeMessage) {
             combinedMessages.push(knowledgeMessage);
         }
-        if (docsRagMessage) {
+        if (docsRagMessage && !knowledgeMessage) {
             combinedMessages.push(docsRagMessage);
         }
         combinedMessages.push(openingMessage);
@@ -271,7 +278,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         if (knowledgeMessage) {
             combinedMessages.push(knowledgeMessage);
         }
-        if (docsRagMessage) {
+        if (docsRagMessage && !knowledgeMessage) {
             combinedMessages.push(docsRagMessage);
         }
         combinedMessages = [...combinedMessages, ...userMessages];

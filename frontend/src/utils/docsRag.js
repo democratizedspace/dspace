@@ -62,7 +62,8 @@ const trimExcerpt = (text, maxChars) => {
 };
 
 const buildEntry = ({ kind, title, slug, anchor, excerpt }) => {
-    return `- [${kind}] ${title} — ${slug}#${anchor}\n  ${excerpt}`;
+    const resolvedAnchor = anchor || 'top';
+    return `- [${kind}] ${title} — ${slug}#${resolvedAnchor}\n  ${excerpt}`;
 };
 
 export const searchDocsRag = async (queryText, options = {}) => {
@@ -101,11 +102,12 @@ export const searchDocsRag = async (queryText, options = {}) => {
         const excerpt = trimExcerpt(String(chunk.text || '').trim(), maxExcerptChars);
         if (!excerpt) continue;
 
+        const resolvedAnchor = chunk.anchor || 'top';
         const entry = `${buildEntry({
             kind: chunk.kind,
             title: chunk.title,
             slug: chunk.slug,
-            anchor: chunk.anchor,
+            anchor: resolvedAnchor,
             excerpt,
         })}\n`;
 
@@ -124,7 +126,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
                 kind: chunk.kind,
                 title: chunk.title,
                 slug: chunk.slug,
-                anchor: chunk.anchor,
+                anchor: resolvedAnchor,
                 excerpt: trimmedExcerpt,
             })}\n`;
 
@@ -133,12 +135,16 @@ export const searchDocsRag = async (queryText, options = {}) => {
             }
 
             output += trimmedEntry;
-            included.push(chunk);
+            included.push({ ...chunk, anchor: resolvedAnchor });
             break;
         }
 
         output += entry;
-        included.push(chunk);
+        included.push({ ...chunk, anchor: resolvedAnchor });
+    }
+
+    if (!included.length) {
+        return { excerptsText: '', sourcesMeta: { results: [] } };
     }
 
     output += '---';
