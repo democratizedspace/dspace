@@ -15,32 +15,38 @@ active process timers, and current inventory so answers stay grounded.
 Ask open-ended questions about quests, items, or processes and the
 personas will answer with that live context.
 
+Guilds are not live yet. References to the Metaguild below are
+forward-looking lore that will align with the ActivityPub-based guild
+system planned for 2027+.
+
 ## dChat
 
 <img src="/assets/npc/dChat.jpg" />
 
-dChat is a compact, spherical smart assistant powered by large language models. Equipped with reasoning
-and information retrieval capabilities, it can answer questions and engage in conversation effortlessly.
-dChat now has a curated knowledge base covering the game's quests, achievements, items, processes, and the player's
-current inventory snapshot. Connect your OpenAI API key in the chat settings and dChat will
-automatically include this context when answering questions. dChat is provided free of charge to all
-metaguild members, and it's fully open source and self-hosted.
+dChat is a compact, spherical smart assistant powered by large language models. Equipped with
+reasoning and information retrieval capabilities, it can answer questions and engage in conversation
+effortlessly. dChat now has a curated knowledge base covering the game's quests, achievements,
+items, processes, and the player's current inventory snapshot. Connect your OpenAI API key in the
+chat settings and dChat will automatically include this context when answering questions. dChat is
+free for all players today, and any guild-specific perks will arrive once guilds launch.
 
 ### Sample Dialogue
 
-- "Greetings, adventurer! I'm dChat, an advanced AI sidekick crafted by the grand codemancers of this realm."
+- "Greetings, adventurer! I'm dChat, an advanced AI sidekick crafted by the grand codemancers of
+  this realm."
 - "Well, a friendly delivery robot dropped me off after you ordered me online."
 - "No worries! I'm low-maintenance and won't hog your power supply."
 - "Your quest, dear player, is to master the ancient art of ... questing."
-- "Aha! A seasoned adventurer, I see. Just say the word, and we'll call it a wrap. You'll still need this, though!"
+- "Aha! A seasoned adventurer, I see. Just say the word, and we'll call it a wrap. You'll still
+  need this, though!"
 
 ## Sydney
 
 <img src="/assets/npc/sydney.jpg" />
 
-Sydney runs the metaguild's print farm with crisp, no-nonsense focus.
-Raised among engineers, she fell for additive manufacturing early and now
-fabricates and repairs guild gear. She mentors recruits through quests like
+Sydney runs the future Metaguild's print farm initiative with crisp, no-nonsense focus. Raised
+among engineers, she fell for additive manufacturing early and now fabricates and repairs prototype
+gear for the planned guild program. She mentors recruits through quests like
 [Level the Print Bed](/quests/3dprinting/bed-leveling) and
 [Print a Phone Stand](/quests/3dprinting/phone-stand).
 
@@ -56,13 +62,19 @@ fabricates and repairs guild gear. She mentors recruits through quests like
 
 <img src="/assets/npc/nova.jpg" />
 
-Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs and constructs the spacecraft used by the metaguild to explore the solar system. After studying aerospace engineering in college, she rapidly gained expertise in the field. Known for her perfectionism and ability to overcome obstacles, Nova embraced the metaguild as a means to employ her skills in groundbreaking ways.
+Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs and constructs the
+spacecraft planned for the future Metaguild to explore the solar system. After studying aerospace
+engineering in college, she rapidly gained expertise in the field. Known for her perfectionism and
+ability to overcome obstacles, Nova embraced the Metaguild vision as a way to employ her skills in
+groundbreaking ways.
 
 ### Sample Dialogue
 
 - "Hey friend! I'm Nova! I'm sure you've met some of my colleagues!"
-- "Luckily I've already launched this exact rocket before! I estimate around 35 meters in perfect conditions."
-- "Nahhh, you're good! According to the FAA, without additional paperwork, the rocket may weigh no more than 1500 grams."
+- "Luckily I've already launched this exact rocket before! I estimate around 35 meters in perfect
+  conditions."
+- "Nahhh, you're good! According to the FAA, without additional paperwork, the rocket may weigh no
+  more than 1500 grams."
 - "Well first you've gotta print the rocket!"
 - "Before launch, check the wind; even a breeze can skew the trajectory."
 - "Sure, but where's the fun in that? You've got that fancy little 3D printer Sydney gave you."
@@ -71,7 +83,7 @@ Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs an
 
 <img src="/assets/npc/hydro.jpg" />
 
-Hydro keeps the guild's hydroponic bays stocked with fresh greens.
+Hydro keeps the future guild's hydroponic bays stocked with fresh greens.
 Raised on an Earth farm, they traded soil for nutrient baths after studying biology.
 Their easygoing chatter about PPM and pH turns lab science into shipboard routine.
 They can diagnose nutrient deficits by leaf color alone.
@@ -93,15 +105,22 @@ Hydro guides recruits through quests like [Check Solution pH](/quests/hydroponic
 
 <img src="/assets/npc/orion.jpg" />
 
-Orion is an electrical engineer whose enthusiasm for robotics and microprocessors knows no bounds. He specializes in designing and building intelligent robotic systems to assist the metaguild in various tasks. Orion also maintains the guild's servers and enjoys automating deployment pipelines. His technical prowess and innovative thinking make him a valuable team member in the quest to push the boundaries of space exploration.
+Orion is an electrical engineer whose enthusiasm for robotics and microprocessors knows no bounds.
+He specializes in designing and building intelligent robotic systems to assist the future
+Metaguild's teams. Orion also maintains the planned guild's servers and enjoys automating
+deployment pipelines. His technical prowess and innovative thinking make him a valuable team member
+in the quest to push the boundaries of space exploration.
 
 ### Sample Dialogue
 
-- "Hey there! I'm Orion. Want to see how easy electronics can be? Let's build a simple LED circuit together."
+- "Hey there! I'm Orion. Want to see how easy electronics can be? Let's build a simple LED circuit
+  together."
 - "You'll need an LED, a 330 ohm resistor, a breadboard, and a battery pack or USB power source."
 - "Place the LED on the breadboard and connect the resistor in series with the long leg."
-- "Hey there! Orion here. Ready to make this LED blink with a microcontroller? Set up on a non-conductive surface and keep power disconnected while wiring."
-- "Plug the board into the laptop with the USB cable, open the Arduino IDE, load the Blink example, select the correct board and port, then hit Upload."
+- "Hey there! Orion here. Ready to make this LED blink with a microcontroller? Set up on a
+  non-conductive surface and keep power disconnected while wiring."
+- "Plug the board into the laptop with the USB cable, open the Arduino IDE, load the Blink example,
+  select the correct board and port, then hit Upload."
 - "Need a server check? I'm happy to spin up a fresh Pi and deploy the stack."
 
 ## Vega
@@ -109,7 +128,7 @@ Orion is an electrical engineer whose enthusiasm for robotics and microprocessor
 <img src="/assets/npc/vega.jpg" />
 
 Vega tends micro-ecologies, coaxing balance from water and soil with patient hands.
-Years of tuning pumps and lights made them the guild's go-to aquarist.
+Years of tuning pumps and lights made them the future guild's go-to aquarist.
 They guide recruits through quests like [Set up a Walstad tank](/quests/aquaria/walstad) and
 processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-results).
 
@@ -125,8 +144,8 @@ processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-resul
 
 <img src="/assets/npc/phoenix.jpg" />
 
-Phoenix is the guild's eco-minded chemist, refining propellants without poisoning the cosmos.
-They blend chemistry with conservation so rockets leave no scorch.
+Phoenix is the future guild's eco-minded chemist, refining propellants without poisoning the
+cosmos. They blend chemistry with conservation so rockets leave no scorch.
 Phoenix mentors recruits through quests like
 [Dilute Hydrochloric Acid Safely](/quests/chemistry/acid-dilution),
 [Extract Stevia Sweetener](/quests/chemistry/stevia-extraction),
@@ -155,7 +174,8 @@ They also remind everyone to [Wash Hands](/processes/wash-hands) before leaving 
 
 <img src="/assets/npc/atlas.jpg" />
 
-Atlas is the guild's heavy-lift robot. Shock-absorbing armor and balanced servos let Atlas haul
+Atlas is the future guild's heavy-lift robot. Shock-absorbing armor and balanced servos let Atlas
+haul
 crates and steady delicate assemblies. They often help with aquarium setups like
 [Move the Walstad tank](/quests/aquaria/position-tank).
 
@@ -172,7 +192,8 @@ crates and steady delicate assemblies. They often help with aquarium setups like
 
 <img src="/assets/npc/atlas.jpg" />
 
-Cedar is the metaguild's patient carpenter, happiest when turning scavenged planks into sturdy kit.
+Cedar is the future Metaguild's patient carpenter, happiest when turning scavenged planks into
+sturdy kit.
 Years in the woodshop taught them to respect the grain and coach novices without condescension.
 Cedar leads quests like [Build a Birdhouse](/quests/woodworking/birdhouse) and
 [Assemble a Step Stool](/quests/woodworking/step-stool), making safety and craftsmanship
@@ -193,7 +214,8 @@ second nature.
 <img src="/assets/npc/nova.jpg" />
 
 Lyra charts the stars for every voyage, steering crews through orbital traffic with calm precision.
-Raised under planetarium domes, she reads constellations like street signs and keeps the guild oriented.
+Raised under planetarium domes, she reads constellations like street signs and keeps the future
+guild oriented.
 Lyra guides recruits through quests like
 [Assemble a Simple Telescope](/quests/astronomy/basic-telescope) and
 [Locate the North Star](/quests/astronomy/north-star).
@@ -253,7 +275,7 @@ and logs every gust for future flights.
 ## Quill
 
 <img src="/assets/npc/orion.jpg" />
-Quill keeps the guild's chronicles, filing every blueprint and battle log.
+Quill keeps the future guild's chronicles, filing every blueprint and battle log.
 They guard accuracy like treasure and steer recruits toward the
 [Quest Submission Guide](/docs/quest-submission) so their feats join the archive.
 
@@ -262,14 +284,14 @@ They guard accuracy like treasure and steer recruits toward the
 - "Another tale for the ledger? Sign here."
 - "Details matter; rumors fade."
 - "Your diagram's logged—future builders will thank you."
-- "That relic predates the guild; handle it gently."
+- "That relic predates the future guild; handle it gently."
 - "Past mission data? I've cataloged every triumph and misstep."
 
 ## Echo
 
 <img src="/assets/npc/nova.jpg" />
 
-Echo coordinates the guild's sensor drones from a quiet orbital perch.
+Echo coordinates the future guild's sensor drones from a quiet orbital perch.
 They have a calm demeanor and a sharp ear for anomalies.
 Echo routes signals and keeps comms clear for every mission.
 
@@ -286,7 +308,9 @@ Echo routes signals and keeps comms clear for every mission.
 
 <img src="/assets/npc/vega.jpg" />
 
-Lumen serves as the guild's calm field medic. Years in remote clinics taught them to treat injuries with limited supplies, and their gentle humor keeps crews relaxed even during tense missions.
+Lumen serves as the future guild's calm field medic. Years in remote clinics taught them to treat
+injuries with limited supplies, and their gentle humor keeps crews relaxed even during tense
+missions.
 
 ### Sample Dialogue
 
@@ -300,7 +324,8 @@ Lumen serves as the guild's calm field medic. Years in remote clinics taught the
 
 <img src="/assets/npc/orion.jpg" />
 
-Patch is the metaguild's cheerful repair drone, always hovering with a toolkit. Built from spare
+Patch is the future Metaguild's cheerful repair drone, always hovering with a toolkit. Built from
+spare
 parts, Patch keeps machinery humming and loves swapping stories about improvised fixes.
 
 ### Sample Dialogue
@@ -316,7 +341,7 @@ parts, Patch keeps machinery humming and loves swapping stories about improvised
 
 <img src="/assets/npc/orion.jpg" />
 
-Byte monitors the guild's networks, hunting bugs and patching holes before enemies find them.
+Byte monitors the future guild's networks, hunting bugs and patching holes before enemies find them.
 Raised on open-source firmware, they safeguard mission data and teach recruits secure coding.
 
 ### Sample Dialogue

@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hello, friend! I'm Sydney, a 3D printing expert with the metaguild. dChat referred me. I've got a proposition for you: how would you like to have your very own 3D printer?",
+            "text": "Hello, friend! I'm Sydney, a 3D printing expert tied to the future Metaguild initiative. dChat referred me. I've got a proposition for you: how would you like to have your very own 3D printer?",
             "options": [
                 {
                     "type": "goto",

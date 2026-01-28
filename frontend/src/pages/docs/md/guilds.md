@@ -3,31 +3,34 @@ title: 'Guilds'
 slug: 'guilds'
 ---
 
-Guilds are planned for DSPACE v3 as collaborative crews that will pool
-equipment, quests, and funding. The Metaguild will serve as the flagship
-organization and welcome new recruits once they unlock the daily basic income
-quest. From there, specialist teams will handle everything from additive
-manufacturing to hydroponics so explorers can lean on in-universe experts
-instead of grinding alone.
+Guilds are **not live yet**. They are planned for 2027 and beyond, after the
+ActivityPub integration that will power DSPACE's multiplayer foundation.
+Until that work ships, you cannot create or join a guild, and there is no
+guild-specific progression, content, or rewards.
 
-## Metaguild structure
+## Current status
 
-- **Specialist wings** – Sydney, Hydro, Nova, and the rest of the persona
-  roster each lead a discipline-focused wing (print farm, hydroponics,
-  rocketry, medicine, and more). Their quests will unlock tooling, safety
-  checklists, and ongoing maintenance tasks for the whole crew.
-- **Donation board** – The [Leaderboard](/leaderboard) tracks dUSD donations
-  that power the universal basic income pool. Crew members can celebrate the
-  top supporters and see which wings are currently funding new projects.
-- **Operations log** – The [Stats](/stats) destination and quest trees
-  highlight the shared progress the Metaguild will catalog, keeping everyone
-  aligned on what content ships next.
+- DSPACE is single-player today, with no guild roster or recruitment flow.
+- Any mentions of the Metaguild in UI copy, quests, or lore are narrative
+  placeholders rather than active multiplayer features.
+- The Leaderboard and Stats pages are standalone tools right now—they do not
+  represent live guild membership or benefits.
 
-## How to get involved
+## Planned direction (post-ActivityPub)
 
-1.  Finish the "Universal Basic Income" quest line to receive your Metaguild
-    callsign and daily stipend.
-2.  Visit the [Leaderboard](/leaderboard) to contribute dUSD and earn a spot on
-    the roster once guild recruitment opens.
-3.  Chat with Metaguild specialists such as Sydney or Hydro through dChat to
-    plan builds, troubleshoot processes, and queue new quests for your crew.
+Once ActivityPub integration is complete, guilds will become the multiplayer
+layer for DSPACE. At that point, players will be able to:
+
+- Create or join a guild with a shared identity and roster.
+- Unlock guild-specific quests, content drops, and in-game benefits.
+- Contribute resources (such as dUSD) to shared goals that power communal
+  progression.
+- Participate in role-focused guild wings (e.g., fabrication, hydroponics,
+  rocketry) led by NPC specialists.
+
+## What to do for now
+
+You can still progress through quests, manage inventory, and use the
+[Leaderboard](/leaderboard) and [Stats](/stats) pages for your personal
+progress. Guilds will be announced in the [Roadmap](/docs/roadmap) and
+in release notes when they move into active development.

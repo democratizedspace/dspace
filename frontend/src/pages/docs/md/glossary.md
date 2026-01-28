@@ -56,7 +56,9 @@ exportable, and can reward items or trigger processes.
 
 ## Guild
 
-A collection of players populating the solar system under the same banner. A guild has its own unique name and 2-4 character tag. Tags consist of any combination of the 26 letters of the English alphabet.
+A planned multiplayer feature that will let groups of players share a banner, roster, and
+guild-specific content once ActivityPub integration ships (2027+). Guilds are not live yet, and
+there is currently no guild creation or membership flow.
 
 ## Hyperstructure
 

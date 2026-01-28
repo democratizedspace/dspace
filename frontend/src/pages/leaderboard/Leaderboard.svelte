@@ -41,10 +41,10 @@
 
 <div class="leaderboard" data-hydrated={hydrated ? 'true' : 'false'}>
     <header class="intro">
-        <h1>Metaguild Donation Leaderboard</h1>
+        <h1>UBI Supporter Leaderboard</h1>
         <p>
-            See which crews fuel the universal basic income pool. Daily donations earn streak
-            bonuses and bragging rights across the metaguild.
+            See which crews fuel the universal basic income pool. Guilds are planned for 2027+, so
+            this board is a preview of donation stats rather than live guild standings.
         </p>
     </header>
 
@@ -55,7 +55,7 @@
                 <tr>
                     <th scope="col">Rank</th>
                     <th scope="col">Callsign</th>
-                    <th scope="col">Guild</th>
+                    <th scope="col">Crew</th>
                     <th scope="col">Total dUSD</th>
                     <th scope="col">Streak (days)</th>
                 </tr>
@@ -65,7 +65,7 @@
                     <tr>
                         <th scope="row">#{entry.rank}</th>
                         <td>{entry.callsign}</td>
-                        <td>{entry.guild}</td>
+                        <td>{entry.crew}</td>
                         <td>{formatNumber(entry.contribution)}</td>
                         <td>{entry.streak}</td>
                     </tr>
@@ -89,8 +89,8 @@
                 <div>
                     <dt>Daily streak tip</dt>
                     <dd>
-                        Donate dUSD after each quest to climb the chart and earn exclusive metaguild
-                        badges.
+                        Donate dUSD after each quest to climb the chart and earn future guild badges
+                        once multiplayer launches.
                     </dd>
                 </div>
             </dl>
@@ -108,7 +108,7 @@
                         <span class="rank">#{entry.rank}</span>
                         <div class="details">
                             <strong>{entry.callsign}</strong>
-                            <span>{entry.guild}</span>
+                            <span>{entry.crew}</span>
                         </div>
                         <span class="metric">{entry.completed} quests</span>
                     </li>
@@ -123,7 +123,7 @@
                         <span class="rank">#{entry.rank}</span>
                         <div class="details">
                             <strong>{entry.callsign}</strong>
-                            <span>{entry.guild}</span>
+                            <span>{entry.crew}</span>
                         </div>
                         <span class="metric">{formatNumber(entry.stored)} dWatt</span>
                     </li>

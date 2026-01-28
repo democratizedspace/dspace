@@ -6,17 +6,47 @@
         "title": "3D Printing",
         "heading": "3D Printing",
         "anchor": "top",
-        "text": "3D printing is the process of making a three-dimensional object from a digital file. The object is created by laying down many thin layers of material in succession.",
+        "text": "3D printing turns digital models into physical parts by laying down thin layers of material (most DSPACE quests use FDM printers with PLA).",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/3dprinting:why-3d-printing:1:0",
+        "id": "doc:/docs/3dprinting:what-you-learn:1:0",
         "path": "frontend/src/pages/docs/md/3dprinting.md",
         "slug": "/docs/3dprinting",
         "title": "3D Printing",
-        "heading": "Why 3D printing?",
-        "anchor": "why-3d-printing",
-        "text": "3D printing is a great way to make prototypes or things that would otherwise require much larger machines.\n In space, specifically, 3D printing is crucial for making things like tools, spare parts, and other things that are very situational or difficult to plan for. They could also be scaled up substantially to make things like habitats or space stations. You could also 3D print entire human organs in low earth orbit and send them down to Earth.",
+        "heading": "What you learn",
+        "anchor": "what-you-learn",
+        "text": "- How to set up and calibrate an entry-level FDM printer - How to handle first-layer adhesion, retraction, and temperature tuning - How to keep prints consistent with maintenance tasks like belt tensioning and nozzle cleaning",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/3dprinting:quest-trailheads:2:0",
+        "path": "frontend/src/pages/docs/md/3dprinting.md",
+        "slug": "/docs/3dprinting",
+        "title": "3D Printing",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Set up your first 3D printer - Level the Print Bed - Print a Calibration Cube - Print a Temperature Tower - Tune Retraction Settings - Print a Phone Stand",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/3dprinting:key-gear-and-materials:3:0",
+        "path": "frontend/src/pages/docs/md/3dprinting.md",
+        "slug": "/docs/3dprinting",
+        "title": "3D Printing",
+        "heading": "Key gear and materials",
+        "anchor": "key-gear-and-materials",
+        "text": "- Entry-level FDM printer, spare nozzles, and a print removal scraper - PLA filament (green and white spools are stocked in inventory) - Digital calipers for checking dimensions and squareness",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/3dprinting:good-practices:4:0",
+        "path": "frontend/src/pages/docs/md/3dprinting.md",
+        "slug": "/docs/3dprinting",
+        "title": "3D Printing",
+        "heading": "Good practices",
+        "anchor": "good-practices",
+        "text": "- Run calibration prints (Benchy, temperature tower) before long jobs. - Keep your nozzle clean and watch for signs of a clog or \"blob of death\" before it ruins a print. - Record slicer settings in your quest notes so you can repeat successful builds.",
         "kind": "doc"
     },
     {
@@ -26,7 +56,7 @@
         "title": "About",
         "heading": "About DSPACE",
         "anchor": "about-dspace",
-        "text": "DSPACE is an incremental simulation game about resource management and space exploration. In the game, you will learn skills, work on quests, and build your own presence in the solar system.\n The game is still under active development. If you would like to get involved in the creation of the game, please join the Discord and say hello!",
+        "text": "DSPACE is an incremental simulation game about resource management and the practical skills behind space exploration. The current gameplay is intentionally grounded: you learn real-world systems on Earth first, then build toward the space era as new milestones ship. In the game, you will learn skills, work on quests, and grow a resilient technical foundation.\n The game is still under active development. If you would like to get involved in the creation of the game, please join the Discord and say hello!",
         "kind": "doc"
     },
     {
@@ -36,7 +66,7 @@
         "title": "About",
         "heading": "Start with the basics",
         "anchor": "start-with-the-basics",
-        "text": "Learn skills related to space exploration and resource management, and be an early adopter of (virtual) futuristic tech. Complete educational quests that teach you real-world skills applicable to space exploration.",
+        "text": "Learn skills related to resource management, energy, fabrication, and life support. Current quests center on grounded systems like electricity, solar, aquaria, hydroponics, chemistry, electronics, and operations, so you build a working toolkit before heading off-world.",
         "kind": "doc"
     },
     {
@@ -46,7 +76,7 @@
         "title": "About",
         "heading": "Gain momentum",
         "anchor": "gain-momentum",
-        "text": "Find a career related to the manufacturing of rockets, satellites, solar panels, and other space-related equipment. Or maybe you want to start a mining operation, or be a space pirate, or a space tourist. The choice is yours! Gain access to an existing launch provider or use your own rockets. Launch payloads into low Earth orbit. Create fuel depots. Explore the moon and beyond. Build your own space station.",
+        "text": "Build confidence by assembling and validating real infrastructure: power systems, tools, monitoring, and small-scale manufacturing. The game is expanding bottom-up, so space-based orbital and suborbital launches are not playable yet; today’s rocketry content is educational, model-rocket scale. When we introduce launch systems, you will already have the energy, materials, and operational habits needed to support them.",
         "kind": "doc"
     },
     {
@@ -56,7 +86,7 @@
         "title": "About",
         "heading": "Research",
         "anchor": "research",
-        "text": "Use in-situ resource utilization. Mine the moon for water and oxygen. Use the water and oxygen to produce rocket fuel. Use the rocket fuel to launch rockets. Use the rockets to launch more rockets. Master the Sabatier reaction on Mars to generate fuel.",
+        "text": "In-situ resource utilization (ISRU), lunar mining, and deep-space fuel production are long-term goals. We are laying the groundwork first with terrestrial resource loops, storage, and process chains so that future off-world systems feel earned rather than assumed.",
         "kind": "doc"
     },
     {
@@ -127,6 +157,126 @@
         "heading": "How it works",
         "anchor": "how-it-works",
         "text": ".amazing { width: 100%; height: 350px; object-fit: cover; }",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/aquaria:top:0:0",
+        "path": "frontend/src/pages/docs/md/aquaria.md",
+        "slug": "/docs/aquaria",
+        "title": "Aquaria",
+        "heading": "Aquaria",
+        "anchor": "top",
+        "text": "Aquaria quests focus on building and caring for freshwater tanks, from Walstad setups to steady fish husbandry. The skills emphasize water quality, temperature stability, and gentle maintenance routines.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/aquaria:what-you-learn:1:0",
+        "path": "frontend/src/pages/docs/md/aquaria.md",
+        "slug": "/docs/aquaria",
+        "title": "Aquaria",
+        "heading": "What you learn",
+        "anchor": "what-you-learn",
+        "text": "- How to set up and cycle a tank (filters, heaters, and lighting) - How to test pH, ammonia, nitrite, and nitrate levels - How to plan regular water changes and keep logs",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/aquaria:quest-trailheads:2:0",
+        "path": "frontend/src/pages/docs/md/aquaria.md",
+        "slug": "/docs/aquaria",
+        "title": "Aquaria",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Set up a Walstad tank - Install an aquarium heater - Install an aquarium light - Test water parameters - Perform a partial water change - Add guppies",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/aquaria:key-gear:3:0",
+        "path": "frontend/src/pages/docs/md/aquaria.md",
+        "slug": "/docs/aquaria",
+        "title": "Aquaria",
+        "heading": "Key gear",
+        "anchor": "key-gear",
+        "text": "- Aquarium (150 L) with a stable stand and aquarium gravel (1 kg) for substrate - Aquarium heater (150 W), aquarium LED light (20 W), and aquarium thermometer (0–50°C) - Aquarium liquid test kit, water conditioner, and a water test logbook - Gravel vacuum and aquarium net for maintenance days",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/aquaria:common-pitfalls:4:0",
+        "path": "frontend/src/pages/docs/md/aquaria.md",
+        "slug": "/docs/aquaria",
+        "title": "Aquaria",
+        "heading": "Common pitfalls",
+        "anchor": "common-pitfalls",
+        "text": "- Adding fish before the tank has cycled or before water parameters are stable - Skipping dechlorination or mismatching water temperatures during changes - Replacing filter media all at once instead of rinsing and reusing it",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/aquaria:next-steps:5:0",
+        "path": "frontend/src/pages/docs/md/aquaria.md",
+        "slug": "/docs/aquaria",
+        "title": "Aquaria",
+        "heading": "Next steps",
+        "anchor": "next-steps",
+        "text": "- Keep weekly logs so you can compare readings after each quest cycle. - Pair tank monitoring with data tracking practices from Programming.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/astronomy:top:0:0",
+        "path": "frontend/src/pages/docs/md/astronomy.md",
+        "slug": "/docs/astronomy",
+        "title": "Astronomy & Observation",
+        "heading": "Astronomy & Observation",
+        "anchor": "top",
+        "text": "Astronomy quests teach you to observe the sky, build simple optics, and document what you see. Expect a mix of visual observation, photography, and light-pollution tracking.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/astronomy:what-you-learn:1:0",
+        "path": "frontend/src/pages/docs/md/astronomy.md",
+        "slug": "/docs/astronomy",
+        "title": "Astronomy & Observation",
+        "heading": "What you learn",
+        "anchor": "what-you-learn",
+        "text": "- How to build a simple telescope from lenses and a tube - How to locate bright targets like the Moon, ISS, and planets - How to capture photos and star trails with stable mounts",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/astronomy:quest-trailheads:2:0",
+        "path": "frontend/src/pages/docs/md/astronomy.md",
+        "slug": "/docs/astronomy",
+        "title": "Astronomy & Observation",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Assemble a Simple Telescope - Locate the North Star - Map the Constellations - Track Jupiter's Moons - Photograph the ISS - Capture Star Trails",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/astronomy:key-gear:3:0",
+        "path": "frontend/src/pages/docs/md/astronomy.md",
+        "slug": "/docs/astronomy",
+        "title": "Astronomy & Observation",
+        "heading": "Key gear",
+        "anchor": "key-gear",
+        "text": "- Basic telescope or DIY optics with a 50 mm magnifying lens and 20 mm magnifying lens - Planisphere star chart and red flashlight to preserve night vision - Camera tripod for long exposures and stable sketches",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/astronomy:common-pitfalls:4:0",
+        "path": "frontend/src/pages/docs/md/astronomy.md",
+        "slug": "/docs/astronomy",
+        "title": "Astronomy & Observation",
+        "heading": "Common pitfalls",
+        "anchor": "common-pitfalls",
+        "text": "- Observing before your eyes adapt to the dark or without a red light - Forgetting to stabilize the tripod, leading to blurry star trails - Not noting timestamps or sky conditions, which makes comparisons harder later",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/astronomy:next-steps:5:0",
+        "path": "frontend/src/pages/docs/md/astronomy.md",
+        "slug": "/docs/astronomy",
+        "title": "Astronomy & Observation",
+        "heading": "Next steps",
+        "anchor": "next-steps",
+        "text": "- Build a repeatable observation log and archive photos from each session. - Use Programming to chart your observation cadence and results.",
         "kind": "doc"
     },
     {
@@ -286,37 +436,47 @@
         "title": "Chemistry Lab Basics",
         "heading": "Chemistry Lab Basics",
         "anchor": "top",
-        "text": "A compact home lab lets you extract useful compounds from plants and practice sustainable chemistry.",
+        "text": "A compact home lab lets you extract useful compounds, tune nutrient solutions, and practice safe chemistry skills.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/chemistry-lab:core-tools:1:0",
+        "id": "doc:/docs/chemistry-lab:core-tools-and-supplies:1:0",
         "path": "frontend/src/pages/docs/md/chemistry-lab.md",
         "slug": "/docs/chemistry-lab",
         "title": "Chemistry Lab Basics",
-        "heading": "Core tools",
-        "anchor": "core-tools",
-        "text": "- Hot plate – provides steady heat for boiling or evaporation - Aquarium thermometer – monitors solution temperature - Beakers – hold and mix liquids - Glass funnel & filter paper – remove plant solids from a solution - Scale – measure ingredients accurately",
+        "heading": "Core tools and supplies",
+        "anchor": "core-tools-and-supplies",
+        "text": "- Beakers, graduated cylinders, funnels, and glass stir rods - Safety goggles, lab coat, and spill tray for containment - pH test supplies, buffer ingredients, and dilution containers",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/chemistry-lab:safety-tips:2:0",
+        "id": "doc:/docs/chemistry-lab:quest-trailheads:2:0",
+        "path": "frontend/src/pages/docs/md/chemistry-lab.md",
+        "slug": "/docs/chemistry-lab",
+        "title": "Chemistry Lab Basics",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Measure Solution pH - Adjust Solution pH - Dilute Hydrochloric Acid Safely - Neutralize an Acid Spill - Extract Stevia Sweetener - Refine Stevia Crystals",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/chemistry-lab:safety-tips:3:0",
         "path": "frontend/src/pages/docs/md/chemistry-lab.md",
         "slug": "/docs/chemistry-lab",
         "title": "Chemistry Lab Basics",
         "heading": "Safety tips",
         "anchor": "safety-tips",
-        "text": "1. Wear eye protection and gloves when heating or pouring chemicals. 2. Work in a well-ventilated area away from flames. 3. Keep a fire extinguisher and first aid kit nearby.",
+        "text": "1. Wear eye protection and gloves when handling acids or hot liquids. 2. Work in a well-ventilated area and keep an exit path clear. 3. Always add acid to water when diluting, never the reverse.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/chemistry-lab:stevia-extraction-overview:3:0",
+        "id": "doc:/docs/chemistry-lab:stevia-extraction-overview:4:0",
         "path": "frontend/src/pages/docs/md/chemistry-lab.md",
         "slug": "/docs/chemistry-lab",
         "title": "Chemistry Lab Basics",
         "heading": "Stevia extraction overview",
         "anchor": "stevia-extraction-overview",
-        "text": "Homegrown stevia leaves contain steviol glycosides. Dry the leaves, steep them in hot water, then filter the liquid. To create a purer sweetener, dissolve the extract in a small amount of food-safe alcohol and let it evaporate slowly so white crystals form. See the Refine Stevia Crystals quest for detailed steps.",
+        "text": "Homegrown stevia leaves contain steviol glycosides. Dry the leaves, steep them in hot water, filter out the solids, and refine the extract into crystals. The Refine Stevia Crystals quest walks through the full process.",
         "kind": "doc"
     },
     {
@@ -367,6 +527,66 @@
         "heading": "Disable Cloud Sync",
         "anchor": "disable-cloud-sync",
         "text": "Use the Log out button on the Settings page to clear the token and gist ID. Local progress remains on your device.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/composting:top:0:0",
+        "path": "frontend/src/pages/docs/md/composting.md",
+        "slug": "/docs/composting",
+        "title": "Composting",
+        "heading": "Composting",
+        "anchor": "top",
+        "text": "Composting quests teach you to turn organic scraps into stable soil amendments. The skill focuses on the bucket compost method, which is compact and measurable.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/composting:what-you-learn:1:0",
+        "path": "frontend/src/pages/docs/md/composting.md",
+        "slug": "/docs/composting",
+        "title": "Composting",
+        "heading": "What you learn",
+        "anchor": "what-you-learn",
+        "text": "- How to balance greens and browns for a healthy compost mix - How to monitor moisture and temperature in the pile - How to turn and sift finished compost for garden use",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/composting:quest-trailheads:2:0",
+        "path": "frontend/src/pages/docs/md/composting.md",
+        "slug": "/docs/composting",
+        "title": "Composting",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Start a Compost Bucket - Check Compost Temperature - Turn Your Compost Bucket - Sift Finished Compost",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/composting:key-gear:3:0",
+        "path": "frontend/src/pages/docs/md/composting.md",
+        "slug": "/docs/composting",
+        "title": "Composting",
+        "heading": "Key gear",
+        "anchor": "key-gear",
+        "text": "- 5 gallon bucket with airflow holes for a compact compost vessel - Compost thermometer and compost moisture meter for core readings - Compost temperature log and compost moisture log to track trends - Compost sifter to screen finished material",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/composting:common-pitfalls:4:0",
+        "path": "frontend/src/pages/docs/md/composting.md",
+        "slug": "/docs/composting",
+        "title": "Composting",
+        "heading": "Common pitfalls",
+        "anchor": "common-pitfalls",
+        "text": "- Running too wet or too dry (aim for the \"wrung sponge\" feel) - Skipping turns, which slows decomposition and creates odors - Using compost before it cools and cures fully",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/composting:next-steps:5:0",
+        "path": "frontend/src/pages/docs/md/composting.md",
+        "slug": "/docs/composting",
+        "title": "Composting",
+        "heading": "Next steps",
+        "anchor": "next-steps",
+        "text": "- Aim for a screened compost blend before top-dressing beds or pots. - Use the same logging habits in Hydroponics and other grow skills.",
         "kind": "doc"
     },
     {
@@ -756,7 +976,7 @@
         "title": "Docs search",
         "heading": "How it works",
         "anchor": "how-it-works",
-        "text": "- Title + content search: Typing a word like matches docs whose titles or body text contain that word. - Feature filters: Queries that include (for example, ) still filter by those features. The filter works alongside the text query, and snippets are hidden for these operator searches.",
+        "text": "- Title + content search: Typing a word like matches docs whose titles or body text contain that word. - Feature filters: Queries that include must use or to filter by those features. The filter works alongside the text query, and snippets are hidden for these operator searches.",
         "kind": "doc"
     },
     {
@@ -780,27 +1000,207 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/electricity:non-renewable-energy:0:0",
+        "id": "doc:/docs/electricity:top:0:0",
         "path": "frontend/src/pages/docs/md/electricity.md",
         "slug": "/docs/electricity",
         "title": "Electricity",
-        "heading": "Non-renewable energy",
-        "anchor": "non-renewable-energy",
-        "text": "If you plug a machine in the wall (on Earth, at least), chances are you're still using fossil fuels, either from coal or natural gas. In DSPACE, there is a built-in carbon tax that is applied to all electricity usage based on fossil fuels. For every 1000 dCarbon produced within the game, your sell prices in the shop will be reduced by 1%, up to a maximum reduction of 90%. This provides a monetary incentive to continue to adopt renewable energy production.",
+        "heading": "Electricity",
+        "anchor": "top",
+        "text": "Electricity is the backbone of DSPACE's economy and automation loop. Using it efficiently keeps costs low, while generating it cleanly earns you dWatt without dCarbon penalties.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/electricity:renewable-energy:1:0",
+        "id": "doc:/docs/electricity:non-renewable-energy-dcarbon-impact:1:0",
         "path": "frontend/src/pages/docs/md/electricity.md",
         "slug": "/docs/electricity",
         "title": "Electricity",
-        "heading": "Renewable energy",
-        "anchor": "renewable-energy",
-        "text": "You can buy a solar panel or handheld wind turbine from Amazing. These will generate electricity for you, and you can use them to power your machines. You can also sell the electricity you generate to other players.",
+        "heading": "Non-renewable energy (dCarbon impact)",
+        "anchor": "non-renewable-energy-dcarbon-impact",
+        "text": "If you pull power from fossil-fuel sources, DSPACE applies a built-in carbon tax. For every 1,000 dCarbon generated, shop sell prices drop by 1% (up to a 90% reduction). The goal is simple: reward renewable energy and make wasteful usage expensive.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/faq:what-can-i-do:0:0",
+        "id": "doc:/docs/electricity:renewable-energy-and-storage:2:0",
+        "path": "frontend/src/pages/docs/md/electricity.md",
+        "slug": "/docs/electricity",
+        "title": "Electricity",
+        "heading": "Renewable energy and storage",
+        "anchor": "renewable-energy-and-storage",
+        "text": "- Generate dWatt via solar panels and wind turbines, then store it in batteries for later use. - Use charge controllers, inverters, and smart plugs to monitor consumption and protect hardware. - Keep a GFCI tester on hand when working around mains power.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/electricity:quest-trailheads:3:0",
+        "path": "frontend/src/pages/docs/md/electricity.md",
+        "slug": "/docs/electricity",
+        "title": "Electricity",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Install a Power Inverter - Maintain Your Battery Pack - Check a battery pack's voltage - Test a GFCI Outlet - Charge a Device Off-Grid",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/electricity:safety-reminders:4:0",
+        "path": "frontend/src/pages/docs/md/electricity.md",
+        "slug": "/docs/electricity",
+        "title": "Electricity",
+        "heading": "Safety reminders",
+        "anchor": "safety-reminders",
+        "text": "- Always fuse DC runs close to the battery and keep wire gauges appropriate for the load. - Verify polarity before powering up new circuits.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/electronics:top:0:0",
+        "path": "frontend/src/pages/docs/md/electronics.md",
+        "slug": "/docs/electronics",
+        "title": "Electronics",
+        "heading": "Electronics",
+        "anchor": "top",
+        "text": "Electronics quests cover sensing, soldering, and measurement skills that power robotics, energy systems, and data logging.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/electronics:what-you-learn:1:0",
+        "path": "frontend/src/pages/docs/md/electronics.md",
+        "slug": "/docs/electronics",
+        "title": "Electronics",
+        "heading": "What you learn",
+        "anchor": "what-you-learn",
+        "text": "- How to build LED circuits and voltage dividers - How to read sensors like thermistors and photoresistors - How to solder, desolder, and validate continuity with a multimeter",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/electronics:quest-trailheads:2:0",
+        "path": "frontend/src/pages/docs/md/electronics.md",
+        "slug": "/docs/electronics",
+        "title": "Electronics",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Build a basic LED circuit - Check LED polarity with a multimeter - Measure a Resistor - Solder a Wire Connection - Read a Thermistor - Build a Light Sensor",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/electronics:key-gear:3:0",
+        "path": "frontend/src/pages/docs/md/electronics.md",
+        "slug": "/docs/electronics",
+        "title": "Electronics",
+        "heading": "Key gear",
+        "anchor": "key-gear",
+        "text": "- Digital multimeter, soldering iron kit, and solderless breadboard - Lead-free solder spool, solder wick, and desoldering pump for rework - 220 Ohm Resistor, Thermistor (10k NTC), and Photoresistor for sensor builds",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/electronics:common-pitfalls:4:0",
+        "path": "frontend/src/pages/docs/md/electronics.md",
+        "slug": "/docs/electronics",
+        "title": "Electronics",
+        "heading": "Common pitfalls",
+        "anchor": "common-pitfalls",
+        "text": "- Powering circuits before checking polarity or continuity - Creating cold solder joints by moving parts before they cool - Forgetting current limits on LEDs and sensor dividers",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/electronics:next-steps:5:0",
+        "path": "frontend/src/pages/docs/md/electronics.md",
+        "slug": "/docs/electronics",
+        "title": "Electronics",
+        "heading": "Next steps",
+        "anchor": "next-steps",
+        "text": "- Take your sensor circuits into Programming quests for logging. - Combine actuators and sensors in Robotics.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/energy-systems:top:0:0",
+        "path": "frontend/src/pages/docs/md/energy-systems.md",
+        "slug": "/docs/energy-systems",
+        "title": "Energy Systems",
+        "heading": "Energy Systems",
+        "anchor": "top",
+        "text": "Energy systems quests expand beyond individual solar panels to cover storage, conversion, and off-grid reliability.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/energy-systems:what-you-learn:1:0",
+        "path": "frontend/src/pages/docs/md/energy-systems.md",
+        "slug": "/docs/energy-systems",
+        "title": "Energy Systems",
+        "heading": "What you learn",
+        "anchor": "what-you-learn",
+        "text": "- How to size batteries and inverters for real loads - How to wire charge controllers and protect DC runs - How to blend solar, wind, and manual generation for redundancy",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/energy-systems:quest-trailheads:2:0",
+        "path": "frontend/src/pages/docs/md/energy-systems.md",
+        "slug": "/docs/energy-systems",
+        "title": "Energy Systems",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Configure a Solar Charge Controller - Install a Power Inverter - Maintain Your Battery Pack - Install a Wind Turbine - Charge a Device Off-Grid - Build a Hand Crank Generator",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/energy-systems:key-gear:3:0",
+        "path": "frontend/src/pages/docs/md/energy-systems.md",
+        "slug": "/docs/energy-systems",
+        "title": "Energy Systems",
+        "heading": "Key gear",
+        "anchor": "key-gear",
+        "text": "- 200 Wh battery pack or 1 kWh battery pack for storage capacity goals - 300 W pure sine inverter and Solar charge controller for conversion and charging - Portable solar panel, 500 W wind turbine, and hand crank generator assembly for sources",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/energy-systems:common-pitfalls:4:0",
+        "path": "frontend/src/pages/docs/md/energy-systems.md",
+        "slug": "/docs/energy-systems",
+        "title": "Energy Systems",
+        "heading": "Common pitfalls",
+        "anchor": "common-pitfalls",
+        "text": "- Mixing battery chemistries or voltages without matching charge profiles - Skipping fuses or undervaluing cable size on DC runs - Tracking generation but not logging load usage over time",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/energy-systems:next-steps:5:0",
+        "path": "frontend/src/pages/docs/md/energy-systems.md",
+        "slug": "/docs/energy-systems",
+        "title": "Energy Systems",
+        "heading": "Next steps",
+        "anchor": "next-steps",
+        "text": "- Deepen production skills with Solar power. - Review safety practices in Electricity.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:what-is-dspace:0:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "What is DSPACE?",
+        "anchor": "what-is-dspace",
+        "text": "DSPACE is an incremental simulation game about resource management and space exploration. It focuses on learning by doing through quests, processes, and real-world inspired projects. For a full overview, start with About and the Mission.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:is-dspace-still-in-development:1:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "Is DSPACE still in development?",
+        "anchor": "is-dspace-still-in-development",
+        "text": "Yes. The game is under active development, and new quests, systems, and improvements ship regularly. If you want to help shape what’s next, join the community on Discord or see the Roadmap.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:how-do-i-get-started:2:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "How do I get started?",
+        "anchor": "how-do-i-get-started",
+        "text": "Begin with the Welcome quest tree, which teaches the basics of accepting quests, completing objectives, and collecting rewards. The Quest Trees page lists every quest line so you can pick the next path once the tutorial is complete.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:what-can-i-do:3:0",
         "path": "frontend/src/pages/docs/md/faq.md",
         "slug": "/docs/faq",
         "title": "Frequently Asked Questions",
@@ -810,17 +1210,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/faq:how-do-i-submit-custom-quests:1:0",
-        "path": "frontend/src/pages/docs/md/faq.md",
-        "slug": "/docs/faq",
-        "title": "Frequently Asked Questions",
-        "heading": "How do I submit custom quests?",
-        "anchor": "how-do-i-submit-custom-quests",
-        "text": "Use the Quest Submission Guide to package your quest, process, or item so it can be reviewed for inclusion in the canon game. The guide walks through exporting your content, generating screenshots, and opening a pull request directly from the in-game tools.",
-        "kind": "doc"
-    },
-    {
-        "id": "doc:/docs/faq:how-do-i-make-progress:2:0",
+        "id": "doc:/docs/faq:how-do-i-make-progress:4:0",
         "path": "frontend/src/pages/docs/md/faq.md",
         "slug": "/docs/faq",
         "title": "Frequently Asked Questions",
@@ -830,7 +1220,17 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/faq:what-are-processes-and-how-do-they-work:3:0",
+        "id": "doc:/docs/faq:what-are-quest-trees:5:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "What are quest trees?",
+        "anchor": "what-are-quest-trees",
+        "text": "Quest trees group related quests into themed learning paths such as 3D printing, energy systems, hydroponics, and rocketry. Browse the full catalog on the Quest Trees page to find a topic that interests you.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:what-are-processes-and-how-do-they-work:6:0",
         "path": "frontend/src/pages/docs/md/faq.md",
         "slug": "/docs/faq",
         "title": "Frequently Asked Questions",
@@ -840,13 +1240,293 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/faq:where-can-i-learn-more:4:0",
+        "id": "doc:/docs/faq:where-do-items-live-and-how-does-inventory-work:7:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "Where do items live and how does inventory work?",
+        "anchor": "where-do-items-live-and-how-does-inventory-work",
+        "text": "Your inventory holds everything you earn from quests and processes. Items are stored locally in IndexedDB, grouped into categories, and can be filtered or inspected in detail from the page.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:can-i-create-custom-quests-items-or-processes:8:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "Can I create custom quests, items, or processes?",
+        "anchor": "can-i-create-custom-quests-items-or-processes",
+        "text": "Yes. DSPACE includes in-game editors for all three: , , and . Edits are stored locally and can be managed from , , and . See the Content Development Guide for the full workflow.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:how-do-i-submit-custom-quests:9:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "How do I submit custom quests?",
+        "anchor": "how-do-i-submit-custom-quests",
+        "text": "Use the Quest Submission Guide to package your quest, process, or item so it can be reviewed for inclusion in the canon game. The guide walks through exporting your content, generating screenshots, and opening a pull request directly from the in-game tools.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:what-are-custom-content-bundles:10:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "What are custom content bundles?",
+        "anchor": "what-are-custom-content-bundles",
+        "text": "Bundles let you submit related quests, items, and processes together as one JSON file so they stay in sync. Learn the format and submission flow in Custom Content Bundles.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:where-is-my-save-data-stored:11:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "Where is my save data stored?",
+        "anchor": "where-is-my-save-data-stored",
+        "text": "Game state, custom content, achievements, and tokens are stored locally in your browser using IndexedDB. DSPACE does not send your data to a server unless you explicitly enable Cloud Sync.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:how-do-i-back-up-or-restore-my-data:12:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "How do I back up or restore my data?",
+        "anchor": "how-do-i-back-up-or-restore-my-data",
+        "text": "Use the export tools described in Backups to copy a Base64 snapshot of your gamesave or custom content. You can restore by pasting the saved string into the matching import screen.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:how-does-cloud-sync-work:13:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "How does Cloud Sync work?",
+        "anchor": "how-does-cloud-sync-work",
+        "text": "Cloud Sync stores encrypted backups in a private GitHub gist. You supply a GitHub token and gist ID in the Settings page, and DSPACE uploads changes automatically. Details are in Cloud Sync.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:do-i-need-a-github-token:14:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "Do I need a GitHub token?",
+        "anchor": "do-i-need-a-github-token",
+        "text": "A GitHub token is required only for features that interact with GitHub, such as submitting quests or using Cloud Sync. Tokens are stored locally and can be cleared at any time. See the Authentication Flow for setup and security notes.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:how-do-i-log-out-or-clear-my-token:15:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "How do I log out or clear my token?",
+        "anchor": "how-do-i-log-out-or-clear-my-token",
+        "text": "Open the Settings page and click Log out to clear the saved GitHub token and any Cloud Sync ID. You can also use the Clear button next to the token input field. See Authentication Flow for details.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:what-are-dusd-dwatt-and-dcarbon:16:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "What are dUSD, dWatt, and dCarbon?",
+        "anchor": "what-are-dusd-dwatt-and-dcarbon",
+        "text": "- dUSD is the in-game currency used for buying and selling. - dWatt tracks energy generation used to power processes. - dCarbon tracks emissions produced by non-renewable power sources.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:how-do-energy-sources-affect-the-economy:17:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "How do energy sources affect the economy?",
+        "anchor": "how-do-energy-sources-affect-the-economy",
+        "text": "Generating power from fossil-fuel outlets increases dCarbon. For every 1000 dCarbon, shop sell prices drop by 1% (up to 90%), so renewable energy like solar power or wind turbines is the best long-term strategy. See Electricity for the full rules.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:how-do-i-reduce-dcarbon:18:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "How do I reduce dCarbon?",
+        "anchor": "how-do-i-reduce-dcarbon",
+        "text": "Run the dCarbon to dOffset process to convert accumulated dCarbon into dOffset. The process consumes dCarbon and a small amount of dUSD, lowering your emissions footprint. See dCarbon.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:where-can-i-track-achievements-and-titles:19:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "Where can I track achievements and titles?",
+        "anchor": "where-can-i-track-achievements-and-titles",
+        "text": "Achievements live on and update as you finish quests or collect items. Titles are tied to achievements and appear on and your profile. See Achievements and Titles.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:what-are-guilds-and-the-metaguild:20:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "What are guilds and the Metaguild?",
+        "anchor": "what-are-guilds-and-the-metaguild",
+        "text": "Guilds are planned for 2027+ and are not live yet. The Metaguild is a future flagship guild that will arrive after ActivityPub integration brings multiplayer foundations to DSPACE. For now, the game is single-player and any Metaguild references are narrative placeholders. See Guilds for the latest plan.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:how-do-i-search-the-docs:21:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "How do I search the docs?",
+        "anchor": "how-do-i-search-the-docs",
+        "text": "Use the search box on to find pages by title or content. Searches also support filters (for example, ). See Docs search.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:can-i-self-host-dspace:22:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "Can I self-host DSPACE?",
+        "anchor": "can-i-self-host-dspace",
+        "text": "Yes. DSPACE provides a Docker Compose setup for running the game locally. See Self-hosting DSPACE for the quick-start guide and advanced deployment links.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:where-can-i-learn-more:23:0",
         "path": "frontend/src/pages/docs/md/faq.md",
         "slug": "/docs/faq",
         "title": "Frequently Asked Questions",
         "heading": "Where can I learn more?",
         "anchor": "where-can-i-learn-more",
-        "text": "On the Discord or here in the docs.",
+        "text": "On the Discord or here in the docs. You can also explore the Contribution Guide and Developer Resources.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/first-aid:top:0:0",
+        "path": "frontend/src/pages/docs/md/first-aid.md",
+        "slug": "/docs/first-aid",
+        "title": "First Aid",
+        "heading": "First Aid",
+        "anchor": "top",
+        "text": "First aid quests focus on preparedness and calm response: assembling kits, treating minor injuries, and maintaining clean supplies.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/first-aid:what-you-learn:1:0",
+        "path": "frontend/src/pages/docs/md/first-aid.md",
+        "slug": "/docs/first-aid",
+        "title": "First Aid",
+        "heading": "What you learn",
+        "anchor": "what-you-learn",
+        "text": "- How to stock and restock a basic first aid kit - How to clean wounds, dress cuts, and manage minor burns - How to practice CPR techniques with proper hygiene",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/first-aid:quest-trailheads:2:0",
+        "path": "frontend/src/pages/docs/md/first-aid.md",
+        "slug": "/docs/first-aid",
+        "title": "First Aid",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Assemble a First Aid Kit - Practice Basic Wound Care - Restock Your First Aid Kit - Treat a Minor Burn - Stop a Nosebleed - Practice Basic CPR",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/first-aid:key-gear:3:0",
+        "path": "frontend/src/pages/docs/md/first-aid.md",
+        "slug": "/docs/first-aid",
+        "title": "First Aid",
+        "heading": "Key gear",
+        "anchor": "key-gear",
+        "text": "- First aid kit stocked with adhesive bandages, sterile gauze pads, and antiseptic wipes - Nitrile gloves (pair) and biohazard waste bags for clean handling - CPR pocket mask and CPR training manikin for safe practice",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/first-aid:common-pitfalls:4:0",
+        "path": "frontend/src/pages/docs/md/first-aid.md",
+        "slug": "/docs/first-aid",
+        "title": "First Aid",
+        "heading": "Common pitfalls",
+        "anchor": "common-pitfalls",
+        "text": "- Using expired supplies or forgetting to restock after a quest - Skipping hand hygiene and glove changes between treatments - Practicing CPR without a barrier device or cleaning the manikin",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/first-aid:next-steps:5:0",
+        "path": "frontend/src/pages/docs/md/first-aid.md",
+        "slug": "/docs/first-aid",
+        "title": "First Aid",
+        "heading": "Next steps",
+        "anchor": "next-steps",
+        "text": "- Build a restock cadence and add reminders to your quest log. - Pair first aid readiness with shop safety in Woodworking.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/geothermal:top:0:0",
+        "path": "frontend/src/pages/docs/md/geothermal.md",
+        "slug": "/docs/geothermal",
+        "title": "Geothermal",
+        "heading": "Geothermal",
+        "anchor": "top",
+        "text": "Geothermal quests focus on monitoring ground-loop systems and keeping heat pump infrastructure healthy over time.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/geothermal:what-you-learn:1:0",
+        "path": "frontend/src/pages/docs/md/geothermal.md",
+        "slug": "/docs/geothermal",
+        "title": "Geothermal",
+        "heading": "What you learn",
+        "anchor": "what-you-learn",
+        "text": "- How to survey ground temperature and compare seasonal trends - How to read loop pressure, inlet/outlet temperatures, and deltas - How to keep sensors calibrated and air purged from the loop",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/geothermal:quest-trailheads:2:0",
+        "path": "frontend/src/pages/docs/md/geothermal.md",
+        "slug": "/docs/geothermal",
+        "title": "Geothermal",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Survey for Geothermal Heat - Log Ground Temperature - Calibrate Ground Sensor - Check Loop Pressure - Monitor Heat Pump Energy Use - Purge Air from Ground Loop",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/geothermal:key-gear:3:0",
+        "path": "frontend/src/pages/docs/md/geothermal.md",
+        "slug": "/docs/geothermal",
+        "title": "Geothermal",
+        "heading": "Key gear",
+        "anchor": "key-gear",
+        "text": "- Thermistor logging rig and digital multimeter for sensor verification - Temperature log CSV and temperature line chart to compare trends - Clean calibration notes stored with your ground-loop records",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/geothermal:common-pitfalls:4:0",
+        "path": "frontend/src/pages/docs/md/geothermal.md",
+        "slug": "/docs/geothermal",
+        "title": "Geothermal",
+        "heading": "Common pitfalls",
+        "anchor": "common-pitfalls",
+        "text": "- Sampling at inconsistent times, which hides seasonal patterns - Moving sensors between locations without noting offsets - Clearing air from the loop without logging before-and-after readings",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/geothermal:next-steps:5:0",
+        "path": "frontend/src/pages/docs/md/geothermal.md",
+        "slug": "/docs/geothermal",
+        "title": "Geothermal",
+        "heading": "Next steps",
+        "anchor": "next-steps",
+        "text": "- Keep a seasonal baseline and revisit it after each maintenance quest. - Compare your thermal performance to energy logs in Energy Systems.",
         "kind": "doc"
     },
     {
@@ -860,17 +1540,107 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/glossary:guild:1:0",
+        "id": "doc:/docs/glossary:built-in-quest:1:0",
+        "path": "frontend/src/pages/docs/md/glossary.md",
+        "slug": "/docs/glossary",
+        "title": "Glossary",
+        "heading": "Built-in quest",
+        "anchor": "built-in-quest",
+        "text": "A quest shipped with the game and stored in the source repository. Built-in quests are read-only in the in-game editors.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/glossary:built-in-item:2:0",
+        "path": "frontend/src/pages/docs/md/glossary.md",
+        "slug": "/docs/glossary",
+        "title": "Glossary",
+        "heading": "Built-in item",
+        "anchor": "built-in-item",
+        "text": "An item shipped with the game and stored in the source repository. Built-in items are read-only in the in-game editors.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/glossary:built-in-process:3:0",
+        "path": "frontend/src/pages/docs/md/glossary.md",
+        "slug": "/docs/glossary",
+        "title": "Glossary",
+        "heading": "Built-in process",
+        "anchor": "built-in-process",
+        "text": "A process shipped with the game and stored in the source repository. Built-in processes are read-only in the in-game editors.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/glossary:custom-entity:4:0",
+        "path": "frontend/src/pages/docs/md/glossary.md",
+        "slug": "/docs/glossary",
+        "title": "Glossary",
+        "heading": "Custom entity",
+        "anchor": "custom-entity",
+        "text": "A quest, item, or process created in-game by a player and stored in the player's browser (typically in IndexedDB, with a non-persistent in-memory fallback if IndexedDB is unavailable). Custom entities are editable, exportable, and can be submitted for inclusion in the official game.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/glossary:custom-content-bundle:5:0",
+        "path": "frontend/src/pages/docs/md/glossary.md",
+        "slug": "/docs/glossary",
+        "title": "Glossary",
+        "heading": "Custom content bundle",
+        "anchor": "custom-content-bundle",
+        "text": "A packaged set of related custom quests, items, and processes exported together for submission to the official game.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/glossary:custom-content-backup:6:0",
+        "path": "frontend/src/pages/docs/md/glossary.md",
+        "slug": "/docs/glossary",
+        "title": "Glossary",
+        "heading": "Custom content backup",
+        "anchor": "custom-content-backup",
+        "text": "The backup export/import workflow on /contentbackup used to package custom quests, items, and processes for transfer or recovery.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/glossary:custom-item:7:0",
+        "path": "frontend/src/pages/docs/md/glossary.md",
+        "slug": "/docs/glossary",
+        "title": "Glossary",
+        "heading": "Custom item",
+        "anchor": "custom-item",
+        "text": "An item created in-game and stored in the player's browser. Custom items are editable, exportable, and can be referenced by custom quests and custom processes.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/glossary:custom-process:8:0",
+        "path": "frontend/src/pages/docs/md/glossary.md",
+        "slug": "/docs/glossary",
+        "title": "Glossary",
+        "heading": "Custom process",
+        "anchor": "custom-process",
+        "text": "A process created in-game and stored in the player's browser. Custom processes are editable, exportable, and can reference both built-in and custom items.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/glossary:custom-quest:9:0",
+        "path": "frontend/src/pages/docs/md/glossary.md",
+        "slug": "/docs/glossary",
+        "title": "Glossary",
+        "heading": "Custom quest",
+        "anchor": "custom-quest",
+        "text": "A quest created in-game and stored in the player's browser. Custom quests are editable, exportable, and can reward items or trigger processes.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/glossary:guild:10:0",
         "path": "frontend/src/pages/docs/md/glossary.md",
         "slug": "/docs/glossary",
         "title": "Glossary",
         "heading": "Guild",
         "anchor": "guild",
-        "text": "A collection of players populating the solar system under the same banner. A guild has its own unique name and 2-4 character tag. Tags consist of any combination of the 26 letters of the English alphabet.",
+        "text": "A planned multiplayer feature that will let groups of players share a banner, roster, and guild-specific content once ActivityPub integration ships (2027+). Guilds are not live yet, and there is currently no guild creation or membership flow.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/glossary:hyperstructure:2:0",
+        "id": "doc:/docs/glossary:hyperstructure:11:0",
         "path": "frontend/src/pages/docs/md/glossary.md",
         "slug": "/docs/glossary",
         "title": "Glossary",
@@ -880,27 +1650,77 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/glossary:process:3:0",
+        "id": "doc:/docs/glossary:inventory:12:0",
+        "path": "frontend/src/pages/docs/md/glossary.md",
+        "slug": "/docs/glossary",
+        "title": "Glossary",
+        "heading": "Inventory",
+        "anchor": "inventory",
+        "text": "The player's collection of items and currency balances. Inventory changes when quests grant items or when processes consume or create items.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/glossary:item:13:0",
+        "path": "frontend/src/pages/docs/md/glossary.md",
+        "slug": "/docs/glossary",
+        "title": "Glossary",
+        "heading": "Item",
+        "anchor": "item",
+        "text": "An object stored in the inventory. Items can be required or consumed by processes, created by processes, and granted as quest rewards.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/glossary:npc:14:0",
+        "path": "frontend/src/pages/docs/md/glossary.md",
+        "slug": "/docs/glossary",
+        "title": "Glossary",
+        "heading": "NPC",
+        "anchor": "npc",
+        "text": "Short for non-player character. NPCs deliver quest dialogue and anchor the narrative voice of questlines.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/glossary:process:15:0",
         "path": "frontend/src/pages/docs/md/glossary.md",
         "slug": "/docs/glossary",
         "title": "Glossary",
         "heading": "Process",
         "anchor": "process",
-        "text": "Given certain required items (and items that are consumed by the process, create certain new items). The primary method for building objects, machines, decor, plants, etc.",
+        "text": "An activity that transforms items into new ones. Processes can require items, consume items, and create items, making them the primary method for crafting objects, machines, decor, and plants.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/glossary:quest:4:0",
+        "id": "doc:/docs/glossary:quest:16:0",
         "path": "frontend/src/pages/docs/md/glossary.md",
         "slug": "/docs/glossary",
         "title": "Glossary",
         "heading": "Quest",
         "anchor": "quest",
-        "text": "A task that can be completed by the player. It involves branching dialogue with an NPC, a variety of objects either given or received,",
+        "text": "A task that can be completed by the player. Quests use branching dialogue with an NPC and can grant or require items and processes.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/glossary:questline:5:0",
+        "id": "doc:/docs/glossary:quest-options:17:0",
+        "path": "frontend/src/pages/docs/md/glossary.md",
+        "slug": "/docs/glossary",
+        "title": "Glossary",
+        "heading": "Quest options",
+        "anchor": "quest-options",
+        "text": "An actionable choice in a quest's dialogue flow. Options can jump to another step, finish a quest, start a process, or grant items.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/glossary:in-game-editor:18:0",
+        "path": "frontend/src/pages/docs/md/glossary.md",
+        "slug": "/docs/glossary",
+        "title": "Glossary",
+        "heading": "In-game editor",
+        "anchor": "in-game-editor",
+        "text": "The in-app UI for creating or updating custom quests, items, and processes. Editors store entries locally until they are exported or submitted.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/glossary:questline:19:0",
         "path": "frontend/src/pages/docs/md/glossary.md",
         "slug": "/docs/glossary",
         "title": "Glossary",
@@ -916,27 +1736,37 @@
         "title": "Guilds",
         "heading": "Guilds",
         "anchor": "top",
-        "text": "Guilds are live in DSPACE as collaborative crews that pool equipment, quests, and funding. The Metaguild serves as the flagship organization and welcomes new recruits once they unlock the daily basic income quest. From there, specialist teams handle everything from additive manufacturing to hydroponics so explorers can lean on in-universe experts instead of grinding alone.",
+        "text": "Guilds are not live yet. They are planned for 2027 and beyond, after the ActivityPub integration that will power DSPACE's multiplayer foundation. Until that work ships, you cannot create or join a guild, and there is no guild-specific progression, content, or rewards.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/guilds:metaguild-structure:1:0",
+        "id": "doc:/docs/guilds:current-status:1:0",
         "path": "frontend/src/pages/docs/md/guilds.md",
         "slug": "/docs/guilds",
         "title": "Guilds",
-        "heading": "Metaguild structure",
-        "anchor": "metaguild-structure",
-        "text": "- Specialist wings – Sydney, Hydro, Nova, and the rest of the persona roster each lead a discipline-focused wing (print farm, hydroponics, rocketry, medicine, and more). Their quests unlock tooling, safety checklists, and ongoing maintenance tasks for the whole crew. - Donation board – The Leaderboard tracks dUSD donations that power the universal basic income pool. Crew members can celebrate the top supporters and see which wings are currently funding new projects. - Operations log – The Stats destination and quest trees highlight the shared progress the Metaguild has already cataloged, keeping everyone aligned on what content ships next.",
+        "heading": "Current status",
+        "anchor": "current-status",
+        "text": "- DSPACE is single-player today, with no guild roster or recruitment flow. - Any mentions of the Metaguild in UI copy, quests, or lore are narrative placeholders rather than active multiplayer features. - The Leaderboard and Stats pages are standalone tools right now—they do not represent live guild membership or benefits.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/guilds:how-to-get-involved:2:0",
+        "id": "doc:/docs/guilds:planned-direction-post-activitypub:2:0",
         "path": "frontend/src/pages/docs/md/guilds.md",
         "slug": "/docs/guilds",
         "title": "Guilds",
-        "heading": "How to get involved",
-        "anchor": "how-to-get-involved",
-        "text": "1. Finish the \"Universal Basic Income\" quest line to receive your Metaguild callsign and daily stipend. 2. Visit the Leaderboard to contribute dUSD and earn a spot on the live roster. 3. Chat with Metaguild specialists such as Sydney or Hydro through dChat to plan builds, troubleshoot processes, and queue new quests for your crew.",
+        "heading": "Planned direction (post-ActivityPub)",
+        "anchor": "planned-direction-post-activitypub",
+        "text": "Once ActivityPub integration is complete, guilds will become the multiplayer layer for DSPACE. At that point, players will be able to:\n - Create or join a guild with a shared identity and roster. - Unlock guild-specific quests, content drops, and in-game benefits. - Contribute resources (such as dUSD) to shared goals that power communal progression. - Participate in role-focused guild wings (e.g., fabrication, hydroponics, rocketry) led by NPC specialists.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/guilds:what-to-do-for-now:3:0",
+        "path": "frontend/src/pages/docs/md/guilds.md",
+        "slug": "/docs/guilds",
+        "title": "Guilds",
+        "heading": "What to do for now",
+        "anchor": "what-to-do-for-now",
+        "text": "You can still progress through quests, manage inventory, and use the Leaderboard and Stats pages for your personal progress. Guilds will be announced in the Roadmap and in release notes when they move into active development.",
         "kind": "doc"
     },
     {
@@ -946,7 +1776,47 @@
         "title": "Hydroponics",
         "heading": "Hydroponics",
         "anchor": "top",
-        "text": "Hydroponics is the process of growing plants in a water-based nutrient solution.\n Hydroponics is a great way to grow plants in space or on bodies like the Moon or Mars. You can grow them in a carefully controlled environment, and you don't have to worry about soil or other things that might be difficult or expensive to transport.",
+        "text": "Hydroponics is the practice of growing plants in nutrient-rich water instead of soil. In DSPACE, this skill ties together water treatment, sensor checks, and steady crop output.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/hydroponics:what-you-learn:1:0",
+        "path": "frontend/src/pages/docs/md/hydroponics.md",
+        "slug": "/docs/hydroponics",
+        "title": "Hydroponics",
+        "heading": "What you learn",
+        "anchor": "what-you-learn",
+        "text": "- How to assemble a hydroponic tub with pumps, net cups, and grow lights - How to manage pH, EC, and nutrient refresh cycles - How to sanitize equipment and keep roots healthy",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/hydroponics:quest-trailheads:2:0",
+        "path": "frontend/src/pages/docs/md/hydroponics.md",
+        "slug": "/docs/hydroponics",
+        "title": "Hydroponics",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Install Submersible Pump - Install a Grow Light - Grow basil hydroponically - Check Solution pH - Calibrate EC Meter - Refresh Nutrient Solution",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/hydroponics:key-gear-and-materials:3:0",
+        "path": "frontend/src/pages/docs/md/hydroponics.md",
+        "slug": "/docs/hydroponics",
+        "title": "Hydroponics",
+        "heading": "Key gear and materials",
+        "anchor": "key-gear-and-materials",
+        "text": "- Hydroponics kits, tubs, net cups, and submersible pumps - Nutrient concentrate, pH test strips, digital pH meters, and EC meters - Grow lights, air stones, and dechlorinated water",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/hydroponics:good-practices:4:0",
+        "path": "frontend/src/pages/docs/md/hydroponics.md",
+        "slug": "/docs/hydroponics",
+        "title": "Hydroponics",
+        "heading": "Good practices",
+        "anchor": "good-practices",
+        "text": "- Log pH and EC readings every time you top off or refresh the reservoir. - Rinse and sanitize components between crops to prevent algae and salt buildup.",
         "kind": "doc"
     },
     {
@@ -1796,7 +2666,7 @@
         "title": "NPCs",
         "heading": "AI-enabled NPC chat",
         "anchor": "ai-enabled-npc-chat",
-        "text": "DSPACE's chat console now lets you pick an NPC persona before starting a conversation. Choose dChat for general knowledge, or switch to Sydney, Nova, or Hydro to receive guidance steeped in their specialties. Each persona keeps its existing lore and draws from the shared quest, item, and process knowledge base once you connect an OpenAI API key in the chat settings. The chat payload now also includes your live quest progress, active process timers, and current inventory so answers stay grounded. Ask open-ended questions about quests, items, or processes and the personas will answer with that live context.",
+        "text": "DSPACE's chat console now lets you pick an NPC persona before starting a conversation. Choose dChat for general knowledge, or switch to Sydney, Nova, or Hydro to receive guidance steeped in their specialties. Each persona keeps its existing lore and draws from the shared quest, item, and process knowledge base once you connect an OpenAI API key in the chat settings. The chat payload now also includes your live quest progress, active process timers, and current inventory so answers stay grounded. Ask open-ended questions about quests, items, or processes and the personas will answer with that live context.\n Guilds are not live yet. References to the Metaguild below are forward-looking lore that will align with the ActivityPub-based guild system planned for 2027+.",
         "kind": "doc"
     },
     {
@@ -1806,7 +2676,7 @@
         "title": "NPCs",
         "heading": "dChat",
         "anchor": "dchat",
-        "text": "dChat is a compact, spherical smart assistant powered by large language models. Equipped with reasoning and information retrieval capabilities, it can answer questions and engage in conversation effortlessly. dChat now has a curated knowledge base covering the game's quests, achievements, items, processes, and the player's current inventory snapshot. Connect your OpenAI API key in the chat settings and dChat will automatically include this context when answering questions. dChat is provided free of charge to all metaguild members, and it's fully open source and self-hosted.",
+        "text": "dChat is a compact, spherical smart assistant powered by large language models. Equipped with reasoning and information retrieval capabilities, it can answer questions and engage in conversation effortlessly. dChat now has a curated knowledge base covering the game's quests, achievements, items, processes, and the player's current inventory snapshot. Connect your OpenAI API key in the chat settings and dChat will automatically include this context when answering questions. dChat is free for all players today, and any guild-specific perks will arrive once guilds launch.",
         "kind": "doc"
     },
     {
@@ -1826,7 +2696,7 @@
         "title": "NPCs",
         "heading": "Sydney",
         "anchor": "sydney",
-        "text": "Sydney runs the metaguild's print farm with crisp, no-nonsense focus. Raised among engineers, she fell for additive manufacturing early and now fabricates and repairs guild gear. She mentors recruits through quests like Level the Print Bed and Print a Phone Stand.",
+        "text": "Sydney runs the future Metaguild's print farm initiative with crisp, no-nonsense focus. Raised among engineers, she fell for additive manufacturing early and now fabricates and repairs prototype gear for the planned guild program. She mentors recruits through quests like Level the Print Bed and Print a Phone Stand.",
         "kind": "doc"
     },
     {
@@ -1846,7 +2716,7 @@
         "title": "NPCs",
         "heading": "Nova",
         "anchor": "nova",
-        "text": "Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs and constructs the spacecraft used by the metaguild to explore the solar system. After studying aerospace engineering in college, she rapidly gained expertise in the field. Known for her perfectionism and ability to overcome obstacles, Nova embraced the metaguild as a means to employ her skills in groundbreaking ways.",
+        "text": "Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs and constructs the spacecraft planned for the future Metaguild to explore the solar system. After studying aerospace engineering in college, she rapidly gained expertise in the field. Known for her perfectionism and ability to overcome obstacles, Nova embraced the Metaguild vision as a way to employ her skills in groundbreaking ways.",
         "kind": "doc"
     },
     {
@@ -1866,7 +2736,7 @@
         "title": "NPCs",
         "heading": "Hydro",
         "anchor": "hydro",
-        "text": "Hydro keeps the guild's hydroponic bays stocked with fresh greens. Raised on an Earth farm, they traded soil for nutrient baths after studying biology. Their easygoing chatter about PPM and pH turns lab science into shipboard routine. They can diagnose nutrient deficits by leaf color alone. Hydro guides recruits through quests like Check Solution pH and Grow Stevia Hydroponically.",
+        "text": "Hydro keeps the future guild's hydroponic bays stocked with fresh greens. Raised on an Earth farm, they traded soil for nutrient baths after studying biology. Their easygoing chatter about PPM and pH turns lab science into shipboard routine. They can diagnose nutrient deficits by leaf color alone. Hydro guides recruits through quests like Check Solution pH and Grow Stevia Hydroponically.",
         "kind": "doc"
     },
     {
@@ -1886,7 +2756,7 @@
         "title": "NPCs",
         "heading": "Orion",
         "anchor": "orion",
-        "text": "Orion is an electrical engineer whose enthusiasm for robotics and microprocessors knows no bounds. He specializes in designing and building intelligent robotic systems to assist the metaguild in various tasks. Orion also maintains the guild's servers and enjoys automating deployment pipelines. His technical prowess and innovative thinking make him a valuable team member in the quest to push the boundaries of space exploration.",
+        "text": "Orion is an electrical engineer whose enthusiasm for robotics and microprocessors knows no bounds. He specializes in designing and building intelligent robotic systems to assist the future Metaguild's teams. Orion also maintains the planned guild's servers and enjoys automating deployment pipelines. His technical prowess and innovative thinking make him a valuable team member in the quest to push the boundaries of space exploration.",
         "kind": "doc"
     },
     {
@@ -1906,7 +2776,7 @@
         "title": "NPCs",
         "heading": "Vega",
         "anchor": "vega",
-        "text": "Vega tends micro-ecologies, coaxing balance from water and soil with patient hands. Years of tuning pumps and lights made them the guild's go-to aquarist. They guide recruits through quests like Set up a Walstad tank and processes such as Log Aquarium Test Results.",
+        "text": "Vega tends micro-ecologies, coaxing balance from water and soil with patient hands. Years of tuning pumps and lights made them the future guild's go-to aquarist. They guide recruits through quests like Set up a Walstad tank and processes such as Log Aquarium Test Results.",
         "kind": "doc"
     },
     {
@@ -1926,7 +2796,7 @@
         "title": "NPCs",
         "heading": "Phoenix",
         "anchor": "phoenix",
-        "text": "Phoenix is the guild's eco-minded chemist, refining propellants without poisoning the cosmos. They blend chemistry with conservation so rockets leave no scorch. Phoenix mentors recruits through quests like Dilute Hydrochloric Acid Safely, Extract Stevia Sweetener, Refine Stevia Crystals, Prepare a Buffer Solution, and Fuel Mixture Calibration. They also remind everyone to Wash Hands before leaving the lab.",
+        "text": "Phoenix is the future guild's eco-minded chemist, refining propellants without poisoning the cosmos. They blend chemistry with conservation so rockets leave no scorch. Phoenix mentors recruits through quests like Dilute Hydrochloric Acid Safely, Extract Stevia Sweetener, Refine Stevia Crystals, Prepare a Buffer Solution, and Fuel Mixture Calibration. They also remind everyone to Wash Hands before leaving the lab.",
         "kind": "doc"
     },
     {
@@ -1946,7 +2816,7 @@
         "title": "NPCs",
         "heading": "Atlas",
         "anchor": "atlas",
-        "text": "Atlas is the guild's heavy-lift robot. Shock-absorbing armor and balanced servos let Atlas haul crates and steady delicate assemblies. They often help with aquarium setups like Move the Walstad tank.",
+        "text": "Atlas is the future guild's heavy-lift robot. Shock-absorbing armor and balanced servos let Atlas haul crates and steady delicate assemblies. They often help with aquarium setups like Move the Walstad tank.",
         "kind": "doc"
     },
     {
@@ -1966,7 +2836,7 @@
         "title": "NPCs",
         "heading": "Cedar",
         "anchor": "cedar",
-        "text": "Cedar is the metaguild's patient carpenter, happiest when turning scavenged planks into sturdy kit. Years in the woodshop taught them to respect the grain and coach novices without condescension. Cedar leads quests like Build a Birdhouse and Assemble a Step Stool, making safety and craftsmanship second nature.",
+        "text": "Cedar is the future Metaguild's patient carpenter, happiest when turning scavenged planks into sturdy kit. Years in the woodshop taught them to respect the grain and coach novices without condescension. Cedar leads quests like Build a Birdhouse and Assemble a Step Stool, making safety and craftsmanship second nature.",
         "kind": "doc"
     },
     {
@@ -1986,7 +2856,7 @@
         "title": "NPCs",
         "heading": "Lyra",
         "anchor": "lyra",
-        "text": "Lyra charts the stars for every voyage, steering crews through orbital traffic with calm precision. Raised under planetarium domes, she reads constellations like street signs and keeps the guild oriented. Lyra guides recruits through quests like Assemble a Simple Telescope and Locate the North Star. She steers launches through debris fields and teaches patience in stargazing.",
+        "text": "Lyra charts the stars for every voyage, steering crews through orbital traffic with calm precision. Raised under planetarium domes, she reads constellations like street signs and keeps the future guild oriented. Lyra guides recruits through quests like Assemble a Simple Telescope and Locate the North Star. She steers launches through debris fields and teaches patience in stargazing.",
         "kind": "doc"
     },
     {
@@ -2046,7 +2916,7 @@
         "title": "NPCs",
         "heading": "Quill",
         "anchor": "quill",
-        "text": "Quill keeps the guild's chronicles, filing every blueprint and battle log. They guard accuracy like treasure and steer recruits toward the Quest Submission Guide so their feats join the archive.",
+        "text": "Quill keeps the future guild's chronicles, filing every blueprint and battle log. They guard accuracy like treasure and steer recruits toward the Quest Submission Guide so their feats join the archive.",
         "kind": "doc"
     },
     {
@@ -2056,7 +2926,7 @@
         "title": "NPCs",
         "heading": "Sample Dialogue",
         "anchor": "sample-dialogue-12",
-        "text": "- \"Another tale for the ledger? Sign here.\" - \"Details matter; rumors fade.\" - \"Your diagram's logged—future builders will thank you.\" - \"That relic predates the guild; handle it gently.\" - \"Past mission data? I've cataloged every triumph and misstep.\"",
+        "text": "- \"Another tale for the ledger? Sign here.\" - \"Details matter; rumors fade.\" - \"Your diagram's logged—future builders will thank you.\" - \"That relic predates the future guild; handle it gently.\" - \"Past mission data? I've cataloged every triumph and misstep.\"",
         "kind": "doc"
     },
     {
@@ -2066,7 +2936,7 @@
         "title": "NPCs",
         "heading": "Echo",
         "anchor": "echo",
-        "text": "Echo coordinates the guild's sensor drones from a quiet orbital perch. They have a calm demeanor and a sharp ear for anomalies. Echo routes signals and keeps comms clear for every mission.",
+        "text": "Echo coordinates the future guild's sensor drones from a quiet orbital perch. They have a calm demeanor and a sharp ear for anomalies. Echo routes signals and keeps comms clear for every mission.",
         "kind": "doc"
     },
     {
@@ -2086,7 +2956,7 @@
         "title": "NPCs",
         "heading": "Lumen",
         "anchor": "lumen",
-        "text": "Lumen serves as the guild's calm field medic. Years in remote clinics taught them to treat injuries with limited supplies, and their gentle humor keeps crews relaxed even during tense missions.",
+        "text": "Lumen serves as the future guild's calm field medic. Years in remote clinics taught them to treat injuries with limited supplies, and their gentle humor keeps crews relaxed even during tense missions.",
         "kind": "doc"
     },
     {
@@ -2106,7 +2976,7 @@
         "title": "NPCs",
         "heading": "Patch",
         "anchor": "patch",
-        "text": "Patch is the metaguild's cheerful repair drone, always hovering with a toolkit. Built from spare parts, Patch keeps machinery humming and loves swapping stories about improvised fixes.",
+        "text": "Patch is the future Metaguild's cheerful repair drone, always hovering with a toolkit. Built from spare parts, Patch keeps machinery humming and loves swapping stories about improvised fixes.",
         "kind": "doc"
     },
     {
@@ -2126,7 +2996,7 @@
         "title": "NPCs",
         "heading": "Byte",
         "anchor": "byte",
-        "text": "Byte monitors the guild's networks, hunting bugs and patching holes before enemies find them. Raised on open-source firmware, they safeguard mission data and teach recruits secure coding.",
+        "text": "Byte monitors the future guild's networks, hunting bugs and patching holes before enemies find them. Raised on open-source firmware, they safeguard mission data and teach recruits secure coding.",
         "kind": "doc"
     },
     {
@@ -2700,6 +3570,66 @@
         "kind": "doc"
     },
     {
+        "id": "doc:/docs/programming:top:0:0",
+        "path": "frontend/src/pages/docs/md/programming.md",
+        "slug": "/docs/programming",
+        "title": "Programming",
+        "heading": "Programming",
+        "anchor": "top",
+        "text": "Programming quests teach you to collect data, expose it via simple APIs, and present it in useful charts. The focus is practical telemetry for sensors and systems.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/programming:what-you-learn:1:0",
+        "path": "frontend/src/pages/docs/md/programming.md",
+        "slug": "/docs/programming",
+        "title": "Programming",
+        "heading": "What you learn",
+        "anchor": "what-you-learn",
+        "text": "- How to log sensor readings and compute summary statistics - How to build JSON endpoints and simple web dashboards - How to alert when thresholds are exceeded",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/programming:quest-trailheads:2:0",
+        "path": "frontend/src/pages/docs/md/programming.md",
+        "slug": "/docs/programming",
+        "title": "Programming",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Log Temperature Data - Serve Temperature as JSON - Graph Temperature Logs - Serve a Web Page - Set Temperature Alert - Email Temperature Alert",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/programming:key-gear:3:0",
+        "path": "frontend/src/pages/docs/md/programming.md",
+        "slug": "/docs/programming",
+        "title": "Programming",
+        "heading": "Key gear",
+        "anchor": "key-gear",
+        "text": "- Thermistor logging rig and temperature log CSV exports - Live temperature JSON endpoint and live temperature dashboard output - Temperature line chart and annotated temperature graph for reporting",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/programming:common-pitfalls:4:0",
+        "path": "frontend/src/pages/docs/md/programming.md",
+        "slug": "/docs/programming",
+        "title": "Programming",
+        "heading": "Common pitfalls",
+        "anchor": "common-pitfalls",
+        "text": "- Overwriting raw logs instead of appending with timestamps - Building alerts without verifying sensor calibration first - Forgetting to document API routes and refresh intervals",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/programming:next-steps:5:0",
+        "path": "frontend/src/pages/docs/md/programming.md",
+        "slug": "/docs/programming",
+        "title": "Programming",
+        "heading": "Next steps",
+        "anchor": "next-steps",
+        "text": "- Deploy your dashboards with reliability practices from Sysadmin & DevOps. - Integrate new sensors from Electronics.",
+        "kind": "doc"
+    },
+    {
         "id": "doc:/docs/prompts-codex:codex-prompt-library-for-the-dspace-repo:0:0",
         "path": "frontend/src/pages/docs/md/prompts-codex.md",
         "slug": "/docs/prompts-codex",
@@ -3106,7 +4036,7 @@
         "title": "Quest Template Example",
         "heading": "Quest Template Example",
         "anchor": "quest-template-example",
-        "text": "This page provides a minimal quest JSON structure that you can use as a starting point for your own quests. Quests created with this format are compatible with the token.place project and can be shared across repos. For field details see the Quest Schema Requirements, and when you're ready to publish, follow the Quest Submission Guide. Feel free to copy this snippet into your editor to speed up the process.\n Ready-to-use JSON templates live in . Copy for a linear quest or to experiment with multiple paths. You can also run (or ) to copy one automatically.\n \n Use this template as a baseline and expand it with additional dialogue nodes, processes, item requirements, and rewards. For more in-depth guidance, see the Quest Development Guidelines. The optional block tracks how many upgrade passes a quest has survived and stores a history of Codex tasks. This metadata is meant for maintainers and QA reporting; it no longer surfaces in the player-facing UI but is still used by tests and dashboards. Increment , update , switch the status (🛠️ → 🌀 → ✅ → 💯) and append an entry to with the task ID, date and score each time you run the quest hardening loop described in the [quest prompt guide][quest-prompt-guide]. An automated Playwright example ( ) walks through creating this quest step by step if you prefer a hands-on reference.\n [quest-prompt-guide]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/quests.md#quest-prompt-guide",
+        "text": "This page provides a minimal quest JSON structure that you can use as a starting point for your own quests. For field details see the Quest Schema Requirements, and when you're ready to publish, follow the Quest Submission Guide. Feel free to copy this snippet into your editor to speed up the process.\n Ready-to-use JSON templates live in . Copy for a linear quest or to experiment with multiple paths. You can also run (or ) to copy one automatically.\n \n Use this template as a baseline and expand it with additional dialogue nodes, processes, item requirements, and rewards. For more in-depth guidance, see the Quest Development Guidelines. The optional block tracks how many upgrade passes a quest has survived and stores a history of Codex tasks. This metadata is meant for maintainers and QA reporting; it no longer surfaces in the player-facing UI but is still used by tests and dashboards. Increment , update , switch the status (🛠️ → 🌀 → ✅ → 💯) and append an entry to with the task ID, date and score each time you run the quest hardening loop described in the [quest prompt guide][quest-prompt-guide]. An automated Playwright example ( ) walks through creating this quest step by step if you prefer a hands-on reference.\n [quest-prompt-guide]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/quests.md#quest-prompt-guide",
         "kind": "doc"
     },
     {
@@ -3156,7 +4086,7 @@
         "title": "Roadmap",
         "heading": "2027 and beyond",
         "anchor": "2027-and-beyond",
-        "text": "Multiplayer remains a long-term research area; updates will follow once prototypes reach community testing.",
+        "text": "- [ ] guilds (ActivityPub multiplayer foundation, Metaguild recruitment, donation board, NPC wings) - [ ] Multiplayer remains a long-term research area; updates will follow once prototypes reach community testing",
         "kind": "doc"
     },
     {
@@ -3166,7 +4096,7 @@
         "title": "Roadmap",
         "heading": "2026",
         "anchor": "2026",
-        "text": "- Top-down isometric base building remains deferred from the 2024 roadmap while we focus on shipping supporting systems first.",
+        "text": "The v3 milestones below were previously listed across the 2023-2024 roadmap entries and are now retargeted to 2026.\n - [ ] DSPACE v3 ships (targeting March 2026) - [ ] custom quests launch alongside v3 - [ ] smarter dChat (knowledge of the game, the items, your inventory, etc.) - [ ] 10x more quests - [ ] Top-down isometric base building targets late 2026 after the v3 foundation is live",
         "kind": "doc"
     },
     {
@@ -3176,7 +4106,7 @@
         "title": "Roadmap",
         "heading": "2025",
         "anchor": "2025",
-        "text": "Focusing on maintenance and prep work for the larger features slated for 2026 and beyond.",
+        "text": "The bulk of 2025 was spent developing and stabilizing DSPACE v3 for 2026 delivery.",
         "kind": "doc"
     },
     {
@@ -3186,7 +4116,7 @@
         "title": "Roadmap",
         "heading": "2024",
         "anchor": "2024",
-        "text": "- [x] guilds (Metaguild recruitment, donation board, and NPC wings live) - [x] 10x more quests (246 quests delivered, exceeding the 220-quest goal)",
+        "text": "Maintenance and groundwork leading into v3.",
         "kind": "doc"
     },
     {
@@ -3200,27 +4130,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/roadmap:september-2023:6:0",
-        "path": "frontend/src/pages/docs/md/roadmap.md",
-        "slug": "/docs/roadmap",
-        "title": "Roadmap",
-        "heading": "September 2023",
-        "anchor": "september-2023",
-        "text": "- [x] smarter dChat (knowledge of the game, the items, your inventory, etc.)",
-        "kind": "doc"
-    },
-    {
-        "id": "doc:/docs/roadmap:august-2023:7:0",
-        "path": "frontend/src/pages/docs/md/roadmap.md",
-        "slug": "/docs/roadmap",
-        "title": "Roadmap",
-        "heading": "August 2023",
-        "anchor": "august-2023",
-        "text": "- [x] custom quests",
-        "kind": "doc"
-    },
-    {
-        "id": "doc:/docs/roadmap:july-2023:8:0",
+        "id": "doc:/docs/roadmap:july-2023:6:0",
         "path": "frontend/src/pages/docs/md/roadmap.md",
         "slug": "/docs/roadmap",
         "title": "Roadmap",
@@ -3230,7 +4140,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/roadmap:june-2023:9:0",
+        "id": "doc:/docs/roadmap:june-2023:7:0",
         "path": "frontend/src/pages/docs/md/roadmap.md",
         "slug": "/docs/roadmap",
         "title": "Roadmap",
@@ -3240,7 +4150,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/roadmap:january-2023:10:0",
+        "id": "doc:/docs/roadmap:january-2023:8:0",
         "path": "frontend/src/pages/docs/md/roadmap.md",
         "slug": "/docs/roadmap",
         "title": "Roadmap",
@@ -3250,7 +4160,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/roadmap:october-2022:11:0",
+        "id": "doc:/docs/roadmap:october-2022:9:0",
         "path": "frontend/src/pages/docs/md/roadmap.md",
         "slug": "/docs/roadmap",
         "title": "Roadmap",
@@ -3260,7 +4170,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/roadmap:september-2022:12:0",
+        "id": "doc:/docs/roadmap:september-2022:10:0",
         "path": "frontend/src/pages/docs/md/roadmap.md",
         "slug": "/docs/roadmap",
         "title": "Roadmap",
@@ -3270,43 +4180,123 @@
         "kind": "doc"
     },
     {
+        "id": "doc:/docs/robotics:top:0:0",
+        "path": "frontend/src/pages/docs/md/robotics.md",
+        "slug": "/docs/robotics",
+        "title": "Robotics",
+        "heading": "Robotics",
+        "anchor": "top",
+        "text": "Robotics quests build on electronics fundamentals to create sensing, motion control, and navigation skills for small robots.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/robotics:what-you-learn:1:0",
+        "path": "frontend/src/pages/docs/md/robotics.md",
+        "slug": "/docs/robotics",
+        "title": "Robotics",
+        "heading": "What you learn",
+        "anchor": "what-you-learn",
+        "text": "- How to control servos and build simple actuators - How to use sensors for line following, distance, and reflectance - How to combine sensor input with motion planning",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/robotics:quest-trailheads:2:0",
+        "path": "frontend/src/pages/docs/md/robotics.md",
+        "slug": "/docs/robotics",
+        "title": "Robotics",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Control a Servo Motor - Build a line-following robot - Measure distance with an ultrasonic sensor - Build a Servo Gripper - Add Obstacle Avoidance - Navigate a Simple Maze",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/robotics:key-gear:3:0",
+        "path": "frontend/src/pages/docs/md/robotics.md",
+        "slug": "/docs/robotics",
+        "title": "Robotics",
+        "heading": "Key gear",
+        "anchor": "key-gear",
+        "text": "- Servo Motor and micro servo pair for motion testing - Ultrasonic distance sensor and pan-tilt ultrasonic rig for navigation practice - Two-servo arm kit or assembled servo arm for grasping exercises",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/robotics:common-pitfalls:4:0",
+        "path": "frontend/src/pages/docs/md/robotics.md",
+        "slug": "/docs/robotics",
+        "title": "Robotics",
+        "heading": "Common pitfalls",
+        "anchor": "common-pitfalls",
+        "text": "- Powering servos from logic pins instead of a stable supply - Skipping calibration steps before obstacle-avoidance quests - Letting wiring snag on moving parts during motion tests",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/robotics:next-steps:5:0",
+        "path": "frontend/src/pages/docs/md/robotics.md",
+        "slug": "/docs/robotics",
+        "title": "Robotics",
+        "heading": "Next steps",
+        "anchor": "next-steps",
+        "text": "- Expand sensors and actuators through Electronics. - Use Programming to log robot runs and tuning data.",
+        "kind": "doc"
+    },
+    {
         "id": "doc:/docs/rockets:top:0:0",
         "path": "frontend/src/pages/docs/md/rockets.md",
         "slug": "/docs/rockets",
-        "title": "Rockets",
-        "heading": "Rockets",
+        "title": "Rocketry",
+        "heading": "Rocketry",
         "anchor": "top",
-        "text": "DSPACE aims to make the creation and launches of rockets so easy that anyone can do it.\n These quests focus on hobbyist-grade model rockets; commercial or high-powered launches are out of scope.\n You can now build a fully functioning guided model rocket, complete with servo steering and onboard video, and launch it through the in-game questline. The playbook below covers everything from printing the hardware to rehearsing the countdown so the hop succeeds on the first real attempt.\n Orbit remains a long-term aspiration that will require significant iteration and regulatory diligence. For now, the guided hop serves as the shipped milestone while DSPACE researches what it would take to graduate to orbital launches in the future.",
+        "text": "DSPACE rocketry focuses on hobbyist-grade model rockets. The questline guides you from basic preflight checks to guided model hops with onboard telemetry.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/rockets:guided-model-rocket-hop-playbook:1:0",
+        "id": "doc:/docs/rockets:what-you-learn:1:0",
         "path": "frontend/src/pages/docs/md/rockets.md",
         "slug": "/docs/rockets",
-        "title": "Rockets",
-        "heading": "Guided model rocket hop playbook",
-        "anchor": "guided-model-rocket-hop-playbook",
-        "text": "Before aiming for orbit, DSPACE now documents a realistic step beyond the parachute-only build. Follow these quests and processes to add servo steering and onboard video to your 3D printed rocket.",
+        "title": "Rocketry",
+        "heading": "What you learn",
+        "anchor": "what-you-learn",
+        "text": "- How to assemble and test 3D-printed rocket hardware - How to run safe launch procedures and recovery drills - How to calibrate guidance systems before the first hop",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/rockets:fabrication-and-bench-testing:2:0",
+        "id": "doc:/docs/rockets:quest-trailheads:2:0",
         "path": "frontend/src/pages/docs/md/rockets.md",
         "slug": "/docs/rockets",
-        "title": "Rockets",
+        "title": "Rocketry",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Build a Guided Model Rocket - Preflight Checklist - Check the Launch Winds - Perform a Static Engine Test - Guided Model Rocket Hop - Practice Rocket Recovery",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/rockets:fabrication-and-bench-testing:3:0",
+        "path": "frontend/src/pages/docs/md/rockets.md",
+        "slug": "/docs/rockets",
+        "title": "Rocketry",
         "heading": "Fabrication and bench testing",
         "anchor": "fabrication-and-bench-testing",
-        "text": "1. Print guidance hardware – Run for the servo-ready fincan and for the avionics tray so the servos and Arduino seat cleanly inside the body tube. 2. Wire the avionics – Use to mount the Arduino, route servo leads, and secure connectors. Harden the build with a dab of superglue before buttoning it up. 3. Tune stability firmware – Flash the sketch and exercise the servos with . Stop when the fins hold attitude without chattering through the tilt test. 4. Add a camera – Install the keychain module with so you can capture the hop from the nosecone.",
+        "text": "1. Print guidance hardware – Run for the servo-ready fincan and for the avionics tray so the servos and controller seat cleanly. 2. Wire the avionics – Use to mount the controller, route servo leads, and secure connectors. Harden the build with a dab of adhesive before closing the tube. 3. Tune stability firmware – Flash the sketch and exercise the servos with . Stop when the fins hold attitude without chattering. 4. Add a camera – Install the keychain module with to capture the hop.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/rockets:simulation-and-launch-day:3:0",
+        "id": "doc:/docs/rockets:simulation-and-launch-day:4:0",
         "path": "frontend/src/pages/docs/md/rockets.md",
         "slug": "/docs/rockets",
-        "title": "Rockets",
+        "title": "Rocketry",
         "heading": "Simulation and launch day",
         "anchor": "simulation-and-launch-day",
-        "text": "1. Rehearse the profile – Run to simulate the flight and confirm guided hop telemetry stays within drift limits before leaving the shop. 2. Set up the range – At the field, execute to log rod angle checks, igniter continuity, servo wiggle tests, and camera arming. 3. Call the countdown – Follow to keep everyone in sync right up to key turn. 4. Launch and recover – Trigger and bring home the guided flight log capsule for replay.",
+        "text": "1. Rehearse the profile – Run to simulate the flight and confirm telemetry is inside drift limits before leaving the shop. 2. Set up the range – Execute to log rod angle checks, igniter continuity, servo wiggle tests, and camera arming. 3. Call the countdown – Follow to keep everyone in sync. 4. Launch and recover – Trigger and bring home the guided flight log.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/rockets:key-gear:5:0",
+        "path": "frontend/src/pages/docs/md/rockets.md",
+        "slug": "/docs/rockets",
+        "title": "Rocketry",
+        "heading": "Key gear",
+        "anchor": "key-gear",
+        "text": "- 3D printed rocket body and guidance sled components - Launch controller, safety key, and an open field for recovery",
         "kind": "doc"
     },
     {
@@ -3396,7 +4386,47 @@
         "title": "Solar Power",
         "heading": "Solar Power",
         "anchor": "top",
-        "text": "Solar power is a renewable energy source that has a number of benefits:\n - Solar panels don't require moving parts (in most cases) - Solar panels can be added incrementally - Solar panels can be made with common materials\n For this reason, it's the first major energy source supported by the game. Wind turbines are also available, giving you another renewable option that pairs well with solar arrays for round-the-clock power.",
+        "text": "Solar power is DSPACE's first major renewable skill: it feeds your batteries, mints dSolar, and reduces your dCarbon footprint.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/solar:what-you-learn:1:0",
+        "path": "frontend/src/pages/docs/md/solar.md",
+        "slug": "/docs/solar",
+        "title": "Solar Power",
+        "heading": "What you learn",
+        "anchor": "what-you-learn",
+        "text": "- How to position, wire, and monitor solar panels for reliable output - How to scale from a single panel to portable and tracked arrays - How solar integrates with batteries, charge controllers, and dWatt storage",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/solar:quest-trailheads:2:0",
+        "path": "frontend/src/pages/docs/md/solar.md",
+        "slug": "/docs/solar",
+        "title": "Solar Power",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Set up a solar panel - Test a Portable Solar Panel - Configure a Solar Charge Controller - Build a Solar Tracker - Upgrade your solar enclosure with more capacity - Accrue 1,000 dSolar",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/solar:key-gear-and-materials:3:0",
+        "path": "frontend/src/pages/docs/md/solar.md",
+        "slug": "/docs/solar",
+        "title": "Solar Power",
+        "heading": "Key gear and materials",
+        "anchor": "key-gear-and-materials",
+        "text": "- Portable solar panel and wired solar kit components - Charge controller settings and fused cabling for safe hookups - Battery packs to capture dWatt when the sun is strong",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/solar:tips:4:0",
+        "path": "frontend/src/pages/docs/md/solar.md",
+        "slug": "/docs/solar",
+        "title": "Solar Power",
+        "heading": "Tips",
+        "anchor": "tips",
+        "text": "- Log your panel orientation and weather notes; steady output matters more than peak spikes. - Wind turbines and storage pair well with solar so nighttime usage doesn't incur dCarbon penalties.",
         "kind": "doc"
     },
     {
@@ -3417,6 +4447,66 @@
         "heading": "Async game state",
         "anchor": "async-game-state",
         "text": "Because IndexedDB calls are asynchronous, wait for the shared promise before reading or writing game data. Components that compute quest availability or export saves should only run after this promise resolves.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/sysadmin-devops:top:0:0",
+        "path": "frontend/src/pages/docs/md/sysadmin-devops.md",
+        "slug": "/docs/sysadmin-devops",
+        "title": "Sysadmin & DevOps",
+        "heading": "Sysadmin & DevOps",
+        "anchor": "top",
+        "text": "Sysadmin and DevOps quests are about keeping real systems reliable: secure shells, monitor logs, ship updates, and automate backups.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/sysadmin-devops:what-you-learn:1:0",
+        "path": "frontend/src/pages/docs/md/sysadmin-devops.md",
+        "slug": "/docs/sysadmin-devops",
+        "title": "Sysadmin & DevOps",
+        "heading": "What you learn",
+        "anchor": "what-you-learn",
+        "text": "- How to navigate Linux, inspect logs, and monitor resource usage - How to harden servers with firewalls, SSH policies, and automatic updates - How to deploy DSPACE in Docker or k3s and keep it running",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/sysadmin-devops:quest-trailheads:2:0",
+        "path": "frontend/src/pages/docs/md/sysadmin-devops.md",
+        "slug": "/docs/sysadmin-devops",
+        "title": "Sysadmin & DevOps",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Learn Basic Linux Commands - Inspect System Logs - Monitor System Resources - Launch DSPACE in Docker - Set Up a CI Pipeline - Configure Firewall Rules",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/sysadmin-devops:key-gear:3:0",
+        "path": "frontend/src/pages/docs/md/sysadmin-devops.md",
+        "slug": "/docs/sysadmin-devops",
+        "title": "Sysadmin & DevOps",
+        "heading": "Key gear",
+        "anchor": "key-gear",
+        "text": "- Laptop Computer for SSH sessions and configuration work - Raspberry Pi 5 board for local testing and automation - External backup SSD for snapshots and recovery drills - PoE+ switch for managed network lab setups",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/sysadmin-devops:common-pitfalls:4:0",
+        "path": "frontend/src/pages/docs/md/sysadmin-devops.md",
+        "slug": "/docs/sysadmin-devops",
+        "title": "Sysadmin & DevOps",
+        "heading": "Common pitfalls",
+        "anchor": "common-pitfalls",
+        "text": "- Making changes without capturing the current configuration state - Leaving SSH exposed without key-based auth or firewall rules - Skipping backup restores to verify that they actually work",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/sysadmin-devops:next-steps:5:0",
+        "path": "frontend/src/pages/docs/md/sysadmin-devops.md",
+        "slug": "/docs/sysadmin-devops",
+        "title": "Sysadmin & DevOps",
+        "heading": "Next steps",
+        "anchor": "next-steps",
+        "text": "- Pair deployments with Backups guidance. - Review hosting basics in Self-hosting.",
         "kind": "doc"
     },
     {
@@ -3576,7 +4666,7 @@
         "title": "token.place Integration",
         "heading": "token.place Integration",
         "anchor": "top",
-        "text": "DSPACE uses the token.place API for in-game AI features like chat. The utility sends messages to the service and returns the model's reply.\n The API endpoint defaults to , but token.place is disabled by default to keep staging and local builds on OpenAI unless you explicitly opt in.\n You can enable token.place in two ways:\n - Environment variable: set . You can also point to a custom URL with . - Game settings: save in your game state (for example, via a settings screen that toggles the integration). Optionally pair this with a custom .\n \n You can clear the saved URL (or the opt-in flag) by resetting your game state.\n accepts an optional and throws a descriptive error when the service returns one, making failures easier to diagnose.",
+        "text": "DSPACE v3 ships with OpenAI as the active AI provider. Support for the token.place API is planned for v3.1 once the token.place v1 API is available. Historical changelog entries may still mention token.place activation; the integration remains planned for v3.1.\n When v3.1 lands, the API endpoint will default to and the integration will remain disabled by default to keep staging and local builds on OpenAI unless you explicitly opt in.\n Planned opt-in paths for v3.1:\n - Environment variable: set . You can also point to a custom URL with . - Game settings: save in your game state (for example, via a settings screen that toggles the integration). Optionally pair this with a custom .\n \n You can clear the saved URL (or the opt-in flag) by resetting your game state.\n The utility is wired for the upcoming integration and will accept an optional plus surface descriptive service errors once the provider is enabled.",
         "kind": "doc"
     },
     {
@@ -3637,6 +4727,66 @@
         "heading": "User Journeys",
         "anchor": "user-journeys",
         "text": "This document tracks major journeys in DSPACE and whether a Playwright test covers each path. Tests under are placeholders for journeys without automation; when a journey gains coverage, move its spec into with to preserve history. Entries are sorted alphabetically by journey name, and new journeys should include a placeholder spec in until coverage exists.\n | Journey | Playwright coverage | Test file | | -------------------------- | ------------------- | ------------------------------------------------- | | About page loads | Yes | | | Authentication flow | Yes | | | Built-in quest details | Yes | | | Changelog page loads | Yes | | | Chat persona switching | Yes | | | Cloud sync | Yes | | | Constellations quest | Yes | | | Cookie consent flow | Yes | | | Custom backup | Yes | | | Custom content integration | Yes | | | Dark mode toggle | Yes | | | Docs landing page loads | Yes | | | Docs navigation | Yes | | | Docs search | Yes | | | Error pages | Yes | | | Failover status page | Yes | | | Glossary page loads | Yes | | | Home page loads | Yes | | | Item preview | Yes | | | Legacy data import | Yes | | | Logout flow | Yes | | | Manage items | Yes | | | Manage processes | Yes | | | Manage quests | Yes | | | Manage quests search | Yes | | | Mobile item form | Yes | | | Mobile process form | Yes | | | Mobile quest form | Yes | | | Page structure | Yes | | | Process creation | Yes | | | Process preview | Yes | | | Profile avatar selection | Yes | | | Profile page loads | Yes | | | Quest chat | Yes | | | Quest form validation | Yes | | | Quest list navigation | Yes | | | Quest PR form | Yes | | | Quest PR validation | Yes | | | Quest success message | Yes | | | Settings page loads | Yes | | | Shop workflow | Yes | | | Svelte component hydration | Yes | | | Touch item selector | Yes | | | Touch menu navigation | Yes | | | Tutorial quest run | Yes | | | UI responsiveness | Yes | | | User journeys doc loads | Yes | |",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/woodworking:top:0:0",
+        "path": "frontend/src/pages/docs/md/woodworking.md",
+        "slug": "/docs/woodworking",
+        "title": "Woodworking",
+        "heading": "Woodworking",
+        "anchor": "top",
+        "text": "Woodworking quests emphasize safe tool use, measurements, and finishing techniques while building useful shop fixtures and furniture.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/woodworking:what-you-learn:1:0",
+        "path": "frontend/src/pages/docs/md/woodworking.md",
+        "slug": "/docs/woodworking",
+        "title": "Woodworking",
+        "heading": "What you learn",
+        "anchor": "what-you-learn",
+        "text": "- How to measure, cut, and assemble basic wooden projects - How to sand and apply finishes for durability - How to plan builds with repeatable dimensions",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/woodworking:quest-trailheads:2:0",
+        "path": "frontend/src/pages/docs/md/woodworking.md",
+        "slug": "/docs/woodworking",
+        "title": "Woodworking",
+        "heading": "Quest trailheads",
+        "anchor": "quest-trailheads",
+        "text": "- Build a birdhouse - Build a step stool - Build a small bookshelf - Finish Sand Your Project - Apply a Wood Finish - Build a simple workbench",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/woodworking:key-gear:3:0",
+        "path": "frontend/src/pages/docs/md/woodworking.md",
+        "slug": "/docs/woodworking",
+        "title": "Woodworking",
+        "heading": "Key gear",
+        "anchor": "key-gear",
+        "text": "- Workbench with a stable, flat surface for measuring and assembly - Handsaw, tape measure, and claw hammer (16 oz) for core cuts - Sandpaper pack and paintbrush for smoothing and finish coats",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/woodworking:common-pitfalls:4:0",
+        "path": "frontend/src/pages/docs/md/woodworking.md",
+        "slug": "/docs/woodworking",
+        "title": "Woodworking",
+        "heading": "Common pitfalls",
+        "anchor": "common-pitfalls",
+        "text": "- Cutting without confirming measurements or marking reference faces - Rushing assembly before dry-fitting parts together - Applying finish before dust is cleared from the surface",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/woodworking:next-steps:5:0",
+        "path": "frontend/src/pages/docs/md/woodworking.md",
+        "slug": "/docs/woodworking",
+        "title": "Woodworking",
+        "heading": "Next steps",
+        "anchor": "next-steps",
+        "text": "- Keep a cut list and finish schedule in your quest log for repeat builds. - Build jigs or brackets with 3D printing.",
         "kind": "doc"
     },
     {
