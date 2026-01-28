@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 describe('UBI quest donation copy', () => {
-    it('describes the donation leaderboard as available today', () => {
+    it('frames the donation leaderboard as a future feature', () => {
         const questPath = join(
             process.cwd(),
             'frontend',
@@ -17,8 +17,7 @@ describe('UBI quest donation copy', () => {
 
         const raw = readFileSync(questPath, 'utf8');
 
-        expect(raw).toMatch(/leaderboard that gamifies donations/i);
-        expect(raw).not.toMatch(/not quite ready/i);
-        expect(raw).not.toMatch(/coming soon/i);
+        expect(raw).toMatch(/Once guilds launch in a future release/i);
+        expect(raw).toMatch(/leaderboard will highlight/i);
     });
 });
