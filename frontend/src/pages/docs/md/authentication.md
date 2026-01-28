@@ -4,8 +4,8 @@ slug: 'authentication'
 ---
 
 DSPACE uses GitHub authentication only for features that talk directly to GitHub. Most of the game
-works offline. Authentication is required when you submit content to the official repository or
-sync your save data with **Cloud Sync**.
+works offline. Authentication is required when you submit content to the official repository,
+sync your save data with **Cloud Sync**, or choose quest options that are gated by GitHub access.
 
 ## Where you'll see authentication prompts
 
