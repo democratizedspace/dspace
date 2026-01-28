@@ -12,9 +12,9 @@ page.
 
 - **Title + content search**: Typing a word like `turbine` matches docs whose titles _or_ body text
   contain that word.
-- **Feature filters**: Queries that include `has:` (for example, `has:image`) still filter by those
-  features. The filter works alongside the text query, and snippets are hidden for these operator
-  searches.
+- **Feature filters**: Queries that include `has:` (for example, `has:image` or `has:link`) still
+  filter by those features. The two currently supported predicates are `has:image` and `has:link`.
+  The filter works alongside the text query, and snippets are hidden for these operator searches.
 
 ## Snippets
 
