@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's kick off your woodworking journey with a small project. A birdhouse is perfect for practicing basic cuts and assembly.",
+            "text": "Cedar here. A birdhouse is small, but it teaches clean cuts and patient glue-ups.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "gather",
-            "text": "You'll need a pine board, wood glue, sandpaper, your handsaw, tape measure, hammer, and safety goggles. I'll supply missing gear.",
+            "text": "Grab a pine board, wood glue, sandpaper, handsaw, tape measure, hammer, and safety goggles. I'll cover any missing gear.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -94,7 +94,7 @@
         },
         {
             "id": "layout",
-            "text": "Mark the board into a floor, a front, two side walls, a back, and a two-piece roof. Keep the entry hole about 32 mm and leave overhang to shed rain.",
+            "text": "Mark a floor, front, two sides, back, and a two-piece roof. Keep the entry hole about 32 mm and add roof overhang for rain.",
             "options": [
                 {
                     "type": "goto",
@@ -110,7 +110,7 @@
         },
         {
             "id": "cut",
-            "text": "Crosscut the pine board into labeled panels and drill the entrance hole. Check for square edges so glue joints align later.",
+            "text": "Crosscut the pine into labeled panels and drill the entrance hole. Square edges make clean glue joints.",
             "options": [
                 {
                     "type": "process",
@@ -137,7 +137,7 @@
         },
         {
             "id": "assemble",
-            "text": "Dry-fit the panels, then glue and nail the walls and roof. Keep the floor slightly recessed so rainwater drains away.",
+            "text": "Dry-fit first, then glue and nail the walls and roof. Recess the floor so water drains out.",
             "options": [
                 {
                     "type": "process",
@@ -164,7 +164,7 @@
         },
         {
             "id": "finish",
-            "text": "Ease every edge with sandpaper, add a small perch if you like, and pre-drill for a hook or screw so mounting is easy.",
+            "text": "Ease every edge with sandpaper, add a small perch if you like, and pre-drill for a hook or screw.",
             "options": [
                 {
                     "type": "process",
@@ -191,7 +191,7 @@
         },
         {
             "id": "complete",
-            "text": "Excellent craftsmanship! Mount your birdhouse outdoors and watch for new feathered tenants.",
+            "text": "Nice craftsmanship. Mount it outdoors and keep an eye out for new tenants.",
             "options": [
                 {
                     "type": "finish",

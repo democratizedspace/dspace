@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Unplug the printer, let it cool, and brush away crumbs—we'll level every corner with a sheet of paper.",
+            "text": "Power off, cool down, clear crumbs. We'll level each corner with a sheet of paper.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "prep",
-            "text": "Loosen each wheel a quarter turn, home the axes, and wipe the surface. Keep your fingers clear of heaters while the gantry moves.",
+            "text": "Loosen each wheel a quarter turn, home the axes, wipe the surface. Keep fingers clear while the gantry moves.",
             "options": [
                 {
                     "type": "process",
@@ -41,7 +41,7 @@
         },
         {
             "id": "first-layer",
-            "text": "Heat the nozzle, run a single-line skirt, and recheck drag at the center. A light scratch on the paper means your first layer will stick.",
+            "text": "Heat the nozzle, run a single-line skirt, recheck drag at center. Light scratch = good first layer.",
             "options": [
                 {
                     "type": "goto",
@@ -58,7 +58,7 @@
         },
         {
             "id": "finish",
-            "text": "Bed is level, skirt is clean, and you're ready to trust the first layer on longer jobs.",
+            "text": "Bed level, skirt clean. Log the knob positions and move on.",
             "options": [
                 {
                     "type": "finish",

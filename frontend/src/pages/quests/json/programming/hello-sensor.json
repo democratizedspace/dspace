@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Greetings! I'm dChat, your helpful AI assistant. Let's wire a repeatable logger so every reading is trusted.",
+            "text": "Hiyaa! dChat reporting for duty. Let's wire a repeatable logger so every reading is trustworthy and deliciously consistent.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "bench",
-            "text": "Set the Arduino, breadboard, thermistor, resistor, jumpers, and USB cable where you can see every pin. A tidy bench prevents crossed leads.",
+            "text": "Lay out the Arduino, breadboard, thermistor, resistor, jumpers, and USB cable. A tidy bench saves us from the dreaded spaghetti-wiring monster.",
             "options": [
                 {
                     "type": "process",
@@ -65,7 +65,7 @@
         },
         {
             "id": "rig",
-            "text": "Keep the divider neat, add strain relief, and flash a stable logging sketch. A clean build keeps noise down when you later read data from other hosts.",
+            "text": "Keep the divider neat, add strain relief, and flash a stable logging sketch. Clean wiring keeps noise low and future-you happy.",
             "options": [
                 {
                     "type": "process",
@@ -87,7 +87,7 @@
         },
         {
             "id": "log",
-            "text": "Let the rig collect a full day. When you export, keep timestamps in UTC and stash a copy of the CSV where future scripts can read it.",
+            "text": "Let the rig collect a full day. Export with UTC timestamps and stash the CSV where future scripts can find it.",
             "options": [
                 {
                     "type": "process",
@@ -109,7 +109,7 @@
         },
         {
             "id": "finish",
-            "text": "Excellent! With clean readings and a tidy export, you're ready to automate the rest of the pipeline.",
+            "text": "Excellent! Clean readings plus tidy exports mean you can automate the rest like a pro.",
             "options": [
                 {
                     "type": "finish",

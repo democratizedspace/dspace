@@ -30,7 +30,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Wear lab coat, nitrile gloves, and safety goggles. In a spill tray, set 100 mL water in a 250 mL beaker with a glass stir rod, a pH strip, and the 37% HCl bottle. Always add acid to water.",
+            "text": "Phoenix here. Suit up: lab coat, nitrile gloves, goggles. In a spill tray, set 100 mL water in a 250 mL beaker with a stir rod, pH strip, and the 37% HCl bottle. Acid goes into water, always.",
             "options": [
                 {
                     "type": "goto",
@@ -41,7 +41,7 @@
         },
         {
             "id": "dilute",
-            "text": "Slowly trickle 10 mL of hydrochloric acid down the beaker wall while stirring. Keep your face back, go slow, and verify with a pH strip.",
+            "text": "Slowly trickle 10 mL of HCl down the beaker wall while stirring. Face back, pace slow, then verify with a pH strip.",
             "options": [
                 {
                     "type": "process",
@@ -91,7 +91,7 @@
         },
         {
             "id": "finish",
-            "text": "Label the diluted acid with concentration and date, cap it, and store the bottle in the spill tray.",
+            "text": "Label the diluted acid with concentration and date, cap it, and store it in the spill tray. No mystery mixes.",
             "options": [
                 {
                     "type": "finish",

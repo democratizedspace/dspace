@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Sketching the Moon was a great start. Gather a 50 mm magnifying lens, a 20 mm magnifying lens, a cardboard mailing tube, masking tape and a camera tripod. Inspect each lens for chips, work in a shaded area, wear eye protection and keep the tube pointed away from the Sun. Ready?",
+            "text": "Lyra here. Gather a 50 mm lens, 20 mm lens, mailing tube, masking tape, and a camera tripod. Inspect for chips, work in shade, wear eye protection, and keep the tube away from the Sun. Ready?",
             "options": [
                 {
                     "type": "goto",
@@ -26,7 +26,7 @@
         },
         {
             "id": "build",
-            "text": "Tape the 50 mm lens to the front of the mailing tube as the objective and the 20 mm lens at the back as the eyepiece. Mount the tube securely on the camera tripod with masking tape, verify the tripod is stable before viewing, handle glass edges carefully and never aim at the Sun.",
+            "text": "Tape the 50 mm lens to the front as the objective and the 20 mm lens at the back as the eyepiece. Mount the tube securely on the tripod, verify stability, handle glass edges carefully, and never aim at the Sun.",
             "options": [
                 {
                     "type": "process",
@@ -48,11 +48,11 @@
         },
         {
             "id": "finish",
-            "text": "Excellent craftsmanship! Regular stargazing will sharpen your navigation skills for future missions. Cap both lenses with masking tape before storing and keep the telescope away from heat and direct sunlight.",
+            "text": "Excellent craftsmanship. Regular stargazing sharpens navigation. Cap both lenses before storing and keep the telescope away from heat and direct sunlight.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Nova."
+                    "text": "Thanks, Lyra."
                 }
             ]
         }

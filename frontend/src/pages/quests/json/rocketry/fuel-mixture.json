@@ -3,12 +3,12 @@
     "title": "Fuel Mixture Calibration",
     "description": "Dial in a safe oxidizer-to-fuel ratio for a hobbyist model rocket before launch.",
     "image": "/assets/quests/rocket_fuel_mixture_calibration.jpg",
-    "npc": "/assets/npc/nova.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey friend! Nova here. Want to help me calibrate today's hobbyist propellant mix?",
+            "text": "Phoenix here. We'll dial in a hobbyist propellant mix with precision and minimal waste.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "measure",
-            "text": "We'll weigh out the fuel and oxidizer. Grab a scale and place the canister on it.",
+            "text": "We'll weigh fuel and oxidizer. Grab a scale and tare the canister before dosing.",
             "options": [
                 {
                     "type": "goto",
@@ -36,7 +36,7 @@
         },
         {
             "id": "adjust",
-            "text": "The mix is a tad rich. Add binder until the ratio looks right for our model rocket.",
+            "text": "The mix is a tad rich. Add binder in small increments until the ratio is on target.",
             "options": [
                 {
                     "type": "goto",
@@ -47,7 +47,7 @@
         },
         {
             "id": "done",
-            "text": "Nice work! This hobby-class mix should burn steady when we launch.",
+            "text": "Nice work. This hobby-class mix should burn steady and clean for launch.",
             "options": [
                 {
                     "type": "finish",
