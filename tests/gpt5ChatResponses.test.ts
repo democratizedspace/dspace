@@ -3,6 +3,7 @@ import { npcPersonas } from '../frontend/src/data/npcPersonas.js';
 
 const loadGameStateMock = vi.fn();
 const buildDchatKnowledgeMock = vi.fn();
+const searchDocsRagMock = vi.fn();
 
 const MockOpenAI = function (config) {
   this.config = config;
@@ -28,6 +29,10 @@ vi.mock('../frontend/src/utils/gameState/common.js', () => ({
 
 vi.mock('../frontend/src/utils/dchatKnowledge.js', () => ({
   buildDchatKnowledge: buildDchatKnowledgeMock,
+}));
+
+vi.mock('../frontend/src/utils/docsRag.js', () => ({
+  searchDocsRag: searchDocsRagMock,
 }));
 
 const dchatPersona = npcPersonas.find((persona) => persona.id === 'dchat');
@@ -75,6 +80,7 @@ describe('gpt-5 chat responses integration', () => {
     globalThis.__DSpaceOpenAIClient = MockOpenAI;
     loadGameStateMock.mockReset();
     buildDchatKnowledgeMock.mockReset();
+    searchDocsRagMock.mockReset();
     fetchMock.mockReset();
     vi.stubGlobal('fetch', fetchMock);
   });
@@ -92,6 +98,7 @@ describe('gpt-5 chat responses integration', () => {
       },
     });
     buildDchatKnowledgeMock.mockReturnValue('Quest facts');
+    searchDocsRagMock.mockResolvedValue({ excerptsText: '', sourcesMeta: { sources: [] } });
     fetchMock.mockResolvedValueOnce(jsonResponse('ok'));
 
     const { GPT5Chat: gpt5Chat } = await import('../frontend/src/utils/openAI.js');
@@ -105,15 +112,17 @@ describe('gpt-5 chat responses integration', () => {
 
     const payload = JSON.parse(init?.body ?? '{}');
     expect(payload.model).toBe('gpt-5.2');
-    expect(payload.input).toHaveLength(3);
+    expect(payload.input).toHaveLength(4);
     expect(payload.input[0].role).toBe('system');
     if (!dchatPersona) {
       throw new Error('Expected to find the default dChat persona');
     }
     expect(payload.input[0].content[0].text).toBe(dchatPersona.systemPrompt);
     expect(payload.input[1].role).toBe('system');
-    expect(payload.input[1].content[0].text).toContain('Quest facts');
-    expect(payload.input[2]).toEqual({
+    expect(payload.input[1].content[0].text).toContain('Never invent quests');
+    expect(payload.input[2].role).toBe('system');
+    expect(payload.input[2].content[0].text).toContain('Quest facts');
+    expect(payload.input[3]).toEqual({
       role: 'user',
       content: [
         {
@@ -131,6 +140,7 @@ describe('gpt-5 chat responses integration', () => {
       openAI: { ['api' + 'Key']: playerCredentials.session },
     });
     buildDchatKnowledgeMock.mockReturnValue(null);
+    searchDocsRagMock.mockResolvedValue({ excerptsText: '', sourcesMeta: { sources: [] } });
     fetchMock.mockResolvedValueOnce(jsonResponse('hello!'));
 
     const { GPT5Chat: gpt5Chat } = await import('../frontend/src/utils/openAI.js');
@@ -138,11 +148,12 @@ describe('gpt-5 chat responses integration', () => {
 
     const [, init] = fetchMock.mock.calls[0];
     const payload = JSON.parse(init?.body ?? '{}');
-    expect(payload.input).toHaveLength(2);
+    expect(payload.input).toHaveLength(3);
     if (!dchatPersona) {
       throw new Error('Expected to find the default dChat persona');
     }
-    expect(payload.input[1]).toEqual({
+    expect(payload.input[1].content[0].text).toContain('Never invent quests');
+    expect(payload.input[2]).toEqual({
       role: 'assistant',
       content: [
         {

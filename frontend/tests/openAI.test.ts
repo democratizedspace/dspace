@@ -11,6 +11,10 @@ vi.mock('../src/utils/dchatKnowledge.js', () => ({
     buildDchatKnowledge: vi.fn(() => 'knowledge'),
 }));
 
+vi.mock('../src/utils/docsRag.js', () => ({
+    searchDocsRag: vi.fn(async () => ({ excerptsText: '', sourcesMeta: { sources: [] } })),
+}));
+
 vi.mock('../src/data/npcPersonas.js', () => ({
     npcPersonas: [
         {
@@ -188,6 +192,15 @@ describe('GPT5Chat', () => {
                     {
                         type: 'input_text',
                         text: expect.any(String),
+                    },
+                ],
+            }),
+            expect.objectContaining({
+                role: 'system',
+                content: [
+                    {
+                        type: 'input_text',
+                        text: expect.stringContaining('Never invent quests'),
                     },
                 ],
             }),

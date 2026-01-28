@@ -1,5 +1,6 @@
 import { loadGameState, ready } from './gameState/common.js';
 import { buildDchatKnowledge } from './dchatKnowledge.js';
+import { searchDocsRag } from './docsRag.js';
 import { npcPersonas } from '../data/npcPersonas.js';
 import OpenAI from 'openai';
 
@@ -44,6 +45,9 @@ const fallbackWelcomeMessage =
     defaultPersona?.welcomeMessage || 'Welcome! How can I assist you today?';
 export const defaultOpenAIErrorMessage =
     "Sorry, I'm having some trouble and can't generate a response.";
+const gameFactsGuardrail =
+    "Never invent quests, items, processes, routes, or player state. If you're unsure, say you " +
+    "don't know and suggest checking /docs or docs/ROUTES.md.";
 
 const toNumericStatus = (status) => {
     if (typeof status === 'string') {
@@ -214,16 +218,34 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const gameState = loadGameState();
 
     const persona = options.persona || defaultPersona;
+    const baseSystemPrompt = persona?.systemPrompt || fallbackSystemPrompt;
     const systemMessage = {
         role: 'system',
-        content: persona?.systemPrompt || fallbackSystemPrompt,
+        content: baseSystemPrompt,
     };
+    const guardrailMessage = baseSystemPrompt.includes('Never invent quests')
+        ? null
+        : {
+              role: 'system',
+              content: gameFactsGuardrail,
+          };
 
     const knowledgeSummary = buildDchatKnowledge(gameState);
     const knowledgeMessage = knowledgeSummary
         ? {
               role: 'system',
               content: `DSPACE knowledge base:\n${knowledgeSummary}`,
+          }
+        : null;
+    const latestUserMessage =
+        [...messages].reverse().find((message) => message.role === 'user')?.content || '';
+    const docsRag = latestUserMessage
+        ? await searchDocsRag(latestUserMessage, { maxResults: 5, maxChars: 5000 })
+        : { excerptsText: '' };
+    const docsRagMessage = docsRag.excerptsText
+        ? {
+              role: 'system',
+              content: docsRag.excerptsText,
           }
         : null;
 
@@ -234,17 +256,30 @@ export const buildChatPrompt = async (messages, options = {}) => {
 
     const userMessages = [...messages];
     let combinedMessages = [...userMessages];
+    const ragMessages = [knowledgeMessage, docsRagMessage].filter(Boolean);
 
     if (combinedMessages.length === 0) {
         combinedMessages = [systemMessage];
+        if (guardrailMessage) {
+            combinedMessages.push(guardrailMessage);
+        }
         if (knowledgeMessage) {
             combinedMessages.push(knowledgeMessage);
+        }
+        if (docsRagMessage) {
+            combinedMessages.push(docsRagMessage);
         }
         combinedMessages.push(openingMessage);
     } else {
         combinedMessages = [systemMessage];
+        if (guardrailMessage) {
+            combinedMessages.push(guardrailMessage);
+        }
         if (knowledgeMessage) {
             combinedMessages.push(knowledgeMessage);
+        }
+        if (docsRagMessage) {
+            combinedMessages.push(docsRagMessage);
         }
         combinedMessages = [...combinedMessages, ...userMessages];
     }
@@ -252,7 +287,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const debugMessages = combinedMessages.map((message) => ({
         role: message.role,
         content: message.content,
-        kind: message === knowledgeMessage ? 'rag' : 'main',
+        kind: ragMessages.includes(message) ? 'rag' : 'main',
     }));
 
     return { combinedMessages, debugMessages, gameState };
