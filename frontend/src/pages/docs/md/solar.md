@@ -30,4 +30,4 @@ reduces your dCarbon footprint.
 ## Tips
 
 - Log your panel orientation and weather notes; steady output matters more than peak spikes.
-- Pair solar with wind turbines or storage so nighttime usage doesn't incur dCarbon penalties.
+- Wind turbines and storage pair well with solar so nighttime usage doesn't incur dCarbon penalties.
