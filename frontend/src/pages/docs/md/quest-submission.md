@@ -44,10 +44,14 @@ If your quest uses only existing items and processes:
       `frontend/src/pages/quests/json/<tree>/<quest>.json` and copy its contents.
     - If the quest is custom content, export from `/contentbackup` and copy the quest entry from
       the downloaded bundle JSON.
-3. **Validate** the quest structure by running:
-    ```bash
-    node scripts/validate-quest.js path/to/quest.json
-    ```
+3. **Validate** the quest structure:
+    - For quests that live in the repository, run:
+        ```bash
+        node scripts/validate-quest.js path/to/quest.json
+        ```
+        This validates against the repo schema (including `hardening` metadata).
+    - For quests exported from the in-game editor, use the validation in the
+      submission form (exports do not include `hardening`).
 4. **Submit at** `/quests/submit` with your GitHub token
 5. **Respond to feedback** on the generated pull request
 
