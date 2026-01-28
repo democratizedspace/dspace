@@ -4,7 +4,7 @@ slug: 'doffset'
 ---
 
 dOffset represents retired carbon emissions in the game. You earn dOffset by paying down your
-[dCarbon](/docs/dCarbon) footprint, turning emissions into verified offsets you can track in your
+[dCarbon](/docs/dcarbon) footprint, turning emissions into verified offsets you can track in your
 inventory.
 
 ## How to get dOffset

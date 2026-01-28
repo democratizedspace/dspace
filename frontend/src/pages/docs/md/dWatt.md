@@ -12,7 +12,7 @@ To generate dWatt, see the [Electricity](/docs/electricity) page.
 
 Generating dWatt using an outlet assumes the use of fossil fuels. The in-game smart plug handles
 this accounting by tracking your draw over time, minting dWatt, and accruing the matching
-[dCarbon](/docs/dCarbon). You can later retire those emissions by converting dCarbon into
+[dCarbon](/docs/dcarbon). You can later retire those emissions by converting dCarbon into
 [dOffset](/docs/doffset).
 
 Renewable sources like solar panels and wind turbines generate dWatt without adding dCarbon, so
