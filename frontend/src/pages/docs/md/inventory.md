@@ -3,39 +3,23 @@ title: 'Inventory'
 slug: 'inventory'
 ---
 
-Your inventory contains all the items you've collected through quests, processes, and other activities. Starting with v3, items are stored locally and can be managed through the inventory interface.
+Your inventory tracks the items you've collected through quests and processes, plus anything you add
+with the custom item tools. In v3, inventory and custom content are stored locally in your
+browser. Inventory saves use IndexedDB with a localStorage fallback, while custom content falls back
+to an in-memory store if IndexedDB is unavailable.
 
-## Item Types
+## Item categories
 
-Items in DSPACE fall into several categories:
+Inventory items are organized by category in the canonical item catalog. Categories are defined by
+the item schema and assigned in the JSON files under `frontend/src/pages/inventory/json/items/`.
+Each item can declare a category, and files without a category inherit a default value in the item
+index.
 
-1. Resources
-    - Energy units ([dWatt](/docs/dwatt), [dSolar](/docs/solar))
-    - Currency ([dUSD](/docs/dusd))
-    - Raw materials (PLA filament, water)
-
-2. Tools and Equipment
-    - 3D printers
-    - Solar panels and batteries
-    - Aquarium equipment
-    - Hydroponics systems
-
-3. Components
-    - 3D printed parts
-    - Rocket components
-    - Electronic components
-
-4. Consumables
-    - Plant nutrients
-    - Fish food
-    - Rocket fuel
-
-## Inventory categories and filters
+## Inventory filters
 
 The `/inventory` page groups items into filterable categories so you can narrow down large lists
-quickly. Categories are defined in the item JSON data under
-`frontend/src/pages/inventory/json/items/`. The filter chips are derived directly from that data—no
-hardcoded lists—so adding or renaming a category only requires updating the items themselves.
+quickly. The filter chips are derived directly from the item data (no hardcoded lists), so adding or
+renaming a category only requires updating the items themselves.
 
 - 3D Printing & Fabrication
 - Astronomy & Observation
@@ -54,18 +38,19 @@ Items missing an explicit category fall back to the "Uncategorized" label in the
 new category, update the relevant JSON entries and refresh the assertions in
 `frontend/tests/inventory-items-import.test.ts` so the expected category set stays in sync.
 
-## Item Properties
+## Item properties
 
-Each item has:
+Each item record includes:
 
 - Unique ID
 - Name
 - Description
 - Image
-- Count (quantity in inventory)
-- Related processes (requires/consumes/creates)
+- Optional metadata like `price`, `unit`, `type`, `category`, and `dependencies`
 
-## Item Relationships
+Counts live in the game state inventory, not on the item definitions themselves.
+
+## Item relationships
 
 Items are interconnected through:
 
@@ -79,31 +64,26 @@ Items are interconnected through:
     - Rewards for completion
     - Granted items during dialogue
 
-## Custom Items
+## Custom items
 
-With v3, you can create custom items that:
+Custom items can be created from `/inventory/create` and are stored locally in the custom content
+database (IndexedDB with an in-memory fallback if IndexedDB is unavailable). Custom items can be
+referenced by custom processes and quests.
 
-- Can be used in custom processes
-- Can be granted by custom quests
-- Are stored locally by default
-- Can be contributed to the base game
-
-## Item Management
+## Item management
 
 The inventory interface allows you to:
 
 - View item details and counts
-- See related processes
-- Track item dependencies using the new `dependencies` field
-- Manage custom items and preview them from the **Manage Items** page using
-  the **Preview** button next to each entry
-- Remove custom items you no longer need directly from this page
+- Search, sort, and filter the inventory list by category
+- Jump to an item's detail page to see related processes and quests
+- Manage custom items on **Manage Items**, including previewing details and deleting custom entries
 
-All inventory data is now stored locally using IndexedDB. For cross-device backups you can use the new [Cloud Sync](/docs/cloud-sync) feature.
+Inventory data is stored locally (IndexedDB with a localStorage fallback). For cross-device backups
+you can enable [Cloud Sync](/docs/cloud-sync).
 
-## Browser Support
+## Browser support
 
-IndexedDB functionality has been verified in the latest versions of Chrome,
-Firefox, Safari and Edge. DSPACE automatically falls back to vendor-prefixed
-implementations when needed, ensuring consistent inventory storage across major
-browsers.
+DSPACE uses IndexedDB in modern browsers and falls back to vendor-prefixed implementations where
+available. If IndexedDB is unavailable, the game falls back to localStorage and warns that storage
+may be limited.
