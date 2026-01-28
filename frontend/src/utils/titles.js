@@ -2,32 +2,39 @@ import { ACHIEVEMENTS, evaluateAchievements } from './achievements.js';
 
 const definitions = [
     {
-        id: 'titles:rookie-explorer',
-        name: 'Rookie Explorer',
-        description: 'Awarded for completing your first quest.',
+        id: 'titles:mission-commander',
+        name: 'Mission Commander',
+        description: 'Reserved for explorers who complete twenty quests.',
         category: 'Quest mastery',
-        achievementId: 'quests:first',
+        achievementId: 'quests:twenty',
     },
     {
-        id: 'titles:mission-specialist',
-        name: 'Mission Specialist',
-        description: 'Granted once you finish ten quests across any storyline.',
-        category: 'Quest mastery',
-        achievementId: 'quests:ten',
-    },
-    {
-        id: 'titles:grid-investor',
-        name: 'Grid Investor',
-        description: 'Recognizes players who store at least 500 dWatt in their inventory.',
+        id: 'titles:power-reserve',
+        name: 'Power Reserve',
+        description: 'Honors players who build a 2,000 dWatt safety margin.',
         category: 'Energy leadership',
-        achievementId: 'energy:stored',
+        achievementId: 'energy:reserve',
     },
     {
-        id: 'titles:wind-pioneer',
-        name: 'Wind Pioneer',
-        description: 'Celebrates the installation of a 500 W wind turbine at your base.',
+        id: 'titles:grid-stabilizer',
+        name: 'Grid Stabilizer',
+        description: 'Awarded after a load-tested inverter proves your grid is steady.',
         category: 'Energy leadership',
-        achievementId: 'equipment:wind-turbine',
+        achievementId: 'equipment:tested-inverter',
+    },
+    {
+        id: 'titles:launch-director',
+        name: 'Launch Director',
+        description: 'Given to rocketeers who establish a dedicated launchpad.',
+        category: 'Rocketry',
+        achievementId: 'rocketry:launchpad',
+    },
+    {
+        id: 'titles:completionist-laureate',
+        name: 'Completionist Laureate',
+        description: 'A prestigious honor for earning the Completionist Award.',
+        category: 'Legacy honors',
+        achievementId: 'awards:completionist',
     },
 ];
 
