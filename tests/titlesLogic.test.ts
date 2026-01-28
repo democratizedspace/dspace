@@ -17,7 +17,7 @@ describe('evaluateTitles', () => {
     expect(summaries.every((summary) => summary.unlocked === false)).toBe(true);
   });
 
-  it('unlocks prestige titles as milestones are met', () => {
+  it('unlocks quest and energy titles as milestones are met', () => {
     const quests = Object.fromEntries(
       Array.from({ length: 30 }, (_, index) => [
         `quest-${index + 1}`,
@@ -37,10 +37,14 @@ describe('evaluateTitles', () => {
       .filter((summary) => summary.unlocked)
       .map((summary) => summary.name);
 
-    expect(unlockedNames).toContain('Quest Vanguard');
-    expect(unlockedNames).toContain('Grid Magnate');
-    expect(unlockedNames).toContain('Solar Architect');
-    expect(unlockedNames).toContain('Guidance Officer');
-    expect(unlockedNames).toContain('Stellar Cartographer');
+    expect(new Set(unlockedNames)).toEqual(
+      new Set([
+        'Quest Vanguard',
+        'Grid Magnate',
+        'Solar Architect',
+        'Guidance Officer',
+        'Stellar Cartographer',
+      ])
+    );
   });
 });
