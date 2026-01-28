@@ -3,11 +3,29 @@ title: 'Authentication Flow'
 slug: 'authentication'
 ---
 
-DSPACE uses GitHub authentication for features that interact with the official repository, such as submitting custom quest pull requests or syncing your save data with **Cloud Sync**.
+DSPACE uses GitHub authentication for features that interact with the official repository, such as
+submitting custom quest pull requests or syncing your save data with **Cloud Sync**.
+
+## Authentication surfaces
+
+These are the places in DSPACE that request a GitHub token today:
+
+- **Cloud Sync** (`/cloudsync`) stores and validates a token, then uses it to list backups, upload
+  encrypted saves to a private gist, and restore from a gist ID. The Cloud Sync UI also lets you
+  clear the stored gist ID after restores.
+- **Quest submission** (`/quests/submit`) uses your token to open a pull request for a quest JSON
+  submission.
+- **Custom content bundle submission** (`/bundles/submit`) uses the token to open a pull request for
+  bundled quests, items, and processes.
+- **Quest dialogue gates**: quests can mark options with `requiresGitHub`, which disables those
+  choices until a token is saved (for example, the “Connect GitHub” onboarding quest).
+
+Use the **Settings → Log out** panel to clear saved tokens and Cloud Sync IDs on shared devices.
 
 ## Personal Access Tokens
 
-To authenticate, generate a GitHub personal access token with the `repo` and `gist` scopes. The token is used client-side only and never sent anywhere except directly to GitHub's API.
+To authenticate, generate a GitHub personal access token with the `repo` and `gist` scopes. The
+token is used client-side only and never sent anywhere except directly to GitHub's API.
 
 1. Visit [GitHub Settings → Developer settings → Personal access tokens](https://github.com/settings/tokens).
 2. Create a token granting **repo** and **gist** permissions.
@@ -15,9 +33,10 @@ To authenticate, generate a GitHub personal access token with the `repo` and `gi
 
 ## Token Storage
 
-Your token is stored in IndexedDB under `gameState.github.token` so you don't
-need to re-enter it each time you open the game. You can clear the saved token
-using the **Clear** button next to the input field.
+Your token is stored in IndexedDB under `gameState.github.token` so you don't need to re-enter it
+each time you open the game. Cloud Sync also stores the last-used gist ID at
+`gameState.cloudSync.gistId`. You can clear the saved token using the **Clear** button next to the
+input field or the **Log out** button in Settings.
 
 ## Security Considerations
 
