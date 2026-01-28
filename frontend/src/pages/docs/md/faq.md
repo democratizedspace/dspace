@@ -124,9 +124,9 @@ tied to achievements and appear on `/titles` and your [profile](/profile). See
 
 ## What are guilds and the Metaguild?
 
-Guilds are collaborative crews that share progress, resources, and funding. The Metaguild is the
-flagship guild and opens after completing the daily basic income quest line. Learn more on the
-[Guilds](/docs/guilds) page.
+Guilds are planned for 2027 or later and are not live today. They will become collaborative crews
+once ActivityPub multiplayer support is integrated, with the Metaguild serving as the flagship
+guild. For the current status and future plans, see [Guilds](/docs/guilds).
 
 ## How do I search the docs?
 

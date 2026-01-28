@@ -3,31 +3,33 @@ title: 'Guilds'
 slug: 'guilds'
 ---
 
-Guilds are planned for DSPACE v3 as collaborative crews that will pool
-equipment, quests, and funding. The Metaguild will serve as the flagship
-organization and welcome new recruits once they unlock the daily basic income
-quest. From there, specialist teams will handle everything from additive
-manufacturing to hydroponics so explorers can lean on in-universe experts
-instead of grinding alone.
+Guilds are **not live** in DSPACE today. They are planned for **2027 or later** per the
+[roadmap](/docs/roadmap). This page describes the direction we are building toward so players know
+what to expect and what is not available yet.
 
-## Metaguild structure
+## What guilds will be
 
-- **Specialist wings** – Sydney, Hydro, Nova, and the rest of the persona
-  roster each lead a discipline-focused wing (print farm, hydroponics,
-  rocketry, medicine, and more). Their quests will unlock tooling, safety
-  checklists, and ongoing maintenance tasks for the whole crew.
-- **Donation board** – The [Leaderboard](/leaderboard) tracks dUSD donations
-  that power the universal basic income pool. Crew members can celebrate the
-  top supporters and see which wings are currently funding new projects.
-- **Operations log** – The [Stats](/stats) destination and quest trees
-  highlight the shared progress the Metaguild will catalog, keeping everyone
-  aligned on what content ships next.
+When DSPACE integrates ActivityPub, it will provide the foundation for multiplayer. That upgrade
+will unlock player-created guilds, shared progression, and guild-specific content that grants
+in-game benefits. The Metaguild will be the flagship guild that connects the NPC roster, donation
+stories, and community-driven projects.
 
-## How to get involved
+## What is available now (single-player)
 
-1.  Finish the "Universal Basic Income" quest line to receive your Metaguild
-    callsign and daily stipend.
-2.  Visit the [Leaderboard](/leaderboard) to contribute dUSD and earn a spot on
-    the roster once guild recruitment opens.
-3.  Chat with Metaguild specialists such as Sydney or Hydro through dChat to
-    plan builds, troubleshoot processes, and queue new quests for your crew.
+- **No guild accounts or tags yet** – there is no live roster, recruitment flow, or guild
+  management UI.
+- **No shared progression** – quests, inventory, and energy are tracked per player only.
+- **No guild-only rewards** – any benefits tied to guild membership will arrive after the
+  ActivityPub milestone ships.
+
+## Preview surfaces
+
+Some parts of the UI and lore reference guilds as future-facing flavor. For example, the
+[Leaderboard](/leaderboard) currently uses static, illustrative data to show how a donation board
+might feel once guilds are online. Treat these screens as previews, not active multiplayer systems.
+
+## Stay in the loop
+
+Keep an eye on the [roadmap](/docs/roadmap) and release notes for updates as the ActivityPub
+integration progresses. Guild recruitment, shared content, and guild benefits will not be
+available until that work is complete.

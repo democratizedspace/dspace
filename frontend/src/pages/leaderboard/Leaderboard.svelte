@@ -41,15 +41,15 @@
 
 <div class="leaderboard" data-hydrated={hydrated ? 'true' : 'false'}>
     <header class="intro">
-        <h1>Metaguild Donation Leaderboard</h1>
+        <h1>Metaguild Donation Board (Preview)</h1>
         <p>
-            See which crews fuel the universal basic income pool. Daily donations earn streak
-            bonuses and bragging rights across the metaguild.
+            This preview shows how a future Metaguild donation board could look once guilds go
+            live. The data below is illustrative until ActivityPub multiplayer arrives.
         </p>
     </header>
 
     <section aria-labelledby="donation-table" class="panel">
-        <h2 id="donation-table">Top UBI donors</h2>
+        <h2 id="donation-table">Top UBI donors (preview)</h2>
         <table aria-label="Donation leaderboard">
             <thead>
                 <tr>
@@ -87,10 +87,10 @@
                     <dd>{formatNumber(personalStats.energyStored)}</dd>
                 </div>
                 <div>
-                    <dt>Daily streak tip</dt>
+                    <dt>Daily streak tip (preview)</dt>
                     <dd>
-                        Donate dUSD after each quest to climb the chart and earn exclusive metaguild
-                        badges.
+                        Guild streak bonuses are planned for a future release once multiplayer is
+                        live.
                     </dd>
                 </div>
             </dl>

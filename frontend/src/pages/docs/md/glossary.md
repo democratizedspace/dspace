@@ -56,7 +56,8 @@ exportable, and can reward items or trigger processes.
 
 ## Guild
 
-A collection of players populating the solar system under the same banner. A guild has its own unique name and 2-4 character tag. Tags consist of any combination of the 26 letters of the English alphabet.
+A future multiplayer crew planned for 2027 or later. Guilds will allow players to share
+progression and use a unique name and 2–4 character tag once ActivityPub integration is live.
 
 ## Hyperstructure
 
