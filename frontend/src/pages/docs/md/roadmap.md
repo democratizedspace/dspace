@@ -10,7 +10,7 @@ change, timelines are subject to delays, and some things may be reprioritized.
 
 - [ ] guilds (Metaguild recruitment, donation board, and NPC wings)
 - [ ] Multiplayer remains a long-term research area; updates will follow once prototypes reach
-  community testing
+      community testing
 
 ## 2026
 
