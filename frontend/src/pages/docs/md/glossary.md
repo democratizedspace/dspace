@@ -7,26 +7,52 @@ slug: 'glossary'
 
 Short for Democratized Space (sometimes stylized as democratized.space).
 
-## Entity
+## Built-in quest
 
-A game object that can be managed or referenced in gameplay. Core entities are quests, processes,
-and items.
+A quest shipped with the game and stored in the source repository. Built-in quests are read-only
+in the in-game editors.
 
-## Built-in entity
+## Built-in item
 
-An entity shipped with the game and stored in the source repository. Built-in entities are
+An item shipped with the game and stored in the source repository. Built-in items are read-only in
+the in-game editors.
+
+## Built-in process
+
+A process shipped with the game and stored in the source repository. Built-in processes are
 read-only in the in-game editors.
 
 ## Custom entity
 
-An entity created in-game by a player and stored in the player's browser (typically in IndexedDB,
-with a non-persistent in-memory fallback if IndexedDB is unavailable). Custom entities are
-editable, exportable, and can be submitted for inclusion in the official game.
+A quest, item, or process created in-game by a player and stored in the player's browser
+(typically in IndexedDB, with a non-persistent in-memory fallback if IndexedDB is unavailable).
+Custom entities are editable, exportable, and can be submitted for inclusion in the official
+game.
 
 ## Custom content bundle
 
 A packaged set of related custom quests, items, and processes exported together for submission to
 the official game.
+
+## Custom content backup
+
+The backup export/import workflow on [/contentbackup](/contentbackup) used to package custom
+quests, items, and processes for transfer or recovery.
+
+## Custom item
+
+An item created in-game and stored in the player's browser. Custom items are editable, exportable,
+and can be referenced by custom quests and custom processes.
+
+## Custom process
+
+A process created in-game and stored in the player's browser. Custom processes are editable,
+exportable, and can reference both built-in and custom items.
+
+## Custom quest
+
+A quest created in-game and stored in the player's browser. Custom quests are editable,
+exportable, and can reward items or trigger processes.
 
 ## Guild
 
@@ -57,25 +83,20 @@ An activity that transforms items into new ones. [Processes](/docs/processes) ca
 consume items, and create items, making them the primary method for crafting objects, machines,
 decor, and plants.
 
-## Process chain
-
-A sequence of processes where the outputs of one process become inputs for the next, creating a
-clear progression path.
-
 ## Quest
 
 A task that can be completed by the player. Quests use branching dialogue with an NPC and can grant
 or require items and processes.
 
-## Quest node
+## Quest options
 
-One step in a quest's dialogue flow. Nodes contain NPC text plus one or more options that advance
-or finish the quest.
+An actionable choice in a quest's dialogue flow. Options can jump to another step, finish a quest,
+start a process, or grant items.
 
-## Quest option
+## In-game editor
 
-An actionable choice on a quest node. Options can jump to another node, finish a quest, start a
-process, or grant items.
+The in-app UI for creating or updating custom quests, items, and processes. Editors store entries
+locally until they are exported or submitted.
 
 ## Questline
 
