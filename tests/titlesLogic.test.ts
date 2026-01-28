@@ -25,7 +25,7 @@ describe('evaluateTitles', () => {
       ])
     );
     const inventory = {
-      ...(dWattId ? { [dWattId]: 5000 } : {}),
+      ...(dWattId ? { [dWattId]: 6000 } : {}),
       ...(solarSetupId ? { [solarSetupId]: 1 } : {}),
       ...(guidedStackId ? { [guidedStackId]: 1 } : {}),
       ...(starTrailId ? { [starTrailId]: 1 } : {}),
