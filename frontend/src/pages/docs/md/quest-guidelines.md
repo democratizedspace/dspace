@@ -32,13 +32,12 @@ existing tree unless you're intentionally adding a new category.
 
 Current trees include:
 
--   **Welcome** (onboarding mechanics)
 -   **3D Printing**
 -   **Aquaria**
 -   **Astronomy**
 -   **Chemistry**
--   **Composting**
 -   **Completionist**
+-   **Composting**
 -   **DevOps**
 -   **Electronics**
 -   **Energy**
@@ -50,6 +49,7 @@ Current trees include:
 -   **Rocketry**
 -   **Sysadmin**
 -   **UBI**
+-   **Welcome** (onboarding mechanics)
 -   **Woodworking**
 
 ## Quest Structure Guidelines
@@ -147,7 +147,7 @@ Every quest JSON file must include:
         -   `process`: For type:process, process ID
         -   `requiresItems`: Optional items needed to select option
         -   `grantsItems`: Optional items given when selecting option
-        -   `requiresGitHub`: Set to `true` to disable the option until a GitHub token is saved
+        -   `requiresGitHub`: Optional schema field used by the quest runtime to gate an option
 -   `rewards`: Items given upon quest completion
 -   `requiresQuests`: Array of quest IDs that must be completed first (select these in the quest
     form under **Quest Requirements**). Automated tests ensure these dependencies reference
@@ -165,7 +165,8 @@ root-relative path. Quest titles must be unique across all existing quests.
 > `process`, or `grantsItems` options, and adding item requirements or rewards on each option. You
 > can choose the start node and manage options without writing JSON, and the preview updates live
 > for uploaded images. The form remains mobile‑responsive and stacks action buttons on small
-> screens.
+> screens. Advanced option flags like `requiresGitHub` are part of the JSON schema/runtime but are
+> not exposed in the editor UI.
 
 The editor focuses on the fundamentals today and exposes controls to gate dialogue options on
 specific items or grant rewards inline. You can run `npm run generate-quest --template basic`
