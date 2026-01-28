@@ -3,10 +3,36 @@ title: 'Electricity'
 slug: 'electricity'
 ---
 
-## Non-renewable energy
+Electricity skills bridge safe power handling with measurement and control. In DSPACE, that means
+learning to move energy from generation to devices, while tracking dWatt usage and system health.
 
-If you plug a machine in the wall (on Earth, at least), chances are you're still using fossil fuels, either from coal or natural gas. In DSPACE, there is a built-in carbon tax that is applied to all electricity usage based on fossil fuels. For every 1000 [dCarbon](/docs/dCarbon) produced within the game, your sell prices in the shop will be reduced by 1%, up to a maximum reduction of 90%. This provides a monetary incentive to continue to adopt renewable energy production.
+## What this skill covers
 
-## Renewable energy
+- AC/DC safety, grounding, and basic circuit inspection.
+- Measuring voltage, current, and resistance with handheld tools.
+- Power distribution from batteries, inverters, and smart plugs.
+- Energy budgeting with dWatt and system logs.
 
-You can buy a solar panel or handheld wind turbine from [Amazing](/docs/amazing). These will generate electricity for you, and you can use them to power your machines. You can also sell the electricity you generate to other players.
+## Recommended inventory
+
+- Digital multimeter and GFCI outlet tester for safety checks.
+- Smart plugs or power strips to track load usage.
+- Battery packs, fused cabling, and inverters for small off-grid setups.
+
+## Quest highlights
+
+- [Test a GFCI outlet](/quests/electronics/test-gfci-outlet) verifies safety wiring.
+- [Check battery voltage](/quests/electronics/check-battery-voltage) covers DC measurement.
+- [Power inverter](/quests/energy/power-inverter) connects batteries to AC loads.
+- [Off-grid charger](/quests/energy/offgrid-charger) validates real usage tracking.
+
+## Best practices
+
+1. De-energize circuits before wiring or probing.
+2. Use the correct meter range and verify probes are in the right ports.
+3. Keep load logs so you can match dWatt usage to real devices.
+4. Treat every unknown wire as live until proven otherwise.
+
+## Where to go next
+
+Build on electricity skills with solar power, electronics, and robotics quests.

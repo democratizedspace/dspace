@@ -3,49 +3,46 @@ title: 'Rockets'
 slug: 'rockets'
 ---
 
-DSPACE aims to make the creation and launches of rockets so easy that anyone can do it.
+Rocketry quests blend fabrication, safety, and flight operations. DSPACE covers model rocket
+builds, ground testing, and recovery systems before advancing to more ambitious launches.
 
-These quests focus on hobbyist-grade model rockets; commercial or
-high-powered launches are out of scope.
+## What this skill covers
 
-You can now build a fully functioning guided model rocket, complete with
-servo steering and onboard video, and launch it through the in-game questline.
-The playbook below covers everything from printing the hardware to rehearsing
-the countdown so the hop succeeds on the first real attempt.
+- Building airframes, nose cones, and recovery systems.
+- Launch procedures, range safety, and preflight checklists.
+- Motor selection, propellant handling, and static testing basics.
+- Logging flight data and iterating on designs.
 
-Orbit remains a long-term aspiration that will require significant iteration
-and regulatory diligence. For now, the guided hop serves as the shipped
-milestone while DSPACE researches what it would take to graduate to orbital
-launches in the future.
+## Recommended inventory
+
+- Launch controller and safe ignition gear.
+- 3D printed rocket parts or airframe components.
+- Parachute and recovery hardware for return flights.
+
+## Quest highlights
+
+- [First launch](/quests/rocketry/firstlaunch) establishes safe launch flow.
+- [Preflight check](/quests/rocketry/preflight-check) builds a repeatable checklist.
+- [Parachute](/quests/rocketry/parachute) focuses on recovery planning.
+- [Static test](/quests/rocketry/static-test) validates propulsion before flight.
 
 ## Guided model rocket hop playbook
 
-Before aiming for orbit, DSPACE now documents a realistic step beyond the
-parachute-only build. Follow these quests and processes to add servo steering
-and onboard video to your 3D printed rocket.
+The guided model rocket hop is DSPACE's current flight workflow. It keeps projects grounded in
+repeatable milestones while still feeling ambitious.
 
-### Fabrication and bench testing
+1. **Fabrication and bench testing**: assemble the airframe, verify the recovery system, and
+   validate the launch controller on the bench.
+2. **Simulation and launch day**: run a dry preflight checklist, confirm weather and wind limits,
+   then launch with a dedicated spotter and recovery plan.
 
-1. **Print guidance hardware** – Run `3dprint-guided-fincan` for the servo-ready
-   fincan and `3dprint-guidance-sled` for the avionics tray so the servos and
-   Arduino seat cleanly inside the body tube.
-2. **Wire the avionics** – Use `assemble-guided-flight-stack` to mount the
-   Arduino, route servo leads, and secure connectors. Harden the build with a
-   dab of superglue before buttoning it up.
-3. **Tune stability firmware** – Flash the sketch and exercise the servos with
-   `calibrate-guided-flight-stack`. Stop when the fins hold attitude without
-   chattering through the tilt test.
-4. **Add a camera** – Install the keychain module with `install-rocket-camera`
-   so you can capture the hop from the nosecone.
+## Best practices
 
-### Simulation and launch day
+1. Keep a clear launch zone and a dedicated spotter.
+2. Inspect wiring and igniters before arming the controller.
+3. Log wind conditions, motor type, and recovery results every flight.
+4. Never skip the preflight checklist, even on routine launches.
 
-1. **Rehearse the profile** – Run `suborbital-hop` to simulate the flight and
-   confirm guided hop telemetry stays within drift limits before leaving the
-   shop.
-2. **Set up the range** – At the field, execute `range-setup-guided-hop` to log
-   rod angle checks, igniter continuity, servo wiggle tests, and camera arming.
-3. **Call the countdown** – Follow `countdown-guided-hop` to keep everyone in
-   sync right up to key turn.
-4. **Launch and recover** – Trigger `launch-guided-hop` and bring home the
-   guided flight log capsule for replay.
+## Where to go next
+
+Combine rockets with 3D printing and electronics to create smarter airframes and flight systems.

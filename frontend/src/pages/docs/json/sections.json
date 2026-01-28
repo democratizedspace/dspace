@@ -29,23 +29,55 @@
         "title": "Skills",
         "links": [
             { "title": "3D printing", "href": "/docs/3dprinting", "keywords": ["fabrication"] },
-            { "title": "Solar power", "href": "/docs/solar", "keywords": ["energy", "panels"] },
+            { "title": "Aquaria", "href": "/docs/aquaria", "keywords": ["aquarium", "water"] },
             {
-                "title": "Electricity",
-                "href": "/docs/electricity",
-                "keywords": ["power", "generation"]
-            },
-            {
-                "title": "Hydroponics",
-                "href": "/docs/hydroponics",
-                "keywords": ["farming", "plants"]
+                "title": "Astronomy",
+                "href": "/docs/astronomy",
+                "keywords": ["observations", "stars"]
             },
             {
                 "title": "Chemistry Lab Basics",
                 "href": "/docs/chemistry-lab",
                 "keywords": ["chemistry", "laboratory"]
             },
-            { "title": "Rockets", "href": "/docs/rockets", "keywords": ["launch", "propulsion"] }
+            { "title": "Composting", "href": "/docs/composting", "keywords": ["soil", "waste"] },
+            { "title": "DevOps", "href": "/docs/devops", "keywords": ["deployments", "infra"] },
+            {
+                "title": "Electronics",
+                "href": "/docs/electronics",
+                "keywords": ["circuits", "sensors"]
+            },
+            {
+                "title": "Electricity",
+                "href": "/docs/electricity",
+                "keywords": ["power", "generation"]
+            },
+            {
+                "title": "Energy systems",
+                "href": "/docs/energy-systems",
+                "keywords": ["batteries", "storage", "wind"]
+            },
+            { "title": "First Aid", "href": "/docs/first-aid", "keywords": ["safety", "medical"] },
+            { "title": "Geothermal", "href": "/docs/geothermal", "keywords": ["heat", "loops"] },
+            {
+                "title": "Hydroponics",
+                "href": "/docs/hydroponics",
+                "keywords": ["farming", "plants"]
+            },
+            {
+                "title": "Programming",
+                "href": "/docs/programming",
+                "keywords": ["code", "data"]
+            },
+            { "title": "Robotics", "href": "/docs/robotics", "keywords": ["robots", "control"] },
+            { "title": "Rockets", "href": "/docs/rockets", "keywords": ["launch", "propulsion"] },
+            { "title": "Solar power", "href": "/docs/solar", "keywords": ["energy", "panels"] },
+            { "title": "Sysadmin", "href": "/docs/sysadmin", "keywords": ["systems", "ops"] },
+            {
+                "title": "Woodworking",
+                "href": "/docs/woodworking",
+                "keywords": ["construction", "shop"]
+            }
         ]
     },
     {
