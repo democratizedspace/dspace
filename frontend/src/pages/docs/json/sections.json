@@ -29,11 +29,47 @@
         "title": "Skills",
         "links": [
             { "title": "3D printing", "href": "/docs/3dprinting", "keywords": ["fabrication"] },
+            {
+                "title": "Aquaria",
+                "href": "/docs/aquaria",
+                "keywords": ["aquarium", "fish", "water quality"]
+            },
+            {
+                "title": "Astronomy & Observation",
+                "href": "/docs/astronomy",
+                "keywords": ["telescope", "night sky", "photography"]
+            },
+            {
+                "title": "Chemistry Lab Basics",
+                "href": "/docs/chemistry-lab",
+                "keywords": ["chemistry", "laboratory"]
+            },
+            {
+                "title": "Composting",
+                "href": "/docs/composting",
+                "keywords": ["soil", "waste", "temperature"]
+            },
+            {
+                "title": "Electronics",
+                "href": "/docs/electronics",
+                "keywords": ["circuits", "sensors", "soldering"]
+            },
+            {
+                "title": "Energy Systems",
+                "href": "/docs/energy-systems",
+                "keywords": ["batteries", "inverters", "off-grid"]
+            },
             { "title": "Solar power", "href": "/docs/solar", "keywords": ["energy", "panels"] },
             {
                 "title": "Electricity",
                 "href": "/docs/electricity",
                 "keywords": ["power", "generation"]
+            },
+            { "title": "First Aid", "href": "/docs/first-aid", "keywords": ["safety", "medical"] },
+            {
+                "title": "Geothermal",
+                "href": "/docs/geothermal",
+                "keywords": ["heat pump", "ground loop"]
             },
             {
                 "title": "Hydroponics",
@@ -41,11 +77,26 @@
                 "keywords": ["farming", "plants"]
             },
             {
-                "title": "Chemistry Lab Basics",
-                "href": "/docs/chemistry-lab",
-                "keywords": ["chemistry", "laboratory"]
+                "title": "Programming",
+                "href": "/docs/programming",
+                "keywords": ["data", "apis", "alerts"]
             },
-            { "title": "Rockets", "href": "/docs/rockets", "keywords": ["launch", "propulsion"] }
+            {
+                "title": "Robotics",
+                "href": "/docs/robotics",
+                "keywords": ["sensors", "actuators", "motion"]
+            },
+            { "title": "Rocketry", "href": "/docs/rockets", "keywords": ["launch", "propulsion"] },
+            {
+                "title": "Sysadmin & DevOps",
+                "href": "/docs/sysadmin-devops",
+                "keywords": ["servers", "deployments", "security"]
+            },
+            {
+                "title": "Woodworking",
+                "href": "/docs/woodworking",
+                "keywords": ["carpentry", "furniture", "finishing"]
+            }
         ]
     },
     {

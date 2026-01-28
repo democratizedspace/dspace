@@ -21,6 +21,7 @@ describe('runTests', () => {
       .fn()
       .mockReturnValueOnce('Test Files  1 passed\nTests  1 passed')
       .mockReturnValueOnce('')
+      .mockReturnValueOnce('')
       .mockReturnValueOnce('');
     const code = runTests(exec, 'linux');
     expect(code).toBe(0);
@@ -29,6 +30,11 @@ describe('runTests', () => {
     });
     expect(exec).toHaveBeenNthCalledWith(
       3,
+      'npm run test:docs-rag',
+      expect.objectContaining({ stdio: 'inherit' })
+    );
+    expect(exec).toHaveBeenNthCalledWith(
+      4,
       'bash ./frontend/scripts/prepare-pr.sh',
       expect.objectContaining({
         stdio: 'inherit',

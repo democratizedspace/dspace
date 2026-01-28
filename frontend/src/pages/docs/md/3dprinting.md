@@ -3,10 +3,32 @@ title: '3D Printing'
 slug: '3dprinting'
 ---
 
-3D printing is the process of making a three-dimensional object from a digital file. The object is created by laying down many thin layers of material in succession.
+3D printing turns digital models into physical parts by laying down thin layers of material (most
+DSPACE quests use FDM printers with PLA).
 
-## Why 3D printing?
+## What you learn
 
-3D printing is a great way to make prototypes or things that would otherwise require much larger machines.
+- How to set up and calibrate an entry-level FDM printer
+- How to handle first-layer adhesion, retraction, and temperature tuning
+- How to keep prints consistent with maintenance tasks like belt tensioning and nozzle cleaning
 
-In space, specifically, 3D printing is crucial for making things like tools, spare parts, and other things that are very situational or difficult to plan for. They could also be scaled up substantially to make things like habitats or space stations. You could also 3D print entire human organs in low earth orbit and send them down to Earth.
+## Quest trailheads
+
+- [Set up your first 3D printer](/quests/3dprinting/start)
+- [Level the Print Bed](/quests/3dprinting/bed-leveling)
+- [Print a Calibration Cube](/quests/3dprinting/calibration-cube)
+- [Print a Temperature Tower](/quests/3dprinting/temperature-tower)
+- [Tune Retraction Settings](/quests/3dprinting/retraction-test)
+- [Print a Phone Stand](/quests/3dprinting/phone-stand)
+
+## Key gear and materials
+
+- Entry-level FDM printer, spare nozzles, and a print removal scraper
+- PLA filament (green and white spools are stocked in inventory)
+- Digital calipers for checking dimensions and squareness
+
+## Good practices
+
+- Run calibration prints (Benchy, temperature tower) before long jobs.
+- Keep your nozzle clean and watch for signs of a clog or "blob of death" before it ruins a print.
+- Record slicer settings in your quest notes so you can repeat successful builds.

@@ -159,6 +159,7 @@ export const stripMarkdownToText = (markdown: string) => {
     text = text.replace(/^\s*#+\s*/gm, '');
     text = text.replace(/^\s*>\s*/gm, '');
     text = text.replace(/[*_~]+/g, '');
+    text = text.replace(/\bquest trailheads?\b/gi, ' ');
     text = text.replace(/\s+/g, ' ').trim();
 
     return text;

@@ -3,31 +3,41 @@ title: 'Guilds'
 slug: 'guilds'
 ---
 
-Guilds are planned for DSPACE v3 as collaborative crews that will pool
-equipment, quests, and funding. The Metaguild will serve as the flagship
-organization and welcome new recruits once they unlock the daily basic income
-quest. From there, specialist teams will handle everything from additive
-manufacturing to hydroponics so explorers can lean on in-universe experts
-instead of grinding alone.
+Guilds are **not live yet**. They are planned for DSPACE v3 (2027+ on the
+[roadmap](/docs/roadmap)) and will arrive after DSPACE integrates ActivityPub
+as the multiplayer foundation. This page outlines the intended direction so
+players know what to expect once guilds ship.
 
-## Metaguild structure
+## Planned guild experience
 
-- **Specialist wings** – Sydney, Hydro, Nova, and the rest of the persona
-  roster each lead a discipline-focused wing (print farm, hydroponics,
-  rocketry, medicine, and more). Their quests will unlock tooling, safety
-  checklists, and ongoing maintenance tasks for the whole crew.
-- **Donation board** – The [Leaderboard](/leaderboard) tracks dUSD donations
-  that power the universal basic income pool. Crew members can celebrate the
-  top supporters and see which wings are currently funding new projects.
-- **Operations log** – The [Stats](/stats) destination and quest trees
-  highlight the shared progress the Metaguild will catalog, keeping everyone
-  aligned on what content ships next.
+When ActivityPub integration is complete, players will be able to:
 
-## How to get involved
+- **Create or join guilds** with a shared name, tag, and public profile.
+- **Coordinate multiplayer progress** through guild-specific questlines,
+  shared milestones, and cooperative resource goals.
+- **Unlock guild content** that provides in-game benefits such as tooling
+  access, bonus quest rewards, and specialized support.
+- **Connect to the wider fediverse** so guild identities, announcements, and
+  updates can travel beyond a single DSPACE instance.
 
-1.  Finish the "Universal Basic Income" quest line to receive your Metaguild
-    callsign and daily stipend.
-2.  Visit the [Leaderboard](/leaderboard) to contribute dUSD and earn a spot on
-    the roster once guild recruitment opens.
-3.  Chat with Metaguild specialists such as Sydney or Hydro through dChat to
-    plan builds, troubleshoot processes, and queue new quests for your crew.
+## The Metaguild vision
+
+The Metaguild will act as the flagship guild, providing a narrative anchor for
+newcomers and a place to collaborate on global tech tree goals. Specialist
+wings (print farm, hydroponics, rocketry, medicine, and more) will eventually
+host quests, checklists, and ongoing maintenance tasks for the whole crew.
+
+## What is not available today
+
+The following features are **not implemented yet** in the current build:
+
+- Guild creation, membership, or shared inventories
+- Guild-specific quests, rewards, or benefits
+- Donation boards, UBI funding controls, or live guild leaderboards
+- ActivityPub identities or cross-instance multiplayer coordination
+
+## How to follow progress
+
+Keep an eye on the [roadmap](/docs/roadmap) for milestone updates and join the
+[Discord](https://discord.gg/A3UAfYvnxM) to discuss multiplayer planning. We
+will update this page as soon as guild development begins.

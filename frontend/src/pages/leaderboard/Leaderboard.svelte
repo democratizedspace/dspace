@@ -41,15 +41,15 @@
 
 <div class="leaderboard" data-hydrated={hydrated ? 'true' : 'false'}>
     <header class="intro">
-        <h1>Metaguild Donation Leaderboard</h1>
+        <h1>Metaguild Donation Leaderboard (Preview)</h1>
         <p>
-            See which crews fuel the universal basic income pool. Daily donations earn streak
-            bonuses and bragging rights across the metaguild.
+            This page previews the planned Metaguild leaderboard. Once guilds launch, it will show
+            which crews fuel the universal basic income pool and highlight daily donation streaks.
         </p>
     </header>
 
     <section aria-labelledby="donation-table" class="panel">
-        <h2 id="donation-table">Top UBI donors</h2>
+        <h2 id="donation-table">Top UBI donors (planned)</h2>
         <table aria-label="Donation leaderboard">
             <thead>
                 <tr>
@@ -89,8 +89,8 @@
                 <div>
                     <dt>Daily streak tip</dt>
                     <dd>
-                        Donate dUSD after each quest to climb the chart and earn exclusive metaguild
-                        badges.
+                        When guilds launch, donating dUSD after each quest will help you climb the
+                        chart and earn Metaguild badges.
                     </dd>
                 </div>
             </dl>

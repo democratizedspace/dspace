@@ -373,6 +373,8 @@ Proposal (opt-in):
 **Changes:**
 - Add docs index + routes list to `buildDchatKnowledge` summary.
 - Add corresponding `sources` entries.
+- Generate build-time MiniSearch artifacts for docs chunks and routes under
+  `frontend/src/generated/rag/` to keep QA coverage deterministic and client-only.
 
 **Acceptance criteria:**
 - Knowledge summary contains `/docs` titles + slugs and route index data.
