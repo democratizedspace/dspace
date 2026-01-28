@@ -73,7 +73,16 @@ export const searchDocsRag = async (queryText, options = {}) => {
         return { excerptsText: '', sourcesMeta: { results: [] } };
     }
 
-    const { miniSearch, chunkMap, meta } = await loadDocsRag();
+    let miniSearch;
+    let chunkMap;
+    let meta;
+
+    try {
+        ({ miniSearch, chunkMap, meta } = await loadDocsRag());
+    } catch (error) {
+        console.error('Failed to load docs RAG data:', error);
+        return { excerptsText: '', sourcesMeta: { results: [] } };
+    }
     const results = miniSearch.search(query, { prefix: true, fuzzy: 0.2 });
     const maxResults = options.maxResults ?? DEFAULT_MAX_RESULTS;
     const maxChars = options.maxChars ?? DEFAULT_MAX_CHARS;

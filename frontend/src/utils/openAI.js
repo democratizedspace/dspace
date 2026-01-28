@@ -53,7 +53,7 @@ const applySystemGuardrail = (prompt) => {
     if (!prompt) return sharedSystemGuardrail;
     const normalizedPrompt = prompt.toLowerCase();
     const hasNeverInvent = normalizedPrompt.includes('never invent');
-    const hasGuardedDomain = /(quests|items|processes|routes|player state)/i.test(prompt);
+    const hasGuardedDomain = /(quests|items|processes|routes|player state)/.test(normalizedPrompt);
     if (hasNeverInvent && hasGuardedDomain) return prompt;
     return `${prompt}\n\n${sharedSystemGuardrail}`;
 };
