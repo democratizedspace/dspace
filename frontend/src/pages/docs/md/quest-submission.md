@@ -27,8 +27,9 @@ If your quest requires custom items or processes, use the bundle submission work
     - Use the process picker for “Run process” dialogue options and set item counts as needed
 2. **Create related items** at `/inventory/create` if needed
 3. **Create related processes** at `/processes/create` if needed
-4. **Package everything into a bundle** following the [Custom Content Bundles](/docs/custom-bundles) format
-5. **Submit the bundle** at `/bundles/submit` with your GitHub token
+4. **Export a bundle** from [/contentbackup](/contentbackup) (Prepare backup → Download backup)
+5. **Submit the bundle** at `/bundles/submit` with your GitHub token (paste the JSON from the
+   downloaded backup or from `scripts/create-content-bundle.js`)
 6. **Respond to feedback** on the generated pull request
 
 ### Option 2: Quest-Only Submission
@@ -38,15 +39,13 @@ If your quest uses only existing items and processes:
 1. **Create your quest** using the in-game editor at `/quests/create`
     - Add quest completion rewards with the item picker for any items you want to grant on finish
     - Use the process picker for “Run process” dialogue options when applicable
-2. **Validate** the quest structure by running:
+2. **Export the quest JSON** from your custom content backup or copy the JSON file if you're
+   authoring it in the repository.
+3. **Validate** the quest structure by running:
     ```bash
-    npm run test:ci -- questValidation
+    node scripts/validate-quest.js path/to/quest.json
     ```
-3. **Check quest quality** with:
-    ```bash
-    npm run test:ci -- questQuality
-    ```
-4. **Submit at** `/quests/submit` with your GitHub token
+4. **Submit at** `/quests/submit` with your GitHub token (paste the quest JSON into the form)
 5. **Respond to feedback** on the generated pull request
 
 ## Quest Images
@@ -60,13 +59,18 @@ load times. Developers should use the shared helper at
 
 For manual submissions via command-line:
 
-1. **Bundle related content** using `scripts/create-content-bundle.js`. This script collects quests, items, and processes into a single JSON file under `submissions/bundles`.
+1. **Bundle related content** using `scripts/create-content-bundle.js`, for example:
+   ```bash
+   node scripts/create-content-bundle.js submissions/bundles/my-bundle.json path/to/quest.json --items path/to/item.json --processes path/to/process.json
+   ```
+   This script collects quests, items, and processes into a single JSON file under `submissions/bundles`.
 2. **Validate** all content following the guidelines above
 3. **Create a pull request** manually with your bundle file
 4. **Regenerate the new quests list** by running `npm run new-quests:update` and
    committing the updated `/docs/new-quests.md` to keep quest counts accurate.
 
-Maintainers can review submitted quests at `/quests/review`, approving or rejecting them before merge.
+Maintainers can review submitted quests at `/quests/review`, approving or rejecting them before
+merge.
 
 If something goes wrong, the submission form will display an error message so you can adjust and try again.
 

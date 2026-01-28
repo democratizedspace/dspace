@@ -17,11 +17,11 @@ summarizes the required structure.
 | `id`             | string | ✔️       | Unique quest identifier, e.g. `astronomy/constellations` |
 | `title`          | string | ✔️       | Display name for the quest                               |
 | `description`    | string | ✔️       | Short summary shown before starting                      |
-| `image`          | string | ✔️       | Path to quest image asset                                |
+| `image`          | string | ✔️       | Quest image URL or asset path                            |
 | `npc`            | string | ✔️       | NPC image or identifier shown in dialogue                |
 | `start`          | string | ✔️       | ID of the first dialogue node                            |
 | `dialogue`       | array  | ✔️       | Ordered list of dialogue nodes                           |
-| `hardening`      | object | ✔️       | Content rating and safety metadata for the quest         |
+| `hardening`      | object | ✔️       | QA hardening metadata (see shared hardening schema)      |
 | `rewards`        | array  | ❌       | Items granted on completion                              |
 | `requiresQuests` | array  | ❌       | Quest IDs that must be finished first                    |
 
@@ -41,7 +41,7 @@ Options control quest flow and may grant or require items.
 
 | Field            | Type    | Required | Description                                   |
 | ---------------- | ------- | -------- | --------------------------------------------- |
-| `type`           | string  | ✔️       | `goto`, `process`, or `finish`                |
+| `type`           | string  | ✔️       | `goto`, `process`, `finish`, or `grantsItems` |
 | `text`           | string  | ✔️       | Option label shown to the player              |
 | `goto`           | string  | depends  | Target node when `type` is `goto`             |
 | `process`        | string  | depends  | Process ID when `type` is `process`           |
@@ -51,4 +51,11 @@ Options control quest flow and may grant or require items.
 
 Item arrays consist of objects with `id` (string) and `count` (number).
 
-For a full example, see the [Quest Template Example](/docs/quest-template). Validation against the schema is performed by test suites such as `npm test -- questValidation`.
+For a full example, see the [Quest Template Example](/docs/quest-template). To validate a quest
+file locally, run:
+
+```bash
+node scripts/validate-quest.js path/to/quest.json
+```
+
+That script applies the schema and checks that quest and process references exist.

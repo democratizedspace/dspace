@@ -59,9 +59,8 @@ Organize quests in a **clear progression** from beginner to advanced:
 ### Quest Dependencies
 
 -   Make dependencies clear and logical
--   Only `welcome/howtodoquests` should have an empty `requiresQuests` list. All other quests must
-    depend on it directly or on a downstream quest so new players always learn the mechanics first.
-    This rule is enforced by automated repository tests to prevent regressions.
+-   Today, `welcome/howtodoquests` is the only quest with an empty `requiresQuests` list. Keep that
+    quest as the root of each new chain so new players always learn the mechanics first.
 -   Each category should have a clear entry point that chains back to `welcome/howtodoquests`.
 -   Dependencies should mirror the real learning path (e.g., rocketry quests rely on 3D printing and
     electronics basics; robotics builds on electronics and programming fundamentals).
@@ -127,7 +126,7 @@ Every quest JSON file must include:
 -   `id`: Unique identifier following the pattern `category/name`
 -   `title`: Display title of the quest
 -   `description`: Brief description explaining the quest purpose
--   `image`: Path to quest image
+-   `image`: Quest image URL or asset path
 -   `npc`: Path to NPC avatar image (choose from the NPC list in [/docs/npcs](/docs/npcs))
 -   `start`: ID of the starting dialogue node
 -   `dialogue`: Array of dialogue nodes, each containing:
@@ -145,27 +144,36 @@ Every quest JSON file must include:
 -   `requiresQuests`: Array of quest IDs that must be completed first (select these in the quest form under **Quest Requirements**).
     Automated tests ensure these dependencies reference existing quests and avoid cycles.
 
-Quest data is validated against a JSON schema. Titles and descriptions reject
-`<` and `>` characters, and `image` must be a data URL, an absolute HTTP(S)
-link, or a root-relative path. Quest titles must be unique across all existing
-quests.
+The in-game quest editor validates against a JSON schema. Titles and
+descriptions reject `<` and `>` characters, `image` must be a data URL, an
+absolute HTTP(S) link, or a root-relative path, and quest titles must be unique
+across existing quests.
+
+Repository quests are validated by `scripts/validate-quest.js`, which checks the
+schema along with missing quest/process references. The editor uses a stricter
+`customQuestValidation` schema plus additional UI checks (unique titles, valid
+dialogue targets, and item counts) before saving.
 
 ### Current Implementation State
 
 > **Note:** The quest editor now lets you build branching dialogue directly in the browser. The current
-> implementation in `QuestForm.svelte` supports quest metadata (title, description, image), selecting
-> required quests, defining an NPC, creating dialogue nodes with `goto` or `finish` options, and
-> configuring process actions or item gates on each option. You can choose the start node and manage
-> options without writing JSON, and the preview still updates live for uploaded images. The form
-> remains mobile‑responsive and stacks action buttons on small screens.
+> implementation in `QuestForm.svelte` supports quest metadata (title,
+> description, image), selecting required quests, defining an NPC, creating
+> dialogue nodes with `goto`, `finish`, `process`, or `grantsItems` options, and
+> configuring item gates on each option. You can choose the start node and
+> manage options without writing JSON, and the preview still updates live for
+> uploaded images. The form remains mobile‑responsive and stacks action buttons
+> on small screens.
 
 The editor focuses on the fundamentals today and exposes controls to gate dialogue options on
-specific items or grant rewards inline. You can run `npm run generate-quest --template basic`
-(or `branching`) to scaffold a template JSON file with placeholder dialogue.
+specific items or grant rewards inline. The `requiresGitHub` option type is
+supported by the runtime but is not exposed in the editor UI. You can run
+`cd frontend && npm run generate-quest --template basic` (or `branching`) to
+scaffold a template JSON file with placeholder dialogue.
 
--   Item requirement and reward configuration for dialogue options
+-   Item requirement and item grant configuration for dialogue options
 -   Process action selection
--   Preview functionality to test dialogue flow
+-   Live preview plus simulation checks (finish path + unreachable nodes)
 
 ### In-game editor flow (create + edit)
 
@@ -217,15 +225,17 @@ Before submitting a quest, verify:
 
 1. Use the in-game editor from the **Play → Manage Quests** menu to create or edit your quest.
 2. Test using the built-in preview feature to confirm dialogue flow and reward logic.
-3. Click **Submit** to open an authenticated pull request directly from the game.
-4. Track review feedback in the linked GitHub pull request and iterate in the editor.
-5. Once approved, the quest deploys to all players automatically.
+3. Export the JSON from [/contentbackup](/contentbackup).
+4. Submit the JSON via [/quests/submit](/quests/submit) (or [/bundles/submit](/bundles/submit) if
+   you also created items or processes).
+5. Track review feedback in the linked GitHub pull request and iterate as needed.
+6. Once approved, the quest deploys to all players automatically.
 
 ### Manual JSON contribution
 
 1. Develop your quest locally following these guidelines. Start with
-   `npm run generate-quest --template basic` for a ready-made template.
-2. Test thoroughly in your local environment.
+   `cd frontend && npm run generate-quest --template basic` for a ready-made template.
+2. Validate your quest with `node scripts/validate-quest.js path/to/quest.json`.
 3. Submit a [pull request](https://github.com/democratizedspace/dspace/pulls) with your quest JSON file.
 4. Respond to feedback during code review.
 5. Once approved, your quest will be merged into the official game.

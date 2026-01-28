@@ -10,7 +10,9 @@ own quests. For field details see the [Quest Schema Requirements](/docs/quest-sc
 you're ready to publish, follow the [Quest Submission Guide](/docs/quest-submission). Feel free
 to copy this snippet into your editor to speed up the process.
 
-Ready-to-use JSON templates live in `frontend/src/pages/quests/templates`. Copy `basic.json` for a linear quest or `branching.json` to experiment with multiple paths. You can also run `npm run generate-quest --template basic` (or `branching`) to copy one automatically.
+Ready-to-use JSON templates live in `frontend/src/pages/quests/templates`. Copy `basic.json` for a
+linear quest or `branching.json` to experiment with multiple paths. You can also run
+`cd frontend && npm run generate-quest --template basic` (or `branching`) to copy one automatically.
 
 ```json
 {
@@ -63,11 +65,10 @@ Ready-to-use JSON templates live in `frontend/src/pages/quests/templates`. Copy 
 Use this template as a baseline and expand it with additional dialogue nodes, processes, item
 requirements, and rewards. For more in-depth guidance, see the
 [Quest Development Guidelines](/docs/quest-guidelines).
-The optional `hardening` block tracks how many upgrade passes a quest has survived and stores a
-history of Codex tasks. This metadata is meant for maintainers and QA reporting; it no longer
-surfaces in the player-facing UI but is still used by tests and dashboards.
-Increment `passes`, update `score`, switch the status `emoji` (🛠️ → 🌀 → ✅ → 💯) and append an
-entry to `history` with the task ID, date and score each time you run the quest hardening loop
+The `hardening` block tracks how many upgrade passes a quest has survived and stores a history of
+Codex tasks. This metadata is required by the quest schema and validated by the hardening scripts.
+Increment `passes`, update `score`, switch the status `emoji` (🛠️ → 🌀 → ✅ → 💯), and append an
+entry to `history` with the task ID, date, and score each time you run the quest hardening loop
 described in the [quest prompt guide][quest-prompt-guide].
 An automated Playwright example (`constellations-quest.spec.ts`) walks through creating this quest
 step by step if you prefer a hands-on reference.

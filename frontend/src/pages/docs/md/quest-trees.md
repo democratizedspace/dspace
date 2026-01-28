@@ -28,4 +28,6 @@ DSPACE quests are organized into themed trees that build skills over time. This 
 - **First Aid** – assemble a kit and practice CPR so accidents don't derail progress
 - **Astronomy** – observe the Moon, build a telescope, track Jupiter's moons and map the constellations, document a meteor shower, and monitor passing satellites
 
-Run `node scripts/generate-quest-chart.js` from the repository root to produce a radar chart summarizing the quest tree sizes. The PNG output is ignored by Git, but CI artifacts attach the latest image.
+Run `node scripts/generate-quest-chart.js` from the repository root to produce a radar chart
+summarizing the quest tree sizes. The PNG output is ignored by Git; the script also writes a text
+summary to `frontend/src/pages/docs/images/quest-tree-stats.txt`.
