@@ -17,7 +17,7 @@ describe('UBI quest donation copy', () => {
 
         const raw = readFileSync(questPath, 'utf8');
 
-        expect(raw).toMatch(/Once guilds are live/i);
+        expect(raw).toMatch(/Once guilds launch in a future release/i);
         expect(raw).toMatch(/leaderboard will highlight/i);
     });
 });

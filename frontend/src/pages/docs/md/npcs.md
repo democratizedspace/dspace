@@ -42,8 +42,8 @@ to Metaguild members once guilds launch, and it's fully open source and self-hos
 <img src="/assets/npc/sydney.jpg" />
 
 Sydney will run the Metaguild's print farm with crisp, no-nonsense focus.
-Raised among engineers, she fell for additive manufacturing early and now
-fabricates and repairs guild gear. She will mentor recruits through quests like
+Raised among engineers, she fell for additive manufacturing early and will
+fabricate and repair future guild gear. She will mentor recruits through quests like
 [Level the Print Bed](/quests/3dprinting/bed-leveling) and
 [Print a Phone Stand](/quests/3dprinting/phone-stand).
 

@@ -43,7 +43,7 @@
     <header class="intro">
         <h1>Metaguild Donation Leaderboard (Preview)</h1>
         <p>
-            This page previews the planned Metaguild leaderboard. Once guilds go live, it will show
+            This page previews the planned Metaguild leaderboard. Once guilds launch, it will show
             which crews fuel the universal basic income pool and highlight daily donation streaks.
         </p>
     </header>
