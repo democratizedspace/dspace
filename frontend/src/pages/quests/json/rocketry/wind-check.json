@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Skies look a little gusty. Let's make sure it's safe to fly!",
+            "text": "Nimbus here. Skies are gusty—let's pull data before we fly.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "measure",
-            "text": "Hold an anemometer at launch height and take a reading.",
+            "text": "Hold the anemometer at launch height and log a reading.",
             "options": [
                 {
                     "type": "process",
@@ -41,7 +41,7 @@
         },
         {
             "id": "ready",
-            "text": "Looks good! With winds under control, our launch window is open.",
+            "text": "Looks good. Winds are in spec and the window is open.",
             "options": [
                 {
                     "type": "goto",
@@ -52,7 +52,7 @@
         },
         {
             "id": "done",
-            "text": "Great job! Always respect the wind; rockets love smooth skies.",
+            "text": "Good data. Respect the wind; rockets prefer smooth skies.",
             "options": [
                 {
                     "type": "finish",

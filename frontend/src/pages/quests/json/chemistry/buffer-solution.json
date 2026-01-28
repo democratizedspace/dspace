@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's mix a buffer. Gather vinegar, baking soda, a beaker, gloves, goggles, and a lab coat.",
+            "text": "Phoenix here. Let's mix a gentle buffer. Gather vinegar, baking soda, a beaker, gloves, goggles, and a lab coat.",
             "options": [
                 {
                     "type": "goto",

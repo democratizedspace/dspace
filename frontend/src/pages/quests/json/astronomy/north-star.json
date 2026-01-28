@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Polaris anchors the night sky. Let's identify it to orient ourselves.",
+            "text": "Lyra here. Polaris anchors the night sky. Let's identify it to orient ourselves.",
             "options": [
                 {
                     "type": "goto",
@@ -53,7 +53,7 @@
         },
         {
             "id": "finish",
-            "text": "Excellent! Polaris now anchors your night sky orientation. Keep scans short so you don't wander off-trail.",
+            "text": "Excellent. Polaris now anchors your night sky orientation. Keep scans short so you don't wander off-trail.",
             "options": [
                 {
                     "type": "finish",

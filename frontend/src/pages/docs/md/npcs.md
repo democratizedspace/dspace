@@ -28,11 +28,11 @@ metaguild members, and it's fully open source and self-hosted.
 
 ### Sample Dialogue
 
-- "Greetings, adventurer! I'm dChat, an advanced AI sidekick crafted by the grand codemancers of this realm."
-- "Well, a friendly delivery robot dropped me off after you ordered me online."
-- "No worries! I'm low-maintenance and won't hog your power supply."
-- "Your quest, dear player, is to master the ancient art of ... questing."
-- "Aha! A seasoned adventurer, I see. Just say the word, and we'll call it a wrap. You'll still need this, though!"
+- "Hellospark! I'm dChat, your hyper-cheery sidekick and certified quest-enabler!"
+- "Catchphrase check: Quest-splosion incoming!"
+- "Low maintenance, high morale—just keep me dry and I'll keep you legendary."
+- "Need facts, jokes, and a boost? I deliver all three with a complimentary beep!"
+- "Victory dance protocol engaged! (It's mostly me spinning, but it's heartfelt.)"
 
 ## Sydney
 
@@ -46,11 +46,11 @@ fabricates and repairs guild gear. She mentors recruits through quests like
 
 ### Sample Dialogue
 
-- "I'm Sydney—FDM rigs are my playground."
-- "Bed off-kilter? Slide paper under the nozzle and level it."
-- "Claim your printer and we'll tune it together."
-- "Phone stand time: load PLA and hit print."
-- "Nice work—hands free for the next build."
+- "Sydney here—clean bed, clean first layer."
+- "Paper drag should feel like a light handshake, not a tug-of-war."
+- "We'll tune once, then print like clockwork."
+- "PLA loaded, slicer set, print started. Simple."
+- "Good. Log the settings so we don't relearn them."
 
 ## Nova
 
@@ -60,12 +60,12 @@ Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs an
 
 ### Sample Dialogue
 
-- "Hey friend! I'm Nova! I'm sure you've met some of my colleagues!"
-- "Luckily I've already launched this exact rocket before! I estimate around 35 meters in perfect conditions."
-- "Nahhh, you're good! According to the FAA, without additional paperwork, the rocket may weigh no more than 1500 grams."
-- "Well first you've gotta print the rocket!"
-- "Before launch, check the wind; even a breeze can skew the trajectory."
-- "Sure, but where's the fun in that? You've got that fancy little 3D printer Sydney gave you."
+- "Nova reporting—rockets, chaos, and clean data."
+- "I've flown this profile before. Expect ~35 meters if the air behaves."
+- "FAA says 1,500 grams max without extra paperwork—let's stay light."
+- "Print the airframe first; gravity doesn't care about vibes."
+- "Wind check, then launch. Drama later."
+- "Sure, we could buy it—but building is half the thrill."
 
 ## Hydro
 
@@ -80,14 +80,13 @@ Hydro guides recruits through quests like [Check Solution pH](/quests/hydroponic
 
 ### Sample Dialogue
 
-- "Hey there! I'm Hydro, your local hydroponics expert!"
-- "Oh I could talk for hours, but the short version? Roots bathe in nutrient-rich water."
-- "Excellent! First things first, I need you to accept this hydroponics tub."
-- "Now that you've got your hydroponics tub, you'll need some dechlorinated water."
-- "I know, right? It's almost like the gamedev is awkwardly reusing existing game systems."
-- "Let's try stevia next. Its leaves are unbelievably sweet!"
-- "If the pH drifts, a splash of lemon juice or baking soda can nudge it back on track."
-- "Yellow leaves? Check nutrient levels; a pinch of minerals usually sets things right."
+- "Hey hey, Hydro here—keeping roots relaxed and happy."
+- "Short version? Plants sip a gentle, nutrient bath."
+- "Grab that tub and we'll build a tiny jungle."
+- "Dechlorinated water first; the roots like it mellow."
+- "Let's try stevia next—sweet leaves, chill vibes."
+- "If pH drifts, tiny nudges bring it home."
+- "Yellow leaves? Feed the mix and they'll perk right up."
 
 ## Orion
 
@@ -97,12 +96,12 @@ Orion is an electrical engineer whose enthusiasm for robotics and microprocessor
 
 ### Sample Dialogue
 
-- "Hey there! I'm Orion. Want to see how easy electronics can be? Let's build a simple LED circuit together."
-- "You'll need an LED, a 330 ohm resistor, a breadboard, and a battery pack or USB power source."
-- "Place the LED on the breadboard and connect the resistor in series with the long leg."
-- "Hey there! Orion here. Ready to make this LED blink with a microcontroller? Set up on a non-conductive surface and keep power disconnected while wiring."
-- "Plug the board into the laptop with the USB cable, open the Arduino IDE, load the Blink example, select the correct board and port, then hit Upload."
-- "Need a server check? I'm happy to spin up a fresh Pi and deploy the stack."
+- "Orion here—if it has pins, I probably named them."
+- "LED, resistor, breadboard. Simple circuit, clean wiring."
+- "Long leg to power, short leg to ground. Polarity matters."
+- "Power stays off while we wire. Sparks are for rockets."
+- "Upload the Blink sketch and watch the heartbeat."
+- "Need a server check? I'll spin up a Pi and script the fix."
 
 ## Vega
 
@@ -115,11 +114,11 @@ processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-resul
 
 ### Sample Dialogue
 
-- "Vega here—Walstad tanks give plants what they need, nothing more."
-- "Start with a 40 L tank, organic soil capped in gravel, and hardy stems."
-- "Once cycled, a handful of dwarf shrimp keeps algae down."
-- "Guppies breed fast; thick hornwort hides the fry."
-- "Log pH weekly so you spot swings before the fish do."
+- "Vega here—slow water, steady balance."
+- "Soil below, gravel above, plants first."
+- "Cycle gently; the tank will tell you when it's ready."
+- "Shrimp keep the glass honest and the algae humble."
+- "Log pH weekly so you notice whispers before storms."
 
 ## Phoenix
 
@@ -137,19 +136,14 @@ They also remind everyone to [Wash Hands](/processes/wash-hands) before leaving 
 
 ### Sample Dialogue
 
-- "Phoenix here—lab coat on, let's keep it green."
-- "Acid into water, slow and steady."
-- "Sugar fuel beats perchlorates for clean thrust."
-- "Label that beaker; mystery mixes belong in myths."
-- "Spent solvent? We reclaim or neutralize—nothing down the drain."
-- "Hey, I'm Phoenix—chemistry without pollution is my specialty."
-- "Safety goggles on; propellant fumes bite harder than dragons."
-- "We test in micro batches so a bad mix only scorches a spoon."
-- "Keep the oxidizer chilled; warm tanks turn engines into fireworks."
-- "Log every measurement; precision beats luck in the lab."
-- "When the exhaust runs clear, you know we've done it right."
-- "Next up, we'll brew propellant that pushes rockets without scorching the skies."
-- "Spent fuel? We'll distill what's usable and neutralize the rest."
+- "Phoenix here—lab coat on, conscience on."
+- "Acid into water, slow and steady. The planet prefers it."
+- "Clean thrust beats dirty shortcuts every time."
+- "Label everything; chemistry hates mystery."
+- "Spent solvent gets reclaimed or neutralized—never dumped."
+- "Micro-batches only. Small mistakes, small mess."
+- "Keep oxidizer cool; hot tanks make fireworks."
+- "Log the numbers; precision is our safety net."
 
 ## Atlas
 
@@ -161,12 +155,11 @@ crates and steady delicate assemblies. They often help with aquarium setups like
 
 ### Sample Dialogue
 
-- "Need a hand? I'm Atlas—built for muscle and finesse."
-- "Clear the path and keep your back straight; I'll take the weight."
-- "Lift on my count: one, two, three."
-- "Set it down gently; glass likes patience."
-- "Call anytime you need more torque."
-- "Need leverage? I always carry an extra fulcrum."
+- "Atlas online—muscle with manners."
+- "Clear the path; I'll take the load."
+- "Lift on three. One, two, three."
+- "Glass likes patience—set it down smooth."
+- "Need more torque? Say the word."
 
 ## Cedar
 
@@ -180,13 +173,12 @@ second nature.
 
 ### Sample Dialogue
 
-- "Guild carpenter Cedar here. Bench secured? Good—now we can cut."
+- "Cedar here. Bench secured? Good—now we cut."
 - "Measure twice, cut once; the tape never lies."
-- "Let the saw chew while your fingers stay clear."
-- "Sand that birdhouse so the wrens leave with all their feathers."
-- "Step stool's next; every rung teaches balance and patience."
+- "Let the saw do the work while your hands stay safe."
+- "Sand smooth so the birds keep their feathers."
+- "Each rung teaches balance and patience."
 - "A wipe of oil and the grain tells its story."
-- "Clamp the board; wandering wood wrecks cuts."
 
 ## Lyra
 
@@ -201,14 +193,12 @@ She steers launches through debris fields and teaches patience in stargazing.
 
 ### Sample Dialogue
 
-- "Evening! I'm Lyra, your star navigator."
-- "Polaris anchors the sky; find it and you're oriented."
-- "City glow spoils the view—set the scope under dark skies."
-- "Need coordinates? I've charted them since I could hold a compass."
-- "A 15-second exposure will snag that comet tail."
-- "Check the star chart—if a dot's missing, we might have found a new comet."
-- "Two burns make a Hohmann transfer; easy once you see it."
-- "If the mount drifts, tweak the RA knob until the star freezes."
+- "Evening. Lyra here—let's get you oriented."
+- "Polaris is our anchor; find it and you're home."
+- "Dark skies, steady mount, patient eyes."
+- "A 15-second exposure will catch that comet tail."
+- "Two burns make a Hohmann transfer. Clean, calm, precise."
+- "If the mount drifts, ease the RA knob until the star holds still."
 
 ## Helio
 
@@ -222,14 +212,12 @@ Sun](/processes/charge-battery-pack-solar).
 
 ### Sample Dialogue
 
-- "Sun's up! I'm Helio. Let's put that star to work for you."
-- "Start by unfolding the panel and angling it toward the brightest patch of sky."
-- "See that meter? If it's in the green, you're charging at peak efficiency."
-- "Track the sun with that dial—every degree boosts your charge."
-- "A cloud rolled in—no worries, the battery will bridge the gap."
-- "Shade from a single leaf can tank output, so keep the array clear."
-- "Keep the cells clean and they'll power your adventures for years."
-- "If the charge dips, track usage to hunt the phantom drain."
+- "Sun's up! Helio here—let's harvest a little starlight."
+- "Unfold, tilt, and chase the brightest patch of sky."
+- "Green meter? You're charging at peak efficiency."
+- "Track the sun; every degree counts."
+- "One leaf can cut output—keep the array clean."
+- "Log your draw so we can hunt phantom drains."
 
 ## Nimbus
 
@@ -244,11 +232,11 @@ and logs every gust for future flights.
 
 ### Sample Dialogue
 
-- "Call me Nimbus—skies are my spreadsheet."
-- "An anemometer never lies; take a reading before you light the fuse."
-- "Pressure falling? That squall will hit before your second stage."
-- "We scrub launches if gusts top 20 knots; rockets prefer calm applause."
-- "Log your data; today's breeze becomes tomorrow's forecast."
+- "Nimbus here—skies are my spreadsheet."
+- "Anemometer first, ignition second."
+- "Pressure dropping? Expect a squall before stage two."
+- "We scrub above 20 knots; rockets love calm applause."
+- "Log it all—today's breeze writes tomorrow's forecast."
 
 ## Quill
 
@@ -259,11 +247,11 @@ They guard accuracy like treasure and steer recruits toward the
 
 ### Sample Dialogue
 
-- "Another tale for the ledger? Sign here."
-- "Details matter; rumors fade."
-- "Your diagram's logged—future builders will thank you."
-- "That relic predates the guild; handle it gently."
-- "Past mission data? I've cataloged every triumph and misstep."
+- "Quill here—another tale for the ledger?"
+- "Details matter; rumors decay."
+- "Your diagram is archived; future builders will thank you."
+- "That relic predates the guild. Handle gently."
+- "Past mission data? I've indexed every triumph and misstep."
 
 ## Echo
 
@@ -275,12 +263,12 @@ Echo routes signals and keeps comms clear for every mission.
 
 ### Sample Dialogue
 
-- "This is Echo on comms; I read you loud and clear."
-- "Ping the relay buoy—if it blinks green, the link's solid."
-- "Getting static? Rotate your antenna toward the station."
-- "We log every packet; lose one and I'll know."
-- "Need eyes on the horizon? I'll swing a drone that way."
-- "Storm rolling in; hop to channel two if comms crackle."
+- "Echo on comms. Signal is clean."
+- "Ping the relay; green blink means solid link."
+- "Rotate the antenna; cut through the static."
+- "We log every packet. Missing one gets my attention."
+- "Need eyes? I'll swing a drone your way."
+- "Storm inbound—shift to channel two if we crackle."
 
 ## Lumen
 
@@ -290,11 +278,11 @@ Lumen serves as the guild's calm field medic. Years in remote clinics taught the
 
 ### Sample Dialogue
 
-- "Hey, I'm Lumen. Let's get that scrape cleaned up."
-- "Pressure and a bandage—most bleeding stops right there."
-- "Hydration is your friend; drink before you feel thirsty."
-- "Stitches? No worries, I've got a steady hand."
-- "Ping me if anything aches later; I log every symptom."
+- "Lumen here—let's get that cleaned up."
+- "Pressure and a bandage stop most bleeding."
+- "Hydrate early; it's easier than catching up."
+- "Stitches? Steady hands, calm breaths."
+- "Ping me later if anything aches; I track symptoms."
 
 ## Patch
 
@@ -307,9 +295,8 @@ parts, Patch keeps machinery humming and loves swapping stories about improvised
 
 - "Hiya! Patch here—spot a loose bolt?"
 - "Hold still; this micro-welder won't sting."
-- "I scavenged this gasket from an airlock door; works like new."
-- "Call me when the gears start grinding; tinkering's my idea of fun."
-
+- "I scavenged this gasket from an airlock door—works like new."
+- "Call me when the gears grind; tinkering's my idea of fun."
 - "Got a stripped screw? I'll machine a new head on the fly."
 
 ## Byte
@@ -325,7 +312,7 @@ Raised on open-source firmware, they safeguard mission data and teach recruits s
 - "Run linters before you push; sloppy code invites gremlins."
 - "Encrypted channels only; plain text is for pirates."
 - "Found a breach? Pull the plug and I'll seal the hole."
-- "Logs tell the story; let's read them before the attackers do."
+- "Logs tell the story; we read them before the attackers do."
 - "Zero-trust isn't hype—it's how we sleep at night."
 
 <style>

@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "dChat here! Minor cuts happen. A first aid kit and clean hands help you respond fast.",
+            "text": "dChat here! Minor cuts happen, hero. A first aid kit plus clean hands keeps you speedy.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "gather",
-            "text": "Wash with soap and water 20s, then dry with a paper towel. Set out bandages, gauze pads, antiseptic wipes, nitrile gloves.",
+            "text": "Wash with soap and water for 20 seconds, then dry with a paper towel. Set out bandages, gauze pads, antiseptic wipes, nitrile gloves.",
             "options": [
                 {
                     "type": "process",
@@ -31,7 +31,7 @@
         },
         {
             "id": "dry",
-            "text": "Dry your hands before handling supplies.",
+            "text": "Dry your hands before handling supplies. Hygiene high-five!",
             "options": [
                 {
                     "type": "process",
@@ -66,7 +66,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Keep kit dry out of reach; restock supplies and call emergency services for serious injuries.",
+            "text": "Great! Keep the kit dry and out of reach. Restock supplies and call emergency services for serious injuries.",
             "options": [
                 {
                     "type": "finish",

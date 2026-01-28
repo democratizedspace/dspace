@@ -30,7 +30,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Wear lab coat, nitrile gloves, and safety goggles. In a spill tray, set 100 mL water in a 250 mL beaker with a glass stir rod, a pH strip, and the 37% HCl bottle. Always add acid to water.",
+            "text": "Phoenix here. Lab coat, nitrile gloves, goggles. In a spill tray, set 100 mL water in a 250 mL beaker with a glass stir rod, a pH strip, and 37% HCl. Always add acid to water.",
             "options": [
                 {
                     "type": "goto",
@@ -91,7 +91,7 @@
         },
         {
             "id": "finish",
-            "text": "Label the diluted acid with concentration and date, cap it, and store the bottle in the spill tray.",
+            "text": "Label the diluted acid with concentration and date, cap it, and store the bottle in the spill tray. Clean workspace, keep it green.",
             "options": [
                 {
                     "type": "finish",

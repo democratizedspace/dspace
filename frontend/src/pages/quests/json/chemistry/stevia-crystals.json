@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to step up the purity? We'll separate the sweet compounds with a bit of alcohol.",
+            "text": "Ready to step up the purity? We'll separate the sweet compounds with a small, food-grade solvent pass.",
             "options": [
                 {
                     "type": "goto",
@@ -41,7 +41,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! These stevia crystals are intensely sweet and store well.",
+            "text": "Nice work. These stevia crystals are intensely sweet and store well.",
             "options": [
                 {
                     "type": "finish",
