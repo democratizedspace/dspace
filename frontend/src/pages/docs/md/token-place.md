@@ -8,8 +8,9 @@ local and staging environments keep using OpenAI until you opt in.
 
 ## How it works
 
-- The chat client calls `tokenPlaceChat`, which posts to `${baseUrl}/chat`.
-- The default base URL is `https://token.place/api`.
+- The chat client calls `tokenPlaceChat`, which posts to `${baseUrl}/chat` and returns the
+  `reply` field from the JSON response.
+- The default base URL is `https://token.place/api` (`DEFAULT_URL` in `tokenPlace.js`).
 - The integration is enabled only when an explicit opt-in flag is set.
 
 ## Opt-in options
@@ -26,6 +27,8 @@ VITE_TOKEN_PLACE_ENABLED=true VITE_TOKEN_PLACE_URL=https://my-token-place/api np
 ```
 
 The environment flag takes precedence over game state. If you set
-`VITE_TOKEN_PLACE_ENABLED=false`, token.place stays disabled even if game state is enabled.
+`VITE_TOKEN_PLACE_ENABLED=false`, token.place stays disabled even if game state is enabled. When
+enabled, the URL preference order is `tokenPlace.url` (game state), then `VITE_TOKEN_PLACE_URL`,
+then the default URL.
 
 You can clear the saved URL (or the opt-in flag) by resetting your game state.

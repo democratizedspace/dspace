@@ -48,10 +48,11 @@ component:
 
 ## UI responsiveness metrics
 
-The `<UIResponsiveness>` component reports hydration time using
-`window.dspaceStart ?? performance.timing.navigationStart` as the start timestamp. The homepage
-sets `window.dspaceStart = performance.now()` before hydration; other pages rely on the
-`navigationStart` fallback.
+The `<UIResponsiveness>` component reports hydration time using an explicit `startTime` prop if
+provided, otherwise it falls back to `window.dspaceStart ?? performance.timing.navigationStart`.
+The homepage sets `window.dspaceStart = performance.now()` via an inline script in
+`frontend/src/pages/index.astro`; other pages rely on the `navigationStart` fallback unless they
+set their own `startTime` or `window.dspaceStart`.
 
 ## Debugging tips
 
