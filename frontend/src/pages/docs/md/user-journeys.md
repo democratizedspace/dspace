@@ -5,11 +5,10 @@ slug: 'user-journeys'
 
 # User Journeys
 
-This document tracks major journeys in DSPACE and whether a Playwright test covers each path.
-Tests under `frontend/e2e/backlog` are placeholders for journeys without automation; when a
-journey gains coverage, move its spec into `frontend/e2e` with `git mv` to preserve history.
-Entries are sorted alphabetically by journey name, and new journeys should include a placeholder
-spec in `frontend/e2e/backlog` until coverage exists.
+This document tracks major journeys in DSPACE and whether a Playwright test covers each path. The
+list is intentionally curated (not exhaustive); add or update entries whenever a user-visible flow
+or a test name changes. If a journey is missing automation, add a placeholder spec under
+`frontend/e2e/backlog` until coverage exists (the backlog folder is empty today).
 
 | Journey                    | Playwright coverage | Test file                                         |
 | -------------------------- | ------------------- | ------------------------------------------------- |
@@ -23,6 +22,8 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | Cookie consent flow        | Yes                 | `frontend/e2e/cookie-consent.spec.ts`             |
 | Custom backup              | Yes                 | `frontend/e2e/custom-backup.spec.ts`              |
 | Custom content integration | Yes                 | `frontend/e2e/custom-content.spec.ts`             |
+| Custom item detail         | Yes                 | `frontend/e2e/custom-item-detail.spec.ts`         |
+| Custom quest chat          | Yes                 | `frontend/e2e/custom-quest-chat.spec.ts`          |
 | Dark mode toggle           | Yes                 | `frontend/e2e/dark-mode-toggle.spec.ts`           |
 | Docs landing page loads    | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
 | Docs navigation            | Yes                 | `frontend/e2e/docs-navigation.spec.ts`            |
@@ -43,10 +44,10 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | Mobile quest form          | Yes                 | `frontend/e2e/mobile-quest-form.spec.ts`          |
 | Page structure             | Yes                 | `frontend/e2e/page-structure.spec.ts`             |
 | Process creation           | Yes                 | `frontend/e2e/process-creation.spec.ts`           |
-| Process preview            | Yes                 | `frontend/e2e/manage-processes.spec.ts`           |
+| Process preview            | Yes                 | `frontend/e2e/process-preview.spec.ts`            |
 | Profile avatar selection   | Yes                 | `frontend/e2e/profile-avatar-selection.spec.ts`   |
 | Profile page loads         | Yes                 | `frontend/e2e/profile-page.spec.ts`               |
-| Quest chat                 | Yes                 | `frontend/e2e/test-quest-chat.spec.ts`            |
+| Quest chat (tutorial)      | Yes                 | `frontend/e2e/test-quest-chat.spec.ts`            |
 | Quest form validation      | Yes                 | `frontend/e2e/quest-form-validation.spec.ts`      |
 | Quest list navigation      | Yes                 | `frontend/e2e/quests.spec.ts`                     |
 | Quest PR form              | Yes                 | `frontend/e2e/quest-pr-form.spec.ts`              |

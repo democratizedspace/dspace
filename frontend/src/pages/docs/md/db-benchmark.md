@@ -3,7 +3,8 @@ title: 'Database Benchmark'
 slug: 'db-benchmark'
 ---
 
-DSPACE includes a utility to measure IndexedDB performance for custom content.
+DSPACE includes a utility to measure IndexedDB performance for custom content. The script runs in
+Node with `fake-indexeddb`, so you can benchmark without opening a browser.
 Run the benchmark with:
 
 ```bash
@@ -28,4 +29,5 @@ The script inserts and reads sample records, printing JSON metrics like:
 }
 ```
 
-Use this to track database performance during development.
+Use this to track database performance during development and to sanity-check regression changes
+to the custom content persistence helpers.

@@ -12,3 +12,4 @@ Before opening a pull request:
     - The script prints "Potential secret detected" when AWS keys, GitHub tokens, or other
       credential-like values slip into the staged diff, so you can remove them before pushing.
 - use an emoji-prefixed commit message
+- if you changed documentation links, run `node scripts/link-check.mjs` to validate internal docs

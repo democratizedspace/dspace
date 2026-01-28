@@ -5,8 +5,9 @@ slug: 'self-hosting'
 
 # Self-hosting DSPACE
 
-Run your own DSPACE instance on your hardware. Docker Compose builds the site and
-serves it locally.
+Run your own DSPACE instance on your hardware. The repo ships with Docker Compose definitions for
+the production container (root `docker-compose.yml`) and a frontend-only dev container
+(`frontend/docker-compose.yml`).
 
 ## Requirements
 
@@ -24,19 +25,31 @@ serves it locally.
     ```bash
     docker compose up -d
     ```
-    The site will be available at `http://localhost:3002`.
+    The production container listens on `http://localhost:8080`.
 3. Stop the container at any time with:
     ```bash
     docker compose down
     ```
 
-## Helper script
+## Frontend-only dev container
 
-The repository includes a convenience script that proxies common Docker
-commands. Use it from the repository root:
+If you only need the frontend development server (no backend services), you can use the compose
+file in `frontend/`:
 
 ```bash
-./run-dspace.sh start   # start the app
+cd frontend
+docker compose up -d
+```
+
+This exposes the dev server at `http://localhost:3002`.
+
+## Helper script
+
+The repository includes a convenience script that proxies common Docker commands. It uses the
+frontend compose file for local dev and Playwright runs:
+
+```bash
+./run-dspace.sh start   # start the frontend dev container
 ./run-dspace.sh stop    # stop containers
 ```
 
