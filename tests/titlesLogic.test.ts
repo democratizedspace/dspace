@@ -6,7 +6,9 @@ const findItemId = (name: string) =>
   items.find((item) => item.name === name)?.id ?? '';
 
 const dWattId = findItemId('dWatt');
-const windTurbineId = findItemId('500 W wind turbine');
+const solarSetupId = findItemId('Solar setup (1 kWh)');
+const guidedStackId = findItemId('guided flight stack');
+const starTrailId = findItemId('stacked star trail photo');
 
 describe('evaluateTitles', () => {
   it('keeps titles locked when the player is new', () => {
@@ -15,16 +17,18 @@ describe('evaluateTitles', () => {
     expect(summaries.every((summary) => summary.unlocked === false)).toBe(true);
   });
 
-  it('unlocks quest and energy titles as milestones are met', () => {
+  it('unlocks prestige titles as milestones are met', () => {
     const quests = Object.fromEntries(
-      Array.from({ length: 10 }, (_, index) => [
+      Array.from({ length: 30 }, (_, index) => [
         `quest-${index + 1}`,
         { finished: true },
       ])
     );
     const inventory = {
-      ...(dWattId ? { [dWattId]: 600 } : {}),
-      ...(windTurbineId ? { [windTurbineId]: 1 } : {}),
+      ...(dWattId ? { [dWattId]: 5000 } : {}),
+      ...(solarSetupId ? { [solarSetupId]: 1 } : {}),
+      ...(guidedStackId ? { [guidedStackId]: 1 } : {}),
+      ...(starTrailId ? { [starTrailId]: 1 } : {}),
     };
 
     const summaries = evaluateTitles({ quests, inventory });
@@ -33,9 +37,10 @@ describe('evaluateTitles', () => {
       .filter((summary) => summary.unlocked)
       .map((summary) => summary.name);
 
-    expect(unlockedNames).toContain('Rookie Explorer');
-    expect(unlockedNames).toContain('Mission Specialist');
-    expect(unlockedNames).toContain('Grid Investor');
-    expect(unlockedNames).toContain('Wind Pioneer');
+    expect(unlockedNames).toContain('Quest Vanguard');
+    expect(unlockedNames).toContain('Grid Magnate');
+    expect(unlockedNames).toContain('Solar Architect');
+    expect(unlockedNames).toContain('Guidance Officer');
+    expect(unlockedNames).toContain('Stellar Cartographer');
   });
 });
