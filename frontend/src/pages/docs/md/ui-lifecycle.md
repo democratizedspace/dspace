@@ -41,9 +41,10 @@ To avoid hydration mismatches and make tests predictable, follow this pattern in
 
 ## UI Responsiveness Metrics
 
-Before rendering a page, set `window.dspaceStart = performance.now()` to mark the start time. The
-`<UIResponsiveness>` component uses this value and `calculateHydrationTime` to report how long
-hydration takes.
+If you want to track hydration timing, set `window.dspaceStart = performance.now()` before client
+hydration begins. The `<UIResponsiveness>` component uses this value (falling back to
+`performance.timing.navigationStart`) and `calculateHydrationTime` to report how long hydration
+takes.
 
 ## Debugging Tips
 

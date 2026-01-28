@@ -93,8 +93,9 @@ acceptedCookies=true; item-3=12.5; item-10=2; item-22=500; currency-balance-dUSD
 
 ## V1 seed profiles for `/settings`
 
-Use these profiles to seed sample v1 data (manual DevTools or the `/settings` seeder UI). They are
-implementation-ready key/value sets that mirror the v1 format above.
+Use these profiles to seed sample v1 data (manual DevTools or the `/settings` seeder UI when QA
+cheats are enabled in `DSPACE_ENV=dev|development|staging`). They are implementation-ready
+key/value sets that mirror the v1 format above.
 
 ### Minimal seed (cookies only)
 
@@ -412,8 +413,9 @@ Treat these as migration **warnings** and QA requirements, not guarantees of v3 
 
 ## v2.1 seed profiles for `/settings` (v2 localStorage)
 
-Use these to seed `localStorage["gameState"]` in DevTools or the `/settings` seeder. All JSON is
-copy/pastable. **Do not use real secrets** (use `"REDACTED"` or placeholders).
+Use these to seed `localStorage["gameState"]` in DevTools or the `/settings` seeder when QA cheats
+are enabled in `DSPACE_ENV=dev|development|staging`. All JSON is copy/pastable. **Do not use real
+secrets** (use `"REDACTED"` or placeholders).
 
 ### Seed 1: Minimal v2.1 gameState
 
@@ -609,8 +611,9 @@ QA seeding writes known-good fixtures that match the above schemas.
   reads
   `frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`.
 
-The `/settings` seeder exposes two v1 profiles (minimal + maximal) and three v2.1 profiles
-(minimal, in-progress, messy), and reports which keys were written after each seed action.
+The `/settings` seeder (available when QA cheats are enabled) exposes two v1 profiles (minimal +
+maximal) and three v2.1 profiles (minimal, in-progress, messy), and reports which keys were
+written after each seed action.
 
 After seeding, use [`/settings`](/settings) → **Legacy save upgrades** to merge or replace, and
 verify detection with the global legacy banner (shared detection logic).

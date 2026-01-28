@@ -5,8 +5,11 @@ slug: 'self-hosting'
 
 # Self-hosting DSPACE
 
-Run your own DSPACE instance on your hardware. Docker Compose builds the site and
-serves it locally.
+Run your own DSPACE instance on your hardware. The repository ships with two Docker Compose
+configurations:
+
+- **Root `docker-compose.yml`** for the full production-style build (serves on port 8080).
+- **`frontend/docker-compose.yml`** for the frontend-only dev server (serves on port 3002).
 
 ## Requirements
 
@@ -24,7 +27,7 @@ serves it locally.
     ```bash
     docker compose up -d
     ```
-    The site will be available at `http://localhost:3002`.
+    The site will be available at `http://localhost:8080`.
 3. Stop the container at any time with:
     ```bash
     docker compose down
@@ -32,8 +35,9 @@ serves it locally.
 
 ## Helper script
 
-The repository includes a convenience script that proxies common Docker
-commands. Use it from the repository root:
+The repository includes a convenience script that proxies common Docker commands. It is geared
+toward the frontend Docker Compose setup (port 3002). If it does not match your deployment, use
+`docker compose` directly instead.
 
 ```bash
 ./run-dspace.sh start   # start the app
