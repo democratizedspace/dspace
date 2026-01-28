@@ -24,7 +24,7 @@ describe('run-tests.js', () => {
         delete process.env.CI_COVERAGE_DONE;
     });
 
-    it('runs root, hardening, and prepare scripts with expected arguments', () => {
+    it('runs root, hardening, docs rag, and prepare scripts with expected arguments', () => {
         execSyncMock.mockReturnValueOnce('Test Files 1 (1)\nTests 1 (1)\n');
         execSyncMock.mockReturnValue('');
 
@@ -43,6 +43,11 @@ describe('run-tests.js', () => {
         );
         expect(execSyncMock).toHaveBeenNthCalledWith(
             3,
+            'npm run test:docs-rag',
+            expect.objectContaining({ stdio: 'inherit' })
+        );
+        expect(execSyncMock).toHaveBeenNthCalledWith(
+            4,
             'bash ./frontend/scripts/prepare-pr.sh',
             expect.objectContaining({
                 stdio: 'inherit',
@@ -58,7 +63,7 @@ describe('run-tests.js', () => {
         const code = runTests(execSyncMock, osModule.platform());
 
         expect(code).toBe(0);
-        expect(execSyncMock).toHaveBeenCalledTimes(2);
+        expect(execSyncMock).toHaveBeenCalledTimes(3);
         expect(execSyncMock).toHaveBeenNthCalledWith(
             1,
             'npm run hardening:validate',
@@ -66,6 +71,11 @@ describe('run-tests.js', () => {
         );
         expect(execSyncMock).toHaveBeenNthCalledWith(
             2,
+            'npm run test:docs-rag',
+            expect.objectContaining({ stdio: 'inherit' })
+        );
+        expect(execSyncMock).toHaveBeenNthCalledWith(
+            3,
             'bash ./frontend/scripts/prepare-pr.sh',
             expect.objectContaining({
                 env: expect.objectContaining({ SKIP_UNIT_TESTS: '1' }),
