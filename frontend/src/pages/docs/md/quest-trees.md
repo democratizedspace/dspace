@@ -22,7 +22,7 @@ DSPACE quests are organized into themed trees that build skills over time. This 
 - **DevOps** – deploy DSPACE on a Raspberry Pi cluster using Docker and k3s, then add monitoring, nightly backups and automatic updates
 - **Programming** – log thermistor readings, calibrate sensors, analyze temperature trends, publish JSON APIs, and deploy a web server to share data automations
 - **Sysadmin** – learn core Linux commands and monitor resources on Ubuntu 24.04 LTS Minimal
-- **UBI** – an optional quest explaining the metaguild's basic income concept with daily payouts
+- **UBI** – an optional quest explaining the planned Metaguild basic income concept with daily payouts
 - **Completionist** – track progress toward finishing all available quests
 - **Woodworking** – build a sturdy workbench, sand projects smooth, then craft birdhouses, stools, shelves, and planter boxes
 - **First Aid** – assemble a kit and practice CPR so accidents don't derail progress
