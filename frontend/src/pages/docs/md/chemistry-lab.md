@@ -3,22 +3,32 @@ title: 'Chemistry Lab Basics'
 slug: 'chemistry-lab'
 ---
 
-A compact home lab lets you extract useful compounds from plants and practice sustainable chemistry.
+A compact home lab lets you extract useful compounds, tune nutrient solutions, and practice safe
+chemistry skills.
 
-## Core tools
+## Core tools and supplies
 
-- **Hot plate** – provides steady heat for boiling or evaporation
-- **Aquarium thermometer** – monitors solution temperature
-- **Beakers** – hold and mix liquids
-- **Glass funnel & filter paper** – remove plant solids from a solution
-- **Scale** – measure ingredients accurately
+- Beakers, graduated cylinders, funnels, and glass stir rods
+- Safety goggles, lab coat, and spill tray for containment
+- pH test supplies, buffer ingredients, and dilution containers
+
+## Quest trailheads
+
+- [Measure Solution pH](/quests/chemistry/ph-test)
+- [Adjust Solution pH](/quests/chemistry/ph-adjustment)
+- [Dilute Hydrochloric Acid Safely](/quests/chemistry/acid-dilution)
+- [Neutralize an Acid Spill](/quests/chemistry/acid-neutralization)
+- [Extract Stevia Sweetener](/quests/chemistry/stevia-extraction)
+- [Refine Stevia Crystals](/quests/chemistry/stevia-crystals)
 
 ## Safety tips
 
-1. Wear eye protection and gloves when heating or pouring chemicals.
-2. Work in a well-ventilated area away from flames.
-3. Keep a fire extinguisher and first aid kit nearby.
+1. Wear eye protection and gloves when handling acids or hot liquids.
+2. Work in a well-ventilated area and keep an exit path clear.
+3. Always add acid to water when diluting, never the reverse.
 
 ## Stevia extraction overview
 
-Homegrown stevia leaves contain steviol glycosides. Dry the leaves, steep them in hot water, then filter the liquid. To create a purer sweetener, dissolve the extract in a small amount of food-safe alcohol and let it evaporate slowly so white crystals form. See the [Refine Stevia Crystals](/quests/chemistry/stevia-crystals) quest for detailed steps.
+Homegrown stevia leaves contain steviol glycosides. Dry the leaves, steep them in hot water, filter
+out the solids, and refine the extract into crystals. The
+[Refine Stevia Crystals](/quests/chemistry/stevia-crystals) quest walks through the full process.
