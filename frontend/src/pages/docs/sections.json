@@ -16,11 +16,24 @@
         "title": "Skills",
         "links": [
             { "label": "3D printing", "href": "/docs/3dprinting" },
-            { "label": "Solar power", "href": "/docs/solar" },
-            { "label": "Electricity", "href": "/docs/electricity" },
-            { "label": "Hydroponics", "href": "/docs/hydroponics" },
+            { "label": "Aquaria", "href": "/docs/aquaria" },
+            { "label": "Astronomy", "href": "/docs/astronomy" },
             { "label": "Chemistry Lab Basics", "href": "/docs/chemistry-lab" },
-            { "label": "Rockets", "href": "/docs/rockets" }
+            { "label": "Composting", "href": "/docs/composting" },
+            { "label": "DevOps", "href": "/docs/devops" },
+            { "label": "Electricity", "href": "/docs/electricity" },
+            { "label": "Electronics", "href": "/docs/electronics" },
+            { "label": "Energy Systems", "href": "/docs/energy" },
+            { "label": "First Aid", "href": "/docs/first-aid" },
+            { "label": "Geothermal", "href": "/docs/geothermal" },
+            { "label": "Hydroponics", "href": "/docs/hydroponics" },
+            { "label": "Programming", "href": "/docs/programming" },
+            { "label": "Robotics", "href": "/docs/robotics" },
+            { "label": "Rockets", "href": "/docs/rockets" },
+            { "label": "Solar power", "href": "/docs/solar" },
+            { "label": "System Administration", "href": "/docs/sysadmin" },
+            { "label": "UBI", "href": "/docs/ubi" },
+            { "label": "Woodworking", "href": "/docs/woodworking" }
         ]
     },
     {

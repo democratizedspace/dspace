@@ -28,24 +28,101 @@
     {
         "title": "Skills",
         "links": [
-            { "title": "3D printing", "href": "/docs/3dprinting", "keywords": ["fabrication"] },
-            { "title": "Solar power", "href": "/docs/solar", "keywords": ["energy", "panels"] },
             {
-                "title": "Electricity",
-                "href": "/docs/electricity",
-                "keywords": ["power", "generation"]
+                "title": "3D printing",
+                "href": "/docs/3dprinting",
+                "keywords": ["fabrication", "fdm", "printing"]
             },
             {
-                "title": "Hydroponics",
-                "href": "/docs/hydroponics",
-                "keywords": ["farming", "plants"]
+                "title": "Aquaria",
+                "href": "/docs/aquaria",
+                "keywords": ["aquarium", "fish", "water"]
+            },
+            {
+                "title": "Astronomy",
+                "href": "/docs/astronomy",
+                "keywords": ["stars", "observation", "telescope"]
             },
             {
                 "title": "Chemistry Lab Basics",
                 "href": "/docs/chemistry-lab",
-                "keywords": ["chemistry", "laboratory"]
+                "keywords": ["chemistry", "lab", "reactions"]
             },
-            { "title": "Rockets", "href": "/docs/rockets", "keywords": ["launch", "propulsion"] }
+            {
+                "title": "Composting",
+                "href": "/docs/composting",
+                "keywords": ["soil", "waste", "compost"]
+            },
+            {
+                "title": "DevOps",
+                "href": "/docs/devops",
+                "keywords": ["devops", "ci", "deployment"]
+            },
+            {
+                "title": "Electricity",
+                "href": "/docs/electricity",
+                "keywords": ["power", "energy", "grid"]
+            },
+            {
+                "title": "Electronics",
+                "href": "/docs/electronics",
+                "keywords": ["circuits", "arduino", "sensors"]
+            },
+            {
+                "title": "Energy Systems",
+                "href": "/docs/energy",
+                "keywords": ["renewable", "storage", "solar", "wind"]
+            },
+            {
+                "title": "First Aid",
+                "href": "/docs/first-aid",
+                "keywords": ["safety", "medical", "emergency"]
+            },
+            {
+                "title": "Geothermal",
+                "href": "/docs/geothermal",
+                "keywords": ["geothermal", "heat", "loops"]
+            },
+            {
+                "title": "Hydroponics",
+                "href": "/docs/hydroponics",
+                "keywords": ["plants", "farming", "water"]
+            },
+            {
+                "title": "Programming",
+                "href": "/docs/programming",
+                "keywords": ["code", "data", "api"]
+            },
+            {
+                "title": "Robotics",
+                "href": "/docs/robotics",
+                "keywords": ["robots", "automation", "sensors"]
+            },
+            {
+                "title": "Rockets",
+                "href": "/docs/rockets",
+                "keywords": ["launch", "rocketry", "propulsion"]
+            },
+            {
+                "title": "Solar power",
+                "href": "/docs/solar",
+                "keywords": ["solar", "energy", "panels"]
+            },
+            {
+                "title": "System Administration",
+                "href": "/docs/sysadmin",
+                "keywords": ["linux", "ops", "systems"]
+            },
+            {
+                "title": "UBI",
+                "href": "/docs/ubi",
+                "keywords": ["economy", "income", "benefits"]
+            },
+            {
+                "title": "Woodworking",
+                "href": "/docs/woodworking",
+                "keywords": ["wood", "construction", "carpentry"]
+            }
         ]
     },
     {
