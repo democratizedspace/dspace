@@ -49,7 +49,7 @@ Current trees include:
 -   **Rocketry**
 -   **Sysadmin**
 -   **UBI**
--   **Welcome** (onboarding mechanics)
+-   **Welcome**
 -   **Woodworking**
 
 ## Quest Structure Guidelines
