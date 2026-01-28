@@ -13,13 +13,13 @@ describe('roadmap 10x More Quests entry', () => {
     'roadmap.md'
   );
 
-  it('marks the 10x More Quests milestone as shipped', () => {
+  it('marks the 10x More Quests milestone as upcoming', () => {
     const content = readFileSync(roadmapPath, 'utf8');
 
-    // Verify it's not marked as incomplete
-    expect(content).not.toMatch(/-\s+\[ \]\s+10x.*quests/i);
-    
-    // Verify it's marked as complete
-    expect(content).toMatch(/-\s+\[x\]\s+10x.*quests/i);
+    // Verify it's not marked as complete
+    expect(content).not.toMatch(/-\s+\[x\]\s+10x.*quests/i);
+
+    // Verify it's marked as planned
+    expect(content).toMatch(/-\s+\[ \]\s+10x.*quests/i);
   });
 });

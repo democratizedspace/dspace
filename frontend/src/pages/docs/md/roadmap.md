@@ -8,35 +8,33 @@ change, timelines are subject to delays, and some things may be reprioritized.
 
 ## 2027 and beyond
 
-Multiplayer remains a long-term research area; updates will follow once prototypes reach
-community testing.
+- [ ] guilds (Metaguild recruitment, donation board, and NPC wings)
+- [ ] Multiplayer remains a long-term research area; updates will follow once prototypes reach
+      community testing
 
 ## 2026
 
-- Top-down isometric base building remains deferred from the 2024 roadmap while we focus on
-  shipping supporting systems first.
+The v3 milestones below were previously listed across the 2023-2024 roadmap entries and are
+now retargeted to 2026.
+
+- [ ] DSPACE v3 ships (targeting March 2026)
+- [ ] [custom quests](/docs/custom-quest-system) launch alongside v3
+- [ ] smarter dChat (knowledge of the game, the items, your inventory, etc.)
+- [ ] 10x more quests
+- [ ] Top-down isometric base building targets late 2026 after the v3 foundation is live
 
 ## 2025
 
-Focusing on maintenance and prep work for the larger features slated for 2026 and beyond.
+The bulk of 2025 was spent developing and stabilizing DSPACE v3 for 2026 delivery.
 
 ## 2024
 
-- [x] guilds (Metaguild recruitment, donation board, and NPC wings live)
-- [x] 10x more quests (246 quests delivered, exceeding the 220-quest goal)
+Maintenance and groundwork leading into v3.
 
 ## 2023
 
 - [x] in-game guided model rocket hop (servo + camera upgrade)
 - [x] AI-enabled NPCs (chat now supports persona-powered conversations)
-
-## September 2023
-
-- [x] smarter dChat (knowledge of the game, the items, your inventory, etc.)
-
-## August 2023
-
-- [x] [custom quests](/docs/custom-quest-system)
 
 ## July 2023
 
