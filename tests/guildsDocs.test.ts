@@ -8,7 +8,9 @@ describe('Guilds documentation', () => {
     it('describes guilds as a planned feature', () => {
         const guildsDoc = readFileSync(join(docsDir, 'guilds.md'), 'utf8');
 
-        expect(guildsDoc).toMatch(/planned for DSPACE v3/i);
+        expect(guildsDoc).toMatch(/not live yet/i);
+        expect(guildsDoc).toMatch(/2027 or later/i);
+        expect(guildsDoc).toMatch(/ActivityPub/i);
         expect(guildsDoc).toMatch(/Metaguild/);
     });
 

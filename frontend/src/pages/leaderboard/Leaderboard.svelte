@@ -43,8 +43,8 @@
     <header class="intro">
         <h1>Metaguild Donation Leaderboard</h1>
         <p>
-            See which crews fuel the universal basic income pool. Daily donations earn streak
-            bonuses and bragging rights across the metaguild.
+            Preview how crews will fuel the universal basic income pool once guilds launch. Daily
+            donations and streak rewards are planned, but guild membership is not live yet.
         </p>
     </header>
 
@@ -89,8 +89,8 @@
                 <div>
                     <dt>Daily streak tip</dt>
                     <dd>
-                        Donate dUSD after each quest to climb the chart and earn exclusive metaguild
-                        badges.
+                        When guilds launch, donating dUSD after each quest will let you climb the
+                        chart and earn exclusive metaguild badges.
                     </dd>
                 </div>
             </dl>

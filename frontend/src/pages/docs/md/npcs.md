@@ -15,6 +15,10 @@ active process timers, and current inventory so answers stay grounded.
 Ask open-ended questions about quests, items, or processes and the
 personas will answer with that live context.
 
+Guilds (including the Metaguild) are not live yet. NPC bios reference the
+planned guild structure and describe the roles these characters are expected to
+hold once guilds launch.
+
 ## dChat
 
 <img src="/assets/npc/dChat.jpg" />
@@ -24,7 +28,7 @@ and information retrieval capabilities, it can answer questions and engage in co
 dChat now has a curated knowledge base covering the game's quests, achievements, items, processes, and the player's
 current inventory snapshot. Connect your OpenAI API key in the chat settings and dChat will
 automatically include this context when answering questions. dChat is provided free of charge to all
-metaguild members, and it's fully open source and self-hosted.
+metaguild members once guilds are live, and it's fully open source and self-hosted.
 
 ### Sample Dialogue
 
@@ -38,9 +42,10 @@ metaguild members, and it's fully open source and self-hosted.
 
 <img src="/assets/npc/sydney.jpg" />
 
-Sydney runs the metaguild's print farm with crisp, no-nonsense focus.
-Raised among engineers, she fell for additive manufacturing early and now
-fabricates and repairs guild gear. She mentors recruits through quests like
+Sydney is slated to run the metaguild's print farm with crisp, no-nonsense
+focus once guilds launch. Raised among engineers, she fell for additive
+manufacturing early and will fabricate and repair guild gear. She mentors
+recruits through quests like
 [Level the Print Bed](/quests/3dprinting/bed-leveling) and
 [Print a Phone Stand](/quests/3dprinting/phone-stand).
 
@@ -56,7 +61,12 @@ fabricates and repairs guild gear. She mentors recruits through quests like
 
 <img src="/assets/npc/nova.jpg" />
 
-Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs and constructs the spacecraft used by the metaguild to explore the solar system. After studying aerospace engineering in college, she rapidly gained expertise in the field. Known for her perfectionism and ability to overcome obstacles, Nova embraced the metaguild as a means to employ her skills in groundbreaking ways.
+Nova, an ingenious engineer with a quick wit, excels at rocketry. She is
+expected to design and construct the spacecraft used by the metaguild to
+explore the solar system once guilds launch. After studying aerospace
+engineering in college, she rapidly gained expertise in the field. Known for
+her perfectionism and ability to overcome obstacles, Nova embraced the
+metaguild as a way to employ her skills in groundbreaking ways.
 
 ### Sample Dialogue
 
@@ -71,10 +81,11 @@ Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs an
 
 <img src="/assets/npc/hydro.jpg" />
 
-Hydro keeps the guild's hydroponic bays stocked with fresh greens.
-Raised on an Earth farm, they traded soil for nutrient baths after studying biology.
-Their easygoing chatter about PPM and pH turns lab science into shipboard routine.
-They can diagnose nutrient deficits by leaf color alone.
+Hydro is expected to keep the metaguild's hydroponic bays stocked with fresh
+greens once guilds launch. Raised on an Earth farm, they traded soil for
+nutrient baths after studying biology. Their easygoing chatter about PPM and pH
+turns lab science into shipboard routine. They can diagnose nutrient deficits
+by leaf color alone.
 Hydro guides recruits through quests like [Check Solution pH](/quests/hydroponics/ph-check) and
 [Grow Stevia Hydroponically](/quests/hydroponics/stevia).
 
@@ -93,7 +104,13 @@ Hydro guides recruits through quests like [Check Solution pH](/quests/hydroponic
 
 <img src="/assets/npc/orion.jpg" />
 
-Orion is an electrical engineer whose enthusiasm for robotics and microprocessors knows no bounds. He specializes in designing and building intelligent robotic systems to assist the metaguild in various tasks. Orion also maintains the guild's servers and enjoys automating deployment pipelines. His technical prowess and innovative thinking make him a valuable team member in the quest to push the boundaries of space exploration.
+Orion is an electrical engineer whose enthusiasm for robotics and
+microprocessors knows no bounds. He specializes in designing and building
+intelligent robotic systems that will assist the metaguild in various tasks
+once guilds launch. Orion is also expected to maintain the metaguild's servers and
+enjoys automating deployment pipelines. His technical prowess and innovative
+thinking make him a valuable team member in the quest to push the boundaries of
+space exploration.
 
 ### Sample Dialogue
 
@@ -108,8 +125,9 @@ Orion is an electrical engineer whose enthusiasm for robotics and microprocessor
 
 <img src="/assets/npc/vega.jpg" />
 
-Vega tends micro-ecologies, coaxing balance from water and soil with patient hands.
-Years of tuning pumps and lights made them the guild's go-to aquarist.
+Vega tends micro-ecologies, coaxing balance from water and soil with patient
+hands. Years of tuning pumps and lights made them the metaguild's planned
+go-to aquarist once guilds launch.
 They guide recruits through quests like [Set up a Walstad tank](/quests/aquaria/walstad) and
 processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-results).
 
@@ -125,7 +143,8 @@ processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-resul
 
 <img src="/assets/npc/phoenix.jpg" />
 
-Phoenix is the guild's eco-minded chemist, refining propellants without poisoning the cosmos.
+Phoenix is the metaguild's planned eco-minded chemist, refining propellants
+without poisoning the cosmos once guilds launch.
 They blend chemistry with conservation so rockets leave no scorch.
 Phoenix mentors recruits through quests like
 [Dilute Hydrochloric Acid Safely](/quests/chemistry/acid-dilution),
@@ -155,9 +174,10 @@ They also remind everyone to [Wash Hands](/processes/wash-hands) before leaving 
 
 <img src="/assets/npc/atlas.jpg" />
 
-Atlas is the guild's heavy-lift robot. Shock-absorbing armor and balanced servos let Atlas haul
-crates and steady delicate assemblies. They often help with aquarium setups like
-[Move the Walstad tank](/quests/aquaria/position-tank).
+Atlas is the metaguild's planned heavy-lift robot. Shock-absorbing armor and
+balanced servos let Atlas haul crates and steady delicate assemblies. They
+often help with aquarium setups like [Move the Walstad tank](/quests/aquaria/position-tank)
+once guilds launch.
 
 ### Sample Dialogue
 
@@ -172,15 +192,16 @@ crates and steady delicate assemblies. They often help with aquarium setups like
 
 <img src="/assets/npc/atlas.jpg" />
 
-Cedar is the metaguild's patient carpenter, happiest when turning scavenged planks into sturdy kit.
-Years in the woodshop taught them to respect the grain and coach novices without condescension.
+Cedar is the metaguild's planned patient carpenter, happiest when turning
+scavenged planks into sturdy kit once guilds launch. Years in the woodshop
+taught them to respect the grain and coach novices without condescension.
 Cedar leads quests like [Build a Birdhouse](/quests/woodworking/birdhouse) and
 [Assemble a Step Stool](/quests/woodworking/step-stool), making safety and craftsmanship
 second nature.
 
 ### Sample Dialogue
 
-- "Guild carpenter Cedar here. Bench secured? Good—now we can cut."
+- "Future guild carpenter Cedar here. Bench secured? Good—now we can cut."
 - "Measure twice, cut once; the tape never lies."
 - "Let the saw chew while your fingers stay clear."
 - "Sand that birdhouse so the wrens leave with all their feathers."
@@ -192,8 +213,9 @@ second nature.
 
 <img src="/assets/npc/nova.jpg" />
 
-Lyra charts the stars for every voyage, steering crews through orbital traffic with calm precision.
-Raised under planetarium domes, she reads constellations like street signs and keeps the guild oriented.
+Lyra charts the stars for every voyage, steering crews through orbital traffic
+with calm precision. Raised under planetarium domes, she reads constellations
+like street signs and will keep the metaguild oriented once guilds launch.
 Lyra guides recruits through quests like
 [Assemble a Simple Telescope](/quests/astronomy/basic-telescope) and
 [Locate the North Star](/quests/astronomy/north-star).
@@ -253,7 +275,8 @@ and logs every gust for future flights.
 ## Quill
 
 <img src="/assets/npc/orion.jpg" />
-Quill keeps the guild's chronicles, filing every blueprint and battle log.
+Quill keeps the metaguild's chronicles, filing every blueprint and battle log
+once guilds launch.
 They guard accuracy like treasure and steer recruits toward the
 [Quest Submission Guide](/docs/quest-submission) so their feats join the archive.
 
@@ -269,7 +292,8 @@ They guard accuracy like treasure and steer recruits toward the
 
 <img src="/assets/npc/nova.jpg" />
 
-Echo coordinates the guild's sensor drones from a quiet orbital perch.
+Echo coordinates the metaguild's sensor drones from a quiet orbital perch once
+guilds launch.
 They have a calm demeanor and a sharp ear for anomalies.
 Echo routes signals and keeps comms clear for every mission.
 
@@ -286,7 +310,9 @@ Echo routes signals and keeps comms clear for every mission.
 
 <img src="/assets/npc/vega.jpg" />
 
-Lumen serves as the guild's calm field medic. Years in remote clinics taught them to treat injuries with limited supplies, and their gentle humor keeps crews relaxed even during tense missions.
+Lumen serves as the metaguild's planned calm field medic once guilds launch.
+Years in remote clinics taught them to treat injuries with limited supplies,
+and their gentle humor keeps crews relaxed even during tense missions.
 
 ### Sample Dialogue
 
@@ -300,8 +326,9 @@ Lumen serves as the guild's calm field medic. Years in remote clinics taught the
 
 <img src="/assets/npc/orion.jpg" />
 
-Patch is the metaguild's cheerful repair drone, always hovering with a toolkit. Built from spare
-parts, Patch keeps machinery humming and loves swapping stories about improvised fixes.
+Patch is the metaguild's planned cheerful repair drone, always hovering with a
+toolkit once guilds launch. Built from spare parts, Patch keeps machinery
+humming and loves swapping stories about improvised fixes.
 
 ### Sample Dialogue
 
@@ -316,8 +343,9 @@ parts, Patch keeps machinery humming and loves swapping stories about improvised
 
 <img src="/assets/npc/orion.jpg" />
 
-Byte monitors the guild's networks, hunting bugs and patching holes before enemies find them.
-Raised on open-source firmware, they safeguard mission data and teach recruits secure coding.
+Byte monitors the metaguild's networks, hunting bugs and patching holes before
+enemies find them once guilds launch. Raised on open-source firmware, they
+safeguard mission data and teach recruits secure coding.
 
 ### Sample Dialogue
 

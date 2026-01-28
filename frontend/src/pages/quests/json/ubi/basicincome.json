@@ -24,7 +24,7 @@
         },
         {
             "id": "earn",
-            "text": "Fantastic! Welcome to the wonderful world of UBI - Universal Basic Income! You can receive some dUSD daily, courtesy of the metaguild and its members.",
+            "text": "Fantastic! Welcome to the wonderful world of UBI - Universal Basic Income! You can receive some dUSD daily as part of the planned metaguild economy, even though guilds are not live yet.",
             "options": [
                 {
                     "type": "goto",
@@ -40,7 +40,7 @@
         },
         {
             "id": "what",
-            "text": "That's right! Thanks to the metaguild and its generous members, we can provide you with a daily UBI in the form of dUSD. Isn't it great?",
+            "text": "That's right! The daily UBI in the form of dUSD is designed around the future metaguild economy. Isn't it great?",
             "options": [
                 {
                     "type": "goto",
@@ -88,7 +88,7 @@
         },
         {
             "id": "source",
-            "text": "The money comes from donations made by generous members of the metaguild. There's a live leaderboard that gamifies donations so crews can celebrate the biggest supporters. Additionally, any ecosystem tax (for example, having too much dCarbon, a token that accrues whenever you release carbon dioxide into the atmosphere) contributes to the UBI pool.",
+            "text": "The plan is for the UBI pool to be funded by donations from future guild members. The donation leaderboard is a preview of that system, and ecosystem taxes (for example, having too much dCarbon, a token that accrues whenever you release carbon dioxide into the atmosphere) will also contribute to the pool.",
             "options": [
                 {
                     "type": "goto",
