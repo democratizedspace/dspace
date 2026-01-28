@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Cedar here. A birdhouse is small, but it teaches clean cuts and patient glue-ups.",
+            "text": "Atlas here. A birdhouse is small, but it teaches clean cuts and patient glue-ups.",
             "options": [
                 {
                     "type": "goto",

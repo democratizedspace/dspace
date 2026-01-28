@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Lyra here. Gather a 50 mm lens, 20 mm lens, mailing tube, masking tape, and a camera tripod. Inspect for chips, work in shade, wear eye protection, and keep the tube away from the Sun. Ready?",
+            "text": "Nova here. Gather a 50 mm lens, 20 mm lens, mailing tube, masking tape, and a camera tripod. Inspect for chips, work in shade, wear eye protection, and keep the tube away from the Sun. Ready?",
             "options": [
                 {
                     "type": "goto",
@@ -52,7 +52,7 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Lyra."
+                    "text": "Thanks, Nova."
                 }
             ]
         }
