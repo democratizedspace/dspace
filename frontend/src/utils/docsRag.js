@@ -32,7 +32,7 @@ const loadDocsRag = async () => {
 
             if (indexData) {
                 try {
-                    miniSearch = MiniSearch.loadJSON(indexData, indexOptions);
+                    miniSearch = MiniSearch.loadJSON(JSON.stringify(indexData), indexOptions);
                 } catch (error) {
                     miniSearch = null;
                 }

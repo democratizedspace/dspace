@@ -51,7 +51,7 @@ const sharedSystemGuardrail =
 
 const applySystemGuardrail = (prompt) => {
     if (!prompt) return sharedSystemGuardrail;
-    if (prompt.toLowerCase().includes('never invent quests')) return prompt;
+    if (prompt.toLowerCase().includes(sharedSystemGuardrail.toLowerCase())) return prompt;
     return `${prompt}\n\n${sharedSystemGuardrail}`;
 };
 
