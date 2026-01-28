@@ -22,6 +22,6 @@
         ],
         "v3Changelog": ["frontend/src/pages/docs/md/changelog/20260301.md"]
     },
-    "counts": { "totalChunks": 438, "docs": 364, "routes": 19, "changelog": 55 },
-    "gitSha": "24f462b2a939212f848b1d4ae3be641e2296360d"
+    "counts": { "totalChunks": 552, "docs": 478, "routes": 19, "changelog": 55 },
+    "gitSha": "1c856576bbcd08aeb2f1f46fb45154afb90eb624"
 }

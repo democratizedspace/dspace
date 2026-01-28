@@ -5,8 +5,8 @@ slug: 'self-hosting'
 
 # Self-hosting DSPACE
 
-Run your own DSPACE instance on your hardware. Docker Compose builds the site and
-serves it locally.
+Run your own DSPACE instance on your hardware. Docker Compose builds the site and serves it
+locally.
 
 ## Requirements
 
@@ -20,24 +20,24 @@ serves it locally.
     git clone https://github.com/democratizedspace/dspace.git
     cd dspace
     ```
-2. Build and launch the production container:
+2. Build and launch the production container from the repository root:
     ```bash
-    docker compose up -d
+    docker compose up --build -d
     ```
-    The site will be available at `http://localhost:3002`.
+    The site will be available at `http://localhost:8080`.
 3. Stop the container at any time with:
     ```bash
     docker compose down
     ```
 
-## Helper script
+## Frontend-only compose file (optional)
 
-The repository includes a convenience script that proxies common Docker
-commands. Use it from the repository root:
+If you only need the frontend for local development, `frontend/docker-compose.yml` runs the
+frontend dev server and maps port `3002`. Use it from the `frontend/` directory:
 
 ```bash
-./run-dspace.sh start   # start the app
-./run-dspace.sh stop    # stop containers
+cd frontend
+docker compose up --build -d
 ```
 
 ## Advanced guides
@@ -48,6 +48,6 @@ These additional documents cover more complex deployments:
 - [Failover Procedures][failover]
 - [Monitoring Setup][monitoring]
 
-[raspi-k3s]: https://github.com/democratizedspace/dspace/blob/main/docs/deploy/raspi.md
-[failover]: https://github.com/democratizedspace/dspace/blob/main/docs/failover_procedures.md
-[monitoring]: https://github.com/democratizedspace/dspace/blob/main/docs/monitoring_setup.md
+[raspi-k3s]: https://github.com/democratizedspace/dspace/blob/main/docs/ops/RPI_DEPLOYMENT_GUIDE.md
+[failover]: https://github.com/democratizedspace/dspace/blob/main/docs/ops/failover_procedures.md
+[monitoring]: https://github.com/democratizedspace/dspace/blob/main/docs/ops/monitoring_setup.md

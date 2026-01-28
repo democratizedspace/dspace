@@ -5,8 +5,8 @@ slug: 'prompts-codex'
 
 # Codex prompt library for the _dspace_ repo
 
-All detailed Codex prompt guides now live in the repository under
-[`docs/prompts/codex/`](https://github.com/democratizedspace/dspace/tree/v3/docs/prompts/codex).
+All detailed Codex prompt guides live in the repository under
+[`docs/prompts/codex/`](https://github.com/democratizedspace/dspace/tree/main/docs/prompts/codex).
 This page stays in the in-game handbook as a quick index so contributors can jump straight to the
 canonical Markdown files and keep them in sync.
 
@@ -37,11 +37,14 @@ canonical Markdown files and keep them in sync.
 - **Playwright tests:** [Playwright prompts][playwright]
 - **Refactors:** [Refactor prompts][refactors]
 - **Docs & JSDoc:** [Docs prompts][docs]
+- **Structural polish:** [Codex polish prompt][polish]
 - **Processes:** [Process prompts][processes]
 - **Items:** [Item prompts][items]
 - **Quests:** [Quest prompts][quests]
 - **Quest quality:** [Quest polish prompt][quests-polish]
 - **NPCs:** [NPC prompts][npcs]
+- **K3s deployment:** [DSPACE k3s prompt][k3s]
+- **QA coverage:** [QA test coverage prompt][qa-coverage]
 
 ## Keeping the library current
 
@@ -54,29 +57,31 @@ canonical Markdown files and keep them in sync.
 Have ideas for improving the prompts? Open a pull request that updates the Markdown in
 `docs/prompts/codex/` and mention it in the weekly docs review.
 
-[codex-playbook]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/baseline.md
-[meta]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/meta.md
-[upgrader]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/upgrader.md
-[ci-fix]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/ci-fix.md
-[merge]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/merge-conflicts.md
-[outages]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/outages.md
-[backups]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/backups.md
-[monitoring]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/monitoring.md
-[audit]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/audit.md
-[secrets]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/secrets.md
-[backend]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/backend.md
-[frontend]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/frontend.md
-[accessibility]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/accessibility.md
-[chat-ui]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/chat-ui.md
-[vitest]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/vitest.md
-[playwright]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/playwright-tests.md
-[refactors]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/refactors.md
-[docs]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/docs.md
-[processes]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/processes.md
-[items]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/items.md
-[quests]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/quests.md
-[quests-polish]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/quests-polish.md
-[npcs]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/npcs.md
-[implementation]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/implement.md
-[polish]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/polish.md
-[upgrade]: https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/baseline.md#upgrade-prompt
+[codex-playbook]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/baseline.md
+[meta]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/meta.md
+[upgrader]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/upgrader.md
+[ci-fix]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/ci-fix.md
+[merge]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/merge-conflicts.md
+[outages]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/outages.md
+[backups]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/backups.md
+[monitoring]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/monitoring.md
+[audit]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/audit.md
+[secrets]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/secrets.md
+[backend]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/backend.md
+[frontend]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/frontend.md
+[accessibility]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/accessibility.md
+[chat-ui]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/chat-ui.md
+[vitest]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/vitest.md
+[playwright]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/playwright-tests.md
+[refactors]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/refactors.md
+[docs]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/docs.md
+[polish]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/polish.md
+[processes]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/processes.md
+[items]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/items.md
+[quests]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/quests.md
+[quests-polish]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/quests-polish.md
+[npcs]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/npcs.md
+[implementation]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/implement.md
+[upgrade]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/baseline.md#upgrade-prompt
+[k3s]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/dspace-v3-k3s.md
+[qa-coverage]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/qa-test-coverage.md
