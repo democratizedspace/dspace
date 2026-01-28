@@ -1,6 +1,6 @@
 ---
 title: 'dCarbon'
-slug: 'dCarbon'
+slug: 'dcarbon'
 ---
 
 dCarbon represents the amount of carbon dioxide produced by a player in the game. 1 dCarbon = 1 kg
