@@ -29,22 +29,46 @@
         "title": "Skills",
         "links": [
             { "title": "3D printing", "href": "/docs/3dprinting", "keywords": ["fabrication"] },
-            { "title": "Solar power", "href": "/docs/solar", "keywords": ["energy", "panels"] },
             {
-                "title": "Electricity",
+                "title": "Renewable power",
+                "href": "/docs/solar",
+                "keywords": ["energy", "solar", "wind", "storage"]
+            },
+            {
+                "title": "Electricity & Electronics",
                 "href": "/docs/electricity",
-                "keywords": ["power", "generation"]
+                "keywords": ["power", "circuits", "safety"]
             },
             {
                 "title": "Hydroponics",
                 "href": "/docs/hydroponics",
                 "keywords": ["farming", "plants"]
             },
+            { "title": "Aquaria", "href": "/docs/aquaria", "keywords": ["fish", "water"] },
             {
                 "title": "Chemistry Lab Basics",
                 "href": "/docs/chemistry-lab",
                 "keywords": ["chemistry", "laboratory"]
             },
+            { "title": "Composting", "href": "/docs/composting", "keywords": ["soil", "organic"] },
+            { "title": "First aid", "href": "/docs/first-aid", "keywords": ["medical", "safety"] },
+            { "title": "Astronomy", "href": "/docs/astronomy", "keywords": ["sky", "stars"] },
+            {
+                "title": "Programming",
+                "href": "/docs/programming",
+                "keywords": ["code", "sensors"]
+            },
+            {
+                "title": "Robotics",
+                "href": "/docs/robotics",
+                "keywords": ["automation", "sensors"]
+            },
+            {
+                "title": "Sysadmin & DevOps",
+                "href": "/docs/sysadmin",
+                "keywords": ["operations", "infrastructure"]
+            },
+            { "title": "Woodworking", "href": "/docs/woodworking", "keywords": ["shop", "build"] },
             { "title": "Rockets", "href": "/docs/rockets", "keywords": ["launch", "propulsion"] }
         ]
     },
