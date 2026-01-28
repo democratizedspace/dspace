@@ -33,13 +33,13 @@ never sent anywhere except directly to GitHub's API.
 ### Token scopes by feature
 
 - **Quest submissions** (`/quests/submit`): needs repository access for the DSPACE repo. Classic
-  PATs should include **repo**. Fine-grained tokens should grant read/write access to the DSPACE
+  PATs should include `repo`. Fine-grained tokens should grant read/write access to the DSPACE
   repository (contents + pull requests).
 - **Bundle submissions** (`/bundles/submit`): same requirements as quest submissions.
-- **Cloud Sync** (`/cloudsync`): needs **gist** access (read/write) to create and list private
+- **Cloud Sync** (`/cloudsync`): needs `gist` access (read/write) to create and list private
   gists. You can use a separate gist-only token if you prefer.
 
-If you want a single token for all surfaces, a classic PAT with **repo** + **gist** is sufficient.
+If you want a single token for all surfaces, a classic PAT with `repo` + `gist` is sufficient.
 
 ## Token Storage
 
