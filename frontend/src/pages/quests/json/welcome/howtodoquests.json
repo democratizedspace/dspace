@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hiyaa! I'm dChat, your cheery garage sidekick and part-time quest confetti cannon. I enhance journeys, I crack jokes, I occasionally beep. Ready for a tutorial quest?",
+            "text": "Hiyaa! Confetti deployed! I'm dChat, your cheery garage sidekick and part-time quest confetti cannon. I enhance journeys, I crack jokes, I occasionally beep. Ready for a tutorial quest?",
             "options": [
                 {
                     "type": "goto",
@@ -173,7 +173,7 @@
         },
         {
             "id": "hangofthis",
-            "text": "You're crushing it! If you ever need a refresher, say the word. I'll be here, ready to cheer. Here's some digital cash—sparkly, but still pretend. Any questions before we wrap? Remember to disconnect the smart plug when you're done.",
+            "text": "You're crushing it! Victory is just a button away! If you ever need a refresher, say the word. I'll be here, ready to cheer. Here's some digital cash—sparkly, but still pretend. Any questions before we wrap? Remember to disconnect the smart plug when you're done.",
             "options": [
                 {
                     "type": "finish",
