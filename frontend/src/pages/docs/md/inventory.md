@@ -3,11 +3,14 @@ title: 'Inventory'
 slug: 'inventory'
 ---
 
-Your inventory contains all the items you've collected through quests, processes, and other activities. Starting with v3, items are stored locally and can be managed through the inventory interface.
+Your inventory contains the items your game state has collected from quests, processes, and
+shop actions. In v3, inventory data is stored locally in the browser and managed through the
+Inventory and Manage Items screens.
 
 ## Item Types
 
-Items in DSPACE fall into several categories:
+Items in DSPACE cover a mix of resources, tools, components, and consumables. Examples from the
+built-in catalog include:
 
 1. Resources
     - Energy units ([dWatt](/docs/dwatt), [dSolar](/docs/solar))
@@ -32,78 +35,72 @@ Items in DSPACE fall into several categories:
 
 ## Inventory categories and filters
 
-The `/inventory` page groups items into filterable categories so you can narrow down large lists
-quickly. Categories are defined in the item JSON data under
-`frontend/src/pages/inventory/json/items/`. The filter chips are derived directly from that data—no
-hardcoded lists—so adding or renaming a category only requires updating the items themselves.
+The `/inventory` page groups items into filterable categories derived directly from the item JSON
+catalog (`frontend/src/pages/inventory/json/items/`). The filters are not hardcoded; adding or
+renaming a category only requires updating the item data.
+
+Current built-in categories include:
 
 - 3D Printing & Fabrication
+- Aquarium
 - Astronomy & Observation
+- Awards
 - Biology & Lab
 - Digital & Records
 - Digital Currency & Tokens
 - Electronics & Robotics
 - Energy & Power
+- Hydroponics
 - Rocketry & Flight
 - Safety & Medical
+- Tools
 - Transportation
+- Uncategorized
 - Workshop & Construction
-- Plus existing categories for Aquarium, Awards, Hydroponics, and Tools
 
-Items missing an explicit category fall back to the "Uncategorized" label in the UI. When adding a
-new category, update the relevant JSON entries and refresh the assertions in
-`frontend/tests/inventory-items-import.test.ts` so the expected category set stays in sync.
+Custom items created through the inventory form default to the **Custom** category. The Manage
+Items screen also falls back to **Uncategorized** for any entries without an explicit category so
+filters stay usable.
 
 ## Item Properties
 
-Each item has:
+Each item includes:
 
 - Unique ID
 - Name
 - Description
 - Image
 - Count (quantity in inventory)
-- Related processes (requires/consumes/creates)
+- Category
+- Optional price/unit/type metadata
+- Optional dependencies list (shown in the Manage Items preview)
 
 ## Item Relationships
 
-Items are interconnected through:
-
-1. Processes
-    - Required items (checked but not consumed)
-    - Consumed items (removed when process starts)
-    - Created items (added when process completes)
-
-2. Quests
-    - Requirements for dialogue options
-    - Rewards for completion
-    - Granted items during dialogue
+Items can be tied to processes and quests. The item detail view (`/inventory/item/[itemId]`) shows
+processes that require, consume, or create the item, along with quests where the item is required
+or rewarded.
 
 ## Custom Items
 
-With v3, you can create custom items that:
-
-- Can be used in custom processes
-- Can be granted by custom quests
-- Are stored locally by default
-- Can be contributed to the base game
+Custom items are created at `/inventory/create`, stored in the custom content database, and merged
+into the main catalog at runtime. They can be used in custom processes, granted by custom quests,
+and edited or removed from `/inventory/manage`.
 
 ## Item Management
 
 The inventory interface allows you to:
 
 - View item details and counts
-- See related processes
-- Track item dependencies using the new `dependencies` field
-- Manage custom items and preview them from the **Manage Items** page using
-  the **Preview** button next to each entry
-- Remove custom items you no longer need directly from this page
+- Browse category filters and search results
+- Jump from an item to related processes or quests
+- Manage custom items with previews, edits, and deletes from **Manage Items**
 
-All inventory data is now stored locally using IndexedDB. For cross-device backups you can use the new [Cloud Sync](/docs/cloud-sync) feature.
+## Storage and Sync
 
-## Browser Support
+Inventory counts live in the game state, which persists in IndexedDB and falls back to
+localStorage if IndexedDB is unavailable. Custom items are stored in the custom content database,
+which also relies on IndexedDB with an in-memory fallback.
 
-IndexedDB functionality has been verified in the latest versions of Chrome,
-Firefox, Safari and Edge. DSPACE automatically falls back to vendor-prefixed
-implementations when needed, ensuring consistent inventory storage across major
-browsers.
+For cross-device backups, use [Cloud Sync](/docs/cloud-sync) to upload your save data (including
+custom items, quests, and processes) to a private GitHub gist.
