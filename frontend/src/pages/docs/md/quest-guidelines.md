@@ -26,24 +26,31 @@ DSPACE quests should:
 
 ## Quest Categories
 
-When creating quests, focus on these primary categories:
+Quest trees map to the folders in `frontend/src/pages/quests/json`. The current in-game trees are
+listed in [Quest Trees](/docs/quest-trees). When writing new content, align the quest's `id` with an
+existing tree unless you're intentionally adding a new category.
 
-### Core Categories
+Current trees include:
 
--   **Hydroponics**: Growing plants without soil, crucial for space habitation
--   **Aquaria**: Managing aquatic ecosystems, modeling closed-loop life support
--   **Aquaponics**: Combining fish and plant cultivation in symbiotic systems
--   **Electronics**: Basic circuitry, sensing, and control systems
--   **Energy Systems**: Solar, wind, batteries and sustainable power generation
--   **3D Printing**: Fabrication techniques for creating components and tools
-
-### Secondary Categories
-
--   **Chemistry**: Safe experiments demonstrating principles relevant to space
--   **Biology**: Experiments studying life in controlled environments
--   **Physics**: Demonstrations of physical principles in space exploration
--   **Astronomy**: Observational techniques and understanding celestial objects
--   **Materials Science**: Testing and comparing materials for various applications
+-   **Welcome** (onboarding mechanics)
+-   **3D Printing**
+-   **Aquaria**
+-   **Astronomy**
+-   **Chemistry**
+-   **Composting**
+-   **Completionist**
+-   **DevOps**
+-   **Electronics**
+-   **Energy**
+-   **First Aid**
+-   **Geothermal**
+-   **Hydroponics**
+-   **Programming**
+-   **Robotics**
+-   **Rocketry**
+-   **Sysadmin**
+-   **UBI**
+-   **Woodworking**
 
 ## Quest Structure Guidelines
 
@@ -63,8 +70,8 @@ Organize quests in a **clear progression** from beginner to advanced:
     depend on it directly or on a downstream quest so new players always learn the mechanics first.
     This rule is enforced by automated repository tests to prevent regressions.
 -   Each category should have a clear entry point that chains back to `welcome/howtodoquests`.
--   Dependencies should mirror the real learning path (e.g., rocketry quests rely on 3D printing and
-    electronics basics; robotics builds on electronics and programming fundamentals).
+-   Dependencies should mirror the real learning path so prerequisites teach the skills needed for
+    later quests.
 -   Advanced quests should require completion of relevant prerequisites
 
 ## Content Guidelines
@@ -96,27 +103,27 @@ Organize quests in a **clear progression** from beginner to advanced:
 
 ### Aquaria Sequence (Example)
 
-1. **Basic Guppy Tank** (Entry) - Simple setup for beginners
-2. **Guppy Breeding** (Beginner) - Introduction to fish reproduction
-3. **Walstad Method** (Intermediate) - Self-sustaining planted tank with shrimp
-4. **Goldfish Keeping** (Advanced) - More demanding water parameters and filtration
-5. **Aquaponics System** (Advanced) - Combining fish-keeping with plant production
+1. **Position the Tank** (Entry) - Choose a safe, stable location
+2. **Sponge Filter** (Beginner) - Add mechanical filtration
+3. **Walstad Method** (Intermediate) - Set up a planted, low-tech tank
+4. **Shrimp Care** (Intermediate) - Introduce shrimp and floating plants
+5. **Goldfish Care** (Advanced) - Meet higher filtration and water quality needs
 
 ### Hydroponics Sequence (Example)
 
 1. **Basil Growing** (Entry) - Simple setup with minimal equipment
-2. **Lettuce Production** (Beginner) - Leafy greens with basic monitoring
-3. **Microgreens System** (Intermediate) - Fast-cycle crops with succession planting
-4. **Strawberry Tower** (Intermediate) - Vertical growing systems
-5. **Advanced Nutrient Management** (Advanced) - Precise monitoring and adjustment
+2. **Bucket System** (Beginner) - Move to a basic bucket configuration
+3. **Lettuce Production** (Intermediate) - Add leafy greens with routine checks
+4. **Nutrient Refresh** (Intermediate) - Refresh reservoir nutrients and pH
+5. **Stevia Regrowth** (Advanced) - Maintain and regrow a more sensitive crop
 
 ### Electronics Sequence (Example)
 
 1. **Basic Circuit** (Entry) - Simple LED circuit with battery
-2. **Arduino Projects** (Beginner) - Programmed interactions
-3. **Solar USB Charger** (Intermediate) - Energy harvesting application
-4. **Home Energy Monitor** (Intermediate) - Sensing and data collection
-5. **Automated Garden** (Advanced) - Integration of electronics with biology
+2. **Arduino Blink** (Beginner) - Programmed interactions
+3. **Light Sensor** (Intermediate) - Read sensor data reliably
+4. **Temperature Logging** (Intermediate) - Capture and chart readings
+5. **Potentiometer Dimmer** (Advanced) - Build a variable control circuit
 
 ## Quest Technical Requirements
 
@@ -142,22 +149,23 @@ Every quest JSON file must include:
         -   `grantsItems`: Optional items given when selecting option
         -   `requiresGitHub`: Set to `true` to disable the option until a GitHub token is saved
 -   `rewards`: Items given upon quest completion
--   `requiresQuests`: Array of quest IDs that must be completed first (select these in the quest form under **Quest Requirements**).
-    Automated tests ensure these dependencies reference existing quests and avoid cycles.
+-   `requiresQuests`: Array of quest IDs that must be completed first (select these in the quest
+    form under **Quest Requirements**). Automated tests ensure these dependencies reference
+    existing quests and avoid cycles.
 
-Quest data is validated against a JSON schema. Titles and descriptions reject
-`<` and `>` characters, and `image` must be a data URL, an absolute HTTP(S)
-link, or a root-relative path. Quest titles must be unique across all existing
-quests.
+Quest data is validated against a JSON schema. In the in-game editor, titles and descriptions
+reject `<` and `>` characters, and `image` must be a data URL, an absolute HTTP(S) link, or a
+root-relative path. Quest titles must be unique across all existing quests.
 
 ### Current Implementation State
 
-> **Note:** The quest editor now lets you build branching dialogue directly in the browser. The current
-> implementation in `QuestForm.svelte` supports quest metadata (title, description, image), selecting
-> required quests, defining an NPC, creating dialogue nodes with `goto` or `finish` options, and
-> configuring process actions or item gates on each option. You can choose the start node and manage
-> options without writing JSON, and the preview still updates live for uploaded images. The form
-> remains mobile‑responsive and stacks action buttons on small screens.
+> **Note:** The quest editor lets you build branching dialogue directly in the browser. The current
+> implementation in `QuestForm.svelte` supports quest metadata (title, description, image),
+> selecting required quests, choosing an NPC, creating dialogue nodes with `goto`, `finish`,
+> `process`, or `grantsItems` options, and adding item requirements or rewards on each option. You
+> can choose the start node and manage options without writing JSON, and the preview updates live
+> for uploaded images. The form remains mobile‑responsive and stacks action buttons on small
+> screens.
 
 The editor focuses on the fundamentals today and exposes controls to gate dialogue options on
 specific items or grant rewards inline. You can run `npm run generate-quest --template basic`
@@ -171,7 +179,8 @@ specific items or grant rewards inline. You can run `npm run generate-quest --te
 
 Use the in-game quest editor to create and update custom quests that are stored locally in your
 browser's IndexedDB custom content database (with an in-memory fallback if IndexedDB is not
-available, so changes will not persist after refresh).
+available, so changes will not persist after refresh). The editor only saves locally; to submit
+content, export JSON and use the submission forms described in the [Quest Submission Guide](/docs/quest-submission).
 
 **Create a quest**
 
@@ -213,22 +222,23 @@ Before submitting a quest, verify:
 
 ## Contribution Workflow
 
-### Preferred: In-game editor submission
+### Preferred: In-game editor + submission forms
 
-1. Use the in-game editor from the **Play → Manage Quests** menu to create or edit your quest.
-2. Test using the built-in preview feature to confirm dialogue flow and reward logic.
-3. Click **Submit** to open an authenticated pull request directly from the game.
-4. Track review feedback in the linked GitHub pull request and iterate in the editor.
-5. Once approved, the quest deploys to all players automatically.
+1. Use the in-game editor at `/quests/create` or `/quests/[id]/edit`.
+2. Test using the preview and simulation summary to confirm dialogue flow and rewards.
+3. Export your custom content from `/contentbackup`.
+4. Submit the quest JSON at `/quests/submit` (or bundle JSON at `/bundles/submit`) with a GitHub
+   token.
+5. Track review feedback in the linked GitHub pull request and iterate as needed.
 
 ### Manual JSON contribution
 
 1. Develop your quest locally following these guidelines. Start with
    `npm run generate-quest --template basic` for a ready-made template.
-2. Test thoroughly in your local environment.
-3. Submit a [pull request](https://github.com/democratizedspace/dspace/pulls) with your quest JSON file.
+2. Validate the quest JSON with `node scripts/validate-quest.js path/to/quest.json`.
+3. Submit a [pull request](https://github.com/democratizedspace/dspace/pulls) with your quest JSON
+   file.
 4. Respond to feedback during code review.
-5. Once approved, your quest will be merged into the official game.
 
 ## Areas Needing More Content
 

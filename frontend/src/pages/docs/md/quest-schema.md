@@ -49,6 +49,16 @@ Options control quest flow and may grant or require items.
 | `grantsItems`    | array   | ❌       | Items granted when selected                   |
 | `requiresGitHub` | boolean | ❌       | Option requires GitHub authentication         |
 
-Item arrays consist of objects with `id` (string) and `count` (number).
+Item arrays consist of objects with `id` (string) and `count` (number). Built-in quest files
+should reference images under `/assets/quests/` to satisfy repository validation checks.
 
-For a full example, see the [Quest Template Example](/docs/quest-template). Validation against the schema is performed by test suites such as `npm test -- questValidation`.
+For a full example, see the [Quest Template Example](/docs/quest-template). To validate a quest
+file locally, run:
+
+```bash
+node scripts/validate-quest.js path/to/quest.json
+```
+
+That script checks the JSON schema, the required `hardening` metadata, and references to quest and
+process IDs. Repository CI also validates built-in quest files with tests like
+`tests/builtinQuestSchema.test.ts` and `tests/questPrerequisites.test.ts`.
