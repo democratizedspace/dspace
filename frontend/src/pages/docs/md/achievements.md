@@ -12,7 +12,7 @@ the next badge.
 
 - **First Steps** – Complete your first quest.
 - **Trailblazer** – Finish five quests to set your course.
-- **Mission Specialist** – Finish 10 quests across any quest line.
+- **Mission Specialist** – Finish 10 quests to prove your dedication.
 - **Quest Navigator** – Complete 20 quests across the DSPACE atlas.
 - **Quest Vanguard** – Finish 30 quests and become a veteran explorer.
 - **Energy Investor** – Store a combined total of 500 dWatt in your inventory.
@@ -20,7 +20,7 @@ the next badge.
 - **Grid Magnate** – Reach a 5,000 dWatt stockpile.
 - **Solar Scout** – Secure a portable solar panel for field ops.
 - **Solar Architect** – Assemble a full 1 kWh solar setup.
-- **Wind Pioneer** – Acquire at least one 500 W wind turbine.
+- **Wind Pioneer** – Add a 500 W wind turbine to your base.
 - **Maker Online** – Bring an entry-level FDM 3D printer into service.
 - **Calibration Captain** – Print a Benchy to prove your setup is dialed in.
 - **Launch Ready** – Complete a launch-capable model rocket build.

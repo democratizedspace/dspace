@@ -9,7 +9,7 @@ Once earned, titles appear on your [profile](/profile) and in the in-game [Title
 
 ## Available titles
 
-- **Quest Vanguard** – Reserved for commanders who finish 30 quests.
+- **Quest Vanguard** – Reserved for commanders who finish thirty quests.
 - **Grid Magnate** – Honors players who build a 5,000 dWatt reserve.
 - **Solar Architect** – Awarded for assembling a full 1 kWh solar setup.
 - **Guidance Officer** – Marks the completion of a guided flight stack.
