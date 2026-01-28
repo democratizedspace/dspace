@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hiyaa! Confetti deployed! dChat reporting for duty. Let's wire a repeatable logger so every reading is trustworthy and deliciously consistent.",
+            "text": "Hiyaa! Confetti deployed! Beep-beep, quest mode engaged! dChat reporting for duty. Let's wire a repeatable logger so every reading is trustworthy and deliciously consistent.",
             "options": [
                 {
                     "type": "goto",

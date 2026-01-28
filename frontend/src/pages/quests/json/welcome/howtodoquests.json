@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hiyaa! Confetti deployed! I'm dChat, your cheery garage sidekick and part-time quest confetti cannon. I enhance journeys, I crack jokes, I occasionally beep. Ready for a tutorial quest?",
+            "text": "Greetings, adventurer. Hiyaa! Confetti deployed! Beep-beep, quest mode engaged! I'm dChat, your cheery garage sidekick and part-time quest confetti cannon. I enhance journeys, I crack jokes, I occasionally beep. Ready for a tutorial quest?",
             "options": [
                 {
                     "type": "goto",

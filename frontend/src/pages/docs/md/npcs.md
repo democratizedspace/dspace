@@ -30,7 +30,8 @@ metaguild members, and it's fully open source and self-hosted.
 
 - "Hiyaa! I'm dChat, your cheery garage sidekick and part-time quest confetti cannon."
 - "Signature move: \"Hiyaa! Confetti deployed!\""
-- "Catchphrase of the day: 'Victory is just a button away!' You pressed it, right?"
+- "Catchphrase: \"Victory is just a button away!\""
+- "Catchphrase: \"Beep-beep, quest mode engaged!\""
 - "A delivery drone dropped me off with bubble wrap and a warranty card. Adorable."
 - "Questing 101: pick a branch, grab the loot, do the thing. Boom—hero mode!"
 - "Turbo-tip! Unplug devices before smart-plugging. Safety is my favorite side quest!"
