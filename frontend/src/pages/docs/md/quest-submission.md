@@ -27,9 +27,11 @@ If your quest requires custom items or processes, use the bundle submission work
     - Use the process picker for “Run process” dialogue options and set item counts as needed
 2. **Create related items** at `/inventory/create` if needed
 3. **Create related processes** at `/processes/create` if needed
-4. **Package everything into a bundle** following the [Custom Content Bundles](/docs/custom-bundles) format
-5. **Submit the bundle** at `/bundles/submit` with your GitHub token
-6. **Respond to feedback** on the generated pull request
+4. **Export your custom content** from `/contentbackup` (Prepare backup → Download backup)
+5. **Package everything into a bundle** following the [Custom Content Bundles](/docs/custom-bundles)
+   format
+6. **Submit the bundle** at `/bundles/submit` with your GitHub token
+7. **Respond to feedback** on the generated pull request
 
 ### Option 2: Quest-Only Submission
 
@@ -38,16 +40,20 @@ If your quest uses only existing items and processes:
 1. **Create your quest** using the in-game editor at `/quests/create`
     - Add quest completion rewards with the item picker for any items you want to grant on finish
     - Use the process picker for “Run process” dialogue options when applicable
-2. **Validate** the quest structure by running:
+2. **Export your quest JSON** from `/contentbackup` (Prepare backup → Download backup), or work from
+   a local quest JSON file if you created it manually.
+3. **Validate** the quest structure by running:
     ```bash
-    npm run test:ci -- questValidation
+    cd frontend
+    npm test -- questValidation questCanonical questDependencies questSimulation
     ```
-3. **Check quest quality** with:
+4. **Check quest quality** with:
     ```bash
-    npm run test:ci -- questQuality
+    cd frontend
+    npm test -- questQuality
     ```
-4. **Submit at** `/quests/submit` with your GitHub token
-5. **Respond to feedback** on the generated pull request
+5. **Submit at** `/quests/submit` with your GitHub token
+6. **Respond to feedback** on the generated pull request
 
 ## Quest Images
 
@@ -66,7 +72,8 @@ For manual submissions via command-line:
 4. **Regenerate the new quests list** by running `npm run new-quests:update` and
    committing the updated `/docs/new-quests.md` to keep quest counts accurate.
 
-Maintainers can review submitted quests at `/quests/review`, approving or rejecting them before merge.
+Maintainers can review submitted quests at `/quests/review`, approving or rejecting them before
+merge.
 
 If something goes wrong, the submission form will display an error message so you can adjust and try again.
 

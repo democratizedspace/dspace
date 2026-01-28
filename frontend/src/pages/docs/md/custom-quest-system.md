@@ -14,8 +14,8 @@ JSON files. This page outlines the workflow and links to detailed guides.
   pictures locally as data URLs
 - **Schema validation** – Every quest is checked against the official JSON schema
 - **Preview mode** – See how your quest plays before saving
-- **Contribution workflow** – Submit quests for review and automatically open a pull request
-- **Simulation testing** – Run automated tests to verify quest logic
+- **Quest flow checks** – Flags missing start nodes, unreachable nodes, and finish paths
+- **Submission forms** – Use `/quests/submit` or `/bundles/submit` to open a pull request
 
 ## Creating quests
 
@@ -23,6 +23,7 @@ JSON files. This page outlines the workflow and links to detailed guides.
 2. Add nodes, options, and optional images in the form
 3. Resolve validation errors highlighted by the editor
 4. Preview the quest to ensure everything works
+5. Save the quest locally (custom quests live in IndexedDB)
 
 For writing tips and narrative conventions, see the
 [Quest Development Guidelines](/docs/quest-guidelines).
@@ -31,8 +32,9 @@ For writing tips and narrative conventions, see the
 
 When your quest is ready to share:
 
-1. Click **Submit** in the editor
-2. Authenticate if prompted
-3. The game will open a pull request on your behalf
+1. Export your custom content from `/contentbackup` (Prepare backup → Download backup)
+2. For quest-only submissions, paste the quest JSON into `/quests/submit`
+3. For bundles with custom items/processes, submit the bundle JSON at `/bundles/submit`
+4. Authenticate when prompted to open a pull request
 
 See the [Quest Submission Guide](/docs/quest-submission) for step-by-step instructions.

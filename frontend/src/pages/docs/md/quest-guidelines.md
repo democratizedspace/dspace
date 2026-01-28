@@ -26,24 +26,30 @@ DSPACE quests should:
 
 ## Quest Categories
 
-When creating quests, focus on these primary categories:
+Align new quests with the **current quest trees** shipped in DSPACE. If you are proposing a brand
+new tree, call it out explicitly in your pull request so reviewers can confirm scope and pacing.
 
-### Core Categories
+Current quest trees:
 
--   **Hydroponics**: Growing plants without soil, crucial for space habitation
--   **Aquaria**: Managing aquatic ecosystems, modeling closed-loop life support
--   **Aquaponics**: Combining fish and plant cultivation in symbiotic systems
--   **Electronics**: Basic circuitry, sensing, and control systems
--   **Energy Systems**: Solar, wind, batteries and sustainable power generation
--   **3D Printing**: Fabrication techniques for creating components and tools
-
-### Secondary Categories
-
--   **Chemistry**: Safe experiments demonstrating principles relevant to space
--   **Biology**: Experiments studying life in controlled environments
--   **Physics**: Demonstrations of physical principles in space exploration
--   **Astronomy**: Observational techniques and understanding celestial objects
--   **Materials Science**: Testing and comparing materials for various applications
+-   **Welcome**: onboarding tutorial for how quests work
+-   **3D Printing**: printer setup, calibration, and maintenance
+-   **Aquaria**: aquarium setup, maintenance, and fish care
+-   **Astronomy**: observing the night sky and tracking celestial objects
+-   **Chemistry**: safe, foundational experiments with clear safety guidance
+-   **Composting**: compost setup, maintenance, and use
+-   **DevOps**: self-hosting, automation, and operations workflows
+-   **Electronics**: circuits, sensors, and microcontroller basics
+-   **Energy**: renewable power, storage, and measurement
+-   **First Aid**: safety preparedness and basic care
+-   **Geothermal**: monitoring and maintaining geothermal systems
+-   **Hydroponics**: growing plants in water-based systems
+-   **Programming**: data logging, scripts, and automation
+-   **Robotics**: servo control, chassis builds, and automation
+-   **Rocketry**: model rocket design, printing, and launch steps
+-   **Sysadmin**: foundational Linux workflows and maintenance
+-   **UBI**: metaguild and basic-income concepts
+-   **Woodworking**: tooling, safety, and build projects
+-   **Completionist**: meta quests that track overall progress
 
 ## Quest Structure Guidelines
 
@@ -134,38 +140,39 @@ Every quest JSON file must include:
     -   `id`: Node identifier
     -   `text`: NPC's dialogue text
     -   `options`: Array of player response options, including:
-        -   `type`: Action type (goto, finish, process, grantsItems)
+        -   `type`: Action type (`goto`, `finish`, `process`, or `grantsItems`)
         -   `text`: Player's response text
-        -   `goto`: For type:goto, target node ID
-        -   `process`: For type:process, process ID
-        -   `requiresItems`: Optional items needed to select option
-        -   `grantsItems`: Optional items given when selecting option
+        -   `goto`: For `type: "goto"`, the target node ID
+        -   `process`: For `type: "process"`, the process ID
+        -   `requiresItems`: Optional items needed to select the option
+        -   `grantsItems`: Items granted when `type: "grantsItems"`
         -   `requiresGitHub`: Set to `true` to disable the option until a GitHub token is saved
 -   `rewards`: Items given upon quest completion
 -   `requiresQuests`: Array of quest IDs that must be completed first (select these in the quest form under **Quest Requirements**).
     Automated tests ensure these dependencies reference existing quests and avoid cycles.
 
-Quest data is validated against a JSON schema. Titles and descriptions reject
-`<` and `>` characters, and `image` must be a data URL, an absolute HTTP(S)
-link, or a root-relative path. Quest titles must be unique across all existing
-quests.
+Quest data is validated against a JSON schema. Titles and descriptions reject `<` and `>`
+characters, and `image` must be a data URL, an absolute HTTP(S) link, or a root-relative path.
+Quest titles must be unique across all existing quests. Automated tests also expect every dialogue
+node to include at least one option so the quest can progress.
 
 ### Current Implementation State
 
-> **Note:** The quest editor now lets you build branching dialogue directly in the browser. The current
+> **Note:** The quest editor lets you build branching dialogue directly in the browser. The current
 > implementation in `QuestForm.svelte` supports quest metadata (title, description, image), selecting
-> required quests, defining an NPC, creating dialogue nodes with `goto` or `finish` options, and
-> configuring process actions or item gates on each option. You can choose the start node and manage
-> options without writing JSON, and the preview still updates live for uploaded images. The form
+> required quests, defining an NPC, creating dialogue nodes with `goto`, `finish`, `process`, or
+> `grantsItems` options, and adding item requirements for gating. You can choose the start node and
+> manage options without writing JSON, and the preview updates live for uploaded images. The form
 > remains mobile‑responsive and stacks action buttons on small screens.
 
 The editor focuses on the fundamentals today and exposes controls to gate dialogue options on
-specific items or grant rewards inline. You can run `npm run generate-quest --template basic`
-(or `branching`) to scaffold a template JSON file with placeholder dialogue.
+specific items, grant items inline, and set completion rewards. You can run
+`cd frontend && npm run generate-quest --template basic` (or `branching`) to scaffold a template
+JSON file with placeholder dialogue.
 
--   Item requirement and reward configuration for dialogue options
+-   Item requirements, item grants, and quest rewards
 -   Process action selection
--   Preview functionality to test dialogue flow
+-   Preview functionality plus basic quest-flow checks (start node, finish path, unreachable nodes)
 
 ### In-game editor flow (create + edit)
 
@@ -177,8 +184,8 @@ available, so changes will not persist after refresh).
 
 1. Open `/quests/create`.
 2. Fill out the quest metadata (title, description, image, NPC).
-3. Add dialogue nodes and options (goto, finish, process, or grantsItems) and choose the start
-   node.
+3. Add dialogue nodes and options (`goto`, `finish`, `process`, or `grantsItems`) and choose the
+   start node.
 4. Save the quest to store it locally and receive a link to view it.
 
 **Edit a quest**
@@ -213,18 +220,18 @@ Before submitting a quest, verify:
 
 ## Contribution Workflow
 
-### Preferred: In-game editor submission
+### Preferred: In-game editor + submission forms
 
-1. Use the in-game editor from the **Play → Manage Quests** menu to create or edit your quest.
-2. Test using the built-in preview feature to confirm dialogue flow and reward logic.
-3. Click **Submit** to open an authenticated pull request directly from the game.
-4. Track review feedback in the linked GitHub pull request and iterate in the editor.
-5. Once approved, the quest deploys to all players automatically.
+1. Use the in-game editor at `/quests/create` or `/quests/manage` to create or edit your quest.
+2. Use the preview and flow checks to confirm dialogue flow and reward logic.
+3. Export your custom content from `/contentbackup` (Prepare backup → Download backup).
+4. Submit your quest JSON at `/quests/submit` (or submit a bundle at `/bundles/submit`).
+5. Track review feedback in the linked GitHub pull request and iterate as needed.
 
 ### Manual JSON contribution
 
 1. Develop your quest locally following these guidelines. Start with
-   `npm run generate-quest --template basic` for a ready-made template.
+   `cd frontend && npm run generate-quest --template basic` for a ready-made template.
 2. Test thoroughly in your local environment.
 3. Submit a [pull request](https://github.com/democratizedspace/dspace/pulls) with your quest JSON file.
 4. Respond to feedback during code review.
