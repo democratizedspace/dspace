@@ -123,6 +123,8 @@ Once a process has been completed, items produced by the process can be collecte
 
 <style>
 img {
-    width: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
 }
 </style>
