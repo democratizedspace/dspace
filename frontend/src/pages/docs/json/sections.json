@@ -131,7 +131,8 @@
             { "title": "Guilds", "href": "/docs/guilds", "keywords": ["teams", "co-op"] },
             { "title": "Amazing", "href": "/docs/amazing", "keywords": ["wonder", "delight"] },
             { "title": "dWatt", "href": "/docs/dwatt", "keywords": ["energy", "token"] },
-            { "title": "dCarbon", "href": "/docs/dCarbon", "keywords": ["carbon", "token"] }
+            { "title": "dCarbon", "href": "/docs/dCarbon", "keywords": ["carbon", "token"] },
+            { "title": "dOffset", "href": "/docs/dOffset", "keywords": ["offset", "token"] }
         ]
     },
     {
