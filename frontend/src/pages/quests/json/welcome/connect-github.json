@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's hook up your GitHub account so you can back up progress and share quests.",
+            "text": "Time for a power-up: connect GitHub so your progress syncs and your quests can travel.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "token",
-            "text": "Visit the cloud sync page and paste your personal access token. I'll store it locally so you can upload saves and create PRs.",
+            "text": "Visit the cloud sync page and paste your personal access token. I'll store it locally so you can upload saves and ship PRs.",
             "options": [
                 {
                     "type": "goto",
@@ -30,7 +30,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Your GitHub account is connected.",
+            "text": "Connection locked. Your GitHub link is live!",
             "options": [
                 {
                     "type": "finish",

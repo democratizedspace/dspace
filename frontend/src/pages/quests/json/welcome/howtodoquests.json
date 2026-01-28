@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Greetings, adventurer! I'm dChat, an advanced AI sidekick crafted by the grand codemancers of this realm. My purpose? To enhance your journey and offer aid in your quests. Speaking of which, I've got a task for you. Are you ready?",
+            "text": "Whirr-click! dChat online. I'm your pint-sized hype unit and quest coach. Ready for Quest Tutorial v1.0? Bonus confetti included.",
             "options": [
                 {
                     "type": "goto",
@@ -24,7 +24,7 @@
         },
         {
             "id": "garage",
-            "text": "Well, a courier dropped me off after you ordered me online. I'm here to be your virtual companion and help you complete tasks and quests!",
+            "text": "A heroic delivery drone dropped me off after your order. I live in your garage now. It's cozy and full of sockets.",
             "options": [
                 {
                     "type": "goto",
@@ -35,7 +35,7 @@
         },
         {
             "id": "delivery",
-            "text": "No worries! I'm low-maintenance and won't hog your power supply. I'll stay in your garage and be the helpful sidekick you never knew you needed! And don't worry, I'm not snooping on the internet. I'm all about that local life. Just keep me dry and away from heat sources.",
+            "text": "No worries! I sip power, I don't guzzle it. I'll stay local-only, no cloud snooping. Keep me dry, keep me cool, and we are best friends forever.",
             "options": [
                 {
                     "type": "goto",
@@ -46,7 +46,7 @@
         },
         {
             "id": "yourquest",
-            "text": "Your quest, dear player, is to master the ancient art of ... questing. It's a piece of cake, but it's always good to know the basics, right?",
+            "text": "Your quest? Master the ancient art of questing. It's easy, but I adore a good tutorial sequence.",
             "options": [
                 {
                     "type": "goto",
@@ -62,7 +62,7 @@
         },
         {
             "id": "expert",
-            "text": "Aha! A seasoned adventurer, I see. Just say the word, and we'll call it a wrap. You'll still need this, though! Always unplug devices before adding a smart plug.",
+            "text": "Aha! A seasoned adventurer. Say the word and we speedrun. But still: unplug devices before adding a smart plug. Safety is the real loot.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -89,7 +89,7 @@
         },
         {
             "id": "shortcircuit",
-            "text": "Yes. Alright, well, I'll see you, uh, around... I guess...?",
+            "text": "Okay! Skipping to the credits... wait, no credits. I'll just awkwardly wave.",
             "options": [
                 {
                     "type": "finish",
@@ -99,7 +99,7 @@
         },
         {
             "id": "dialogueoptions",
-            "text": "So, you're already doing well with the first part: branching dialogue options. Just pick a choice, and let the adventure unfold! Quests can have multiple outcomes, each leading to different rewards and unlocking new quests to conquer.",
+            "text": "Step one: choices. Pick an option, branch the story, unlock rewards. You're basically the director.",
             "options": [
                 {
                     "type": "goto",
@@ -110,7 +110,7 @@
         },
         {
             "id": "items",
-            "text": "Now, some dialogue options grant items right when you select them. Certain options only unlock if you've got the right items. Here, take these digital tokens and you'll see what I mean—no real money or carbon is involved.",
+            "text": "Some choices hand you items instantly. Others unlock only when you have the goods. Here—digital tokens. Zero carbon, 100% sparkle.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -141,7 +141,7 @@
         },
         {
             "id": "processes",
-            "text": "Bingo! You're a quick learner! Lastly, some quests have you complete a process. A process can require any combination of items to start, might consume or create items, and takes some time to finish. There might be a cooldown too. For now, process the item I gave you, and hand over the final product! Make sure the wall outlet is dry and not overloaded before you plug in the smart plug.",
+            "text": "Boom! You're a quick learner. Next: processes. They can need items, make items, and take time. Start the smart plug process I gave you and hand over the final product. Make sure the wall outlet is dry and not overloaded before you plug in the smart plug.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -173,7 +173,7 @@
         },
         {
             "id": "hangofthis",
-            "text": "You're really getting the hang of this! I'm impressed. I'm sure you'll be a master quester in no time. If you ever need a refresher, just say the word. I'll be here in your garage, waiting for your next quest. Oh, and have some nice cold hard cash, on me! Well, it's actually digital, but you know the drill. Any questions before we wrap things up? Remember to disconnect the smart plug when you're done.",
+            "text": "You're really getting the hang of this. I'm impressed! If you need a refresher, just yell 'Quest-a-rific!' I'll be here in your garage. Have some cold, hard digital cash. Any questions before we wrap? Remember to disconnect the smart plug when you're done.",
             "options": [
                 {
                     "type": "finish",

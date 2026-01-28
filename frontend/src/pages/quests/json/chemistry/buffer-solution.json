@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's mix a buffer. Gather vinegar, baking soda, a beaker, gloves, goggles, and a lab coat.",
+            "text": "Phoenix here—let's mix a buffer. Gather vinegar, baking soda, a beaker, gloves, goggles, and a lab coat.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "mix",
-            "text": "Dissolve a teaspoon of baking soda in water. Stir in vinegar dropwise and check pH.",
+            "text": "Dissolve a teaspoon of baking soda in water. Add vinegar dropwise and check pH as you go.",
             "options": [
                 {
                     "type": "process",

@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Before diving into bigger tasks, open the inventory page and make sure your new smart plug shows up.",
+            "text": "Mini-mission! Open your inventory and make sure the shiny new smart plug shows up.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "view",
-            "text": "Great! Seeing your items helps track progress. You'll use many of them in upcoming quests.",
+            "text": "Boom! Inventory confirmed. This list is your loot tracker—keep it handy.",
             "options": [
                 {
                     "type": "goto",
@@ -36,7 +36,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Keep an eye on this list as you craft and discover new gear.",
+            "text": "Nice work! New gear lands here, so check in often. dChat approved!",
             "options": [
                 {
                     "type": "finish",

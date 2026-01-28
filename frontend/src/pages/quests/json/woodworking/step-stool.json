@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've mastered small projects. Ready to build a sturdy step stool?",
+            "text": "Atlas ready. Build a sturdy step stool?",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "gather",
-            "text": "Gather boards, glue, handsaw, and tape measure. Goggles on, lay out gear.",
+            "text": "Gather boards, glue, handsaw, tape measure. Goggles on. Lay out gear.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -78,7 +78,7 @@
         },
         {
             "id": "assemble",
-            "text": "Measure boards, cut with handsaw, glue frame and supports, cure, then test.",
+            "text": "Measure boards, cut with handsaw, glue frame and supports, let it cure, then test.",
             "options": [
                 {
                     "type": "goto",
@@ -89,7 +89,7 @@
         },
         {
             "id": "finish",
-            "text": "Nicely done! The step stool is ready—check for wobble before use.",
+            "text": "Step stool ready. Check for wobble before use.",
             "options": [
                 {
                     "type": "grantsItems",

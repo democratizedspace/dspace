@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey, Sydney again! Ready for a tidy phone stand? We'll tune the printer, slice a simple stand, and print it in white PLA so the details pop and the surface stays smooth.",
+            "text": "Sydney here. Let's print a tidy phone stand. We'll tune, slice, then print in white PLA.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "prep",
-            "text": "Start with safety: ventilate the room, tie back hair, and keep sleeves clear of the gantry. Heat the nozzle to PLA temps, wipe it clean, and paper-level the bed so you feel light drag at all four corners. Clean the build plate with isopropyl to help first-layer adhesion, then purge to white PLA until the filament comes out consistent and bubble-free.",
+            "text": "Ventilate, tie back hair, sleeves clear. Heat the nozzle to PLA temps, wipe it clean, and paper-level the bed to light drag. Clean the plate with isopropyl, then purge to white PLA until flow is steady.",
             "options": [
                 {
                     "type": "process",
@@ -60,7 +60,7 @@
         },
         {
             "id": "print",
-            "text": "Open the Phone Stand STL from your community library inventory, then slice it with a 0.2 mm layer height, 3 perimeters, 5 top/bottom layers, and 15% gyroid infill. Orient the stand flat so the phone rests on solid perimeters; supports should stay off unless your slicer shows a true overhang. Enable a 3-5 mm brim if your printer struggles with adhesion, and if the first layer won't stick, re-clean the plate, increase the brim, or nudge the Z-offset down a touch. Use ~200°C nozzle and 60°C bed for PLA, then watch the first layer for full contact. Let the print finish undisturbed, cool completely, and flex the bed to release without prying.",
+            "text": "Open the Phone Stand STL from your community library inventory. Slice at 0.2 mm, 3 perimeters, 5 top/bottom layers, 15% gyroid infill. Lay it flat; skip supports unless your slicer flags a real overhang. Use a 3-5 mm brim if adhesion is weak. PLA at ~200°C nozzle, 60°C bed. Watch the first layer, then let it finish, cool, and flex the bed to release.",
             "options": [
                 {
                     "type": "process",
@@ -82,7 +82,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Test-fit your phone: the back should lean 60–70° and the lip should hold the phone without blocking the charging port. If it feels tight, sand the lip lightly; if it feels loose, scale the model up 1-2% and reprint. Power down the printer and log your settings for the next run.",
+            "text": "Test-fit the phone: 60–70° lean, lip clear of the charging port. Too tight, sand lightly. Too loose, scale 1-2% and reprint. Power down and log settings.",
             "options": [
                 {
                     "type": "finish",

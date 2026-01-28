@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Healthy roots need a stable pH. Let's test your nutrient solution.",
+            "text": "Roots like calm water. Let's check the nutrient bath pH.",
             "options": [
                 {
                     "type": "goto",
@@ -46,7 +46,7 @@
         },
         {
             "id": "log",
-            "text": "Record the stable reading so you can spot drifts later.",
+            "text": "Log the stable reading so you can spot drifts later.",
             "options": [
                 {
                     "type": "process",
@@ -68,7 +68,7 @@
         },
         {
             "id": "adjust",
-            "text": "Put on gloves and goggles. Add a little pH up or pH down solution, stir, and re-test until you're back in range.",
+            "text": "Gloves and goggles on. Add a little pH up or down, stir, and re-test until you're back in range.",
             "options": [
                 {
                     "type": "process",

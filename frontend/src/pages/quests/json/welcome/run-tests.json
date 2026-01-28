@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Testing keeps DSPACE cooperative for everyone. Want a quick tour before we hammer the suite?",
+            "text": "Testing keeps DSPACE cooperative for everyone. Want the quick tour before we smash the test button?",
             "options": [
                 {
                     "type": "goto",
@@ -35,7 +35,7 @@
         },
         {
             "id": "overview",
-            "text": "We run lint, type checks, unit tests, and shard the Playwright suite. Keep the CI workflow close so your local run mirrors what ships.",
+            "text": "We run lint, type checks, unit tests, and both Playwright shards. Match CI so nothing explodes later. dChat hates surprises.",
             "options": [
                 {
                     "type": "goto",
@@ -46,7 +46,7 @@
         },
         {
             "id": "setup",
-            "text": "Clone the repo, install dependencies, and warm the build cache. Keep the CI workflow file handy so the commands match what PRs run.",
+            "text": "Clone the repo, install dependencies, and warm the build cache. Keep the CI workflow file handy so local commands match what PRs run.",
             "options": [
                 {
                     "type": "goto",
@@ -95,7 +95,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work. With a clean report and CI parity, your changes are ready to share without surprising the fleet.",
+            "text": "Nice work. Clean report, CI parity, zero surprises for the fleet. High-five protocol engaged.",
             "options": [
                 {
                     "type": "finish",

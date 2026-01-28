@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Water tests only help if we write them down. Gloves on, liquid kit ready, and let's capture today's ammonia, nitrite, nitrate, and pH.",
+            "text": "Water tests only help if we write them down. Gloves on, liquid kit ready. Let's capture today's ammonia, nitrite, nitrate, and pH.",
             "options": [
                 {
                     "type": "goto",
@@ -69,7 +69,7 @@
         },
         {
             "id": "finish",
-            "text": "Great recordkeeping! If numbers creep up, you can schedule a water change or adjust feeding before the fish even notice.",
+            "text": "Great recordkeeping. If numbers creep up, schedule a water change or adjust feeding before the fish notice.",
             "options": [
                 {
                     "type": "finish",
