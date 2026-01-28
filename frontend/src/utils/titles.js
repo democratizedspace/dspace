@@ -2,32 +2,32 @@ import { ACHIEVEMENTS, evaluateAchievements } from './achievements.js';
 
 const definitions = [
     {
-        id: 'titles:rookie-explorer',
-        name: 'Rookie Explorer',
-        description: 'Awarded for completing your first quest.',
+        id: 'titles:quest-commander',
+        name: 'Quest Commander',
+        description: 'Reserved for captains who complete 20 quests.',
         category: 'Quest mastery',
-        achievementId: 'quests:first',
+        achievementId: 'quests:twenty',
     },
     {
-        id: 'titles:mission-specialist',
-        name: 'Mission Specialist',
-        description: 'Granted once you finish ten quests across any storyline.',
-        category: 'Quest mastery',
-        achievementId: 'quests:ten',
-    },
-    {
-        id: 'titles:grid-investor',
-        name: 'Grid Investor',
-        description: 'Recognizes players who store at least 500 dWatt in their inventory.',
+        id: 'titles:power-mogul',
+        name: 'Power Mogul',
+        description: 'Earned by storing 10,000 dWatt in your inventory.',
         category: 'Energy leadership',
-        achievementId: 'energy:stored',
+        achievementId: 'energy:mogul',
     },
     {
-        id: 'titles:wind-pioneer',
-        name: 'Wind Pioneer',
-        description: 'Celebrates the installation of a 500 W wind turbine at your base.',
+        id: 'titles:wind-architect',
+        name: 'Wind Architect',
+        description: 'Granted for installing a 500 W wind turbine.',
         category: 'Energy leadership',
         achievementId: 'equipment:wind-turbine',
+    },
+    {
+        id: 'titles:launch-director',
+        name: 'Launch Director',
+        description: 'Awarded after recording five successful launches.',
+        category: 'Flight command',
+        achievementId: 'rocketry:flights',
     },
 ];
 

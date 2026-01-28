@@ -6,6 +6,7 @@ const findItemId = (name: string) =>
   items.find((item) => item.name === name)?.id ?? '';
 
 const dWattId = findItemId('dWatt');
+const dLaunchId = findItemId('dLaunch');
 const windTurbineId = findItemId('500 W wind turbine');
 
 describe('evaluateTitles', () => {
@@ -15,15 +16,16 @@ describe('evaluateTitles', () => {
     expect(summaries.every((summary) => summary.unlocked === false)).toBe(true);
   });
 
-  it('unlocks quest and energy titles as milestones are met', () => {
+  it('unlocks quest, energy, and flight titles as milestones are met', () => {
     const quests = Object.fromEntries(
-      Array.from({ length: 10 }, (_, index) => [
+      Array.from({ length: 20 }, (_, index) => [
         `quest-${index + 1}`,
         { finished: true },
       ])
     );
     const inventory = {
-      ...(dWattId ? { [dWattId]: 600 } : {}),
+      ...(dWattId ? { [dWattId]: 10000 } : {}),
+      ...(dLaunchId ? { [dLaunchId]: 5 } : {}),
       ...(windTurbineId ? { [windTurbineId]: 1 } : {}),
     };
 
@@ -33,9 +35,9 @@ describe('evaluateTitles', () => {
       .filter((summary) => summary.unlocked)
       .map((summary) => summary.name);
 
-    expect(unlockedNames).toContain('Rookie Explorer');
-    expect(unlockedNames).toContain('Mission Specialist');
-    expect(unlockedNames).toContain('Grid Investor');
-    expect(unlockedNames).toContain('Wind Pioneer');
+    expect(unlockedNames).toContain('Quest Commander');
+    expect(unlockedNames).toContain('Power Mogul');
+    expect(unlockedNames).toContain('Wind Architect');
+    expect(unlockedNames).toContain('Launch Director');
   });
 });
