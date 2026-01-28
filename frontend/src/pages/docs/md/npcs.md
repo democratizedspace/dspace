@@ -331,7 +331,8 @@ Raised on open-source firmware, they safeguard mission data and teach recruits s
 <style>
     img {
         float: left;
-        width: 150px;
+        max-width: 150px;
+        height: auto;
         margin: 10px;
         border-radius: 20px;
     }

@@ -13,8 +13,7 @@ Amazing is designed to be a [hyperstructure](https://jacob.energy/hyperstructure
 
 <style>
     .amazing {
-        width: 100%;
-        height: 350px;
-        object-fit: cover;
+        max-width: 100%;
+        height: auto;
     }
 </style>
