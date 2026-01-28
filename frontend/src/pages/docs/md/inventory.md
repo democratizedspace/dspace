@@ -5,11 +5,12 @@ slug: 'inventory'
 
 Your inventory contains all the items you've collected through quests, processes, purchases, and
 other activities. In v3, inventory counts are stored in your browser using IndexedDB when it is
-available, with a localStorage fallback if IndexedDB is unavailable.
+available. Game state snapshots are also written to localStorage as a lightweight backup, and
+localStorage becomes the primary store if IndexedDB is unavailable.
 
 ## Item Types
 
-Items in DSPACE fall into several types pulled from the current item catalog:
+The catalog spans several broad groupings, including:
 
 1. Resources
     - Energy units ([dWatt](/docs/dwatt), [dSolar](/docs/solar))
@@ -101,16 +102,17 @@ With v3, you can create custom items that:
 The inventory interface allows you to:
 
 - View item details and counts
-- Filter by category, search by name/description/price, and sort by name, price, or count
+- Filter by category, search by ID/name/description/price, and sort by name, price, or count
 - Toggle "Show all items" to include zero-count entries
-- See related processes and quest links on the item detail page
+- See related processes plus quest IDs on the item detail page
 - Preview custom item metadata (including dependencies) from the **Manage Items** page
 - Remove custom items you no longer need directly from the **Manage Items** page
 
-Inventory counts are stored locally using IndexedDB when available, with a localStorage fallback if
-needed. Custom items, quests, and processes use the IndexedDB-backed custom content database with an
-in-memory fallback. For cross-device backups you can use [Cloud Sync](/docs/cloud-sync) or export a
-custom content bundle from [/contentbackup](/contentbackup).
+Inventory counts are stored locally using IndexedDB when available, while localStorage receives a
+parallel backup and becomes the fallback store if IndexedDB cannot be opened. Custom items, quests,
+and processes use the IndexedDB-backed custom content database with an in-memory fallback. For
+cross-device backups you can use [Cloud Sync](/docs/cloud-sync) or export a custom content bundle
+from [/contentbackup](/contentbackup).
 
 ## Browser Support
 
