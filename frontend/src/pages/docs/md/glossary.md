@@ -19,8 +19,14 @@ read-only in the in-game editors.
 
 ## Custom entity
 
-An entity created in-game by a player and stored locally on their device. Custom entities are
+An entity created in-game by a player and stored in the player's browser (typically in IndexedDB,
+with a non-persistent in-memory fallback if IndexedDB is unavailable). Custom entities are
 editable, exportable, and can be submitted for inclusion in the official game.
+
+## Custom content bundle
+
+A packaged set of related custom quests, items, and processes exported together for submission to
+the official game.
 
 ## Guild
 
@@ -47,8 +53,14 @@ questlines.
 
 ## Process
 
-An activity that transforms items into new ones. Processes can require items, consume items, and
-create items, making them the primary method for crafting objects, machines, decor, and plants.
+An activity that transforms items into new ones. [Processes](/docs/processes) can require items,
+consume items, and create items, making them the primary method for crafting objects, machines,
+decor, and plants.
+
+## Process chain
+
+A sequence of processes where the outputs of one process become inputs for the next, creating a
+clear progression path.
 
 ## Quest
 
@@ -68,13 +80,3 @@ process, or grant items.
 ## Questline
 
 A series of quests that are related to each other. Questlines are broken down into **quests**.
-
-## Process chain
-
-A sequence of processes where the outputs of one process become inputs for the next, creating a
-clear progression path.
-
-## Custom content bundle
-
-A packaged set of related custom quests, items, and processes exported together for submission to
-the official game.
