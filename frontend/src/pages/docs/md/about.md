@@ -23,8 +23,9 @@ electronics, and operations, so you build a working toolkit before heading off-w
 
 Build confidence by assembling and validating real infrastructure: power systems, tools,
 monitoring, and small-scale manufacturing. The game is expanding bottom-up, so space-based
-orbital launches are not playable yet. When we introduce launch systems, you will already have
-the energy, materials, and operational habits needed to support them.
+orbital and suborbital launches are not playable yet; today’s rocketry content is educational,
+model-rocket scale. When we introduce launch systems, you will already have the energy,
+materials, and operational habits needed to support them.
 
 ## Research
 
