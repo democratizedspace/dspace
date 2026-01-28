@@ -22,9 +22,9 @@ electronics, and operations, so you build a working toolkit before heading off-w
 ## Gain momentum
 
 Build confidence by assembling and validating real infrastructure: power systems, tools,
-monitoring, and small-scale manufacturing. The game is expanding bottom-up, so orbital or
-suborbital launches are not playable yet. When we introduce launch systems, you will already
-have the energy, materials, and operational habits needed to support them.
+monitoring, and small-scale manufacturing. The game is expanding bottom-up, so space-based
+orbital launches are not playable yet. When we introduce launch systems, you will already have
+the energy, materials, and operational habits needed to support them.
 
 ## Research
 
