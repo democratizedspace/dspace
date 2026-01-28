@@ -24,7 +24,7 @@ describe('run-tests.js', () => {
         delete process.env.CI_COVERAGE_DONE;
     });
 
-    it('runs root, hardening, docs rag, and prepare scripts with expected arguments', () => {
+    it('runs root, hardening, and prepare scripts with expected arguments', () => {
         execSyncMock.mockReturnValueOnce('Test Files 1 (1)\nTests 1 (1)\n');
         execSyncMock.mockReturnValue('');
 

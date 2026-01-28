@@ -20,15 +20,8 @@
             "frontend/src/pages/docs/md/changelog/20230915.md",
             "frontend/src/pages/docs/md/changelog/20260301.md"
         ],
-        "v3Changelog": [
-            "frontend/src/pages/docs/md/changelog/20260301.md"
-        ]
+        "v3Changelog": ["frontend/src/pages/docs/md/changelog/20260301.md"]
     },
-    "counts": {
-        "totalChunks": 438,
-        "docs": 364,
-        "routes": 19,
-        "changelog": 55
-    },
-    "gitSha": "c60312094ec78029cca3fe65a4f00383006b712d"
+    "counts": { "totalChunks": 438, "docs": 364, "routes": 19, "changelog": 55 },
+    "gitSha": "24f462b2a939212f848b1d4ae3be641e2296360d"
 }

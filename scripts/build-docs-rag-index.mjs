@@ -6,6 +6,7 @@ import { glob } from 'glob';
 import yaml from 'yaml';
 import { execSync } from 'node:child_process';
 import GithubSlugger from 'github-slugger';
+import prettier from 'prettier';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,6 +26,10 @@ const CHANGELOG_CANDIDATES = [
 
 const MAX_CHUNK_LENGTH = 6000;
 const CHUNK_SPLIT_MIN = 2000;
+const FRONTEND_PRETTIER_TARGET = path.join(
+    repoRoot,
+    'frontend/src/generated/rag/docs_chunks.json'
+);
 
 const ensureFileExists = async (filePath, label) => {
     try {
@@ -40,6 +45,15 @@ const ensureFileExists = async (filePath, label) => {
 const readFileSafe = async (filePath) => {
     const content = await fs.readFile(filePath, 'utf-8');
     return content.replace(/\r\n/g, '\n');
+};
+
+const formatJson = async (data, targetPath) => {
+    const config = (await prettier.resolveConfig(targetPath)) ?? {};
+    const formatted = await prettier.format(JSON.stringify(data), {
+        ...config,
+        parser: 'json',
+    });
+    return `${formatted.trimEnd()}\n`;
 };
 
 const parseFrontmatter = (content) => {
@@ -468,9 +482,14 @@ const writeArtifacts = async (chunks, index, metaSources) => {
         gitSha: getGitSha(),
     };
 
-    await fs.writeFile(chunksPath, `${JSON.stringify(chunks, null, 2)}\n`);
-    await fs.writeFile(indexPath, JSON.stringify(index));
-    await fs.writeFile(metaPath, `${JSON.stringify(meta, null, 2)}\n`);
+    const [chunksOutput, indexOutput, metaOutput] = await Promise.all([
+        formatJson(chunks, FRONTEND_PRETTIER_TARGET),
+        formatJson(index, FRONTEND_PRETTIER_TARGET),
+        formatJson(meta, FRONTEND_PRETTIER_TARGET),
+    ]);
+    await fs.writeFile(chunksPath, chunksOutput);
+    await fs.writeFile(indexPath, indexOutput);
+    await fs.writeFile(metaPath, metaOutput);
 
     return { chunksPath, indexPath, metaPath };
 };
