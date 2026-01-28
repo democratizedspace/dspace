@@ -5,31 +5,46 @@ slug: 'about'
 
 # About DSPACE
 
-DSPACE is an incremental simulation game about resource management and space exploration. In the game, you will learn skills, work on [quests](/quests), and build your own presence in the solar system.
+DSPACE is an incremental simulation game about resource management and the long road to space
+exploration. In the game, you learn skills, work on [quests](/quests), and build the systems that
+eventually make life beyond Earth possible.
 
-**The game is still under active development.** If you would like to get involved in the creation of the game, please join the [Discord](https://discord.gg/A3UAfYvnxM) and say hello!
+**The game is still under active development.** If you would like to get involved in the
+creation of the game, please join the [Discord](https://discord.gg/A3UAfYvnxM) and say hello!
 
 ## Start with the basics
 
-Learn skills related to space exploration and resource management, and be an early adopter of (virtual) futuristic tech. Complete educational quests that teach you real-world skills applicable to space exploration.
+Right now, DSPACE is grounded in Earthside prep work. You’ll grow food in hydroponic tubs, run
+aquariums, build small energy systems, tinker with electronics, write software, and practice
+hands-on fabrication through 3D printing and machining. These quests are intentionally practical
+and teach real-world skills that show up in future space programs.
 
 ## Gain momentum
 
-Find a career related to the manufacturing of rockets, satellites, solar panels, and other space-related equipment. Or maybe you want to start a mining operation, or be a space pirate, or a space tourist. The choice is yours! Gain access to an existing launch provider or use your own rockets. Launch payloads into low Earth orbit. Create fuel depots. Explore the moon and beyond. Build your own space station.
+The current gameplay focuses on early-stage rocketry and operations. You’ll assemble model
+rockets, test guidance stacks, and run suborbital hops while learning launch safety and recovery.
+Astronomy and tracking tasks help you connect the dots between what you can observe today and
+what we hope to reach tomorrow.
 
-## Research
+## What’s coming later
 
-Use in-situ resource utilization. Mine the moon for water and oxygen. Use the water and oxygen to produce rocket fuel. Use the rocket fuel to launch rockets. Use the rockets to launch more rockets. Master the Sabatier reaction on Mars to generate fuel.
+Orbital launches, lunar ISRU, fuel depots, and deep-space logistics are part of the long-term
+vision—but they’re not playable yet. We’re building DSPACE bottom-up, so the systems for life
+support, manufacturing, energy, and robotics come first. As those foundations harden, the game
+can expand outward into orbit, the Moon, and beyond without skipping the hard parts.
 
 ## Create your own content
 
 DSPACE is designed as an extensible platform where you can create and contribute:
 
-- **[Custom Quests](/docs/custom-quest-system)** - Create and submit missions with the in-game editor
+- **[Custom Quests](/docs/custom-quest-system)** - Create and submit missions with the in-game
+  editor
 - **[Custom Items](/docs/item-guidelines)** - Create virtual resources, tools, and components
-- **[Custom Processes](/docs/process-guidelines)** - Build activities that transform or utilize items
+- **[Custom Processes](/docs/process-guidelines)** - Build activities that transform or utilize
+  items
 
-Our [Content Development Guide](/docs/content-development) provides a comprehensive overview of all content creation options, workflows, and best practices.
+Our [Content Development Guide](/docs/content-development) provides a comprehensive overview of
+all content creation options, workflows, and best practices.
 
 ## Educational Foundation
 
@@ -44,4 +59,5 @@ All content in DSPACE is designed with education in mind. Through gameplay, you'
 
 ## Where to go next
 
-Check out the [mission statement](/docs/mission) and take a look at the [roadmap](/docs/roadmap). If you'd like to contribute, visit our [contribution guide](/docs/contribute).
+Check out the [mission statement](/docs/mission) and take a look at the [roadmap](/docs/roadmap).
+If you'd like to contribute, visit our [contribution guide](/docs/contribute).
