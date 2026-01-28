@@ -16,11 +16,22 @@
         "title": "Skills",
         "links": [
             { "label": "3D printing", "href": "/docs/3dprinting" },
+            { "label": "Aquaria", "href": "/docs/aquaria" },
+            { "label": "Astronomy & Observation", "href": "/docs/astronomy" },
+            { "label": "Chemistry Lab Basics", "href": "/docs/chemistry-lab" },
+            { "label": "Composting", "href": "/docs/composting" },
+            { "label": "Electronics", "href": "/docs/electronics" },
+            { "label": "Energy Systems", "href": "/docs/energy-systems" },
             { "label": "Solar power", "href": "/docs/solar" },
             { "label": "Electricity", "href": "/docs/electricity" },
+            { "label": "First Aid", "href": "/docs/first-aid" },
+            { "label": "Geothermal", "href": "/docs/geothermal" },
             { "label": "Hydroponics", "href": "/docs/hydroponics" },
-            { "label": "Chemistry Lab Basics", "href": "/docs/chemistry-lab" },
-            { "label": "Rockets", "href": "/docs/rockets" }
+            { "label": "Programming", "href": "/docs/programming" },
+            { "label": "Robotics", "href": "/docs/robotics" },
+            { "label": "Rocketry", "href": "/docs/rockets" },
+            { "label": "Sysadmin & DevOps", "href": "/docs/sysadmin-devops" },
+            { "label": "Woodworking", "href": "/docs/woodworking" }
         ]
     },
     {

@@ -1,51 +1,48 @@
 ---
-title: 'Rockets'
+title: 'Rocketry'
 slug: 'rockets'
 ---
 
-DSPACE aims to make the creation and launches of rockets so easy that anyone can do it.
+DSPACE rocketry focuses on hobbyist-grade model rockets. The questline guides you from basic
+preflight checks to guided model hops with onboard telemetry.
 
-These quests focus on hobbyist-grade model rockets; commercial or
-high-powered launches are out of scope.
+## What you learn
 
-You can now build a fully functioning guided model rocket, complete with
-servo steering and onboard video, and launch it through the in-game questline.
-The playbook below covers everything from printing the hardware to rehearsing
-the countdown so the hop succeeds on the first real attempt.
+- How to assemble and test 3D-printed rocket hardware
+- How to run safe launch procedures and recovery drills
+- How to calibrate guidance systems before the first hop
 
-Orbit remains a long-term aspiration that will require significant iteration
-and regulatory diligence. For now, the guided hop serves as the shipped
-milestone while DSPACE researches what it would take to graduate to orbital
-launches in the future.
+## Quest trailheads
+
+- [Build a Guided Model Rocket](/quests/rocketry/guided-rocket-build)
+- [Preflight Checklist](/quests/rocketry/preflight-check)
+- [Check the Launch Winds](/quests/rocketry/wind-check)
+- [Perform a Static Engine Test](/quests/rocketry/static-test)
+- [Guided Model Rocket Hop](/quests/rocketry/suborbital-hop)
+- [Practice Rocket Recovery](/quests/rocketry/recovery-run)
 
 ## Guided model rocket hop playbook
 
-Before aiming for orbit, DSPACE now documents a realistic step beyond the
-parachute-only build. Follow these quests and processes to add servo steering
-and onboard video to your 3D printed rocket.
-
 ### Fabrication and bench testing
 
-1. **Print guidance hardware** – Run `3dprint-guided-fincan` for the servo-ready
-   fincan and `3dprint-guidance-sled` for the avionics tray so the servos and
-   Arduino seat cleanly inside the body tube.
-2. **Wire the avionics** – Use `assemble-guided-flight-stack` to mount the
-   Arduino, route servo leads, and secure connectors. Harden the build with a
-   dab of superglue before buttoning it up.
+1. **Print guidance hardware** – Run `3dprint-guided-fincan` for the servo-ready fincan and
+   `3dprint-guidance-sled` for the avionics tray so the servos and controller seat cleanly.
+2. **Wire the avionics** – Use `assemble-guided-flight-stack` to mount the controller, route servo
+   leads, and secure connectors. Harden the build with a dab of adhesive before closing the tube.
 3. **Tune stability firmware** – Flash the sketch and exercise the servos with
-   `calibrate-guided-flight-stack`. Stop when the fins hold attitude without
-   chattering through the tilt test.
-4. **Add a camera** – Install the keychain module with `install-rocket-camera`
-   so you can capture the hop from the nosecone.
+   `calibrate-guided-flight-stack`. Stop when the fins hold attitude without chattering.
+4. **Add a camera** – Install the keychain module with `install-rocket-camera` to capture the hop.
 
 ### Simulation and launch day
 
-1. **Rehearse the profile** – Run `suborbital-hop` to simulate the flight and
-   confirm guided hop telemetry stays within drift limits before leaving the
-   shop.
-2. **Set up the range** – At the field, execute `range-setup-guided-hop` to log
-   rod angle checks, igniter continuity, servo wiggle tests, and camera arming.
-3. **Call the countdown** – Follow `countdown-guided-hop` to keep everyone in
-   sync right up to key turn.
-4. **Launch and recover** – Trigger `launch-guided-hop` and bring home the
-   guided flight log capsule for replay.
+1. **Rehearse the profile** – Run `suborbital-hop` to simulate the flight and confirm telemetry is
+   inside drift limits before leaving the shop.
+2. **Set up the range** – Execute `range-setup-guided-hop` to log rod angle checks, igniter
+   continuity, servo wiggle tests, and camera arming.
+3. **Call the countdown** – Follow `countdown-guided-hop` to keep everyone in sync.
+4. **Launch and recover** – Trigger `launch-guided-hop` and bring home the guided flight log.
+
+## Key gear
+
+- 3D printed rocket body and guidance sled components
+- Launch controller, safety key, and an open field for recovery
