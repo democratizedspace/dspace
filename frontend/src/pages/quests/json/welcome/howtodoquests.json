@@ -46,7 +46,7 @@
         },
         {
             "id": "yourquest",
-            "text": "Your quest: master the ancient art of questing. Choices, items, processes—boom, hero mode.",
+            "text": "Your quest, dear player: master the ancient art of questing. Choices, items, processes—boom, hero mode.",
             "options": [
                 {
                     "type": "goto",
@@ -62,7 +62,7 @@
         },
         {
             "id": "expert",
-            "text": "Oho! Veteran detected. I can fast-track you, but safety is my boss. Always unplug devices before adding a smart plug.",
+            "text": "Aha! A seasoned adventurer. I can fast-track you, but safety is my boss. Always unplug devices before adding a smart plug.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -89,7 +89,7 @@
         },
         {
             "id": "shortcircuit",
-            "text": "Turbo exit engaged. I'll be here in the garage, humming my victory jingle.",
+            "text": "Yes. Alright, well, I'll see you back in the garage, humming my victory jingle.",
             "options": [
                 {
                     "type": "finish",

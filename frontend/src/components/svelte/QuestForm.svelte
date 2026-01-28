@@ -343,6 +343,21 @@
             ? npcOptions
             : [...npcOptions, { value: npc, label: `Custom (${npc})` }];
 
+    function readFileAsDataUrl(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                if (typeof reader.result === 'string') {
+                    resolve(reader.result);
+                } else {
+                    reject(new Error('Unable to read file as data URL.'));
+                }
+            };
+            reader.onerror = () => reject(new Error('Unable to read file as data URL.'));
+            reader.readAsDataURL(file);
+        });
+    }
+
     async function handleImageUpload(event) {
         const file = event.target.files[0];
         if (file) {
@@ -355,6 +370,16 @@
                 await validateForm();
             } catch (error) {
                 console.error('Error preparing quest image:', error);
+                try {
+                    const fallbackDataUrl = await readFileAsDataUrl(file);
+                    previewUrl = fallbackDataUrl;
+                    processedImageUrl = fallbackDataUrl;
+                    image = file;
+                    await validateForm();
+                    return;
+                } catch (fallbackError) {
+                    console.error('Error creating quest image preview:', fallbackError);
+                }
                 previewUrl = null;
                 processedImageUrl = null;
                 image = null;

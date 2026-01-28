@@ -293,7 +293,7 @@ export async function waitForImagePreview(
             },
             { timeout: timeoutMs }
         )
-        .toMatch(/^data:image\/jpeg;base64,/);
+        .toMatch(/^data:image\/(jpeg|png);base64,/);
 
     const preview = (await resolvePreview()) ?? page.locator('.image-preview');
     await expect(preview.first()).toBeVisible({ timeout: timeoutMs });
