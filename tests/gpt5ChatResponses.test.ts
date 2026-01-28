@@ -30,6 +30,10 @@ vi.mock('../frontend/src/utils/dchatKnowledge.js', () => ({
   buildDchatKnowledge: buildDchatKnowledgeMock,
 }));
 
+vi.mock('../frontend/src/utils/docsRag.js', () => ({
+  searchDocsRag: vi.fn(async () => ({ excerptsText: '', sourcesMeta: { results: [] } })),
+}));
+
 const dchatPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 
 describe('gpt-5 chat responses integration', () => {
@@ -110,7 +114,8 @@ describe('gpt-5 chat responses integration', () => {
     if (!dchatPersona) {
       throw new Error('Expected to find the default dChat persona');
     }
-    expect(payload.input[0].content[0].text).toBe(dchatPersona.systemPrompt);
+    expect(payload.input[0].content[0].text).toContain(dchatPersona.systemPrompt);
+    expect(payload.input[0].content[0].text).toContain('Never invent');
     expect(payload.input[1].role).toBe('system');
     expect(payload.input[1].content[0].text).toContain('Quest facts');
     expect(payload.input[2]).toEqual({
