@@ -102,7 +102,7 @@ ID. You can also use the **Clear** button next to the token input field. See
 
 - **[dUSD](/docs/dusd)** is the in-game currency used for buying and selling.
 - **[dWatt](/docs/dwatt)** tracks energy generation used to power processes.
-- **[dCarbon](/docs/dCarbon)** tracks emissions produced by non-renewable power sources.
+- **[dCarbon](/docs/dcarbon)** tracks emissions produced by non-renewable power sources.
 
 ## How do energy sources affect the economy?
 
@@ -114,7 +114,7 @@ is the best long-term strategy. See [Electricity](/docs/electricity) for the ful
 
 Run the **dCarbon to dOffset** process to convert accumulated dCarbon into dOffset. The process
 consumes dCarbon and a small amount of dUSD, lowering your emissions footprint. See
-[dCarbon](/docs/dCarbon).
+[dCarbon](/docs/dcarbon).
 
 ## Where can I track achievements and titles?
 
