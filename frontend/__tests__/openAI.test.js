@@ -49,6 +49,13 @@ jest.mock('../src/utils/gameState/common.js', () => ({
     ready: Promise.resolve(),
 }));
 
+jest.mock('../src/utils/docsRag.js', () => ({
+    searchDocsRag: jest.fn(async () => ({
+        excerptsText:
+            'Docs grounding (gitSha: test):\n- [doc] Example — /docs/example#top\n  Example excerpt\n---',
+    })),
+}));
+
 const { buildChatPrompt, GPT5Chat } = require('../src/utils/openAI.js');
 
 describe('gpt-5 chat responses utility', () => {
@@ -104,7 +111,18 @@ describe('gpt-5 chat responses utility', () => {
                 ],
             })
         );
-        expect(call.input[2]).toEqual({
+        expect(call.input[2]).toEqual(
+            expect.objectContaining({
+                role: 'system',
+                content: [
+                    expect.objectContaining({
+                        type: 'input_text',
+                        text: expect.stringContaining('Docs grounding'),
+                    }),
+                ],
+            })
+        );
+        expect(call.input[3]).toEqual({
             role: 'user',
             content: [
                 {
