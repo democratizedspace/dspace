@@ -2,32 +2,39 @@ import { ACHIEVEMENTS, evaluateAchievements } from './achievements.js';
 
 const definitions = [
     {
-        id: 'titles:rookie-explorer',
-        name: 'Rookie Explorer',
-        description: 'Awarded for completing your first quest.',
+        id: 'titles:quest-vanguard',
+        name: 'Quest Vanguard',
+        description: 'Reserved for commanders who finish thirty quests.',
         category: 'Quest mastery',
-        achievementId: 'quests:first',
+        achievementId: 'quests:thirty',
     },
     {
-        id: 'titles:mission-specialist',
-        name: 'Mission Specialist',
-        description: 'Granted once you finish ten quests across any storyline.',
-        category: 'Quest mastery',
-        achievementId: 'quests:ten',
-    },
-    {
-        id: 'titles:grid-investor',
-        name: 'Grid Investor',
-        description: 'Recognizes players who store at least 500 dWatt in their inventory.',
+        id: 'titles:grid-magnate',
+        name: 'Grid Magnate',
+        description: 'Honors players who build a 5,000 dWatt reserve.',
         category: 'Energy leadership',
-        achievementId: 'energy:stored',
+        achievementId: 'energy:stored-5000',
     },
     {
-        id: 'titles:wind-pioneer',
-        name: 'Wind Pioneer',
-        description: 'Celebrates the installation of a 500 W wind turbine at your base.',
+        id: 'titles:solar-architect',
+        name: 'Solar Architect',
+        description: 'Awarded for assembling a full 1 kWh solar setup.',
         category: 'Energy leadership',
-        achievementId: 'equipment:wind-turbine',
+        achievementId: 'energy:solar-array',
+    },
+    {
+        id: 'titles:guidance-officer',
+        name: 'Guidance Officer',
+        description: 'Marks the completion of a guided flight stack.',
+        category: 'Rocketry elite',
+        achievementId: 'rocketry:guided',
+    },
+    {
+        id: 'titles:stellar-cartographer',
+        name: 'Stellar Cartographer',
+        description: 'Recognizes explorers who capture a stacked star trail photo.',
+        category: 'Exploration elite',
+        achievementId: 'exploration:star-trails',
     },
 ];
 
