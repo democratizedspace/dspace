@@ -7,12 +7,16 @@
     import { formatRelative, format } from 'date-fns';
     import { fade } from 'svelte/transition';
     import { copyToClipboard } from '../../../utils/copyToClipboard.js';
+    import { sortSources } from '../../../utils/contextSources.js';
 
     export let messageMarkdown;
     export let className;
     export let timestamp;
     export let avatarUrl = null;
     export let avatarAlt = 'NPC portrait';
+    export let contextSources = [];
+
+    $: sortedSources = sortSources(contextSources || []);
 
     let messageHtml;
     const md = new Remarkable({
@@ -101,6 +105,30 @@
             {formatRelative(new Date(timestamp), new Date())}
         </div>
         {@html messageHtml}
+        {#if className === 'assistant' && sortedSources.length}
+            <details class="message-sources" data-testid="sources-used">
+                <summary>Sources used</summary>
+                <ul>
+                    {#each sortedSources as source (source.id)}
+                        <li
+                            class="source-item"
+                            data-testid="source-item"
+                            data-source-type={source.type}
+                            data-source-url={source.url}
+                        >
+                            <span class="source-type">{source.type}</span>
+                            {#if source.url}
+                                <a href={source.url} class="source-link">
+                                    {source.label}
+                                </a>
+                            {:else}
+                                <span class="source-label">{source.label}</span>
+                            {/if}
+                        </li>
+                    {/each}
+                </ul>
+            </details>
+        {/if}
         {#if toastVisible}
             <div
                 class="toast"
@@ -165,6 +193,57 @@
     .timestamp {
         font-size: 12px;
         margin-bottom: 5px;
+    }
+
+    .message-sources {
+        margin-top: 0.75rem;
+        font-size: 0.85rem;
+        color: #111827;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .message-sources summary {
+        cursor: pointer;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .message-sources ul {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem 0 0;
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .source-item {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .source-type {
+        text-transform: uppercase;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        padding: 0.15rem 0.4rem;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.1);
+        color: #0f172a;
+    }
+
+    .source-link,
+    .source-label {
+        font-size: 0.85rem;
+        color: #1f2937;
+    }
+
+    .source-link {
+        text-decoration: underline;
     }
 
     .copy-button {

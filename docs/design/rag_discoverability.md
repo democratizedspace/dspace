@@ -74,6 +74,8 @@ without introducing heavyweight infrastructure.
 - Stage 3 adds a non-breaking `GPT5ChatV2` that returns `{ text, contextSources }`, where
   `contextSources` is a deterministic list of `Source` objects
   (`type`, `id`, `label`, optional `url`/`detail`) for docs and knowledge-pack grounding.
+- Stage 4 wires `/chat` to `GPT5ChatV2`, storing `contextSources` on assistant messages so the UI
+  can render a collapsed “Sources used” disclosure and QA can verify grounding quickly.
 - token.place chat builds a simple system + user message list and returns a string reply.
 
 ### Error handling + uncertainty

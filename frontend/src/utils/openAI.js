@@ -249,12 +249,13 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const docsRagPayload = latestUserMessage
         ? await searchDocsRag(latestUserMessage.content)
         : { excerptsText: '', sources: [] };
-    const docsRagMessage = docsRagPayload.excerptsText
-        ? {
-              role: 'system',
-              content: docsRagPayload.excerptsText,
-          }
-        : null;
+    const docsRagMessage =
+        docsRagPayload.excerptsText && !knowledgeMessage
+            ? {
+                  role: 'system',
+                  content: docsRagPayload.excerptsText,
+              }
+            : null;
 
     if (knowledgeMessage && docsRagPayload.excerptsText) {
         knowledgeMessage.content = `${knowledgeMessage.content}\n\n${docsRagPayload.excerptsText}`;

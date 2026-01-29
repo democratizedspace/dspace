@@ -53,6 +53,7 @@ jest.mock('../src/utils/docsRag.js', () => ({
     searchDocsRag: jest.fn(async () => ({ excerptsText: '', sourcesMeta: { results: [] } })),
 }));
 
+const { searchDocsRag } = require('../src/utils/docsRag.js');
 const { buildChatPrompt, GPT5Chat } = require('../src/utils/openAI.js');
 
 describe('gpt-5 chat responses utility', () => {
@@ -129,5 +130,37 @@ describe('gpt-5 chat responses utility', () => {
         const ragMessages = debugMessages.filter((message) => message.kind === 'rag');
         expect(ragMessages).toHaveLength(1);
         expect(ragMessages[0].content).toContain('DSPACE knowledge base:');
+    });
+
+    test('buildChatPrompt does not duplicate docs excerpts when knowledge exists', async () => {
+        searchDocsRag.mockResolvedValueOnce({
+            excerptsText: [
+                '---',
+                'Docs grounding (gitSha: abc123):',
+                '- [route] Routes — /docs/routes#top',
+                '---',
+            ].join('\n'),
+            sources: [
+                {
+                    type: 'route',
+                    id: 'route:/docs/routes#top',
+                    label: 'Routes',
+                    url: '/docs/routes#top',
+                },
+            ],
+            sourcesMeta: { results: [] },
+        });
+
+        const { debugMessages } = await buildChatPrompt([
+            { role: 'user', content: 'What are the routes?' },
+        ]);
+        const combinedText = debugMessages.map((message) => message.content).join('\n');
+        const occurrences = combinedText.match(/Docs grounding/gi) ?? [];
+        expect(occurrences).toHaveLength(1);
+        expect(
+            debugMessages.filter(
+                (message) => message.kind === 'rag' && message.content.includes('Docs grounding')
+            )
+        ).toHaveLength(1);
     });
 });
