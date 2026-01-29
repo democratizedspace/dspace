@@ -96,6 +96,7 @@ const TEST_GROUPS = [
             'chat-persona-switching.spec.ts',
             'chat-rag-context.spec.ts',
             'chat-message-flow.spec.ts',
+            'chat-sources-debug.spec.ts',
             'token-place-chat-banners.spec.ts',
             'dark-mode-toggle.spec.ts',
             'local-storage-helpers.spec.ts',

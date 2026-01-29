@@ -7,14 +7,17 @@
     import { formatRelative, format } from 'date-fns';
     import { fade } from 'svelte/transition';
     import { copyToClipboard } from '../../../utils/copyToClipboard.js';
+    import { sortSources } from '../../../utils/contextSources.js';
 
     export let messageMarkdown;
     export let className;
     export let timestamp;
     export let avatarUrl = null;
     export let avatarAlt = 'NPC portrait';
+    export let contextSources = [];
 
     let messageHtml;
+    let sortedSources = [];
     const md = new Remarkable({
         html: true,
         breaks: true,
@@ -42,6 +45,8 @@
         let rawHtml = md.render(messageMarkdown);
         messageHtml = DOMPurify.sanitize(rawHtml);
     }
+
+    $: sortedSources = Array.isArray(contextSources) ? sortSources(contextSources) : [];
 
     let toastVisible = false;
 
@@ -101,6 +106,24 @@
             {formatRelative(new Date(timestamp), new Date())}
         </div>
         {@html messageHtml}
+        {#if className === 'assistant' && sortedSources.length}
+            <details class="sources" data-testid="assistant-sources">
+                <summary>Sources used</summary>
+                <ul>
+                    {#each sortedSources as source (`${source.type}-${source.id}-${source.url || ''}`)}
+                        <li>
+                            <span class={`source-type source-type--${source.type}`}>
+                                {source.type}
+                            </span>
+                            <span class="source-label">{source.label}</span>
+                            {#if source.url}
+                                <a class="source-link" href={source.url}>{source.url}</a>
+                            {/if}
+                        </li>
+                    {/each}
+                </ul>
+            </details>
+        {/if}
         {#if toastVisible}
             <div
                 class="toast"
@@ -210,5 +233,55 @@
     .avatar-spacer {
         width: 32px;
         height: 32px;
+    }
+
+    .sources {
+        margin-top: 0.75rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        padding-top: 0.5rem;
+    }
+
+    .sources summary {
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #111827;
+    }
+
+    .sources ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0.5rem 0 0;
+        display: grid;
+        gap: 0.4rem;
+    }
+
+    .sources li {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+    }
+
+    .source-type {
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.65rem;
+        letter-spacing: 0.05em;
+        padding: 0.15rem 0.35rem;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.1);
+        color: #111827;
+    }
+
+    .source-label {
+        font-weight: 600;
+    }
+
+    .source-link {
+        color: #1d4ed8;
+        text-decoration: underline;
+        word-break: break-all;
     }
 </style>

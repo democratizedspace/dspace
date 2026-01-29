@@ -34,9 +34,11 @@ import {
     defaultOpenAIErrorMessage,
     describeOpenAIError,
     getOpenAIErrorSummary,
+    buildChatPrompt,
     GPT5Chat,
     GPT5ChatV2,
 } from '../src/utils/openAI.js';
+import { buildDchatKnowledgePack } from '../src/utils/dchatKnowledge.js';
 import { searchDocsRag } from '../src/utils/docsRag.js';
 
 class MockResponseClient {
@@ -455,6 +457,36 @@ describe('GPT5ChatV2', () => {
                 (entry) => entry.type === 'changelog' && entry.url?.startsWith('/changelog#')
             )
         ).toBe(true);
+    });
+});
+
+describe('buildChatPrompt', () => {
+    afterEach(() => {
+        vi.mocked(searchDocsRag).mockClear();
+        vi.mocked(buildDchatKnowledgePack).mockClear();
+    });
+
+    it('includes docs excerpts once when a knowledge summary exists', async () => {
+        vi.mocked(buildDchatKnowledgePack).mockReturnValueOnce({
+            summary: 'knowledge summary',
+            sources: [],
+        });
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText:
+                '---\nDocs grounding (gitSha: test):\n- [route] Routes — /docs/routes#top\n  excerpt\n---',
+            sources: [],
+            sourcesMeta: { results: [] },
+        });
+
+        const { combinedMessages, debugMessages } = await buildChatPrompt([
+            { role: 'user', content: 'What are the current routes?' },
+        ]);
+
+        const combinedText = combinedMessages.map((message) => message.content).join('\n');
+        const debugText = debugMessages.map((message) => message.content).join('\n');
+
+        expect(combinedText.match(/Docs grounding/g)).toHaveLength(1);
+        expect(debugText.match(/Docs grounding/g)).toHaveLength(1);
     });
 });
 

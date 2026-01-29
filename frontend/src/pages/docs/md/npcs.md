@@ -14,6 +14,10 @@ settings. The chat payload now also includes your live quest progress,
 active process timers, and current inventory so answers stay grounded.
 Ask open-ended questions about quests, items, or processes and the
 personas will answer with that live context.
+Assistant replies now include a collapsed “Sources used” panel listing the
+docs, routes, and game data that grounded the response. Enable “Show chat
+prompt debug on /chat” in Settings to view the full prompt payload with RAG
+blocks highlighted.
 
 Guilds (including the Metaguild) are planned for a future release, so the
 bios below describe intended roles rather than live multiplayer features.
