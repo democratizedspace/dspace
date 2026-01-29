@@ -189,4 +189,41 @@ describe('QuestForm image uploads', () => {
             expect(preview).toHaveAttribute('src', sampleDataUrl);
         });
     });
+
+    it('shows an error if both downsampling and FileReader previews fail', async () => {
+        downsampleAndCompressToJpeg.mockRejectedValueOnce(new Error('Downsample failed'));
+
+        global.FileReader = class FileReader {
+            constructor() {
+                this.result = null;
+                this.onload = null;
+                this.onerror = null;
+            }
+            readAsDataURL() {
+                this.result = new ArrayBuffer(8);
+                if (this.onload) {
+                    this.onload();
+                }
+            }
+        };
+
+        const { getByLabelText, findByText } = render(QuestForm, {
+            target: container,
+            props: { existingQuests: [] },
+        });
+
+        await waitFor(() => expect(listMock).toHaveBeenCalled());
+
+        const fileInput = getByLabelText(/upload an image\*/i);
+        await act(async () => {
+            const file = new File(['content'], 'quest.png', { type: 'image/png' });
+            fireEvent.change(fileInput, {
+                target: { files: [file] },
+            });
+        });
+
+        const errorMessage = await findByText(/image processing failed/i);
+        expect(errorMessage).toBeInTheDocument();
+        expect(container.querySelector('.image-preview')).not.toBeInTheDocument();
+    });
 });
