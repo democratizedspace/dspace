@@ -325,13 +325,16 @@ export function buildDchatKnowledgePack(gameState = {}) {
         }
         knowledgeSections.push(`Achievements: ${sections.join(' | ')}`);
         stateDetails.push('achievements');
+        const unlockedSlice = unlocked.slice(0, unlockedEntries.length);
+        const remainingSlots = Math.max(0, MAX_ACHIEVEMENT_ENTRIES - unlockedSlice.length);
+        const inProgressSlice = inProgress.slice(0, remainingSlots);
         sources.push(
-            ...unlocked.map((achievement) => ({
+            ...unlockedSlice.map((achievement) => ({
                 type: 'achievement',
                 id: achievement.id,
                 label: achievement.title,
             })),
-            ...inProgress.map((achievement) => ({
+            ...inProgressSlice.map((achievement) => ({
                 type: 'achievement',
                 id: achievement.id,
                 label: achievement.title,
