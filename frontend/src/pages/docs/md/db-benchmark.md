@@ -3,14 +3,16 @@ title: 'Database Benchmark'
 slug: 'db-benchmark'
 ---
 
-DSPACE includes a utility to measure IndexedDB performance for custom content.
+DSPACE includes a Node-based utility to measure custom content IndexedDB performance. It uses
+`fake-indexeddb` so you can run it without a browser.
+
 Run the benchmark with:
 
 ```bash
 npm run db:benchmark
 ```
 
-Pass `--count <n>` to adjust the number of records:
+Pass `--count <n>` to adjust the number of records per entity (defaults to 50):
 
 ```bash
 npm run db:benchmark -- --count 100

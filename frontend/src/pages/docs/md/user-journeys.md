@@ -5,11 +5,19 @@ slug: 'user-journeys'
 
 # User Journeys
 
-This document tracks major journeys in DSPACE and whether a Playwright test covers each path.
-Tests under `frontend/e2e/backlog` are placeholders for journeys without automation; when a
-journey gains coverage, move its spec into `frontend/e2e` with `git mv` to preserve history.
-Entries are sorted alphabetically by journey name, and new journeys should include a placeholder
-spec in `frontend/e2e/backlog` until coverage exists.
+This document highlights a curated set of player journeys and the Playwright tests that cover
+those paths. It is **not** an exhaustive inventory of every E2E spec.
+
+**Source of truth**
+
+- All Playwright specs live in `frontend/e2e`.
+- `frontend/scripts/run-test-groups.mjs` lists every spec included in the `npm test` workflow.
+- `frontend/e2e/test-coverage.spec.ts` fails if a spec is missing from the test groups.
+
+When you add a new journey, create a `.spec.ts` file in `frontend/e2e` and wire it into
+`frontend/scripts/run-test-groups.mjs` so it runs in CI.
+
+## Curated coverage map
 
 | Journey                    | Playwright coverage | Test file                                         |
 | -------------------------- | ------------------- | ------------------------------------------------- |
@@ -43,7 +51,7 @@ spec in `frontend/e2e/backlog` until coverage exists.
 | Mobile quest form          | Yes                 | `frontend/e2e/mobile-quest-form.spec.ts`          |
 | Page structure             | Yes                 | `frontend/e2e/page-structure.spec.ts`             |
 | Process creation           | Yes                 | `frontend/e2e/process-creation.spec.ts`           |
-| Process preview            | Yes                 | `frontend/e2e/manage-processes.spec.ts`           |
+| Process preview            | Yes                 | `frontend/e2e/process-preview.spec.ts`            |
 | Profile avatar selection   | Yes                 | `frontend/e2e/profile-avatar-selection.spec.ts`   |
 | Profile page loads         | Yes                 | `frontend/e2e/profile-page.spec.ts`               |
 | Quest chat                 | Yes                 | `frontend/e2e/test-quest-chat.spec.ts`            |

@@ -5,15 +5,15 @@ slug: 'self-hosting'
 
 # Self-hosting DSPACE
 
-Run your own DSPACE instance on your hardware. Docker Compose builds the site and
-serves it locally.
+Run your own DSPACE instance on your hardware. The repository includes a production-ready Docker
+Compose file at the repo root.
 
 ## Requirements
 
 - Git
 - Docker and Docker Compose
 
-## Quick start
+## Quick start (production container)
 
 1. Clone this repository and enter the directory:
     ```bash
@@ -22,21 +22,20 @@ serves it locally.
     ```
 2. Build and launch the production container:
     ```bash
-    docker compose up -d
+    docker compose up -d --build
     ```
-    The site will be available at `http://localhost:3002`.
+    The site will be available at `http://localhost:8080`.
 3. Stop the container at any time with:
     ```bash
     docker compose down
     ```
 
-## Helper script
+## Helper script (optional)
 
-The repository includes a convenience script that proxies common Docker
-commands. Use it from the repository root:
+The repository includes a convenience script for Docker workflows:
 
 ```bash
-./run-dspace.sh start   # start the app
+./run-dspace.sh start   # start the app via Docker Compose
 ./run-dspace.sh stop    # stop containers
 ```
 
