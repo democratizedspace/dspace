@@ -7,12 +7,14 @@
     import { formatRelative, format } from 'date-fns';
     import { fade } from 'svelte/transition';
     import { copyToClipboard } from '../../../utils/copyToClipboard.js';
+    import { sortSources } from '../../../utils/contextSources.js';
 
     export let messageMarkdown;
     export let className;
     export let timestamp;
     export let avatarUrl = null;
     export let avatarAlt = 'NPC portrait';
+    export let contextSources = [];
 
     let messageHtml;
     const md = new Remarkable({
@@ -37,6 +39,8 @@
             hljs.highlightAuto(code).value
         }</code><button class="copy-button" type="button" aria-label="Copy code to clipboard">Copy</button></pre></div>`;
     };
+
+    $: sortedSources = Array.isArray(contextSources) ? sortSources(contextSources) : [];
 
     $: {
         let rawHtml = md.render(messageMarkdown);
@@ -101,6 +105,28 @@
             {formatRelative(new Date(timestamp), new Date())}
         </div>
         {@html messageHtml}
+        {#if className === 'assistant' && sortedSources.length}
+            <details class="sources-used" data-testid="sources-used">
+                <summary>Sources used</summary>
+                <ul>
+                    {#each sortedSources as source (source.id)}
+                        <li>
+                            <span class="source-type">{source.type}</span>
+                            {#if source.url}
+                                <a class="source-link" href={source.url}>
+                                    {source.label}
+                                </a>
+                            {:else}
+                                <span class="source-label">{source.label}</span>
+                            {/if}
+                            {#if source.detail}
+                                <span class="source-detail">{source.detail}</span>
+                            {/if}
+                        </li>
+                    {/each}
+                </ul>
+            </details>
+        {/if}
         {#if toastVisible}
             <div
                 class="toast"
@@ -165,6 +191,62 @@
     .timestamp {
         font-size: 12px;
         margin-bottom: 5px;
+    }
+
+    .sources-used {
+        margin-top: 0.75rem;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .sources-used summary {
+        cursor: pointer;
+        font-weight: 600;
+        list-style: none;
+    }
+
+    .sources-used summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .sources-used ul {
+        margin: 0.5rem 0 0;
+        padding-left: 0;
+        list-style: none;
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .sources-used li {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        align-items: center;
+    }
+
+    .source-type {
+        text-transform: uppercase;
+        font-size: 0.65rem;
+        letter-spacing: 0.08em;
+        background: rgba(15, 23, 42, 0.2);
+        color: #111827;
+        padding: 0.15rem 0.4rem;
+        border-radius: 999px;
+        font-weight: 600;
+    }
+
+    .source-link,
+    .source-label {
+        color: inherit;
+        font-weight: 500;
+        text-decoration: underline;
+    }
+
+    .source-detail {
+        color: rgba(15, 23, 42, 0.7);
+        font-size: 0.75rem;
     }
 
     .copy-button {

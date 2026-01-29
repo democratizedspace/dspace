@@ -23,6 +23,9 @@ test.describe('chat RAG context', () => {
                             elapsedBeforePause: 0,
                         },
                     },
+                    settings: {
+                        showChatDebugPayload: true,
+                    },
                 };
 
                 localStorage.setItem('gameState', JSON.stringify(gameState));
@@ -91,5 +94,35 @@ test.describe('chat RAG context', () => {
         expect(messageTexts).toContain('welcome/howtodoquests');
         expect(messageTexts).toContain('Processes in flight');
         expect(messageTexts).toContain('Buy 1 kWh of electricity from a wall outlet');
+    });
+
+    test('renders sources used and highlights RAG content in debug payload', async ({ page }) => {
+        await page.goto('/chat');
+
+        const chatPanel = page.locator('[data-testid="chat-panel"][data-provider="openai"]');
+        await expect(chatPanel).toBeVisible();
+        await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
+
+        await chatPanel.getByRole('textbox').fill('What are the current game routes?');
+        await chatPanel.getByRole('button', { name: 'Send' }).click();
+
+        const assistantMessage = chatPanel.locator('.message-bubble.assistant').first();
+        await expect(assistantMessage).toContainText('stubbed reply');
+
+        const sourcesDetails = assistantMessage.locator('[data-testid="sources-used"]');
+        await expect(sourcesDetails).toBeVisible();
+        await sourcesDetails.getByText('Sources used').click();
+
+        const routeSource = sourcesDetails.locator(
+            '.source-type:has-text("route") + .source-link'
+        );
+        await expect(routeSource).toHaveAttribute('href', /\\/docs\\/routes/);
+
+        const debugPanel = page.locator('[data-testid="chat-debug-panel"]');
+        await expect(debugPanel).toBeVisible();
+        await debugPanel.getByRole('button', { name: 'Show prompt' }).click();
+
+        const ragMessage = debugPanel.locator('.debug-message.rag');
+        await expect(ragMessage.first()).toBeVisible();
     });
 });

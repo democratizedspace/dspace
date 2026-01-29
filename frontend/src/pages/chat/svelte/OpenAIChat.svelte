@@ -5,7 +5,7 @@
         describeOpenAIError,
         buildChatPrompt,
         getOpenAIErrorSummary,
-        GPT5Chat,
+        GPT5ChatV2,
     } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
     import {
@@ -105,14 +105,16 @@
         }
 
         try {
-            const aiResponse = await GPT5Chat(historyForApi, {
+            const aiResponse = await GPT5ChatV2(historyForApi, {
                 persona: currentPersona,
                 promptPayload: debugPayload,
             });
+            const responseText = aiResponse?.text ?? '';
             const aiMessage = {
                 role: 'assistant',
-                content: aiResponse,
-                tokens: countTokens(aiResponse),
+                content: responseText,
+                tokens: countTokens(responseText),
+                contextSources: aiResponse?.contextSources ?? [],
                 avatarUrl: getPersonaAvatar(currentPersona),
                 avatarAlt: getPersonaAlt(currentPersona),
                 timestamp: Date.now(),
@@ -235,6 +237,7 @@
                     timestamp={message.timestamp}
                     avatarUrl={message.avatarUrl}
                     avatarAlt={message.avatarAlt}
+                    contextSources={message.contextSources}
                 />
             {/each}
         {/if}
@@ -265,6 +268,7 @@
                                 class="debug-message"
                                 class:rag={debugMessage.kind === 'rag'}
                                 class:main={debugMessage.kind === 'main'}
+                                data-kind={debugMessage.kind}
                             >
                                 <div class="debug-meta">
                                     <span class="debug-role">{debugMessage.role}</span>
