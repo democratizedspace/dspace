@@ -9,14 +9,16 @@ import QuestForm from '../svelte/QuestForm.svelte';
 import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
 
 const questsAddMock = vi.fn();
+const questsUpdateMock = vi.fn();
+const questsGetMock = vi.fn();
 const listMock = vi.fn();
 
 vi.mock('../../utils/customcontent.js', () => ({
     db: {
         quests: {
             add: questsAddMock,
-            update: vi.fn(),
-            get: vi.fn(),
+            update: questsUpdateMock,
+            get: questsGetMock,
             delete: vi.fn(),
         },
         list: listMock,
@@ -59,7 +61,10 @@ describe('QuestForm image uploads', () => {
     beforeEach(() => {
         container = setupDom();
         questsAddMock.mockReset();
+        questsUpdateMock.mockReset();
+        questsGetMock.mockReset();
         questsAddMock.mockResolvedValue('quest-123');
+        questsUpdateMock.mockResolvedValue(undefined);
         listMock.mockReset();
         listMock.mockResolvedValue([]);
         global.fetch = vi.fn(() =>
@@ -262,5 +267,118 @@ describe('QuestForm image uploads', () => {
         const errorMessage = await findByText(/image processing failed/i);
         expect(errorMessage).toBeInTheDocument();
         expect(container.querySelector('.image-preview')).not.toBeInTheDocument();
+    });
+
+    it('uses the existing preview URL when editing without a new file', async () => {
+        const existingQuest = {
+            id: 'quest-123',
+            title: 'Existing Quest',
+            description: 'A fully valid quest description.',
+            npc: '/assets/npc/dChat.jpg',
+            image: 'https://example.com/quest.png',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Ready to go?',
+                    options: [{ text: 'Finish', type: 'finish' }],
+                },
+            ],
+        };
+
+        questsGetMock.mockResolvedValue(existingQuest);
+
+        const { getByRole } = render(QuestForm, {
+            target: container,
+            props: { isEdit: true, questId: 'quest-123', existingQuests: [] },
+        });
+
+        await waitFor(() => expect(listMock).toHaveBeenCalled());
+        await waitFor(() => expect(questsGetMock).toHaveBeenCalledWith('quest-123'));
+
+        await act(async () => {
+            fireEvent.click(getByRole('button', { name: /update quest/i }));
+        });
+
+        await waitFor(() => expect(questsUpdateMock).toHaveBeenCalledTimes(1));
+
+        const savedQuest = questsUpdateMock.mock.calls[0][1];
+        expect(savedQuest.image).toBe(existingQuest.image);
+    });
+
+    it('keeps the preview URL when upload compression fails on submit', async () => {
+        downsampleAndCompressToJpeg.mockResolvedValueOnce({
+            dataUrl: 'https://example.com/preview.jpg',
+            bytes: 12345,
+            width: 512,
+            height: 512,
+            qualityUsed: 0.8,
+        });
+        downsampleAndCompressToJpeg.mockRejectedValueOnce(new Error('Upload failed'));
+
+        const { getByLabelText, getByRole, getByText } = render(QuestForm, {
+            target: container,
+            props: { existingQuests: [] },
+        });
+
+        await waitFor(() => expect(listMock).toHaveBeenCalled());
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/title\*/i), {
+                target: { value: 'Quest With Remote Preview' },
+            });
+            fireEvent.input(getByLabelText(/description\*/i), {
+                target: { value: 'This quest confirms preview fallback on submit.' },
+            });
+            fireEvent.input(getByLabelText(/npc identifier\*/i), {
+                target: { value: '/assets/npc/dChat.jpg' },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/new node id/i), {
+                target: { value: 'start' },
+            });
+            fireEvent.input(getByLabelText(/node text/i), {
+                target: { value: 'Ready to finish?' },
+            });
+            fireEvent.click(getByText(/add dialogue node/i));
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/new option text/i), {
+                target: { value: 'Finish quest' },
+            });
+            fireEvent.change(getByLabelText(/^type$/i), {
+                target: { value: 'finish' },
+            });
+            fireEvent.click(getByText(/add option/i));
+            fireEvent.change(getByLabelText(/start node/i), {
+                target: { value: 'start' },
+            });
+        });
+
+        const fileInput = getByLabelText(/upload an image\*/i);
+        await act(async () => {
+            const file = new File(['content'], 'quest.png', { type: 'image/png' });
+            fireEvent.change(fileInput, {
+                target: { files: [file] },
+            });
+        });
+
+        await waitFor(() => {
+            const preview = container.querySelector('.image-preview');
+            expect(preview).toBeInTheDocument();
+        });
+
+        await act(async () => {
+            fireEvent.click(getByRole('button', { name: /create quest/i }));
+        });
+
+        await waitFor(() => expect(questsAddMock).toHaveBeenCalledTimes(1));
+
+        const savedQuest = questsAddMock.mock.calls[0][0];
+        expect(savedQuest.image).toBe('https://example.com/preview.jpg');
+        expect(downsampleAndCompressToJpeg).toHaveBeenCalledTimes(2);
     });
 });
