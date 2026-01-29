@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { searchDocsRag } from '../src/utils/docsRag.js';
+import { searchDocsRag, searchDocsRagWithSources } from '../src/utils/docsRag.js';
 
 describe('docs RAG search', () => {
     it('returns docs excerpts with canonical /docs URLs', async () => {
@@ -13,21 +13,30 @@ describe('docs RAG search', () => {
     });
 
     it('retrieves routes index chunk', async () => {
-        const { excerptsText } = await searchDocsRag('routes', {
+        const { excerptsText, sources } = await searchDocsRagWithSources('routes', {
             maxResults: 4,
             maxChars: 2000,
         });
 
         expect(excerptsText).toContain('/docs/routes#top');
+        expect(
+            sources.some(
+                (source) => source.type === 'route' && source.url === '/docs/routes#top'
+            )
+        ).toBe(true);
     });
 
     it('retrieves v3 changelog references', async () => {
-        const { excerptsText, sourcesMeta } = await searchDocsRag('token.place', {
-            maxResults: 6,
-            maxChars: 3000,
-        });
+        const { excerptsText, sourcesMeta, sources } = await searchDocsRagWithSources(
+            'token.place',
+            {
+                maxResults: 6,
+                maxChars: 3000,
+            }
+        );
 
         expect(excerptsText).toMatch(/\/changelog#[^\s]+/);
         expect(sourcesMeta.results.some((entry) => entry.kind === 'changelog')).toBe(true);
+        expect(sources.some((source) => source.type === 'changelog')).toBe(true);
     });
 });

@@ -8,6 +8,7 @@ const MAX_QUESTS = 25;
 const MAX_QUEST_STATUS_ENTRIES = 12;
 const MAX_PROCESS_STATUS_ENTRIES = 8;
 const MAX_ACHIEVEMENT_ENTRIES = 6;
+const MAX_INVENTORY_SOURCES = 20;
 const PRIORITY_QUEST_IDS = [
     'welcome/howtodoquests',
     'welcome/intro-inventory',
@@ -90,6 +91,17 @@ function formatInventory(inventory = {}) {
         .sort();
 }
 
+function getInventoryItemIds(inventory = {}) {
+    if (!inventory || typeof inventory !== 'object') {
+        return [];
+    }
+
+    return Object.entries(inventory)
+        .filter(([, count]) => typeof count === 'number' && count > 0)
+        .map(([id]) => id)
+        .sort();
+}
+
 function summarizeItems() {
     return items
         .slice()
@@ -110,10 +122,14 @@ function summarizeProcesses() {
 }
 
 function summarizeAchievements(gameState = {}) {
+    return getAchievementSummaryData(gameState).sections;
+}
+
+function getAchievementSummaryData(gameState = {}) {
     const achievements = evaluateAchievements(gameState);
 
     if (!Array.isArray(achievements) || achievements.length === 0) {
-        return [];
+        return { sections: [], sources: [], hasProgress: false };
     }
 
     const unlocked = achievements.filter((achievement) => achievement.unlocked);
@@ -146,7 +162,29 @@ function summarizeAchievements(gameState = {}) {
         sections.push('No achievements unlocked yet.');
     }
 
-    return sections;
+    const sources = unlocked
+        .slice(0, MAX_ACHIEVEMENT_ENTRIES)
+        .map((achievement) => ({
+            type: 'achievement',
+            id: achievement.id,
+            label: achievement.title,
+        }))
+        .concat(
+            inProgress
+                .slice(0, remainingSlots)
+                .map((achievement) => ({
+                    type: 'achievement',
+                    id: achievement.id,
+                    label: achievement.title,
+                    detail: achievement.progress?.displayValue,
+                }))
+        );
+
+    return {
+        sections,
+        sources,
+        hasProgress: unlocked.length > 0 || inProgress.length > 0,
+    };
 }
 
 function summarizeQuests() {
@@ -228,22 +266,114 @@ function summarizeProcessProgress(gameState = {}) {
         .sort((a, b) => a.localeCompare(b));
 }
 
-export function buildDchatKnowledge(gameState = {}) {
+function buildQuestUrl(questId) {
+    if (typeof questId !== 'string') {
+        return undefined;
+    }
+
+    const [pathId, ...rest] = questId.split('/');
+    if (!pathId || rest.length === 0) {
+        return undefined;
+    }
+
+    return `/quests/${pathId}/${rest.join('/')}`;
+}
+
+function sortSources(sources) {
+    return sources.sort((a, b) => {
+        const typeCompare = a.type.localeCompare(b.type);
+        if (typeCompare !== 0) {
+            return typeCompare;
+        }
+        const labelCompare = (a.label || '').localeCompare(b.label || '');
+        if (labelCompare !== 0) {
+            return labelCompare;
+        }
+        return (a.id || '').localeCompare(b.id || '');
+    });
+}
+
+export function buildDchatKnowledgePack(gameState = {}) {
     const knowledgeSections = [];
+    const sources = [];
 
     const inventorySummary = formatInventory(gameState.inventory);
     if (inventorySummary.length > 0) {
         knowledgeSections.push(`Inventory highlights: ${inventorySummary.join('; ')}`);
     }
 
-    const itemSummary = summarizeItems();
-    if (itemSummary.length > 0) {
-        knowledgeSections.push(`Items: ${itemSummary.join(' | ')}`);
+    const inventoryItemIds = getInventoryItemIds(gameState.inventory);
+    if (inventoryItemIds.length > 0) {
+        if (inventoryItemIds.length > MAX_INVENTORY_SOURCES) {
+            sources.push({
+                type: 'item',
+                id: 'inventory-highlights',
+                label: 'Inventory highlights',
+                detail: inventoryItemIds.slice(0, MAX_INVENTORY_SOURCES).join(', '),
+            });
+        } else {
+            inventoryItemIds.forEach((itemId) => {
+                const item = items.find((entry) => entry.id === itemId);
+                sources.push({
+                    type: 'item',
+                    id: itemId,
+                    label: item?.name || itemId,
+                    url: `/inventory/item/${itemId}`,
+                });
+            });
+        }
     }
 
-    const questSummary = summarizeQuests();
-    if (questSummary.length > 0) {
-        knowledgeSections.push(`Quests: ${questSummary.join(' || ')}`);
+    const itemEntries = items
+        .slice()
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .slice(0, MAX_ITEMS);
+    if (itemEntries.length > 0) {
+        const itemSummary = itemEntries.map(
+            (item) => `${item.name}: ${truncate(item.description || '')}`
+        );
+        knowledgeSections.push(
+            `Items: ${itemSummary.join(' | ')}`
+        );
+        itemEntries.forEach((item) => {
+            sources.push({
+                type: 'item',
+                id: item.id,
+                label: item.name,
+                url: `/inventory/item/${item.id}`,
+                detail: item.description ? truncate(item.description || '') : undefined,
+            });
+        });
+    }
+
+    const questEntries = prioritizeQuests(quests).slice(0, MAX_QUESTS);
+    if (questEntries.length > 0) {
+        knowledgeSections.push(
+            `Quests: ${questEntries
+                .map((quest) => {
+                    const parts = [`${quest.title} [${quest.id}]`];
+                    if (quest.description) {
+                        parts.push(quest.description);
+                    }
+                    if (quest.requiresQuests.length > 0) {
+                        parts.push(`Prereqs: ${quest.requiresQuests.join(', ')}`);
+                    }
+                    if (quest.rewards.length > 0) {
+                        parts.push(`Rewards: ${quest.rewards.join(', ')}`);
+                    }
+                    return parts.join(' — ');
+                })
+                .join(' || ')}`
+        );
+        questEntries.forEach((quest) => {
+            sources.push({
+                type: 'quest',
+                id: quest.id,
+                label: quest.title,
+                url: buildQuestUrl(quest.id),
+                detail: quest.description || undefined,
+            });
+        });
     }
 
     const questProgressSummary = summarizeQuestProgress(gameState);
@@ -251,14 +381,35 @@ export function buildDchatKnowledge(gameState = {}) {
         knowledgeSections.push(`Quest progress: ${questProgressSummary.join(' | ')}`);
     }
 
-    const achievementSummary = summarizeAchievements(gameState);
-    if (achievementSummary.length > 0) {
-        knowledgeSections.push(`Achievements: ${achievementSummary.join(' | ')}`);
+    const achievementData = getAchievementSummaryData(gameState);
+    if (achievementData.sections.length > 0) {
+        knowledgeSections.push(`Achievements: ${achievementData.sections.join(' | ')}`);
+    }
+    if (achievementData.sources.length > 0) {
+        sources.push(...achievementData.sources);
     }
 
-    const processSummary = summarizeProcesses();
-    if (processSummary.length > 0) {
-        knowledgeSections.push(`Processes: ${processSummary.join(' | ')}`);
+    const processEntries = processes
+        .slice()
+        .sort((a, b) => a.title.localeCompare(b.title))
+        .slice(0, MAX_PROCESSES);
+    if (processEntries.length > 0) {
+        knowledgeSections.push(
+            `Processes: ${processEntries
+                .map((process) => {
+                    const duration = process.duration ? ` (duration ${process.duration})` : '';
+                    return `${process.title}${duration}`;
+                })
+                .join(' | ')}`
+        );
+        processEntries.forEach((process) => {
+            sources.push({
+                type: 'process',
+                id: process.id,
+                label: process.title,
+                url: `/processes/${process.id}`,
+            });
+        });
     }
 
     const processProgressSummary = summarizeProcessProgress(gameState);
@@ -266,13 +417,50 @@ export function buildDchatKnowledge(gameState = {}) {
         knowledgeSections.push(`Processes in flight: ${processProgressSummary.join(' | ')}`);
     }
 
-    return knowledgeSections.join('\n\n');
+    const hasStateSnapshot =
+        (gameState.inventory && Object.keys(gameState.inventory).length > 0) ||
+        (gameState.quests && Object.keys(gameState.quests).length > 0) ||
+        (gameState.processes && Object.keys(gameState.processes).length > 0);
+    const usesState =
+        inventorySummary.length > 0 ||
+        questProgressSummary.length > 0 ||
+        processProgressSummary.length > 0 ||
+        achievementData.hasProgress;
+
+    if (hasStateSnapshot && usesState) {
+        const stateDetailParts = [];
+        if (inventorySummary.length > 0) {
+            stateDetailParts.push('inventory');
+        }
+        if (questProgressSummary.length > 0) {
+            stateDetailParts.push('quest progress');
+        }
+        if (processProgressSummary.length > 0) {
+            stateDetailParts.push('process progress');
+        }
+        if (achievementData.hasProgress) {
+            stateDetailParts.push('achievements');
+        }
+        sources.push({
+            type: 'state',
+            id: 'local-game-state',
+            label: 'Local game state snapshot',
+            detail: stateDetailParts.length > 0 ? stateDetailParts.join(', ') : undefined,
+        });
+    }
+
+    return { summary: knowledgeSections.join('\n\n'), sources: sortSources(sources) };
+}
+
+export function buildDchatKnowledge(gameState = {}) {
+    return buildDchatKnowledgePack(gameState).summary;
 }
 
 export function __testables() {
     return {
         truncate,
         formatInventory,
+        getInventoryItemIds,
         summarizeItems,
         summarizeProcesses,
         summarizeQuests,
@@ -280,5 +468,7 @@ export function __testables() {
         summarizeProcessProgress,
         prioritizeQuests,
         summarizeAchievements,
+        getAchievementSummaryData,
+        buildQuestUrl,
     };
 }

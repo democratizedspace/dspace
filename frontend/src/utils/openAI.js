@@ -1,6 +1,6 @@
 import { loadGameState, ready } from './gameState/common.js';
-import { buildDchatKnowledge } from './dchatKnowledge.js';
-import { searchDocsRag } from './docsRag.js';
+import { buildDchatKnowledge, buildDchatKnowledgePack } from './dchatKnowledge.js';
+import { searchDocsRag, searchDocsRagWithSources } from './docsRag.js';
 import { npcPersonas } from '../data/npcPersonas.js';
 import OpenAI from 'openai';
 
@@ -296,6 +296,119 @@ export const buildChatPrompt = async (messages, options = {}) => {
     return { combinedMessages, debugMessages, gameState };
 };
 
+const dedupeContextSources = (sources = []) => {
+    const seen = new Set();
+    const deduped = [];
+
+    for (const source of sources) {
+        if (!source) continue;
+        const key = `${source.type}|${source.id}|${source.url ?? ''}`;
+        if (seen.has(key)) {
+            continue;
+        }
+        seen.add(key);
+        deduped.push(source);
+    }
+
+    return deduped;
+};
+
+const sortContextSources = (sources = []) => {
+    return sources.sort((a, b) => {
+        const typeCompare = String(a.type || '').localeCompare(String(b.type || ''));
+        if (typeCompare !== 0) {
+            return typeCompare;
+        }
+        const labelCompare = String(a.label || '').localeCompare(String(b.label || ''));
+        if (labelCompare !== 0) {
+            return labelCompare;
+        }
+        return String(a.id || '').localeCompare(String(b.id || ''));
+    });
+};
+
+export const buildChatPromptWithSources = async (messages, options = {}) => {
+    await ready;
+    const gameState = loadGameState();
+
+    const persona = options.persona || defaultPersona;
+    const systemMessage = {
+        role: 'system',
+        content: applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt),
+    };
+
+    const knowledgePack = buildDchatKnowledgePack(gameState);
+    const knowledgeMessage = knowledgePack.summary
+        ? {
+              role: 'system',
+              content: `DSPACE knowledge base:\n${knowledgePack.summary}`,
+          }
+        : null;
+    const latestUserMessage = [...messages]
+        .reverse()
+        .find((message) => message.role === 'user' && message.content?.trim());
+    const docsRagPayload = latestUserMessage
+        ? await searchDocsRagWithSources(latestUserMessage.content)
+        : { excerptsText: '', sources: [] };
+    const docsRagMessage = docsRagPayload.excerptsText
+        ? {
+              role: 'system',
+              content: docsRagPayload.excerptsText,
+          }
+        : null;
+
+    if (knowledgeMessage && docsRagPayload.excerptsText) {
+        knowledgeMessage.content = `${knowledgeMessage.content}\n\n${docsRagPayload.excerptsText}`;
+    }
+
+    const openingMessage = {
+        role: 'assistant',
+        content: persona?.welcomeMessage || fallbackWelcomeMessage,
+    };
+
+    const userMessages = [...messages];
+    let combinedMessages = [...userMessages];
+
+    if (combinedMessages.length === 0) {
+        combinedMessages = [systemMessage];
+        if (knowledgeMessage) {
+            combinedMessages.push(knowledgeMessage);
+        }
+        if (docsRagMessage && !knowledgeMessage) {
+            combinedMessages.push(docsRagMessage);
+        }
+        combinedMessages.push(openingMessage);
+    } else {
+        combinedMessages = [systemMessage];
+        if (knowledgeMessage) {
+            combinedMessages.push(knowledgeMessage);
+        }
+        if (docsRagMessage && !knowledgeMessage) {
+            combinedMessages.push(docsRagMessage);
+        }
+        combinedMessages = [...combinedMessages, ...userMessages];
+    }
+
+    const ragMessages = new Set([knowledgeMessage, docsRagMessage].filter(Boolean));
+    const debugMessages = combinedMessages.map((message) => ({
+        role: message.role,
+        content: message.content,
+        kind: ragMessages.has(message) ? 'rag' : 'main',
+    }));
+
+    const mergedSources = dedupeContextSources([
+        ...(knowledgePack.sources || []),
+        ...(docsRagPayload.sources || []),
+    ]);
+
+    return {
+        combinedMessages,
+        debugMessages,
+        gameState,
+        contextSources: sortContextSources(mergedSources),
+    };
+};
+
 export const GPT5Chat = async (messages, options = {}) => {
     const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
     const { combinedMessages, gameState } = promptPayload;
@@ -306,4 +419,20 @@ export const GPT5Chat = async (messages, options = {}) => {
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
 
     return toOutputText(response);
+};
+
+export const GPT5ChatV2 = async (messages, options = {}) => {
+    const promptPayload =
+        options.promptPayload || (await buildChatPromptWithSources(messages, options));
+    const { combinedMessages, gameState, contextSources } = promptPayload;
+    const apiKey = gameState.openAI?.apiKey || ''; // scan-secrets: ignore
+    const OpenAIClient = resolveOpenAIClient();
+    const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
+
+    const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+
+    return {
+        text: toOutputText(response),
+        contextSources: Array.isArray(contextSources) ? contextSources : [],
+    };
 };

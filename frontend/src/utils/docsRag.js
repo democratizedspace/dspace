@@ -1,5 +1,14 @@
 import MiniSearch from 'minisearch';
 
+/**
+ * @typedef {Object} Source
+ * @property {'item'|'process'|'quest'|'achievement'|'doc'|'route'|'changelog'|'state'} type
+ * @property {string} id
+ * @property {string} label
+ * @property {string} [url]
+ * @property {string} [detail]
+ */
+
 const DEFAULT_MAX_RESULTS = 5;
 const DEFAULT_MAX_CHARS = 5000;
 const DEFAULT_MAX_EXCERPT_CHARS = 850;
@@ -64,6 +73,38 @@ const trimExcerpt = (text, maxChars) => {
 const buildEntry = ({ kind, title, slug, anchor, excerpt }) => {
     const resolvedAnchor = anchor || 'top';
     return `- [${kind}] ${title} — ${slug}#${resolvedAnchor}\n  ${excerpt}`;
+};
+
+const toDocsSourceType = (kind) => {
+    if (kind === 'route' || kind === 'changelog' || kind === 'doc') {
+        return kind;
+    }
+    return 'doc';
+};
+
+const buildDocsSources = (sourcesMeta = {}) => {
+    const results = Array.isArray(sourcesMeta?.results) ? sourcesMeta.results : [];
+
+    return results
+        .map((entry) => {
+            if (!entry?.slug || !entry?.title) {
+                return null;
+            }
+            const resolvedAnchor = entry.anchor || 'top';
+            const label = entry.heading ? `${entry.title} — ${entry.heading}` : entry.title;
+            const url = `${entry.slug}#${resolvedAnchor}`;
+            const detail =
+                entry.heading && entry.heading !== entry.title ? entry.heading : undefined;
+
+            return {
+                type: toDocsSourceType(entry.kind),
+                id: url,
+                label,
+                url,
+                detail,
+            };
+        })
+        .filter(Boolean);
 };
 
 export const searchDocsRag = async (queryText, options = {}) => {
@@ -171,5 +212,13 @@ export const searchDocsRag = async (queryText, options = {}) => {
                 heading: chunk.heading,
             })),
         },
+    };
+};
+
+export const searchDocsRagWithSources = async (queryText, options = {}) => {
+    const payload = await searchDocsRag(queryText, options);
+    return {
+        ...payload,
+        sources: buildDocsSources(payload.sourcesMeta),
     };
 };

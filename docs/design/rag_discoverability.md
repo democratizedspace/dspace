@@ -71,6 +71,8 @@ without introducing heavyweight infrastructure.
 - `GPT5Chat` calls our OpenAI client via `openai.responses.create` (a project-level abstraction
   over the OpenAI Chat Completions API) and returns **only the output text** string (no citations,
   no metadata).
+- Stage 3 adds an opt-in `GPT5ChatV2` response shape that returns `{ text, contextSources }` so
+  UI callers can show deterministic “Sources used” entries without changing existing consumers.
 - token.place chat builds a simple system + user message list and returns a string reply.
 
 ### Error handling + uncertainty
