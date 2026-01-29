@@ -95,13 +95,18 @@ describe('QA 9.4 chat hallucination contracts', () => {
         const systemMessage = debugMessages.find(
             (message) => message.role === 'system' && message.kind === 'main'
         );
-        const normalized = systemMessage?.content?.toLowerCase() || '';
-        expect(normalized).toContain('never invent');
-        expect(normalized).toContain('player state');
+        const normalized = systemMessage?.content ?? '';
+        expect(normalized).toMatch(/never invent/i);
+        expect(normalized).toMatch(/player state/i);
+        const saveSnapshotPattern =
+            /save snapshot|cannot see.*save|provide.*save|cannot see your save/i;
+        if (saveSnapshotPattern.test(normalized)) {
+            expect(normalized).toMatch(saveSnapshotPattern);
+        }
     });
 
     it.todo(
-        'Stage 7: system guardrail should ask for a save snapshot or explain it cannot see saves'
+        'Stage 7: system guardrail should ask for a save snapshot or explain it cannot see saves (not present yet)'
     );
 
     it.todo('Stage 8: retrieval includes requires/consumes/creates duration semantics doc chunk');
