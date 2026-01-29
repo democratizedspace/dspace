@@ -92,10 +92,11 @@ export const mapDocsResultsToSources = (results = []) => {
         .map((result) => {
             const resolvedAnchor = result.anchor || 'top';
             const slug = result.slug ? String(result.slug) : '';
-            const idValue = result.id ?? (slug ? `${slug}#${resolvedAnchor}` : '');
+            const type = docsKindToType[result.kind] || 'doc';
+            const stableId = slug ? `${type}:${slug}#${resolvedAnchor}` : '';
+            const idValue = stableId || result.id;
             const id = idValue != null ? String(idValue) : '';
             const label = formatSourceLabel(result);
-            const type = docsKindToType[result.kind] || 'doc';
 
             if (!id || !label) {
                 return null;

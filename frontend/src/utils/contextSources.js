@@ -15,7 +15,7 @@ const toSourceKey = (source) => `${source.type}::${source.id}::${source.url ?? '
 
 const normalizeSource = (source) => {
     if (!source || typeof source !== 'object') return null;
-    const type = source.type;
+    const type = typeof source.type === 'string' ? source.type : '';
     const id = source.id != null ? String(source.id) : '';
     const label = source.label != null ? String(source.label) : '';
     const url = source.url ? String(source.url) : undefined;
