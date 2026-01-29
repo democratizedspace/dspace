@@ -3,13 +3,10 @@ import { searchDocsRag } from '../src/utils/docsRag.js';
 
 describe('docs RAG search', () => {
     it('returns docs excerpts with canonical /docs URLs', async () => {
-        const { excerptsText } = await searchDocsRag(
-            'custom content import export backup',
-            {
-                maxResults: 6,
-                maxChars: 4000,
-            }
-        );
+        const { excerptsText } = await searchDocsRag('custom content import export backup', {
+            maxResults: 6,
+            maxChars: 4000,
+        });
 
         expect(excerptsText).toMatch(/\/docs\//);
         expect(excerptsText).toMatch(/\/docs\/[^\s#]+#[^\s]+/);

@@ -46,7 +46,7 @@ const fallbackWelcomeMessage =
 export const defaultOpenAIErrorMessage =
     "Sorry, I'm having some trouble and can't generate a response.";
 const sharedSystemGuardrail =
-    "Never invent quests, items, processes, routes, URLs, or player state. If you are " +
+    'Never invent quests, items, processes, routes, URLs, or player state. If you are ' +
     "unsure, say you don't know and direct the player to /docs or docs/ROUTES.md.";
 
 const applySystemGuardrail = (prompt) => {
