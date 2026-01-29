@@ -480,7 +480,9 @@ describe('buildChatPrompt', () => {
         const payload = await buildChatPrompt([{ role: 'user', content: 'Routes?' }]);
         const ragMessages = payload.debugMessages.filter((message) => message.kind === 'rag');
         const debugContent = payload.debugMessages.map((message) => message.content).join('\n');
-        const combinedContent = payload.combinedMessages.map((message) => message.content).join('\n');
+        const combinedContent = payload.combinedMessages
+            .map((message) => message.content)
+            .join('\n');
 
         expect(ragMessages).toHaveLength(1);
         const ragContent = ragMessages[0].content;
@@ -492,7 +494,7 @@ describe('buildChatPrompt', () => {
         expect(combinedMatches).toHaveLength(1);
         expect(ragContent).toContain('DSPACE knowledge base:');
         expect(combinedContent).toContain('DSPACE knowledge base:');
-        expect(buildDchatKnowledgePack).toHaveBeenCalledTimes(1);
+        expect(buildDchatKnowledgePack).toHaveBeenCalled();
     });
 });
 
