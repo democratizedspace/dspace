@@ -1,16 +1,17 @@
 /**
  * @jest-environment jsdom
  */
+// @ts-nocheck
 import { beforeEach, afterEach, describe, it, expect, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import { render, fireEvent, waitFor, act } from '@testing-library/svelte';
-import QuestForm from '../src/components/svelte/QuestForm.svelte';
-import { downsampleAndCompressToJpeg } from '../src/utils/imageDownsample.js';
+import QuestForm from '../svelte/QuestForm.svelte';
+import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
 
 const questsAddMock = vi.fn();
 const listMock = vi.fn();
 
-vi.mock('../src/utils/customcontent.js', () => ({
+vi.mock('../../utils/customcontent.js', () => ({
     db: {
         quests: {
             add: questsAddMock,
@@ -23,16 +24,16 @@ vi.mock('../src/utils/customcontent.js', () => ({
     ENTITY_TYPES: { QUEST: 'quest' },
 }));
 
-vi.mock('../src/utils/customQuestValidation.js', () => ({
+vi.mock('../../utils/customQuestValidation.js', () => ({
     validateQuestData: () => ({ valid: true, errors: [] }),
     validateQuestDependencies: () => true,
 }));
 
-vi.mock('../src/utils/questHelpers.js', () => ({
+vi.mock('../../utils/questHelpers.js', () => ({
     isQuestTitleUnique: () => true,
 }));
 
-vi.mock('../src/utils/imageDownsample.js', () => ({
+vi.mock('../../utils/imageDownsample.js', () => ({
     downsampleAndCompressToJpeg: vi.fn().mockResolvedValue({
         dataUrl: 'data:image/jpeg;base64,COMPRESSED',
         bytes: 12345,
@@ -190,7 +191,43 @@ describe('QuestForm image uploads', () => {
         });
     });
 
-    it('shows an error if both downsampling and FileReader previews fail', async () => {
+    it('shows an error if FileReader fails while creating a preview', async () => {
+        downsampleAndCompressToJpeg.mockRejectedValueOnce(new Error('Downsample failed'));
+
+        global.FileReader = class FileReader {
+            constructor() {
+                this.result = null;
+                this.onload = null;
+                this.onerror = null;
+            }
+            readAsDataURL() {
+                if (this.onerror) {
+                    this.onerror(new Error('FileReader failed'));
+                }
+            }
+        };
+
+        const { getByLabelText, findByText } = render(QuestForm, {
+            target: container,
+            props: { existingQuests: [] },
+        });
+
+        await waitFor(() => expect(listMock).toHaveBeenCalled());
+
+        const fileInput = getByLabelText(/upload an image\*/i);
+        await act(async () => {
+            const file = new File(['content'], 'quest.png', { type: 'image/png' });
+            fireEvent.change(fileInput, {
+                target: { files: [file] },
+            });
+        });
+
+        const errorMessage = await findByText(/image processing failed/i);
+        expect(errorMessage).toBeInTheDocument();
+        expect(container.querySelector('.image-preview')).not.toBeInTheDocument();
+    });
+
+    it('shows an error if FileReader returns a non-string result', async () => {
         downsampleAndCompressToJpeg.mockRejectedValueOnce(new Error('Downsample failed'));
 
         global.FileReader = class FileReader {
