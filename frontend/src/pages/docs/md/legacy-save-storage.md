@@ -115,10 +115,11 @@ item-70=1
 currency-balance-dUSD=123.45
 ```
 
-**Expected v3 detection outcomes:**
+**Expected v3 detection outcomes (current UI):**
 
-- **Legacy save banner** appears on pages that render `<LegacyUpgradeBanner>` when v1 `item-` or
-  `currency-balance-` cookies are present.
+- **Legacy save banner:** pages that include `<LegacyUpgradeBanner>` (via
+  `frontend/src/components/Page.astro`) show the banner when `detectLegacyArtifacts` reports v1
+  `item-` or `currency-balance-` cookies. The banner links to `/settings`.
 - **/settings → Legacy save upgrades** shows a V1 card with the items listed above.
 - **Currency balance:** `currency-balance-dUSD` is surfaced in the V1 UI and migrates into the v3
   inventory using the v1→v3 item ID mapping.
@@ -144,7 +145,7 @@ process-3dprint-benchy-starttime=1700000000000
 machine-lock-0=1
 ```
 
-**Expected v3 detection outcomes:**
+**Expected v3 detection outcomes (current UI):**
 
 - Same as minimal seed for **banner + V1 card** (v1 detection keys are cookie-based).
 - No `quest-` or `checkpoint-` cookies are seeded by default; if you add them manually they remain
@@ -251,8 +252,9 @@ Use the table below to validate mappings during QA and when auditing legacy save
 4. **Merge v1 into v3:** click **Merge v1 into current save**.
     - Inventory gains the seeded items.
     - dUSD balances are migrated from `currency-balance-dUSD`.
-    - Detected `item-<id>` and `currency-balance-dUSD` cookies are expired after merge; reloading
-      should remove the V1 banner.
+    - The UI attempts to expire detected `item-<id>` and `currency-balance-dUSD` cookies after the
+      merge. If the cookies are cleared, the banner disappears after reload; if not, clear them
+      manually.
     - If you re-seed the cookies and merge again, counts should increase again (merge is additive).
 5. **Maximal seed case:** repeat with the maximal profile and confirm the same results, plus
    ensure process timers and machine locks remain ignored.
@@ -376,9 +378,9 @@ backup and fallback for unsupported environments.
 **Merge vs. replace semantics:**
 
 - **V1 → V3:** `importV1V3` adds counts to the current inventory (merge) or starts from an empty
-  validated state (replace). When `LegacySaveUpgrade` in `/settings` calls `importV1V3`, it passes
-  `grantUpgradeTrophy: true`, so successful v1 imports grant the **Early Adopter Token** and the
-  **V2 Upgrade Trophy** when legacy items are imported (see
+  validated state (replace). The `LegacySaveUpgrade` UI calls `importV1V3` with
+  `grantUpgradeTrophy: true` in the current codebase, so successful v1 imports grant the **Early
+  Adopter Token** and the **V2 Upgrade Trophy** when legacy items are imported (see
   `frontend/src/utils/gameState.js`).
 - **V2 → V3:** `importV2V3` replaces the current save with the legacy state, and
   `mergeLegacyStateIntoCurrent` combines inventory while preserving existing quests/processes.
@@ -391,7 +393,9 @@ backup and fallback for unsupported environments.
   `frontend/src/components/svelte/LegacySaveUpgrade.svelte`).
   Other legacy cookies (ex: `quest-`, `checkpoint-`) are not cleared.
 - V2 cleanup deletes `gameState` / `gameStateBackup` during v2 → v3 migrations (when IndexedDB is
-  in use) and also via the **Delete v2 localStorage** action in the Legacy Save Upgrade UI.
+  in use) and also via the **Delete v2 localStorage** action in the Legacy Save Upgrade UI. Both
+  flows are best-effort (they skip removal if IndexedDB is unavailable or the browser is already
+  using localStorage for the active save).
 - The **Clear v3 save for testing** action (available when QA cheats are enabled) only removes v3
   persistence data; it preserves legacy v2 `gameState` / `gameStateBackup` entries if they still
   contain v2-formatted saves.

@@ -20,18 +20,19 @@ console.log(`Custom content schema version: ${version}`);
 ```
 
 If IndexedDB is unavailable (for example, during server-side rendering or when no polyfill is
-present), the helper returns the current application version (`CUSTOM_CONTENT_DB_VERSION`) so
-callers can still make decisions safely.
+present), `getSchemaVersion` returns the current application constant
+(`CUSTOM_CONTENT_DB_VERSION` in `frontend/src/utils/indexeddb.js`) so callers can still branch on
+the expected schema version.
 
 ## Migration behavior
 
 - Migrations run automatically in `openCustomContentDB` (`frontend/src/utils/indexeddb.js`), which
   invokes `runMigrations` after a successful open.
 - After migrations, `runMigrations` calls `validateDataIntegrity` and throws
-  `DataIntegrityValidationError` (defined in `frontend/src/utils/migrations.js`) if it finds
-  invalid records.
-- `openCustomContentDB` catches `DataIntegrityValidationError` (or matching error codes/names),
-  logs a warning, and continues to use the database; other errors still reject the open.
+  `DataIntegrityValidationError` (defined in `frontend/src/utils/migrations.js`) if invalid
+  records are found.
+- `openCustomContentDB` treats `DataIntegrityValidationError` (instance, name, or code match) as a
+  recoverable warning and continues to use the database; other errors still reject the open.
 
 ## Migration history
 
