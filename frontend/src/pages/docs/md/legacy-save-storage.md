@@ -96,7 +96,10 @@ acceptedCookies=true; item-3=12.5; item-10=2; item-22=500; currency-balance-dUSD
 Use these profiles to seed sample v1 data (manual DevTools or the `/settings` seeder UI). The
 seeded profiles are powered by
 `frontend/src/utils/legacySaveFixtures/legacy_v1_cookie_save.json` and are exposed through the QA
-cheats panel when it is available (dev/staging builds with QA cheats enabled).
+cheats panel when it is available. QA cheats are gated by `getCheatsAvailabilityFlag`
+(`frontend/src/utils/cheatsAvailability.ts`) and the toggle in
+`frontend/src/components/svelte/QaCheatsToggle.svelte`, which is enabled when `DSPACE_ENV` is set
+to `dev`, `development`, or `staging`.
 
 ### Minimal seed (cookies only)
 
@@ -373,11 +376,14 @@ backup and fallback for unsupported environments.
 **Merge vs. replace semantics:**
 
 - **V1 → V3:** `importV1V3` adds counts to the current inventory (merge) or starts from an empty
-  validated state (replace). When the `/settings` upgrade flow runs, it grants the **Early Adopter
-  Token** and **V2 Upgrade Trophy** if any v1 items were imported.
+  validated state (replace). When `LegacySaveUpgrade` in `/settings` calls `importV1V3`, it passes
+  `grantUpgradeTrophy: true`, so successful v1 imports grant the **Early Adopter Token** and the
+  **V2 Upgrade Trophy** when legacy items are imported (see
+  `frontend/src/utils/gameState.js`).
 - **V2 → V3:** `importV2V3` replaces the current save with the legacy state, and
   `mergeLegacyStateIntoCurrent` combines inventory while preserving existing quests/processes.
-- Both flows update `versionNumberString` to `3` and persist to IndexedDB.
+- Both flows update `versionNumberString` to `3` and persist to IndexedDB via
+  `persistMigratedState` in `frontend/src/utils/gameState.js`.
 
 **Cleanup behavior:**
 
@@ -393,7 +399,8 @@ backup and fallback for unsupported environments.
 ## QA seeding
 
 QA seeding writes known-good fixtures that match the above schemas and is available when the QA
-cheats panel is enabled (dev/staging builds).
+cheats panel is enabled. QA cheat availability is controlled by `DSPACE_ENV` via
+`frontend/src/utils/cheatsAvailability.ts`.
 
 - **V1 seed:**
   `frontend/src/utils/legacySaveSeeding.ts`
@@ -405,7 +412,8 @@ cheats panel is enabled (dev/staging builds).
   `frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`.
 
 The `/settings` seeder exposes two v1 profiles (minimal + maximal) and three v2.1 profiles
-(minimal, in-progress, messy), and reports which keys were written after each seed action.
+(minimal, in-progress, messy), and reports which keys were written after each seed action in the
+QA cheats panel summary.
 
 After seeding, use [`/settings`](/settings) → **Legacy save upgrades** to merge or replace, and
 verify detection with the global legacy banner (shared detection logic).

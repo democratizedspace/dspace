@@ -48,9 +48,10 @@ component:
 
 ## UI responsiveness metrics
 
-The `<UIResponsiveness>` component reports hydration time using an explicit `startTime` prop if
-provided, otherwise it falls back to `window.dspaceStart ?? performance.timing.navigationStart`.
-The homepage sets `window.dspaceStart = performance.now()` via an inline script in
+The `<UIResponsiveness>` component (`frontend/src/components/svelte/UIResponsiveness.svelte`)
+reports hydration time using an explicit `startTime` prop if provided, otherwise it falls back to
+`window.dspaceStart ?? performance.timing.navigationStart` inside its `onMount` hook. The homepage
+sets `window.dspaceStart = performance.now()` via an inline script in
 `frontend/src/pages/index.astro`; other pages rely on the `navigationStart` fallback unless they
 set their own `startTime` or `window.dspaceStart`.
 
