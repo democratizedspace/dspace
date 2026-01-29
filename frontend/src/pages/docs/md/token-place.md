@@ -10,8 +10,8 @@ DSPACE ships with a token.place integration for in-game chat, but it is **disabl
 - The chat client calls `tokenPlaceChat` (see `frontend/src/utils/tokenPlace.js`), which posts to
   `${baseUrl}/chat` and returns the `reply` field from the JSON response. If the feature is
   disabled, the helper throws with a message that points back to the opt-in options.
-- The default base URL is `https://token.place/api` (`DEFAULT_URL` in
-  `frontend/src/utils/tokenPlace.js`).
+- The default base URL is `DEFAULT_URL` in `frontend/src/utils/tokenPlace.js` (the token.place API
+  base configured in this codebase).
 - The integration is enabled only when an explicit opt-in flag is set via
   `isTokenPlaceEnabled` (see `getEnabledOverride` and `isTokenPlaceEnabled` in
   `frontend/src/utils/tokenPlace.js`).
@@ -26,7 +26,7 @@ Token.place can be enabled in two ways:
   a custom `tokenPlace.url`.
 
 ```bash
-VITE_TOKEN_PLACE_ENABLED=true VITE_TOKEN_PLACE_URL=https://my-token-place/api npm run dev
+VITE_TOKEN_PLACE_ENABLED=true VITE_TOKEN_PLACE_URL=$TOKEN_PLACE_API_URL npm run dev
 ```
 
 The environment flag takes precedence over game state (see `getEnabledOverride` and
