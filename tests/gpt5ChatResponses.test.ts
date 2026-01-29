@@ -3,6 +3,7 @@ import { npcPersonas } from '../frontend/src/data/npcPersonas.js';
 
 const loadGameStateMock = vi.fn();
 const buildDchatKnowledgeMock = vi.fn();
+const buildDchatKnowledgePackMock = vi.fn();
 
 const MockOpenAI = function (config) {
   this.config = config;
@@ -28,6 +29,7 @@ vi.mock('../frontend/src/utils/gameState/common.js', () => ({
 
 vi.mock('../frontend/src/utils/dchatKnowledge.js', () => ({
   buildDchatKnowledge: buildDchatKnowledgeMock,
+  buildDchatKnowledgePack: buildDchatKnowledgePackMock,
 }));
 
 vi.mock('../frontend/src/utils/docsRag.js', () => ({
@@ -79,6 +81,7 @@ describe('gpt-5 chat responses integration', () => {
     globalThis.__DSpaceOpenAIClient = MockOpenAI;
     loadGameStateMock.mockReset();
     buildDchatKnowledgeMock.mockReset();
+    buildDchatKnowledgePackMock.mockReset();
     fetchMock.mockReset();
     vi.stubGlobal('fetch', fetchMock);
   });
@@ -96,6 +99,7 @@ describe('gpt-5 chat responses integration', () => {
       },
     });
     buildDchatKnowledgeMock.mockReturnValue('Quest facts');
+    buildDchatKnowledgePackMock.mockReturnValue({ summary: 'Quest facts', sources: [] });
     fetchMock.mockResolvedValueOnce(jsonResponse('ok'));
 
     const { GPT5Chat: gpt5Chat } = await import('../frontend/src/utils/openAI.js');
@@ -136,6 +140,7 @@ describe('gpt-5 chat responses integration', () => {
       openAI: { ['api' + 'Key']: playerCredentials.session },
     });
     buildDchatKnowledgeMock.mockReturnValue(null);
+    buildDchatKnowledgePackMock.mockReturnValue({ summary: null, sources: [] });
     fetchMock.mockResolvedValueOnce(jsonResponse('hello!'));
 
     const { GPT5Chat: gpt5Chat } = await import('../frontend/src/utils/openAI.js');

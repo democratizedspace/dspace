@@ -17,6 +17,7 @@ vi.mock('../src/utils/gameState/common.js', () => ({
 
 vi.mock('../src/utils/dchatKnowledge.js', () => ({
     buildDchatKnowledge: vi.fn(() => 'knowledge'),
+    buildDchatKnowledgePack: vi.fn(() => ({ summary: 'knowledge', sources: [] })),
 }));
 
 vi.mock('../src/data/npcPersonas.js', () => ({

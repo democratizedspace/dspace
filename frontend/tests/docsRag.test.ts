@@ -13,21 +13,25 @@ describe('docs RAG search', () => {
     });
 
     it('retrieves routes index chunk', async () => {
-        const { excerptsText } = await searchDocsRag('routes', {
+        const { excerptsText, sources } = await searchDocsRag('routes', {
             maxResults: 4,
             maxChars: 2000,
         });
 
         expect(excerptsText).toContain('/docs/routes#top');
+        expect(
+            sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+        ).toBe(true);
     });
 
     it('retrieves v3 changelog references', async () => {
-        const { excerptsText, sourcesMeta } = await searchDocsRag('token.place', {
+        const { excerptsText, sourcesMeta, sources } = await searchDocsRag('token.place', {
             maxResults: 6,
             maxChars: 3000,
         });
 
         expect(excerptsText).toMatch(/\/changelog#[^\s]+/);
         expect(sourcesMeta.results.some((entry) => entry.kind === 'changelog')).toBe(true);
+        expect(sources.some((entry) => entry.type === 'changelog')).toBe(true);
     });
 });

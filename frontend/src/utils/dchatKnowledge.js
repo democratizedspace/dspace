@@ -1,6 +1,7 @@
 import items from '../pages/inventory/json/items/index.js';
 import processes from '../generated/processes.json' assert { type: 'json' };
 import { evaluateAchievements } from './achievements.js';
+import { mergeSources } from './contextSources.js';
 
 const MAX_ITEMS = 25;
 const MAX_PROCESSES = 20;
@@ -91,46 +92,20 @@ function formatInventory(inventory = {}) {
 }
 
 function summarizeItems() {
-    return items
-        .slice()
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .slice(0, MAX_ITEMS)
-        .map((item) => `${item.name}: ${truncate(item.description || '')}`);
+    return getItemsForKnowledge().map(
+        (item) => `${item.name}: ${truncate(item.description || '')}`
+    );
 }
 
 function summarizeProcesses() {
-    return processes
-        .slice()
-        .sort((a, b) => a.title.localeCompare(b.title))
-        .slice(0, MAX_PROCESSES)
-        .map((process) => {
-            const duration = process.duration ? ` (duration ${process.duration})` : '';
-            return `${process.title}${duration}`;
-        });
+    return getProcessesForKnowledge().map((process) => {
+        const duration = process.duration ? ` (duration ${process.duration})` : '';
+        return `${process.title}${duration}`;
+    });
 }
 
 function summarizeAchievements(gameState = {}) {
-    const achievements = evaluateAchievements(gameState);
-
-    if (!Array.isArray(achievements) || achievements.length === 0) {
-        return [];
-    }
-
-    const unlocked = achievements.filter((achievement) => achievement.unlocked);
-    const inProgress = achievements.filter(
-        (achievement) => !achievement.unlocked && achievement.progress?.percent > 0
-    );
-
-    const formatEntry = (achievement) => {
-        const display = achievement.progress?.displayValue;
-        return display ? `${achievement.title} (${display})` : achievement.title;
-    };
-
-    const unlockedEntries = unlocked
-        .slice(0, MAX_ACHIEVEMENT_ENTRIES)
-        .map((achievement) => achievement.title);
-    const remainingSlots = Math.max(0, MAX_ACHIEVEMENT_ENTRIES - unlockedEntries.length);
-    const progressEntries = inProgress.slice(0, remainingSlots).map(formatEntry);
+    const { unlockedEntries, progressEntries } = getAchievementEntries(gameState);
 
     const sections = [];
 
@@ -150,21 +125,70 @@ function summarizeAchievements(gameState = {}) {
 }
 
 function summarizeQuests() {
-    return prioritizeQuests(quests)
-        .slice(0, MAX_QUESTS)
-        .map((quest) => {
-            const parts = [`${quest.title} [${quest.id}]`];
-            if (quest.description) {
-                parts.push(quest.description);
-            }
-            if (quest.requiresQuests.length > 0) {
-                parts.push(`Prereqs: ${quest.requiresQuests.join(', ')}`);
-            }
-            if (quest.rewards.length > 0) {
-                parts.push(`Rewards: ${quest.rewards.join(', ')}`);
-            }
-            return parts.join(' — ');
-        });
+    return getQuestsForKnowledge().map((quest) => {
+        const parts = [`${quest.title} [${quest.id}]`];
+        if (quest.description) {
+            parts.push(quest.description);
+        }
+        if (quest.requiresQuests.length > 0) {
+            parts.push(`Prereqs: ${quest.requiresQuests.join(', ')}`);
+        }
+        if (quest.rewards.length > 0) {
+            parts.push(`Rewards: ${quest.rewards.join(', ')}`);
+        }
+        return parts.join(' — ');
+    });
+}
+
+function getItemsForKnowledge() {
+    return items
+        .slice()
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .slice(0, MAX_ITEMS);
+}
+
+function getProcessesForKnowledge() {
+    return processes
+        .slice()
+        .sort((a, b) => a.title.localeCompare(b.title))
+        .slice(0, MAX_PROCESSES);
+}
+
+function getQuestsForKnowledge() {
+    return prioritizeQuests(quests).slice(0, MAX_QUESTS);
+}
+
+function getAchievementEntries(gameState = {}) {
+    const achievements = evaluateAchievements(gameState);
+
+    if (!Array.isArray(achievements) || achievements.length === 0) {
+        return { unlockedEntries: [], progressEntries: [], unlocked: [], inProgress: [] };
+    }
+
+    const unlocked = achievements.filter((achievement) => achievement.unlocked);
+    const inProgress = achievements.filter(
+        (achievement) => !achievement.unlocked && achievement.progress?.percent > 0
+    );
+
+    const formatEntry = (achievement) => {
+        const display = achievement.progress?.displayValue;
+        return display ? `${achievement.title} (${display})` : achievement.title;
+    };
+
+    const unlockedSlice = unlocked.slice(0, MAX_ACHIEVEMENT_ENTRIES);
+    const remainingSlots = Math.max(0, MAX_ACHIEVEMENT_ENTRIES - unlockedSlice.length);
+    const inProgressSlice = inProgress.slice(0, remainingSlots);
+    const unlockedEntries = unlockedSlice.map((achievement) => achievement.title);
+    const progressEntries = inProgressSlice.map(formatEntry);
+
+    return {
+        unlockedEntries,
+        progressEntries,
+        unlocked,
+        inProgress,
+        unlockedSlice,
+        inProgressSlice,
+    };
 }
 
 function describeQuestProgress(questId, questState) {
@@ -228,45 +252,144 @@ function summarizeProcessProgress(gameState = {}) {
         .sort((a, b) => a.localeCompare(b));
 }
 
-export function buildDchatKnowledge(gameState = {}) {
+export function buildDchatKnowledgePack(gameState = {}) {
     const knowledgeSections = [];
+    const sources = [];
+    const stateDetails = [];
 
     const inventorySummary = formatInventory(gameState.inventory);
     if (inventorySummary.length > 0) {
         knowledgeSections.push(`Inventory highlights: ${inventorySummary.join('; ')}`);
+        stateDetails.push('inventory');
     }
 
-    const itemSummary = summarizeItems();
-    if (itemSummary.length > 0) {
-        knowledgeSections.push(`Items: ${itemSummary.join(' | ')}`);
+    const itemEntries = getItemsForKnowledge();
+    if (itemEntries.length > 0) {
+        knowledgeSections.push(
+            `Items: ${itemEntries
+                .map((item) => `${item.name}: ${truncate(item.description || '')}`)
+                .join(' | ')}`
+        );
+        sources.push(
+            ...itemEntries.map((item) => ({
+                type: 'item',
+                id: item.id,
+                label: item.name,
+                url: `/inventory/item/${item.id}`,
+                detail: truncate(item.description || ''),
+            }))
+        );
     }
 
-    const questSummary = summarizeQuests();
-    if (questSummary.length > 0) {
-        knowledgeSections.push(`Quests: ${questSummary.join(' || ')}`);
+    const questEntries = getQuestsForKnowledge();
+    if (questEntries.length > 0) {
+        knowledgeSections.push(
+            `Quests: ${questEntries
+                .map((quest) => {
+                    const parts = [`${quest.title} [${quest.id}]`];
+                    if (quest.description) {
+                        parts.push(quest.description);
+                    }
+                    if (quest.requiresQuests.length > 0) {
+                        parts.push(`Prereqs: ${quest.requiresQuests.join(', ')}`);
+                    }
+                    if (quest.rewards.length > 0) {
+                        parts.push(`Rewards: ${quest.rewards.join(', ')}`);
+                    }
+                    return parts.join(' — ');
+                })
+                .join(' || ')}`
+        );
+        sources.push(
+            ...questEntries.map((quest) => ({
+                type: 'quest',
+                id: quest.id,
+                label: quest.title || quest.id,
+                url: `/quests/${quest.id}`,
+                detail: quest.description || '',
+            }))
+        );
     }
 
     const questProgressSummary = summarizeQuestProgress(gameState);
     if (questProgressSummary.length > 0) {
         knowledgeSections.push(`Quest progress: ${questProgressSummary.join(' | ')}`);
+        stateDetails.push('quest progress');
     }
 
-    const achievementSummary = summarizeAchievements(gameState);
-    if (achievementSummary.length > 0) {
-        knowledgeSections.push(`Achievements: ${achievementSummary.join(' | ')}`);
+    const { unlockedEntries, progressEntries, unlockedSlice, inProgressSlice } =
+        getAchievementEntries(gameState);
+    if (unlockedEntries.length > 0 || progressEntries.length > 0) {
+        const sections = [];
+        if (unlockedEntries.length > 0) {
+            sections.push(`Unlocked: ${unlockedEntries.join(', ')}`);
+        }
+        if (progressEntries.length > 0) {
+            sections.push(`In progress: ${progressEntries.join(', ')}`);
+        }
+        if (sections.length === 0) {
+            sections.push('No achievements unlocked yet.');
+        }
+        knowledgeSections.push(`Achievements: ${sections.join(' | ')}`);
+        stateDetails.push('achievements');
+        sources.push(
+            ...unlockedSlice.map((achievement) => ({
+                type: 'achievement',
+                id: achievement.id,
+                label: achievement.title,
+            })),
+            ...inProgressSlice.map((achievement) => ({
+                type: 'achievement',
+                id: achievement.id,
+                label: achievement.title,
+                detail: achievement.progress?.displayValue || '',
+            }))
+        );
     }
 
-    const processSummary = summarizeProcesses();
-    if (processSummary.length > 0) {
-        knowledgeSections.push(`Processes: ${processSummary.join(' | ')}`);
+    const processEntries = getProcessesForKnowledge();
+    if (processEntries.length > 0) {
+        knowledgeSections.push(
+            `Processes: ${processEntries
+                .map((process) => {
+                    const duration = process.duration ? ` (duration ${process.duration})` : '';
+                    return `${process.title}${duration}`;
+                })
+                .join(' | ')}`
+        );
+        sources.push(
+            ...processEntries.map((process) => ({
+                type: 'process',
+                id: process.id,
+                label: process.title,
+                url: `/processes/${process.id}`,
+            }))
+        );
     }
 
     const processProgressSummary = summarizeProcessProgress(gameState);
     if (processProgressSummary.length > 0) {
         knowledgeSections.push(`Processes in flight: ${processProgressSummary.join(' | ')}`);
+        stateDetails.push('process progress');
     }
 
-    return knowledgeSections.join('\n\n');
+    if (stateDetails.length > 0) {
+        sources.push({
+            type: 'state',
+            id: 'local-game-state',
+            label: 'Local game state snapshot',
+            detail: stateDetails.join(', '),
+        });
+    }
+
+    return {
+        summary: knowledgeSections.join('\n\n'),
+        sources: mergeSources(sources),
+    };
+}
+
+export function buildDchatKnowledge(gameState = {}) {
+    return buildDchatKnowledgePack(gameState).summary;
 }
 
 export function __testables() {
@@ -280,5 +403,9 @@ export function __testables() {
         summarizeProcessProgress,
         prioritizeQuests,
         summarizeAchievements,
+        getItemsForKnowledge,
+        getProcessesForKnowledge,
+        getQuestsForKnowledge,
+        getAchievementEntries,
     };
 }
