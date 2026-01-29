@@ -467,6 +467,7 @@ const writeArtifacts = async (chunks, index, metaSources) => {
     const metaPath = path.join(OUTPUT_DIR, 'docs_meta.json');
 
     const meta = {
+        generatedAt: new Date().toISOString(),
         generatedFrom: {
             routes: path.relative(repoRoot, ROUTES_PATH).split(path.sep).join('/'),
             docs: path.relative(repoRoot, DOCS_DIR).split(path.sep).join('/'),

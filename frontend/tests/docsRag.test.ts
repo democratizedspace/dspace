@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import docsMeta from '../src/generated/rag/docs_meta.json';
 import { searchDocsRag } from '../src/utils/docsRag.js';
 
 describe('docs RAG search', () => {
@@ -33,5 +34,26 @@ describe('docs RAG search', () => {
         expect(excerptsText).toMatch(/\/changelog#[^\s]+/);
         expect(sourcesMeta.results.some((entry) => entry.kind === 'changelog')).toBe(true);
         expect(sources.some((entry) => entry.type === 'changelog')).toBe(true);
+    });
+
+    it('caps excerpts and remains deterministic', async () => {
+        const options = { maxResults: 15, maxChars: 700, maxExcerptChars: 140 };
+        const first = await searchDocsRag('docs', options);
+        const second = await searchDocsRag('docs', options);
+
+        expect(first.excerptsText.length).toBeLessThanOrEqual(options.maxChars);
+        expect(first.excerptsText.startsWith('---')).toBe(true);
+        expect(first.excerptsText.endsWith('---')).toBe(true);
+        expect(first.excerptsText).toBe(second.excerptsText);
+    });
+
+    it('exposes generatedAt metadata in docs results', async () => {
+        const { excerptsText } = await searchDocsRag('routes', {
+            maxResults: 4,
+            maxChars: 2000,
+        });
+
+        expect(docsMeta.generatedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
+        expect(excerptsText).toContain(docsMeta.generatedAt);
     });
 });
