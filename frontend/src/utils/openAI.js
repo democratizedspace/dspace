@@ -249,12 +249,13 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const docsRagPayload = latestUserMessage
         ? await searchDocsRag(latestUserMessage.content)
         : { excerptsText: '', sources: [] };
-    const docsRagMessage = docsRagPayload.excerptsText
-        ? {
-              role: 'system',
-              content: docsRagPayload.excerptsText,
-          }
-        : null;
+    const docsRagMessage =
+        !knowledgeMessage && docsRagPayload.excerptsText
+            ? {
+                  role: 'system',
+                  content: docsRagPayload.excerptsText,
+              }
+            : null;
 
     if (knowledgeMessage && docsRagPayload.excerptsText) {
         knowledgeMessage.content = `${knowledgeMessage.content}\n\n${docsRagPayload.excerptsText}`;
@@ -321,5 +322,8 @@ export const GPT5ChatV2 = async (messages, options = {}) => {
 
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
 
-    return { text: toOutputText(response), contextSources: contextSources || [] };
+    return {
+        text: toOutputText(response),
+        contextSources: Array.isArray(contextSources) ? contextSources : [],
+    };
 };

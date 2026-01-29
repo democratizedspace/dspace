@@ -11,6 +11,7 @@ test.describe('chat RAG context', () => {
                 const now = Date.now();
                 const gameState = {
                     _meta: { lastUpdated: now },
+                    settings: { showChatDebugPayload: true },
                     inventory: { [inventoryId]: 2 },
                     quests: {
                         [questId]: { stepId: 2 },
@@ -91,5 +92,30 @@ test.describe('chat RAG context', () => {
         expect(messageTexts).toContain('welcome/howtodoquests');
         expect(messageTexts).toContain('Processes in flight');
         expect(messageTexts).toContain('Buy 1 kWh of electricity from a wall outlet');
+    });
+
+    test('renders sources used and highlights rag content in debug payload', async ({ page }) => {
+        await page.goto('/chat');
+
+        const chatPanel = page.locator('[data-testid="chat-panel"][data-provider="openai"]');
+        await expect(chatPanel).toBeVisible();
+        await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
+
+        await chatPanel.getByRole('textbox').fill('What are the current game routes?');
+        await chatPanel.getByRole('button', { name: 'Send' }).click();
+
+        await expect(chatPanel.getByText('stubbed reply')).toBeVisible();
+
+        const sourcesDetails = chatPanel.getByTestId('sources-used').first();
+        await expect(sourcesDetails).toBeVisible();
+        await sourcesDetails.locator('summary').click();
+
+        const routeSourceLink = sourcesDetails.locator('[data-source-type="route"] a');
+        await expect(routeSourceLink).toHaveAttribute('href', /\/docs\/routes/);
+
+        await chatPanel.getByRole('button', { name: 'Show prompt' }).click();
+        await expect(
+            chatPanel.locator('[data-testid="chat-debug-message"][data-kind="rag"]')
+        ).toBeVisible();
     });
 });

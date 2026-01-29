@@ -33,13 +33,13 @@ vi.mock('../src/data/npcPersonas.js', () => ({
     ],
 }));
 
-const GPT5Chat = vi.hoisted(() => vi.fn());
+const GPT5ChatV2 = vi.hoisted(() => vi.fn());
 
 vi.mock('../src/utils/openAI.js', async () => {
     const actual = await vi.importActual('../src/utils/openAI.js');
     return {
         ...actual,
-        GPT5Chat,
+        GPT5ChatV2,
     };
 });
 
@@ -69,7 +69,7 @@ describe('OpenAIChat error messaging', () => {
     let consoleErrorMock: ReturnType<typeof vi.spyOn>;
 
     beforeEach(() => {
-        GPT5Chat.mockReset();
+        GPT5ChatV2.mockReset();
         messages.set([]);
         activePersonaId.set('dchat');
         consoleErrorMock = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -80,12 +80,12 @@ describe('OpenAIChat error messaging', () => {
     });
 
     it('surfaces actionable guidance when quota is exhausted', async () => {
-        GPT5Chat.mockRejectedValueOnce(quotaError());
+        GPT5ChatV2.mockRejectedValueOnce(quotaError());
 
         render(OpenAIChat);
         await sendMessage('Hello');
 
-        await waitFor(() => expect(GPT5Chat).toHaveBeenCalled());
+        await waitFor(() => expect(GPT5ChatV2).toHaveBeenCalled());
         const banner = await screen.findByRole('alert');
         expect(banner.getAttribute('data-error-type')).toBe('quota');
         expect(banner.textContent).toMatch(/out of credits/i);
@@ -98,12 +98,12 @@ describe('OpenAIChat error messaging', () => {
         const error = new Error('Incorrect API key provided');
         // @ts-expect-error vitest mock error extension
         error.status = 401;
-        GPT5Chat.mockRejectedValueOnce(error);
+        GPT5ChatV2.mockRejectedValueOnce(error);
 
         render(OpenAIChat);
         await sendMessage('Hello again');
 
-        await waitFor(() => expect(GPT5Chat).toHaveBeenCalled());
+        await waitFor(() => expect(GPT5ChatV2).toHaveBeenCalled());
         const banner = await screen.findByRole('alert');
         expect(banner.getAttribute('data-error-type')).toBe('auth');
         expect(await screen.findAllByText(/api key/i)).toHaveLength(2);

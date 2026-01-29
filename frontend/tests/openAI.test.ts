@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach, vi } from 'vitest';
+import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest';
 
 vi.mock('../src/utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({
@@ -33,10 +33,12 @@ vi.mock('../src/data/npcPersonas.js', () => ({
 import {
     defaultOpenAIErrorMessage,
     describeOpenAIError,
+    buildChatPrompt,
     getOpenAIErrorSummary,
     GPT5Chat,
     GPT5ChatV2,
 } from '../src/utils/openAI.js';
+import { buildDchatKnowledgePack } from '../src/utils/dchatKnowledge.js';
 import { searchDocsRag } from '../src/utils/docsRag.js';
 
 class MockResponseClient {
@@ -455,6 +457,44 @@ describe('GPT5ChatV2', () => {
                 (entry) => entry.type === 'changelog' && entry.url?.startsWith('/changelog#')
             )
         ).toBe(true);
+    });
+});
+
+describe('buildChatPrompt', () => {
+    beforeEach(() => {
+        vi.mocked(buildDchatKnowledgePack).mockClear();
+        vi.mocked(searchDocsRag).mockClear();
+    });
+
+    it('does not duplicate docs excerpts when knowledge summary exists', async () => {
+        vi.mocked(buildDchatKnowledgePack).mockReturnValueOnce({
+            summary: 'Summary entry',
+            sources: [],
+        });
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: `---\nDocs grounding (gitSha: test):\n- [doc] Routes — /docs/routes#top\n  sample\n---`,
+            sources: [],
+            sourcesMeta: { results: [] },
+        });
+
+        const payload = await buildChatPrompt([{ role: 'user', content: 'Routes?' }]);
+        const ragMessages = payload.debugMessages.filter((message) => message.kind === 'rag');
+        const debugContent = payload.debugMessages.map((message) => message.content).join('\n');
+        const combinedContent = payload.combinedMessages
+            .map((message) => message.content)
+            .join('\n');
+
+        expect(ragMessages).toHaveLength(1);
+        const ragContent = ragMessages[0].content;
+        const ragMatches = ragContent.match(/Docs grounding/g) || [];
+        expect(ragMatches).toHaveLength(1);
+        const debugMatches = debugContent.match(/Docs grounding/g) || [];
+        expect(debugMatches).toHaveLength(1);
+        const combinedMatches = combinedContent.match(/Docs grounding/g) || [];
+        expect(combinedMatches).toHaveLength(1);
+        expect(ragContent).toContain('DSPACE knowledge base:');
+        expect(combinedContent).toContain('DSPACE knowledge base:');
+        expect(buildDchatKnowledgePack).toHaveBeenCalled();
     });
 });
 

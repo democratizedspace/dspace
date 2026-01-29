@@ -7,12 +7,14 @@
     import { formatRelative, format } from 'date-fns';
     import { fade } from 'svelte/transition';
     import { copyToClipboard } from '../../../utils/copyToClipboard.js';
+    import { sortSources } from '../../../utils/contextSources.js';
 
     export let messageMarkdown;
     export let className;
     export let timestamp;
     export let avatarUrl = null;
     export let avatarAlt = 'NPC portrait';
+    export let contextSources = [];
 
     let messageHtml;
     const md = new Remarkable({
@@ -42,6 +44,9 @@
         let rawHtml = md.render(messageMarkdown);
         messageHtml = DOMPurify.sanitize(rawHtml);
     }
+
+    $: sortedSources = Array.isArray(contextSources) ? sortSources(contextSources) : [];
+    $: hasSources = className === 'assistant' && sortedSources.length > 0;
 
     let toastVisible = false;
 
@@ -101,6 +106,26 @@
             {formatRelative(new Date(timestamp), new Date())}
         </div>
         {@html messageHtml}
+        {#if hasSources}
+            <details class="sources" data-testid="sources-used">
+                <summary>Sources used</summary>
+                <ul>
+                    {#each sortedSources as source}
+                        <li class="source-item" data-source-type={source.type}>
+                            <span class="source-type">{source.type}</span>
+                            {#if source.url}
+                                <a href={source.url} class="source-link">{source.label}</a>
+                            {:else}
+                                <span class="source-label">{source.label}</span>
+                            {/if}
+                            {#if source.detail}
+                                <span class="source-detail">{source.detail}</span>
+                            {/if}
+                        </li>
+                    {/each}
+                </ul>
+            </details>
+        {/if}
         {#if toastVisible}
             <div
                 class="toast"
@@ -165,6 +190,61 @@
     .timestamp {
         font-size: 12px;
         margin-bottom: 5px;
+    }
+
+    .sources {
+        margin-top: 0.75rem;
+        background: rgba(15, 23, 42, 0.08);
+        border-radius: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        color: #111827;
+    }
+
+    .sources summary {
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .sources ul {
+        list-style: none;
+        margin: 0.5rem 0 0;
+        padding: 0;
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .source-item {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .source-type {
+        text-transform: uppercase;
+        font-size: 0.65rem;
+        letter-spacing: 0.08em;
+        padding: 0.15rem 0.4rem;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.15);
+    }
+
+    .source-link,
+    .source-label {
+        font-weight: 600;
+        color: #0f172a;
+    }
+
+    .source-link:hover,
+    .source-link:focus-visible {
+        text-decoration: underline;
+    }
+
+    .source-detail {
+        color: rgba(15, 23, 42, 0.7);
+        font-size: 0.8rem;
     }
 
     .copy-button {
