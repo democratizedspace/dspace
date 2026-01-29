@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to step up the purity? We'll separate the sweet compounds with a bit of alcohol.",
+            "text": "Ready to step up purity? We'll separate the sweet compounds with a small, controlled alcohol wash.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "purify",
-            "text": "Add a splash of food-grade ethanol and let the solution evaporate. Crystals will form as it dries.",
+            "text": "Add a splash of food-grade ethanol and let the solution evaporate. Crystals form as it dries—slow is fine.",
             "options": [
                 {
                     "type": "process",
@@ -41,7 +41,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! These stevia crystals are intensely sweet and store well.",
+            "text": "Nice work. These crystals are potent and store well. Seal them and label the batch.",
             "options": [
                 {
                     "type": "finish",

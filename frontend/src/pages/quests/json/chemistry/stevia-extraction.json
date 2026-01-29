@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. Those stevia leaves become sweetener. Want an extraction demo?",
+            "text": "Phoenix here. We'll turn those stevia leaves into clean sweetener with low waste. Ready?",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "extract",
-            "text": "Dry leaves, crush, steep below boiling, then filter. See docs/chemistry.",
+            "text": "Dry the leaves, crush them, steep below boiling, then filter. Keep the heat gentle to protect the compounds.",
             "options": [
                 {
                     "type": "process",
@@ -41,7 +41,7 @@
         },
         {
             "id": "finish",
-            "text": "Great job! This extract sweetens without sugar. Next we make crystals.",
+            "text": "Nice work. Sweetener without sugar, and minimal waste. Next up: crystals.",
             "options": [
                 {
                     "type": "finish",
