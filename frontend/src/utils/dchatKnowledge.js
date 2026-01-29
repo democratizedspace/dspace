@@ -175,13 +175,20 @@ function getAchievementEntries(gameState = {}) {
         return display ? `${achievement.title} (${display})` : achievement.title;
     };
 
-    const unlockedEntries = unlocked
-        .slice(0, MAX_ACHIEVEMENT_ENTRIES)
-        .map((achievement) => achievement.title);
-    const remainingSlots = Math.max(0, MAX_ACHIEVEMENT_ENTRIES - unlockedEntries.length);
-    const progressEntries = inProgress.slice(0, remainingSlots).map(formatEntry);
+    const unlockedSlice = unlocked.slice(0, MAX_ACHIEVEMENT_ENTRIES);
+    const remainingSlots = Math.max(0, MAX_ACHIEVEMENT_ENTRIES - unlockedSlice.length);
+    const inProgressSlice = inProgress.slice(0, remainingSlots);
+    const unlockedEntries = unlockedSlice.map((achievement) => achievement.title);
+    const progressEntries = inProgressSlice.map(formatEntry);
 
-    return { unlockedEntries, progressEntries, unlocked, inProgress };
+    return {
+        unlockedEntries,
+        progressEntries,
+        unlocked,
+        inProgress,
+        unlockedSlice,
+        inProgressSlice,
+    };
 }
 
 function describeQuestProgress(questId, questState) {
@@ -310,7 +317,7 @@ export function buildDchatKnowledgePack(gameState = {}) {
         stateDetails.push('quest progress');
     }
 
-    const { unlockedEntries, progressEntries, unlocked, inProgress } =
+    const { unlockedEntries, progressEntries, unlockedSlice, inProgressSlice } =
         getAchievementEntries(gameState);
     if (unlockedEntries.length > 0 || progressEntries.length > 0) {
         const sections = [];
@@ -325,9 +332,6 @@ export function buildDchatKnowledgePack(gameState = {}) {
         }
         knowledgeSections.push(`Achievements: ${sections.join(' | ')}`);
         stateDetails.push('achievements');
-        const unlockedSlice = unlocked.slice(0, unlockedEntries.length);
-        const remainingSlots = Math.max(0, MAX_ACHIEVEMENT_ENTRIES - unlockedSlice.length);
-        const inProgressSlice = inProgress.slice(0, remainingSlots);
         sources.push(
             ...unlockedSlice.map((achievement) => ({
                 type: 'achievement',

@@ -36,7 +36,7 @@ describe('buildDchatKnowledgePack', () => {
     });
 
     it('caps achievement sources to the configured limit', () => {
-        const unlocked = Array.from({ length: 8 }, (_, index) => ({
+        const unlocked = Array.from({ length: 4 }, (_, index) => ({
             id: `unlocked-${index + 1}`,
             title: `Unlocked ${index + 1}`,
             unlocked: true,
@@ -55,7 +55,10 @@ describe('buildDchatKnowledgePack', () => {
 
         expect(achievementSources.length).toBe(6);
         expect(achievementSources.map((entry) => entry.id)).toEqual(
-            unlocked.slice(0, 6).map((entry) => entry.id)
+            [
+                ...unlocked.map((entry) => entry.id),
+                ...inProgress.slice(0, 2).map((entry) => entry.id),
+            ]
         );
     });
 });
