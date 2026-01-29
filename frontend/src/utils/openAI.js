@@ -322,5 +322,8 @@ export const GPT5ChatV2 = async (messages, options = {}) => {
 
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
 
-    return { text: toOutputText(response), contextSources: contextSources || [] };
+    return {
+        text: toOutputText(response),
+        contextSources: Array.isArray(contextSources) ? contextSources : [],
+    };
 };
