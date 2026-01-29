@@ -413,7 +413,9 @@ describe('GPT5ChatV2', () => {
             }
         };
 
-        const result = await GPT5ChatV2([{ role: 'user', content: 'What are the current routes?' }]);
+        const result = await GPT5ChatV2([
+            { role: 'user', content: 'What are the current routes?' },
+        ]);
 
         expect(result.text).toBe('ok');
         expect(
@@ -445,9 +447,7 @@ describe('GPT5ChatV2', () => {
             }
         };
 
-        const result = await GPT5ChatV2([
-            { role: 'user', content: 'Is token.place active?' },
-        ]);
+        const result = await GPT5ChatV2([{ role: 'user', content: 'Is token.place active?' }]);
 
         expect(result.text).toBe('ok');
         expect(

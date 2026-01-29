@@ -52,13 +52,22 @@ describe('buildDchatKnowledgePack', () => {
 
         const pack = buildDchatKnowledgePack({});
         const achievementSources = pack.sources.filter((entry) => entry.type === 'achievement');
+        const expectedIds = [
+            ...unlocked.map((entry) => entry.id),
+            ...inProgress.slice(0, 2).map((entry) => entry.id),
+        ];
+        const sortedAchievementIds = [...achievementSources]
+            .sort((a, b) => {
+                const labelCompare = a.label.localeCompare(b.label);
+                if (labelCompare !== 0) {
+                    return labelCompare;
+                }
+                return a.id.localeCompare(b.id);
+            })
+            .map((entry) => entry.id);
 
         expect(achievementSources.length).toBe(6);
-        expect(achievementSources.map((entry) => entry.id)).toEqual(
-            [
-                ...unlocked.map((entry) => entry.id),
-                ...inProgress.slice(0, 2).map((entry) => entry.id),
-            ]
-        );
+        expect(achievementSources.map((entry) => entry.id)).toEqual(sortedAchievementIds);
+        expect(new Set(achievementSources.map((entry) => entry.id))).toEqual(new Set(expectedIds));
     });
 });
