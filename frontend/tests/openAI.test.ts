@@ -33,6 +33,7 @@ vi.mock('../src/data/npcPersonas.js', () => ({
 import {
     defaultOpenAIErrorMessage,
     describeOpenAIError,
+    buildChatPrompt,
     getOpenAIErrorSummary,
     GPT5Chat,
     GPT5ChatV2,
@@ -455,6 +456,29 @@ describe('GPT5ChatV2', () => {
                 (entry) => entry.type === 'changelog' && entry.url?.startsWith('/changelog#')
             )
         ).toBe(true);
+    });
+});
+
+describe('buildChatPrompt', () => {
+    afterEach(() => {
+        vi.mocked(searchDocsRag).mockClear();
+    });
+
+    it('does not duplicate docs excerpts when knowledge summary exists', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: `---\nDocs grounding (gitSha: test):\n- [doc] Routes — /docs/routes#top\n  sample\n---`,
+            sources: [],
+            sourcesMeta: { results: [] },
+        });
+
+        const payload = await buildChatPrompt([{ role: 'user', content: 'Routes?' }]);
+        const ragMessages = payload.debugMessages.filter((message) => message.kind === 'rag');
+
+        expect(ragMessages).toHaveLength(1);
+        const ragContent = ragMessages[0].content;
+        const matches = ragContent.match(/Docs grounding/g) || [];
+        expect(matches).toHaveLength(1);
+        expect(ragContent).toContain('DSPACE knowledge base:');
     });
 });
 
