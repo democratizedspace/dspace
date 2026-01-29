@@ -16,7 +16,8 @@ This guide describes how to submit your custom quests to become part of the offi
 
 ## Submission Options
 
-You have two ways to submit your quest:
+You have two ways to submit your quest. Both submission forms accept raw JSON in a text area, so
+you will need to paste the quest or bundle JSON directly.
 
 ### Option 1: Bundle Submission (Recommended)
 
@@ -27,8 +28,8 @@ If your quest requires custom items or processes, use the bundle submission work
     - Use the process picker for “Run process” dialogue options and set item counts as needed
 2. **Create related items** at `/inventory/create` if needed
 3. **Create related processes** at `/processes/create` if needed
-4. **Package everything into a bundle** following the [Custom Content Bundles](/docs/custom-bundles) format
-5. **Submit the bundle** at `/bundles/submit` with your GitHub token
+4. **Export your custom content** from `/contentbackup` (Prepare backup → Download backup)
+5. **Submit the bundle JSON** at `/bundles/submit` with your GitHub token
 6. **Respond to feedback** on the generated pull request
 
 ### Option 2: Quest-Only Submission
@@ -38,14 +39,19 @@ If your quest uses only existing items and processes:
 1. **Create your quest** using the in-game editor at `/quests/create`
     - Add quest completion rewards with the item picker for any items you want to grant on finish
     - Use the process picker for “Run process” dialogue options when applicable
-2. **Validate** the quest structure by running:
-    ```bash
-    npm run test:ci -- questValidation
-    ```
-3. **Check quest quality** with:
-    ```bash
-    npm run test:ci -- questQuality
-    ```
+2. **Export the quest JSON**
+    - If the quest lives in the repository, open the JSON file in
+      `frontend/src/pages/quests/json/<tree>/<quest>.json` and copy its contents.
+    - If the quest is custom content, export from `/contentbackup` and copy the quest entry from
+      the downloaded bundle JSON.
+3. **Validate** the quest structure:
+    - For quests that live in the repository, run:
+        ```bash
+        node scripts/validate-quest.js path/to/quest.json
+        ```
+        This validates against the repo schema (including `hardening` metadata).
+    - For quests exported from the in-game editor, use the validation in the
+      submission form (exports do not include `hardening`).
 4. **Submit at** `/quests/submit` with your GitHub token
 5. **Respond to feedback** on the generated pull request
 
@@ -60,7 +66,8 @@ load times. Developers should use the shared helper at
 
 For manual submissions via command-line:
 
-1. **Bundle related content** using `scripts/create-content-bundle.js`. This script collects quests, items, and processes into a single JSON file under `submissions/bundles`.
+1. **Bundle related content** using `scripts/create-content-bundle.js`. This script collects
+   quests, items, and processes into a single JSON file under `submissions/bundles`.
 2. **Validate** all content following the guidelines above
 3. **Create a pull request** manually with your bundle file
 4. **Regenerate the new quests list** by running `npm run new-quests:update` and
