@@ -6,7 +6,9 @@ const findItemId = (name: string) =>
   items.find((item) => item.name === name)?.id ?? '';
 
 const dWattId = findItemId('dWatt');
-const windTurbineId = findItemId('500 W wind turbine');
+const solarSetupId = findItemId('Solar setup (1 kWh)');
+const guidedStackId = findItemId('guided flight stack');
+const starTrailId = findItemId('stacked star trail photo');
 
 describe('evaluateTitles', () => {
   it('keeps titles locked when the player is new', () => {
@@ -17,14 +19,16 @@ describe('evaluateTitles', () => {
 
   it('unlocks quest and energy titles as milestones are met', () => {
     const quests = Object.fromEntries(
-      Array.from({ length: 10 }, (_, index) => [
+      Array.from({ length: 30 }, (_, index) => [
         `quest-${index + 1}`,
         { finished: true },
       ])
     );
     const inventory = {
-      ...(dWattId ? { [dWattId]: 600 } : {}),
-      ...(windTurbineId ? { [windTurbineId]: 1 } : {}),
+      ...(dWattId ? { [dWattId]: 6000 } : {}),
+      ...(solarSetupId ? { [solarSetupId]: 1 } : {}),
+      ...(guidedStackId ? { [guidedStackId]: 1 } : {}),
+      ...(starTrailId ? { [starTrailId]: 1 } : {}),
     };
 
     const summaries = evaluateTitles({ quests, inventory });
@@ -33,9 +37,14 @@ describe('evaluateTitles', () => {
       .filter((summary) => summary.unlocked)
       .map((summary) => summary.name);
 
-    expect(unlockedNames).toContain('Rookie Explorer');
-    expect(unlockedNames).toContain('Mission Specialist');
-    expect(unlockedNames).toContain('Grid Investor');
-    expect(unlockedNames).toContain('Wind Pioneer');
+    expect(new Set(unlockedNames)).toEqual(
+      new Set([
+        'Quest Vanguard',
+        'Grid Magnate',
+        'Solar Architect',
+        'Guidance Officer',
+        'Stellar Cartographer',
+      ])
+    );
   });
 });
