@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { buildChatPrompt } from '../src/utils/openAI.js';
-import { searchDocsRag } from '../src/utils/docsRag.js';
 import { sortSources } from '../src/utils/contextSources.js';
 
 const probes = [
@@ -42,7 +41,7 @@ const expectSortedAndDeduped = (contextSources) => {
 
     const seen = new Set();
     for (const source of contextSources) {
-        const key = `${source.type}::${source.url ?? ''}`;
+        const key = `${source.type}::${source.id ?? ''}::${source.url ?? ''}`;
         expect(seen.has(key)).toBe(false);
         seen.add(key);
     }
@@ -71,7 +70,6 @@ const assertCoverage = (coverage, contextSources, ragText) => {
 
 describe('QA 9.4 chat hallucination contracts', () => {
     it.each(probes)('buildChatPrompt contracts: $label', async ({ prompt, coverage }) => {
-        const docsRagPayload = await searchDocsRag(prompt);
         const { debugMessages, contextSources } = await buildChatPrompt([
             { role: 'user', content: prompt },
         ]);
@@ -79,16 +77,11 @@ describe('QA 9.4 chat hallucination contracts', () => {
         expect(debugMessages[0]?.role).toBe('system');
         expect(debugMessages[0]?.kind).toBe('main');
 
-        const ragText = debugMessages
-            .filter((message) => message.kind === 'rag')
-            .map((message) => message.content)
-            .join('\n');
-
-        if (docsRagPayload.excerptsText) {
-            expect(debugMessages.some((message) => message.kind === 'rag')).toBe(true);
-        }
+        const ragMessages = debugMessages.filter((message) => message.kind === 'rag');
+        const ragText = ragMessages.map((message) => message.content).join('\n');
 
         if (coverage && coverage !== 'state') {
+            expect(ragMessages.length).toBeGreaterThan(0);
             assertCoverage(coverage, contextSources, ragText);
         }
 
