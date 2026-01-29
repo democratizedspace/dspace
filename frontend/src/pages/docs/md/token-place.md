@@ -20,8 +20,8 @@ Token.place can be enabled in two ways:
 
 - **Environment variable**: set `VITE_TOKEN_PLACE_ENABLED=true`. You can also point to a custom URL
   with `VITE_TOKEN_PLACE_URL`.
-- **Game settings**: save `tokenPlace.enabled=true` in game state (for example, via a settings
-  toggle). Optionally pair this with a custom `tokenPlace.url`.
+- **Game state**: persist `tokenPlace.enabled=true` in saved game state. Optionally pair this with
+  a custom `tokenPlace.url`.
 
 ```bash
 VITE_TOKEN_PLACE_ENABLED=true VITE_TOKEN_PLACE_URL=https://my-token-place/api npm run dev
