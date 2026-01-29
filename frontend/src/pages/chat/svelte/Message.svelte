@@ -45,7 +45,7 @@
         messageHtml = DOMPurify.sanitize(rawHtml);
     }
 
-    $: sortedSources = sortSources(contextSources || []);
+    $: sortedSources = Array.isArray(contextSources) ? sortSources(contextSources) : [];
     $: hasSources = className === 'assistant' && sortedSources.length > 0;
 
     let toastVisible = false;

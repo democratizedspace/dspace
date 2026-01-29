@@ -109,7 +109,7 @@
                 persona: currentPersona,
                 promptPayload: debugPayload,
             });
-            const responseText = aiResponse.text;
+            const responseText = aiResponse?.text ?? '';
             const aiMessage = {
                 role: 'assistant',
                 content: responseText,
@@ -117,7 +117,7 @@
                 avatarUrl: getPersonaAvatar(currentPersona),
                 avatarAlt: getPersonaAlt(currentPersona),
                 timestamp: Date.now(),
-                contextSources: aiResponse.contextSources,
+                contextSources: aiResponse?.contextSources ?? [],
             };
 
             addMessage(aiMessage);
