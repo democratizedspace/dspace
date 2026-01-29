@@ -49,6 +49,10 @@ jest.mock('../src/utils/gameState/common.js', () => ({
     ready: Promise.resolve(),
 }));
 
+jest.mock('../src/utils/docsRag.js', () => ({
+    searchDocsRag: jest.fn(async () => ({ excerptsText: '', sourcesMeta: { results: [] } })),
+}));
+
 const { buildChatPrompt, GPT5Chat } = require('../src/utils/openAI.js');
 
 describe('gpt-5 chat responses utility', () => {

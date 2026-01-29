@@ -1,5 +1,6 @@
 import { loadGameState, ready } from './gameState/common.js';
 import { buildDchatKnowledge } from './dchatKnowledge.js';
+import { searchDocsRag } from './docsRag.js';
 import { npcPersonas } from '../data/npcPersonas.js';
 import OpenAI from 'openai';
 
@@ -44,6 +45,20 @@ const fallbackWelcomeMessage =
     defaultPersona?.welcomeMessage || 'Welcome! How can I assist you today?';
 export const defaultOpenAIErrorMessage =
     "Sorry, I'm having some trouble and can't generate a response.";
+const sharedSystemGuardrail =
+    'Never invent quests, items, processes, routes, URLs, or player state. If you are ' +
+    "unsure, say you don't know and direct the player to /docs or docs/ROUTES.md.";
+
+const applySystemGuardrail = (prompt) => {
+    if (!prompt) return sharedSystemGuardrail;
+    const normalizedPrompt = prompt.toLowerCase();
+    const hasNeverInvent = normalizedPrompt.includes('never invent');
+    const hasGuardedDomain = /(quests|items|processes|routes|player state|urls?)/.test(
+        normalizedPrompt
+    );
+    if (hasNeverInvent && hasGuardedDomain) return prompt;
+    return `${prompt}\n\n${sharedSystemGuardrail}`;
+};
 
 const toNumericStatus = (status) => {
     if (typeof status === 'string') {
@@ -216,7 +231,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const persona = options.persona || defaultPersona;
     const systemMessage = {
         role: 'system',
-        content: persona?.systemPrompt || fallbackSystemPrompt,
+        content: applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt),
     };
 
     const knowledgeSummary = buildDchatKnowledge(gameState);
@@ -226,6 +241,22 @@ export const buildChatPrompt = async (messages, options = {}) => {
               content: `DSPACE knowledge base:\n${knowledgeSummary}`,
           }
         : null;
+    const latestUserMessage = [...messages]
+        .reverse()
+        .find((message) => message.role === 'user' && message.content?.trim());
+    const docsRagPayload = latestUserMessage
+        ? await searchDocsRag(latestUserMessage.content)
+        : { excerptsText: '' };
+    const docsRagMessage = docsRagPayload.excerptsText
+        ? {
+              role: 'system',
+              content: docsRagPayload.excerptsText,
+          }
+        : null;
+
+    if (knowledgeMessage && docsRagPayload.excerptsText) {
+        knowledgeMessage.content = `${knowledgeMessage.content}\n\n${docsRagPayload.excerptsText}`;
+    }
 
     const openingMessage = {
         role: 'assistant',
@@ -240,19 +271,26 @@ export const buildChatPrompt = async (messages, options = {}) => {
         if (knowledgeMessage) {
             combinedMessages.push(knowledgeMessage);
         }
+        if (docsRagMessage && !knowledgeMessage) {
+            combinedMessages.push(docsRagMessage);
+        }
         combinedMessages.push(openingMessage);
     } else {
         combinedMessages = [systemMessage];
         if (knowledgeMessage) {
             combinedMessages.push(knowledgeMessage);
         }
+        if (docsRagMessage && !knowledgeMessage) {
+            combinedMessages.push(docsRagMessage);
+        }
         combinedMessages = [...combinedMessages, ...userMessages];
     }
 
+    const ragMessages = new Set([knowledgeMessage, docsRagMessage].filter(Boolean));
     const debugMessages = combinedMessages.map((message) => ({
         role: message.role,
         content: message.content,
-        kind: message === knowledgeMessage ? 'rag' : 'main',
+        kind: ragMessages.has(message) ? 'rag' : 'main',
     }));
 
     return { combinedMessages, debugMessages, gameState };

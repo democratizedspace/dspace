@@ -11,6 +11,10 @@ vi.mock('../src/utils/dchatKnowledge.js', () => ({
     buildDchatKnowledge: vi.fn(() => 'knowledge'),
 }));
 
+vi.mock('../src/utils/docsRag.js', () => ({
+    searchDocsRag: vi.fn(async () => ({ excerptsText: '', sourcesMeta: { results: [] } })),
+}));
+
 vi.mock('../src/data/npcPersonas.js', () => ({
     npcPersonas: [
         {

@@ -375,6 +375,8 @@ Proposal (opt-in):
 - Add corresponding `sources` entries.
 - Generate build-time MiniSearch artifacts for docs chunks and routes under
   `frontend/src/generated/rag/` to keep QA coverage deterministic and client-only.
+- At runtime, query the MiniSearch artifacts on each chat turn and inject a
+  small, URL-anchored docs excerpt block into the system prompt.
 
 **Acceptance criteria:**
 - Knowledge summary contains `/docs` titles + slugs and route index data.
