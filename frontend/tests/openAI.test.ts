@@ -491,6 +491,7 @@ describe('buildChatPrompt', () => {
         expect(combinedMatches).toHaveLength(1);
         expect(ragContent).toContain('DSPACE knowledge base:');
         expect(combinedContent).toContain('DSPACE knowledge base:');
+        expect(buildDchatKnowledgePack).toHaveBeenCalledTimes(1);
     });
 });
 
