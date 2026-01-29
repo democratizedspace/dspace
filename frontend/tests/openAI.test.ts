@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach, vi } from 'vitest';
+import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest';
 
 vi.mock('../src/utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({
@@ -461,7 +461,8 @@ describe('GPT5ChatV2', () => {
 });
 
 describe('buildChatPrompt', () => {
-    afterEach(() => {
+    beforeEach(() => {
+        vi.mocked(buildDchatKnowledgePack).mockClear();
         vi.mocked(searchDocsRag).mockClear();
     });
 
