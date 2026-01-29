@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import docsMeta from '../src/generated/rag/docs_meta.json';
 import { searchDocsRag } from '../src/utils/docsRag.js';
 
 describe('docs RAG search', () => {
@@ -33,5 +34,33 @@ describe('docs RAG search', () => {
         expect(excerptsText).toMatch(/\/changelog#[^\s]+/);
         expect(sourcesMeta.results.some((entry) => entry.kind === 'changelog')).toBe(true);
         expect(sources.some((entry) => entry.type === 'changelog')).toBe(true);
+    });
+
+    it('caps excerpts and returns deterministic results', async () => {
+        const options = {
+            maxResults: 12,
+            maxChars: 1200,
+            maxExcerptChars: 160,
+        };
+        const first = await searchDocsRag('docs routes changelog', options);
+        const second = await searchDocsRag('docs routes changelog', options);
+
+        expect(first.excerptsText.length).toBeLessThanOrEqual(options.maxChars);
+        expect(first.excerptsText.startsWith('---')).toBe(true);
+        expect(first.excerptsText.endsWith('---')).toBe(true);
+        expect(first.excerptsText).toBe(second.excerptsText);
+        expect(first.sourcesMeta.results).toEqual(second.sourcesMeta.results);
+    });
+
+    it('includes docs meta generatedAt in headers', async () => {
+        expect(docsMeta.generatedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+
+        const { excerptsText } = await searchDocsRag('routes', {
+            maxResults: 2,
+            maxChars: 1200,
+        });
+
+        expect(excerptsText).toContain('generatedAt:');
+        expect(excerptsText).toContain(docsMeta.generatedAt);
     });
 });
