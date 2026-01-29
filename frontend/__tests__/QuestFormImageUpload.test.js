@@ -5,6 +5,7 @@ import { beforeEach, afterEach, describe, it, expect, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import { render, fireEvent, waitFor, act } from '@testing-library/svelte';
 import QuestForm from '../src/components/svelte/QuestForm.svelte';
+import { downsampleAndCompressToJpeg } from '../src/utils/imageDownsample.js';
 
 const questsAddMock = vi.fn();
 const listMock = vi.fn();
@@ -52,6 +53,7 @@ function setupDom() {
 
 describe('QuestForm image uploads', () => {
     let container;
+    const sampleDataUrl = 'data:image/png;base64,FALLBACKDATA';
 
     beforeEach(() => {
         container = setupDom();
@@ -72,6 +74,19 @@ describe('QuestForm image uploads', () => {
                 this.type = options.type || '';
             }
         };
+        global.FileReader = class FileReader {
+            constructor() {
+                this.result = null;
+                this.onload = null;
+                this.onerror = null;
+            }
+            readAsDataURL() {
+                this.result = sampleDataUrl;
+                if (this.onload) {
+                    this.onload();
+                }
+            }
+        };
         global.__SSR__ = false;
         global.__BROWSER__ = true;
     });
@@ -80,6 +95,7 @@ describe('QuestForm image uploads', () => {
         container.innerHTML = '';
         delete global.fetch;
         delete global.File;
+        delete global.FileReader;
     });
 
     it('stores quest images locally without calling a remote upload endpoint', async () => {
@@ -147,5 +163,30 @@ describe('QuestForm image uploads', () => {
         const savedQuest = questsAddMock.mock.calls[0][0];
         expect(savedQuest.image).toBe('data:image/jpeg;base64,COMPRESSED');
         expect(global.fetch).not.toHaveBeenCalled();
+    });
+
+    it('falls back to a FileReader preview when JPEG downsampling fails', async () => {
+        downsampleAndCompressToJpeg.mockRejectedValueOnce(new Error('Downsample failed'));
+
+        const { getByLabelText } = render(QuestForm, {
+            target: container,
+            props: { existingQuests: [] },
+        });
+
+        await waitFor(() => expect(listMock).toHaveBeenCalled());
+
+        const fileInput = getByLabelText(/upload an image\*/i);
+        await act(async () => {
+            const file = new File(['content'], 'quest.png', { type: 'image/png' });
+            fireEvent.change(fileInput, {
+                target: { files: [file] },
+            });
+        });
+
+        await waitFor(() => {
+            const preview = container.querySelector('.image-preview');
+            expect(preview).toBeInTheDocument();
+            expect(preview).toHaveAttribute('src', sampleDataUrl);
+        });
     });
 });
