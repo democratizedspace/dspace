@@ -9,10 +9,15 @@ vi.mock('../src/utils/gameState/common.js', () => ({
 
 vi.mock('../src/utils/dchatKnowledge.js', () => ({
     buildDchatKnowledge: vi.fn(() => 'knowledge'),
+    buildDchatKnowledgePack: vi.fn(() => ({ summary: 'knowledge', sources: [] })),
 }));
 
 vi.mock('../src/utils/docsRag.js', () => ({
-    searchDocsRag: vi.fn(async () => ({ excerptsText: '', sourcesMeta: { results: [] } })),
+    searchDocsRag: vi.fn(async () => ({
+        excerptsText: '',
+        sources: [],
+        sourcesMeta: { results: [] },
+    })),
 }));
 
 vi.mock('../src/data/npcPersonas.js', () => ({
@@ -30,7 +35,9 @@ import {
     describeOpenAIError,
     getOpenAIErrorSummary,
     GPT5Chat,
+    GPT5ChatV2,
 } from '../src/utils/openAI.js';
+import { searchDocsRag } from '../src/utils/docsRag.js';
 
 class MockResponseClient {
     constructor(resolver) {
@@ -375,6 +382,79 @@ describe('GPT5Chat', () => {
             'temporary outage'
         );
         expect(resolver).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('GPT5ChatV2', () => {
+    afterEach(() => {
+        delete globalThis.__DSpaceOpenAIClient;
+        vi.mocked(searchDocsRag).mockClear();
+    });
+
+    it('returns contextSources for route grounding', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: 'routes excerpt',
+            sources: [
+                {
+                    type: 'route',
+                    id: 'docs/routes#top',
+                    label: 'Routes',
+                    url: '/docs/routes#top',
+                },
+            ],
+            sourcesMeta: { results: [] },
+        });
+
+        const resolver = vi.fn(async () => ({ output_text: 'ok' }));
+
+        globalThis.__DSpaceOpenAIClient = class extends MockResponseClient {
+            constructor() {
+                super(resolver);
+            }
+        };
+
+        const result = await GPT5ChatV2([{ role: 'user', content: 'What are the current routes?' }]);
+
+        expect(result.text).toBe('ok');
+        expect(
+            result.contextSources.some(
+                (entry) => entry.type === 'route' && entry.url === '/docs/routes#top'
+            )
+        ).toBe(true);
+    });
+
+    it('returns contextSources for changelog grounding', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: 'changelog excerpt',
+            sources: [
+                {
+                    type: 'changelog',
+                    id: 'changelog/token-place',
+                    label: 'Changelog',
+                    url: '/changelog#token-place',
+                },
+            ],
+            sourcesMeta: { results: [] },
+        });
+
+        const resolver = vi.fn(async () => ({ output_text: 'ok' }));
+
+        globalThis.__DSpaceOpenAIClient = class extends MockResponseClient {
+            constructor() {
+                super(resolver);
+            }
+        };
+
+        const result = await GPT5ChatV2([
+            { role: 'user', content: 'Is token.place active?' },
+        ]);
+
+        expect(result.text).toBe('ok');
+        expect(
+            result.contextSources.some(
+                (entry) => entry.type === 'changelog' && entry.url?.startsWith('/changelog#')
+            )
+        ).toBe(true);
     });
 });
 

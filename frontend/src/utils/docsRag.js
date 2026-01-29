@@ -15,6 +15,12 @@ const indexOptions = {
 
 let docsRagPromise;
 
+const docsKindToType = {
+    doc: 'doc',
+    route: 'route',
+    changelog: 'changelog',
+};
+
 const loadDocsRag = async () => {
     if (!docsRagPromise) {
         docsRagPromise = (async () => {
@@ -66,11 +72,50 @@ const buildEntry = ({ kind, title, slug, anchor, excerpt }) => {
     return `- [${kind}] ${title} — ${slug}#${resolvedAnchor}\n  ${excerpt}`;
 };
 
+const formatSourceLabel = ({ title, heading }) => {
+    const trimmedTitle = String(title || '').trim();
+    const trimmedHeading = String(heading || '').trim();
+
+    if (trimmedTitle && trimmedHeading && trimmedHeading !== trimmedTitle) {
+        return `${trimmedTitle} — ${trimmedHeading}`;
+    }
+
+    return trimmedTitle || trimmedHeading || 'Untitled';
+};
+
+export const mapDocsResultsToSources = (results = []) => {
+    if (!Array.isArray(results) || results.length === 0) {
+        return [];
+    }
+
+    return results
+        .map((result) => {
+            const resolvedAnchor = result.anchor || 'top';
+            const slug = result.slug ? String(result.slug) : '';
+            const idValue = result.id ?? (slug ? `${slug}#${resolvedAnchor}` : '');
+            const id = idValue != null ? String(idValue) : '';
+            const label = formatSourceLabel(result);
+            const type = docsKindToType[result.kind] || 'doc';
+
+            if (!id || !label) {
+                return null;
+            }
+
+            return {
+                type,
+                id,
+                label,
+                url: slug ? `${slug}#${resolvedAnchor}` : undefined,
+            };
+        })
+        .filter(Boolean);
+};
+
 export const searchDocsRag = async (queryText, options = {}) => {
     const query = String(queryText || '').trim();
 
     if (!query) {
-        return { excerptsText: '', sourcesMeta: { results: [] } };
+        return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
 
     let miniSearch;
@@ -81,7 +126,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
         ({ miniSearch, chunkMap, meta } = await loadDocsRag());
     } catch (error) {
         console.error('Failed to load docs RAG data:', error);
-        return { excerptsText: '', sourcesMeta: { results: [] } };
+        return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
     const results = miniSearch.search(query, { prefix: true, fuzzy: 0.2 });
     const maxResults = options.maxResults ?? DEFAULT_MAX_RESULTS;
@@ -99,7 +144,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
     }
 
     if (!selected.length) {
-        return { excerptsText: '', sourcesMeta: { results: [] } };
+        return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
 
     const gitSha = meta?.gitSha || 'unknown';
@@ -153,23 +198,26 @@ export const searchDocsRag = async (queryText, options = {}) => {
     }
 
     if (!included.length) {
-        return { excerptsText: '', sourcesMeta: { results: [] } };
+        return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
 
     output += '---';
 
+    const sourcesMeta = {
+        gitSha,
+        results: included.map((chunk) => ({
+            id: chunk.id,
+            slug: chunk.slug,
+            anchor: chunk.anchor,
+            kind: chunk.kind,
+            title: chunk.title,
+            heading: chunk.heading,
+        })),
+    };
+
     return {
         excerptsText: output,
-        sourcesMeta: {
-            gitSha,
-            results: included.map((chunk) => ({
-                id: chunk.id,
-                slug: chunk.slug,
-                anchor: chunk.anchor,
-                kind: chunk.kind,
-                title: chunk.title,
-                heading: chunk.heading,
-            })),
-        },
+        sources: mapDocsResultsToSources(sourcesMeta.results),
+        sourcesMeta,
     };
 };

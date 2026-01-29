@@ -1,5 +1,6 @@
 import { loadGameState, ready } from './gameState/common.js';
-import { buildDchatKnowledge } from './dchatKnowledge.js';
+import { buildDchatKnowledgePack } from './dchatKnowledge.js';
+import { mergeSources } from './contextSources.js';
 import { searchDocsRag } from './docsRag.js';
 import { npcPersonas } from '../data/npcPersonas.js';
 import OpenAI from 'openai';
@@ -234,7 +235,8 @@ export const buildChatPrompt = async (messages, options = {}) => {
         content: applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt),
     };
 
-    const knowledgeSummary = buildDchatKnowledge(gameState);
+    const knowledgePack = buildDchatKnowledgePack(gameState);
+    const knowledgeSummary = knowledgePack.summary;
     const knowledgeMessage = knowledgeSummary
         ? {
               role: 'system',
@@ -246,7 +248,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         .find((message) => message.role === 'user' && message.content?.trim());
     const docsRagPayload = latestUserMessage
         ? await searchDocsRag(latestUserMessage.content)
-        : { excerptsText: '' };
+        : { excerptsText: '', sources: [] };
     const docsRagMessage = docsRagPayload.excerptsText
         ? {
               role: 'system',
@@ -293,7 +295,9 @@ export const buildChatPrompt = async (messages, options = {}) => {
         kind: ragMessages.has(message) ? 'rag' : 'main',
     }));
 
-    return { combinedMessages, debugMessages, gameState };
+    const contextSources = mergeSources(knowledgePack.sources || [], docsRagPayload.sources || []);
+
+    return { combinedMessages, debugMessages, gameState, contextSources };
 };
 
 export const GPT5Chat = async (messages, options = {}) => {
@@ -306,4 +310,16 @@ export const GPT5Chat = async (messages, options = {}) => {
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
 
     return toOutputText(response);
+};
+
+export const GPT5ChatV2 = async (messages, options = {}) => {
+    const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
+    const { combinedMessages, gameState, contextSources } = promptPayload;
+    const apiKey = gameState.openAI?.apiKey || ''; // scan-secrets: ignore
+    const OpenAIClient = resolveOpenAIClient();
+    const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
+
+    const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+
+    return { text: toOutputText(response), contextSources: contextSources || [] };
 };
