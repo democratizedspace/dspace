@@ -1,0 +1,115 @@
+import { describe, expect, it } from 'vitest';
+import { buildChatPrompt } from '../src/utils/openAI.js';
+import { searchDocsRag } from '../src/utils/docsRag.js';
+import { sortSources } from '../src/utils/contextSources.js';
+
+const probes = [
+    {
+        label: 'custom content',
+        prompt: 'How do I add custom content to DSPACE?',
+        coverage: 'doc',
+    },
+    {
+        label: 'quest editing',
+        prompt: 'Where do I edit quests?',
+        coverage: 'doc',
+    },
+    {
+        label: 'backup export',
+        prompt: 'What can I back up or export?',
+        coverage: 'doc',
+    },
+    {
+        label: 'inventory state',
+        prompt: 'What’s in my inventory right now?',
+        coverage: 'state',
+    },
+    {
+        label: 'token.place status',
+        prompt: 'Is token.place active?',
+        coverage: 'changelog',
+    },
+    {
+        label: 'routes list',
+        prompt: 'What are the current game routes?',
+        coverage: 'route',
+    },
+];
+
+const expectSortedAndDeduped = (contextSources) => {
+    const sorted = sortSources(contextSources);
+    expect(contextSources).toEqual(sorted);
+
+    const seen = new Set();
+    for (const source of contextSources) {
+        const key = `${source.type}::${source.url ?? ''}`;
+        expect(seen.has(key)).toBe(false);
+        seen.add(key);
+    }
+};
+
+const assertCoverage = (coverage, contextSources, ragText) => {
+    if (coverage === 'doc') {
+        const hasDoc = contextSources.some(
+            (source) => source.type === 'doc' && String(source.url || '').startsWith('/docs/')
+        );
+        expect(hasDoc || ragText.includes('/docs/')).toBe(true);
+    }
+
+    if (coverage === 'route') {
+        const hasRoute = contextSources.some((source) => source.type === 'route');
+        expect(hasRoute || ragText.includes('/docs/routes') || ragText.includes('ROUTES')).toBe(
+            true
+        );
+    }
+
+    if (coverage === 'changelog') {
+        const hasChangelog = contextSources.some((source) => source.type === 'changelog');
+        expect(hasChangelog || ragText.includes('/changelog')).toBe(true);
+    }
+};
+
+describe('QA 9.4 chat hallucination contracts', () => {
+    it.each(probes)('buildChatPrompt contracts: $label', async ({ prompt, coverage }) => {
+        const docsRagPayload = await searchDocsRag(prompt);
+        const { debugMessages, contextSources } = await buildChatPrompt([
+            { role: 'user', content: prompt },
+        ]);
+
+        expect(debugMessages[0]?.role).toBe('system');
+        expect(debugMessages[0]?.kind).toBe('main');
+
+        const ragText = debugMessages
+            .filter((message) => message.kind === 'rag')
+            .map((message) => message.content)
+            .join('\n');
+
+        if (docsRagPayload.excerptsText) {
+            expect(debugMessages.some((message) => message.kind === 'rag')).toBe(true);
+        }
+
+        if (coverage && coverage !== 'state') {
+            assertCoverage(coverage, contextSources, ragText);
+        }
+
+        expectSortedAndDeduped(contextSources);
+    });
+
+    it('includes inventory guardrails against inventing player state', async () => {
+        const { debugMessages } = await buildChatPrompt([
+            { role: 'user', content: 'What’s in my inventory right now?' },
+        ]);
+        const systemMessage = debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const normalized = systemMessage?.content?.toLowerCase() || '';
+        expect(normalized).toContain('never invent');
+        expect(normalized).toContain('player state');
+    });
+
+    it.todo(
+        'Stage 7: system guardrail should ask for a save snapshot or explain it cannot see saves'
+    );
+
+    it.todo('Stage 8: retrieval includes requires/consumes/creates duration semantics doc chunk');
+});
