@@ -509,6 +509,30 @@ describe('buildChatPrompt', () => {
         expect(occurrences).toHaveLength(1);
     });
 
+    it('appends only missing guardrail lines when a persona includes some rules', async () => {
+        const systemPrompt = [
+            'Custom system prompt.',
+            'Never invent quests, items, processes, routes, URLs, or player state.',
+        ].join('\n');
+
+        const payload = await buildChatPrompt([{ role: 'user', content: 'Check guardrails.' }], {
+            persona: {
+                id: 'custom',
+                systemPrompt,
+                welcomeMessage: 'hello',
+            },
+        });
+        const systemMessage = payload.debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const content = systemMessage?.content ?? '';
+        const neverInventMatches = content.match(/never invent/gi) ?? [];
+
+        expect(neverInventMatches).toHaveLength(1);
+        expect(content).toContain('/gamesaves');
+        expect(content).toMatch(/save snapshot/i);
+    });
+
     it('does not duplicate docs excerpts when knowledge summary exists', async () => {
         vi.mocked(buildDchatKnowledgePack).mockReturnValueOnce({
             summary: 'Summary entry',

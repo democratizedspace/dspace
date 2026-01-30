@@ -46,36 +46,49 @@ const fallbackWelcomeMessage =
     defaultPersona?.welcomeMessage || 'Welcome! How can I assist you today?';
 export const defaultOpenAIErrorMessage =
     "Sorry, I'm having some trouble and can't generate a response.";
-const sharedSystemGuardrail = [
-    'Never invent quests, items, processes, routes, URLs, or player state.',
-    "I can't see your inventory/quests/progress unless a save snapshot is provided.",
-    'Please export/paste a save from /gamesaves (or describe what you see) before I answer ' +
-        'state questions.',
-    "If you're missing context, say you don't know and ask a clarifying question OR point " +
-        'to a specific /docs page.',
-    'When giving URLs/navigation, cite /docs excerpts or docs/ROUTES.md.',
-    'Only give exact counts/durations/rates if they appear in retrieved context; otherwise be ' +
-        "approximate or say you don't know.",
-].join('\n');
+const guardrailRules = [
+    {
+        line: 'Never invent quests, items, processes, routes, URLs, or player state.',
+        pattern: /never invent/,
+    },
+    {
+        line: "I can't see your inventory/quests/progress unless a save snapshot is provided.",
+        pattern: /inventory\/quests\/progress/,
+    },
+    {
+        line:
+            'Please export/paste a save from /gamesaves (or describe what you see) before I answer ' +
+            'state questions.',
+        pattern: /\/gamesaves/,
+    },
+    {
+        line:
+            "If you're missing context, say you don't know and ask a clarifying question OR point " +
+            'to a specific /docs page.',
+        pattern: /clarifying question/,
+    },
+    {
+        line: 'When giving URLs/navigation, cite /docs excerpts or docs/ROUTES.md.',
+        pattern: /docs\/routes\.md/,
+    },
+    {
+        line:
+            'Only give exact counts/durations/rates if they appear in retrieved context; otherwise be ' +
+            "approximate or say you don't know.",
+        pattern: /only give exact/,
+    },
+];
+const sharedSystemGuardrail = guardrailRules.map((rule) => rule.line).join('\n');
 
 const applySystemGuardrail = (prompt) => {
     if (!prompt) return sharedSystemGuardrail;
     const normalizedPrompt = prompt.toLowerCase();
-    const guardrailChecks = [
-        /never invent/,
-        /player state/,
-        /save snapshot/,
-        /\/gamesaves/,
-        /clarifying question/,
-        /docs\/routes\.md/,
-        /only give exact/,
-    ];
-    if (guardrailChecks.length === 0) {
-        return `${prompt}\n\n${sharedSystemGuardrail}`;
-    }
-    const hasGuardrail = guardrailChecks.every((pattern) => pattern.test(normalizedPrompt));
-    if (hasGuardrail) return prompt;
-    return `${prompt}\n\n${sharedSystemGuardrail}`;
+    const missingRules = guardrailRules.filter(
+        (rule) => !rule.pattern.test(normalizedPrompt)
+    );
+    if (missingRules.length === 0) return prompt;
+    const missingGuardrail = missingRules.map((rule) => rule.line).join('\n');
+    return `${prompt}\n\n${missingGuardrail}`;
 };
 
 const toNumericStatus = (status) => {
