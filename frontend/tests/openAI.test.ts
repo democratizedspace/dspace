@@ -493,16 +493,13 @@ describe('buildChatPrompt', () => {
                 "approximate or say you don't know.",
         ].join('\n');
 
-        const payload = await buildChatPrompt(
-            [{ role: 'user', content: 'Check guardrails.' }],
-            {
-                persona: {
-                    id: 'custom',
-                    systemPrompt,
-                    welcomeMessage: 'hello',
-                },
-            }
-        );
+        const payload = await buildChatPrompt([{ role: 'user', content: 'Check guardrails.' }], {
+            persona: {
+                id: 'custom',
+                systemPrompt,
+                welcomeMessage: 'hello',
+            },
+        });
         const systemMessage = payload.debugMessages.find(
             (message) => message.role === 'system' && message.kind === 'main'
         );
