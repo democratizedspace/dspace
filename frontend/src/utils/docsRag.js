@@ -87,6 +87,12 @@ const formatSourceLabel = ({ title, heading }) => {
     return trimmedTitle || trimmedHeading || 'Untitled';
 };
 
+const compareIds = (leftId, rightId) => {
+    if (leftId < rightId) return -1;
+    if (leftId > rightId) return 1;
+    return 0;
+};
+
 export const mapDocsResultsToSources = (results = []) => {
     if (!Array.isArray(results) || results.length === 0) {
         return [];
@@ -139,9 +145,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
         }
         const leftId = String(left.id);
         const rightId = String(right.id);
-        if (leftId < rightId) return -1;
-        if (leftId > rightId) return 1;
-        return 0;
+        return compareIds(leftId, rightId);
     });
     const maxResults = options.maxResults ?? DEFAULT_MAX_RESULTS;
     const maxChars = options.maxChars ?? DEFAULT_MAX_CHARS;
