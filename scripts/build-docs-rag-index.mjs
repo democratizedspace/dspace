@@ -1,16 +1,17 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import MiniSearch from 'minisearch';
 import { glob } from 'glob';
 import yaml from 'yaml';
 import { execSync } from 'node:child_process';
 import GithubSlugger from 'github-slugger';
-import prettier from 'prettier';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const repoRoot = path.resolve(__dirname, '..');
+const require = createRequire(import.meta.url);
 
 const DOCS_DIR = path.join(repoRoot, 'frontend/src/pages/docs/md');
 const ROUTES_PATH = path.join(repoRoot, 'docs/ROUTES.md');
@@ -47,7 +48,29 @@ const readFileSafe = async (filePath) => {
     return content.replace(/\r\n/g, '\n');
 };
 
+const normalizePrettier = (module) => module?.default ?? module;
+
+const loadPrettier = async () => {
+    try {
+        return normalizePrettier(await import('prettier'));
+    } catch (error) {
+        try {
+            const prettierPath = require.resolve('prettier', {
+                paths: [path.join(repoRoot, 'frontend')],
+            });
+            return normalizePrettier(await import(prettierPath));
+        } catch (fallbackError) {
+            return null;
+        }
+    }
+};
+
 const formatJson = async (data, targetPath) => {
+    const prettier = await loadPrettier();
+    if (!prettier) {
+        return `${JSON.stringify(data, null, 4)}\n`;
+    }
+
     const config = (await prettier.resolveConfig(targetPath)) ?? {};
     const formatted = await prettier.format(JSON.stringify(data), {
         ...config,
@@ -472,6 +495,7 @@ const writeArtifacts = async (chunks, index, metaSources) => {
             docs: path.relative(repoRoot, DOCS_DIR).split(path.sep).join('/'),
             changelog: path.relative(repoRoot, CHANGELOG_DIR).split(path.sep).join('/'),
         },
+        generatedAt: new Date().toISOString(),
         sources: metaSources,
         counts: {
             totalChunks: chunks.length,

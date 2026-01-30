@@ -4,6 +4,7 @@
         "docs": "frontend/src/pages/docs/md",
         "changelog": "frontend/src/pages/docs/md/changelog"
     },
+    "generatedAt": "2026-01-29T23:52:13.581Z",
     "sources": {
         "changelog": [
             "frontend/src/pages/docs/md/changelog.md",
@@ -22,6 +23,6 @@
         ],
         "v3Changelog": ["frontend/src/pages/docs/md/changelog/20260301.md"]
     },
-    "counts": { "totalChunks": 438, "docs": 364, "routes": 19, "changelog": 55 },
-    "gitSha": "24f462b2a939212f848b1d4ae3be641e2296360d"
+    "counts": { "totalChunks": 553, "docs": 479, "routes": 19, "changelog": 55 },
+    "gitSha": "74dc776b198784d0c8d28226f0b17937b9e93595"
 }

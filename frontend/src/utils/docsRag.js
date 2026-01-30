@@ -3,6 +3,11 @@ import MiniSearch from 'minisearch';
 const DEFAULT_MAX_RESULTS = 5;
 const DEFAULT_MAX_CHARS = 5000;
 const DEFAULT_MAX_EXCERPT_CHARS = 850;
+const DEFAULT_SEARCH_OPTIONS = {
+    prefix: true,
+    fuzzy: 0.2,
+    boost: { title: 3, heading: 2 },
+};
 
 const indexOptions = {
     idField: 'id',
@@ -58,6 +63,11 @@ const loadDocsRag = async () => {
     return docsRagPromise;
 };
 
+const normalizeExcerpt = (text) =>
+    String(text || '')
+        .replace(/\s+/g, ' ')
+        .trim();
+
 const trimExcerpt = (text, maxChars) => {
     if (text.length <= maxChars) {
         return text;
@@ -67,9 +77,30 @@ const trimExcerpt = (text, maxChars) => {
     return clipped ? `${clipped}…` : '';
 };
 
-const buildEntry = ({ kind, title, slug, anchor, excerpt }) => {
-    const resolvedAnchor = anchor || 'top';
-    return `- [${kind}] ${title} — ${slug}#${resolvedAnchor}\n  ${excerpt}`;
+const buildHeaderText = ({ gitSha, generatedAt }) => {
+    const generatedAtValue = generatedAt || 'unknown';
+    return `---\nDocs grounding (gitSha: ${gitSha}, generatedAt: ${generatedAtValue}):\n`;
+};
+
+const sortResultsDeterministically = (results) =>
+    [...results].sort((left, right) => {
+        if (left.score !== right.score) {
+            return right.score - left.score;
+        }
+        const leftId = String(left.id ?? '');
+        const rightId = String(right.id ?? '');
+        if (leftId < rightId) {
+            return -1;
+        }
+        if (leftId > rightId) {
+            return 1;
+        }
+        return 0;
+    });
+
+const buildEntryWithExcerpt = ({ kind, title, slug, anchor, excerpt }) => {
+    const baseEntry = `- [${kind}] ${title} — ${slug}#${anchor}\n  `;
+    return `${baseEntry}${excerpt}\n`;
 };
 
 const formatSourceLabel = ({ title, heading }) => {
@@ -129,13 +160,14 @@ export const searchDocsRag = async (queryText, options = {}) => {
         console.error('Failed to load docs RAG data:', error);
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
-    const results = miniSearch.search(query, { prefix: true, fuzzy: 0.2 });
+    const results = miniSearch.search(query, DEFAULT_SEARCH_OPTIONS);
     const maxResults = options.maxResults ?? DEFAULT_MAX_RESULTS;
     const maxChars = options.maxChars ?? DEFAULT_MAX_CHARS;
     const maxExcerptChars = options.maxExcerptChars ?? DEFAULT_MAX_EXCERPT_CHARS;
 
     const selected = [];
-    for (const result of results) {
+    const orderedResults = sortResultsDeterministically(results);
+    for (const result of orderedResults) {
         const chunk = chunkMap.get(result.id);
         if (!chunk) continue;
         selected.push({ ...chunk, score: result.score });
@@ -149,63 +181,89 @@ export const searchDocsRag = async (queryText, options = {}) => {
     }
 
     const gitSha = meta?.gitSha || 'unknown';
-    const headerLines = ['---', `Docs grounding (gitSha: ${gitSha}):`];
-    let output = `${headerLines.join('\n')}\n`;
+    const generatedAt = meta?.generatedAt || 'unknown';
+    let headerText = buildHeaderText({ gitSha, generatedAt });
+    const footerText = '---';
+    const maxHeaderLength = Math.max(0, maxChars - footerText.length);
+    if (headerText.length > maxHeaderLength) {
+        headerText = headerText.slice(0, maxHeaderLength);
+        if (headerText.length && !headerText.endsWith('\n')) {
+            headerText = `${headerText.replace(/\s+$/, '')}\n`.slice(0, maxHeaderLength);
+        }
+    }
+    let output = headerText;
     const included = [];
+    let remaining = maxChars - headerText.length - footerText.length;
+    if (remaining <= 0) {
+        return {
+            excerptsText: `${headerText}${footerText}`,
+            sources: [],
+            sourcesMeta: { results: [] },
+        };
+    }
 
     for (const chunk of selected) {
-        const excerpt = trimExcerpt(String(chunk.text || '').trim(), maxExcerptChars);
+        const excerpt = trimExcerpt(normalizeExcerpt(chunk.text), maxExcerptChars);
         if (!excerpt) continue;
 
         const resolvedAnchor = chunk.anchor || 'top';
-        const entry = `${buildEntry({
+        const entry = buildEntryWithExcerpt({
             kind: chunk.kind,
             title: chunk.title,
             slug: chunk.slug,
             anchor: resolvedAnchor,
             excerpt,
-        })}\n`;
-
-        if (output.length + entry.length + 4 > maxChars) {
-            const remaining = maxChars - output.length - 4;
-            if (remaining <= 0) {
+        });
+        if (entry.length > remaining) {
+            const baseEntry = buildEntryWithExcerpt({
+                kind: chunk.kind,
+                title: chunk.title,
+                slug: chunk.slug,
+                anchor: resolvedAnchor,
+                excerpt: '',
+            });
+            const maxEntryExcerpt = remaining - baseEntry.length;
+            if (maxEntryExcerpt <= 0) {
                 break;
             }
-
-            const trimmedExcerpt = trimExcerpt(excerpt, Math.max(0, remaining - 40));
+            const trimmedExcerpt = trimExcerpt(excerpt, maxEntryExcerpt);
             if (!trimmedExcerpt) {
                 break;
             }
-
-            const trimmedEntry = `${buildEntry({
+            const trimmedEntry = buildEntryWithExcerpt({
                 kind: chunk.kind,
                 title: chunk.title,
                 slug: chunk.slug,
                 anchor: resolvedAnchor,
                 excerpt: trimmedExcerpt,
-            })}\n`;
-
-            if (output.length + trimmedEntry.length + 4 > maxChars) {
+            });
+            if (trimmedEntry.length > remaining) {
                 break;
             }
-
             output += trimmedEntry;
+            remaining -= trimmedEntry.length;
             included.push({ ...chunk, anchor: resolvedAnchor });
             break;
         }
 
         output += entry;
+        remaining -= entry.length;
         included.push({ ...chunk, anchor: resolvedAnchor });
     }
 
     if (!included.length) {
-        return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
+        return {
+            excerptsText: `${headerText}${footerText}`,
+            sources: [],
+            sourcesMeta: { results: [] },
+        };
     }
 
-    output += '---';
+    output += footerText;
 
     const sourcesMeta = {
         gitSha,
+        generatedAt,
         results: included.map((chunk) => ({
             id: chunk.id,
             slug: chunk.slug,
