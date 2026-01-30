@@ -83,9 +83,7 @@ const sharedSystemGuardrail = guardrailRules.map((rule) => rule.line).join('\n')
 const applySystemGuardrail = (prompt) => {
     if (!prompt) return sharedSystemGuardrail;
     const normalizedPrompt = prompt.toLowerCase();
-    const missingRules = guardrailRules.filter(
-        (rule) => !rule.pattern.test(normalizedPrompt)
-    );
+    const missingRules = guardrailRules.filter((rule) => !rule.pattern.test(normalizedPrompt));
     if (missingRules.length === 0) return prompt;
     const missingGuardrail = missingRules.map((rule) => rule.line).join('\n');
     return `${prompt}\n\n${missingGuardrail}`;
