@@ -472,6 +472,7 @@ const writeArtifacts = async (chunks, index, metaSources) => {
             docs: path.relative(repoRoot, DOCS_DIR).split(path.sep).join('/'),
             changelog: path.relative(repoRoot, CHANGELOG_DIR).split(path.sep).join('/'),
         },
+        generatedAt: new Date().toISOString(),
         sources: metaSources,
         counts: {
             totalChunks: chunks.length,

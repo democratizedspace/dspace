@@ -23,5 +23,6 @@
         "v3Changelog": ["frontend/src/pages/docs/md/changelog/20260301.md"]
     },
     "counts": { "totalChunks": 438, "docs": 364, "routes": 19, "changelog": 55 },
+    "generatedAt": "2025-09-19T21:13:00.000Z",
     "gitSha": "24f462b2a939212f848b1d4ae3be641e2296360d"
 }
