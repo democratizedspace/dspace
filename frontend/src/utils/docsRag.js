@@ -66,7 +66,8 @@ const trimExcerpt = (text, maxChars) => {
         return text;
     }
 
-    const clipped = text.slice(0, Math.max(0, maxChars - 1)).trimEnd();
+    const trimmedText = text.endsWith('…') ? text.slice(0, -1) : text;
+    const clipped = trimmedText.slice(0, Math.max(0, maxChars - 1)).trimEnd();
     return clipped ? `${clipped}…` : '';
 };
 
@@ -136,7 +137,11 @@ export const searchDocsRag = async (queryText, options = {}) => {
         if (left.score !== right.score) {
             return right.score - left.score;
         }
-        return String(left.id).localeCompare(String(right.id));
+        const leftId = String(left.id);
+        const rightId = String(right.id);
+        if (leftId < rightId) return -1;
+        if (leftId > rightId) return 1;
+        return 0;
     });
     const maxResults = options.maxResults ?? DEFAULT_MAX_RESULTS;
     const maxChars = options.maxChars ?? DEFAULT_MAX_CHARS;
