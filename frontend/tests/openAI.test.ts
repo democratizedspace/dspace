@@ -496,6 +496,22 @@ describe('buildChatPrompt', () => {
         expect(combinedContent).toContain('DSPACE knowledge base:');
         expect(buildDchatKnowledgePack).toHaveBeenCalled();
     });
+
+    it('applies shared guardrails for snapshot requests, clarifying questions, and anti-precision', async () => {
+        const { debugMessages } = await buildChatPrompt([
+            { role: 'user', content: "What's in my inventory right now?" },
+        ]);
+        const systemMessage = debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const content = systemMessage?.content ?? '';
+
+        expect(content).toMatch(/save snapshot/i);
+        expect(content).toMatch(/\/gamesaves/i);
+        expect(content).toMatch(/clarifying question/i);
+        expect(content).toMatch(/docs\/routes\.md/i);
+        expect(content).toMatch(/exact counts\/durations\/rates/i);
+    });
 });
 
 describe('describeOpenAIError', () => {
