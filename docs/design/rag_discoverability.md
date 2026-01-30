@@ -211,6 +211,8 @@ provided save.
 **Fix:**
 - **Guardrail:** explicitly forbid claiming access to player state unless a save snapshot or game
   state is provided. Require a clarification request when state is absent.
+- **Snapshot phrasing:** direct players to export/paste saves from `/gamesaves`, and avoid exact
+  counts or rates unless they appear in grounded context.
 - **Context labeling:** when `buildDchatKnowledge` includes game state, label it as “Snapshot:
   local game state” to make the presence/absence obvious to the model.
 - **UI disclosure:** show whether local game state was a source in the “Sources used” list.

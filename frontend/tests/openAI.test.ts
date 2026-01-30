@@ -466,6 +466,55 @@ describe('buildChatPrompt', () => {
         vi.mocked(searchDocsRag).mockClear();
     });
 
+    it('includes guardrails for save snapshots, clarifying questions, and anti-precision', async () => {
+        const payload = await buildChatPrompt([
+            { role: 'user', content: 'What is my current inventory?' },
+        ]);
+        const systemMessage = payload.debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const content = systemMessage?.content ?? '';
+
+        expect(content).toMatch(/save snapshot/i);
+        expect(content).toMatch(/\/gamesaves/i);
+        expect(content).toMatch(/clarifying question/i);
+        expect(content).toMatch(/docs\/ROUTES\.md/i);
+        expect(content).toMatch(/exact counts, durations, or rates/i);
+    });
+
+    it('does not duplicate guardrails when the persona prompt already includes them', async () => {
+        const guardrailPrompt = [
+            'Custom system prompt.',
+            'Never invent quests, items, processes, routes, URLs, or player state.',
+            "I can't see your inventory/quests/progress unless a save snapshot is provided.",
+            'Please export/paste a save from /gamesaves (or describe what you see) before I ' +
+                'answer state questions.',
+            "If you're missing context, say you don't know and ask a clarifying question or " +
+                'point to a specific /docs page.',
+            'When giving URLs or navigation, cite /docs excerpts or docs/ROUTES.md.',
+            'Only give exact counts, durations, or rates if they appear in retrieved context; ' +
+                "otherwise be approximate or say you don't know.",
+        ].join('\n');
+
+        const payload = await buildChatPrompt(
+            [{ role: 'user', content: 'What is my inventory?' }],
+            {
+                persona: {
+                    id: 'custom',
+                    systemPrompt: guardrailPrompt,
+                    welcomeMessage: 'hello',
+                },
+            }
+        );
+        const systemMessage = payload.debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const content = systemMessage?.content ?? '';
+
+        expect(content).toBe(guardrailPrompt);
+        expect(content.match(/save snapshot/gi)).toHaveLength(1);
+    });
+
     it('does not duplicate docs excerpts when knowledge summary exists', async () => {
         vi.mocked(buildDchatKnowledgePack).mockReturnValueOnce({
             summary: 'Summary entry',

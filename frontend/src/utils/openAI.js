@@ -46,19 +46,37 @@ const fallbackWelcomeMessage =
     defaultPersona?.welcomeMessage || 'Welcome! How can I assist you today?';
 export const defaultOpenAIErrorMessage =
     "Sorry, I'm having some trouble and can't generate a response.";
-const sharedSystemGuardrail =
-    'Never invent quests, items, processes, routes, URLs, or player state. If you are ' +
-    "unsure, say you don't know and direct the player to /docs or docs/ROUTES.md.";
+const sharedSystemGuardrailLines = [
+    'Never invent quests, items, processes, routes, URLs, or player state.',
+    "I can't see your inventory/quests/progress unless a save snapshot is provided.",
+    'Please export/paste a save from /gamesaves (or describe what you see) before I answer ' +
+        'state questions.',
+    "If you're missing context, say you don't know and ask a clarifying question or point to " +
+        'a specific /docs page.',
+    'When giving URLs or navigation, cite /docs excerpts or docs/ROUTES.md.',
+    'Only give exact counts, durations, or rates if they appear in retrieved context; ' +
+        "otherwise be approximate or say you don't know.",
+];
+const sharedSystemGuardrail = sharedSystemGuardrailLines.join('\n');
+const sharedSystemGuardrailFragments = [
+    'never invent quests, items, processes, routes, urls, or player state',
+    "can't see your inventory/quests/progress unless a save snapshot is provided",
+    'export/paste a save from /gamesaves',
+    "if you're missing context, say you don't know and ask a clarifying question",
+    'cite /docs excerpts or docs/routes.md',
+    'only give exact counts, durations, or rates',
+];
 
 const applySystemGuardrail = (prompt) => {
     if (!prompt) return sharedSystemGuardrail;
     const normalizedPrompt = prompt.toLowerCase();
-    const hasNeverInvent = normalizedPrompt.includes('never invent');
-    const hasGuardedDomain = /(quests|items|processes|routes|player state|urls?)/.test(
-        normalizedPrompt
-    );
-    if (hasNeverInvent && hasGuardedDomain) return prompt;
-    return `${prompt}\n\n${sharedSystemGuardrail}`;
+    const missingGuardrailLines = sharedSystemGuardrailLines.filter((line, index) => {
+        const fragment = sharedSystemGuardrailFragments[index];
+        return !normalizedPrompt.includes(fragment);
+    });
+    if (missingGuardrailLines.length === 0) return prompt;
+    const separator = prompt.endsWith('\n') ? '' : '\n\n';
+    return `${prompt}${separator}${missingGuardrailLines.join('\n')}`;
 };
 
 const toNumericStatus = (status) => {
