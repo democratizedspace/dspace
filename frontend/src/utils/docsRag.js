@@ -3,14 +3,17 @@ import MiniSearch from 'minisearch';
 const DEFAULT_MAX_RESULTS = 5;
 const DEFAULT_MAX_CHARS = 5000;
 const DEFAULT_MAX_EXCERPT_CHARS = 850;
+const SEARCH_OPTIONS = Object.freeze({
+    boost: { title: 3, heading: 2 },
+    prefix: true,
+    fuzzy: 0.2,
+});
 
 const indexOptions = {
     idField: 'id',
     fields: ['title', 'heading', 'text', 'slug', 'path'],
     storeFields: ['id', 'slug', 'title', 'heading', 'anchor', 'kind', 'path'],
-    searchOptions: {
-        boost: { title: 3, heading: 2 },
-    },
+    searchOptions: SEARCH_OPTIONS,
 };
 
 let docsRagPromise;
@@ -63,7 +66,8 @@ const trimExcerpt = (text, maxChars) => {
         return text;
     }
 
-    const clipped = text.slice(0, Math.max(0, maxChars - 1)).trimEnd();
+    const trimmedText = text.endsWith('…') ? text.slice(0, -1) : text;
+    const clipped = trimmedText.slice(0, Math.max(0, maxChars - 1)).trimEnd();
     return clipped ? `${clipped}…` : '';
 };
 
@@ -81,6 +85,12 @@ const formatSourceLabel = ({ title, heading }) => {
     }
 
     return trimmedTitle || trimmedHeading || 'Untitled';
+};
+
+const compareIds = (leftId, rightId) => {
+    if (leftId < rightId) return -1;
+    if (leftId > rightId) return 1;
+    return 0;
 };
 
 export const mapDocsResultsToSources = (results = []) => {
@@ -129,7 +139,14 @@ export const searchDocsRag = async (queryText, options = {}) => {
         console.error('Failed to load docs RAG data:', error);
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
-    const results = miniSearch.search(query, { prefix: true, fuzzy: 0.2 });
+    const results = miniSearch.search(query, SEARCH_OPTIONS).sort((left, right) => {
+        if (left.score !== right.score) {
+            return right.score - left.score;
+        }
+        const leftId = String(left.id);
+        const rightId = String(right.id);
+        return compareIds(leftId, rightId);
+    });
     const maxResults = options.maxResults ?? DEFAULT_MAX_RESULTS;
     const maxChars = options.maxChars ?? DEFAULT_MAX_CHARS;
     const maxExcerptChars = options.maxExcerptChars ?? DEFAULT_MAX_EXCERPT_CHARS;
@@ -149,8 +166,16 @@ export const searchDocsRag = async (queryText, options = {}) => {
     }
 
     const gitSha = meta?.gitSha || 'unknown';
-    const headerLines = ['---', `Docs grounding (gitSha: ${gitSha}):`];
-    let output = `${headerLines.join('\n')}\n`;
+    const generatedAt = meta?.generatedAt || 'unknown';
+    const headerLines = ['---', `Docs grounding (gitSha: ${gitSha}, generatedAt: ${generatedAt}):`];
+    const header = `${headerLines.join('\n')}\n`;
+    const footer = '---';
+    const minBlockLength = header.length + footer.length;
+    if (minBlockLength > maxChars) {
+        return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
+    }
+
+    let output = header;
     const included = [];
 
     for (const chunk of selected) {
@@ -158,39 +183,39 @@ export const searchDocsRag = async (queryText, options = {}) => {
         if (!excerpt) continue;
 
         const resolvedAnchor = chunk.anchor || 'top';
+        const entryBase = buildEntry({
+            kind: chunk.kind,
+            title: chunk.title,
+            slug: chunk.slug,
+            anchor: resolvedAnchor,
+            excerpt: '',
+        });
+        const entryOverhead = entryBase.length + 1;
+        const availableForEntry = maxChars - output.length - footer.length;
+
+        if (availableForEntry <= 0) {
+            break;
+        }
+
+        if (entryOverhead > availableForEntry) {
+            break;
+        }
+
+        const maxExcerptForEntry = Math.min(maxExcerptChars, availableForEntry - entryOverhead);
+        const finalExcerpt = trimExcerpt(excerpt, maxExcerptForEntry);
+        if (!finalExcerpt) {
+            continue;
+        }
+
         const entry = `${buildEntry({
             kind: chunk.kind,
             title: chunk.title,
             slug: chunk.slug,
             anchor: resolvedAnchor,
-            excerpt,
+            excerpt: finalExcerpt,
         })}\n`;
 
-        if (output.length + entry.length + 4 > maxChars) {
-            const remaining = maxChars - output.length - 4;
-            if (remaining <= 0) {
-                break;
-            }
-
-            const trimmedExcerpt = trimExcerpt(excerpt, Math.max(0, remaining - 40));
-            if (!trimmedExcerpt) {
-                break;
-            }
-
-            const trimmedEntry = `${buildEntry({
-                kind: chunk.kind,
-                title: chunk.title,
-                slug: chunk.slug,
-                anchor: resolvedAnchor,
-                excerpt: trimmedExcerpt,
-            })}\n`;
-
-            if (output.length + trimmedEntry.length + 4 > maxChars) {
-                break;
-            }
-
-            output += trimmedEntry;
-            included.push({ ...chunk, anchor: resolvedAnchor });
+        if (entry.length > availableForEntry) {
             break;
         }
 
@@ -202,10 +227,11 @@ export const searchDocsRag = async (queryText, options = {}) => {
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
 
-    output += '---';
+    output += footer;
 
     const sourcesMeta = {
         gitSha,
+        generatedAt,
         results: included.map((chunk) => ({
             id: chunk.id,
             slug: chunk.slug,
