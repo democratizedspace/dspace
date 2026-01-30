@@ -95,13 +95,13 @@ describe('QA 9.4 chat hallucination contracts', () => {
         const systemMessage = debugMessages.find(
             (message) => message.role === 'system' && message.kind === 'main'
         );
-        const normalized = systemMessage?.content ?? '';
-        expect(normalized).toMatch(/never invent/i);
-        expect(normalized).toMatch(/player state/i);
+        const systemContent = systemMessage?.content ?? '';
+        expect(systemContent).toMatch(/never invent/i);
+        expect(systemContent).toMatch(/player state/i);
         const saveSnapshotPattern =
             /save snapshot|cannot see.*save|provide.*save|cannot see your save/i;
-        if (saveSnapshotPattern.test(normalized)) {
-            expect(normalized).toMatch(saveSnapshotPattern);
+        if (saveSnapshotPattern.test(systemContent)) {
+            expect(systemContent).toMatch(saveSnapshotPattern);
         }
     });
 
@@ -112,10 +112,10 @@ describe('QA 9.4 chat hallucination contracts', () => {
         const systemMessage = debugMessages.find(
             (message) => message.role === 'system' && message.kind === 'main'
         );
-        const normalized = systemMessage?.content ?? '';
-        expect(normalized).toMatch(/save snapshot/i);
-        expect(normalized).toMatch(/\/gamesaves/i);
-        expect(normalized).toMatch(/inventory\/quests\/progress/i);
+        const systemContent = systemMessage?.content ?? '';
+        expect(systemContent).toMatch(/save snapshot/i);
+        expect(systemContent).toMatch(/\/gamesaves/i);
+        expect(systemContent).toMatch(/inventory\/quests\/progress/i);
     });
 
     it.todo('Stage 8: retrieval includes requires/consumes/creates duration semantics doc chunk');
