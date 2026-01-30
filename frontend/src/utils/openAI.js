@@ -46,18 +46,32 @@ const fallbackWelcomeMessage =
     defaultPersona?.welcomeMessage || 'Welcome! How can I assist you today?';
 export const defaultOpenAIErrorMessage =
     "Sorry, I'm having some trouble and can't generate a response.";
-const sharedSystemGuardrail =
-    'Never invent quests, items, processes, routes, URLs, or player state. If you are ' +
-    "unsure, say you don't know and direct the player to /docs or docs/ROUTES.md.";
+const sharedSystemGuardrail = [
+    'Never invent quests, items, processes, routes, URLs, or player state.',
+    "I can't see your inventory/quests/progress unless a save snapshot is provided.",
+    'Please export/paste a save from /gamesaves (or describe what you see) before I answer ' +
+        'state questions.',
+    "If you're missing context, say you don't know and ask a clarifying question or point " +
+        'to a specific /docs page.',
+    'When giving URLs/navigation, cite /docs excerpts or docs/ROUTES.md.',
+    'Only give exact counts/durations/rates if they appear in retrieved context; otherwise be ' +
+        "approximate or say you don't know.",
+].join('\n');
 
 const applySystemGuardrail = (prompt) => {
     if (!prompt) return sharedSystemGuardrail;
     const normalizedPrompt = prompt.toLowerCase();
-    const hasNeverInvent = normalizedPrompt.includes('never invent');
-    const hasGuardedDomain = /(quests|items|processes|routes|player state|urls?)/.test(
-        normalizedPrompt
-    );
-    if (hasNeverInvent && hasGuardedDomain) return prompt;
+    const guardrailMarkers = [
+        'never invent',
+        'save snapshot',
+        '/gamesaves',
+        'clarifying question',
+        '/docs',
+        'docs/routes.md',
+        'exact counts/durations/rates',
+    ];
+    const hasGuardrail = guardrailMarkers.every((marker) => normalizedPrompt.includes(marker));
+    if (hasGuardrail) return prompt;
     return `${prompt}\n\n${sharedSystemGuardrail}`;
 };
 
