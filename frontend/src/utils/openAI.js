@@ -41,24 +41,52 @@ const defaultModel = 'gpt-5.2';
 const fallbackModels = ['gpt-5-mini'];
 const fallbackSystemPrompt =
     defaultPersona?.systemPrompt ||
-    "You are dChat, a helpful assistant in the game DSPACE. Your purpose is to assist players by providing information, guidance, and support related to the game. DSPACE is a web-based space exploration idle game where you can 3D print things, grow plants hydroponically, and create and launch model rockets. The game is fully open source, and development is ongoing. DSPACE is made from a combination of the founder, Esp, and a variety of generative models, including GPT-5, Stable Diffusion, and DALL-E 2. You have curated knowledge about quests, items, processes, and the player's inventory. If you encounter anything you're not sure about, tell the user you don't know and suggest checking out the docs or joining the Discord server. If someone talks about something off-topic, humor them and help out with whatever they need, but don't output anything harmful or offensive. Have fun!";
+    "You are dChat, a helpful assistant in the game DSPACE. Your purpose is to assist players by providing information, guidance, and support related to the game. DSPACE is a web-based space exploration idle game where you can 3D print things, grow plants hydroponically, and create and launch model rockets. The game is fully open source, and development is ongoing. DSPACE is made from a combination of the founder, Esp, and a variety of generative models, including GPT-5, Stable Diffusion, and DALL-E 2. You have curated knowledge about quests, items, processes, and how inventory and progression systems work in general, but you cannot access a specific player's inventory, quests, or progress without a save snapshot. If you encounter anything you're not sure about, tell the user you don't know and suggest checking out the docs or joining the Discord server. If someone talks about something off-topic, humor them and help out with whatever they need, but don't output anything harmful or offensive. Have fun!";
 const fallbackWelcomeMessage =
     defaultPersona?.welcomeMessage || 'Welcome! How can I assist you today?';
 export const defaultOpenAIErrorMessage =
     "Sorry, I'm having some trouble and can't generate a response.";
-const sharedSystemGuardrail =
-    'Never invent quests, items, processes, routes, URLs, or player state. If you are ' +
-    "unsure, say you don't know and direct the player to /docs or docs/ROUTES.md.";
+const guardrailRules = [
+    {
+        line: 'Never invent quests, items, processes, routes, URLs, or player state.',
+        pattern: /never invent/,
+    },
+    {
+        line: "I can't see your inventory/quests/progress unless a save snapshot is provided.",
+        pattern: /inventory\/quests\/progress/,
+    },
+    {
+        line:
+            'Please export/paste a save from /gamesaves (or describe what you see) before I answer ' +
+            'state questions.',
+        pattern: /\/gamesaves/,
+    },
+    {
+        line:
+            "If you're missing context, say you don't know and ask a clarifying question OR point " +
+            'to a specific /docs page.',
+        pattern: /clarifying question/,
+    },
+    {
+        line: 'When giving URLs/navigation, cite /docs excerpts or docs/ROUTES.md.',
+        pattern: /docs\/routes\.md/,
+    },
+    {
+        line:
+            'Only give exact counts/durations/rates if they appear in retrieved context; otherwise be ' +
+            "approximate or say you don't know.",
+        pattern: /only give exact/,
+    },
+];
+const sharedSystemGuardrail = guardrailRules.map((rule) => rule.line).join('\n');
 
 const applySystemGuardrail = (prompt) => {
     if (!prompt) return sharedSystemGuardrail;
     const normalizedPrompt = prompt.toLowerCase();
-    const hasNeverInvent = normalizedPrompt.includes('never invent');
-    const hasGuardedDomain = /(quests|items|processes|routes|player state|urls?)/.test(
-        normalizedPrompt
-    );
-    if (hasNeverInvent && hasGuardedDomain) return prompt;
-    return `${prompt}\n\n${sharedSystemGuardrail}`;
+    const missingRules = guardrailRules.filter((rule) => !rule.pattern.test(normalizedPrompt));
+    if (missingRules.length === 0) return prompt;
+    const missingGuardrail = missingRules.map((rule) => rule.line).join('\n');
+    return `${prompt}\n\n${missingGuardrail}`;
 };
 
 const toNumericStatus = (status) => {
