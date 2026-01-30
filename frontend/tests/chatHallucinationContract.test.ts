@@ -105,9 +105,18 @@ describe('QA 9.4 chat hallucination contracts', () => {
         }
     });
 
-    it.todo(
-        'Stage 7: system guardrail should ask for a save snapshot or explain it cannot see saves (not present yet)'
-    );
+    it('Stage 7: system guardrail asks for a save snapshot', async () => {
+        const { debugMessages } = await buildChatPrompt([
+            { role: 'user', content: 'What’s in my inventory right now?' },
+        ]);
+        const systemMessage = debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const normalized = systemMessage?.content ?? '';
+        expect(normalized).toMatch(/save snapshot/i);
+        expect(normalized).toMatch(/\/gamesaves/i);
+        expect(normalized).toMatch(/inventory\/quests\/progress/i);
+    });
 
     it.todo('Stage 8: retrieval includes requires/consumes/creates duration semantics doc chunk');
 });

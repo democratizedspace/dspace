@@ -466,6 +466,52 @@ describe('buildChatPrompt', () => {
         vi.mocked(searchDocsRag).mockClear();
     });
 
+    it('adds guardrails for save snapshots, clarifying questions, and anti-precision', async () => {
+        const payload = await buildChatPrompt([{ role: 'user', content: 'Status?' }]);
+        const systemMessage = payload.debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const content = systemMessage?.content ?? '';
+
+        expect(content).toContain("I can't see your inventory/quests/progress");
+        expect(content).toContain('/gamesaves');
+        expect(content).toMatch(/clarifying question/i);
+        expect(content).toMatch(/only give exact counts\/durations\/rates/i);
+    });
+
+    it('does not duplicate the shared guardrail when already present', async () => {
+        const systemPrompt = [
+            'Custom system prompt.',
+            'Never invent quests, items, processes, routes, URLs, or player state.',
+            "I can't see your inventory/quests/progress unless a save snapshot is provided.",
+            'Please export/paste a save from /gamesaves (or describe what you see) before I answer ' +
+                'state questions.',
+            "If you're missing context, say you don't know and ask a clarifying question OR point " +
+                'to a specific /docs page.',
+            'When giving URLs/navigation, cite /docs excerpts or docs/ROUTES.md.',
+            'Only give exact counts/durations/rates if they appear in retrieved context; otherwise be ' +
+                "approximate or say you don't know.",
+        ].join('\n');
+
+        const payload = await buildChatPrompt(
+            [{ role: 'user', content: 'Check guardrails.' }],
+            {
+                persona: {
+                    id: 'custom',
+                    systemPrompt,
+                    welcomeMessage: 'hello',
+                },
+            }
+        );
+        const systemMessage = payload.debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const content = systemMessage?.content ?? '';
+        const occurrences = content.match(/save snapshot/gi) ?? [];
+
+        expect(occurrences).toHaveLength(1);
+    });
+
     it('does not duplicate docs excerpts when knowledge summary exists', async () => {
         vi.mocked(buildDchatKnowledgePack).mockReturnValueOnce({
             summary: 'Summary entry',
