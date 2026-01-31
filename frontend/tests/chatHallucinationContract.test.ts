@@ -133,4 +133,43 @@ describe('QA 9.4 chat hallucination contracts', () => {
         expect(hasDocSource).toBe(true);
         expect(ragText).toMatch(/\b(requires|consumes|creates|duration)\b/i);
     });
+
+    it('Stage 9: retrieval includes custom content editor/import/export/backup docs', async () => {
+        const prompt = 'How do I add custom content to DSPACE?';
+        const { debugMessages, contextSources } = await buildChatPrompt([
+            { role: 'user', content: prompt },
+        ]);
+
+        const ragMessages = debugMessages.filter((message) => message.kind === 'rag');
+        const ragText = ragMessages.map((message) => message.content).join('\n');
+        const hasDocSource = contextSources.some(
+            (source) => source.type === 'doc' && String(source.url || '').startsWith('/docs/')
+        );
+
+        expect(ragMessages.length).toBeGreaterThan(0);
+        expect(hasDocSource).toBe(true);
+        expect(ragText).toMatch(/editor|import|export|backup|contentbackup|json schema/i);
+    });
+
+    it('Stage 9: retrieval includes quest editor docs for quest editing prompts', async () => {
+        const prompt = 'Where do I edit quests?';
+        const { debugMessages } = await buildChatPrompt([{ role: 'user', content: prompt }]);
+
+        const ragMessages = debugMessages.filter((message) => message.kind === 'rag');
+        const ragText = ragMessages.map((message) => message.content).join('\n');
+
+        expect(ragMessages.length).toBeGreaterThan(0);
+        expect(ragText).toMatch(/quests\/manage|quest editor/i);
+    });
+
+    it('Stage 9: retrieval includes backup/export docs for backup prompts', async () => {
+        const prompt = 'What can I back up or export?';
+        const { debugMessages } = await buildChatPrompt([{ role: 'user', content: prompt }]);
+
+        const ragMessages = debugMessages.filter((message) => message.kind === 'rag');
+        const ragText = ragMessages.map((message) => message.content).join('\n');
+
+        expect(ragMessages.length).toBeGreaterThan(0);
+        expect(ragText).toMatch(/gamesaves|contentbackup|backup/i);
+    });
 });

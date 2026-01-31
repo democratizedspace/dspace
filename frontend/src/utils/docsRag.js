@@ -11,6 +11,11 @@ const SEMANTICS_INTENT =
     /\b(requires|consumes|creates|duration|timer|recipe|semantics|normalize)\b/i;
 const SEMANTICS_MATCH = /\b(requires|consumes|creates|duration|process)\b/i;
 const SEMANTICS_FALLBACK_QUERY = 'requires consumes creates duration semantics';
+const CUSTOM_CONTENT_INTENT =
+    /\b(custom content|custom quest|custom quests|quest editor|import|export|backup|contentbackup|json schema|manage quests|manage items|manage processes)\b/i;
+const CUSTOM_CONTENT_MATCH =
+    /\b(custom content|quest editor|import|export|backup|content backup|contentbackup|schema|json schema)\b/i;
+const CUSTOM_CONTENT_FALLBACK_QUERY = 'custom content editor import export backup json schema';
 const SEARCH_OPTIONS = Object.freeze({
     boost: { title: 3, heading: 2 },
     prefix: true,
@@ -114,6 +119,21 @@ const matchesSemanticsChunk = (chunk) => {
     const title = String(chunk.title || '');
     const heading = String(chunk.heading || '');
     return SEMANTICS_MATCH.test(`${title} ${heading}`);
+};
+
+const matchesCustomContentChunk = (chunk) => {
+    const title = String(chunk.title || '');
+    const heading = String(chunk.heading || '');
+    return CUSTOM_CONTENT_MATCH.test(`${title} ${heading}`);
+};
+
+const matchesCustomContentFallback = (chunk) => {
+    const title = String(chunk.title || '');
+    const heading = String(chunk.heading || '');
+    const combined = `${title} ${heading}`.toLowerCase();
+    return (
+        combined.includes('custom') && /\b(editor|backup|import|export)\b/.test(combined)
+    );
 };
 
 const findHighestRankedChunk = (results, chunkMap, predicate) => {
@@ -229,6 +249,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
     const wantsRoutes = ROUTES_INTENT.test(query);
     const wantsChangelog = CHANGELOG_INTENT.test(query);
     const wantsSemantics = SEMANTICS_INTENT.test(query);
+    const wantsCustomContent = CUSTOM_CONTENT_INTENT.test(query);
 
     if (wantsRoutes) {
         const preferredRoute =
@@ -280,6 +301,29 @@ export const searchDocsRag = async (queryText, options = {}) => {
         }
 
         includeForcedChunk(selected, semanticsChunk, maxResults);
+    }
+
+    if (wantsCustomContent) {
+        let customContentChunk = findHighestRankedChunk(results, chunkMap, (chunk) => {
+            return chunk.kind === 'doc' && matchesCustomContentChunk(chunk);
+        });
+
+        if (!customContentChunk) {
+            const customResults = miniSearch
+                .search(CUSTOM_CONTENT_FALLBACK_QUERY, SEARCH_OPTIONS)
+                .sort(compareResultsByRank);
+            customContentChunk = findHighestRankedChunk(customResults, chunkMap, (chunk) => {
+                return chunk.kind === 'doc';
+            });
+        }
+
+        if (!customContentChunk) {
+            customContentChunk = findDeterministicChunk(chunkMap, (chunk) => {
+                return chunk.kind === 'doc' && matchesCustomContentFallback(chunk);
+            });
+        }
+
+        includeForcedChunk(selected, customContentChunk, maxResults);
     }
 
     selected.sort(compareResultsByRank);

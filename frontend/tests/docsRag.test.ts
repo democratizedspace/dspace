@@ -13,6 +13,27 @@ describe('docs RAG search', () => {
         expect(excerptsText).toMatch(/\/docs\/[^\s#]+#[^\s]+/);
     });
 
+    it('forces custom content docs coverage for editor/import/export/backup questions', async () => {
+        const { excerptsText, sources } = await searchDocsRag(
+            'How do I add custom content to DSPACE?',
+            {
+                maxResults: 6,
+                maxChars: 3000,
+            }
+        );
+
+        const hasDocSource = sources.some(
+            (entry) => entry.type === 'doc' && String(entry.url || '').startsWith('/docs/')
+        );
+        expect(hasDocSource).toBe(true);
+
+        const customSignals = /editor|import|export|backup|contentbackup|json schema|schema/i;
+        const hasSignal =
+            customSignals.test(excerptsText) ||
+            sources.some((entry) => customSignals.test(entry.label));
+        expect(hasSignal).toBe(true);
+    });
+
     it('retrieves routes index chunk', async () => {
         const { excerptsText, sources } = await searchDocsRag('routes', {
             maxResults: 4,
