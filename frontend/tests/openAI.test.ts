@@ -563,6 +563,60 @@ describe('buildChatPrompt', () => {
         expect(combinedContent).toContain('DSPACE knowledge base:');
         expect(buildDchatKnowledgePack).toHaveBeenCalled();
     });
+
+    it('expands docs retrieval queries for vague follow-ups with capped context', async () => {
+        const longUserDetail = 'Details about crafting a rocket. '.repeat(30);
+        const longAssistantDetail = 'Step guidance for the build. '.repeat(30);
+        const messages = [
+            {
+                role: 'user',
+                content: `How do I craft a rocket in DSPACE? ${longUserDetail}`,
+            },
+            {
+                role: 'assistant',
+                content: `You start by gathering materials. ${longAssistantDetail}`,
+            },
+            {
+                role: 'user',
+                content: 'what about the second step?',
+            },
+        ];
+
+        await buildChatPrompt(messages);
+
+        const retrievalQuery = vi.mocked(searchDocsRag).mock.calls[0][0];
+
+        expect(retrievalQuery).toContain('what about the second step?');
+        expect(retrievalQuery).toContain('How do I craft a rocket in DSPACE?');
+        expect(retrievalQuery).toContain('You start by gathering materials.');
+        expect(retrievalQuery).toContain('Previous context:');
+        expect(retrievalQuery.length).toBeLessThanOrEqual(1000);
+    });
+
+    it('keeps docs retrieval queries unchanged for non-vague prompts', async () => {
+        const latestMessage =
+            'Can you explain the full process for crafting a rocket, including materials and steps?';
+        const messages = [
+            {
+                role: 'user',
+                content: 'Any tips for early quests?',
+            },
+            {
+                role: 'assistant',
+                content: 'Start with the tutorial quest.',
+            },
+            {
+                role: 'user',
+                content: latestMessage,
+            },
+        ];
+
+        await buildChatPrompt(messages);
+
+        const retrievalQuery = vi.mocked(searchDocsRag).mock.calls[0][0];
+
+        expect(retrievalQuery).toBe(latestMessage);
+    });
 });
 
 describe('describeOpenAIError', () => {
