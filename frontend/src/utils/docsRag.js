@@ -79,8 +79,10 @@ const trimExcerpt = (text, maxChars) => {
     return clipped ? `${clipped}…` : '';
 };
 
+const resolveAnchor = (anchor) => anchor || 'top';
+
 const buildEntry = ({ kind, title, slug, anchor, excerpt }) => {
-    const resolvedAnchor = anchor || 'top';
+    const resolvedAnchor = resolveAnchor(anchor);
     return `- [${kind}] ${title} — ${slug}#${resolvedAnchor}\n  ${excerpt}`;
 };
 
@@ -170,7 +172,7 @@ export const mapDocsResultsToSources = (results = []) => {
 
     return results
         .map((result) => {
-            const resolvedAnchor = result.anchor || 'top';
+            const resolvedAnchor = resolveAnchor(result.anchor);
             const slug = result.slug ? String(result.slug) : '';
             const type = docsKindToType[result.kind] || 'doc';
             const stableId = slug ? `${type}:${slug}#${resolvedAnchor}` : '';
@@ -233,12 +235,18 @@ export const searchDocsRag = async (queryText, options = {}) => {
             findHighestRankedChunk(
                 results,
                 chunkMap,
-                (chunk) => chunk.kind === 'route' && chunk.slug === '/docs/routes'
+                (chunk) =>
+                    chunk.kind === 'route' &&
+                    chunk.slug === '/docs/routes' &&
+                    resolveAnchor(chunk.anchor) === 'top'
             ) ||
             findHighestRankedChunk(results, chunkMap, (chunk) => chunk.kind === 'route') ||
             findDeterministicChunk(
                 chunkMap,
-                (chunk) => chunk.kind === 'route' && chunk.slug === '/docs/routes'
+                (chunk) =>
+                    chunk.kind === 'route' &&
+                    chunk.slug === '/docs/routes' &&
+                    resolveAnchor(chunk.anchor) === 'top'
             ) ||
             findDeterministicChunk(chunkMap, (chunk) => chunk.kind === 'route');
         includeForcedChunk(selected, preferredRoute, maxResults);
@@ -297,7 +305,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
         const excerpt = trimExcerpt(String(chunk.text || '').trim(), maxExcerptChars);
         if (!excerpt) continue;
 
-        const resolvedAnchor = chunk.anchor || 'top';
+        const resolvedAnchor = resolveAnchor(chunk.anchor);
         const entryBase = buildEntry({
             kind: chunk.kind,
             title: chunk.title,
