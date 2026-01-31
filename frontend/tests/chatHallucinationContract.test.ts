@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildChatPrompt } from '../src/utils/openAI.js';
+import { buildChatPrompt, providerRealityLine } from '../src/utils/openAI.js';
 import { sortSources } from '../src/utils/contextSources.js';
 
 const probes = [
@@ -99,6 +99,16 @@ describe('QA 9.4 chat hallucination contracts', () => {
 
         if (prompt === 'What can I back up or export?') {
             expect(ragText).toMatch(/\b(gamesaves|contentbackup|backups?)\b/i);
+        }
+
+        if (prompt === 'Is token.place active?') {
+            const systemContent = debugMessages[0]?.content ?? '';
+            const hasChangelogSource = contextSources.some(
+                (source) =>
+                    source.type === 'changelog' && String(source.url || '').startsWith('/changelog')
+            );
+            expect(systemContent).toContain(providerRealityLine);
+            expect(hasChangelogSource).toBe(true);
         }
 
         expectSortedAndDeduped(contextSources);
