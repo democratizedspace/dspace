@@ -13,8 +13,10 @@ const SEMANTICS_MATCH = /\b(requires|consumes|creates|duration|process)\b/i;
 const SEMANTICS_FALLBACK_QUERY = 'requires consumes creates duration semantics';
 const CUSTOM_CONTENT_INTENT =
     /\b(custom content|custom quests?|quest editor|content editor|manage (?:quests|items|processes)|custom (?:items|processes)|content backup|backup (?:custom|content)|custom (?:import|export)|(?:import|export) (?:custom|quest|content)|json schema)\b/i;
+const CUSTOM_CONTENT_CONTEXT = /\b(custom|quest|content)\b/i;
+const CUSTOM_CONTENT_SIGNAL = /\b(editor|import|export|backup|schema)\b/i;
 const CUSTOM_CONTENT_MATCH =
-    /\b(custom content|quest editor|import|export|backup|schema|content backup)\b/i;
+    /\b(custom content|quest editor|content editor|content backup|json schema)\b/i;
 const CUSTOM_CONTENT_FALLBACK_QUERY = 'custom content editor import export backup json schema';
 const CUSTOM_CONTENT_FALLBACK_REQUIRED = /\bcustom\b/i;
 const CUSTOM_CONTENT_FALLBACK_ACTION = /\b(editor|backup|import|export)\b/i;
@@ -126,16 +128,23 @@ const matchesSemanticsChunk = (chunk) => {
 const matchesCustomContentChunk = (chunk) => {
     const title = String(chunk.title || '');
     const heading = String(chunk.heading || '');
-    return CUSTOM_CONTENT_MATCH.test(`${title} ${heading}`);
+    const text = String(chunk.text || '');
+    const combined = `${title} ${heading} ${text}`;
+    return (
+        CUSTOM_CONTENT_MATCH.test(combined) ||
+        (CUSTOM_CONTENT_CONTEXT.test(combined) && CUSTOM_CONTENT_SIGNAL.test(combined))
+    );
 };
 
 const matchesCustomContentFallbackChunk = (chunk) => {
     const title = String(chunk.title || '');
     const heading = String(chunk.heading || '');
-    const combined = `${title} ${heading}`;
+    const text = String(chunk.text || '');
+    const combined = `${title} ${heading} ${text}`;
     return (
         CUSTOM_CONTENT_FALLBACK_REQUIRED.test(combined) &&
-        CUSTOM_CONTENT_FALLBACK_ACTION.test(combined)
+        CUSTOM_CONTENT_FALLBACK_ACTION.test(combined) &&
+        CUSTOM_CONTENT_SIGNAL.test(combined)
     );
 };
 
@@ -332,7 +341,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
                 .search(CUSTOM_CONTENT_FALLBACK_QUERY, SEARCH_OPTIONS)
                 .sort(compareResultsByRank);
             customContentChunk = findHighestRankedChunk(customContentResults, chunkMap, (chunk) => {
-                return chunk.kind === 'doc';
+                return chunk.kind === 'doc' && matchesCustomContentChunk(chunk);
             });
         }
 
