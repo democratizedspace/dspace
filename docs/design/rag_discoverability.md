@@ -289,6 +289,8 @@ return shape) so callers like `GPT5Chat` can be updated incrementally.
   `frontend/src/pages/docs/json/sections.json` (imported by
   `frontend/src/pages/docs/index.astro`).
 - Emit a short “Docs index” summary (titles + slugs) and add each doc to the `sources` list.
+- Prefer deterministic forced-inclusion heuristics for key intents (routes, changelog, process
+  semantics) when lexical search misses, while respecting existing caps and ordering.
 
 **Routes grounding:**
 - Include the canonical route list from `docs/ROUTES.md` in the knowledge summary as a short

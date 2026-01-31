@@ -3,6 +3,13 @@ import MiniSearch from 'minisearch';
 const DEFAULT_MAX_RESULTS = 5;
 const DEFAULT_MAX_CHARS = 5000;
 const DEFAULT_MAX_EXCERPT_CHARS = 850;
+const ROUTES_INTENT =
+    /\b(route|routes|url|urls|path|page|menu|navigate|navigation|where is|link)\b/i;
+const CHANGELOG_INTENT = /\b(token\.place|tokenplace|v3|v2|release|changelog|deferred|active)\b/i;
+const SEMANTICS_INTENT =
+    /\b(requires|consumes|creates|duration|timer|recipe|semantics|normalize)\b/i;
+const SEMANTICS_HEADING = /\b(requires|consumes|creates|duration|process)\b/i;
+const SEMANTICS_FALLBACK_QUERY = 'requires consumes creates duration semantics';
 const SEARCH_OPTIONS = Object.freeze({
     boost: { title: 3, heading: 2 },
     prefix: true,
@@ -93,6 +100,80 @@ const compareIds = (leftId, rightId) => {
     return 0;
 };
 
+const sortResults = (results) =>
+    results.slice().sort((left, right) => {
+        if (left.score !== right.score) {
+            return right.score - left.score;
+        }
+        const leftId = String(left.id);
+        const rightId = String(right.id);
+        return compareIds(leftId, rightId);
+    });
+
+const sortSelected = (entries) =>
+    entries.sort((left, right) => {
+        if (left.score !== right.score) {
+            return right.score - left.score;
+        }
+        return compareIds(String(left.id), String(right.id));
+    });
+
+const findBestResultMatch = (results, chunkMap, predicate) => {
+    for (const result of results) {
+        const chunk = chunkMap.get(result.id);
+        if (chunk && predicate(chunk)) {
+            return { chunk, score: result.score };
+        }
+    }
+    return null;
+};
+
+const selectDeterministicCandidate = (chunks, predicate) => {
+    let selected = null;
+    for (const chunk of chunks) {
+        if (!predicate(chunk)) continue;
+        if (!selected || compareIds(String(chunk.id), String(selected.id)) < 0) {
+            selected = chunk;
+        }
+    }
+    return selected;
+};
+
+const findChunkBySlugAnchorKind = (chunks, { slug, anchor, kind }) => {
+    const anchored = selectDeterministicCandidate(
+        chunks,
+        (chunk) => chunk.kind === kind && chunk.slug === slug && (chunk.anchor || 'top') === anchor
+    );
+    if (anchored) {
+        return anchored;
+    }
+    return selectDeterministicCandidate(
+        chunks,
+        (chunk) => chunk.kind === kind && chunk.slug === slug
+    );
+};
+
+const addForcedSelection = (selected, entry, maxResults) => {
+    if (!entry?.chunk) return;
+    if (selected.some((item) => item.id === entry.chunk.id)) return;
+    selected.push({
+        ...entry.chunk,
+        score: entry.score ?? Number.NEGATIVE_INFINITY,
+        forced: true,
+    });
+    if (selected.length <= maxResults) {
+        return;
+    }
+    const candidates = selected.filter((item) => !item.forced);
+    const pool = candidates.length ? candidates : selected;
+    const sorted = sortSelected(pool.slice());
+    const toRemove = sorted[sorted.length - 1];
+    const index = selected.findIndex((item) => item.id === toRemove.id);
+    if (index >= 0) {
+        selected.splice(index, 1);
+    }
+};
+
 export const mapDocsResultsToSources = (results = []) => {
     if (!Array.isArray(results) || results.length === 0) {
         return [];
@@ -139,14 +220,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
         console.error('Failed to load docs RAG data:', error);
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
-    const results = miniSearch.search(query, SEARCH_OPTIONS).sort((left, right) => {
-        if (left.score !== right.score) {
-            return right.score - left.score;
-        }
-        const leftId = String(left.id);
-        const rightId = String(right.id);
-        return compareIds(leftId, rightId);
-    });
+    const results = sortResults(miniSearch.search(query, SEARCH_OPTIONS));
     const maxResults = options.maxResults ?? DEFAULT_MAX_RESULTS;
     const maxChars = options.maxChars ?? DEFAULT_MAX_CHARS;
     const maxExcerptChars = options.maxExcerptChars ?? DEFAULT_MAX_EXCERPT_CHARS;
@@ -155,11 +229,77 @@ export const searchDocsRag = async (queryText, options = {}) => {
     for (const result of results) {
         const chunk = chunkMap.get(result.id);
         if (!chunk) continue;
-        selected.push({ ...chunk, score: result.score });
+        selected.push({ ...chunk, score: result.score, forced: false });
         if (selected.length >= maxResults) {
             break;
         }
     }
+
+    const chunkList = Array.from(chunkMap.values());
+    const intents = {
+        routes: ROUTES_INTENT.test(query),
+        changelog: CHANGELOG_INTENT.test(query),
+        semantics: SEMANTICS_INTENT.test(query),
+    };
+    const scoreMap = new Map(results.map((result) => [result.id, result.score]));
+
+    if (intents.routes) {
+        const preferredRoute = findChunkBySlugAnchorKind(chunkList, {
+            slug: '/docs/routes',
+            anchor: 'top',
+            kind: 'route',
+        });
+        const routeFromResults =
+            findBestResultMatch(results, chunkMap, (chunk) => chunk.kind === 'route') ?? null;
+        const routeFallback = preferredRoute ?? routeFromResults?.chunk;
+        const routeScore = routeFallback ? scoreMap.get(routeFallback.id) : undefined;
+        const routeCandidate =
+            preferredRoute && routeFromResults?.chunk?.id === preferredRoute.id
+                ? routeFromResults
+                : routeFallback
+                  ? { chunk: routeFallback, score: routeScore }
+                  : routeFromResults;
+        addForcedSelection(selected, routeCandidate, maxResults);
+    }
+
+    if (intents.changelog) {
+        const changelogCandidate =
+            findBestResultMatch(results, chunkMap, (chunk) => chunk.kind === 'changelog') ??
+            (() => {
+                const fallback = selectDeterministicCandidate(
+                    chunkList,
+                    (chunk) => chunk.kind === 'changelog'
+                );
+                if (!fallback) return null;
+                return { chunk: fallback, score: scoreMap.get(fallback.id) };
+            })();
+        addForcedSelection(selected, changelogCandidate, maxResults);
+    }
+
+    if (intents.semantics) {
+        const semanticsCandidate =
+            findBestResultMatch(results, chunkMap, (chunk) => {
+                if (chunk.kind !== 'doc') return false;
+                const label = `${chunk.title || ''} ${chunk.heading || ''}`;
+                return SEMANTICS_HEADING.test(label);
+            }) ?? null;
+
+        if (semanticsCandidate) {
+            addForcedSelection(selected, semanticsCandidate, maxResults);
+        } else {
+            const fallbackResults = sortResults(
+                miniSearch.search(SEMANTICS_FALLBACK_QUERY, SEARCH_OPTIONS)
+            );
+            const fallbackCandidate = findBestResultMatch(
+                fallbackResults,
+                chunkMap,
+                (chunk) => chunk.kind === 'doc'
+            );
+            addForcedSelection(selected, fallbackCandidate, maxResults);
+        }
+    }
+
+    sortSelected(selected);
 
     if (!selected.length) {
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
