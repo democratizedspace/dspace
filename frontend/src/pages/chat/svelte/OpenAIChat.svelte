@@ -22,6 +22,10 @@
         state as gameStateStore,
     } from '../../../utils/gameState/common.js';
     import { normalizeSettings } from '../../../utils/settingsDefaults.js';
+    import {
+        SAVE_SNAPSHOT_HINT_TEXT,
+        shouldShowSaveSnapshotHint,
+    } from '../../../utils/chatHints.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -35,9 +39,12 @@
     let debugMessages = [];
     let debugExpanded = false;
     let settingsUnsubscribe;
+    const saveSnapshotHintKey = 'dspace.chat.dismissSaveSnapshotHint';
+    let saveSnapshotHintDismissed = false;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
+    $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -146,6 +153,13 @@
         }
     }
 
+    function dismissSaveSnapshotHint() {
+        saveSnapshotHintDismissed = true;
+        if (typeof sessionStorage !== 'undefined') {
+            sessionStorage.setItem(saveSnapshotHintKey, '1');
+        }
+    }
+
     async function handlePersonaChange(event) {
         const selectedId = event.target.value;
         const nextPersona =
@@ -167,6 +181,9 @@
         const currentState = loadGameState();
         const normalized = normalizeSettings(currentState?.settings);
         showDebug = normalized.showChatDebugPayload;
+        if (typeof sessionStorage !== 'undefined') {
+            saveSnapshotHintDismissed = sessionStorage.getItem(saveSnapshotHintKey) === '1';
+        }
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
             const nextNormalized = normalizeSettings(value?.settings);
             showDebug = nextNormalized.showChatDebugPayload;
@@ -223,6 +240,19 @@
             style="font-size: 18px;"
         ></textarea>
         <button type="button" on:click={submitMessage}>Send</button>
+        {#if showSaveSnapshotHint}
+            <div class="save-snapshot-hint" role="note">
+                <span>{SAVE_SNAPSHOT_HINT_TEXT}</span>
+                <button
+                    type="button"
+                    class="save-snapshot-dismiss"
+                    aria-label="Dismiss save snapshot hint"
+                    on:click={dismissSaveSnapshotHint}
+                >
+                    ×
+                </button>
+            </div>
+        {/if}
     </div>
 
     <div class="chat-container">
@@ -402,6 +432,40 @@
         padding: 10px;
         font-size: 16px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .save-snapshot-hint {
+        margin-top: 0.5rem;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.6rem 0.75rem;
+        border-radius: 0.5rem;
+        background: rgba(248, 250, 252, 0.95);
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        color: #0f172a;
+        font-size: 0.85rem;
+        line-height: 1.3;
+    }
+
+    .save-snapshot-dismiss {
+        height: 28px;
+        width: 28px;
+        margin: 0;
+        padding: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: #0f172a;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        font-size: 1rem;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: none;
     }
 
     .debug-panel {

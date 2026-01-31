@@ -563,6 +563,50 @@ describe('buildChatPrompt', () => {
         expect(combinedContent).toContain('DSPACE knowledge base:');
         expect(buildDchatKnowledgePack).toHaveBeenCalled();
     });
+
+    it('expands retrieval queries for vague follow-ups with bounded prior context', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: '',
+            sources: [],
+            sourcesMeta: { results: [] },
+        });
+
+        await buildChatPrompt([
+            {
+                role: 'user',
+                content: 'How do I finish the launch tutorial? I need help with the steps.',
+            },
+            {
+                role: 'assistant',
+                content: 'Step 1: Gather fuel. Step 2: Prep the capsule for launch.',
+            },
+            { role: 'user', content: 'what about the second step?' },
+        ]);
+
+        const retrievalQuery = vi.mocked(searchDocsRag).mock.calls[0]?.[0] ?? '';
+
+        expect(retrievalQuery).toContain('what about the second step?');
+        expect(retrievalQuery).toContain('How do I finish the launch tutorial');
+        expect(retrievalQuery).toContain('Step 1: Gather fuel');
+        expect(retrievalQuery.length).toBeLessThanOrEqual(1000);
+    });
+
+    it('keeps retrieval queries unchanged for non-vague messages', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: '',
+            sources: [],
+            sourcesMeta: { results: [] },
+        });
+
+        await buildChatPrompt([
+            { role: 'user', content: 'Tell me about the hydroponics process.' },
+        ]);
+
+        const retrievalQuery = vi.mocked(searchDocsRag).mock.calls[0]?.[0] ?? '';
+
+        expect(retrievalQuery).toBe('Tell me about the hydroponics process.');
+        expect(retrievalQuery).not.toContain('Previous context:');
+    });
 });
 
 describe('describeOpenAIError', () => {

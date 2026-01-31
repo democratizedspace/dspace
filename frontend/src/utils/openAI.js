@@ -80,6 +80,83 @@ const guardrailRules = [
     },
 ];
 const sharedSystemGuardrail = guardrailRules.map((rule) => rule.line).join('\n');
+const vagueFollowupPattern =
+    /^\s*(what about|and then|that step|the second step|next step|step 2)\b/i;
+const maxRetrievalContextChars = 800;
+const maxRetrievalQueryChars = 1000;
+
+const normalizeWhitespace = (text) => {
+    if (!text) return '';
+    return text.replace(/\s+/g, ' ').trim();
+};
+
+const isVagueFollowup = (text) => {
+    const normalized = normalizeWhitespace(text);
+    if (!normalized) return false;
+    return normalized.length < 50 || vagueFollowupPattern.test(normalized);
+};
+
+const findLatestUserMessage = (messages) => {
+    for (let index = messages.length - 1; index >= 0; index -= 1) {
+        const message = messages[index];
+        if (message?.role === 'user' && message.content?.trim()) {
+            return { message, index };
+        }
+    }
+    return { message: null, index: -1 };
+};
+
+const findPreviousMessage = (messages, startIndex, role) => {
+    for (let index = startIndex; index >= 0; index -= 1) {
+        const message = messages[index];
+        if (message?.role === role && message.content?.trim()) {
+            return message;
+        }
+    }
+    return null;
+};
+
+const buildRetrievalQuery = (messages, latestUserInfo) => {
+    const latestUserMessage = latestUserInfo?.message;
+    if (!latestUserMessage) return '';
+    const latestText = normalizeWhitespace(latestUserMessage.content);
+    if (!isVagueFollowup(latestText)) {
+        return latestText;
+    }
+
+    const prevUserMessage = findPreviousMessage(messages, latestUserInfo.index - 1, 'user');
+    const prevAssistantMessage = findPreviousMessage(
+        messages,
+        latestUserInfo.index - 1,
+        'assistant'
+    );
+    const contextParts = [
+        normalizeWhitespace(prevUserMessage?.content),
+        normalizeWhitespace(prevAssistantMessage?.content),
+    ].filter(Boolean);
+
+    if (!contextParts.length) {
+        return latestText;
+    }
+
+    let remainingChars = maxRetrievalContextChars;
+    const limitedContext = contextParts
+        .map((part) => {
+            if (remainingChars <= 0) return '';
+            const slice = part.slice(0, remainingChars);
+            remainingChars -= slice.length;
+            return slice;
+        })
+        .filter(Boolean)
+        .join('\n');
+
+    let query = `${latestText}\n\nPrevious context:\n${limitedContext}`;
+    if (query.length > maxRetrievalQueryChars) {
+        query = query.slice(0, maxRetrievalQueryChars).trim();
+    }
+
+    return query;
+};
 
 const applyProviderRealityLine = (prompt) => {
     const basePrompt = prompt || providerRealityLine;
@@ -289,11 +366,10 @@ export const buildChatPrompt = async (messages, options = {}) => {
               content: `DSPACE knowledge base:\n${knowledgeSummary}`,
           }
         : null;
-    const latestUserMessage = [...messages]
-        .reverse()
-        .find((message) => message.role === 'user' && message.content?.trim());
-    const docsRagPayload = latestUserMessage
-        ? await searchDocsRag(latestUserMessage.content)
+    const latestUserInfo = findLatestUserMessage(messages);
+    const retrievalQuery = buildRetrievalQuery(messages, latestUserInfo);
+    const docsRagPayload = latestUserInfo.message
+        ? await searchDocsRag(retrievalQuery)
         : { excerptsText: '', sources: [] };
     const docsRagMessage =
         !knowledgeMessage && docsRagPayload.excerptsText

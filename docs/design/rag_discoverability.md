@@ -404,6 +404,19 @@ Proposal (opt-in):
 
 ---
 
+### Stage 11 — Bounded follow-up retrieval + save snapshot hint
+**Changes:**
+- Expand docs retrieval queries for vague follow-ups with a bounded slice of the prior user +
+  assistant context (retrieval-only, deterministic caps).
+- Add a dismissible `/gamesaves` hint under the chat input when draft questions mention
+  inventory/progress state.
+
+**Acceptance criteria:**
+- Vague follow-up queries pull in the previous step context without bloating prompts.
+- Chat UI gently nudges users to paste a save snapshot for state questions.
+
+---
+
 ## Testing Plan (repo-aligned)
 
 ### Unit tests
