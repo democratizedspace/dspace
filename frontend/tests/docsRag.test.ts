@@ -25,6 +25,26 @@ describe('docs RAG search', () => {
         ).toBe(true);
     });
 
+    it('includes custom content docs for editor/import/export questions', async () => {
+        const { excerptsText, sources } = await searchDocsRag(
+            'How do I add custom content to DSPACE?',
+            {
+                maxResults: 6,
+                maxChars: 3000,
+            }
+        );
+
+        const hasDocSource = sources.some(
+            (entry) => entry.type === 'doc' && String(entry.url || '').startsWith('/docs/')
+        );
+        const sourceLabels = sources.map((entry) => entry.label).join(' ');
+
+        expect(hasDocSource).toBe(true);
+        expect(`${excerptsText} ${sourceLabels}`).toMatch(
+            /\b(editor|import|export|backup|schema)\b/i
+        );
+    });
+
     it('forces routes inclusion for navigation queries', async () => {
         const { sources } = await searchDocsRag('Where is the menu?', {
             maxResults: 4,
