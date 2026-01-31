@@ -82,12 +82,18 @@ const guardrailRules = [
 const sharedSystemGuardrail = guardrailRules.map((rule) => rule.line).join('\n');
 
 const applyProviderRealityLine = (prompt) => {
-    if (!prompt) return providerRealityLine;
-    const normalizedPrompt = prompt.toLowerCase();
-    if (normalizedPrompt.includes(providerRealityLine.toLowerCase())) {
-        return prompt;
+    const basePrompt = prompt || providerRealityLine;
+    const normalizedPrompt = basePrompt.toLowerCase();
+    const normalizedRealityLine = providerRealityLine.toLowerCase();
+    if (normalizedPrompt.includes(normalizedRealityLine)) {
+        if (basePrompt.includes(providerRealityLine)) {
+            return basePrompt;
+        }
+        const escapedRealityLine = providerRealityLine.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const realityLinePattern = new RegExp(escapedRealityLine, 'i');
+        return basePrompt.replace(realityLinePattern, providerRealityLine);
     }
-    return `${providerRealityLine}\n\n${prompt}`;
+    return `${providerRealityLine}\n\n${basePrompt}`;
 };
 
 const applySystemGuardrail = (prompt) => {

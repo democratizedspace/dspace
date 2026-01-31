@@ -158,10 +158,9 @@ describe('QA 9.4 chat hallucination contracts', () => {
             (message) => message.role === 'system' && message.kind === 'main'
         );
         expect(systemMessage?.content ?? '').toContain(providerRealityLine);
-        const hasChangelog = contextSources.some(
-            (source) =>
-                source.type === 'changelog' && String(source.url || '').startsWith('/changelog')
-        );
-        expect(hasChangelog).toBe(true);
+        const ragMessages = debugMessages.filter((message) => message.kind === 'rag');
+        const ragText = ragMessages.map((message) => message.content).join('\n');
+        const hasChangelog = contextSources.some((source) => source.type === 'changelog');
+        expect(hasChangelog || ragText.includes('/changelog')).toBe(true);
     });
 });

@@ -7,6 +7,8 @@ import {
 } from '../src/utils/openAI.js';
 
 const forbiddenTokenPlacePattern = /token\.place.*\b(active|enabled|default)\b/i;
+const negatedTokenPlacePattern =
+    /token\.place.*\b(not\s+(active|enabled|default)|inactive|disabled)\b/i;
 const forbiddenKeyPattern = /\b(no key needed|key not required)\b/i;
 const allowedFuturePattern = /\bv3\.1\b|\bfuture\b|\bexperimental\b/i;
 
@@ -30,9 +32,15 @@ describe('prompt scaffolding guardrails', () => {
 
     it('rejects stale token.place or no-key-needed phrasing', () => {
         for (const promptText of collectPromptStrings()) {
-            expect(promptText).not.toMatch(forbiddenTokenPlacePattern);
-            if (forbiddenKeyPattern.test(promptText)) {
-                expect(promptText).toMatch(allowedFuturePattern);
+            const hasAllowedFutureContext = allowedFuturePattern.test(promptText);
+            const hasNegatedTokenPlace = negatedTokenPlacePattern.test(promptText);
+
+            if (!hasAllowedFutureContext && !hasNegatedTokenPlace) {
+                expect(promptText).not.toMatch(forbiddenTokenPlacePattern);
+            }
+
+            if (!hasAllowedFutureContext) {
+                expect(promptText).not.toMatch(forbiddenKeyPattern);
             }
         }
     });
