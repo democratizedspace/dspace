@@ -11,11 +11,8 @@ const SEMANTICS_INTENT =
     /\b(requires|consumes|creates|duration|timer|recipe|semantics|normalize)\b/i;
 const SEMANTICS_MATCH = /\b(requires|consumes|creates|duration|process)\b/i;
 const SEMANTICS_FALLBACK_QUERY = 'requires consumes creates duration semantics';
-const CUSTOM_CONTENT_INTENT = new RegExp(
-    '\\b(custom content|custom quest|custom quests|quest editor|import|export|backup|' +
-        'contentbackup|json schema|manage quests|manage items|manage processes)\\b',
-    'i'
-);
+const CUSTOM_CONTENT_INTENT =
+    /\b(custom content|custom quests?|quest editor|content editor|manage (?:quests|items|processes)|custom (?:items|processes)|content backup|backup (?:custom|content)|custom (?:import|export)|(?:import|export) (?:custom|quest|content)|json schema)\b/i;
 const CUSTOM_CONTENT_MATCH =
     /\b(custom content|quest editor|import|export|backup|schema|content backup)\b/i;
 const CUSTOM_CONTENT_FALLBACK_QUERY = 'custom content editor import export backup json schema';
