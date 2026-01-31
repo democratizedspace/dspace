@@ -3,6 +3,13 @@ import MiniSearch from 'minisearch';
 const DEFAULT_MAX_RESULTS = 5;
 const DEFAULT_MAX_CHARS = 5000;
 const DEFAULT_MAX_EXCERPT_CHARS = 850;
+const ROUTES_INTENT =
+    /\b(route|routes|url|urls|path|page|menu|navigate|navigation|where is|link)\b/i;
+const CHANGELOG_INTENT = /\b(token\.place|tokenplace|v3|v2|release|changelog|deferred|active)\b/i;
+const SEMANTICS_INTENT =
+    /\b(requires|consumes|creates|duration|timer|recipe|semantics|normalize)\b/i;
+const SEMANTICS_MATCH = /\b(requires|consumes|creates|duration|process)\b/i;
+const SEMANTICS_FALLBACK_QUERY = 'requires consumes creates duration semantics';
 const SEARCH_OPTIONS = Object.freeze({
     boost: { title: 3, heading: 2 },
     prefix: true,
@@ -93,6 +100,68 @@ const compareIds = (leftId, rightId) => {
     return 0;
 };
 
+const compareResultsByRank = (left, right) => {
+    if (left.score !== right.score) {
+        return right.score - left.score;
+    }
+    return compareIds(String(left.id), String(right.id));
+};
+
+const matchesSemanticsChunk = (chunk) => {
+    const title = String(chunk.title || '');
+    const heading = String(chunk.heading || '');
+    return SEMANTICS_MATCH.test(`${title} ${heading}`);
+};
+
+const findHighestRankedChunk = (results, chunkMap, predicate) => {
+    for (const result of results) {
+        const chunk = chunkMap.get(result.id);
+        if (!chunk) continue;
+        if (predicate(chunk)) {
+            return { ...chunk, score: result.score };
+        }
+    }
+    return null;
+};
+
+const findDeterministicChunk = (chunkMap, predicate) => {
+    const candidates = [];
+    for (const chunk of chunkMap.values()) {
+        if (predicate(chunk)) {
+            candidates.push(chunk);
+        }
+    }
+    if (!candidates.length) {
+        return null;
+    }
+    candidates.sort((left, right) => compareIds(String(left.id), String(right.id)));
+    return { ...candidates[0], score: 0 };
+};
+
+const dropLowestRanked = (selected) => {
+    if (!selected.length) return;
+    let lowestIndex = 0;
+    for (let index = 1; index < selected.length; index += 1) {
+        if (compareResultsByRank(selected[index], selected[lowestIndex]) > 0) {
+            lowestIndex = index;
+        }
+    }
+    selected.splice(lowestIndex, 1);
+};
+
+const includeForcedChunk = (selected, chunk, maxResults) => {
+    if (!chunk) {
+        return;
+    }
+    if (selected.some((entry) => entry.id === chunk.id)) {
+        return;
+    }
+    if (selected.length >= maxResults) {
+        dropLowestRanked(selected);
+    }
+    selected.push(chunk);
+};
+
 export const mapDocsResultsToSources = (results = []) => {
     if (!Array.isArray(results) || results.length === 0) {
         return [];
@@ -139,14 +208,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
         console.error('Failed to load docs RAG data:', error);
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
-    const results = miniSearch.search(query, SEARCH_OPTIONS).sort((left, right) => {
-        if (left.score !== right.score) {
-            return right.score - left.score;
-        }
-        const leftId = String(left.id);
-        const rightId = String(right.id);
-        return compareIds(leftId, rightId);
-    });
+    const results = miniSearch.search(query, SEARCH_OPTIONS).sort(compareResultsByRank);
     const maxResults = options.maxResults ?? DEFAULT_MAX_RESULTS;
     const maxChars = options.maxChars ?? DEFAULT_MAX_CHARS;
     const maxExcerptChars = options.maxExcerptChars ?? DEFAULT_MAX_EXCERPT_CHARS;
@@ -160,6 +222,58 @@ export const searchDocsRag = async (queryText, options = {}) => {
             break;
         }
     }
+
+    const wantsRoutes = ROUTES_INTENT.test(query);
+    const wantsChangelog = CHANGELOG_INTENT.test(query);
+    const wantsSemantics = SEMANTICS_INTENT.test(query);
+
+    if (wantsRoutes) {
+        const preferredRoute =
+            findHighestRankedChunk(
+                results,
+                chunkMap,
+                (chunk) => chunk.kind === 'route' && chunk.slug === '/docs/routes'
+            ) ||
+            findHighestRankedChunk(results, chunkMap, (chunk) => chunk.kind === 'route') ||
+            findDeterministicChunk(
+                chunkMap,
+                (chunk) => chunk.kind === 'route' && chunk.slug === '/docs/routes'
+            ) ||
+            findDeterministicChunk(chunkMap, (chunk) => chunk.kind === 'route');
+        includeForcedChunk(selected, preferredRoute, maxResults);
+    }
+
+    if (wantsChangelog) {
+        const preferredChangelog =
+            findHighestRankedChunk(results, chunkMap, (chunk) => chunk.kind === 'changelog') ||
+            findDeterministicChunk(chunkMap, (chunk) => chunk.kind === 'changelog');
+        includeForcedChunk(selected, preferredChangelog, maxResults);
+    }
+
+    if (wantsSemantics) {
+        let semanticsChunk = findHighestRankedChunk(results, chunkMap, (chunk) => {
+            return chunk.kind === 'doc' && matchesSemanticsChunk(chunk);
+        });
+
+        if (!semanticsChunk) {
+            const semanticResults = miniSearch
+                .search(SEMANTICS_FALLBACK_QUERY, SEARCH_OPTIONS)
+                .sort(compareResultsByRank);
+            semanticsChunk = findHighestRankedChunk(semanticResults, chunkMap, (chunk) => {
+                return chunk.kind === 'doc';
+            });
+        }
+
+        if (!semanticsChunk) {
+            semanticsChunk = findDeterministicChunk(chunkMap, (chunk) => {
+                return chunk.kind === 'doc' && matchesSemanticsChunk(chunk);
+            });
+        }
+
+        includeForcedChunk(selected, semanticsChunk, maxResults);
+    }
+
+    selected.sort(compareResultsByRank);
 
     if (!selected.length) {
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
