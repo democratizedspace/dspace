@@ -17,6 +17,42 @@ const PRIORITY_QUEST_IDS = [
     'welcome/connect-github',
 ];
 const MAX_DESCRIPTION_LENGTH = 180;
+export const dchatKnowledgeScaffoldingStrings = [
+    'Inventory highlights',
+    'Items',
+    'Quests',
+    'Prereqs',
+    'Rewards',
+    'Quest progress',
+    'Achievements',
+    'Unlocked',
+    'In progress',
+    'No achievements unlocked yet.',
+    'Processes',
+    'Processes in flight',
+    'Local game state snapshot',
+    'not started',
+    'finished',
+    'paused',
+];
+const dchatKnowledgeScaffolding = {
+    inventoryHighlights: dchatKnowledgeScaffoldingStrings[0],
+    items: dchatKnowledgeScaffoldingStrings[1],
+    quests: dchatKnowledgeScaffoldingStrings[2],
+    prereqs: dchatKnowledgeScaffoldingStrings[3],
+    rewards: dchatKnowledgeScaffoldingStrings[4],
+    questProgress: dchatKnowledgeScaffoldingStrings[5],
+    achievements: dchatKnowledgeScaffoldingStrings[6],
+    unlocked: dchatKnowledgeScaffoldingStrings[7],
+    inProgress: dchatKnowledgeScaffoldingStrings[8],
+    noAchievements: dchatKnowledgeScaffoldingStrings[9],
+    processes: dchatKnowledgeScaffoldingStrings[10],
+    processesInFlight: dchatKnowledgeScaffoldingStrings[11],
+    localGameStateSnapshot: dchatKnowledgeScaffoldingStrings[12],
+    notStarted: dchatKnowledgeScaffoldingStrings[13],
+    finished: dchatKnowledgeScaffoldingStrings[14],
+    paused: dchatKnowledgeScaffoldingStrings[15],
+};
 
 function truncate(text, maxLength = MAX_DESCRIPTION_LENGTH) {
     if (typeof text !== 'string') {
@@ -195,7 +231,7 @@ function describeQuestProgress(questId, questState) {
     const quest = quests.find((entry) => entry.id === questId);
     const title = quest?.title || questId;
     if (questState?.finished) {
-        return `${title}: finished`;
+        return `${title}: ${dchatKnowledgeScaffolding.finished}`;
     }
     if (typeof questState?.stepId === 'number') {
         const stepNumber = questState.stepId + 1;
@@ -220,7 +256,7 @@ function describeProcessProgress(processId, processState = {}) {
     const title = process?.title || processId;
     const { startedAt, duration, pausedAt, elapsedBeforePause } = processState;
     if (!startedAt || !duration) {
-        return `${title}: not started`;
+        return `${title}: ${dchatKnowledgeScaffolding.notStarted}`;
     }
 
     let elapsed = elapsedBeforePause || 0;
@@ -232,10 +268,10 @@ function describeProcessProgress(processId, processState = {}) {
 
     const progress = Math.min(100, Math.max(0, Math.round((elapsed / duration) * 100)));
     if (progress >= 100) {
-        return `${title}: finished (100%)`;
+        return `${title}: ${dchatKnowledgeScaffolding.finished} (100%)`;
     }
     if (pausedAt) {
-        return `${title}: paused (${progress}%)`;
+        return `${title}: ${dchatKnowledgeScaffolding.paused} (${progress}%)`;
     }
     return `${title}: in progress (${progress}%)`;
 }
@@ -259,14 +295,16 @@ export function buildDchatKnowledgePack(gameState = {}) {
 
     const inventorySummary = formatInventory(gameState.inventory);
     if (inventorySummary.length > 0) {
-        knowledgeSections.push(`Inventory highlights: ${inventorySummary.join('; ')}`);
+        knowledgeSections.push(
+            `${dchatKnowledgeScaffolding.inventoryHighlights}: ${inventorySummary.join('; ')}`
+        );
         stateDetails.push('inventory');
     }
 
     const itemEntries = getItemsForKnowledge();
     if (itemEntries.length > 0) {
         knowledgeSections.push(
-            `Items: ${itemEntries
+            `${dchatKnowledgeScaffolding.items}: ${itemEntries
                 .map((item) => `${item.name}: ${truncate(item.description || '')}`)
                 .join(' | ')}`
         );
@@ -284,17 +322,23 @@ export function buildDchatKnowledgePack(gameState = {}) {
     const questEntries = getQuestsForKnowledge();
     if (questEntries.length > 0) {
         knowledgeSections.push(
-            `Quests: ${questEntries
+            `${dchatKnowledgeScaffolding.quests}: ${questEntries
                 .map((quest) => {
                     const parts = [`${quest.title} [${quest.id}]`];
                     if (quest.description) {
                         parts.push(quest.description);
                     }
                     if (quest.requiresQuests.length > 0) {
-                        parts.push(`Prereqs: ${quest.requiresQuests.join(', ')}`);
+                        parts.push(
+                            `${dchatKnowledgeScaffolding.prereqs}: ${quest.requiresQuests.join(
+                                ', '
+                            )}`
+                        );
                     }
                     if (quest.rewards.length > 0) {
-                        parts.push(`Rewards: ${quest.rewards.join(', ')}`);
+                        parts.push(
+                            `${dchatKnowledgeScaffolding.rewards}: ${quest.rewards.join(', ')}`
+                        );
                     }
                     return parts.join(' — ');
                 })
@@ -313,7 +357,9 @@ export function buildDchatKnowledgePack(gameState = {}) {
 
     const questProgressSummary = summarizeQuestProgress(gameState);
     if (questProgressSummary.length > 0) {
-        knowledgeSections.push(`Quest progress: ${questProgressSummary.join(' | ')}`);
+        knowledgeSections.push(
+            `${dchatKnowledgeScaffolding.questProgress}: ${questProgressSummary.join(' | ')}`
+        );
         stateDetails.push('quest progress');
     }
 
@@ -322,15 +368,17 @@ export function buildDchatKnowledgePack(gameState = {}) {
     if (unlockedEntries.length > 0 || progressEntries.length > 0) {
         const sections = [];
         if (unlockedEntries.length > 0) {
-            sections.push(`Unlocked: ${unlockedEntries.join(', ')}`);
+            sections.push(`${dchatKnowledgeScaffolding.unlocked}: ${unlockedEntries.join(', ')}`);
         }
         if (progressEntries.length > 0) {
-            sections.push(`In progress: ${progressEntries.join(', ')}`);
+            sections.push(`${dchatKnowledgeScaffolding.inProgress}: ${progressEntries.join(', ')}`);
         }
         if (sections.length === 0) {
-            sections.push('No achievements unlocked yet.');
+            sections.push(dchatKnowledgeScaffolding.noAchievements);
         }
-        knowledgeSections.push(`Achievements: ${sections.join(' | ')}`);
+        knowledgeSections.push(
+            `${dchatKnowledgeScaffolding.achievements}: ${sections.join(' | ')}`
+        );
         stateDetails.push('achievements');
         sources.push(
             ...unlockedSlice.map((achievement) => ({
@@ -350,7 +398,7 @@ export function buildDchatKnowledgePack(gameState = {}) {
     const processEntries = getProcessesForKnowledge();
     if (processEntries.length > 0) {
         knowledgeSections.push(
-            `Processes: ${processEntries
+            `${dchatKnowledgeScaffolding.processes}: ${processEntries
                 .map((process) => {
                     const duration = process.duration ? ` (duration ${process.duration})` : '';
                     return `${process.title}${duration}`;
@@ -369,7 +417,9 @@ export function buildDchatKnowledgePack(gameState = {}) {
 
     const processProgressSummary = summarizeProcessProgress(gameState);
     if (processProgressSummary.length > 0) {
-        knowledgeSections.push(`Processes in flight: ${processProgressSummary.join(' | ')}`);
+        knowledgeSections.push(
+            `${dchatKnowledgeScaffolding.processesInFlight}: ${processProgressSummary.join(' | ')}`
+        );
         stateDetails.push('process progress');
     }
 
@@ -377,7 +427,7 @@ export function buildDchatKnowledgePack(gameState = {}) {
         sources.push({
             type: 'state',
             id: 'local-game-state',
-            label: 'Local game state snapshot',
+            label: dchatKnowledgeScaffolding.localGameStateSnapshot,
             detail: stateDetails.join(', '),
         });
     }

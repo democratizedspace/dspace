@@ -39,10 +39,11 @@ const toOutputText = (response) => {
 const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';
 const fallbackModels = ['gpt-5-mini'];
-const fallbackSystemPrompt =
+export const providerRealityLine = 'In v3, chat uses OpenAI. token.place is deferred to v3.1.';
+export const fallbackSystemPrompt =
     defaultPersona?.systemPrompt ||
     "You are dChat, a helpful assistant in the game DSPACE. Your purpose is to assist players by providing information, guidance, and support related to the game. DSPACE is a web-based space exploration idle game where you can 3D print things, grow plants hydroponically, and create and launch model rockets. The game is fully open source, and development is ongoing. DSPACE is made from a combination of the founder, Esp, and a variety of generative models, including GPT-5, Stable Diffusion, and DALL-E 2. You have curated knowledge about quests, items, processes, and how inventory and progression systems work in general, but you cannot access a specific player's inventory, quests, or progress without a save snapshot. If you encounter anything you're not sure about, tell the user you don't know and suggest checking out the docs or joining the Discord server. If someone talks about something off-topic, humor them and help out with whatever they need, but don't output anything harmful or offensive. Have fun!";
-const fallbackWelcomeMessage =
+export const fallbackWelcomeMessage =
     defaultPersona?.welcomeMessage || 'Welcome! How can I assist you today?';
 export const defaultOpenAIErrorMessage =
     "Sorry, I'm having some trouble and can't generate a response.";
@@ -79,6 +80,21 @@ const guardrailRules = [
     },
 ];
 const sharedSystemGuardrail = guardrailRules.map((rule) => rule.line).join('\n');
+
+const applyProviderRealityLine = (prompt) => {
+    const basePrompt = prompt || providerRealityLine;
+    const normalizedPrompt = basePrompt.toLowerCase();
+    const normalizedRealityLine = providerRealityLine.toLowerCase();
+    if (normalizedPrompt.includes(normalizedRealityLine)) {
+        if (basePrompt.includes(providerRealityLine)) {
+            return basePrompt;
+        }
+        const escapedRealityLine = providerRealityLine.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const realityLinePattern = new RegExp(escapedRealityLine, 'i');
+        return basePrompt.replace(realityLinePattern, providerRealityLine);
+    }
+    return `${providerRealityLine}\n\n${basePrompt}`;
+};
 
 const applySystemGuardrail = (prompt) => {
     if (!prompt) return sharedSystemGuardrail;
@@ -260,7 +276,9 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const persona = options.persona || defaultPersona;
     const systemMessage = {
         role: 'system',
-        content: applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt),
+        content: applyProviderRealityLine(
+            applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt)
+        ),
     };
 
     const knowledgePack = buildDchatKnowledgePack(gameState);

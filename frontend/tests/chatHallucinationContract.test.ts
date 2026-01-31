@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildChatPrompt } from '../src/utils/openAI.js';
+import { buildChatPrompt, providerRealityLine } from '../src/utils/openAI.js';
 import { sortSources } from '../src/utils/contextSources.js';
 
 const probes = [
@@ -148,5 +148,19 @@ describe('QA 9.4 chat hallucination contracts', () => {
         expect(ragMessages.length).toBeGreaterThan(0);
         expect(hasDocSource).toBe(true);
         expect(ragText).toMatch(/\b(requires|consumes|creates|duration)\b/i);
+    });
+
+    it('Stage 10: token.place probe includes provider reality line and changelog source', async () => {
+        const { debugMessages, contextSources } = await buildChatPrompt([
+            { role: 'user', content: 'Is token.place active?' },
+        ]);
+        const systemMessage = debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        expect(systemMessage?.content ?? '').toContain(providerRealityLine);
+        const ragMessages = debugMessages.filter((message) => message.kind === 'rag');
+        const ragText = ragMessages.map((message) => message.content).join('\n');
+        const hasChangelog = contextSources.some((source) => source.type === 'changelog');
+        expect(hasChangelog || ragText.includes('/changelog')).toBe(true);
     });
 });
