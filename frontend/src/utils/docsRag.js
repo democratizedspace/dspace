@@ -5,7 +5,8 @@ const DEFAULT_MAX_CHARS = 5000;
 const DEFAULT_MAX_EXCERPT_CHARS = 850;
 const ROUTES_INTENT =
     /\b(route|routes|url|urls|path|page|menu|navigate|navigation|where is|link)\b/i;
-const CHANGELOG_INTENT = /\b(token\.place|tokenplace|v3|v2|release|changelog|deferred|active)\b/i;
+const CHANGELOG_INTENT =
+    /\b(token\.place|tokenplace|changelog|release|version(?:\s+notes?)?|what'?s new)\b/i;
 const SEMANTICS_INTENT =
     /\b(requires|consumes|creates|duration|timer|recipe|semantics|normalize)\b/i;
 const SEMANTICS_MATCH = /\b(requires|consumes|creates|duration|process)\b/i;
@@ -142,7 +143,7 @@ const dropLowestRanked = (selected) => {
     if (!selected.length) return;
     let lowestIndex = 0;
     for (let index = 1; index < selected.length; index += 1) {
-        if (compareResultsByRank(selected[index], selected[lowestIndex]) > 0) {
+        if (compareResultsByRank(selected[index], selected[lowestIndex]) < 0) {
             lowestIndex = index;
         }
     }
