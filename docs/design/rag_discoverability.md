@@ -107,6 +107,9 @@ in the chat UI, so uncertainty and coverage are visible to QA (file touchpoints:
 This design satisfies it by extending the knowledge summary with `/docs` titles + slugs and the
 route index (file touchpoints: `frontend/src/utils/dchatKnowledge.js`, `docs/ROUTES.md`,
 `frontend/src/pages/docs/json/sections.json`).
+DocsRag now layers deterministic forced-inclusion heuristics (routes, changelog, process
+semantics) on top of MiniSearch results to avoid lexical misses in the chat context packer
+(`frontend/src/utils/docsRag.js`).
 
 > - [ ] System prompt explicitly forbids inventing items, quests, processes, or routes that are not
 >       in context; require “check docs” or ask a clarifying question instead.

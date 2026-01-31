@@ -25,6 +25,17 @@ describe('docs RAG search', () => {
         ).toBe(true);
     });
 
+    it('forces routes inclusion for navigation queries', async () => {
+        const { sources } = await searchDocsRag('Where is the menu?', {
+            maxResults: 4,
+            maxChars: 2000,
+        });
+
+        expect(
+            sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+        ).toBe(true);
+    });
+
     it('retrieves v3 changelog references', async () => {
         const { excerptsText, sourcesMeta, sources } = await searchDocsRag('token.place', {
             maxResults: 6,
@@ -34,6 +45,40 @@ describe('docs RAG search', () => {
         expect(excerptsText).toMatch(/\/changelog#[^\s]+/);
         expect(sourcesMeta.results.some((entry) => entry.kind === 'changelog')).toBe(true);
         expect(sources.some((entry) => entry.type === 'changelog')).toBe(true);
+    });
+
+    it('forces changelog inclusion for version status queries', async () => {
+        const { sourcesMeta } = await searchDocsRag('Is token.place active in v3?', {
+            maxResults: 6,
+            maxChars: 3000,
+        });
+
+        expect(sourcesMeta.results.some((entry) => entry.kind === 'changelog')).toBe(true);
+    });
+
+    it('retrieves process semantics doc chunk', async () => {
+        const { excerptsText, sourcesMeta, sources } = await searchDocsRag(
+            'requires consumes creates duration semantics',
+            {
+                maxResults: 6,
+                maxChars: 3000,
+            }
+        );
+
+        expect(excerptsText).toMatch(/\b(requires|consumes|creates|duration)\b/i);
+        const semanticsMatch = sourcesMeta.results.find(
+            (entry) =>
+                entry.kind === 'doc' &&
+                /\b(requires|consumes|creates|duration|process)\b/i.test(
+                    `${entry.title || ''} ${entry.heading || ''}`
+                )
+        );
+        expect(semanticsMatch).toBeTruthy();
+        expect(
+            sources.some(
+                (entry) => entry.type === 'doc' && String(entry.url || '').startsWith('/docs/')
+            )
+        ).toBe(true);
     });
 
     it('caps excerpts and remains deterministic', async () => {
