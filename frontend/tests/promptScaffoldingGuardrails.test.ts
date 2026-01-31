@@ -3,8 +3,10 @@ import { npcPersonas } from '../src/data/npcPersonas.js';
 import {
     buildChatPrompt,
     fallbackSystemPrompt,
+    fallbackWelcomeMessage,
     providerRealityLine,
 } from '../src/utils/openAI.js';
+import { dchatKnowledgeScaffoldingStrings } from '../src/utils/dchatKnowledge.js';
 
 const forbiddenTokenPlacePattern = /token\.place.*\b(active|enabled|default)\b/i;
 const negatedTokenPlacePattern =
@@ -16,7 +18,13 @@ const collectPromptStrings = () => {
     const personaStrings = npcPersonas.flatMap((persona) =>
         [persona.systemPrompt, persona.welcomeMessage].filter(Boolean)
     );
-    return [...personaStrings, fallbackSystemPrompt];
+    return [
+        ...personaStrings,
+        fallbackSystemPrompt,
+        fallbackWelcomeMessage,
+        providerRealityLine,
+        ...dchatKnowledgeScaffoldingStrings,
+    ];
 };
 
 describe('prompt scaffolding guardrails', () => {
@@ -34,12 +42,14 @@ describe('prompt scaffolding guardrails', () => {
         for (const promptText of collectPromptStrings()) {
             const hasAllowedFutureContext = allowedFuturePattern.test(promptText);
             const hasNegatedTokenPlace = negatedTokenPlacePattern.test(promptText);
+            const hasForbiddenTokenPlace = forbiddenTokenPlacePattern.test(promptText);
+            const hasForbiddenKey = forbiddenKeyPattern.test(promptText);
 
-            if (!hasAllowedFutureContext && !hasNegatedTokenPlace) {
+            if (hasForbiddenTokenPlace && !hasAllowedFutureContext && !hasNegatedTokenPlace) {
                 expect(promptText).not.toMatch(forbiddenTokenPlacePattern);
             }
 
-            if (!hasAllowedFutureContext) {
+            if (hasForbiddenKey && !hasAllowedFutureContext) {
                 expect(promptText).not.toMatch(forbiddenKeyPattern);
             }
         }
