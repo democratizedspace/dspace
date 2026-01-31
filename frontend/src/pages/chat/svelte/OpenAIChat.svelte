@@ -165,8 +165,7 @@
         if (typeof sessionStorage === 'undefined') {
             return;
         }
-        saveSnapshotHintDismissed =
-            sessionStorage.getItem(saveSnapshotHintStorageKey) === '1';
+        saveSnapshotHintDismissed = sessionStorage.getItem(saveSnapshotHintStorageKey) === '1';
     }
 
     async function handlePersonaChange(event) {
@@ -191,9 +190,7 @@
         const normalized = normalizeSettings(currentState?.settings);
         showDebug = normalized.showChatDebugPayload;
         syncSaveSnapshotHintDismissed();
-        saveSnapshotHintFocusListener = () => {
-            syncSaveSnapshotHintDismissed();
-        };
+        saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
             const nextNormalized = normalizeSettings(value?.settings);
