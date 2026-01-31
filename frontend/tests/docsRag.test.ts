@@ -40,9 +40,7 @@ describe('docs RAG search', () => {
         const sourceLabels = sources.map((entry) => entry.label).join(' ');
 
         expect(hasDocSource).toBe(true);
-        expect(`${excerptsText} ${sourceLabels}`).toMatch(
-            /\b(editor|import|export|backup|schema)\b/i
-        );
+        expect(`${excerptsText} ${sourceLabels}`).toMatch(/\bcustom content\b/i);
     });
 
     it('keeps custom content docs under tight maxChars caps', async () => {
@@ -60,9 +58,7 @@ describe('docs RAG search', () => {
         const sourceLabels = sources.map((entry) => entry.label).join(' ');
 
         expect(hasDocSource).toBe(true);
-        expect(`${excerptsText} ${sourceLabels}`).toMatch(
-            /\b(editor|import|export|backup|schema)\b/i
-        );
+        expect(`${excerptsText} ${sourceLabels}`).toMatch(/\bcustom content\b/i);
     });
 
     it('forces routes inclusion for navigation queries', async () => {
