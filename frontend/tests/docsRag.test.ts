@@ -36,6 +36,27 @@ describe('docs RAG search', () => {
         expect(sources.some((entry) => entry.type === 'changelog')).toBe(true);
     });
 
+    it('retrieves process semantics docs', async () => {
+        const { excerptsText, sourcesMeta, sources } = await searchDocsRag(
+            'requires consumes creates duration semantics',
+            {
+                maxResults: 6,
+                maxChars: 3000,
+            }
+        );
+        const semanticsPattern = /\b(requires|consumes|creates|duration|process)\b/i;
+        const hasSemanticsSource = sourcesMeta.results.some(
+            (entry) =>
+                entry.kind === 'doc' &&
+                String(entry.slug || '').startsWith('/docs/') &&
+                semanticsPattern.test(`${entry.title ?? ''} ${entry.heading ?? ''}`)
+        );
+
+        expect(excerptsText).toMatch(semanticsPattern);
+        expect(hasSemanticsSource).toBe(true);
+        expect(sources.some((entry) => entry.type === 'doc')).toBe(true);
+    });
+
     it('caps excerpts and remains deterministic', async () => {
         const options = { maxResults: 15, maxChars: 700, maxExcerptChars: 140 };
         const first = await searchDocsRag('docs', options);

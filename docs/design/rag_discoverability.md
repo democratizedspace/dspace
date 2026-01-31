@@ -53,6 +53,9 @@ without introducing heavyweight infrastructure.
 ### Retrieval / “RAG” context (current)
 - The only retrieval mechanism is **string assembly** inside
   `frontend/src/utils/dchatKnowledge.js` via `buildDchatKnowledge(gameState)`.
+- Docs RAG also uses a MiniSearch index in `frontend/src/utils/docsRag.js` with deterministic
+  ranking, hard caps, and forced inclusion for route index, changelog, and process semantics
+  queries so key docs anchors are always present when relevant.
 - Sources used today:
   - Items catalog: `frontend/src/pages/inventory/json/items/index.js`
   - Processes catalog: `frontend/src/generated/processes.json`
