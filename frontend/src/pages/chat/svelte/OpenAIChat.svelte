@@ -22,11 +22,16 @@
         state as gameStateStore,
     } from '../../../utils/gameState/common.js';
     import { normalizeSettings } from '../../../utils/settingsDefaults.js';
+    import {
+        SAVE_SNAPSHOT_HINT_TEXT,
+        shouldShowSaveSnapshotHint,
+    } from '../../../utils/chatHints.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
     const message = writable('');
     const messageHistory = writable([]);
+    const saveSnapshotHintStorageKey = 'dspace.chat.dismissSaveSnapshotHint';
     let showSpinner = false;
     let hydrated = false;
     let messageCounter = 0;
@@ -35,9 +40,12 @@
     let debugMessages = [];
     let debugExpanded = false;
     let settingsUnsubscribe;
+    let saveSnapshotHintDismissed = false;
+    let saveSnapshotHintFocusListener;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
+    $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -146,6 +154,20 @@
         }
     }
 
+    function dismissSaveSnapshotHint() {
+        saveSnapshotHintDismissed = true;
+        if (typeof sessionStorage !== 'undefined') {
+            sessionStorage.setItem(saveSnapshotHintStorageKey, '1');
+        }
+    }
+
+    function syncSaveSnapshotHintDismissed() {
+        if (typeof sessionStorage === 'undefined') {
+            return;
+        }
+        saveSnapshotHintDismissed = sessionStorage.getItem(saveSnapshotHintStorageKey) === '1';
+    }
+
     async function handlePersonaChange(event) {
         const selectedId = event.target.value;
         const nextPersona =
@@ -167,6 +189,9 @@
         const currentState = loadGameState();
         const normalized = normalizeSettings(currentState?.settings);
         showDebug = normalized.showChatDebugPayload;
+        syncSaveSnapshotHintDismissed();
+        saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
+        window.addEventListener('focus', saveSnapshotHintFocusListener);
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
             const nextNormalized = normalizeSettings(value?.settings);
             showDebug = nextNormalized.showChatDebugPayload;
@@ -182,6 +207,9 @@
 
     onDestroy(() => {
         settingsUnsubscribe?.();
+        if (saveSnapshotHintFocusListener) {
+            window.removeEventListener('focus', saveSnapshotHintFocusListener);
+        }
     });
 </script>
 
@@ -222,6 +250,19 @@
             on:keydown={handleKeyDown}
             style="font-size: 18px;"
         ></textarea>
+        {#if showSaveSnapshotHint}
+            <div class="save-snapshot-hint" role="note">
+                <span>{SAVE_SNAPSHOT_HINT_TEXT}</span>
+                <button
+                    type="button"
+                    class="hint-dismiss"
+                    aria-label="Dismiss save snapshot hint"
+                    on:click={dismissSaveSnapshotHint}
+                >
+                    ×
+                </button>
+            </div>
+        {/if}
         <button type="button" on:click={submitMessage}>Send</button>
     </div>
 
@@ -402,6 +443,40 @@
         padding: 10px;
         font-size: 16px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .save-snapshot-hint {
+        width: 100%;
+        margin-top: 0.25rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        background: rgba(148, 163, 184, 0.12);
+        color: rgba(15, 23, 42, 0.9);
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+    }
+
+    .save-snapshot-hint span {
+        flex: 1;
+    }
+
+    .hint-dismiss {
+        height: 28px;
+        width: 28px;
+        margin: 0;
+        padding: 0;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.08);
+        color: rgba(15, 23, 42, 0.8);
+        font-size: 1.1rem;
+        line-height: 1;
+    }
+
+    .hint-dismiss:hover {
+        background: rgba(15, 23, 42, 0.18);
     }
 
     .debug-panel {

@@ -80,6 +80,10 @@ const guardrailRules = [
     },
 ];
 const sharedSystemGuardrail = guardrailRules.map((rule) => rule.line).join('\n');
+const vagueFollowupPattern =
+    /^\s*(what about|and then|that step|the second step|next step|step 2)\b/i;
+const retrievalContextLimit = 800;
+const retrievalQueryLimit = 1000;
 
 const applyProviderRealityLine = (prompt) => {
     const basePrompt = prompt || providerRealityLine;
@@ -111,6 +115,62 @@ const toNumericStatus = (status) => {
     }
 
     return status;
+};
+
+const normalizeQueryText = (text) => (text || '').replace(/\s+/g, ' ').trim();
+
+const truncateText = (text, maxLength) => {
+    if (!text) return '';
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength);
+};
+
+const buildRetrievalQuery = (messages, latestUserMessage) => {
+    if (!latestUserMessage) return '';
+    const latestText = normalizeQueryText(latestUserMessage.content);
+    if (!latestText) return latestUserMessage.content || '';
+
+    const isVague = vagueFollowupPattern.test(latestText);
+    if (!isVague) {
+        return latestUserMessage.content;
+    }
+
+    const latestIndex = messages.lastIndexOf(latestUserMessage);
+    let prevUserMessage;
+    let prevAssistantMessage;
+    for (let index = latestIndex - 1; index >= 0; index -= 1) {
+        const candidate = messages[index];
+        if (!prevUserMessage && candidate.role === 'user' && candidate.content?.trim()) {
+            prevUserMessage = candidate;
+        }
+        if (!prevAssistantMessage && candidate.role === 'assistant' && candidate.content?.trim()) {
+            prevAssistantMessage = candidate;
+        }
+        if (prevUserMessage && prevAssistantMessage) break;
+    }
+
+    const prevUserText = normalizeQueryText(prevUserMessage?.content);
+    const prevAssistantText = normalizeQueryText(prevAssistantMessage?.content);
+    const perMessageLimit = Math.floor(retrievalContextLimit / 2);
+    const cappedPrevUserText = truncateText(prevUserText, perMessageLimit);
+    const cappedPrevAssistantText = truncateText(prevAssistantText, perMessageLimit);
+    const combinedContext = [cappedPrevUserText, cappedPrevAssistantText]
+        .filter(Boolean)
+        .join('\n\n');
+
+    if (!combinedContext) {
+        return latestUserMessage.content;
+    }
+
+    const baseQuery = `${latestText}\n\nPrevious context:\n`;
+    const availableContextLength = Math.max(
+        0,
+        Math.min(retrievalContextLimit, retrievalQueryLimit - baseQuery.length)
+    );
+    const cappedContext = truncateText(combinedContext, availableContextLength);
+    const retrievalQuery = `${baseQuery}${cappedContext}`;
+
+    return truncateText(retrievalQuery, retrievalQueryLimit);
 };
 
 const extractErrorDetails = (error) => {
@@ -292,8 +352,11 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const latestUserMessage = [...messages]
         .reverse()
         .find((message) => message.role === 'user' && message.content?.trim());
+    const retrievalQuery = latestUserMessage
+        ? buildRetrievalQuery(messages, latestUserMessage)
+        : '';
     const docsRagPayload = latestUserMessage
-        ? await searchDocsRag(latestUserMessage.content)
+        ? await searchDocsRag(retrievalQuery)
         : { excerptsText: '', sources: [] };
     const docsRagMessage =
         !knowledgeMessage && docsRagPayload.excerptsText
