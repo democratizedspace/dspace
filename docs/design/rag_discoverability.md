@@ -397,6 +397,20 @@ Proposal (opt-in):
 - Each assistant reply shows a deterministic list of sources used for that turn.
 - QA can inspect source lists in the UI and via diagnostics.
 
+### Stage 8 — Retrieval heuristics for routes, changelog, and semantics
+**Changes:**
+- Detect route/changelog/semantics query intents and force-include at least one
+  matching chunk when lexical ranking misses.
+- Prefer `/docs/routes#top` for route intent, include changelog chunks for release
+  intent, and prioritize process semantics headings (requires/consumes/creates/
+  duration) with a deterministic fallback query.
+- Keep caps and ordering deterministic: drop the lowest-ranked selection before
+  forced additions and preserve score-desc/id-asc sorting.
+
+**Acceptance criteria:**
+- QA probes about routes, release notes, and process semantics always include the
+  matching doc chunk in the grounded excerpt block.
+
 ---
 
 ## Testing Plan (repo-aligned)

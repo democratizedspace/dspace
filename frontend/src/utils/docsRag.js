@@ -3,6 +3,13 @@ import MiniSearch from 'minisearch';
 const DEFAULT_MAX_RESULTS = 5;
 const DEFAULT_MAX_CHARS = 5000;
 const DEFAULT_MAX_EXCERPT_CHARS = 850;
+const ROUTES_INTENT =
+    /\b(route|routes|url|urls|path|page|menu|navigate|navigation|where is|link)\b/i;
+const CHANGELOG_INTENT = /\b(token\.place|tokenplace|v3|v2|release|changelog|deferred|active)\b/i;
+const SEMANTICS_INTENT =
+    /\b(requires|consumes|creates|duration|timer|recipe|semantics|normalize)\b/i;
+const SEMANTICS_TITLE_HINT = /\b(requires|consumes|creates|duration|process)\b/i;
+const SEMANTICS_QUERY = 'requires consumes creates duration semantics';
 const SEARCH_OPTIONS = Object.freeze({
     boost: { title: 3, heading: 2 },
     prefix: true,
@@ -93,6 +100,31 @@ const compareIds = (leftId, rightId) => {
     return 0;
 };
 
+const sortByScoreAndId = (left, right) => {
+    if (left.score !== right.score) {
+        return right.score - left.score;
+    }
+    const leftId = String(left.id);
+    const rightId = String(right.id);
+    return compareIds(leftId, rightId);
+};
+
+const matchesSemanticsHeading = (chunk) =>
+    SEMANTICS_TITLE_HINT.test(String(chunk.title || '')) ||
+    SEMANTICS_TITLE_HINT.test(String(chunk.heading || ''));
+
+const resolveAnchor = (anchor) => anchor || 'top';
+
+const findFirstMatchingChunk = (rankedChunks, predicate) =>
+    rankedChunks.find((entry) => predicate(entry));
+
+const findFallbackChunk = (chunkMap, predicate) => {
+    const sortedChunks = Array.from(chunkMap.values()).sort((left, right) =>
+        compareIds(String(left.id), String(right.id))
+    );
+    return sortedChunks.find((entry) => predicate(entry));
+};
+
 export const mapDocsResultsToSources = (results = []) => {
     if (!Array.isArray(results) || results.length === 0) {
         return [];
@@ -139,26 +171,106 @@ export const searchDocsRag = async (queryText, options = {}) => {
         console.error('Failed to load docs RAG data:', error);
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
-    const results = miniSearch.search(query, SEARCH_OPTIONS).sort((left, right) => {
-        if (left.score !== right.score) {
-            return right.score - left.score;
-        }
-        const leftId = String(left.id);
-        const rightId = String(right.id);
-        return compareIds(leftId, rightId);
-    });
+    const results = miniSearch.search(query, SEARCH_OPTIONS).sort(sortByScoreAndId);
     const maxResults = options.maxResults ?? DEFAULT_MAX_RESULTS;
     const maxChars = options.maxChars ?? DEFAULT_MAX_CHARS;
     const maxExcerptChars = options.maxExcerptChars ?? DEFAULT_MAX_EXCERPT_CHARS;
 
-    const selected = [];
-    for (const result of results) {
-        const chunk = chunkMap.get(result.id);
-        if (!chunk) continue;
-        selected.push({ ...chunk, score: result.score });
-        if (selected.length >= maxResults) {
-            break;
+    const rankedChunks = results
+        .map((result) => {
+            const chunk = chunkMap.get(result.id);
+            if (!chunk) {
+                return null;
+            }
+            return { ...chunk, score: result.score };
+        })
+        .filter(Boolean);
+
+    const selected = rankedChunks.slice(0, maxResults);
+    const forcedIds = new Set();
+
+    const ensureCapacityForForced = () => {
+        if (selected.length < maxResults) {
+            return;
         }
+        for (let index = selected.length - 1; index >= 0; index -= 1) {
+            if (!forcedIds.has(selected[index].id)) {
+                selected.splice(index, 1);
+                return;
+            }
+        }
+        selected.pop();
+    };
+
+    const includeForcedChunk = (chunk) => {
+        if (!chunk) {
+            return;
+        }
+        if (selected.some((entry) => entry.id === chunk.id)) {
+            return;
+        }
+        ensureCapacityForForced();
+        selected.push(chunk);
+        forcedIds.add(chunk.id);
+        selected.sort(sortByScoreAndId);
+    };
+
+    const wantsRoutes = ROUTES_INTENT.test(query);
+    const wantsChangelog = CHANGELOG_INTENT.test(query);
+    const wantsSemantics = SEMANTICS_INTENT.test(query);
+
+    if (wantsRoutes) {
+        const preferredRoute = findFirstMatchingChunk(
+            rankedChunks,
+            (entry) =>
+                entry.kind === 'route' &&
+                entry.slug === '/docs/routes' &&
+                resolveAnchor(entry.anchor) === 'top'
+        );
+        const fallbackRoute =
+            preferredRoute ??
+            findFirstMatchingChunk(rankedChunks, (entry) => entry.kind === 'route') ??
+            findFallbackChunk(
+                chunkMap,
+                (entry) =>
+                    entry.kind === 'route' &&
+                    entry.slug === '/docs/routes' &&
+                    resolveAnchor(entry.anchor) === 'top'
+            ) ??
+            findFallbackChunk(chunkMap, (entry) => entry.kind === 'route');
+        includeForcedChunk(fallbackRoute);
+    }
+
+    if (wantsChangelog) {
+        const changelogChunk =
+            findFirstMatchingChunk(rankedChunks, (entry) => entry.kind === 'changelog') ??
+            findFallbackChunk(chunkMap, (entry) => entry.kind === 'changelog');
+        includeForcedChunk(changelogChunk);
+    }
+
+    if (wantsSemantics) {
+        let semanticsChunk = findFirstMatchingChunk(
+            rankedChunks,
+            (entry) => entry.kind === 'doc' && matchesSemanticsHeading(entry)
+        );
+        if (!semanticsChunk) {
+            const secondaryResults = miniSearch.search(SEMANTICS_QUERY, SEARCH_OPTIONS);
+            const rankedSecondary = secondaryResults
+                .sort(sortByScoreAndId)
+                .map((result) => {
+                    const chunk = chunkMap.get(result.id);
+                    if (!chunk) {
+                        return null;
+                    }
+                    return { ...chunk, score: result.score };
+                })
+                .filter(Boolean);
+            semanticsChunk = findFirstMatchingChunk(
+                rankedSecondary,
+                (entry) => entry.kind === 'doc'
+            );
+        }
+        includeForcedChunk(semanticsChunk);
     }
 
     if (!selected.length) {

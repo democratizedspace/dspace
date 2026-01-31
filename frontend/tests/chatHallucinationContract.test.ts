@@ -118,5 +118,20 @@ describe('QA 9.4 chat hallucination contracts', () => {
         expect(systemContent).toMatch(/inventory\/quests\/progress/i);
     });
 
-    it.todo('Stage 8: retrieval includes requires/consumes/creates duration semantics doc chunk');
+    it('Stage 8: retrieval includes requires/consumes/creates duration semantics doc chunk', async () => {
+        const { debugMessages } = await buildChatPrompt([
+            {
+                role: 'user',
+                content: 'Explain requires vs consumes vs creates and duration semantics',
+            },
+        ]);
+
+        const ragMessages = debugMessages.filter((message) => message.kind === 'rag');
+        const ragText = ragMessages.map((message) => message.content).join('\n');
+        const semanticsPattern =
+            /-\s\[doc\].*\/docs\/[^\s#]+#[^\s]+\n\s+.*\b(requires|consumes|creates|duration)\b/i;
+
+        expect(ragMessages.length).toBeGreaterThan(0);
+        expect(ragText).toMatch(semanticsPattern);
+    });
 });
