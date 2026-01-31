@@ -14,6 +14,8 @@ settings. The chat payload now also includes your live quest progress,
 active process timers, and current inventory so answers stay grounded.
 Ask open-ended questions about quests, items, or processes and the
 personas will answer with that live context.
+For inventory or progress questions, export and paste a save snapshot
+from [/gamesaves](/gamesaves) so the chat can reference your state.
 
 Guilds (including the Metaguild) are planned for a future release, so the
 bios below describe intended roles rather than live multiplayer features.

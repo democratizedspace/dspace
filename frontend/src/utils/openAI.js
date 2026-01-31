@@ -39,6 +39,10 @@ const toOutputText = (response) => {
 const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';
 const fallbackModels = ['gpt-5-mini'];
+const vagueFollowUpPattern =
+    /^\s*(what about|and then|that step|the second step|next step|step 2)\b/i;
+const maxRetrievalContextChars = 800;
+const maxRetrievalQueryChars = 1000;
 export const providerRealityLine = 'In v3, chat uses OpenAI. token.place is deferred to v3.1.';
 export const fallbackSystemPrompt =
     defaultPersona?.systemPrompt ||
@@ -103,6 +107,75 @@ const applySystemGuardrail = (prompt) => {
     if (missingRules.length === 0) return prompt;
     const missingGuardrail = missingRules.map((rule) => rule.line).join('\n');
     return `${prompt}\n\n${missingGuardrail}`;
+};
+
+const normalizeWhitespace = (text) => text.replace(/\s+/g, ' ').trim();
+
+const truncateText = (text, maxChars) => {
+    const normalized = normalizeWhitespace(text);
+    if (normalized.length <= maxChars) {
+        return normalized;
+    }
+    return normalized.slice(0, maxChars).trim();
+};
+
+const isVagueFollowUp = (content) => {
+    const trimmed = content.trim();
+    if (!trimmed) {
+        return false;
+    }
+    return trimmed.length < 50 || vagueFollowUpPattern.test(trimmed);
+};
+
+const buildRetrievalQuery = (messages, latestUserMessage) => {
+    const baseContent = latestUserMessage?.content ?? '';
+    const trimmedBase = baseContent.trim();
+    if (!trimmedBase) {
+        return trimmedBase;
+    }
+    if (!isVagueFollowUp(trimmedBase)) {
+        return baseContent;
+    }
+    const normalizedBase = normalizeWhitespace(baseContent);
+
+    const latestIndex = messages.findIndex((message) => message === latestUserMessage);
+    if (latestIndex < 0) {
+        return normalizedBase;
+    }
+
+    let prevUserMessage = null;
+    let prevAssistantMessage = null;
+    for (let index = latestIndex - 1; index >= 0; index -= 1) {
+        const entry = messages[index];
+        if (!prevUserMessage && entry.role === 'user' && entry.content?.trim()) {
+            prevUserMessage = entry;
+        }
+        if (!prevAssistantMessage && entry.role === 'assistant' && entry.content?.trim()) {
+            prevAssistantMessage = entry;
+        }
+        if (prevUserMessage && prevAssistantMessage) {
+            break;
+        }
+    }
+
+    if (!prevUserMessage && !prevAssistantMessage) {
+        return normalizedBase;
+    }
+
+    const contextParts = [
+        prevUserMessage?.content ? normalizeWhitespace(prevUserMessage.content) : '',
+        prevAssistantMessage?.content ? normalizeWhitespace(prevAssistantMessage.content) : '',
+    ].filter(Boolean);
+    const contextBlock = truncateText(contextParts.join('\n'), maxRetrievalContextChars);
+    if (!contextBlock) {
+        return normalizedBase;
+    }
+
+    const query = `${normalizedBase}\n\nPrevious context:\n${contextBlock}`;
+    if (query.length <= maxRetrievalQueryChars) {
+        return query;
+    }
+    return query.slice(0, maxRetrievalQueryChars).trim();
 };
 
 const toNumericStatus = (status) => {
@@ -293,7 +366,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         .reverse()
         .find((message) => message.role === 'user' && message.content?.trim());
     const docsRagPayload = latestUserMessage
-        ? await searchDocsRag(latestUserMessage.content)
+        ? await searchDocsRag(buildRetrievalQuery(messages, latestUserMessage))
         : { excerptsText: '', sources: [] };
     const docsRagMessage =
         !knowledgeMessage && docsRagPayload.excerptsText

@@ -24,6 +24,10 @@
     import { normalizeSettings } from '../../../utils/settingsDefaults.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
+    import {
+        SAVE_SNAPSHOT_HINT_TEXT,
+        shouldShowSaveSnapshotHint,
+    } from '../../../utils/chatHints.js';
 
     const message = writable('');
     const messageHistory = writable([]);
@@ -35,9 +39,12 @@
     let debugMessages = [];
     let debugExpanded = false;
     let settingsUnsubscribe;
+    let saveSnapshotHintDismissed = false;
+    const saveSnapshotHintStorageKey = 'dspace.chat.dismissSaveSnapshotHint';
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
+    $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -178,11 +185,21 @@
         if ($messageHistory.length === 0) {
             addWelcomeMessage();
         }
+        if (typeof sessionStorage !== 'undefined') {
+            saveSnapshotHintDismissed = sessionStorage.getItem(saveSnapshotHintStorageKey) === '1';
+        }
     });
 
     onDestroy(() => {
         settingsUnsubscribe?.();
     });
+
+    function dismissSaveSnapshotHint() {
+        saveSnapshotHintDismissed = true;
+        if (typeof sessionStorage !== 'undefined') {
+            sessionStorage.setItem(saveSnapshotHintStorageKey, '1');
+        }
+    }
 </script>
 
 <div
@@ -222,6 +239,19 @@
             on:keydown={handleKeyDown}
             style="font-size: 18px;"
         ></textarea>
+        {#if showSaveSnapshotHint}
+            <div class="chat-hint" role="note" aria-live="polite">
+                <span>{SAVE_SNAPSHOT_HINT_TEXT}</span>
+                <button
+                    class="chat-hint-dismiss"
+                    type="button"
+                    aria-label="Dismiss save snapshot hint"
+                    on:click={dismissSaveSnapshotHint}
+                >
+                    ×
+                </button>
+            </div>
+        {/if}
         <button type="button" on:click={submitMessage}>Send</button>
     </div>
 
@@ -402,6 +432,37 @@
         padding: 10px;
         font-size: 16px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-hint {
+        margin-top: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        background: rgba(30, 41, 59, 0.08);
+        color: rgba(15, 23, 42, 0.85);
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.75rem;
+        font-size: 0.9rem;
+        width: 100%;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .chat-hint-dismiss {
+        margin: 0;
+        height: auto;
+        padding: 0 0.4rem;
+        border-radius: 999px;
+        background: transparent;
+        color: inherit;
+        box-shadow: none;
+        font-size: 1rem;
+        line-height: 1;
+    }
+
+    .chat-hint-dismiss:hover {
+        background: rgba(15, 23, 42, 0.08);
     }
 
     .debug-panel {

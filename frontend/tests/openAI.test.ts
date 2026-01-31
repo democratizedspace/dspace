@@ -563,6 +563,46 @@ describe('buildChatPrompt', () => {
         expect(combinedContent).toContain('DSPACE knowledge base:');
         expect(buildDchatKnowledgePack).toHaveBeenCalled();
     });
+
+    it('expands docs retrieval query for vague follow-ups', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: '',
+            sources: [],
+            sourcesMeta: { results: [] },
+        });
+        const messages = [
+            { role: 'user', content: 'Explain the launch steps for the rocket.' },
+            { role: 'assistant', content: 'Step 1: gather parts and print the casing.' },
+            { role: 'user', content: 'what about the second step?' },
+        ];
+
+        await buildChatPrompt(messages);
+
+        const query = vi.mocked(searchDocsRag).mock.calls[0][0];
+        expect(query).toContain('what about the second step?');
+        expect(query).toContain('Explain the launch steps for the rocket.');
+        expect(query).toContain('Step 1: gather parts and print the casing.');
+        expect(query.length).toBeLessThanOrEqual(1000);
+    });
+
+    it('keeps the docs retrieval query unchanged for non-vague messages', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: '',
+            sources: [],
+            sourcesMeta: { results: [] },
+        });
+        const messages = [
+            { role: 'user', content: 'Give me tips on crafting.' },
+            { role: 'assistant', content: 'Start with the basics.' },
+            { role: 'user', content: 'Give me the full crafting walkthrough for rockets.' },
+        ];
+
+        await buildChatPrompt(messages);
+
+        const query = vi.mocked(searchDocsRag).mock.calls[0][0];
+        expect(query).toBe('Give me the full crafting walkthrough for rockets.');
+        expect(query).not.toContain('Start with the basics.');
+    });
 });
 
 describe('describeOpenAIError', () => {
