@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { buildChatPrompt } from '../src/utils/openAI.js';
+import {
+    buildChatPrompt,
+    fallbackSystemPrompt,
+    providerRealityLine,
+} from '../src/utils/openAI.js';
 import { sortSources } from '../src/utils/contextSources.js';
+import { npcPersonas } from '../src/data/npcPersonas.js';
 
 const probes = [
     {
@@ -102,6 +107,49 @@ describe('QA 9.4 chat hallucination contracts', () => {
         }
 
         expectSortedAndDeduped(contextSources);
+    });
+
+    it('injects provider reality and changelog grounding for token.place probes', async () => {
+        const { debugMessages, contextSources } = await buildChatPrompt([
+            { role: 'user', content: 'Is token.place active?' },
+        ]);
+
+        const systemMessage = debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        expect(systemMessage?.content).toContain(providerRealityLine);
+
+        const hasChangelogSource = contextSources.some(
+            (source) =>
+                source.type === 'changelog' && String(source.url || '').startsWith('/changelog')
+        );
+        expect(hasChangelogSource).toBe(true);
+    });
+
+    it('keeps prompt scaffolding free of stale token.place claims', () => {
+        const forbiddenTokenPlaceClaim = /token\.place.*\b(active|enabled|default)\b/i;
+        const forbiddenNoKeyClaim = /\b(no key needed|key not required)\b/i;
+        const futureQualifier = /\b(v3\.1|future|experimental)\b/i;
+
+        const promptCandidates = [
+            fallbackSystemPrompt,
+            ...npcPersonas.map((persona) => persona.systemPrompt).filter(Boolean),
+        ];
+
+        for (const prompt of promptCandidates) {
+            expect(forbiddenTokenPlaceClaim.test(prompt)).toBe(false);
+            if (forbiddenNoKeyClaim.test(prompt)) {
+                expect(futureQualifier.test(prompt)).toBe(true);
+            }
+        }
+    });
+
+    it('always includes provider reality line in the system prompt', async () => {
+        const { debugMessages } = await buildChatPrompt([{ role: 'user', content: 'Hello!' }]);
+        const systemMessage = debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        expect(systemMessage?.content).toContain(providerRealityLine);
     });
 
     it('includes inventory guardrails against inventing player state', async () => {
