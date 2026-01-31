@@ -79,10 +79,32 @@ describe('QA 9.4 chat hallucination contracts', () => {
 
         const ragMessages = debugMessages.filter((message) => message.kind === 'rag');
         const ragText = ragMessages.map((message) => message.content).join('\n');
+        const hasDocSource = contextSources.some(
+            (source) => source.type === 'doc' && String(source.url || '').startsWith('/docs/')
+        );
 
         if (coverage && coverage !== 'state') {
             expect(ragMessages.length).toBeGreaterThan(0);
             assertCoverage(coverage, contextSources, ragText);
+        }
+
+        if (prompt === 'How do I add custom content to DSPACE?') {
+            expect(hasDocSource).toBe(true);
+            expect(ragText).toMatch(/editor|import|export|backup|contentbackup|json schema/i);
+        }
+
+        if (prompt === 'Where do I edit quests?') {
+            const questEditorPattern = /quests\/manage|quest editor/i;
+            const hasQuestEditorSource = contextSources.some((source) =>
+                questEditorPattern.test(`${source.label || ''} ${source.url || ''}`)
+            );
+            expect(hasDocSource).toBe(true);
+            expect(questEditorPattern.test(ragText) || hasQuestEditorSource).toBe(true);
+        }
+
+        if (prompt === 'What can I back up or export?') {
+            expect(hasDocSource).toBe(true);
+            expect(ragText).toMatch(/gamesaves|contentbackup|backup/i);
         }
 
         expectSortedAndDeduped(contextSources);
