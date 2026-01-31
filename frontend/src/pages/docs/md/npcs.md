@@ -10,12 +10,11 @@ conversation. Choose dChat for general knowledge, or switch to Sydney,
 Nova, or Hydro to receive guidance steeped in their specialties. Each
 persona keeps its existing lore and draws from the shared quest, item, and
 process knowledge base once you connect an OpenAI API key in the chat
-settings. The chat payload now also includes your live quest progress,
-active process timers, and current inventory so answers stay grounded.
-Ask open-ended questions about quests, items, or processes and the
-personas will answer with that live context.
-For inventory or progress questions, export/paste a save snapshot from
-/gamesaves so the chat can reference your current state.
+settings. When you're chatting in an active session, the payload also
+includes live quest progress, active process timers, and current
+inventory so answers stay grounded. If you're asking about a different
+save or chatting outside an active session, export/paste a save snapshot
+from /gamesaves so the chat can reference your current state.
 
 Guilds (including the Metaguild) are planned for a future release, so the
 bios below describe intended roles rather than live multiplayer features.

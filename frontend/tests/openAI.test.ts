@@ -617,6 +617,30 @@ describe('buildChatPrompt', () => {
 
         expect(retrievalQuery).toBe(latestMessage);
     });
+
+    it('keeps short, self-contained questions unchanged', async () => {
+        const latestMessage = 'Where is /gamesaves?';
+        const messages = [
+            {
+                role: 'user',
+                content: 'Tell me about quests.',
+            },
+            {
+                role: 'assistant',
+                content: 'Quests guide you through tasks.',
+            },
+            {
+                role: 'user',
+                content: latestMessage,
+            },
+        ];
+
+        await buildChatPrompt(messages);
+
+        const retrievalQuery = vi.mocked(searchDocsRag).mock.calls[0][0];
+
+        expect(retrievalQuery).toBe(latestMessage);
+    });
 });
 
 describe('describeOpenAIError', () => {

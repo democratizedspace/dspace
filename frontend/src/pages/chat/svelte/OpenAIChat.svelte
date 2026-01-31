@@ -41,6 +41,7 @@
     let debugExpanded = false;
     let settingsUnsubscribe;
     let saveSnapshotHintDismissed = false;
+    let saveSnapshotHintFocusListener;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -160,6 +161,14 @@
         }
     }
 
+    function syncSaveSnapshotHintDismissed() {
+        if (typeof sessionStorage === 'undefined') {
+            return;
+        }
+        saveSnapshotHintDismissed =
+            sessionStorage.getItem(saveSnapshotHintStorageKey) === '1';
+    }
+
     async function handlePersonaChange(event) {
         const selectedId = event.target.value;
         const nextPersona =
@@ -181,9 +190,11 @@
         const currentState = loadGameState();
         const normalized = normalizeSettings(currentState?.settings);
         showDebug = normalized.showChatDebugPayload;
-        saveSnapshotHintDismissed =
-            typeof sessionStorage !== 'undefined' &&
-            sessionStorage.getItem(saveSnapshotHintStorageKey) === '1';
+        syncSaveSnapshotHintDismissed();
+        saveSnapshotHintFocusListener = () => {
+            syncSaveSnapshotHintDismissed();
+        };
+        window.addEventListener('focus', saveSnapshotHintFocusListener);
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
             const nextNormalized = normalizeSettings(value?.settings);
             showDebug = nextNormalized.showChatDebugPayload;
@@ -199,6 +210,9 @@
 
     onDestroy(() => {
         settingsUnsubscribe?.();
+        if (saveSnapshotHintFocusListener) {
+            window.removeEventListener('focus', saveSnapshotHintFocusListener);
+        }
     });
 </script>
 

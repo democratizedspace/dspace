@@ -82,7 +82,6 @@ const guardrailRules = [
 const sharedSystemGuardrail = guardrailRules.map((rule) => rule.line).join('\n');
 const vagueFollowupPattern =
     /^\s*(what about|and then|that step|the second step|next step|step 2)\b/i;
-const vagueFollowupLengthLimit = 50;
 const retrievalContextLimit = 800;
 const retrievalQueryLimit = 1000;
 
@@ -131,8 +130,7 @@ const buildRetrievalQuery = (messages, latestUserMessage) => {
     const latestText = normalizeQueryText(latestUserMessage.content);
     if (!latestText) return latestUserMessage.content || '';
 
-    const isVague =
-        latestText.length < vagueFollowupLengthLimit || vagueFollowupPattern.test(latestText);
+    const isVague = vagueFollowupPattern.test(latestText);
     if (!isVague) {
         return latestUserMessage.content;
     }
@@ -158,7 +156,7 @@ const buildRetrievalQuery = (messages, latestUserMessage) => {
     const cappedPrevAssistantText = truncateText(prevAssistantText, perMessageLimit);
     const combinedContext = [cappedPrevUserText, cappedPrevAssistantText]
         .filter(Boolean)
-        .join('\n');
+        .join('\n\n');
 
     if (!combinedContext) {
         return latestUserMessage.content;

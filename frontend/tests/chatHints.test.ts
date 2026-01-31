@@ -13,4 +13,12 @@ describe('shouldShowSaveSnapshotHint', () => {
     it('returns false for unrelated queries', () => {
         expect(shouldShowSaveSnapshotHint('What are the current game routes?')).toBe(false);
     });
+
+    it('returns false for empty or missing input', () => {
+        expect(shouldShowSaveSnapshotHint('')).toBe(false);
+        // @ts-expect-error - verifying null guard
+        expect(shouldShowSaveSnapshotHint(null)).toBe(false);
+        // @ts-expect-error - verifying undefined guard
+        expect(shouldShowSaveSnapshotHint(undefined)).toBe(false);
+    });
 });
