@@ -567,6 +567,11 @@ describe('buildChatPrompt', () => {
     it('expands docs retrieval queries for vague follow-ups with capped context', async () => {
         const longUserDetail = 'Details about crafting a rocket. '.repeat(30);
         const longAssistantDetail = 'Step guidance for the build. '.repeat(30);
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: '',
+            sources: [],
+            sourcesMeta: { results: [] },
+        });
         const messages = [
             {
                 role: 'user',
@@ -590,12 +595,19 @@ describe('buildChatPrompt', () => {
         expect(retrievalQuery).toContain('How do I craft a rocket in DSPACE?');
         expect(retrievalQuery).toContain('You start by gathering materials.');
         expect(retrievalQuery).toContain('Previous context:');
+        const contextBlock = retrievalQuery.split('Previous context:')[1]?.trim() ?? '';
+        expect(contextBlock.length).toBeLessThanOrEqual(800);
         expect(retrievalQuery.length).toBeLessThanOrEqual(1000);
     });
 
     it('keeps docs retrieval queries unchanged for non-vague prompts', async () => {
         const latestMessage =
             'Can you explain the full process for crafting a rocket, including materials and steps?';
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: '',
+            sources: [],
+            sourcesMeta: { results: [] },
+        });
         const messages = [
             {
                 role: 'user',

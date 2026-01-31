@@ -253,7 +253,6 @@
             on:keydown={handleKeyDown}
             style="font-size: 18px;"
         ></textarea>
-        <button type="button" on:click={submitMessage}>Send</button>
         {#if showSaveSnapshotHint}
             <div class="save-snapshot-hint" role="note">
                 <span>{SAVE_SNAPSHOT_HINT_TEXT}</span>
@@ -267,6 +266,7 @@
                 </button>
             </div>
         {/if}
+        <button type="button" on:click={submitMessage}>Send</button>
     </div>
 
     <div class="chat-container">
