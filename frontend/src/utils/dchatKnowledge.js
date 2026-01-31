@@ -368,14 +368,10 @@ export function buildDchatKnowledgePack(gameState = {}) {
     if (unlockedEntries.length > 0 || progressEntries.length > 0) {
         const sections = [];
         if (unlockedEntries.length > 0) {
-            sections.push(
-                `${dchatKnowledgeScaffolding.unlocked}: ${unlockedEntries.join(', ')}`
-            );
+            sections.push(`${dchatKnowledgeScaffolding.unlocked}: ${unlockedEntries.join(', ')}`);
         }
         if (progressEntries.length > 0) {
-            sections.push(
-                `${dchatKnowledgeScaffolding.inProgress}: ${progressEntries.join(', ')}`
-            );
+            sections.push(`${dchatKnowledgeScaffolding.inProgress}: ${progressEntries.join(', ')}`);
         }
         if (sections.length === 0) {
             sections.push(dchatKnowledgeScaffolding.noAchievements);
@@ -422,9 +418,7 @@ export function buildDchatKnowledgePack(gameState = {}) {
     const processProgressSummary = summarizeProcessProgress(gameState);
     if (processProgressSummary.length > 0) {
         knowledgeSections.push(
-            `${dchatKnowledgeScaffolding.processesInFlight}: ${processProgressSummary.join(
-                ' | '
-            )}`
+            `${dchatKnowledgeScaffolding.processesInFlight}: ${processProgressSummary.join(' | ')}`
         );
         stateDetails.push('process progress');
     }
