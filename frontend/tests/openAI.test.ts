@@ -563,6 +563,49 @@ describe('buildChatPrompt', () => {
         expect(combinedContent).toContain('DSPACE knowledge base:');
         expect(buildDchatKnowledgePack).toHaveBeenCalled();
     });
+
+    it('expands the retrieval query with bounded context for vague follow-ups', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: '',
+            sources: [],
+            sourcesMeta: { results: [] },
+        });
+
+        await buildChatPrompt([
+            { role: 'user', content: 'How do I start the tutorial quest in DSPACE?' },
+            {
+                role: 'assistant',
+                content: 'Step 1: open the quest log. Step 2: select the tutorial quest to begin.',
+            },
+            { role: 'user', content: 'what about the second step?' },
+        ]);
+
+        const retrievalQuery = vi.mocked(searchDocsRag).mock.calls[0][0];
+
+        expect(retrievalQuery).toContain('what about the second step?');
+        expect(retrievalQuery).toContain('How do I start the tutorial quest in DSPACE?');
+        expect(retrievalQuery).toContain('Step 1: open the quest log.');
+        expect(retrievalQuery.length).toBeLessThanOrEqual(1000);
+    });
+
+    it('keeps the retrieval query scoped to the latest message for non-vague prompts', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: '',
+            sources: [],
+            sourcesMeta: { results: [] },
+        });
+        const latestMessage = 'Can you explain the steps to unlock the laboratory in DSPACE?';
+
+        await buildChatPrompt([
+            { role: 'user', content: 'How do I start the tutorial quest?' },
+            { role: 'assistant', content: 'Open the quest log.' },
+            { role: 'user', content: latestMessage },
+        ]);
+
+        const retrievalQuery = vi.mocked(searchDocsRag).mock.calls[0][0];
+
+        expect(retrievalQuery).toBe(latestMessage);
+    });
 });
 
 describe('describeOpenAIError', () => {

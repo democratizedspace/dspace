@@ -105,6 +105,65 @@ const applySystemGuardrail = (prompt) => {
     return `${prompt}\n\n${missingGuardrail}`;
 };
 
+const VAGUE_FOLLOWUP_REGEX =
+    /^\s*(what about|and then|that step|the second step|next step|step 2)\b/i;
+const RETRIEVAL_CONTEXT_MAX_CHARS = 800;
+const RETRIEVAL_QUERY_MAX_CHARS = 1000;
+
+const normalizeQueryText = (text) => {
+    if (typeof text !== 'string') return '';
+    return text.replace(/\s+/g, ' ').trim();
+};
+
+const capText = (text, maxLength) => {
+    if (typeof text !== 'string') return '';
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength);
+};
+
+const isVagueFollowup = (text) => {
+    const normalized = normalizeQueryText(text);
+    if (!normalized) return false;
+    if (normalized.length < 50) return true;
+    return VAGUE_FOLLOWUP_REGEX.test(normalized);
+};
+
+const findPreviousMessage = (messages, startIndex, role) => {
+    for (let index = startIndex - 1; index >= 0; index -= 1) {
+        const message = messages[index];
+        if (message?.role !== role) continue;
+        if (message.content?.trim()) {
+            return message;
+        }
+    }
+    return null;
+};
+
+const buildRetrievalQuery = (messages, latestUserMessage) => {
+    const latestText = normalizeQueryText(latestUserMessage?.content);
+    if (!latestText) return '';
+    if (!isVagueFollowup(latestText)) {
+        return latestText;
+    }
+
+    const latestIndex = messages.lastIndexOf(latestUserMessage);
+    const searchStart = latestIndex >= 0 ? latestIndex : messages.length;
+    const previousUser = findPreviousMessage(messages, searchStart, 'user');
+    const previousAssistant = findPreviousMessage(messages, searchStart, 'assistant');
+    const contextParts = [
+        normalizeQueryText(previousUser?.content),
+        normalizeQueryText(previousAssistant?.content),
+    ].filter(Boolean);
+
+    if (contextParts.length === 0) {
+        return latestText;
+    }
+
+    const cappedContext = capText(contextParts.join('\n'), RETRIEVAL_CONTEXT_MAX_CHARS);
+    const queryWithContext = `${latestText}\n\nPrevious context:\n${cappedContext}`;
+    return capText(queryWithContext, RETRIEVAL_QUERY_MAX_CHARS);
+};
+
 const toNumericStatus = (status) => {
     if (typeof status === 'string') {
         return Number(status);
@@ -292,8 +351,11 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const latestUserMessage = [...messages]
         .reverse()
         .find((message) => message.role === 'user' && message.content?.trim());
+    const retrievalQuery = latestUserMessage
+        ? buildRetrievalQuery(messages, latestUserMessage)
+        : '';
     const docsRagPayload = latestUserMessage
-        ? await searchDocsRag(latestUserMessage.content)
+        ? await searchDocsRag(retrievalQuery)
         : { excerptsText: '', sources: [] };
     const docsRagMessage =
         !knowledgeMessage && docsRagPayload.excerptsText

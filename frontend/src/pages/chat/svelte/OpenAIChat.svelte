@@ -22,6 +22,11 @@
         state as gameStateStore,
     } from '../../../utils/gameState/common.js';
     import { normalizeSettings } from '../../../utils/settingsDefaults.js';
+    import {
+        SAVE_SNAPSHOT_HINT_TEXT,
+        shouldShowSaveSnapshotHint,
+    } from '../../../utils/chatHints.js';
+    import { isBrowser } from '../../../utils/ssr.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -35,6 +40,9 @@
     let debugMessages = [];
     let debugExpanded = false;
     let settingsUnsubscribe;
+    const saveSnapshotDismissKey = 'dspace.chat.dismissSaveSnapshotHint';
+    let saveSnapshotHintDismissed = false;
+    $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -49,6 +57,13 @@
 
     function getPersonaAlt(persona) {
         return persona?.name ? `${persona.name} portrait` : 'NPC portrait';
+    }
+
+    function dismissSaveSnapshotHint() {
+        saveSnapshotHintDismissed = true;
+        if (isBrowser) {
+            sessionStorage.setItem(saveSnapshotDismissKey, '1');
+        }
     }
 
     function createMessageId() {
@@ -175,6 +190,9 @@
                 debugMessages = [];
             }
         });
+        if (isBrowser) {
+            saveSnapshotHintDismissed = sessionStorage.getItem(saveSnapshotDismissKey) === '1';
+        }
         if ($messageHistory.length === 0) {
             addWelcomeMessage();
         }
@@ -222,6 +240,19 @@
             on:keydown={handleKeyDown}
             style="font-size: 18px;"
         ></textarea>
+        {#if showSaveSnapshotHint}
+            <div class="save-snapshot-hint" role="note">
+                <span>{SAVE_SNAPSHOT_HINT_TEXT}</span>
+                <button
+                    class="save-snapshot-dismiss"
+                    type="button"
+                    aria-label="Dismiss save snapshot hint"
+                    on:click={dismissSaveSnapshotHint}
+                >
+                    ×
+                </button>
+            </div>
+        {/if}
         <button type="button" on:click={submitMessage}>Send</button>
     </div>
 
@@ -402,6 +433,42 @@
         padding: 10px;
         font-size: 16px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .save-snapshot-hint {
+        width: 100%;
+        margin-top: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(148, 163, 184, 0.4);
+        background: rgba(241, 245, 249, 0.8);
+        color: #0f172a;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+
+    .save-snapshot-dismiss {
+        height: 24px;
+        width: 24px;
+        margin: 0;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        background: transparent;
+        color: #334155;
+        font-size: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: none;
+    }
+
+    .save-snapshot-dismiss:hover {
+        background: rgba(148, 163, 184, 0.2);
     }
 
     .debug-panel {
