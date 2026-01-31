@@ -11,6 +11,15 @@ const SEMANTICS_INTENT =
     /\b(requires|consumes|creates|duration|timer|recipe|semantics|normalize)\b/i;
 const SEMANTICS_MATCH = /\b(requires|consumes|creates|duration|process)\b/i;
 const SEMANTICS_FALLBACK_QUERY = 'requires consumes creates duration semantics';
+const CUSTOM_CONTENT_INTENT =
+    /\b(custom content|custom quests?|quest editor|content editor|manage (?:quests|items|processes)|custom (?:items|processes)|content backup|backup (?:custom|content)|custom (?:import|export)|(?:import|export) (?:custom|quest|content)|json schema)\b/i;
+const CUSTOM_CONTENT_CONTEXT = /\b(custom|quest|content)\b/i;
+const CUSTOM_CONTENT_SIGNAL = /\b(editor|import|export|backup|schema)\b/i;
+const CUSTOM_CONTENT_MATCH =
+    /\b(custom content|quest editor|content editor|content backup|json schema)\b/i;
+const CUSTOM_CONTENT_FALLBACK_QUERY = 'custom content editor import export backup json schema';
+const CUSTOM_CONTENT_FALLBACK_REQUIRED = /\bcustom\b/i;
+const CUSTOM_CONTENT_FALLBACK_ACTION = /\b(editor|backup|import|export)\b/i;
 const SEARCH_OPTIONS = Object.freeze({
     boost: { title: 3, heading: 2 },
     prefix: true,
@@ -116,6 +125,29 @@ const matchesSemanticsChunk = (chunk) => {
     return SEMANTICS_MATCH.test(`${title} ${heading}`);
 };
 
+const matchesCustomContentChunk = (chunk) => {
+    const title = String(chunk.title || '');
+    const heading = String(chunk.heading || '');
+    const text = String(chunk.text || '');
+    const combined = `${title} ${heading} ${text}`;
+    return (
+        CUSTOM_CONTENT_MATCH.test(combined) ||
+        (CUSTOM_CONTENT_CONTEXT.test(combined) && CUSTOM_CONTENT_SIGNAL.test(combined))
+    );
+};
+
+const matchesCustomContentFallbackChunk = (chunk) => {
+    const title = String(chunk.title || '');
+    const heading = String(chunk.heading || '');
+    const text = String(chunk.text || '');
+    const combined = `${title} ${heading} ${text}`;
+    return (
+        CUSTOM_CONTENT_FALLBACK_REQUIRED.test(combined) &&
+        CUSTOM_CONTENT_FALLBACK_ACTION.test(combined) &&
+        CUSTOM_CONTENT_SIGNAL.test(combined)
+    );
+};
+
 const findHighestRankedChunk = (results, chunkMap, predicate) => {
     for (const result of results) {
         const chunk = chunkMap.get(result.id);
@@ -141,28 +173,44 @@ const findDeterministicChunk = (chunkMap, predicate) => {
     return { ...candidates[0], score: 0 };
 };
 
-const dropLowestRanked = (selected) => {
-    if (!selected.length) return;
-    let lowestIndex = 0;
-    for (let index = 1; index < selected.length; index += 1) {
+const dropLowestRanked = (selected, predicate = () => true) => {
+    if (!selected.length) return false;
+    let lowestIndex = -1;
+    for (let index = 0; index < selected.length; index += 1) {
+        if (!predicate(selected[index])) {
+            continue;
+        }
+        if (lowestIndex === -1) {
+            lowestIndex = index;
+            continue;
+        }
         if (compareResultsByRank(selected[index], selected[lowestIndex]) < 0) {
             lowestIndex = index;
         }
     }
+    if (lowestIndex === -1) {
+        return false;
+    }
     selected.splice(lowestIndex, 1);
+    return true;
 };
 
 const includeForcedChunk = (selected, chunk, maxResults) => {
     if (!chunk) {
         return;
     }
-    if (selected.some((entry) => entry.id === chunk.id)) {
+    const existing = selected.find((entry) => entry.id === chunk.id);
+    if (existing) {
+        existing.forced = true;
         return;
     }
     if (selected.length >= maxResults) {
-        dropLowestRanked(selected);
+        const dropped = dropLowestRanked(selected, (entry) => !entry.forced);
+        if (!dropped) {
+            dropLowestRanked(selected);
+        }
     }
-    selected.push(chunk);
+    selected.push({ ...chunk, forced: true });
 };
 
 export const mapDocsResultsToSources = (results = []) => {
@@ -220,7 +268,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
     for (const result of results) {
         const chunk = chunkMap.get(result.id);
         if (!chunk) continue;
-        selected.push({ ...chunk, score: result.score });
+        selected.push({ ...chunk, score: result.score, forced: false });
         if (selected.length >= maxResults) {
             break;
         }
@@ -229,6 +277,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
     const wantsRoutes = ROUTES_INTENT.test(query);
     const wantsChangelog = CHANGELOG_INTENT.test(query);
     const wantsSemantics = SEMANTICS_INTENT.test(query);
+    const wantsCustomContent = CUSTOM_CONTENT_INTENT.test(query);
 
     if (wantsRoutes) {
         const preferredRoute =
@@ -282,6 +331,29 @@ export const searchDocsRag = async (queryText, options = {}) => {
         includeForcedChunk(selected, semanticsChunk, maxResults);
     }
 
+    if (wantsCustomContent) {
+        let customContentChunk = findHighestRankedChunk(results, chunkMap, (chunk) => {
+            return chunk.kind === 'doc' && matchesCustomContentChunk(chunk);
+        });
+
+        if (!customContentChunk) {
+            const customContentResults = miniSearch
+                .search(CUSTOM_CONTENT_FALLBACK_QUERY, SEARCH_OPTIONS)
+                .sort(compareResultsByRank);
+            customContentChunk = findHighestRankedChunk(customContentResults, chunkMap, (chunk) => {
+                return chunk.kind === 'doc' && matchesCustomContentChunk(chunk);
+            });
+        }
+
+        if (!customContentChunk) {
+            customContentChunk = findDeterministicChunk(chunkMap, (chunk) => {
+                return chunk.kind === 'doc' && matchesCustomContentFallbackChunk(chunk);
+            });
+        }
+
+        includeForcedChunk(selected, customContentChunk, maxResults);
+    }
+
     selected.sort(compareResultsByRank);
 
     if (!selected.length) {
@@ -298,52 +370,87 @@ export const searchDocsRag = async (queryText, options = {}) => {
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
 
-    let output = header;
-    const included = [];
+    const buildExcerpts = (currentSelected) => {
+        let outputText = header;
+        const includedChunks = [];
 
-    for (const chunk of selected) {
-        const excerpt = trimExcerpt(String(chunk.text || '').trim(), maxExcerptChars);
-        if (!excerpt) continue;
+        for (const chunk of currentSelected) {
+            const excerpt = trimExcerpt(String(chunk.text || '').trim(), maxExcerptChars);
+            if (!excerpt) continue;
 
-        const resolvedAnchor = resolveAnchor(chunk.anchor);
-        const entryBase = buildEntry({
-            kind: chunk.kind,
-            title: chunk.title,
-            slug: chunk.slug,
-            anchor: resolvedAnchor,
-            excerpt: '',
-        });
-        const entryOverhead = entryBase.length + 1;
-        const availableForEntry = maxChars - output.length - footer.length;
+            const resolvedAnchor = resolveAnchor(chunk.anchor);
+            const entryBase = buildEntry({
+                kind: chunk.kind,
+                title: chunk.title,
+                slug: chunk.slug,
+                anchor: resolvedAnchor,
+                excerpt: '',
+            });
+            const entryOverhead = entryBase.length + 1;
+            const availableForEntry = maxChars - outputText.length - footer.length;
 
-        if (availableForEntry <= 0) {
+            if (availableForEntry <= 0) {
+                break;
+            }
+
+            if (entryOverhead > availableForEntry) {
+                break;
+            }
+
+            const maxExcerptForEntry = Math.min(maxExcerptChars, availableForEntry - entryOverhead);
+            const finalExcerpt = trimExcerpt(excerpt, maxExcerptForEntry);
+            if (!finalExcerpt) {
+                continue;
+            }
+
+            const entry = `${buildEntry({
+                kind: chunk.kind,
+                title: chunk.title,
+                slug: chunk.slug,
+                anchor: resolvedAnchor,
+                excerpt: finalExcerpt,
+            })}\n`;
+
+            if (entry.length > availableForEntry) {
+                break;
+            }
+
+            outputText += entry;
+            includedChunks.push({ ...chunk, anchor: resolvedAnchor });
+        }
+
+        return { outputText, includedChunks };
+    };
+
+    const forcedIds = new Set(selected.filter((chunk) => chunk.forced).map((chunk) => chunk.id));
+    let output = '';
+    let included = [];
+    let remaining = selected;
+    let attempts = 0;
+
+    while (attempts <= selected.length) {
+        const { outputText, includedChunks } = buildExcerpts(remaining);
+        output = outputText;
+        included = includedChunks;
+
+        if (!forcedIds.size) {
             break;
         }
 
-        if (entryOverhead > availableForEntry) {
+        const includedForcedIds = new Set(
+            included.filter((chunk) => forcedIds.has(chunk.id)).map((chunk) => chunk.id)
+        );
+        const missingForced = [...forcedIds].filter((id) => !includedForcedIds.has(id));
+        if (!missingForced.length) {
             break;
         }
 
-        const maxExcerptForEntry = Math.min(maxExcerptChars, availableForEntry - entryOverhead);
-        const finalExcerpt = trimExcerpt(excerpt, maxExcerptForEntry);
-        if (!finalExcerpt) {
-            continue;
-        }
-
-        const entry = `${buildEntry({
-            kind: chunk.kind,
-            title: chunk.title,
-            slug: chunk.slug,
-            anchor: resolvedAnchor,
-            excerpt: finalExcerpt,
-        })}\n`;
-
-        if (entry.length > availableForEntry) {
+        const dropped = dropLowestRanked(remaining, (chunk) => !chunk.forced);
+        if (!dropped) {
             break;
         }
-
-        output += entry;
-        included.push({ ...chunk, anchor: resolvedAnchor });
+        remaining.sort(compareResultsByRank);
+        attempts += 1;
     }
 
     if (!included.length) {

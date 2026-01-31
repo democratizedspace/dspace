@@ -176,6 +176,8 @@ in-game editor, import/export, and backup workflows.
   `frontend/src/pages/docs/json/sections.json` and include `/docs` entries for custom content and
   quest submission guidance, plus the `/contentbackup` and `/quests/manage` routes from
   `docs/ROUTES.md`.
+- **Deterministic retrieval:** force-include custom content doc chunks for editor/import/export/
+  backup/schema intents to prevent lexically missed coverage in the RAG excerpt packer.
 - **Prompt guardrail:** append the shared hallucination guardrail sentence defined later in this
   doc to every persona prompt so the system message explicitly requires doc-backed answers.
 - **UI disclosure:** show “Sources used” so QA can confirm custom content docs were in-context.
