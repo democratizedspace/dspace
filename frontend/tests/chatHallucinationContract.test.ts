@@ -88,6 +88,49 @@ describe('QA 9.4 chat hallucination contracts', () => {
         expectSortedAndDeduped(contextSources);
     });
 
+    it('covers custom content docs for editor/import/export/backup prompts', async () => {
+        const prompt = 'How do I add custom content to DSPACE?';
+        const { debugMessages, contextSources } = await buildChatPrompt([
+            { role: 'user', content: prompt },
+        ]);
+        const ragMessages = debugMessages.filter((message) => message.kind === 'rag');
+        const ragText = ragMessages.map((message) => message.content).join('\n');
+        const hasDocSource = contextSources.some(
+            (source) => source.type === 'doc' && String(source.url || '').startsWith('/docs/')
+        );
+
+        expect(ragMessages.length).toBeGreaterThan(0);
+        expect(hasDocSource).toBe(true);
+        expect(ragText).toMatch(/\b(editor|import|export|backup|contentbackup|json schema)\b/i);
+    });
+
+    it('covers quest editor sources for quest editing prompts', async () => {
+        const prompt = 'Where do I edit quests?';
+        const { debugMessages, contextSources } = await buildChatPrompt([
+            { role: 'user', content: prompt },
+        ]);
+        const ragMessages = debugMessages.filter((message) => message.kind === 'rag');
+        const ragText = ragMessages.map((message) => message.content).join('\n');
+        const hasQuestEditorSource = contextSources.some(
+            (source) =>
+                source.type === 'doc' &&
+                /quest editor|quests\/manage/i.test(`${source.label ?? ''} ${source.url ?? ''}`)
+        );
+
+        expect(ragMessages.length).toBeGreaterThan(0);
+        expect(/quests\/manage|quest editor/i.test(ragText) || hasQuestEditorSource).toBe(true);
+    });
+
+    it('covers backup/export sources for backup prompts', async () => {
+        const prompt = 'What can I back up or export?';
+        const { debugMessages } = await buildChatPrompt([{ role: 'user', content: prompt }]);
+        const ragMessages = debugMessages.filter((message) => message.kind === 'rag');
+        const ragText = ragMessages.map((message) => message.content).join('\n');
+
+        expect(ragMessages.length).toBeGreaterThan(0);
+        expect(ragText).toMatch(/\b(gamesaves|contentbackup|backups?)\b/i);
+    });
+
     it('includes inventory guardrails against inventing player state', async () => {
         const { debugMessages } = await buildChatPrompt([
             { role: 'user', content: 'What’s in my inventory right now?' },
