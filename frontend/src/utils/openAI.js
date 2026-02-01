@@ -39,6 +39,7 @@ const toOutputText = (response) => {
 const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';
 const fallbackModels = ['gpt-5-mini'];
+export const safeFallbackMessage = 'I don\'t know; please check /docs for the latest details.';
 export const providerRealityLine = 'In v3, chat uses OpenAI. token.place is deferred to v3.1.';
 export const fallbackSystemPrompt =
     defaultPersona?.systemPrompt ||
@@ -84,6 +85,69 @@ const vagueFollowupPattern =
     /^\s*(what about|and then|that step|the second step|next step|step 2)\b/i;
 const retrievalContextLimit = 800;
 const retrievalQueryLimit = 1000;
+
+const readEnvValue = (key) => {
+    if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
+        return import.meta.env[key];
+    }
+    if (typeof process !== 'undefined' && process.env?.[key]) {
+        return process.env[key];
+    }
+    return undefined;
+};
+
+const parseEnvList = (value) =>
+    (value || '')
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+
+const dedupeList = (values) => {
+    const seen = new Set();
+    return values.filter((value) => {
+        const normalized = value?.trim();
+        if (!normalized || seen.has(normalized)) {
+            return false;
+        }
+        seen.add(normalized);
+        return true;
+    });
+};
+
+const getChatModelConfig = () => {
+    const envModel = readEnvValue('VITE_CHAT_MODEL');
+    const envFallbackModels = readEnvValue('VITE_CHAT_FALLBACK_MODELS');
+    const resolvedModel = envModel?.trim() || defaultModel;
+    const resolvedFallbackModels =
+        envFallbackModels && envFallbackModels.trim()
+            ? parseEnvList(envFallbackModels)
+            : fallbackModels;
+    const dedupedModels = dedupeList([resolvedModel, ...resolvedFallbackModels]);
+    return {
+        defaultModel: dedupedModels[0] || defaultModel,
+        fallbackModels: dedupedModels.slice(1),
+    };
+};
+
+export const validateChatResponseText = (text) => {
+    const textValue = typeof text === 'string' ? text : '';
+    const normalizedText = textValue.trim();
+    if (!normalizedText) {
+        return { text: textValue, wasSanitized: false };
+    }
+
+    const suspiciousPrecisionPattern =
+        /\bexactly\s+\d+(?:\.\d+)?\b|\b\d+\.\d+\s*(?:%|percent)\b/i;
+    const citationMarkerPattern = /\[[^\]]+\]|\/docs\/|docs\/ROUTES\.md|sources?:/i;
+    const hasSuspiciousPrecision = suspiciousPrecisionPattern.test(normalizedText);
+    const hasCitationMarkers = citationMarkerPattern.test(normalizedText);
+
+    if (hasSuspiciousPrecision && !hasCitationMarkers) {
+        return { text: safeFallbackMessage, wasSanitized: true };
+    }
+
+    return { text: textValue, wasSanitized: false };
+};
 
 const applyProviderRealityLine = (prompt) => {
     const basePrompt = prompt || providerRealityLine;
@@ -313,7 +377,9 @@ export const getOpenAIErrorSummary = (error) => {
 };
 
 async function createChatResponse(openai, input) {
-    const models = [defaultModel, ...fallbackModels];
+    const { defaultModel: resolvedModel, fallbackModels: resolvedFallbackModels } =
+        getChatModelConfig();
+    const models = [resolvedModel, ...resolvedFallbackModels];
 
     for (let index = 0; index < models.length; index += 1) {
         const model = models[index];
@@ -418,8 +484,10 @@ export const GPT5Chat = async (messages, options = {}) => {
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+    const outputText = toOutputText(response);
+    const { text } = validateChatResponseText(outputText);
 
-    return toOutputText(response);
+    return text;
 };
 
 export const GPT5ChatV2 = async (messages, options = {}) => {
@@ -430,9 +498,11 @@ export const GPT5ChatV2 = async (messages, options = {}) => {
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+    const outputText = toOutputText(response);
+    const { text } = validateChatResponseText(outputText);
 
     return {
-        text: toOutputText(response),
+        text,
         contextSources: Array.isArray(contextSources) ? contextSources : [],
     };
 };
