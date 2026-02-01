@@ -78,6 +78,48 @@ const loadDocsRag = async () => {
     return docsRagPromise;
 };
 
+const normalizeSha = (value) => String(value || '').trim();
+
+const shasMatch = (appSha, docsSha) => {
+    const left = normalizeSha(appSha);
+    const right = normalizeSha(docsSha);
+    if (!left || !right) {
+        return false;
+    }
+    if (left === right) {
+        return true;
+    }
+    if (left.length < right.length) {
+        return right.startsWith(left);
+    }
+    if (right.length < left.length) {
+        return left.startsWith(right);
+    }
+    return false;
+};
+
+export const getDocsRagMeta = async () => {
+    try {
+        const { meta } = await loadDocsRag();
+        return meta ?? {};
+    } catch (error) {
+        console.error('Failed to load docs RAG metadata:', error);
+        return {};
+    }
+};
+
+export const getDocsRagMismatchWarning = (appGitSha, docsGitSha) => {
+    const appSha = normalizeSha(appGitSha);
+    const docsSha = normalizeSha(docsGitSha);
+    if (!appSha || !docsSha || appSha === 'unknown' || docsSha === 'unknown') {
+        return null;
+    }
+    if (shasMatch(appSha, docsSha)) {
+        return null;
+    }
+    return 'Docs RAG is stale vs app build.';
+};
+
 const trimExcerpt = (text, maxChars) => {
     if (text.length <= maxChars) {
         return text;

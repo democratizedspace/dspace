@@ -26,6 +26,7 @@
         SAVE_SNAPSHOT_HINT_TEXT,
         shouldShowSaveSnapshotHint,
     } from '../../../utils/chatHints.js';
+    import { getDocsRagMeta, getDocsRagMismatchWarning } from '../../../utils/docsRag.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -42,6 +43,10 @@
     let settingsUnsubscribe;
     let saveSnapshotHintDismissed = false;
     let saveSnapshotHintFocusListener;
+    let appGitSha = 'unknown';
+    let docsRagGitSha = 'unknown';
+    let docsRagGeneratedAt = 'unknown';
+    let docsRagWarning = null;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -189,6 +194,11 @@
         const currentState = loadGameState();
         const normalized = normalizeSettings(currentState?.settings);
         showDebug = normalized.showChatDebugPayload;
+        appGitSha = import.meta.env?.VITE_GIT_SHA ?? 'unknown';
+        const docsMeta = await getDocsRagMeta();
+        docsRagGitSha = docsMeta?.gitSha ?? 'unknown';
+        docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
+        docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
@@ -301,6 +311,23 @@
                     {debugExpanded ? 'Hide prompt' : 'Show prompt'}
                 </button>
             </div>
+            <div class="debug-metadata">
+                <div class="debug-meta-row">
+                    <span>App build SHA</span>
+                    <span class="debug-mono">{appGitSha}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs RAG SHA</span>
+                    <span class="debug-mono">{docsRagGitSha}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs RAG generatedAt</span>
+                    <span class="debug-mono">{docsRagGeneratedAt}</span>
+                </div>
+            </div>
+            {#if docsRagWarning}
+                <div class="debug-warning" role="alert">{docsRagWarning}</div>
+            {/if}
             {#if debugExpanded}
                 {#if debugMessages.length}
                     <div class="debug-list">
@@ -506,6 +533,37 @@
         margin: 0;
         font-size: 0.9rem;
         color: #cbd5e1;
+    }
+
+    .debug-metadata {
+        display: grid;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: #cbd5e1;
+    }
+
+    .debug-meta-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .debug-mono {
+        font-family:
+            'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New',
+            monospace;
+        color: #f8fafc;
+        word-break: break-all;
+    }
+
+    .debug-warning {
+        padding: 0.6rem 0.75rem;
+        border-radius: 0.65rem;
+        border: 1px solid rgba(248, 113, 113, 0.7);
+        background: rgba(127, 29, 29, 0.4);
+        color: #fecaca;
+        font-size: 0.9rem;
     }
 
     .debug-toggle {

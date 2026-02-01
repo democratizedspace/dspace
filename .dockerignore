@@ -50,3 +50,4 @@ Thumbs.db
 *.md
 !frontend/src/pages/docs/md/**/*.md
 docs/
+!docs/ROUTES.md
