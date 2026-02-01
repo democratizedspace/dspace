@@ -7,9 +7,11 @@
         state as gameStateStore,
     } from '../../utils/gameState/common.js';
     import { normalizeSettings } from '../../utils/settingsDefaults.js';
+    import { CHAT_PROMPT_VERSION } from '../../utils/openAI.js';
 
     const QUEST_GRAPH_KEY = 'showQuestGraphVisualizer';
     const CHAT_DEBUG_KEY = 'showChatDebugPayload';
+    const APP_SHA = import.meta.env.VITE_GIT_SHA || 'dev';
 
     let hydrated = false;
     let questGraphEnabled = false;
@@ -109,6 +111,17 @@
             <span class="toggle__state">{chatDebugEnabled ? 'On' : 'Off'}</span>
         </button>
     </label>
+
+    <div class="debug-meta">
+        <div class="debug-meta__row">
+            <span class="debug-meta__label">Prompt version</span>
+            <span class="debug-meta__value">{CHAT_PROMPT_VERSION}</span>
+        </div>
+        <div class="debug-meta__row">
+            <span class="debug-meta__label">App SHA</span>
+            <span class="debug-meta__value">{APP_SHA}</span>
+        </div>
+    </div>
 </section>
 
 <style>
@@ -217,5 +230,34 @@
         z-index: 1;
         font-size: 0.9rem;
         margin-left: auto;
+    }
+
+    .debug-meta {
+        border: 1px dashed rgba(148, 163, 184, 0.4);
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        display: grid;
+        gap: 0.4rem;
+        background: rgba(15, 23, 42, 0.45);
+        font-size: 0.85rem;
+    }
+
+    .debug-meta__row {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    .debug-meta__label {
+        color: #cbd5e1;
+        font-weight: 600;
+    }
+
+    .debug-meta__value {
+        color: #e2e8f0;
+        font-family: 'SFMono-Regular', ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.82rem;
+        word-break: break-all;
     }
 </style>
