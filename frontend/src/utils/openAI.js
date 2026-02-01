@@ -84,6 +84,11 @@ const vagueFollowupPattern =
     /^\s*(what about|and then|that step|the second step|next step|step 2)\b/i;
 const retrievalContextLimit = 800;
 const retrievalQueryLimit = 1000;
+const docsRagOptions = {
+    maxResults: 50,
+    maxChars: 50000,
+    maxExcerptChars: 8500,
+};
 
 const applyProviderRealityLine = (prompt) => {
     const basePrompt = prompt || providerRealityLine;
@@ -356,7 +361,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         ? buildRetrievalQuery(messages, latestUserMessage)
         : '';
     const docsRagPayload = latestUserMessage
-        ? await searchDocsRag(retrievalQuery)
+        ? await searchDocsRag(retrievalQuery, docsRagOptions)
         : { excerptsText: '', sources: [] };
     const docsRagMessage =
         !knowledgeMessage && docsRagPayload.excerptsText
