@@ -452,10 +452,20 @@ const buildIndex = (chunks) => {
 };
 
 const getGitSha = () => {
+    const envSha =
+        process.env.GIT_SHA ||
+        process.env.VITE_GIT_SHA ||
+        process.env.GITHUB_SHA ||
+        process.env.CI_COMMIT_SHA;
+    if (envSha) {
+        return envSha.trim();
+    }
+
     try {
-        return execSync('git rev-parse HEAD', { cwd: repoRoot, encoding: 'utf-8' }).trim();
+        const sha = execSync('git rev-parse HEAD', { cwd: repoRoot, encoding: 'utf-8' }).trim();
+        return sha || 'unknown';
     } catch (error) {
-        return null;
+        return 'unknown';
     }
 };
 

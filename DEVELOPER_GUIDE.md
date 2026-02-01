@@ -857,6 +857,13 @@ image assets to create. When using `--json`, the output fields are named `duplic
 **Windows/PowerShell**: The command works the same way on Windows. Ensure you're in the root
 directory (`C:\Users\...\dspace\`) before running the command, not in the `frontend` subdirectory.
 
+### Docs RAG Build Metadata
+
+The `/chat` debug panel reports both the app build SHA (`VITE_GIT_SHA`) and the docs RAG
+metadata (SHA + generated timestamp from `frontend/src/generated/rag/docs_meta.json`). Use the
+warning indicator there to quickly spot when docs grounding was generated from a different
+commit than the running app build.
+
 ### Testing Environment Limitations
 
 #### Browser Capabilities in Test Environments
