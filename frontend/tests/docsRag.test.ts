@@ -25,6 +25,17 @@ describe('docs RAG search', () => {
         ).toBe(true);
     });
 
+    it('forces routes inclusion for sitemap queries', async () => {
+        const { sources } = await searchDocsRag('Generate a sitemap for DSPACE', {
+            maxResults: 4,
+            maxChars: 2000,
+        });
+
+        expect(
+            sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+        ).toBe(true);
+    });
+
     it('includes custom content docs for editor/import/export questions', async () => {
         const { excerptsText, sources } = await searchDocsRag(
             'How do I add custom content to DSPACE?',
