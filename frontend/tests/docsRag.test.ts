@@ -72,6 +72,17 @@ describe('docs RAG search', () => {
         ).toBe(true);
     });
 
+    it('forces routes inclusion for sitemap requests', async () => {
+        const { sources } = await searchDocsRag('Generate a sitemap of DSPACE.', {
+            maxResults: 4,
+            maxChars: 2000,
+        });
+
+        expect(
+            sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+        ).toBe(true);
+    });
+
     it('retrieves v3 changelog references', async () => {
         const { excerptsText, sourcesMeta, sources } = await searchDocsRag('token.place', {
             maxResults: 6,
