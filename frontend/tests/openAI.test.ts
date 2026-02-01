@@ -653,6 +653,32 @@ describe('buildChatPrompt', () => {
 
         expect(retrievalQuery).toBe(latestMessage);
     });
+
+    it('passes expanded docs RAG options to searchDocsRag', async () => {
+        const messages = [{ role: 'user', content: 'Tell me about quests.' }];
+
+        await buildChatPrompt(messages, { docsRagBudgetChars: 1000000 });
+
+        const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
+
+        expect(options).toEqual(
+            expect.objectContaining({
+                maxResults: 50,
+                maxChars: 50000,
+                maxExcerptChars: 8500,
+            })
+        );
+    });
+
+    it('clamps docs RAG maxChars when the prompt budget is exhausted', async () => {
+        const messages = [{ role: 'user', content: 'Need docs.' }];
+
+        await buildChatPrompt(messages, { docsRagBudgetChars: 0 });
+
+        const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
+
+        expect(options.maxChars).toBe(0);
+    });
 });
 
 describe('describeOpenAIError', () => {

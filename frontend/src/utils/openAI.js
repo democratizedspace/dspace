@@ -89,6 +89,7 @@ const docsRagOptions = {
     maxChars: 50000,
     maxExcerptChars: 8500,
 };
+const docsRagPromptBudgetChars = 80000;
 
 const applyProviderRealityLine = (prompt) => {
     const basePrompt = prompt || providerRealityLine;
@@ -128,6 +129,25 @@ const truncateText = (text, maxLength) => {
     if (!text) return '';
     if (text.length <= maxLength) return text;
     return text.slice(0, maxLength);
+};
+
+const countPromptChars = (messages) => {
+    if (!Array.isArray(messages)) return 0;
+    return messages.reduce((total, message) => total + (message?.content?.length || 0), 0);
+};
+
+const buildDocsRagOptions = ({ promptBudgetChars, options, baseMessages }) => {
+    const budget =
+        typeof promptBudgetChars === 'number' && Number.isFinite(promptBudgetChars)
+            ? Math.max(0, promptBudgetChars)
+            : docsRagPromptBudgetChars;
+    const baseOptions = { ...docsRagOptions, ...(options || {}) };
+    const remainingBudget = Math.max(0, budget - countPromptChars(baseMessages));
+
+    return {
+        ...baseOptions,
+        maxChars: Math.min(baseOptions.maxChars, remainingBudget),
+    };
 };
 
 const buildRetrievalQuery = (messages, latestUserMessage) => {
@@ -354,6 +374,15 @@ export const buildChatPrompt = async (messages, options = {}) => {
               content: `DSPACE knowledge base:\n${knowledgeSummary}`,
           }
         : null;
+    const docsRagRequestOptions = buildDocsRagOptions({
+        promptBudgetChars: options.docsRagBudgetChars,
+        options: options.docsRagOptions,
+        baseMessages: [
+            systemMessage,
+            ...(knowledgeMessage ? [knowledgeMessage] : []),
+            ...(Array.isArray(messages) ? messages : []),
+        ],
+    });
     const latestUserMessage = [...messages]
         .reverse()
         .find((message) => message.role === 'user' && message.content?.trim());
@@ -361,7 +390,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         ? buildRetrievalQuery(messages, latestUserMessage)
         : '';
     const docsRagPayload = latestUserMessage
-        ? await searchDocsRag(retrievalQuery, docsRagOptions)
+        ? await searchDocsRag(retrievalQuery, docsRagRequestOptions)
         : { excerptsText: '', sources: [] };
     const docsRagMessage =
         !knowledgeMessage && docsRagPayload.excerptsText
