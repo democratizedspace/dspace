@@ -39,37 +39,38 @@ Use this canonical route index for navigation questions and chat citations.
 | Launch | `/launch` | Launch page | |
 | dChat | `/dchat` | Alternate chat UI | |
 | Debug | `/debug` | Debug tools | |
-| Docs (slug) | `/docs/[slug]` | Documentation pages | |
-| Docs (outages) | `/docs/outages/[slug]` | Outage reports | |
+| Docs (slug) | `/docs/:slug` | Documentation pages | |
+| Docs (outages) | `/docs/outages/:slug` | Outage reports | |
 | Inventory create | `/inventory/create` | Create custom item | Custom content |
 | Inventory manage | `/inventory/manage` | Manage custom items | Custom content |
-| Inventory item | `/inventory/item/[itemId]` | Item detail | |
-| Inventory item edit | `/inventory/item/[itemId]/edit` | Edit custom item | Custom content |
+| Inventory item | `/inventory/item/:itemId` | Item detail | |
+| Inventory edit | `/inventory/:id/edit` | Prompt canonical edit route (implemented at `/inventory/item/:itemId/edit`) | Custom content |
+| Inventory item edit | `/inventory/item/:itemId/edit` | Edit custom item | Custom content |
 | Items create | `/items/create` | Alternate item create path | |
 | Processes create | `/processes/create` | Create custom process | Custom content |
 | Processes manage | `/processes/manage` | Manage custom processes | Custom content |
-| Processes detail | `/processes/[processId]` | Process detail | |
-| Processes edit | `/processes/[processId]/edit` | Edit custom process | Custom content |
-| Process legacy | `/process/[slug]` | Legacy process path | |
+| Processes detail | `/processes/:id` | Process detail | |
+| Processes edit | `/processes/:id/edit` | Edit custom process | Custom content |
+| Process legacy | `/process/:slug` | Legacy process path | |
 | Quests create | `/quests/create` | Create custom quest | Custom content |
 | Quests manage | `/quests/manage` | Manage custom quests | Custom content |
 | Quests review | `/quests/review` | Quest review queue | |
 | Quests submit | `/quests/submit` | Quest submission | |
-| Quests detail | `/quests/[id]` | Quest by ID | |
-| Quests edit | `/quests/[id]/edit` | Edit custom quest | Custom content |
+| Quests detail | `/quests/:id` | Quest by ID | |
+| Quests edit | `/quests/:id/edit` | Edit custom quest | Custom content |
 | Quests fixture | `/quests/fixtures/ancestor-highlights` | QA fixture | |
-| Quests nested | `/quests/[pathId]/[questId]` | Quest by path | |
-| Quests nested edit | `/quests/[pathId]/[questId]/edit` | Edit nested quest | Custom content |
-| Quests finished | `/quests/[pathId]/[questId]/finished` | Quest completion | |
+| Quests nested | `/quests/:pathId/:questId` | Quest by path | |
+| Quests nested edit | `/quests/:pathId/:questId/edit` | Edit nested quest | Custom content |
+| Quests finished | `/quests/:pathId/:questId/finished` | Quest completion | |
 | Shop | `/shop` | Shop index | |
-| Shop buy | `/shop/buy/[itemId]` | Buy item | |
-| Shop buy qty | `/shop/buy/[itemId]/[count]` | Buy quantity | |
-| Shop buy insufficient balance | `/shop/buy/[itemId]/[count]/insufficient_balance` | Error state | |
-| Shop sell | `/shop/sell/[itemId]` | Sell item | |
-| Shop sell qty | `/shop/sell/[itemId]/[count]` | Sell quantity | |
-| Shop sell insufficient items | `/shop/sell/[itemId]/[count]/insufficient_items` | Error state | |
-| Import | `/import/[newVersion]/[oldVersion]` | Legacy import | |
-| Import done | `/import/[newVersion]/[oldVersion]/done` | Import completion | |
+| Shop buy | `/shop/buy/:itemId` | Buy item | |
+| Shop buy qty | `/shop/buy/:itemId/:count` | Buy quantity | |
+| Shop buy insufficient balance | `/shop/buy/:itemId/:count/insufficient_balance` | Error state | |
+| Shop sell | `/shop/sell/:itemId` | Sell item | |
+| Shop sell qty | `/shop/sell/:itemId/:count` | Sell quantity | |
+| Shop sell insufficient items | `/shop/sell/:itemId/:count/insufficient_items` | Error state | |
+| Import | `/import/:newVersion/:oldVersion` | Legacy import | |
+| Import done | `/import/:newVersion/:oldVersion/done` | Import completion | |
 
 ## Link checker resolution rules
 

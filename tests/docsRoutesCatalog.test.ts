@@ -12,7 +12,15 @@ const ROUTES_PAGE_PATH = path.join(
     'md',
     'routes.md'
 );
-const REQUIRED_ROUTES = ['/contentbackup', '/gamesaves', '/quests/manage', '/processes/manage'];
+const REQUIRED_ROUTES = [
+    '/contentbackup',
+    '/gamesaves',
+    '/quests/manage',
+    '/processes/manage',
+    '/quests/:id/edit',
+    '/inventory/:id/edit',
+    '/processes/:id/edit',
+];
 
 describe('Routes catalog docs', () => {
     it.each([ROUTES_DOC_PATH, ROUTES_PAGE_PATH])(
