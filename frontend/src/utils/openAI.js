@@ -129,15 +129,21 @@ const getChatModelConfig = () => {
     };
 };
 
-export const validateChatResponseText = (text) => {
+export const validateChatResponseText = (text, options = {}) => {
     const textValue = typeof text === 'string' ? text : '';
     const normalizedText = textValue.trim();
     if (!normalizedText) {
         return { text: textValue, wasSanitized: false };
     }
 
+    const hasContextSources =
+        Array.isArray(options.contextSources) && options.contextSources.length > 0;
+    if (hasContextSources) {
+        return { text: textValue, wasSanitized: false };
+    }
+
     const suspiciousPrecisionPattern =
-        /\bexactly\s+\d+(?:\.\d+)?\b|\b\d+\.\d+\s*(?:%|percent)\b/i;
+        /\bexactly\s+\d+(?:\.\d+)?\s+(?:quests?|items?|minutes?|hours?|days?|percent|%)\b|\b\d+\.\d+\s*(?:%|percent)\b/i;
     const citationMarkerPattern = /\[[^\]]+\]|\/docs\/|docs\/ROUTES\.md|sources?:/i;
     const hasSuspiciousPrecision = suspiciousPrecisionPattern.test(normalizedText);
     const hasCitationMarkers = citationMarkerPattern.test(normalizedText);
@@ -478,14 +484,14 @@ export const buildChatPrompt = async (messages, options = {}) => {
 
 export const GPT5Chat = async (messages, options = {}) => {
     const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
-    const { combinedMessages, gameState } = promptPayload;
+    const { combinedMessages, gameState, contextSources } = promptPayload;
     const apiKey = gameState.openAI?.apiKey || ''; // scan-secrets: ignore
     const OpenAIClient = resolveOpenAIClient();
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
     const outputText = toOutputText(response);
-    const { text } = validateChatResponseText(outputText);
+    const { text } = validateChatResponseText(outputText, { contextSources });
 
     return text;
 };
@@ -499,7 +505,7 @@ export const GPT5ChatV2 = async (messages, options = {}) => {
 
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
     const outputText = toOutputText(response);
-    const { text } = validateChatResponseText(outputText);
+    const { text } = validateChatResponseText(outputText, { contextSources });
 
     return {
         text,

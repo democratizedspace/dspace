@@ -20,6 +20,7 @@ vi.mock('../frontend/src/utils/docsRag.js', () => ({
 
 describe('chat non-reasoning regression probes', () => {
     beforeEach(() => {
+        vi.resetModules();
         responsesCreateMock.mockReset();
         globalThis.__DSpaceOpenAIClient = MockOpenAI;
         process.env.VITE_CHAT_MODEL = 'gpt-5-mini';
