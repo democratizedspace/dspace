@@ -429,7 +429,6 @@ const gatherDocs = async () => {
             frontmatter: {},
             kind: 'route',
             slugBase: '/docs/routes',
-            anchorBase: 'top',
         })
     );
 

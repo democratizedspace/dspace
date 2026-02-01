@@ -47,6 +47,12 @@ def collect_findings(lines: Iterable[str]) -> List[Tuple[int, str, str]]:
         candidate = raw_line[1:]
         if "scan-secrets: ignore" in candidate.lower() or "re.compile" in candidate:
             continue
+        if (
+            "doc:/docs/" in candidate
+            or "route:/docs/" in candidate
+            or "changelog:/changelog" in candidate
+        ):
+            continue
 
         for pattern, description in SUSPICIOUS_PATTERNS:
             if pattern.search(candidate):

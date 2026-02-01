@@ -3,6 +3,7 @@ import MiniSearch from 'minisearch';
 const DEFAULT_MAX_RESULTS = 5;
 const DEFAULT_MAX_CHARS = 5000;
 const DEFAULT_MAX_EXCERPT_CHARS = 850;
+const ROUTES_CANONICAL_ANCHOR = 'canonical-route-index';
 const ROUTES_INTENT =
     /\b(route|routes|url|urls|path|page|menu|navigate|navigation|where is|link|sitemap|site[-\s]?map)\b/i;
 const CHANGELOG_INTENT =
@@ -287,7 +288,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
                 (chunk) =>
                     chunk.kind === 'route' &&
                     chunk.slug === '/docs/routes' &&
-                    resolveAnchor(chunk.anchor) === 'top'
+                    resolveAnchor(chunk.anchor) === ROUTES_CANONICAL_ANCHOR
             ) ||
             findHighestRankedChunk(results, chunkMap, (chunk) => chunk.kind === 'route') ||
             findDeterministicChunk(
@@ -295,7 +296,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
                 (chunk) =>
                     chunk.kind === 'route' &&
                     chunk.slug === '/docs/routes' &&
-                    resolveAnchor(chunk.anchor) === 'top'
+                    resolveAnchor(chunk.anchor) === ROUTES_CANONICAL_ANCHOR
             ) ||
             findDeterministicChunk(chunkMap, (chunk) => chunk.kind === 'route');
         includeForcedChunk(selected, preferredRoute, maxResults);
