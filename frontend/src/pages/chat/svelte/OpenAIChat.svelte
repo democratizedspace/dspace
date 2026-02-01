@@ -39,6 +39,7 @@
     let showDebug = false;
     let debugMessages = [];
     let debugExpanded = false;
+    let promptVersion = null;
     let settingsUnsubscribe;
     let saveSnapshotHintDismissed = false;
     let saveSnapshotHintFocusListener;
@@ -108,8 +109,10 @@
                 persona: currentPersona,
             });
             debugMessages = debugPayload.debugMessages;
+            promptVersion = debugPayload.promptVersion || null;
         } else {
             debugMessages = [];
+            promptVersion = null;
         }
 
         try {
@@ -198,6 +201,7 @@
             if (!showDebug) {
                 debugExpanded = false;
                 debugMessages = [];
+                promptVersion = null;
             }
         });
         if ($messageHistory.length === 0) {
@@ -302,6 +306,12 @@
                 </button>
             </div>
             {#if debugExpanded}
+                {#if promptVersion}
+                    <div class="debug-version">
+                        <span class="debug-version__label">Prompt version</span>
+                        <span class="debug-version__value">{promptVersion}</span>
+                    </div>
+                {/if}
                 {#if debugMessages.length}
                     <div class="debug-list">
                         {#each debugMessages as debugMessage, index (index)}
@@ -521,6 +531,32 @@
 
     .debug-toggle:hover {
         background: #334155;
+    }
+
+    .debug-version {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 10px;
+        background: rgba(148, 163, 184, 0.1);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        font-size: 0.85rem;
+    }
+
+    .debug-version__label {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.7rem;
+        color: #cbd5e1;
+    }
+
+    .debug-version__value {
+        font-family:
+            'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New',
+            monospace;
+        font-size: 0.85rem;
     }
 
     .debug-list {

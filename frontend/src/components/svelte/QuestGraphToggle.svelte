@@ -7,9 +7,11 @@
         state as gameStateStore,
     } from '../../utils/gameState/common.js';
     import { normalizeSettings } from '../../utils/settingsDefaults.js';
+    import { CHAT_PROMPT_VERSION } from '../../utils/openAI.js';
 
     const QUEST_GRAPH_KEY = 'showQuestGraphVisualizer';
     const CHAT_DEBUG_KEY = 'showChatDebugPayload';
+    const APP_SHA = import.meta.env.VITE_GIT_SHA || 'dev';
 
     let hydrated = false;
     let questGraphEnabled = false;
@@ -109,6 +111,13 @@
             <span class="toggle__state">{chatDebugEnabled ? 'On' : 'Off'}</span>
         </button>
     </label>
+
+    <div class="prompt-version" aria-live="polite">
+        <div class="prompt-version__label">Prompt version</div>
+        <div class="prompt-version__value">{CHAT_PROMPT_VERSION}</div>
+        <div class="prompt-version__label">App SHA</div>
+        <div class="prompt-version__value">{APP_SHA}</div>
+    </div>
 </section>
 
 <style>
@@ -194,6 +203,32 @@
         background: #0ea5e9;
         border-color: #38bdf8;
         color: #0b1221;
+    }
+
+    .prompt-version {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0.35rem 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        background: rgba(15, 23, 42, 0.75);
+        font-size: 0.85rem;
+    }
+
+    .prompt-version__label {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.7rem;
+        color: #94a3b8;
+    }
+
+    .prompt-version__value {
+        font-family:
+            'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New',
+            monospace;
+        color: #e2e8f0;
+        word-break: break-word;
     }
 
     .toggle__thumb {
