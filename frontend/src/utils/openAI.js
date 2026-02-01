@@ -38,7 +38,9 @@ const toOutputText = (response) => {
 
 const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';
-const fallbackModels = ['gpt-5-mini'];
+const defaultFallbackModels = ['gpt-5-mini'];
+const safeFallbackChatMessage =
+    "I don't know; please check /docs for details or share more context.";
 export const providerRealityLine = 'In v3, chat uses OpenAI. token.place is deferred to v3.1.';
 export const fallbackSystemPrompt =
     defaultPersona?.systemPrompt ||
@@ -47,6 +49,57 @@ export const fallbackWelcomeMessage =
     defaultPersona?.welcomeMessage || 'Welcome! How can I assist you today?';
 export const defaultOpenAIErrorMessage =
     "Sorry, I'm having some trouble and can't generate a response.";
+const readEnvValue = (key) => {
+    if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
+        return import.meta.env[key];
+    }
+    if (typeof process !== 'undefined' && process.env?.[key]) {
+        return process.env[key];
+    }
+    return undefined;
+};
+
+const parseModelList = (value) =>
+    value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+
+const resolveChatModelConfig = () => {
+    const envModel = readEnvValue('VITE_CHAT_MODEL')?.trim();
+    const envFallback = readEnvValue('VITE_CHAT_FALLBACK_MODELS');
+    const fallbackCandidates = envFallback ? parseModelList(envFallback) : defaultFallbackModels;
+    const fallbackModels = (fallbackCandidates.length
+        ? fallbackCandidates
+        : defaultFallbackModels
+    ).filter((model, index, models) => model && model !== envModel && models.indexOf(model) === index);
+
+    return {
+        model: envModel || defaultModel,
+        fallbackModels,
+    };
+};
+
+const citationMarkerPattern = /【\d+†[^】]+】|\[(?:source|sources|ref|\d+)\]/i;
+const suspiciousPrecisionPattern =
+    /\bexactly\s+\d+(?:\.\d+)?\b|\b\d+(?:\.\d+)?%\b|\b\d+\.\d+\b/i;
+
+export const validateChatResponseText = (text) => {
+    const normalizedText = text || '';
+    const hasCitationMarkers = citationMarkerPattern.test(normalizedText);
+    const hasSuspiciousPrecision = suspiciousPrecisionPattern.test(normalizedText);
+    const isSafe = !(hasSuspiciousPrecision && !hasCitationMarkers);
+
+    return { isSafe, hasCitationMarkers, hasSuspiciousPrecision };
+};
+
+const applyChatResponsePolicy = (text) => {
+    const validation = validateChatResponseText(text);
+    if (!validation.isSafe) {
+        return safeFallbackChatMessage;
+    }
+    return text;
+};
 const guardrailRules = [
     {
         line: 'Never invent quests, items, processes, routes, URLs, or player state.',
@@ -313,7 +366,8 @@ export const getOpenAIErrorSummary = (error) => {
 };
 
 async function createChatResponse(openai, input) {
-    const models = [defaultModel, ...fallbackModels];
+    const { model: resolvedModel, fallbackModels } = resolveChatModelConfig();
+    const models = [resolvedModel, ...fallbackModels];
 
     for (let index = 0; index < models.length; index += 1) {
         const model = models[index];
@@ -418,8 +472,9 @@ export const GPT5Chat = async (messages, options = {}) => {
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+    const outputText = toOutputText(response);
 
-    return toOutputText(response);
+    return applyChatResponsePolicy(outputText);
 };
 
 export const GPT5ChatV2 = async (messages, options = {}) => {
@@ -430,9 +485,12 @@ export const GPT5ChatV2 = async (messages, options = {}) => {
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+    const outputText = toOutputText(response);
 
     return {
-        text: toOutputText(response),
+        text: applyChatResponsePolicy(outputText),
         contextSources: Array.isArray(contextSources) ? contextSources : [],
     };
 };
+
+export { safeFallbackChatMessage };
