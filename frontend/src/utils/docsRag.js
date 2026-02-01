@@ -3,8 +3,22 @@ import MiniSearch from 'minisearch';
 const DEFAULT_MAX_RESULTS = 5;
 const DEFAULT_MAX_CHARS = 5000;
 const DEFAULT_MAX_EXCERPT_CHARS = 850;
-const ROUTES_INTENT =
-    /\b(route|routes|url|urls|path|page|menu|navigate|navigation|where is|link)\b/i;
+const ROUTES_TERMS = [
+    'route',
+    'routes',
+    'url',
+    'urls',
+    'path',
+    'page',
+    'menu',
+    'navigate',
+    'navigation',
+    'where is',
+    'link',
+    'sitemap',
+    'site\\s*map',
+];
+const ROUTES_INTENT = new RegExp(`\\b(${ROUTES_TERMS.join('|')})\\b`, 'i');
 const CHANGELOG_INTENT =
     /\b(token\.place|tokenplace|changelog|release|version(?:\s+notes?)?|what'?s new)\b/i;
 const SEMANTICS_INTENT =
