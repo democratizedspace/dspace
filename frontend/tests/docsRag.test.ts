@@ -72,6 +72,31 @@ describe('docs RAG search', () => {
         ).toBe(true);
     });
 
+    it('forces routes inclusion for site map requests', async () => {
+        const { sources } = await searchDocsRag('Can you generate a site map of DSPACE?', {
+            maxResults: 4,
+            maxChars: 2000,
+        });
+
+        expect(
+            sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+        ).toBe(true);
+    });
+
+    it.each(['Generate a sitemap of DSPACE.', 'Generate a site-map of DSPACE.'])(
+        'forces routes inclusion for sitemap requests: %s',
+        async (query) => {
+            const { sources } = await searchDocsRag(query, {
+                maxResults: 4,
+                maxChars: 2000,
+            });
+
+            expect(
+                sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+            ).toBe(true);
+        }
+    );
+
     it('retrieves v3 changelog references', async () => {
         const { excerptsText, sourcesMeta, sources } = await searchDocsRag('token.place', {
             maxResults: 6,
