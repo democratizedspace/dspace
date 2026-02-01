@@ -39,6 +39,7 @@ const toOutputText = (response) => {
 const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';
 const fallbackModels = ['gpt-5-mini'];
+const suspiciousPrecisionFallback = "I don't know; please check /docs for the latest details.";
 export const providerRealityLine = 'In v3, chat uses OpenAI. token.place is deferred to v3.1.';
 export const fallbackSystemPrompt =
     defaultPersona?.systemPrompt ||
@@ -79,11 +80,44 @@ const guardrailRules = [
         pattern: /only give exact/,
     },
 ];
+const suspiciousPrecisionPattern =
+    /\bexactly\s+\d+(\.\d+)?\b|\bdrop rate\s+\d+(\.\d+)?%|\b\d+\.\d+%/i;
+const citationMarkerPattern = /\[[^\]]+\]|\/docs\/|https?:\/\//i;
 const sharedSystemGuardrail = guardrailRules.map((rule) => rule.line).join('\n');
 const vagueFollowupPattern =
     /^\s*(what about|and then|that step|the second step|next step|step 2)\b/i;
 const retrievalContextLimit = 800;
 const retrievalQueryLimit = 1000;
+
+const getEnvValue = (key) => {
+    if (typeof import.meta !== 'undefined' && import.meta.env?.[key] !== undefined) {
+        return import.meta.env[key];
+    }
+    if (typeof process !== 'undefined' && process.env?.[key] !== undefined) {
+        return process.env[key];
+    }
+    return undefined;
+};
+
+const parseModelList = (value) => {
+    if (!value) return [];
+    if (Array.isArray(value)) return value.map((entry) => String(entry).trim()).filter(Boolean);
+    return String(value)
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+};
+
+const resolveChatModels = () => {
+    const envModel = getEnvValue('VITE_CHAT_MODEL');
+    const envFallback = parseModelList(getEnvValue('VITE_CHAT_FALLBACK_MODELS'));
+    const primaryModel = envModel || defaultModel;
+    const fallbackList = envFallback.length > 0 ? envFallback : fallbackModels;
+    const uniqueModels = [primaryModel, ...fallbackList]
+        .filter(Boolean)
+        .filter((model, index, all) => all.indexOf(model) === index);
+    return uniqueModels;
+};
 
 const applyProviderRealityLine = (prompt) => {
     const basePrompt = prompt || providerRealityLine;
@@ -312,8 +346,20 @@ export const getOpenAIErrorSummary = (error) => {
     return { type: 'unknown', message: defaultOpenAIErrorMessage };
 };
 
+export const validateChatResponseText = (text) => {
+    if (!text || typeof text !== 'string') return text || '';
+    const trimmed = text.trim();
+    if (!trimmed) return '';
+    const hasCitation = citationMarkerPattern.test(trimmed);
+    const hasSuspiciousPrecision = suspiciousPrecisionPattern.test(trimmed);
+    if (hasSuspiciousPrecision && !hasCitation) {
+        return suspiciousPrecisionFallback;
+    }
+    return text;
+};
+
 async function createChatResponse(openai, input) {
-    const models = [defaultModel, ...fallbackModels];
+    const models = resolveChatModels();
 
     for (let index = 0; index < models.length; index += 1) {
         const model = models[index];
@@ -419,7 +465,7 @@ export const GPT5Chat = async (messages, options = {}) => {
 
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
 
-    return toOutputText(response);
+    return validateChatResponseText(toOutputText(response));
 };
 
 export const GPT5ChatV2 = async (messages, options = {}) => {
@@ -432,7 +478,9 @@ export const GPT5ChatV2 = async (messages, options = {}) => {
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
 
     return {
-        text: toOutputText(response),
+        text: validateChatResponseText(toOutputText(response)),
         contextSources: Array.isArray(contextSources) ? contextSources : [],
     };
 };
+
+export { suspiciousPrecisionFallback };

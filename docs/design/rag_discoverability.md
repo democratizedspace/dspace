@@ -71,6 +71,9 @@ without introducing heavyweight infrastructure.
 - `GPT5Chat` calls our OpenAI client via `openai.responses.create` (a project-level abstraction
   over the OpenAI Chat Completions API) and returns **only the output text** string (no citations,
   no metadata).
+- `GPT5Chat` picks the primary model from `VITE_CHAT_MODEL` when set; it can also accept a
+  comma-delimited `VITE_CHAT_FALLBACK_MODELS` list for staged rollouts. Defaults remain
+  `gpt-5.2` with a `gpt-5-mini` fallback when no environment overrides are provided.
 - Stage 3 adds a non-breaking `GPT5ChatV2` that returns `{ text, contextSources }`, where
   `contextSources` is a deterministic list of `Source` objects
   (`type`, `id`, `label`, optional `url`/`detail`) for docs and knowledge-pack grounding.
