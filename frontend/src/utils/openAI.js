@@ -39,6 +39,8 @@ const toOutputText = (response) => {
 const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';
 const fallbackModels = ['gpt-5-mini'];
+const chatModelEnvKey = 'VITE_CHAT_MODEL';
+const chatFallbackEnvKey = 'VITE_CHAT_FALLBACK_MODELS';
 export const providerRealityLine = 'In v3, chat uses OpenAI. token.place is deferred to v3.1.';
 export const fallbackSystemPrompt =
     defaultPersona?.systemPrompt ||
@@ -84,6 +86,36 @@ const vagueFollowupPattern =
     /^\s*(what about|and then|that step|the second step|next step|step 2)\b/i;
 const retrievalContextLimit = 800;
 const retrievalQueryLimit = 1000;
+
+const resolveEnvValue = (key) => {
+    if (typeof import.meta !== 'undefined' && import.meta?.env && key in import.meta.env) {
+        return import.meta.env[key];
+    }
+    if (typeof process !== 'undefined' && process?.env && key in process.env) {
+        return process.env[key];
+    }
+    return undefined;
+};
+
+const parseModelList = (value) => {
+    if (!value) return [];
+    return value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+};
+
+const getChatModelConfig = () => {
+    const configuredModel = resolveEnvValue(chatModelEnvKey)?.trim();
+    const fallbackRaw = resolveEnvValue(chatFallbackEnvKey);
+    const configuredFallbacks = parseModelList(fallbackRaw);
+    const primaryModel = configuredModel || defaultModel;
+    const fallbackList = configuredFallbacks.length > 0 ? configuredFallbacks : fallbackModels;
+    const dedupedFallbacks = fallbackList.filter(
+        (model, index) => model && model !== primaryModel && fallbackList.indexOf(model) === index
+    );
+    return { primaryModel, fallbackModels: dedupedFallbacks };
+};
 
 const applyProviderRealityLine = (prompt) => {
     const basePrompt = prompt || providerRealityLine;
@@ -313,7 +345,8 @@ export const getOpenAIErrorSummary = (error) => {
 };
 
 async function createChatResponse(openai, input) {
-    const models = [defaultModel, ...fallbackModels];
+    const { primaryModel, fallbackModels: chatFallbacks } = getChatModelConfig();
+    const models = [primaryModel, ...chatFallbacks];
 
     for (let index = 0; index < models.length; index += 1) {
         const model = models[index];
@@ -328,6 +361,30 @@ async function createChatResponse(openai, input) {
         }
     }
 }
+
+const safePrecisionFallbackMessage = "I don't know; please check /docs for the latest details.";
+const citationMarkerPattern = /(\[\d+\]|\[source\]|\(source\)|\/docs\/)/i;
+const precisionPatterns = [
+    /\bexactly\s+\d+/i,
+    /\b\d+\.\d+%/i,
+    /\baverage\s+(?:time|duration)[^.\n]*\d+/i,
+    /\bmean\s+\d+/i,
+];
+
+export const validateChatResponseText = (text) => {
+    const normalizedText = typeof text === 'string' ? text.trim() : '';
+    if (!normalizedText) {
+        return { text: normalizedText, wasAdjusted: false };
+    }
+    if (citationMarkerPattern.test(normalizedText)) {
+        return { text: normalizedText, wasAdjusted: false };
+    }
+    const hasPrecisionSignal = precisionPatterns.some((pattern) => pattern.test(normalizedText));
+    if (!hasPrecisionSignal) {
+        return { text: normalizedText, wasAdjusted: false };
+    }
+    return { text: safePrecisionFallbackMessage, wasAdjusted: true };
+};
 
 export const buildChatPrompt = async (messages, options = {}) => {
     await ready;
@@ -418,8 +475,10 @@ export const GPT5Chat = async (messages, options = {}) => {
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+    const outputText = toOutputText(response);
+    const validated = validateChatResponseText(outputText);
 
-    return toOutputText(response);
+    return validated.text;
 };
 
 export const GPT5ChatV2 = async (messages, options = {}) => {
@@ -430,9 +489,11 @@ export const GPT5ChatV2 = async (messages, options = {}) => {
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
     const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+    const outputText = toOutputText(response);
+    const validated = validateChatResponseText(outputText);
 
     return {
-        text: toOutputText(response),
+        text: validated.text,
         contextSources: Array.isArray(contextSources) ? contextSources : [],
     };
 };
