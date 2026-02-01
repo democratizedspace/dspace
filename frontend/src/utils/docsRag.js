@@ -3,6 +3,7 @@ import MiniSearch from 'minisearch';
 const DEFAULT_MAX_RESULTS = 5;
 const DEFAULT_MAX_CHARS = 5000;
 const DEFAULT_MAX_EXCERPT_CHARS = 850;
+const ROUTES_CANONICAL_ANCHOR = 'canonical-route-index';
 const ROUTES_INTENT =
     /\b(route|routes|url|urls|path|page|menu|navigate|navigation|where is|link|sitemap|site[-\s]?map)\b/i;
 const CHANGELOG_INTENT =
@@ -280,23 +281,20 @@ export const searchDocsRag = async (queryText, options = {}) => {
     const wantsCustomContent = CUSTOM_CONTENT_INTENT.test(query);
 
     if (wantsRoutes) {
+        const isCanonicalRouteChunk = (chunk) =>
+            chunk.kind === 'route' &&
+            chunk.slug === '/docs/routes' &&
+            resolveAnchor(chunk.anchor) === ROUTES_CANONICAL_ANCHOR;
+        const isRoutesTopChunk = (chunk) =>
+            chunk.kind === 'route' &&
+            chunk.slug === '/docs/routes' &&
+            resolveAnchor(chunk.anchor) === 'top';
         const preferredRoute =
-            findHighestRankedChunk(
-                results,
-                chunkMap,
-                (chunk) =>
-                    chunk.kind === 'route' &&
-                    chunk.slug === '/docs/routes' &&
-                    resolveAnchor(chunk.anchor) === 'top'
-            ) ||
+            findHighestRankedChunk(results, chunkMap, isCanonicalRouteChunk) ||
+            findHighestRankedChunk(results, chunkMap, isRoutesTopChunk) ||
             findHighestRankedChunk(results, chunkMap, (chunk) => chunk.kind === 'route') ||
-            findDeterministicChunk(
-                chunkMap,
-                (chunk) =>
-                    chunk.kind === 'route' &&
-                    chunk.slug === '/docs/routes' &&
-                    resolveAnchor(chunk.anchor) === 'top'
-            ) ||
+            findDeterministicChunk(chunkMap, isCanonicalRouteChunk) ||
+            findDeterministicChunk(chunkMap, isRoutesTopChunk) ||
             findDeterministicChunk(chunkMap, (chunk) => chunk.kind === 'route');
         includeForcedChunk(selected, preferredRoute, maxResults);
     }

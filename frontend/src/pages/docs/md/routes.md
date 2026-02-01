@@ -1,11 +1,14 @@
-# DSPACE Routes Documentation
+---
+title: 'Routes'
+slug: 'routes'
+---
 
-This document describes all routes served by the Astro SSR server. Use this catalog for link
-checking, QA, and RAG grounding.
+# Routes
+
+This page publishes the canonical route catalog for DSPACE. Dynamic segments are written as
+`:param`.
 
 ## Canonical Route Index
-
-The table below is the canonical route catalog. Dynamic segments are written as `:param`.
 
 | Label | Route | Notes | Nav location |
 | --- | --- | --- | --- |
@@ -78,63 +81,14 @@ The table below is the canonical route catalog. Dynamic segments are written as 
 | Liveness | `/livez` | Liveness probe | - |
 | Metrics | `/metrics` | Prometheus metrics | - |
 
-## Route Patterns
+## Link checker rules
 
-Astro uses file-based routing where files in `frontend/src/pages/` map to URL paths. Dynamic
-segments are denoted by brackets (e.g., `[id].astro`), which appear as `:id` in the table.
+The internal link checker resolves Markdown links without starting the server. It maps static
+routes to files in `frontend/src/pages/` and dynamic routes to bracketed patterns.
 
-## Route Resolution for Link Checking
+Common patterns:
 
-When validating internal links in markdown files, the link checker (`scripts/link-check.mjs`)
-resolves paths by:
-
-1. **Exact match**: `/inventory` → `frontend/src/pages/inventory/index.astro`
-2. **Index pattern**: `/quests` → `frontend/src/pages/quests/index.astro`
-3. **Slug pattern**: `/docs/about` → `frontend/src/pages/docs/[slug].astro`
-4. **ID pattern**: `/quests/1` → `frontend/src/pages/quests/[id].astro`
-5. **Nested dynamic**: `/quests/play/2` → `frontend/src/pages/quests/[pathId]/[questId].astro`
-6. **Parameterized**: `/inventory/item/37` → `frontend/src/pages/inventory/item/[itemId]/index.astro`
-
-## Static Assets
-
-Static assets are served from:
-
-- `frontend/public/` - Main public directory
-- `/assets/` - Images and media files
-
-Examples:
-
-- `/assets/rescue.jpg`
-- `/assets/changelog/20230105/back_forward.jpg`
-- `/assets/rocket_min.gif`
-
-## Adding New Routes
-
-When adding new routes:
-
-1. Create the `.astro` file in `frontend/src/pages/`
-2. Update this documentation if introducing a new route pattern
-3. Ensure `scripts/link-check.mjs` can resolve the pattern
-4. Test with `node scripts/link-check.mjs`
-
-## Testing Route Resolution
-
-To verify the link checker correctly resolves routes:
-
-```bash
-# Run link checker on all markdown files
-node scripts/link-check.mjs
-
-# Test specific routes by creating a test markdown file
-echo '- [Test](/docs/about)' > test.md
-node scripts/link-check.mjs
-rm test.md
-```
-
-## Notes for AI Agents
-
-- Routes starting with `/` are internal Astro SSR routes
-- Dynamic route segments use `[paramName]` syntax
-- All routes must map to a physical `.astro` or `.md` file
-- The link checker validates these routes without requiring server startup
-- External links (containing `://`) are validated by lychee in CI
+- `/docs/:slug` → `frontend/src/pages/docs/[slug].astro`
+- `/quests/:id` → `frontend/src/pages/quests/[id].astro`
+- `/quests/:pathId/:questId` → `frontend/src/pages/quests/[pathId]/[questId].astro`
+- `/inventory/item/:itemId` → `frontend/src/pages/inventory/item/[itemId]/index.astro`

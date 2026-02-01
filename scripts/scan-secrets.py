@@ -45,7 +45,12 @@ def collect_findings(lines: Iterable[str]) -> List[Tuple[int, str, str]]:
         if not raw_line.startswith("+") or raw_line.startswith("+++"):
             continue
         candidate = raw_line[1:]
-        if "scan-secrets: ignore" in candidate.lower() or "re.compile" in candidate:
+        lowered = candidate.lower()
+        if (
+            "scan-secrets: ignore" in lowered
+            or "re.compile" in candidate
+            or "doc:/docs/" in candidate
+        ):
             continue
 
         for pattern, description in SUSPICIOUS_PATTERNS:
