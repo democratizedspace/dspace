@@ -4,6 +4,15 @@ slug: 'token-place'
 ---
 
 DSPACE ships with a token.place integration for in-game chat, but it is **disabled by default**.
+The reason is simple: **token.place API v1 is not implemented or live in production yet**, so
+there is nothing to safely call today.
+
+## Status and roadmap
+
+- **DSPACE v3 launches with OpenAI only.** The OpenAI API remains the sole supported chat provider
+  in v3 production.
+- **token.place API v1 is still in progress.** Once the API is finished and deployed to production,
+  we will complete the token.place integration work as part of **DSPACE v3.1**.
 
 ## How it works
 
