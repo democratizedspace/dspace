@@ -7,6 +7,7 @@
         state as gameStateStore,
     } from '../../utils/gameState/common.js';
     import { normalizeSettings } from '../../utils/settingsDefaults.js';
+    import { CHAT_PROMPT_VERSION } from '../../utils/openAI.js';
 
     const QUEST_GRAPH_KEY = 'showQuestGraphVisualizer';
     const CHAT_DEBUG_KEY = 'showChatDebugPayload';
@@ -16,6 +17,7 @@
     let chatDebugEnabled = false;
     let loading = true;
     let unsubscribe;
+    const appSha = import.meta.env.VITE_GIT_SHA || 'dev';
 
     const syncFromState = (value) => {
         const normalized = normalizeSettings(value?.settings);
@@ -68,6 +70,10 @@
     <div class="heading">
         <h2>Debug</h2>
         <p>Optional debugging tools for inspecting DSPACE behavior.</p>
+        <div class="debug-meta">
+            <span>Prompt version: {CHAT_PROMPT_VERSION}</span>
+            <span>App SHA: {appSha}</span>
+        </div>
     </div>
 
     <label class="toggle">
@@ -127,6 +133,14 @@
     .heading {
         display: grid;
         gap: 0.35rem;
+    }
+
+    .debug-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        font-size: 0.85rem;
+        color: #94a3b8;
     }
 
     h2 {

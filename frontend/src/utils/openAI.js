@@ -39,6 +39,7 @@ const toOutputText = (response) => {
 const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';
 const fallbackModels = ['gpt-5-mini'];
+export const CHAT_PROMPT_VERSION = `v3:${import.meta.env.VITE_GIT_SHA || 'dev'}`;
 export const providerRealityLine = 'In v3, chat uses OpenAI. token.place is deferred to v3.1.';
 export const fallbackSystemPrompt =
     defaultPersona?.systemPrompt ||
@@ -359,11 +360,12 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const gameState = loadGameState();
 
     const persona = options.persona || defaultPersona;
+    const systemPrompt = applyProviderRealityLine(
+        applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt)
+    );
     const systemMessage = {
         role: 'system',
-        content: applyProviderRealityLine(
-            applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt)
-        ),
+        content: `Prompt version: ${CHAT_PROMPT_VERSION}\n${systemPrompt}`,
     };
 
     const knowledgePack = buildDchatKnowledgePack(gameState);
