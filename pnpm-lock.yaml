@@ -257,6 +257,12 @@ importers:
       eslint-plugin-svelte:
         specifier: ^3.13.1
         version: 3.13.1(eslint@9.32.0)(svelte@5.46.0)
+      github-slugger:
+        specifier: ^2.0.0
+        version: 2.0.0
+      glob:
+        specifier: ^10.4.5
+        version: 10.4.5
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -305,6 +311,9 @@ importers:
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
+      yaml:
+        specifier: ^2.8.1
+        version: 2.8.1
 
   packages/cache-version: {}
 

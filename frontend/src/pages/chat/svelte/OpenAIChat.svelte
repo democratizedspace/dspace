@@ -28,6 +28,8 @@
     } from '../../../utils/chatHints.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
+    import docsMeta from '../../../generated/rag/docs_meta.json';
+    import { resolveDocsRagMeta } from '../../../utils/docsRagMeta.js';
 
     const message = writable('');
     const messageHistory = writable([]);
@@ -42,6 +44,8 @@
     let settingsUnsubscribe;
     let saveSnapshotHintDismissed = false;
     let saveSnapshotHintFocusListener;
+    const appBuildSha = import.meta.env?.VITE_GIT_SHA || 'unknown';
+    $: docsRagMeta = resolveDocsRagMeta({ meta: docsMeta, buildSha: appBuildSha });
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -301,6 +305,25 @@
                     {debugExpanded ? 'Hide prompt' : 'Show prompt'}
                 </button>
             </div>
+            <div class="debug-build-meta">
+                <div class="debug-build-row">
+                    <span class="debug-build-label">App build SHA</span>
+                    <span class="debug-build-value">{docsRagMeta.appSha}</span>
+                </div>
+                <div class="debug-build-row">
+                    <span class="debug-build-label">Docs RAG SHA</span>
+                    <span class="debug-build-value">{docsRagMeta.docsSha}</span>
+                </div>
+                <div class="debug-build-row">
+                    <span class="debug-build-label">Docs RAG generated</span>
+                    <span class="debug-build-value">{docsRagMeta.generatedAt}</span>
+                </div>
+                {#if docsRagMeta.hasMismatch}
+                    <div class="debug-warning" role="alert">
+                        {docsRagMeta.warning}
+                    </div>
+                {/if}
+            </div>
             {#if debugExpanded}
                 {#if debugMessages.length}
                     <div class="debug-list">
@@ -521,6 +544,49 @@
 
     .debug-toggle:hover {
         background: #334155;
+    }
+
+    .debug-build-meta {
+        display: grid;
+        gap: 0.35rem;
+        padding: 0.75rem;
+        border-radius: 10px;
+        background: rgba(15, 23, 42, 0.65);
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        font-size: 0.85rem;
+    }
+
+    .debug-build-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .debug-build-label {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.7rem;
+        color: #cbd5e1;
+    }
+
+    .debug-build-value {
+        font-family:
+            'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New',
+            monospace;
+        font-size: 0.8rem;
+        color: #e2e8f0;
+        word-break: break-all;
+    }
+
+    .debug-warning {
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        background: rgba(251, 191, 36, 0.2);
+        border: 1px solid rgba(251, 191, 36, 0.45);
+        color: #fef3c7;
+        font-size: 0.8rem;
+        font-weight: 600;
     }
 
     .debug-list {
