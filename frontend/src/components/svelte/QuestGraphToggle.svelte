@@ -17,7 +17,7 @@
     let chatDebugEnabled = false;
     let loading = true;
     let unsubscribe;
-    const appSha = import.meta.env.VITE_GIT_SHA || 'dev';
+    const appSha = CHAT_PROMPT_VERSION.split(':')[1] || CHAT_PROMPT_VERSION;
 
     const syncFromState = (value) => {
         const normalized = normalizeSettings(value?.settings);

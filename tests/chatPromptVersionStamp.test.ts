@@ -21,12 +21,17 @@ describe('chat prompt version stamp', () => {
         const payload = await buildChatPrompt([]);
         const systemMessage = payload.combinedMessages.find((message) => message.role === 'system');
 
-        expect(systemMessage?.content).toContain('Prompt version:');
-        expect(systemMessage?.content).toContain(`Prompt version: ${CHAT_PROMPT_VERSION}`);
-        expect(systemMessage?.content).toContain(
+        expect(systemMessage).toBeDefined();
+        if (!systemMessage) {
+            throw new Error('Expected system message to be defined.');
+        }
+
+        expect(systemMessage.content).toContain('Prompt version:');
+        expect(systemMessage.content).toContain(`Prompt version: ${CHAT_PROMPT_VERSION}`);
+        expect(systemMessage.content).toContain(
             'Never invent quests, items, processes, routes, URLs, or player state.'
         );
-        expect(systemMessage?.content).toContain('/gamesaves');
-        expect(systemMessage?.content).toContain('docs/ROUTES.md');
+        expect(systemMessage.content).toContain('/gamesaves');
+        expect(systemMessage.content).toContain('docs/ROUTES.md');
     });
 });
