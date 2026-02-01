@@ -278,6 +278,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
     const wantsChangelog = CHANGELOG_INTENT.test(query);
     const wantsSemantics = SEMANTICS_INTENT.test(query);
     const wantsCustomContent = CUSTOM_CONTENT_INTENT.test(query);
+    const routeExcerptChars = wantsRoutes ? Math.max(maxExcerptChars, 1600) : maxExcerptChars;
 
     if (wantsRoutes) {
         const preferredRoute =
@@ -397,7 +398,9 @@ export const searchDocsRag = async (queryText, options = {}) => {
                 break;
             }
 
-            const maxExcerptForEntry = Math.min(maxExcerptChars, availableForEntry - entryOverhead);
+            const excerptBudget =
+                wantsRoutes && chunk.kind === 'route' ? routeExcerptChars : maxExcerptChars;
+            const maxExcerptForEntry = Math.min(excerptBudget, availableForEntry - entryOverhead);
             const finalExcerpt = trimExcerpt(excerpt, maxExcerptForEntry);
             if (!finalExcerpt) {
                 continue;

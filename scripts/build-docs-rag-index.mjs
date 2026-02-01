@@ -262,6 +262,43 @@ const resolveDocTitle = (frontmatter, content) => {
     return headingMatch ? headingMatch[1].trim() : 'Doc';
 };
 
+const extractRouteList = (markdown) => {
+    const matches = [];
+    const routePattern = /`(\/[^`]+)`/g;
+    let match;
+
+    while ((match = routePattern.exec(markdown)) !== null) {
+        matches.push(match[1]);
+    }
+
+    return matches;
+};
+
+const chunkRoutesIndex = ({ filePath, content }) => {
+    const title = resolveDocTitle({}, content);
+    const heading = title || 'Routes';
+    const slug = '/docs/routes';
+    const anchor = 'top';
+    const pathRelative = path.relative(repoRoot, filePath).split(path.sep).join('/');
+    const routeSummary = extractRouteList(content).join(' ');
+    const text = [routeSummary ? `Routes index: ${routeSummary}` : '', stripMarkdownToText(content)]
+        .filter(Boolean)
+        .join('\n\n');
+
+    return [
+        {
+            id: `route:${slug}:${anchor}#0-0`,
+            path: pathRelative,
+            slug,
+            title,
+            heading,
+            anchor,
+            text,
+            kind: 'route',
+        },
+    ];
+};
+
 const chunkDocument = ({
     filePath,
     content,
@@ -285,7 +322,7 @@ const chunkDocument = ({
         const textChunks = splitTextByLength(plainText || '');
 
         textChunks.forEach((textChunk, chunkIndex) => {
-            const id = `${kind}:${slug}:${anchor}:${sectionIndex}:${chunkIndex}`;
+            const id = `${kind}:${slug}:${anchor}#${sectionIndex}-${chunkIndex}`;
             chunks.push({
                 id,
                 path: pathRelative,
@@ -423,13 +460,9 @@ const gatherDocs = async () => {
 
     const routesContent = await readFileSafe(ROUTES_PATH);
     chunks.push(
-        ...chunkDocument({
+        ...chunkRoutesIndex({
             filePath: ROUTES_PATH,
             content: routesContent,
-            frontmatter: {},
-            kind: 'route',
-            slugBase: '/docs/routes',
-            anchorBase: 'top',
         })
     );
 
