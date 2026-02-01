@@ -6,6 +6,7 @@
         buildChatPrompt,
         getOpenAIErrorSummary,
         GPT5ChatV2,
+        CHAT_PROMPT_VERSION,
     } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
     import {
@@ -290,6 +291,7 @@
                 <div>
                     <h3>Chat prompt debug</h3>
                     <p>Displays the full prompt payload, with RAG content highlighted.</p>
+                    <p class="debug-version">Prompt version: {CHAT_PROMPT_VERSION}</p>
                 </div>
                 <button
                     class="debug-toggle"
@@ -506,6 +508,11 @@
         margin: 0;
         font-size: 0.9rem;
         color: #cbd5e1;
+    }
+
+    .debug-version {
+        font-size: 0.8rem;
+        color: #94a3b8;
     }
 
     .debug-toggle {

@@ -68,6 +68,8 @@ without introducing heavyweight infrastructure.
 - Persona system prompts are defined in `frontend/src/data/npcPersonas.js` and passed into
   `GPT5Chat` as the system message. Only the **dChat persona** currently includes explicit
   “If you’re unsure, say you don’t know” language.
+- System prompts are prefixed with a version stamp (`Prompt version: v3:<git-sha>`) so QA can
+  compare `/chat` debug output and Settings > Debug across staging/prod builds.
 - `GPT5Chat` calls our OpenAI client via `openai.responses.create` (a project-level abstraction
   over the OpenAI Chat Completions API) and returns **only the output text** string (no citations,
   no metadata).
