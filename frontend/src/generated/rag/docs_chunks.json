@@ -3510,22 +3510,22 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/processes:not_started:15:0",
+        "id": "doc:/docs/processes:not-started:15:0",
         "path": "frontend/src/pages/docs/md/processes.md",
         "slug": "/docs/processes",
         "title": "Processes",
         "heading": "NOT_STARTED",
-        "anchor": "not_started",
+        "anchor": "not-started",
         "text": "In this state, a process is waiting to be started. You can start a process by clicking the Start button. If you do not have the required items, the Start button will do nothing. When you click Start, the items in the Consumes list will be removed from your inventory and the process will begin.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/processes:in_progress:16:0",
+        "id": "doc:/docs/processes:in-progress:16:0",
         "path": "frontend/src/pages/docs/md/processes.md",
         "slug": "/docs/processes",
         "title": "Processes",
         "heading": "IN_PROGRESS",
-        "anchor": "in_progress",
+        "anchor": "in-progress",
         "text": "In this state, the process is active. You have the option to terminate an active process by clicking the Cancel button. If you cancel a process, your items will be returned to you. A countdown to the process's completion and a progress bar are also displayed in this state.",
         "kind": "doc"
     },
@@ -3610,12 +3610,12 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/prompts-codex:codex-prompt-library-for-the-_dspace_-repo:0:0",
+        "id": "doc:/docs/prompts-codex:codex-prompt-library-for-the--dspace--repo:0:0",
         "path": "frontend/src/pages/docs/md/prompts-codex.md",
         "slug": "/docs/prompts-codex",
         "title": "Codex Prompt Library",
         "heading": "Codex prompt library for the _dspace_ repo",
-        "anchor": "codex-prompt-library-for-the-_dspace_-repo",
+        "anchor": "codex-prompt-library-for-the--dspace--repo",
         "text": "All detailed Codex prompt guides live in the repository under docs/prompts/codex/. This page stays in the in-game handbook as a quick index so contributors can jump straight to the canonical Markdown files. Need a prompt fast? Browse the list below, open the linked Markdown file in GitHub, and copy the snippet you need. Each guide follows the same conventions: scope work to one or two files, be explicit about tests to run, stop the prompt when the spec is complete, and scan staged changes with ./scripts/scan-secrets.py before committing.",
         "kind": "doc"
     },
@@ -4416,7 +4416,7 @@
         "title": "Routes",
         "heading": "Static assets",
         "anchor": "static-assets",
-        "text": "Static assets are served from: - frontend/public/ - Main public directory - /assets/ - Images and media files\n Examples: - /assets/rescue.jpg - /assets/changelog/20230105/back_forward.jpg - /assets/rocket_min.gif",
+        "text": "Static assets are served from:\n - frontend/public/ - Main public directory - /assets/ - Images and media files\n Examples:\n - /assets/rescue.jpg - /assets/changelog/20230105/back_forward.jpg - /assets/rocket_min.gif",
         "kind": "doc"
     },
     {
@@ -5503,190 +5503,10 @@
         "id": "route:/docs/routes:top:0:0",
         "path": "docs/ROUTES.md",
         "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "DSPACE Routes Documentation",
+        "title": "Routes",
+        "heading": "Routes",
         "anchor": "top",
-        "text": "This document describes all routes served by the Astro SSR server. Understanding these routes is essential for link checking, testing, and development.",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:1:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Route Patterns",
-        "anchor": "top",
-        "text": "Astro uses file-based routing where files in frontend/src/pages/ map to URL paths. Dynamic segments are denoted by brackets (e.g., [id].astro).",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:2:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Core Pages",
-        "anchor": "top",
-        "text": "- / - Homepage (index.astro) - /404 - 404 error page - /settings - User settings - /stats - User statistics - /skills - Skills page - /task - Task page - /launch - Launch page - /changelog - Changelog page",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:3:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Cookie Management",
-        "anchor": "top",
-        "text": "- /accept_cookies - Cookie acceptance page - /accepted_cookies - Cookie acceptance confirmation",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:4:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Profile & Achievements",
-        "anchor": "top",
-        "text": "- /profile - User profile page - /profile/avatar - Avatar selection - /achievements - User achievements page - /titles - User titles page - /leaderboard - Global leaderboard",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:5:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Game Systems",
-        "anchor": "top",
-        "text": "- /energy - Energy management page - /gamesaves - Game save import/export - /cloudsync - Cloud synchronization - /contentbackup - Content backup management",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:6:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Chat & Debug",
-        "anchor": "top",
-        "text": "- /chat - Chat interface - /dchat - dChat interface (AI assistant) - /debug - Debug tools",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:7:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Documentation",
-        "anchor": "top",
-        "text": "- /docs - Documentation index - /docs/[slug] - Individual documentation pages - Examples: /docs/about, /docs/solar, /docs/team, /docs/processes",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:8:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Inventory",
-        "anchor": "top",
-        "text": "- /inventory - Inventory list - /inventory/create - Create new item - /inventory/manage - Manage inventory - /inventory/item/[itemId] - Individual item details - Examples: /inventory/item/1, /inventory/item/37, /inventory/item/50 - /inventory/item/[itemId]/edit - Edit custom item - Examples: /inventory/item/1/edit, /inventory/item/37/edit, /inventory/item/50/edit",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:9:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Items (Alternative Inventory Routes)",
-        "anchor": "top",
-        "text": "- /items/create - Create new item (alternative path)",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:10:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Processes",
-        "anchor": "top",
-        "text": "- /process/[slug] - Process by slug (legacy pattern) - /processes - Processes list - /processes/[processId] - Individual process details - Examples: /processes/launch-rocket, /processes/feed-goldfish - /processes/create - Create new process - /processes/manage - Manage processes",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:11:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Quests",
-        "anchor": "top",
-        "text": "- /quests - Quest list - /quests/create - Create new quest - /quests/manage - Manage quests - /quests/review - Review quests - /quests/submit - Submit quest - /quests/[id] - Quest by ID (simple pattern) - /quests/fixtures/ancestor-highlights - Quest graph fixture used for ancestor/descendant QA - /quests/[id]/edit - Edit quest by ID - /quests/[pathId]/[questId] - Quest by path and ID (nested pattern) - Examples: /quests/play/2, /quests/custom/5 - /quests/[pathId]/[questId]/edit - Edit nested quest - /quests/[pathId]/[questId]/finished - Quest completion page",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:12:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Shop",
-        "anchor": "top",
-        "text": "- /shop - Shop index - /shop/buy/[itemId] - Buy item page - /shop/buy/[itemId]/[count] - Buy specific quantity - /shop/buy/[itemId]/[count]/insufficient_balance - Insufficient balance error - /shop/sell/[itemId] - Sell item page - /shop/sell/[itemId]/[count] - Sell specific quantity - /shop/sell/[itemId]/[count]/insufficient_items - Insufficient items error",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:13:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Import/Migration",
-        "anchor": "top",
-        "text": "- /import/[newVersion]/[oldVersion] - Import from old version - /import/[newVersion]/[oldVersion]/done - Import completion",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:14:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Route Resolution for Link Checking",
-        "anchor": "top",
-        "text": "When validating internal links in markdown files, the link checker (scripts/link-check.mjs) resolves paths by:\n 1. Exact match: /inventory → frontend/src/pages/inventory/index.astro 2. Index pattern: /quests → frontend/src/pages/quests/index.astro 3. Slug pattern: /docs/about → frontend/src/pages/docs/[slug].astro 4. ID pattern: /quests/1 → frontend/src/pages/quests/[id].astro 5. Nested dynamic: /quests/play/2 → frontend/src/pages/quests/[pathId]/[questId].astro 6. Parameterized: /inventory/item/37 → frontend/src/pages/inventory/item/[itemId]/index.astro",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:15:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Static Assets",
-        "anchor": "top",
-        "text": "Static assets are served from: - frontend/public/ - Main public directory - /assets/ - Images and media files\n Examples: - /assets/rescue.jpg - /assets/changelog/20230105/back_forward.jpg - /assets/rocket_min.gif",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:16:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Adding New Routes",
-        "anchor": "top",
-        "text": "When adding new routes:\n 1. Create the .astro file in frontend/src/pages/ 2. Update this documentation if introducing a new route pattern 3. Ensure scripts/link-check.mjs can resolve the pattern 4. Test with node scripts/link-check.mjs",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:17:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Testing Route Resolution",
-        "anchor": "top",
-        "text": "To verify the link checker correctly resolves routes:",
-        "kind": "route"
-    },
-    {
-        "id": "route:/docs/routes:top:18:0",
-        "path": "docs/ROUTES.md",
-        "slug": "/docs/routes",
-        "title": "DSPACE Routes Documentation",
-        "heading": "Notes for AI Agents",
-        "anchor": "top",
-        "text": "- Routes starting with / are internal Astro SSR routes - Dynamic route segments use [paramName] syntax - All routes must map to a physical .astro or .md file - The link checker validates these routes without requiring server startup - External links (containing ://) are validated by lychee in CI",
+        "text": "DSPACE Routes Documentation\n This document describes all routes served by the Astro SSR server. Understanding these routes is essential for link checking, testing, and development. Route Patterns\n Astro uses file-based routing where files in frontend/src/pages/ map to URL paths. Dynamic segments are denoted by brackets (e.g., [id].astro). Static Routes Core Pages - / - Homepage (index.astro) - /404 - 404 error page - /settings - User settings - /stats - User statistics - /skills - Skills page - /task - Task page - /launch - Launch page - /changelog - Changelog page Cookie Management - /accept_cookies - Cookie acceptance page - /accepted_cookies - Cookie acceptance confirmation Profile & Achievements - /profile - User profile page - /profile/avatar - Avatar selection - /achievements - User achievements page - /titles - User titles page - /leaderboard - Global leaderboard Game Systems - /energy - Energy management page - /gamesaves - Game save import/export - /cloudsync - Cloud synchronization - /contentbackup - Content backup management Chat & Debug - /chat - Chat interface - /dchat - dChat interface (AI assistant) - /debug - Debug tools Dynamic Routes Documentation - /docs - Documentation index - /docs/[slug] - Individual documentation pages - Examples: /docs/about, /docs/solar, /docs/team, /docs/processes Inventory - /inventory - Inventory list - /inventory/create - Create new item - /inventory/manage - Manage inventory - /inventory/item/[itemId] - Individual item details - Examples: /inventory/item/1, /inventory/item/37, /inventory/item/50 - /inventory/item/[itemId]/edit - Edit custom item - Examples: /inventory/item/1/edit, /inventory/item/37/edit, /inventory/item/50/edit Items (Alternative Inventory Routes) - /items/create - Create new item (alternative path) Processes - /process/[slug] - Process by slug (legacy pattern) - /processes - Processes list - /processes/[processId] - Individual process details - Examples: /processes/launch-rocket, /processes/feed-goldfish - /processes/create - Create new process - /processes/manage - Manage processes Quests - /quests - Quest list - /quests/create - Create new quest - /quests/manage - Manage quests - /quests/review - Review quests - /quests/submit - Submit quest - /quests/[id] - Quest by ID (simple pattern) - /quests/fixtures/ancestor-highlights - Quest graph fixture used for ancestor/descendant QA - /quests/[id]/edit - Edit quest by ID - /quests/[pathId]/[questId] - Quest by path and ID (nested pattern) - Examples: /quests/play/2, /quests/custom/5 - /quests/[pathId]/[questId]/edit - Edit nested quest - /quests/[pathId]/[questId]/finished - Quest completion page Shop - /shop - Shop index - /shop/buy/[itemId] - Buy item page - /shop/buy/[itemId]/[count] - Buy specific quantity - /shop/buy/[itemId]/[count]/insufficient_balance - Insufficient balance error - /shop/sell/[itemId] - Sell item page - /shop/sell/[itemId]/[count] - Sell specific quantity - /shop/sell/[itemId]/[count]/insufficient_items - Insufficient items error Import/Migration - /import/[newVersion]/[oldVersion] - Import from old version - /import/[newVersion]/[oldVersion]/done - Import completion Route Resolution for Link Checking\n When validating internal links in markdown files, the link checker (scripts/link-check.mjs) resolves paths by:\n 1. Exact match: /inventory → frontend/src/pages/inventory/index.astro 2. Index pattern: /quests → frontend/src/pages/quests/index.astro 3. Slug pattern: /docs/about → frontend/src/pages/docs/[slug].astro 4. ID pattern: /quests/1 → frontend/src/pages/quests/[id].astro 5. Nested dynamic: /quests/play/2 → frontend/src/pages/quests/[pathId]/[questId].astro 6. Parameterized: /inventory/item/37 → frontend/src/pages/inventory/item/[itemId]/index.astro Static Assets\n Static assets are served from: - frontend/public/ - Main public directory - /assets/ - Images and media files\n Examples: - /assets/rescue.jpg - /assets/changelog/20230105/back_forward.jpg - /assets/rocket_min.gif Adding New Routes\n When adding new routes:\n 1. Create the .astro file in frontend/src/pages/ 2. Update this documentation if introducing a new route pattern 3. Ensure scripts/link-check.mjs can resolve the pattern 4. Test with node scripts/link-check.mjs Testing Route Resolution\n To verify the link checker correctly resolves routes: Notes for AI Agents\n - Routes starting with / are internal Astro SSR routes - Dynamic route segments use [paramName] syntax - All routes must map to a physical .astro or .md file - The link checker validates these routes without requiring server startup - External links (containing ://) are validated by lychee in CI",
         "kind": "route"
     }
 ]

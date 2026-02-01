@@ -20,6 +20,7 @@ const CUSTOM_CONTENT_MATCH =
 const CUSTOM_CONTENT_FALLBACK_QUERY = 'custom content editor import export backup json schema';
 const CUSTOM_CONTENT_FALLBACK_REQUIRED = /\bcustom\b/i;
 const CUSTOM_CONTENT_FALLBACK_ACTION = /\b(editor|backup|import|export)\b/i;
+const CUSTOM_CONTENT_ROUTE_SIGNAL = /\b(export|import|backup)\b/i;
 const SEARCH_OPTIONS = Object.freeze({
     boost: { title: 3, heading: 2 },
     prefix: true,
@@ -278,8 +279,10 @@ export const searchDocsRag = async (queryText, options = {}) => {
     const wantsChangelog = CHANGELOG_INTENT.test(query);
     const wantsSemantics = SEMANTICS_INTENT.test(query);
     const wantsCustomContent = CUSTOM_CONTENT_INTENT.test(query);
+    const wantsCustomContentRoute = wantsCustomContent && CUSTOM_CONTENT_ROUTE_SIGNAL.test(query);
+    const wantsRouteChunk = wantsRoutes || wantsCustomContentRoute;
 
-    if (wantsRoutes) {
+    if (wantsRouteChunk) {
         const preferredRoute =
             findHighestRankedChunk(
                 results,
@@ -375,7 +378,12 @@ export const searchDocsRag = async (queryText, options = {}) => {
         const includedChunks = [];
 
         for (const chunk of currentSelected) {
-            const excerpt = trimExcerpt(String(chunk.text || '').trim(), maxExcerptChars);
+            const routeExcerptChars = wantsRouteChunk
+                ? Math.max(maxExcerptChars, 2500)
+                : maxExcerptChars;
+            const chunkMaxExcerptChars =
+                chunk.kind === 'route' && wantsRouteChunk ? routeExcerptChars : maxExcerptChars;
+            const excerpt = trimExcerpt(String(chunk.text || '').trim(), chunkMaxExcerptChars);
             if (!excerpt) continue;
 
             const resolvedAnchor = resolveAnchor(chunk.anchor);
@@ -397,7 +405,10 @@ export const searchDocsRag = async (queryText, options = {}) => {
                 break;
             }
 
-            const maxExcerptForEntry = Math.min(maxExcerptChars, availableForEntry - entryOverhead);
+            const maxExcerptForEntry = Math.min(
+                chunkMaxExcerptChars,
+                availableForEntry - entryOverhead
+            );
             const finalExcerpt = trimExcerpt(excerpt, maxExcerptForEntry);
             if (!finalExcerpt) {
                 continue;

@@ -11,6 +11,7 @@ This page lists the canonical Astro SSR routes served by DSPACE. It mirrors
 ## Static routes
 
 ### Core pages
+
 - / - Homepage (index.astro)
 - /404 - 404 error page
 - /settings - User settings
@@ -21,10 +22,12 @@ This page lists the canonical Astro SSR routes served by DSPACE. It mirrors
 - /changelog - Changelog page
 
 ### Cookie management
+
 - /accept_cookies - Cookie acceptance page
 - /accepted_cookies - Cookie acceptance confirmation
 
 ### Profile & achievements
+
 - /profile - User profile page
 - /profile/avatar - Avatar selection
 - /achievements - User achievements page
@@ -32,12 +35,14 @@ This page lists the canonical Astro SSR routes served by DSPACE. It mirrors
 - /leaderboard - Global leaderboard
 
 ### Game systems
+
 - /energy - Energy management page
 - /gamesaves - Game save import/export
 - /cloudsync - Cloud synchronization
 - /contentbackup - Content backup management
 
 ### Chat & debug
+
 - /chat - Chat interface
 - /dchat - dChat interface (AI assistant)
 - /debug - Debug tools
@@ -45,31 +50,36 @@ This page lists the canonical Astro SSR routes served by DSPACE. It mirrors
 ## Dynamic routes
 
 ### Documentation
+
 - /docs - Documentation index
 - /docs/[slug] - Individual documentation pages
-  - Examples: /docs/about, /docs/solar, /docs/team, /docs/processes
+    - Examples: /docs/about, /docs/solar, /docs/team, /docs/processes
 
 ### Inventory
+
 - /inventory - Inventory list
 - /inventory/create - Create new item
 - /inventory/manage - Manage inventory
 - /inventory/item/[itemId] - Individual item details
-  - Examples: /inventory/item/1, /inventory/item/37, /inventory/item/50
+    - Examples: /inventory/item/1, /inventory/item/37, /inventory/item/50
 - /inventory/item/[itemId]/edit - Edit custom item
-  - Examples: /inventory/item/1/edit, /inventory/item/37/edit, /inventory/item/50/edit
+    - Examples: /inventory/item/1/edit, /inventory/item/37/edit, /inventory/item/50/edit
 
 ### Items (alternative inventory routes)
+
 - /items/create - Create new item (alternative path)
 
 ### Processes
+
 - /process/[slug] - Process by slug (legacy pattern)
 - /processes - Processes list
 - /processes/[processId] - Individual process details
-  - Examples: /processes/launch-rocket, /processes/feed-goldfish
+    - Examples: /processes/launch-rocket, /processes/feed-goldfish
 - /processes/create - Create new process
 - /processes/manage - Manage processes
 
 ### Quests
+
 - /quests - Quest list
 - /quests/create - Create new quest
 - /quests/manage - Manage quests
@@ -79,11 +89,12 @@ This page lists the canonical Astro SSR routes served by DSPACE. It mirrors
 - /quests/fixtures/ancestor-highlights - Quest graph fixture used for ancestor/descendant QA
 - /quests/[id]/edit - Edit quest by ID
 - /quests/[pathId]/[questId] - Quest by path and ID (nested pattern)
-  - Examples: /quests/play/2, /quests/custom/5
+    - Examples: /quests/play/2, /quests/custom/5
 - /quests/[pathId]/[questId]/edit - Edit nested quest
 - /quests/[pathId]/[questId]/finished - Quest completion page
 
 ### Shop
+
 - /shop - Shop index
 - /shop/buy/[itemId] - Buy item page
 - /shop/buy/[itemId]/[count] - Buy specific quantity
@@ -93,6 +104,7 @@ This page lists the canonical Astro SSR routes served by DSPACE. It mirrors
 - /shop/sell/[itemId]/[count]/insufficient_items - Insufficient items error
 
 ### Import/migration
+
 - /import/[newVersion]/[oldVersion] - Import from old version
 - /import/[newVersion]/[oldVersion]/done - Import completion
 
@@ -111,10 +123,12 @@ When validating internal links in markdown files, the link checker
 ## Static assets
 
 Static assets are served from:
+
 - frontend/public/ - Main public directory
 - /assets/ - Images and media files
 
 Examples:
+
 - /assets/rescue.jpg
 - /assets/changelog/20230105/back_forward.jpg
 - /assets/rocket_min.gif
