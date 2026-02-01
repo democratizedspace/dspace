@@ -20,4 +20,24 @@ describe('docs RAG mismatch warning', () => {
         const warning = getDocsRagMismatchWarning('aaaaaaaa', 'bbbbbbbb');
         expect(warning).toBe('Docs RAG is stale vs app build.');
     });
+
+    it('returns null when SHAs match', () => {
+        const warning = getDocsRagMismatchWarning('abc123', 'abc123');
+        expect(warning).toBeNull();
+    });
+
+    it('returns null when either SHA is unknown', () => {
+        const warning = getDocsRagMismatchWarning('unknown', 'abc123');
+        expect(warning).toBeNull();
+    });
+
+    it('returns null when either SHA is empty', () => {
+        const warning = getDocsRagMismatchWarning('', 'abc123');
+        expect(warning).toBeNull();
+    });
+
+    it('returns null when SHAs match by prefix', () => {
+        const warning = getDocsRagMismatchWarning('abc123', 'abc123def456');
+        expect(warning).toBeNull();
+    });
 });

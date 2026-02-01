@@ -328,7 +328,7 @@
                 </div>
             </div>
             {#if docsRagWarning}
-                <div class="debug-warning" role="alert">{docsRagWarning}</div>
+                <div class="debug-warning" role="alert" aria-live="polite">{docsRagWarning}</div>
             {/if}
             {#if debugExpanded}
                 {#if debugMessages.length}
