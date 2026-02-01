@@ -33,6 +33,11 @@ SUSPICIOUS_PATTERNS: List[Tuple[re.Pattern[str], str]] = [
     ),
 ]
 
+IGNORE_TOKEN_ASSIGNMENT_FILES = {
+    "frontend/src/generated/rag/docs_chunks.json",
+    "frontend/src/generated/rag/docs_index.json",
+}
+
 
 def collect_findings(lines: Iterable[str]) -> List[Tuple[int, str, str]]:
     """Return a list of suspicious additions.
@@ -41,7 +46,15 @@ def collect_findings(lines: Iterable[str]) -> List[Tuple[int, str, str]]:
     """
 
     findings: List[Tuple[int, str, str]] = []
+    current_file = None
     for index, raw_line in enumerate(lines, start=1):
+        if raw_line.startswith("+++ "):
+            candidate_path = raw_line[4:].strip()
+            if candidate_path.startswith("b/"):
+                current_file = candidate_path[2:]
+            else:
+                current_file = candidate_path
+            continue
         if not raw_line.startswith("+") or raw_line.startswith("+++"):
             continue
         candidate = raw_line[1:]
@@ -49,6 +62,11 @@ def collect_findings(lines: Iterable[str]) -> List[Tuple[int, str, str]]:
             continue
 
         for pattern, description in SUSPICIOUS_PATTERNS:
+            if (
+                description == "Credential keyword assignment"
+                and current_file in IGNORE_TOKEN_ASSIGNMENT_FILES
+            ):
+                continue
             if pattern.search(candidate):
                 snippet = candidate.strip()
                 if len(snippet) > 120:

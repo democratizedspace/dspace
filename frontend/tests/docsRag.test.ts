@@ -25,6 +25,21 @@ describe('docs RAG search', () => {
         ).toBe(true);
     });
 
+    it('returns content backup route context for custom content export queries', async () => {
+        const { excerptsText, sources } = await searchDocsRag(
+            'Where do I export custom content? What is the route?',
+            {
+                maxResults: 6,
+                maxChars: 3000,
+            }
+        );
+
+        expect(
+            sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+        ).toBe(true);
+        expect(excerptsText).toContain('/contentbackup');
+    });
+
     it('includes custom content docs for editor/import/export questions', async () => {
         const { excerptsText, sources } = await searchDocsRag(
             'How do I add custom content to DSPACE?',

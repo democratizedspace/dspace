@@ -98,6 +98,30 @@ const stripMarkdownToText = (markdown) => {
     return text;
 };
 
+const stripMarkdownToRoutesText = (markdown) => {
+    if (!markdown) {
+        return '';
+    }
+
+    let text = markdown;
+
+    text = text.replace(/^---[\s\S]*?---/g, ' ');
+    text = text.replace(/```[\s\S]*?```/g, ' ');
+    text = text.replace(/`([^`]*)`/g, '$1');
+    text = text.replace(/!\[([^\]]*)]\([^)]*\)/g, '$1');
+    text = text.replace(/\[([^\]]+)]\([^)]*\)/g, '$1');
+    text = text.replace(/<[^>]+>/g, ' ');
+    text = text.replace(/^\s*#+\s*/gm, '');
+    text = text.replace(/^\s*>\s*/gm, '');
+    text = text.replace(/[*_~]+/g, '');
+    text = text.replace(/\n{2,}/g, '\n\n');
+    text = text.replace(/\n(?!\n)/g, ' ');
+    text = text.replace(/[ \t]+/g, ' ');
+    text = text.replace(/\n\n+/g, '\n\n').trim();
+
+    return text;
+};
+
 const splitTextByLength = (text, maxLength = MAX_CHUNK_LENGTH) => {
     if (text.length <= maxLength) {
         return [text];
@@ -262,6 +286,29 @@ const resolveDocTitle = (frontmatter, content) => {
     return headingMatch ? headingMatch[1].trim() : 'Doc';
 };
 
+const chunkRoutesDocument = ({ filePath, content }) => {
+    const slug = '/docs/routes';
+    const title = resolveDocTitle({}, content);
+    const heading = 'Routes Index';
+    const anchor = 'top';
+    const text = stripMarkdownToRoutesText(content);
+    const pathRelative = path.relative(repoRoot, filePath).split(path.sep).join('/');
+    const id = `route:${slug}:${anchor}:0:0`;
+
+    return [
+        {
+            id,
+            path: pathRelative,
+            slug,
+            title,
+            heading,
+            anchor,
+            text,
+            kind: 'route',
+        },
+    ];
+};
+
 const chunkDocument = ({
     filePath,
     content,
@@ -423,13 +470,9 @@ const gatherDocs = async () => {
 
     const routesContent = await readFileSafe(ROUTES_PATH);
     chunks.push(
-        ...chunkDocument({
+        ...chunkRoutesDocument({
             filePath: ROUTES_PATH,
             content: routesContent,
-            frontmatter: {},
-            kind: 'route',
-            slugBase: '/docs/routes',
-            anchorBase: 'top',
         })
     );
 
