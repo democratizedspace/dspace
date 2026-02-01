@@ -83,13 +83,13 @@ const stripMarkdownToText = (markdown) => {
 
     text = text.replace(/^---[\s\S]*?---/g, ' ');
     text = text.replace(/```[\s\S]*?```/g, ' ');
-    text = text.replace(/`[^`]*`/g, ' ');
+    text = text.replace(/`([^`]*)`/g, '$1');
     text = text.replace(/!\[([^\]]*)]\([^)]*\)/g, '$1');
     text = text.replace(/\[([^\]]+)]\([^)]*\)/g, '$1');
     text = text.replace(/<[^>]+>/g, ' ');
     text = text.replace(/^\s*#+\s*/gm, '');
     text = text.replace(/^\s*>\s*/gm, '');
-    text = text.replace(/[*_~]+/g, '');
+    text = text.replace(/[*~]+/g, '');
     text = text.replace(/\n{2,}/g, '\n\n');
     text = text.replace(/\n(?!\n)/g, ' ');
     text = text.replace(/[ \t]+/g, ' ');

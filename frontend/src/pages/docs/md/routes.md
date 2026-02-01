@@ -1,14 +1,16 @@
-# DSPACE Routes Documentation
+---
+title: 'Routes'
+slug: 'routes'
+---
 
-This document describes all routes served by the Astro SSR server. Understanding these routes is essential for link checking, testing, and development.
+# DSPACE Routes
 
-## Route Patterns
+This page lists the canonical Astro SSR routes served by DSPACE. It mirrors
+`docs/ROUTES.md` and is intended for quick lookups and RAG grounding.
 
-Astro uses file-based routing where files in `frontend/src/pages/` map to URL paths. Dynamic segments are denoted by brackets (e.g., `[id].astro`).
+## Static routes
 
-## Static Routes
-
-### Core Pages
+### Core pages
 - / - Homepage (index.astro)
 - /404 - 404 error page
 - /settings - User settings
@@ -18,29 +20,29 @@ Astro uses file-based routing where files in `frontend/src/pages/` map to URL pa
 - /launch - Launch page
 - /changelog - Changelog page
 
-### Cookie Management
+### Cookie management
 - /accept_cookies - Cookie acceptance page
 - /accepted_cookies - Cookie acceptance confirmation
 
-### Profile & Achievements
+### Profile & achievements
 - /profile - User profile page
 - /profile/avatar - Avatar selection
 - /achievements - User achievements page
 - /titles - User titles page
 - /leaderboard - Global leaderboard
 
-### Game Systems
+### Game systems
 - /energy - Energy management page
 - /gamesaves - Game save import/export
 - /cloudsync - Cloud synchronization
 - /contentbackup - Content backup management
 
-### Chat & Debug
+### Chat & debug
 - /chat - Chat interface
 - /dchat - dChat interface (AI assistant)
 - /debug - Debug tools
 
-## Dynamic Routes
+## Dynamic routes
 
 ### Documentation
 - /docs - Documentation index
@@ -56,7 +58,7 @@ Astro uses file-based routing where files in `frontend/src/pages/` map to URL pa
 - /inventory/item/[itemId]/edit - Edit custom item
   - Examples: /inventory/item/1/edit, /inventory/item/37/edit, /inventory/item/50/edit
 
-### Items (Alternative Inventory Routes)
+### Items (alternative inventory routes)
 - /items/create - Create new item (alternative path)
 
 ### Processes
@@ -90,25 +92,26 @@ Astro uses file-based routing where files in `frontend/src/pages/` map to URL pa
 - /shop/sell/[itemId]/[count] - Sell specific quantity
 - /shop/sell/[itemId]/[count]/insufficient_items - Insufficient items error
 
-### Import/Migration
+### Import/migration
 - /import/[newVersion]/[oldVersion] - Import from old version
 - /import/[newVersion]/[oldVersion]/done - Import completion
 
-## Route Resolution for Link Checking
+## Route resolution for link checking
 
-When validating internal links in markdown files, the link checker (`scripts/link-check.mjs`) resolves paths by:
+When validating internal links in markdown files, the link checker
+(`scripts/link-check.mjs`) resolves paths by:
 
-1. **Exact match**: /inventory → `frontend/src/pages/inventory/index.astro`
-2. **Index pattern**: /quests → `frontend/src/pages/quests/index.astro`
-3. **Slug pattern**: /docs/about → `frontend/src/pages/docs/[slug].astro`
-4. **ID pattern**: /quests/1 → `frontend/src/pages/quests/[id].astro`
-5. **Nested dynamic**: /quests/play/2 → `frontend/src/pages/quests/[pathId]/[questId].astro`
-6. **Parameterized**: /inventory/item/37 → `frontend/src/pages/inventory/item/[itemId]/index.astro`
+1. Exact match: /inventory → frontend/src/pages/inventory/index.astro
+2. Index pattern: /quests → frontend/src/pages/quests/index.astro
+3. Slug pattern: /docs/about → frontend/src/pages/docs/[slug].astro
+4. ID pattern: /quests/1 → frontend/src/pages/quests/[id].astro
+5. Nested dynamic: /quests/play/2 → frontend/src/pages/quests/[pathId]/[questId].astro
+6. Parameterized: /inventory/item/37 → frontend/src/pages/inventory/item/[itemId]/index.astro
 
-## Static Assets
+## Static assets
 
 Static assets are served from:
-- `frontend/public/` - Main public directory
+- frontend/public/ - Main public directory
 - /assets/ - Images and media files
 
 Examples:
@@ -116,7 +119,7 @@ Examples:
 - /assets/changelog/20230105/back_forward.jpg
 - /assets/rocket_min.gif
 
-## Adding New Routes
+## Adding new routes
 
 When adding new routes:
 
@@ -124,25 +127,3 @@ When adding new routes:
 2. Update this documentation if introducing a new route pattern
 3. Ensure `scripts/link-check.mjs` can resolve the pattern
 4. Test with `node scripts/link-check.mjs`
-
-## Testing Route Resolution
-
-To verify the link checker correctly resolves routes:
-
-```bash
-# Run link checker on all markdown files
-node scripts/link-check.mjs
-
-# Test specific routes by creating a test markdown file
-echo '- [Test](/docs/about)' > test.md
-node scripts/link-check.mjs
-rm test.md
-```
-
-## Notes for AI Agents
-
-- Routes starting with `/` are internal Astro SSR routes
-- Dynamic route segments use `[paramName]` syntax
-- All routes must map to a physical `.astro` or `.md` file
-- The link checker validates these routes without requiring server startup
-- External links (containing `://`) are validated by lychee in CI
