@@ -1,8 +1,8 @@
 import MiniSearch from 'minisearch';
 
-const DEFAULT_MAX_RESULTS = 5;
-const DEFAULT_MAX_CHARS = 5000;
-const DEFAULT_MAX_EXCERPT_CHARS = 850;
+const DEFAULT_MAX_RESULTS = 50;
+const DEFAULT_MAX_CHARS = 50000;
+const DEFAULT_MAX_EXCERPT_CHARS = 8500;
 const ROUTES_INTENT =
     /\b(route|routes|url|urls|path|page|menu|navigate|navigation|where is|link)\b/i;
 const CHANGELOG_INTENT =
