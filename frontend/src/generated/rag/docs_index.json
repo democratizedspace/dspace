@@ -137,8 +137,8 @@
         "132": "doc:/docs/faq:where-is-my-save-data-stored:11:0",
         "133": "doc:/docs/faq:how-do-i-back-up-or-restore-my-data:12:0",
         "134": "doc:/docs/faq:how-does-cloud-sync-work:13:0",
-        "135": "doc:/docs/faq:do-i-need-a-github-token-14-0",
-        "136": "doc:/docs/faq:how-do-i-log-out-or-clear-my-token-15-0",
+        "135": "doc:/docs/faq:do-i-need-a-github-token:14:0",
+        "136": "doc:/docs/faq:how-do-i-log-out-or-clear-my-token:15:0",
         "137": "doc:/docs/faq:what-are-dusd-dwatt-and-dcarbon:16:0",
         "138": "doc:/docs/faq:how-do-energy-sources-affect-the-economy:17:0",
         "139": "doc:/docs/faq:how-do-i-reduce-dcarbon:18:0",
@@ -2365,7 +2365,7 @@
             "path": "frontend/src/pages/docs/md/faq.md"
         },
         "135": {
-            "id": "doc:/docs/faq:do-i-need-a-github-token-14-0",
+            "id": "doc:/docs/faq:do-i-need-a-github-token:14:0",
             "slug": "/docs/faq",
             "title": "Frequently Asked Questions",
             "heading": "Do I need a GitHub token?",
@@ -2374,7 +2374,7 @@
             "path": "frontend/src/pages/docs/md/faq.md"
         },
         "136": {
-            "id": "doc:/docs/faq:how-do-i-log-out-or-clear-my-token-15-0",
+            "id": "doc:/docs/faq:how-do-i-log-out-or-clear-my-token:15:0",
             "slug": "/docs/faq",
             "title": "Frequently Asked Questions",
             "heading": "How do I log out or clear my token?",

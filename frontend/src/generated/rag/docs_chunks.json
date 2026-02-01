@@ -1350,7 +1350,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/faq:do-i-need-a-github-token-14-0",
+        "id": "doc:/docs/faq:do-i-need-a-github-token:14:0",
         "path": "frontend/src/pages/docs/md/faq.md",
         "slug": "/docs/faq",
         "title": "Frequently Asked Questions",
@@ -1360,7 +1360,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/faq:how-do-i-log-out-or-clear-my-token-15-0",
+        "id": "doc:/docs/faq:how-do-i-log-out-or-clear-my-token:15:0",
         "path": "frontend/src/pages/docs/md/faq.md",
         "slug": "/docs/faq",
         "title": "Frequently Asked Questions",
