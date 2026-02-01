@@ -35,16 +35,22 @@ COPY packages/cache-version/package.json packages/cache-version/
 COPY packages/feature-flags/package.json packages/feature-flags/
 # Scripts are required for frontend postinstall hooks but we avoid copying build artifacts.
 COPY frontend/scripts frontend/scripts
-RUN --mount=type=cache,target=/root/.pnpm-store pnpm install --filter ./frontend... --frozen-lockfile
+RUN --mount=type=cache,target=/root/.pnpm-store pnpm install --filter ./frontend... --filter . --frozen-lockfile
 
 FROM deps AS build
 ARG DSPACE_VERSION
+ARG GIT_SHA
+ENV VITE_GIT_SHA="${GIT_SHA}"
+ENV DSPACE_GIT_SHA="${GIT_SHA}"
 # Copy source separately to avoid overlaying host node_modules (pnpm symlinks make this fail when
 # node_modules exists on the host). Build artifacts are excluded via .dockerignore for compatibility
 # with builders that do not support COPY --exclude flags.
 COPY --link frontend/ frontend/
+COPY --link scripts/ scripts/
+COPY --link docs/ROUTES.md docs/ROUTES.md
 COPY --link packages/cache-version/ packages/cache-version/
 COPY --link packages/feature-flags/ packages/feature-flags/
+RUN node scripts/build-docs-rag-index.mjs
 RUN pnpm --filter ./frontend... run build
 
 FROM base AS prod-deps

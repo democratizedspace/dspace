@@ -26,12 +26,18 @@
         SAVE_SNAPSHOT_HINT_TEXT,
         shouldShowSaveSnapshotHint,
     } from '../../../utils/chatHints.js';
+    import { getDocsRagMeta } from '../../../utils/docsRag.js';
+    import {
+        getDocsRagMismatchWarning,
+        normalizeGitSha,
+    } from '../../../utils/docsRagMeta.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
     const message = writable('');
     const messageHistory = writable([]);
     const saveSnapshotHintStorageKey = 'dspace.chat.dismissSaveSnapshotHint';
+    const appBuildSha = normalizeGitSha(import.meta.env.VITE_GIT_SHA);
     let showSpinner = false;
     let hydrated = false;
     let messageCounter = 0;
@@ -42,6 +48,8 @@
     let settingsUnsubscribe;
     let saveSnapshotHintDismissed = false;
     let saveSnapshotHintFocusListener;
+    let docsRagMeta = { gitSha: 'unknown', generatedAt: 'unknown' };
+    let docsRagWarning = null;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -147,6 +155,16 @@
         showSpinner = false;
     }
 
+    async function refreshDocsRagMeta() {
+        const meta = await getDocsRagMeta();
+        const gitSha = normalizeGitSha(meta?.gitSha);
+        docsRagMeta = {
+            gitSha,
+            generatedAt: meta?.generatedAt || 'unknown',
+        };
+        docsRagWarning = getDocsRagMismatchWarning(appBuildSha, gitSha);
+    }
+
     function handleKeyDown(event) {
         if (event.key === 'Enter' && event.target.tagName === 'TEXTAREA' && !event.shiftKey) {
             event.preventDefault();
@@ -192,12 +210,18 @@
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
+        if (showDebug) {
+            await refreshDocsRagMeta();
+        }
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
             const nextNormalized = normalizeSettings(value?.settings);
             showDebug = nextNormalized.showChatDebugPayload;
             if (!showDebug) {
                 debugExpanded = false;
                 debugMessages = [];
+            }
+            if (showDebug) {
+                refreshDocsRagMeta();
             }
         });
         if ($messageHistory.length === 0) {
@@ -301,6 +325,25 @@
                     {debugExpanded ? 'Hide prompt' : 'Show prompt'}
                 </button>
             </div>
+            <div class="debug-build-meta">
+                <div>
+                    <span class="debug-build-label">App build SHA</span>
+                    <span class="debug-build-value">{appBuildSha}</span>
+                </div>
+                <div>
+                    <span class="debug-build-label">Docs RAG SHA</span>
+                    <span class="debug-build-value">{docsRagMeta.gitSha}</span>
+                </div>
+                <div>
+                    <span class="debug-build-label">Docs RAG generated</span>
+                    <span class="debug-build-value">{docsRagMeta.generatedAt}</span>
+                </div>
+            </div>
+            {#if docsRagWarning}
+                <div class="debug-warning" role="alert">
+                    {docsRagWarning}
+                </div>
+            {/if}
             {#if debugExpanded}
                 {#if debugMessages.length}
                     <div class="debug-list">
@@ -521,6 +564,47 @@
 
     .debug-toggle:hover {
         background: #334155;
+    }
+
+    .debug-build-meta {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.5rem 1rem;
+        background: rgba(15, 23, 42, 0.55);
+        border-radius: 0.75rem;
+        padding: 0.75rem;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .debug-build-meta div {
+        display: grid;
+        gap: 0.15rem;
+    }
+
+    .debug-build-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: rgba(226, 232, 240, 0.7);
+    }
+
+    .debug-build-value {
+        font-size: 0.85rem;
+        font-weight: 600;
+        word-break: break-all;
+        color: #f8fafc;
+    }
+
+    .debug-warning {
+        border-radius: 0.75rem;
+        padding: 0.65rem 0.8rem;
+        background: rgba(248, 113, 113, 0.2);
+        border: 1px solid rgba(248, 113, 113, 0.7);
+        color: #fecaca;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
     }
 
     .debug-list {

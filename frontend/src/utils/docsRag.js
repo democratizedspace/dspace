@@ -78,6 +78,11 @@ const loadDocsRag = async () => {
     return docsRagPromise;
 };
 
+export const getDocsRagMeta = async () => {
+    const docsRag = await loadDocsRag();
+    return docsRag?.meta ?? {};
+};
+
 const trimExcerpt = (text, maxChars) => {
     if (text.length <= maxChars) {
         return text;

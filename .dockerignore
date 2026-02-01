@@ -49,4 +49,6 @@ Thumbs.db
 # Ignore documentation (not needed in image)
 *.md
 !frontend/src/pages/docs/md/**/*.md
-docs/
+docs/**
+!docs/
+!docs/ROUTES.md

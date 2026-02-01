@@ -459,6 +459,16 @@ const getGitSha = () => {
     }
 };
 
+const resolveGitSha = () => {
+    const envSha =
+        process.env.DSPACE_GIT_SHA || process.env.GIT_SHA || process.env.VITE_GIT_SHA || '';
+    if (envSha.trim()) {
+        return envSha.trim();
+    }
+
+    return getGitSha() || 'unknown';
+};
+
 const writeArtifacts = async (chunks, index, metaSources) => {
     await fs.mkdir(OUTPUT_DIR, { recursive: true });
 
@@ -480,7 +490,7 @@ const writeArtifacts = async (chunks, index, metaSources) => {
             routes: chunks.filter((chunk) => chunk.kind === 'route').length,
             changelog: chunks.filter((chunk) => chunk.kind === 'changelog').length,
         },
-        gitSha: getGitSha(),
+        gitSha: resolveGitSha(),
     };
 
     const [chunksOutput, indexOutput, metaOutput] = await Promise.all([
