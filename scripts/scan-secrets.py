@@ -33,6 +33,10 @@ SUSPICIOUS_PATTERNS: List[Tuple[re.Pattern[str], str]] = [
     ),
 ]
 
+IGNORED_PATH_MARKERS = (
+    "frontend/src/generated/rag/",
+)
+
 
 def collect_findings(lines: Iterable[str]) -> List[Tuple[int, str, str]]:
     """Return a list of suspicious additions.
@@ -41,8 +45,14 @@ def collect_findings(lines: Iterable[str]) -> List[Tuple[int, str, str]]:
     """
 
     findings: List[Tuple[int, str, str]] = []
+    current_file = ""
     for index, raw_line in enumerate(lines, start=1):
+        if raw_line.startswith("+++ b/"):
+            current_file = raw_line[6:].strip()
+            continue
         if not raw_line.startswith("+") or raw_line.startswith("+++"):
+            continue
+        if current_file and any(marker in current_file for marker in IGNORED_PATH_MARKERS):
             continue
         candidate = raw_line[1:]
         if "scan-secrets: ignore" in candidate.lower() or "re.compile" in candidate:

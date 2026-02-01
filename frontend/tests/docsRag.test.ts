@@ -19,9 +19,12 @@ describe('docs RAG search', () => {
             maxChars: 2000,
         });
 
-        expect(excerptsText).toContain('/docs/routes#top');
+        expect(excerptsText).toContain('/docs/routes#canonical-route-index');
         expect(
-            sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+            sources.some(
+                (entry) =>
+                    entry.type === 'route' && entry.url === '/docs/routes#canonical-route-index'
+            )
         ).toBe(true);
     });
 
@@ -68,7 +71,10 @@ describe('docs RAG search', () => {
         });
 
         expect(
-            sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+            sources.some(
+                (entry) =>
+                    entry.type === 'route' && entry.url === '/docs/routes#canonical-route-index'
+            )
         ).toBe(true);
     });
 
@@ -79,7 +85,10 @@ describe('docs RAG search', () => {
         });
 
         expect(
-            sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+            sources.some(
+                (entry) =>
+                    entry.type === 'route' && entry.url === '/docs/routes#canonical-route-index'
+            )
         ).toBe(true);
     });
 
@@ -92,7 +101,11 @@ describe('docs RAG search', () => {
             });
 
             expect(
-                sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+                sources.some(
+                    (entry) =>
+                        entry.type === 'route' &&
+                        entry.url === '/docs/routes#canonical-route-index'
+                )
             ).toBe(true);
         }
     );

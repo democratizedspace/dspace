@@ -399,9 +399,9 @@ describe('GPT5ChatV2', () => {
             sources: [
                 {
                     type: 'route',
-                    id: 'docs/routes#top',
+                    id: 'docs/routes#canonical-route-index',
                     label: 'Routes',
-                    url: '/docs/routes#top',
+                    url: '/docs/routes#canonical-route-index',
                 },
             ],
             sourcesMeta: { results: [] },
@@ -422,7 +422,8 @@ describe('GPT5ChatV2', () => {
         expect(result.text).toBe('ok');
         expect(
             result.contextSources.some(
-                (entry) => entry.type === 'route' && entry.url === '/docs/routes#top'
+                (entry) =>
+                    entry.type === 'route' && entry.url === '/docs/routes#canonical-route-index'
             )
         ).toBe(true);
     });
@@ -539,7 +540,8 @@ describe('buildChatPrompt', () => {
             sources: [],
         });
         vi.mocked(searchDocsRag).mockResolvedValueOnce({
-            excerptsText: `---\nDocs grounding (gitSha: test):\n- [doc] Routes — /docs/routes#top\n  sample\n---`,
+            excerptsText:
+                `---\nDocs grounding (gitSha: test):\n- [doc] Routes — /docs/routes#canonical-route-index\n  sample\n---`,
             sources: [],
             sourcesMeta: { results: [] },
         });

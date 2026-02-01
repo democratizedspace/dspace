@@ -20,6 +20,7 @@ const CUSTOM_CONTENT_MATCH =
 const CUSTOM_CONTENT_FALLBACK_QUERY = 'custom content editor import export backup json schema';
 const CUSTOM_CONTENT_FALLBACK_REQUIRED = /\bcustom\b/i;
 const CUSTOM_CONTENT_FALLBACK_ACTION = /\b(editor|backup|import|export)\b/i;
+const ROUTES_CANONICAL_ANCHOR = 'canonical-route-index';
 const SEARCH_OPTIONS = Object.freeze({
     boost: { title: 3, heading: 2 },
     prefix: true,
@@ -287,7 +288,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
                 (chunk) =>
                     chunk.kind === 'route' &&
                     chunk.slug === '/docs/routes' &&
-                    resolveAnchor(chunk.anchor) === 'top'
+                    resolveAnchor(chunk.anchor) === ROUTES_CANONICAL_ANCHOR
             ) ||
             findHighestRankedChunk(results, chunkMap, (chunk) => chunk.kind === 'route') ||
             findDeterministicChunk(
@@ -295,7 +296,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
                 (chunk) =>
                     chunk.kind === 'route' &&
                     chunk.slug === '/docs/routes' &&
-                    resolveAnchor(chunk.anchor) === 'top'
+                    resolveAnchor(chunk.anchor) === ROUTES_CANONICAL_ANCHOR
             ) ||
             findDeterministicChunk(chunkMap, (chunk) => chunk.kind === 'route');
         includeForcedChunk(selected, preferredRoute, maxResults);

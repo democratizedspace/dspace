@@ -1,7 +1,11 @@
-# DSPACE Routes Documentation
+---
+title: 'Routes'
+slug: 'routes'
+---
 
-This document describes all routes served by the Astro SSR server. Use the canonical route
-index below for navigation lookups and chat responses.
+# Routes
+
+Use this canonical route index for navigation questions and chat citations.
 
 ## Canonical Route Index
 
@@ -69,15 +73,10 @@ index below for navigation lookups and chat responses.
 | Import | `/import/[newVersion]/[oldVersion]` | Legacy import | |
 | Import done | `/import/[newVersion]/[oldVersion]/done` | Import completion | |
 
-## Route Patterns
+## Link checker resolution rules
 
-Astro uses file-based routing where files in `frontend/src/pages/` map to URL paths. Dynamic
-segments are denoted by brackets (e.g., `[id].astro`).
-
-## Route Resolution for Link Checking
-
-When validating internal links in markdown files, the link checker (`scripts/link-check.mjs`)
-resolves paths by:
+The internal link checker (`scripts/link-check.mjs`) resolves dynamic routes without requiring a
+running server. Common patterns include:
 
 1. **Exact match**: `/inventory` → `frontend/src/pages/inventory/index.astro`
 2. **Index pattern**: `/quests` → `frontend/src/pages/quests/index.astro`
@@ -85,45 +84,3 @@ resolves paths by:
 4. **ID pattern**: `/quests/1` → `frontend/src/pages/quests/[id].astro`
 5. **Nested dynamic**: `/quests/play/2` → `frontend/src/pages/quests/[pathId]/[questId].astro`
 6. **Parameterized**: `/inventory/item/37` → `frontend/src/pages/inventory/item/[itemId]/index.astro`
-
-## Static Assets
-
-Static assets are served from:
-- `frontend/public/` - Main public directory
-- `/assets/` - Images and media files
-
-Examples:
-- `/assets/rescue.jpg`
-- `/assets/changelog/20230105/back_forward.jpg`
-- `/assets/rocket_min.gif`
-
-## Adding New Routes
-
-When adding new routes:
-
-1. Create the `.astro` file in `frontend/src/pages/`
-2. Update this documentation if introducing a new route pattern
-3. Ensure `scripts/link-check.mjs` can resolve the pattern
-4. Test with `node scripts/link-check.mjs`
-
-## Testing Route Resolution
-
-To verify the link checker correctly resolves routes:
-
-```bash
-# Run link checker on all markdown files
-node scripts/link-check.mjs
-
-# Test specific routes by creating a test markdown file
-echo '- [Test](/docs/about)' > test.md
-node scripts/link-check.mjs
-rm test.md
-```
-
-## Notes for AI Agents
-
-- Routes starting with `/` are internal Astro SSR routes
-- Dynamic route segments use `[paramName]` syntax
-- All routes must map to a physical `.astro` or `.md` file
-- The link checker validates these routes without requiring server startup
-- External links (containing `://`) are validated by lychee in CI
