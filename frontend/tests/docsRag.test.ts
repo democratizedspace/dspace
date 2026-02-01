@@ -72,8 +72,12 @@ describe('docs RAG search', () => {
         ).toBe(true);
     });
 
-    it('forces routes inclusion for sitemap requests', async () => {
-        const { sources } = await searchDocsRag('Generate a sitemap of DSPACE.', {
+    it.each([
+        'Generate a sitemap of DSPACE.',
+        'Generate a site map of DSPACE.',
+        'Generate a site-map of DSPACE.',
+    ])('forces routes inclusion for sitemap requests: %s', async (query) => {
+        const { sources } = await searchDocsRag(query, {
             maxResults: 4,
             maxChars: 2000,
         });
