@@ -3,7 +3,7 @@ title: 'token.place Integration'
 slug: 'token-place'
 ---
 
-DSPACE ships with a token.place integration for in-game chat, but it is **disabled by default**
+DSPACE ships with a token.place integration for in-game chat, but it is **disabled by default**.
 in v3. The reason is simple: the token.place API v1 is not yet implemented or live in production,
 so DSPACE v3 ships with **OpenAI-only chat** while token.place is deferred to v3.1.
 
