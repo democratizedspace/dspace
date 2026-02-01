@@ -74,4 +74,57 @@ describe('chat non-reasoning regression probes', () => {
 
         expect(reply).toBe(safeFallbackMessage);
     });
+
+    it('keeps suspicious precision when inline citations are present', async () => {
+        responsesCreateMock.mockResolvedValueOnce({
+            output_text: 'The answer is exactly 123 quests. 【1†sources】',
+        });
+        const { GPT5Chat } = await import('../frontend/src/utils/openAI.js');
+
+        const reply = await GPT5Chat([
+            {
+                role: 'user',
+                content:
+                    'What is the exact number of quests in v3 and the exact average time-to-complete?',
+            },
+        ]);
+
+        expect(reply).toBe('The answer is exactly 123 quests. 【1†sources】');
+    });
+
+    it('keeps suspicious precision when a /docs link is present', async () => {
+        responsesCreateMock.mockResolvedValueOnce({
+            output_text: 'The answer is exactly 123 quests. See /docs/quests.',
+        });
+        const { GPT5Chat } = await import('../frontend/src/utils/openAI.js');
+
+        const reply = await GPT5Chat([
+            {
+                role: 'user',
+                content:
+                    'What is the exact number of quests in v3 and the exact average time-to-complete?',
+            },
+        ]);
+
+        expect(reply).toBe('The answer is exactly 123 quests. See /docs/quests.');
+    });
+
+    it('dedupes fallback models and retries with the next unique model', async () => {
+        process.env.VITE_CHAT_FALLBACK_MODELS = 'gpt-5-mini, gpt-5.2, gpt-5.2';
+        responsesCreateMock
+            .mockRejectedValueOnce({ status: 404, message: 'Model not found' })
+            .mockResolvedValueOnce({ output_text: 'ok' });
+        const { GPT5Chat } = await import('../frontend/src/utils/openAI.js');
+
+        await GPT5Chat([
+            {
+                role: 'user',
+                content: 'List the docs route for quests.',
+            },
+        ]);
+
+        expect(responsesCreateMock).toHaveBeenCalledTimes(2);
+        expect(responsesCreateMock.mock.calls[0][0].model).toBe('gpt-5-mini');
+        expect(responsesCreateMock.mock.calls[1][0].model).toBe('gpt-5.2');
+    });
 });

@@ -144,7 +144,8 @@ export const validateChatResponseText = (text, options = {}) => {
 
     const suspiciousPrecisionPattern =
         /\bexactly\s+\d+(?:\.\d+)?\s+(?:quests?|items?|minutes?|hours?|days?|percent|%)\b|\b\d+\.\d+\s*(?:%|percent)\b/i;
-    const citationMarkerPattern = /\[[^\]]+\]|\/docs\/|docs\/ROUTES\.md|sources?:/i;
+    const citationMarkerPattern =
+        /\[[^\]]+\]|【\d+†[^】]+】|\/docs\/|docs\/ROUTES\.md|sources?:|https?:\/\//i;
     const hasSuspiciousPrecision = suspiciousPrecisionPattern.test(normalizedText);
     const hasCitationMarkers = citationMarkerPattern.test(normalizedText);
 
