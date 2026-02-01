@@ -39,7 +39,7 @@ const toOutputText = (response) => {
 const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';
 const fallbackModels = ['gpt-5-mini'];
-export const safeFallbackMessage = 'I don\'t know; please check /docs for the latest details.';
+export const safeFallbackMessage = "I don't know; please check /docs for the latest details.";
 export const providerRealityLine = 'In v3, chat uses OpenAI. token.place is deferred to v3.1.';
 export const fallbackSystemPrompt =
     defaultPersona?.systemPrompt ||
