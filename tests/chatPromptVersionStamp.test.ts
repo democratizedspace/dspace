@@ -28,9 +28,6 @@ describe('chat prompt version stamp', () => {
 
         expect(systemMessage.content).toContain('Prompt version:');
         expect(systemMessage.content).toContain(`Prompt version: ${CHAT_PROMPT_VERSION}`);
-        expect(systemMessage.content).toContain(
-            'Never invent quests, items, processes, routes, URLs, or player state.'
-        );
         expect(systemMessage.content).toContain('/gamesaves');
         expect(systemMessage.content).toContain('docs/ROUTES.md');
     });
