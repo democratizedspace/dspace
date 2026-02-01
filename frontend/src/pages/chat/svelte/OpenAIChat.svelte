@@ -4,6 +4,7 @@
         defaultOpenAIErrorMessage,
         describeOpenAIError,
         buildChatPrompt,
+        CHAT_PROMPT_VERSION,
         getOpenAIErrorSummary,
         GPT5ChatV2,
     } from '../../../utils/openAI.js';
@@ -300,6 +301,7 @@
                 <div>
                     <h3>Chat prompt debug</h3>
                     <p>Displays the full prompt payload, with RAG content highlighted.</p>
+                    <p class="debug-version">Prompt version: {CHAT_PROMPT_VERSION}</p>
                 </div>
                 <button
                     class="debug-toggle"
@@ -564,6 +566,12 @@
         background: rgba(127, 29, 29, 0.4);
         color: #fecaca;
         font-size: 0.9rem;
+    }
+
+    .debug-version {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #94a3b8;
     }
 
     .debug-toggle {
