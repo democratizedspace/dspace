@@ -83,6 +83,21 @@ describe('docs RAG search', () => {
         ).toBe(true);
     });
 
+    it('surfaces content backup route for custom content export questions', async () => {
+        const { excerptsText, sources } = await searchDocsRag(
+            'Where do I export custom content? What is the route?',
+            {
+                maxResults: 6,
+                maxChars: 4000,
+            }
+        );
+
+        expect(excerptsText).toContain('/contentbackup');
+        expect(
+            sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+        ).toBe(true);
+    });
+
     it.each(['Generate a sitemap of DSPACE.', 'Generate a site-map of DSPACE.'])(
         'forces routes inclusion for sitemap requests: %s',
         async (query) => {

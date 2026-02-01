@@ -280,7 +280,19 @@ export const searchDocsRag = async (queryText, options = {}) => {
     const wantsCustomContent = CUSTOM_CONTENT_INTENT.test(query);
 
     if (wantsRoutes) {
+        const customContentRoute =
+            wantsCustomContent &&
+            (findHighestRankedChunk(
+                results,
+                chunkMap,
+                (chunk) => chunk.kind === 'route' && /\/contentbackup\b/i.test(chunk.text || '')
+            ) ||
+                findDeterministicChunk(
+                    chunkMap,
+                    (chunk) => chunk.kind === 'route' && /\/contentbackup\b/i.test(chunk.text || '')
+                ));
         const preferredRoute =
+            customContentRoute ||
             findHighestRankedChunk(
                 results,
                 chunkMap,
@@ -375,7 +387,9 @@ export const searchDocsRag = async (queryText, options = {}) => {
         const includedChunks = [];
 
         for (const chunk of currentSelected) {
-            const excerpt = trimExcerpt(String(chunk.text || '').trim(), maxExcerptChars);
+            const excerptBudget =
+                chunk.kind === 'route' ? Math.max(maxExcerptChars, 2000) : maxExcerptChars;
+            const excerpt = trimExcerpt(String(chunk.text || '').trim(), excerptBudget);
             if (!excerpt) continue;
 
             const resolvedAnchor = resolveAnchor(chunk.anchor);
@@ -397,7 +411,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
                 break;
             }
 
-            const maxExcerptForEntry = Math.min(maxExcerptChars, availableForEntry - entryOverhead);
+            const maxExcerptForEntry = Math.min(excerptBudget, availableForEntry - entryOverhead);
             const finalExcerpt = trimExcerpt(excerpt, maxExcerptForEntry);
             if (!finalExcerpt) {
                 continue;
