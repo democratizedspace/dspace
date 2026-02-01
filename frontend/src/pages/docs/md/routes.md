@@ -30,8 +30,6 @@ Use this canonical route index for navigation questions and chat citations.
 | Titles | `/titles` | Title selection | More menu |
 | Toolbox | `/toolbox` | Links to save tools | More menu |
 | Settings | `/settings` | User settings | More menu |
-| Guilds | `/guilds` | Coming soon | More menu (coming soon) |
-| Locations | `/locations` | Coming soon | More menu (coming soon) |
 | 404 | `/404` | Not found page | |
 | Accept cookies | `/accept_cookies` | Cookie consent | |
 | Cookies accepted | `/accepted_cookies` | Cookie confirmation | |
