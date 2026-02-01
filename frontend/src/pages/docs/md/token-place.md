@@ -4,8 +4,17 @@ slug: 'token-place'
 ---
 
 DSPACE ships with a token.place integration for in-game chat, but it is **disabled by default**.
+In DSPACE v3, chat ships with the OpenAI API only because token.place API v1 is not yet implemented
+or live in production. Once token.place API v1 is finished and deployed, the integration will be
+completed in DSPACE v3.1.
 
-## How it works
+## Why it is disabled in v3
+
+- DSPACE v3 launches with the OpenAI API as the only production-ready provider.
+- token.place API v1 is still under development and not available in production.
+- After token.place API v1 is shipped, DSPACE v3.1 will finish the token.place integration.
+
+## How the integration works (when available)
 
 - The chat client calls `tokenPlaceChat` (see `frontend/src/utils/tokenPlace.js`), which posts to
   `${baseUrl}/chat` and returns the `reply` field from the JSON response. If the feature is
@@ -19,9 +28,10 @@ DSPACE ships with a token.place integration for in-game chat, but it is **disabl
   `frontend/src/pages/chat/svelte/OpenAIChat.svelte`), so leaving token.place disabled keeps
   chat on the OpenAI-backed flow.
 
-## Opt-in options
+## Opt-in options (for local or future rollout)
 
-Token.place can be enabled in two ways:
+Token.place can be enabled in two ways. Until token.place API v1 is live, these flags are meant for
+local or staging experimentation and will not work against a production token.place endpoint.
 
 - **Environment variable**: set `VITE_TOKEN_PLACE_ENABLED=true`. You can also point to a custom URL
   with `VITE_TOKEN_PLACE_URL`.
