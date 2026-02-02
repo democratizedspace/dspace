@@ -43,6 +43,15 @@ describe('docs RAG comparison', () => {
         expect(getDocsRagMismatchWarning('deadbeef', 'unknown')).toBeNull();
     });
 
+    it('treats case-insensitive unknown docs SHAs as unavailable', () => {
+        const comparison = getDocsRagComparison('deadbeef', 'UNKNOWN');
+        expect(comparison).toEqual({
+            status: 'unavailable',
+            message: 'Docs RAG SHA unavailable; cannot compare.',
+        });
+        expect(getDocsRagMismatchWarning('deadbeef', 'UNKNOWN')).toBeNull();
+    });
+
     it('reports match when SHAs align', () => {
         const comparison = getDocsRagComparison('abc123', 'abc123');
         expect(comparison).toEqual({
