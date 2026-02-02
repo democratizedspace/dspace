@@ -20,10 +20,11 @@ clients.
 ## Exporting and importing game saves
 
 1. Open [Import/export gamesaves](/gamesaves).
-2. Click **Copy** to place a Base64-encoded JSON snapshot on your clipboard (works even if the
-   Clipboard API is unavailable) or download the text manually.
-3. To restore, paste a previously saved string and select **Import**. Your quests, inventory, and
-   processes will be replaced with the imported data.
+2. Click **Copy** to place a Base64-encoded JSON snapshot on your clipboard. The export panel shows
+   the backup envelope so you can paste it into a notes app if needed.
+3. To restore, paste the backup string into the **Paste a game state backup string** field and
+   select **Import**. Your quests, inventory, and processes will be replaced with the imported
+   data.
 
 The encoded JSON stores `quests`, `inventory`, and `processes` keys. Keep the output somewhere you
 control (password manager, notes app, or version-controlled gist).
@@ -31,12 +32,14 @@ control (password manager, notes app, or version-controlled gist).
 ## Exporting and importing custom content
 
 1. Open [Custom Content Backup](/contentbackup).
-2. Click **Copy** to export only user-created items, quests, and processes as a Base64-encoded JSON
-   string.
-3. To restore, paste the saved string and choose **Import**.
+2. Under **Export custom content**, click **Prepare backup**. When the status reads **Preparing
+   backup…**, wait for the prepared summary to appear.
+3. Click **Download backup** to save the `.json` (or `.dspace-backup`) file to your device.
+4. To restore, drag and drop the backup file onto the import area or click **Choose backup file** to
+   browse. The status will show **Importing…** and confirm when the import is complete.
 
-The encoded JSON contains `items`, `processes`, and `quests` keys. Use this path if you want to move
-custom creations between profiles without touching your main save.
+The backup file contains `items`, `processes`, and `quests` records. Use this path if you want to
+move custom creations between profiles without touching your main save.
 
 ## Automated backups with Cloud Sync
 

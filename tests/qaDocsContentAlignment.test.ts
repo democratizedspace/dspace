@@ -15,6 +15,12 @@ const decodeBase64Json = (value: string) => {
     return JSON.parse(buffer.toString('utf8'));
 };
 
+const readSection = (doc: string, heading: string) => {
+    const matcher = new RegExp(`## ${heading}\\n([\\s\\S]*?)(?=\\n## |\\n# |$)`, 'i');
+    const match = doc.match(matcher);
+    return match ? match[1] : '';
+};
+
 async function clearCustomContentDatabase(): Promise<void> {
     if (typeof indexedDB === 'undefined') {
         return;
@@ -88,6 +94,8 @@ describe('backups doc alignment', () => {
 
     it('matches the documented export formats for saves and custom content', async () => {
         const doc = readDoc('../frontend/src/pages/docs/md/backups.md');
+        const savesSection = readSection(doc, 'Exporting and importing game saves');
+        const customSection = readSection(doc, 'Exporting and importing custom content');
 
         const baseState = {
             quests: { q1: { finished: true } },
@@ -115,8 +123,18 @@ describe('backups doc alignment', () => {
             quests: expect.any(Array),
         });
 
-        expect(doc).toMatch(/Base64-encoded JSON snapshot/i);
-        expect(doc).toMatch(/quest progress, inventory, and processes/i);
-        expect(doc).toMatch(/items, quests, and processes/i);
+        expect(savesSection).toMatch(/Base64-encoded JSON snapshot/i);
+        expect(savesSection).toMatch(/quest progress, inventory, and processes/i);
+        expect(savesSection).toMatch(/Paste a game state backup string/i);
+        expect(savesSection).toMatch(/\bCopy\b/i);
+        expect(savesSection).toMatch(/\bImport\b/i);
+
+        expect(customSection).toMatch(/Prepare backup/i);
+        expect(customSection).toMatch(/Download backup/i);
+        expect(customSection).toMatch(/Drag and drop/i);
+        expect(customSection).toMatch(/Choose backup file/i);
+        expect(customSection).toMatch(/\.json|\.(?:dspace-)?backup/i);
+        expect(customSection).not.toMatch(/Base64/i);
+        expect(customSection).not.toMatch(/\bCopy\b/i);
     });
 });
