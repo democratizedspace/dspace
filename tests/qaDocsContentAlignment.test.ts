@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { exportGameStateString } from '../frontend/src/utils/gameState/common.js';
-import { exportCustomContentString } from '../frontend/src/utils/customcontent.js';
+import { buildCustomContentBackupData } from '../frontend/src/utils/customContentBackup.js';
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
 const readDoc = (relativePath: string) =>
@@ -107,16 +107,22 @@ describe('backups doc alignment', () => {
             processes: baseState.processes,
         });
 
-        const customExport = await exportCustomContentString();
-        const decodedCustom = decodeBase64Json(customExport);
-        expect(decodedCustom).toMatchObject({
+        const customBackup = await buildCustomContentBackupData();
+        expect(customBackup).toMatchObject({
+            schemaVersion: expect.any(Number),
+            timestamp: expect.any(String),
             items: expect.any(Array),
             processes: expect.any(Array),
             quests: expect.any(Array),
+            images: expect.any(Array),
         });
 
-        expect(doc).toMatch(/Base64-encoded JSON snapshot/i);
+        expect(doc).toMatch(/Base64-encoded JSON backup envelope/i);
         expect(doc).toMatch(/quest progress, inventory, and processes/i);
-        expect(doc).toMatch(/items, quests, and processes/i);
+        expect(doc).toMatch(/Copy/i);
+        expect(doc).toMatch(/Import/i);
+        expect(doc).toMatch(/Prepare backup/i);
+        expect(doc).toMatch(/Download backup/i);
+        expect(doc).toMatch(/Choose backup file/i);
     });
 });

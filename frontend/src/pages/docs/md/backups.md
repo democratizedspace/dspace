@@ -20,10 +20,12 @@ clients.
 ## Exporting and importing game saves
 
 1. Open [Import/export gamesaves](/gamesaves).
-2. Click **Copy** to place a Base64-encoded JSON snapshot on your clipboard (works even if the
-   Clipboard API is unavailable) or download the text manually.
-3. To restore, paste a previously saved string and select **Import**. Your quests, inventory, and
-   processes will be replaced with the imported data.
+2. In the export panel, select **Copy** to copy the Base64-encoded JSON backup envelope shown on
+   screen. The button briefly changes to **Copied!** or **Copy failed** to confirm the action.
+3. In the import panel labeled “Paste a game state backup string (envelope or raw state) here,”
+   paste your saved string and select **Import**. If something goes wrong, the page shows “Import
+   failed. Please double-check the backup string and try again.” Your quests, inventory, and
+   processes are replaced with the imported data.
 
 The encoded JSON stores `quests`, `inventory`, and `processes` keys. Keep the output somewhere you
 control (password manager, notes app, or version-controlled gist).
@@ -31,12 +33,17 @@ control (password manager, notes app, or version-controlled gist).
 ## Exporting and importing custom content
 
 1. Open [Custom Content Backup](/contentbackup).
-2. Click **Copy** to export only user-created items, quests, and processes as a Base64-encoded JSON
-   string.
-3. To restore, paste the saved string and choose **Import**.
+2. In the **Export custom content** panel, click **Prepare backup**. While it runs you will see a
+   “Preparing backup…” status and a progress list. When it finishes, a **Prepared content** summary
+   appears along with the **Download backup** button.
+3. Click **Download backup** to save the JSON file to your device.
+4. In the **Import custom content** panel, drop the file onto the “Drag and drop your backup file
+   here, or click to browse.” area or click **Choose backup file** to select it. The status
+   updates to “Importing…” and then “Import complete,” including the filename.
 
-The encoded JSON contains `items`, `processes`, and `quests` keys. Use this path if you want to move
-custom creations between profiles without touching your main save.
+The backup file stores `schemaVersion`, `timestamp`, and the `items`, `processes`, `quests`, and
+`images` arrays. Use this path if you want to move custom creations between profiles without
+touching your main save.
 
 ## Automated backups with Cloud Sync
 
