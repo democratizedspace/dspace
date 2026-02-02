@@ -22,9 +22,9 @@ clients.
 1. Open [Import/export gamesaves](/gamesaves).
 2. Click **Copy** to place a Base64-encoded JSON snapshot on your clipboard. The export panel shows
    the backup envelope so you can paste it into a notes app if needed.
-3. To restore, paste the backup string into the **Paste a game state backup string** field and
-   select **Import**. Your quests, inventory, and processes will be replaced with the imported
-   data.
+3. To restore, paste the backup string into the **Paste a game state backup string (envelope or raw
+   state) here:** field and select **Import**. Your quests, inventory, and processes will be
+   replaced with the imported data.
 
 The encoded JSON stores `quests`, `inventory`, and `processes` keys. Keep the output somewhere you
 control (password manager, notes app, or version-controlled gist).
@@ -36,8 +36,8 @@ control (password manager, notes app, or version-controlled gist).
    backup…**, wait for the prepared summary to appear.
 3. Click **Download backup** to save the `.json` file to your device.
 4. To restore, drag and drop the `.json` or `.dspace-backup` backup file onto the import area or
-   click **Choose backup file** to browse. The status will show **Importing…** and confirm when the
-   import is complete.
+   click **Choose backup file** to browse. The status will show **Importing…** and confirm with
+   **Import complete** when the import finishes.
 
 The backup file contains `items`, `processes`, and `quests` records. Use this path if you want to
 move custom creations between profiles without touching your main save.
