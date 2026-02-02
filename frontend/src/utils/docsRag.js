@@ -7,6 +7,8 @@ const ROUTES_INTENT =
     /\b(route|routes|url|urls|path|page|menu|navigate|navigation|where is|link|sitemap|site[-\s]?map)\b/i;
 const CHANGELOG_INTENT =
     /\b(token\.place|tokenplace|changelog|release|version(?:\s+notes?)?|what'?s new)\b/i;
+const DRIFT_INTENT =
+    /\b(v2[-\s]?only|removed|deprecated|not applicable|v3 release state|release state|current behavior)\b/i;
 const SEMANTICS_INTENT =
     /\b(requires|consumes|creates|duration|timer|recipe|semantics|normalize)\b/i;
 const SEMANTICS_MATCH = /\b(requires|consumes|creates|duration|process)\b/i;
@@ -319,6 +321,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
 
     const wantsRoutes = ROUTES_INTENT.test(query);
     const wantsChangelog = CHANGELOG_INTENT.test(query);
+    const wantsDrift = DRIFT_INTENT.test(query);
     const wantsSemantics = SEMANTICS_INTENT.test(query);
     const wantsCustomContent = CUSTOM_CONTENT_INTENT.test(query);
     const wantsCustomContentRoute = wantsCustomContent && CUSTOM_CONTENT_ROUTE_SIGNAL.test(query);
@@ -351,6 +354,20 @@ export const searchDocsRag = async (queryText, options = {}) => {
             findHighestRankedChunk(results, chunkMap, (chunk) => chunk.kind === 'changelog') ||
             findDeterministicChunk(chunkMap, (chunk) => chunk.kind === 'changelog');
         includeForcedChunk(selected, preferredChangelog, maxResults);
+    }
+
+    if (wantsDrift) {
+        const releaseStateChunk =
+            findHighestRankedChunk(
+                results,
+                chunkMap,
+                (chunk) => chunk.kind === 'doc' && chunk.slug === '/docs/v3-release-state'
+            ) ||
+            findDeterministicChunk(
+                chunkMap,
+                (chunk) => chunk.kind === 'doc' && chunk.slug === '/docs/v3-release-state'
+            );
+        includeForcedChunk(selected, releaseStateChunk, maxResults);
     }
 
     if (wantsSemantics) {
