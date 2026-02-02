@@ -25,6 +25,15 @@ describe('docs RAG comparison', () => {
         expect(getDocsRagMismatchWarning('unknown', 'deadbeef')).toBeNull();
     });
 
+    it('treats case-insensitive unknown app SHAs as unavailable', () => {
+        const comparison = getDocsRagComparison('UNKNOWN', 'deadbeef');
+        expect(comparison).toEqual({
+            status: 'unavailable',
+            message: 'App build SHA unavailable; cannot compare.',
+        });
+        expect(getDocsRagMismatchWarning('UNKNOWN', 'deadbeef')).toBeNull();
+    });
+
     it('reports unavailable when docs SHA is missing', () => {
         const comparison = getDocsRagComparison('deadbeef', 'unknown');
         expect(comparison).toEqual({
