@@ -98,6 +98,21 @@ describe('docs RAG search', () => {
         ).toBe(true);
     });
 
+    it('returns click-path guidance for Custom Content Backup navigation', async () => {
+        const { excerptsText, sources } = await searchDocsRag(
+            'How do I get to Custom Content Backup?',
+            {
+                maxResults: 6,
+                maxChars: 3000,
+            }
+        );
+
+        expect(excerptsText).toContain('More → Custom Content Backup');
+        expect(
+            sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+        ).toBe(true);
+    });
+
     it.each(['Generate a sitemap of DSPACE.', 'Generate a site-map of DSPACE.'])(
         'forces routes inclusion for sitemap requests: %s',
         async (query) => {

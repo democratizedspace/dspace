@@ -33,6 +33,13 @@ const REQUIRED_DYNAMIC_ROUTES = [
     '/processes/:processId',
     '/processes/:processId/edit',
 ];
+const REQUIRED_CLICK_PATHS = [
+    'More → Import/export gamesaves opens /gamesaves.',
+    'More → Custom Content Backup opens /contentbackup.',
+    'More → Toolbox opens /toolbox.',
+    'Manage button',
+    'Create button',
+];
 
 describe('routes docs coverage', () => {
     it('includes canonical routes needed for custom content UX', () => {
@@ -55,6 +62,17 @@ describe('routes docs coverage', () => {
             const missing = REQUIRED_DYNAMIC_ROUTES.filter((route) => !content.includes(route));
             expect(missing).toEqual([]);
             expect(content).not.toMatch(/\/\[[^\]]+\]/);
+        }
+    });
+
+    it('documents canonical click-path phrases for navigation and editors', () => {
+        const routeDocs = [ROUTES_DOC_PATH, ROOT_ROUTES_DOC_PATH].map((docPath) => ({
+            content: readFileSync(docPath, 'utf8'),
+        }));
+
+        for (const { content } of routeDocs) {
+            const missing = REQUIRED_CLICK_PATHS.filter((phrase) => !content.includes(phrase));
+            expect(missing).toEqual([]);
         }
     });
 });

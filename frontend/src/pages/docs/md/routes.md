@@ -54,6 +54,41 @@ This nav map is the citeable click-path grounding reference. It mirrors
 | Twitter                 | https://twitter.com/dspacegame              | External link        |
 | Github                  | https://github.com/democratizedspace/dspace | External link        |
 
+### Navigation click-paths (canonical)
+
+Use these sentences when describing how to reach pages in the UI. Each click-path uses the
+exact on-screen label for the navigation item.
+
+- More → Processes opens /processes.
+- More → Import/export gamesaves opens /gamesaves.
+- More → Cloud Sync opens /cloudsync.
+- More → Custom Content Backup opens /contentbackup.
+- More → Guilds opens /guilds.
+- More → Stats opens /stats.
+- More → Achievements opens /achievements.
+- More → Leaderboard opens /leaderboard.
+- More → Locations opens /locations.
+- More → Titles opens /titles.
+- More → Toolbox opens /toolbox.
+- More → Settings opens /settings.
+- More → Discord opens https://discord.gg/A3UAfYvnxM.
+- More → Twitter opens https://twitter.com/dspacegame.
+- More → Github opens https://github.com/democratizedspace/dspace.
+
+### Editor & manage click-paths (canonical)
+
+Use these UI CTA labels when describing how to reach editor and manage pages.
+
+- Quests page → Manage button → /quests/manage.
+- Quests page → Create button → /quests/create.
+- Quests manage page → Create button → /quests/create.
+- Inventory page → Manage button → /inventory/manage.
+- Inventory page → Create button → /inventory/create.
+- Inventory manage page → Create button → /inventory/create.
+- Processes page → Manage button → /processes/manage.
+- Processes page → Create button → /processes/create.
+- Processes manage page → Create button → /processes/create.
+
 ## Canonical route index
 
 This section is the citeable route catalog. Use the anchor
