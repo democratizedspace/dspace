@@ -88,6 +88,9 @@ describe('backups doc alignment', () => {
 
     it('matches the documented export formats for saves and custom content', async () => {
         const doc = readDoc('../frontend/src/pages/docs/md/backups.md');
+        const customContentSection = doc
+            .split('## Exporting and importing custom content')[1]
+            ?.split('##')[0];
 
         const baseState = {
             quests: { q1: { finished: true } },
@@ -118,5 +121,11 @@ describe('backups doc alignment', () => {
         expect(doc).toMatch(/Base64-encoded JSON snapshot/i);
         expect(doc).toMatch(/quest progress, inventory, and processes/i);
         expect(doc).toMatch(/items, quests, and processes/i);
+        expect(doc).toMatch(/Prepare backup/i);
+        expect(doc).toMatch(/Download backup/i);
+        expect(doc).toMatch(/Choose backup file/i);
+        expect(doc).toMatch(/Importing…/i);
+        expect(customContentSection).not.toMatch(/Base64/i);
+        expect(customContentSection).not.toMatch(/Copy/i);
     });
 });

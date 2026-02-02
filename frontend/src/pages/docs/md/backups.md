@@ -20,9 +20,8 @@ clients.
 ## Exporting and importing game saves
 
 1. Open [Import/export gamesaves](/gamesaves).
-2. Click **Copy** to place a Base64-encoded JSON snapshot on your clipboard (works even if the
-   Clipboard API is unavailable) or download the text manually.
-3. To restore, paste a previously saved string and select **Import**. Your quests, inventory, and
+2. Click **Copy** to place a Base64-encoded JSON snapshot on your clipboard.
+3. Paste the saved string into the import field and select **Import**. Your quests, inventory, and
    processes will be replaced with the imported data.
 
 The encoded JSON stores `quests`, `inventory`, and `processes` keys. Keep the output somewhere you
@@ -31,11 +30,12 @@ control (password manager, notes app, or version-controlled gist).
 ## Exporting and importing custom content
 
 1. Open [Custom Content Backup](/contentbackup).
-2. Click **Copy** to export only user-created items, quests, and processes as a Base64-encoded JSON
-   string.
-3. To restore, paste the saved string and choose **Import**.
+2. Select **Prepare backup** and wait for the "Preparing backup…" status to finish.
+3. Click **Download backup** to save the generated `.json` or `.dspace-backup` file.
+4. To restore, drag and drop the backup file into the import area or click **Choose backup file**
+   to browse, then wait for the **Importing…** status to complete.
 
-The encoded JSON contains `items`, `processes`, and `quests` keys. Use this path if you want to move
+The backup file contains `items`, `processes`, and `quests` keys. Use this path if you want to move
 custom creations between profiles without touching your main save.
 
 ## Automated backups with Cloud Sync
