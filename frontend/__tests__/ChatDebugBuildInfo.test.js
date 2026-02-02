@@ -41,6 +41,9 @@ describe('OpenAIChat build metadata', () => {
 
     it('shows the build SHA and prompt version from VITE_GIT_SHA', async () => {
         vi.stubEnv('VITE_GIT_SHA', 'abc123');
+        // Ensure module cache is cleared so the stubbed env is read on import.
+        // This also exercises the process.env fallback path since import.meta.env is static.
+        vi.resetModules();
         const { default: OpenAIChat } = await import('../src/pages/chat/svelte/OpenAIChat.svelte');
         render(OpenAIChat);
 
