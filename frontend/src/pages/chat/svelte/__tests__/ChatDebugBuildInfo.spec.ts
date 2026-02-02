@@ -35,14 +35,11 @@ vi.mock('../../../../utils/docsRag.js', () => ({
 describe('OpenAIChat build metadata', () => {
     afterEach(() => {
         delete process.env.VITE_GIT_SHA;
-        vi.resetModules();
     });
 
     it('shows the build SHA and prompt version from VITE_GIT_SHA', async () => {
         // Set process.env before import so the module reads the fallback path for VITE_GIT_SHA.
         process.env.VITE_GIT_SHA = 'abc123';
-        vi.resetModules();
-
         const { default: OpenAIChat } = await import('../OpenAIChat.svelte');
         render(OpenAIChat);
 
