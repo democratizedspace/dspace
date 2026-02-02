@@ -32,6 +32,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Ensure build SHA is present
+        run: |
+          if [ -z "$GITHUB_SHA" ]; then
+            echo "GITHUB_SHA is empty; refusing to build." >&2
+            exit 1
+          fi
+
       - name: Set up pnpm
         uses: pnpm/action-setup@v2
         with:
@@ -238,6 +245,13 @@ jobs:
         with:
           ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.branch || '' }}
 
+      - name: Ensure build SHA is present
+        run: |
+          if [ -z "$GITHUB_SHA" ]; then
+            echo "GITHUB_SHA is empty; refusing to build." >&2
+            exit 1
+          fi
+
       # Explicitly install the Node version from .nvmrc so version reads stay stable even if
       # runner defaults change.
       - name: Set up Node.js
@@ -313,6 +327,7 @@ jobs:
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
             GIT_SHA=${{ github.sha }}
+            VITE_GIT_SHA=${{ github.sha }}
           labels: |
             org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
             org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
@@ -337,6 +352,7 @@ jobs:
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
             GIT_SHA=${{ github.sha }}
+            VITE_GIT_SHA=${{ github.sha }}
           labels: |
             org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
             org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
