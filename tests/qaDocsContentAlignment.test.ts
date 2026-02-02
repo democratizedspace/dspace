@@ -15,6 +15,11 @@ const decodeBase64Json = (value: string) => {
     return JSON.parse(buffer.toString('utf8'));
 };
 
+const readSection = (doc: string, heading: string) => {
+    const pattern = new RegExp(`##\\s+${heading}\\n([\\s\\S]*?)(?=\\n##\\s|$)`, 'i');
+    return doc.match(pattern)?.[1] ?? '';
+};
+
 async function clearCustomContentDatabase(): Promise<void> {
     if (typeof indexedDB === 'undefined') {
         return;
@@ -88,6 +93,8 @@ describe('backups doc alignment', () => {
 
     it('matches the documented export formats for saves and custom content', async () => {
         const doc = readDoc('../frontend/src/pages/docs/md/backups.md');
+        const saveSection = readSection(doc, 'Exporting and importing game saves');
+        const customSection = readSection(doc, 'Exporting and importing custom content');
 
         const baseState = {
             quests: { q1: { finished: true } },
@@ -115,8 +122,17 @@ describe('backups doc alignment', () => {
             quests: expect.any(Array),
         });
 
-        expect(doc).toMatch(/Base64-encoded JSON snapshot/i);
-        expect(doc).toMatch(/quest progress, inventory, and processes/i);
-        expect(doc).toMatch(/items, quests, and processes/i);
+        expect(saveSection).toMatch(/Base64-encoded JSON snapshot/i);
+        expect(saveSection).toMatch(/Click \*\*Copy\*\*/i);
+        expect(saveSection).toMatch(/select \*\*Import\*\*/i);
+        expect(saveSection).toMatch(/quest progress, inventory, and processes/i);
+
+        expect(customSection).toMatch(/\*\*Prepare backup\*\*/i);
+        expect(customSection).toMatch(/\*\*Download backup\*\*/i);
+        expect(customSection).toMatch(/Drag and drop your backup file here, or click to browse/i);
+        expect(customSection).toMatch(/\*\*Choose backup file\*\*/i);
+        expect(customSection).toMatch(/\*\*Import complete\*\*/i);
+        expect(customSection).toMatch(/items, quests, and processes/i);
+        expect(customSection).not.toMatch(/Base64-encoded JSON/i);
     });
 });

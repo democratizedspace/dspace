@@ -20,10 +20,10 @@ clients.
 ## Exporting and importing game saves
 
 1. Open [Import/export gamesaves](/gamesaves).
-2. Click **Copy** to place a Base64-encoded JSON snapshot on your clipboard (works even if the
-   Clipboard API is unavailable) or download the text manually.
-3. To restore, paste a previously saved string and select **Import**. Your quests, inventory, and
-   processes will be replaced with the imported data.
+2. Click **Copy** to place the Base64-encoded JSON snapshot on your clipboard. The code block
+   updates as your state changes, and the button briefly reads **Copied!** after a successful copy.
+3. To restore, paste a previously saved string into the text area and select **Import**. Your
+   quests, inventory, and processes will be replaced with the imported data.
 
 The encoded JSON stores `quests`, `inventory`, and `processes` keys. Keep the output somewhere you
 control (password manager, notes app, or version-controlled gist).
@@ -31,11 +31,13 @@ control (password manager, notes app, or version-controlled gist).
 ## Exporting and importing custom content
 
 1. Open [Custom Content Backup](/contentbackup).
-2. Click **Copy** to export only user-created items, quests, and processes as a Base64-encoded JSON
-   string.
-3. To restore, paste the saved string and choose **Import**.
+2. Select **Prepare backup** to generate a downloadable file. While it runs you will see
+   **Preparing backup…** and a prepared summary list once it completes.
+3. Click **Download backup** to save the generated `.json` or `.dspace-backup` file.
+4. To restore, drag and drop the file into the import panel or click **Choose backup file** to
+   browse. A successful import ends with the **Import complete** status.
 
-The encoded JSON contains `items`, `processes`, and `quests` keys. Use this path if you want to move
+The backup file contains `items`, `processes`, and `quests` keys. Use this path if you want to move
 custom creations between profiles without touching your main save.
 
 ## Automated backups with Cloud Sync
