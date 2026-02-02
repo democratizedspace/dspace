@@ -49,6 +49,32 @@ page and uses the exact UI labels from `frontend/src/config/menu.json`.
 | Twitter | https://twitter.com/dspacegame | External link |
 | Github | https://github.com/democratizedspace/dspace | External link |
 
+### Navigation click-paths (canonical)
+
+Use these UI click-path sentences verbatim for chat navigation answers.
+
+- More → Processes opens /processes.
+- More → Import/export gamesaves opens /gamesaves.
+- More → Cloud Sync opens /cloudsync.
+- More → Custom Content Backup opens /contentbackup.
+- More → Guilds opens /guilds.
+- More → Stats opens /stats.
+- More → Achievements opens /achievements.
+- More → Leaderboard opens /leaderboard.
+- More → Locations opens /locations.
+- More → Titles opens /titles.
+- More → Toolbox opens /toolbox.
+- More → Settings opens /settings.
+- More → Discord opens https://discord.gg/A3UAfYvnxM.
+- More → Twitter opens https://twitter.com/dspacegame.
+- More → Github opens https://github.com/democratizedspace/dspace.
+- Quests page → Manage button → /quests/manage.
+- Quests page → Manage button → Manage page Create button → /quests/create.
+- Inventory page → Manage button → /inventory/manage.
+- Inventory page → Manage button → Manage page Create button → /inventory/create.
+- Processes page → Manage button → /processes/manage.
+- Processes page → Manage button → Manage page Create button → /processes/create.
+
 ## Canonical route index
 
 <a id="canonical-route-index"></a>
