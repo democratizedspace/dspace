@@ -86,7 +86,7 @@ const loadDocsRag = async () => {
 const normalizeSha = (value) => String(value || '').trim();
 const normalizeComparableSha = (value) => {
     const normalized = normalizeSha(value);
-    if (!normalized || normalized === 'unknown') {
+    if (!normalized || normalized.toLowerCase() === 'unknown') {
         return '';
     }
     return normalized;

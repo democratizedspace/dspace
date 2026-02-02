@@ -25,6 +25,26 @@ describe('docs RAG comparison', () => {
         expect(getDocsRagMismatchWarning('unknown', 'deadbeef')).toBeNull();
     });
 
+    it('reports unavailable when app SHA is truly absent', () => {
+        const comparison = getDocsRagComparison(undefined as unknown as string, 'deadbeef');
+        expect(comparison).toEqual({
+            status: 'unavailable',
+            message: 'App build SHA unavailable; cannot compare.',
+        });
+        expect(
+            getDocsRagMismatchWarning(undefined as unknown as string, 'deadbeef')
+        ).toBeNull();
+    });
+
+    it('treats case-insensitive unknown app SHAs as unavailable', () => {
+        const comparison = getDocsRagComparison('UNKNOWN', 'deadbeef');
+        expect(comparison).toEqual({
+            status: 'unavailable',
+            message: 'App build SHA unavailable; cannot compare.',
+        });
+        expect(getDocsRagMismatchWarning('UNKNOWN', 'deadbeef')).toBeNull();
+    });
+
     it('reports unavailable when docs SHA is missing', () => {
         const comparison = getDocsRagComparison('deadbeef', 'unknown');
         expect(comparison).toEqual({
@@ -32,6 +52,15 @@ describe('docs RAG comparison', () => {
             message: 'Docs RAG SHA unavailable; cannot compare.',
         });
         expect(getDocsRagMismatchWarning('deadbeef', 'unknown')).toBeNull();
+    });
+
+    it('treats case-insensitive unknown docs SHAs as unavailable', () => {
+        const comparison = getDocsRagComparison('deadbeef', 'UNKNOWN');
+        expect(comparison).toEqual({
+            status: 'unavailable',
+            message: 'Docs RAG SHA unavailable; cannot compare.',
+        });
+        expect(getDocsRagMismatchWarning('deadbeef', 'UNKNOWN')).toBeNull();
     });
 
     it('reports match when SHAs align', () => {
