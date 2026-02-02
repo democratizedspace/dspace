@@ -27,7 +27,7 @@
         SAVE_SNAPSHOT_HINT_TEXT,
         shouldShowSaveSnapshotHint,
     } from '../../../utils/chatHints.js';
-    import { getDocsRagMeta, getDocsRagMismatchWarning } from '../../../utils/docsRag.js';
+    import { getDocsRagMeta, getDocsRagComparison } from '../../../utils/docsRag.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -47,6 +47,7 @@
     let appGitSha = 'unknown';
     let docsRagGitSha = 'unknown';
     let docsRagGeneratedAt = 'unknown';
+    let docsRagComparisonMessage = 'App build SHA unavailable; cannot compare.';
     let docsRagWarning = null;
 
     $: currentPersona = $activePersona;
@@ -199,7 +200,9 @@
         const docsMeta = await getDocsRagMeta();
         docsRagGitSha = docsMeta?.gitSha ?? 'unknown';
         docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
-        docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+        const comparison = getDocsRagComparison(appGitSha, docsRagGitSha);
+        docsRagComparisonMessage = comparison.message;
+        docsRagWarning = comparison.status === 'stale' ? comparison.message : null;
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
@@ -325,6 +328,10 @@
                 <div class="debug-meta-row">
                     <span>Docs RAG generatedAt</span>
                     <span class="debug-mono">{docsRagGeneratedAt}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs RAG comparison</span>
+                    <span class="debug-mono">{docsRagComparisonMessage}</span>
                 </div>
             </div>
             {#if docsRagWarning}

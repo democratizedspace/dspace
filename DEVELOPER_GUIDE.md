@@ -198,6 +198,15 @@ We follow a feature branch workflow:
 3. Push to your branch and create a PR
 4. Ensure tests pass before requesting review
 
+### Build Metadata (App + Docs RAG)
+
+Production/staging builds embed the current commit SHA into the frontend via the
+`VITE_GIT_SHA` environment variable. The root `npm run build` script now computes this
+SHA (using `git rev-parse HEAD` when needed) and uses it for both the Docs RAG metadata
+generation and the frontend build, ensuring the `/chat` debug panel can compare the
+app build SHA with `docs_meta.json`. Local dev builds can fall back to `v3:dev` when
+`VITE_GIT_SHA` is not set.
+
 ### Commit Messages
 
 Commit messages must start with a conventional prefix enforced by the commit-msg hook. Use

@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../frontend/src/utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({})),
@@ -14,6 +14,11 @@ vi.mock('../frontend/src/utils/docsRag.js', () => ({
 }));
 
 describe('chat prompt version stamp', () => {
+    afterEach(() => {
+        vi.unstubAllEnvs();
+        vi.resetModules();
+    });
+
     it('includes the prompt version header and guardrail lines', async () => {
         const { buildChatPrompt, CHAT_PROMPT_VERSION } = await import(
             '../frontend/src/utils/openAI.js'
@@ -30,5 +35,23 @@ describe('chat prompt version stamp', () => {
         expect(systemMessage.content).toContain(`Prompt version: ${CHAT_PROMPT_VERSION}`);
         expect(systemMessage.content).toContain('/gamesaves');
         expect(systemMessage.content).toContain('docs/ROUTES.md');
+    });
+
+    it('stamps prompt version with the build SHA when available', async () => {
+        vi.stubEnv('VITE_GIT_SHA', 'feedface');
+        vi.resetModules();
+        const { buildChatPrompt, CHAT_PROMPT_VERSION } = await import(
+            '../frontend/src/utils/openAI.js'
+        );
+        const payload = await buildChatPrompt([]);
+        const systemMessage = payload.combinedMessages.find((message) => message.role === 'system');
+
+        expect(systemMessage).toBeDefined();
+        if (!systemMessage) {
+            throw new Error('Expected system message to be defined.');
+        }
+
+        expect(CHAT_PROMPT_VERSION).toBe('v3:feedface');
+        expect(systemMessage.content).toContain('Prompt version: v3:feedface');
     });
 });
