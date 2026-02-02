@@ -72,6 +72,21 @@ describe('docs RAG search', () => {
         ).toBe(true);
     });
 
+    it('answers Custom Content Backup navigation with routes chunk', async () => {
+        const { excerptsText, sources } = await searchDocsRag(
+            'How do I get to Custom Content Backup?',
+            {
+                maxResults: 6,
+                maxChars: 3000,
+            }
+        );
+
+        expect(excerptsText).toContain('Custom Content Backup');
+        expect(
+            sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+        ).toBe(true);
+    });
+
     it('forces routes inclusion for site map requests', async () => {
         const { sources } = await searchDocsRag('Can you generate a site map of DSPACE?', {
             maxResults: 4,

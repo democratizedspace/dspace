@@ -54,6 +54,35 @@ This nav map is the citeable click-path grounding reference. It mirrors
 | Twitter                 | https://twitter.com/dspacegame              | External link        |
 | Github                  | https://github.com/democratizedspace/dspace | External link        |
 
+### Navigation click-paths (canonical)
+
+Use these sentences for citeable navigation guidance that includes exact UI labels.
+
+- More → Processes opens /processes.
+- More → Import/export gamesaves opens /gamesaves.
+- More → Cloud Sync opens /cloudsync.
+- More → Custom Content Backup opens /contentbackup.
+- More → Guilds opens /guilds (coming soon).
+- More → Stats opens /stats.
+- More → Achievements opens /achievements.
+- More → Leaderboard opens /leaderboard.
+- More → Locations opens /locations (coming soon).
+- More → Titles opens /titles.
+- More → Toolbox opens /toolbox.
+- More → Settings opens /settings.
+- More → Discord opens https://discord.gg/A3UAfYvnxM.
+- More → Twitter opens https://twitter.com/dspacegame.
+- More → Github opens https://github.com/democratizedspace/dspace.
+
+### Editor/manage click-paths (canonical)
+
+- Quests page → Manage button opens /quests/manage.
+- Quests manage page → Create button opens /quests/create.
+- Inventory page → Manage button opens /inventory/manage.
+- Inventory manage page → Create button opens /inventory/create.
+- Processes page → Manage button opens /processes/manage.
+- Processes manage page → Create button opens /processes/create.
+
 ## Canonical route index
 
 This section is the citeable route catalog. Use the anchor
