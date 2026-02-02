@@ -2,6 +2,7 @@
 
 ARG DSPACE_VERSION=dev
 ARG GIT_SHA=unknown
+ARG VITE_GIT_SHA=unknown
 
 FROM node:20-bookworm-slim AS base
 ARG DSPACE_VERSION
@@ -41,8 +42,9 @@ RUN --mount=type=cache,target=/root/.pnpm-store pnpm install --frozen-lockfile
 FROM deps AS build
 ARG DSPACE_VERSION
 ARG GIT_SHA=unknown
-# GIT_SHA should be provided via build args; git is not available in the image to compute it.
-ENV VITE_GIT_SHA="${GIT_SHA}"
+ARG VITE_GIT_SHA=unknown
+# VITE_GIT_SHA should be provided via build args; git is not available in the image to compute it.
+ENV VITE_GIT_SHA="${VITE_GIT_SHA}"
 # Copy source separately to avoid overlaying host node_modules (pnpm symlinks make this fail when
 # node_modules exists on the host). Build artifacts are excluded via .dockerignore for compatibility
 # with builders that do not support COPY --exclude flags.
