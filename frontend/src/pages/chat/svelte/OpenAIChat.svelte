@@ -27,7 +27,7 @@
         SAVE_SNAPSHOT_HINT_TEXT,
         shouldShowSaveSnapshotHint,
     } from '../../../utils/chatHints.js';
-    import { getDocsRagMeta, getDocsRagMismatchWarning } from '../../../utils/docsRag.js';
+    import { getDocsRagComparison, getDocsRagMeta } from '../../../utils/docsRag.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -47,7 +47,7 @@
     let appGitSha = 'unknown';
     let docsRagGitSha = 'unknown';
     let docsRagGeneratedAt = 'unknown';
-    let docsRagWarning = null;
+    let docsRagComparison = null;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -199,7 +199,7 @@
         const docsMeta = await getDocsRagMeta();
         docsRagGitSha = docsMeta?.gitSha ?? 'unknown';
         docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
-        docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+        docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
@@ -327,8 +327,10 @@
                     <span class="debug-mono">{docsRagGeneratedAt}</span>
                 </div>
             </div>
-            {#if docsRagWarning}
-                <div class="debug-warning" role="alert" aria-live="polite">{docsRagWarning}</div>
+            {#if docsRagComparison}
+                <div class="debug-warning" role="alert" aria-live="polite">
+                    {docsRagComparison.message}
+                </div>
             {/if}
             {#if debugExpanded}
                 {#if debugMessages.length}

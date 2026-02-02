@@ -36,10 +36,20 @@ const toOutputText = (response) => {
     return outputText || '';
 };
 
+const readEnvValue = (key) => {
+    if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
+        return import.meta.env[key];
+    }
+    if (typeof process !== 'undefined' && process.env?.[key]) {
+        return process.env?.[key];
+    }
+    return undefined;
+};
+
 const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';
 const fallbackModels = ['gpt-5-mini'];
-export const CHAT_PROMPT_VERSION = `v3:${import.meta.env.VITE_GIT_SHA || 'dev'}`;
+export const CHAT_PROMPT_VERSION = `v3:${readEnvValue('VITE_GIT_SHA') || 'dev'}`;
 export const safeFallbackMessage = "I don't know; please check /docs for the latest details.";
 export const providerRealityLine = 'In v3, chat uses OpenAI. token.place is deferred to v3.1.';
 export const fallbackSystemPrompt =
@@ -92,16 +102,6 @@ const docsRagOptions = {
     maxExcerptChars: 8500,
 };
 const docsRagPromptBudgetChars = 80000;
-
-const readEnvValue = (key) => {
-    if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
-        return import.meta.env[key];
-    }
-    if (typeof process !== 'undefined' && process.env?.[key]) {
-        return process.env?.[key];
-    }
-    return undefined;
-};
 
 const parseEnvList = (value) =>
     (value || '')

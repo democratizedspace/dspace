@@ -81,6 +81,11 @@ const loadDocsRag = async () => {
 
 const normalizeSha = (value) => String(value || '').trim();
 
+const isShaUnavailable = (value) => {
+    const normalized = normalizeSha(value);
+    return !normalized || normalized === 'unknown';
+};
+
 const shasMatch = (appSha, docsSha) => {
     const left = normalizeSha(appSha);
     const right = normalizeSha(docsSha);
@@ -109,16 +114,39 @@ export const getDocsRagMeta = async () => {
     }
 };
 
-export const getDocsRagMismatchWarning = (appGitSha, docsGitSha) => {
+export const getDocsRagComparison = (appGitSha, docsGitSha) => {
+    if (isShaUnavailable(appGitSha)) {
+        return {
+            status: 'unavailable',
+            message: 'App build SHA unavailable; cannot compare.',
+        };
+    }
+    if (isShaUnavailable(docsGitSha)) {
+        return {
+            status: 'unavailable',
+            message: 'Docs RAG SHA unavailable; cannot compare.',
+        };
+    }
+
     const appSha = normalizeSha(appGitSha);
     const docsSha = normalizeSha(docsGitSha);
-    if (appSha === docsSha) {
-        return null;
-    }
+
     if (shasMatch(appSha, docsSha)) {
-        return null;
+        return {
+            status: 'match',
+            message: 'Docs RAG matches app build.',
+        };
     }
-    return 'Docs RAG is stale vs app build.';
+
+    return {
+        status: 'stale',
+        message: 'Docs RAG is stale vs app build.',
+    };
+};
+
+export const getDocsRagMismatchWarning = (appGitSha, docsGitSha) => {
+    const comparison = getDocsRagComparison(appGitSha, docsGitSha);
+    return comparison.status === 'stale' ? comparison.message : null;
 };
 
 const trimExcerpt = (text, maxChars) => {

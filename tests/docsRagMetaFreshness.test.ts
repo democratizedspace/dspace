@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import docsMeta from '../frontend/src/generated/rag/docs_meta.json';
-import { getDocsRagMismatchWarning } from '../frontend/src/utils/docsRag.js';
+import { getDocsRagComparison, getDocsRagMismatchWarning } from '../frontend/src/utils/docsRag.js';
 
 describe('docs RAG metadata freshness', () => {
     it('records a concrete git SHA', () => {
@@ -21,14 +21,14 @@ describe('docs RAG mismatch warning', () => {
         expect(warning).toBe('Docs RAG is stale vs app build.');
     });
 
-    it('warns when app SHA is unknown', () => {
+    it('does not warn when app SHA is unknown', () => {
         const warning = getDocsRagMismatchWarning('unknown', 'deadbeef');
-        expect(warning).toBe('Docs RAG is stale vs app build.');
+        expect(warning).toBeNull();
     });
 
-    it('warns when docs SHA is unknown', () => {
+    it('does not warn when docs SHA is unknown', () => {
         const warning = getDocsRagMismatchWarning('deadbeef', 'unknown');
-        expect(warning).toBe('Docs RAG is stale vs app build.');
+        expect(warning).toBeNull();
     });
 
     it('returns null when SHAs match', () => {
@@ -36,13 +36,39 @@ describe('docs RAG mismatch warning', () => {
         expect(warning).toBeNull();
     });
 
-    it('warns when either SHA is empty', () => {
+    it('does not warn when either SHA is empty', () => {
         const warning = getDocsRagMismatchWarning('', 'abc123');
-        expect(warning).toBe('Docs RAG is stale vs app build.');
+        expect(warning).toBeNull();
     });
 
     it('returns null when SHAs match by prefix', () => {
         const warning = getDocsRagMismatchWarning('abc123', 'abc123def456');
         expect(warning).toBeNull();
+    });
+});
+
+describe('docs RAG comparison message', () => {
+    it('returns cannot compare when app SHA is missing', () => {
+        const comparison = getDocsRagComparison('unknown', 'deadbeef');
+        expect(comparison).toEqual({
+            status: 'unavailable',
+            message: 'App build SHA unavailable; cannot compare.',
+        });
+    });
+
+    it('returns match when SHAs align', () => {
+        const comparison = getDocsRagComparison('abc123', 'abc123');
+        expect(comparison).toEqual({
+            status: 'match',
+            message: 'Docs RAG matches app build.',
+        });
+    });
+
+    it('returns stale when SHAs differ', () => {
+        const comparison = getDocsRagComparison('abc123', 'def456');
+        expect(comparison).toEqual({
+            status: 'stale',
+            message: 'Docs RAG is stale vs app build.',
+        });
     });
 });
