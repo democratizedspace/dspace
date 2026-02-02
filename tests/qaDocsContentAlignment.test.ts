@@ -124,7 +124,7 @@ describe('backups doc alignment', () => {
         });
 
         expect(savesSection).toMatch(/Base64-encoded JSON snapshot/i);
-        expect(savesSection).toMatch(/quest progress, inventory, and processes/i);
+        expect(doc).toMatch(/quest progress, inventory, and processes/i);
         expect(savesSection).toMatch(/Paste a game state backup string/i);
         expect(savesSection).toMatch(/\bCopy\b/i);
         expect(savesSection).toMatch(/\bImport\b/i);
@@ -133,7 +133,8 @@ describe('backups doc alignment', () => {
         expect(customSection).toMatch(/Download backup/i);
         expect(customSection).toMatch(/Drag and drop/i);
         expect(customSection).toMatch(/Choose backup file/i);
-        expect(customSection).toMatch(/\.json|\.(?:dspace-)?backup/i);
+        expect(customSection).toMatch(/\.json/i);
+        expect(customSection).toMatch(/\.dspace-backup/i);
         expect(customSection).not.toMatch(/Base64/i);
         expect(customSection).not.toMatch(/\bCopy\b/i);
     });

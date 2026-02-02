@@ -34,9 +34,10 @@ control (password manager, notes app, or version-controlled gist).
 1. Open [Custom Content Backup](/contentbackup).
 2. Under **Export custom content**, click **Prepare backup**. When the status reads **Preparing
    backup…**, wait for the prepared summary to appear.
-3. Click **Download backup** to save the `.json` (or `.dspace-backup`) file to your device.
-4. To restore, drag and drop the backup file onto the import area or click **Choose backup file** to
-   browse. The status will show **Importing…** and confirm when the import is complete.
+3. Click **Download backup** to save the `.json` file to your device.
+4. To restore, drag and drop the `.json` or `.dspace-backup` backup file onto the import area or
+   click **Choose backup file** to browse. The status will show **Importing…** and confirm when the
+   import is complete.
 
 The backup file contains `items`, `processes`, and `quests` records. Use this path if you want to
 move custom creations between profiles without touching your main save.
