@@ -54,4 +54,13 @@ describe('chat prompt version stamp', () => {
         expect(CHAT_PROMPT_VERSION).toBe('v3:feedface');
         expect(systemMessage.content).toContain('Prompt version: v3:feedface');
     });
+
+    it('does not emit v3:dev in production mode without a build SHA', async () => {
+        vi.stubEnv('NODE_ENV', 'production');
+        vi.stubEnv('VITE_GIT_SHA', '');
+        vi.resetModules();
+        const { CHAT_PROMPT_VERSION } = await import('../frontend/src/utils/openAI.js');
+
+        expect(CHAT_PROMPT_VERSION).not.toBe('v3:dev');
+    });
 });

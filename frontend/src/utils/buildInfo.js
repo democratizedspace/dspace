@@ -15,6 +15,15 @@ export const getAppGitSha = () => {
 };
 
 export const getPromptVersionSha = () => {
-    const appSha = getAppGitSha();
-    return appSha && appSha !== 'unknown' ? appSha : 'dev';
+    const rawSha = readViteGitSha();
+    const normalized = String(rawSha || '').trim();
+    if (normalized) {
+        return normalized;
+    }
+
+    const isProd =
+        (typeof import.meta !== 'undefined' && import.meta.env?.PROD) ||
+        (typeof process !== 'undefined' && process.env?.NODE_ENV === 'production');
+
+    return isProd ? 'unknown' : 'dev';
 };
