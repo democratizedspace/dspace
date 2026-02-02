@@ -22,37 +22,37 @@ This nav map is the citeable click-path grounding reference. It mirrors
 
 ### Top navigation (pinned)
 
-| UI label | Route | Notes |
-| --- | --- | --- |
-| Home | / | Homepage |
-| Quests | /quests | Quest list |
-| Inventory | /inventory | Inventory list |
-| Energy | /energy | Energy management |
-| Wallet | /wallet | Wallet overview |
-| Profile | /profile | Player profile |
-| Docs | /docs | Documentation index |
-| Chat | /chat | Chat interface |
-| Changelog | /changelog | Release notes |
+| UI label  | Route      | Notes               |
+| --------- | ---------- | ------------------- |
+| Home      | /          | Homepage            |
+| Quests    | /quests    | Quest list          |
+| Inventory | /inventory | Inventory list      |
+| Energy    | /energy    | Energy management   |
+| Wallet    | /wallet    | Wallet overview     |
+| Profile   | /profile   | Player profile      |
+| Docs      | /docs      | Documentation index |
+| Chat      | /chat      | Chat interface      |
+| Changelog | /changelog | Release notes       |
 
 ### More menu (unpinned)
 
-| UI label | Route | Notes |
-| --- | --- | --- |
-| Processes | /processes | Process list |
-| Import/export gamesaves | /gamesaves | Save import/export |
-| Cloud Sync | /cloudsync | Cloud sync setup |
-| Custom Content Backup | /contentbackup | Backup management |
-| Guilds | /guilds | Coming soon |
-| Stats | /stats | Player statistics |
-| Achievements | /achievements | Achievement list |
-| Leaderboard | /leaderboard | Global leaderboard |
-| Locations | /locations | Coming soon |
-| Titles | /titles | Player titles |
-| Toolbox | /toolbox | Utilities & QA tools |
-| Settings | /settings | User settings |
-| Discord | https://discord.gg/A3UAfYvnxM | External link |
-| Twitter | https://twitter.com/dspacegame | External link |
-| Github | https://github.com/democratizedspace/dspace | External link |
+| UI label                | Route                                       | Notes                |
+| ----------------------- | ------------------------------------------- | -------------------- |
+| Processes               | /processes                                  | Process list         |
+| Import/export gamesaves | /gamesaves                                  | Save import/export   |
+| Cloud Sync              | /cloudsync                                  | Cloud sync setup     |
+| Custom Content Backup   | /contentbackup                              | Backup management    |
+| Guilds                  | /guilds                                     | Coming soon          |
+| Stats                   | /stats                                      | Player statistics    |
+| Achievements            | /achievements                               | Achievement list     |
+| Leaderboard             | /leaderboard                                | Global leaderboard   |
+| Locations               | /locations                                  | Coming soon          |
+| Titles                  | /titles                                     | Player titles        |
+| Toolbox                 | /toolbox                                    | Utilities & QA tools |
+| Settings                | /settings                                   | User settings        |
+| Discord                 | https://discord.gg/A3UAfYvnxM               | External link        |
+| Twitter                 | https://twitter.com/dspacegame              | External link        |
+| Github                  | https://github.com/democratizedspace/dspace | External link        |
 
 ## Canonical route index
 
@@ -63,17 +63,17 @@ This section is the citeable route catalog. Use the anchor
 
 ### Custom content authoring
 
-| Route | Description |
-| --- | --- |
-| /quests/create | Create a custom quest |
-| /quests/manage | Manage custom quests |
-| /quests/:id/edit | Edit a custom quest |
-| /inventory/create | Create a custom item |
-| /inventory/manage | Manage custom inventory |
+| Route                        | Description                  |
+| ---------------------------- | ---------------------------- |
+| /quests/create               | Create a custom quest        |
+| /quests/manage               | Manage custom quests         |
+| /quests/:id/edit             | Edit a custom quest          |
+| /inventory/create            | Create a custom item         |
+| /inventory/manage            | Manage custom inventory      |
 | /inventory/item/:itemId/edit | Edit a custom inventory item |
-| /processes/create | Create a custom process |
-| /processes/manage | Manage custom processes |
-| /processes/:processId/edit | Edit a custom process |
+| /processes/create            | Create a custom process      |
+| /processes/manage            | Manage custom processes      |
+| /processes/:processId/edit   | Edit a custom process        |
 
 ## Static routes
 
