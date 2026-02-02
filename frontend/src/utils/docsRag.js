@@ -11,6 +11,8 @@ const SEMANTICS_INTENT =
     /\b(requires|consumes|creates|duration|timer|recipe|semantics|normalize)\b/i;
 const SEMANTICS_MATCH = /\b(requires|consumes|creates|duration|process)\b/i;
 const SEMANTICS_FALLBACK_QUERY = 'requires consumes creates duration semantics';
+const DRIFT_INTENT =
+    /\b(v2[-\s]?only|removed|deprecated|not applicable|v3 release state|current behavior)\b/i;
 const CUSTOM_CONTENT_INTENT =
     /\b(custom content|custom quests?|quest editor|content editor|manage (?:quests|items|processes)|custom (?:items|processes)|content backup|backup (?:custom|content)|custom (?:import|export)|(?:import|export) (?:custom|quest|content)|json schema)\b/i;
 const CUSTOM_CONTENT_CONTEXT = /\b(custom|quest|content)\b/i;
@@ -323,6 +325,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
     const wantsCustomContent = CUSTOM_CONTENT_INTENT.test(query);
     const wantsCustomContentRoute = wantsCustomContent && CUSTOM_CONTENT_ROUTE_SIGNAL.test(query);
     const wantsRouteChunk = wantsRoutes || wantsCustomContentRoute;
+    const wantsDrift = DRIFT_INTENT.test(query);
 
     if (wantsRouteChunk) {
         const preferredRoute =
@@ -397,6 +400,35 @@ export const searchDocsRag = async (queryText, options = {}) => {
         }
 
         includeForcedChunk(selected, customContentChunk, maxResults);
+    }
+
+    if (wantsDrift) {
+        const preferredReleaseState =
+            findHighestRankedChunk(
+                results,
+                chunkMap,
+                (chunk) =>
+                    chunk.kind === 'doc' &&
+                    chunk.slug === '/docs/v3-release-state' &&
+                    resolveAnchor(chunk.anchor) === 'top'
+            ) ||
+            findHighestRankedChunk(
+                results,
+                chunkMap,
+                (chunk) => chunk.kind === 'doc' && chunk.slug === '/docs/v3-release-state'
+            ) ||
+            findDeterministicChunk(
+                chunkMap,
+                (chunk) =>
+                    chunk.kind === 'doc' &&
+                    chunk.slug === '/docs/v3-release-state' &&
+                    resolveAnchor(chunk.anchor) === 'top'
+            ) ||
+            findDeterministicChunk(
+                chunkMap,
+                (chunk) => chunk.kind === 'doc' && chunk.slug === '/docs/v3-release-state'
+            );
+        includeForcedChunk(selected, preferredReleaseState, maxResults);
     }
 
     selected.sort(compareResultsByRank);
