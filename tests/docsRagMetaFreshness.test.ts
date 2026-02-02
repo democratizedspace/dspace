@@ -17,12 +17,12 @@ describe('docs RAG metadata freshness', () => {
 
 describe('docs RAG comparison', () => {
     it('reports unavailable when app SHA is missing', () => {
-        const comparison = getDocsRagComparison('unknown', 'deadbeef');
+        const comparison = getDocsRagComparison('UNKNOWN', 'deadbeef');
         expect(comparison).toEqual({
             status: 'unavailable',
             message: 'App build SHA unavailable; cannot compare.',
         });
-        expect(getDocsRagMismatchWarning('unknown', 'deadbeef')).toBeNull();
+        expect(getDocsRagMismatchWarning('UNKNOWN', 'deadbeef')).toBeNull();
     });
 
     it('reports unavailable when docs SHA is missing', () => {
