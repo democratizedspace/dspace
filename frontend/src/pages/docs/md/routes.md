@@ -18,6 +18,8 @@ catalog, dynamic segments use `:param` notation (for example, `/quests/:id`).
 This section is the citeable route catalog and nav map. Use the anchor
 `/docs/routes#canonical-route-index` when you need a stable reference.
 
+<a id="canonical-route-index"></a>
+
 ### Top navigation (pinned)
 
 | UI label | Route | Notes |
@@ -59,7 +61,7 @@ This section is the citeable route catalog and nav map. Use the anchor
 | /inventory/item/:itemId/edit | Edit a custom inventory item |
 | /processes/create | Create a custom process |
 | /processes/manage | Manage custom processes |
-| /processes/:id/edit | Edit a custom process |
+| /processes/:processId/edit | Edit a custom process |
 
 ## Static routes
 
@@ -131,15 +133,15 @@ This section is the citeable route catalog and nav map. Use the anchor
 ### Items (alternative inventory routes)
 
 - /items/create - Create new item (alternative path)
-- /item/:slug - Item detail page by slug (legacy)
+- /item/:slug - Removed legacy route (no longer available)
 
 ### Processes
 
 - /process/:slug - Process by slug (legacy pattern)
 - /processes - Processes list
-- /processes/:id - Individual process details
+- /processes/:processId - Individual process details
     - Examples: /processes/launch-rocket, /processes/feed-goldfish
-- /processes/:id/edit - Edit custom process
+- /processes/:processId/edit - Edit custom process
 - /processes/create - Create new process
 - /processes/manage - Manage processes
 
@@ -184,10 +186,10 @@ When validating internal links in markdown files, the link checker
 
 1. Exact match: /inventory → frontend/src/pages/inventory/index.astro
 2. Index pattern: /quests → frontend/src/pages/quests/index.astro
-3. Slug pattern: /docs/about → frontend/src/pages/docs/:slug
-4. ID pattern: /quests/1 → frontend/src/pages/quests/:id
-5. Nested dynamic: /quests/play/2 → frontend/src/pages/quests/:pathId/:questId
-6. Parameterized: /inventory/item/37 → frontend/src/pages/inventory/item/:itemId/index.astro
+3. Slug pattern: /docs/about → frontend/src/pages/docs/[slug].astro
+4. ID pattern: /quests/1 → frontend/src/pages/quests/[id].astro
+5. Nested dynamic: /quests/play/2 → frontend/src/pages/quests/[pathId]/[questId].astro
+6. Parameterized: /inventory/item/37 → frontend/src/pages/inventory/item/[itemId]/index.astro
 
 ## Static assets
 
