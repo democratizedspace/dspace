@@ -1,5 +1,5 @@
 {
-    "generatedAt": "2026-02-02T01:03:28.514Z",
+    "generatedAt": "2026-02-02T04:15:18.490Z",
     "generatedFrom": {
         "routes": "docs/ROUTES.md",
         "docs": "frontend/src/pages/docs/md",
@@ -24,5 +24,5 @@
         "v3Changelog": ["frontend/src/pages/docs/md/changelog/20260301.md"]
     },
     "counts": { "totalChunks": 553, "docs": 497, "routes": 1, "changelog": 55 },
-    "gitSha": "6a77efce4edf59f07a4ecd180e7a86451f136818"
+    "gitSha": "6e5e975c35e945b11556f9aae1e2a62130110149"
 }
