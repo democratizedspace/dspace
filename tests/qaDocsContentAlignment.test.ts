@@ -132,7 +132,7 @@ describe('backups doc alignment', () => {
         expect(savesSection).toMatch(/\bImport\b/i);
 
         expect(customSection).toMatch(/Prepare backup/i);
-        expect(customSection).toMatch(/Preparing backup…/i);
+        expect(customSection).toMatch(/Preparing\s+backup…/i);
         expect(customSection).toMatch(/Download backup/i);
         expect(customSection).toMatch(/Drag and drop/i);
         expect(customSection).toMatch(/Choose backup file/i);
