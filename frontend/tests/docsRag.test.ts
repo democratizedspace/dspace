@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import docsMeta from '../src/generated/rag/docs_meta.json';
-import { searchDocsRag } from '../src/utils/docsRag.js';
+import { getDocsRagComparisonMessage, searchDocsRag } from '../src/utils/docsRag.js';
 
 describe('docs RAG search', () => {
     it('returns docs excerpts with canonical /docs URLs', async () => {
@@ -176,5 +176,23 @@ describe('docs RAG search', () => {
 
         expect(docsMeta.generatedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
         expect(excerptsText).toContain(docsMeta.generatedAt);
+    });
+
+    it('does not mark docs stale when app SHA is unavailable', () => {
+        const comparison = getDocsRagComparisonMessage('unknown', 'abc123');
+
+        expect(comparison).toBe('App build SHA unavailable; cannot compare.');
+    });
+
+    it('reports a match when docs SHA equals app SHA', () => {
+        const comparison = getDocsRagComparisonMessage('abc123', 'abc123');
+
+        expect(comparison).toBe('Docs RAG matches app build.');
+    });
+
+    it('reports stale when docs SHA differs from app SHA', () => {
+        const comparison = getDocsRagComparisonMessage('abc123', 'def456');
+
+        expect(comparison).toBe('Docs RAG is stale vs app build.');
     });
 });
