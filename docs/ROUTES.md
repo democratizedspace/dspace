@@ -8,12 +8,12 @@ is essential for link checking, testing, and development.
 Astro uses file-based routing where files in `frontend/src/pages/` map to URL paths. In this
 catalog, dynamic segments use `:param` notation (for example, `/quests/:id`).
 
-## Canonical route index
+## Nav map (click-path grounding)
 
-<a id="canonical-route-index"></a>
+<a id="top"></a>
 
-This section is the citeable route catalog and nav map. It mirrors the `/docs/routes` page and
-anchors the canonical routes under `/docs/routes#canonical-route-index`.
+This nav map is the citeable click-path grounding reference. It mirrors the `/docs/routes`
+page and uses the exact UI labels from `frontend/src/config/menu.json`.
 
 ### Top navigation (pinned)
 
@@ -37,12 +37,24 @@ anchors the canonical routes under `/docs/routes#canonical-route-index`.
 | Import/export gamesaves | /gamesaves | Save import/export |
 | Cloud Sync | /cloudsync | Cloud sync setup |
 | Custom Content Backup | /contentbackup | Backup management |
+| Guilds | /guilds | Coming soon |
 | Stats | /stats | Player statistics |
 | Achievements | /achievements | Achievement list |
 | Leaderboard | /leaderboard | Global leaderboard |
+| Locations | /locations | Coming soon |
 | Titles | /titles | Player titles |
 | Toolbox | /toolbox | Utilities & QA tools |
 | Settings | /settings | User settings |
+| Discord | https://discord.gg/A3UAfYvnxM | External link |
+| Twitter | https://twitter.com/dspacegame | External link |
+| Github | https://github.com/democratizedspace/dspace | External link |
+
+## Canonical route index
+
+<a id="canonical-route-index"></a>
+
+This section is the citeable route catalog and anchors the canonical routes under
+`/docs/routes#canonical-route-index`.
 
 ### Custom content authoring
 
@@ -98,14 +110,6 @@ anchors the canonical routes under `/docs/routes#canonical-route-index`.
 - /chat - Chat interface
 - /dchat - dChat interface (AI assistant)
 - /debug - Debug tools
-
-### Health & diagnostics
-
-- /config.json - Runtime configuration
-- /health - Health check
-- /healthz - Health check (Kubernetes)
-- /livez - Liveness check (Kubernetes)
-- /metrics - Prometheus metrics
 
 ## Dynamic routes
 
@@ -170,10 +174,6 @@ anchors the canonical routes under `/docs/routes#canonical-route-index`.
 - /import/:newVersion/:oldVersion - Import from old version
 - /import/:newVersion/:oldVersion/done - Import completion
 
-### Bundles
-
-- /bundles/submit - Submit a content bundle
-
 ## Route resolution for link checking
 
 When validating internal links in markdown files, the link checker (`scripts/link-check.mjs`)
@@ -181,10 +181,10 @@ resolves paths by:
 
 1. Exact match: /inventory → frontend/src/pages/inventory/index.astro
 2. Index pattern: /quests → frontend/src/pages/quests/index.astro
-3. Slug pattern: /docs/about → frontend/src/pages/docs/[slug].astro
-4. ID pattern: /quests/1 → frontend/src/pages/quests/[id].astro
-5. Nested dynamic: /quests/play/2 → frontend/src/pages/quests/[pathId]/[questId].astro
-6. Parameterized: /inventory/item/37 → frontend/src/pages/inventory/item/[itemId]/index.astro
+3. Slug pattern: /docs/about → frontend/src/pages/docs/{slug}.astro
+4. ID pattern: /quests/1 → frontend/src/pages/quests/{id}.astro
+5. Nested dynamic: /quests/play/2 → frontend/src/pages/quests/{pathId}/{questId}.astro
+6. Parameterized: /inventory/item/37 → frontend/src/pages/inventory/item/{itemId}/index.astro
 
 ## Static assets
 

@@ -36,10 +36,14 @@ const REQUIRED_DYNAMIC_ROUTES = [
 
 describe('routes docs coverage', () => {
     it('includes canonical routes needed for custom content UX', () => {
-        const content = readFileSync(ROUTES_DOC_PATH, 'utf8');
-        const missing = REQUIRED_ROUTES.filter((route) => !content.includes(route));
+        const routeDocs = [ROUTES_DOC_PATH, ROOT_ROUTES_DOC_PATH].map((docPath) => ({
+            content: readFileSync(docPath, 'utf8'),
+        }));
 
-        expect(missing).toEqual([]);
+        for (const { content } of routeDocs) {
+            const missing = REQUIRED_ROUTES.filter((route) => !content.includes(route));
+            expect(missing).toEqual([]);
+        }
     });
 
     it('keeps route patterns consistent in both route catalogs', () => {
@@ -50,6 +54,7 @@ describe('routes docs coverage', () => {
         for (const { content } of routeDocs) {
             const missing = REQUIRED_DYNAMIC_ROUTES.filter((route) => !content.includes(route));
             expect(missing).toEqual([]);
+            expect(content).not.toMatch(/\/\[[^\]]+\]/);
         }
     });
 });
