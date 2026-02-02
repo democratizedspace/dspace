@@ -8,6 +8,16 @@ const readViteGitSha = () => {
     return undefined;
 };
 
+const isProductionBuild = () => {
+    if (typeof import.meta !== 'undefined' && typeof import.meta.env?.PROD === 'boolean') {
+        return import.meta.env.PROD;
+    }
+    if (typeof process !== 'undefined' && process.env?.NODE_ENV) {
+        return process.env.NODE_ENV === 'production';
+    }
+    return false;
+};
+
 export const getAppGitSha = () => {
     const rawSha = readViteGitSha();
     const normalized = String(rawSha || '').trim();
@@ -15,6 +25,10 @@ export const getAppGitSha = () => {
 };
 
 export const getPromptVersionSha = () => {
-    const appSha = getAppGitSha();
-    return appSha && appSha !== 'unknown' ? appSha : 'dev';
+    const rawSha = readViteGitSha();
+    const normalized = String(rawSha || '').trim();
+    if (normalized) {
+        return normalized;
+    }
+    return isProductionBuild() ? 'missing-sha' : 'dev';
 };
