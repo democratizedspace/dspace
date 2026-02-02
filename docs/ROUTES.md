@@ -1,14 +1,65 @@
 # DSPACE Routes Documentation
 
-This document describes all routes served by the Astro SSR server. Understanding these routes is essential for link checking, testing, and development.
+This document describes all routes served by the Astro SSR server. Understanding these routes
+is essential for link checking, testing, and development.
 
-## Route Patterns
+## Route patterns
 
-Astro uses file-based routing where files in `frontend/src/pages/` map to URL paths. Dynamic segments are denoted by brackets (e.g., `[id].astro`).
+Astro uses file-based routing where files in `frontend/src/pages/` map to URL paths. In this
+catalog, dynamic segments use `:param` notation (for example, `/quests/:id`).
 
-## Static Routes
+## Canonical route index
 
-### Core Pages
+This section is the citeable route catalog and nav map. It mirrors the `/docs/routes` page and
+anchors the canonical routes under `/docs/routes#canonical-route-index`.
+
+### Top navigation (pinned)
+
+| UI label | Route | Notes |
+| --- | --- | --- |
+| Home | / | Homepage |
+| Quests | /quests | Quest list |
+| Inventory | /inventory | Inventory list |
+| Energy | /energy | Energy management |
+| Wallet | /wallet | Wallet overview |
+| Profile | /profile | Player profile |
+| Docs | /docs | Documentation index |
+| Chat | /chat | Chat interface |
+| Changelog | /changelog | Release notes |
+
+### More menu (unpinned)
+
+| UI label | Route | Notes |
+| --- | --- | --- |
+| Processes | /processes | Process list |
+| Import/export gamesaves | /gamesaves | Save import/export |
+| Cloud Sync | /cloudsync | Cloud sync setup |
+| Custom Content Backup | /contentbackup | Backup management |
+| Stats | /stats | Player statistics |
+| Achievements | /achievements | Achievement list |
+| Leaderboard | /leaderboard | Global leaderboard |
+| Titles | /titles | Player titles |
+| Toolbox | /toolbox | Utilities & QA tools |
+| Settings | /settings | User settings |
+
+### Custom content authoring
+
+| Route | Description |
+| --- | --- |
+| /quests/create | Create a custom quest |
+| /quests/manage | Manage custom quests |
+| /quests/:id/edit | Edit a custom quest |
+| /inventory/create | Create a custom item |
+| /inventory/manage | Manage custom inventory |
+| /inventory/item/:itemId/edit | Edit a custom inventory item |
+| /processes/create | Create a custom process |
+| /processes/manage | Manage custom processes |
+| /processes/:id/edit | Edit a custom process |
+
+## Static routes
+
+### Core pages
+
 - / - Homepage (index.astro)
 - /404 - 404 error page
 - /settings - User settings
@@ -17,106 +68,136 @@ Astro uses file-based routing where files in `frontend/src/pages/` map to URL pa
 - /task - Task page
 - /launch - Launch page
 - /changelog - Changelog page
+- /wallet - Wallet overview
+- /toolbox - Toolbox utilities
 
-### Cookie Management
+### Cookie management
+
 - /accept_cookies - Cookie acceptance page
 - /accepted_cookies - Cookie acceptance confirmation
 
-### Profile & Achievements
+### Profile & achievements
+
 - /profile - User profile page
 - /profile/avatar - Avatar selection
 - /achievements - User achievements page
 - /titles - User titles page
 - /leaderboard - Global leaderboard
 
-### Game Systems
+### Game systems
+
 - /energy - Energy management page
 - /gamesaves - Game save import/export
 - /cloudsync - Cloud synchronization
 - /contentbackup - Content backup management
 
-### Chat & Debug
+### Chat & debug
+
 - /chat - Chat interface
 - /dchat - dChat interface (AI assistant)
 - /debug - Debug tools
 
-## Dynamic Routes
+### Health & diagnostics
+
+- /config.json - Runtime configuration
+- /health - Health check
+- /healthz - Health check (Kubernetes)
+- /livez - Liveness check (Kubernetes)
+- /metrics - Prometheus metrics
+
+## Dynamic routes
 
 ### Documentation
+
 - /docs - Documentation index
-- /docs/[slug] - Individual documentation pages
+- /docs/:slug - Individual documentation pages
   - Examples: /docs/about, /docs/solar, /docs/team, /docs/processes
 
 ### Inventory
+
 - /inventory - Inventory list
 - /inventory/create - Create new item
 - /inventory/manage - Manage inventory
-- /inventory/item/[itemId] - Individual item details
+- /inventory/item/:itemId - Individual item details
   - Examples: /inventory/item/1, /inventory/item/37, /inventory/item/50
-- /inventory/item/[itemId]/edit - Edit custom item
+- /inventory/item/:itemId/edit - Edit custom item
   - Examples: /inventory/item/1/edit, /inventory/item/37/edit, /inventory/item/50/edit
 
-### Items (Alternative Inventory Routes)
+### Items (alternative inventory routes)
+
 - /items/create - Create new item (alternative path)
+- /item/:slug - Item detail page by slug (legacy)
 
 ### Processes
-- /process/[slug] - Process by slug (legacy pattern)
+
+- /process/:slug - Process by slug (legacy pattern)
 - /processes - Processes list
-- /processes/[processId] - Individual process details
+- /processes/:id - Individual process details
   - Examples: /processes/launch-rocket, /processes/feed-goldfish
+- /processes/:id/edit - Edit custom process
 - /processes/create - Create new process
 - /processes/manage - Manage processes
 
 ### Quests
+
 - /quests - Quest list
 - /quests/create - Create new quest
 - /quests/manage - Manage quests
 - /quests/review - Review quests
 - /quests/submit - Submit quest
-- /quests/[id] - Quest by ID (simple pattern)
+- /quests/:id - Quest by ID (simple pattern)
 - /quests/fixtures/ancestor-highlights - Quest graph fixture used for ancestor/descendant QA
-- /quests/[id]/edit - Edit quest by ID
-- /quests/[pathId]/[questId] - Quest by path and ID (nested pattern)
+- /quests/:id/edit - Edit quest by ID
+- /quests/:pathId/:questId - Quest by path and ID (nested pattern)
   - Examples: /quests/play/2, /quests/custom/5
-- /quests/[pathId]/[questId]/edit - Edit nested quest
-- /quests/[pathId]/[questId]/finished - Quest completion page
+- /quests/:pathId/:questId/edit - Edit nested quest
+- /quests/:pathId/:questId/finished - Quest completion page
 
 ### Shop
+
 - /shop - Shop index
-- /shop/buy/[itemId] - Buy item page
-- /shop/buy/[itemId]/[count] - Buy specific quantity
-- /shop/buy/[itemId]/[count]/insufficient_balance - Insufficient balance error
-- /shop/sell/[itemId] - Sell item page
-- /shop/sell/[itemId]/[count] - Sell specific quantity
-- /shop/sell/[itemId]/[count]/insufficient_items - Insufficient items error
+- /shop/buy/:itemId - Buy item page
+- /shop/buy/:itemId/:count - Buy specific quantity
+- /shop/buy/:itemId/:count/insufficient_balance - Insufficient balance error
+- /shop/sell/:itemId - Sell item page
+- /shop/sell/:itemId/:count - Sell specific quantity
+- /shop/sell/:itemId/:count/insufficient_items - Insufficient items error
 
-### Import/Migration
-- /import/[newVersion]/[oldVersion] - Import from old version
-- /import/[newVersion]/[oldVersion]/done - Import completion
+### Import/migration
 
-## Route Resolution for Link Checking
+- /import/:newVersion/:oldVersion - Import from old version
+- /import/:newVersion/:oldVersion/done - Import completion
 
-When validating internal links in markdown files, the link checker (`scripts/link-check.mjs`) resolves paths by:
+### Bundles
 
-1. **Exact match**: /inventory → `frontend/src/pages/inventory/index.astro`
-2. **Index pattern**: /quests → `frontend/src/pages/quests/index.astro`
-3. **Slug pattern**: /docs/about → `frontend/src/pages/docs/[slug].astro`
-4. **ID pattern**: /quests/1 → `frontend/src/pages/quests/[id].astro`
-5. **Nested dynamic**: /quests/play/2 → `frontend/src/pages/quests/[pathId]/[questId].astro`
-6. **Parameterized**: /inventory/item/37 → `frontend/src/pages/inventory/item/[itemId]/index.astro`
+- /bundles/submit - Submit a content bundle
 
-## Static Assets
+## Route resolution for link checking
+
+When validating internal links in markdown files, the link checker (`scripts/link-check.mjs`)
+resolves paths by:
+
+1. Exact match: /inventory → frontend/src/pages/inventory/index.astro
+2. Index pattern: /quests → frontend/src/pages/quests/index.astro
+3. Slug pattern: /docs/about → frontend/src/pages/docs/:slug
+4. ID pattern: /quests/1 → frontend/src/pages/quests/:id
+5. Nested dynamic: /quests/play/2 → frontend/src/pages/quests/:pathId/:questId
+6. Parameterized: /inventory/item/37 → frontend/src/pages/inventory/item/:itemId/index.astro
+
+## Static assets
 
 Static assets are served from:
-- `frontend/public/` - Main public directory
+
+- frontend/public/ - Main public directory
 - /assets/ - Images and media files
 
 Examples:
+
 - /assets/rescue.jpg
 - /assets/changelog/20230105/back_forward.jpg
 - /assets/rocket_min.gif
 
-## Adding New Routes
+## Adding new routes
 
 When adding new routes:
 
@@ -125,7 +206,7 @@ When adding new routes:
 3. Ensure `scripts/link-check.mjs` can resolve the pattern
 4. Test with `node scripts/link-check.mjs`
 
-## Testing Route Resolution
+## Testing route resolution
 
 To verify the link checker correctly resolves routes:
 
@@ -139,10 +220,10 @@ node scripts/link-check.mjs
 rm test.md
 ```
 
-## Notes for AI Agents
+## Notes for AI agents
 
-- Routes starting with `/` are internal Astro SSR routes
-- Dynamic route segments use `[paramName]` syntax
-- All routes must map to a physical `.astro` or `.md` file
-- The link checker validates these routes without requiring server startup
-- External links (containing `://`) are validated by lychee in CI
+- Routes starting with `/` are internal Astro SSR routes.
+- Dynamic route segments in this catalog use `:param` notation.
+- All routes must map to a physical `.astro` or `.md` file.
+- The link checker validates these routes without requiring server startup.
+- External links (containing `://`) are validated by lychee in CI.
