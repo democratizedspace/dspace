@@ -51,10 +51,13 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
+          context: .
+          file: Dockerfile
           platforms: linux/arm64
           push: true
           tags: ghcr.io/${{ github.repository }}:latest
+          build-args: |
+            GIT_SHA=${{ github.sha }}
       - name: Deploy on Raspberry Pi
         # Only run this step if the Raspberry Pi host secret is set
         if: env.RPI_HOST != ''

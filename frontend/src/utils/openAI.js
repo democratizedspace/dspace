@@ -2,6 +2,7 @@ import { loadGameState, ready } from './gameState/common.js';
 import { buildDchatKnowledgePack } from './dchatKnowledge.js';
 import { mergeSources } from './contextSources.js';
 import { searchDocsRag } from './docsRag.js';
+import { resolveAppBuildSha } from './buildMeta.js';
 import { npcPersonas } from '../data/npcPersonas.js';
 import OpenAI from 'openai';
 
@@ -40,10 +41,8 @@ const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';
 const fallbackModels = ['gpt-5-mini'];
 const resolvePromptVersionSha = () => {
-    const envSha =
-        import.meta?.env?.VITE_GIT_SHA ??
-        (typeof process !== 'undefined' ? process.env?.VITE_GIT_SHA : undefined);
-    const normalized = String(envSha || '').trim();
+    const appBuildSha = resolveAppBuildSha();
+    const normalized = String(appBuildSha || '').trim();
     return normalized && normalized !== 'unknown' ? normalized : 'dev';
 };
 export const CHAT_PROMPT_VERSION = `v3:${resolvePromptVersionSha()}`;
