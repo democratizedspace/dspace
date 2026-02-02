@@ -21,19 +21,24 @@ describe('docs RAG mismatch warning', () => {
         expect(warning).toBe('Docs RAG is stale vs app build.');
     });
 
+    it('warns when app SHA is unknown', () => {
+        const warning = getDocsRagMismatchWarning('unknown', 'deadbeef');
+        expect(warning).toBe('Docs RAG is stale vs app build.');
+    });
+
+    it('warns when docs SHA is unknown', () => {
+        const warning = getDocsRagMismatchWarning('deadbeef', 'unknown');
+        expect(warning).toBe('Docs RAG is stale vs app build.');
+    });
+
     it('returns null when SHAs match', () => {
         const warning = getDocsRagMismatchWarning('abc123', 'abc123');
         expect(warning).toBeNull();
     });
 
-    it('returns null when either SHA is unknown', () => {
-        const warning = getDocsRagMismatchWarning('unknown', 'abc123');
-        expect(warning).toBeNull();
-    });
-
-    it('returns null when either SHA is empty', () => {
+    it('warns when either SHA is empty', () => {
         const warning = getDocsRagMismatchWarning('', 'abc123');
-        expect(warning).toBeNull();
+        expect(warning).toBe('Docs RAG is stale vs app build.');
     });
 
     it('returns null when SHAs match by prefix', () => {

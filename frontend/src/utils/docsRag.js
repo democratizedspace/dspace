@@ -111,7 +111,7 @@ export const getDocsRagMeta = async () => {
 export const getDocsRagMismatchWarning = (appGitSha, docsGitSha) => {
     const appSha = normalizeSha(appGitSha);
     const docsSha = normalizeSha(docsGitSha);
-    if (!appSha || !docsSha || appSha === 'unknown' || docsSha === 'unknown') {
+    if (appSha === docsSha) {
         return null;
     }
     if (shasMatch(appSha, docsSha)) {
