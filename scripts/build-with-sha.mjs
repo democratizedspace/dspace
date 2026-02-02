@@ -3,8 +3,11 @@ import { execSync, spawnSync } from 'node:child_process';
 const resolveGitSha = () => {
     const envSha =
         process.env.VITE_GIT_SHA || process.env.DSPACE_GIT_SHA || process.env.GIT_SHA;
-    if (envSha && envSha.trim()) {
-        return envSha.trim();
+    if (envSha) {
+        const normalizedEnvSha = envSha.trim();
+        if (normalizedEnvSha && normalizedEnvSha.toLowerCase() !== 'unknown') {
+            return normalizedEnvSha;
+        }
     }
 
     try {
@@ -20,6 +23,10 @@ const run = (command, args, options = {}) => {
         env: process.env,
         ...options,
     });
+
+    if (result.error) {
+        console.error(`Failed to run ${command}:`, result.error);
+    }
 
     if (result.status !== 0) {
         process.exit(result.status ?? 1);
