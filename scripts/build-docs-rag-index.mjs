@@ -74,6 +74,12 @@ const parseFrontmatter = (content) => {
 
 const normalizeHeading = (value) => String(value || '').trim();
 
+const normalizeAnchor = (value) =>
+    String(value || '')
+        .trim()
+        .toLowerCase()
+        .replace(/_/g, '-');
+
 const stripMarkdownToText = (markdown) => {
     if (!markdown) {
         return '';
@@ -83,13 +89,13 @@ const stripMarkdownToText = (markdown) => {
 
     text = text.replace(/^---[\s\S]*?---/g, ' ');
     text = text.replace(/```[\s\S]*?```/g, ' ');
-    text = text.replace(/`[^`]*`/g, ' ');
+    text = text.replace(/`([^`]*)`/g, '$1');
     text = text.replace(/!\[([^\]]*)]\([^)]*\)/g, '$1');
     text = text.replace(/\[([^\]]+)]\([^)]*\)/g, '$1');
     text = text.replace(/<[^>]+>/g, ' ');
     text = text.replace(/^\s*#+\s*/gm, '');
     text = text.replace(/^\s*>\s*/gm, '');
-    text = text.replace(/[*_~]+/g, '');
+    text = text.replace(/[*~]+/g, '');
     text = text.replace(/\n{2,}/g, '\n\n');
     text = text.replace(/\n(?!\n)/g, ' ');
     text = text.replace(/[ \t]+/g, ' ');
@@ -242,7 +248,7 @@ const resolveHeadingText = (heading) => stripMarkdownToText(heading);
 
 const resolveSectionAnchor = ({ slugger, heading, anchorBase }) => {
     if (anchorBase) {
-        return anchorBase;
+        return normalizeAnchor(anchorBase) || 'top';
     }
 
     const normalizedHeading = normalizeHeading(resolveHeadingText(heading));
@@ -250,7 +256,8 @@ const resolveSectionAnchor = ({ slugger, heading, anchorBase }) => {
         return 'top';
     }
 
-    return slugger.slug(normalizedHeading) || 'top';
+    const slug = slugger.slug(normalizedHeading) || 'top';
+    return normalizeAnchor(slug) || 'top';
 };
 
 const resolveDocTitle = (frontmatter, content) => {
@@ -260,6 +267,29 @@ const resolveDocTitle = (frontmatter, content) => {
     }
     const headingMatch = content.match(/^#\s+(.+)$/m);
     return headingMatch ? headingMatch[1].trim() : 'Doc';
+};
+
+const chunkRoutesDocument = ({ filePath, content, slugBase }) => {
+    const title = 'Routes';
+    const slug = slugBase;
+    const pathRelative = path.relative(repoRoot, filePath).split(path.sep).join('/');
+    const anchor = 'top';
+    const heading = title;
+    const text = stripMarkdownToText(content);
+    const id = `route:${slug}:${anchor}:0:0`;
+
+    return [
+        {
+            id,
+            path: pathRelative,
+            slug,
+            title,
+            heading,
+            anchor,
+            text,
+            kind: 'route',
+        },
+    ];
 };
 
 const chunkDocument = ({
@@ -423,13 +453,10 @@ const gatherDocs = async () => {
 
     const routesContent = await readFileSafe(ROUTES_PATH);
     chunks.push(
-        ...chunkDocument({
+        ...chunkRoutesDocument({
             filePath: ROUTES_PATH,
             content: routesContent,
-            frontmatter: {},
-            kind: 'route',
             slugBase: '/docs/routes',
-            anchorBase: 'top',
         })
     );
 
