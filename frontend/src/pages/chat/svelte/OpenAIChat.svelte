@@ -5,6 +5,7 @@
         describeOpenAIError,
         buildChatPrompt,
         CHAT_PROMPT_VERSION,
+        resolveAppGitSha,
         getOpenAIErrorSummary,
         GPT5ChatV2,
     } from '../../../utils/openAI.js';
@@ -196,7 +197,7 @@
         const currentState = loadGameState();
         const normalized = normalizeSettings(currentState?.settings);
         showDebug = normalized.showChatDebugPayload;
-        appGitSha = import.meta.env?.VITE_GIT_SHA ?? 'unknown';
+        appGitSha = resolveAppGitSha();
         const docsMeta = await getDocsRagMeta();
         docsRagGitSha = docsMeta?.gitSha ?? 'unknown';
         docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';

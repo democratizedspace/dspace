@@ -39,12 +39,25 @@ const toOutputText = (response) => {
 const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';
 const fallbackModels = ['gpt-5-mini'];
-const resolvePromptVersionSha = () => {
-    const envSha =
-        import.meta?.env?.VITE_GIT_SHA ??
-        (typeof process !== 'undefined' ? process.env?.VITE_GIT_SHA : undefined);
+const readEnvValue = (key) => {
+    if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
+        return import.meta.env[key];
+    }
+    if (typeof process !== 'undefined' && process.env?.[key]) {
+        return process.env?.[key];
+    }
+    return undefined;
+};
+
+export const resolveAppGitSha = () => {
+    const envSha = readEnvValue('VITE_GIT_SHA');
     const normalized = String(envSha || '').trim();
-    return normalized && normalized !== 'unknown' ? normalized : 'dev';
+    return normalized && normalized !== 'unknown' ? normalized : 'unknown';
+};
+
+const resolvePromptVersionSha = () => {
+    const appSha = resolveAppGitSha();
+    return appSha !== 'unknown' ? appSha : 'dev';
 };
 export const CHAT_PROMPT_VERSION = `v3:${resolvePromptVersionSha()}`;
 export const safeFallbackMessage = "I don't know; please check /docs for the latest details.";
@@ -99,16 +112,6 @@ const docsRagOptions = {
     maxExcerptChars: 8500,
 };
 const docsRagPromptBudgetChars = 80000;
-
-const readEnvValue = (key) => {
-    if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
-        return import.meta.env[key];
-    }
-    if (typeof process !== 'undefined' && process.env?.[key]) {
-        return process.env?.[key];
-    }
-    return undefined;
-};
 
 const parseEnvList = (value) =>
     (value || '')
