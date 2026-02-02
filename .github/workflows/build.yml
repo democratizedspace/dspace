@@ -28,6 +28,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Ensure build SHA is present
+        run: |
+          if [ -z "$GITHUB_SHA" ]; then
+            echo "GITHUB_SHA is empty; refusing to build." >&2
+            exit 1
+          fi
+
       - name: Compute branch + SHA tag
         id: vars
         run: |
@@ -94,5 +101,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             GIT_SHA=${{ github.sha }}
+            VITE_GIT_SHA=${{ github.sha }}
           cache-from: ${{ env.PUSH_IMAGE == 'true' && format('type=registry,ref={0}/{1}:buildcache', env.REGISTRY, env.IMAGE_NAME) || '' }}
           cache-to:   ${{ env.PUSH_IMAGE == 'true' && format('type=registry,ref={0}/{1}:buildcache,mode=max', env.REGISTRY, env.IMAGE_NAME) || '' }}

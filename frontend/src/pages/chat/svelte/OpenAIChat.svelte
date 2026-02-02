@@ -27,6 +27,7 @@
         SAVE_SNAPSHOT_HINT_TEXT,
         shouldShowSaveSnapshotHint,
     } from '../../../utils/chatHints.js';
+    import { getAppGitSha } from '../../../utils/buildInfo.js';
     import { getDocsRagMeta, getDocsRagComparison } from '../../../utils/docsRag.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
@@ -196,7 +197,7 @@
         const currentState = loadGameState();
         const normalized = normalizeSettings(currentState?.settings);
         showDebug = normalized.showChatDebugPayload;
-        appGitSha = import.meta.env?.VITE_GIT_SHA ?? 'unknown';
+        appGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
         docsRagGitSha = docsMeta?.gitSha ?? 'unknown';
         docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';

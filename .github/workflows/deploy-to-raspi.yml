@@ -34,6 +34,8 @@ jobs:
       - name: Build and push Docker image
         run: |
           docker buildx build --platform linux/arm64,linux/amd64 \
+            --build-arg GIT_SHA=${{ github.sha }} \
+            --build-arg VITE_GIT_SHA=${{ github.sha }} \
             -t $IMAGE_NAME --push frontend
       - name: Deploy on Raspberry Pi
         uses: appleboy/ssh-action@v1.0.0
