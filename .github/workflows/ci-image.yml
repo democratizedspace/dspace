@@ -68,6 +68,7 @@ jobs:
           provenance: false
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
+            GIT_SHA=${{ github.sha }}
 
       - name: Build image with local node_modules present
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false
@@ -84,6 +85,7 @@ jobs:
           tags: dspace-test:latest
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
+            GIT_SHA=${{ github.sha }}
 
       - name: Build image for smoke test (no cache for forks)
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork
@@ -98,6 +100,7 @@ jobs:
           tags: dspace-test:latest
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
+            GIT_SHA=${{ github.sha }}
 
       - name: Canvas native deps smoke test
         run: |
@@ -306,6 +309,7 @@ jobs:
             ${{ steps.tags.outputs.version_tag }}
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
+            GIT_SHA=${{ github.sha }}
           labels: |
             org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
             org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
@@ -329,6 +333,7 @@ jobs:
             ${{ steps.tags.outputs.version_tag }}
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
+            GIT_SHA=${{ github.sha }}
           labels: |
             org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
             org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
