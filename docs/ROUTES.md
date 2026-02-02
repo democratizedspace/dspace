@@ -60,11 +60,11 @@ answer "how do I get there?" with citeable pathing.
 - More → Import/export gamesaves opens /gamesaves.
 - More → Cloud Sync opens /cloudsync.
 - More → Custom Content Backup opens /contentbackup.
-- More → Guilds opens /guilds.
+- More → Guilds is marked Coming soon (no navigation yet).
 - More → Stats opens /stats.
 - More → Achievements opens /achievements.
 - More → Leaderboard opens /leaderboard.
-- More → Locations opens /locations.
+- More → Locations is marked Coming soon (no navigation yet).
 - More → Titles opens /titles.
 - More → Toolbox opens /toolbox.
 - More → Settings opens /settings.

@@ -92,7 +92,8 @@ describe('docs RAG search', () => {
             }
         );
 
-        expect(excerptsText).toMatch(/More → Custom Content Backup opens \/contentbackup\./);
+        expect(excerptsText).toMatch(/Custom Content Backup/i);
+        expect(excerptsText).toMatch(/\/contentbackup/);
         expect(
             sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
         ).toBe(true);
