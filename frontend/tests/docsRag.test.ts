@@ -83,6 +83,22 @@ describe('docs RAG search', () => {
         ).toBe(true);
     });
 
+    it('returns click-path guidance for custom content backup navigation', async () => {
+        const { excerptsText, sources } = await searchDocsRag(
+            'How do I get to Custom Content Backup?',
+            {
+                maxResults: 4,
+                maxChars: 2000,
+            }
+        );
+
+        expect(excerptsText).toMatch(/Custom Content Backup/i);
+        expect(excerptsText).toMatch(/\/contentbackup/);
+        expect(
+            sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+        ).toBe(true);
+    });
+
     it('returns routes for custom content export questions', async () => {
         const { excerptsText, sources } = await searchDocsRag(
             'Where do I export custom content? What is the route?',
