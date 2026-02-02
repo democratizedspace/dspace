@@ -24,6 +24,7 @@ const CUSTOM_CONTENT_FALLBACK_QUERY = 'custom content editor import export backu
 const CUSTOM_CONTENT_FALLBACK_REQUIRED = /\bcustom\b/i;
 const CUSTOM_CONTENT_FALLBACK_ACTION = /\b(editor|backup|import|export)\b/i;
 const CUSTOM_CONTENT_ROUTE_SIGNAL = /\b(export|import|backup)\b/i;
+const CUSTOM_CONTENT_BACKUP_MATCH = /\bcustom content backup\b|\/contentbackup/i;
 const SEARCH_OPTIONS = Object.freeze({
     boost: { title: 3, heading: 2 },
     prefix: true,
@@ -163,6 +164,34 @@ const trimExcerpt = (text, maxChars) => {
     const trimmedText = text.endsWith('…') ? text.slice(0, -1) : text;
     const clipped = trimmedText.slice(0, Math.max(0, maxChars - 1)).trimEnd();
     return clipped ? `${clipped}…` : '';
+};
+
+const buildMatchExcerpt = (text, regex, maxChars) => {
+    const match = text.match(regex);
+    if (!match) {
+        return text;
+    }
+
+    const matchIndex =
+        typeof match.index === 'number'
+            ? match.index
+            : text.toLowerCase().indexOf(String(match[0]).toLowerCase());
+    if (matchIndex < 0) {
+        return text;
+    }
+
+    const halfWindow = Math.floor(maxChars / 2);
+    let start = Math.max(0, matchIndex - halfWindow);
+    let end = Math.min(text.length, start + maxChars);
+
+    if (end - start < maxChars) {
+        start = Math.max(0, end - maxChars);
+    }
+
+    const snippet = text.slice(start, end).trim();
+    const prefix = start > 0 ? '…' : '';
+    const suffix = end < text.length ? '…' : '';
+    return `${prefix}${snippet}${suffix}`;
 };
 
 const resolveAnchor = (anchor) => anchor || 'top';
@@ -467,15 +496,25 @@ export const searchDocsRag = async (queryText, options = {}) => {
     const buildExcerpts = (currentSelected) => {
         let outputText = header;
         const includedChunks = [];
+        const orderedSelected = wantsCustomContentRoute
+            ? [...currentSelected].sort((left, right) => {
+                  if (left.kind === 'route' && right.kind !== 'route') {
+                      return -1;
+                  }
+                  if (right.kind === 'route' && left.kind !== 'route') {
+                      return 1;
+                  }
+                  return compareResultsByRank(left, right);
+              })
+            : currentSelected;
 
-        for (const chunk of currentSelected) {
+        for (const chunk of orderedSelected) {
             const routeExcerptChars = wantsRouteChunk
                 ? Math.max(maxExcerptChars, 2500)
                 : maxExcerptChars;
             const chunkMaxExcerptChars =
                 chunk.kind === 'route' && wantsRouteChunk ? routeExcerptChars : maxExcerptChars;
-            const excerpt = trimExcerpt(String(chunk.text || '').trim(), chunkMaxExcerptChars);
-            if (!excerpt) continue;
+            const rawText = String(chunk.text || '').trim();
 
             const resolvedAnchor = resolveAnchor(chunk.anchor);
             const entryBase = buildEntry({
@@ -500,6 +539,19 @@ export const searchDocsRag = async (queryText, options = {}) => {
                 chunkMaxExcerptChars,
                 availableForEntry - entryOverhead
             );
+            if (maxExcerptForEntry <= 0) {
+                continue;
+            }
+
+            const excerptText =
+                chunk.kind === 'route' && wantsCustomContentRoute
+                    ? buildMatchExcerpt(rawText, CUSTOM_CONTENT_BACKUP_MATCH, maxExcerptForEntry)
+                    : rawText;
+            const excerpt = trimExcerpt(excerptText, maxExcerptForEntry);
+            if (!excerpt) {
+                continue;
+            }
+
             const finalExcerpt = trimExcerpt(excerpt, maxExcerptForEntry);
             if (!finalExcerpt) {
                 continue;
