@@ -6,6 +6,7 @@ import {
     getPromptVersionLabelForSha,
     getPromptVersionLabel,
     getPromptVersionSha,
+    deriveEnvNameFromHostname,
 } from '../src/utils/buildInfo.js';
 
 describe('buildInfo', () => {
@@ -42,5 +43,13 @@ describe('buildInfo', () => {
     it('derives the prompt SHA from an existing prompt label', () => {
         expect(getPromptVersionSha('v3:feedface')).toBe('feedfac');
         expect(getPromptVersionSha('v3:dev-local')).toBe('dev-local');
+    });
+
+    it('derives env names from hostnames', () => {
+        expect(deriveEnvNameFromHostname('staging.democratized.space')).toBe('staging');
+        expect(deriveEnvNameFromHostname('democratized.space')).toBe('prod');
+        expect(deriveEnvNameFromHostname('foo.democratized.space')).toBe('prod');
+        expect(deriveEnvNameFromHostname('localhost:3000')).toBe('dev');
+        expect(deriveEnvNameFromHostname('example.com')).toBe('dev');
     });
 });

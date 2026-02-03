@@ -74,3 +74,17 @@ export const getPromptVersionSha = (promptVersionLabel) => {
 };
 
 export const getPromptVersionLabel = () => `v3:${getPromptVersionSha()}`;
+
+export const deriveEnvNameFromHostname = (hostname) => {
+    const normalized = String(hostname || '')
+        .trim()
+        .toLowerCase();
+    const host = normalized.split(':')[0];
+    if (host.startsWith('staging.')) {
+        return 'staging';
+    }
+    if (host === 'democratized.space' || host.endsWith('.democratized.space')) {
+        return 'prod';
+    }
+    return 'dev';
+};

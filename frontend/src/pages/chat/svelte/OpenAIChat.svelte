@@ -30,6 +30,7 @@
     import {
         getAppGitSha,
         getAppGitShaWithFallback,
+        deriveEnvNameFromHostname,
         getPromptVersionLabelForSha,
     } from '../../../utils/buildInfo.js';
     import {
@@ -206,25 +207,8 @@
         return normalized;
     }
 
-    function inferEnvFromHost(hostname) {
-        const normalized = String(hostname || '').trim().toLowerCase();
-        if (!normalized || normalized === 'unknown') {
-            return null;
-        }
-        if (normalized.startsWith('staging.')) {
-            return 'staging';
-        }
-        if (
-            normalized === 'democratized.space' ||
-            normalized.endsWith('.democratized.space')
-        ) {
-            return 'prod';
-        }
-        return 'dev';
-    }
-
     function buildDocsEnvMismatchWarning(hostname, docsEnvName) {
-        const hostEnv = inferEnvFromHost(hostname);
+        const hostEnv = deriveEnvNameFromHostname(hostname);
         const docsEnv = normalizeEnvName(docsEnvName);
         if (!hostEnv || !docsEnv || hostEnv === docsEnv) {
             return null;
@@ -316,8 +300,8 @@
         promptVersionLabel = getPromptVersionLabelForSha(appGitShaDisplay);
         const normalizedDocsEnv = normalizeEnvName(docsRagEnvName);
         docsRagDerivedEnv = normalizedDocsEnv
-            ? normalizedDocsEnv
-            : inferEnvFromHost(docsRagHost) ?? 'unavailable';
+            ? 'n/a'
+            : deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable';
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
