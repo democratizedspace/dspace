@@ -394,7 +394,7 @@
                     <span class="debug-mono">{docsRagHost}</span>
                 </div>
                 <div class="debug-meta-row">
-                    <span>Docs pack generatedAt</span>
+                    <span>Docs RAG generatedAt</span>
                     <span class="debug-mono">{docsRagGeneratedAt}</span>
                 </div>
                 <div class="debug-meta-row">
