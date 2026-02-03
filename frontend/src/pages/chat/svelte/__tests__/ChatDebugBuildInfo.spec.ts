@@ -23,8 +23,10 @@ vi.mock('../../../../utils/gameState/common.js', () => ({
 
 vi.mock('../../../../utils/docsRag.js', () => ({
     getDocsRagMeta: vi.fn(async () => ({
-        gitSha: 'abc123',
+        docsGitSha: 'abc123',
         generatedAt: 'just-now',
+        envName: 'dev',
+        sourceRef: 'main',
     })),
     getDocsRagComparison: vi.fn(() => ({
         status: 'match',
@@ -48,5 +50,8 @@ describe('OpenAIChat build metadata', () => {
 
         const appBuildLabel = await screen.findByText('App build SHA');
         expect(appBuildLabel.nextElementSibling).toHaveTextContent('abc123');
+
+        const docsEnvLabel = await screen.findByText('Docs env');
+        expect(docsEnvLabel.nextElementSibling).toHaveTextContent('dev');
     });
 });

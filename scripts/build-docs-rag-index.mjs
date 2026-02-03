@@ -23,6 +23,7 @@ const CHANGELOG_CANDIDATES = [
     path.join(repoRoot, 'frontend/src/pages/docs/md/changelog*.md'),
     path.join(repoRoot, 'frontend/src/pages/docs/md/changelog/*.md'),
 ];
+const LEGACY_CHANGELOG_YEAR_CUTOFF = 2023;
 
 const MAX_CHUNK_LENGTH = 6000;
 const CHUNK_SPLIT_MIN = 2000;
@@ -217,6 +218,26 @@ const resolveChangelogSlug = (frontmatter, filePath) => {
     return path.basename(filePath, path.extname(filePath)).toLowerCase();
 };
 
+const resolveChangelogYear = (slug, filePath) => {
+    const slugMatch = String(slug || '').match(/^(\d{4})/);
+    if (slugMatch) {
+        return Number(slugMatch[1]);
+    }
+    const pathMatch = filePath.match(/changelog[\\/](\d{4})/);
+    return pathMatch ? Number(pathMatch[1]) : null;
+};
+
+const isLegacyDocSource = ({ filePath, slugBase }) => {
+    const normalizedPath = filePath.toLowerCase();
+    if (normalizedPath.includes(`${path.sep}legacy-`)) {
+        return true;
+    }
+    if (String(slugBase || '').startsWith('/docs/legacy')) {
+        return true;
+    }
+    return false;
+};
+
 const resolveDocSlugBase = (frontmatter, filePath) => {
     const slugValue = resolveDocSlug(frontmatter, filePath);
 
@@ -399,6 +420,9 @@ const gatherDocs = async () => {
 
     const chunks = [];
     const v3ChangelogSources = [];
+    const legacyDocSlugs = new Set();
+    const legacyDocPaths = new Set();
+    const legacyChangelogYears = new Set();
 
     const sortedDocFiles = docFiles.sort();
     for (const filePath of sortedDocFiles) {
@@ -409,6 +433,10 @@ const gatherDocs = async () => {
         const raw = await readFileSafe(filePath);
         const { frontmatter, body } = parseFrontmatter(raw);
         const slugBase = resolveDocSlugBase(frontmatter, filePath);
+        if (isLegacyDocSource({ filePath, slugBase })) {
+            legacyDocSlugs.add(slugBase);
+            legacyDocPaths.add(path.relative(repoRoot, filePath).split(path.sep).join('/'));
+        }
 
         chunks.push(
             ...chunkDocument({
@@ -425,6 +453,10 @@ const gatherDocs = async () => {
         const raw = await readFileSafe(filePath);
         const { frontmatter, body } = parseFrontmatter(raw);
         const entrySlug = resolveChangelogSlug(frontmatter, filePath);
+        const entryYear = resolveChangelogYear(entrySlug, filePath);
+        if (entryYear && entryYear <= LEGACY_CHANGELOG_YEAR_CUTOFF) {
+            legacyChangelogYears.add(entryYear);
+        }
         const qualifiesAsV3 = isV3ChangelogSource({ filePath, frontmatter, body });
         if (qualifiesAsV3) {
             v3ChangelogSources.push(filePath);
@@ -460,7 +492,16 @@ const gatherDocs = async () => {
         })
     );
 
-    return { chunks, changelogFiles, v3ChangelogSources };
+    return {
+        chunks,
+        changelogFiles,
+        v3ChangelogSources,
+        legacyMeta: {
+            docSlugs: Array.from(legacyDocSlugs).sort(),
+            docPaths: Array.from(legacyDocPaths).sort(),
+            changelogYears: Array.from(legacyChangelogYears).sort(),
+        },
+    };
 };
 
 const buildIndex = (chunks) => {
@@ -478,6 +519,40 @@ const buildIndex = (chunks) => {
     return miniSearch;
 };
 
+const normalizeEnvName = (value) => {
+    const normalized = String(value || '').trim().toLowerCase();
+    if (!normalized) {
+        return 'unknown';
+    }
+    if (['production', 'prod'].includes(normalized)) {
+        return 'prod';
+    }
+    if (['staging', 'stage'].includes(normalized)) {
+        return 'staging';
+    }
+    if (['development', 'dev'].includes(normalized)) {
+        return 'dev';
+    }
+    return normalized;
+};
+
+const getEnvName = () =>
+    normalizeEnvName(
+        process.env.VITE_DSPACE_ENV || process.env.DSPACE_ENV || process.env.NODE_ENV
+    );
+
+const getSourceRef = () => {
+    const sourceRef =
+        process.env.DSPACE_DOCS_SOURCE_REF ||
+        process.env.VITE_DSPACE_DOCS_SOURCE_REF ||
+        process.env.GITHUB_REF_NAME ||
+        process.env.GIT_REF_NAME ||
+        process.env.GITHUB_REF ||
+        process.env.CI_COMMIT_REF_NAME ||
+        process.env.BRANCH_NAME;
+    return sourceRef && sourceRef.trim() ? sourceRef.trim() : null;
+};
+
 const getGitSha = () => {
     const envSha =
         process.env.VITE_GIT_SHA || process.env.DSPACE_GIT_SHA || process.env.GIT_SHA;
@@ -492,14 +567,17 @@ const getGitSha = () => {
     }
 };
 
-const writeArtifacts = async (chunks, index, metaSources) => {
+const writeArtifacts = async (chunks, index, metaSources, legacyMeta) => {
     await fs.mkdir(OUTPUT_DIR, { recursive: true });
 
     const chunksPath = path.join(OUTPUT_DIR, 'docs_chunks.json');
     const indexPath = path.join(OUTPUT_DIR, 'docs_index.json');
     const metaPath = path.join(OUTPUT_DIR, 'docs_meta.json');
 
+    const gitSha = getGitSha();
     const meta = {
+        envName: getEnvName(),
+        sourceRef: getSourceRef(),
         generatedAt: new Date().toISOString(),
         generatedFrom: {
             routes: path.relative(repoRoot, ROUTES_PATH).split(path.sep).join('/'),
@@ -507,13 +585,15 @@ const writeArtifacts = async (chunks, index, metaSources) => {
             changelog: path.relative(repoRoot, CHANGELOG_DIR).split(path.sep).join('/'),
         },
         sources: metaSources,
+        legacy: legacyMeta,
         counts: {
             totalChunks: chunks.length,
             docs: chunks.filter((chunk) => chunk.kind === 'doc').length,
             routes: chunks.filter((chunk) => chunk.kind === 'route').length,
             changelog: chunks.filter((chunk) => chunk.kind === 'changelog').length,
         },
-        gitSha: getGitSha(),
+        gitSha,
+        docsGitSha: gitSha,
     };
 
     const [chunksOutput, indexOutput, metaOutput] = await Promise.all([
@@ -529,7 +609,7 @@ const writeArtifacts = async (chunks, index, metaSources) => {
 };
 
 const main = async () => {
-    const { chunks, changelogFiles, v3ChangelogSources } = await gatherDocs();
+    const { chunks, changelogFiles, v3ChangelogSources, legacyMeta } = await gatherDocs();
 
     const filtered = chunks
         .map((chunk) => ({
@@ -543,14 +623,19 @@ const main = async () => {
     }
 
     const index = buildIndex(filtered);
-    await writeArtifacts(filtered, index, {
-        changelog: changelogFiles.map((filePath) =>
-            path.relative(repoRoot, filePath).split(path.sep).join('/')
-        ),
-        v3Changelog: v3ChangelogSources.map((filePath) =>
-            path.relative(repoRoot, filePath).split(path.sep).join('/')
-        ),
-    });
+    await writeArtifacts(
+        filtered,
+        index,
+        {
+            changelog: changelogFiles.map((filePath) =>
+                path.relative(repoRoot, filePath).split(path.sep).join('/')
+            ),
+            v3Changelog: v3ChangelogSources.map((filePath) =>
+                path.relative(repoRoot, filePath).split(path.sep).join('/')
+            ),
+        },
+        legacyMeta
+    );
 
     console.log(
         `Generated ${filtered.length} chunks into ${path.relative(repoRoot, OUTPUT_DIR)}/`

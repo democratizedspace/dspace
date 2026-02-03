@@ -118,4 +118,30 @@ test.describe('chat RAG context', () => {
             chatPanel.locator('[data-testid="chat-debug-message"][data-kind="rag"]')
         ).toBeVisible();
     });
+
+    test('shows docs pack provenance in chat debug panel', async ({ page }) => {
+        await page.goto('/chat');
+
+        const chatPanel = page.locator('[data-testid="chat-panel"][data-provider="openai"]');
+        await expect(chatPanel).toBeVisible();
+        await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
+
+        const debugPanel = chatPanel.getByTestId('chat-debug-panel');
+        await expect(debugPanel.getByText('Docs env')).toBeVisible();
+
+        const envValue = debugPanel
+            .locator('.debug-meta-row', { hasText: 'Docs env' })
+            .locator('.debug-mono');
+        await expect(envValue).toHaveText(/\S+/);
+
+        const generatedAtValue = debugPanel
+            .locator('.debug-meta-row', { hasText: 'Docs pack generatedAt' })
+            .locator('.debug-mono');
+        await expect(generatedAtValue).toHaveText(/\S+/);
+
+        const shaValue = debugPanel
+            .locator('.debug-meta-row', { hasText: 'Docs pack SHA' })
+            .locator('.debug-mono');
+        await expect(shaValue).toHaveText(/\S+/);
+    });
 });

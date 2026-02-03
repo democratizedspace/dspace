@@ -489,6 +489,7 @@ describe('buildChatPrompt', () => {
             "If you're missing context, say you don't know and ask a clarifying question OR point " +
                 'to a specific /docs page.',
             'When giving URLs/navigation, cite /docs excerpts or docs/ROUTES.md.',
+            'Never link GitHub blob URLs for docs; prefer in-game /docs routes (e.g. /docs/routes, /docs/backups).',
             'Only give exact counts/durations/rates if they appear in retrieved context; otherwise be ' +
                 "approximate or say you don't know.",
         ].join('\n');
@@ -539,7 +540,7 @@ describe('buildChatPrompt', () => {
             sources: [],
         });
         vi.mocked(searchDocsRag).mockResolvedValueOnce({
-            excerptsText: `---\nDocs grounding (gitSha: test):\n- [doc] Routes — /docs/routes#top\n  sample\n---`,
+            excerptsText: `---\nDocs grounding (env: dev, docsGitSha: test, generatedAt: now, sourceRef: main):\n- [doc] Routes — /docs/routes#top\n  sample\n---`,
             sources: [],
             sourcesMeta: { results: [] },
         });

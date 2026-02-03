@@ -109,6 +109,24 @@ describe('chat non-reasoning regression probes', () => {
         expect(reply).toBe('The answer is exactly 123 quests. See /docs/quests.');
     });
 
+    it('sanitizes GitHub blob links to avoid stale branch URLs', async () => {
+        responsesCreateMock.mockResolvedValueOnce({
+            output_text:
+                'See https://github.com/democratizedspace/dspace/blob/main/docs/ROUTES.md for routes.',
+        });
+        const { GPT5Chat } = await import('../frontend/src/utils/openAI.js');
+
+        const reply = await GPT5Chat([
+            {
+                role: 'user',
+                content: 'Where are the routes documented?',
+            },
+        ]);
+
+        expect(reply).toContain('/docs');
+        expect(reply).not.toContain('/blob/');
+    });
+
     it('dedupes fallback models and retries with the next unique model', async () => {
         process.env.VITE_CHAT_FALLBACK_MODELS = 'gpt-5-mini, gpt-5.2, gpt-5.2';
         responsesCreateMock

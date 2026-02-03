@@ -10,6 +10,7 @@ const CHANGELOG_INTENT =
 const DRIFT_INTENT =
     /\b(drift|deprecat(?:ed|ion)|removed|not applicable|release state|current behavior|current state)\b/i;
 const DRIFT_VERSION_CUE = /\b(v2|v3|v2[-\s]?only|v2\s*(?:to|->|→|vs\.?|\/)\s*v3)\b/i;
+const LEGACY_QUERY_INTENT = /\b(legacy|v1|v2|2023|pre[-\s]?v3|historical|old)\b/i;
 const SEMANTICS_INTENT =
     /\b(requires|consumes|creates|duration|timer|recipe|semantics|normalize)\b/i;
 const SEMANTICS_MATCH = /\b(requires|consumes|creates|duration|process)\b/i;
@@ -25,6 +26,9 @@ const CUSTOM_CONTENT_FALLBACK_REQUIRED = /\bcustom\b/i;
 const CUSTOM_CONTENT_FALLBACK_ACTION = /\b(editor|backup|import|export)\b/i;
 const CUSTOM_CONTENT_ROUTE_SIGNAL = /\b(export|import|backup)\b/i;
 const CUSTOM_CONTENT_BACKUP_MATCH = /\bcustom content backup\b|\/contentbackup/i;
+const PRIORITY_DOC_SLUGS = new Set(['/docs/v3-release-state', '/docs/routes', '/docs/backups']);
+const PRIORITY_CHANGELOG_ANCHORS = new Set(['20260301']);
+const GITHUB_BLOB_PATTERN = /https?:\/\/github\.com\/[^)\s]+\/blob\/[^\s)]+/gi;
 const SEARCH_OPTIONS = Object.freeze({
     boost: { title: 3, heading: 2 },
     prefix: true,
@@ -212,6 +216,93 @@ const formatSourceLabel = ({ title, heading }) => {
     return trimmedTitle || trimmedHeading || 'Untitled';
 };
 
+const sanitizeExcerptText = (text) => {
+    if (!text) {
+        return '';
+    }
+    return text.replace(GITHUB_BLOB_PATTERN, '');
+};
+
+const parseChangelogYear = (value) => {
+    const match = String(value || '').match(/^(\d{4})/);
+    if (!match) {
+        return null;
+    }
+    const year = Number(match[1]);
+    return Number.isFinite(year) ? year : null;
+};
+
+const getLegacyMetaSets = (meta) => {
+    const legacy = meta?.legacy || {};
+    const docSlugs = new Set(legacy.docSlugs || []);
+    const docPaths = new Set(legacy.docPaths || []);
+    const changelogYears = new Set(legacy.changelogYears || []);
+    return { docSlugs, docPaths, changelogYears };
+};
+
+const isLegacyChunk = (chunk, meta) => {
+    const slug = String(chunk.slug || '');
+    const path = String(chunk.path || '');
+    const { docSlugs, docPaths, changelogYears } = getLegacyMetaSets(meta);
+
+    if (docSlugs.has(slug) || docPaths.has(path)) {
+        return true;
+    }
+
+    if (chunk.kind === 'changelog') {
+        const year =
+            parseChangelogYear(chunk.anchor) || parseChangelogYear(path.split('/changelog/')[1]);
+        return year ? changelogYears.has(year) : false;
+    }
+
+    return slug.startsWith('/docs/legacy') || path.includes('/docs/md/legacy-');
+};
+
+const getChunkRankBoost = (chunk, query, meta) => {
+    let boost = 0;
+    const normalizedSlug = String(chunk.slug || '');
+    const normalizedAnchor = resolveAnchor(chunk.anchor);
+    const wantsLegacy = LEGACY_QUERY_INTENT.test(query);
+    const legacyChunk = isLegacyChunk(chunk, meta);
+
+    if (PRIORITY_DOC_SLUGS.has(normalizedSlug)) {
+        boost += 1.5;
+    }
+
+    if (chunk.kind === 'changelog' && PRIORITY_CHANGELOG_ANCHORS.has(normalizedAnchor)) {
+        boost += 1.5;
+    }
+
+    if (!legacyChunk) {
+        boost += 0.4;
+    } else if (!wantsLegacy) {
+        boost -= 1.5;
+    }
+
+    return boost;
+};
+
+export const rankDocsResults = (results = [], chunkMap, meta, query) => {
+    if (!Array.isArray(results) || results.length === 0) {
+        return [];
+    }
+
+    return results
+        .map((result) => {
+            const chunk = chunkMap?.get(result.id);
+            if (!chunk) {
+                return { ...result, packGeneratedAt: meta?.generatedAt };
+            }
+            const boost = getChunkRankBoost(chunk, query, meta);
+            return {
+                ...result,
+                score: result.score + boost,
+                packGeneratedAt: meta?.generatedAt,
+            };
+        })
+        .sort(compareResultsByRank);
+};
+
 const compareIds = (leftId, rightId) => {
     if (leftId < rightId) return -1;
     if (leftId > rightId) return 1;
@@ -221,6 +312,13 @@ const compareIds = (leftId, rightId) => {
 const compareResultsByRank = (left, right) => {
     if (left.score !== right.score) {
         return right.score - left.score;
+    }
+    const leftGeneratedAt = Date.parse(left.packGeneratedAt || left.generatedAt || '');
+    const rightGeneratedAt = Date.parse(right.packGeneratedAt || right.generatedAt || '');
+    if (!Number.isNaN(leftGeneratedAt) && !Number.isNaN(rightGeneratedAt)) {
+        if (leftGeneratedAt !== rightGeneratedAt) {
+            return rightGeneratedAt - leftGeneratedAt;
+        }
     }
     return compareIds(String(left.id), String(right.id));
 };
@@ -365,7 +463,8 @@ export const searchDocsRag = async (queryText, options = {}) => {
         console.error('Failed to load docs RAG data:', error);
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
-    const results = miniSearch.search(query, SEARCH_OPTIONS).sort(compareResultsByRank);
+    const rawResults = miniSearch.search(query, SEARCH_OPTIONS).sort(compareResultsByRank);
+    const results = rankDocsResults(rawResults, chunkMap, meta, query);
     const maxResults = options.maxResults ?? DEFAULT_MAX_RESULTS;
     const maxChars = options.maxChars ?? DEFAULT_MAX_CHARS;
     const maxExcerptChars = options.maxExcerptChars ?? DEFAULT_MAX_EXCERPT_CHARS;
@@ -374,7 +473,12 @@ export const searchDocsRag = async (queryText, options = {}) => {
     for (const result of results) {
         const chunk = chunkMap.get(result.id);
         if (!chunk) continue;
-        selected.push({ ...chunk, score: result.score, forced: false });
+        selected.push({
+            ...chunk,
+            score: result.score,
+            forced: false,
+            packGeneratedAt: result.packGeneratedAt,
+        });
         if (selected.length >= maxResults) {
             break;
         }
@@ -440,7 +544,13 @@ export const searchDocsRag = async (queryText, options = {}) => {
             const semanticResults = miniSearch
                 .search(SEMANTICS_FALLBACK_QUERY, SEARCH_OPTIONS)
                 .sort(compareResultsByRank);
-            semanticsChunk = findHighestRankedChunk(semanticResults, chunkMap, (chunk) => {
+            const rankedSemantics = rankDocsResults(
+                semanticResults,
+                chunkMap,
+                meta,
+                SEMANTICS_FALLBACK_QUERY
+            );
+            semanticsChunk = findHighestRankedChunk(rankedSemantics, chunkMap, (chunk) => {
                 return chunk.kind === 'doc';
             });
         }
@@ -463,7 +573,13 @@ export const searchDocsRag = async (queryText, options = {}) => {
             const customContentResults = miniSearch
                 .search(CUSTOM_CONTENT_FALLBACK_QUERY, SEARCH_OPTIONS)
                 .sort(compareResultsByRank);
-            customContentChunk = findHighestRankedChunk(customContentResults, chunkMap, (chunk) => {
+            const rankedCustomContent = rankDocsResults(
+                customContentResults,
+                chunkMap,
+                meta,
+                CUSTOM_CONTENT_FALLBACK_QUERY
+            );
+            customContentChunk = findHighestRankedChunk(rankedCustomContent, chunkMap, (chunk) => {
                 return chunk.kind === 'doc' && matchesCustomContentChunk(chunk);
             });
         }
@@ -483,9 +599,14 @@ export const searchDocsRag = async (queryText, options = {}) => {
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
 
-    const gitSha = meta?.gitSha || 'unknown';
+    const docsGitSha = meta?.docsGitSha || meta?.gitSha || 'unknown';
     const generatedAt = meta?.generatedAt || 'unknown';
-    const headerLines = ['---', `Docs grounding (gitSha: ${gitSha}, generatedAt: ${generatedAt}):`];
+    const envName = meta?.envName || 'unknown';
+    const sourceRef = meta?.sourceRef || 'unknown';
+    const headerLines = [
+        '---',
+        `Docs grounding (env: ${envName}, docsGitSha: ${docsGitSha}, generatedAt: ${generatedAt}, sourceRef: ${sourceRef}):`,
+    ];
     const header = `${headerLines.join('\n')}\n`;
     const footer = '---';
     const minBlockLength = header.length + footer.length;
@@ -514,7 +635,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
                 : maxExcerptChars;
             const chunkMaxExcerptChars =
                 chunk.kind === 'route' && wantsRouteChunk ? routeExcerptChars : maxExcerptChars;
-            const rawText = String(chunk.text || '').trim();
+            const rawText = sanitizeExcerptText(String(chunk.text || '').trim());
 
             const resolvedAnchor = resolveAnchor(chunk.anchor);
             const entryBase = buildEntry({
@@ -614,7 +735,9 @@ export const searchDocsRag = async (queryText, options = {}) => {
     output += footer;
 
     const sourcesMeta = {
-        gitSha,
+        envName,
+        sourceRef,
+        docsGitSha,
         generatedAt,
         results: included.map((chunk) => ({
             id: chunk.id,

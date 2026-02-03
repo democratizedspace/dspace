@@ -1,5 +1,7 @@
 {
-    "generatedAt": "2026-02-02T07:38:00.874Z",
+    "envName": "test",
+    "sourceRef": null,
+    "generatedAt": "2026-02-02T22:30:19.520Z",
     "generatedFrom": {
         "routes": "docs/ROUTES.md",
         "docs": "frontend/src/pages/docs/md",
@@ -23,6 +25,12 @@
         ],
         "v3Changelog": ["frontend/src/pages/docs/md/changelog/20260301.md"]
     },
+    "legacy": {
+        "docSlugs": ["/docs/legacy-save-storage"],
+        "docPaths": ["frontend/src/pages/docs/md/legacy-save-storage.md"],
+        "changelogYears": [2022, 2023]
+    },
     "counts": { "totalChunks": 562, "docs": 506, "routes": 1, "changelog": 55 },
-    "gitSha": "bebd9e70991327413e2ded4eb0802607af3527d7"
+    "gitSha": "b30e72b44be1c572df9100711bd1ee8150e0345d",
+    "docsGitSha": "b30e72b44be1c572df9100711bd1ee8150e0345d"
 }

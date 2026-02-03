@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import docsMeta from '../src/generated/rag/docs_meta.json';
-import { searchDocsRag } from '../src/utils/docsRag.js';
+import { rankDocsResults, searchDocsRag } from '../src/utils/docsRag.js';
 
 describe('docs RAG search', () => {
     it('returns docs excerpts with canonical /docs URLs', async () => {
@@ -139,6 +139,63 @@ describe('docs RAG search', () => {
         expect(sources.some((entry) => entry.type === 'changelog')).toBe(true);
     });
 
+    it('prefers v3 release-state docs over legacy changelog results', () => {
+        const chunkMap = new Map([
+            [
+                'doc:v3',
+                {
+                    id: 'doc:v3',
+                    kind: 'doc',
+                    slug: '/docs/v3-release-state',
+                    anchor: 'top',
+                    title: 'Release state',
+                    heading: 'Release state',
+                    path: 'frontend/src/pages/docs/md/v3-release-state.md',
+                },
+            ],
+            [
+                'changelog:legacy',
+                {
+                    id: 'changelog:legacy',
+                    kind: 'changelog',
+                    slug: '/changelog',
+                    anchor: '20230630',
+                    title: 'Changelog',
+                    heading: '2023',
+                    path: 'frontend/src/pages/docs/md/changelog/20230630.md',
+                },
+            ],
+        ]);
+        const results = [
+            { id: 'doc:v3', score: 5 },
+            { id: 'changelog:legacy', score: 5 },
+        ];
+        const meta = { legacy: { changelogYears: [2023] }, generatedAt: '2026-02-02T00:00:00Z' };
+
+        const ranked = rankDocsResults(results, chunkMap, meta, 'release state v3');
+
+        expect(ranked[0]?.id).toBe('doc:v3');
+    });
+
+    it('deprioritizes legacy changelog chunks for v3 questions', async () => {
+        const { sourcesMeta } = await searchDocsRag('Is token.place active in v3?', {
+            maxResults: 6,
+            maxChars: 4000,
+        });
+        const legacyAnchors = sourcesMeta.results
+            .filter((entry) => entry.kind === 'changelog' && /^2023/.test(entry.anchor || ''))
+            .map((entry) => entry.anchor);
+
+        expect(legacyAnchors).toHaveLength(0);
+        expect(
+            sourcesMeta.results.some(
+                (entry) =>
+                    (entry.kind === 'doc' && entry.slug === '/docs/v3-release-state') ||
+                    (entry.kind === 'changelog' && entry.anchor === '20260301')
+            )
+        ).toBe(true);
+    });
+
     it('forces changelog inclusion for version status queries', async () => {
         const { sourcesMeta } = await searchDocsRag('Is token.place active in v3?', {
             maxResults: 6,
@@ -191,6 +248,8 @@ describe('docs RAG search', () => {
         });
 
         expect(docsMeta.generatedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
+        expect(docsMeta.envName).toBeTruthy();
+        expect(docsMeta.docsGitSha || docsMeta.gitSha).toBeTruthy();
         expect(excerptsText).toContain(docsMeta.generatedAt);
     });
 });

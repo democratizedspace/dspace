@@ -76,6 +76,10 @@ const guardrailRules = [
         pattern: /docs\/routes\.md/,
     },
     {
+        line: 'Never link GitHub blob URLs for docs; prefer in-game /docs routes (e.g. /docs/routes, /docs/backups).',
+        pattern: /github blob|\/docs\/backups/,
+    },
+    {
         line:
             'Only give exact counts/durations/rates if they appear in retrieved context; otherwise be ' +
             "approximate or say you don't know.",
@@ -142,6 +146,14 @@ export const validateChatResponseText = (text, options = {}) => {
     const normalizedText = textValue.trim();
     if (!normalizedText) {
         return { text: textValue, wasSanitized: false };
+    }
+    const gitHubBlobPattern = /https?:\/\/github\.com\/[^/\s]+\/[^/\s]+\/blob\/[^\s)]+/gi;
+    if (gitHubBlobPattern.test(normalizedText)) {
+        const sanitized = textValue.replace(gitHubBlobPattern, '/docs');
+        return {
+            text: sanitized.trim() || safeFallbackMessage,
+            wasSanitized: true,
+        };
     }
 
     const hasContextSources =
