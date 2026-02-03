@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/svelte';
+import { cleanup, render, screen } from '@testing-library/svelte';
 
 vi.mock('../../../../utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({
@@ -31,23 +31,26 @@ vi.mock('../../../../utils/docsRag.js', () => ({
     })),
     getDocsRagComparison: vi.fn(() => ({
         status: 'match',
-        message: 'Docs RAG matches app build.',
+        message: '✅ in sync (app: abc123def456, docs: docs789)',
     })),
+    getDocsRagMismatchWarning: vi.fn(() => null),
 }));
 
 describe('OpenAIChat build metadata', () => {
     afterEach(() => {
+        cleanup();
         delete process.env.VITE_GIT_SHA;
     });
 
-    it('shows the build SHA and prompt version from VITE_GIT_SHA', async () => {
+    it('shows non-empty build metadata from VITE_GIT_SHA', async () => {
         // Set process.env before import so the module reads the fallback path for VITE_GIT_SHA.
-        process.env.VITE_GIT_SHA = 'abc123';
+        process.env.VITE_GIT_SHA = 'abc123def456';
         const { default: OpenAIChat } = await import('../OpenAIChat.svelte');
         render(OpenAIChat);
 
-        const promptVersion = await screen.findByText('Prompt version: v3:abc123');
+        const promptVersion = await screen.findByText('Prompt version: v3:abc123d');
         expect(promptVersion).toBeInTheDocument();
+        expect(promptVersion).not.toHaveTextContent('unknown');
 
         const appBuildLabel = await screen.findByText('App build SHA');
         expect(appBuildLabel.nextElementSibling).toHaveTextContent('abc123');
