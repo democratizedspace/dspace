@@ -69,7 +69,9 @@ RUN --mount=type=cache,target=/root/.pnpm-store pnpm install --filter ./frontend
 
 FROM node:20-bookworm-slim AS runtime
 ARG DSPACE_VERSION=dev
+ARG VITE_GIT_SHA=unknown
 ENV DSPACE_VERSION="${DSPACE_VERSION}"
+ENV VITE_GIT_SHA="${VITE_GIT_SHA}"
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
