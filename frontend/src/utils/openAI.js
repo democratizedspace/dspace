@@ -77,7 +77,7 @@ const guardrailRules = [
     },
     {
         line: 'Never link to GitHub blob/tree URLs for docs; use in-game /docs routes and cite them.',
-        pattern: /github blob\/tree|\/docs routes/i,
+        pattern: /github blob\/tree urls? for docs/i,
     },
     {
         line:
@@ -148,6 +148,12 @@ export const validateChatResponseText = (text, options = {}) => {
         return { text: textValue, wasSanitized: false };
     }
 
+    const githubDocsLinkPattern =
+        /https?:\/\/github\.com\/democratizedspace\/dspace\/(?:blob|tree)\/[^\s)]+/i;
+    if (githubDocsLinkPattern.test(normalizedText)) {
+        return { text: safeFallbackMessage, wasSanitized: true };
+    }
+
     const hasContextSources =
         Array.isArray(options.contextSources) && options.contextSources.length > 0;
     if (hasContextSources) {
@@ -162,12 +168,6 @@ export const validateChatResponseText = (text, options = {}) => {
     const hasCitationMarkers = citationMarkerPattern.test(normalizedText);
 
     if (hasSuspiciousPrecision && !hasCitationMarkers) {
-        return { text: safeFallbackMessage, wasSanitized: true };
-    }
-
-    const githubDocsLinkPattern =
-        /https?:\/\/github\.com\/democratizedspace\/dspace\/(?:blob|tree)\/[^\s)]+/i;
-    if (githubDocsLinkPattern.test(normalizedText)) {
         return { text: safeFallbackMessage, wasSanitized: true };
     }
 

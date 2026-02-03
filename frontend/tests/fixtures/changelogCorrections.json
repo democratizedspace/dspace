@@ -35,6 +35,11 @@
             "type": "link",
             "description": "Removed dead internal Wallet link because the route no longer exists",
             "date": "2025-11-06"
+        },
+        {
+            "type": "metadata",
+            "description": "Aligned the changelog slug with the January 31 filename to keep anchors consistent",
+            "date": "2026-02-02"
         }
     ],
     "20230630": [
