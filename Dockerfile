@@ -45,6 +45,10 @@ ARG GIT_SHA=unknown
 ARG VITE_GIT_SHA=${GIT_SHA}
 # GIT_SHA should be provided via build args; git is not available in the image to compute it.
 ENV VITE_GIT_SHA="${VITE_GIT_SHA}"
+RUN if [ -z "$VITE_GIT_SHA" ] || [ "$VITE_GIT_SHA" = "unknown" ]; then \
+        echo "Missing VITE_GIT_SHA build arg; refusing to build frontend assets." >&2; \
+        exit 1; \
+    fi
 # Copy source separately to avoid overlaying host node_modules (pnpm symlinks make this fail when
 # node_modules exists on the host). Build artifacts are excluded via .dockerignore for compatibility
 # with builders that do not support COPY --exclude flags.

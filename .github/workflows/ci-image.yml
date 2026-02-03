@@ -112,6 +112,53 @@ jobs:
             GIT_SHA=${{ github.sha }}
             VITE_GIT_SHA=${{ github.sha }}
 
+      - name: Assert build SHA is baked into frontend bundle
+        run: |
+          short_sha="$(git rev-parse --short HEAD)"
+          docker run --rm \
+            -e EXPECTED_SHA="${GITHUB_SHA}" \
+            -e EXPECTED_SHORT_SHA="${short_sha}" \
+            dspace-test:latest \
+            node -e "const fs = require('fs');\
+const path = require('path');\
+const targets = [process.env.EXPECTED_SHA, process.env.EXPECTED_SHORT_SHA].filter(Boolean);\
+if (!targets.length) {\
+  console.error('No expected SHA provided.');\
+  process.exit(1);\
+}\
+const root = '/app/dist';\
+const shouldMatch = (content) => targets.some((target) => content.includes(target));\
+let found = false;\
+const stack = [root];\
+while (stack.length && !found) {\
+  const current = stack.pop();\
+  const entries = fs.readdirSync(current, { withFileTypes: true });\
+  for (const entry of entries) {\
+    const fullPath = path.join(current, entry.name);\
+    if (entry.isDirectory()) {\
+      stack.push(fullPath);\
+      continue;\
+    }\
+    if (!entry.isFile()) {\
+      continue;\
+    }\
+    try {\
+      const content = fs.readFileSync(fullPath, 'utf8');\
+      if (shouldMatch(content)) {\
+        found = true;\
+        break;\
+      }\
+    } catch (error) {\
+      continue;\
+    }\
+  }\
+}\
+if (!found) {\
+  console.error('Expected build SHA not found in frontend bundle.');\
+  process.exit(1);\
+}\
+console.log('Build SHA found in frontend bundle.');"
+
       - name: Canvas native deps smoke test
         run: |
           docker run --rm --entrypoint node dspace-test:latest \
