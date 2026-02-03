@@ -25,6 +25,10 @@ const CUSTOM_CONTENT_FALLBACK_REQUIRED = /\bcustom\b/i;
 const CUSTOM_CONTENT_FALLBACK_ACTION = /\b(editor|backup|import|export)\b/i;
 const CUSTOM_CONTENT_ROUTE_SIGNAL = /\b(export|import|backup)\b/i;
 const CUSTOM_CONTENT_BACKUP_MATCH = /\bcustom content backup\b|\/contentbackup/i;
+const LEGACY_QUERY_CUES = /\b(v1|v2|legacy|2022|2023|old(?:er)?)\b/i;
+const LEGACY_CHANGELOG_ANCHOR = /^202[0-3]/;
+const PREFERRED_DOC_SLUGS = new Set(['/docs/v3-release-state', '/docs/routes', '/docs/backups']);
+const PREFERRED_CHANGELOG_ANCHORS = new Set(['20260301']);
 const SEARCH_OPTIONS = Object.freeze({
     boost: { title: 3, heading: 2 },
     prefix: true,
@@ -224,11 +228,89 @@ const compareIds = (leftId, rightId) => {
     return 0;
 };
 
+const SCORE_EPSILON = 1e-6;
+
+const parseGeneratedAt = (value) => {
+    if (!value) return null;
+    const parsed = Date.parse(value);
+    return Number.isNaN(parsed) ? null : parsed;
+};
+
+const compareByGeneratedAt = (leftMeta, rightMeta) => {
+    const leftTime = parseGeneratedAt(leftMeta?.generatedAt);
+    const rightTime = parseGeneratedAt(rightMeta?.generatedAt);
+    if (leftTime == null || rightTime == null || leftTime === rightTime) {
+        return 0;
+    }
+    return rightTime - leftTime;
+};
+
 const compareResultsByRank = (left, right) => {
-    if (left.score !== right.score) {
-        return right.score - left.score;
+    const scoreDelta = right.score - left.score;
+    if (Math.abs(scoreDelta) > SCORE_EPSILON) {
+        return scoreDelta;
+    }
+    const generatedAtComparison = compareByGeneratedAt(left?.meta, right?.meta);
+    if (generatedAtComparison !== 0) {
+        return generatedAtComparison;
     }
     return compareIds(String(left.id), String(right.id));
+};
+
+const buildLegacyAnchors = (meta) =>
+    new Set((meta?.legacy?.changelogAnchors || []).map((entry) => String(entry || '').trim()));
+
+const isLegacyChangelogChunk = (chunk, legacyAnchors) => {
+    if (!chunk || chunk.kind !== 'changelog') {
+        return false;
+    }
+    const anchor = resolveAnchor(chunk.anchor);
+    if (legacyAnchors.has(anchor)) {
+        return true;
+    }
+    return LEGACY_CHANGELOG_ANCHOR.test(anchor);
+};
+
+const getDocsRankBoost = ({ chunk, wantsLegacy, legacyAnchors }) => {
+    if (!chunk) {
+        return 0;
+    }
+
+    let boost = 0;
+
+    if (chunk.kind === 'doc' && PREFERRED_DOC_SLUGS.has(chunk.slug)) {
+        boost += 1.5;
+    }
+
+    if (chunk.kind === 'route' && chunk.slug === '/docs/routes') {
+        boost += 1.2;
+    }
+
+    const anchor = resolveAnchor(chunk.anchor);
+    if (chunk.kind === 'changelog' && PREFERRED_CHANGELOG_ANCHORS.has(anchor)) {
+        boost += 1.4;
+    }
+
+    const isLegacy = isLegacyChangelogChunk(chunk, legacyAnchors);
+    if (isLegacy) {
+        boost += wantsLegacy ? 0.4 : -2.0;
+    }
+
+    return boost;
+};
+
+export const rankDocsResults = ({ results, chunkMap, query, meta }) => {
+    const wantsLegacy = LEGACY_QUERY_CUES.test(String(query || ''));
+    const legacyAnchors = buildLegacyAnchors(meta);
+
+    return results
+        .map((result) => {
+            const chunk = chunkMap.get(result.id);
+            const boost = getDocsRankBoost({ chunk, wantsLegacy, legacyAnchors });
+            const resultMeta = result.meta ?? meta ?? null;
+            return { ...result, score: result.score + boost, meta: resultMeta };
+        })
+        .sort(compareResultsByRank);
 };
 
 const matchesSemanticsChunk = (chunk) => {
@@ -371,7 +453,8 @@ export const searchDocsRag = async (queryText, options = {}) => {
         console.error('Failed to load docs RAG data:', error);
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
-    const results = miniSearch.search(query, SEARCH_OPTIONS).sort(compareResultsByRank);
+    const rawResults = miniSearch.search(query, SEARCH_OPTIONS);
+    const results = rankDocsResults({ results: rawResults, chunkMap, query, meta });
     const maxResults = options.maxResults ?? DEFAULT_MAX_RESULTS;
     const maxChars = options.maxChars ?? DEFAULT_MAX_CHARS;
     const maxExcerptChars = options.maxExcerptChars ?? DEFAULT_MAX_EXCERPT_CHARS;
@@ -380,7 +463,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
     for (const result of results) {
         const chunk = chunkMap.get(result.id);
         if (!chunk) continue;
-        selected.push({ ...chunk, score: result.score, forced: false });
+        selected.push({ ...chunk, score: result.score, forced: false, meta: result.meta });
         if (selected.length >= maxResults) {
             break;
         }
@@ -443,9 +526,12 @@ export const searchDocsRag = async (queryText, options = {}) => {
         });
 
         if (!semanticsChunk) {
-            const semanticResults = miniSearch
-                .search(SEMANTICS_FALLBACK_QUERY, SEARCH_OPTIONS)
-                .sort(compareResultsByRank);
+            const semanticResults = rankDocsResults({
+                results: miniSearch.search(SEMANTICS_FALLBACK_QUERY, SEARCH_OPTIONS),
+                chunkMap,
+                query: SEMANTICS_FALLBACK_QUERY,
+                meta,
+            });
             semanticsChunk = findHighestRankedChunk(semanticResults, chunkMap, (chunk) => {
                 return chunk.kind === 'doc';
             });
@@ -466,9 +552,12 @@ export const searchDocsRag = async (queryText, options = {}) => {
         });
 
         if (!customContentChunk) {
-            const customContentResults = miniSearch
-                .search(CUSTOM_CONTENT_FALLBACK_QUERY, SEARCH_OPTIONS)
-                .sort(compareResultsByRank);
+            const customContentResults = rankDocsResults({
+                results: miniSearch.search(CUSTOM_CONTENT_FALLBACK_QUERY, SEARCH_OPTIONS),
+                chunkMap,
+                query: CUSTOM_CONTENT_FALLBACK_QUERY,
+                meta,
+            });
             customContentChunk = findHighestRankedChunk(customContentResults, chunkMap, (chunk) => {
                 return chunk.kind === 'doc' && matchesCustomContentChunk(chunk);
             });
@@ -489,9 +578,14 @@ export const searchDocsRag = async (queryText, options = {}) => {
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
 
-    const gitSha = normalizeSha(meta?.gitSha) || 'unavailable';
-    const generatedAt = normalizeSha(meta?.generatedAt) || 'unavailable';
-    const headerLines = ['---', `Docs grounding (gitSha: ${gitSha}, generatedAt: ${generatedAt}):`];
+    const docsGitSha = meta?.docsGitSha || meta?.gitSha || 'unknown';
+    const generatedAt = meta?.generatedAt || 'unknown';
+    const envName = meta?.envName || 'unknown';
+    const sourceRef = meta?.sourceRef ? `, sourceRef: ${meta.sourceRef}` : '';
+    const headerLines = [
+        '---',
+        `Docs grounding (env: ${envName}, gitSha: ${docsGitSha}, generatedAt: ${generatedAt}${sourceRef}):`,
+    ];
     const header = `${headerLines.join('\n')}\n`;
     const footer = '---';
     const minBlockLength = header.length + footer.length;
@@ -620,8 +714,11 @@ export const searchDocsRag = async (queryText, options = {}) => {
     output += footer;
 
     const sourcesMeta = {
-        gitSha,
+        gitSha: docsGitSha,
+        docsGitSha,
         generatedAt,
+        envName,
+        sourceRef: meta?.sourceRef || null,
         results: included.map((chunk) => ({
             id: chunk.id,
             slug: chunk.slug,

@@ -23,8 +23,11 @@ vi.mock('../../../../utils/gameState/common.js', () => ({
 
 vi.mock('../../../../utils/docsRag.js', () => ({
     getDocsRagMeta: vi.fn(async () => ({
-        gitSha: 'docs789',
+        gitSha: 'abc123',
+        docsGitSha: 'abc123',
         generatedAt: 'just-now',
+        envName: 'staging',
+        sourceRef: 'refs/heads/main',
     })),
     getDocsRagComparison: vi.fn(() => ({
         status: 'match',
@@ -50,16 +53,18 @@ describe('OpenAIChat build metadata', () => {
         expect(promptVersion).not.toHaveTextContent('unknown');
 
         const appBuildLabel = await screen.findByText('App build SHA');
-        expect(appBuildLabel.nextElementSibling).toHaveTextContent('abc123def456');
-        expect(appBuildLabel.nextElementSibling).not.toHaveTextContent('unknown');
+        expect(appBuildLabel.nextElementSibling).toHaveTextContent('abc123');
 
         const docsShaLabel = await screen.findByText('Docs RAG SHA');
-        expect(docsShaLabel.nextElementSibling).toHaveTextContent('docs789');
+        expect(docsShaLabel.nextElementSibling).toHaveTextContent('abc123');
 
-        const docsGeneratedLabel = await screen.findByText('Docs RAG generatedAt');
-        expect(docsGeneratedLabel.nextElementSibling).toHaveTextContent('just-now');
+        const docsEnvLabel = await screen.findByText('Docs pack env');
+        expect(docsEnvLabel.nextElementSibling).toHaveTextContent('staging');
 
-        const comparisonLabel = await screen.findByText('Docs RAG comparison');
-        expect(comparisonLabel.nextElementSibling).toHaveTextContent('✅ in sync');
+        const docsHostLabel = await screen.findByText('Docs host');
+        expect(docsHostLabel.nextElementSibling).toHaveTextContent(window.location.origin);
+
+        const docsSourceRefLabel = await screen.findByText('Docs pack sourceRef');
+        expect(docsSourceRefLabel.nextElementSibling).toHaveTextContent('refs/heads/main');
     });
 });

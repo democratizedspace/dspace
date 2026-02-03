@@ -76,6 +76,10 @@ const guardrailRules = [
         pattern: /docs\/routes\.md/,
     },
     {
+        line: 'Never link to GitHub blob/tree URLs for docs; use in-game /docs routes and cite them.',
+        pattern: /github.*blob\/tree.*docs/i,
+    },
+    {
         line:
             'Only give exact counts/durations/rates if they appear in retrieved context; otherwise be ' +
             "approximate or say you don't know.",
@@ -137,17 +141,71 @@ const getChatModelConfig = () => {
     };
 };
 
+const githubDocsLinkPattern =
+    /https?:\/\/github\.com\/democratizedspace\/dspace\/(?:blob|tree)\/[^\s)]+/gi;
+
+const resolveDocsRouteFromGithubPath = (docsPath) => {
+    if (!docsPath) return null;
+    if (/^docs\/routes\.md$/i.test(docsPath)) {
+        return '/docs/routes';
+    }
+    const docsPageMatch = docsPath.match(/^frontend\/src\/pages\/docs\/md\/(.+)\.md$/i);
+    if (docsPageMatch) {
+        const slugPath = docsPageMatch[1].replace(/\\/g, '/');
+        return `/docs/${slugPath}`;
+    }
+    return null;
+};
+
+const rewriteGithubDocsLink = (url) => {
+    try {
+        const parsed = new URL(url);
+        const match = parsed.pathname.match(
+            /^\/democratizedspace\/dspace\/(?:blob|tree)\/[^/]+\/(.+)$/
+        );
+        if (!match) {
+            return null;
+        }
+        return resolveDocsRouteFromGithubPath(match[1]);
+    } catch (error) {
+        return null;
+    }
+};
+
+const sanitizeGithubDocsLinks = (text) => {
+    if (!text) {
+        return { text: text || '', wasSanitized: false };
+    }
+
+    let sanitized = false;
+    const rewritten = text.replace(githubDocsLinkPattern, (url) => {
+        let cleanedUrl = url;
+        let trailingPunctuation = '';
+        while (/[.,!?;:]$/.test(cleanedUrl)) {
+            trailingPunctuation = cleanedUrl.slice(-1) + trailingPunctuation;
+            cleanedUrl = cleanedUrl.slice(0, -1);
+        }
+        const resolved = rewriteGithubDocsLink(cleanedUrl);
+        sanitized = true;
+        return `${resolved || '[link removed: use /docs routes]'}${trailingPunctuation}`;
+    });
+
+    return { text: rewritten, wasSanitized: sanitized };
+};
+
 export const validateChatResponseText = (text, options = {}) => {
     const textValue = typeof text === 'string' ? text : '';
-    const normalizedText = textValue.trim();
+    const sanitizedLinks = sanitizeGithubDocsLinks(textValue);
+    const sanitizedText = sanitizedLinks.text;
+    const normalizedText = sanitizedText.trim();
     if (!normalizedText) {
-        return { text: textValue, wasSanitized: false };
+        return { text: sanitizedText, wasSanitized: sanitizedLinks.wasSanitized };
     }
 
     const hasContextSources =
         Array.isArray(options.contextSources) && options.contextSources.length > 0;
     if (hasContextSources) {
-        return { text: textValue, wasSanitized: false };
+        return { text: sanitizedText, wasSanitized: sanitizedLinks.wasSanitized };
     }
 
     const suspiciousPrecisionPattern =
@@ -161,7 +219,7 @@ export const validateChatResponseText = (text, options = {}) => {
         return { text: safeFallbackMessage, wasSanitized: true };
     }
 
-    return { text: textValue, wasSanitized: false };
+    return { text: sanitizedText, wasSanitized: sanitizedLinks.wasSanitized };
 };
 
 const applyProviderRealityLine = (prompt) => {

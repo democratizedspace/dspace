@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import docsMeta from '../src/generated/rag/docs_meta.json';
-import { searchDocsRag } from '../src/utils/docsRag.js';
+import { rankDocsResults, searchDocsRag } from '../src/utils/docsRag.js';
 
 describe('docs RAG search', () => {
     it('returns docs excerpts with canonical /docs URLs', async () => {
@@ -192,5 +192,104 @@ describe('docs RAG search', () => {
 
         expect(docsMeta.generatedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
         expect(excerptsText).toContain(docsMeta.generatedAt);
+        expect(excerptsText).toContain(docsMeta.envName);
+    });
+
+    it('prefers v3 release-state docs over legacy changelog entries for neutral queries', () => {
+        const legacyChunk = {
+            id: 'changelog:/changelog:20230101:0:0',
+            kind: 'changelog',
+            slug: '/changelog',
+            anchor: '20230101',
+            title: 'Legacy Changelog',
+            heading: '2023',
+            text: 'Legacy release notes',
+        };
+        const v3Chunk = {
+            id: 'doc:/docs/v3-release-state:top:0:0',
+            kind: 'doc',
+            slug: '/docs/v3-release-state',
+            anchor: 'top',
+            title: 'V3 Release State',
+            heading: 'Release State',
+            text: 'v3 release state details',
+        };
+        const chunkMap = new Map([
+            [legacyChunk.id, legacyChunk],
+            [v3Chunk.id, v3Chunk],
+        ]);
+        const results = [
+            { id: legacyChunk.id, score: 1 },
+            { id: v3Chunk.id, score: 1 },
+        ];
+
+        const ranked = rankDocsResults({
+            results,
+            chunkMap,
+            query: 'release state',
+            meta: {
+                legacy: { changelogAnchors: ['20230101'] },
+            },
+        });
+
+        expect(ranked[0].id).toBe(v3Chunk.id);
+    });
+
+    it('prefers newer generatedAt metadata when scores tie', () => {
+        const olderChunk = {
+            id: 'doc:/docs/alpha:top:0:0',
+            kind: 'doc',
+            slug: '/docs/alpha',
+            anchor: 'top',
+            title: 'Alpha',
+            heading: 'Alpha',
+            text: 'Alpha content',
+        };
+        const newerChunk = {
+            id: 'doc:/docs/bravo:top:0:0',
+            kind: 'doc',
+            slug: '/docs/bravo',
+            anchor: 'top',
+            title: 'Bravo',
+            heading: 'Bravo',
+            text: 'Bravo content',
+        };
+        const chunkMap = new Map([
+            [olderChunk.id, olderChunk],
+            [newerChunk.id, newerChunk],
+        ]);
+        const results = [
+            { id: olderChunk.id, score: 1, meta: { generatedAt: '2024-01-10T00:00:00.000Z' } },
+            { id: newerChunk.id, score: 1, meta: { generatedAt: '2024-02-10T00:00:00.000Z' } },
+        ];
+
+        const ranked = rankDocsResults({
+            results,
+            chunkMap,
+            query: 'docs',
+            meta: {},
+        });
+
+        expect(ranked[0].id).toBe(newerChunk.id);
+    });
+
+    it('prefers v3 release-state docs over legacy changelog sources in retrieval', async () => {
+        const { sources } = await searchDocsRag('v3 release state status', {
+            maxResults: 6,
+            maxChars: 3000,
+        });
+
+        expect(
+            sources.some(
+                (entry) =>
+                    entry.type === 'doc' &&
+                    String(entry.url || '').startsWith('/docs/v3-release-state#')
+            )
+        ).toBe(true);
+        expect(
+            sources.some(
+                (entry) => entry.type === 'changelog' && /\/changelog#2023/.test(entry.url || '')
+            )
+        ).toBe(false);
     });
 });
