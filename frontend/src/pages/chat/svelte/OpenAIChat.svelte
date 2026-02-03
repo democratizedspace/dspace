@@ -174,7 +174,9 @@
     }
 
     function normalizeEnvName(value) {
-        const normalized = String(value || '').trim().toLowerCase();
+        const normalized = String(value || '')
+            .trim()
+            .toLowerCase();
         if (!normalized || normalized === 'unknown') {
             return null;
         }
