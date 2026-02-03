@@ -302,7 +302,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.branch || '' }}
+          ref: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.branch) || github.ref }}
 
       - name: Ensure build SHA is present
         run: |
