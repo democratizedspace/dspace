@@ -301,7 +301,7 @@
         const normalizedDocsEnv = normalizeEnvName(docsRagEnvName);
         docsRagDerivedEnv = normalizedDocsEnv
             ? 'n/a'
-            : (deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable');
+            : deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable';
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
@@ -371,7 +371,7 @@
             bind:value={$message}
             on:keydown={handleKeyDown}
             style="font-size: 18px;"
-        ></textarea>
+        />
         {#if showSaveSnapshotHint}
             <div class="save-snapshot-hint" role="note">
                 <span>{SAVE_SNAPSHOT_HINT_TEXT}</span>
