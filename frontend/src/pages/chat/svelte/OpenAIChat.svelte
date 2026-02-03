@@ -46,6 +46,7 @@
     let showDebug = false;
     let debugMessages = [];
     let debugExpanded = false;
+    let promptDebugRequested = false;
     let settingsUnsubscribe;
     let saveSnapshotHintDismissed = false;
     let saveSnapshotHintFocusListener;
@@ -184,6 +185,20 @@
         saveSnapshotHintDismissed = sessionStorage.getItem(saveSnapshotHintStorageKey) === '1';
     }
 
+    function isPromptDebugRequest() {
+        if (typeof window === 'undefined') {
+            return false;
+        }
+
+        const hash = window.location.hash;
+        if (hash === '#prompt-debug') {
+            return true;
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        return params.get('debug') === 'prompt';
+    }
+
     async function handlePersonaChange(event) {
         const selectedId = event.target.value;
         const nextPersona =
@@ -204,7 +219,11 @@
         await ready;
         const currentState = loadGameState();
         const normalized = normalizeSettings(currentState?.settings);
-        showDebug = normalized.showChatDebugPayload;
+        promptDebugRequested = isPromptDebugRequest();
+        showDebug = normalized.showChatDebugPayload || promptDebugRequested;
+        if (promptDebugRequested) {
+            debugExpanded = true;
+        }
         appGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
         docsRagGitSha = docsMeta?.gitSha ?? 'unavailable';
@@ -214,7 +233,7 @@
         window.addEventListener('focus', saveSnapshotHintFocusListener);
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
             const nextNormalized = normalizeSettings(value?.settings);
-            showDebug = nextNormalized.showChatDebugPayload;
+            showDebug = nextNormalized.showChatDebugPayload || promptDebugRequested;
             if (!showDebug) {
                 debugExpanded = false;
                 debugMessages = [];
@@ -305,7 +324,7 @@
     </div>
 
     {#if showDebug}
-        <div class="debug-panel" data-testid="chat-debug-panel">
+        <div class="debug-panel" id="prompt-debug" data-testid="chat-debug-panel">
             <div class="debug-heading">
                 <div>
                     <h3>Chat prompt debug</h3>

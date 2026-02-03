@@ -74,6 +74,9 @@
             <span>Prompt version: {CHAT_PROMPT_VERSION}</span>
             <span>App SHA: {appSha}</span>
         </div>
+        <a class="debug-link" href="/chat#prompt-debug" data-testid="settings-debug-link">
+            Open chat prompt debug
+        </a>
     </div>
 
     <label class="toggle">
@@ -141,6 +144,26 @@
         gap: 0.25rem;
         font-size: 0.85rem;
         color: #94a3b8;
+    }
+
+    .debug-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(59, 130, 246, 0.16);
+        color: #bfdbfe;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-decoration: none;
+        border: 1px solid rgba(59, 130, 246, 0.5);
+        width: fit-content;
+    }
+
+    .debug-link:hover {
+        background: rgba(59, 130, 246, 0.25);
+        color: #e0f2fe;
     }
 
     h2 {
