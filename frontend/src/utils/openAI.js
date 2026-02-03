@@ -76,6 +76,10 @@ const guardrailRules = [
         pattern: /docs\/routes\.md/,
     },
     {
+        line: 'Never link to GitHub blob/tree URLs for docs; use in-game /docs routes and cite them.',
+        pattern: /github blob\/tree|\/docs routes/i,
+    },
+    {
         line:
             'Only give exact counts/durations/rates if they appear in retrieved context; otherwise be ' +
             "approximate or say you don't know.",
@@ -158,6 +162,12 @@ export const validateChatResponseText = (text, options = {}) => {
     const hasCitationMarkers = citationMarkerPattern.test(normalizedText);
 
     if (hasSuspiciousPrecision && !hasCitationMarkers) {
+        return { text: safeFallbackMessage, wasSanitized: true };
+    }
+
+    const githubDocsLinkPattern =
+        /https?:\/\/github\.com\/democratizedspace\/dspace\/(?:blob|tree)\/[^\s)]+/i;
+    if (githubDocsLinkPattern.test(normalizedText)) {
         return { text: safeFallbackMessage, wasSanitized: true };
     }
 

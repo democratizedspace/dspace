@@ -37,6 +37,7 @@ import {
     getOpenAIErrorSummary,
     GPT5Chat,
     GPT5ChatV2,
+    validateChatResponseText,
 } from '../src/utils/openAI.js';
 import { buildDchatKnowledgePack } from '../src/utils/dchatKnowledge.js';
 import { searchDocsRag } from '../src/utils/docsRag.js';
@@ -678,6 +679,17 @@ describe('buildChatPrompt', () => {
         const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
 
         expect(options.maxChars).toBe(0);
+    });
+});
+
+describe('validateChatResponseText', () => {
+    it('rejects GitHub blob links in responses', () => {
+        const result = validateChatResponseText(
+            'See https://github.com/democratizedspace/dspace/blob/main/docs/ROUTES.md for docs.'
+        );
+
+        expect(result.wasSanitized).toBe(true);
+        expect(result.text).toMatch(/\/docs/i);
     });
 });
 

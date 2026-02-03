@@ -64,6 +64,15 @@ without introducing heavyweight infrastructure.
 - The summary is injected as a **system message** with the prefix
   `DSPACE knowledge base:` in `frontend/src/utils/openAI.js`.
 
+### Docs pack provenance + environment wiring
+- The docs RAG pack includes explicit provenance metadata (`envName`, `docsGitSha`, `generatedAt`,
+  optional `sourceRef`) to keep staging/prod from silently using stale docs packs.
+- `envName` is derived from `DSPACE_ENV` (or `VITE_DSPACE_ENV` / `NODE_ENV` as fallbacks).
+- `sourceRef` is optional and can be wired via `DSPACE_DOCS_SOURCE_REF`, `GITHUB_REF_NAME`,
+  `GITHUB_REF`, or other CI ref variables when generating the pack.
+- `/chat` debug surfaces `Docs env`, `Docs pack generatedAt`, and `Docs pack sha` so QA can verify
+  provenance without digging into artifacts.
+
 ### Prompting + response shape
 - Persona system prompts are defined in `frontend/src/data/npcPersonas.js` and passed into
   `GPT5Chat` as the system message. Only the **dChat persona** currently includes explicit

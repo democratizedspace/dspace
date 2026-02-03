@@ -47,6 +47,8 @@
     let saveSnapshotHintFocusListener;
     let appGitSha = 'unknown';
     let docsRagGitSha = 'unknown';
+    let docsRagEnvName = 'unknown';
+    let docsRagSourceRef = 'unknown';
     let docsRagGeneratedAt = 'unknown';
     let docsRagComparisonMessage = 'App build SHA unavailable; cannot compare.';
     let docsRagWarning = null;
@@ -199,7 +201,9 @@
         showDebug = normalized.showChatDebugPayload;
         appGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
-        docsRagGitSha = docsMeta?.gitSha ?? 'unknown';
+        docsRagGitSha = docsMeta?.docsGitSha ?? docsMeta?.gitSha ?? 'unknown';
+        docsRagEnvName = docsMeta?.envName ?? 'unknown';
+        docsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
         docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
         const comparison = getDocsRagComparison(appGitSha, docsRagGitSha);
         docsRagComparisonMessage = comparison.message;
@@ -323,12 +327,20 @@
                     <span class="debug-mono">{appGitSha}</span>
                 </div>
                 <div class="debug-meta-row">
-                    <span>Docs RAG SHA</span>
+                    <span>Docs pack sha</span>
                     <span class="debug-mono">{docsRagGitSha}</span>
                 </div>
                 <div class="debug-meta-row">
-                    <span>Docs RAG generatedAt</span>
+                    <span>Docs env</span>
+                    <span class="debug-mono">{docsRagEnvName}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs pack generatedAt</span>
                     <span class="debug-mono">{docsRagGeneratedAt}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs pack sourceRef</span>
+                    <span class="debug-mono">{docsRagSourceRef}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>Docs RAG comparison</span>
