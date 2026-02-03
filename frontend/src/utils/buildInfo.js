@@ -10,9 +10,18 @@ const readViteGitSha = () => {
 
 const normalizeSha = (value) => String(value || '').trim();
 
+const isPlaceholderSha = (value) => {
+    const normalized = normalizeSha(value);
+    if (!normalized) {
+        return true;
+    }
+    const lower = normalized.toLowerCase();
+    return lower === 'unknown' || lower === 'dev-local' || lower === 'missing-sha';
+};
+
 const resolveGitSha = () => {
     const normalized = normalizeSha(readViteGitSha());
-    if (!normalized || normalized.toLowerCase() === 'unknown') {
+    if (isPlaceholderSha(normalized)) {
         return 'dev-local';
     }
     return normalized;
@@ -27,6 +36,23 @@ const shortenSha = (value) => {
 };
 
 export const getAppGitSha = () => resolveGitSha();
+
+export const getAppGitShaWithFallback = (fallbackSha) => {
+    const appSha = normalizeSha(readViteGitSha());
+    if (!isPlaceholderSha(appSha)) {
+        return { sha: appSha, source: 'vite' };
+    }
+    const fallbackNormalized = normalizeSha(fallbackSha);
+    if (!isPlaceholderSha(fallbackNormalized)) {
+        return { sha: fallbackNormalized, source: 'docs-pack-fallback' };
+    }
+    return { sha: 'dev-local', source: 'dev-local' };
+};
+
+export const getPromptVersionLabelForSha = (sha) => {
+    const shortSha = shortenSha(sha);
+    return `v3:${shortSha || 'dev-local'}`;
+};
 
 const extractPromptVersionSha = (promptVersionLabel) => {
     const normalized = normalizeSha(promptVersionLabel);
