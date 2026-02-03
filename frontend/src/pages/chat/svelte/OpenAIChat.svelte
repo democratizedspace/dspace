@@ -115,10 +115,12 @@
     }
 
     async function submitMessage() {
+        const currentMessage = $message;
+        message.set('');
         const userMessage = {
             role: 'user',
-            content: $message,
-            tokens: countTokens($message),
+            content: currentMessage,
+            tokens: countTokens(currentMessage),
             timestamp: Date.now(),
         };
 
@@ -167,7 +169,6 @@
             });
         }
 
-        message.set('');
         showSpinner = false;
     }
 
