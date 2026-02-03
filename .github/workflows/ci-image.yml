@@ -115,6 +115,10 @@ jobs:
             VITE_GIT_SHA=${{ github.sha }}
             ENFORCE_VITE_GIT_SHA=1
 
+      - name: Inspect frontend bundle location in built image
+        run: |
+          docker run --rm dspace-test:latest sh -lc 'ls -la /app && find /app -maxdepth 4 -type d -name dist -o -name build | head'
+
       - name: Assert build SHA is baked into frontend bundle
         run: |
           docker run --rm \
