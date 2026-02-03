@@ -123,6 +123,7 @@
         };
 
         addMessage(userMessage);
+        message.set('');
         const historyForApi = [...$messageHistory];
         showSpinner = true;
         errorBanner = null;
@@ -167,7 +168,6 @@
             });
         }
 
-        message.set('');
         showSpinner = false;
     }
 
