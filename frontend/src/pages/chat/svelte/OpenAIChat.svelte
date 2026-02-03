@@ -27,7 +27,11 @@
         SAVE_SNAPSHOT_HINT_TEXT,
         shouldShowSaveSnapshotHint,
     } from '../../../utils/chatHints.js';
-    import { getAppGitSha } from '../../../utils/buildInfo.js';
+    import {
+        deriveEnvNameFromHostname,
+        getAppGitSha,
+        getAppGitShaWithFallback,
+    } from '../../../utils/buildInfo.js';
     import {
         getDocsRagMeta,
         getDocsRagComparison,
@@ -51,8 +55,11 @@
     let saveSnapshotHintFocusListener;
     let promptDebugLinkListener;
     let appGitSha = getAppGitSha();
+    let appGitShaDisplay = appGitSha;
+    let appGitShaSource = 'dev-local';
     let docsRagGitSha = 'unavailable';
     let docsRagEnvName = 'unavailable';
+    let docsRagDerivedEnvName = 'unavailable';
     let docsRagSourceRef = 'unavailable';
     let docsRagGeneratedAt = 'unavailable';
     let docsRagHost = 'unavailable';
@@ -187,43 +194,24 @@
             return null;
         }
         if (['production', 'prod'].includes(normalized)) {
-            return 'production';
+            return 'prod';
         }
         if (['staging', 'stage', 'stg'].includes(normalized)) {
             return 'staging';
         }
+        if (['development', 'dev'].includes(normalized)) {
+            return 'dev';
+        }
         return normalized;
     }
 
-    function inferEnvFromHost(origin) {
-        if (!origin || origin === 'unknown') {
-            return null;
-        }
-        let hostname = '';
-        try {
-            hostname = new URL(origin).hostname;
-        } catch (error) {
-            return null;
-        }
-        if (!hostname || hostname === 'localhost' || hostname === '127.0.0.1') {
-            return null;
-        }
-        if (/(staging|stage|stg)/i.test(hostname)) {
-            return 'staging';
-        }
-        if (/(prod|production)/i.test(hostname)) {
-            return 'production';
-        }
-        return null;
-    }
-
-    function buildDocsEnvMismatchWarning(hostOrigin, docsEnvName) {
-        const hostEnv = inferEnvFromHost(hostOrigin);
+    function buildDocsEnvMismatchWarning(hostname, docsEnvName) {
+        const hostEnv = deriveEnvNameFromHostname(hostname);
         const docsEnv = normalizeEnvName(docsEnvName);
         if (!hostEnv || !docsEnv || hostEnv === docsEnv) {
             return null;
         }
-        return `Docs pack env (${docsEnvName}) does not match host (${hostOrigin}).`;
+        return `Docs pack env (${docsEnvName}) does not match host (${hostname}).`;
     }
 
     function dismissSaveSnapshotHint() {
@@ -300,10 +288,17 @@
         appGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
         docsRagGitSha = docsMeta?.docsGitSha ?? docsMeta?.gitSha ?? 'unknown';
+        const appShaInfo = getAppGitShaWithFallback(docsRagGitSha);
+        appGitShaDisplay = appShaInfo.sha;
+        appGitShaSource = appShaInfo.source;
         docsRagEnvName = docsMeta?.envName ?? 'unknown';
         docsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
         docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
-        docsRagHost = window?.location?.origin || 'unknown';
+        docsRagHost = window?.location?.host || 'unknown';
+        const normalizedDocsEnv = normalizeEnvName(docsRagEnvName);
+        const derivedEnv = deriveEnvNameFromHostname(docsRagHost);
+        docsRagDerivedEnvName = normalizedDocsEnv ? 'not-needed' : derivedEnv;
+        docsRagEnvName = normalizedDocsEnv ?? derivedEnv;
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
@@ -429,7 +424,11 @@
             <div class="debug-metadata">
                 <div class="debug-meta-row">
                     <span>App build SHA</span>
-                    <span class="debug-mono">{appGitSha}</span>
+                    <span class="debug-mono">{appGitShaDisplay}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>App build SHA source</span>
+                    <span class="debug-mono">{appGitShaSource}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>Docs RAG SHA</span>
@@ -438,6 +437,10 @@
                 <div class="debug-meta-row">
                     <span>Docs pack env</span>
                     <span class="debug-mono">{docsRagEnvName}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs env derived</span>
+                    <span class="debug-mono">{docsRagDerivedEnvName}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>Docs host</span>

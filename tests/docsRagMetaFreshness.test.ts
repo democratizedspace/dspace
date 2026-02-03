@@ -20,7 +20,7 @@ describe('docs RAG comparison', () => {
         const comparison = getDocsRagComparison('unknown', 'deadbeef');
         expect(comparison).toEqual({
             status: 'unavailable',
-            message: '⚠️ mismatch (app: unavailable, docs: deadbeef)',
+            message: 'ℹ️ app SHA missing; using docs pack SHA for display (docs: deadbeef)',
         });
         expect(getDocsRagMismatchWarning('unknown', 'deadbeef')).toBeNull();
     });
@@ -29,7 +29,7 @@ describe('docs RAG comparison', () => {
         const comparison = getDocsRagComparison(undefined as unknown as string, 'deadbeef');
         expect(comparison).toEqual({
             status: 'unavailable',
-            message: '⚠️ mismatch (app: unavailable, docs: deadbeef)',
+            message: 'ℹ️ app SHA missing; using docs pack SHA for display (docs: deadbeef)',
         });
         expect(getDocsRagMismatchWarning(undefined as unknown as string, 'deadbeef')).toBeNull();
     });
@@ -38,7 +38,7 @@ describe('docs RAG comparison', () => {
         const comparison = getDocsRagComparison('UNKNOWN', 'deadbeef');
         expect(comparison).toEqual({
             status: 'unavailable',
-            message: '⚠️ mismatch (app: unavailable, docs: deadbeef)',
+            message: 'ℹ️ app SHA missing; using docs pack SHA for display (docs: deadbeef)',
         });
         expect(getDocsRagMismatchWarning('UNKNOWN', 'deadbeef')).toBeNull();
     });
@@ -47,7 +47,7 @@ describe('docs RAG comparison', () => {
         const comparison = getDocsRagComparison('dev-local', 'deadbeef');
         expect(comparison).toEqual({
             status: 'unavailable',
-            message: '⚠️ mismatch (app: dev-local, docs: deadbeef)',
+            message: 'ℹ️ app SHA missing; using docs pack SHA for display (docs: deadbeef)',
         });
         expect(getDocsRagMismatchWarning('dev-local', 'deadbeef')).toBeNull();
     });
@@ -56,7 +56,7 @@ describe('docs RAG comparison', () => {
         const comparison = getDocsRagComparison('missing-sha', 'deadbeef');
         expect(comparison).toEqual({
             status: 'unavailable',
-            message: '⚠️ mismatch (app: missing-sha, docs: deadbeef)',
+            message: 'ℹ️ app SHA missing; using docs pack SHA for display (docs: deadbeef)',
         });
         expect(getDocsRagMismatchWarning('missing-sha', 'deadbeef')).toBeNull();
     });
@@ -65,7 +65,7 @@ describe('docs RAG comparison', () => {
         const comparison = getDocsRagComparison('deadbeef', 'unknown');
         expect(comparison).toEqual({
             status: 'unavailable',
-            message: '⚠️ mismatch (app: deadbeef, docs: unavailable)',
+            message: 'ℹ️ docs SHA unavailable (app: deadbeef)',
         });
         expect(getDocsRagMismatchWarning('deadbeef', 'unknown')).toBeNull();
     });
@@ -74,7 +74,7 @@ describe('docs RAG comparison', () => {
         const comparison = getDocsRagComparison('deadbeef', 'UNKNOWN');
         expect(comparison).toEqual({
             status: 'unavailable',
-            message: '⚠️ mismatch (app: deadbeef, docs: unavailable)',
+            message: 'ℹ️ docs SHA unavailable (app: deadbeef)',
         });
         expect(getDocsRagMismatchWarning('deadbeef', 'UNKNOWN')).toBeNull();
     });

@@ -10,6 +10,15 @@ const readViteGitSha = () => {
 
 const normalizeSha = (value) => String(value || '').trim();
 
+const isMissingSha = (value) => {
+    const normalized = normalizeSha(value);
+    if (!normalized) {
+        return true;
+    }
+    const lower = normalized.toLowerCase();
+    return lower === 'unknown' || lower === 'dev-local' || lower === 'missing-sha';
+};
+
 const resolveGitSha = () => {
     const normalized = normalizeSha(readViteGitSha());
     if (!normalized || normalized.toLowerCase() === 'unknown') {
@@ -27,6 +36,31 @@ const shortenSha = (value) => {
 };
 
 export const getAppGitSha = () => resolveGitSha();
+
+export const getAppGitShaWithFallback = (fallbackSha) => {
+    const appSha = resolveGitSha();
+    if (!isMissingSha(appSha)) {
+        return { sha: appSha, source: 'vite' };
+    }
+    if (!isMissingSha(fallbackSha)) {
+        return { sha: normalizeSha(fallbackSha), source: 'docs-pack-fallback' };
+    }
+    return { sha: appSha || 'dev-local', source: 'dev-local' };
+};
+
+export const deriveEnvNameFromHostname = (hostname) => {
+    const normalized = String(hostname || '')
+        .trim()
+        .toLowerCase();
+    const host = normalized.includes(':') ? normalized.split(':')[0] : normalized;
+    if (host.startsWith('staging.')) {
+        return 'staging';
+    }
+    if (host === 'democratized.space' || host.endsWith('.democratized.space')) {
+        return 'prod';
+    }
+    return 'dev';
+};
 
 const extractPromptVersionSha = (promptVersionLabel) => {
     const normalized = normalizeSha(promptVersionLabel);
