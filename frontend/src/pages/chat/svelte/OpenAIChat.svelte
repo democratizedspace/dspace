@@ -115,10 +115,11 @@
     }
 
     async function submitMessage() {
+        const messageText = $message;
         const userMessage = {
             role: 'user',
-            content: $message,
-            tokens: countTokens($message),
+            content: messageText,
+            tokens: countTokens(messageText),
             timestamp: Date.now(),
         };
 
