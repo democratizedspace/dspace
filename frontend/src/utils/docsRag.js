@@ -222,9 +222,31 @@ const compareIds = (leftId, rightId) => {
     return 0;
 };
 
+const SCORE_EPSILON = 1e-6;
+
+const parseGeneratedAt = (value) => {
+    if (!value) return null;
+    const parsed = Date.parse(value);
+    return Number.isNaN(parsed) ? null : parsed;
+};
+
+const compareByGeneratedAt = (leftMeta, rightMeta) => {
+    const leftTime = parseGeneratedAt(leftMeta?.generatedAt);
+    const rightTime = parseGeneratedAt(rightMeta?.generatedAt);
+    if (leftTime == null || rightTime == null || leftTime === rightTime) {
+        return 0;
+    }
+    return rightTime - leftTime;
+};
+
 const compareResultsByRank = (left, right) => {
-    if (left.score !== right.score) {
-        return right.score - left.score;
+    const scoreDelta = right.score - left.score;
+    if (Math.abs(scoreDelta) > SCORE_EPSILON) {
+        return scoreDelta;
+    }
+    const generatedAtComparison = compareByGeneratedAt(left?.meta, right?.meta);
+    if (generatedAtComparison !== 0) {
+        return generatedAtComparison;
     }
     return compareIds(String(left.id), String(right.id));
 };
@@ -279,7 +301,8 @@ export const rankDocsResults = ({ results, chunkMap, query, meta }) => {
         .map((result) => {
             const chunk = chunkMap.get(result.id);
             const boost = getDocsRankBoost({ chunk, wantsLegacy, legacyAnchors });
-            return { ...result, score: result.score + boost };
+            const resultMeta = result.meta ?? meta ?? null;
+            return { ...result, score: result.score + boost, meta: resultMeta };
         })
         .sort(compareResultsByRank);
 };
@@ -434,7 +457,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
     for (const result of results) {
         const chunk = chunkMap.get(result.id);
         if (!chunk) continue;
-        selected.push({ ...chunk, score: result.score, forced: false });
+        selected.push({ ...chunk, score: result.score, forced: false, meta: result.meta });
         if (selected.length >= maxResults) {
             break;
         }

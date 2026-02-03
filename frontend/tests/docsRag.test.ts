@@ -235,6 +235,44 @@ describe('docs RAG search', () => {
         expect(ranked[0].id).toBe(v3Chunk.id);
     });
 
+    it('prefers newer generatedAt metadata when scores tie', () => {
+        const olderChunk = {
+            id: 'doc:/docs/alpha:top:0:0',
+            kind: 'doc',
+            slug: '/docs/alpha',
+            anchor: 'top',
+            title: 'Alpha',
+            heading: 'Alpha',
+            text: 'Alpha content',
+        };
+        const newerChunk = {
+            id: 'doc:/docs/bravo:top:0:0',
+            kind: 'doc',
+            slug: '/docs/bravo',
+            anchor: 'top',
+            title: 'Bravo',
+            heading: 'Bravo',
+            text: 'Bravo content',
+        };
+        const chunkMap = new Map([
+            [olderChunk.id, olderChunk],
+            [newerChunk.id, newerChunk],
+        ]);
+        const results = [
+            { id: olderChunk.id, score: 1, meta: { generatedAt: '2024-01-10T00:00:00.000Z' } },
+            { id: newerChunk.id, score: 1, meta: { generatedAt: '2024-02-10T00:00:00.000Z' } },
+        ];
+
+        const ranked = rankDocsResults({
+            results,
+            chunkMap,
+            query: 'docs',
+            meta: {},
+        });
+
+        expect(ranked[0].id).toBe(newerChunk.id);
+    });
+
     it('prefers v3 release-state docs over legacy changelog sources in retrieval', async () => {
         const { sources } = await searchDocsRag('v3 release state status', {
             maxResults: 6,
