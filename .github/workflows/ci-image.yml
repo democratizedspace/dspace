@@ -77,6 +77,7 @@ jobs:
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
             GIT_SHA=${{ github.sha }}
             VITE_GIT_SHA=${{ github.sha }}
+            ENFORCE_VITE_GIT_SHA=1
 
       - name: Build image with local node_modules present
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false
@@ -95,6 +96,7 @@ jobs:
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
             GIT_SHA=${{ github.sha }}
             VITE_GIT_SHA=${{ github.sha }}
+            ENFORCE_VITE_GIT_SHA=1
 
       - name: Build image for smoke test (no cache for forks)
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork
@@ -111,6 +113,63 @@ jobs:
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
             GIT_SHA=${{ github.sha }}
             VITE_GIT_SHA=${{ github.sha }}
+            ENFORCE_VITE_GIT_SHA=1
+
+      - name: Inspect frontend bundle location in built image
+        run: |
+          docker run --rm dspace-test:latest sh -lc 'ls -la /app && find /app -maxdepth 4 -type d -name dist -o -name build | head'
+
+      - name: Assert build SHA is baked into frontend bundle
+        run: |
+          docker run --rm \
+            -e EXPECTED_SHA="${GITHUB_SHA}" \
+            dspace-test:latest \
+            node -e "const fs = require('fs');\
+const path = require('path');\
+const targets = [process.env.EXPECTED_SHA].filter(Boolean);\
+if (!targets.length) {\
+  console.error('No expected SHA provided.');\
+  process.exit(1);\
+}\
+const root = '/app/dist';\
+const allowedExtensions = new Set(['.js', '.mjs', '.cjs', '.css', '.html']);\
+const shouldMatch = (content) => targets.some((target) => content.includes(target));\
+const stack = [root];\
+let found = false;\
+while (stack.length) {\
+  const current = stack.pop();\
+  const entries = fs.readdirSync(current, { withFileTypes: true });\
+  for (const entry of entries) {\
+    const fullPath = path.join(current, entry.name);\
+    if (entry.isDirectory()) {\
+      stack.push(fullPath);\
+      continue;\
+    }\
+    if (!entry.isFile()) {\
+      continue;\
+    }\
+    if (!allowedExtensions.has(path.extname(fullPath))) {\
+      continue;\
+    }\
+    try {\
+      const content = fs.readFileSync(fullPath, 'utf8');\
+      if (shouldMatch(content)) {\
+        found = true;\
+        break;\
+      }\
+    } catch (error) {\
+      continue;\
+    }\
+  }\
+  if (found) {\
+    break;\
+  }\
+}\
+if (!found) {\
+  console.error('Expected build SHA not found in frontend bundle.');\
+  process.exit(1);\
+}\
+console.log('Build SHA found in frontend bundle.');"
 
       - name: Canvas native deps smoke test
         run: |
