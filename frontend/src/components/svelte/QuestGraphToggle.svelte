@@ -70,6 +70,9 @@
     <div class="heading">
         <h2>Debug</h2>
         <p>Optional debugging tools for inspecting DSPACE behavior.</p>
+        <a class="debug-link" href="/chat#prompt-debug" data-testid="chat-debug-link">
+            Open chat prompt debug view
+        </a>
         <div class="debug-meta">
             <span>Prompt version: {CHAT_PROMPT_VERSION}</span>
             <span>App SHA: {appSha}</span>
@@ -141,6 +144,17 @@
         gap: 0.25rem;
         font-size: 0.85rem;
         color: #94a3b8;
+    }
+
+    .debug-link {
+        color: #38bdf8;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .debug-link:hover {
+        text-decoration: underline;
     }
 
     h2 {

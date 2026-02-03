@@ -46,6 +46,7 @@
     let showDebug = false;
     let debugMessages = [];
     let debugExpanded = false;
+    let forceDebugFromUrl = false;
     let settingsUnsubscribe;
     let saveSnapshotHintDismissed = false;
     let saveSnapshotHintFocusListener;
@@ -62,6 +63,21 @@
     $: docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
     $: docsRagComparisonMessage = docsRagComparison.message;
     $: docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+
+    const promptDebugAnchor = '#prompt-debug';
+
+    function isPromptDebugUrl() {
+        return typeof window !== 'undefined' && window.location.hash === promptDebugAnchor;
+    }
+
+    function syncDebugSettings(settings) {
+        const normalized = normalizeSettings(settings);
+        showDebug = normalized.showChatDebugPayload || forceDebugFromUrl;
+        if (!showDebug) {
+            debugExpanded = false;
+            debugMessages = [];
+        }
+    }
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -203,8 +219,15 @@
         hydrated = true;
         await ready;
         const currentState = loadGameState();
-        const normalized = normalizeSettings(currentState?.settings);
-        showDebug = normalized.showChatDebugPayload;
+        forceDebugFromUrl = isPromptDebugUrl();
+        syncDebugSettings(currentState?.settings);
+        if (forceDebugFromUrl) {
+            debugExpanded = true;
+            await tick();
+            document.getElementById(promptDebugAnchor.slice(1))?.scrollIntoView({
+                block: 'start',
+            });
+        }
         appGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
         docsRagGitSha = docsMeta?.gitSha ?? 'unavailable';
@@ -213,12 +236,7 @@
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
-            const nextNormalized = normalizeSettings(value?.settings);
-            showDebug = nextNormalized.showChatDebugPayload;
-            if (!showDebug) {
-                debugExpanded = false;
-                debugMessages = [];
-            }
+            syncDebugSettings(value?.settings);
         });
         if ($messageHistory.length === 0) {
             addWelcomeMessage();
@@ -305,7 +323,7 @@
     </div>
 
     {#if showDebug}
-        <div class="debug-panel" data-testid="chat-debug-panel">
+        <div class="debug-panel" id="prompt-debug" data-testid="chat-debug-panel">
             <div class="debug-heading">
                 <div>
                     <h3>Chat prompt debug</h3>

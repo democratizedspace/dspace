@@ -7,6 +7,30 @@ test.describe('Chat debug build metadata', () => {
         await clearUserData(page);
     });
 
+    test('Settings → Debug link opens chat prompt debug panel', async ({ page }) => {
+        await navigateWithRetry(page, '/settings');
+        await waitForHydration(page);
+
+        const debugLink = page.getByTestId('chat-debug-link');
+        await expect(debugLink).toBeVisible();
+
+        await Promise.all([page.waitForURL('**/chat#prompt-debug'), debugLink.click()]);
+        await waitForHydration(page, 'data-testid=chat-panel');
+
+        const debugPanel = page.getByTestId('chat-debug-panel');
+        await expect(debugPanel).toBeVisible();
+        await expect(debugPanel.getByRole('button', { name: 'Hide prompt' })).toBeVisible();
+    });
+
+    test('direct navigation to /chat#prompt-debug auto-expands the panel', async ({ page }) => {
+        await navigateWithRetry(page, '/chat#prompt-debug');
+        await waitForHydration(page, 'data-testid=chat-panel');
+
+        const debugPanel = page.getByTestId('chat-debug-panel');
+        await expect(debugPanel).toBeVisible();
+        await expect(debugPanel.getByRole('button', { name: 'Hide prompt' })).toBeVisible();
+    });
+
     test('shows prompt/app/docs build info with sync comparison', async ({ page }) => {
         await navigateWithRetry(page, '/settings');
         await waitForHydration(page);
