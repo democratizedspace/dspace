@@ -1,5 +1,6 @@
 {
-    "generatedAt": "2026-02-02T07:38:00.874Z",
+    "envName": "test",
+    "generatedAt": "2026-02-02T22:30:29.737Z",
     "generatedFrom": {
         "routes": "docs/ROUTES.md",
         "docs": "frontend/src/pages/docs/md",
@@ -21,8 +22,148 @@
             "frontend/src/pages/docs/md/changelog/20230915.md",
             "frontend/src/pages/docs/md/changelog/20260301.md"
         ],
-        "v3Changelog": ["frontend/src/pages/docs/md/changelog/20260301.md"]
+        "v3Changelog": ["frontend/src/pages/docs/md/changelog/20260301.md"],
+        "legacyChangelog": [
+            {
+                "slug": "/changelog",
+                "anchor": "20221003",
+                "path": "frontend/src/pages/docs/md/changelog/20221003.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20221005",
+                "path": "frontend/src/pages/docs/md/changelog/20221005.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20221015",
+                "path": "frontend/src/pages/docs/md/changelog/20221015.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20221019",
+                "path": "frontend/src/pages/docs/md/changelog/20221019.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20221031",
+                "path": "frontend/src/pages/docs/md/changelog/20221031.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20221210",
+                "path": "frontend/src/pages/docs/md/changelog/20221210.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20230101",
+                "path": "frontend/src/pages/docs/md/changelog/20230101.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20230105",
+                "path": "frontend/src/pages/docs/md/changelog/20230105.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20230130",
+                "path": "frontend/src/pages/docs/md/changelog/20230131.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20230630",
+                "path": "frontend/src/pages/docs/md/changelog/20230630.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20230915",
+                "path": "frontend/src/pages/docs/md/changelog/20230915.md",
+                "reason": "Pre-2024 changelog entry"
+            }
+        ]
     },
     "counts": { "totalChunks": 562, "docs": 506, "routes": 1, "changelog": 55 },
-    "gitSha": "bebd9e70991327413e2ded4eb0802607af3527d7"
+    "legacy": {
+        "changelog": [
+            {
+                "slug": "/changelog",
+                "anchor": "20221003",
+                "path": "frontend/src/pages/docs/md/changelog/20221003.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20221005",
+                "path": "frontend/src/pages/docs/md/changelog/20221005.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20221015",
+                "path": "frontend/src/pages/docs/md/changelog/20221015.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20221019",
+                "path": "frontend/src/pages/docs/md/changelog/20221019.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20221031",
+                "path": "frontend/src/pages/docs/md/changelog/20221031.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20221210",
+                "path": "frontend/src/pages/docs/md/changelog/20221210.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20230101",
+                "path": "frontend/src/pages/docs/md/changelog/20230101.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20230105",
+                "path": "frontend/src/pages/docs/md/changelog/20230105.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20230130",
+                "path": "frontend/src/pages/docs/md/changelog/20230131.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20230630",
+                "path": "frontend/src/pages/docs/md/changelog/20230630.md",
+                "reason": "Pre-2024 changelog entry"
+            },
+            {
+                "slug": "/changelog",
+                "anchor": "20230915",
+                "path": "frontend/src/pages/docs/md/changelog/20230915.md",
+                "reason": "Pre-2024 changelog entry"
+            }
+        ]
+    },
+    "sourceRef": null,
+    "docsGitSha": "b30e72b44be1c572df9100711bd1ee8150e0345d",
+    "gitSha": "b30e72b44be1c572df9100711bd1ee8150e0345d"
 }

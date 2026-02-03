@@ -76,6 +76,10 @@ const guardrailRules = [
         pattern: /docs\/routes\.md/,
     },
     {
+        line: 'Never link to GitHub blob/tree URLs for docs; use /docs routes instead.',
+        pattern: /github blob\/tree urls/,
+    },
+    {
         line:
             'Only give exact counts/durations/rates if they appear in retrieved context; otherwise be ' +
             "approximate or say you don't know.",
@@ -152,10 +156,15 @@ export const validateChatResponseText = (text, options = {}) => {
 
     const suspiciousPrecisionPattern =
         /\bexactly\s+\d+(?:\.\d+)?\s+(?:quests?|items?|minutes?|hours?|days?|percent|%)\b|\b\d+\.\d+\s*(?:%|percent)\b/i;
+    const githubBlobPattern = /https?:\/\/github\.com\/[^\s/]+\/[^\s/]+\/(blob|tree)\/[^\s)]+/i;
     const citationMarkerPattern =
         /\[[^\]]+\]|【\d+†[^】]+】|\/docs\/|docs\/ROUTES\.md|sources?:|https?:\/\//i;
     const hasSuspiciousPrecision = suspiciousPrecisionPattern.test(normalizedText);
     const hasCitationMarkers = citationMarkerPattern.test(normalizedText);
+
+    if (githubBlobPattern.test(normalizedText)) {
+        return { text: safeFallbackMessage, wasSanitized: true };
+    }
 
     if (hasSuspiciousPrecision && !hasCitationMarkers) {
         return { text: safeFallbackMessage, wasSanitized: true };

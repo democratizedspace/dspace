@@ -10,6 +10,8 @@ const CHANGELOG_INTENT =
 const DRIFT_INTENT =
     /\b(drift|deprecat(?:ed|ion)|removed|not applicable|release state|current behavior|current state)\b/i;
 const DRIFT_VERSION_CUE = /\b(v2|v3|v2[-\s]?only|v2\s*(?:to|->|→|vs\.?|\/)\s*v3)\b/i;
+const LEGACY_INTENT = /\b(legacy|v2|2023|2022|2021|deprecated|old)\b/i;
+const V3_INTENT = /\bv3\b/i;
 const SEMANTICS_INTENT =
     /\b(requires|consumes|creates|duration|timer|recipe|semantics|normalize)\b/i;
 const SEMANTICS_MATCH = /\b(requires|consumes|creates|duration|process)\b/i;
@@ -25,6 +27,17 @@ const CUSTOM_CONTENT_FALLBACK_REQUIRED = /\bcustom\b/i;
 const CUSTOM_CONTENT_FALLBACK_ACTION = /\b(editor|backup|import|export)\b/i;
 const CUSTOM_CONTENT_ROUTE_SIGNAL = /\b(export|import|backup)\b/i;
 const CUSTOM_CONTENT_BACKUP_MATCH = /\bcustom content backup\b|\/contentbackup/i;
+const LEGACY_CHANGELOG_ANCHOR = /^202[0-3]/;
+const PREFERRED_CHANGELOG_ANCHORS = new Set(['20260301']);
+const PREFERRED_DOC_SLUGS = new Set(['/docs/v3-release-state']);
+const PREFERRED_ROUTE_SLUGS = new Set(['/docs/routes']);
+const DOCS_RANKING_BOOSTS = Object.freeze({
+    v3ReleaseState: 2.5,
+    v3Changelog: 1.5,
+    routes: 1,
+    legacyPenalty: 2.5,
+    legacyBoost: 1.25,
+});
 const SEARCH_OPTIONS = Object.freeze({
     boost: { title: 3, heading: 2 },
     prefix: true,
@@ -225,6 +238,71 @@ const compareResultsByRank = (left, right) => {
     return compareIds(String(left.id), String(right.id));
 };
 
+const buildLegacyLookup = (meta) => {
+    const legacyEntries = [
+        ...(Array.isArray(meta?.legacy?.changelog) ? meta.legacy.changelog : []),
+        ...(Array.isArray(meta?.sources?.legacyChangelog) ? meta.sources.legacyChangelog : []),
+    ];
+    const lookup = new Set();
+    for (const entry of legacyEntries) {
+        const slug = String(entry?.slug || '').trim();
+        const anchor = resolveAnchor(entry?.anchor);
+        if (!slug) continue;
+        lookup.add(`${slug}#${anchor}`);
+    }
+    return lookup;
+};
+
+const isLegacyChunk = (chunk, legacyLookup) => {
+    if (!chunk) return false;
+    if (chunk.legacy) return true;
+    const slug = String(chunk.slug || '').trim();
+    const anchor = resolveAnchor(chunk.anchor);
+    if (legacyLookup?.has(`${slug}#${anchor}`)) {
+        return true;
+    }
+    return chunk.kind === 'changelog' && LEGACY_CHANGELOG_ANCHOR.test(anchor);
+};
+
+const isPreferredDocChunk = (chunk) => {
+    const slug = String(chunk.slug || '').trim();
+    return chunk.kind === 'doc' && PREFERRED_DOC_SLUGS.has(slug);
+};
+
+const isPreferredRouteChunk = (chunk) => {
+    const slug = String(chunk.slug || '').trim();
+    return chunk.kind === 'route' && PREFERRED_ROUTE_SLUGS.has(slug);
+};
+
+const isPreferredChangelogChunk = (chunk) => {
+    const anchor = resolveAnchor(chunk.anchor);
+    return chunk.kind === 'changelog' && PREFERRED_CHANGELOG_ANCHORS.has(anchor);
+};
+
+const buildDocsRagBoost = ({ chunk, query, legacyLookup, wantsDrift }) => {
+    if (!chunk) return 0;
+    let boost = 0;
+    if (isPreferredDocChunk(chunk)) {
+        boost += DOCS_RANKING_BOOSTS.v3ReleaseState;
+    }
+    if (isPreferredChangelogChunk(chunk)) {
+        boost += DOCS_RANKING_BOOSTS.v3Changelog;
+    }
+    if (isPreferredRouteChunk(chunk)) {
+        boost += DOCS_RANKING_BOOSTS.routes;
+    }
+    if (wantsDrift && isPreferredDocChunk(chunk)) {
+        boost += 1;
+    }
+    const wantsLegacy = LEGACY_INTENT.test(query);
+    if (isLegacyChunk(chunk, legacyLookup)) {
+        boost += wantsLegacy ? DOCS_RANKING_BOOSTS.legacyBoost : -DOCS_RANKING_BOOSTS.legacyPenalty;
+    } else if (V3_INTENT.test(query) && isPreferredDocChunk(chunk)) {
+        boost += 0.5;
+    }
+    return boost;
+};
+
 const matchesSemanticsChunk = (chunk) => {
     const title = String(chunk.title || '');
     const heading = String(chunk.heading || '');
@@ -365,7 +443,16 @@ export const searchDocsRag = async (queryText, options = {}) => {
         console.error('Failed to load docs RAG data:', error);
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
-    const results = miniSearch.search(query, SEARCH_OPTIONS).sort(compareResultsByRank);
+    const legacyLookup = buildLegacyLookup(meta);
+    const wantsDrift = DRIFT_INTENT.test(query) && DRIFT_VERSION_CUE.test(query);
+    const results = miniSearch
+        .search(query, SEARCH_OPTIONS)
+        .map((result) => {
+            const chunk = chunkMap.get(result.id);
+            const boost = buildDocsRagBoost({ chunk, query, legacyLookup, wantsDrift });
+            return { ...result, score: result.score + boost };
+        })
+        .sort(compareResultsByRank);
     const maxResults = options.maxResults ?? DEFAULT_MAX_RESULTS;
     const maxChars = options.maxChars ?? DEFAULT_MAX_CHARS;
     const maxExcerptChars = options.maxExcerptChars ?? DEFAULT_MAX_EXCERPT_CHARS;
@@ -382,7 +469,6 @@ export const searchDocsRag = async (queryText, options = {}) => {
 
     const wantsRoutes = ROUTES_INTENT.test(query);
     const wantsChangelog = CHANGELOG_INTENT.test(query);
-    const wantsDrift = DRIFT_INTENT.test(query) && DRIFT_VERSION_CUE.test(query);
     const wantsSemantics = SEMANTICS_INTENT.test(query);
     const wantsCustomContent = CUSTOM_CONTENT_INTENT.test(query);
     const wantsCustomContentRoute = wantsCustomContent && CUSTOM_CONTENT_ROUTE_SIGNAL.test(query);
@@ -483,9 +569,15 @@ export const searchDocsRag = async (queryText, options = {}) => {
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
 
-    const gitSha = meta?.gitSha || 'unknown';
+    const docsGitSha = meta?.docsGitSha || meta?.gitSha || 'unknown';
     const generatedAt = meta?.generatedAt || 'unknown';
-    const headerLines = ['---', `Docs grounding (gitSha: ${gitSha}, generatedAt: ${generatedAt}):`];
+    const envName = meta?.envName || 'unknown';
+    const sourceRef = meta?.sourceRef ? String(meta.sourceRef) : '';
+    const sourceRefLine = sourceRef ? `, sourceRef: ${sourceRef}` : '';
+    const headerLines = [
+        '---',
+        `Docs grounding (env: ${envName}, gitSha: ${docsGitSha}, generatedAt: ${generatedAt}${sourceRefLine}):`,
+    ];
     const header = `${headerLines.join('\n')}\n`;
     const footer = '---';
     const minBlockLength = header.length + footer.length;
@@ -614,8 +706,11 @@ export const searchDocsRag = async (queryText, options = {}) => {
     output += footer;
 
     const sourcesMeta = {
-        gitSha,
+        envName,
+        gitSha: docsGitSha,
+        docsGitSha,
         generatedAt,
+        sourceRef: sourceRef || null,
         results: included.map((chunk) => ({
             id: chunk.id,
             slug: chunk.slug,
@@ -623,6 +718,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
             kind: chunk.kind,
             title: chunk.title,
             heading: chunk.heading,
+            legacy: isLegacyChunk(chunk, legacyLookup),
         })),
     };
 

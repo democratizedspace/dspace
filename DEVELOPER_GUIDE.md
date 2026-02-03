@@ -208,6 +208,18 @@ app build SHA with `docs_meta.json`. Local dev builds can fall back to `v3:dev` 
 `VITE_GIT_SHA` is not set or is resolved as `unknown` (for example, if git resolution
 fails).
 
+#### Docs RAG provenance fields
+
+The docs RAG pack now captures provenance metadata so `/chat` debug can validate freshness. The
+pack uses the following environment variables during `scripts/build-docs-rag-index.mjs`:
+
+- `VITE_DSPACE_ENV` (or `DSPACE_ENV`/`NODE_ENV`) → `envName` in `docs_meta.json`
+- `VITE_DOCS_SOURCE_REF` (or `DOCS_SOURCE_REF`, `GITHUB_REF_NAME`, `GITHUB_HEAD_REF`) → `sourceRef`
+
+For staging and production builds, ensure the deployment pipeline sets `DSPACE_ENV` (and the
+matching `VITE_DSPACE_ENV` for frontend builds) plus a branch/ref name if you want `sourceRef`
+populated. The `sourceRef` field is optional and may be left `null` when unavailable.
+
 ### Commit Messages
 
 Commit messages must start with a conventional prefix enforced by the commit-msg hook. Use

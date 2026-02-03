@@ -139,6 +139,29 @@ describe('docs RAG search', () => {
         expect(sources.some((entry) => entry.type === 'changelog')).toBe(true);
     });
 
+    it('prefers v3 changelog entries over legacy changelog content by default', async () => {
+        const { sourcesMeta } = await searchDocsRag('v3 release state', {
+            maxResults: 4,
+            maxChars: 2000,
+        });
+
+        const preferredResult = sourcesMeta.results.find(
+            (entry) => entry.anchor === '20260301' || entry.slug === '/docs/v3-release-state'
+        );
+
+        expect(preferredResult).toBeTruthy();
+        expect(sourcesMeta.results.some((entry) => entry.legacy)).toBe(false);
+    });
+
+    it('allows legacy changelog entries when explicitly requested', async () => {
+        const { sourcesMeta } = await searchDocsRag('legacy v2 changelog 2023', {
+            maxResults: 3,
+            maxChars: 3000,
+        });
+
+        expect(sourcesMeta.results.some((entry) => entry.legacy)).toBe(true);
+    });
+
     it('forces changelog inclusion for version status queries', async () => {
         const { sourcesMeta } = await searchDocsRag('Is token.place active in v3?', {
             maxResults: 6,
@@ -146,6 +169,16 @@ describe('docs RAG search', () => {
         });
 
         expect(sourcesMeta.results.some((entry) => entry.kind === 'changelog')).toBe(true);
+    });
+
+    it('prefers v3 docs over legacy changelog entries for v3 questions', async () => {
+        const { excerptsText, sourcesMeta } = await searchDocsRag('Is token.place active in v3?', {
+            maxResults: 3,
+            maxChars: 3000,
+        });
+
+        expect(excerptsText).toMatch(/\/docs\/v3-release-state|\/changelog#20260301/);
+        expect(sourcesMeta.results.some((entry) => entry.legacy)).toBe(false);
     });
 
     it('retrieves process semantics doc chunk', async () => {
@@ -184,12 +217,14 @@ describe('docs RAG search', () => {
         expect(first.excerptsText).toBe(second.excerptsText);
     });
 
-    it('exposes generatedAt metadata in docs results', async () => {
+    it('exposes docs pack provenance metadata in docs results', async () => {
         const { excerptsText } = await searchDocsRag('routes', {
             maxResults: 4,
             maxChars: 2000,
         });
 
+        expect(docsMeta.envName).toBeTruthy();
+        expect(docsMeta.docsGitSha || docsMeta.gitSha).toBeTruthy();
         expect(docsMeta.generatedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
         expect(excerptsText).toContain(docsMeta.generatedAt);
     });

@@ -477,6 +477,7 @@ describe('buildChatPrompt', () => {
         expect(content).toContain('/gamesaves');
         expect(content).toMatch(/clarifying question/i);
         expect(content).toMatch(/only give exact counts\/durations\/rates/i);
+        expect(content).toMatch(/github blob\/tree urls/i);
     });
 
     it('does not duplicate the shared guardrail when already present', async () => {
@@ -489,6 +490,7 @@ describe('buildChatPrompt', () => {
             "If you're missing context, say you don't know and ask a clarifying question OR point " +
                 'to a specific /docs page.',
             'When giving URLs/navigation, cite /docs excerpts or docs/ROUTES.md.',
+            'Never link to GitHub blob/tree URLs for docs; use /docs routes instead.',
             'Only give exact counts/durations/rates if they appear in retrieved context; otherwise be ' +
                 "approximate or say you don't know.",
         ].join('\n');
@@ -539,7 +541,7 @@ describe('buildChatPrompt', () => {
             sources: [],
         });
         vi.mocked(searchDocsRag).mockResolvedValueOnce({
-            excerptsText: `---\nDocs grounding (gitSha: test):\n- [doc] Routes — /docs/routes#top\n  sample\n---`,
+            excerptsText: `---\nDocs grounding (env: dev, gitSha: test, generatedAt: just-now):\n- [doc] Routes — /docs/routes#top\n  sample\n---`,
             sources: [],
             sourcesMeta: { results: [] },
         });
