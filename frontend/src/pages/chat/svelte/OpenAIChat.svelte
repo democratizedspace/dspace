@@ -28,7 +28,11 @@
         shouldShowSaveSnapshotHint,
     } from '../../../utils/chatHints.js';
     import { getAppGitSha } from '../../../utils/buildInfo.js';
-    import { getDocsRagMeta, getDocsRagComparison } from '../../../utils/docsRag.js';
+    import {
+        getDocsRagMeta,
+        getDocsRagComparison,
+        getDocsRagMismatchWarning,
+    } from '../../../utils/docsRag.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -45,15 +49,19 @@
     let settingsUnsubscribe;
     let saveSnapshotHintDismissed = false;
     let saveSnapshotHintFocusListener;
-    let appGitSha = 'unknown';
-    let docsRagGitSha = 'unknown';
-    let docsRagGeneratedAt = 'unknown';
-    let docsRagComparisonMessage = 'App build SHA unavailable; cannot compare.';
-    let docsRagWarning = null;
+    let appGitSha = getAppGitSha();
+    let docsRagGitSha = 'unavailable';
+    let docsRagGeneratedAt = 'unavailable';
+    let docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
+    let docsRagComparisonMessage = docsRagComparison.message;
+    let docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
     $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
+    $: docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
+    $: docsRagComparisonMessage = docsRagComparison.message;
+    $: docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -199,11 +207,8 @@
         showDebug = normalized.showChatDebugPayload;
         appGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
-        docsRagGitSha = docsMeta?.gitSha ?? 'unknown';
-        docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
-        const comparison = getDocsRagComparison(appGitSha, docsRagGitSha);
-        docsRagComparisonMessage = comparison.message;
-        docsRagWarning = comparison.status === 'stale' ? comparison.message : null;
+        docsRagGitSha = docsMeta?.gitSha ?? 'unavailable';
+        docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unavailable';
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
