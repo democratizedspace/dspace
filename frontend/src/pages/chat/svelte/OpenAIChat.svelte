@@ -115,14 +115,16 @@
     }
 
     async function submitMessage() {
+        const messageText = $message;
         const userMessage = {
             role: 'user',
-            content: $message,
-            tokens: countTokens($message),
+            content: messageText,
+            tokens: countTokens(messageText),
             timestamp: Date.now(),
         };
 
         addMessage(userMessage);
+        message.set('');
         const historyForApi = [...$messageHistory];
         showSpinner = true;
         errorBanner = null;
@@ -167,7 +169,6 @@
             });
         }
 
-        message.set('');
         showSpinner = false;
     }
 
