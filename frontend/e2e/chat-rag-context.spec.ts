@@ -118,4 +118,39 @@ test.describe('chat RAG context', () => {
             chatPanel.locator('[data-testid="chat-debug-message"][data-kind="rag"]')
         ).toBeVisible();
     });
+
+    test('shows build metadata and comparison status in the debug panel', async ({ page }) => {
+        await page.goto('/chat');
+
+        const chatPanel = page.locator('[data-testid="chat-panel"][data-provider="openai"]');
+        await expect(chatPanel).toBeVisible();
+        await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
+
+        const debugPanel = chatPanel.getByTestId('chat-debug-panel');
+        await expect(debugPanel).toBeVisible();
+
+        const promptVersion = debugPanel.getByText(/Prompt version:/);
+        await expect(promptVersion).not.toContainText('unknown');
+
+        const appBuildRow = debugPanel.locator('.debug-meta-row', { hasText: 'App build SHA' });
+        await expect(appBuildRow.locator('.debug-mono')).not.toHaveText(/unknown/i);
+
+        const docsShaRow = debugPanel.locator('.debug-meta-row', { hasText: 'Docs RAG SHA' });
+        await expect(docsShaRow.locator('.debug-mono')).not.toHaveText(/unknown/i);
+
+        const docsGeneratedRow = debugPanel.locator('.debug-meta-row', {
+            hasText: 'Docs RAG generatedAt',
+        });
+        await expect(docsGeneratedRow.locator('.debug-mono')).not.toHaveText(/unknown/i);
+
+        const comparisonRow = debugPanel.locator('.debug-meta-row', {
+            hasText: 'Docs RAG comparison',
+        });
+        const comparisonText = await comparisonRow.locator('.debug-mono').textContent();
+        expect(comparisonText).toMatch(/✅ in sync|⚠️ mismatch/);
+        if (comparisonText?.includes('⚠️ mismatch')) {
+            expect(comparisonText).toContain('app:');
+            expect(comparisonText).toContain('docs:');
+        }
+    });
 });

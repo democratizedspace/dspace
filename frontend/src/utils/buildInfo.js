@@ -1,3 +1,5 @@
+const FALLBACK_SHA = 'dev-local';
+
 const readViteGitSha = () => {
     if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GIT_SHA) {
         return import.meta.env.VITE_GIT_SHA;
@@ -8,22 +10,23 @@ const readViteGitSha = () => {
     return undefined;
 };
 
-export const getAppGitSha = () => {
+const normalizeSha = (value) => {
+    const normalized = String(value || '').trim();
+    if (!normalized || normalized.toLowerCase() === 'unknown') {
+        return '';
+    }
+    return normalized;
+};
+
+const getBuildSha = () => {
     const rawSha = readViteGitSha();
-    const normalized = String(rawSha || '').trim();
-    return normalized || 'unknown';
+    return normalizeSha(rawSha) || FALLBACK_SHA;
+};
+
+export const getAppGitSha = () => {
+    return getBuildSha();
 };
 
 export const getPromptVersionSha = () => {
-    const rawSha = readViteGitSha();
-    const normalized = String(rawSha || '').trim();
-    if (normalized) {
-        return normalized;
-    }
-
-    const isProd =
-        (typeof import.meta !== 'undefined' && import.meta.env?.PROD) ||
-        (typeof process !== 'undefined' && process.env?.NODE_ENV === 'production');
-
-    return isProd ? 'unknown' : 'dev';
+    return getBuildSha();
 };

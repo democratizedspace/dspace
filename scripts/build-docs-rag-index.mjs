@@ -478,17 +478,22 @@ const buildIndex = (chunks) => {
     return miniSearch;
 };
 
+const FALLBACK_SHA = 'dev-local';
+
 const getGitSha = () => {
     const envSha =
         process.env.VITE_GIT_SHA || process.env.DSPACE_GIT_SHA || process.env.GIT_SHA;
     if (envSha && envSha.trim()) {
-        return envSha.trim();
+        const normalizedEnvSha = envSha.trim();
+        if (normalizedEnvSha.toLowerCase() !== 'unknown') {
+            return normalizedEnvSha;
+        }
     }
 
     try {
         return execSync('git rev-parse HEAD', { cwd: repoRoot, encoding: 'utf-8' }).trim();
     } catch (error) {
-        return 'unknown';
+        return FALLBACK_SHA;
     }
 };
 

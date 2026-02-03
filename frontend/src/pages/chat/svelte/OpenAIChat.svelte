@@ -45,10 +45,10 @@
     let settingsUnsubscribe;
     let saveSnapshotHintDismissed = false;
     let saveSnapshotHintFocusListener;
-    let appGitSha = 'unknown';
-    let docsRagGitSha = 'unknown';
-    let docsRagGeneratedAt = 'unknown';
-    let docsRagComparisonMessage = 'App build SHA unavailable; cannot compare.';
+    let appGitSha = getAppGitSha();
+    let docsRagGitSha = 'dev-local';
+    let docsRagGeneratedAt = 'dev-local';
+    let docsRagComparisonMessage = '⚠️ mismatch (app: dev-local, docs: dev-local)';
     let docsRagWarning = null;
 
     $: currentPersona = $activePersona;
@@ -199,11 +199,11 @@
         showDebug = normalized.showChatDebugPayload;
         appGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
-        docsRagGitSha = docsMeta?.gitSha ?? 'unknown';
-        docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
+        docsRagGitSha = docsMeta?.gitSha ?? 'dev-local';
+        docsRagGeneratedAt = docsMeta?.generatedAt ?? 'dev-local';
         const comparison = getDocsRagComparison(appGitSha, docsRagGitSha);
         docsRagComparisonMessage = comparison.message;
-        docsRagWarning = comparison.status === 'stale' ? comparison.message : null;
+        docsRagWarning = comparison.status === 'mismatch' ? comparison.message : null;
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);

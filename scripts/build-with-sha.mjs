@@ -1,5 +1,7 @@
 import { execSync, spawnSync } from 'node:child_process';
 
+const FALLBACK_SHA = 'dev-local';
+
 const resolveGitSha = () => {
     const envSha =
         process.env.VITE_GIT_SHA || process.env.DSPACE_GIT_SHA || process.env.GIT_SHA;
@@ -13,7 +15,7 @@ const resolveGitSha = () => {
     try {
         return execSync('git rev-parse HEAD', { encoding: 'utf-8' }).trim();
     } catch (error) {
-        return 'unknown';
+        return FALLBACK_SHA;
     }
 };
 

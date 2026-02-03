@@ -28,7 +28,7 @@ vi.mock('../../../../utils/docsRag.js', () => ({
     })),
     getDocsRagComparison: vi.fn(() => ({
         status: 'match',
-        message: 'Docs RAG matches app build.',
+        message: '✅ in sync',
     })),
 }));
 
@@ -48,5 +48,22 @@ describe('OpenAIChat build metadata', () => {
 
         const appBuildLabel = await screen.findByText('App build SHA');
         expect(appBuildLabel.nextElementSibling).toHaveTextContent('abc123');
+    });
+
+    it('renders non-empty debug metadata values when VITE_GIT_SHA is missing', async () => {
+        const { default: OpenAIChat } = await import('../OpenAIChat.svelte');
+        render(OpenAIChat);
+
+        const promptVersion = await screen.findByText('Prompt version: v3:dev-local');
+        expect(promptVersion).toBeInTheDocument();
+
+        const appBuildLabel = await screen.findByText('App build SHA');
+        expect(appBuildLabel.nextElementSibling?.textContent).toBe('dev-local');
+
+        const docsRagShaLabel = await screen.findByText('Docs RAG SHA');
+        expect(docsRagShaLabel.nextElementSibling?.textContent).toBe('abc123');
+
+        const docsRagGeneratedLabel = await screen.findByText('Docs RAG generatedAt');
+        expect(docsRagGeneratedLabel.nextElementSibling?.textContent).toBe('just-now');
     });
 });
