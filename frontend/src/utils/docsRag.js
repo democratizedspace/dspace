@@ -90,7 +90,10 @@ const loadDocsRag = async () => {
 const normalizeSha = (value) => String(value || '').trim();
 const normalizeDisplaySha = (value) => {
     const normalized = normalizeSha(value);
-    if (!normalized || normalized.toLowerCase() === 'unknown') {
+    if (
+        !normalized ||
+        ['unknown', 'missing-sha', 'dev-local', 'unavailable'].includes(normalized.toLowerCase())
+    ) {
         return 'unavailable';
     }
     return normalized;
@@ -140,7 +143,8 @@ export const getDocsRagMeta = async () => {
     }
 };
 
-export const getDocsRagComparison = (appGitSha, docsGitSha) => {
+export const getDocsRagComparison = (appGitSha, docsGitSha, options = {}) => {
+    const { appShaSource } = options;
     const appLabel = normalizeDisplaySha(appGitSha);
     const docsLabel = normalizeDisplaySha(docsGitSha);
     const appSha = normalizeComparableSha(appGitSha);
@@ -155,14 +159,27 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
         };
     }
 
+    if (!bothValid) {
+        if (appShaSource === 'docs-pack-fallback') {
+            return {
+                status: 'unavailable',
+                message: `ℹ️ app SHA missing; using docs pack SHA for display (docs: ${docsLabel})`,
+            };
+        }
+        return {
+            status: 'unavailable',
+            message: `ℹ️ unavailable (app: ${appLabel}, docs: ${docsLabel})`,
+        };
+    }
+
     return {
-        status: bothValid ? 'mismatch' : 'unavailable',
+        status: 'mismatch',
         message: `⚠️ mismatch (app: ${appLabel}, docs: ${docsLabel})`,
     };
 };
 
-export const getDocsRagMismatchWarning = (appGitSha, docsGitSha) => {
-    const comparison = getDocsRagComparison(appGitSha, docsGitSha);
+export const getDocsRagMismatchWarning = (appGitSha, docsGitSha, options = {}) => {
+    const comparison = getDocsRagComparison(appGitSha, docsGitSha, options);
     return comparison.status === 'mismatch' ? comparison.message : null;
 };
 

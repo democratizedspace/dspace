@@ -27,7 +27,11 @@
         SAVE_SNAPSHOT_HINT_TEXT,
         shouldShowSaveSnapshotHint,
     } from '../../../utils/chatHints.js';
-    import { getAppGitSha } from '../../../utils/buildInfo.js';
+    import {
+        deriveEnvNameFromHostname,
+        getAppGitSha,
+        getAppGitShaWithFallback,
+    } from '../../../utils/buildInfo.js';
     import {
         getDocsRagMeta,
         getDocsRagComparison,
@@ -51,14 +55,22 @@
     let saveSnapshotHintFocusListener;
     let promptDebugLinkListener;
     let appGitSha = getAppGitSha();
+    let appGitShaDisplay = appGitSha;
+    let appGitShaSource = appGitSha === 'dev-local' ? 'dev-local' : 'vite';
+    let appGitShaForComparison = appGitSha;
     let docsRagGitSha = 'unavailable';
     let docsRagEnvName = 'unavailable';
+    let docsRagEnvDerived = 'n/a';
     let docsRagSourceRef = 'unavailable';
     let docsRagGeneratedAt = 'unavailable';
     let docsRagHost = 'unavailable';
-    let docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
+    let docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha, {
+        appShaSource: appGitShaSource,
+    });
     let docsRagComparisonMessage = docsRagComparison.message;
-    let docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+    let docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha, {
+        appShaSource: appGitShaSource,
+    });
     let docsRagEnvWarning = null;
     let debugOverride = false;
     let currentSettings = { showChatDebugPayload: false };
@@ -67,9 +79,13 @@
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
     $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
-    $: docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
+    $: docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha, {
+        appShaSource: appGitShaSource,
+    });
     $: docsRagComparisonMessage = docsRagComparison.message;
-    $: docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+    $: docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha, {
+        appShaSource: appGitShaSource,
+    });
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -187,10 +203,13 @@
             return null;
         }
         if (['production', 'prod'].includes(normalized)) {
-            return 'production';
+            return 'prod';
         }
         if (['staging', 'stage', 'stg'].includes(normalized)) {
             return 'staging';
+        }
+        if (['development', 'dev'].includes(normalized)) {
+            return 'dev';
         }
         return normalized;
     }
@@ -205,16 +224,10 @@
         } catch (error) {
             return null;
         }
-        if (!hostname || hostname === 'localhost' || hostname === '127.0.0.1') {
+        if (!hostname) {
             return null;
         }
-        if (/(staging|stage|stg)/i.test(hostname)) {
-            return 'staging';
-        }
-        if (/(prod|production)/i.test(hostname)) {
-            return 'production';
-        }
-        return null;
+        return deriveEnvNameFromHostname(hostname);
     }
 
     function buildDocsEnvMismatchWarning(hostOrigin, docsEnvName) {
@@ -297,10 +310,22 @@
         currentSettings = normalized;
         lastShowChatDebugPayload = normalized.showChatDebugPayload;
         syncPromptDebugDeepLink({ allowAutoExpand: true });
-        appGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
         docsRagGitSha = docsMeta?.docsGitSha ?? docsMeta?.gitSha ?? 'unknown';
-        docsRagEnvName = docsMeta?.envName ?? 'unknown';
+        const appShaInfo = getAppGitShaWithFallback(docsRagGitSha);
+        appGitShaDisplay = appShaInfo.sha;
+        appGitShaSource = appShaInfo.source;
+        appGitShaForComparison = appShaInfo.source === 'vite' ? appShaInfo.sha : 'missing-sha';
+        const rawDocsEnvName = docsMeta?.envName ?? 'unknown';
+        const normalizedDocsEnv = normalizeEnvName(rawDocsEnvName);
+        if (!normalizedDocsEnv) {
+            const derivedEnv = deriveEnvNameFromHostname(window?.location?.host);
+            docsRagEnvName = derivedEnv;
+            docsRagEnvDerived = derivedEnv;
+        } else {
+            docsRagEnvName = rawDocsEnvName;
+            docsRagEnvDerived = 'n/a';
+        }
         docsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
         docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
         docsRagHost = window?.location?.origin || 'unknown';
@@ -429,7 +454,11 @@
             <div class="debug-metadata">
                 <div class="debug-meta-row">
                     <span>App build SHA</span>
-                    <span class="debug-mono">{appGitSha}</span>
+                    <span class="debug-mono">{appGitShaDisplay}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>App build SHA source</span>
+                    <span class="debug-mono">{appGitShaSource}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>Docs RAG SHA</span>
@@ -438,6 +467,10 @@
                 <div class="debug-meta-row">
                     <span>Docs pack env</span>
                     <span class="debug-mono">{docsRagEnvName}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs env derived</span>
+                    <span class="debug-mono">{docsRagEnvDerived}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>Docs host</span>
