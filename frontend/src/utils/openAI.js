@@ -179,9 +179,15 @@ const sanitizeGithubDocsLinks = (text) => {
 
     let sanitized = false;
     const rewritten = text.replace(githubDocsLinkPattern, (url) => {
-        const resolved = rewriteGithubDocsLink(url);
+        let cleanedUrl = url;
+        let trailingPunctuation = '';
+        while (/[.,!?;:]$/.test(cleanedUrl)) {
+            trailingPunctuation = cleanedUrl.slice(-1) + trailingPunctuation;
+            cleanedUrl = cleanedUrl.slice(0, -1);
+        }
+        const resolved = rewriteGithubDocsLink(cleanedUrl);
         sanitized = true;
-        return resolved || '[link removed: use /docs routes]';
+        return `${resolved || '[link removed: use /docs routes]'}${trailingPunctuation}`;
     });
 
     return { text: rewritten, wasSanitized: sanitized };

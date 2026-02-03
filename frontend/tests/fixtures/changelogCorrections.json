@@ -37,7 +37,7 @@
             "date": "2025-11-06"
         },
         {
-            "type": "metadata",
+            "type": "formatting",
             "description": "Aligned the changelog slug with the January 31 filename to keep anchors consistent",
             "date": "2026-02-02"
         }
