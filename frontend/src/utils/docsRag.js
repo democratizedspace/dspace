@@ -97,7 +97,12 @@ const normalizeComparableSha = (value) => {
         return '';
     }
     const lower = normalized.toLowerCase();
-    if (lower === 'unknown' || lower === 'unavailable') {
+    if (
+        lower === 'unknown' ||
+        lower === 'unavailable' ||
+        lower === 'dev-local' ||
+        lower === 'missing-sha'
+    ) {
         return '';
     }
     return normalized;
@@ -136,8 +141,8 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
     const docsLabel = normalizeDisplaySha(docsGitSha);
     const appSha = normalizeComparableSha(appGitSha);
     const docsSha = normalizeComparableSha(docsGitSha);
-    const canCompare = Boolean(appSha && docsSha);
-    const inSync = Boolean(canCompare && shasMatch(appSha, docsSha));
+    const bothValid = Boolean(appSha && docsSha);
+    const inSync = Boolean(bothValid && shasMatch(appSha, docsSha));
 
     if (inSync) {
         return {
@@ -146,15 +151,8 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
         };
     }
 
-    if (!canCompare) {
-        return {
-            status: 'unavailable',
-            message: `⚠️ unavailable (app: ${appLabel}, docs: ${docsLabel})`,
-        };
-    }
-
     return {
-        status: 'mismatch',
+        status: bothValid ? 'mismatch' : 'unavailable',
         message: `⚠️ mismatch (app: ${appLabel}, docs: ${docsLabel})`,
     };
 };

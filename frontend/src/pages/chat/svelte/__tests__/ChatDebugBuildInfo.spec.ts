@@ -30,6 +30,7 @@ vi.mock('../../../../utils/docsRag.js', () => ({
         status: 'match',
         message: '✅ in sync (app: abc123def456, docs: docs789)',
     })),
+    getDocsRagMismatchWarning: vi.fn(() => null),
 }));
 
 describe('OpenAIChat build metadata', () => {

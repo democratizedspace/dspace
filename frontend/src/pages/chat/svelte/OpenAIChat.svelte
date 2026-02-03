@@ -28,7 +28,11 @@
         shouldShowSaveSnapshotHint,
     } from '../../../utils/chatHints.js';
     import { getAppGitSha } from '../../../utils/buildInfo.js';
-    import { getDocsRagMeta, getDocsRagComparison } from '../../../utils/docsRag.js';
+    import {
+        getDocsRagMeta,
+        getDocsRagComparison,
+        getDocsRagMismatchWarning,
+    } from '../../../utils/docsRag.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -50,15 +54,14 @@
     let docsRagGeneratedAt = 'unavailable';
     let docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
     let docsRagComparisonMessage = docsRagComparison.message;
-    let docsRagWarning = docsRagComparison.status === 'mismatch' ? docsRagComparison.message : null;
+    let docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
     $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
     $: docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
     $: docsRagComparisonMessage = docsRagComparison.message;
-    $: docsRagWarning =
-        docsRagComparison.status === 'mismatch' ? docsRagComparison.message : null;
+    $: docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
