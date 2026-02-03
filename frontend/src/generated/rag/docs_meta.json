@@ -1,5 +1,6 @@
 {
-    "generatedAt": "2026-02-02T07:38:00.874Z",
+    "envName": "test",
+    "generatedAt": "2026-02-02T22:27:18.631Z",
     "generatedFrom": {
         "routes": "docs/ROUTES.md",
         "docs": "frontend/src/pages/docs/md",
@@ -23,6 +24,24 @@
         ],
         "v3Changelog": ["frontend/src/pages/docs/md/changelog/20260301.md"]
     },
-    "counts": { "totalChunks": 562, "docs": 506, "routes": 1, "changelog": 55 },
-    "gitSha": "bebd9e70991327413e2ded4eb0802607af3527d7"
+    "legacy": {
+        "docSlugs": ["/docs/legacy-save-storage"],
+        "changelogAnchors": [
+            "20221003",
+            "20221005",
+            "20221015",
+            "20221019",
+            "20221031",
+            "20221210",
+            "20230101",
+            "20230105",
+            "20230130",
+            "20230630",
+            "20230915"
+        ]
+    },
+    "counts": { "totalChunks": 562, "docs": 506, "routes": 1, "changelog": 55, "legacy": 55 },
+    "gitSha": "b30e72b44be1c572df9100711bd1ee8150e0345d",
+    "docsGitSha": "b30e72b44be1c572df9100711bd1ee8150e0345d",
+    "sourceRef": "unknown"
 }

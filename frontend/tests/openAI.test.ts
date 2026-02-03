@@ -539,7 +539,7 @@ describe('buildChatPrompt', () => {
             sources: [],
         });
         vi.mocked(searchDocsRag).mockResolvedValueOnce({
-            excerptsText: `---\nDocs grounding (gitSha: test):\n- [doc] Routes — /docs/routes#top\n  sample\n---`,
+            excerptsText: `---\nDocs grounding (docsGitSha: test, generatedAt: unknown, env: unknown, sourceRef: unknown):\n- [doc] Routes — /docs/routes#top\n  sample\n---`,
             sources: [],
             sourcesMeta: { results: [] },
         });

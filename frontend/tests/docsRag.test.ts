@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import docsMeta from '../src/generated/rag/docs_meta.json';
-import { searchDocsRag } from '../src/utils/docsRag.js';
+import { rankDocsResults, searchDocsRag } from '../src/utils/docsRag.js';
 
 describe('docs RAG search', () => {
     it('returns docs excerpts with canonical /docs URLs', async () => {
@@ -191,6 +191,41 @@ describe('docs RAG search', () => {
         });
 
         expect(docsMeta.generatedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
+        expect(docsMeta.envName).toBeTruthy();
+        expect(docsMeta.docsGitSha || docsMeta.gitSha).toBeTruthy();
         expect(excerptsText).toContain(docsMeta.generatedAt);
+    });
+
+    it('prefers v3 release-state docs over legacy changelog chunks', () => {
+        const results = [
+            { id: 'legacy', score: 10 },
+            { id: 'v3', score: 10 },
+        ];
+        const chunkMap = new Map([
+            [
+                'legacy',
+                {
+                    id: 'legacy',
+                    slug: '/changelog',
+                    anchor: '20230101',
+                    kind: 'changelog',
+                    legacy: true,
+                },
+            ],
+            [
+                'v3',
+                {
+                    id: 'v3',
+                    slug: '/docs/v3-release-state',
+                    anchor: 'top',
+                    kind: 'doc',
+                },
+            ],
+        ]);
+        const ranked = rankDocsResults(results, chunkMap, 'release state', {
+            legacy: { changelogAnchors: ['20230101'], docSlugs: [] },
+        });
+
+        expect(ranked[0]?.id).toBe('v3');
     });
 });

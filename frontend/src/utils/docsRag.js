@@ -10,6 +10,8 @@ const CHANGELOG_INTENT =
 const DRIFT_INTENT =
     /\b(drift|deprecat(?:ed|ion)|removed|not applicable|release state|current behavior|current state)\b/i;
 const DRIFT_VERSION_CUE = /\b(v2|v3|v2[-\s]?only|v2\s*(?:to|->|→|vs\.?|\/)\s*v3)\b/i;
+const LEGACY_QUERY_CUE = /\b(legacy|v2|v2\.x|2023|2022|old release|previous version)\b/i;
+const V3_QUERY_CUE = /\b(v3|release state|current state|v3\.x)\b/i;
 const SEMANTICS_INTENT =
     /\b(requires|consumes|creates|duration|timer|recipe|semantics|normalize)\b/i;
 const SEMANTICS_MATCH = /\b(requires|consumes|creates|duration|process)\b/i;
@@ -44,6 +46,93 @@ const docsKindToType = {
     doc: 'doc',
     route: 'route',
     changelog: 'changelog',
+};
+
+const priorityDocsBoosts = [
+    { slug: '/docs/v3-release-state', boost: 3.5 },
+    { slug: '/docs/routes', boost: 2 },
+];
+const priorityChangelogAnchors = [{ anchor: '20260301', boost: 2.5 }];
+
+const normalizeSlug = (slug) =>
+    String(slug || '')
+        .trim()
+        .toLowerCase();
+
+const normalizeAnchor = (anchor) =>
+    String(anchor || '')
+        .trim()
+        .toLowerCase();
+
+const extractLegacyMeta = (meta) => ({
+    docSlugs: Array.isArray(meta?.legacy?.docSlugs) ? meta.legacy.docSlugs : [],
+    changelogAnchors: Array.isArray(meta?.legacy?.changelogAnchors)
+        ? meta.legacy.changelogAnchors
+        : [],
+});
+
+const isLegacyChunk = (chunk, meta) => {
+    if (chunk?.legacy) {
+        return true;
+    }
+    const { docSlugs, changelogAnchors } = extractLegacyMeta(meta);
+    const slug = normalizeSlug(chunk?.slug);
+    const anchor = normalizeAnchor(chunk?.anchor);
+
+    if (chunk?.kind === 'doc') {
+        if (docSlugs.map(normalizeSlug).includes(slug)) {
+            return true;
+        }
+        return slug.includes('/docs/legacy');
+    }
+
+    if (chunk?.kind === 'changelog') {
+        if (changelogAnchors.map(normalizeAnchor).includes(anchor)) {
+            return true;
+        }
+        return /^(2022|2023)/.test(anchor);
+    }
+
+    return false;
+};
+
+const getRecencyBoost = (chunk, query, meta) => {
+    const normalizedQuery = String(query || '').trim();
+    const wantsLegacy = LEGACY_QUERY_CUE.test(normalizedQuery);
+    const wantsV3 = V3_QUERY_CUE.test(normalizedQuery);
+    const legacy = isLegacyChunk(chunk, meta);
+    let boost = 0;
+
+    if (!legacy) {
+        boost += 1;
+    }
+
+    if (legacy && !wantsLegacy) {
+        boost -= 2.5;
+    }
+
+    const slug = normalizeSlug(chunk?.slug);
+    const anchor = normalizeAnchor(chunk?.anchor);
+
+    for (const priority of priorityDocsBoosts) {
+        if (slug === priority.slug) {
+            boost += priority.boost;
+            break;
+        }
+    }
+
+    for (const priority of priorityChangelogAnchors) {
+        if (chunk?.kind === 'changelog' && anchor.startsWith(priority.anchor)) {
+            boost += priority.boost;
+            break;
+        }
+    }
+
+    if (wantsV3 && slug === '/docs/v3-release-state') {
+        boost += 1.5;
+    }
+
+    return boost;
 };
 
 const loadDocsRag = async () => {
@@ -225,6 +314,25 @@ const compareResultsByRank = (left, right) => {
     return compareIds(String(left.id), String(right.id));
 };
 
+const applyResultBoosts = (results, chunkMap, query, meta) =>
+    results.map((result) => {
+        const chunk = chunkMap.get(result.id);
+        if (!chunk) {
+            return result;
+        }
+        const boost = getRecencyBoost(chunk, query, meta);
+        if (!boost) {
+            return result;
+        }
+        return {
+            ...result,
+            score: result.score + boost,
+        };
+    });
+
+export const rankDocsResults = (results, chunkMap, query, meta) =>
+    applyResultBoosts(results, chunkMap, query, meta).sort(compareResultsByRank);
+
 const matchesSemanticsChunk = (chunk) => {
     const title = String(chunk.title || '');
     const heading = String(chunk.heading || '');
@@ -365,20 +473,11 @@ export const searchDocsRag = async (queryText, options = {}) => {
         console.error('Failed to load docs RAG data:', error);
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
-    const results = miniSearch.search(query, SEARCH_OPTIONS).sort(compareResultsByRank);
+    const rawResults = miniSearch.search(query, SEARCH_OPTIONS).sort(compareResultsByRank);
+    const results = rankDocsResults(rawResults, chunkMap, query, meta);
     const maxResults = options.maxResults ?? DEFAULT_MAX_RESULTS;
     const maxChars = options.maxChars ?? DEFAULT_MAX_CHARS;
     const maxExcerptChars = options.maxExcerptChars ?? DEFAULT_MAX_EXCERPT_CHARS;
-
-    const selected = [];
-    for (const result of results) {
-        const chunk = chunkMap.get(result.id);
-        if (!chunk) continue;
-        selected.push({ ...chunk, score: result.score, forced: false });
-        if (selected.length >= maxResults) {
-            break;
-        }
-    }
 
     const wantsRoutes = ROUTES_INTENT.test(query);
     const wantsChangelog = CHANGELOG_INTENT.test(query);
@@ -387,6 +486,20 @@ export const searchDocsRag = async (queryText, options = {}) => {
     const wantsCustomContent = CUSTOM_CONTENT_INTENT.test(query);
     const wantsCustomContentRoute = wantsCustomContent && CUSTOM_CONTENT_ROUTE_SIGNAL.test(query);
     const wantsRouteChunk = wantsRoutes || wantsCustomContentRoute;
+    const wantsLegacy = LEGACY_QUERY_CUE.test(query);
+
+    const selected = [];
+    for (const result of results) {
+        const chunk = chunkMap.get(result.id);
+        if (!chunk) continue;
+        if (!wantsLegacy && isLegacyChunk(chunk, meta)) {
+            continue;
+        }
+        selected.push({ ...chunk, score: result.score, forced: false });
+        if (selected.length >= maxResults) {
+            break;
+        }
+    }
 
     if (wantsRouteChunk) {
         const preferredRoute =
@@ -412,8 +525,17 @@ export const searchDocsRag = async (queryText, options = {}) => {
 
     if (wantsChangelog) {
         const preferredChangelog =
-            findHighestRankedChunk(results, chunkMap, (chunk) => chunk.kind === 'changelog') ||
-            findDeterministicChunk(chunkMap, (chunk) => chunk.kind === 'changelog');
+            findHighestRankedChunk(
+                results,
+                chunkMap,
+                (chunk) =>
+                    chunk.kind === 'changelog' && (wantsLegacy || !isLegacyChunk(chunk, meta))
+            ) ||
+            findDeterministicChunk(
+                chunkMap,
+                (chunk) =>
+                    chunk.kind === 'changelog' && (wantsLegacy || !isLegacyChunk(chunk, meta))
+            );
         includeForcedChunk(selected, preferredChangelog, maxResults);
     }
 
@@ -483,9 +605,14 @@ export const searchDocsRag = async (queryText, options = {}) => {
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
 
-    const gitSha = meta?.gitSha || 'unknown';
+    const docsGitSha = meta?.docsGitSha || meta?.gitSha || 'unknown';
     const generatedAt = meta?.generatedAt || 'unknown';
-    const headerLines = ['---', `Docs grounding (gitSha: ${gitSha}, generatedAt: ${generatedAt}):`];
+    const envName = meta?.envName || 'unknown';
+    const sourceRef = meta?.sourceRef || 'unknown';
+    const headerLines = [
+        '---',
+        `Docs grounding (docsGitSha: ${docsGitSha}, generatedAt: ${generatedAt}, env: ${envName}, sourceRef: ${sourceRef}):`,
+    ];
     const header = `${headerLines.join('\n')}\n`;
     const footer = '---';
     const minBlockLength = header.length + footer.length;
@@ -614,8 +741,10 @@ export const searchDocsRag = async (queryText, options = {}) => {
     output += footer;
 
     const sourcesMeta = {
-        gitSha,
+        docsGitSha,
         generatedAt,
+        envName,
+        sourceRef,
         results: included.map((chunk) => ({
             id: chunk.id,
             slug: chunk.slug,

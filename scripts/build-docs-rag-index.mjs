@@ -288,6 +288,7 @@ const chunkRoutesDocument = ({ filePath, content, slugBase }) => {
             anchor,
             text,
             kind: 'route',
+            legacy: false,
         },
     ];
 };
@@ -299,6 +300,7 @@ const chunkDocument = ({
     kind,
     slugBase,
     anchorBase,
+    legacy = false,
 }) => {
     const sections = splitMarkdownIntoSections(content);
     const title = resolveDocTitle(frontmatter, content);
@@ -325,6 +327,7 @@ const chunkDocument = ({
                 anchor,
                 text: textChunk,
                 kind,
+                legacy,
             });
         });
     });
@@ -410,6 +413,7 @@ const gatherDocs = async () => {
         const { frontmatter, body } = parseFrontmatter(raw);
         const slugBase = resolveDocSlugBase(frontmatter, filePath);
 
+        const isLegacy = isLegacyDoc({ slug: slugBase, filePath });
         chunks.push(
             ...chunkDocument({
                 filePath,
@@ -417,6 +421,7 @@ const gatherDocs = async () => {
                 frontmatter,
                 kind: 'doc',
                 slugBase,
+                legacy: isLegacy,
             })
         );
     }
@@ -429,6 +434,7 @@ const gatherDocs = async () => {
         if (qualifiesAsV3) {
             v3ChangelogSources.push(filePath);
         }
+        const isLegacy = isLegacyChangelog({ entrySlug });
         const slugBase = '/changelog';
 
         chunks.push(
@@ -439,6 +445,7 @@ const gatherDocs = async () => {
                 kind: 'changelog',
                 slugBase,
                 anchorBase: entrySlug,
+                legacy: isLegacy,
             })
         );
     }
@@ -492,6 +499,52 @@ const getGitSha = () => {
     }
 };
 
+const resolveEnvName = () => {
+    const candidates = [
+        process.env.VITE_DSPACE_ENV,
+        process.env.DSPACE_ENV,
+        process.env.NODE_ENV,
+    ];
+    const resolved = candidates.find((value) => value && value.trim());
+    return resolved ? resolved.trim() : 'unknown';
+};
+
+const resolveSourceRef = () => {
+    const candidates = [
+        process.env.VITE_DOCS_SOURCE_REF,
+        process.env.DOCS_SOURCE_REF,
+        process.env.GITHUB_REF_NAME,
+        process.env.GITHUB_REF,
+        process.env.GIT_BRANCH,
+    ];
+    const resolved = candidates.find((value) => value && value.trim());
+    return resolved ? resolved.trim() : undefined;
+};
+
+const LEGACY_DOC_SLUG_PATTERNS = [/^\/docs\/legacy\b/i, /\blegacy\b/i];
+
+const getChangelogYear = (slug) => {
+    const match = String(slug || '').match(/^(\d{4})/);
+    if (!match) {
+        return null;
+    }
+    const year = Number(match[1]);
+    return Number.isFinite(year) ? year : null;
+};
+
+const isLegacyDoc = ({ slug, filePath }) => {
+    const normalizedSlug = String(slug || '').toLowerCase();
+    const normalizedPath = String(filePath || '').toLowerCase();
+    return LEGACY_DOC_SLUG_PATTERNS.some(
+        (pattern) => pattern.test(normalizedSlug) || pattern.test(normalizedPath)
+    );
+};
+
+const isLegacyChangelog = ({ entrySlug }) => {
+    const year = getChangelogYear(entrySlug);
+    return typeof year === 'number' ? year <= 2023 : false;
+};
+
 const writeArtifacts = async (chunks, index, metaSources) => {
     await fs.mkdir(OUTPUT_DIR, { recursive: true });
 
@@ -499,7 +552,11 @@ const writeArtifacts = async (chunks, index, metaSources) => {
     const indexPath = path.join(OUTPUT_DIR, 'docs_index.json');
     const metaPath = path.join(OUTPUT_DIR, 'docs_meta.json');
 
+    const gitSha = getGitSha();
+    const envName = resolveEnvName();
+    const sourceRef = resolveSourceRef() || 'unknown';
     const meta = {
+        envName,
         generatedAt: new Date().toISOString(),
         generatedFrom: {
             routes: path.relative(repoRoot, ROUTES_PATH).split(path.sep).join('/'),
@@ -507,13 +564,34 @@ const writeArtifacts = async (chunks, index, metaSources) => {
             changelog: path.relative(repoRoot, CHANGELOG_DIR).split(path.sep).join('/'),
         },
         sources: metaSources,
+        legacy: {
+            docSlugs: Array.from(
+                new Set(
+                    chunks
+                        .filter((chunk) => chunk.kind === 'doc' && chunk.legacy)
+                        .map((chunk) => chunk.slug)
+                        .filter(Boolean)
+                )
+            ).sort(),
+            changelogAnchors: Array.from(
+                new Set(
+                    chunks
+                        .filter((chunk) => chunk.kind === 'changelog' && chunk.legacy)
+                        .map((chunk) => chunk.anchor)
+                        .filter(Boolean)
+                )
+            ).sort(),
+        },
         counts: {
             totalChunks: chunks.length,
             docs: chunks.filter((chunk) => chunk.kind === 'doc').length,
             routes: chunks.filter((chunk) => chunk.kind === 'route').length,
             changelog: chunks.filter((chunk) => chunk.kind === 'changelog').length,
+            legacy: chunks.filter((chunk) => chunk.legacy).length,
         },
-        gitSha: getGitSha(),
+        gitSha,
+        docsGitSha: gitSha,
+        sourceRef,
     };
 
     const [chunksOutput, indexOutput, metaOutput] = await Promise.all([

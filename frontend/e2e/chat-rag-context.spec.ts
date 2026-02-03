@@ -118,4 +118,17 @@ test.describe('chat RAG context', () => {
             chatPanel.locator('[data-testid="chat-debug-message"][data-kind="rag"]')
         ).toBeVisible();
     });
+
+    test('shows docs pack environment in chat debug metadata', async ({ page }) => {
+        await page.goto('/chat');
+
+        const chatPanel = page.locator('[data-testid="chat-panel"][data-provider="openai"]');
+        await expect(chatPanel).toBeVisible();
+        await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
+
+        const docsEnvLabel = chatPanel.getByText('Docs env');
+        await expect(docsEnvLabel).toBeVisible();
+        const docsEnvValue = docsEnvLabel.locator('..').locator('.debug-mono');
+        await expect(docsEnvValue).not.toHaveText('');
+    });
 });

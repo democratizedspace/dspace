@@ -76,6 +76,10 @@ const guardrailRules = [
         pattern: /docs\/routes\.md/,
     },
     {
+        line: 'Never link to GitHub blob URLs for docs; always prefer in-game /docs routes.',
+        pattern: /github blob|\/docs routes/i,
+    },
+    {
         line:
             'Only give exact counts/durations/rates if they appear in retrieved context; otherwise be ' +
             "approximate or say you don't know.",
@@ -146,16 +150,21 @@ export const validateChatResponseText = (text, options = {}) => {
 
     const hasContextSources =
         Array.isArray(options.contextSources) && options.contextSources.length > 0;
-    if (hasContextSources) {
-        return { text: textValue, wasSanitized: false };
-    }
-
     const suspiciousPrecisionPattern =
         /\bexactly\s+\d+(?:\.\d+)?\s+(?:quests?|items?|minutes?|hours?|days?|percent|%)\b|\b\d+\.\d+\s*(?:%|percent)\b/i;
     const citationMarkerPattern =
         /\[[^\]]+\]|【\d+†[^】]+】|\/docs\/|docs\/ROUTES\.md|sources?:|https?:\/\//i;
+    const githubBlobPattern = /https?:\/\/github\.com\/[^/\s]+\/[^/\s]+\/blob\/[^\s)]+/i;
     const hasSuspiciousPrecision = suspiciousPrecisionPattern.test(normalizedText);
     const hasCitationMarkers = citationMarkerPattern.test(normalizedText);
+
+    if (githubBlobPattern.test(normalizedText)) {
+        return { text: safeFallbackMessage, wasSanitized: true };
+    }
+
+    if (hasContextSources) {
+        return { text: textValue, wasSanitized: false };
+    }
 
     if (hasSuspiciousPrecision && !hasCitationMarkers) {
         return { text: safeFallbackMessage, wasSanitized: true };
