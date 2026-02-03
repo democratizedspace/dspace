@@ -163,4 +163,16 @@ describe('QA 9.4 chat hallucination contracts', () => {
         const hasChangelog = contextSources.some((source) => source.type === 'changelog');
         expect(hasChangelog || ragText.includes('/changelog')).toBe(true);
     });
+
+    it('Stage 11: v3 release state probe cites v3 docs instead of legacy changelog anchors', async () => {
+        const { debugMessages } = await buildChatPrompt([
+            { role: 'user', content: 'Is token.place active in v3?' },
+        ]);
+
+        const ragMessages = debugMessages.filter((message) => message.kind === 'rag');
+        const ragText = ragMessages.map((message) => message.content).join('\n');
+
+        expect(ragText).toMatch(/\/docs\/v3-release-state|\/changelog#20260301/);
+        expect(ragText).not.toMatch(/\/changelog#2023/);
+    });
 });

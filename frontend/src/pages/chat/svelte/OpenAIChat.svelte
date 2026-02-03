@@ -52,10 +52,14 @@
     let promptDebugLinkListener;
     let appGitSha = getAppGitSha();
     let docsRagGitSha = 'unavailable';
+    let docsRagEnvName = 'unavailable';
+    let docsRagSourceRef = 'unavailable';
     let docsRagGeneratedAt = 'unavailable';
+    let docsRagHost = 'unavailable';
     let docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
     let docsRagComparisonMessage = docsRagComparison.message;
     let docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+    let docsRagEnvWarning = null;
     let debugOverride = false;
     let currentSettings = { showChatDebugPayload: false };
     let lastShowChatDebugPayload;
@@ -174,6 +178,53 @@
         }
     }
 
+    function normalizeEnvName(value) {
+        const normalized = String(value || '')
+            .trim()
+            .toLowerCase();
+        if (!normalized || normalized === 'unknown') {
+            return null;
+        }
+        if (['production', 'prod'].includes(normalized)) {
+            return 'production';
+        }
+        if (['staging', 'stage', 'stg'].includes(normalized)) {
+            return 'staging';
+        }
+        return normalized;
+    }
+
+    function inferEnvFromHost(origin) {
+        if (!origin || origin === 'unknown') {
+            return null;
+        }
+        let hostname = '';
+        try {
+            hostname = new URL(origin).hostname;
+        } catch (error) {
+            return null;
+        }
+        if (!hostname || hostname === 'localhost' || hostname === '127.0.0.1') {
+            return null;
+        }
+        if (/(staging|stage|stg)/i.test(hostname)) {
+            return 'staging';
+        }
+        if (/(prod|production)/i.test(hostname)) {
+            return 'production';
+        }
+        return null;
+    }
+
+    function buildDocsEnvMismatchWarning(hostOrigin, docsEnvName) {
+        const hostEnv = inferEnvFromHost(hostOrigin);
+        const docsEnv = normalizeEnvName(docsEnvName);
+        if (!hostEnv || !docsEnv || hostEnv === docsEnv) {
+            return null;
+        }
+        return `Docs pack env (${docsEnvName}) does not match host (${hostOrigin}).`;
+    }
+
     function dismissSaveSnapshotHint() {
         saveSnapshotHintDismissed = true;
         if (typeof sessionStorage !== 'undefined') {
@@ -247,8 +298,12 @@
         syncPromptDebugDeepLink({ allowAutoExpand: true });
         appGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
-        docsRagGitSha = docsMeta?.gitSha ?? 'unavailable';
-        docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unavailable';
+        docsRagGitSha = docsMeta?.docsGitSha ?? docsMeta?.gitSha ?? 'unknown';
+        docsRagEnvName = docsMeta?.envName ?? 'unknown';
+        docsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
+        docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
+        docsRagHost = window?.location?.origin || 'unknown';
+        docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
@@ -380,8 +435,20 @@
                     <span class="debug-mono">{docsRagGitSha}</span>
                 </div>
                 <div class="debug-meta-row">
+                    <span>Docs pack env</span>
+                    <span class="debug-mono">{docsRagEnvName}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs host</span>
+                    <span class="debug-mono">{docsRagHost}</span>
+                </div>
+                <div class="debug-meta-row">
                     <span>Docs RAG generatedAt</span>
                     <span class="debug-mono">{docsRagGeneratedAt}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs pack sourceRef</span>
+                    <span class="debug-mono">{docsRagSourceRef}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>Docs RAG comparison</span>
@@ -389,7 +456,14 @@
                 </div>
             </div>
             {#if docsRagWarning}
-                <div class="debug-warning" role="alert" aria-live="polite">{docsRagWarning}</div>
+                <div class="debug-warning" role="alert" aria-live="polite">
+                    {docsRagWarning}
+                </div>
+            {/if}
+            {#if docsRagEnvWarning}
+                <div class="debug-warning" role="alert" aria-live="polite">
+                    {docsRagEnvWarning}
+                </div>
             {/if}
             {#if debugExpanded}
                 {#if debugMessages.length}

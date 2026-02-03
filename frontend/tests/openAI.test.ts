@@ -37,6 +37,7 @@ import {
     getOpenAIErrorSummary,
     GPT5Chat,
     GPT5ChatV2,
+    validateChatResponseText,
 } from '../src/utils/openAI.js';
 import { buildDchatKnowledgePack } from '../src/utils/dchatKnowledge.js';
 import { searchDocsRag } from '../src/utils/docsRag.js';
@@ -678,6 +679,44 @@ describe('buildChatPrompt', () => {
         const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
 
         expect(options.maxChars).toBe(0);
+    });
+});
+
+describe('validateChatResponseText', () => {
+    it('rewrites GitHub docs blob links to in-game /docs routes', () => {
+        const result = validateChatResponseText(
+            'See https://github.com/democratizedspace/dspace/blob/main/docs/ROUTES.md and ' +
+                'https://github.com/democratizedspace/dspace/blob/main/frontend/src/pages/docs/md/v3-release-state.md.'
+        );
+
+        expect(result.wasSanitized).toBe(true);
+        expect(result.text).toContain('/docs/routes');
+        expect(result.text).toContain('/docs/v3-release-state');
+        expect(result.text).not.toMatch(/\/blob\//i);
+        expect(result.text).not.toMatch(/\/tree\//i);
+    });
+
+    it('strips GitHub blob links while keeping the response body intact', () => {
+        const result = validateChatResponseText(
+            'Reference ' +
+                'https://github.com/democratizedspace/dspace/blob/main/docs/design/rag_discoverability.md ' +
+                'but keep this sentence.'
+        );
+
+        expect(result.wasSanitized).toBe(true);
+        expect(result.text).toContain('keep this sentence');
+        expect(result.text).toContain('[link removed: use /docs routes]');
+        expect(result.text).not.toMatch(/\/blob\//i);
+    });
+
+    it('sanitizes GitHub blob links even when context sources exist', () => {
+        const result = validateChatResponseText(
+            'See https://github.com/democratizedspace/dspace/blob/main/docs/ROUTES.md.',
+            { contextSources: [{ type: 'doc', url: '/docs/routes' }] }
+        );
+
+        expect(result.wasSanitized).toBe(true);
+        expect(result.text).toContain('/docs/routes');
     });
 });
 
