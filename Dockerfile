@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.7
 
 ARG DSPACE_VERSION=dev
-ARG GIT_SHA=unknown
+ARG GIT_SHA=dev-local
 ARG VITE_GIT_SHA=${GIT_SHA}
 
 FROM node:20-bookworm-slim AS base
@@ -41,7 +41,7 @@ RUN --mount=type=cache,target=/root/.pnpm-store pnpm install --frozen-lockfile
 
 FROM deps AS build
 ARG DSPACE_VERSION
-ARG GIT_SHA=unknown
+ARG GIT_SHA=dev-local
 ARG VITE_GIT_SHA=${GIT_SHA}
 # GIT_SHA should be provided via build args; git is not available in the image to compute it.
 ENV VITE_GIT_SHA="${VITE_GIT_SHA}"

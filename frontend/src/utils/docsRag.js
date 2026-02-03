@@ -84,12 +84,10 @@ const loadDocsRag = async () => {
 };
 
 const normalizeSha = (value) => String(value || '').trim();
-const normalizeComparableSha = (value) => {
-    const normalized = normalizeSha(value);
-    if (!normalized || normalized.toLowerCase() === 'unknown') {
-        return '';
-    }
-    return normalized;
+const normalizeComparableSha = (value) => normalizeSha(value);
+const isInvalidSha = (value) => {
+    const normalized = normalizeSha(value).toLowerCase();
+    return !normalized || normalized === 'unknown' || normalized === 'unavailable';
 };
 
 const shasMatch = (appSha, docsSha) => {
@@ -121,39 +119,26 @@ export const getDocsRagMeta = async () => {
 };
 
 export const getDocsRagComparison = (appGitSha, docsGitSha) => {
-    const appSha = normalizeComparableSha(appGitSha);
-    const docsSha = normalizeComparableSha(docsGitSha);
+    const appSha = normalizeComparableSha(appGitSha) || 'unavailable';
+    const docsSha = normalizeComparableSha(docsGitSha) || 'unavailable';
+    const bothValid = !isInvalidSha(appSha) && !isInvalidSha(docsSha);
 
-    if (!appSha) {
-        return {
-            status: 'unavailable',
-            message: 'App build SHA unavailable; cannot compare.',
-        };
-    }
-
-    if (!docsSha) {
-        return {
-            status: 'unavailable',
-            message: 'Docs RAG SHA unavailable; cannot compare.',
-        };
-    }
-
-    if (shasMatch(appSha, docsSha)) {
+    if (bothValid && shasMatch(appSha, docsSha)) {
         return {
             status: 'match',
-            message: 'Docs RAG matches app build.',
+            message: `✅ in sync (app: ${appSha}, docs: ${docsSha})`,
         };
     }
 
     return {
-        status: 'stale',
-        message: 'Docs RAG is stale vs app build.',
+        status: 'mismatch',
+        message: `⚠️ mismatch (app: ${appSha}, docs: ${docsSha})`,
     };
 };
 
 export const getDocsRagMismatchWarning = (appGitSha, docsGitSha) => {
     const comparison = getDocsRagComparison(appGitSha, docsGitSha);
-    return comparison.status === 'stale' ? comparison.message : null;
+    return comparison.status === 'mismatch' ? comparison.message : null;
 };
 
 const trimExcerpt = (text, maxChars) => {

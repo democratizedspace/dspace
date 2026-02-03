@@ -13,7 +13,7 @@ const resolveGitSha = () => {
     try {
         return execSync('git rev-parse HEAD', { encoding: 'utf-8' }).trim();
     } catch (error) {
-        return 'unknown';
+        return 'dev-local';
     }
 };
 
