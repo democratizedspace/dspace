@@ -19,56 +19,46 @@ describe('docs RAG comparison', () => {
     it('reports unavailable when app SHA is missing', () => {
         const comparison = getDocsRagComparison('unknown', 'deadbeef');
         expect(comparison).toEqual({
-            status: 'mismatch',
-            message: '⚠️ mismatch (app: unavailable, docs: deadbeef)',
+            status: 'unavailable',
+            message: '⚠️ unavailable (app: unavailable, docs: deadbeef)',
         });
-        expect(getDocsRagMismatchWarning('unknown', 'deadbeef')).toBe(
-            '⚠️ mismatch (app: unavailable, docs: deadbeef)'
-        );
+        expect(getDocsRagMismatchWarning('unknown', 'deadbeef')).toBeNull();
     });
 
     it('reports unavailable when app SHA is truly absent', () => {
         const comparison = getDocsRagComparison(undefined as unknown as string, 'deadbeef');
         expect(comparison).toEqual({
-            status: 'mismatch',
-            message: '⚠️ mismatch (app: unavailable, docs: deadbeef)',
+            status: 'unavailable',
+            message: '⚠️ unavailable (app: unavailable, docs: deadbeef)',
         });
-        expect(
-            getDocsRagMismatchWarning(undefined as unknown as string, 'deadbeef')
-        ).toBe('⚠️ mismatch (app: unavailable, docs: deadbeef)');
+        expect(getDocsRagMismatchWarning(undefined as unknown as string, 'deadbeef')).toBeNull();
     });
 
     it('treats case-insensitive unknown app SHAs as unavailable', () => {
         const comparison = getDocsRagComparison('UNKNOWN', 'deadbeef');
         expect(comparison).toEqual({
-            status: 'mismatch',
-            message: '⚠️ mismatch (app: unavailable, docs: deadbeef)',
+            status: 'unavailable',
+            message: '⚠️ unavailable (app: unavailable, docs: deadbeef)',
         });
-        expect(getDocsRagMismatchWarning('UNKNOWN', 'deadbeef')).toBe(
-            '⚠️ mismatch (app: unavailable, docs: deadbeef)'
-        );
+        expect(getDocsRagMismatchWarning('UNKNOWN', 'deadbeef')).toBeNull();
     });
 
     it('reports unavailable when docs SHA is missing', () => {
         const comparison = getDocsRagComparison('deadbeef', 'unknown');
         expect(comparison).toEqual({
-            status: 'mismatch',
-            message: '⚠️ mismatch (app: deadbeef, docs: unavailable)',
+            status: 'unavailable',
+            message: '⚠️ unavailable (app: deadbeef, docs: unavailable)',
         });
-        expect(getDocsRagMismatchWarning('deadbeef', 'unknown')).toBe(
-            '⚠️ mismatch (app: deadbeef, docs: unavailable)'
-        );
+        expect(getDocsRagMismatchWarning('deadbeef', 'unknown')).toBeNull();
     });
 
     it('treats case-insensitive unknown docs SHAs as unavailable', () => {
         const comparison = getDocsRagComparison('deadbeef', 'UNKNOWN');
         expect(comparison).toEqual({
-            status: 'mismatch',
-            message: '⚠️ mismatch (app: deadbeef, docs: unavailable)',
+            status: 'unavailable',
+            message: '⚠️ unavailable (app: deadbeef, docs: unavailable)',
         });
-        expect(getDocsRagMismatchWarning('deadbeef', 'UNKNOWN')).toBe(
-            '⚠️ mismatch (app: deadbeef, docs: unavailable)'
-        );
+        expect(getDocsRagMismatchWarning('deadbeef', 'UNKNOWN')).toBeNull();
     });
 
     it('reports match when SHAs align', () => {

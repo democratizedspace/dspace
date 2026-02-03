@@ -48,12 +48,17 @@
     let appGitSha = getAppGitSha();
     let docsRagGitSha = 'unavailable';
     let docsRagGeneratedAt = 'unavailable';
-    let docsRagComparisonMessage = getDocsRagComparison(appGitSha, docsRagGitSha).message;
-    let docsRagWarning = null;
+    let docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
+    let docsRagComparisonMessage = docsRagComparison.message;
+    let docsRagWarning = docsRagComparison.status === 'mismatch' ? docsRagComparison.message : null;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
     $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
+    $: docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
+    $: docsRagComparisonMessage = docsRagComparison.message;
+    $: docsRagWarning =
+        docsRagComparison.status === 'mismatch' ? docsRagComparison.message : null;
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -201,9 +206,6 @@
         const docsMeta = await getDocsRagMeta();
         docsRagGitSha = docsMeta?.gitSha ?? 'unavailable';
         docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unavailable';
-        const comparison = getDocsRagComparison(appGitSha, docsRagGitSha);
-        docsRagComparisonMessage = comparison.message;
-        docsRagWarning = comparison.status === 'mismatch' ? comparison.message : null;
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);

@@ -28,4 +28,23 @@ const shortenSha = (value) => {
 
 export const getAppGitSha = () => resolveGitSha();
 
-export const getPromptVersionSha = () => shortenSha(resolveGitSha());
+const extractPromptVersionSha = (promptVersionLabel) => {
+    const normalized = normalizeSha(promptVersionLabel);
+    if (!normalized) {
+        return '';
+    }
+    const parts = normalized.split(':').filter(Boolean);
+    if (parts.length === 0) {
+        return '';
+    }
+    return parts[parts.length - 1];
+};
+
+export const getPromptVersionSha = (promptVersionLabel) => {
+    if (promptVersionLabel) {
+        return shortenSha(extractPromptVersionSha(promptVersionLabel));
+    }
+    return shortenSha(resolveGitSha());
+};
+
+export const getPromptVersionLabel = () => `v3:${getPromptVersionSha()}`;

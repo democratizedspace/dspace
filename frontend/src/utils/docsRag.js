@@ -136,12 +136,20 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
     const docsLabel = normalizeDisplaySha(docsGitSha);
     const appSha = normalizeComparableSha(appGitSha);
     const docsSha = normalizeComparableSha(docsGitSha);
-    const inSync = Boolean(appSha && docsSha && shasMatch(appSha, docsSha));
+    const canCompare = Boolean(appSha && docsSha);
+    const inSync = Boolean(canCompare && shasMatch(appSha, docsSha));
 
     if (inSync) {
         return {
             status: 'match',
             message: `✅ in sync (app: ${appLabel}, docs: ${docsLabel})`,
+        };
+    }
+
+    if (!canCompare) {
+        return {
+            status: 'unavailable',
+            message: `⚠️ unavailable (app: ${appLabel}, docs: ${docsLabel})`,
         };
     }
 

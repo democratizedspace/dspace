@@ -1,6 +1,10 @@
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { getAppGitSha, getPromptVersionSha } from '../src/utils/buildInfo.js';
+import {
+    getAppGitSha,
+    getPromptVersionLabel,
+    getPromptVersionSha,
+} from '../src/utils/buildInfo.js';
 
 describe('buildInfo', () => {
     afterEach(() => {
@@ -17,5 +21,11 @@ describe('buildInfo', () => {
         process.env.VITE_GIT_SHA = 'abc123def456';
         expect(getAppGitSha()).toBe('abc123def456');
         expect(getPromptVersionSha()).toBe('abc123d');
+        expect(getPromptVersionLabel()).toBe('v3:abc123d');
+    });
+
+    it('derives the prompt SHA from an existing prompt label', () => {
+        expect(getPromptVersionSha('v3:feedface')).toBe('feedfac');
+        expect(getPromptVersionSha('v3:dev-local')).toBe('dev-local');
     });
 });
