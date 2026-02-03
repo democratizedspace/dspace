@@ -316,7 +316,7 @@
         promptVersionLabel = getPromptVersionLabelForSha(appGitShaDisplay);
         const normalizedDocsEnv = normalizeEnvName(docsRagEnvName);
         docsRagDerivedEnv = normalizedDocsEnv
-            ? 'n/a'
+            ? normalizedDocsEnv
             : inferEnvFromHost(docsRagHost) ?? 'unavailable';
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
         syncSaveSnapshotHintDismissed();
