@@ -204,9 +204,8 @@ Production/staging builds embed the current commit SHA into the frontend via the
 `VITE_GIT_SHA` environment variable. The root `npm run build` script now computes this
 SHA (using `git rev-parse HEAD` when needed) and uses it for both the Docs RAG metadata
 generation and the frontend build, ensuring the `/chat` debug panel can compare the
-app build SHA with `docs_meta.json`. Local dev builds can fall back to `v3:dev` when
-`VITE_GIT_SHA` is not set or is resolved as `unknown` (for example, if git resolution
-fails).
+app build SHA with `docs_meta.json`. Local dev builds fall back to `v3:dev-local` when
+`VITE_GIT_SHA` is not set or git resolution fails, so prompt metadata is always explicit.
 
 ### Commit Messages
 

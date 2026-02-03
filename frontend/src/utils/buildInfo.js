@@ -11,7 +11,7 @@ const readViteGitSha = () => {
 export const getAppGitSha = () => {
     const rawSha = readViteGitSha();
     const normalized = String(rawSha || '').trim();
-    return normalized || 'unknown';
+    return normalized || 'dev-local';
 };
 
 export const getPromptVersionSha = () => {
@@ -20,10 +20,5 @@ export const getPromptVersionSha = () => {
     if (normalized) {
         return normalized;
     }
-
-    const isProd =
-        (typeof import.meta !== 'undefined' && import.meta.env?.PROD) ||
-        (typeof process !== 'undefined' && process.env?.NODE_ENV === 'production');
-
-    return isProd ? 'unknown' : 'dev';
+    return 'dev-local';
 };

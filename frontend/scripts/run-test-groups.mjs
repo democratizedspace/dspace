@@ -94,6 +94,7 @@ const TEST_GROUPS = [
         name: 'UI Interaction',
         files: [
             'chat-persona-switching.spec.ts',
+            'chat-debug-build-info.spec.ts',
             'chat-rag-context.spec.ts',
             'chat-message-flow.spec.ts',
             'token-place-chat-banners.spec.ts',

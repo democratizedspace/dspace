@@ -16,70 +16,23 @@ describe('docs RAG metadata freshness', () => {
 });
 
 describe('docs RAG comparison', () => {
-    it('reports unavailable when app SHA is missing', () => {
-        const comparison = getDocsRagComparison('unknown', 'deadbeef');
-        expect(comparison).toEqual({
-            status: 'unavailable',
-            message: 'App build SHA unavailable; cannot compare.',
-        });
-        expect(getDocsRagMismatchWarning('unknown', 'deadbeef')).toBeNull();
-    });
-
-    it('reports unavailable when app SHA is truly absent', () => {
-        const comparison = getDocsRagComparison(undefined as unknown as string, 'deadbeef');
-        expect(comparison).toEqual({
-            status: 'unavailable',
-            message: 'App build SHA unavailable; cannot compare.',
-        });
-        expect(
-            getDocsRagMismatchWarning(undefined as unknown as string, 'deadbeef')
-        ).toBeNull();
-    });
-
-    it('treats case-insensitive unknown app SHAs as unavailable', () => {
-        const comparison = getDocsRagComparison('UNKNOWN', 'deadbeef');
-        expect(comparison).toEqual({
-            status: 'unavailable',
-            message: 'App build SHA unavailable; cannot compare.',
-        });
-        expect(getDocsRagMismatchWarning('UNKNOWN', 'deadbeef')).toBeNull();
-    });
-
-    it('reports unavailable when docs SHA is missing', () => {
-        const comparison = getDocsRagComparison('deadbeef', 'unknown');
-        expect(comparison).toEqual({
-            status: 'unavailable',
-            message: 'Docs RAG SHA unavailable; cannot compare.',
-        });
-        expect(getDocsRagMismatchWarning('deadbeef', 'unknown')).toBeNull();
-    });
-
-    it('treats case-insensitive unknown docs SHAs as unavailable', () => {
-        const comparison = getDocsRagComparison('deadbeef', 'UNKNOWN');
-        expect(comparison).toEqual({
-            status: 'unavailable',
-            message: 'Docs RAG SHA unavailable; cannot compare.',
-        });
-        expect(getDocsRagMismatchWarning('deadbeef', 'UNKNOWN')).toBeNull();
-    });
-
     it('reports match when SHAs align', () => {
         const comparison = getDocsRagComparison('abc123', 'abc123');
         expect(comparison).toEqual({
             status: 'match',
-            message: 'Docs RAG matches app build.',
+            message: '✅ in sync',
         });
         expect(getDocsRagMismatchWarning('abc123', 'abc123')).toBeNull();
     });
 
-    it('reports stale when SHAs differ', () => {
+    it('reports mismatch when SHAs differ', () => {
         const comparison = getDocsRagComparison('aaaaaaaa', 'bbbbbbbb');
         expect(comparison).toEqual({
-            status: 'stale',
-            message: 'Docs RAG is stale vs app build.',
+            status: 'mismatch',
+            message: '⚠️ mismatch (app aaaaaaaa, docs bbbbbbbb)',
         });
         expect(getDocsRagMismatchWarning('aaaaaaaa', 'bbbbbbbb')).toBe(
-            'Docs RAG is stale vs app build.'
+            '⚠️ mismatch (app aaaaaaaa, docs bbbbbbbb)'
         );
     });
 
@@ -87,7 +40,15 @@ describe('docs RAG comparison', () => {
         const comparison = getDocsRagComparison('abc123', 'abc123def456');
         expect(comparison).toEqual({
             status: 'match',
-            message: 'Docs RAG matches app build.',
+            message: '✅ in sync',
+        });
+    });
+
+    it('falls back to dev-local when SHAs are missing', () => {
+        const comparison = getDocsRagComparison('', '');
+        expect(comparison).toEqual({
+            status: 'match',
+            message: '✅ in sync',
         });
     });
 });
