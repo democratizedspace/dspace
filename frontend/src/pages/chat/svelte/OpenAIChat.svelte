@@ -55,6 +55,7 @@
     let docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
     let docsRagComparisonMessage = docsRagComparison.message;
     let docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+    let debugOverride = false;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -184,6 +185,19 @@
         saveSnapshotHintDismissed = sessionStorage.getItem(saveSnapshotHintStorageKey) === '1';
     }
 
+    function getPromptDebugDeepLink() {
+        if (typeof window === 'undefined') {
+            return { forceDebug: false, autoExpand: false };
+        }
+
+        const hasPromptHash = window.location.hash === '#prompt-debug';
+        const debugParam = new URLSearchParams(window.location.search).get('debug');
+        const hasPromptParam = debugParam === 'prompt';
+        const shouldOpen = hasPromptHash || hasPromptParam;
+
+        return { forceDebug: shouldOpen, autoExpand: shouldOpen };
+    }
+
     async function handlePersonaChange(event) {
         const selectedId = event.target.value;
         const nextPersona =
@@ -204,7 +218,12 @@
         await ready;
         const currentState = loadGameState();
         const normalized = normalizeSettings(currentState?.settings);
-        showDebug = normalized.showChatDebugPayload;
+        const deepLink = getPromptDebugDeepLink();
+        debugOverride = deepLink.forceDebug;
+        showDebug = normalized.showChatDebugPayload || debugOverride;
+        if (deepLink.autoExpand) {
+            debugExpanded = true;
+        }
         appGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
         docsRagGitSha = docsMeta?.gitSha ?? 'unavailable';
@@ -214,7 +233,7 @@
         window.addEventListener('focus', saveSnapshotHintFocusListener);
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
             const nextNormalized = normalizeSettings(value?.settings);
-            showDebug = nextNormalized.showChatDebugPayload;
+            showDebug = nextNormalized.showChatDebugPayload || debugOverride;
             if (!showDebug) {
                 debugExpanded = false;
                 debugMessages = [];
@@ -305,7 +324,7 @@
     </div>
 
     {#if showDebug}
-        <div class="debug-panel" data-testid="chat-debug-panel">
+        <div class="debug-panel" id="prompt-debug" data-testid="chat-debug-panel">
             <div class="debug-heading">
                 <div>
                     <h3>Chat prompt debug</h3>
