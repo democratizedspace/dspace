@@ -2,7 +2,9 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import {
     getAppGitSha,
+    getAppGitShaWithFallback,
     getPromptVersionLabel,
+    getPromptVersionLabelForSha,
     getPromptVersionSha,
 } from '../src/utils/buildInfo.js';
 
@@ -17,9 +19,22 @@ describe('buildInfo', () => {
         expect(getPromptVersionSha()).toBe('dev-local');
     });
 
+    it('uses a docs pack fallback SHA when VITE_GIT_SHA is missing', () => {
+        delete process.env.VITE_GIT_SHA;
+        expect(getAppGitShaWithFallback('feedface')).toEqual({
+            sha: 'feedface',
+            source: 'docs-pack-fallback',
+        });
+        expect(getPromptVersionLabelForSha('feedface')).toBe('v3:feedfac');
+    });
+
     it('returns a short prompt version while preserving the full app SHA', () => {
         process.env.VITE_GIT_SHA = 'abc123def456';
         expect(getAppGitSha()).toBe('abc123def456');
+        expect(getAppGitShaWithFallback('feedface')).toEqual({
+            sha: 'abc123def456',
+            source: 'vite',
+        });
         expect(getPromptVersionSha()).toBe('abc123d');
         expect(getPromptVersionLabel()).toBe('v3:abc123d');
     });

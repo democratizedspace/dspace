@@ -42,9 +42,17 @@ describe('OpenAIChat build metadata', () => {
         delete process.env.VITE_GIT_SHA;
     });
 
-    it('shows non-empty build metadata from VITE_GIT_SHA', async () => {
+    it('shows build metadata from VITE_GIT_SHA', async () => {
         // Set process.env before import so the module reads the fallback path for VITE_GIT_SHA.
         process.env.VITE_GIT_SHA = 'abc123def456';
+        const docsRagModule = await import('../../../../utils/docsRag.js');
+        docsRagModule.getDocsRagMeta.mockResolvedValueOnce({
+            gitSha: 'abc123',
+            docsGitSha: 'abc123',
+            generatedAt: 'just-now',
+            envName: 'staging',
+            sourceRef: 'refs/heads/main',
+        });
         const { default: OpenAIChat } = await import('../OpenAIChat.svelte');
         render(OpenAIChat);
 
@@ -53,7 +61,10 @@ describe('OpenAIChat build metadata', () => {
         expect(promptVersion).not.toHaveTextContent('unknown');
 
         const appBuildLabel = await screen.findByText('App build SHA');
-        expect(appBuildLabel.nextElementSibling).toHaveTextContent('abc123');
+        expect(appBuildLabel.nextElementSibling).toHaveTextContent('abc123def456');
+
+        const appBuildSourceLabel = await screen.findByText('App build SHA source');
+        expect(appBuildSourceLabel.nextElementSibling).toHaveTextContent('vite');
 
         const docsShaLabel = await screen.findByText('Docs RAG SHA');
         expect(docsShaLabel.nextElementSibling).toHaveTextContent('abc123');
@@ -61,10 +72,49 @@ describe('OpenAIChat build metadata', () => {
         const docsEnvLabel = await screen.findByText('Docs pack env');
         expect(docsEnvLabel.nextElementSibling).toHaveTextContent('staging');
 
+        const docsEnvDerivedLabel = await screen.findByText('Docs env derived');
+        expect(docsEnvDerivedLabel.nextElementSibling).toHaveTextContent('staging');
+
         const docsHostLabel = await screen.findByText('Docs host');
-        expect(docsHostLabel.nextElementSibling).toHaveTextContent(window.location.origin);
+        expect(docsHostLabel.nextElementSibling).toHaveTextContent(window.location.host);
 
         const docsSourceRefLabel = await screen.findByText('Docs pack sourceRef');
         expect(docsSourceRefLabel.nextElementSibling).toHaveTextContent('refs/heads/main');
+    });
+
+    it('falls back to docs pack SHA when app SHA is missing', async () => {
+        delete process.env.VITE_GIT_SHA;
+        const originalHref = window.location.href;
+        window.history.pushState({}, '', 'https://staging.democratized.space');
+        const docsRagModule = await import('../../../../utils/docsRag.js');
+        docsRagModule.getDocsRagMeta.mockResolvedValueOnce({
+            gitSha: 'feedface',
+            docsGitSha: 'feedface',
+            generatedAt: 'just-now',
+            envName: 'unknown',
+            sourceRef: 'refs/heads/main',
+        });
+        const { default: OpenAIChat } = await import('../OpenAIChat.svelte');
+        render(OpenAIChat);
+
+        const promptVersion = await screen.findByText('Prompt version: v3:feedfac');
+        expect(promptVersion).toBeInTheDocument();
+
+        const appBuildLabel = await screen.findByText('App build SHA');
+        expect(appBuildLabel.nextElementSibling).toHaveTextContent('feedface');
+
+        const appBuildSourceLabel = await screen.findByText('App build SHA source');
+        expect(appBuildSourceLabel.nextElementSibling).toHaveTextContent('docs-pack-fallback');
+
+        const docsEnvLabel = await screen.findByText('Docs pack env');
+        expect(docsEnvLabel.nextElementSibling).toHaveTextContent('unknown');
+
+        const docsEnvDerivedLabel = await screen.findByText('Docs env derived');
+        expect(docsEnvDerivedLabel.nextElementSibling).toHaveTextContent('staging');
+
+        const docsHostLabel = await screen.findByText('Docs host');
+        expect(docsHostLabel.nextElementSibling).toHaveTextContent('staging.democratized.space');
+
+        window.history.pushState({}, '', originalHref);
     });
 });

@@ -155,9 +155,30 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
         };
     }
 
+    if (bothValid) {
+        return {
+            status: 'mismatch',
+            message: `⚠️ mismatch (app: ${appLabel}, docs: ${docsLabel})`,
+        };
+    }
+
+    if (!appSha && docsSha) {
+        return {
+            status: 'assumed',
+            message: `ℹ️ app SHA missing; using docs pack SHA for display (docs: ${docsLabel})`,
+        };
+    }
+
+    if (appSha && !docsSha) {
+        return {
+            status: 'unavailable',
+            message: `ℹ️ docs SHA unavailable (app: ${appLabel})`,
+        };
+    }
+
     return {
-        status: bothValid ? 'mismatch' : 'unavailable',
-        message: `⚠️ mismatch (app: ${appLabel}, docs: ${docsLabel})`,
+        status: 'unavailable',
+        message: `ℹ️ SHA unavailable (app: ${appLabel}, docs: ${docsLabel})`,
     };
 };
 
