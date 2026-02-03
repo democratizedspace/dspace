@@ -359,7 +359,8 @@ version and values; it simply forces Helm to pull the refreshed image tag.
 
    You should see the Deployment and pods referencing `ghcr.io/democratizedspace/dspace:v3-latest`
    (which should point at your newest `v3-<shortsha>` build). Load the site to confirm the expected
-   version or build SHA if your UI exposes it.
+   version or build SHA if your UI exposes it, and use `/settings` → chat debug to view the prompt
+   version, app build SHA, and Docs RAG sync status in `/chat`.
 
 > This is the fast path and may cause brief downtime while the Deployment rolls pods. More gradual
 > rollouts (canary/blue-green) can be layered on later using native Kubernetes strategies or

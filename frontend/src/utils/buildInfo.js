@@ -8,22 +8,24 @@ const readViteGitSha = () => {
     return undefined;
 };
 
-export const getAppGitSha = () => {
-    const rawSha = readViteGitSha();
-    const normalized = String(rawSha || '').trim();
-    return normalized || 'unknown';
+const normalizeSha = (value) => String(value || '').trim();
+
+const resolveGitSha = () => {
+    const normalized = normalizeSha(readViteGitSha());
+    if (!normalized || normalized.toLowerCase() === 'unknown') {
+        return 'dev-local';
+    }
+    return normalized;
 };
 
-export const getPromptVersionSha = () => {
-    const rawSha = readViteGitSha();
-    const normalized = String(rawSha || '').trim();
-    if (normalized) {
+const shortenSha = (value) => {
+    const normalized = normalizeSha(value);
+    if (!normalized || normalized === 'dev-local') {
         return normalized;
     }
-
-    const isProd =
-        (typeof import.meta !== 'undefined' && import.meta.env?.PROD) ||
-        (typeof process !== 'undefined' && process.env?.NODE_ENV === 'production');
-
-    return isProd ? 'unknown' : 'dev';
+    return normalized.length > 7 ? normalized.slice(0, 7) : normalized;
 };
+
+export const getAppGitSha = () => resolveGitSha();
+
+export const getPromptVersionSha = () => shortenSha(resolveGitSha());

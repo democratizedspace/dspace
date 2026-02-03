@@ -84,9 +84,20 @@ const loadDocsRag = async () => {
 };
 
 const normalizeSha = (value) => String(value || '').trim();
-const normalizeComparableSha = (value) => {
+const normalizeDisplaySha = (value) => {
     const normalized = normalizeSha(value);
     if (!normalized || normalized.toLowerCase() === 'unknown') {
+        return 'unavailable';
+    }
+    return normalized;
+};
+const normalizeComparableSha = (value) => {
+    const normalized = normalizeSha(value);
+    if (!normalized) {
+        return '';
+    }
+    const lower = normalized.toLowerCase();
+    if (lower === 'unknown' || lower === 'unavailable') {
         return '';
     }
     return normalized;
@@ -121,39 +132,28 @@ export const getDocsRagMeta = async () => {
 };
 
 export const getDocsRagComparison = (appGitSha, docsGitSha) => {
+    const appLabel = normalizeDisplaySha(appGitSha);
+    const docsLabel = normalizeDisplaySha(docsGitSha);
     const appSha = normalizeComparableSha(appGitSha);
     const docsSha = normalizeComparableSha(docsGitSha);
+    const inSync = Boolean(appSha && docsSha && shasMatch(appSha, docsSha));
 
-    if (!appSha) {
-        return {
-            status: 'unavailable',
-            message: 'App build SHA unavailable; cannot compare.',
-        };
-    }
-
-    if (!docsSha) {
-        return {
-            status: 'unavailable',
-            message: 'Docs RAG SHA unavailable; cannot compare.',
-        };
-    }
-
-    if (shasMatch(appSha, docsSha)) {
+    if (inSync) {
         return {
             status: 'match',
-            message: 'Docs RAG matches app build.',
+            message: `✅ in sync (app: ${appLabel}, docs: ${docsLabel})`,
         };
     }
 
     return {
-        status: 'stale',
-        message: 'Docs RAG is stale vs app build.',
+        status: 'mismatch',
+        message: `⚠️ mismatch (app: ${appLabel}, docs: ${docsLabel})`,
     };
 };
 
 export const getDocsRagMismatchWarning = (appGitSha, docsGitSha) => {
     const comparison = getDocsRagComparison(appGitSha, docsGitSha);
-    return comparison.status === 'stale' ? comparison.message : null;
+    return comparison.status === 'mismatch' ? comparison.message : null;
 };
 
 const trimExcerpt = (text, maxChars) => {
@@ -483,8 +483,8 @@ export const searchDocsRag = async (queryText, options = {}) => {
         return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
     }
 
-    const gitSha = meta?.gitSha || 'unknown';
-    const generatedAt = meta?.generatedAt || 'unknown';
+    const gitSha = normalizeSha(meta?.gitSha) || 'unavailable';
+    const generatedAt = normalizeSha(meta?.generatedAt) || 'unavailable';
     const headerLines = ['---', `Docs grounding (gitSha: ${gitSha}, generatedAt: ${generatedAt}):`];
     const header = `${headerLines.join('\n')}\n`;
     const footer = '---';
