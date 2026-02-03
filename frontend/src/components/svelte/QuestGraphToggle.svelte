@@ -68,7 +68,11 @@
 
 <section class="panel" data-hydrated={hydrated ? 'true' : 'false'}>
     <div class="heading">
-        <h2>Debug</h2>
+        <h2>
+            <a class="debug-link" href="/chat#prompt-debug" data-testid="settings-debug-link">
+                Debug
+            </a>
+        </h2>
         <p>Optional debugging tools for inspecting DSPACE behavior.</p>
         <div class="debug-meta">
             <span>Prompt version: {CHAT_PROMPT_VERSION}</span>
@@ -146,6 +150,16 @@
     h2 {
         margin: 0;
         color: #e2e8f0;
+    }
+
+    .debug-link {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .debug-link:hover,
+    .debug-link:focus-visible {
+        text-decoration: underline;
     }
 
     p {
