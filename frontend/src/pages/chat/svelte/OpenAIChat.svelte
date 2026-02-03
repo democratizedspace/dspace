@@ -301,7 +301,7 @@
         const normalizedDocsEnv = normalizeEnvName(docsRagEnvName);
         docsRagDerivedEnv = normalizedDocsEnv
             ? 'n/a'
-            : deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable';
+            : (deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable');
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
@@ -694,9 +694,8 @@
     }
 
     .debug-mono {
-        font-family:
-            'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New',
-            monospace;
+        font-family: 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono',
+            'Courier New', monospace;
         color: #f8fafc;
         word-break: break-all;
     }
@@ -771,9 +770,8 @@
 
     .debug-message pre {
         margin: 0;
-        font-family:
-            'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New',
-            monospace;
+        font-family: 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono',
+            'Courier New', monospace;
         font-size: 0.85rem;
         white-space: pre-wrap;
         word-break: break-word;
