@@ -382,7 +382,7 @@
                     <span class="debug-mono">{appGitSha}</span>
                 </div>
                 <div class="debug-meta-row">
-                    <span>Docs pack sha</span>
+                    <span>Docs RAG SHA</span>
                     <span class="debug-mono">{docsRagGitSha}</span>
                 </div>
                 <div class="debug-meta-row">

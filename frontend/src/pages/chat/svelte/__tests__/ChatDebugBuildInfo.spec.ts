@@ -55,7 +55,7 @@ describe('OpenAIChat build metadata', () => {
         const appBuildLabel = await screen.findByText('App build SHA');
         expect(appBuildLabel.nextElementSibling).toHaveTextContent('abc123');
 
-        const docsShaLabel = await screen.findByText('Docs pack sha');
+        const docsShaLabel = await screen.findByText('Docs RAG SHA');
         expect(docsShaLabel.nextElementSibling).toHaveTextContent('abc123');
 
         const docsEnvLabel = await screen.findByText('Docs pack env');
