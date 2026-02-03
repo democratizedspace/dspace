@@ -77,6 +77,10 @@ answer "how do I get there?" with citeable pathing.
 - More → Twitter opens https://twitter.com/dspacegame.
 - More → Github opens https://github.com/democratizedspace/dspace.
 
+### Settings page click-paths
+
+- Settings → Debug opens /chat#prompt-debug.
+
 ### Editor/manage entrypoints (CTA labels)
 
 - Quests page → Manage button opens /quests/manage.

@@ -46,9 +46,11 @@
     let showDebug = false;
     let debugMessages = [];
     let debugExpanded = false;
+    let shouldExpandDebugFromUrl = false;
     let settingsUnsubscribe;
     let saveSnapshotHintDismissed = false;
     let saveSnapshotHintFocusListener;
+    let debugUrlListener;
     let appGitSha = getAppGitSha();
     let docsRagGitSha = 'unavailable';
     let docsRagGeneratedAt = 'unavailable';
@@ -104,6 +106,31 @@
             timestamp: Date.now(),
         };
         addMessage(welcome);
+    }
+
+    function urlWantsPromptDebug() {
+        if (typeof window === 'undefined') {
+            return false;
+        }
+        const currentUrl = new URL(window.location.href);
+        return (
+            currentUrl.hash === '#prompt-debug' ||
+            currentUrl.searchParams.get('debug') === 'prompt'
+        );
+    }
+
+    async function syncDebugExpansionFromUrl() {
+        if (typeof window === 'undefined') {
+            return;
+        }
+        shouldExpandDebugFromUrl = urlWantsPromptDebug();
+        if (!shouldExpandDebugFromUrl || !showDebug) {
+            return;
+        }
+        debugExpanded = true;
+        await tick();
+        const panel = document.getElementById('prompt-debug');
+        panel?.scrollIntoView({ block: 'start' });
     }
 
     async function submitMessage() {
@@ -218,8 +245,16 @@
             if (!showDebug) {
                 debugExpanded = false;
                 debugMessages = [];
+            } else if (shouldExpandDebugFromUrl) {
+                debugExpanded = true;
             }
         });
+        debugUrlListener = () => {
+            syncDebugExpansionFromUrl();
+        };
+        window.addEventListener('hashchange', debugUrlListener);
+        window.addEventListener('popstate', debugUrlListener);
+        await syncDebugExpansionFromUrl();
         if ($messageHistory.length === 0) {
             addWelcomeMessage();
         }
@@ -229,6 +264,10 @@
         settingsUnsubscribe?.();
         if (saveSnapshotHintFocusListener) {
             window.removeEventListener('focus', saveSnapshotHintFocusListener);
+        }
+        if (debugUrlListener) {
+            window.removeEventListener('hashchange', debugUrlListener);
+            window.removeEventListener('popstate', debugUrlListener);
         }
     });
 </script>
@@ -305,7 +344,7 @@
     </div>
 
     {#if showDebug}
-        <div class="debug-panel" data-testid="chat-debug-panel">
+        <div class="debug-panel" id="prompt-debug" data-testid="chat-debug-panel">
             <div class="debug-heading">
                 <div>
                     <h3>Chat prompt debug</h3>

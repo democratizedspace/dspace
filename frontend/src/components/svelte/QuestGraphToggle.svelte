@@ -74,6 +74,12 @@
             <span>Prompt version: {CHAT_PROMPT_VERSION}</span>
             <span>App SHA: {appSha}</span>
         </div>
+        <div class="debug-links">
+            <a class="debug-link" href="/chat#prompt-debug" data-testid="settings-debug-link">
+                Debug
+            </a>
+            <span class="debug-link__hint">Open the chat prompt payload view.</span>
+        </div>
     </div>
 
     <label class="toggle">
@@ -141,6 +147,37 @@
         gap: 0.25rem;
         font-size: 0.85rem;
         color: #94a3b8;
+    }
+
+    .debug-links {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: #cbd5e1;
+    }
+
+    .debug-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.4rem 0.9rem;
+        border-radius: 999px;
+        background: rgba(148, 163, 184, 0.2);
+        color: #e2e8f0;
+        text-decoration: none;
+        font-weight: 600;
+        border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .debug-link:hover {
+        background: rgba(148, 163, 184, 0.35);
+    }
+
+    .debug-link__hint {
+        font-size: 0.85rem;
+        color: #cbd5e1;
     }
 
     h2 {
