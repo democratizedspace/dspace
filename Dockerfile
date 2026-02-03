@@ -45,6 +45,13 @@ ARG GIT_SHA=unknown
 ARG VITE_GIT_SHA=${GIT_SHA}
 # GIT_SHA should be provided via build args; git is not available in the image to compute it.
 ENV VITE_GIT_SHA="${VITE_GIT_SHA}"
+RUN if [ "$DSPACE_VERSION" != "dev" ]; then \
+        if [ -z "$VITE_GIT_SHA" ] || [ "$VITE_GIT_SHA" = "unknown" ] || \
+            [ "$VITE_GIT_SHA" = "dev-local" ]; then \
+            echo "VITE_GIT_SHA must be set for non-dev builds." >&2; \
+            exit 1; \
+        fi; \
+    fi
 # Copy source separately to avoid overlaying host node_modules (pnpm symlinks make this fail when
 # node_modules exists on the host). Build artifacts are excluded via .dockerignore for compatibility
 # with builders that do not support COPY --exclude flags.
