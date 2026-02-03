@@ -49,6 +49,7 @@
     let settingsUnsubscribe;
     let saveSnapshotHintDismissed = false;
     let saveSnapshotHintFocusListener;
+    let promptDebugLinkListener;
     let appGitSha = getAppGitSha();
     let docsRagGitSha = 'unavailable';
     let docsRagGeneratedAt = 'unavailable';
@@ -56,6 +57,8 @@
     let docsRagComparisonMessage = docsRagComparison.message;
     let docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
     let debugOverride = false;
+    let currentSettings = { showChatDebugPayload: false };
+    let lastShowChatDebugPayload;
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -198,6 +201,27 @@
         return { forceDebug: shouldOpen, autoExpand: shouldOpen };
     }
 
+    function syncDebugVisibility() {
+        showDebug = currentSettings.showChatDebugPayload || debugOverride;
+        if (!showDebug) {
+            debugExpanded = false;
+            debugMessages = [];
+        }
+    }
+
+    function syncPromptDebugDeepLink({ allowAutoExpand = false } = {}) {
+        const deepLink = getPromptDebugDeepLink();
+        if (deepLink.forceDebug) {
+            debugOverride = true;
+            if (allowAutoExpand && deepLink.autoExpand) {
+                debugExpanded = true;
+            }
+        } else if (!currentSettings.showChatDebugPayload) {
+            debugOverride = false;
+        }
+        syncDebugVisibility();
+    }
+
     async function handlePersonaChange(event) {
         const selectedId = event.target.value;
         const nextPersona =
@@ -218,12 +242,9 @@
         await ready;
         const currentState = loadGameState();
         const normalized = normalizeSettings(currentState?.settings);
-        const deepLink = getPromptDebugDeepLink();
-        debugOverride = deepLink.forceDebug;
-        showDebug = normalized.showChatDebugPayload || debugOverride;
-        if (deepLink.autoExpand) {
-            debugExpanded = true;
-        }
+        currentSettings = normalized;
+        lastShowChatDebugPayload = normalized.showChatDebugPayload;
+        syncPromptDebugDeepLink({ allowAutoExpand: true });
         appGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
         docsRagGitSha = docsMeta?.gitSha ?? 'unavailable';
@@ -231,13 +252,17 @@
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
+        promptDebugLinkListener = () => syncPromptDebugDeepLink({ allowAutoExpand: true });
+        window.addEventListener('hashchange', promptDebugLinkListener);
+        window.addEventListener('popstate', promptDebugLinkListener);
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
             const nextNormalized = normalizeSettings(value?.settings);
-            showDebug = nextNormalized.showChatDebugPayload || debugOverride;
-            if (!showDebug) {
-                debugExpanded = false;
-                debugMessages = [];
+            currentSettings = nextNormalized;
+            if (lastShowChatDebugPayload && !nextNormalized.showChatDebugPayload) {
+                debugOverride = false;
             }
+            lastShowChatDebugPayload = nextNormalized.showChatDebugPayload;
+            syncDebugVisibility();
         });
         if ($messageHistory.length === 0) {
             addWelcomeMessage();
@@ -248,6 +273,10 @@
         settingsUnsubscribe?.();
         if (saveSnapshotHintFocusListener) {
             window.removeEventListener('focus', saveSnapshotHintFocusListener);
+        }
+        if (promptDebugLinkListener) {
+            window.removeEventListener('hashchange', promptDebugLinkListener);
+            window.removeEventListener('popstate', promptDebugLinkListener);
         }
     });
 </script>
