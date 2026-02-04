@@ -49,7 +49,6 @@ describe('buildInfo', () => {
             source: 'vite',
         });
         expect(promptLabel).toBe('v3:feedbee');
-        expect(promptLabel).not.toBe('v3:dev-local');
     });
 
     it('derives the prompt SHA from an existing prompt label', () => {

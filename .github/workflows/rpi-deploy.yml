@@ -58,6 +58,7 @@ jobs:
           build-args: |
             GIT_SHA=${{ github.sha }}
             VITE_GIT_SHA=${{ github.sha }}
+            ENFORCE_VITE_GIT_SHA=1
       - name: Deploy on Raspberry Pi
         # Only run this step if the Raspberry Pi host secret is set
         if: env.RPI_HOST != ''

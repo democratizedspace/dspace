@@ -102,5 +102,6 @@ jobs:
           build-args: |
             GIT_SHA=${{ github.sha }}
             VITE_GIT_SHA=${{ github.sha }}
+            ENFORCE_VITE_GIT_SHA=1
           cache-from: ${{ env.PUSH_IMAGE == 'true' && format('type=registry,ref={0}/{1}:buildcache', env.REGISTRY, env.IMAGE_NAME) || '' }}
           cache-to:   ${{ env.PUSH_IMAGE == 'true' && format('type=registry,ref={0}/{1}:buildcache,mode=max', env.REGISTRY, env.IMAGE_NAME) || '' }}
