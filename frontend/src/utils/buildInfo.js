@@ -16,7 +16,12 @@ const isPlaceholderSha = (value) => {
         return true;
     }
     const lower = normalized.toLowerCase();
-    return lower === 'unknown' || lower === 'dev-local' || lower === 'missing-sha';
+    return (
+        lower === 'unknown' ||
+        lower === 'dev-local' ||
+        lower === 'missing' ||
+        lower === 'missing-sha'
+    );
 };
 
 const resolveGitSha = () => {
@@ -37,16 +42,19 @@ const shortenSha = (value) => {
 
 export const getAppGitSha = () => resolveGitSha();
 
-export const getAppGitShaWithFallback = (fallbackSha) => {
+export const getAppGitShaWithFallback = (fallbackSha, { allowFallback = true } = {}) => {
     const appSha = normalizeSha(readViteGitSha());
     if (!isPlaceholderSha(appSha)) {
-        return { sha: appSha, source: 'vite' };
+        return { sha: appSha, source: 'vite', isReal: true };
     }
     const fallbackNormalized = normalizeSha(fallbackSha);
-    if (!isPlaceholderSha(fallbackNormalized)) {
-        return { sha: fallbackNormalized, source: 'docs-pack-fallback' };
+    if (allowFallback && !isPlaceholderSha(fallbackNormalized)) {
+        return { sha: fallbackNormalized, source: 'docs-pack-fallback', isReal: false };
     }
-    return { sha: 'dev-local', source: 'dev-local' };
+    if (allowFallback) {
+        return { sha: 'dev-local', source: 'dev-local', isReal: false };
+    }
+    return { sha: 'missing', source: 'missing', isReal: false };
 };
 
 export const getPromptVersionLabelForSha = (sha) => {

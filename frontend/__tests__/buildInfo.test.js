@@ -25,6 +25,7 @@ describe('buildInfo', () => {
         expect(getAppGitShaWithFallback('feedface')).toEqual({
             sha: 'feedface',
             source: 'docs-pack-fallback',
+            isReal: false,
         });
         expect(getPromptVersionLabelForSha('feedface')).toBe('v3:feedfac');
     });
@@ -37,6 +38,7 @@ describe('buildInfo', () => {
         expect(getAppGitShaWithFallback('feedface')).toEqual({
             sha: 'abc123def456',
             source: 'vite',
+            isReal: true,
         });
     });
 
@@ -48,6 +50,7 @@ describe('buildInfo', () => {
         expect(appShaWithFallback).toEqual({
             sha: 'feedbeefcafef00d',
             source: 'vite',
+            isReal: true,
         });
         expect(appShaWithFallback.source).not.toBe('docs-pack-fallback');
         expect(getPromptVersionSha()).toBe('feedbee');
@@ -57,6 +60,15 @@ describe('buildInfo', () => {
     it('derives the prompt SHA from an existing prompt label', () => {
         expect(getPromptVersionSha('v3:feedface')).toBe('feedfac');
         expect(getPromptVersionSha('v3:dev-local')).toBe('dev-local');
+    });
+
+    it('returns missing when fallback is disallowed', () => {
+        delete process.env.VITE_GIT_SHA;
+        expect(getAppGitShaWithFallback('feedface', { allowFallback: false })).toEqual({
+            sha: 'missing',
+            source: 'missing',
+            isReal: false,
+        });
     });
 
     it('derives env names from hostnames', () => {

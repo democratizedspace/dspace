@@ -50,7 +50,7 @@ test.describe('Chat debug build metadata', () => {
             hasText: 'Docs RAG comparison',
         });
         await expect(comparisonRow.locator('.debug-mono')).toHaveText(
-            /✅ in sync|⚠️ mismatch|ℹ️ app SHA missing|ℹ️ docs SHA unavailable/
+            /✅ in sync|⚠️ mismatch|⚠️ cannot verify app\/docs sync|ℹ️ app SHA missing|ℹ️ docs SHA unavailable/
         );
     });
 });

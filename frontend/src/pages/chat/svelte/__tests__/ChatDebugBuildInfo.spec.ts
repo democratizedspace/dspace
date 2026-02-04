@@ -54,6 +54,7 @@ describe('OpenAIChat build metadata', () => {
             message: '✅ in sync (app: abc123def456, docs: docs789)',
         });
         mockGetDocsRagMismatchWarning.mockReturnValue(null);
+        window.history.pushState({}, '', 'https://localhost/chat');
     });
 
     afterEach(() => {
@@ -113,9 +114,32 @@ describe('OpenAIChat build metadata', () => {
         expect(appBuildLabel.nextElementSibling).toHaveTextContent('docs-only');
 
         const appBuildSourceLabel = await screen.findByText('App build SHA source');
-        expect(appBuildSourceLabel.nextElementSibling).toHaveTextContent('docs-pack-fallback');
+        expect(appBuildSourceLabel.nextElementSibling).toHaveTextContent(
+            'docs-pack-fallback (dev)'
+        );
 
         const docsDerivedEnvLabel = await screen.findByText('Docs env derived');
         expect(docsDerivedEnvLabel.nextElementSibling).toHaveTextContent('dev');
+    });
+
+    it('shows missing app SHA for staging hosts without a build SHA', async () => {
+        delete process.env.VITE_GIT_SHA;
+        window.history.pushState({}, '', 'https://staging.democratized.space/chat');
+        mockGetDocsRagMeta.mockResolvedValueOnce({
+            gitSha: 'docs-only',
+            docsGitSha: 'docs-only',
+            generatedAt: 'just-now',
+            envName: 'unknown',
+            sourceRef: 'refs/heads/main',
+        });
+
+        const { default: OpenAIChat } = await import('../OpenAIChat.svelte');
+        render(OpenAIChat);
+
+        const appBuildLabel = await screen.findByText('App build SHA');
+        expect(appBuildLabel.nextElementSibling).toHaveTextContent('missing');
+
+        const appBuildSourceLabel = await screen.findByText('App build SHA source');
+        expect(appBuildSourceLabel.nextElementSibling).toHaveTextContent('missing');
     });
 });

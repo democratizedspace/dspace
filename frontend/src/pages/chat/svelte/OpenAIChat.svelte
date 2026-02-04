@@ -59,15 +59,23 @@
     let appGitShaDisplay = appGitSha;
     let appGitShaSource = 'dev-local';
     let promptVersionLabel = CHAT_PROMPT_VERSION;
+    let appGitShaIsReal = false;
+    let appHostEnv = 'dev';
     let docsRagGitSha = 'unavailable';
     let docsRagEnvName = 'unavailable';
     let docsRagDerivedEnv = 'unavailable';
     let docsRagSourceRef = 'unavailable';
     let docsRagGeneratedAt = 'unavailable';
     let docsRagHost = 'unavailable';
-    let docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
+    let docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha, {
+        envName: appHostEnv,
+        appShaIsReal: appGitShaIsReal,
+    });
     let docsRagComparisonMessage = docsRagComparison.message;
-    let docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+    let docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha, {
+        envName: appHostEnv,
+        appShaIsReal: appGitShaIsReal,
+    });
     let docsRagEnvWarning = null;
     let debugOverride = false;
     let currentSettings = { showChatDebugPayload: false };
@@ -76,9 +84,15 @@
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
     $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
-    $: docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
+    $: docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha, {
+        envName: appHostEnv,
+        appShaIsReal: appGitShaIsReal,
+    });
     $: docsRagComparisonMessage = docsRagComparison.message;
-    $: docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+    $: docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha, {
+        envName: appHostEnv,
+        appShaIsReal: appGitShaIsReal,
+    });
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -294,9 +308,17 @@
         docsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
         docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
         docsRagHost = window?.location?.host || 'unknown';
-        const appShaInfo = getAppGitShaWithFallback(docsRagGitSha);
+        appHostEnv = deriveEnvNameFromHostname(docsRagHost) ?? 'dev';
+        const appShaInfo = getAppGitShaWithFallback(docsRagGitSha, {
+            allowFallback: appHostEnv === 'dev',
+        });
         appGitShaDisplay = appShaInfo.sha;
-        appGitShaSource = appShaInfo.source;
+        appGitSha = appShaInfo.sha;
+        appGitShaIsReal = appShaInfo.isReal;
+        appGitShaSource =
+            appShaInfo.source === 'docs-pack-fallback' && appHostEnv === 'dev'
+                ? 'docs-pack-fallback (dev)'
+                : appShaInfo.source;
         // NOTE: This label is for UI/debug purposes only and is derived from the effective app
         // Git SHA (which may use a fallback). The actual prompt version sent to OpenAI is
         // determined by the module-level CHAT_PROMPT_VERSION in openAI.js and may differ when

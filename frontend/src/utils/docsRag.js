@@ -105,6 +105,8 @@ const normalizeComparableSha = (value) => {
         lower === 'unknown' ||
         lower === 'unavailable' ||
         lower === 'dev-local' ||
+        lower === 'docs-pack-fallback' ||
+        lower === 'missing' ||
         lower === 'missing-sha'
     ) {
         return '';
@@ -140,15 +142,45 @@ export const getDocsRagMeta = async () => {
     }
 };
 
-export const getDocsRagComparison = (appGitSha, docsGitSha) => {
+const normalizeEnvName = (value) => {
+    const normalized = String(value || '')
+        .trim()
+        .toLowerCase();
+    if (!normalized) {
+        return null;
+    }
+    if (['production', 'prod'].includes(normalized)) {
+        return 'prod';
+    }
+    if (['staging', 'stage', 'stg'].includes(normalized)) {
+        return 'staging';
+    }
+    if (['dev', 'development', 'local'].includes(normalized)) {
+        return 'dev';
+    }
+    return normalized;
+};
+
+export const getDocsRagComparison = (appGitSha, docsGitSha, options = {}) => {
     const appLabel = normalizeDisplaySha(appGitSha);
     const docsLabel = normalizeDisplaySha(docsGitSha);
     const appSha = normalizeComparableSha(appGitSha);
     const docsSha = normalizeComparableSha(docsGitSha);
-    const hasAppSha = Boolean(appSha);
-    const hasDocsSha = Boolean(docsSha);
+    const appShaIsReal = options.appShaIsReal ?? Boolean(appSha);
+    const docsShaIsReal = options.docsShaIsReal ?? Boolean(docsSha);
+    const hasAppSha = Boolean(appShaIsReal && appSha);
+    const hasDocsSha = Boolean(docsShaIsReal && docsSha);
     const bothValid = hasAppSha && hasDocsSha;
     const inSync = Boolean(bothValid && shasMatch(appSha, docsSha));
+    const envName = normalizeEnvName(options.envName);
+    const isDeployed = envName === 'staging' || envName === 'prod';
+
+    if (isDeployed && !appShaIsReal) {
+        return {
+            status: 'unavailable',
+            message: '⚠️ cannot verify app/docs sync (app SHA missing)',
+        };
+    }
 
     if (inSync) {
         return {
@@ -184,8 +216,8 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
     };
 };
 
-export const getDocsRagMismatchWarning = (appGitSha, docsGitSha) => {
-    const comparison = getDocsRagComparison(appGitSha, docsGitSha);
+export const getDocsRagMismatchWarning = (appGitSha, docsGitSha, options = {}) => {
+    const comparison = getDocsRagComparison(appGitSha, docsGitSha, options);
     return comparison.status === 'mismatch' ? comparison.message : null;
 };
 
