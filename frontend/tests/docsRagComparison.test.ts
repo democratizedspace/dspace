@@ -17,4 +17,24 @@ describe('docs RAG comparison', () => {
         expect(comparison.message).toContain('⚠️');
         expect(getDocsRagMismatchWarning('abc123', 'def456')).toBe(comparison.message);
     });
+
+    it('cannot verify sync on staging when app SHA is missing', () => {
+        const comparison = getDocsRagComparison('dev-local', 'abc123', {
+            envName: 'staging',
+            appShaSource: 'missing',
+        });
+
+        expect(comparison.status).toBe('unavailable');
+        expect(comparison.message).toBe('⚠️ cannot verify app/docs sync (app SHA missing)');
+    });
+
+    it('reports in sync only when staging SHAs are real and match', () => {
+        const comparison = getDocsRagComparison('abc123def456', 'abc123', {
+            envName: 'staging',
+            appShaSource: 'vite',
+        });
+
+        expect(comparison.status).toBe('match');
+        expect(comparison.message).toContain('✅ in sync');
+    });
 });

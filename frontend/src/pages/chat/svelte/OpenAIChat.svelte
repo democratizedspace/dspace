@@ -76,9 +76,15 @@
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
     $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
-    $: docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
+    $: docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha, {
+        envName: deriveEnvNameFromHostname(docsRagHost),
+        appShaSource: appGitShaSource,
+    });
     $: docsRagComparisonMessage = docsRagComparison.message;
-    $: docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+    $: docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha, {
+        envName: deriveEnvNameFromHostname(docsRagHost),
+        appShaSource: appGitShaSource,
+    });
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -294,7 +300,9 @@
         docsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
         docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
         docsRagHost = window?.location?.host || 'unknown';
-        const appShaInfo = getAppGitShaWithFallback(docsRagGitSha);
+        const appShaInfo = getAppGitShaWithFallback(docsRagGitSha, {
+            hostname: docsRagHost,
+        });
         appGitShaDisplay = appShaInfo.sha;
         appGitShaSource = appShaInfo.source;
         // NOTE: This label is for UI/debug purposes only and is derived from the effective app

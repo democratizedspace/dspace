@@ -59,6 +59,7 @@ describe('OpenAIChat build metadata', () => {
     afterEach(() => {
         cleanup();
         delete process.env.VITE_GIT_SHA;
+        vi.unstubAllGlobals();
     });
 
     it('shows non-empty build metadata from VITE_GIT_SHA', async () => {
@@ -117,5 +118,32 @@ describe('OpenAIChat build metadata', () => {
 
         const docsDerivedEnvLabel = await screen.findByText('Docs env derived');
         expect(docsDerivedEnvLabel.nextElementSibling).toHaveTextContent('dev');
+    });
+
+    it('shows missing app SHA metadata on staging hosts without a build SHA', async () => {
+        delete process.env.VITE_GIT_SHA;
+        vi.stubGlobal('location', { host: 'staging.democratized.space' });
+        mockGetDocsRagMeta.mockResolvedValueOnce({
+            gitSha: 'docs-only',
+            docsGitSha: 'docs-only',
+            generatedAt: 'just-now',
+            envName: 'unknown',
+            sourceRef: 'refs/heads/main',
+        });
+
+        const { default: OpenAIChat } = await import('../OpenAIChat.svelte');
+        render(OpenAIChat);
+
+        const promptVersion = await screen.findByText('Prompt version: v3:missing');
+        expect(promptVersion).toBeInTheDocument();
+
+        const appBuildLabel = await screen.findByText('App build SHA');
+        expect(appBuildLabel.nextElementSibling).toHaveTextContent('missing');
+
+        const appBuildSourceLabel = await screen.findByText('App build SHA source');
+        expect(appBuildSourceLabel.nextElementSibling).toHaveTextContent('missing');
+
+        const docsDerivedEnvLabel = await screen.findByText('Docs env derived');
+        expect(docsDerivedEnvLabel.nextElementSibling).toHaveTextContent('staging');
     });
 });

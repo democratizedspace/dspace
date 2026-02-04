@@ -22,7 +22,7 @@ describe('buildInfo', () => {
 
     it('uses docs pack fallback when no build SHA is provided', () => {
         delete process.env.VITE_GIT_SHA;
-        expect(getAppGitShaWithFallback('feedface')).toEqual({
+        expect(getAppGitShaWithFallback('feedface', { hostname: 'localhost:3000' })).toEqual({
             sha: 'feedface',
             source: 'docs-pack-fallback',
         });
@@ -65,5 +65,19 @@ describe('buildInfo', () => {
         expect(deriveEnvNameFromHostname('foo.democratized.space')).toBe('prod');
         expect(deriveEnvNameFromHostname('localhost:3000')).toBe('dev');
         expect(deriveEnvNameFromHostname('example.com')).toBe('dev');
+    });
+
+    it('marks missing app SHAs in staging/prod hosts', () => {
+        delete process.env.VITE_GIT_SHA;
+        expect(
+            getAppGitShaWithFallback('feedface', { hostname: 'staging.democratized.space' })
+        ).toEqual({
+            sha: 'missing',
+            source: 'missing',
+        });
+        expect(getAppGitShaWithFallback('feedface', { hostname: 'democratized.space' })).toEqual({
+            sha: 'missing',
+            source: 'missing',
+        });
     });
 });

@@ -105,7 +105,9 @@ const normalizeComparableSha = (value) => {
         lower === 'unknown' ||
         lower === 'unavailable' ||
         lower === 'dev-local' ||
-        lower === 'missing-sha'
+        lower === 'missing-sha' ||
+        lower === 'docs-pack-fallback' ||
+        lower === 'missing'
     ) {
         return '';
     }
@@ -140,15 +142,46 @@ export const getDocsRagMeta = async () => {
     }
 };
 
-export const getDocsRagComparison = (appGitSha, docsGitSha) => {
+const normalizeEnvName = (value) => {
+    const normalized = String(value || '')
+        .trim()
+        .toLowerCase();
+    if (!normalized || normalized === 'unknown') {
+        return null;
+    }
+    if (['production', 'prod'].includes(normalized)) {
+        return 'prod';
+    }
+    if (['staging', 'stage', 'stg'].includes(normalized)) {
+        return 'staging';
+    }
+    if (['dev', 'development', 'local'].includes(normalized)) {
+        return 'dev';
+    }
+    return normalized;
+};
+
+const isRealAppSha = (appSha, appShaSource) => {
+    const normalized = normalizeComparableSha(appSha);
+    if (!normalized) {
+        return false;
+    }
+    if (!appShaSource) {
+        return true;
+    }
+    return !['docs-pack-fallback', 'missing', 'dev-local'].includes(appShaSource);
+};
+
+export const getDocsRagComparison = (appGitSha, docsGitSha, options = {}) => {
     const appLabel = normalizeDisplaySha(appGitSha);
     const docsLabel = normalizeDisplaySha(docsGitSha);
     const appSha = normalizeComparableSha(appGitSha);
     const docsSha = normalizeComparableSha(docsGitSha);
-    const hasAppSha = Boolean(appSha);
     const hasDocsSha = Boolean(docsSha);
-    const bothValid = hasAppSha && hasDocsSha;
+    const hasRealAppSha = isRealAppSha(appGitSha, options.appShaSource);
+    const bothValid = hasRealAppSha && hasDocsSha;
     const inSync = Boolean(bothValid && shasMatch(appSha, docsSha));
+    const envName = normalizeEnvName(options.envName);
 
     if (inSync) {
         return {
@@ -164,14 +197,20 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
         };
     }
 
-    if (!hasAppSha && hasDocsSha) {
+    if (!hasRealAppSha && hasDocsSha) {
+        if (envName === 'staging' || envName === 'prod') {
+            return {
+                status: 'unavailable',
+                message: '⚠️ cannot verify app/docs sync (app SHA missing)',
+            };
+        }
         return {
             status: 'assumed',
             message: `ℹ️ app SHA missing; using docs pack SHA for display (docs: ${docsLabel})`,
         };
     }
 
-    if (hasAppSha && !hasDocsSha) {
+    if (hasRealAppSha && !hasDocsSha) {
         return {
             status: 'unavailable',
             message: `ℹ️ docs SHA unavailable (app: ${appLabel}, docs: ${docsLabel})`,
@@ -184,8 +223,8 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
     };
 };
 
-export const getDocsRagMismatchWarning = (appGitSha, docsGitSha) => {
-    const comparison = getDocsRagComparison(appGitSha, docsGitSha);
+export const getDocsRagMismatchWarning = (appGitSha, docsGitSha, options = {}) => {
+    const comparison = getDocsRagComparison(appGitSha, docsGitSha, options);
     return comparison.status === 'mismatch' ? comparison.message : null;
 };
 
