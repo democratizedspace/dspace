@@ -429,7 +429,7 @@
                 </button>
             </div>
             <div class="debug-metadata">
-                <div class="debug-meta-row">
+                <div class="debug-meta-row" data-testid="debug-app-sha-row">
                     <span>App build SHA</span>
                     <span class="debug-mono">{appGitShaDisplay}</span>
                 </div>

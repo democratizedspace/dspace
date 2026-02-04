@@ -28,7 +28,7 @@ test.describe('Chat debug build metadata', () => {
         await expect(promptVersion).toBeVisible();
         await expect(promptVersion).not.toContainText('unknown');
 
-        const appRow = debugPanel.locator('.debug-meta-row', { hasText: 'App build SHA' });
+        const appRow = debugPanel.getByTestId('debug-app-sha-row');
         const appValue = appRow.locator('.debug-mono');
         await expect(appValue).toBeVisible();
         await expect(appValue).not.toHaveText('');
