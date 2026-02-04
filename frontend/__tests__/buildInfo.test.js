@@ -40,6 +40,20 @@ describe('buildInfo', () => {
         });
     });
 
+    it('prefers the VITE build SHA for production-like builds', () => {
+        process.env.VITE_GIT_SHA = 'feedbeefcafef00d';
+        const promptLabel = getPromptVersionLabel();
+        expect(getAppGitSha()).toBe('feedbeefcafef00d');
+        const appShaWithFallback = getAppGitShaWithFallback('docs-pack-sha');
+        expect(appShaWithFallback).toEqual({
+            sha: 'feedbeefcafef00d',
+            source: 'vite',
+        });
+        expect(appShaWithFallback.source).not.toBe('docs-pack-fallback');
+        expect(getPromptVersionSha()).toBe('feedbee');
+        expect(promptLabel).toBe('v3:feedbee');
+    });
+
     it('derives the prompt SHA from an existing prompt label', () => {
         expect(getPromptVersionSha('v3:feedface')).toBe('feedfac');
         expect(getPromptVersionSha('v3:dev-local')).toBe('dev-local');

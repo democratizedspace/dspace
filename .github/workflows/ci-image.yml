@@ -387,6 +387,7 @@ jobs:
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
             GIT_SHA=${{ github.sha }}
             VITE_GIT_SHA=${{ github.sha }}
+            ENFORCE_VITE_GIT_SHA=1
           labels: |
             org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
             org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
@@ -412,6 +413,7 @@ jobs:
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
             GIT_SHA=${{ github.sha }}
             VITE_GIT_SHA=${{ github.sha }}
+            ENFORCE_VITE_GIT_SHA=1
           labels: |
             org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
             org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
