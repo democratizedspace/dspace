@@ -300,28 +300,39 @@
         currentSettings = normalized;
         lastShowChatDebugPayload = normalized.showChatDebugPayload;
         syncPromptDebugDeepLink({ allowAutoExpand: true });
-        appGitSha = getAppGitSha();
+        const resolvedAppGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
-        docsRagGitSha = docsMeta?.docsGitSha ?? docsMeta?.gitSha ?? 'unknown';
-        docsRagEnvName = docsMeta?.envName ?? 'unknown';
-        docsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
-        docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
-        docsRagHost = window?.location?.host || 'unknown';
-        hostEnvName = deriveEnvNameFromHostname(docsRagHost);
-        const allowDocsFallback = hostEnvName === 'dev';
+        const resolvedDocsRagGitSha = docsMeta?.docsGitSha ?? docsMeta?.gitSha ?? 'unknown';
+        const resolvedDocsRagEnvName = docsMeta?.envName ?? 'unknown';
+        const resolvedDocsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
+        const resolvedDocsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
+        const resolvedDocsRagHost = window?.location?.host || 'unknown';
+        const resolvedHostEnvName = deriveEnvNameFromHostname(resolvedDocsRagHost);
+        const allowDocsFallback = resolvedHostEnvName === 'dev';
         const appShaInfo = allowDocsFallback
-            ? getAppGitShaWithFallback(docsRagGitSha)
+            ? getAppGitShaWithFallback(resolvedDocsRagGitSha)
             : getAppGitShaWithFallback();
-        appGitShaMissing = appShaInfo.source !== 'vite';
-        appGitShaDisplay = appShaInfo.sha;
-        appGitShaSource = appShaInfo.source;
-        if (!allowDocsFallback && appGitShaMissing) {
-            appGitShaDisplay = 'missing';
-            appGitShaSource = 'missing';
+        let resolvedAppGitShaMissing = appShaInfo.source !== 'vite';
+        let resolvedAppGitShaDisplay = appShaInfo.sha;
+        let resolvedAppGitShaSource = appShaInfo.source;
+        if (!allowDocsFallback && resolvedAppGitShaMissing) {
+            resolvedAppGitShaDisplay = 'missing';
+            resolvedAppGitShaSource = 'missing';
         }
-        if (allowDocsFallback && appGitShaSource === 'docs-pack-fallback') {
-            appGitShaSource = 'docs-pack-fallback (dev)';
+        if (allowDocsFallback && resolvedAppGitShaSource === 'docs-pack-fallback') {
+            resolvedAppGitShaSource = 'docs-pack-fallback (dev)';
         }
+
+        docsRagGitSha = resolvedDocsRagGitSha;
+        docsRagEnvName = resolvedDocsRagEnvName;
+        docsRagSourceRef = resolvedDocsRagSourceRef;
+        docsRagGeneratedAt = resolvedDocsRagGeneratedAt;
+        docsRagHost = resolvedDocsRagHost;
+        hostEnvName = resolvedHostEnvName;
+        appGitShaMissing = resolvedAppGitShaMissing;
+        appGitShaDisplay = resolvedAppGitShaDisplay;
+        appGitShaSource = resolvedAppGitShaSource;
+        appGitSha = resolvedAppGitSha;
         // NOTE: This label is for UI/debug purposes only and is derived from the effective app
         // Git SHA (which may use a fallback). The actual prompt version sent to OpenAI is
         // determined by the module-level CHAT_PROMPT_VERSION in openAI.js and may differ when

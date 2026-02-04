@@ -143,10 +143,10 @@ describe('OpenAIChat build metadata', () => {
             envName: 'staging',
             sourceRef: 'refs/heads/main',
         });
-        mockGetDocsRagComparison.mockReturnValueOnce({
-            status: 'match',
-            message: '✅ in sync (app: docs-only, docs: docs-only)',
-        });
+        mockGetDocsRagComparison.mockImplementation(() => ({
+            status: 'assumed',
+            message: '⚠️ assumed (app: dev-local, docs: docs-only)',
+        }));
 
         const { default: OpenAIChat } = await import('../OpenAIChat.svelte');
         render(OpenAIChat);
