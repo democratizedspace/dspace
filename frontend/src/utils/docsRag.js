@@ -145,7 +145,9 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
     const docsLabel = normalizeDisplaySha(docsGitSha);
     const appSha = normalizeComparableSha(appGitSha);
     const docsSha = normalizeComparableSha(docsGitSha);
-    const bothValid = Boolean(appSha && docsSha);
+    const hasAppSha = Boolean(appSha);
+    const hasDocsSha = Boolean(docsSha);
+    const bothValid = hasAppSha && hasDocsSha;
     const inSync = Boolean(bothValid && shasMatch(appSha, docsSha));
 
     if (inSync) {
@@ -155,9 +157,30 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
         };
     }
 
+    if (bothValid) {
+        return {
+            status: 'mismatch',
+            message: `⚠️ mismatch (app: ${appLabel}, docs: ${docsLabel})`,
+        };
+    }
+
+    if (!hasAppSha && hasDocsSha) {
+        return {
+            status: 'assumed',
+            message: `ℹ️ app SHA missing; using docs pack SHA for display (docs: ${docsLabel})`,
+        };
+    }
+
+    if (hasAppSha && !hasDocsSha) {
+        return {
+            status: 'unavailable',
+            message: `ℹ️ docs SHA unavailable (app: ${appLabel}, docs: ${docsLabel})`,
+        };
+    }
+
     return {
-        status: bothValid ? 'mismatch' : 'unavailable',
-        message: `⚠️ mismatch (app: ${appLabel}, docs: ${docsLabel})`,
+        status: 'unavailable',
+        message: `ℹ️ app/docs SHAs unavailable (app: ${appLabel}, docs: ${docsLabel})`,
     };
 };
 

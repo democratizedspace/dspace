@@ -7,8 +7,9 @@ across `dev`, `int`, and `prod` clusters.
 ## Container Images
 
 - The CI pipeline publishes multi-architecture images (`linux/amd64` and `linux/arm64`) to
-  [GHCR](https://ghcr.io/) and tags every push with an immutable `sha-<full commit>` identifier so
-  clusters can pin exact builds.
+  [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
+  and tags every push with an immutable `sha-<full commit>` identifier so clusters can pin exact
+  builds.
 
 ## Environment Variables
 

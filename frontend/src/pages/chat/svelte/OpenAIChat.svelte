@@ -27,7 +27,12 @@
         SAVE_SNAPSHOT_HINT_TEXT,
         shouldShowSaveSnapshotHint,
     } from '../../../utils/chatHints.js';
-    import { getAppGitSha } from '../../../utils/buildInfo.js';
+    import {
+        getAppGitSha,
+        getAppGitShaWithFallback,
+        deriveEnvNameFromHostname,
+        getPromptVersionLabelForSha,
+    } from '../../../utils/buildInfo.js';
     import {
         getDocsRagMeta,
         getDocsRagComparison,
@@ -51,8 +56,12 @@
     let saveSnapshotHintFocusListener;
     let promptDebugLinkListener;
     let appGitSha = getAppGitSha();
+    let appGitShaDisplay = appGitSha;
+    let appGitShaSource = 'dev-local';
+    let promptVersionLabel = CHAT_PROMPT_VERSION;
     let docsRagGitSha = 'unavailable';
     let docsRagEnvName = 'unavailable';
+    let docsRagDerivedEnv = 'unavailable';
     let docsRagSourceRef = 'unavailable';
     let docsRagGeneratedAt = 'unavailable';
     let docsRagHost = 'unavailable';
@@ -187,43 +196,24 @@
             return null;
         }
         if (['production', 'prod'].includes(normalized)) {
-            return 'production';
+            return 'prod';
         }
         if (['staging', 'stage', 'stg'].includes(normalized)) {
             return 'staging';
         }
+        if (['dev', 'development', 'local'].includes(normalized)) {
+            return 'dev';
+        }
         return normalized;
     }
 
-    function inferEnvFromHost(origin) {
-        if (!origin || origin === 'unknown') {
-            return null;
-        }
-        let hostname = '';
-        try {
-            hostname = new URL(origin).hostname;
-        } catch (error) {
-            return null;
-        }
-        if (!hostname || hostname === 'localhost' || hostname === '127.0.0.1') {
-            return null;
-        }
-        if (/(staging|stage|stg)/i.test(hostname)) {
-            return 'staging';
-        }
-        if (/(prod|production)/i.test(hostname)) {
-            return 'production';
-        }
-        return null;
-    }
-
-    function buildDocsEnvMismatchWarning(hostOrigin, docsEnvName) {
-        const hostEnv = inferEnvFromHost(hostOrigin);
+    function buildDocsEnvMismatchWarning(hostname, docsEnvName) {
+        const hostEnv = deriveEnvNameFromHostname(hostname);
         const docsEnv = normalizeEnvName(docsEnvName);
         if (!hostEnv || !docsEnv || hostEnv === docsEnv) {
             return null;
         }
-        return `Docs pack env (${docsEnvName}) does not match host (${hostOrigin}).`;
+        return `Docs pack env (${docsEnvName}) does not match host (${hostname}).`;
     }
 
     function dismissSaveSnapshotHint() {
@@ -303,7 +293,19 @@
         docsRagEnvName = docsMeta?.envName ?? 'unknown';
         docsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
         docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
-        docsRagHost = window?.location?.origin || 'unknown';
+        docsRagHost = window?.location?.host || 'unknown';
+        const appShaInfo = getAppGitShaWithFallback(docsRagGitSha);
+        appGitShaDisplay = appShaInfo.sha;
+        appGitShaSource = appShaInfo.source;
+        // NOTE: This label is for UI/debug purposes only and is derived from the effective app
+        // Git SHA (which may use a fallback). The actual prompt version sent to OpenAI is
+        // determined by the module-level CHAT_PROMPT_VERSION in openAI.js and may differ when
+        // build metadata is missing or a placeholder.
+        promptVersionLabel = getPromptVersionLabelForSha(appGitShaDisplay);
+        const normalizedDocsEnv = normalizeEnvName(docsRagEnvName);
+        docsRagDerivedEnv = normalizedDocsEnv
+            ? 'n/a'
+            : (deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable');
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
@@ -414,7 +416,7 @@
                 <div>
                     <h3>Chat prompt debug</h3>
                     <p>Displays the full prompt payload, with RAG content highlighted.</p>
-                    <p class="debug-version">Prompt version: {CHAT_PROMPT_VERSION}</p>
+                    <p class="debug-version">Prompt version: {promptVersionLabel}</p>
                 </div>
                 <button
                     class="debug-toggle"
@@ -427,9 +429,13 @@
                 </button>
             </div>
             <div class="debug-metadata">
-                <div class="debug-meta-row">
+                <div class="debug-meta-row" data-testid="debug-app-sha-row">
                     <span>App build SHA</span>
-                    <span class="debug-mono">{appGitSha}</span>
+                    <span class="debug-mono">{appGitShaDisplay}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>App build SHA source</span>
+                    <span class="debug-mono">{appGitShaSource}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>Docs RAG SHA</span>
@@ -438,6 +444,10 @@
                 <div class="debug-meta-row">
                     <span>Docs pack env</span>
                     <span class="debug-mono">{docsRagEnvName}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs env derived</span>
+                    <span class="debug-mono">{docsRagDerivedEnv}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>Docs host</span>

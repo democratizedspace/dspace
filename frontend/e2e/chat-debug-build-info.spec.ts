@@ -28,7 +28,7 @@ test.describe('Chat debug build metadata', () => {
         await expect(promptVersion).toBeVisible();
         await expect(promptVersion).not.toContainText('unknown');
 
-        const appRow = debugPanel.locator('.debug-meta-row', { hasText: 'App build SHA' });
+        const appRow = debugPanel.getByTestId('debug-app-sha-row');
         const appValue = appRow.locator('.debug-mono');
         await expect(appValue).toBeVisible();
         await expect(appValue).not.toHaveText('');
@@ -49,6 +49,8 @@ test.describe('Chat debug build metadata', () => {
         const comparisonRow = debugPanel.locator('.debug-meta-row', {
             hasText: 'Docs RAG comparison',
         });
-        await expect(comparisonRow.locator('.debug-mono')).toHaveText(/✅ in sync|⚠️ mismatch/);
+        await expect(comparisonRow.locator('.debug-mono')).toHaveText(
+            /✅ in sync|⚠️ mismatch|ℹ️ app SHA missing|ℹ️ docs SHA unavailable/
+        );
     });
 });
