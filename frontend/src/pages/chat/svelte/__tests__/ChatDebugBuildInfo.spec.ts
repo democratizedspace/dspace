@@ -73,6 +73,7 @@ describe('OpenAIChat build metadata', () => {
             value: originalLocation,
             writable: true,
         });
+        vi.resetModules();
     });
 
     it('shows non-empty build metadata from VITE_GIT_SHA', async () => {
@@ -127,7 +128,9 @@ describe('OpenAIChat build metadata', () => {
         expect(appBuildLabel.nextElementSibling).toHaveTextContent('docs-only');
 
         const appBuildSourceLabel = await screen.findByText('App build SHA source');
-        expect(appBuildSourceLabel.nextElementSibling).toHaveTextContent('docs-pack-fallback (dev)');
+        expect(appBuildSourceLabel.nextElementSibling).toHaveTextContent(
+            'docs-pack-fallback (dev)'
+        );
 
         const docsDerivedEnvLabel = await screen.findByText('Docs env derived');
         expect(docsDerivedEnvLabel.nextElementSibling).toHaveTextContent('dev');
