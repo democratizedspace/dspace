@@ -44,10 +44,13 @@ describe('buildInfo', () => {
         process.env.VITE_GIT_SHA = 'feedbeefcafef00d';
         const promptLabel = getPromptVersionLabel();
         expect(getAppGitSha()).toBe('feedbeefcafef00d');
-        expect(getAppGitShaWithFallback('docs-pack-sha')).toEqual({
+        const appShaWithFallback = getAppGitShaWithFallback('docs-pack-sha');
+        expect(appShaWithFallback).toEqual({
             sha: 'feedbeefcafef00d',
             source: 'vite',
         });
+        expect(appShaWithFallback.source).not.toBe('docs-pack-fallback');
+        expect(getPromptVersionSha()).toBe('feedbee');
         expect(promptLabel).toBe('v3:feedbee');
     });
 
