@@ -22,7 +22,7 @@ describe('buildInfo', () => {
 
     it('uses docs pack fallback when no build SHA is provided', () => {
         delete process.env.VITE_GIT_SHA;
-        expect(getAppGitShaWithFallback('feedface')).toEqual({
+        expect(getAppGitShaWithFallback('feedface', { envName: 'dev' })).toEqual({
             sha: 'feedface',
             source: 'docs-pack-fallback',
         });
@@ -34,7 +34,7 @@ describe('buildInfo', () => {
         expect(getAppGitSha()).toBe('abc123def456');
         expect(getPromptVersionSha()).toBe('abc123d');
         expect(getPromptVersionLabel()).toBe('v3:abc123d');
-        expect(getAppGitShaWithFallback('feedface')).toEqual({
+        expect(getAppGitShaWithFallback('feedface', { envName: 'prod' })).toEqual({
             sha: 'abc123def456',
             source: 'vite',
         });
@@ -44,7 +44,7 @@ describe('buildInfo', () => {
         process.env.VITE_GIT_SHA = 'feedbeefcafef00d';
         const promptLabel = getPromptVersionLabel();
         expect(getAppGitSha()).toBe('feedbeefcafef00d');
-        const appShaWithFallback = getAppGitShaWithFallback('docs-pack-sha');
+        const appShaWithFallback = getAppGitShaWithFallback('docs-pack-sha', { envName: 'prod' });
         expect(appShaWithFallback).toEqual({
             sha: 'feedbeefcafef00d',
             source: 'vite',
@@ -59,8 +59,17 @@ describe('buildInfo', () => {
         expect(getPromptVersionSha('v3:dev-local')).toBe('dev-local');
     });
 
+    it('avoids docs pack fallback in deployed environments', () => {
+        delete process.env.VITE_GIT_SHA;
+        expect(getAppGitShaWithFallback('feedface', { envName: 'prod' })).toEqual({
+            sha: 'missing',
+            source: 'missing',
+        });
+    });
+
     it('derives env names from hostnames', () => {
         expect(deriveEnvNameFromHostname('staging.democratized.space')).toBe('staging');
+        expect(deriveEnvNameFromHostname('foo.staging.democratized.space')).toBe('staging');
         expect(deriveEnvNameFromHostname('democratized.space')).toBe('prod');
         expect(deriveEnvNameFromHostname('foo.democratized.space')).toBe('prod');
         expect(deriveEnvNameFromHostname('localhost:3000')).toBe('dev');

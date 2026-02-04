@@ -16,7 +16,12 @@ const isPlaceholderSha = (value) => {
         return true;
     }
     const lower = normalized.toLowerCase();
-    return lower === 'unknown' || lower === 'dev-local' || lower === 'missing-sha';
+    return (
+        lower === 'unknown' ||
+        lower === 'dev-local' ||
+        lower === 'missing-sha' ||
+        lower === 'missing'
+    );
 };
 
 const resolveGitSha = () => {
@@ -37,14 +42,38 @@ const shortenSha = (value) => {
 
 export const getAppGitSha = () => resolveGitSha();
 
-export const getAppGitShaWithFallback = (fallbackSha) => {
+const normalizeEnvName = (value) => {
+    const normalized = String(value || '')
+        .trim()
+        .toLowerCase();
+    if (!normalized || normalized === 'unknown') {
+        return 'dev';
+    }
+    if (['production', 'prod'].includes(normalized)) {
+        return 'prod';
+    }
+    if (['staging', 'stage', 'stg'].includes(normalized)) {
+        return 'staging';
+    }
+    if (['dev', 'development', 'local'].includes(normalized)) {
+        return 'dev';
+    }
+    return normalized;
+};
+
+const isDeployedEnv = (value) => ['staging', 'prod'].includes(normalizeEnvName(value));
+
+export const getAppGitShaWithFallback = (fallbackSha, { envName } = {}) => {
     const appSha = normalizeSha(readViteGitSha());
     if (!isPlaceholderSha(appSha)) {
         return { sha: appSha, source: 'vite' };
     }
     const fallbackNormalized = normalizeSha(fallbackSha);
-    if (!isPlaceholderSha(fallbackNormalized)) {
+    if (!isDeployedEnv(envName) && !isPlaceholderSha(fallbackNormalized)) {
         return { sha: fallbackNormalized, source: 'docs-pack-fallback' };
+    }
+    if (isDeployedEnv(envName)) {
+        return { sha: 'missing', source: 'missing' };
     }
     return { sha: 'dev-local', source: 'dev-local' };
 };
@@ -80,7 +109,7 @@ export const deriveEnvNameFromHostname = (hostname) => {
         .trim()
         .toLowerCase();
     const host = normalized.split(':')[0];
-    if (host.startsWith('staging.')) {
+    if (host.includes('staging.democratized.space')) {
         return 'staging';
     }
     if (host === 'democratized.space' || host.endsWith('.democratized.space')) {

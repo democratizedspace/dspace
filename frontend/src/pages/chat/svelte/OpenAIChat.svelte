@@ -65,9 +65,14 @@
     let docsRagSourceRef = 'unavailable';
     let docsRagGeneratedAt = 'unavailable';
     let docsRagHost = 'unavailable';
-    let docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
+    let appEnvName = 'dev';
+    let docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha, {
+        envName: appEnvName,
+    });
     let docsRagComparisonMessage = docsRagComparison.message;
-    let docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+    let docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha, {
+        envName: appEnvName,
+    });
     let docsRagEnvWarning = null;
     let debugOverride = false;
     let currentSettings = { showChatDebugPayload: false };
@@ -76,9 +81,11 @@
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
     $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
-    $: docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
+    $: docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha, { envName: appEnvName });
     $: docsRagComparisonMessage = docsRagComparison.message;
-    $: docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+    $: docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha, {
+        envName: appEnvName,
+    });
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -294,7 +301,8 @@
         docsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
         docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
         docsRagHost = window?.location?.host || 'unknown';
-        const appShaInfo = getAppGitShaWithFallback(docsRagGitSha);
+        appEnvName = deriveEnvNameFromHostname(docsRagHost);
+        const appShaInfo = getAppGitShaWithFallback(docsRagGitSha, { envName: appEnvName });
         appGitShaDisplay = appShaInfo.sha;
         appGitShaSource = appShaInfo.source;
         // NOTE: This label is for UI/debug purposes only and is derived from the effective app

@@ -17,90 +17,96 @@ describe('docs RAG metadata freshness', () => {
 
 describe('docs RAG comparison', () => {
     it('reports unavailable when app SHA is missing', () => {
-        const comparison = getDocsRagComparison('unknown', 'deadbeef');
+        const comparison = getDocsRagComparison('unknown', 'deadbeef', { envName: 'dev' });
         expect(comparison).toEqual({
             status: 'assumed',
-            message: 'ℹ️ app SHA missing; using docs pack SHA for display (docs: deadbeef)',
+            message: 'ℹ️ dev fallback; app SHA missing (docs: deadbeef)',
         });
-        expect(getDocsRagMismatchWarning('unknown', 'deadbeef')).toBeNull();
+        expect(getDocsRagMismatchWarning('unknown', 'deadbeef', { envName: 'dev' })).toBeNull();
     });
 
     it('reports unavailable when app SHA is truly absent', () => {
-        const comparison = getDocsRagComparison(undefined as unknown as string, 'deadbeef');
+        const comparison = getDocsRagComparison(undefined as unknown as string, 'deadbeef', {
+            envName: 'dev',
+        });
         expect(comparison).toEqual({
             status: 'assumed',
-            message: 'ℹ️ app SHA missing; using docs pack SHA for display (docs: deadbeef)',
+            message: 'ℹ️ dev fallback; app SHA missing (docs: deadbeef)',
         });
-        expect(getDocsRagMismatchWarning(undefined as unknown as string, 'deadbeef')).toBeNull();
+        expect(
+            getDocsRagMismatchWarning(undefined as unknown as string, 'deadbeef', {
+                envName: 'dev',
+            })
+        ).toBeNull();
     });
 
     it('treats case-insensitive unknown app SHAs as unavailable', () => {
-        const comparison = getDocsRagComparison('UNKNOWN', 'deadbeef');
+        const comparison = getDocsRagComparison('UNKNOWN', 'deadbeef', { envName: 'dev' });
         expect(comparison).toEqual({
             status: 'assumed',
-            message: 'ℹ️ app SHA missing; using docs pack SHA for display (docs: deadbeef)',
+            message: 'ℹ️ dev fallback; app SHA missing (docs: deadbeef)',
         });
-        expect(getDocsRagMismatchWarning('UNKNOWN', 'deadbeef')).toBeNull();
+        expect(getDocsRagMismatchWarning('UNKNOWN', 'deadbeef', { envName: 'dev' })).toBeNull();
     });
 
     it('reports unavailable when app SHA is a local placeholder', () => {
-        const comparison = getDocsRagComparison('dev-local', 'deadbeef');
+        const comparison = getDocsRagComparison('dev-local', 'deadbeef', { envName: 'dev' });
         expect(comparison).toEqual({
             status: 'assumed',
-            message: 'ℹ️ app SHA missing; using docs pack SHA for display (docs: deadbeef)',
+            message: 'ℹ️ dev fallback; app SHA missing (docs: deadbeef)',
         });
-        expect(getDocsRagMismatchWarning('dev-local', 'deadbeef')).toBeNull();
+        expect(getDocsRagMismatchWarning('dev-local', 'deadbeef', { envName: 'dev' })).toBeNull();
     });
 
     it('reports unavailable when app SHA is a missing placeholder', () => {
-        const comparison = getDocsRagComparison('missing-sha', 'deadbeef');
+        const comparison = getDocsRagComparison('missing-sha', 'deadbeef', { envName: 'dev' });
         expect(comparison).toEqual({
             status: 'assumed',
-            message: 'ℹ️ app SHA missing; using docs pack SHA for display (docs: deadbeef)',
+            message: 'ℹ️ dev fallback; app SHA missing (docs: deadbeef)',
         });
-        expect(getDocsRagMismatchWarning('missing-sha', 'deadbeef')).toBeNull();
+        expect(getDocsRagMismatchWarning('missing-sha', 'deadbeef', { envName: 'dev' })).toBeNull();
     });
 
     it('reports unavailable when docs SHA is missing', () => {
-        const comparison = getDocsRagComparison('deadbeef', 'unknown');
+        const comparison = getDocsRagComparison('deadbeef', 'unknown', { envName: 'dev' });
         expect(comparison).toEqual({
             status: 'unavailable',
             message: 'ℹ️ docs SHA unavailable (app: deadbeef, docs: unavailable)',
         });
-        expect(getDocsRagMismatchWarning('deadbeef', 'unknown')).toBeNull();
+        expect(getDocsRagMismatchWarning('deadbeef', 'unknown', { envName: 'dev' })).toBeNull();
     });
 
     it('treats case-insensitive unknown docs SHAs as unavailable', () => {
-        const comparison = getDocsRagComparison('deadbeef', 'UNKNOWN');
+        const comparison = getDocsRagComparison('deadbeef', 'UNKNOWN', { envName: 'dev' });
         expect(comparison).toEqual({
             status: 'unavailable',
             message: 'ℹ️ docs SHA unavailable (app: deadbeef, docs: unavailable)',
         });
-        expect(getDocsRagMismatchWarning('deadbeef', 'UNKNOWN')).toBeNull();
+        expect(getDocsRagMismatchWarning('deadbeef', 'UNKNOWN', { envName: 'dev' })).toBeNull();
     });
 
     it('reports match when SHAs align', () => {
-        const comparison = getDocsRagComparison('abc123', 'abc123');
+        const comparison = getDocsRagComparison('abc123', 'abc123', { envName: 'dev' });
         expect(comparison).toEqual({
             status: 'match',
             message: '✅ in sync (app: abc123, docs: abc123)',
         });
-        expect(getDocsRagMismatchWarning('abc123', 'abc123')).toBeNull();
+        expect(getDocsRagMismatchWarning('abc123', 'abc123', { envName: 'dev' })).toBeNull();
     });
 
     it('reports stale when SHAs differ', () => {
-        const comparison = getDocsRagComparison('aaaaaaaa', 'bbbbbbbb');
+        const comparison = getDocsRagComparison('aaaaaaaa', 'bbbbbbbb', { envName: 'dev' });
         expect(comparison).toEqual({
             status: 'mismatch',
             message: '⚠️ mismatch (app: aaaaaaaa, docs: bbbbbbbb)',
         });
-        expect(getDocsRagMismatchWarning('aaaaaaaa', 'bbbbbbbb')).toBe(
+        expect(getDocsRagMismatchWarning('aaaaaaaa', 'bbbbbbbb', { envName: 'dev' })).toBe(
             '⚠️ mismatch (app: aaaaaaaa, docs: bbbbbbbb)'
         );
     });
 
     it('matches by prefix when SHAs share a prefix', () => {
-        const comparison = getDocsRagComparison('abc123', 'abc123def456');
+        const comparison = getDocsRagComparison('abc123', 'abc123def456', { envName: 'dev' });
         expect(comparison).toEqual({
             status: 'match',
             message: '✅ in sync (app: abc123, docs: abc123def456)',
