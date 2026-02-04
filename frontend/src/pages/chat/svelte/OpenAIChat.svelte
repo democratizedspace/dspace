@@ -301,7 +301,7 @@
         const normalizedDocsEnv = normalizeEnvName(docsRagEnvName);
         docsRagDerivedEnv = normalizedDocsEnv
             ? 'n/a'
-            : deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable';
+            : (deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable');
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
