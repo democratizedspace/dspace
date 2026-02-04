@@ -297,6 +297,10 @@
         const appShaInfo = getAppGitShaWithFallback(docsRagGitSha);
         appGitShaDisplay = appShaInfo.sha;
         appGitShaSource = appShaInfo.source;
+        // NOTE: This label is UI-only and is derived from the effective app Git SHA (which may
+        // use a fallback). The actual prompt version sent to OpenAI is determined by the
+        // module-level CHAT_PROMPT_VERSION in openAI.js and may differ when build metadata is
+        // missing or a placeholder.
         promptVersionLabel = getPromptVersionLabelForSha(appGitShaDisplay);
         const normalizedDocsEnv = normalizeEnvName(docsRagEnvName);
         docsRagDerivedEnv = normalizedDocsEnv
@@ -371,7 +375,7 @@
             bind:value={$message}
             on:keydown={handleKeyDown}
             style="font-size: 18px;"
-        />
+        ></textarea>
         {#if showSaveSnapshotHint}
             <div class="save-snapshot-hint" role="note">
                 <span>{SAVE_SNAPSHOT_HINT_TEXT}</span>
