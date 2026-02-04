@@ -56,6 +56,7 @@
     let saveSnapshotHintFocusListener;
     let promptDebugLinkListener;
     let appGitSha = getAppGitSha();
+    let appGitShaForComparison = appGitSha;
     let appGitShaDisplay = appGitSha;
     let appGitShaSource = 'dev-local';
     let promptVersionLabel = CHAT_PROMPT_VERSION;
@@ -65,9 +66,9 @@
     let docsRagSourceRef = 'unavailable';
     let docsRagGeneratedAt = 'unavailable';
     let docsRagHost = 'unavailable';
-    let docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
+    let docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha);
     let docsRagComparisonMessage = docsRagComparison.message;
-    let docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+    let docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
     let docsRagEnvWarning = null;
     let hostEnvName = 'dev';
     let appGitShaMissing = true;
@@ -78,13 +79,13 @@
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
     $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
-    $: docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
+    $: docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha);
     $: docsRagComparisonMessage = buildDocsRagComparisonMessage(
         docsRagComparison,
         hostEnvName,
         appGitShaMissing
     );
-    $: docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+    $: docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -315,9 +316,11 @@
         let resolvedAppGitShaMissing = appShaInfo.source !== 'vite';
         let resolvedAppGitShaDisplay = appShaInfo.sha;
         let resolvedAppGitShaSource = appShaInfo.source;
+        let resolvedAppGitShaForComparison = appShaInfo.sha;
         if (!allowDocsFallback && resolvedAppGitShaMissing) {
             resolvedAppGitShaDisplay = 'missing';
             resolvedAppGitShaSource = 'missing';
+            resolvedAppGitShaForComparison = 'missing';
         }
         if (allowDocsFallback && resolvedAppGitShaSource === 'docs-pack-fallback') {
             resolvedAppGitShaSource = 'docs-pack-fallback (dev)';
@@ -332,6 +335,7 @@
         appGitShaMissing = resolvedAppGitShaMissing;
         appGitShaDisplay = resolvedAppGitShaDisplay;
         appGitShaSource = resolvedAppGitShaSource;
+        appGitShaForComparison = resolvedAppGitShaForComparison;
         // NOTE: This label is for UI/debug purposes only and is derived from the effective app
         // Git SHA (which may use a fallback). The actual prompt version sent to OpenAI is
         // determined by the module-level CHAT_PROMPT_VERSION in openAI.js and may differ when

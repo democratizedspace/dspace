@@ -9,9 +9,9 @@ const mockGetDocsRagMeta = vi.fn(async () => ({
     envName: 'staging',
     sourceRef: 'refs/heads/main',
 }));
-const mockGetDocsRagComparison = vi.fn(() => ({
+const mockGetDocsRagComparison = vi.fn((appSha: string, docsSha: string) => ({
     status: 'match',
-    message: '✅ in sync (app: abc123def456, docs: docs789)',
+    message: `✅ in sync (app: ${appSha}, docs: ${docsSha})`,
 }));
 const mockGetDocsRagMismatchWarning = vi.fn(() => null);
 
@@ -59,10 +59,10 @@ describe('OpenAIChat build metadata', () => {
             envName: 'staging',
             sourceRef: 'refs/heads/main',
         });
-        mockGetDocsRagComparison.mockReturnValue({
+        mockGetDocsRagComparison.mockImplementation((appSha: string, docsSha: string) => ({
             status: 'match',
-            message: '✅ in sync (app: abc123def456, docs: docs789)',
-        });
+            message: `✅ in sync (app: ${appSha}, docs: ${docsSha})`,
+        }));
         mockGetDocsRagMismatchWarning.mockReturnValue(null);
     });
 
@@ -143,9 +143,9 @@ describe('OpenAIChat build metadata', () => {
             envName: 'staging',
             sourceRef: 'refs/heads/main',
         });
-        mockGetDocsRagComparison.mockImplementation(() => ({
+        mockGetDocsRagComparison.mockImplementation((appSha: string, docsSha: string) => ({
             status: 'assumed',
-            message: '⚠️ assumed (app: dev-local, docs: docs-only)',
+            message: `⚠️ assumed (app: ${appSha}, docs: ${docsSha})`,
         }));
 
         const { default: OpenAIChat } = await import('../OpenAIChat.svelte');
@@ -161,6 +161,7 @@ describe('OpenAIChat build metadata', () => {
         expect(comparisonLabel.nextElementSibling).toHaveTextContent(
             '⚠️ cannot verify app/docs sync (app SHA missing)'
         );
+        expect(mockGetDocsRagComparison.mock.calls).toContainEqual(['missing', 'docs-only']);
     });
 
     it('shows in sync when app SHA matches docs on a prod host', async () => {
@@ -173,9 +174,9 @@ describe('OpenAIChat build metadata', () => {
             envName: 'prod',
             sourceRef: 'refs/heads/main',
         });
-        mockGetDocsRagComparison.mockImplementation(() => ({
+        mockGetDocsRagComparison.mockImplementation((appSha: string, docsSha: string) => ({
             status: 'match',
-            message: '✅ in sync (app: abc123def456, docs: abc123def456)',
+            message: `✅ in sync (app: ${appSha}, docs: ${docsSha})`,
         }));
 
         const { default: OpenAIChat } = await import('../OpenAIChat.svelte');
