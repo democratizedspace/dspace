@@ -40,6 +40,19 @@ describe('buildInfo', () => {
         });
     });
 
+    it('prefers baked-in build SHA data for production images', () => {
+        process.env.VITE_GIT_SHA = 'deadbeefcafebabe';
+
+        expect(getAppGitSha()).toBe('deadbeefcafebabe');
+        expect(getAppGitShaWithFallback('feedface')).toEqual({
+            sha: 'deadbeefcafebabe',
+            source: 'vite',
+        });
+        expect(getPromptVersionLabel()).toBe('v3:deadbee');
+        expect(getPromptVersionSha()).toBe('deadbee');
+        expect(getPromptVersionLabel()).not.toContain('dev-local');
+    });
+
     it('derives the prompt SHA from an existing prompt label', () => {
         expect(getPromptVersionSha('v3:feedface')).toBe('feedfac');
         expect(getPromptVersionSha('v3:dev-local')).toBe('dev-local');
