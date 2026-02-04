@@ -105,7 +105,8 @@ const normalizeComparableSha = (value) => {
         lower === 'unknown' ||
         lower === 'unavailable' ||
         lower === 'dev-local' ||
-        lower === 'missing-sha'
+        lower === 'missing-sha' ||
+        lower === 'docs-pack-fallback'
     ) {
         return '';
     }

@@ -17,4 +17,11 @@ describe('docs RAG comparison', () => {
         expect(comparison.message).toContain('⚠️');
         expect(getDocsRagMismatchWarning('abc123', 'def456')).toBe(comparison.message);
     });
+
+    it('treats docs-pack-fallback as non-real for sync checks', () => {
+        const comparison = getDocsRagComparison('docs-pack-fallback', 'abc123');
+
+        expect(comparison.status).toBe('assumed');
+        expect(comparison.message).toContain('app SHA missing');
+    });
 });

@@ -69,6 +69,8 @@
     let docsRagComparisonMessage = docsRagComparison.message;
     let docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
     let docsRagEnvWarning = null;
+    let hostEnvName = 'dev';
+    let appGitShaMissing = true;
     let debugOverride = false;
     let currentSettings = { showChatDebugPayload: false };
     let lastShowChatDebugPayload;
@@ -77,7 +79,11 @@
     $: personaSummary = currentPersona?.summary;
     $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
     $: docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
-    $: docsRagComparisonMessage = docsRagComparison.message;
+    $: docsRagComparisonMessage = buildDocsRagComparisonMessage(
+        docsRagComparison,
+        hostEnvName,
+        appGitShaMissing
+    );
     $: docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
 
     function getWelcomeText(persona) {
@@ -216,6 +222,13 @@
         return `Docs pack env (${docsEnvName}) does not match host (${hostname}).`;
     }
 
+    function buildDocsRagComparisonMessage(comparison, envName, isAppShaMissing) {
+        if (['staging', 'prod'].includes(envName) && isAppShaMissing) {
+            return '⚠️ cannot verify app/docs sync (app SHA missing)';
+        }
+        return comparison.message;
+    }
+
     function dismissSaveSnapshotHint() {
         saveSnapshotHintDismissed = true;
         if (typeof sessionStorage !== 'undefined') {
@@ -294,9 +307,21 @@
         docsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
         docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
         docsRagHost = window?.location?.host || 'unknown';
-        const appShaInfo = getAppGitShaWithFallback(docsRagGitSha);
+        hostEnvName = deriveEnvNameFromHostname(docsRagHost);
+        const allowDocsFallback = hostEnvName === 'dev';
+        const appShaInfo = allowDocsFallback
+            ? getAppGitShaWithFallback(docsRagGitSha)
+            : getAppGitShaWithFallback();
+        appGitShaMissing = appShaInfo.source !== 'vite';
         appGitShaDisplay = appShaInfo.sha;
         appGitShaSource = appShaInfo.source;
+        if (!allowDocsFallback && appGitShaMissing) {
+            appGitShaDisplay = 'missing';
+            appGitShaSource = 'missing';
+        }
+        if (allowDocsFallback && appGitShaSource === 'docs-pack-fallback') {
+            appGitShaSource = 'docs-pack-fallback (dev)';
+        }
         // NOTE: This label is for UI/debug purposes only and is derived from the effective app
         // Git SHA (which may use a fallback). The actual prompt version sent to OpenAI is
         // determined by the module-level CHAT_PROMPT_VERSION in openAI.js and may differ when
