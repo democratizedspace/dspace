@@ -34,6 +34,7 @@ describe('buildInfo', () => {
         expect(getAppGitSha()).toBe('abc123def456');
         expect(getPromptVersionSha()).toBe('abc123d');
         expect(getPromptVersionLabel()).toBe('v3:abc123d');
+        expect(getPromptVersionLabel()).not.toBe('v3:dev-local');
         expect(getAppGitShaWithFallback('feedface')).toEqual({
             sha: 'abc123def456',
             source: 'vite',
