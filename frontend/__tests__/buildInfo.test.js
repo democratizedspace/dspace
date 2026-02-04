@@ -40,6 +40,17 @@ describe('buildInfo', () => {
         });
     });
 
+    it('uses the baked build SHA for prompt metadata in production builds', () => {
+        process.env.VITE_GIT_SHA = 'feedfacebead1234';
+        expect(getAppGitSha()).toBe('feedfacebead1234');
+        expect(getAppGitShaWithFallback('docs-pack-fallback')).toEqual({
+            sha: 'feedfacebead1234',
+            source: 'vite',
+        });
+        expect(getPromptVersionLabel()).toBe('v3:feedfac');
+        expect(getPromptVersionLabel()).not.toContain('dev-local');
+    });
+
     it('derives the prompt SHA from an existing prompt label', () => {
         expect(getPromptVersionSha('v3:feedface')).toBe('feedfac');
         expect(getPromptVersionSha('v3:dev-local')).toBe('dev-local');
