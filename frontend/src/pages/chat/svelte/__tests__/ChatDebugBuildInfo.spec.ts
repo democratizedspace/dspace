@@ -164,7 +164,7 @@ describe('OpenAIChat build metadata', () => {
         expect(comparisonLabel.nextElementSibling).toHaveTextContent(
             '⚠️ cannot verify app/docs sync (app SHA missing)'
         );
-        expect(mockGetDocsRagComparison.mock.calls).toContainEqual(['missing', 'docs-only']);
+        expect(mockGetDocsRagComparison).toHaveBeenCalledWith('missing', 'docs-only');
     });
 
     it('shows in sync when app SHA matches docs on a prod host', async () => {
