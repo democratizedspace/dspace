@@ -98,7 +98,7 @@ describe('OpenAIChat docs RAG comparison messaging', () => {
             envName: 'staging',
         });
 
-        await expectComparisonMessage(/✅ in sync/);
+        await expectComparisonMessage('✅ in sync');
     });
 
     it('shows mismatch when staging SHAs are real and different', async () => {

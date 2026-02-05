@@ -14,7 +14,7 @@ describe('docs RAG comparison', () => {
         const comparison = getDocsRagComparison('abc123', 'unknown');
 
         expect(comparison.status).toBe('unverified');
-        expect(comparison.message).toBe('⚠️ cannot verify app/docs sync (docs SHA missing)');
+        expect(comparison.message).toBe('⚠️ cannot verify app/docs sync (app SHA missing)');
     });
 
     it('flags mismatches only when both SHAs are available', () => {
@@ -30,5 +30,12 @@ describe('docs RAG comparison', () => {
 
         expect(comparison.status).toBe('unverified');
         expect(comparison.message).toBe('⚠️ cannot verify app/docs sync (app SHA missing)');
+    });
+
+    it('reports in-sync when SHAs match exactly', () => {
+        const comparison = getDocsRagComparison('abc123', 'abc123');
+
+        expect(comparison.status).toBe('match');
+        expect(comparison.message).toBe('✅ in sync');
     });
 });

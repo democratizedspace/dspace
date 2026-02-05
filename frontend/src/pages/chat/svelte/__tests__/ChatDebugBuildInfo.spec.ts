@@ -15,7 +15,7 @@ const mockGetDocsRagMeta = vi.hoisted(() =>
 const mockGetDocsRagComparison = vi.hoisted(() =>
     vi.fn((appSha: string, docsSha: string) => ({
         status: 'match',
-        message: `✅ in sync (app: ${appSha}, docs: ${docsSha})`,
+        message: '✅ in sync',
     }))
 );
 const mockGetDocsRagMismatchWarning = vi.hoisted(() => vi.fn(() => null));
@@ -65,7 +65,7 @@ describe('OpenAIChat build metadata', () => {
         });
         mockGetDocsRagComparison.mockImplementation((appSha: string, docsSha: string) => ({
             status: 'match',
-            message: `✅ in sync (app: ${appSha}, docs: ${docsSha})`,
+            message: '✅ in sync',
         }));
         mockGetDocsRagMismatchWarning.mockReturnValue(null);
     });
@@ -182,7 +182,7 @@ describe('OpenAIChat build metadata', () => {
         });
         mockGetDocsRagComparison.mockImplementation((appSha: string, docsSha: string) => ({
             status: 'match',
-            message: `✅ in sync (app: ${appSha}, docs: ${docsSha})`,
+            message: '✅ in sync',
         }));
 
         render(OpenAIChat);
@@ -193,6 +193,6 @@ describe('OpenAIChat build metadata', () => {
         const appBuildSourceLabel = await screen.findByText('App build SHA source');
         expect(appBuildSourceLabel.nextElementSibling).toHaveTextContent('vite');
 
-        await screen.findByText('✅ in sync (app: abc123def456, docs: abc123def456)');
+        await screen.findByText('✅ in sync');
     });
 });

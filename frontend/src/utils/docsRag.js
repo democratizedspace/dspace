@@ -146,10 +146,9 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
     const hasDocsSha = isRealSha(docsGitSha);
 
     if (!hasAppSha || !hasDocsSha) {
-        const missing = !hasAppSha ? 'app SHA missing' : 'docs SHA missing';
         return {
             status: 'unverified',
-            message: `⚠️ cannot verify app/docs sync (${missing})`,
+            message: '⚠️ cannot verify app/docs sync (app SHA missing)',
         };
     }
 
@@ -158,7 +157,7 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
     if (inSync) {
         return {
             status: 'match',
-            message: `✅ in sync (app: ${appLabel}, docs: ${docsLabel})`,
+            message: '✅ in sync',
         };
     }
 
