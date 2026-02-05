@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import {
     getAppGitSha,
@@ -10,8 +10,18 @@ import {
 } from '../src/utils/buildInfo.js';
 
 describe('buildInfo', () => {
+    let originalViteGitSha;
+
+    beforeEach(() => {
+        originalViteGitSha = process.env.VITE_GIT_SHA;
+    });
+
     afterEach(() => {
-        delete process.env.VITE_GIT_SHA;
+        if (originalViteGitSha === undefined) {
+            delete process.env.VITE_GIT_SHA;
+        } else {
+            process.env.VITE_GIT_SHA = originalViteGitSha;
+        }
     });
 
     it('falls back to dev-local when no build SHA is provided', () => {
@@ -52,6 +62,13 @@ describe('buildInfo', () => {
         expect(appShaWithFallback.source).not.toBe('docs-pack-fallback');
         expect(getPromptVersionSha()).toBe('feedbee');
         expect(promptLabel).toBe('v3:feedbee');
+    });
+
+    it('does not return a missing placeholder when VITE_GIT_SHA is set', () => {
+        process.env.VITE_GIT_SHA = 'abc123def456';
+        expect(getAppGitSha()).toBe('abc123def456');
+        expect(getPromptVersionLabel()).toBe('v3:abc123d');
+        expect(getPromptVersionSha()).toBe('abc123d');
     });
 
     it('derives the prompt SHA from an existing prompt label', () => {
