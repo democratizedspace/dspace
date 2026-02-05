@@ -130,15 +130,15 @@ describe('OpenAIChat build metadata', () => {
         expect(promptVersion).toBeInTheDocument();
 
         const appBuildLabel = await screen.findByText('App build SHA');
-        expect(appBuildLabel.nextElementSibling).toHaveTextContent('docs-only');
+        expect(appBuildLabel.nextElementSibling?.textContent).toContain('docs-only');
 
         const appBuildSourceLabel = await screen.findByText('App build SHA source');
-        expect(appBuildSourceLabel.nextElementSibling).toHaveTextContent(
+        expect(appBuildSourceLabel.nextElementSibling?.textContent).toContain(
             'docs-pack-fallback (dev)'
         );
 
         const docsDerivedEnvLabel = await screen.findByText('Docs env derived');
-        expect(docsDerivedEnvLabel.nextElementSibling).toHaveTextContent('dev');
+        expect(docsDerivedEnvLabel.nextElementSibling?.textContent).toContain('dev');
     });
 
     it('warns when app SHA is missing on a staging host', async () => {
@@ -159,12 +159,16 @@ describe('OpenAIChat build metadata', () => {
         render(OpenAIChat);
 
         const appBuildLabel = await screen.findByText('App build SHA');
-        expect(appBuildLabel.nextElementSibling).toHaveTextContent('missing');
+        expect(appBuildLabel.nextElementSibling?.textContent).toContain('missing');
 
         const appBuildSourceLabel = await screen.findByText('App build SHA source');
-        expect(appBuildSourceLabel.nextElementSibling).toHaveTextContent('missing');
+        expect(appBuildSourceLabel.nextElementSibling?.textContent).toContain('missing');
 
-        await screen.findByText('⚠️ cannot verify app/docs sync (app SHA missing)');
+        const comparisonLabel = await screen.findByText('Docs RAG comparison');
+        const comparisonRow = comparisonLabel.closest('.debug-meta-row');
+        expect(comparisonRow?.textContent).toContain(
+            '⚠️ cannot verify app/docs sync (app SHA missing)'
+        );
         await waitFor(() => {
             expect(mockGetDocsRagComparison).toHaveBeenCalledWith('missing', 'docs-only');
         });
@@ -188,11 +192,13 @@ describe('OpenAIChat build metadata', () => {
         render(OpenAIChat);
 
         const appBuildLabel = await screen.findByText('App build SHA');
-        expect(appBuildLabel.nextElementSibling).toHaveTextContent('abc123def456');
+        expect(appBuildLabel.nextElementSibling?.textContent).toContain('abc123def456');
 
         const appBuildSourceLabel = await screen.findByText('App build SHA source');
-        expect(appBuildSourceLabel.nextElementSibling).toHaveTextContent('vite');
+        expect(appBuildSourceLabel.nextElementSibling?.textContent).toContain('vite');
 
-        await screen.findByText('✅ in sync');
+        const comparisonLabel = await screen.findByText('Docs RAG comparison');
+        const comparisonRow = comparisonLabel.closest('.debug-meta-row');
+        expect(comparisonRow?.textContent).toContain('✅ in sync');
     });
 });
