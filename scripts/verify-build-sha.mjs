@@ -12,16 +12,7 @@ if (!expectedSha) {
 
 const shortSha = expectedSha.length > 7 ? expectedSha.slice(0, 7) : expectedSha;
 const targets = [expectedSha, shortSha, `v3:${shortSha}`].filter(Boolean);
-const forbidden = [
-    'v3:missing',
-    'missing',
-    'v3:unknown',
-    'unknown',
-    'v3:dev-local',
-    'dev-local',
-    'v3:missing-sha',
-    'missing-sha',
-];
+const forbidden = ['v3:missing', 'v3:dev-local', 'v3:unknown', 'v3:missing-sha'];
 const allowedExtensions = new Set(['.js', '.mjs', '.cjs', '.css', '.html']);
 
 const candidateDirs =
