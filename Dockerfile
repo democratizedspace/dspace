@@ -62,6 +62,7 @@ COPY --link scripts/ scripts/
 COPY --link docs/ROUTES.md docs/ROUTES.md
 RUN node scripts/build-docs-rag-index.mjs
 RUN pnpm --filter ./frontend... run build
+RUN node scripts/verify-build-sha.mjs --dist frontend/dist
 
 FROM base AS prod-deps
 ARG DSPACE_VERSION
@@ -105,6 +106,7 @@ COPY --from=prod-deps /workspace/frontend/node_modules ./node_modules
 COPY --from=prod-deps /workspace/node_modules/.pnpm ../node_modules/.pnpm
 COPY --from=build /workspace/frontend/dist ./dist
 COPY --from=build /workspace/frontend/package.json ./package.json
+COPY --from=build /workspace/scripts/verify-build-sha.mjs ./scripts/verify-build-sha.mjs
 COPY infra/docker/entrypoint.mjs ./entrypoint.mjs
 COPY infra/metrics.mjs ./metrics.mjs
 RUN chown -R node:node /app /node_modules
