@@ -95,22 +95,20 @@ const normalizeDisplaySha = (value) => {
     }
     return normalized;
 };
-const normalizeComparableSha = (value) => {
+const NON_REAL_SHAS = new Set([
+    'dev-local',
+    'docs-pack-fallback',
+    'missing',
+    'missing-sha',
+    'unavailable',
+    'unknown',
+]);
+const isRealSha = (value) => {
     const normalized = normalizeSha(value);
     if (!normalized) {
-        return '';
+        return false;
     }
-    const lower = normalized.toLowerCase();
-    if (
-        lower === 'unknown' ||
-        lower === 'unavailable' ||
-        lower === 'dev-local' ||
-        lower === 'missing-sha' ||
-        lower === 'docs-pack-fallback'
-    ) {
-        return '';
-    }
-    return normalized;
+    return !NON_REAL_SHAS.has(normalized.toLowerCase());
 };
 
 const shasMatch = (appSha, docsSha) => {
@@ -144,12 +142,17 @@ export const getDocsRagMeta = async () => {
 export const getDocsRagComparison = (appGitSha, docsGitSha) => {
     const appLabel = normalizeDisplaySha(appGitSha);
     const docsLabel = normalizeDisplaySha(docsGitSha);
-    const appSha = normalizeComparableSha(appGitSha);
-    const docsSha = normalizeComparableSha(docsGitSha);
-    const hasAppSha = Boolean(appSha);
-    const hasDocsSha = Boolean(docsSha);
-    const bothValid = hasAppSha && hasDocsSha;
-    const inSync = Boolean(bothValid && shasMatch(appSha, docsSha));
+    const hasAppSha = isRealSha(appGitSha);
+    const hasDocsSha = isRealSha(docsGitSha);
+
+    if (!hasAppSha || !hasDocsSha) {
+        return {
+            status: 'unverified',
+            message: '⚠️ cannot verify app/docs sync (app SHA missing)',
+        };
+    }
+
+    const inSync = shasMatch(appGitSha, docsGitSha);
 
     if (inSync) {
         return {
@@ -158,30 +161,9 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
         };
     }
 
-    if (bothValid) {
-        return {
-            status: 'mismatch',
-            message: `⚠️ mismatch (app: ${appLabel}, docs: ${docsLabel})`,
-        };
-    }
-
-    if (!hasAppSha && hasDocsSha) {
-        return {
-            status: 'assumed',
-            message: `ℹ️ app SHA missing; using docs pack SHA for display (docs: ${docsLabel})`,
-        };
-    }
-
-    if (hasAppSha && !hasDocsSha) {
-        return {
-            status: 'unavailable',
-            message: `ℹ️ docs SHA unavailable (app: ${appLabel}, docs: ${docsLabel})`,
-        };
-    }
-
     return {
-        status: 'unavailable',
-        message: `ℹ️ app/docs SHAs unavailable (app: ${appLabel}, docs: ${docsLabel})`,
+        status: 'mismatch',
+        message: `⚠️ mismatch (app: ${appLabel}, docs: ${docsLabel})`,
     };
 };
 

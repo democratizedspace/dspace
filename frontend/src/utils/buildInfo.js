@@ -16,7 +16,12 @@ const isPlaceholderSha = (value) => {
         return true;
     }
     const lower = normalized.toLowerCase();
-    return lower === 'unknown' || lower === 'dev-local' || lower === 'missing-sha';
+    return (
+        lower === 'unknown' ||
+        lower === 'dev-local' ||
+        lower === 'missing' ||
+        lower === 'missing-sha'
+    );
 };
 
 const resolveGitSha = () => {
@@ -80,10 +85,10 @@ export const deriveEnvNameFromHostname = (hostname) => {
         .trim()
         .toLowerCase();
     const host = normalized.split(':')[0];
-    if (host.startsWith('staging.')) {
+    if (host === 'staging.democratized.space') {
         return 'staging';
     }
-    if (host === 'democratized.space' || host.endsWith('.democratized.space')) {
+    if (host === 'democratized.space') {
         return 'prod';
     }
     return 'dev';
