@@ -3,24 +3,24 @@ import '@testing-library/jest-dom';
 import { cleanup, render, screen, waitFor } from '@testing-library/svelte';
 import OpenAIChat from '../OpenAIChat.svelte';
 
-const {
-    mockGetDocsRagMeta,
-    mockGetDocsRagComparison,
-    mockGetDocsRagMismatchWarning,
-} = vi.hoisted(() => ({
-    mockGetDocsRagMeta: vi.fn(async () => ({
+let mockGetDocsRagMeta: ReturnType<typeof vi.fn>;
+let mockGetDocsRagComparison: ReturnType<typeof vi.fn>;
+let mockGetDocsRagMismatchWarning: ReturnType<typeof vi.fn>;
+
+vi.hoisted(() => {
+    mockGetDocsRagMeta = vi.fn(async () => ({
         gitSha: 'abc123',
         docsGitSha: 'abc123',
         generatedAt: 'just-now',
         envName: 'staging',
         sourceRef: 'refs/heads/main',
-    })),
-    mockGetDocsRagComparison: vi.fn((appSha: string, docsSha: string) => ({
+    }));
+    mockGetDocsRagComparison = vi.fn((appSha: string, docsSha: string) => ({
         status: 'match',
         message: `✅ in sync (app: ${appSha}, docs: ${docsSha})`,
-    })),
-    mockGetDocsRagMismatchWarning: vi.fn(() => null),
-}));
+    }));
+    mockGetDocsRagMismatchWarning = vi.fn(() => null);
+});
 
 vi.mock('../../../../utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({
