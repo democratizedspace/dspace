@@ -2,9 +2,25 @@ import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 import { cleanup, render, screen } from '@testing-library/svelte';
 
-if (globalThis.SvelteDSL) {
-    globalThis.SvelteDSL.effect = () => () => {};
-}
+globalThis.SvelteDSL = globalThis.SvelteDSL ?? {};
+globalThis.SvelteDSL.effect = (fn?: () => void) => {
+    if (fn) {
+        fn();
+    }
+    return () => {};
+};
+globalThis.SvelteDSL.effect_root = (fn?: () => void) => {
+    if (fn) {
+        fn();
+    }
+    return () => {};
+};
+globalThis.SvelteDSL.pre_effect = (fn?: () => void) => {
+    if (fn) {
+        fn();
+    }
+};
+globalThis.SvelteDSL.legacy_pre_effect_reset = () => {};
 
 const mockGetDocsRagMeta = vi.fn(async () => ({
     gitSha: 'abc123',
