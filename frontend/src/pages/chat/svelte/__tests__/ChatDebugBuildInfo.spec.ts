@@ -42,12 +42,21 @@ vi.mock('../../../../utils/docsRag.js', () => ({
 
 describe('OpenAIChat build metadata', () => {
     const originalLocation = window.location;
+    let importCounter = 0;
 
     const setHost = (url: string) => {
         Object.defineProperty(window, 'location', {
             value: new URL(url),
             writable: true,
         });
+    };
+
+    const importChatComponent = async () => {
+        importCounter += 1;
+        const { default: OpenAIChat } = await import(
+            `../OpenAIChat.svelte?test=${importCounter}`
+        );
+        return OpenAIChat;
     };
 
     beforeEach(() => {
@@ -73,7 +82,6 @@ describe('OpenAIChat build metadata', () => {
             value: originalLocation,
             writable: true,
         });
-        vi.resetModules();
         vi.clearAllMocks();
         mockGetDocsRagMeta.mockReset();
         mockGetDocsRagComparison.mockReset();
@@ -83,7 +91,7 @@ describe('OpenAIChat build metadata', () => {
     it('shows non-empty build metadata from VITE_GIT_SHA', async () => {
         // Set process.env before import so the module reads the fallback path for VITE_GIT_SHA.
         process.env.VITE_GIT_SHA = 'abc123def456';
-        const { default: OpenAIChat } = await import('../OpenAIChat.svelte');
+        const OpenAIChat = await importChatComponent();
         render(OpenAIChat);
 
         const promptVersion = await screen.findByText('Prompt version: v3:abc123d');
@@ -122,7 +130,7 @@ describe('OpenAIChat build metadata', () => {
             sourceRef: 'refs/heads/main',
         });
 
-        const { default: OpenAIChat } = await import('../OpenAIChat.svelte');
+        const OpenAIChat = await importChatComponent();
         render(OpenAIChat);
 
         const promptVersion = await screen.findByText('Prompt version: v3:docs-on');
@@ -155,7 +163,7 @@ describe('OpenAIChat build metadata', () => {
             message: `⚠️ assumed (app: ${appSha}, docs: ${docsSha})`,
         }));
 
-        const { default: OpenAIChat } = await import('../OpenAIChat.svelte');
+        const OpenAIChat = await importChatComponent();
         render(OpenAIChat);
 
         const appBuildLabel = await screen.findByText('App build SHA');
@@ -185,7 +193,7 @@ describe('OpenAIChat build metadata', () => {
             message: `✅ in sync (app: ${appSha}, docs: ${docsSha})`,
         }));
 
-        const { default: OpenAIChat } = await import('../OpenAIChat.svelte');
+        const OpenAIChat = await importChatComponent();
         render(OpenAIChat);
 
         const appBuildLabel = await screen.findByText('App build SHA');
