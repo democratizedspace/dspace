@@ -2,6 +2,10 @@ import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 import { cleanup, render, screen } from '@testing-library/svelte';
 
+if (globalThis.SvelteDSL) {
+    globalThis.SvelteDSL.effect = () => () => {};
+}
+
 const mockGetDocsRagMeta = vi.fn(async () => ({
     gitSha: 'abc123',
     docsGitSha: 'abc123',
@@ -74,6 +78,10 @@ describe('OpenAIChat build metadata', () => {
             writable: true,
         });
         vi.resetModules();
+        vi.clearAllMocks();
+        mockGetDocsRagMeta.mockReset();
+        mockGetDocsRagComparison.mockReset();
+        mockGetDocsRagMismatchWarning.mockReset();
     });
 
     it('shows non-empty build metadata from VITE_GIT_SHA', async () => {
