@@ -62,6 +62,7 @@ COPY --link scripts/ scripts/
 COPY --link docs/ROUTES.md docs/ROUTES.md
 RUN node scripts/build-docs-rag-index.mjs
 RUN pnpm --filter ./frontend... run build
+RUN node scripts/verify-build-sha.mjs
 
 FROM base AS prod-deps
 ARG DSPACE_VERSION

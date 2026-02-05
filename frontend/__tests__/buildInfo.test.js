@@ -54,6 +54,18 @@ describe('buildInfo', () => {
         expect(promptLabel).toBe('v3:feedbee');
     });
 
+    it('does not return missing placeholders when a VITE build SHA is set', () => {
+        process.env.VITE_GIT_SHA = '0123456789abcdef';
+        expect(getAppGitSha()).toBe('0123456789abcdef');
+        expect(getAppGitSha()).not.toBe('missing');
+        expect(getAppGitSha()).not.toBe('dev-local');
+        expect(getAppGitShaWithFallback('docs-pack-sha')).toEqual({
+            sha: '0123456789abcdef',
+            source: 'vite',
+        });
+        expect(getPromptVersionLabel()).toBe('v3:0123456');
+    });
+
     it('derives the prompt SHA from an existing prompt label', () => {
         expect(getPromptVersionSha('v3:feedface')).toBe('feedfac');
         expect(getPromptVersionSha('v3:dev-local')).toBe('dev-local');
