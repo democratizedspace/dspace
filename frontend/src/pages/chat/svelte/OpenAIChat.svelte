@@ -70,8 +70,6 @@
     let docsRagComparisonMessage = docsRagComparison.message;
     let docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
     let docsRagEnvWarning = null;
-    let hostEnvName = 'dev';
-    let appGitShaMissing = true;
     let debugOverride = false;
     let currentSettings = { showChatDebugPayload: false };
     let lastShowChatDebugPayload;
@@ -80,11 +78,7 @@
     $: personaSummary = currentPersona?.summary;
     $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
     $: docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha);
-    $: docsRagComparisonMessage = buildDocsRagComparisonMessage(
-        docsRagComparison,
-        hostEnvName,
-        appGitShaMissing
-    );
+    $: docsRagComparisonMessage = docsRagComparison.message;
     $: docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
 
     function getWelcomeText(persona) {
@@ -223,13 +217,6 @@
         return `Docs pack env (${docsEnvName}) does not match host (${hostname}).`;
     }
 
-    function buildDocsRagComparisonMessage(comparison, envName, isAppShaMissing) {
-        if (['staging', 'prod'].includes(envName) && isAppShaMissing) {
-            return '⚠️ cannot verify app/docs sync (app SHA missing)';
-        }
-        return comparison.message;
-    }
-
     function dismissSaveSnapshotHint() {
         saveSnapshotHintDismissed = true;
         if (typeof sessionStorage !== 'undefined') {
@@ -331,8 +318,6 @@
         docsRagSourceRef = resolvedDocsRagSourceRef;
         docsRagGeneratedAt = resolvedDocsRagGeneratedAt;
         docsRagHost = resolvedDocsRagHost;
-        hostEnvName = resolvedHostEnvName;
-        appGitShaMissing = resolvedAppGitShaMissing;
         appGitShaDisplay = resolvedAppGitShaDisplay;
         appGitShaSource = resolvedAppGitShaSource;
         appGitShaForComparison = resolvedAppGitShaForComparison;
