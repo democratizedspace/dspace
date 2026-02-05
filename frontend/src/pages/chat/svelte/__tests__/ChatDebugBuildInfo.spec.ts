@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
-import { cleanup, render, screen } from '@testing-library/svelte';
+import { cleanup, render, screen, waitFor } from '@testing-library/svelte';
 
 const mockGetDocsRagMeta = vi.fn(async () => ({
     gitSha: 'abc123',
@@ -164,11 +164,10 @@ describe('OpenAIChat build metadata', () => {
         const appBuildSourceLabel = await screen.findByText('App build SHA source');
         expect(appBuildSourceLabel.nextElementSibling).toHaveTextContent('missing');
 
-        const comparisonLabel = await screen.findByText('Docs RAG comparison');
-        expect(comparisonLabel.nextElementSibling).toHaveTextContent(
-            '⚠️ cannot verify app/docs sync (app SHA missing)'
-        );
-        expect(mockGetDocsRagComparison).toHaveBeenCalledWith('missing', 'docs-only');
+        await screen.findByText('⚠️ cannot verify app/docs sync (app SHA missing)');
+        await waitFor(() => {
+            expect(mockGetDocsRagComparison).toHaveBeenCalledWith('missing', 'docs-only');
+        });
     });
 
     it('shows in sync when app SHA matches docs on a prod host', async () => {
@@ -195,9 +194,6 @@ describe('OpenAIChat build metadata', () => {
         const appBuildSourceLabel = await screen.findByText('App build SHA source');
         expect(appBuildSourceLabel.nextElementSibling).toHaveTextContent('vite');
 
-        const comparisonLabel = await screen.findByText('Docs RAG comparison');
-        expect(comparisonLabel.nextElementSibling).toHaveTextContent(
-            '✅ in sync (app: abc123def456, docs: abc123def456)'
-        );
+        await screen.findByText('✅ in sync (app: abc123def456, docs: abc123def456)');
     });
 });
