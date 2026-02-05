@@ -77,7 +77,12 @@ describe('OpenAIChat docs RAG comparison messaging', () => {
         const row = label.closest('.debug-meta-row');
         await waitFor(() => {
             expect(row).toBeTruthy();
-            expect(row).toHaveTextContent(expected);
+            const content = row?.textContent ?? '';
+            if (expected instanceof RegExp) {
+                expect(content).toMatch(expected);
+            } else {
+                expect(content).toContain(expected);
+            }
         });
     };
 
