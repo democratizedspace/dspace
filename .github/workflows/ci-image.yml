@@ -123,53 +123,9 @@ jobs:
         run: |
           docker run --rm \
             -e EXPECTED_SHA="${GITHUB_SHA}" \
+            -v "${PWD}:/repo" \
             dspace-test:latest \
-            node -e "const fs = require('fs');\
-              const path = require('path');\
-              const targets = [process.env.EXPECTED_SHA].filter(Boolean);\
-              if (!targets.length) {\
-                console.error('No expected SHA provided.');\
-                process.exit(1);\
-              }\
-              const root = '/app/dist';\
-              const allowedExtensions = new Set(['.js', '.mjs', '.cjs', '.css', '.html']);\
-              const shouldMatch = (content) => targets.some((target) => content.includes(target));\
-              const stack = [root];\
-              let found = false;\
-              while (stack.length) {\
-                const current = stack.pop();\
-                const entries = fs.readdirSync(current, { withFileTypes: true });\
-                for (const entry of entries) {\
-                  const fullPath = path.join(current, entry.name);\
-                  if (entry.isDirectory()) {\
-                    stack.push(fullPath);\
-                    continue;\
-                  }\
-                  if (!entry.isFile()) {\
-                    continue;\
-                  }\
-                  if (!allowedExtensions.has(path.extname(fullPath))) {\
-                    continue;\
-                  }\
-                  try {\
-                    const content = fs.readFileSync(fullPath, 'utf8');\
-                    if (shouldMatch(content)) {\
-                      found = true;\
-                      break;\
-                    }\
-                  } catch (error) {\
-                    continue;\
-                  }\
-                }\
-                if (found) {\
-                  break;\
-                }\
-              }\
-              if (!found) {\
-                console.error('Expected build SHA not found in frontend bundle.');\
-                process.exit(1);\
-              }\
-              console.log('Build SHA found in frontend bundle.');"
+            node /repo/scripts/verify-build-sha.mjs /app/dist
 
       - name: Canvas native deps smoke test
         run: |

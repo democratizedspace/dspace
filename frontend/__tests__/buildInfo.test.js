@@ -54,6 +54,13 @@ describe('buildInfo', () => {
         expect(promptLabel).toBe('v3:feedbee');
     });
 
+    it('never returns a missing placeholder when VITE_GIT_SHA is set', () => {
+        process.env.VITE_GIT_SHA = 'missing-sha';
+        expect(getAppGitSha()).toBe('dev-local');
+        expect(getPromptVersionSha()).toBe('dev-local');
+        expect(getPromptVersionLabel()).toBe('v3:dev-local');
+    });
+
     it('derives the prompt SHA from an existing prompt label', () => {
         expect(getPromptVersionSha('v3:feedface')).toBe('feedfac');
         expect(getPromptVersionSha('v3:dev-local')).toBe('dev-local');
