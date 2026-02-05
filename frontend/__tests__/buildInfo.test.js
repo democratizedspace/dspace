@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import {
     getAppGitSha,
@@ -10,8 +10,18 @@ import {
 } from '../src/utils/buildInfo.js';
 
 describe('buildInfo', () => {
+    let originalViteGitSha;
+
+    beforeEach(() => {
+        originalViteGitSha = process.env.VITE_GIT_SHA;
+    });
+
     afterEach(() => {
-        delete process.env.VITE_GIT_SHA;
+        if (originalViteGitSha === undefined) {
+            delete process.env.VITE_GIT_SHA;
+        } else {
+            process.env.VITE_GIT_SHA = originalViteGitSha;
+        }
     });
 
     it('falls back to dev-local when no build SHA is provided', () => {
