@@ -104,6 +104,7 @@ const normalizeComparableSha = (value) => {
     if (
         lower === 'unknown' ||
         lower === 'unavailable' ||
+        lower === 'missing' ||
         lower === 'dev-local' ||
         lower === 'missing-sha' ||
         lower === 'docs-pack-fallback'
@@ -112,6 +113,7 @@ const normalizeComparableSha = (value) => {
     }
     return normalized;
 };
+const isRealSha = (value) => Boolean(normalizeComparableSha(value));
 
 const shasMatch = (appSha, docsSha) => {
     const left = normalizeSha(appSha);
@@ -146,10 +148,17 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
     const docsLabel = normalizeDisplaySha(docsGitSha);
     const appSha = normalizeComparableSha(appGitSha);
     const docsSha = normalizeComparableSha(docsGitSha);
-    const hasAppSha = Boolean(appSha);
-    const hasDocsSha = Boolean(docsSha);
+    const hasAppSha = isRealSha(appSha);
+    const hasDocsSha = isRealSha(docsSha);
     const bothValid = hasAppSha && hasDocsSha;
     const inSync = Boolean(bothValid && shasMatch(appSha, docsSha));
+
+    if (!bothValid) {
+        return {
+            status: 'unverified',
+            message: '⚠️ cannot verify app/docs sync (app SHA missing)',
+        };
+    }
 
     if (inSync) {
         return {
@@ -158,30 +167,9 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
         };
     }
 
-    if (bothValid) {
-        return {
-            status: 'mismatch',
-            message: `⚠️ mismatch (app: ${appLabel}, docs: ${docsLabel})`,
-        };
-    }
-
-    if (!hasAppSha && hasDocsSha) {
-        return {
-            status: 'assumed',
-            message: `ℹ️ app SHA missing; using docs pack SHA for display (docs: ${docsLabel})`,
-        };
-    }
-
-    if (hasAppSha && !hasDocsSha) {
-        return {
-            status: 'unavailable',
-            message: `ℹ️ docs SHA unavailable (app: ${appLabel}, docs: ${docsLabel})`,
-        };
-    }
-
     return {
-        status: 'unavailable',
-        message: `ℹ️ app/docs SHAs unavailable (app: ${appLabel}, docs: ${docsLabel})`,
+        status: 'mismatch',
+        message: `⚠️ mismatch (app: ${appLabel}, docs: ${docsLabel})`,
     };
 };
 
