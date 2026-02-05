@@ -70,8 +70,6 @@
     let docsRagComparisonMessage = docsRagComparison.message;
     let docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
     let docsRagEnvWarning = null;
-    let hostEnvName = 'dev';
-    let appGitShaMissing = true;
     let debugOverride = false;
     let currentSettings = { showChatDebugPayload: false };
     let lastShowChatDebugPayload;
@@ -80,11 +78,7 @@
     $: personaSummary = currentPersona?.summary;
     $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
     $: docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha);
-    $: docsRagComparisonMessage = buildDocsRagComparisonMessage(
-        docsRagComparison,
-        hostEnvName,
-        appGitShaMissing
-    );
+    $: docsRagComparisonMessage = buildDocsRagComparisonMessage(docsRagComparison);
     $: docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
 
     function getWelcomeText(persona) {
@@ -223,10 +217,7 @@
         return `Docs pack env (${docsEnvName}) does not match host (${hostname}).`;
     }
 
-    function buildDocsRagComparisonMessage(comparison, envName, isAppShaMissing) {
-        if (['staging', 'prod'].includes(envName) && isAppShaMissing) {
-            return '⚠️ cannot verify app/docs sync (app SHA missing)';
-        }
+    function buildDocsRagComparisonMessage(comparison) {
         return comparison.message;
     }
 
@@ -331,8 +322,6 @@
         docsRagSourceRef = resolvedDocsRagSourceRef;
         docsRagGeneratedAt = resolvedDocsRagGeneratedAt;
         docsRagHost = resolvedDocsRagHost;
-        hostEnvName = resolvedHostEnvName;
-        appGitShaMissing = resolvedAppGitShaMissing;
         appGitShaDisplay = resolvedAppGitShaDisplay;
         appGitShaSource = resolvedAppGitShaSource;
         appGitShaForComparison = resolvedAppGitShaForComparison;
@@ -341,10 +330,7 @@
         // determined by the module-level CHAT_PROMPT_VERSION in openAI.js and may differ when
         // build metadata is missing or a placeholder.
         promptVersionLabel = getPromptVersionLabelForSha(appGitShaDisplay);
-        const normalizedDocsEnv = normalizeEnvName(docsRagEnvName);
-        docsRagDerivedEnv = normalizedDocsEnv
-            ? 'n/a'
-            : (deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable');
+        docsRagDerivedEnv = deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable';
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
         appGitSha = resolvedAppGitSha;
         syncSaveSnapshotHintDismissed();

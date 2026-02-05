@@ -2,11 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { getDocsRagComparison, getDocsRagMismatchWarning } from '../src/utils/docsRag.js';
 
 describe('docs RAG comparison', () => {
-    it('does not emit mismatch warning when app SHA is missing', () => {
+    it('reports unverifiable when app SHA is missing', () => {
         const comparison = getDocsRagComparison('dev-local', 'abc123');
 
-        expect(comparison.status).toBe('assumed');
-        expect(comparison.message).toContain('app SHA missing');
+        expect(comparison.status).toBe('unverifiable');
+        expect(comparison.message).toBe('⚠️ cannot verify app/docs sync (app SHA missing)');
         expect(getDocsRagMismatchWarning('dev-local', 'abc123')).toBeNull();
     });
 
@@ -21,7 +21,7 @@ describe('docs RAG comparison', () => {
     it('treats docs-pack-fallback as non-real for sync checks', () => {
         const comparison = getDocsRagComparison('docs-pack-fallback', 'abc123');
 
-        expect(comparison.status).toBe('assumed');
-        expect(comparison.message).toContain('app SHA missing');
+        expect(comparison.status).toBe('unverifiable');
+        expect(comparison.message).toBe('⚠️ cannot verify app/docs sync (app SHA missing)');
     });
 });

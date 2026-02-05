@@ -88,13 +88,7 @@ const loadDocsRag = async () => {
 };
 
 const normalizeSha = (value) => String(value || '').trim();
-const normalizeDisplaySha = (value) => {
-    const normalized = normalizeSha(value);
-    if (!normalized || normalized.toLowerCase() === 'unknown') {
-        return 'unavailable';
-    }
-    return normalized;
-};
+const normalizeDisplaySha = (value) => normalizeSha(value);
 const normalizeComparableSha = (value) => {
     const normalized = normalizeSha(value);
     if (!normalized) {
@@ -103,10 +97,11 @@ const normalizeComparableSha = (value) => {
     const lower = normalized.toLowerCase();
     if (
         lower === 'unknown' ||
-        lower === 'unavailable' ||
         lower === 'dev-local' ||
+        lower === 'missing' ||
         lower === 'missing-sha' ||
-        lower === 'docs-pack-fallback'
+        lower === 'docs-pack-fallback' ||
+        lower === 'unavailable'
     ) {
         return '';
     }
@@ -154,7 +149,7 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
     if (inSync) {
         return {
             status: 'match',
-            message: `✅ in sync (app: ${appLabel}, docs: ${docsLabel})`,
+            message: '✅ in sync',
         };
     }
 
@@ -165,23 +160,9 @@ export const getDocsRagComparison = (appGitSha, docsGitSha) => {
         };
     }
 
-    if (!hasAppSha && hasDocsSha) {
-        return {
-            status: 'assumed',
-            message: `ℹ️ app SHA missing; using docs pack SHA for display (docs: ${docsLabel})`,
-        };
-    }
-
-    if (hasAppSha && !hasDocsSha) {
-        return {
-            status: 'unavailable',
-            message: `ℹ️ docs SHA unavailable (app: ${appLabel}, docs: ${docsLabel})`,
-        };
-    }
-
     return {
-        status: 'unavailable',
-        message: `ℹ️ app/docs SHAs unavailable (app: ${appLabel}, docs: ${docsLabel})`,
+        status: 'unverifiable',
+        message: '⚠️ cannot verify app/docs sync (app SHA missing)',
     };
 };
 
