@@ -56,6 +56,7 @@
     let saveSnapshotHintFocusListener;
     let promptDebugLinkListener;
     let appGitSha = getAppGitSha();
+    let appGitShaForComparison = appGitSha;
     let appGitShaDisplay = appGitSha;
     let appGitShaSource = 'dev-local';
     let promptVersionLabel = CHAT_PROMPT_VERSION;
@@ -65,10 +66,12 @@
     let docsRagSourceRef = 'unavailable';
     let docsRagGeneratedAt = 'unavailable';
     let docsRagHost = 'unavailable';
-    let docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
+    let docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha);
     let docsRagComparisonMessage = docsRagComparison.message;
-    let docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+    let docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
     let docsRagEnvWarning = null;
+    let hostEnvName = 'dev';
+    let appGitShaMissing = true;
     let debugOverride = false;
     let currentSettings = { showChatDebugPayload: false };
     let lastShowChatDebugPayload;
@@ -76,9 +79,13 @@
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
     $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
-    $: docsRagComparison = getDocsRagComparison(appGitSha, docsRagGitSha);
-    $: docsRagComparisonMessage = docsRagComparison.message;
-    $: docsRagWarning = getDocsRagMismatchWarning(appGitSha, docsRagGitSha);
+    $: docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha);
+    $: docsRagComparisonMessage = buildDocsRagComparisonMessage(
+        docsRagComparison,
+        hostEnvName,
+        appGitShaMissing
+    );
+    $: docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -216,6 +223,13 @@
         return `Docs pack env (${docsEnvName}) does not match host (${hostname}).`;
     }
 
+    function buildDocsRagComparisonMessage(comparison, envName, isAppShaMissing) {
+        if (['staging', 'prod'].includes(envName) && isAppShaMissing) {
+            return '⚠️ cannot verify app/docs sync (app SHA missing)';
+        }
+        return comparison.message;
+    }
+
     function dismissSaveSnapshotHint() {
         saveSnapshotHintDismissed = true;
         if (typeof sessionStorage !== 'undefined') {
@@ -287,16 +301,41 @@
         currentSettings = normalized;
         lastShowChatDebugPayload = normalized.showChatDebugPayload;
         syncPromptDebugDeepLink({ allowAutoExpand: true });
-        appGitSha = getAppGitSha();
+        const resolvedAppGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
-        docsRagGitSha = docsMeta?.docsGitSha ?? docsMeta?.gitSha ?? 'unknown';
-        docsRagEnvName = docsMeta?.envName ?? 'unknown';
-        docsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
-        docsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
-        docsRagHost = window?.location?.host || 'unknown';
-        const appShaInfo = getAppGitShaWithFallback(docsRagGitSha);
-        appGitShaDisplay = appShaInfo.sha;
-        appGitShaSource = appShaInfo.source;
+        const resolvedDocsRagGitSha = docsMeta?.docsGitSha ?? docsMeta?.gitSha ?? 'unknown';
+        const resolvedDocsRagEnvName = docsMeta?.envName ?? 'unknown';
+        const resolvedDocsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
+        const resolvedDocsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
+        const resolvedDocsRagHost = window?.location?.host || 'unknown';
+        const resolvedHostEnvName = deriveEnvNameFromHostname(resolvedDocsRagHost);
+        const allowDocsFallback = resolvedHostEnvName === 'dev';
+        const appShaInfo = allowDocsFallback
+            ? getAppGitShaWithFallback(resolvedDocsRagGitSha)
+            : getAppGitShaWithFallback();
+        let resolvedAppGitShaMissing = appShaInfo.source !== 'vite';
+        let resolvedAppGitShaDisplay = appShaInfo.sha;
+        let resolvedAppGitShaSource = appShaInfo.source;
+        let resolvedAppGitShaForComparison = appShaInfo.sha;
+        if (!allowDocsFallback && resolvedAppGitShaMissing) {
+            resolvedAppGitShaDisplay = 'missing';
+            resolvedAppGitShaSource = 'missing';
+            resolvedAppGitShaForComparison = 'missing';
+        }
+        if (allowDocsFallback && resolvedAppGitShaSource === 'docs-pack-fallback') {
+            resolvedAppGitShaSource = 'docs-pack-fallback (dev)';
+        }
+
+        docsRagGitSha = resolvedDocsRagGitSha;
+        docsRagEnvName = resolvedDocsRagEnvName;
+        docsRagSourceRef = resolvedDocsRagSourceRef;
+        docsRagGeneratedAt = resolvedDocsRagGeneratedAt;
+        docsRagHost = resolvedDocsRagHost;
+        hostEnvName = resolvedHostEnvName;
+        appGitShaMissing = resolvedAppGitShaMissing;
+        appGitShaDisplay = resolvedAppGitShaDisplay;
+        appGitShaSource = resolvedAppGitShaSource;
+        appGitShaForComparison = resolvedAppGitShaForComparison;
         // NOTE: This label is for UI/debug purposes only and is derived from the effective app
         // Git SHA (which may use a fallback). The actual prompt version sent to OpenAI is
         // determined by the module-level CHAT_PROMPT_VERSION in openAI.js and may differ when
@@ -307,6 +346,7 @@
             ? 'n/a'
             : (deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable');
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
+        appGitSha = resolvedAppGitSha;
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
