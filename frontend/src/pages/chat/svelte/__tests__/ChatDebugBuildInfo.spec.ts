@@ -2,6 +2,25 @@ import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 import { cleanup, render, screen } from '@testing-library/svelte';
 
+vi.mock('svelte', async () => {
+    const actual = await vi.importActual('svelte');
+    return {
+        ...(actual as Record<string, unknown>),
+        effect: (fn?: () => void) => {
+            if (fn) {
+                fn();
+            }
+            return () => {};
+        },
+        onMount: (fn?: () => void) => {
+            if (fn) {
+                fn();
+            }
+            return () => {};
+        },
+    };
+});
+
 vi.mock('svelte/internal/client', async () => {
     const actual = await vi.importActual('svelte/internal/client');
     return {
