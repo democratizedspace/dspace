@@ -14,7 +14,7 @@ describe('docs RAG comparison', () => {
         const comparison = getDocsRagComparison('abc123', 'unknown');
 
         expect(comparison.status).toBe('unverified');
-        expect(comparison.message).toBe('⚠️ cannot verify app/docs sync (app SHA missing)');
+        expect(comparison.message).toBe('⚠️ cannot verify app/docs sync (docs SHA missing)');
     });
 
     it('flags mismatches only when both SHAs are available', () => {

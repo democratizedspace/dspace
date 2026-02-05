@@ -151,9 +151,9 @@ describe('OpenAIChat build metadata', () => {
             envName: 'staging',
             sourceRef: 'refs/heads/main',
         });
-        mockGetDocsRagComparison.mockImplementation((appSha: string, docsSha: string) => ({
-            status: 'assumed',
-            message: `⚠️ assumed (app: ${appSha}, docs: ${docsSha})`,
+        mockGetDocsRagComparison.mockImplementation(() => ({
+            status: 'unverified',
+            message: '⚠️ cannot verify app/docs sync (app SHA missing)',
         }));
 
         render(OpenAIChat);

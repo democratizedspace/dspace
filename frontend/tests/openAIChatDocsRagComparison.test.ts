@@ -91,6 +91,16 @@ describe('OpenAIChat docs RAG comparison messaging', () => {
         await expectComparisonMessage('⚠️ cannot verify app/docs sync (app SHA missing)');
     });
 
+    it('shows cannot-verify when docs SHA is missing on staging', async () => {
+        process.env.VITE_GIT_SHA = 'abc123def';
+        getDocsRagMeta.mockResolvedValue({
+            docsGitSha: 'unknown',
+            envName: 'staging',
+        });
+
+        await expectComparisonMessage('⚠️ cannot verify app/docs sync (docs SHA missing)');
+    });
+
     it('shows in-sync when staging SHAs are real and matching', async () => {
         process.env.VITE_GIT_SHA = 'abc123def';
         getDocsRagMeta.mockResolvedValue({
