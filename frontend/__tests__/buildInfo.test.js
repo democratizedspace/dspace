@@ -58,7 +58,7 @@ describe('buildInfo', () => {
         process.env.VITE_GIT_SHA = 'abc123def456';
         expect(getAppGitSha()).toBe('abc123def456');
         expect(getPromptVersionLabel()).toBe('v3:abc123d');
-        expect(getPromptVersionSha()).not.toContain('missing');
+        expect(getPromptVersionSha()).toBe('abc123d');
     });
 
     it('derives the prompt SHA from an existing prompt label', () => {
