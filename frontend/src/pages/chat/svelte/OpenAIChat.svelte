@@ -38,6 +38,7 @@
         getDocsRagComparison,
         getDocsRagMismatchWarning,
     } from '../../../utils/docsRag.js';
+    import { copyToClipboard } from '../../../utils/copyToClipboard.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -73,6 +74,9 @@
     let debugOverride = false;
     let currentSettings = { showChatDebugPayload: false };
     let lastShowChatDebugPayload;
+    let debugCopyStatus = null;
+    let debugCopyTimeout;
+    let debugInfo = {};
     let playerStateSummary = {
         included: false,
         questsFinishedCount: 0,
@@ -87,6 +91,18 @@
     $: docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha);
     $: docsRagComparisonMessage = docsRagComparison.message;
     $: docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
+    $: debugInfo = {
+        promptVersionLabel,
+        appGitShaDisplay,
+        appGitShaSource,
+        docsRagGitSha,
+        docsRagHost,
+        docsRagDerivedEnv,
+        docsRagGeneratedAt,
+        docsRagEnvName,
+        docsRagSourceRef,
+        docsRagComparisonMessage,
+    };
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -280,6 +296,29 @@
         syncDebugVisibility();
     }
 
+    async function handleCopyDebugInfo() {
+        const debugCopyText = [
+            `Prompt version: ${debugInfo.promptVersionLabel}`,
+            `App build SHA: ${debugInfo.appGitShaDisplay}`,
+            `App build SHA source: ${debugInfo.appGitShaSource}`,
+            `Docs RAG SHA: ${debugInfo.docsRagGitSha}`,
+            `Docs host: ${debugInfo.docsRagHost}`,
+            `Docs env derived: ${debugInfo.docsRagDerivedEnv}`,
+            `Docs RAG generatedAt: ${debugInfo.docsRagGeneratedAt}`,
+            `Docs pack env: ${debugInfo.docsRagEnvName}`,
+            `Docs pack sourceRef: ${debugInfo.docsRagSourceRef}`,
+            `Docs RAG comparison: ${debugInfo.docsRagComparisonMessage}`,
+        ].join('\n');
+        await copyToClipboard(debugCopyText);
+        debugCopyStatus = 'Copied debug info';
+        if (debugCopyTimeout) {
+            clearTimeout(debugCopyTimeout);
+        }
+        debugCopyTimeout = setTimeout(() => {
+            debugCopyStatus = null;
+        }, 2000);
+    }
+
     async function handlePersonaChange(event) {
         const selectedId = event.target.value;
         const nextPersona =
@@ -369,6 +408,9 @@
 
     onDestroy(() => {
         settingsUnsubscribe?.();
+        if (debugCopyTimeout) {
+            clearTimeout(debugCopyTimeout);
+        }
         if (saveSnapshotHintFocusListener) {
             window.removeEventListener('focus', saveSnapshotHintFocusListener);
         }
@@ -456,54 +498,69 @@
                 <div>
                     <h3>Chat prompt debug</h3>
                     <p>Displays the full prompt payload, with RAG content highlighted.</p>
-                    <p class="debug-version">Prompt version: {promptVersionLabel}</p>
+                    <p class="debug-version">Prompt version: {debugInfo.promptVersionLabel}</p>
                 </div>
-                <button
-                    class="debug-toggle"
-                    type="button"
-                    on:click={() => {
-                        debugExpanded = !debugExpanded;
-                    }}
-                >
-                    {debugExpanded ? 'Hide prompt' : 'Show prompt'}
-                </button>
+                <div class="debug-actions">
+                    <button
+                        class="debug-copy"
+                        type="button"
+                        data-testid="debug-copy-button"
+                        on:click={handleCopyDebugInfo}
+                    >
+                        Copy debug info
+                    </button>
+                    <button
+                        class="debug-toggle"
+                        type="button"
+                        on:click={() => {
+                            debugExpanded = !debugExpanded;
+                        }}
+                    >
+                        {debugExpanded ? 'Hide prompt' : 'Show prompt'}
+                    </button>
+                </div>
             </div>
+            {#if debugCopyStatus}
+                <div class="debug-copy-status" role="status" aria-live="polite">
+                    {debugCopyStatus}
+                </div>
+            {/if}
             <div class="debug-metadata">
                 <div class="debug-meta-row" data-testid="debug-app-sha-row">
                     <span>App build SHA</span>
-                    <span class="debug-mono">{appGitShaDisplay}</span>
+                    <span class="debug-mono">{debugInfo.appGitShaDisplay}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>App build SHA source</span>
-                    <span class="debug-mono">{appGitShaSource}</span>
+                    <span class="debug-mono">{debugInfo.appGitShaSource}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>Docs RAG SHA</span>
-                    <span class="debug-mono">{docsRagGitSha}</span>
+                    <span class="debug-mono">{debugInfo.docsRagGitSha}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>Docs pack env</span>
-                    <span class="debug-mono">{docsRagEnvName}</span>
+                    <span class="debug-mono">{debugInfo.docsRagEnvName}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>Docs env derived</span>
-                    <span class="debug-mono">{docsRagDerivedEnv}</span>
+                    <span class="debug-mono">{debugInfo.docsRagDerivedEnv}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>Docs host</span>
-                    <span class="debug-mono">{docsRagHost}</span>
+                    <span class="debug-mono">{debugInfo.docsRagHost}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>Docs RAG generatedAt</span>
-                    <span class="debug-mono">{docsRagGeneratedAt}</span>
+                    <span class="debug-mono">{debugInfo.docsRagGeneratedAt}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>Docs pack sourceRef</span>
-                    <span class="debug-mono">{docsRagSourceRef}</span>
+                    <span class="debug-mono">{debugInfo.docsRagSourceRef}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>Docs RAG comparison</span>
-                    <span class="debug-mono">{docsRagComparisonMessage}</span>
+                    <span class="debug-mono">{debugInfo.docsRagComparisonMessage}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>PlayerState included</span>
@@ -780,6 +837,34 @@
         margin: 0;
         font-size: 0.85rem;
         color: #94a3b8;
+    }
+
+    .debug-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .debug-copy {
+        height: 32px;
+        margin: 0;
+        padding: 0 0.75rem;
+        font-size: 0.85rem;
+        background: #0b1220;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        border-radius: 999px;
+        color: #e2e8f0;
+    }
+
+    .debug-copy:hover {
+        background: #1f2937;
+    }
+
+    .debug-copy-status {
+        font-size: 0.85rem;
+        color: #cbd5e1;
     }
 
     .debug-toggle {
