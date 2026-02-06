@@ -51,6 +51,7 @@
     let showDebug = false;
     let debugMessages = [];
     let debugExpanded = false;
+    let playerStateMeta = null;
     let settingsUnsubscribe;
     let saveSnapshotHintDismissed = false;
     let saveSnapshotHintFocusListener;
@@ -144,8 +145,10 @@
                 persona: currentPersona,
             });
             debugMessages = debugPayload.debugMessages;
+            playerStateMeta = debugPayload.playerStateMeta;
         } else {
             debugMessages = [];
+            playerStateMeta = null;
         }
 
         try {
@@ -457,6 +460,34 @@
                 <div class="debug-meta-row" data-testid="debug-app-sha-row">
                     <span>App build SHA</span>
                     <span class="debug-mono">{appGitShaDisplay}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState included</span>
+                    <span class="debug-mono">
+                        {playerStateMeta?.included ? 'yes' : 'no'}
+                    </span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState questsFinished</span>
+                    <span class="debug-mono">
+                        {playerStateMeta?.questsFinishedCount ?? 0}
+                    </span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState inventory entries</span>
+                    <span class="debug-mono">
+                        {playerStateMeta
+                            ? `${playerStateMeta.inventoryIncludedCount ?? 0}/${
+                                  playerStateMeta.inventoryTotalCount ?? 0
+                              }`
+                            : '0/0'}
+                    </span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState inventory truncated</span>
+                    <span class="debug-mono">
+                        {playerStateMeta?.inventoryTruncated ? 'yes' : 'no'}
+                    </span>
                 </div>
                 <div class="debug-meta-row">
                     <span>App build SHA source</span>

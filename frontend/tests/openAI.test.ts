@@ -41,6 +41,7 @@ import {
 } from '../src/utils/openAI.js';
 import { buildDchatKnowledgePack } from '../src/utils/dchatKnowledge.js';
 import { searchDocsRag } from '../src/utils/docsRag.js';
+import { loadGameState } from '../src/utils/gameState/common.js';
 
 class MockResponseClient {
     constructor(resolver) {
@@ -210,6 +211,15 @@ describe('GPT5Chat', () => {
                 content: [
                     {
                         type: 'input_text',
+                        text: expect.stringContaining('PlayerState'),
+                    },
+                ],
+            }),
+            expect.objectContaining({
+                role: 'system',
+                content: [
+                    {
+                        type: 'input_text',
                         text: expect.stringContaining('knowledge'),
                     },
                 ],
@@ -268,6 +278,49 @@ describe('GPT5Chat', () => {
             ])
         );
         expect(result).toBe('follow up');
+    });
+
+    it('lists finished quests when PlayerState is present', async () => {
+        vi.mocked(loadGameState).mockReturnValueOnce({
+            openAI: {},
+            versionNumberString: '3',
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+                'welcome/intro-inventory': { finished: true },
+                'welcome/run-tests': { finished: false },
+            },
+            inventory: {},
+            processes: {},
+        });
+
+        const resolver = vi.fn(async ({ input }) => {
+            const playerStateEntry = input.find((entry) =>
+                entry.content?.some((block) => block.text?.includes('PlayerState v'))
+            );
+            const playerStateText = playerStateEntry?.content?.[0]?.text ?? '';
+            if (!playerStateText) {
+                return { output_text: 'Please export via /gamesaves.' };
+            }
+            const jsonText = playerStateText.split('\n').slice(1).join('\n');
+            const playerState = JSON.parse(jsonText);
+            return {
+                output_text: `Completed quests: ${playerState.questsFinished.join(', ')}`,
+            };
+        });
+
+        globalThis.__DSpaceOpenAIClient = class extends MockResponseClient {
+            constructor() {
+                super(resolver);
+            }
+        };
+
+        const result = await GPT5Chat([
+            { role: 'user', content: 'what quests have I completed?' },
+        ]);
+
+        expect(result).toContain('welcome/howtodoquests');
+        expect(result).toContain('welcome/intro-inventory');
+        expect(result).not.toContain('/gamesaves');
     });
 
     it('falls back to output content when output_text is an empty string', async () => {
@@ -476,17 +529,75 @@ describe('buildChatPrompt', () => {
 
         expect(content).toContain("I can't see your inventory/quests/progress");
         expect(content).toContain('/gamesaves');
+        expect(content).toContain('/docs/backups');
         expect(content).toMatch(/clarifying question/i);
         expect(content).toMatch(/only give exact counts\/durations\/rates/i);
+    });
+
+    it('adds a PlayerState block with finished quests and inventory counts', async () => {
+        vi.mocked(loadGameState).mockReturnValueOnce({
+            openAI: {},
+            versionNumberString: '3',
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+                'welcome/intro-inventory': { finished: false },
+            },
+            inventory: {
+                'item-ore': 12,
+                'item-dust': 0,
+                'item-rocket': 1.5,
+            },
+            processes: {},
+        });
+
+        const payload = await buildChatPrompt([{ role: 'user', content: 'Status?' }]);
+        const playerStateMessage = payload.debugMessages.find(
+            (message) => message.role === 'system' && message.content?.startsWith('PlayerState v')
+        );
+
+        expect(playerStateMessage?.content).toContain('"questsFinished": [');
+        expect(playerStateMessage?.content).toContain('"welcome/howtodoquests"');
+        expect(playerStateMessage?.content).toContain('"inventory": [');
+        expect(playerStateMessage?.content).toContain('"id": "item-ore"');
+        expect(playerStateMessage?.content).toContain('"id": "item-rocket"');
+        expect(payload.playerStateMeta).toEqual(
+            expect.objectContaining({
+                included: true,
+                questsFinishedCount: 1,
+                inventoryIncludedCount: 2,
+                inventoryTotalCount: 2,
+                inventoryTruncated: false,
+            })
+        );
+    });
+
+    it('keeps the save snapshot instruction when PlayerState is omitted', async () => {
+        const payload = await buildChatPrompt(
+            [{ role: 'user', content: 'Status?' }],
+            { includePlayerState: false }
+        );
+        const systemMessage = payload.debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const content = systemMessage?.content ?? '';
+
+        expect(payload.playerStateMeta).toEqual(
+            expect.objectContaining({
+                included: false,
+            })
+        );
+        expect(content).toContain('/gamesaves');
+        expect(content).toMatch(/\/docs\/backups|\/docs\/routes/i);
     });
 
     it('does not duplicate the shared guardrail when already present', async () => {
         const systemPrompt = [
             'Custom system prompt.',
-            'Never invent quests, items, processes, routes, URLs, or player state.',
-            "I can't see your inventory/quests/progress unless a save snapshot is provided.",
-            'Please export/paste a save from /gamesaves (or describe what you see) before I answer ' +
-                'state questions.',
+            'Never invent game facts or player state.',
+            'Use the PlayerState block when present.',
+            "I can't see your inventory/quests/progress unless PlayerState or a save snapshot is provided.",
+            'If PlayerState is missing, ask for a /gamesaves export and cite /docs/backups or ' +
+                '/docs/routes.',
             "If you're missing context, say you don't know and ask a clarifying question OR point " +
                 'to a specific /docs page.',
             'When giving URLs/navigation, cite /docs excerpts or docs/ROUTES.md.',
@@ -511,10 +622,9 @@ describe('buildChatPrompt', () => {
     });
 
     it('appends only missing guardrail lines when a persona includes some rules', async () => {
-        const systemPrompt = [
-            'Custom system prompt.',
-            'Never invent quests, items, processes, routes, URLs, or player state.',
-        ].join('\n');
+        const systemPrompt = ['Custom system prompt.', 'Never invent game facts or player state.'].join(
+            '\n'
+        );
 
         const payload = await buildChatPrompt([{ role: 'user', content: 'Check guardrails.' }], {
             persona: {

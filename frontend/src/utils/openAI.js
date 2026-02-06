@@ -52,18 +52,22 @@ export const defaultOpenAIErrorMessage =
     "Sorry, I'm having some trouble and can't generate a response.";
 const guardrailRules = [
     {
-        line: 'Never invent quests, items, processes, routes, URLs, or player state.',
+        line: 'Never invent game facts or player state.',
         pattern: /never invent/,
     },
     {
-        line: "I can't see your inventory/quests/progress unless a save snapshot is provided.",
+        line: 'Use the PlayerState block when present.',
+        pattern: /playerstate.*present/i,
+    },
+    {
+        line: "I can't see your inventory/quests/progress unless PlayerState or a save snapshot is provided.",
         pattern: /inventory\/quests\/progress/,
     },
     {
         line:
-            'Please export/paste a save from /gamesaves (or describe what you see) before I answer ' +
-            'state questions.',
-        pattern: /\/gamesaves/,
+            'If PlayerState is missing, ask for a /gamesaves export and cite /docs/backups or ' +
+            '/docs/routes.',
+        pattern: /playerstate is missing|\/docs\/backups|\/docs\/routes/i,
     },
     {
         line:
@@ -97,6 +101,7 @@ const docsRagOptions = {
     maxExcerptChars: 8500,
 };
 const docsRagPromptBudgetChars = 80000;
+const MAX_PLAYER_STATE_ITEMS = 50;
 
 const readEnvValue = (key) => {
     if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
@@ -260,6 +265,77 @@ const truncateText = (text, maxLength) => {
     if (!text) return '';
     if (text.length <= maxLength) return text;
     return text.slice(0, maxLength);
+};
+
+const buildPlayerStateSnapshot = (gameState) => {
+    if (!gameState || typeof gameState !== 'object') {
+        return {
+            block: null,
+            meta: {
+                included: false,
+                questsFinishedCount: 0,
+                inventoryIncludedCount: 0,
+                inventoryTotalCount: 0,
+                inventoryTruncated: false,
+            },
+        };
+    }
+
+    const questsFinished = Object.entries(gameState.quests || {})
+        .filter(([, questState]) => questState?.finished === true)
+        .map(([questId]) => questId)
+        .sort((a, b) => a.localeCompare(b));
+
+    const inventoryEntries = Object.entries(gameState.inventory || {})
+        .filter(([, count]) => typeof count === 'number' && Number.isFinite(count) && count > 0)
+        .map(([id, count]) => ({ id, count }))
+        .sort((a, b) => {
+            if (b.count !== a.count) {
+                return b.count - a.count;
+            }
+            return a.id.localeCompare(b.id);
+        });
+
+    const inventoryTotalCount = inventoryEntries.length;
+    const inventoryTruncated = inventoryTotalCount > MAX_PLAYER_STATE_ITEMS;
+    const inventoryIncluded = inventoryTruncated
+        ? inventoryEntries.slice(0, MAX_PLAYER_STATE_ITEMS)
+        : inventoryEntries;
+
+    const playerStatePayload = {
+        versionNumberString:
+            typeof gameState.versionNumberString === 'string'
+                ? gameState.versionNumberString
+                : 'unknown',
+        questsFinished,
+        inventory: inventoryIncluded,
+        ...(inventoryTruncated
+            ? {
+                  inventoryMeta: {
+                      truncated: true,
+                      totalItems: inventoryTotalCount,
+                  },
+              }
+            : {}),
+    };
+
+    const versionLabel = playerStatePayload.versionNumberString;
+    const block = `PlayerState v${versionLabel} (authoritative; do not infer beyond this):\n${JSON.stringify(
+        playerStatePayload,
+        null,
+        2
+    )}`;
+
+    return {
+        block,
+        meta: {
+            included: true,
+            questsFinishedCount: questsFinished.length,
+            inventoryIncludedCount: inventoryIncluded.length,
+            inventoryTotalCount,
+            inventoryTruncated,
+        },
+    };
 };
 
 const countPromptChars = (messages) => {
@@ -490,6 +566,25 @@ async function createChatResponse(openai, input) {
 export const buildChatPrompt = async (messages, options = {}) => {
     await ready;
     const gameState = loadGameState();
+    const playerStateSnapshot =
+        options.includePlayerState === false
+            ? {
+                  block: null,
+                  meta: {
+                      included: false,
+                      questsFinishedCount: 0,
+                      inventoryIncludedCount: 0,
+                      inventoryTotalCount: 0,
+                      inventoryTruncated: false,
+                  },
+              }
+            : buildPlayerStateSnapshot(gameState);
+    const playerStateMessage = playerStateSnapshot.block
+        ? {
+              role: 'system',
+              content: playerStateSnapshot.block,
+          }
+        : null;
 
     const persona = options.persona || defaultPersona;
     const systemPrompt = applyProviderRealityLine(
@@ -513,6 +608,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         options: options.docsRagOptions,
         baseMessages: [
             systemMessage,
+            ...(playerStateMessage ? [playerStateMessage] : []),
             ...(knowledgeMessage ? [knowledgeMessage] : []),
             ...(Array.isArray(messages) ? messages : []),
         ],
@@ -548,6 +644,9 @@ export const buildChatPrompt = async (messages, options = {}) => {
 
     if (combinedMessages.length === 0) {
         combinedMessages = [systemMessage];
+        if (playerStateMessage) {
+            combinedMessages.push(playerStateMessage);
+        }
         if (knowledgeMessage) {
             combinedMessages.push(knowledgeMessage);
         }
@@ -557,6 +656,9 @@ export const buildChatPrompt = async (messages, options = {}) => {
         combinedMessages.push(openingMessage);
     } else {
         combinedMessages = [systemMessage];
+        if (playerStateMessage) {
+            combinedMessages.push(playerStateMessage);
+        }
         if (knowledgeMessage) {
             combinedMessages.push(knowledgeMessage);
         }
@@ -575,7 +677,13 @@ export const buildChatPrompt = async (messages, options = {}) => {
 
     const contextSources = mergeSources(knowledgePack.sources || [], docsRagPayload.sources || []);
 
-    return { combinedMessages, debugMessages, gameState, contextSources };
+    return {
+        combinedMessages,
+        debugMessages,
+        gameState,
+        contextSources,
+        playerStateMeta: playerStateSnapshot.meta,
+    };
 };
 
 export const GPT5Chat = async (messages, options = {}) => {
