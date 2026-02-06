@@ -73,6 +73,13 @@
     let debugOverride = false;
     let currentSettings = { showChatDebugPayload: false };
     let lastShowChatDebugPayload;
+    let playerStateSummary = {
+        included: false,
+        questsFinishedCount: 0,
+        inventoryIncludedCount: 0,
+        inventoryTotalCount: 0,
+        inventoryTruncated: false,
+    };
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -144,8 +151,16 @@
                 persona: currentPersona,
             });
             debugMessages = debugPayload.debugMessages;
+            playerStateSummary = debugPayload.playerStateSummary ?? playerStateSummary;
         } else {
             debugMessages = [];
+            playerStateSummary = {
+                included: false,
+                questsFinishedCount: 0,
+                inventoryIncludedCount: 0,
+                inventoryTotalCount: 0,
+                inventoryTruncated: false,
+            };
         }
 
         try {
@@ -489,6 +504,28 @@
                 <div class="debug-meta-row">
                     <span>Docs RAG comparison</span>
                     <span class="debug-mono">{docsRagComparisonMessage}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState included</span>
+                    <span class="debug-mono">{playerStateSummary.included ? 'yes' : 'no'}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState questsFinished</span>
+                    <span class="debug-mono">{playerStateSummary.questsFinishedCount}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState inventory entries</span>
+                    <span class="debug-mono">{playerStateSummary.inventoryIncludedCount}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState inventory total</span>
+                    <span class="debug-mono">{playerStateSummary.inventoryTotalCount}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState inventory truncated</span>
+                    <span class="debug-mono">
+                        {playerStateSummary.inventoryTruncated ? 'yes' : 'no'}
+                    </span>
                 </div>
             </div>
             {#if docsRagWarning}

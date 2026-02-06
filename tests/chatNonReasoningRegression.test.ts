@@ -127,4 +127,70 @@ describe('chat non-reasoning regression probes', () => {
         expect(responsesCreateMock.mock.calls[0][0].model).toBe('gpt-5-mini');
         expect(responsesCreateMock.mock.calls[1][0].model).toBe('gpt-5.2');
     });
+
+    it('answers completed quests using PlayerState when present', async () => {
+        const { loadGameState } = await import('../frontend/src/utils/gameState/common.js');
+        vi.mocked(loadGameState).mockReturnValueOnce({
+            openAI: { ['api' + 'Key']: 'test-key' },
+            versionNumberString: '3',
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+                '3dprinter/start': { finished: true },
+            },
+            inventory: {},
+        });
+
+        responsesCreateMock.mockImplementationOnce(async (payload) => {
+            const messages = payload.input ?? [];
+            const playerStateMessage = messages.find(
+                (message) =>
+                    message.role === 'system' &&
+                    message.content?.[0]?.text?.includes('PlayerState v3')
+            );
+            const text = playerStateMessage?.content?.[0]?.text ?? '';
+            const jsonStart = text.indexOf('{');
+            const snapshot = JSON.parse(text.slice(jsonStart));
+            return {
+                output_text: `Completed quests: ${snapshot.questsFinished.join(', ')}`,
+            };
+        });
+
+        const { GPT5Chat } = await import('../frontend/src/utils/openAI.js');
+        const reply = await GPT5Chat([
+            { role: 'user', content: 'What quests have I completed?' },
+        ]);
+
+        expect(reply).toContain('welcome/howtodoquests');
+        expect(reply).toContain('3dprinter/start');
+        expect(reply).not.toMatch(/\/gamesaves/i);
+    });
+
+    it('requests /gamesaves export when PlayerState is missing', async () => {
+        const { loadGameState } = await import('../frontend/src/utils/gameState/common.js');
+        vi.mocked(loadGameState).mockReturnValueOnce(null);
+
+        responsesCreateMock.mockImplementationOnce(async (payload) => {
+            const messages = payload.input ?? [];
+            const hasPlayerState = messages.some(
+                (message) =>
+                    message.role === 'system' &&
+                    message.content?.[0]?.text?.includes('PlayerState v')
+            );
+            if (hasPlayerState) {
+                return { output_text: 'PlayerState was unexpectedly present.' };
+            }
+            return {
+                output_text:
+                    'Please export/paste a save from /gamesaves. See /docs/backups for steps.',
+            };
+        });
+
+        const { GPT5Chat } = await import('../frontend/src/utils/openAI.js');
+        const reply = await GPT5Chat([
+            { role: 'user', content: 'What quests have I completed?' },
+        ]);
+
+        expect(reply).toMatch(/\/gamesaves/);
+        expect(reply).toMatch(/\/docs\/backups|\/docs\/routes/);
+    });
 });

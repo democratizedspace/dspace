@@ -114,11 +114,7 @@ describe('QA 9.4 chat hallucination contracts', () => {
         const systemContent = systemMessage?.content ?? '';
         expect(systemContent).toMatch(/never invent/i);
         expect(systemContent).toMatch(/player state/i);
-        const saveSnapshotPattern =
-            /save snapshot|cannot see.*save|provide.*save|cannot see your save/i;
-        if (saveSnapshotPattern.test(systemContent)) {
-            expect(systemContent).toMatch(saveSnapshotPattern);
-        }
+        expect(systemContent).toMatch(/playerstate block/i);
     });
 
     it('Stage 7: system guardrail asks for a save snapshot', async () => {
@@ -131,7 +127,7 @@ describe('QA 9.4 chat hallucination contracts', () => {
         const systemContent = systemMessage?.content ?? '';
         expect(systemContent).toMatch(/save snapshot/i);
         expect(systemContent).toMatch(/\/gamesaves/i);
-        expect(systemContent).toMatch(/inventory\/quests\/progress/i);
+        expect(systemContent).toMatch(/\/docs\/backups|\/docs\/routes/i);
     });
 
     it('Stage 8: retrieval includes requires/consumes/creates duration semantics doc chunk', async () => {
