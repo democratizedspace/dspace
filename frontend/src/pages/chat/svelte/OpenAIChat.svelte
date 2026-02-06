@@ -73,6 +73,14 @@
     let debugOverride = false;
     let currentSettings = { showChatDebugPayload: false };
     let lastShowChatDebugPayload;
+    const defaultPlayerStateMeta = {
+        included: false,
+        questsFinishedCount: 0,
+        inventoryEntriesCount: 0,
+        inventoryTotalItems: 0,
+        inventoryTruncated: false,
+    };
+    let playerStateMeta = { ...defaultPlayerStateMeta };
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
@@ -144,8 +152,10 @@
                 persona: currentPersona,
             });
             debugMessages = debugPayload.debugMessages;
+            playerStateMeta = debugPayload.playerStateMeta ?? { ...defaultPlayerStateMeta };
         } else {
             debugMessages = [];
+            playerStateMeta = { ...defaultPlayerStateMeta };
         }
 
         try {
@@ -489,6 +499,29 @@
                 <div class="debug-meta-row">
                     <span>Docs RAG comparison</span>
                     <span class="debug-mono">{docsRagComparisonMessage}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState included</span>
+                    <span class="debug-mono">{playerStateMeta.included ? 'yes' : 'no'}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState quests finished</span>
+                    <span class="debug-mono">{playerStateMeta.questsFinishedCount}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState inventory entries</span>
+                    <span class="debug-mono">
+                        {playerStateMeta.inventoryEntriesCount}
+                        {playerStateMeta.inventoryTruncated
+                            ? ` of ${playerStateMeta.inventoryTotalItems}`
+                            : ''}
+                    </span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState inventory truncated</span>
+                    <span class="debug-mono">
+                        {playerStateMeta.inventoryTruncated ? 'yes' : 'no'}
+                    </span>
                 </div>
             </div>
             {#if docsRagWarning}

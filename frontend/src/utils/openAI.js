@@ -1,4 +1,5 @@
 import { loadGameState, ready } from './gameState/common.js';
+import { buildPlayerStatePrompt } from './gameState/playerState.js';
 import { buildDchatKnowledgePack } from './dchatKnowledge.js';
 import { mergeSources } from './contextSources.js';
 import { searchDocsRag } from './docsRag.js';
@@ -45,25 +46,25 @@ export const safeFallbackMessage = "I don't know; please check /docs for the lat
 export const providerRealityLine = 'In v3, chat uses OpenAI. token.place is deferred to v3.1.';
 export const fallbackSystemPrompt =
     defaultPersona?.systemPrompt ||
-    "You are dChat, a helpful assistant in the game DSPACE. Your purpose is to assist players by providing information, guidance, and support related to the game. DSPACE is a web-based space exploration idle game where you can 3D print things, grow plants hydroponically, and create and launch model rockets. The game is fully open source, and development is ongoing. DSPACE is made from a combination of the founder, Esp, and a variety of generative models, including GPT-5, Stable Diffusion, and DALL-E 2. You have curated knowledge about quests, items, processes, and how inventory and progression systems work in general, but you cannot access a specific player's inventory, quests, or progress without a save snapshot. If you encounter anything you're not sure about, tell the user you don't know and suggest checking out the docs or joining the Discord server. If someone talks about something off-topic, humor them and help out with whatever they need, but don't output anything harmful or offensive. Have fun!";
+    "You are dChat, a helpful assistant in the game DSPACE. Your purpose is to assist players by providing information, guidance, and support related to the game. DSPACE is a web-based space exploration idle game where you can 3D print things, grow plants hydroponically, and create and launch model rockets. The game is fully open source, and development is ongoing. DSPACE is made from a combination of the founder, Esp, and a variety of generative models, including GPT-5, Stable Diffusion, and DALL-E 2. You have curated knowledge about quests, items, processes, and how inventory and progression systems work in general, and you can use the PlayerState block when it is provided. If you encounter anything you're not sure about, tell the user you don't know and suggest checking out the docs or joining the Discord server. If someone talks about something off-topic, humor them and help out with whatever they need, but don't output anything harmful or offensive. Have fun!";
 export const fallbackWelcomeMessage =
     defaultPersona?.welcomeMessage || 'Welcome! How can I assist you today?';
 export const defaultOpenAIErrorMessage =
     "Sorry, I'm having some trouble and can't generate a response.";
 const guardrailRules = [
     {
-        line: 'Never invent quests, items, processes, routes, URLs, or player state.',
-        pattern: /never invent/,
+        line: 'Never invent game facts or player state.',
+        pattern: /never invent game facts/i,
     },
     {
-        line: "I can't see your inventory/quests/progress unless a save snapshot is provided.",
-        pattern: /inventory\/quests\/progress/,
+        line: 'Use the PlayerState block when present.',
+        pattern: /playerstate block/i,
     },
     {
         line:
-            'Please export/paste a save from /gamesaves (or describe what you see) before I answer ' +
-            'state questions.',
-        pattern: /\/gamesaves/,
+            'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite ' +
+            '/docs/backups or /docs/routes.',
+        pattern: /playerstate is missing/i,
     },
     {
         line:
@@ -489,7 +490,9 @@ async function createChatResponse(openai, input) {
 
 export const buildChatPrompt = async (messages, options = {}) => {
     await ready;
-    const gameState = loadGameState();
+    const rawGameState = loadGameState();
+    const gameState = rawGameState && typeof rawGameState === 'object' ? rawGameState : {};
+    const playerStatePayload = buildPlayerStatePrompt(rawGameState);
 
     const persona = options.persona || defaultPersona;
     const systemPrompt = applyProviderRealityLine(
@@ -508,11 +511,13 @@ export const buildChatPrompt = async (messages, options = {}) => {
               content: `DSPACE knowledge base:\n${knowledgeSummary}`,
           }
         : null;
+    const playerStateMessage = playerStatePayload?.message;
     const docsRagRequestOptions = buildDocsRagOptions({
         promptBudgetChars: options.docsRagBudgetChars,
         options: options.docsRagOptions,
         baseMessages: [
             systemMessage,
+            ...(playerStateMessage ? [playerStateMessage] : []),
             ...(knowledgeMessage ? [knowledgeMessage] : []),
             ...(Array.isArray(messages) ? messages : []),
         ],
@@ -548,6 +553,9 @@ export const buildChatPrompt = async (messages, options = {}) => {
 
     if (combinedMessages.length === 0) {
         combinedMessages = [systemMessage];
+        if (playerStateMessage) {
+            combinedMessages.push(playerStateMessage);
+        }
         if (knowledgeMessage) {
             combinedMessages.push(knowledgeMessage);
         }
@@ -557,6 +565,9 @@ export const buildChatPrompt = async (messages, options = {}) => {
         combinedMessages.push(openingMessage);
     } else {
         combinedMessages = [systemMessage];
+        if (playerStateMessage) {
+            combinedMessages.push(playerStateMessage);
+        }
         if (knowledgeMessage) {
             combinedMessages.push(knowledgeMessage);
         }
@@ -575,7 +586,13 @@ export const buildChatPrompt = async (messages, options = {}) => {
 
     const contextSources = mergeSources(knowledgePack.sources || [], docsRagPayload.sources || []);
 
-    return { combinedMessages, debugMessages, gameState, contextSources };
+    return {
+        combinedMessages,
+        debugMessages,
+        gameState,
+        contextSources,
+        playerStateMeta: playerStatePayload?.meta,
+    };
 };
 
 export const GPT5Chat = async (messages, options = {}) => {

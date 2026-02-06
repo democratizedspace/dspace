@@ -4,9 +4,10 @@ const responsesCreateMock = vi.fn();
 const MockOpenAI = vi.fn().mockImplementation(() => ({
     responses: { create: responsesCreateMock },
 }));
+const loadGameStateMock = vi.fn(() => ({ openAI: { ['api' + 'Key']: 'test-key' } }));
 
 vi.mock('../frontend/src/utils/gameState/common.js', () => ({
-    loadGameState: vi.fn(() => ({ openAI: { ['api' + 'Key']: 'test-key' } })),
+    loadGameState: (...args: unknown[]) => loadGameStateMock(...args),
     ready: Promise.resolve(),
 }));
 
@@ -22,6 +23,8 @@ describe('chat non-reasoning regression probes', () => {
     beforeEach(() => {
         vi.resetModules();
         responsesCreateMock.mockReset();
+        loadGameStateMock.mockReset();
+        loadGameStateMock.mockReturnValue({ openAI: { ['api' + 'Key']: 'test-key' } });
         globalThis.__DSpaceOpenAIClient = MockOpenAI;
         process.env.VITE_CHAT_MODEL = 'gpt-5-mini';
     });
@@ -126,5 +129,70 @@ describe('chat non-reasoning regression probes', () => {
         expect(responsesCreateMock).toHaveBeenCalledTimes(2);
         expect(responsesCreateMock.mock.calls[0][0].model).toBe('gpt-5-mini');
         expect(responsesCreateMock.mock.calls[1][0].model).toBe('gpt-5.2');
+    });
+
+    it('answers completed quest questions using PlayerState when present', async () => {
+        loadGameStateMock.mockReturnValueOnce({
+            openAI: { ['api' + 'Key']: 'test-key' },
+            versionNumberString: '3',
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+                'welcome/intro-inventory': { finished: false },
+                '3dprinter/start': { finished: true },
+            },
+            inventory: {
+                'item-alpha': 5,
+            },
+        });
+
+        responsesCreateMock.mockImplementationOnce(({ input }) => {
+            const playerStateMessage = input.find(
+                (message) =>
+                    message.role === 'system' &&
+                    message.content?.[0]?.text?.includes('PlayerState v')
+            );
+            const raw = playerStateMessage?.content?.[0]?.text ?? '';
+            const jsonStart = raw.indexOf('{');
+            const parsed = jsonStart >= 0 ? JSON.parse(raw.slice(jsonStart)) : {};
+            const completed = parsed.questsFinished || [];
+            return {
+                output_text: `Completed quests: ${completed.join(', ')}`,
+            };
+        });
+        const { GPT5Chat } = await import('../frontend/src/utils/openAI.js');
+
+        const reply = await GPT5Chat([
+            { role: 'user', content: 'what quests have I completed?' },
+        ]);
+
+        expect(reply).toContain('welcome/howtodoquests');
+        expect(reply).toContain('3dprinter/start');
+        expect(reply).not.toContain('/gamesaves');
+    });
+
+    it('requests /gamesaves when PlayerState is missing', async () => {
+        loadGameStateMock.mockReturnValueOnce(null);
+        responsesCreateMock.mockImplementationOnce(({ input }) => {
+            const hasPlayerState = input.some(
+                (message) =>
+                    message.role === 'system' &&
+                    message.content?.[0]?.text?.includes('PlayerState v')
+            );
+            if (hasPlayerState) {
+                return { output_text: 'PlayerState was present.' };
+            }
+            return {
+                output_text:
+                    'Please export a save snapshot from /gamesaves and see /docs/backups for steps.',
+            };
+        });
+        const { GPT5Chat } = await import('../frontend/src/utils/openAI.js');
+
+        const reply = await GPT5Chat([
+            { role: 'user', content: 'what quests have I completed?' },
+        ]);
+
+        expect(reply).toContain('/gamesaves');
+        expect(reply).toMatch(/\/docs\/backups|\/docs\/routes/);
     });
 });

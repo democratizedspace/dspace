@@ -67,7 +67,24 @@ describe('gpt-5 chat responses utility', () => {
         expect(call.model).toBe('gpt-5.2');
         expect(call.input[0].role).toBe('system');
         expect(call.input[0].content[0].text).toContain('GPT-5');
-        expect(call.input[1]).toEqual(
+        const playerStateMessage = call.input.find((message) =>
+            message.content?.[0]?.text?.includes('PlayerState v')
+        );
+        expect(playerStateMessage).toEqual(
+            expect.objectContaining({
+                role: 'system',
+                content: [
+                    expect.objectContaining({
+                        type: 'input_text',
+                        text: expect.stringContaining('PlayerState v'),
+                    }),
+                ],
+            })
+        );
+        const knowledgeMessage = call.input.find((message) =>
+            message.content?.[0]?.text?.includes('DSPACE knowledge base:')
+        );
+        expect(knowledgeMessage).toEqual(
             expect.objectContaining({
                 role: 'system',
                 content: [
@@ -78,11 +95,12 @@ describe('gpt-5 chat responses utility', () => {
                 ],
             })
         );
-        expect(call.input[1].content[0].text).toContain('white PLA filament');
-        expect(call.input[1].content[0].text).toContain('How to do quests');
-        expect(call.input[1].content[0].text).toContain('Quest progress');
-        expect(call.input[1].content[0].text).toContain('Processes in flight');
-        expect(call.input[2]).toEqual({
+        expect(knowledgeMessage.content[0].text).toContain('white PLA filament');
+        expect(knowledgeMessage.content[0].text).toContain('How to do quests');
+        expect(knowledgeMessage.content[0].text).toContain('Quest progress');
+        expect(knowledgeMessage.content[0].text).toContain('Processes in flight');
+        const lastMessage = call.input[call.input.length - 1];
+        expect(lastMessage).toEqual({
             role: 'assistant',
             content: [
                 {
@@ -97,7 +115,10 @@ describe('gpt-5 chat responses utility', () => {
         await GPT5Chat([{ role: 'user', content: 'hello' }]);
         const call = createResponseMock.mock.calls[0][0];
         expect(call.input[0]).toEqual(expect.objectContaining({ role: 'system' }));
-        expect(call.input[1]).toEqual(
+        const knowledgeMessage = call.input.find((message) =>
+            message.content?.[0]?.text?.includes('DSPACE knowledge base:')
+        );
+        expect(knowledgeMessage).toEqual(
             expect.objectContaining({
                 role: 'system',
                 content: [
@@ -108,7 +129,8 @@ describe('gpt-5 chat responses utility', () => {
                 ],
             })
         );
-        expect(call.input[2]).toEqual({
+        const lastMessage = call.input[call.input.length - 1];
+        expect(lastMessage).toEqual({
             role: 'user',
             content: [
                 {

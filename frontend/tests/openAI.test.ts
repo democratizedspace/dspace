@@ -41,6 +41,7 @@ import {
 } from '../src/utils/openAI.js';
 import { buildDchatKnowledgePack } from '../src/utils/dchatKnowledge.js';
 import { searchDocsRag } from '../src/utils/docsRag.js';
+import { loadGameState } from '../src/utils/gameState/common.js';
 
 class MockResponseClient {
     constructor(resolver) {
@@ -474,8 +475,8 @@ describe('buildChatPrompt', () => {
         );
         const content = systemMessage?.content ?? '';
 
-        expect(content).toContain("I can't see your inventory/quests/progress");
-        expect(content).toContain('/gamesaves');
+        expect(content).toContain('Use the PlayerState block when present.');
+        expect(content).toContain('PlayerState is missing');
         expect(content).toMatch(/clarifying question/i);
         expect(content).toMatch(/only give exact counts\/durations\/rates/i);
     });
@@ -483,10 +484,10 @@ describe('buildChatPrompt', () => {
     it('does not duplicate the shared guardrail when already present', async () => {
         const systemPrompt = [
             'Custom system prompt.',
-            'Never invent quests, items, processes, routes, URLs, or player state.',
-            "I can't see your inventory/quests/progress unless a save snapshot is provided.",
-            'Please export/paste a save from /gamesaves (or describe what you see) before I answer ' +
-                'state questions.',
+            'Never invent game facts or player state.',
+            'Use the PlayerState block when present.',
+            'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite ' +
+                '/docs/backups or /docs/routes.',
             "If you're missing context, say you don't know and ask a clarifying question OR point " +
                 'to a specific /docs page.',
             'When giving URLs/navigation, cite /docs excerpts or docs/ROUTES.md.',
@@ -513,7 +514,7 @@ describe('buildChatPrompt', () => {
     it('appends only missing guardrail lines when a persona includes some rules', async () => {
         const systemPrompt = [
             'Custom system prompt.',
-            'Never invent quests, items, processes, routes, URLs, or player state.',
+            'Never invent game facts or player state.',
         ].join('\n');
 
         const payload = await buildChatPrompt([{ role: 'user', content: 'Check guardrails.' }], {
@@ -531,7 +532,39 @@ describe('buildChatPrompt', () => {
 
         expect(neverInventMatches).toHaveLength(1);
         expect(content).toContain('/gamesaves');
-        expect(content).toMatch(/save snapshot/i);
+        expect(content).toMatch(/PlayerState is missing/i);
+    });
+
+    it('includes a PlayerState block with finished quests and inventory entries', async () => {
+        vi.mocked(loadGameState).mockReturnValueOnce({
+            openAI: {},
+            versionNumberString: '3',
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+                'welcome/intro-inventory': { finished: false },
+            },
+            inventory: {
+                'item-alpha': 12,
+                'item-beta': 0,
+                'item-gamma': 3.5,
+            },
+        });
+
+        const payload = await buildChatPrompt([{ role: 'user', content: 'Status?' }]);
+        const playerStateMessage = payload.debugMessages.find(
+            (message) =>
+                message.role === 'system' &&
+                message.kind === 'main' &&
+                String(message.content).includes('PlayerState v3')
+        );
+        const content = playerStateMessage?.content ?? '';
+
+        expect(content).toContain('"questsFinished": [');
+        expect(content).toContain('welcome/howtodoquests');
+        expect(content).toContain('"inventory": [');
+        expect(content).toContain('"id": "item-alpha"');
+        expect(content).toContain('"count": 12');
+        expect(content).toContain('"id": "item-gamma"');
     });
 
     it('does not duplicate docs excerpts when knowledge summary exists', async () => {
