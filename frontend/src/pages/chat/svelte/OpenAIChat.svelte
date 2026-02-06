@@ -239,6 +239,38 @@
         }
     }
 
+    function getDebugInfoText() {
+        return [
+            `Prompt version: ${promptVersionLabel}`,
+            `App build SHA: ${appGitShaDisplay}`,
+            `App build SHA source: ${appGitShaSource}`,
+            `Docs RAG SHA: ${docsRagGitSha}`,
+            `Docs host: ${docsRagHost}`,
+            `Docs env derived: ${docsRagDerivedEnv}`,
+            `Docs RAG generatedAt: ${docsRagGeneratedAt}`,
+            `Docs pack env: ${docsRagEnvName}`,
+            `Docs pack sourceRef: ${docsRagSourceRef}`,
+            `Docs RAG comparison: ${docsRagComparisonMessage}`,
+        ].join('\n');
+    }
+
+    async function copyDebugInfo() {
+        const debugInfo = getDebugInfoText();
+        if (navigator?.clipboard?.writeText) {
+            await navigator.clipboard.writeText(debugInfo);
+            return;
+        }
+        const fallback = document.createElement('textarea');
+        fallback.value = debugInfo;
+        fallback.setAttribute('readonly', '');
+        fallback.style.position = 'absolute';
+        fallback.style.left = '-9999px';
+        document.body.appendChild(fallback);
+        fallback.select();
+        document.execCommand('copy');
+        document.body.removeChild(fallback);
+    }
+
     function syncSaveSnapshotHintDismissed() {
         if (typeof sessionStorage === 'undefined') {
             return;
@@ -458,15 +490,25 @@
                     <p>Displays the full prompt payload, with RAG content highlighted.</p>
                     <p class="debug-version">Prompt version: {promptVersionLabel}</p>
                 </div>
-                <button
-                    class="debug-toggle"
-                    type="button"
-                    on:click={() => {
-                        debugExpanded = !debugExpanded;
-                    }}
-                >
-                    {debugExpanded ? 'Hide prompt' : 'Show prompt'}
-                </button>
+                <div class="debug-actions">
+                    <button
+                        class="debug-copy"
+                        type="button"
+                        on:click={copyDebugInfo}
+                        data-testid="chat-debug-copy"
+                    >
+                        Copy debug info
+                    </button>
+                    <button
+                        class="debug-toggle"
+                        type="button"
+                        on:click={() => {
+                            debugExpanded = !debugExpanded;
+                        }}
+                    >
+                        {debugExpanded ? 'Hide prompt' : 'Show prompt'}
+                    </button>
+                </div>
             </div>
             <div class="debug-metadata">
                 <div class="debug-meta-row" data-testid="debug-app-sha-row">
@@ -782,6 +824,15 @@
         color: #94a3b8;
     }
 
+    .debug-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .debug-copy,
     .debug-toggle {
         height: 32px;
         margin: 0;
@@ -794,6 +845,10 @@
     }
 
     .debug-toggle:hover {
+        background: #334155;
+    }
+
+    .debug-copy:hover {
         background: #334155;
     }
 
