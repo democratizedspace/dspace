@@ -130,6 +130,9 @@ jobs:
           GIT_SHA: ${{ github.sha }}
         run: npm run build
 
+      - name: Verify build stamp
+        run: node scripts/verify-build-stamp.mjs
+
       - name: Guardrail - verify docs RAG gitSha is set
         run: |
           node -e "const m=require('./frontend/src/generated/rag/docs_meta.json'); if(!m.gitSha||m.gitSha==='unknown') process.exit(1);"
