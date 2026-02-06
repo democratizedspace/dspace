@@ -19,11 +19,16 @@ const readBuildMetaGeneratedAt = () => normalizeSha(buildMeta?.generatedAt);
 const readBuildMetaSource = () => normalizeSha(buildMeta?.source);
 
 const isDevRuntime = () => {
+    if (typeof process !== 'undefined' && process.env?.NODE_ENV) {
+        if (process.env.NODE_ENV === 'production') {
+            return false;
+        }
+        if (process.env.NODE_ENV === 'development') {
+            return true;
+        }
+    }
     if (typeof import.meta !== 'undefined' && typeof import.meta.env?.DEV === 'boolean') {
         return import.meta.env.DEV;
-    }
-    if (typeof process !== 'undefined' && process.env?.NODE_ENV) {
-        return process.env.NODE_ENV === 'development';
     }
     return false;
 };

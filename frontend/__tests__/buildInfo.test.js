@@ -43,8 +43,9 @@ describe('buildInfo', () => {
             generatedAt: '2026-02-06T05:16:45.000Z',
             source: 'git',
         };
-        const { getAppGitSha, getPromptVersionLabel, getPromptVersionSha } =
-            await loadBuildInfo(buildMeta);
+        const { getAppGitSha, getPromptVersionLabel, getPromptVersionSha } = await loadBuildInfo(
+            buildMeta
+        );
         expect(getAppGitSha()).toBe(buildMeta.gitSha);
         expect(getPromptVersionSha()).toBe(buildMeta.gitSha.slice(0, 7));
         expect(getPromptVersionLabel()).toBe(`v3:${buildMeta.gitSha.slice(0, 7)}`);
@@ -53,12 +54,11 @@ describe('buildInfo', () => {
     it('uses docs pack fallback when no build SHA is provided', async () => {
         delete process.env.VITE_GIT_SHA;
         process.env.NODE_ENV = 'development';
-        const { getAppGitShaWithFallback, getPromptVersionLabelForSha } =
-            await loadBuildInfo({
-                gitSha: 'abc123def456',
-                generatedAt: '2026-02-06T05:16:45.000Z',
-                source: 'git',
-            });
+        const { getAppGitShaWithFallback, getPromptVersionLabelForSha } = await loadBuildInfo({
+            gitSha: 'abc123def456',
+            generatedAt: '2026-02-06T05:16:45.000Z',
+            source: 'git',
+        });
         expect(getAppGitShaWithFallback('feedface')).toEqual({
             sha: 'feedface',
             source: 'docs-pack-fallback',
@@ -68,8 +68,12 @@ describe('buildInfo', () => {
 
     it('returns a short prompt version while preserving the full app SHA', async () => {
         process.env.VITE_GIT_SHA = 'abc123def456';
-        const { getAppGitSha, getPromptVersionLabel, getPromptVersionSha, getAppGitShaWithFallback } =
-            await loadBuildInfo();
+        const {
+            getAppGitSha,
+            getPromptVersionLabel,
+            getPromptVersionSha,
+            getAppGitShaWithFallback,
+        } = await loadBuildInfo();
         expect(getAppGitSha()).toBe('abc123def456');
         expect(getPromptVersionSha()).toBe('abc123d');
         expect(getPromptVersionLabel()).toBe('v3:abc123d');
