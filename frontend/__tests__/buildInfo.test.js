@@ -8,6 +8,7 @@ import {
     getPromptVersionSha,
     deriveEnvNameFromHostname,
 } from '../src/utils/buildInfo.js';
+import buildMeta from '../src/generated/build_meta.json';
 
 describe('buildInfo', () => {
     let originalViteGitSha;
@@ -24,10 +25,11 @@ describe('buildInfo', () => {
         }
     });
 
-    it('falls back to dev-local when no build SHA is provided', () => {
+    it('falls back to build metadata when no build SHA is provided', () => {
         delete process.env.VITE_GIT_SHA;
-        expect(getAppGitSha()).toBe('dev-local');
-        expect(getPromptVersionSha()).toBe('dev-local');
+        expect(getAppGitSha()).toBe(buildMeta.gitSha);
+        expect(getPromptVersionSha()).toBe(buildMeta.gitSha.slice(0, 7));
+        expect(getPromptVersionLabel()).toBe(`v3:${buildMeta.gitSha.slice(0, 7)}`);
     });
 
     it('uses docs pack fallback when no build SHA is provided', () => {

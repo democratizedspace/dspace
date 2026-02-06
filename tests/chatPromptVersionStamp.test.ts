@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import buildMeta from '../frontend/src/generated/build_meta.json';
 
 vi.mock('../frontend/src/utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({})),
@@ -55,12 +56,27 @@ describe('chat prompt version stamp', () => {
         expect(systemMessage.content).toContain('Prompt version: v3:feedfac');
     });
 
-    it('emits v3:dev-local in production mode without a build SHA', async () => {
+    it('emits v3:<shortsha> in production mode without a build SHA', async () => {
         vi.stubEnv('NODE_ENV', 'production');
         vi.stubEnv('VITE_GIT_SHA', '');
         vi.resetModules();
         const { CHAT_PROMPT_VERSION } = await import('../frontend/src/utils/openAI.js');
 
-        expect(CHAT_PROMPT_VERSION).toBe('v3:dev-local');
+        expect(CHAT_PROMPT_VERSION).toBe(`v3:${buildMeta.gitSha.slice(0, 7)}`);
+    });
+
+    it('does not emit a missing prompt version in the system message', async () => {
+        vi.stubEnv('VITE_GIT_SHA', '');
+        vi.resetModules();
+        const { buildChatPrompt } = await import('../frontend/src/utils/openAI.js');
+        const payload = await buildChatPrompt([]);
+        const systemMessage = payload.combinedMessages.find((message) => message.role === 'system');
+
+        expect(systemMessage).toBeDefined();
+        if (!systemMessage) {
+            throw new Error('Expected system message to be defined.');
+        }
+
+        expect(systemMessage.content).not.toContain('v3:missing');
     });
 });
