@@ -39,9 +39,10 @@ export const writeBuildMeta = async (gitSha, source = 'build-meta') => {
 const run = async () => {
     const gitSha = resolveGitSha();
     await writeBuildMeta(gitSha, 'build-meta');
+    console.log(`Build metadata written to ${buildMetaPath}`);
 };
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
     run().catch((error) => {
         console.error('Failed to write build metadata:', error);
         process.exit(1);
