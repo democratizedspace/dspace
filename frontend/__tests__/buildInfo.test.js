@@ -8,6 +8,9 @@ import {
     getPromptVersionSha,
     deriveEnvNameFromHostname,
 } from '../src/utils/buildInfo.js';
+import buildMeta from '../src/generated/build_meta.json';
+
+const shortSha = (sha) => (sha && sha.length > 7 ? sha.slice(0, 7) : sha);
 
 describe('buildInfo', () => {
     let originalViteGitSha;
@@ -24,17 +27,17 @@ describe('buildInfo', () => {
         }
     });
 
-    it('falls back to dev-local when no build SHA is provided', () => {
+    it('falls back to the build meta SHA when no VITE SHA is provided', () => {
         delete process.env.VITE_GIT_SHA;
-        expect(getAppGitSha()).toBe('dev-local');
-        expect(getPromptVersionSha()).toBe('dev-local');
+        expect(getAppGitSha()).toBe(buildMeta.gitSha);
+        expect(getPromptVersionSha()).toBe(shortSha(buildMeta.gitSha));
     });
 
-    it('uses docs pack fallback when no build SHA is provided', () => {
+    it('prefers the build meta SHA over docs pack fallback', () => {
         delete process.env.VITE_GIT_SHA;
         expect(getAppGitShaWithFallback('feedface')).toEqual({
-            sha: 'feedface',
-            source: 'docs-pack-fallback',
+            sha: buildMeta.gitSha,
+            source: 'vite',
         });
         expect(getPromptVersionLabelForSha('feedface')).toBe('v3:feedfac');
     });
@@ -69,6 +72,11 @@ describe('buildInfo', () => {
         expect(getAppGitSha()).toBe('abc123def456');
         expect(getPromptVersionLabel()).toBe('v3:abc123d');
         expect(getPromptVersionSha()).toBe('abc123d');
+    });
+
+    it('returns a prompt label that includes the short build meta SHA when VITE SHA is absent', () => {
+        delete process.env.VITE_GIT_SHA;
+        expect(getPromptVersionLabel()).toBe(`v3:${shortSha(buildMeta.gitSha)}`);
     });
 
     it('derives the prompt SHA from an existing prompt label', () => {

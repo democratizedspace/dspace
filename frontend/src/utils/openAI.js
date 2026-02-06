@@ -4,7 +4,7 @@ import { mergeSources } from './contextSources.js';
 import { searchDocsRag } from './docsRag.js';
 import { npcPersonas } from '../data/npcPersonas.js';
 import OpenAI from 'openai';
-import { getPromptVersionLabel } from './buildInfo.js';
+import { getPromptVersionSha } from './buildInfo.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -40,7 +40,7 @@ const toOutputText = (response) => {
 const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';
 const fallbackModels = ['gpt-5-mini'];
-export const CHAT_PROMPT_VERSION = getPromptVersionLabel();
+export const CHAT_PROMPT_VERSION = `v3:${getPromptVersionSha()}`;
 export const safeFallbackMessage = "I don't know; please check /docs for the latest details.";
 export const providerRealityLine = 'In v3, chat uses OpenAI. token.place is deferred to v3.1.';
 export const fallbackSystemPrompt =
