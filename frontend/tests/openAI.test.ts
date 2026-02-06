@@ -40,6 +40,7 @@ import {
     validateChatResponseText,
 } from '../src/utils/openAI.js';
 import { buildDchatKnowledgePack } from '../src/utils/dchatKnowledge.js';
+import { loadGameState } from '../src/utils/gameState/common.js';
 import { searchDocsRag } from '../src/utils/docsRag.js';
 
 class MockResponseClient {
@@ -474,8 +475,9 @@ describe('buildChatPrompt', () => {
         );
         const content = systemMessage?.content ?? '';
 
-        expect(content).toContain("I can't see your inventory/quests/progress");
+        expect(content).toContain('Use the PlayerState block when present.');
         expect(content).toContain('/gamesaves');
+        expect(content).toContain('/docs/backups');
         expect(content).toMatch(/clarifying question/i);
         expect(content).toMatch(/only give exact counts\/durations\/rates/i);
     });
@@ -483,10 +485,10 @@ describe('buildChatPrompt', () => {
     it('does not duplicate the shared guardrail when already present', async () => {
         const systemPrompt = [
             'Custom system prompt.',
-            'Never invent quests, items, processes, routes, URLs, or player state.',
-            "I can't see your inventory/quests/progress unless a save snapshot is provided.",
-            'Please export/paste a save from /gamesaves (or describe what you see) before I answer ' +
-                'state questions.',
+            'Never invent game facts or player state.',
+            'Use the PlayerState block when present.',
+            'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite ' +
+                '/docs/backups or /docs/routes.',
             "If you're missing context, say you don't know and ask a clarifying question OR point " +
                 'to a specific /docs page.',
             'When giving URLs/navigation, cite /docs excerpts or docs/ROUTES.md.',
@@ -513,7 +515,7 @@ describe('buildChatPrompt', () => {
     it('appends only missing guardrail lines when a persona includes some rules', async () => {
         const systemPrompt = [
             'Custom system prompt.',
-            'Never invent quests, items, processes, routes, URLs, or player state.',
+            'Never invent game facts or player state.',
         ].join('\n');
 
         const payload = await buildChatPrompt([{ role: 'user', content: 'Check guardrails.' }], {
@@ -532,6 +534,55 @@ describe('buildChatPrompt', () => {
         expect(neverInventMatches).toHaveLength(1);
         expect(content).toContain('/gamesaves');
         expect(content).toMatch(/save snapshot/i);
+        expect(content).toContain('/docs/backups');
+    });
+
+    it('injects PlayerState with finished quests and inventory entries', async () => {
+        vi.mocked(loadGameState).mockReturnValueOnce({
+            openAI: {},
+            versionNumberString: '3',
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+                'welcome/intro-inventory': { finished: false },
+                '3dprinter/start': { finished: true },
+            },
+            inventory: {
+                'item-alpha': 12,
+                'item-beta': 0,
+                'item-gamma': 5.5,
+            },
+        });
+
+        const payload = await buildChatPrompt([{ role: 'user', content: 'Status?' }]);
+        const playerStateMessage = payload.debugMessages.find((message) =>
+            message.content?.includes('PlayerState v3')
+        );
+        const content = playerStateMessage?.content ?? '';
+        const jsonStart = content.indexOf('{');
+        const jsonBody = jsonStart >= 0 ? content.slice(jsonStart) : '';
+        const snapshot = jsonBody ? JSON.parse(jsonBody) : null;
+
+        expect(snapshot?.versionNumberString).toBe('3');
+        expect(snapshot?.questsFinished).toEqual(
+            expect.arrayContaining(['welcome/howtodoquests', '3dprinter/start'])
+        );
+        expect(snapshot?.questsFinished).not.toEqual(
+            expect.arrayContaining(['welcome/intro-inventory'])
+        );
+        expect(snapshot?.inventory).toEqual(
+            expect.arrayContaining([
+                { id: 'item-alpha', count: 12 },
+                { id: 'item-gamma', count: 5.5 },
+            ])
+        );
+        expect(payload.playerStateSummary).toEqual(
+            expect.objectContaining({
+                included: true,
+                questsFinishedCount: 2,
+                inventoryIncludedCount: 2,
+                inventoryTruncated: false,
+            })
+        );
     });
 
     it('does not duplicate docs excerpts when knowledge summary exists', async () => {

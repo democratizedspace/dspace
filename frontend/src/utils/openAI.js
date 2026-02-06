@@ -45,35 +45,35 @@ export const safeFallbackMessage = "I don't know; please check /docs for the lat
 export const providerRealityLine = 'In v3, chat uses OpenAI. token.place is deferred to v3.1.';
 export const fallbackSystemPrompt =
     defaultPersona?.systemPrompt ||
-    "You are dChat, a helpful assistant in the game DSPACE. Your purpose is to assist players by providing information, guidance, and support related to the game. DSPACE is a web-based space exploration idle game where you can 3D print things, grow plants hydroponically, and create and launch model rockets. The game is fully open source, and development is ongoing. DSPACE is made from a combination of the founder, Esp, and a variety of generative models, including GPT-5, Stable Diffusion, and DALL-E 2. You have curated knowledge about quests, items, processes, and how inventory and progression systems work in general, but you cannot access a specific player's inventory, quests, or progress without a save snapshot. If you encounter anything you're not sure about, tell the user you don't know and suggest checking out the docs or joining the Discord server. If someone talks about something off-topic, humor them and help out with whatever they need, but don't output anything harmful or offensive. Have fun!";
+    "You are dChat, a helpful assistant in the game DSPACE. Your purpose is to assist players by providing information, guidance, and support related to the game. DSPACE is a web-based space exploration idle game where you can 3D print things, grow plants hydroponically, and create and launch model rockets. The game is fully open source, and development is ongoing. DSPACE is made from a combination of the founder, Esp, and a variety of generative models, including GPT-5, Stable Diffusion, and DALL-E 2. You have curated knowledge about quests, items, processes, and how inventory and progression systems work in general. Use the PlayerState block when provided; if it is missing, ask for a /gamesaves export. If you encounter anything you're not sure about, tell the user you don't know and suggest checking out the docs or joining the Discord server. If someone talks about something off-topic, humor them and help out with whatever they need, but don't output anything harmful or offensive. Have fun!";
 export const fallbackWelcomeMessage =
     defaultPersona?.welcomeMessage || 'Welcome! How can I assist you today?';
 export const defaultOpenAIErrorMessage =
     "Sorry, I'm having some trouble and can't generate a response.";
 const guardrailRules = [
     {
-        line: 'Never invent quests, items, processes, routes, URLs, or player state.',
-        pattern: /never invent/,
+        line: 'Never invent game facts or player state.',
+        pattern: /never invent/i,
     },
     {
-        line: "I can't see your inventory/quests/progress unless a save snapshot is provided.",
-        pattern: /inventory\/quests\/progress/,
+        line: 'Use the PlayerState block when present.',
+        pattern: /playerstate block/i,
     },
     {
         line:
-            'Please export/paste a save from /gamesaves (or describe what you see) before I answer ' +
-            'state questions.',
-        pattern: /\/gamesaves/,
+            'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite ' +
+            '/docs/backups or /docs/routes.',
+        pattern: /playerstate is missing/i,
     },
     {
         line:
             "If you're missing context, say you don't know and ask a clarifying question OR point " +
             'to a specific /docs page.',
-        pattern: /clarifying question/,
+        pattern: /clarifying question/i,
     },
     {
         line: 'When giving URLs/navigation, cite /docs excerpts or docs/ROUTES.md.',
-        pattern: /docs\/routes\.md/,
+        pattern: /docs\/routes\.md/i,
     },
     {
         line: 'Never link to GitHub blob/tree URLs for docs; use in-game /docs routes and cite them.',
@@ -83,7 +83,7 @@ const guardrailRules = [
         line:
             'Only give exact counts/durations/rates if they appear in retrieved context; otherwise be ' +
             "approximate or say you don't know.",
-        pattern: /only give exact/,
+        pattern: /only give exact/i,
     },
 ];
 const sharedSystemGuardrail = guardrailRules.map((rule) => rule.line).join('\n');
@@ -91,6 +91,7 @@ const vagueFollowupPattern =
     /^\s*(what about|and then|that step|the second step|next step|step 2)\b/i;
 const retrievalContextLimit = 800;
 const retrievalQueryLimit = 1000;
+const MAX_PLAYER_STATE_ITEMS = 50;
 const docsRagOptions = {
     maxResults: 50,
     maxChars: 50000,
@@ -265,6 +266,82 @@ const truncateText = (text, maxLength) => {
 const countPromptChars = (messages) => {
     if (!Array.isArray(messages)) return 0;
     return messages.reduce((total, message) => total + (message?.content?.length || 0), 0);
+};
+
+const normalizeVersionNumberString = (value) => {
+    if (typeof value === 'string' && value.trim()) {
+        return value.trim();
+    }
+    if (typeof value === 'number' && Number.isFinite(value)) {
+        return String(value);
+    }
+    return '3';
+};
+
+const buildPlayerStateSnapshot = (gameState, options = {}) => {
+    const { maxInventoryEntries = MAX_PLAYER_STATE_ITEMS } = options;
+    if (!gameState || typeof gameState !== 'object') {
+        return {
+            block: null,
+            meta: {
+                included: false,
+                questsFinishedCount: 0,
+                inventoryIncludedCount: 0,
+                inventoryTotalCount: 0,
+                inventoryTruncated: false,
+            },
+        };
+    }
+
+    const questsFinished = Object.entries(gameState.quests || {})
+        .filter(([, questState]) => questState?.finished)
+        .map(([questId]) => questId)
+        .sort((a, b) => a.localeCompare(b));
+
+    const inventoryEntries = Object.entries(gameState.inventory || {})
+        .filter(([, count]) => typeof count === 'number' && Number.isFinite(count) && count > 0)
+        .map(([id, count]) => ({ id, count }))
+        .sort((a, b) => {
+            if (b.count !== a.count) {
+                return b.count - a.count;
+            }
+            return a.id.localeCompare(b.id);
+        });
+
+    const totalItems = inventoryEntries.length;
+    const truncated = totalItems > maxInventoryEntries;
+    const includedInventory = truncated
+        ? inventoryEntries.slice(0, maxInventoryEntries)
+        : inventoryEntries;
+
+    const versionNumberString = normalizeVersionNumberString(gameState.versionNumberString);
+    const snapshot = {
+        versionNumberString,
+        questsFinished,
+        inventory: includedInventory,
+    };
+
+    if (truncated) {
+        snapshot.truncated = true;
+        snapshot.totalItems = totalItems;
+    }
+
+    const block = `PlayerState v${versionNumberString} (authoritative; do not infer beyond this):\n${JSON.stringify(
+        snapshot,
+        null,
+        2
+    )}`;
+
+    return {
+        block,
+        meta: {
+            included: true,
+            questsFinishedCount: questsFinished.length,
+            inventoryIncludedCount: includedInventory.length,
+            inventoryTotalCount: totalItems,
+            inventoryTruncated: truncated,
+        },
+    };
 };
 
 const buildDocsRagOptions = ({ promptBudgetChars, options, baseMessages }) => {
@@ -489,7 +566,16 @@ async function createChatResponse(openai, input) {
 
 export const buildChatPrompt = async (messages, options = {}) => {
     await ready;
-    const gameState = loadGameState();
+    const rawGameState = loadGameState();
+    const hasGameState = rawGameState && typeof rawGameState === 'object';
+    const gameState = hasGameState ? rawGameState : {};
+    const playerStateSnapshot = buildPlayerStateSnapshot(hasGameState ? rawGameState : null);
+    const playerStateMessage = playerStateSnapshot.block
+        ? {
+              role: 'system',
+              content: playerStateSnapshot.block,
+          }
+        : null;
 
     const persona = options.persona || defaultPersona;
     const systemPrompt = applyProviderRealityLine(
@@ -513,6 +599,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         options: options.docsRagOptions,
         baseMessages: [
             systemMessage,
+            ...(playerStateMessage ? [playerStateMessage] : []),
             ...(knowledgeMessage ? [knowledgeMessage] : []),
             ...(Array.isArray(messages) ? messages : []),
         ],
@@ -548,6 +635,9 @@ export const buildChatPrompt = async (messages, options = {}) => {
 
     if (combinedMessages.length === 0) {
         combinedMessages = [systemMessage];
+        if (playerStateMessage) {
+            combinedMessages.push(playerStateMessage);
+        }
         if (knowledgeMessage) {
             combinedMessages.push(knowledgeMessage);
         }
@@ -557,6 +647,9 @@ export const buildChatPrompt = async (messages, options = {}) => {
         combinedMessages.push(openingMessage);
     } else {
         combinedMessages = [systemMessage];
+        if (playerStateMessage) {
+            combinedMessages.push(playerStateMessage);
+        }
         if (knowledgeMessage) {
             combinedMessages.push(knowledgeMessage);
         }
@@ -575,13 +668,19 @@ export const buildChatPrompt = async (messages, options = {}) => {
 
     const contextSources = mergeSources(knowledgePack.sources || [], docsRagPayload.sources || []);
 
-    return { combinedMessages, debugMessages, gameState, contextSources };
+    return {
+        combinedMessages,
+        debugMessages,
+        gameState,
+        contextSources,
+        playerStateSummary: playerStateSnapshot.meta,
+    };
 };
 
 export const GPT5Chat = async (messages, options = {}) => {
     const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
     const { combinedMessages, gameState, contextSources } = promptPayload;
-    const apiKey = gameState.openAI?.apiKey || ''; // scan-secrets: ignore
+    const apiKey = gameState?.openAI?.apiKey || ''; // scan-secrets: ignore
     const OpenAIClient = resolveOpenAIClient();
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
@@ -595,7 +694,7 @@ export const GPT5Chat = async (messages, options = {}) => {
 export const GPT5ChatV2 = async (messages, options = {}) => {
     const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
     const { combinedMessages, gameState, contextSources } = promptPayload;
-    const apiKey = gameState.openAI?.apiKey || ''; // scan-secrets: ignore
+    const apiKey = gameState?.openAI?.apiKey || ''; // scan-secrets: ignore
     const OpenAIClient = resolveOpenAIClient();
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
