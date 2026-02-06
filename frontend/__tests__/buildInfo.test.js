@@ -43,9 +43,8 @@ describe('buildInfo', () => {
             generatedAt: '2026-02-06T05:16:45.000Z',
             source: 'git',
         };
-        const { getAppGitSha, getPromptVersionLabel, getPromptVersionSha } = await loadBuildInfo(
-            buildMeta
-        );
+        const { getAppGitSha, getPromptVersionLabel, getPromptVersionSha } =
+            await loadBuildInfo(buildMeta);
         expect(getAppGitSha()).toBe(buildMeta.gitSha);
         expect(getPromptVersionSha()).toBe(buildMeta.gitSha.slice(0, 7));
         expect(getPromptVersionLabel()).toBe(`v3:${buildMeta.gitSha.slice(0, 7)}`);
@@ -105,8 +104,7 @@ describe('buildInfo', () => {
 
     it('does not return a missing placeholder when VITE_GIT_SHA is set', async () => {
         process.env.VITE_GIT_SHA = 'abc123def456';
-        const { getAppGitSha, getPromptVersionLabel, getPromptVersionSha } =
-            await loadBuildInfo();
+        const { getAppGitSha, getPromptVersionLabel, getPromptVersionSha } = await loadBuildInfo();
         expect(getAppGitSha()).toBe('abc123def456');
         expect(getPromptVersionLabel()).toBe('v3:abc123d');
         expect(getPromptVersionSha()).toBe('abc123d');
