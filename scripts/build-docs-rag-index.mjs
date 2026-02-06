@@ -1,12 +1,12 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import MiniSearch from 'minisearch';
 import { glob } from 'glob';
 import yaml from 'yaml';
 import { execSync } from 'node:child_process';
 import GithubSlugger from 'github-slugger';
-import prettier from 'prettier';
+let prettierPromise;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -47,7 +47,31 @@ const readFileSafe = async (filePath) => {
     return content.replace(/\r\n/g, '\n');
 };
 
+const loadPrettier = async () => {
+    if (prettierPromise) {
+        return prettierPromise;
+    }
+
+    prettierPromise = import('prettier').catch(async () => {
+        try {
+            const frontendPrettierPath = path.join(
+                repoRoot,
+                'frontend/node_modules/prettier/index.js'
+            );
+            return await import(pathToFileURL(frontendPrettierPath).href);
+        } catch (error) {
+            return null;
+        }
+    });
+
+    return prettierPromise;
+};
+
 const formatJson = async (data, targetPath) => {
+    const prettier = await loadPrettier();
+    if (!prettier) {
+        return `${JSON.stringify(data, null, 4)}\n`;
+    }
     const config = (await prettier.resolveConfig(targetPath)) ?? {};
     const formatted = await prettier.format(JSON.stringify(data), {
         ...config,

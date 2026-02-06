@@ -3,6 +3,14 @@ import '@testing-library/jest-dom';
 import { cleanup, render, screen, waitFor } from '@testing-library/svelte';
 import OpenAIChat from '../OpenAIChat.svelte';
 
+vi.mock('../../../../generated/build_meta.json', () => ({
+    default: {
+        gitSha: 'feedbeefcafef00d',
+        generatedAt: '2024-01-01T00:00:00.000Z',
+        source: 'git',
+    },
+}));
+
 const mockGetDocsRagMeta = vi.hoisted(() =>
     vi.fn(async () => ({
         gitSha: 'abc123',
@@ -114,7 +122,7 @@ describe('OpenAIChat build metadata', () => {
         expect(docsSourceRefLabel.nextElementSibling).toHaveTextContent('refs/heads/main');
     });
 
-    it('derives env and uses docs pack SHA when app SHA is missing', async () => {
+    it('derives env and uses build metadata when VITE SHA is missing', async () => {
         delete process.env.VITE_GIT_SHA;
         mockGetDocsRagMeta.mockResolvedValueOnce({
             gitSha: 'docs-only',
@@ -126,22 +134,20 @@ describe('OpenAIChat build metadata', () => {
 
         render(OpenAIChat);
 
-        const promptVersion = await screen.findByText('Prompt version: v3:docs-on');
+        const promptVersion = await screen.findByText('Prompt version: v3:feedbee');
         expect(promptVersion).toBeInTheDocument();
 
         const appBuildLabel = await screen.findByText('App build SHA');
-        expect(appBuildLabel.nextElementSibling?.textContent).toContain('docs-only');
+        expect(appBuildLabel.nextElementSibling?.textContent).toContain('feedbeefcafef00d');
 
         const appBuildSourceLabel = await screen.findByText('App build SHA source');
-        expect(appBuildSourceLabel.nextElementSibling?.textContent).toContain(
-            'docs-pack-fallback (dev)'
-        );
+        expect(appBuildSourceLabel.nextElementSibling?.textContent).toContain('vite');
 
         const docsDerivedEnvLabel = await screen.findByText('Docs env derived');
         expect(docsDerivedEnvLabel.nextElementSibling?.textContent).toContain('dev');
     });
 
-    it('warns when app SHA is missing on a staging host', async () => {
+    it('uses build metadata on a staging host when VITE SHA is missing', async () => {
         setHost('https://staging.democratized.space/chat');
         delete process.env.VITE_GIT_SHA;
         mockGetDocsRagMeta.mockResolvedValueOnce({
@@ -159,18 +165,16 @@ describe('OpenAIChat build metadata', () => {
         render(OpenAIChat);
 
         const appBuildLabel = await screen.findByText('App build SHA');
-        expect(appBuildLabel.nextElementSibling?.textContent).toContain('missing');
+        expect(appBuildLabel.nextElementSibling?.textContent).toContain('feedbeefcafef00d');
 
         const appBuildSourceLabel = await screen.findByText('App build SHA source');
-        expect(appBuildSourceLabel.nextElementSibling?.textContent).toContain('missing');
+        expect(appBuildSourceLabel.nextElementSibling?.textContent).toContain('vite');
 
         const comparisonLabel = await screen.findByText('Docs RAG comparison');
         const comparisonRow = comparisonLabel.closest('.debug-meta-row');
-        expect(comparisonRow?.textContent).toContain(
-            '⚠️ cannot verify app/docs sync (app SHA missing)'
-        );
+        expect(comparisonRow?.textContent).toContain('⚠️ cannot verify app/docs sync');
         await waitFor(() => {
-            expect(mockGetDocsRagComparison).toHaveBeenCalledWith('missing', 'docs-only');
+            expect(mockGetDocsRagComparison).toHaveBeenCalledWith('feedbeefcafef00d', 'docs-only');
         });
     });
 

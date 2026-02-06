@@ -38,6 +38,14 @@ vi.mock('../src/data/npcPersonas.js', () => ({
     ],
 }));
 
+vi.mock('../src/generated/build_meta.json', () => ({
+    default: {
+        gitSha: 'feedbeefcafef00d',
+        generatedAt: '2024-01-01T00:00:00.000Z',
+        source: 'git',
+    },
+}));
+
 import OpenAIChat from '../src/pages/chat/svelte/OpenAIChat.svelte';
 
 describe('OpenAIChat docs RAG comparison messaging', () => {
@@ -86,14 +94,14 @@ describe('OpenAIChat docs RAG comparison messaging', () => {
         });
     };
 
-    it('shows cannot-verify when app SHA is missing on staging', async () => {
+    it('shows mismatch when app SHA comes from build metadata on staging', async () => {
         delete process.env.VITE_GIT_SHA;
         getDocsRagMeta.mockResolvedValue({
             docsGitSha: 'abc123',
             envName: 'staging',
         });
 
-        await expectComparisonMessage('⚠️ cannot verify app/docs sync (app SHA missing)');
+        await expectComparisonMessage(/⚠️ mismatch/);
     });
 
     it('shows cannot-verify when docs SHA is missing on staging', async () => {

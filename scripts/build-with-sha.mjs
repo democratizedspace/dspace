@@ -1,4 +1,12 @@
 import { execSync, spawnSync } from 'node:child_process';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const repoRoot = path.resolve(__dirname, '..');
+const buildMetaPath = path.join(repoRoot, 'frontend/src/generated/build_meta.json');
 
 const resolveGitSha = () => {
     const envSha =
@@ -6,15 +14,29 @@ const resolveGitSha = () => {
     if (envSha) {
         const normalizedEnvSha = envSha.trim();
         if (normalizedEnvSha && normalizedEnvSha.toLowerCase() !== 'unknown') {
-            return normalizedEnvSha;
+            return { sha: normalizedEnvSha, source: 'ci' };
         }
     }
 
     try {
-        return execSync('git rev-parse HEAD', { encoding: 'utf-8' }).trim();
+        return {
+            sha: execSync('git rev-parse HEAD', { encoding: 'utf-8' }).trim(),
+            source: 'git',
+        };
     } catch (error) {
-        return 'dev-local';
+        return { sha: 'missing', source: 'unknown' };
     }
+};
+
+const writeBuildMeta = async ({ sha, source }) => {
+    const payload = {
+        gitSha: sha,
+        generatedAt: new Date().toISOString(),
+        source,
+    };
+    await fs.mkdir(path.dirname(buildMetaPath), { recursive: true });
+    const formatted = `${JSON.stringify(payload, null, 4)}\n`;
+    await fs.writeFile(buildMetaPath, formatted, 'utf-8');
 };
 
 const run = (command, args, options = {}) => {
@@ -33,7 +55,11 @@ const run = (command, args, options = {}) => {
     }
 };
 
-process.env.VITE_GIT_SHA = resolveGitSha();
+const resolvedBuildInfo = resolveGitSha();
+if (resolvedBuildInfo.sha && resolvedBuildInfo.sha !== 'missing') {
+    process.env.VITE_GIT_SHA = resolvedBuildInfo.sha;
+}
+await writeBuildMeta(resolvedBuildInfo);
 
 run('npm', ['run', 'build:docs-rag']);
 run('npm', ['--prefix', 'frontend', 'run', 'build']);
