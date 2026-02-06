@@ -566,7 +566,7 @@ async function createChatResponse(openai, input) {
 
 export const buildChatPrompt = async (messages, options = {}) => {
     await ready;
-    const userMessages = Array.isArray(messages) ? messages : [];
+    const normalizedMessages = Array.isArray(messages) ? messages : [];
     const rawGameState = loadGameState();
     const hasGameState = rawGameState && typeof rawGameState === 'object';
     const gameState = hasGameState ? rawGameState : {};
@@ -602,14 +602,14 @@ export const buildChatPrompt = async (messages, options = {}) => {
             systemMessage,
             ...(playerStateMessage ? [playerStateMessage] : []),
             ...(knowledgeMessage ? [knowledgeMessage] : []),
-            ...userMessages,
+            ...normalizedMessages,
         ],
     });
-    const latestUserMessage = [...userMessages]
+    const latestUserMessage = [...normalizedMessages]
         .reverse()
         .find((message) => message.role === 'user' && message.content?.trim());
     const retrievalQuery = latestUserMessage
-        ? buildRetrievalQuery(userMessages, latestUserMessage)
+        ? buildRetrievalQuery(normalizedMessages, latestUserMessage)
         : '';
     const docsRagPayload = latestUserMessage
         ? await searchDocsRag(retrievalQuery, docsRagRequestOptions)
@@ -631,7 +631,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         content: persona?.welcomeMessage || fallbackWelcomeMessage,
     };
 
-    let combinedMessages = [...userMessages];
+    let combinedMessages = [...normalizedMessages];
 
     if (combinedMessages.length === 0) {
         combinedMessages = [systemMessage];
@@ -656,7 +656,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         if (docsRagMessage && !knowledgeMessage) {
             combinedMessages.push(docsRagMessage);
         }
-        combinedMessages = [...combinedMessages, ...userMessages];
+        combinedMessages = [...combinedMessages, ...normalizedMessages];
     }
 
     const ragMessages = new Set([knowledgeMessage, docsRagMessage].filter(Boolean));
