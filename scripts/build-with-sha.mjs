@@ -14,23 +14,24 @@ const resolveGitSha = () => {
     if (envSha) {
         const normalizedEnvSha = envSha.trim();
         if (normalizedEnvSha && normalizedEnvSha.toLowerCase() !== 'unknown') {
-            return { gitSha: normalizedEnvSha, source: 'ci' };
+            return { gitSha: normalizedEnvSha, resolvedFrom: 'env' };
         }
     }
 
     try {
         const gitSha = execSync('git rev-parse HEAD', { encoding: 'utf-8' }).trim();
-        return { gitSha, source: 'git' };
+        return { gitSha, resolvedFrom: 'git' };
     } catch (error) {
-        return { gitSha: 'unknown', source: 'unknown' };
+        return { gitSha: 'unknown', resolvedFrom: 'unknown' };
     }
 };
 
-const writeBuildMeta = async ({ gitSha, source }) => {
+const writeBuildMeta = async ({ gitSha, resolvedFrom }) => {
     const payload = {
         gitSha,
         generatedAt: new Date().toISOString(),
-        source,
+        source: 'build-meta',
+        resolvedFrom,
     };
     await fs.mkdir(path.dirname(buildMetaPath), { recursive: true });
     await fs.writeFile(buildMetaPath, `${JSON.stringify(payload, null, 4)}\n`);
@@ -66,3 +67,4 @@ try {
 
 run('npm', ['run', 'build:docs-rag']);
 run('npm', ['--prefix', 'frontend', 'run', 'build']);
+run('node', ['scripts/verify-build-stamp.mjs']);

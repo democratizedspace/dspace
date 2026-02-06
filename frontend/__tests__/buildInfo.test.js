@@ -41,11 +41,20 @@ describe('buildInfo', () => {
         const buildMeta = {
             gitSha: 'abc123def456',
             generatedAt: '2026-02-06T05:16:45.000Z',
-            source: 'git',
+            source: 'build-meta',
         };
-        const { getAppGitSha, getPromptVersionLabel, getPromptVersionSha } =
-            await loadBuildInfo(buildMeta);
+        const {
+            getAppGitSha,
+            getAppGitShaWithFallback,
+            getPromptVersionLabel,
+            getPromptVersionSha,
+        } = await loadBuildInfo(buildMeta);
         expect(getAppGitSha()).toBe(buildMeta.gitSha);
+        expect(getAppGitSha()).not.toBe('missing');
+        expect(getAppGitShaWithFallback()).toEqual({
+            sha: buildMeta.gitSha,
+            source: 'build-meta',
+        });
         expect(getPromptVersionSha()).toBe(buildMeta.gitSha.slice(0, 7));
         expect(getPromptVersionLabel()).toBe(`v3:${buildMeta.gitSha.slice(0, 7)}`);
     });
