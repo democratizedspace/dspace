@@ -14,7 +14,19 @@ const normalizeSha = (value) => String(value || '').trim();
 
 const readBuildMetaSha = () => normalizeSha(buildMeta?.gitSha);
 
+const readBuildMetaGeneratedAt = () => normalizeSha(buildMeta?.generatedAt);
+
 const readBuildMetaSource = () => normalizeSha(buildMeta?.source);
+
+const isDevRuntime = () => {
+    if (typeof import.meta !== 'undefined' && typeof import.meta.env?.DEV === 'boolean') {
+        return import.meta.env.DEV;
+    }
+    if (typeof process !== 'undefined' && process.env?.NODE_ENV) {
+        return process.env.NODE_ENV === 'development';
+    }
+    return false;
+};
 
 const isPlaceholderSha = (value) => {
     const normalized = normalizeSha(value);
@@ -40,8 +52,14 @@ const isPlaceholderSource = (value) => {
 };
 
 const isBuildMetaUsable = () => {
+    if (isDevRuntime()) {
+        return false;
+    }
     const buildMetaSha = readBuildMetaSha();
     if (isPlaceholderSha(buildMetaSha)) {
+        return false;
+    }
+    if (!readBuildMetaGeneratedAt()) {
         return false;
     }
     const buildMetaSource = readBuildMetaSource();

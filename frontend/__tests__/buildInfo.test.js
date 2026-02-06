@@ -15,9 +15,11 @@ const loadBuildInfo = async (buildMetaOverride) => {
 
 describe('buildInfo', () => {
     let originalViteGitSha;
+    let originalNodeEnv;
 
     beforeEach(() => {
         originalViteGitSha = process.env.VITE_GIT_SHA;
+        originalNodeEnv = process.env.NODE_ENV;
     });
 
     afterEach(() => {
@@ -26,10 +28,16 @@ describe('buildInfo', () => {
         } else {
             process.env.VITE_GIT_SHA = originalViteGitSha;
         }
+        if (originalNodeEnv === undefined) {
+            delete process.env.NODE_ENV;
+        } else {
+            process.env.NODE_ENV = originalNodeEnv;
+        }
     });
 
     it('falls back to build metadata when no build SHA is provided', async () => {
         delete process.env.VITE_GIT_SHA;
+        process.env.NODE_ENV = 'production';
         const buildMeta = {
             gitSha: 'abc123def456',
             generatedAt: '2026-02-06T05:16:45.000Z',
@@ -44,11 +52,12 @@ describe('buildInfo', () => {
 
     it('uses docs pack fallback when no build SHA is provided', async () => {
         delete process.env.VITE_GIT_SHA;
+        process.env.NODE_ENV = 'development';
         const { getAppGitShaWithFallback, getPromptVersionLabelForSha } =
             await loadBuildInfo({
-                gitSha: 'missing',
-                generatedAt: '',
-                source: 'static',
+                gitSha: 'abc123def456',
+                generatedAt: '2026-02-06T05:16:45.000Z',
+                source: 'git',
             });
         expect(getAppGitShaWithFallback('feedface')).toEqual({
             sha: 'feedface',

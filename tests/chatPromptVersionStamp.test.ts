@@ -1,5 +1,4 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import buildMeta from '../frontend/src/generated/build_meta.json';
 
 vi.mock('../frontend/src/utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({})),
@@ -20,10 +19,27 @@ describe('chat prompt version stamp', () => {
         vi.resetModules();
     });
 
+    const loadOpenAI = async (buildMetaOverride?: {
+        gitSha: string;
+        generatedAt: string;
+        source: string;
+    }) => {
+        vi.resetModules();
+        if (buildMetaOverride) {
+            vi.doMock('../frontend/src/generated/build_meta.json', () => ({
+                default: buildMetaOverride,
+            }));
+        } else {
+            vi.doMock('../frontend/src/generated/build_meta.json', async () => {
+                const actual = await vi.importActual('../frontend/src/generated/build_meta.json');
+                return { default: actual.default ?? actual };
+            });
+        }
+        return await import('../frontend/src/utils/openAI.js');
+    };
+
     it('includes the prompt version header and guardrail lines', async () => {
-        const { buildChatPrompt, CHAT_PROMPT_VERSION } = await import(
-            '../frontend/src/utils/openAI.js'
-        );
+        const { buildChatPrompt, CHAT_PROMPT_VERSION } = await loadOpenAI();
         const payload = await buildChatPrompt([]);
         const systemMessage = payload.combinedMessages.find((message) => message.role === 'system');
 
@@ -40,10 +56,7 @@ describe('chat prompt version stamp', () => {
 
     it('stamps prompt version with the build SHA when available', async () => {
         vi.stubEnv('VITE_GIT_SHA', 'feedface');
-        vi.resetModules();
-        const { buildChatPrompt, CHAT_PROMPT_VERSION } = await import(
-            '../frontend/src/utils/openAI.js'
-        );
+        const { buildChatPrompt, CHAT_PROMPT_VERSION } = await loadOpenAI();
         const payload = await buildChatPrompt([]);
         const systemMessage = payload.combinedMessages.find((message) => message.role === 'system');
 
@@ -59,16 +72,25 @@ describe('chat prompt version stamp', () => {
     it('emits v3:<shortsha> in production mode without a build SHA', async () => {
         vi.stubEnv('NODE_ENV', 'production');
         vi.stubEnv('VITE_GIT_SHA', '');
-        vi.resetModules();
-        const { CHAT_PROMPT_VERSION } = await import('../frontend/src/utils/openAI.js');
+        const buildMeta = {
+            gitSha: 'feedfacec0ffee',
+            generatedAt: '2026-02-06T05:16:45.000Z',
+            source: 'ci',
+        };
+        const { CHAT_PROMPT_VERSION } = await loadOpenAI(buildMeta);
 
-        expect(CHAT_PROMPT_VERSION).toBe(`v3:${buildMeta.gitSha.slice(0, 7)}`);
+        expect(CHAT_PROMPT_VERSION).toBe('v3:feedfac');
     });
 
     it('does not emit a missing prompt version in the system message', async () => {
+        vi.stubEnv('NODE_ENV', 'production');
         vi.stubEnv('VITE_GIT_SHA', '');
-        vi.resetModules();
-        const { buildChatPrompt } = await import('../frontend/src/utils/openAI.js');
+        const buildMeta = {
+            gitSha: 'deadbeefcafeba5',
+            generatedAt: '2026-02-06T05:16:45.000Z',
+            source: 'ci',
+        };
+        const { buildChatPrompt } = await loadOpenAI(buildMeta);
         const payload = await buildChatPrompt([]);
         const systemMessage = payload.combinedMessages.find((message) => message.role === 'system');
 
