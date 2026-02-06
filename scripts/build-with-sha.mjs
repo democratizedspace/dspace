@@ -14,13 +14,13 @@ const resolveGitSha = () => {
     if (envSha) {
         const normalizedEnvSha = envSha.trim();
         if (normalizedEnvSha && normalizedEnvSha.toLowerCase() !== 'unknown') {
-            return { gitSha: normalizedEnvSha, source: 'ci' };
+            return { gitSha: normalizedEnvSha, source: 'build-meta' };
         }
     }
 
     try {
         const gitSha = execSync('git rev-parse HEAD', { encoding: 'utf-8' }).trim();
-        return { gitSha, source: 'git' };
+        return { gitSha, source: 'build-meta' };
     } catch (error) {
         return { gitSha: 'unknown', source: 'unknown' };
     }
@@ -66,3 +66,4 @@ try {
 
 run('npm', ['run', 'build:docs-rag']);
 run('npm', ['--prefix', 'frontend', 'run', 'build']);
+run('node', ['scripts/verify-build-stamp.mjs']);
