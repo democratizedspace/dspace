@@ -4,7 +4,7 @@ import { mergeSources } from './contextSources.js';
 import { searchDocsRag } from './docsRag.js';
 import { npcPersonas } from '../data/npcPersonas.js';
 import OpenAI from 'openai';
-import { getPromptVersionLabel } from './buildInfo.js';
+import { getPromptVersionLabel, getPromptVersionSha } from './buildInfo.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -582,9 +582,10 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const systemPrompt = applyProviderRealityLine(
         applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt)
     );
+    const promptVersionSha = getPromptVersionSha();
     const systemMessage = {
         role: 'system',
-        content: `Prompt version: ${CHAT_PROMPT_VERSION}\n${systemPrompt}`,
+        content: `Prompt version: v3:${promptVersionSha}\n${systemPrompt}`,
     };
 
     const knowledgePack = buildDchatKnowledgePack(gameState);

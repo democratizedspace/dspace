@@ -1,4 +1,12 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { execSync, spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const repoRoot = path.resolve(__dirname, '..');
+const buildMetaPath = path.join(repoRoot, 'frontend/src/generated/build_meta.json');
 
 const resolveGitSha = () => {
     const envSha =
@@ -6,14 +14,17 @@ const resolveGitSha = () => {
     if (envSha) {
         const normalizedEnvSha = envSha.trim();
         if (normalizedEnvSha && normalizedEnvSha.toLowerCase() !== 'unknown') {
-            return normalizedEnvSha;
+            return { sha: normalizedEnvSha, source: 'ci' };
         }
     }
 
     try {
-        return execSync('git rev-parse HEAD', { encoding: 'utf-8' }).trim();
+        return {
+            sha: execSync('git rev-parse HEAD', { encoding: 'utf-8' }).trim(),
+            source: 'git',
+        };
     } catch (error) {
-        return 'dev-local';
+        return { sha: 'unknown', source: 'unknown' };
     }
 };
 
@@ -33,7 +44,17 @@ const run = (command, args, options = {}) => {
     }
 };
 
-process.env.VITE_GIT_SHA = resolveGitSha();
+const resolvedGit = resolveGitSha();
+
+process.env.VITE_GIT_SHA = resolvedGit.sha;
+
+const buildMetaPayload = {
+    gitSha: resolvedGit.sha,
+    generatedAt: new Date().toISOString(),
+    source: resolvedGit.source,
+};
+
+fs.writeFileSync(buildMetaPath, `${JSON.stringify(buildMetaPayload, null, 4)}\n`, 'utf-8');
 
 run('npm', ['run', 'build:docs-rag']);
 run('npm', ['--prefix', 'frontend', 'run', 'build']);

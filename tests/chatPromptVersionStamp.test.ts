@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import buildMeta from '../frontend/src/generated/build_meta.json';
 
 vi.mock('../frontend/src/utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({})),
@@ -55,12 +56,39 @@ describe('chat prompt version stamp', () => {
         expect(systemMessage.content).toContain('Prompt version: v3:feedfac');
     });
 
-    it('emits v3:dev-local in production mode without a build SHA', async () => {
+    it('falls back to build meta when no VITE build SHA is available', async () => {
         vi.stubEnv('NODE_ENV', 'production');
         vi.stubEnv('VITE_GIT_SHA', '');
         vi.resetModules();
-        const { CHAT_PROMPT_VERSION } = await import('../frontend/src/utils/openAI.js');
+        const { buildChatPrompt, CHAT_PROMPT_VERSION } = await import(
+            '../frontend/src/utils/openAI.js'
+        );
+        const payload = await buildChatPrompt([]);
+        const systemMessage = payload.combinedMessages.find((message) => message.role === 'system');
 
-        expect(CHAT_PROMPT_VERSION).toBe('v3:dev-local');
+        expect(systemMessage).toBeDefined();
+        if (!systemMessage) {
+            throw new Error('Expected system message to be defined.');
+        }
+
+        const shortSha =
+            buildMeta.gitSha.length > 7 ? buildMeta.gitSha.slice(0, 7) : buildMeta.gitSha;
+        expect(CHAT_PROMPT_VERSION).toBe(`v3:${shortSha}`);
+        expect(systemMessage.content).toContain(`Prompt version: v3:${shortSha}`);
+    });
+
+    it('does not stamp v3:missing in the system message', async () => {
+        vi.stubEnv('VITE_GIT_SHA', '');
+        vi.resetModules();
+        const { buildChatPrompt } = await import('../frontend/src/utils/openAI.js');
+        const payload = await buildChatPrompt([]);
+        const systemMessage = payload.combinedMessages.find((message) => message.role === 'system');
+
+        expect(systemMessage).toBeDefined();
+        if (!systemMessage) {
+            throw new Error('Expected system message to be defined.');
+        }
+
+        expect(systemMessage.content).not.toContain('v3:missing');
     });
 });

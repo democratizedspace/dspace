@@ -1,3 +1,5 @@
+import buildMeta from '../generated/build_meta.json';
+
 const readViteGitSha = () => {
     if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GIT_SHA) {
         return import.meta.env.VITE_GIT_SHA;
@@ -24,17 +26,23 @@ const isPlaceholderSha = (value) => {
     );
 };
 
+const readBuildMetaSha = () => normalizeSha(buildMeta?.gitSha);
+
 const resolveGitSha = () => {
     const normalized = normalizeSha(readViteGitSha());
-    if (isPlaceholderSha(normalized)) {
-        return 'dev-local';
+    if (!isPlaceholderSha(normalized)) {
+        return normalized;
     }
-    return normalized;
+    const buildMetaSha = readBuildMetaSha();
+    if (!isPlaceholderSha(buildMetaSha)) {
+        return buildMetaSha;
+    }
+    return 'missing';
 };
 
 const shortenSha = (value) => {
     const normalized = normalizeSha(value);
-    if (!normalized || normalized === 'dev-local') {
+    if (!normalized || normalized === 'dev-local' || normalized === 'missing') {
         return normalized;
     }
     return normalized.length > 7 ? normalized.slice(0, 7) : normalized;
@@ -47,16 +55,20 @@ export const getAppGitShaWithFallback = (fallbackSha) => {
     if (!isPlaceholderSha(appSha)) {
         return { sha: appSha, source: 'vite' };
     }
+    const buildMetaSha = readBuildMetaSha();
+    if (!isPlaceholderSha(buildMetaSha)) {
+        return { sha: buildMetaSha, source: 'vite' };
+    }
     const fallbackNormalized = normalizeSha(fallbackSha);
     if (!isPlaceholderSha(fallbackNormalized)) {
         return { sha: fallbackNormalized, source: 'docs-pack-fallback' };
     }
-    return { sha: 'dev-local', source: 'dev-local' };
+    return { sha: 'missing', source: 'missing' };
 };
 
 export const getPromptVersionLabelForSha = (sha) => {
     const shortSha = shortenSha(sha);
-    return `v3:${shortSha || 'dev-local'}`;
+    return `v3:${shortSha || 'missing'}`;
 };
 
 const extractPromptVersionSha = (promptVersionLabel) => {
