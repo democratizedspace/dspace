@@ -566,6 +566,7 @@ async function createChatResponse(openai, input) {
 
 export const buildChatPrompt = async (messages, options = {}) => {
     await ready;
+    const userMessages = Array.isArray(messages) ? messages : [];
     const rawGameState = loadGameState();
     const hasGameState = rawGameState && typeof rawGameState === 'object';
     const gameState = hasGameState ? rawGameState : {};
@@ -601,14 +602,14 @@ export const buildChatPrompt = async (messages, options = {}) => {
             systemMessage,
             ...(playerStateMessage ? [playerStateMessage] : []),
             ...(knowledgeMessage ? [knowledgeMessage] : []),
-            ...(Array.isArray(messages) ? messages : []),
+            ...userMessages,
         ],
     });
-    const latestUserMessage = [...messages]
+    const latestUserMessage = [...userMessages]
         .reverse()
         .find((message) => message.role === 'user' && message.content?.trim());
     const retrievalQuery = latestUserMessage
-        ? buildRetrievalQuery(messages, latestUserMessage)
+        ? buildRetrievalQuery(userMessages, latestUserMessage)
         : '';
     const docsRagPayload = latestUserMessage
         ? await searchDocsRag(retrievalQuery, docsRagRequestOptions)
@@ -630,7 +631,6 @@ export const buildChatPrompt = async (messages, options = {}) => {
         content: persona?.welcomeMessage || fallbackWelcomeMessage,
     };
 
-    const userMessages = [...messages];
     let combinedMessages = [...userMessages];
 
     if (combinedMessages.length === 0) {
