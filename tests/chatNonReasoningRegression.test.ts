@@ -174,7 +174,7 @@ describe('chat non-reasoning regression probes', () => {
             const hasPlayerState = messages.some(
                 (message) =>
                     message.role === 'system' &&
-                    message.content?.[0]?.text?.includes('PlayerState')
+                    message.content?.[0]?.text?.includes('PlayerState v')
             );
             if (hasPlayerState) {
                 return { output_text: 'PlayerState was unexpectedly present.' };

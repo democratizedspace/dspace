@@ -211,7 +211,16 @@ describe('GPT5Chat', () => {
                 content: [
                     {
                         type: 'input_text',
-                        text: expect.stringContaining('knowledge'),
+                        text: expect.stringContaining('PlayerState v'),
+                    },
+                ],
+            }),
+            expect.objectContaining({
+                role: 'system',
+                content: [
+                    {
+                        type: 'input_text',
+                        text: expect.stringContaining('DSPACE knowledge base:\nknowledge'),
                     },
                 ],
             }),
