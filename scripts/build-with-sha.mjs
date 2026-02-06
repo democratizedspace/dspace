@@ -54,7 +54,15 @@ const run = (command, args, options = {}) => {
 
 const resolvedMeta = resolveGitSha();
 process.env.VITE_GIT_SHA = resolvedMeta.gitSha;
-await writeBuildMeta(resolvedMeta);
+try {
+    await writeBuildMeta(resolvedMeta);
+} catch (error) {
+    console.error(
+        'Failed to write build metadata to frontend/src/generated/build_meta.json',
+        error
+    );
+    process.exit(1);
+}
 
 run('npm', ['run', 'build:docs-rag']);
 run('npm', ['--prefix', 'frontend', 'run', 'build']);

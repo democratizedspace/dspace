@@ -30,14 +30,31 @@ const isPlaceholderSha = (value) => {
     );
 };
 
+const isPlaceholderSource = (value) => {
+    const normalized = normalizeSha(value);
+    if (!normalized) {
+        return true;
+    }
+    const lower = normalized.toLowerCase();
+    return lower === 'unknown' || lower === 'static';
+};
+
+const isBuildMetaUsable = () => {
+    const buildMetaSha = readBuildMetaSha();
+    if (isPlaceholderSha(buildMetaSha)) {
+        return false;
+    }
+    const buildMetaSource = readBuildMetaSource();
+    return !isPlaceholderSource(buildMetaSource);
+};
+
 const resolveGitSha = () => {
     const normalized = normalizeSha(readViteGitSha());
     if (!isPlaceholderSha(normalized)) {
         return normalized;
     }
-    const buildMetaSha = readBuildMetaSha();
-    if (!isPlaceholderSha(buildMetaSha)) {
-        return buildMetaSha;
+    if (isBuildMetaUsable()) {
+        return readBuildMetaSha();
     }
     return 'missing';
 };
@@ -57,9 +74,8 @@ export const getAppGitShaWithFallback = (fallbackSha) => {
     if (!isPlaceholderSha(appSha)) {
         return { sha: appSha, source: 'vite' };
     }
-    const buildMetaSha = readBuildMetaSha();
-    if (!isPlaceholderSha(buildMetaSha)) {
-        return { sha: buildMetaSha, source: readBuildMetaSource() || 'build-meta' };
+    if (isBuildMetaUsable()) {
+        return { sha: readBuildMetaSha(), source: readBuildMetaSource() || 'build-meta' };
     }
     const fallbackNormalized = normalizeSha(fallbackSha);
     if (!isPlaceholderSha(fallbackNormalized)) {
