@@ -4,7 +4,6 @@
         defaultOpenAIErrorMessage,
         describeOpenAIError,
         buildChatPrompt,
-        CHAT_PROMPT_VERSION,
         getOpenAIErrorSummary,
         GPT5ChatV2,
     } from '../../../utils/openAI.js';
@@ -31,7 +30,7 @@
         getAppGitSha,
         getAppGitShaWithFallback,
         deriveEnvNameFromHostname,
-        getPromptVersionLabelForSha,
+        getPromptVersionLabel,
     } from '../../../utils/buildInfo.js';
     import {
         getDocsRagMeta,
@@ -59,7 +58,7 @@
     let appGitShaForComparison = appGitSha;
     let appGitShaDisplay = appGitSha;
     let appGitShaSource = 'dev-local';
-    let promptVersionLabel = CHAT_PROMPT_VERSION;
+    let promptVersionLabel = getPromptVersionLabel();
     let docsRagGitSha = 'unavailable';
     let docsRagEnvName = 'unavailable';
     let docsRagDerivedEnv = 'unavailable';
@@ -87,6 +86,29 @@
     $: docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha);
     $: docsRagComparisonMessage = docsRagComparison.message;
     $: docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
+
+    const buildDebugInfoBlock = () => {
+        const entries = [
+            ['Prompt version', promptVersionLabel],
+            ['App build SHA', appGitShaDisplay],
+            ['App build SHA source', appGitShaSource],
+            ['Docs RAG SHA', docsRagGitSha],
+            ['Docs host', docsRagHost],
+            ['Docs env derived', docsRagDerivedEnv],
+            ['Docs RAG generatedAt', docsRagGeneratedAt],
+            ['Docs pack env', docsRagEnvName],
+            ['Docs pack sourceRef', docsRagSourceRef],
+            ['Docs RAG comparison', docsRagComparisonMessage],
+        ];
+        return entries.map(([label, value]) => `${label}: ${value}`).join('\n');
+    };
+
+    const copyDebugInfo = async () => {
+        if (typeof navigator === 'undefined' || !navigator.clipboard?.writeText) {
+            return;
+        }
+        await navigator.clipboard.writeText(buildDebugInfoBlock());
+    };
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -340,7 +362,7 @@
         // Git SHA (which may use a fallback). The actual prompt version sent to OpenAI is
         // determined by the module-level CHAT_PROMPT_VERSION in openAI.js and may differ when
         // build metadata is missing or a placeholder.
-        promptVersionLabel = getPromptVersionLabelForSha(appGitShaDisplay);
+        promptVersionLabel = getPromptVersionLabel();
         const normalizedDocsEnv = normalizeEnvName(docsRagEnvName);
         docsRagDerivedEnv = normalizedDocsEnv
             ? 'n/a'
@@ -458,15 +480,25 @@
                     <p>Displays the full prompt payload, with RAG content highlighted.</p>
                     <p class="debug-version">Prompt version: {promptVersionLabel}</p>
                 </div>
-                <button
-                    class="debug-toggle"
-                    type="button"
-                    on:click={() => {
-                        debugExpanded = !debugExpanded;
-                    }}
-                >
-                    {debugExpanded ? 'Hide prompt' : 'Show prompt'}
-                </button>
+                <div class="debug-actions">
+                    <button
+                        class="debug-copy"
+                        type="button"
+                        data-testid="debug-copy-button"
+                        on:click={copyDebugInfo}
+                    >
+                        Copy debug info
+                    </button>
+                    <button
+                        class="debug-toggle"
+                        type="button"
+                        on:click={() => {
+                            debugExpanded = !debugExpanded;
+                        }}
+                    >
+                        {debugExpanded ? 'Hide prompt' : 'Show prompt'}
+                    </button>
+                </div>
             </div>
             <div class="debug-metadata">
                 <div class="debug-meta-row" data-testid="debug-app-sha-row">
@@ -780,6 +812,29 @@
         margin: 0;
         font-size: 0.85rem;
         color: #94a3b8;
+    }
+
+    .debug-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+        justify-content: flex-end;
+    }
+
+    .debug-copy {
+        height: 32px;
+        margin: 0;
+        padding: 0 0.75rem;
+        font-size: 0.85rem;
+        background: #0b1220;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        border-radius: 999px;
+        color: #e2e8f0;
+    }
+
+    .debug-copy:hover {
+        background: #1f2937;
     }
 
     .debug-toggle {
