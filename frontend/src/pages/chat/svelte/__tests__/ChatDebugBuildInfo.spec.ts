@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
-import { cleanup, render, screen, waitFor } from '@testing-library/svelte';
+import { cleanup, render, screen, waitFor, fireEvent } from '@testing-library/svelte';
 import OpenAIChat from '../OpenAIChat.svelte';
 
 const mockGetDocsRagMeta = vi.hoisted(() =>
@@ -200,5 +200,43 @@ describe('OpenAIChat build metadata', () => {
         const comparisonLabel = await screen.findByText('Docs RAG comparison');
         const comparisonRow = comparisonLabel.closest('.debug-meta-row');
         expect(comparisonRow?.textContent).toContain('✅ in sync');
+    });
+
+    it('copies debug info with non-empty SHAs', async () => {
+        process.env.VITE_GIT_SHA = 'abc123def456';
+        const originalClipboardDescriptor = Object.getOwnPropertyDescriptor(navigator, 'clipboard');
+        const writeText = vi.fn().mockResolvedValue(undefined);
+        Object.defineProperty(navigator, 'clipboard', {
+            value: { writeText },
+            configurable: true,
+        });
+
+        try {
+            render(OpenAIChat);
+
+            const copyButton = await screen.findByRole('button', { name: 'Copy debug info' });
+            await fireEvent.click(copyButton);
+
+            expect(writeText).toHaveBeenCalledTimes(1);
+            const copiedText = writeText.mock.calls[0][0];
+            expect(copiedText).toContain('Prompt version: v3:abc123d');
+            expect(copiedText).toContain('App build SHA: abc123def456');
+            expect(copiedText).toContain('App build SHA source: vite');
+            expect(copiedText).toContain('Docs RAG SHA: abc123');
+            expect(copiedText).toContain('Docs pack env: staging');
+            expect(copiedText).toContain('Docs env derived: n/a');
+            expect(copiedText).toContain(`Docs host: ${window.location.host}`);
+            expect(copiedText).toContain('Docs RAG generatedAt: just-now');
+            expect(copiedText).toContain('Docs pack sourceRef: refs/heads/main');
+            expect(copiedText).toContain('Docs RAG comparison: ✅ in sync');
+            expect(copiedText).not.toContain('missing');
+        } finally {
+            if (originalClipboardDescriptor) {
+                Object.defineProperty(navigator, 'clipboard', originalClipboardDescriptor);
+            } else {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                delete (navigator as any).clipboard;
+            }
+        }
     });
 });

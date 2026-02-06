@@ -38,6 +38,7 @@
         getDocsRagComparison,
         getDocsRagMismatchWarning,
     } from '../../../utils/docsRag.js';
+    import { copyToClipboard } from '../../../utils/copyToClipboard.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -236,6 +237,29 @@
         saveSnapshotHintDismissed = true;
         if (typeof sessionStorage !== 'undefined') {
             sessionStorage.setItem(saveSnapshotHintStorageKey, '1');
+        }
+    }
+
+    function getDebugInfoText() {
+        return [
+            `Prompt version: ${promptVersionLabel}`,
+            `App build SHA: ${appGitShaDisplay}`,
+            `App build SHA source: ${appGitShaSource}`,
+            `Docs RAG SHA: ${docsRagGitSha}`,
+            `Docs pack env: ${docsRagEnvName}`,
+            `Docs env derived: ${docsRagDerivedEnv}`,
+            `Docs host: ${docsRagHost}`,
+            `Docs RAG generatedAt: ${docsRagGeneratedAt}`,
+            `Docs pack sourceRef: ${docsRagSourceRef}`,
+            `Docs RAG comparison: ${docsRagComparisonMessage}`,
+        ].join('\n');
+    }
+
+    async function copyDebugInfo() {
+        try {
+            await copyToClipboard(getDebugInfoText());
+        } catch (error) {
+            console.error('Failed to copy debug info', error);
         }
     }
 
@@ -458,15 +482,25 @@
                     <p>Displays the full prompt payload, with RAG content highlighted.</p>
                     <p class="debug-version">Prompt version: {promptVersionLabel}</p>
                 </div>
-                <button
-                    class="debug-toggle"
-                    type="button"
-                    on:click={() => {
-                        debugExpanded = !debugExpanded;
-                    }}
-                >
-                    {debugExpanded ? 'Hide prompt' : 'Show prompt'}
-                </button>
+                <div class="debug-actions">
+                    <button
+                        class="debug-copy"
+                        type="button"
+                        on:click={copyDebugInfo}
+                        data-testid="chat-debug-copy"
+                    >
+                        Copy debug info
+                    </button>
+                    <button
+                        class="debug-toggle"
+                        type="button"
+                        on:click={() => {
+                            debugExpanded = !debugExpanded;
+                        }}
+                    >
+                        {debugExpanded ? 'Hide prompt' : 'Show prompt'}
+                    </button>
+                </div>
             </div>
             <div class="debug-metadata">
                 <div class="debug-meta-row" data-testid="debug-app-sha-row">
@@ -782,6 +816,15 @@
         color: #94a3b8;
     }
 
+    .debug-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .debug-copy,
     .debug-toggle {
         height: 32px;
         margin: 0;
@@ -794,6 +837,10 @@
     }
 
     .debug-toggle:hover {
+        background: #334155;
+    }
+
+    .debug-copy:hover {
         background: #334155;
     }
 
