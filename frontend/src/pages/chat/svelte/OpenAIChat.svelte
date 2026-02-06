@@ -31,7 +31,6 @@
         getAppGitSha,
         getAppGitShaWithFallback,
         deriveEnvNameFromHostname,
-        getPromptVersionLabelForSha,
     } from '../../../utils/buildInfo.js';
     import {
         getDocsRagMeta,
@@ -87,6 +86,43 @@
     $: docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha);
     $: docsRagComparisonMessage = docsRagComparison.message;
     $: docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
+
+    const buildDebugInfoText = () =>
+        [
+            `Prompt version: ${promptVersionLabel}`,
+            `App build SHA: ${appGitShaDisplay}`,
+            `App build SHA source: ${appGitShaSource}`,
+            `Docs RAG SHA: ${docsRagGitSha}`,
+            `Docs host: ${docsRagHost}`,
+            `Docs env derived: ${docsRagDerivedEnv}`,
+            `Docs RAG generatedAt: ${docsRagGeneratedAt}`,
+            `Docs pack env: ${docsRagEnvName}`,
+            `Docs pack sourceRef: ${docsRagSourceRef}`,
+            `Docs RAG comparison: ${docsRagComparisonMessage}`,
+        ].join('\n');
+
+    async function copyDebugInfo() {
+        if (typeof navigator === 'undefined') {
+            return;
+        }
+        const text = buildDebugInfoText();
+        if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(text);
+            return;
+        }
+        if (typeof document === 'undefined') {
+            return;
+        }
+        const fallback = document.createElement('textarea');
+        fallback.value = text;
+        fallback.setAttribute('readonly', '');
+        fallback.style.position = 'absolute';
+        fallback.style.left = '-9999px';
+        document.body.appendChild(fallback);
+        fallback.select();
+        document.execCommand('copy');
+        document.body.removeChild(fallback);
+    }
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -336,11 +372,7 @@
         appGitShaDisplay = resolvedAppGitShaDisplay;
         appGitShaSource = resolvedAppGitShaSource;
         appGitShaForComparison = resolvedAppGitShaForComparison;
-        // NOTE: This label is for UI/debug purposes only and is derived from the effective app
-        // Git SHA (which may use a fallback). The actual prompt version sent to OpenAI is
-        // determined by the module-level CHAT_PROMPT_VERSION in openAI.js and may differ when
-        // build metadata is missing or a placeholder.
-        promptVersionLabel = getPromptVersionLabelForSha(appGitShaDisplay);
+        promptVersionLabel = CHAT_PROMPT_VERSION;
         const normalizedDocsEnv = normalizeEnvName(docsRagEnvName);
         docsRagDerivedEnv = normalizedDocsEnv
             ? 'n/a'
@@ -458,15 +490,25 @@
                     <p>Displays the full prompt payload, with RAG content highlighted.</p>
                     <p class="debug-version">Prompt version: {promptVersionLabel}</p>
                 </div>
-                <button
-                    class="debug-toggle"
-                    type="button"
-                    on:click={() => {
-                        debugExpanded = !debugExpanded;
-                    }}
-                >
-                    {debugExpanded ? 'Hide prompt' : 'Show prompt'}
-                </button>
+                <div class="debug-actions">
+                    <button
+                        class="debug-copy"
+                        type="button"
+                        data-testid="debug-copy-button"
+                        on:click={copyDebugInfo}
+                    >
+                        Copy debug info
+                    </button>
+                    <button
+                        class="debug-toggle"
+                        type="button"
+                        on:click={() => {
+                            debugExpanded = !debugExpanded;
+                        }}
+                    >
+                        {debugExpanded ? 'Hide prompt' : 'Show prompt'}
+                    </button>
+                </div>
             </div>
             <div class="debug-metadata">
                 <div class="debug-meta-row" data-testid="debug-app-sha-row">
@@ -780,6 +822,28 @@
         margin: 0;
         font-size: 0.85rem;
         color: #94a3b8;
+    }
+
+    .debug-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: flex-end;
+    }
+
+    .debug-copy {
+        height: 32px;
+        margin: 0;
+        padding: 0 0.75rem;
+        font-size: 0.85rem;
+        background: #0f172a;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        border-radius: 999px;
+        color: #e2e8f0;
+    }
+
+    .debug-copy:hover {
+        background: #1e293b;
     }
 
     .debug-toggle {

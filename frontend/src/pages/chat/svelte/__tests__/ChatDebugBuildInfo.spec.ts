@@ -47,6 +47,7 @@ vi.mock('../../../../utils/docsRag.js', () => ({
 
 describe('OpenAIChat build metadata', () => {
     const originalLocation = window.location;
+    let originalClipboard: Clipboard | undefined;
     const setHost = (url: string) => {
         Object.defineProperty(window, 'location', {
             value: new URL(url),
@@ -55,6 +56,7 @@ describe('OpenAIChat build metadata', () => {
     };
 
     beforeEach(() => {
+        originalClipboard = navigator.clipboard;
         setHost('https://localhost:3000/chat');
         mockGetDocsRagMeta.mockResolvedValue({
             gitSha: 'abc123',
@@ -73,6 +75,10 @@ describe('OpenAIChat build metadata', () => {
     afterEach(() => {
         cleanup();
         delete process.env.VITE_GIT_SHA;
+        Object.defineProperty(navigator, 'clipboard', {
+            value: originalClipboard,
+            writable: true,
+        });
         Object.defineProperty(window, 'location', {
             value: originalLocation,
             writable: true,
@@ -126,7 +132,7 @@ describe('OpenAIChat build metadata', () => {
 
         render(OpenAIChat);
 
-        const promptVersion = await screen.findByText('Prompt version: v3:docs-on');
+        const promptVersion = await screen.findByText('Prompt version: v3:missing');
         expect(promptVersion).toBeInTheDocument();
 
         const appBuildLabel = await screen.findByText('App build SHA');
@@ -200,5 +206,29 @@ describe('OpenAIChat build metadata', () => {
         const comparisonLabel = await screen.findByText('Docs RAG comparison');
         const comparisonRow = comparisonLabel.closest('.debug-meta-row');
         expect(comparisonRow?.textContent).toContain('✅ in sync');
+    });
+
+    it('copies debug info with sha values and no missing placeholders', async () => {
+        process.env.VITE_GIT_SHA = 'abc123def456';
+        const writeText = vi.fn().mockResolvedValue(undefined);
+        Object.defineProperty(navigator, 'clipboard', {
+            value: { writeText },
+            writable: true,
+        });
+
+        render(OpenAIChat);
+
+        const copyButton = await screen.findByRole('button', { name: 'Copy debug info' });
+        copyButton.click();
+
+        await waitFor(() => {
+            expect(writeText).toHaveBeenCalledTimes(1);
+        });
+
+        const [copiedText] = writeText.mock.calls[0];
+        expect(copiedText).toContain('Prompt version: v3:abc123d');
+        expect(copiedText).toContain('App build SHA: abc123def456');
+        expect(copiedText).toContain('Docs RAG SHA: abc123');
+        expect(copiedText).not.toContain('missing');
     });
 });
