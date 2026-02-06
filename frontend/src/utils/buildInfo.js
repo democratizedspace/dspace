@@ -98,7 +98,7 @@ export const getAppGitShaWithFallback = (fallbackSha) => {
         return { sha: appSha, source: 'vite' };
     }
     if (isBuildMetaUsable()) {
-        return { sha: readBuildMetaSha(), source: readBuildMetaSource() || 'build-meta' };
+        return { sha: readBuildMetaSha(), source: 'build-meta' };
     }
     const fallbackNormalized = normalizeSha(fallbackSha);
     if (!isPlaceholderSha(fallbackNormalized)) {

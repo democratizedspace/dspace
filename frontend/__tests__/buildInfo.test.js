@@ -43,8 +43,16 @@ describe('buildInfo', () => {
             generatedAt: '2026-02-06T05:16:45.000Z',
             source: 'git',
         };
-        const { getAppGitSha, getPromptVersionLabel, getPromptVersionSha } =
-            await loadBuildInfo(buildMeta);
+        const {
+            getAppGitSha,
+            getAppGitShaWithFallback,
+            getPromptVersionLabel,
+            getPromptVersionSha,
+        } = await loadBuildInfo(buildMeta);
+        expect(getAppGitShaWithFallback()).toEqual({
+            sha: buildMeta.gitSha,
+            source: 'build-meta',
+        });
         expect(getAppGitSha()).toBe(buildMeta.gitSha);
         expect(getPromptVersionSha()).toBe(buildMeta.gitSha.slice(0, 7));
         expect(getPromptVersionLabel()).toBe(`v3:${buildMeta.gitSha.slice(0, 7)}`);
@@ -63,6 +71,18 @@ describe('buildInfo', () => {
             source: 'docs-pack-fallback',
         });
         expect(getPromptVersionLabelForSha('feedface')).toBe('v3:feedfac');
+    });
+
+    it('avoids missing app SHA when build metadata is present', async () => {
+        delete process.env.VITE_GIT_SHA;
+        process.env.NODE_ENV = 'production';
+        const { getAppGitSha } = await loadBuildInfo({
+            gitSha: 'bada55cafe12345',
+            generatedAt: '2026-02-06T05:16:45.000Z',
+            source: 'ci',
+        });
+        expect(getAppGitSha()).toBe('bada55cafe12345');
+        expect(getAppGitSha()).not.toBe('missing');
     });
 
     it('returns a short prompt version while preserving the full app SHA', async () => {

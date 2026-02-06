@@ -60,6 +60,7 @@ COPY --link packages/cache-version/ packages/cache-version/
 COPY --link packages/feature-flags/ packages/feature-flags/
 COPY --link scripts/ scripts/
 COPY --link docs/ROUTES.md docs/ROUTES.md
+RUN node scripts/write-build-meta.mjs
 RUN node scripts/build-docs-rag-index.mjs
 RUN pnpm --filter ./frontend... run build
 
