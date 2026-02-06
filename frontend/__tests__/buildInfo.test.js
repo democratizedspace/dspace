@@ -50,13 +50,29 @@ describe('buildInfo', () => {
         expect(getPromptVersionLabel()).toBe(`v3:${buildMeta.gitSha.slice(0, 7)}`);
     });
 
+    it('uses build metadata as the source when present', async () => {
+        delete process.env.VITE_GIT_SHA;
+        process.env.NODE_ENV = 'production';
+        const buildMeta = {
+            gitSha: 'aa11bb22cc33',
+            generatedAt: '2026-02-06T05:16:45.000Z',
+            source: 'build-meta',
+        };
+        const { getAppGitSha, getAppGitShaWithFallback } = await loadBuildInfo(buildMeta);
+        expect(getAppGitSha()).toBe(buildMeta.gitSha);
+        expect(getAppGitShaWithFallback()).toEqual({
+            sha: buildMeta.gitSha,
+            source: 'build-meta',
+        });
+    });
+
     it('uses docs pack fallback when no build SHA is provided', async () => {
         delete process.env.VITE_GIT_SHA;
         process.env.NODE_ENV = 'development';
         const { getAppGitShaWithFallback, getPromptVersionLabelForSha } = await loadBuildInfo({
-            gitSha: 'abc123def456',
-            generatedAt: '2026-02-06T05:16:45.000Z',
-            source: 'git',
+            gitSha: 'missing',
+            generatedAt: '',
+            source: 'static',
         });
         expect(getAppGitShaWithFallback('feedface')).toEqual({
             sha: 'feedface',
