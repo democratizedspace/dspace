@@ -38,6 +38,7 @@
         getDocsRagComparison,
         getDocsRagMismatchWarning,
     } from '../../../utils/docsRag.js';
+    import { copyToClipboard } from '../../../utils/copyToClipboard.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -245,30 +246,21 @@
             `App build SHA: ${appGitShaDisplay}`,
             `App build SHA source: ${appGitShaSource}`,
             `Docs RAG SHA: ${docsRagGitSha}`,
-            `Docs host: ${docsRagHost}`,
-            `Docs env derived: ${docsRagDerivedEnv}`,
-            `Docs RAG generatedAt: ${docsRagGeneratedAt}`,
             `Docs pack env: ${docsRagEnvName}`,
+            `Docs env derived: ${docsRagDerivedEnv}`,
+            `Docs host: ${docsRagHost}`,
+            `Docs RAG generatedAt: ${docsRagGeneratedAt}`,
             `Docs pack sourceRef: ${docsRagSourceRef}`,
             `Docs RAG comparison: ${docsRagComparisonMessage}`,
         ].join('\n');
     }
 
     async function copyDebugInfo() {
-        const debugInfo = getDebugInfoText();
-        if (navigator?.clipboard?.writeText) {
-            await navigator.clipboard.writeText(debugInfo);
-            return;
+        try {
+            await copyToClipboard(getDebugInfoText());
+        } catch (error) {
+            console.error('Failed to copy debug info', error);
         }
-        const fallback = document.createElement('textarea');
-        fallback.value = debugInfo;
-        fallback.setAttribute('readonly', '');
-        fallback.style.position = 'absolute';
-        fallback.style.left = '-9999px';
-        document.body.appendChild(fallback);
-        fallback.select();
-        document.execCommand('copy');
-        document.body.removeChild(fallback);
     }
 
     function syncSaveSnapshotHintDismissed() {
