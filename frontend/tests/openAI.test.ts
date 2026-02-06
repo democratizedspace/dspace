@@ -41,6 +41,7 @@ import {
 } from '../src/utils/openAI.js';
 import { buildDchatKnowledgePack } from '../src/utils/dchatKnowledge.js';
 import { searchDocsRag } from '../src/utils/docsRag.js';
+import { loadGameState } from '../src/utils/gameState/common.js';
 
 class MockResponseClient {
     constructor(resolver) {
@@ -49,6 +50,50 @@ class MockResponseClient {
         };
     }
 }
+
+const defaultGameState = {
+    openAI: {},
+    versionNumberString: '3',
+    quests: {},
+    inventory: {},
+};
+
+const extractPlayerStateFromInput = (input) => {
+    const text = (input || [])
+        .flatMap((message) => message.content || [])
+        .map((block) => block.text || '')
+        .join('\n');
+    const labelIndex = text.indexOf('PlayerState v3');
+    if (labelIndex === -1) {
+        return null;
+    }
+    const jsonStart = text.indexOf('{', labelIndex);
+    if (jsonStart === -1) {
+        return null;
+    }
+    let depth = 0;
+    let jsonEnd = -1;
+    for (let index = jsonStart; index < text.length; index += 1) {
+        const char = text[index];
+        if (char === '{') {
+            depth += 1;
+        } else if (char === '}') {
+            depth -= 1;
+            if (depth === 0) {
+                jsonEnd = index + 1;
+                break;
+            }
+        }
+    }
+    if (jsonEnd === -1) {
+        return null;
+    }
+    return JSON.parse(text.slice(jsonStart, jsonEnd));
+};
+
+beforeEach(() => {
+    vi.mocked(loadGameState).mockReturnValue(defaultGameState);
+});
 
 describe('GPT5Chat', () => {
     afterEach(() => {
@@ -151,6 +196,61 @@ describe('GPT5Chat', () => {
         expect(result).toBe('primary response');
     });
 
+    it('answers completed quest questions using PlayerState when present', async () => {
+        vi.mocked(loadGameState).mockReturnValueOnce({
+            ...defaultGameState,
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+                '3dprinter/start': { finished: true },
+            },
+        });
+        const resolver = vi.fn(async ({ input }) => {
+            const playerState = extractPlayerStateFromInput(input);
+            const questsFinished = playerState?.questsFinished ?? [];
+            return {
+                output_text: `Completed quests: ${questsFinished.join(', ')}`,
+            };
+        });
+
+        globalThis.__DSpaceOpenAIClient = class extends MockResponseClient {
+            constructor() {
+                super(resolver);
+            }
+        };
+
+        const result = await GPT5Chat([{ role: 'user', content: 'what quests have I completed?' }]);
+
+        expect(result).toContain('welcome/howtodoquests');
+        expect(result).toContain('3dprinter/start');
+        expect(result).not.toMatch(/\/gamesaves/i);
+    });
+
+    it('requests a /gamesaves export when PlayerState is missing', async () => {
+        vi.mocked(loadGameState).mockReturnValueOnce(undefined);
+        const resolver = vi.fn(async ({ input }) => {
+            const playerState = extractPlayerStateFromInput(input);
+            if (!playerState) {
+                return {
+                    output_text:
+                        'Please export a save from /gamesaves and review /docs/backups for ' +
+                        'instructions.',
+                };
+            }
+            return { output_text: 'ok' };
+        });
+
+        globalThis.__DSpaceOpenAIClient = class extends MockResponseClient {
+            constructor() {
+                super(resolver);
+            }
+        };
+
+        const result = await GPT5Chat([{ role: 'user', content: 'what quests have I completed?' }]);
+
+        expect(result).toContain('/gamesaves');
+        expect(result).toMatch(/\/docs\/backups|\/docs\/routes/i);
+    });
+
     it('extracts output text from the content blocks when output_text is missing', async () => {
         const resolver = vi.fn(async () => ({
             output: [
@@ -202,6 +302,15 @@ describe('GPT5Chat', () => {
                     {
                         type: 'input_text',
                         text: expect.any(String),
+                    },
+                ],
+            }),
+            expect.objectContaining({
+                role: 'system',
+                content: [
+                    {
+                        type: 'input_text',
+                        text: expect.stringContaining('PlayerState v3'),
                     },
                 ],
             }),
@@ -467,15 +576,18 @@ describe('buildChatPrompt', () => {
         vi.mocked(searchDocsRag).mockClear();
     });
 
-    it('adds guardrails for save snapshots, clarifying questions, and anti-precision', async () => {
+    it('adds guardrails for PlayerState, save snapshots, clarifying questions, and anti-precision', async () => {
         const payload = await buildChatPrompt([{ role: 'user', content: 'Status?' }]);
         const systemMessage = payload.debugMessages.find(
             (message) => message.role === 'system' && message.kind === 'main'
         );
         const content = systemMessage?.content ?? '';
 
-        expect(content).toContain("I can't see your inventory/quests/progress");
+        expect(content).toContain('Never invent game facts or player state.');
+        expect(content).toContain('Use the PlayerState block when present.');
+        expect(content).toContain('If PlayerState is missing');
         expect(content).toContain('/gamesaves');
+        expect(content).toMatch(/\/docs\/backups|\/docs\/routes/i);
         expect(content).toMatch(/clarifying question/i);
         expect(content).toMatch(/only give exact counts\/durations\/rates/i);
     });
@@ -483,10 +595,10 @@ describe('buildChatPrompt', () => {
     it('does not duplicate the shared guardrail when already present', async () => {
         const systemPrompt = [
             'Custom system prompt.',
-            'Never invent quests, items, processes, routes, URLs, or player state.',
-            "I can't see your inventory/quests/progress unless a save snapshot is provided.",
-            'Please export/paste a save from /gamesaves (or describe what you see) before I answer ' +
-                'state questions.',
+            'Never invent game facts or player state.',
+            'Use the PlayerState block when present.',
+            'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite ' +
+                '/docs/backups or /docs/routes.',
             "If you're missing context, say you don't know and ask a clarifying question OR point " +
                 'to a specific /docs page.',
             'When giving URLs/navigation, cite /docs excerpts or docs/ROUTES.md.',
@@ -513,7 +625,7 @@ describe('buildChatPrompt', () => {
     it('appends only missing guardrail lines when a persona includes some rules', async () => {
         const systemPrompt = [
             'Custom system prompt.',
-            'Never invent quests, items, processes, routes, URLs, or player state.',
+            'Never invent game facts or player state.',
         ].join('\n');
 
         const payload = await buildChatPrompt([{ role: 'user', content: 'Check guardrails.' }], {
@@ -679,6 +791,32 @@ describe('buildChatPrompt', () => {
         const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
 
         expect(options.maxChars).toBe(0);
+    });
+
+    it('adds PlayerState JSON with finished quests and inventory counts', async () => {
+        vi.mocked(loadGameState).mockReturnValueOnce({
+            ...defaultGameState,
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+                'welcome/intro-inventory': { finished: false },
+            },
+            inventory: {
+                'inventory:widget': 12,
+                'inventory:gizmo': 4.5,
+            },
+        });
+
+        const payload = await buildChatPrompt([{ role: 'user', content: 'Status?' }]);
+        const playerStateMessage = payload.debugMessages.find((message) =>
+            message.content?.includes('PlayerState v3')
+        );
+        const content = playerStateMessage?.content ?? '';
+
+        expect(content).toContain('"questsFinished"');
+        expect(content).toContain('welcome/howtodoquests');
+        expect(content).toContain('"inventory"');
+        expect(content).toContain('inventory:widget');
+        expect(content).toContain('inventory:gizmo');
     });
 });
 

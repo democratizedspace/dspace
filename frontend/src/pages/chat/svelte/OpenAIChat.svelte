@@ -51,6 +51,11 @@
     let showDebug = false;
     let debugMessages = [];
     let debugExpanded = false;
+    let playerStateIncluded = false;
+    let playerStateQuestCount = 0;
+    let playerStateInventoryIncludedCount = 0;
+    let playerStateInventoryTotalCount = 0;
+    let playerStateInventoryTruncated = false;
     let settingsUnsubscribe;
     let saveSnapshotHintDismissed = false;
     let saveSnapshotHintFocusListener;
@@ -144,8 +149,21 @@
                 persona: currentPersona,
             });
             debugMessages = debugPayload.debugMessages;
+            playerStateIncluded = Boolean(debugPayload.playerStateSummary?.included);
+            playerStateQuestCount = debugPayload.playerStateSummary?.questsFinishedCount ?? 0;
+            playerStateInventoryIncludedCount =
+                debugPayload.playerStateSummary?.inventoryIncludedCount ?? 0;
+            playerStateInventoryTotalCount =
+                debugPayload.playerStateSummary?.inventoryTotalCount ?? 0;
+            playerStateInventoryTruncated =
+                debugPayload.playerStateSummary?.inventoryTruncated ?? false;
         } else {
             debugMessages = [];
+            playerStateIncluded = false;
+            playerStateQuestCount = 0;
+            playerStateInventoryIncludedCount = 0;
+            playerStateInventoryTotalCount = 0;
+            playerStateInventoryTruncated = false;
         }
 
         try {
@@ -489,6 +507,27 @@
                 <div class="debug-meta-row">
                     <span>Docs RAG comparison</span>
                     <span class="debug-mono">{docsRagComparisonMessage}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState included</span>
+                    <span class="debug-mono">{playerStateIncluded ? 'yes' : 'no'}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState quests finished</span>
+                    <span class="debug-mono">{playerStateQuestCount}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState inventory entries</span>
+                    <span class="debug-mono">
+                        {playerStateInventoryIncludedCount}
+                        {playerStateInventoryTotalCount > playerStateInventoryIncludedCount
+                            ? ` / ${playerStateInventoryTotalCount}`
+                            : ''}
+                    </span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState inventory truncated</span>
+                    <span class="debug-mono">{playerStateInventoryTruncated ? 'yes' : 'no'}</span>
                 </div>
             </div>
             {#if docsRagWarning}

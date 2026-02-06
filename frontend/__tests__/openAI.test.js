@@ -73,16 +73,27 @@ describe('gpt-5 chat responses utility', () => {
                 content: [
                     expect.objectContaining({
                         type: 'input_text',
+                        text: expect.stringContaining('PlayerState v3'),
+                    }),
+                ],
+            })
+        );
+        expect(call.input[2]).toEqual(
+            expect.objectContaining({
+                role: 'system',
+                content: [
+                    expect.objectContaining({
+                        type: 'input_text',
                         text: expect.stringContaining('DSPACE knowledge base:'),
                     }),
                 ],
             })
         );
-        expect(call.input[1].content[0].text).toContain('white PLA filament');
-        expect(call.input[1].content[0].text).toContain('How to do quests');
-        expect(call.input[1].content[0].text).toContain('Quest progress');
-        expect(call.input[1].content[0].text).toContain('Processes in flight');
-        expect(call.input[2]).toEqual({
+        expect(call.input[2].content[0].text).toContain('white PLA filament');
+        expect(call.input[2].content[0].text).toContain('How to do quests');
+        expect(call.input[2].content[0].text).toContain('Quest progress');
+        expect(call.input[2].content[0].text).toContain('Processes in flight');
+        expect(call.input[3]).toEqual({
             role: 'assistant',
             content: [
                 {
@@ -103,12 +114,23 @@ describe('gpt-5 chat responses utility', () => {
                 content: [
                     expect.objectContaining({
                         type: 'input_text',
+                        text: expect.stringContaining('PlayerState v3'),
+                    }),
+                ],
+            })
+        );
+        expect(call.input[2]).toEqual(
+            expect.objectContaining({
+                role: 'system',
+                content: [
+                    expect.objectContaining({
+                        type: 'input_text',
                         text: expect.stringContaining('DSPACE knowledge base:'),
                     }),
                 ],
             })
         );
-        expect(call.input[2]).toEqual({
+        expect(call.input[3]).toEqual({
             role: 'user',
             content: [
                 {
