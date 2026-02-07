@@ -438,6 +438,7 @@ jobs:
         if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
         run: |
           docker run --rm \
+            -e VERIFY_BUILD_META_PATH=/app/frontend/src/generated/build_meta.json \
             -e VERIFY_REPO_ROOT=/app \
             -v "$PWD/scripts:/scripts:ro" \
             -w /app \
