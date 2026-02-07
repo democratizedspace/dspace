@@ -49,5 +49,6 @@ test.describe('Chat debug build stamp', () => {
         const comparisonValue = comparisonRow.locator('.debug-mono');
         await expect(comparisonValue).toBeVisible();
         await expect(comparisonValue).not.toContainText('app SHA missing');
+        await expect(comparisonValue).not.toContainText(/cannot verify/i);
     });
 });
