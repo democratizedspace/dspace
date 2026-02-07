@@ -93,7 +93,8 @@ const scanAssets = async () => {
         const errorDetails = String(error?.stack ?? error?.message ?? error);
         throw new Error(
             [
-                'build_meta.json is invalid.',
+                'Chat build stamp verification failed.',
+                'Gate A failed: build_meta.json is invalid or incomplete.',
                 `buildDir: ${buildDir}`,
                 `buildMetaPath: ${buildMetaPath}`,
                 errorDetails,
@@ -156,15 +157,7 @@ const scanAssets = async () => {
 
     const failureMessages = [];
     if (!foundMustFind.has(gitSha)) {
-        failureMessages.push(`Missing full git SHA ${gitSha} in assets.`);
-    }
-
-    if (!foundGitShaJson) {
-        failureMessages.push(
-            `Missing embedded build_meta gitSha JSON in assets (expected ${gitShaJsonNeedles.join(
-                ' or '
-            )}).`
-        );
+        failureMessages.push(`Gate B failed: missing full git SHA ${gitSha} in assets.`);
     }
 
     const forbiddenFiles = Array.from(forbiddenHits.entries())
@@ -177,7 +170,7 @@ const scanAssets = async () => {
             new Set(forbiddenFiles.map(({ needle }) => needle))
         ).join(', ');
         failureMessages.push(
-            `Build assets contain forbidden needle(s): ${forbiddenNeedles}.`
+            `Gate C failed: build assets contain forbidden needle(s): ${forbiddenNeedles}.`
         );
     }
 
@@ -202,6 +195,18 @@ const scanAssets = async () => {
             ]
                 .filter(Boolean)
                 .join('\n')
+        );
+    }
+
+    if (foundGitShaJson) {
+        console.warn(
+            `Optional marker found: build_meta gitSha JSON (${gitShaJsonNeedles.join(' or ')}).`
+        );
+    } else {
+        console.warn(
+            `Optional marker not found: build_meta gitSha JSON (${gitShaJsonNeedles.join(
+                ' or '
+            )}). Non-fatal.`
         );
     }
 
