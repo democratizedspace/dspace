@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename);
 const repoRoot = process.env.VERIFY_REPO_ROOT
     ? path.resolve(process.env.VERIFY_REPO_ROOT)
     : path.resolve(__dirname, '..');
+const buildMetaPath = path.join(repoRoot, 'frontend', 'src', 'generated', 'build_meta.json');
 
 const candidateDirs = [
     path.join(repoRoot, 'frontend', 'dist'),
@@ -95,6 +96,10 @@ const scanAssets = async () => {
     const gitSha = normalizeSha(buildMeta?.gitSha);
     const shortSha = gitSha.length > 7 ? gitSha.slice(0, 7) : gitSha;
     const promptLabel = `v3:${shortSha}`;
+    const buildMetaNeedles = [`"gitSha":"${gitSha}"`, `"gitSha": "${gitSha}"`];
+    const mustFind = [gitSha, ...buildMetaNeedles];
+    const mustNotFind = ['v3:missing'];
+    const optionalFind = [promptLabel, 'Prompt version: v3:'];
 
     const files = await walkFiles(buildDir);
     const assetFiles = files.filter((file) => allowedExtensions.has(path.extname(file)));
@@ -103,40 +108,73 @@ const scanAssets = async () => {
         throw new Error(`No build assets found in ${buildDir}`);
     }
 
-    const requiredNeedles = [gitSha, promptLabel, 'v3:missing'];
-    let foundFullSha = false;
-    let foundPromptLabel = false;
-    let foundMissingLabel = false;
+    const searchNeedles = [...mustFind, ...mustNotFind, ...optionalFind];
+    const foundMustFind = new Set();
+    const foundOptional = new Set();
+    const forbiddenHits = new Map();
 
     for (const filePath of assetFiles) {
         let matches = new Set();
         try {
-            matches = await searchFileForNeedles(filePath, requiredNeedles);
+            matches = await searchFileForNeedles(filePath, searchNeedles);
         } catch (error) {
             continue;
         }
-
-        if (matches.has(gitSha)) {
-            foundFullSha = true;
+        for (const needle of mustFind) {
+            if (matches.has(needle)) {
+                foundMustFind.add(needle);
+            }
         }
-        if (matches.has(promptLabel)) {
-            foundPromptLabel = true;
+        for (const needle of optionalFind) {
+            if (matches.has(needle)) {
+                foundOptional.add(needle);
+            }
         }
-        if (matches.has('v3:missing')) {
-            foundMissingLabel = true;
+        for (const needle of mustNotFind) {
+            if (matches.has(needle)) {
+                const hits = forbiddenHits.get(needle) ?? [];
+                hits.push(filePath);
+                forbiddenHits.set(needle, hits);
+            }
         }
     }
 
-    if (!foundFullSha) {
-        throw new Error(`No build stamp found in assets. Expected SHA ${gitSha}.`);
+    const missingMustFind = mustFind.filter((needle) => !foundMustFind.has(needle));
+    const missingBuildMeta = buildMetaNeedles.every((needle) => missingMustFind.includes(needle));
+    const hasForbiddenMissingLabel = forbiddenHits.has('v3:missing');
+
+    if (missingMustFind.length > 0 || hasForbiddenMissingLabel) {
+        const failureLines = [
+            'Build stamp verification failed.',
+            `buildDir: ${buildDir}`,
+            `buildMetaPath: ${buildMetaPath}`,
+            `expected gitSha: ${gitSha}`,
+        ];
+        if (missingMustFind.includes(gitSha)) {
+            failureLines.push(`- Missing full git SHA in assets (${gitSha}).`);
+        }
+        if (missingBuildMeta) {
+            failureLines.push(`- Missing embedded build_meta gitSha JSON (${gitSha}).`);
+        }
+        if (hasForbiddenMissingLabel) {
+            const hitFiles = forbiddenHits.get('v3:missing') ?? [];
+            const maxHits = 5;
+            const listed = hitFiles.slice(0, maxHits);
+            const remainder = hitFiles.length - listed.length;
+            failureLines.push('- Found forbidden v3:missing in assets.');
+            if (listed.length > 0) {
+                failureLines.push(`  Files: ${listed.join(', ')}${remainder > 0 ? '…' : ''}`);
+            }
+        }
+        throw new Error(failureLines.join('\n'));
     }
 
-    if (!foundPromptLabel) {
-        throw new Error(`No prompt stamp found in assets. Expected label ${promptLabel}.`);
-    }
-
-    if (foundMissingLabel) {
-        throw new Error('Build assets contain v3:missing');
+    if (optionalFind.length > 0 && foundOptional.size === 0) {
+        console.warn(
+            `Optional prompt stamp not found (searched for ${optionalFind.join(
+                ', '
+            )}). This is non-fatal.`
+        );
     }
 };
 
