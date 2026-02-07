@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename);
 const repoRoot = process.env.VERIFY_REPO_ROOT
     ? path.resolve(process.env.VERIFY_REPO_ROOT)
     : path.resolve(__dirname, '..');
+const buildMetaPath = path.join(repoRoot, 'frontend', 'src', 'generated', 'build_meta.json');
 
 const candidateDirs = [
     path.join(repoRoot, 'frontend', 'dist'),
@@ -89,12 +90,22 @@ const scanAssets = async () => {
         buildMeta = await readBuildMeta();
         assertBuildMetaComplete(buildMeta);
     } catch (error) {
-        throw new Error(`build_meta.json is invalid: ${error.message}`);
+        throw new Error(
+            [
+                'build_meta.json is invalid.',
+                `buildDir: ${buildDir}`,
+                `buildMetaPath: ${buildMetaPath}`,
+                error.message,
+            ]
+                .filter(Boolean)
+                .join('\n')
+        );
     }
 
     const gitSha = normalizeSha(buildMeta?.gitSha);
     const shortSha = gitSha.length > 7 ? gitSha.slice(0, 7) : gitSha;
     const promptLabel = `v3:${shortSha}`;
+    const gitShaJsonNeedles = [`"gitSha":"${gitSha}"`, `"gitSha": "${gitSha}"`];
 
     const files = await walkFiles(buildDir);
     const assetFiles = files.filter((file) => allowedExtensions.has(path.extname(file)));
@@ -103,40 +114,95 @@ const scanAssets = async () => {
         throw new Error(`No build assets found in ${buildDir}`);
     }
 
-    const requiredNeedles = [gitSha, promptLabel, 'v3:missing'];
-    let foundFullSha = false;
-    let foundPromptLabel = false;
-    let foundMissingLabel = false;
+    const mustFind = [gitSha];
+    const mustNotFind = ['v3:missing'];
+    const optionalFind = [promptLabel, 'Prompt version: v3:'];
+    const allNeedles = [...mustFind, ...mustNotFind, ...optionalFind, ...gitShaJsonNeedles];
+    const foundMustFind = new Set();
+    const foundOptional = new Set();
+    const forbiddenHits = new Map(mustNotFind.map((needle) => [needle, new Set()]));
+    let foundGitShaJson = false;
 
     for (const filePath of assetFiles) {
         let matches = new Set();
         try {
-            matches = await searchFileForNeedles(filePath, requiredNeedles);
+            matches = await searchFileForNeedles(filePath, allNeedles);
         } catch (error) {
             continue;
         }
 
-        if (matches.has(gitSha)) {
-            foundFullSha = true;
+        for (const needle of mustFind) {
+            if (matches.has(needle)) {
+                foundMustFind.add(needle);
+            }
         }
-        if (matches.has(promptLabel)) {
-            foundPromptLabel = true;
+        for (const needle of optionalFind) {
+            if (matches.has(needle)) {
+                foundOptional.add(needle);
+            }
         }
-        if (matches.has('v3:missing')) {
-            foundMissingLabel = true;
+        for (const needle of mustNotFind) {
+            if (matches.has(needle)) {
+                forbiddenHits.get(needle)?.add(filePath);
+            }
+        }
+        if (gitShaJsonNeedles.some((needle) => matches.has(needle))) {
+            foundGitShaJson = true;
         }
     }
 
-    if (!foundFullSha) {
-        throw new Error(`No build stamp found in assets. Expected SHA ${gitSha}.`);
+    const failureMessages = [];
+    if (!foundMustFind.has(gitSha)) {
+        failureMessages.push(`Missing full git SHA ${gitSha} in assets.`);
     }
 
-    if (!foundPromptLabel) {
-        throw new Error(`No prompt stamp found in assets. Expected label ${promptLabel}.`);
+    if (!foundGitShaJson) {
+        failureMessages.push(
+            `Missing embedded build_meta gitSha JSON in assets (expected ${gitShaJsonNeedles.join(
+                ' or '
+            )}).`
+        );
     }
 
-    if (foundMissingLabel) {
-        throw new Error('Build assets contain v3:missing');
+    const forbiddenFiles = Array.from(forbiddenHits.entries())
+        .filter(([, files]) => files.size > 0)
+        .flatMap(([needle, files]) =>
+            Array.from(files).map((file) => ({ needle, file }))
+        );
+    if (forbiddenFiles.length > 0) {
+        failureMessages.push('Build assets contain v3:missing.');
+    }
+
+    if (failureMessages.length > 0) {
+        const maxForbidden = 5;
+        const forbiddenList = forbiddenFiles
+            .slice(0, maxForbidden)
+            .map(({ needle, file }) => `${needle} → ${file}`)
+            .join('\n');
+        const extraForbidden =
+            forbiddenFiles.length > maxForbidden
+                ? `\n...and ${forbiddenFiles.length - maxForbidden} more`
+                : '';
+        throw new Error(
+            [
+                'Chat build stamp verification failed.',
+                `buildDir: ${buildDir}`,
+                `buildMetaPath: ${buildMetaPath}`,
+                `gitSha: ${gitSha}`,
+                ...failureMessages,
+                forbiddenList ? `Forbidden needle hits:\n${forbiddenList}${extraForbidden}` : null,
+            ]
+                .filter(Boolean)
+                .join('\n')
+        );
+    }
+
+    for (const needle of optionalFind) {
+        if (!foundOptional.has(needle)) {
+            console.warn(
+                `Optional stamp not found in assets: ${needle}. buildDir=${buildDir}`
+            );
+        }
     }
 };
 

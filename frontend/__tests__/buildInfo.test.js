@@ -59,7 +59,7 @@ describe('buildInfo', () => {
         };
         const { getAppGitSha, getPromptVersionLabel } = await loadBuildInfo(buildMeta);
         expect(getAppGitSha()).not.toBe('missing');
-        expect(getPromptVersionLabel()).toBe(`v3:${buildMeta.gitSha.slice(0, 7)}`);
+        expect(getPromptVersionLabel()).toBe('v3:f00ba4c');
         expect(getPromptVersionLabel()).not.toBe('v3:missing');
     });
 
