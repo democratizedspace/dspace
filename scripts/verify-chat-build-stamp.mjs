@@ -9,7 +9,9 @@ const __dirname = path.dirname(__filename);
 const repoRoot = process.env.VERIFY_REPO_ROOT
     ? path.resolve(process.env.VERIFY_REPO_ROOT)
     : path.resolve(__dirname, '..');
-const buildMetaPath = path.join(repoRoot, 'frontend', 'src', 'generated', 'build_meta.json');
+const buildMetaPath = process.env.VERIFY_BUILD_META_PATH
+    ? path.resolve(process.env.VERIFY_BUILD_META_PATH)
+    : path.join(repoRoot, 'frontend', 'src', 'generated', 'build_meta.json');
 
 const candidateDirs = [
     path.join(repoRoot, 'frontend', 'dist'),
@@ -92,12 +94,17 @@ const scanAssets = async () => {
         assertBuildMetaComplete(buildMeta);
     } catch (error) {
         const errorDetails = String(error?.stack ?? error?.message ?? error);
+        const isMissingBuildMeta = error?.code === 'ENOENT';
         throw new Error(
             [
                 'Chat build stamp verification failed (gate A: build_meta completeness).',
                 `buildDir: ${buildDir}`,
+                `repoRoot: ${repoRoot}`,
                 `expected gitSha: ${normalizeSha(buildMeta?.gitSha) || 'unknown'}`,
                 `buildMetaPath: ${buildMetaPath}`,
+                isMissingBuildMeta
+                    ? 'build_meta.json not found. Set VERIFY_BUILD_META_PATH to override.'
+                    : null,
                 errorDetails,
             ]
                 .filter(Boolean)
@@ -112,6 +119,7 @@ const scanAssets = async () => {
                 'Chat build stamp verification failed (gate A: build_meta gitSha format).',
                 `buildDir: ${buildDir}`,
                 `buildMetaPath: ${buildMetaPath}`,
+                `repoRoot: ${repoRoot}`,
                 `expected 40-char gitSha: ${gitSha || 'missing'}`,
             ]
                 .filter(Boolean)
@@ -202,6 +210,7 @@ const scanAssets = async () => {
                 'Chat build stamp verification failed.',
                 `buildDir: ${buildDir}`,
                 `buildMetaPath: ${buildMetaPath}`,
+                `repoRoot: ${repoRoot}`,
                 `expected gitSha: ${gitSha}`,
                 ...failureMessages,
                 forbiddenList ? `Forbidden needle hits:\n${forbiddenList}${extraForbidden}` : null,
