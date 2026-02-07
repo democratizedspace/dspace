@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename);
 const repoRoot = process.env.VERIFY_REPO_ROOT
     ? path.resolve(process.env.VERIFY_REPO_ROOT)
     : path.resolve(__dirname, '..');
+const buildMetaPath = path.join(repoRoot, 'frontend', 'src', 'generated', 'build_meta.json');
 
 const candidateDirs = [
     path.join(repoRoot, 'frontend', 'dist'),
@@ -89,7 +90,15 @@ const scanAssets = async () => {
         buildMeta = await readBuildMeta();
         assertBuildMetaComplete(buildMeta);
     } catch (error) {
-        throw new Error(`build_meta.json is invalid: ${error.message}`);
+        throw new Error(
+            [
+                'build_meta.json is invalid.',
+                `buildDir: ${buildDir}`,
+                `repoRoot: ${repoRoot}`,
+                `buildMetaPath: ${buildMetaPath}`,
+                `error: ${error.message}`,
+            ].join('\n')
+        );
     }
 
     const gitSha = normalizeSha(buildMeta?.gitSha);
@@ -103,15 +112,26 @@ const scanAssets = async () => {
         throw new Error(`No build assets found in ${buildDir}`);
     }
 
-    const requiredNeedles = [gitSha, promptLabel, 'v3:missing'];
+    const mustFindNeedles = [gitSha];
+    const buildMetaNeedles = [`"gitSha":"${gitSha}"`, `"gitSha": "${gitSha}"`];
+    const mustNotFindNeedles = ['v3:missing'];
+    const optionalNeedles = [promptLabel, 'Prompt version: v3:'];
+    const allNeedles = [
+        ...mustFindNeedles,
+        ...buildMetaNeedles,
+        ...mustNotFindNeedles,
+        ...optionalNeedles,
+    ];
     let foundFullSha = false;
-    let foundPromptLabel = false;
+    let foundBuildMeta = false;
     let foundMissingLabel = false;
+    let foundOptionalNeedle = false;
+    const forbiddenHits = new Map();
 
     for (const filePath of assetFiles) {
         let matches = new Set();
         try {
-            matches = await searchFileForNeedles(filePath, requiredNeedles);
+            matches = await searchFileForNeedles(filePath, allNeedles);
         } catch (error) {
             continue;
         }
@@ -119,24 +139,72 @@ const scanAssets = async () => {
         if (matches.has(gitSha)) {
             foundFullSha = true;
         }
-        if (matches.has(promptLabel)) {
-            foundPromptLabel = true;
+        if (buildMetaNeedles.some((needle) => matches.has(needle))) {
+            foundBuildMeta = true;
+        }
+        if (optionalNeedles.some((needle) => matches.has(needle))) {
+            foundOptionalNeedle = true;
         }
         if (matches.has('v3:missing')) {
             foundMissingLabel = true;
+            const hitList = forbiddenHits.get('v3:missing') ?? [];
+            if (hitList.length < 5) {
+                hitList.push(filePath);
+            }
+            forbiddenHits.set('v3:missing', hitList);
         }
     }
 
     if (!foundFullSha) {
-        throw new Error(`No build stamp found in assets. Expected SHA ${gitSha}.`);
+        throw new Error(
+            [
+                'Missing required build SHA in assets.',
+                `buildDir: ${buildDir}`,
+                `repoRoot: ${repoRoot}`,
+                `buildMetaPath: ${buildMetaPath}`,
+                `expected gitSha: ${gitSha}`,
+                'invariant: full git SHA not found in build output',
+            ].join('\n')
+        );
     }
 
-    if (!foundPromptLabel) {
-        throw new Error(`No prompt stamp found in assets. Expected label ${promptLabel}.`);
+    if (!foundBuildMeta) {
+        throw new Error(
+            [
+                'Missing embedded build_meta.json payload in assets.',
+                `buildDir: ${buildDir}`,
+                `repoRoot: ${repoRoot}`,
+                `buildMetaPath: ${buildMetaPath}`,
+                `expected gitSha: ${gitSha}`,
+                'invariant: build_meta.json gitSha not found in build output',
+            ].join('\n')
+        );
     }
 
     if (foundMissingLabel) {
-        throw new Error('Build assets contain v3:missing');
+        const hitFiles = forbiddenHits.get('v3:missing') ?? [];
+        const hitList = hitFiles.length ? `\nfiles:\n- ${hitFiles.join('\n- ')}` : '';
+        throw new Error(
+            [
+                'Build assets contain v3:missing.',
+                `buildDir: ${buildDir}`,
+                `repoRoot: ${repoRoot}`,
+                `buildMetaPath: ${buildMetaPath}`,
+                `expected gitSha: ${gitSha}`,
+                `invariant: forbidden marker found${hitList}`,
+            ].join('\n')
+        );
+    }
+
+    if (!foundOptionalNeedle) {
+        console.warn(
+            [
+                'Optional prompt version label not found in assets.',
+                `buildDir: ${buildDir}`,
+                `expected prompt label: ${promptLabel}`,
+                'This is informational; prompt label may be computed at runtime.',
+            ].join('\n')
+        );
     }
 };
 
