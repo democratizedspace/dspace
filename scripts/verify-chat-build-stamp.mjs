@@ -9,7 +9,9 @@ const __dirname = path.dirname(__filename);
 const repoRoot = process.env.VERIFY_REPO_ROOT
     ? path.resolve(process.env.VERIFY_REPO_ROOT)
     : path.resolve(__dirname, '..');
-const buildMetaPath = path.join(repoRoot, 'frontend', 'src', 'generated', 'build_meta.json');
+const buildMetaPath = process.env.VERIFY_BUILD_META_PATH
+    ? path.resolve(process.env.VERIFY_BUILD_META_PATH)
+    : path.join(repoRoot, 'frontend', 'src', 'generated', 'build_meta.json');
 
 const candidateDirs = [
     path.join(repoRoot, 'frontend', 'dist'),
@@ -91,13 +93,18 @@ const scanAssets = async () => {
         buildMeta = await readBuildMeta();
         assertBuildMetaComplete(buildMeta);
     } catch (error) {
+        const isMissingMeta = error?.code === 'ENOENT';
         const errorDetails = String(error?.stack ?? error?.message ?? error);
         throw new Error(
             [
                 'Chat build stamp verification failed (gate A: build_meta completeness).',
                 `buildDir: ${buildDir}`,
-                `expected gitSha: ${normalizeSha(buildMeta?.gitSha) || 'unknown'}`,
+                `repoRoot: ${repoRoot}`,
                 `buildMetaPath: ${buildMetaPath}`,
+                `expected gitSha: ${normalizeSha(buildMeta?.gitSha) || 'unknown'}`,
+                isMissingMeta
+                    ? 'build_meta.json not found. Override with VERIFY_BUILD_META_PATH.'
+                    : null,
                 errorDetails,
             ]
                 .filter(Boolean)
@@ -111,6 +118,7 @@ const scanAssets = async () => {
             [
                 'Chat build stamp verification failed (gate A: build_meta gitSha format).',
                 `buildDir: ${buildDir}`,
+                `repoRoot: ${repoRoot}`,
                 `buildMetaPath: ${buildMetaPath}`,
                 `expected 40-char gitSha: ${gitSha || 'missing'}`,
             ]
@@ -201,6 +209,7 @@ const scanAssets = async () => {
             [
                 'Chat build stamp verification failed.',
                 `buildDir: ${buildDir}`,
+                `repoRoot: ${repoRoot}`,
                 `buildMetaPath: ${buildMetaPath}`,
                 `expected gitSha: ${gitSha}`,
                 ...failureMessages,
