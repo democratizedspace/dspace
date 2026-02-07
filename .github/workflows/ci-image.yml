@@ -267,6 +267,12 @@ jobs:
             exit 1
           fi
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+          run_install: false
+
       # Explicitly install the Node version from .nvmrc so version reads stay stable even if
       # runner defaults change.
       - name: Set up Node.js
@@ -274,12 +280,6 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: pnpm
-
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
-          run_install: false
 
       # Use Node to read the app version from package.json for image tagging.
       - name: Read package version
