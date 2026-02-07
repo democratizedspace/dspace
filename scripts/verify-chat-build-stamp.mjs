@@ -1,17 +1,15 @@
 import fs from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { assertBuildMetaComplete, readBuildMeta } from './write-build-meta.mjs';
+import {
+    assertBuildMetaComplete,
+    getBuildMetaPath,
+    getRepoRoot,
+    readBuildMeta,
+} from './write-build-meta.mjs';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const repoRoot = process.env.VERIFY_REPO_ROOT
-    ? path.resolve(process.env.VERIFY_REPO_ROOT)
-    : path.resolve(__dirname, '..');
-const buildMetaPath = process.env.VERIFY_BUILD_META_PATH
-    ? path.resolve(process.env.VERIFY_BUILD_META_PATH)
-    : path.join(repoRoot, 'frontend', 'src', 'generated', 'build_meta.json');
+const repoRoot = getRepoRoot();
+const buildMetaPath = getBuildMetaPath();
 
 const candidateDirs = [
     path.join(repoRoot, 'frontend', 'dist'),
@@ -104,7 +102,7 @@ const scanAssets = async () => {
                 'Chat build stamp verification failed (gate A: build_meta completeness).',
                 `buildDir: ${buildDir}`,
                 `repoRoot: ${repoRoot}`,
-                `expected gitSha: ${normalizeSha(buildMeta?.gitSha) || 'unknown'}`,
+                `build_meta gitSha: ${normalizeSha(buildMeta?.gitSha) || 'unknown'}`,
                 `buildMetaPath: ${buildMetaPath}`,
                 overrideHint,
                 errorDetails,
