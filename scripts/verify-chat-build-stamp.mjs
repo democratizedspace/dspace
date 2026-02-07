@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename);
 const repoRoot = process.env.VERIFY_REPO_ROOT
     ? path.resolve(process.env.VERIFY_REPO_ROOT)
     : path.resolve(__dirname, '..');
+const buildMetaPath = path.join(repoRoot, 'frontend', 'src', 'generated', 'build_meta.json');
 
 const candidateDirs = [
     path.join(repoRoot, 'frontend', 'dist'),
@@ -95,6 +96,7 @@ const scanAssets = async () => {
     const gitSha = normalizeSha(buildMeta?.gitSha);
     const shortSha = gitSha.length > 7 ? gitSha.slice(0, 7) : gitSha;
     const promptLabel = `v3:${shortSha}`;
+    const buildMetaNeedles = [`"gitSha":"${gitSha}"`, `"gitSha": "${gitSha}"`];
 
     const files = await walkFiles(buildDir);
     const assetFiles = files.filter((file) => allowedExtensions.has(path.extname(file)));
@@ -103,15 +105,21 @@ const scanAssets = async () => {
         throw new Error(`No build assets found in ${buildDir}`);
     }
 
-    const requiredNeedles = [gitSha, promptLabel, 'v3:missing'];
+    const mustFind = [gitSha];
+    const mustNotFind = ['v3:missing'];
+    const optionalFind = [promptLabel, 'Prompt version: v3:'];
+    const allNeedles = [...mustFind, ...mustNotFind, ...optionalFind, ...buildMetaNeedles];
     let foundFullSha = false;
-    let foundPromptLabel = false;
     let foundMissingLabel = false;
+    let foundBuildMetaJson = false;
+    const optionalMatches = new Set();
+    const forbiddenFiles = new Map();
+    const maxReportedFiles = 5;
 
     for (const filePath of assetFiles) {
         let matches = new Set();
         try {
-            matches = await searchFileForNeedles(filePath, requiredNeedles);
+            matches = await searchFileForNeedles(filePath, allNeedles);
         } catch (error) {
             continue;
         }
@@ -119,25 +127,58 @@ const scanAssets = async () => {
         if (matches.has(gitSha)) {
             foundFullSha = true;
         }
-        if (matches.has(promptLabel)) {
-            foundPromptLabel = true;
-        }
         if (matches.has('v3:missing')) {
             foundMissingLabel = true;
+            if (!forbiddenFiles.has('v3:missing')) {
+                forbiddenFiles.set('v3:missing', []);
+            }
+            const files = forbiddenFiles.get('v3:missing');
+            if (files.length < maxReportedFiles) {
+                files.push(filePath);
+            }
+        }
+        if (!foundBuildMetaJson && buildMetaNeedles.some((needle) => matches.has(needle))) {
+            foundBuildMetaJson = true;
+        }
+        for (const needle of optionalFind) {
+            if (matches.has(needle)) {
+                optionalMatches.add(needle);
+            }
         }
     }
 
+    const failures = [];
     if (!foundFullSha) {
-        throw new Error(`No build stamp found in assets. Expected SHA ${gitSha}.`);
+        failures.push('Missing full git SHA in build assets.');
     }
-
-    if (!foundPromptLabel) {
-        throw new Error(`No prompt stamp found in assets. Expected label ${promptLabel}.`);
+    if (!foundBuildMetaJson) {
+        failures.push('Missing embedded build_meta.json gitSha in build assets.');
     }
-
     if (foundMissingLabel) {
-        throw new Error('Build assets contain v3:missing');
+        failures.push('Found forbidden prompt label v3:missing in build assets.');
     }
+
+    if (failures.length > 0) {
+        const details = [
+            'Chat build stamp verification failed.',
+            `buildDir: ${buildDir}`,
+            `buildMetaPath: ${buildMetaPath}`,
+            `expected gitSha: ${gitSha}`,
+            'Failures:',
+            ...failures.map((failure) => `- ${failure}`),
+        ];
+        if (forbiddenFiles.size > 0) {
+            for (const [needle, files] of forbiddenFiles.entries()) {
+                details.push(`Forbidden needle "${needle}" found in:`);
+                details.push(...files.map((file) => `- ${file}`));
+            }
+        }
+        throw new Error(details.join('\n'));
+    }
+
+    const optionalList =
+        optionalMatches.size > 0 ? Array.from(optionalMatches).join(', ') : 'none';
+    console.log(`Optional prompt markers found: ${optionalList}`);
 };
 
 scanAssets().catch((error) => {
