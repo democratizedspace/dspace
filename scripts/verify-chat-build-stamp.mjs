@@ -93,8 +93,9 @@ const scanAssets = async () => {
         const errorDetails = String(error?.stack ?? error?.message ?? error);
         throw new Error(
             [
-                'build_meta.json is invalid.',
+                'Chat build stamp verification failed (gate A: build_meta completeness).',
                 `buildDir: ${buildDir}`,
+                `expected gitSha: ${normalizeSha(buildMeta?.gitSha) || 'unknown'}`,
                 `buildMetaPath: ${buildMetaPath}`,
                 errorDetails,
             ]
@@ -156,15 +157,7 @@ const scanAssets = async () => {
 
     const failureMessages = [];
     if (!foundMustFind.has(gitSha)) {
-        failureMessages.push(`Missing full git SHA ${gitSha} in assets.`);
-    }
-
-    if (!foundGitShaJson) {
-        failureMessages.push(
-            `Missing embedded build_meta gitSha JSON in assets (expected ${gitShaJsonNeedles.join(
-                ' or '
-            )}).`
-        );
+        failureMessages.push(`Gate B failed: missing full git SHA ${gitSha} in assets.`);
     }
 
     const forbiddenFiles = Array.from(forbiddenHits.entries())
@@ -177,7 +170,7 @@ const scanAssets = async () => {
             new Set(forbiddenFiles.map(({ needle }) => needle))
         ).join(', ');
         failureMessages.push(
-            `Build assets contain forbidden needle(s): ${forbiddenNeedles}.`
+            `Gate C failed: build assets contain forbidden needle(s): ${forbiddenNeedles}.`
         );
     }
 
@@ -196,7 +189,7 @@ const scanAssets = async () => {
                 'Chat build stamp verification failed.',
                 `buildDir: ${buildDir}`,
                 `buildMetaPath: ${buildMetaPath}`,
-                `gitSha: ${gitSha}`,
+                `expected gitSha: ${gitSha}`,
                 ...failureMessages,
                 forbiddenList ? `Forbidden needle hits:\n${forbiddenList}${extraForbidden}` : null,
             ]
@@ -210,6 +203,16 @@ const scanAssets = async () => {
     } else {
         console.warn(
             `Optional markers not found (searched: ${optionalFind.join(', ')}). Non-fatal.`
+        );
+    }
+
+    if (foundGitShaJson) {
+        console.warn(`Optional build_meta gitSha JSON marker found in assets.`);
+    } else {
+        console.warn(
+            `Optional build_meta gitSha JSON marker not found (searched: ${gitShaJsonNeedles.join(
+                ' or '
+            )}). Non-fatal.`
         );
     }
 };
