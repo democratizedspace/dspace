@@ -106,6 +106,7 @@ COPY --from=prod-deps /workspace/frontend/node_modules ./node_modules
 COPY --from=prod-deps /workspace/node_modules/.pnpm ../node_modules/.pnpm
 COPY --from=build /workspace/frontend/dist ./dist
 COPY --from=build /workspace/frontend/package.json ./package.json
+COPY --from=build /workspace/frontend/src/generated/build_meta.json ./build_meta.json
 COPY infra/docker/entrypoint.mjs ./entrypoint.mjs
 COPY infra/metrics.mjs ./metrics.mjs
 RUN chown -R node:node /app /node_modules
