@@ -5,8 +5,12 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const repoRoot = path.resolve(__dirname, '..');
-const buildMetaPath = path.join(repoRoot, 'frontend/src/generated/build_meta.json');
+const repoRoot = process.env.VERIFY_REPO_ROOT
+    ? path.resolve(process.env.VERIFY_REPO_ROOT)
+    : path.resolve(__dirname, '..');
+const buildMetaPath = process.env.VERIFY_BUILD_META_PATH
+    ? path.resolve(process.env.VERIFY_BUILD_META_PATH)
+    : path.join(repoRoot, 'frontend/src/generated/build_meta.json');
 const allowedSources = new Set(['ci', 'env', 'git']);
 
 const normalizeSha = (value) => String(value || '').trim();

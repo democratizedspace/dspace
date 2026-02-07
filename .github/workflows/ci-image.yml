@@ -439,6 +439,7 @@ jobs:
         run: |
           docker run --rm \
             -e VERIFY_REPO_ROOT=/app \
+            -e VERIFY_BUILD_META_PATH=/app/frontend/src/generated/build_meta.json \
             -v "$PWD/scripts:/scripts:ro" \
             -w /app \
             dspace-verify:latest \
