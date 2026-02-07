@@ -112,7 +112,9 @@ const scanAssets = async () => {
     const assetFiles = files.filter((file) => allowedExtensions.has(path.extname(file)));
 
     if (assetFiles.length === 0) {
-        throw new Error(`No build assets found in ${buildDir}`);
+        throw new Error(
+            `No build assets found in ${buildDir}. buildMetaPath: ${buildMetaPath}. gitSha: ${gitSha}`
+        );
     }
 
     const mustFind = [gitSha];
@@ -203,23 +205,12 @@ const scanAssets = async () => {
         );
     }
 
-    const missingOptional = Array.from(optionalFind).filter(
-        (needle) => !foundOptional.has(needle)
-    );
-    if (missingOptional.length > 0) {
-        if (process.env.VERIFY_VERBOSE === '1') {
-            for (const needle of missingOptional) {
-                console.warn(
-                    `Optional stamp not found in assets: ${needle}. buildDir=${buildDir}`
-                );
-            }
-        } else {
-            console.warn(
-                `Optional stamps not found in assets (${missingOptional.length}): ${missingOptional.join(
-                    ', '
-                )}. buildDir=${buildDir}`
-            );
-        }
+    if (foundOptional.size > 0) {
+        console.warn(`Optional markers found: ${Array.from(foundOptional).join(', ')}`);
+    } else {
+        console.warn(
+            `Optional markers not found (searched: ${optionalFind.join(', ')}). Non-fatal.`
+        );
     }
 };
 
