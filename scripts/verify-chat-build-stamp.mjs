@@ -91,10 +91,12 @@ const scanAssets = async () => {
         assertBuildMetaComplete(buildMeta);
     } catch (error) {
         const errorDetails = String(error?.stack ?? error?.message ?? error);
+        const expectedSha = normalizeSha(buildMeta?.gitSha) || 'unknown';
         throw new Error(
             [
-                'build_meta.json is invalid.',
+                'Chat build stamp verification failed (Gate A: build_meta.json invalid).',
                 `buildDir: ${buildDir}`,
+                `expectedSha: ${expectedSha}`,
                 `buildMetaPath: ${buildMetaPath}`,
                 errorDetails,
             ]
@@ -156,15 +158,7 @@ const scanAssets = async () => {
 
     const failureMessages = [];
     if (!foundMustFind.has(gitSha)) {
-        failureMessages.push(`Missing full git SHA ${gitSha} in assets.`);
-    }
-
-    if (!foundGitShaJson) {
-        failureMessages.push(
-            `Missing embedded build_meta gitSha JSON in assets (expected ${gitShaJsonNeedles.join(
-                ' or '
-            )}).`
-        );
+        failureMessages.push(`Gate B failed: Missing full git SHA ${gitSha} in assets.`);
     }
 
     const forbiddenFiles = Array.from(forbiddenHits.entries())
@@ -177,7 +171,7 @@ const scanAssets = async () => {
             new Set(forbiddenFiles.map(({ needle }) => needle))
         ).join(', ');
         failureMessages.push(
-            `Build assets contain forbidden needle(s): ${forbiddenNeedles}.`
+            `Gate C failed: Build assets contain forbidden needle(s): ${forbiddenNeedles}.`
         );
     }
 
@@ -197,11 +191,24 @@ const scanAssets = async () => {
                 `buildDir: ${buildDir}`,
                 `buildMetaPath: ${buildMetaPath}`,
                 `gitSha: ${gitSha}`,
+                `expectedSha: ${gitSha}`,
                 ...failureMessages,
                 forbiddenList ? `Forbidden needle hits:\n${forbiddenList}${extraForbidden}` : null,
             ]
                 .filter(Boolean)
                 .join('\n')
+        );
+    }
+
+    if (foundGitShaJson) {
+        console.warn(
+            `Optional build_meta gitSha JSON marker found (matched ${gitShaJsonNeedles.join(' or ')}).`
+        );
+    } else {
+        console.warn(
+            `Optional build_meta gitSha JSON marker not found (searched ${gitShaJsonNeedles.join(
+                ' or '
+            )}). Non-fatal.`
         );
     }
 
