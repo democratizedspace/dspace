@@ -90,12 +90,13 @@ const scanAssets = async () => {
         buildMeta = await readBuildMeta();
         assertBuildMetaComplete(buildMeta);
     } catch (error) {
+        const errorDetails = String(error?.stack ?? error?.message ?? error);
         throw new Error(
             [
                 'build_meta.json is invalid.',
                 `buildDir: ${buildDir}`,
                 `buildMetaPath: ${buildMetaPath}`,
-                error.message,
+                errorDetails,
             ]
                 .filter(Boolean)
                 .join('\n')
@@ -170,7 +171,12 @@ const scanAssets = async () => {
             Array.from(files).map((file) => ({ needle, file }))
         );
     if (forbiddenFiles.length > 0) {
-        failureMessages.push('Build assets contain v3:missing.');
+        const forbiddenNeedles = Array.from(
+            new Set(forbiddenFiles.map(({ needle }) => needle))
+        ).join(', ');
+        failureMessages.push(
+            `Build assets contain forbidden needle(s): ${forbiddenNeedles}.`
+        );
     }
 
     if (failureMessages.length > 0) {
@@ -197,16 +203,27 @@ const scanAssets = async () => {
         );
     }
 
-    for (const needle of optionalFind) {
-        if (!foundOptional.has(needle)) {
+    const missingOptional = Array.from(optionalFind).filter(
+        (needle) => !foundOptional.has(needle)
+    );
+    if (missingOptional.length > 0) {
+        if (process.env.VERIFY_VERBOSE === '1') {
+            for (const needle of missingOptional) {
+                console.warn(
+                    `Optional stamp not found in assets: ${needle}. buildDir=${buildDir}`
+                );
+            }
+        } else {
             console.warn(
-                `Optional stamp not found in assets: ${needle}. buildDir=${buildDir}`
+                `Optional stamps not found in assets (${missingOptional.length}): ${missingOptional.join(
+                    ', '
+                )}. buildDir=${buildDir}`
             );
         }
     }
 };
 
 scanAssets().catch((error) => {
-    console.error(error.message);
+    console.error(String(error?.stack ?? error?.message ?? error));
     process.exit(1);
 });
