@@ -3,6 +3,14 @@ import '@testing-library/jest-dom';
 import { cleanup, render, screen, waitFor, fireEvent } from '@testing-library/svelte';
 import OpenAIChat from '../OpenAIChat.svelte';
 
+vi.mock('../../../../generated/build_meta.json', () => ({
+    default: {
+        gitSha: 'missing',
+        generatedAt: '',
+        source: 'static',
+    },
+}));
+
 const mockGetDocsRagMeta = vi.hoisted(() =>
     vi.fn(async () => ({
         gitSha: 'abc123',

@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { verifyChatBuildStamp } from './verify-chat-build-stamp.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -93,6 +94,8 @@ const scanAssets = async () => {
     if (foundMissingLabel) {
         throw new Error('Build assets contain v3:missing');
     }
+
+    await verifyChatBuildStamp();
 };
 
 scanAssets().catch((error) => {
