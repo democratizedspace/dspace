@@ -2,12 +2,12 @@ import fs from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { assertBuildMetaComplete, readBuildMeta } from './write-build-meta.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const repoRoot = path.resolve(__dirname, '..');
 
-const buildMetaPath = path.join(repoRoot, 'frontend', 'src', 'generated', 'build_meta.json');
 const candidateDirs = [
     path.join(repoRoot, 'frontend', 'dist'),
     path.join(repoRoot, 'frontend', '.vercel', 'output', 'static'),
@@ -84,16 +84,13 @@ const scanAssets = async () => {
 
     let buildMeta;
     try {
-        const rawMeta = await fs.readFile(buildMetaPath, 'utf8');
-        buildMeta = JSON.parse(rawMeta);
+        buildMeta = await readBuildMeta();
+        assertBuildMetaComplete(buildMeta);
     } catch (error) {
-        throw new Error(`Unable to read build metadata at ${buildMetaPath}: ${error.message}`);
+        throw new Error(`build_meta.json is invalid: ${error.message}`);
     }
 
     const gitSha = normalizeSha(buildMeta?.gitSha);
-    if (!gitSha || gitSha.toLowerCase() === 'missing') {
-        throw new Error(`build_meta.json gitSha is not set: ${gitSha || 'empty'}`);
-    }
     const shortSha = gitSha.length > 7 ? gitSha.slice(0, 7) : gitSha;
     const promptLabel = `v3:${shortSha}`;
 
