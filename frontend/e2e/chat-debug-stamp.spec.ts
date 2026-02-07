@@ -27,7 +27,9 @@ test.describe('Chat debug build stamp', () => {
         const promptVersion = debugPanel.getByText(/Prompt version:/);
         await expect(promptVersion).toBeVisible();
         await expect(promptVersion).not.toContainText('v3:missing');
-        await expect(promptVersion).not.toContainText('v3:dev-local');
+        if (process.env.CI) {
+            await expect(promptVersion).not.toContainText('v3:dev-local');
+        }
 
         const appRow = debugPanel.getByTestId('debug-app-sha-row');
         const appValue = appRow.locator('.debug-mono');

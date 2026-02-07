@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -14,7 +15,7 @@ const candidateDirs = [
     path.join(repoRoot, 'dist'),
 ];
 
-const allowedExtensions = new Set(['.js', '.mjs', '.cjs', '.html']);
+const allowedExtensions = new Set(['.js', '.mjs', '.cjs', '.html', '.css', '.map']);
 
 const normalizeSha = (value) => String(value || '').trim();
 
@@ -50,22 +51,28 @@ const findBuildDir = async () => {
     return null;
 };
 
-const forbiddenMatchers = [
-    {
-        label: 'v3:missing',
-        regex: /v3:missing/,
-    },
-    {
-        label: 'App build SHA followed by missing',
-        regex: /App build SHA[\s\S]{0,80}missing/i,
-    },
-    {
-        label: 'App build SHA source followed by missing',
-        regex: /App build SHA source[\s\S]{0,80}missing/i,
-    },
-];
+const searchFileForNeedles = async (filePath, needles) => {
+    const matches = new Set();
+    const maxNeedleLength = Math.max(...needles.map((needle) => needle.length));
+    let carryover = '';
 
-const requiredPromptRegex = /Prompt version: v3:(?!missing)[a-z0-9-]{7,}/i;
+    await new Promise((resolve, reject) => {
+        const stream = createReadStream(filePath);
+        stream.on('data', (chunk) => {
+            const text = carryover + chunk.toString('utf8');
+            for (const needle of needles) {
+                if (text.includes(needle)) {
+                    matches.add(needle);
+                }
+            }
+            carryover = text.slice(-maxNeedleLength);
+        });
+        stream.on('error', reject);
+        stream.on('end', resolve);
+    });
+
+    return matches;
+};
 
 const scanAssets = async () => {
     const buildDir = await findBuildDir();
@@ -88,6 +95,7 @@ const scanAssets = async () => {
         throw new Error(`build_meta.json gitSha is not set: ${gitSha || 'empty'}`);
     }
     const shortSha = gitSha.length > 7 ? gitSha.slice(0, 7) : gitSha;
+    const promptLabel = `v3:${shortSha}`;
 
     const files = await walkFiles(buildDir);
     const assetFiles = files.filter((file) => allowedExtensions.has(path.extname(file)));
@@ -96,46 +104,40 @@ const scanAssets = async () => {
         throw new Error(`No build assets found in ${buildDir}`);
     }
 
-    const forbiddenHits = new Map();
-    let foundRequiredStamp = false;
+    const requiredNeedles = [gitSha, promptLabel, 'v3:missing'];
+    let foundFullSha = false;
+    let foundPromptLabel = false;
+    let foundMissingLabel = false;
 
     for (const filePath of assetFiles) {
-        let content = '';
+        let matches = new Set();
         try {
-            content = await fs.readFile(filePath, 'utf8');
+            matches = await searchFileForNeedles(filePath, requiredNeedles);
         } catch (error) {
             continue;
         }
 
-        for (const matcher of forbiddenMatchers) {
-            if (matcher.regex.test(content)) {
-                const hits = forbiddenHits.get(filePath) ?? [];
-                hits.push(matcher.label);
-                forbiddenHits.set(filePath, hits);
-            }
+        if (matches.has(gitSha)) {
+            foundFullSha = true;
         }
-
-        if (
-            content.includes(gitSha) ||
-            content.includes(shortSha) ||
-            content.includes(`v3:${shortSha}`) ||
-            requiredPromptRegex.test(content)
-        ) {
-            foundRequiredStamp = true;
+        if (matches.has(promptLabel)) {
+            foundPromptLabel = true;
+        }
+        if (matches.has('v3:missing')) {
+            foundMissingLabel = true;
         }
     }
 
-    if (!foundRequiredStamp) {
-        throw new Error(
-            `No build stamp found in assets. Expected SHA ${gitSha} (or ${shortSha}).`
-        );
+    if (!foundFullSha) {
+        throw new Error(`No build stamp found in assets. Expected SHA ${gitSha}.`);
     }
 
-    if (forbiddenHits.size > 0) {
-        const details = Array.from(forbiddenHits.entries())
-            .map(([file, labels]) => `${path.relative(repoRoot, file)}: ${labels.join(', ')}`)
-            .join('\n');
-        throw new Error(`Forbidden build stamp markers detected:\n${details}`);
+    if (!foundPromptLabel) {
+        throw new Error(`No prompt stamp found in assets. Expected label ${promptLabel}.`);
+    }
+
+    if (foundMissingLabel) {
+        throw new Error('Build assets contain v3:missing');
     }
 };
 
