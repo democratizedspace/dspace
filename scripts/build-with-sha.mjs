@@ -31,3 +31,4 @@ try {
 
 run('npm', ['run', 'build:docs-rag']);
 run('npm', ['--prefix', 'frontend', 'run', 'build']);
+run('node', ['scripts/verify-chat-build-stamp.mjs']);

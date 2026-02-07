@@ -19,6 +19,13 @@ const mockGetDocsRagComparison = vi.hoisted(() =>
     }))
 );
 const mockGetDocsRagMismatchWarning = vi.hoisted(() => vi.fn(() => null));
+const mockBuildMeta = vi.hoisted(() => ({
+    default: {
+        gitSha: 'missing',
+        generatedAt: '',
+        source: 'static',
+    },
+}));
 
 vi.mock('../../../../utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({
@@ -44,6 +51,8 @@ vi.mock('../../../../utils/docsRag.js', () => ({
     getDocsRagComparison: mockGetDocsRagComparison,
     getDocsRagMismatchWarning: mockGetDocsRagMismatchWarning,
 }));
+
+vi.mock('../../../../generated/build_meta.json', () => mockBuildMeta);
 
 describe('OpenAIChat build metadata', () => {
     const originalLocation = window.location;
