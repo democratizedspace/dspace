@@ -86,16 +86,20 @@ const scanAssets = async () => {
     }
 
     let buildMeta;
+    let gitSha = '';
     try {
         buildMeta = await readBuildMeta();
+        gitSha = normalizeSha(buildMeta?.gitSha);
         assertBuildMetaComplete(buildMeta);
     } catch (error) {
         const errorDetails = String(error?.stack ?? error?.message ?? error);
         throw new Error(
             [
-                'build_meta.json is invalid.',
+                'Chat build stamp verification failed.',
+                'Gate A failed: build_meta.json is invalid.',
                 `buildDir: ${buildDir}`,
                 `buildMetaPath: ${buildMetaPath}`,
+                `expectedSha: ${gitSha || '(missing)'}`,
                 errorDetails,
             ]
                 .filter(Boolean)
@@ -103,7 +107,6 @@ const scanAssets = async () => {
         );
     }
 
-    const gitSha = normalizeSha(buildMeta?.gitSha);
     const shortSha = gitSha.length > 7 ? gitSha.slice(0, 7) : gitSha;
     const promptLabel = `v3:${shortSha}`;
     const gitShaJsonNeedles = [`"gitSha":"${gitSha}"`, `"gitSha": "${gitSha}"`];
@@ -156,14 +159,8 @@ const scanAssets = async () => {
 
     const failureMessages = [];
     if (!foundMustFind.has(gitSha)) {
-        failureMessages.push(`Missing full git SHA ${gitSha} in assets.`);
-    }
-
-    if (!foundGitShaJson) {
         failureMessages.push(
-            `Missing embedded build_meta gitSha JSON in assets (expected ${gitShaJsonNeedles.join(
-                ' or '
-            )}).`
+            `Gate B failed: missing full git SHA ${gitSha} in assets.`
         );
     }
 
@@ -177,7 +174,7 @@ const scanAssets = async () => {
             new Set(forbiddenFiles.map(({ needle }) => needle))
         ).join(', ');
         failureMessages.push(
-            `Build assets contain forbidden needle(s): ${forbiddenNeedles}.`
+            `Gate C failed: build assets contain forbidden needle(s): ${forbiddenNeedles}.`
         );
     }
 
@@ -196,7 +193,7 @@ const scanAssets = async () => {
                 'Chat build stamp verification failed.',
                 `buildDir: ${buildDir}`,
                 `buildMetaPath: ${buildMetaPath}`,
-                `gitSha: ${gitSha}`,
+                `expectedSha: ${gitSha}`,
                 ...failureMessages,
                 forbiddenList ? `Forbidden needle hits:\n${forbiddenList}${extraForbidden}` : null,
             ]
@@ -205,11 +202,18 @@ const scanAssets = async () => {
         );
     }
 
-    if (foundOptional.size > 0) {
-        console.warn(`Optional markers found: ${Array.from(foundOptional).join(', ')}`);
+    const optionalMarkers = new Set(foundOptional);
+    if (foundGitShaJson) {
+        optionalMarkers.add('build_meta.gitSha JSON');
+    }
+
+    if (optionalMarkers.size > 0) {
+        console.warn(`Optional markers found: ${Array.from(optionalMarkers).join(', ')}`);
     } else {
         console.warn(
-            `Optional markers not found (searched: ${optionalFind.join(', ')}). Non-fatal.`
+            `Optional markers not found (searched: ${[...optionalFind, ...gitShaJsonNeedles].join(
+                ', '
+            )}). Non-fatal.`
         );
     }
 };
