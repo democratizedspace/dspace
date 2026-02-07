@@ -273,6 +273,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+          run_install: false
 
       # Use Node to read the app version from package.json for image tagging.
       - name: Read package version
@@ -280,6 +287,14 @@ jobs:
         run: |
           version="$(node -p "require('./package.json').version")"
           echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --reporter=append-only
+
+      - name: Build and verify chat build stamp
+        run: |
+          pnpm run build
+          pnpm run verify:chat-build-stamp
 
       - name: Define image tags
         id: tags
@@ -403,6 +418,16 @@ jobs:
             -v "$PWD/scripts:/scripts:ro" \
             dspace-verify:latest \
             node /scripts/verify-build-sha.mjs /app/dist
+
+      - name: Verify chat build stamp inside image
+        if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
+        run: |
+          docker run --rm \
+            -e VERIFY_REPO_ROOT=/app \
+            -v "$PWD/scripts:/scripts:ro" \
+            -w /app \
+            dspace-verify:latest \
+            node /scripts/verify-chat-build-stamp.mjs
 
       - name: Fail if both image pushes failed
         if: steps.build_push_1.outcome == 'failure' && steps.build_push_2.outcome == 'failure'

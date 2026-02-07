@@ -6,7 +6,9 @@ import { assertBuildMetaComplete, readBuildMeta } from './write-build-meta.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const repoRoot = path.resolve(__dirname, '..');
+const repoRoot = process.env.VERIFY_REPO_ROOT
+    ? path.resolve(process.env.VERIFY_REPO_ROOT)
+    : path.resolve(__dirname, '..');
 
 const candidateDirs = [
     path.join(repoRoot, 'frontend', 'dist'),
