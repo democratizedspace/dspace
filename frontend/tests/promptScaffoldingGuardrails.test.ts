@@ -61,7 +61,7 @@ describe('prompt scaffolding guardrails', () => {
         expect(systemContent).toContain('ask for a save snapshot via /gamesaves');
         expect(systemContent).toContain('cite /docs/routes');
         expect(systemContent).toContain('Never link to GitHub blob/tree URLs for docs');
-        expect(systemContent).not.toContain('/docs/backups');
+        expect(systemContent).toContain('/docs/backups');
     });
 
     it('rejects stale token.place or no-key-needed phrasing', () => {
