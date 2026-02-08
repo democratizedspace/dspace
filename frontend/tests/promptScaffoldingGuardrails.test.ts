@@ -13,6 +13,9 @@ const negatedTokenPlacePattern =
     /token\.place.*\b(not\s+(active|enabled|default)|inactive|disabled)\b/i;
 const forbiddenKeyPattern = /\b(no key needed|key not required)\b/i;
 const allowedFuturePattern = /\bv3\.1\b|\bfuture\b|\bexperimental\b/i;
+const bundleSubmissionAnchor = '/docs/quest-submission#option-1-bundle-submission-recommended';
+const questOnlySubmissionAnchor = '/docs/quest-submission#option-2-quest-only-submission';
+const customBundlesAnchor = '/docs/custom-bundles';
 
 const collectPromptStrings = () => {
     const personaStrings = npcPersonas.flatMap((persona) =>
@@ -36,6 +39,22 @@ describe('prompt scaffolding guardrails', () => {
             (message) => message.role === 'system' && message.kind === 'main'
         );
         expect(systemMessage?.content ?? '').toContain(providerRealityLine);
+    });
+
+    it('includes custom content submission guidance in the system prompt', async () => {
+        const { debugMessages } = await buildChatPrompt([
+            { role: 'user', content: 'How do I submit a custom quest?' },
+        ]);
+        const systemMessage = debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const systemPrompt = systemMessage?.content ?? '';
+
+        expect(systemPrompt).toContain(bundleSubmissionAnchor);
+        expect(systemPrompt).toContain(customBundlesAnchor);
+        expect(systemPrompt).toContain(questOnlySubmissionAnchor);
+        expect(systemPrompt).toContain('custom items/processes');
+        expect(systemPrompt).toContain('quest-only');
     });
 
     it('rejects stale token.place or no-key-needed phrasing', () => {

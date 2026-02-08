@@ -81,6 +81,13 @@ const guardrailRules = [
     },
     {
         line:
+            'For custom items/processes, cite /docs/quest-submission#option-1-bundle-submission-recommended ' +
+            'and /docs/custom-bundles; for quest-only using existing items/processes, cite ' +
+            '/docs/quest-submission#option-2-quest-only-submission.',
+        pattern: /option-1-bundle-submission-recommended/i,
+    },
+    {
+        line:
             'Only give exact counts/durations/rates if they appear in retrieved context; otherwise be ' +
             "approximate or say you don't know.",
         pattern: /only give exact/i,
