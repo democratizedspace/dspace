@@ -127,7 +127,7 @@ describe('QA 9.4 chat hallucination contracts', () => {
         const systemContent = systemMessage?.content ?? '';
         expect(systemContent).toMatch(/save snapshot/i);
         expect(systemContent).toMatch(/\/gamesaves/i);
-        expect(systemContent).toMatch(/\/docs\/backups|\/docs\/routes/i);
+        expect(systemContent).toMatch(/\/docs\/routes/i);
     });
 
     it('Stage 8: retrieval includes requires/consumes/creates duration semantics doc chunk', async () => {

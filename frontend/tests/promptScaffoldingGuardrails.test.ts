@@ -5,6 +5,7 @@ import {
     fallbackSystemPrompt,
     fallbackWelcomeMessage,
     providerRealityLine,
+    systemPolicyVersionLine,
 } from '../src/utils/openAI.js';
 import { dchatKnowledgeScaffoldingStrings } from '../src/utils/dchatKnowledge.js';
 
@@ -53,5 +54,22 @@ describe('prompt scaffolding guardrails', () => {
                 expect(promptText).not.toMatch(forbiddenKeyPattern);
             }
         }
+    });
+
+    it('keeps policy guardrails and routes guidance in the system prompt', async () => {
+        const { debugMessages } = await buildChatPrompt([
+            { role: 'user', content: 'Check system guardrails.' },
+        ]);
+        const systemMessage = debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const systemContent = systemMessage?.content ?? '';
+
+        expect(systemContent).toContain(systemPolicyVersionLine);
+        expect(systemContent).toContain('Never invent game facts or player state.');
+        expect(systemContent).toContain('ask for a save snapshot via /gamesaves');
+        expect(systemContent).toContain('cite /docs/routes');
+        expect(systemContent).toContain('Never link to GitHub blob/tree URLs for docs');
+        expect(systemContent).not.toContain('/docs/backups');
     });
 });
