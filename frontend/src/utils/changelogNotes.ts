@@ -106,6 +106,62 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
             linkLabel: 'token.place integration doc',
         },
     ],
+    '20260301': [
+        {
+            message:
+                'Release summary: v3.0.0 shipped on March 1, 2026 with 10x quest growth (246 official quests) plus new chemistry, programming, and rocketry chains.',
+            href: '/docs/quest-trees',
+            linkLabel: 'Quest Trees',
+        },
+        {
+            message:
+                'Custom content tooling now includes in-game editors for quests, items, and processes, plus bundled submissions for contributors.',
+            href: '/docs/custom-quest-system',
+            linkLabel: 'Custom Quest System',
+        },
+        {
+            message:
+                'Backups and optional Cloud Sync support export/import plus GitHub Gist sync for cross-device storage.',
+            href: '/docs/cloud-sync',
+            linkLabel: 'Cloud Sync guide',
+        },
+        {
+            message:
+                'AI chat ships OpenAI-only in v3; token.place is deferred to v3.1 for future enablement.',
+            href: '/docs/v3-release-state',
+            linkLabel: 'v3 Release State',
+        },
+        {
+            message:
+                'Breaking change: primary save storage moved to IndexedDB. v2 localStorage keys migrate once and clear afterward, leaving localStorage as fallback only.',
+            href: '/docs/state-migration',
+            linkLabel: 'State Migration',
+        },
+        {
+            message:
+                'Breaking change: Web3/blockchain plans were removed. Virtual units (dWatt, dUSD, dCarbon) remain progress metrics without tokenization.',
+            href: '/docs/v3-release-state',
+            linkLabel: 'v3 Release State',
+        },
+        {
+            message:
+                'Migration steps: launch v3 once to migrate v2 saves, then use Settings → Legacy Save Upgrades for v1/v2 data.',
+            href: '/docs/legacy-save-storage',
+            linkLabel: 'Legacy Save Storage',
+        },
+        {
+            message:
+                'Optional: enable Cloud Sync by storing a GitHub Gist token in Settings for cross-device backups.',
+            href: '/docs/authentication',
+            linkLabel: 'Authentication Flow',
+        },
+        {
+            message:
+                'Known issues: none documented at release time. Monitor open issues for updates.',
+            href: 'https://github.com/democratizedspace/dspace/issues',
+            linkLabel: 'GitHub issues',
+        },
+    ],
 };
 
 function escapeHtml(value: string): string {
