@@ -491,6 +491,19 @@ describe('buildChatPrompt', () => {
         expect(content).toMatch(/only give exact counts\/durations\/rates/i);
     });
 
+    it('adds quest submission guidance for custom items and quest-only submissions', async () => {
+        const payload = await buildChatPrompt([{ role: 'user', content: 'Quest help?' }]);
+        const systemMessage = payload.debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const content = systemMessage?.content ?? '';
+
+        expect(content).toContain('custom quest that uses custom items or processes');
+        expect(content).toContain('/docs/quest-submission#option-1-bundle-submission-recommended');
+        expect(content).toContain('/docs/custom-bundles');
+        expect(content).toContain('/docs/quest-submission#option-2-quest-only-submission');
+    });
+
     it('does not duplicate the shared guardrail when already present', async () => {
         const systemPrompt = [
             'Custom system prompt.',
