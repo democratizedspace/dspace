@@ -484,11 +484,27 @@ describe('buildChatPrompt', () => {
         );
         const content = systemMessage?.content ?? '';
 
+        expect(content).toContain('SYSTEM_POLICY_VERSION=v3.0');
         expect(content).toContain('Use the PlayerState block when present.');
         expect(content).toContain('/gamesaves');
-        expect(content).toContain('/docs/backups');
+        expect(content).toContain('/docs/routes');
         expect(content).toMatch(/clarifying question/i);
         expect(content).toMatch(/only give exact counts\/durations\/rates/i);
+    });
+
+    it('keeps core policy guardrails in the system prompt', async () => {
+        const payload = await buildChatPrompt([{ role: 'user', content: 'Confirm rules.' }]);
+        const systemMessage = payload.debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const content = systemMessage?.content ?? '';
+
+        expect(content).toContain('Never invent game facts or player state.');
+        expect(content).toContain('ask for a save snapshot via /gamesaves');
+        expect(content).toContain('cite /docs/routes');
+        expect(content).toContain('Never link to GitHub blob/tree URLs for docs');
+        expect(content).toContain('SYSTEM_POLICY_VERSION=v3.0');
+        expect(content).not.toContain('/docs/backups');
     });
 
     it('does not duplicate the shared guardrail when already present', async () => {
@@ -497,7 +513,7 @@ describe('buildChatPrompt', () => {
             'Never invent game facts or player state.',
             'Use the PlayerState block when present.',
             'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite ' +
-                '/docs/backups or /docs/routes.',
+                '/docs/routes.',
             "If you're missing context, say you don't know and ask a clarifying question OR point " +
                 'to a specific /docs page.',
             'When giving URLs/navigation, cite /docs excerpts or docs/ROUTES.md.',
@@ -543,7 +559,7 @@ describe('buildChatPrompt', () => {
         expect(neverInventMatches).toHaveLength(1);
         expect(content).toContain('/gamesaves');
         expect(content).toMatch(/save snapshot/i);
-        expect(content).toContain('/docs/backups');
+        expect(content).toContain('/docs/routes');
     });
 
     it('injects PlayerState with finished quests and inventory entries', async () => {

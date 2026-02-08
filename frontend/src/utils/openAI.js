@@ -61,8 +61,7 @@ const guardrailRules = [
     },
     {
         line:
-            'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite ' +
-            '/docs/backups or /docs/routes.',
+            'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite /docs/routes.',
         pattern: /playerstate is missing/i,
     },
     {
@@ -86,6 +85,7 @@ const guardrailRules = [
         pattern: /only give exact/i,
     },
 ];
+const systemPolicyStampLine = 'SYSTEM_POLICY_VERSION=v3.0 never-invent-game-facts';
 const sharedSystemGuardrail = guardrailRules.map((rule) => rule.line).join('\n');
 const vagueFollowupPattern =
     /^\s*(what about|and then|that step|the second step|next step|step 2)\b/i;
@@ -236,6 +236,14 @@ const applyProviderRealityLine = (prompt) => {
         return basePrompt.replace(realityLinePattern, providerRealityLine);
     }
     return `${providerRealityLine}\n\n${basePrompt}`;
+};
+
+const applySystemPolicyStamp = (prompt) => {
+    const basePrompt = prompt || systemPolicyStampLine;
+    if (basePrompt.includes(systemPolicyStampLine)) {
+        return basePrompt;
+    }
+    return `${systemPolicyStampLine}\n${basePrompt}`;
 };
 
 const applySystemGuardrail = (prompt) => {
@@ -584,8 +592,8 @@ export const buildChatPrompt = async (messages, options = {}) => {
         : null;
 
     const persona = options.persona || defaultPersona;
-    const systemPrompt = applyProviderRealityLine(
-        applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt)
+    const systemPrompt = applySystemPolicyStamp(
+        applyProviderRealityLine(applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt))
     );
     const systemMessage = {
         role: 'system',
