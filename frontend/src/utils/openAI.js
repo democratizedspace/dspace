@@ -61,7 +61,9 @@ const guardrailRules = [
         pattern: /playerstate block/i,
     },
     {
-        line: 'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite /docs/routes.',
+        line:
+            'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite /docs/routes ' +
+            'and /docs/backups.',
         pattern: /playerstate is missing/i,
     },
     {
@@ -77,6 +79,13 @@ const guardrailRules = [
     {
         line: 'Never link to GitHub blob/tree URLs for docs; use in-game /docs routes and cite them.',
         pattern: /github.*blob\/tree.*docs/i,
+    },
+    {
+        line:
+            'For custom items/processes, cite /docs/quest-submission#option-1-bundle-submission-recommended ' +
+            'and /docs/custom-bundles; for quest-only using existing items/processes, cite ' +
+            '/docs/quest-submission#option-2-quest-only-submission.',
+        pattern: /custom items\/processes|quest-only/i,
     },
     {
         line:
