@@ -5,6 +5,7 @@ import {
     fallbackSystemPrompt,
     fallbackWelcomeMessage,
     providerRealityLine,
+    SYSTEM_POLICY_VERSION_LINE,
 } from '../src/utils/openAI.js';
 import { dchatKnowledgeScaffoldingStrings } from '../src/utils/dchatKnowledge.js';
 
@@ -55,6 +56,31 @@ describe('prompt scaffolding guardrails', () => {
         expect(systemPrompt).toContain(questOnlySubmissionAnchor);
         expect(systemPrompt).toContain('custom items/processes');
         expect(systemPrompt).toContain('quest-only');
+    });
+
+    it('keeps policy and PlayerState guardrails in the system prompt', async () => {
+        const { debugMessages } = await buildChatPrompt([
+            { role: 'user', content: 'Show the system prompt details.' },
+        ]);
+        const systemMessage = debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const systemContent = systemMessage?.content ?? '';
+
+        const matches = systemContent.match(/SYSTEM_POLICY_VERSION=v3\.0/g) ?? [];
+        expect(matches).toHaveLength(1);
+        const startsWithPolicy = systemContent.startsWith(SYSTEM_POLICY_VERSION_LINE);
+        if (startsWithPolicy) {
+            expect(startsWithPolicy).toBe(true);
+        } else {
+            const firstTwoLines = systemContent.split('\n').slice(0, 2).join('\n');
+            expect(firstTwoLines).toContain(SYSTEM_POLICY_VERSION_LINE);
+        }
+        expect(systemContent).toContain('Never invent game facts or player state.');
+        expect(systemContent).toContain('ask for a save snapshot via /gamesaves');
+        expect(systemContent).toContain('cite /docs/routes');
+        expect(systemContent).toContain('Never link to GitHub blob/tree URLs for docs');
+        expect(systemContent).toContain('/docs/backups');
     });
 
     it('rejects stale token.place or no-key-needed phrasing', () => {

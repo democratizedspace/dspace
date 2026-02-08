@@ -486,7 +486,7 @@ describe('buildChatPrompt', () => {
 
         expect(content).toContain('Use the PlayerState block when present.');
         expect(content).toContain('/gamesaves');
-        expect(content).toContain('/docs/backups');
+        expect(content).toContain('/docs/routes');
         expect(content).toMatch(/clarifying question/i);
         expect(content).toMatch(/only give exact counts\/durations\/rates/i);
     });
@@ -496,8 +496,7 @@ describe('buildChatPrompt', () => {
             'Custom system prompt.',
             'Never invent game facts or player state.',
             'Use the PlayerState block when present.',
-            'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite ' +
-                '/docs/backups or /docs/routes.',
+            'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite /docs/routes.',
             "If you're missing context, say you don't know and ask a clarifying question OR point " +
                 'to a specific /docs page.',
             'When giving URLs/navigation, cite /docs excerpts or docs/ROUTES.md.',
@@ -543,7 +542,7 @@ describe('buildChatPrompt', () => {
         expect(neverInventMatches).toHaveLength(1);
         expect(content).toContain('/gamesaves');
         expect(content).toMatch(/save snapshot/i);
-        expect(content).toContain('/docs/backups');
+        expect(content).toContain('/docs/routes');
     });
 
     it('injects PlayerState with finished quests and inventory entries', async () => {

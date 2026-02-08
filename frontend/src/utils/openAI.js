@@ -41,6 +41,7 @@ const defaultPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 const defaultModel = 'gpt-5.2';
 const fallbackModels = ['gpt-5-mini'];
 export const CHAT_PROMPT_VERSION = getPromptVersionLabel();
+export const SYSTEM_POLICY_VERSION_LINE = 'SYSTEM_POLICY_VERSION=v3.0 never-invent-game-facts';
 export const safeFallbackMessage = "I don't know; please check /docs for the latest details.";
 export const providerRealityLine = 'In v3, chat uses OpenAI. token.place is deferred to v3.1.';
 export const fallbackSystemPrompt =
@@ -60,9 +61,7 @@ const guardrailRules = [
         pattern: /playerstate block/i,
     },
     {
-        line:
-            'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite ' +
-            '/docs/backups or /docs/routes.',
+        line: 'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite /docs/routes.',
         pattern: /playerstate is missing/i,
     },
     {
@@ -252,6 +251,12 @@ const applySystemGuardrail = (prompt) => {
     if (missingRules.length === 0) return prompt;
     const missingGuardrail = missingRules.map((rule) => rule.line).join('\n');
     return `${prompt}\n\n${missingGuardrail}`;
+};
+
+const applySystemPolicyVersion = (prompt) => {
+    if (!prompt) return SYSTEM_POLICY_VERSION_LINE;
+    if (prompt.includes(SYSTEM_POLICY_VERSION_LINE)) return prompt;
+    return `${SYSTEM_POLICY_VERSION_LINE}\n${prompt}`;
 };
 
 const toNumericStatus = (status) => {
@@ -591,8 +596,10 @@ export const buildChatPrompt = async (messages, options = {}) => {
         : null;
 
     const persona = options.persona || defaultPersona;
-    const systemPrompt = applyProviderRealityLine(
-        applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt)
+    const systemPrompt = applySystemPolicyVersion(
+        applyProviderRealityLine(
+            applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt)
+        )
     );
     const systemMessage = {
         role: 'system',
