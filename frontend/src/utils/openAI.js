@@ -278,7 +278,7 @@ const normalizeVersionNumberString = (value) => {
     return '3';
 };
 
-const buildPlayerStateSnapshot = (gameState, options = {}) => {
+export const buildPlayerStateSnapshot = (gameState, options = {}) => {
     const { maxInventoryEntries = MAX_PLAYER_STATE_ITEMS } = options;
     if (!gameState || typeof gameState !== 'object') {
         return {

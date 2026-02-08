@@ -1,4 +1,5 @@
 import {
+    buildBuildMetaResponse,
     buildHealthResponse,
     buildLivezResponse,
     buildRuntimeConfigResponse,
@@ -11,7 +12,13 @@ export interface MiddlewareContext {
 
 export const onRequest = async (context: MiddlewareContext, next: () => Promise<Response>) => {
     const { pathname } = new URL(context.request.url);
-    const handledPaths = new Set(['/config.json', '/healthz', '/health', '/livez']);
+    const handledPaths = new Set([
+        '/build-meta.json',
+        '/config.json',
+        '/healthz',
+        '/health',
+        '/livez',
+    ]);
 
     let response: Response;
 
@@ -56,6 +63,8 @@ export const onRequest = async (context: MiddlewareContext, next: () => Promise<
     }
 
     switch (pathname) {
+        case '/build-meta.json':
+            return await buildBuildMetaResponse();
         case '/config.json':
             return buildRuntimeConfigResponse();
         case '/healthz':

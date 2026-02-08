@@ -1,0 +1,13 @@
+{
+  "id": "2024-12-01-chat-debug-app-sha-playerstate",
+  "date": "2024-12-01",
+  "component": "chat-debug",
+  "longForm": "outages/2024-12-01-chat-debug-app-sha-playerstate.md",
+  "rootCause": "chat debug UI only used build-time metadata and did not refresh PlayerState summary, so runtime build_meta.json and real PlayerState were ignored",
+  "resolution": "added runtime build metadata endpoint and synchronized PlayerState summaries in the debug panel",
+  "references": [
+    "outages/2024-12-01-chat-debug-app-sha-playerstate.md",
+    "frontend/src/utils/runtimeEndpoints.ts",
+    "frontend/src/pages/chat/svelte/OpenAIChat.svelte"
+  ]
+}

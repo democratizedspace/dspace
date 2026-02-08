@@ -4,6 +4,7 @@
         defaultOpenAIErrorMessage,
         describeOpenAIError,
         buildChatPrompt,
+        buildPlayerStateSnapshot,
         CHAT_PROMPT_VERSION,
         getOpenAIErrorSummary,
         GPT5ChatV2,
@@ -31,6 +32,7 @@
         getAppGitSha,
         getAppGitShaWithFallback,
         deriveEnvNameFromHostname,
+        getRuntimeBuildMeta,
         getPromptVersionLabelForSha,
     } from '../../../utils/buildInfo.js';
     import {
@@ -155,13 +157,7 @@
             playerStateSummary = debugPayload.playerStateSummary ?? playerStateSummary;
         } else {
             debugMessages = [];
-            playerStateSummary = {
-                included: false,
-                questsFinishedCount: 0,
-                inventoryIncludedCount: 0,
-                inventoryTotalCount: 0,
-                inventoryTruncated: false,
-            };
+            playerStateSummary = buildPlayerStateSnapshot(loadGameState()).meta;
         }
 
         try {
@@ -323,12 +319,13 @@
         hydrated = true;
         await ready;
         const currentState = loadGameState();
+        playerStateSummary = buildPlayerStateSnapshot(currentState).meta;
         const normalized = normalizeSettings(currentState?.settings);
         currentSettings = normalized;
         lastShowChatDebugPayload = normalized.showChatDebugPayload;
         syncPromptDebugDeepLink({ allowAutoExpand: true });
-        const resolvedAppGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
+        const runtimeBuildMeta = await getRuntimeBuildMeta();
         const resolvedDocsRagGitSha = docsMeta?.docsGitSha ?? docsMeta?.gitSha ?? 'unknown';
         const resolvedDocsRagEnvName = docsMeta?.envName ?? 'unknown';
         const resolvedDocsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
@@ -336,10 +333,12 @@
         const resolvedDocsRagHost = window?.location?.host || 'unknown';
         const resolvedHostEnvName = deriveEnvNameFromHostname(resolvedDocsRagHost);
         const allowDocsFallback = resolvedHostEnvName === 'dev';
-        const appShaInfo = allowDocsFallback
-            ? getAppGitShaWithFallback(resolvedDocsRagGitSha)
-            : getAppGitShaWithFallback();
-        let resolvedAppGitShaMissing = appShaInfo.source !== 'vite';
+        const appShaInfo = runtimeBuildMeta
+            ? { sha: runtimeBuildMeta.gitSha, source: runtimeBuildMeta.source || 'runtime' }
+            : allowDocsFallback
+              ? getAppGitShaWithFallback(resolvedDocsRagGitSha)
+              : getAppGitShaWithFallback();
+        let resolvedAppGitShaMissing = appShaInfo.sha === 'missing';
         let resolvedAppGitShaDisplay = appShaInfo.sha;
         let resolvedAppGitShaSource = appShaInfo.source;
         let resolvedAppGitShaForComparison = appShaInfo.sha;
@@ -370,7 +369,7 @@
             ? 'n/a'
             : (deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable');
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
-        appGitSha = resolvedAppGitSha;
+        appGitSha = appShaInfo.sha;
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
@@ -380,6 +379,7 @@
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
             const nextNormalized = normalizeSettings(value?.settings);
             currentSettings = nextNormalized;
+            playerStateSummary = buildPlayerStateSnapshot(value).meta;
             if (lastShowChatDebugPayload && !nextNormalized.showChatDebugPayload) {
                 debugOverride = false;
             }

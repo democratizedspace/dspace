@@ -74,6 +74,32 @@ const shortenSha = (value) => {
 
 export const getAppGitSha = () => resolveGitSha();
 
+export const getRuntimeBuildMeta = async () => {
+    if (typeof fetch !== 'function') {
+        return null;
+    }
+    try {
+        const response = await fetch('/build-meta.json', {
+            headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) {
+            return null;
+        }
+        const payload = await response.json();
+        const gitSha = normalizeSha(payload?.gitSha);
+        if (isPlaceholderSha(gitSha)) {
+            return null;
+        }
+        return {
+            gitSha,
+            generatedAt: normalizeSha(payload?.generatedAt),
+            source: normalizeSha(payload?.source) || 'runtime',
+        };
+    } catch (error) {
+        return null;
+    }
+};
+
 export const getAppGitShaWithFallback = (fallbackSha) => {
     const appSha = normalizeSha(readViteGitSha());
     if (!isPlaceholderSha(appSha)) {

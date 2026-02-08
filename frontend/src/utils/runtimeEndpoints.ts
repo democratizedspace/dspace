@@ -1,5 +1,7 @@
 import type { FeatureFlagParseResult } from '@dspace/feature-flags';
 import { parseFeatureFlags, readBooleanOverride } from '@dspace/feature-flags';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { logServerError } from './serverLogger';
 
 function parseOfflineWorkerEnabled(flags: FeatureFlagParseResult): boolean {
@@ -27,6 +29,111 @@ function buildHeaders(): HeadersInit {
         'Content-Type': 'application/json; charset=utf-8',
         'Cache-Control': 'no-store',
     };
+}
+
+type BuildMetaPayload = {
+    gitSha: string;
+    generatedAt: string;
+    source: string;
+    path?: string;
+};
+
+const normalizeSha = (value: unknown) => String(value || '').trim();
+
+const isPlaceholderSha = (value: unknown) => {
+    const normalized = normalizeSha(value).toLowerCase();
+    return (
+        !normalized ||
+        normalized === 'unknown' ||
+        normalized === 'missing' ||
+        normalized === 'missing-sha' ||
+        normalized === 'dev-local'
+    );
+};
+
+const resolveBuildMetaPaths = () => [
+    '/app/build_meta.json',
+    path.resolve(process.cwd(), 'frontend', 'src', 'generated', 'build_meta.json'),
+];
+
+const resolveEnvSha = () => {
+    const envPriority = ['GITHUB_SHA', 'VITE_GIT_SHA', 'GIT_SHA', 'DSPACE_GIT_SHA'];
+    for (const key of envPriority) {
+        const value = normalizeSha(process.env[key]);
+        if (value && !isPlaceholderSha(value)) {
+            return { gitSha: value, source: `env:${key}` };
+        }
+    }
+    return null;
+};
+
+const readBuildMetaFile = async (metaPath: string) => {
+    try {
+        const raw = await fs.readFile(metaPath, 'utf8');
+        const parsed = JSON.parse(raw);
+        if (isPlaceholderSha(parsed?.gitSha)) {
+            return null;
+        }
+        const generatedAt = normalizeSha(parsed?.generatedAt);
+        const source = normalizeSha(parsed?.source) || 'build-meta';
+        if (!generatedAt) {
+            return null;
+        }
+        return {
+            gitSha: normalizeSha(parsed?.gitSha),
+            generatedAt,
+            source,
+            path: metaPath,
+        };
+    } catch {
+        return null;
+    }
+};
+
+const resolveBuildMeta = async (): Promise<BuildMetaPayload> => {
+    for (const metaPath of resolveBuildMetaPaths()) {
+        const payload = await readBuildMetaFile(metaPath);
+        if (payload) {
+            return payload;
+        }
+    }
+
+    const envPayload = resolveEnvSha();
+    if (envPayload) {
+        return {
+            gitSha: envPayload.gitSha,
+            generatedAt: new Date().toISOString(),
+            source: envPayload.source,
+        };
+    }
+
+    return {
+        gitSha: 'missing',
+        generatedAt: new Date().toISOString(),
+        source: 'missing',
+    };
+};
+
+export async function buildBuildMetaResponse(): Promise<Response> {
+    try {
+        const payload = await resolveBuildMeta();
+        return new Response(JSON.stringify(payload), {
+            status: 200,
+            headers: buildHeaders(),
+        });
+    } catch (error) {
+        logServerError({
+            route: '/build-meta.json',
+            method: 'GET',
+            message: 'Failed to build runtime build metadata response',
+            error,
+        });
+
+        return new Response(JSON.stringify({ error: 'build_meta_unavailable' }), {
+            status: 503,
+            headers: buildHeaders(),
+        });
+    }
 }
 
 export function buildRuntimeConfigResponse(): Response {
