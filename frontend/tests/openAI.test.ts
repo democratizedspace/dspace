@@ -491,6 +491,24 @@ describe('buildChatPrompt', () => {
         expect(content).toMatch(/only give exact counts\/durations\/rates/i);
     });
 
+    it('adds quest submission guidance for custom items/processes vs quest-only', async () => {
+        const bundleDoc = '/docs/quest-submission#option-1-bundle-submission-recommended';
+        const bundleGuide = '/docs/custom-bundles';
+        const questOnlyDoc = '/docs/quest-submission#option-2-quest-only-submission';
+        const payload = await buildChatPrompt([{ role: 'user', content: 'How do I add content?' }]);
+        const systemMessage = payload.debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const content = systemMessage?.content ?? '';
+
+        expect(content).toMatch(/custom items/i);
+        expect(content).toMatch(/custom processes/i);
+        expect(content).toMatch(/quest-only/i);
+        expect(content).toContain(bundleDoc);
+        expect(content).toContain(bundleGuide);
+        expect(content).toContain(questOnlyDoc);
+    });
+
     it('does not duplicate the shared guardrail when already present', async () => {
         const systemPrompt = [
             'Custom system prompt.',
