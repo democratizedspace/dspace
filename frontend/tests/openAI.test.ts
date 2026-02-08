@@ -527,9 +527,8 @@ describe('buildChatPrompt', () => {
         const occurrences = content.match(/save snapshot/gi) ?? [];
         const base64Occurrences = content.match(/base64-encoded json snapshot/gi) ?? [];
         const envelopeOccurrences = content.match(/envelope or raw state/gi) ?? [];
-        const replacedOccurrences = content.match(
-            /restoring means quests, inventory, and processes are replaced/gi
-        ) ?? [];
+        const replacedOccurrences =
+            content.match(/restoring means quests, inventory, and processes are replaced/gi) ?? [];
 
         expect(occurrences).toHaveLength(1);
         expect(base64Occurrences).toHaveLength(1);
