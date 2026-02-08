@@ -28,6 +28,8 @@ const mockGetDocsRagComparison = vi.hoisted(() =>
     }))
 );
 const mockGetDocsRagMismatchWarning = vi.hoisted(() => vi.fn(() => null));
+let gameStateSubscriber: ((state: { settings: { showChatDebugPayload: boolean } }) => void) | null =
+    null;
 
 vi.mock('../../../../utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({
@@ -38,6 +40,7 @@ vi.mock('../../../../utils/gameState/common.js', () => ({
     ready: Promise.resolve(),
     state: {
         subscribe: (handler: (state: { settings: { showChatDebugPayload: boolean } }) => void) => {
+            gameStateSubscriber = handler;
             handler({
                 settings: {
                     showChatDebugPayload: true,
@@ -94,6 +97,7 @@ describe('OpenAIChat build metadata', () => {
         mockGetDocsRagMeta.mockReset();
         mockGetDocsRagComparison.mockReset();
         mockGetDocsRagMismatchWarning.mockReset();
+        gameStateSubscriber = null;
     });
 
     it('shows non-empty build metadata from VITE_GIT_SHA', async () => {
@@ -198,7 +202,6 @@ describe('OpenAIChat build metadata', () => {
                 gitSha: 'runtime-sha-123',
                 generatedAt: 'just-now',
                 source: 'ci',
-                resolvedFrom: '/app/build_meta.json',
             }),
         });
 
@@ -212,6 +215,7 @@ describe('OpenAIChat build metadata', () => {
         const appBuildSourceLabel = await screen.findByText('App build SHA source');
         await waitFor(() => {
             expect(appBuildSourceLabel.nextElementSibling?.textContent).toContain('ci');
+            expect(appBuildSourceLabel.nextElementSibling?.textContent).toContain('runtime');
         });
 
         await waitFor(() => {
@@ -220,7 +224,7 @@ describe('OpenAIChat build metadata', () => {
     });
 
     it('shows PlayerState summary from the current game state', async () => {
-        vi.mocked(loadGameState).mockReturnValue({
+        vi.mocked(loadGameState).mockReturnValueOnce({
             openAI: {},
             versionNumberString: '3',
             quests: {
@@ -245,6 +249,41 @@ describe('OpenAIChat build metadata', () => {
 
         const inventoryIncludedLabel = await screen.findByText('PlayerState inventory entries');
         expect(inventoryIncludedLabel.nextElementSibling).toHaveTextContent('1');
+    });
+
+    it('updates PlayerState summary when the game state store changes', async () => {
+        render(OpenAIChat);
+
+        await waitFor(async () => {
+            const includedLabel = await screen.findByText('PlayerState included');
+            expect(includedLabel.nextElementSibling).toHaveTextContent('no');
+        });
+
+        gameStateSubscriber?.({
+            settings: {
+                showChatDebugPayload: true,
+            },
+            openAI: {},
+            versionNumberString: '3',
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+            },
+            inventory: {
+                'item-alpha': 2,
+                'item-beta': 1,
+            },
+        });
+
+        await waitFor(async () => {
+            const includedLabel = await screen.findByText('PlayerState included');
+            expect(includedLabel.nextElementSibling).toHaveTextContent('yes');
+        });
+
+        const questsLabel = await screen.findByText('PlayerState questsFinished');
+        expect(questsLabel.nextElementSibling).toHaveTextContent('1');
+
+        const inventoryIncludedLabel = await screen.findByText('PlayerState inventory entries');
+        expect(inventoryIncludedLabel.nextElementSibling).toHaveTextContent('2');
     });
 
     it('shows in sync when app SHA matches docs on a prod host', async () => {

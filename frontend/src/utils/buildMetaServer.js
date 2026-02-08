@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { logServerError } from './serverLogger.js';
+import { logServerError } from './serverLogger';
 
 const RUNTIME_BUILD_META_PATH = '/app/build_meta.json';
 const REPO_BUILD_META_PATH = path.join(
@@ -91,6 +91,14 @@ export const resolveRuntimeBuildMeta = async () => {
     };
 };
 
+const toPublicMeta = (meta) => {
+    if (!meta || typeof meta !== 'object') {
+        return meta;
+    }
+    const { resolvedFrom, ...publicMeta } = meta;
+    return publicMeta;
+};
+
 const buildHeaders = () => ({
     'Content-Type': 'application/json; charset=utf-8',
     'Cache-Control': 'no-store',
@@ -100,28 +108,32 @@ export async function buildRuntimeBuildMetaResponse() {
     try {
         const meta = await resolveRuntimeBuildMeta();
         if (isPlaceholderSha(meta.gitSha)) {
+            const message = 'Runtime build metadata is missing or invalid';
             logServerError({
                 route: '/build-meta.json',
                 method: 'GET',
-                message: 'Runtime build metadata is missing or invalid',
-                error: meta,
+                error: message,
+                context: { meta },
             });
-            return new Response(JSON.stringify(meta), {
+            return new Response(JSON.stringify(toPublicMeta(meta)), {
                 status: 503,
                 headers: buildHeaders(),
             });
         }
 
-        return new Response(JSON.stringify(meta), {
+        return new Response(JSON.stringify(toPublicMeta(meta)), {
             status: 200,
             headers: buildHeaders(),
         });
     } catch (error) {
+        const message = 'Failed to build runtime build metadata response';
+        const errorToLog =
+            error instanceof Error ? new Error(`${message}: ${error.message}`) : new Error(message);
         logServerError({
             route: '/build-meta.json',
             method: 'GET',
-            message: 'Failed to build runtime build metadata response',
-            error,
+            error: errorToLog,
+            context: { error },
         });
 
         return new Response(JSON.stringify({ gitSha: 'missing', source: 'missing' }), {
