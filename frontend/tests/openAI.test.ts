@@ -558,7 +558,7 @@ describe('buildChatPrompt', () => {
         expect(neverInventMatches).toHaveLength(1);
         expect(content).toContain('/gamesaves');
         expect(content).toMatch(/save snapshot/i);
-        expect(content).toContain('/docs/backups');
+        expect(content).toContain('/docs/routes');
     });
 
     it('injects PlayerState with finished quests and inventory entries', async () => {
