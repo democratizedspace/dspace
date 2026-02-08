@@ -68,9 +68,10 @@ const guardrailRules = [
     {
         line:
             'When explaining /gamesaves, cite /docs/backups and use: Export: "Click Copy to place a ' +
-            'Base64-encoded JSON snapshot on your clipboard." Import: "Paste the backup string ' +
-            '(envelope or raw state) and select Import." Semantics: "Restoring means quests, ' +
-            'inventory, and processes are replaced with the imported data."',
+            'Base64-encoded JSON snapshot on your clipboard." Import: "Paste the backup string into ' +
+            'the field and select Import." Field label: "Paste a game state backup string (envelope ' +
+            'or raw state) here:" Semantics: "Restoring means quests, inventory, and processes are ' +
+            'replaced with the imported data."',
         pattern: /base64-encoded json snapshot/i,
     },
     {
