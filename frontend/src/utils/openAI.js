@@ -85,6 +85,15 @@ const guardrailRules = [
             "approximate or say you don't know.",
         pattern: /only give exact/i,
     },
+    {
+        line:
+            'When explaining /gamesaves, cite /docs/backups and use wording consistent with it: ' +
+            'Export: "Click Copy to place a Base64-encoded JSON snapshot on your clipboard." ' +
+            'Import: "Paste the backup string (envelope or raw state) and select Import." ' +
+            'Semantics: "Restoring means quests, inventory, and processes are replaced with the ' +
+            'imported data."',
+        pattern: /base64-encoded json snapshot/i,
+    },
 ];
 const sharedSystemGuardrail = guardrailRules.map((rule) => rule.line).join('\n');
 const vagueFollowupPattern =

@@ -54,4 +54,19 @@ describe('prompt scaffolding guardrails', () => {
             }
         }
     });
+
+    it('includes /gamesaves guidance aligned to /docs/backups', async () => {
+        const { debugMessages } = await buildChatPrompt([
+            { role: 'user', content: 'How do I export or import a save?' },
+        ]);
+        const systemMessage = debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const systemPrompt = systemMessage?.content ?? '';
+
+        expect(systemPrompt).toContain('/docs/backups');
+        expect(systemPrompt).toContain('Base64-encoded JSON snapshot');
+        expect(systemPrompt).toContain('envelope or raw state');
+        expect(systemPrompt).toContain('replaced');
+    });
 });
