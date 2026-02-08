@@ -73,10 +73,15 @@ describe('OpenAIChat error messaging', () => {
         messages.set([]);
         activePersonaId.set('dchat');
         consoleErrorMock = vi.spyOn(console, 'error').mockImplementation(() => {});
+        vi.stubGlobal(
+            'fetch',
+            vi.fn(async () => ({ ok: false, json: async () => ({}) }))
+        );
     });
 
     afterEach(() => {
         consoleErrorMock.mockRestore();
+        vi.unstubAllGlobals();
     });
 
     it('surfaces actionable guidance when quota is exhausted', async () => {

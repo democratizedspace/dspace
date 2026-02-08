@@ -2,6 +2,11 @@ import { render, screen, waitFor } from '@testing-library/svelte';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const getDocsRagMeta = vi.hoisted(() => vi.fn());
+const mockFetch = vi.hoisted(() => vi.fn());
+
+vi.mock('../src/generated/build_meta.json', () => ({
+    default: { gitSha: 'missing', generatedAt: '', source: 'static' },
+}));
 
 vi.mock('../src/utils/docsRag.js', async () => {
     const actual = await vi.importActual('../src/utils/docsRag.js');
@@ -47,6 +52,11 @@ describe('OpenAIChat docs RAG comparison messaging', () => {
     beforeEach(() => {
         originalLocation = window.location;
         originalViteSha = process.env.VITE_GIT_SHA;
+        mockFetch.mockResolvedValue({
+            ok: false,
+            json: async () => ({}),
+        });
+        vi.stubGlobal('fetch', mockFetch);
         Object.defineProperty(window, 'location', {
             configurable: true,
             value: {
@@ -65,6 +75,7 @@ describe('OpenAIChat docs RAG comparison messaging', () => {
         } else {
             process.env.VITE_GIT_SHA = originalViteSha;
         }
+        vi.unstubAllGlobals();
         Object.defineProperty(window, 'location', {
             configurable: true,
             value: originalLocation,

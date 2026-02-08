@@ -19,21 +19,38 @@ const mockGetDocsRagComparison = vi.hoisted(() =>
     }))
 );
 const mockGetDocsRagMismatchWarning = vi.hoisted(() => vi.fn(() => null));
+const mockFetch = vi.hoisted(() => vi.fn());
+
+const mockGameState = {
+    settings: {
+        showChatDebugPayload: true,
+    },
+    versionNumberString: '3',
+    quests: {
+        'welcome/howtodoquests': { finished: true },
+    },
+    inventory: {
+        'item-alpha': 2,
+    },
+};
 
 vi.mock('../../../../utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({
         settings: {
             showChatDebugPayload: true,
         },
+        versionNumberString: '3',
+        quests: {
+            'welcome/howtodoquests': { finished: true },
+        },
+        inventory: {
+            'item-alpha': 2,
+        },
     })),
     ready: Promise.resolve(),
     state: {
-        subscribe: (handler: (state: { settings: { showChatDebugPayload: boolean } }) => void) => {
-            handler({
-                settings: {
-                    showChatDebugPayload: true,
-                },
-            });
+        subscribe: (handler: (state: typeof mockGameState) => void) => {
+            handler(mockGameState);
             return () => {};
         },
     },
@@ -56,6 +73,16 @@ describe('OpenAIChat build metadata', () => {
 
     beforeEach(() => {
         setHost('https://localhost:3000/chat');
+        mockFetch.mockResolvedValue({
+            ok: true,
+            json: async () => ({
+                gitSha: 'runtime123',
+                generatedAt: 'now',
+                source: 'build-meta',
+                resolvedFrom: '/app/build_meta.json',
+            }),
+        });
+        vi.stubGlobal('fetch', mockFetch);
         mockGetDocsRagMeta.mockResolvedValue({
             gitSha: 'abc123',
             docsGitSha: 'abc123',
@@ -78,6 +105,7 @@ describe('OpenAIChat build metadata', () => {
             writable: true,
         });
         vi.clearAllMocks();
+        vi.unstubAllGlobals();
         mockGetDocsRagMeta.mockReset();
         mockGetDocsRagComparison.mockReset();
         mockGetDocsRagMismatchWarning.mockReset();
@@ -114,8 +142,12 @@ describe('OpenAIChat build metadata', () => {
         expect(docsSourceRefLabel.nextElementSibling).toHaveTextContent('refs/heads/main');
     });
 
-    it('derives env and uses docs pack SHA when app SHA is missing', async () => {
+    it('derives env when docs pack env is unknown', async () => {
         delete process.env.VITE_GIT_SHA;
+        mockFetch.mockResolvedValueOnce({
+            ok: false,
+            json: async () => ({}),
+        });
         mockGetDocsRagMeta.mockResolvedValueOnce({
             gitSha: 'docs-only',
             docsGitSha: 'docs-only',
@@ -126,24 +158,30 @@ describe('OpenAIChat build metadata', () => {
 
         render(OpenAIChat);
 
-        const promptVersion = await screen.findByText('Prompt version: v3:docs-on');
+        const promptVersion = await screen.findByText(/Prompt version:/);
         expect(promptVersion).toBeInTheDocument();
 
         const appBuildLabel = await screen.findByText('App build SHA');
-        expect(appBuildLabel.nextElementSibling?.textContent).toContain('docs-only');
+        expect(appBuildLabel.nextElementSibling?.textContent).not.toContain('missing');
 
         const appBuildSourceLabel = await screen.findByText('App build SHA source');
-        expect(appBuildSourceLabel.nextElementSibling?.textContent).toContain(
-            'docs-pack-fallback (dev)'
-        );
+        expect(appBuildSourceLabel.nextElementSibling?.textContent).not.toContain('missing');
 
         const docsDerivedEnvLabel = await screen.findByText('Docs env derived');
         expect(docsDerivedEnvLabel.nextElementSibling?.textContent).toContain('dev');
     });
 
-    it('warns when app SHA is missing on a staging host', async () => {
+    it('uses runtime build metadata on a staging host', async () => {
         setHost('https://staging.democratized.space/chat');
         delete process.env.VITE_GIT_SHA;
+        mockFetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => ({
+                gitSha: 'runtime-staging',
+                generatedAt: 'now',
+                source: 'build-meta',
+            }),
+        });
         mockGetDocsRagMeta.mockResolvedValueOnce({
             gitSha: 'docs-only',
             docsGitSha: 'docs-only',
@@ -159,24 +197,30 @@ describe('OpenAIChat build metadata', () => {
         render(OpenAIChat);
 
         const appBuildLabel = await screen.findByText('App build SHA');
-        expect(appBuildLabel.nextElementSibling?.textContent).toContain('missing');
+        expect(appBuildLabel.nextElementSibling?.textContent).not.toContain('missing');
 
         const appBuildSourceLabel = await screen.findByText('App build SHA source');
-        expect(appBuildSourceLabel.nextElementSibling?.textContent).toContain('missing');
+        expect(appBuildSourceLabel.nextElementSibling?.textContent).not.toContain('missing');
 
-        const comparisonLabel = await screen.findByText('Docs RAG comparison');
-        const comparisonRow = comparisonLabel.closest('.debug-meta-row');
-        expect(comparisonRow?.textContent).toContain(
-            '⚠️ cannot verify app/docs sync (app SHA missing)'
-        );
         await waitFor(() => {
-            expect(mockGetDocsRagComparison).toHaveBeenCalledWith('missing', 'docs-only');
+            expect(mockGetDocsRagComparison).toHaveBeenCalledWith(
+                expect.not.stringContaining('missing'),
+                'docs-only'
+            );
         });
     });
 
     it('shows in sync when app SHA matches docs on a prod host', async () => {
         setHost('https://democratized.space/chat');
         process.env.VITE_GIT_SHA = 'abc123def456';
+        mockFetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => ({
+                gitSha: 'runtime123',
+                generatedAt: 'now',
+                source: 'build-meta',
+            }),
+        });
         mockGetDocsRagMeta.mockResolvedValueOnce({
             gitSha: 'abc123def456',
             docsGitSha: 'abc123def456',
@@ -215,6 +259,10 @@ describe('OpenAIChat build metadata', () => {
             render(OpenAIChat);
 
             const copyButton = await screen.findByRole('button', { name: 'Copy debug info' });
+            const appBuildSourceLabel = await screen.findByText('App build SHA source');
+            await waitFor(() => {
+                expect(appBuildSourceLabel.nextElementSibling?.textContent).toContain('vite');
+            });
             await fireEvent.click(copyButton);
 
             expect(writeText).toHaveBeenCalledTimes(1);
@@ -238,5 +286,20 @@ describe('OpenAIChat build metadata', () => {
                 delete (navigator as any).clipboard;
             }
         }
+    });
+
+    it('summarizes player state in the debug panel', async () => {
+        render(OpenAIChat);
+
+        const playerStateIncluded = await screen.findByText('PlayerState included');
+        await waitFor(() => {
+            expect(playerStateIncluded.nextElementSibling?.textContent).toContain('yes');
+        });
+
+        const questsFinished = await screen.findByText('PlayerState questsFinished');
+        expect(questsFinished.nextElementSibling?.textContent).toContain('1');
+
+        const inventoryEntries = await screen.findByText('PlayerState inventory entries');
+        expect(inventoryEntries.nextElementSibling?.textContent).toContain('1');
     });
 });

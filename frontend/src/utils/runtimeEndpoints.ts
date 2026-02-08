@@ -1,5 +1,7 @@
 import type { FeatureFlagParseResult } from '@dspace/feature-flags';
 import { parseFeatureFlags, readBooleanOverride } from '@dspace/feature-flags';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
 import { logServerError } from './serverLogger';
 
 function parseOfflineWorkerEnabled(flags: FeatureFlagParseResult): boolean {
@@ -28,6 +30,73 @@ function buildHeaders(): HeadersInit {
         'Cache-Control': 'no-store',
     };
 }
+
+const normalizeValue = (value: unknown) => String(value ?? '').trim();
+
+const isPlaceholder = (value: unknown) => {
+    const normalized = normalizeValue(value).toLowerCase();
+    return (
+        !normalized ||
+        normalized === 'unknown' ||
+        normalized === 'missing' ||
+        normalized === 'missing-sha' ||
+        normalized === 'dev-local'
+    );
+};
+
+const resolveBuildMetaCandidates = () => {
+    const candidates = new Set<string>();
+    if (process.env.DSPACE_BUILD_META_PATH) {
+        candidates.add(process.env.DSPACE_BUILD_META_PATH);
+    }
+    candidates.add('/app/build_meta.json');
+    const cwd = process.cwd();
+    candidates.add(path.join(cwd, 'frontend', 'src', 'generated', 'build_meta.json'));
+    candidates.add(path.join(cwd, 'src', 'generated', 'build_meta.json'));
+    return Array.from(candidates);
+};
+
+const resolveEnvBuildMeta = () => {
+    const envSha =
+        process.env.GITHUB_SHA ||
+        process.env.GIT_SHA ||
+        process.env.VITE_GIT_SHA ||
+        process.env.COMMIT_SHA ||
+        '';
+    const gitSha = normalizeValue(envSha);
+    if (isPlaceholder(gitSha)) {
+        return null;
+    }
+    return {
+        gitSha,
+        generatedAt: normalizeValue(process.env.BUILD_TIMESTAMP || '') || null,
+        source: 'env',
+        resolvedFrom: 'env',
+    };
+};
+
+const readBuildMeta = async () => {
+    const candidates = resolveBuildMetaCandidates();
+    for (const candidate of candidates) {
+        try {
+            const raw = await readFile(candidate, 'utf8');
+            const parsed = JSON.parse(raw);
+            const gitSha = normalizeValue(parsed?.gitSha);
+            if (isPlaceholder(gitSha)) {
+                continue;
+            }
+            return {
+                gitSha,
+                generatedAt: normalizeValue(parsed?.generatedAt) || null,
+                source: normalizeValue(parsed?.source) || 'build-meta',
+                resolvedFrom: candidate,
+            };
+        } catch (error) {
+            continue;
+        }
+    }
+    return resolveEnvBuildMeta();
+};
 
 export function buildRuntimeConfigResponse(): Response {
     try {
@@ -58,6 +127,34 @@ export function buildRuntimeConfigResponse(): Response {
         });
 
         return new Response(JSON.stringify({ error: 'config_unavailable' }), {
+            status: 503,
+            headers: buildHeaders(),
+        });
+    }
+}
+
+export async function buildRuntimeBuildMetaResponse(): Promise<Response> {
+    try {
+        const meta = await readBuildMeta();
+        if (!meta) {
+            return new Response(JSON.stringify({ error: 'build_meta_unavailable' }), {
+                status: 503,
+                headers: buildHeaders(),
+            });
+        }
+        return new Response(JSON.stringify(meta), {
+            status: 200,
+            headers: buildHeaders(),
+        });
+    } catch (error) {
+        logServerError({
+            route: '/build-meta.json',
+            method: 'GET',
+            message: 'Failed to build runtime build metadata response',
+            error,
+        });
+
+        return new Response(JSON.stringify({ error: 'build_meta_unavailable' }), {
             status: 503,
             headers: buildHeaders(),
         });

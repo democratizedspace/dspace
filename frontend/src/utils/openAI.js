@@ -344,6 +344,9 @@ const buildPlayerStateSnapshot = (gameState, options = {}) => {
     };
 };
 
+export const getPlayerStateSummary = (gameStateOverride) =>
+    buildPlayerStateSnapshot(gameStateOverride ?? loadGameState()).meta;
+
 const buildDocsRagOptions = ({ promptBudgetChars, options, baseMessages }) => {
     const budget =
         typeof promptBudgetChars === 'number' && Number.isFinite(promptBudgetChars)

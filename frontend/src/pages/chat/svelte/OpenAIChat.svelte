@@ -7,6 +7,7 @@
         CHAT_PROMPT_VERSION,
         getOpenAIErrorSummary,
         GPT5ChatV2,
+        getPlayerStateSummary,
     } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
     import {
@@ -29,9 +30,10 @@
     } from '../../../utils/chatHints.js';
     import {
         getAppGitSha,
-        getAppGitShaWithFallback,
         deriveEnvNameFromHostname,
         getPromptVersionLabelForSha,
+        resolveAppBuildInfo,
+        getRuntimeBuildMeta,
     } from '../../../utils/buildInfo.js';
     import {
         getDocsRagMeta,
@@ -74,6 +76,7 @@
     let debugOverride = false;
     let currentSettings = { showChatDebugPayload: false };
     let lastShowChatDebugPayload;
+    let isActive = false;
     let playerStateSummary = {
         included: false,
         questsFinishedCount: 0,
@@ -320,8 +323,12 @@
     }
 
     onMount(async () => {
+        isActive = true;
         hydrated = true;
         await ready;
+        if (!isActive) {
+            return;
+        }
         const currentState = loadGameState();
         const normalized = normalizeSettings(currentState?.settings);
         currentSettings = normalized;
@@ -329,6 +336,9 @@
         syncPromptDebugDeepLink({ allowAutoExpand: true });
         const resolvedAppGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
+        if (!isActive) {
+            return;
+        }
         const resolvedDocsRagGitSha = docsMeta?.docsGitSha ?? docsMeta?.gitSha ?? 'unknown';
         const resolvedDocsRagEnvName = docsMeta?.envName ?? 'unknown';
         const resolvedDocsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
@@ -336,18 +346,18 @@
         const resolvedDocsRagHost = window?.location?.host || 'unknown';
         const resolvedHostEnvName = deriveEnvNameFromHostname(resolvedDocsRagHost);
         const allowDocsFallback = resolvedHostEnvName === 'dev';
-        const appShaInfo = allowDocsFallback
-            ? getAppGitShaWithFallback(resolvedDocsRagGitSha)
-            : getAppGitShaWithFallback();
-        let resolvedAppGitShaMissing = appShaInfo.source !== 'vite';
+        const runtimeBuildMeta = await getRuntimeBuildMeta();
+        if (!isActive) {
+            return;
+        }
+        const appShaInfo = resolveAppBuildInfo({
+            runtimeMeta: runtimeBuildMeta,
+            docsFallbackSha: resolvedDocsRagGitSha,
+            allowDocsFallback,
+        });
         let resolvedAppGitShaDisplay = appShaInfo.sha;
         let resolvedAppGitShaSource = appShaInfo.source;
         let resolvedAppGitShaForComparison = appShaInfo.sha;
-        if (!allowDocsFallback && resolvedAppGitShaMissing) {
-            resolvedAppGitShaDisplay = 'missing';
-            resolvedAppGitShaSource = 'missing';
-            resolvedAppGitShaForComparison = 'missing';
-        }
         if (allowDocsFallback && resolvedAppGitShaSource === 'docs-pack-fallback') {
             resolvedAppGitShaSource = 'docs-pack-fallback (dev)';
         }
@@ -371,15 +381,21 @@
             : (deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable');
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
         appGitSha = resolvedAppGitSha;
+        playerStateSummary = getPlayerStateSummary();
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
-        window.addEventListener('focus', saveSnapshotHintFocusListener);
+        if (typeof window !== 'undefined') {
+            window.addEventListener('focus', saveSnapshotHintFocusListener);
+        }
         promptDebugLinkListener = () => syncPromptDebugDeepLink({ allowAutoExpand: true });
-        window.addEventListener('hashchange', promptDebugLinkListener);
-        window.addEventListener('popstate', promptDebugLinkListener);
+        if (typeof window !== 'undefined') {
+            window.addEventListener('hashchange', promptDebugLinkListener);
+            window.addEventListener('popstate', promptDebugLinkListener);
+        }
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
             const nextNormalized = normalizeSettings(value?.settings);
             currentSettings = nextNormalized;
+            playerStateSummary = getPlayerStateSummary(value);
             if (lastShowChatDebugPayload && !nextNormalized.showChatDebugPayload) {
                 debugOverride = false;
             }
@@ -392,11 +408,12 @@
     });
 
     onDestroy(() => {
+        isActive = false;
         settingsUnsubscribe?.();
-        if (saveSnapshotHintFocusListener) {
+        if (saveSnapshotHintFocusListener && typeof window !== 'undefined') {
             window.removeEventListener('focus', saveSnapshotHintFocusListener);
         }
-        if (promptDebugLinkListener) {
+        if (promptDebugLinkListener && typeof window !== 'undefined') {
             window.removeEventListener('hashchange', promptDebugLinkListener);
             window.removeEventListener('popstate', promptDebugLinkListener);
         }

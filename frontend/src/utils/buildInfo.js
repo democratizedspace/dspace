@@ -32,6 +32,22 @@ const isPlaceholderSha = (value) => {
     );
 };
 
+const normalizeBuildMeta = (meta) => {
+    if (!meta || typeof meta !== 'object') {
+        return null;
+    }
+    const gitSha = normalizeSha(meta.gitSha);
+    if (isPlaceholderSha(gitSha)) {
+        return null;
+    }
+    return {
+        gitSha,
+        generatedAt: normalizeSha(meta.generatedAt) || null,
+        source: normalizeSha(meta.source) || 'runtime',
+        resolvedFrom: normalizeSha(meta.resolvedFrom) || null,
+    };
+};
+
 const isPlaceholderSource = (value) => {
     const normalized = normalizeSha(value);
     if (!normalized) {
@@ -87,6 +103,39 @@ export const getAppGitShaWithFallback = (fallbackSha) => {
         return { sha: fallbackNormalized, source: 'docs-pack-fallback' };
     }
     return { sha: 'missing', source: 'missing' };
+};
+
+export const resolveAppBuildInfo = ({ runtimeMeta, docsFallbackSha, allowDocsFallback } = {}) => {
+    const base = getAppGitShaWithFallback(allowDocsFallback ? docsFallbackSha : undefined);
+    if (base.source === 'vite') {
+        return base;
+    }
+    const runtime = normalizeBuildMeta(runtimeMeta);
+    if (runtime) {
+        return { sha: runtime.gitSha, source: runtime.source || 'runtime' };
+    }
+    return base;
+};
+
+export const getRuntimeBuildMeta = async (endpoint = '/build-meta.json') => {
+    if (typeof fetch !== 'function') {
+        return null;
+    }
+    try {
+        const requestUrl =
+            typeof window !== 'undefined' && window?.location?.origin
+                ? new URL(endpoint, window.location.origin).toString()
+                : endpoint;
+        const response = await fetch(requestUrl, { cache: 'no-store' });
+        if (!response.ok) {
+            return null;
+        }
+        const data = await response.json();
+        return normalizeBuildMeta(data);
+    } catch (error) {
+        console.warn('Failed to fetch runtime build metadata', error);
+        return null;
+    }
 };
 
 export const getPromptVersionLabelForSha = (sha) => {

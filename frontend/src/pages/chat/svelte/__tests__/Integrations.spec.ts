@@ -34,10 +34,15 @@ describe('Integrations chat entrypoint', () => {
         mockRefs.resetStore();
         delete process.env.VITE_TOKEN_PLACE_URL;
         delete process.env.VITE_TOKEN_PLACE_ENABLED;
+        vi.stubGlobal(
+            'fetch',
+            vi.fn(async () => ({ ok: false, json: async () => ({}) }))
+        );
     });
 
     afterEach(() => {
         vi.clearAllMocks();
+        vi.unstubAllGlobals();
     });
 
     it('renders OpenAI chat and hides token.place by default', async () => {

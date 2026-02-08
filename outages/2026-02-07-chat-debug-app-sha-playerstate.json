@@ -1,0 +1,13 @@
+{
+  "id": "chat-debug-app-sha-playerstate",
+  "date": "2026-02-07",
+  "component": "chat-debug-panel",
+  "longForm": "outages/2026-02-07-chat-debug-app-sha-playerstate.md",
+  "rootCause": "Chat debug UI treated non-VITE build metadata as missing and did not hydrate PlayerState summary until a prompt build.",
+  "resolution": "Added a runtime build metadata endpoint with layered fallbacks and hydrated PlayerState summary from game state on mount.",
+  "references": [
+    "frontend/src/pages/chat/svelte/OpenAIChat.svelte",
+    "frontend/src/utils/runtimeEndpoints.ts",
+    "outages/2026-02-07-chat-debug-app-sha-playerstate.md"
+  ]
+}
