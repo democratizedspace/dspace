@@ -81,6 +81,14 @@ const guardrailRules = [
     },
     {
         line:
+            'When explaining /gamesaves, cite /docs/backups and say: Export: "Click Copy to place a ' +
+            'Base64-encoded JSON snapshot on your clipboard." Import: "Paste the backup string ' +
+            '(envelope or raw state) and select Import." Restoring means the imported data has ' +
+            'replaced quests, inventory, and processes.',
+        pattern: /base64-encoded json snapshot/i,
+    },
+    {
+        line:
             'Only give exact counts/durations/rates if they appear in retrieved context; otherwise be ' +
             "approximate or say you don't know.",
         pattern: /only give exact/i,
