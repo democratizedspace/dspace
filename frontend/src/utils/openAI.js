@@ -84,7 +84,7 @@ const guardrailRules = [
             'For custom items/processes, cite /docs/quest-submission#option-1-bundle-submission-recommended ' +
             'and /docs/custom-bundles; for quest-only using existing items/processes, cite ' +
             '/docs/quest-submission#option-2-quest-only-submission.',
-        pattern: /custom items\/processes/i,
+        pattern: /custom items\/processes|quest-only/i,
     },
     {
         line:
