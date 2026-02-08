@@ -85,6 +85,14 @@ const guardrailRules = [
             "approximate or say you don't know.",
         pattern: /only give exact/i,
     },
+    {
+        line:
+            'If the user asks about custom quests that include custom items or processes, cite ' +
+            '/docs/quest-submission#option-1-bundle-submission-recommended and /docs/custom-bundles. ' +
+            'If the question is quest-only using existing items/processes, cite ' +
+            '/docs/quest-submission#option-2-quest-only-submission.',
+        pattern: /custom items|custom processes|quest-only submission/i,
+    },
 ];
 const sharedSystemGuardrail = guardrailRules.map((rule) => rule.line).join('\n');
 const vagueFollowupPattern =

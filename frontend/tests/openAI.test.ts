@@ -489,6 +489,11 @@ describe('buildChatPrompt', () => {
         expect(content).toContain('/docs/backups');
         expect(content).toMatch(/clarifying question/i);
         expect(content).toMatch(/only give exact counts\/durations\/rates/i);
+        expect(content).toMatch(/custom quests/i);
+        expect(content).toMatch(/quest-only/i);
+        expect(content).toContain('/docs/quest-submission#option-1-bundle-submission-recommended');
+        expect(content).toContain('/docs/custom-bundles');
+        expect(content).toContain('/docs/quest-submission#option-2-quest-only-submission');
     });
 
     it('does not duplicate the shared guardrail when already present', async () => {
