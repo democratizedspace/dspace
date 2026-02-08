@@ -43,6 +43,7 @@ const fallbackModels = ['gpt-5-mini'];
 export const CHAT_PROMPT_VERSION = getPromptVersionLabel();
 export const safeFallbackMessage = "I don't know; please check /docs for the latest details.";
 export const providerRealityLine = 'In v3, chat uses OpenAI. token.place is deferred to v3.1.';
+export const systemPolicyVersionLine = 'SYSTEM_POLICY_VERSION=v3.0 never-invent-game-facts';
 export const fallbackSystemPrompt =
     defaultPersona?.systemPrompt ||
     "You are dChat, a helpful assistant in the game DSPACE. Your purpose is to assist players by providing information, guidance, and support related to the game. DSPACE is a web-based space exploration idle game where you can 3D print things, grow plants hydroponically, and create and launch model rockets. The game is fully open source, and development is ongoing. DSPACE is made from a combination of the founder, Esp, and a variety of generative models, including GPT-5, Stable Diffusion, and DALL-E 2. You have curated knowledge about quests, items, processes, and how inventory and progression systems work in general. Use the PlayerState block when provided; if it is missing, ask for a /gamesaves export. If you encounter anything you're not sure about, tell the user you don't know and suggest checking out the docs or joining the Discord server. If someone talks about something off-topic, humor them and help out with whatever they need, but don't output anything harmful or offensive. Have fun!";
@@ -62,7 +63,7 @@ const guardrailRules = [
     {
         line:
             'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite ' +
-            '/docs/backups or /docs/routes.',
+            '/docs/routes.',
         pattern: /playerstate is missing/i,
     },
     {
@@ -245,6 +246,21 @@ const applySystemGuardrail = (prompt) => {
     if (missingRules.length === 0) return prompt;
     const missingGuardrail = missingRules.map((rule) => rule.line).join('\n');
     return `${prompt}\n\n${missingGuardrail}`;
+};
+
+const applySystemPolicyVersionLine = (prompt) => {
+    const basePrompt = prompt || systemPolicyVersionLine;
+    const normalizedPrompt = basePrompt.toLowerCase();
+    const normalizedPolicyLine = systemPolicyVersionLine.toLowerCase();
+    if (normalizedPrompt.includes(normalizedPolicyLine)) {
+        if (basePrompt.includes(systemPolicyVersionLine)) {
+            return basePrompt;
+        }
+        const escapedPolicyLine = systemPolicyVersionLine.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const policyLinePattern = new RegExp(escapedPolicyLine, 'i');
+        return basePrompt.replace(policyLinePattern, systemPolicyVersionLine);
+    }
+    return `${systemPolicyVersionLine}\n${basePrompt}`;
 };
 
 const toNumericStatus = (status) => {
@@ -584,8 +600,8 @@ export const buildChatPrompt = async (messages, options = {}) => {
         : null;
 
     const persona = options.persona || defaultPersona;
-    const systemPrompt = applyProviderRealityLine(
-        applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt)
+    const systemPrompt = applySystemPolicyVersionLine(
+        applyProviderRealityLine(applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt))
     );
     const systemMessage = {
         role: 'system',
