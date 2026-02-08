@@ -5,6 +5,7 @@ import {
     fallbackSystemPrompt,
     fallbackWelcomeMessage,
     providerRealityLine,
+    SYSTEM_POLICY_VERSION_LINE,
 } from '../src/utils/openAI.js';
 import { dchatKnowledgeScaffoldingStrings } from '../src/utils/dchatKnowledge.js';
 
@@ -47,7 +48,15 @@ describe('prompt scaffolding guardrails', () => {
         );
         const systemContent = systemMessage?.content ?? '';
 
-        expect(systemContent).toContain('SYSTEM_POLICY_VERSION=v3.0');
+        const matches = systemContent.match(/SYSTEM_POLICY_VERSION=v3\.0/g) ?? [];
+        expect(matches).toHaveLength(1);
+        const startsWithPolicy = systemContent.startsWith(SYSTEM_POLICY_VERSION_LINE);
+        if (startsWithPolicy) {
+            expect(startsWithPolicy).toBe(true);
+        } else {
+            const firstTwoLines = systemContent.split('\n').slice(0, 2).join('\n');
+            expect(firstTwoLines).toContain(SYSTEM_POLICY_VERSION_LINE);
+        }
         expect(systemContent).toContain('Never invent game facts or player state.');
         expect(systemContent).toContain('ask for a save snapshot via /gamesaves');
         expect(systemContent).toContain('cite /docs/routes');
