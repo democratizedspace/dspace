@@ -18,7 +18,7 @@ const readBuildMetaGeneratedAt = () => normalizeSha(buildMeta?.generatedAt);
 
 const readBuildMetaSource = () => normalizeSha(buildMeta?.source);
 
-const isPlaceholderSha = (value) => {
+export const isPlaceholderSha = (value) => {
     const normalized = normalizeSha(value);
     if (!normalized) {
         return true;

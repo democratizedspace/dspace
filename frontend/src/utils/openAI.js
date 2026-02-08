@@ -344,6 +344,11 @@ const buildPlayerStateSnapshot = (gameState, options = {}) => {
     };
 };
 
+export const getPlayerStateSummary = (gameState = loadGameState()) => {
+    const hasGameState = gameState && typeof gameState === 'object';
+    return buildPlayerStateSnapshot(hasGameState ? gameState : null).meta;
+};
+
 const buildDocsRagOptions = ({ promptBudgetChars, options, baseMessages }) => {
     const budget =
         typeof promptBudgetChars === 'number' && Number.isFinite(promptBudgetChars)

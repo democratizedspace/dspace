@@ -5,6 +5,7 @@
         describeOpenAIError,
         buildChatPrompt,
         CHAT_PROMPT_VERSION,
+        getPlayerStateSummary,
         getOpenAIErrorSummary,
         GPT5ChatV2,
     } from '../../../utils/openAI.js';
@@ -32,6 +33,7 @@
         getAppGitShaWithFallback,
         deriveEnvNameFromHostname,
         getPromptVersionLabelForSha,
+        isPlaceholderSha,
     } from '../../../utils/buildInfo.js';
     import {
         getDocsRagMeta,
@@ -101,6 +103,14 @@
         return persona?.name ? `${persona.name} portrait` : 'NPC portrait';
     }
 
+    function hasPlayerStateDetails(value) {
+        return (
+            value &&
+            typeof value === 'object' &&
+            ('quests' in value || 'inventory' in value || 'openAI' in value)
+        );
+    }
+
     function createMessageId() {
         messageCounter += 1;
         return `${Date.now()}-${messageCounter}`;
@@ -155,13 +165,7 @@
             playerStateSummary = debugPayload.playerStateSummary ?? playerStateSummary;
         } else {
             debugMessages = [];
-            playerStateSummary = {
-                included: false,
-                questsFinishedCount: 0,
-                inventoryIncludedCount: 0,
-                inventoryTotalCount: 0,
-                inventoryTruncated: false,
-            };
+            playerStateSummary = getPlayerStateSummary();
         }
 
         try {
@@ -255,6 +259,26 @@
         ].join('\n');
     }
 
+    async function fetchRuntimeBuildMeta() {
+        if (typeof fetch !== 'function') {
+            return null;
+        }
+        try {
+            const response = await fetch('/build-meta.json', { cache: 'no-store' });
+            if (!response.ok) {
+                return null;
+            }
+            const payload = await response.json();
+            if (!payload || typeof payload !== 'object') {
+                return null;
+            }
+            return payload;
+        } catch (error) {
+            console.warn('Failed to fetch runtime build metadata', error);
+            return null;
+        }
+    }
+
     async function copyDebugInfo() {
         try {
             await copyToClipboard(getDebugInfoText());
@@ -327,8 +351,8 @@
         currentSettings = normalized;
         lastShowChatDebugPayload = normalized.showChatDebugPayload;
         syncPromptDebugDeepLink({ allowAutoExpand: true });
-        const resolvedAppGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
+        const runtimeBuildMeta = await fetchRuntimeBuildMeta();
         const resolvedDocsRagGitSha = docsMeta?.docsGitSha ?? docsMeta?.gitSha ?? 'unknown';
         const resolvedDocsRagEnvName = docsMeta?.envName ?? 'unknown';
         const resolvedDocsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
@@ -339,10 +363,19 @@
         const appShaInfo = allowDocsFallback
             ? getAppGitShaWithFallback(resolvedDocsRagGitSha)
             : getAppGitShaWithFallback();
-        let resolvedAppGitShaMissing = appShaInfo.source !== 'vite';
-        let resolvedAppGitShaDisplay = appShaInfo.sha;
-        let resolvedAppGitShaSource = appShaInfo.source;
-        let resolvedAppGitShaForComparison = appShaInfo.sha;
+        const runtimeGitSha = String(runtimeBuildMeta?.gitSha || '').trim();
+        const runtimeSource = String(runtimeBuildMeta?.source || '').trim();
+        const runtimeShaAvailable = runtimeGitSha && !isPlaceholderSha(runtimeGitSha);
+        const resolvedAppShaInfo = runtimeShaAvailable
+            ? {
+                  sha: runtimeGitSha,
+                  source: runtimeSource ? `${runtimeSource} (runtime)` : 'runtime',
+              }
+            : appShaInfo;
+        let resolvedAppGitShaDisplay = resolvedAppShaInfo.sha;
+        let resolvedAppGitShaSource = resolvedAppShaInfo.source;
+        let resolvedAppGitShaForComparison = resolvedAppShaInfo.sha;
+        const resolvedAppGitShaMissing = isPlaceholderSha(resolvedAppShaInfo.sha);
         if (!allowDocsFallback && resolvedAppGitShaMissing) {
             resolvedAppGitShaDisplay = 'missing';
             resolvedAppGitShaSource = 'missing';
@@ -370,7 +403,8 @@
             ? 'n/a'
             : (deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable');
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
-        appGitSha = resolvedAppGitSha;
+        appGitSha = resolvedAppShaInfo.sha;
+        playerStateSummary = getPlayerStateSummary(currentState);
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
@@ -380,6 +414,9 @@
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
             const nextNormalized = normalizeSettings(value?.settings);
             currentSettings = nextNormalized;
+            if (hasPlayerStateDetails(value)) {
+                playerStateSummary = getPlayerStateSummary(value);
+            }
             if (lastShowChatDebugPayload && !nextNormalized.showChatDebugPayload) {
                 debugOverride = false;
             }

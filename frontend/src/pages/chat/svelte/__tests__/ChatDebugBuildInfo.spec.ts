@@ -2,6 +2,15 @@ import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 import { cleanup, render, screen, waitFor, fireEvent } from '@testing-library/svelte';
 import OpenAIChat from '../OpenAIChat.svelte';
+import { loadGameState } from '../../../../utils/gameState/common.js';
+
+vi.mock('../../../../generated/build_meta.json', () => ({
+    default: {
+        gitSha: 'missing',
+        generatedAt: '',
+        source: 'static',
+    },
+}));
 
 const mockGetDocsRagMeta = vi.hoisted(() =>
     vi.fn(async () => ({
@@ -19,6 +28,8 @@ const mockGetDocsRagComparison = vi.hoisted(() =>
     }))
 );
 const mockGetDocsRagMismatchWarning = vi.hoisted(() => vi.fn(() => null));
+let gameStateSubscriber: ((state: { settings: { showChatDebugPayload: boolean } }) => void) | null =
+    null;
 
 vi.mock('../../../../utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({
@@ -29,6 +40,7 @@ vi.mock('../../../../utils/gameState/common.js', () => ({
     ready: Promise.resolve(),
     state: {
         subscribe: (handler: (state: { settings: { showChatDebugPayload: boolean } }) => void) => {
+            gameStateSubscriber = handler;
             handler({
                 settings: {
                     showChatDebugPayload: true,
@@ -47,6 +59,7 @@ vi.mock('../../../../utils/docsRag.js', () => ({
 
 describe('OpenAIChat build metadata', () => {
     const originalLocation = window.location;
+    let fetchMock: ReturnType<typeof vi.fn>;
     const setHost = (url: string) => {
         Object.defineProperty(window, 'location', {
             value: new URL(url),
@@ -56,6 +69,8 @@ describe('OpenAIChat build metadata', () => {
 
     beforeEach(() => {
         setHost('https://localhost:3000/chat');
+        fetchMock = vi.fn().mockResolvedValue({ ok: false });
+        vi.stubGlobal('fetch', fetchMock);
         mockGetDocsRagMeta.mockResolvedValue({
             gitSha: 'abc123',
             docsGitSha: 'abc123',
@@ -77,10 +92,12 @@ describe('OpenAIChat build metadata', () => {
             value: originalLocation,
             writable: true,
         });
+        vi.unstubAllGlobals();
         vi.clearAllMocks();
         mockGetDocsRagMeta.mockReset();
         mockGetDocsRagComparison.mockReset();
         mockGetDocsRagMismatchWarning.mockReset();
+        gameStateSubscriber = null;
     });
 
     it('shows non-empty build metadata from VITE_GIT_SHA', async () => {
@@ -159,7 +176,9 @@ describe('OpenAIChat build metadata', () => {
         render(OpenAIChat);
 
         const appBuildLabel = await screen.findByText('App build SHA');
-        expect(appBuildLabel.nextElementSibling?.textContent).toContain('missing');
+        await waitFor(() => {
+            expect(appBuildLabel.nextElementSibling?.textContent).toContain('missing');
+        });
 
         const appBuildSourceLabel = await screen.findByText('App build SHA source');
         expect(appBuildSourceLabel.nextElementSibling?.textContent).toContain('missing');
@@ -172,6 +191,99 @@ describe('OpenAIChat build metadata', () => {
         await waitFor(() => {
             expect(mockGetDocsRagComparison).toHaveBeenCalledWith('missing', 'docs-only');
         });
+    });
+
+    it('prefers runtime build metadata when available', async () => {
+        setHost('https://staging.democratized.space/chat');
+        delete process.env.VITE_GIT_SHA;
+        fetchMock.mockResolvedValueOnce({
+            ok: true,
+            json: async () => ({
+                gitSha: 'runtime-sha-123',
+                generatedAt: 'just-now',
+                source: 'ci',
+            }),
+        });
+
+        render(OpenAIChat);
+
+        const appBuildLabel = await screen.findByText('App build SHA');
+        await waitFor(() => {
+            expect(appBuildLabel.nextElementSibling?.textContent).toContain('runtime-sha-123');
+        });
+
+        const appBuildSourceLabel = await screen.findByText('App build SHA source');
+        await waitFor(() => {
+            expect(appBuildSourceLabel.nextElementSibling?.textContent).toContain('ci');
+            expect(appBuildSourceLabel.nextElementSibling?.textContent).toContain('runtime');
+        });
+
+        await waitFor(() => {
+            expect(mockGetDocsRagComparison).toHaveBeenCalledWith('runtime-sha-123', 'abc123');
+        });
+    });
+
+    it('shows PlayerState summary from the current game state', async () => {
+        vi.mocked(loadGameState).mockReturnValueOnce({
+            openAI: {},
+            versionNumberString: '3',
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+            },
+            inventory: {
+                'item-alpha': 2,
+            },
+            settings: {
+                showChatDebugPayload: true,
+            },
+        });
+
+        render(OpenAIChat);
+        await waitFor(async () => {
+            const includedLabel = await screen.findByText('PlayerState included');
+            expect(includedLabel.nextElementSibling).toHaveTextContent('yes');
+        });
+
+        const questsLabel = await screen.findByText('PlayerState questsFinished');
+        expect(questsLabel.nextElementSibling).toHaveTextContent('1');
+
+        const inventoryIncludedLabel = await screen.findByText('PlayerState inventory entries');
+        expect(inventoryIncludedLabel.nextElementSibling).toHaveTextContent('1');
+    });
+
+    it('updates PlayerState summary when the game state store changes', async () => {
+        render(OpenAIChat);
+
+        await waitFor(async () => {
+            const includedLabel = await screen.findByText('PlayerState included');
+            expect(includedLabel.nextElementSibling).toHaveTextContent('no');
+        });
+
+        gameStateSubscriber?.({
+            settings: {
+                showChatDebugPayload: true,
+            },
+            openAI: {},
+            versionNumberString: '3',
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+            },
+            inventory: {
+                'item-alpha': 2,
+                'item-beta': 1,
+            },
+        });
+
+        await waitFor(async () => {
+            const includedLabel = await screen.findByText('PlayerState included');
+            expect(includedLabel.nextElementSibling).toHaveTextContent('yes');
+        });
+
+        const questsLabel = await screen.findByText('PlayerState questsFinished');
+        expect(questsLabel.nextElementSibling).toHaveTextContent('1');
+
+        const inventoryIncludedLabel = await screen.findByText('PlayerState inventory entries');
+        expect(inventoryIncludedLabel.nextElementSibling).toHaveTextContent('2');
     });
 
     it('shows in sync when app SHA matches docs on a prod host', async () => {
@@ -213,6 +325,8 @@ describe('OpenAIChat build metadata', () => {
 
         try {
             render(OpenAIChat);
+
+            await screen.findByText('Prompt version: v3:abc123d');
 
             const copyButton = await screen.findByRole('button', { name: 'Copy debug info' });
             await fireEvent.click(copyButton);
