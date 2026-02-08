@@ -61,7 +61,9 @@ const guardrailRules = [
         pattern: /playerstate block/i,
     },
     {
-        line: 'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite /docs/routes.',
+        line:
+            'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite /docs/routes ' +
+            'and /docs/backups.',
         pattern: /playerstate is missing/i,
     },
     {
