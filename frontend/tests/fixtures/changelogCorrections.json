@@ -64,6 +64,11 @@
             "type": "formatting",
             "description": "Shifted the v3 release date from February 1 to March 1 per QA schedule.",
             "date": "2026-01-27"
+        },
+        {
+            "type": "formatting",
+            "description": "Moved ship-ready v3 release summary content into changelog notes to preserve historical markdown.",
+            "date": "2026-03-01"
         }
     ]
 }
