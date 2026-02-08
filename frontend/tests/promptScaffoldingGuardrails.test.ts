@@ -38,6 +38,20 @@ describe('prompt scaffolding guardrails', () => {
         expect(systemMessage?.content ?? '').toContain(providerRealityLine);
     });
 
+    it('includes /gamesaves phrasing aligned with /docs/backups', async () => {
+        const { debugMessages } = await buildChatPrompt([
+            { role: 'user', content: 'How do I export a save?' },
+        ]);
+        const systemMessage = debugMessages.find(
+            (message) => message.role === 'system' && message.kind === 'main'
+        );
+        const systemContent = systemMessage?.content ?? '';
+        expect(systemContent).toContain('/docs/backups');
+        expect(systemContent).toContain('Base64-encoded JSON snapshot');
+        expect(systemContent).toContain('envelope or raw state');
+        expect(systemContent).toMatch(/replac(?:ed|es) quests, inventory, and processes/i);
+    });
+
     it('rejects stale token.place or no-key-needed phrasing', () => {
         for (const promptText of collectPromptStrings()) {
             const hasAllowedFutureContext = allowedFuturePattern.test(promptText);
