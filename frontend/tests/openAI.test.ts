@@ -487,6 +487,9 @@ describe('buildChatPrompt', () => {
         expect(content).toContain('Use the PlayerState block when present.');
         expect(content).toContain('/gamesaves');
         expect(content).toContain('/docs/backups');
+        expect(content).toContain('Base64-encoded JSON snapshot');
+        expect(content).toContain('envelope or raw state');
+        expect(content).toMatch(/quests, inventory, and processes.*replaced/i);
         expect(content).toMatch(/clarifying question/i);
         expect(content).toMatch(/only give exact counts\/durations\/rates/i);
     });
