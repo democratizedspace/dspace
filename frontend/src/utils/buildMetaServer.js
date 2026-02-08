@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { logServerError } from './serverLogger';
+import { logServerError } from './serverLogger.js';
 
 const RUNTIME_BUILD_META_PATH = '/app/build_meta.json';
 const REPO_BUILD_META_PATH = path.join(
