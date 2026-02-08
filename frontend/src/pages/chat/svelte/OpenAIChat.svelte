@@ -7,6 +7,7 @@
         CHAT_PROMPT_VERSION,
         getOpenAIErrorSummary,
         GPT5ChatV2,
+        summarizePlayerState,
     } from '../../../utils/openAI.js';
     import { writable } from 'svelte/store';
     import {
@@ -32,6 +33,7 @@
         getAppGitShaWithFallback,
         deriveEnvNameFromHostname,
         getPromptVersionLabelForSha,
+        isPlaceholderSha,
     } from '../../../utils/buildInfo.js';
     import {
         getDocsRagMeta,
@@ -255,6 +257,37 @@
         ].join('\n');
     }
 
+    async function getRuntimeBuildMeta() {
+        try {
+            if (typeof process !== 'undefined' && process.env?.NODE_ENV === 'test') {
+                return null;
+            }
+            if (typeof window === 'undefined' || typeof fetch !== 'function') {
+                return null;
+            }
+            const origin = window.location?.origin;
+            if (!origin) {
+                return null;
+            }
+            const url = new URL('/build-meta.json', origin).toString();
+            const response = await fetch(url, { cache: 'no-store' });
+            if (!response.ok) {
+                return null;
+            }
+            return await response.json();
+        } catch (error) {
+            console.warn('Failed to load runtime build metadata', error);
+            return null;
+        }
+    }
+
+    const formatRuntimeBuildSource = (meta) => {
+        if (!meta?.source) {
+            return 'runtime';
+        }
+        return `runtime:${meta.source}`;
+    };
+
     async function copyDebugInfo() {
         try {
             await copyToClipboard(getDebugInfoText());
@@ -327,22 +360,31 @@
         currentSettings = normalized;
         lastShowChatDebugPayload = normalized.showChatDebugPayload;
         syncPromptDebugDeepLink({ allowAutoExpand: true });
-        const resolvedAppGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
         const resolvedDocsRagGitSha = docsMeta?.docsGitSha ?? docsMeta?.gitSha ?? 'unknown';
         const resolvedDocsRagEnvName = docsMeta?.envName ?? 'unknown';
         const resolvedDocsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
         const resolvedDocsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
-        const resolvedDocsRagHost = window?.location?.host || 'unknown';
+        const resolvedDocsRagHost =
+            typeof window !== 'undefined' ? window.location?.host || 'unknown' : 'unknown';
         const resolvedHostEnvName = deriveEnvNameFromHostname(resolvedDocsRagHost);
         const allowDocsFallback = resolvedHostEnvName === 'dev';
         const appShaInfo = allowDocsFallback
             ? getAppGitShaWithFallback(resolvedDocsRagGitSha)
             : getAppGitShaWithFallback();
-        let resolvedAppGitShaMissing = appShaInfo.source !== 'vite';
+        let resolvedAppGitShaMissing = isPlaceholderSha(appShaInfo.sha);
         let resolvedAppGitShaDisplay = appShaInfo.sha;
         let resolvedAppGitShaSource = appShaInfo.source;
         let resolvedAppGitShaForComparison = appShaInfo.sha;
+        if (resolvedAppGitShaMissing) {
+            const runtimeBuildMeta = await getRuntimeBuildMeta();
+            if (runtimeBuildMeta?.gitSha && !isPlaceholderSha(runtimeBuildMeta.gitSha)) {
+                resolvedAppGitShaMissing = false;
+                resolvedAppGitShaDisplay = runtimeBuildMeta.gitSha;
+                resolvedAppGitShaSource = formatRuntimeBuildSource(runtimeBuildMeta);
+                resolvedAppGitShaForComparison = runtimeBuildMeta.gitSha;
+            }
+        }
         if (!allowDocsFallback && resolvedAppGitShaMissing) {
             resolvedAppGitShaDisplay = 'missing';
             resolvedAppGitShaSource = 'missing';
@@ -370,7 +412,8 @@
             ? 'n/a'
             : (deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable');
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
-        appGitSha = resolvedAppGitSha;
+        appGitSha = resolvedAppGitShaDisplay;
+        playerStateSummary = summarizePlayerState(loadGameState());
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
@@ -380,6 +423,7 @@
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
             const nextNormalized = normalizeSettings(value?.settings);
             currentSettings = nextNormalized;
+            playerStateSummary = summarizePlayerState(value);
             if (lastShowChatDebugPayload && !nextNormalized.showChatDebugPayload) {
                 debugOverride = false;
             }

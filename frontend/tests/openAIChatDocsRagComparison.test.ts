@@ -11,6 +11,18 @@ vi.mock('../src/utils/docsRag.js', async () => {
     };
 });
 
+vi.mock('../src/utils/buildInfo.js', async () => {
+    const actual = await vi.importActual('../src/utils/buildInfo.js');
+    return {
+        ...actual,
+        getAppGitSha: () => process.env.VITE_GIT_SHA ?? 'missing',
+        getAppGitShaWithFallback: () => {
+            const sha = process.env.VITE_GIT_SHA ?? 'missing';
+            return { sha, source: sha === 'missing' ? 'missing' : 'vite' };
+        },
+    };
+});
+
 vi.mock('../src/utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({
         openAI: {},

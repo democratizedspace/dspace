@@ -1,0 +1,18 @@
+{
+  "id": "2026-02-07-chat-debug-build-meta-playerstate",
+  "date": "2026-02-07",
+  "component": "frontend/chat",
+  "longForm": "outages/2026-02-07-chat-debug-build-meta-playerstate.md",
+  "rootCause": "The chat debug panel treated any non-vite build SHA as missing, masking real build metadata on staging/prod, and PlayerState summary only refreshed after prompt submission instead of syncing with the live game state store.",
+  "resolution": "Use placeholder detection for app SHA, add a runtime build metadata endpoint for fallback resolution, and initialize/refresh PlayerState summary from the game state store so the debug panel reflects real counts.",
+  "references": [
+    "frontend/src/pages/chat/svelte/OpenAIChat.svelte",
+    "frontend/src/utils/runtimeBuildMeta.ts",
+    "frontend/src/pages/build-meta.json.ts",
+    "frontend/src/utils/openAI.js",
+    "frontend/src/utils/buildInfo.js",
+    "frontend/tests/openAIChatDocsRagComparison.test.ts",
+    "frontend/src/pages/chat/svelte/__tests__/ChatDebugBuildInfo.spec.ts",
+    "tests/runtimeBuildMeta.test.ts"
+  ]
+}
