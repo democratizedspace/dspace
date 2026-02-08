@@ -5,6 +5,7 @@
         describeOpenAIError,
         buildChatPrompt,
         CHAT_PROMPT_VERSION,
+        getPlayerStateSummary,
         getOpenAIErrorSummary,
         GPT5ChatV2,
     } from '../../../utils/openAI.js';
@@ -32,6 +33,7 @@
         getAppGitShaWithFallback,
         deriveEnvNameFromHostname,
         getPromptVersionLabelForSha,
+        isPlaceholderSha,
     } from '../../../utils/buildInfo.js';
     import {
         getDocsRagMeta,
@@ -255,6 +257,26 @@
         ].join('\n');
     }
 
+    async function fetchRuntimeBuildMeta() {
+        if (typeof fetch !== 'function') {
+            return null;
+        }
+        try {
+            const response = await fetch('/build-meta.json', { cache: 'no-store' });
+            if (!response.ok) {
+                return null;
+            }
+            const payload = await response.json();
+            if (!payload || typeof payload !== 'object') {
+                return null;
+            }
+            return payload;
+        } catch (error) {
+            console.warn('Failed to fetch runtime build metadata', error);
+            return null;
+        }
+    }
+
     async function copyDebugInfo() {
         try {
             await copyToClipboard(getDebugInfoText());
@@ -329,6 +351,7 @@
         syncPromptDebugDeepLink({ allowAutoExpand: true });
         const resolvedAppGitSha = getAppGitSha();
         const docsMeta = await getDocsRagMeta();
+        const runtimeBuildMeta = await fetchRuntimeBuildMeta();
         const resolvedDocsRagGitSha = docsMeta?.docsGitSha ?? docsMeta?.gitSha ?? 'unknown';
         const resolvedDocsRagEnvName = docsMeta?.envName ?? 'unknown';
         const resolvedDocsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
@@ -339,10 +362,22 @@
         const appShaInfo = allowDocsFallback
             ? getAppGitShaWithFallback(resolvedDocsRagGitSha)
             : getAppGitShaWithFallback();
-        let resolvedAppGitShaMissing = appShaInfo.source !== 'vite';
-        let resolvedAppGitShaDisplay = appShaInfo.sha;
-        let resolvedAppGitShaSource = appShaInfo.source;
-        let resolvedAppGitShaForComparison = appShaInfo.sha;
+        const runtimeGitSha = String(runtimeBuildMeta?.gitSha || '').trim();
+        const runtimeSource = String(runtimeBuildMeta?.source || '').trim();
+        const runtimeResolvedFrom = String(runtimeBuildMeta?.resolvedFrom || '').trim();
+        const runtimeShaAvailable = runtimeGitSha && !isPlaceholderSha(runtimeGitSha);
+        const resolvedAppShaInfo = runtimeShaAvailable
+            ? {
+                  sha: runtimeGitSha,
+                  source: [runtimeSource || 'build-meta', runtimeResolvedFrom]
+                      .filter(Boolean)
+                      .join(' '),
+              }
+            : appShaInfo;
+        let resolvedAppGitShaDisplay = resolvedAppShaInfo.sha;
+        let resolvedAppGitShaSource = resolvedAppShaInfo.source;
+        let resolvedAppGitShaForComparison = resolvedAppShaInfo.sha;
+        const resolvedAppGitShaMissing = isPlaceholderSha(resolvedAppShaInfo.sha);
         if (!allowDocsFallback && resolvedAppGitShaMissing) {
             resolvedAppGitShaDisplay = 'missing';
             resolvedAppGitShaSource = 'missing';
@@ -370,7 +405,8 @@
             ? 'n/a'
             : (deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable');
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
-        appGitSha = resolvedAppGitSha;
+        appGitSha = resolvedAppShaInfo.sha;
+        playerStateSummary = getPlayerStateSummary();
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
