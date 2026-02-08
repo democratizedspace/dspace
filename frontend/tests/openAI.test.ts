@@ -486,7 +486,10 @@ describe('buildChatPrompt', () => {
 
         expect(content).toContain('Use the PlayerState block when present.');
         expect(content).toContain('/gamesaves');
-        expect(content).toContain('/docs/routes');
+        expect(content).toContain('/docs/backups');
+        expect(content).toContain('Base64-encoded JSON snapshot');
+        expect(content).toContain('envelope or raw state');
+        expect(content).toMatch(/quests, inventory, and processes.*replaced/i);
         expect(content).toMatch(/clarifying question/i);
         expect(content).toMatch(/only give exact counts\/durations\/rates/i);
     });
@@ -496,7 +499,13 @@ describe('buildChatPrompt', () => {
             'Custom system prompt.',
             'Never invent game facts or player state.',
             'Use the PlayerState block when present.',
-            'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite /docs/routes.',
+            'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite ' +
+                '/docs/backups or /docs/routes.',
+            'When explaining /gamesaves, cite /docs/backups and use: Export: "Click Copy to place a ' +
+                'Base64-encoded JSON snapshot on your clipboard." Import: "Paste the backup string into ' +
+                'the field and select Import." Field label: "Paste a game state backup string (envelope ' +
+                'or raw state) here:" Semantics: "Restoring means quests, inventory, and processes are ' +
+                'replaced with the imported data."',
             "If you're missing context, say you don't know and ask a clarifying question OR point " +
                 'to a specific /docs page.',
             'When giving URLs/navigation, cite /docs excerpts or docs/ROUTES.md.',
@@ -516,8 +525,15 @@ describe('buildChatPrompt', () => {
         );
         const content = systemMessage?.content ?? '';
         const occurrences = content.match(/save snapshot/gi) ?? [];
+        const base64Occurrences = content.match(/base64-encoded json snapshot/gi) ?? [];
+        const envelopeOccurrences = content.match(/envelope or raw state/gi) ?? [];
+        const replacedOccurrences =
+            content.match(/restoring means quests, inventory, and processes are replaced/gi) ?? [];
 
         expect(occurrences).toHaveLength(1);
+        expect(base64Occurrences).toHaveLength(1);
+        expect(envelopeOccurrences).toHaveLength(1);
+        expect(replacedOccurrences).toHaveLength(1);
     });
 
     it('appends only missing guardrail lines when a persona includes some rules', async () => {
