@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's hook up your GitHub account so you can back up progress and share quests. We'll use a classic personal access token.",
+            "text": "Connecting GitHub unlocks cloud sync, quest submissions, and portable progress across devices. We'll use a classic personal access token (PAT).",
             "options": [
                 {
                     "type": "goto",
@@ -24,7 +24,7 @@
         },
         {
             "id": "steps",
-            "text": "Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic). Create a token with repo + gist scopes, then paste it into /cloudsync and click Save.",
+            "text": "GitHub Settings → Developer settings → Personal access tokens → Tokens (classic). Generate a token, set an expiration, select repo + gist scopes, copy it, then paste it into /cloudsync and click Save.",
             "options": [
                 {
                     "type": "goto",
@@ -35,64 +35,129 @@
         },
         {
             "id": "quiz-1",
-            "text": "Where do you create the personal access token?",
+            "text": "What do PAT scopes represent?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-2",
-                    "text": "GitHub Settings → Developer settings → Personal access tokens"
+                    "text": "They limit what the token can access."
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "Inside the DSPACE settings page"
+                    "goto": "retry-scopes",
+                    "text": "They speed up API requests."
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "From the GitHub repository README"
+                    "goto": "retry-scopes",
+                    "text": "They are cosmetic labels."
+                }
+            ]
+        },
+        {
+            "id": "retry-scopes",
+            "text": "Scopes are permission boundaries. The smaller the scope, the safer the token.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Try that again"
                 }
             ]
         },
         {
             "id": "quiz-2",
-            "text": "Which classic PAT scopes cover quest submissions and Cloud Sync?",
+            "text": "How should you handle your token?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-3",
-                    "text": "repo + gist"
+                    "text": "Keep it secret and only store it in DSPACE."
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "public_repo only"
+                    "goto": "retry-secret",
+                    "text": "Share it in chat if you lose it."
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "admin:org"
+                    "goto": "retry-secret",
+                    "text": "Post it in a repo issue for safekeeping."
+                }
+            ]
+        },
+        {
+            "id": "retry-secret",
+            "text": "Tokens are like passwords. Keep them private and rotate them if they leak.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "Got it—back to the quiz"
                 }
             ]
         },
         {
             "id": "quiz-3",
-            "text": "Where do you paste the token in DSPACE to enable GitHub features?",
+            "text": "What does connecting GitHub enable in DSPACE?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "Cloud sync and quest submissions."
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-enable",
+                    "text": "Unlimited dUSD bonuses."
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-enable",
+                    "text": "Unlocking private chat models."
+                }
+            ]
+        },
+        {
+            "id": "retry-enable",
+            "text": "GitHub connects saves and lets you submit quests. It does not grant free currency.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "Understood—continue"
+                }
+            ]
+        },
+        {
+            "id": "quiz-4",
+            "text": "If a token is compromised, what is the safest fix?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "/cloudsync (then click Save)"
+                    "text": "Revoke it in GitHub Settings and make a new one."
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "/quests/submit"
+                    "goto": "retry-revoke",
+                    "text": "Change your DSPACE username."
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "/inventory"
+                    "goto": "retry-revoke",
+                    "text": "Wait for it to expire and keep using it."
+                }
+            ]
+        },
+        {
+            "id": "retry-revoke",
+            "text": "Revoking the token in GitHub stops it immediately. Then generate a fresh one.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "Retry that question"
                 }
             ]
         },

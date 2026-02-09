@@ -1,14 +1,14 @@
 {
     "id": "welcome/intro-inventory",
     "title": "Check Your Inventory",
-    "description": "Learn how to view items you've collected so far.",
+    "description": "Learn how to buy and sell items from /inventory.",
     "image": "/assets/quests/intro_inventory_grid.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Before bigger tasks, open /inventory and buy a USB Type-A to Type-B cable with dUSD. Use search, check the price, and hit Buy.",
+            "text": "Head to /inventory. Use search to find the USB Type-A to Type-B cable, check the price, and buy one with dUSD.",
             "options": [
                 {
                     "type": "goto",
@@ -19,11 +19,11 @@
         },
         {
             "id": "view",
-            "text": "Nice. The inventory page shows what you own, what you can buy, and what you can sell back for dUSD. Try filtering by category and scanning prices.",
+            "text": "Nice. /inventory shows what you own and what you can buy. When you buy something, the Owned count updates immediately.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "sell-tip",
                     "text": "Cable purchased",
                     "requiresItems": [
                         {
@@ -31,6 +31,17 @@
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "sell-tip",
+            "text": "Selling returns dUSD. Open any item and use Sell to preview the payout. Quest requirements read your Owned count, so keep one cable before finishing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Ready to finish"
                 }
             ]
         },
@@ -48,14 +59,14 @@
     "rewards": [
         {
             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-            "count": 150
+            "count": 125
         },
         {
-            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
             "count": 1
         },
         {
-            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+            "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
             "count": 1
         }
     ],

@@ -8,7 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Testing keeps DSPACE cooperative for everyone. Nail the quiz and we'll set up your local run.",
+            "text": "Tests catch regressions and keep reviews fast. Learn the core commands, then ace the quiz.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "primer",
+                    "text": "Show me the commands."
+                }
+            ]
+        },
+        {
+            "id": "primer",
+            "text": "Quick sanity check: npm run qa:smoke (type-check, link-check, item validation, test:ci, no Playwright). Full pre-PR suite: npm run test:pr (includes grouped Playwright). No browsers? SKIP_E2E=1 npm test.",
             "options": [
                 {
                     "type": "goto",
@@ -19,43 +30,65 @@
         },
         {
             "id": "quiz-1",
-            "text": "Which command runs the full pre-PR suite with grouped Playwright tests?",
+            "text": "Which command is the fastest sanity check that mirrors CI without Playwright?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-2",
-                    "text": "npm run test:pr"
-                },
-                {
-                    "type": "goto",
-                    "goto": "start",
                     "text": "npm run qa:smoke"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
+                    "goto": "retry-sanity",
+                    "text": "npm run test:pr"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-sanity",
                     "text": "npm run lint"
                 }
             ]
         },
         {
+            "id": "retry-sanity",
+            "text": "qa:smoke is the quick CI-parity run without Playwright E2E.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Try again"
+                }
+            ]
+        },
+        {
             "id": "quiz-2",
-            "text": "Which command runs CI-parity checks without Playwright E2E?",
+            "text": "Which command runs the full pre-PR suite with grouped Playwright tests?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-3",
+                    "text": "npm run test:pr"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-pr",
                     "text": "npm run qa:smoke"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "npm test"
-                },
+                    "goto": "retry-pr",
+                    "text": "npm run build"
+                }
+            ]
+        },
+        {
+            "id": "retry-pr",
+            "text": "test:pr is the full pre-PR suite, including grouped Playwright E2E.",
+            "options": [
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "npm run build"
+                    "goto": "quiz-2",
+                    "text": "Back to it"
                 }
             ]
         },
@@ -70,13 +103,24 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
+                    "goto": "retry-e2e",
                     "text": "E2E_SKIP=1 npm test"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
+                    "goto": "retry-e2e",
                     "text": "npm test --no-e2e"
+                }
+            ]
+        },
+        {
+            "id": "retry-e2e",
+            "text": "Use SKIP_E2E=1 npm test when browsers are unavailable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "Got it"
                 }
             ]
         },

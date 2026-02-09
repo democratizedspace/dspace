@@ -1,7 +1,7 @@
 {
     "id": "welcome/smart-plug-test",
     "title": "Smart Plug Test",
-    "description": "Use a smart plug to buy 1 kWh from a wall outlet and learn how dWatt and dCarbon work.",
+    "description": "Use a smart plug to buy 1 kWh from the grid and learn how dWatt and dCarbon work.",
     "hardening": {
         "passes": 1,
         "score": 100,
@@ -20,7 +20,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Use the smart plug to buy 1 kWh from a wall outlet. Ready to log some energy?",
+            "text": "The smart plug lets you buy grid energy on demand. It is convenient, but it adds dCarbon. Ready for a quick demo?",
             "options": [
                 {
                     "type": "goto",
@@ -31,7 +31,7 @@
         },
         {
             "id": "measure",
-            "text": "Run outlet-dWatt-1e3 with the smart plug. dWatt tracks energy you buy; dCarbon tracks fossil debt and carries a sell tax.",
+            "text": "Run outlet-dWatt-1e3 with the smart plug. dWatt is usable energy for processes. dCarbon is the fossil-use tag that comes with grid power.",
             "options": [
                 {
                     "type": "process",
@@ -40,7 +40,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "wrapup",
+                    "goto": "tax",
                     "requiresItems": [
                         {
                             "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
@@ -52,8 +52,19 @@
             ]
         },
         {
+            "id": "tax",
+            "text": "When you sell energy, a dCarbon tax is deducted. You can see the tax line in the /inventory Sell panel before confirming a sale.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wrapup",
+                    "text": "Got it."
+                }
+            ]
+        },
+        {
             "id": "wrapup",
-            "text": "That was the easy, fossil-fueled path. Renewables are meant to replace it—unplug and plan cleaner sources.",
+            "text": "That was the fast, fossil-fueled path. Early on it helps you earn dWatt quickly, but renewables are meant to replace it.",
             "options": [
                 {
                     "type": "finish",
@@ -68,7 +79,11 @@
             "count": 1000
         },
         {
-            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 50
+        },
+        {
+            "id": "80d30825-a42b-4add-b715-322e1713952c",
             "count": 1
         }
     ],
