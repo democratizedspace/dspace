@@ -8,184 +8,134 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Testing keeps DSPACE cooperative for everyone. Nail the quiz and we'll set up your local run.",
+            "text": "Tests keep DSPACE stable for everyone. Catch regressions early and reviews go faster.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "primer",
+                    "text": "Show me the command map"
+                }
+            ]
+        },
+        {
+            "id": "primer",
+            "text": "From docs/qa/v3.md: npm run qa:smoke (fast sanity check + CI parity without Playwright), npm run test:pr (full pre-PR suite with grouped Playwright), plus targeted checks like npm run lint, npm run type-check, npm run build, and npm run coverage.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-1",
-                    "text": "Quiz me."
+                    "text": "Quiz me"
                 }
             ]
         },
         {
             "id": "quiz-1",
-            "text": "Which command runs the full pre-PR suite with grouped Playwright tests?",
+            "text": "Which command is the fastest sanity check while matching CI parity without Playwright?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-2",
+                    "text": "npm run qa:smoke"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-1-wrong",
                     "text": "npm run test:pr"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "npm run qa:smoke"
-                },
-                {
-                    "type": "goto",
-                    "goto": "start",
-                    "text": "npm run lint"
-                }
-            ]
-        },
-        {
-            "id": "quiz-2",
-            "text": "Which command runs CI-parity checks without Playwright E2E?",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "quiz-3",
-                    "text": "npm run qa:smoke"
-                },
-                {
-                    "type": "goto",
-                    "goto": "start",
-                    "text": "npm test"
-                },
-                {
-                    "type": "goto",
-                    "goto": "start",
+                    "goto": "quiz-1-wrong",
                     "text": "npm run build"
                 }
             ]
         },
         {
-            "id": "quiz-3",
-            "text": "If Playwright browsers are missing, how do you skip E2E tests?",
+            "id": "quiz-1-wrong",
+            "text": "qa:smoke is the quick CI-parity sweep. test:pr is the full suite, and build is just compilation.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "prep-repo",
+                    "goto": "quiz-1",
+                    "text": "Try again"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2",
+            "text": "Which command runs the full pre-PR suite with grouped Playwright tests?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "npm run test:pr"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-2-wrong",
+                    "text": "npm run qa:smoke"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-2-wrong",
+                    "text": "npm run lint"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2-wrong",
+            "text": "test:pr is the full pre-PR run, including grouped Playwright. qa:smoke skips E2E.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "Try again"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "Playwright browsers missing—what command skips E2E tests?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wrap",
                     "text": "SKIP_E2E=1 npm test"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
+                    "goto": "quiz-3-wrong",
                     "text": "E2E_SKIP=1 npm test"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
+                    "goto": "quiz-3-wrong",
                     "text": "npm test --no-e2e"
                 }
             ]
         },
         {
-            "id": "prep-repo",
-            "text": "Start by creating a GitHub repo for your fork so you can mirror CI locally.",
+            "id": "quiz-3-wrong",
+            "text": "Use SKIP_E2E=1 with npm test when browsers aren't installed.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "create-github-repo",
-                    "text": "Create the GitHub repo fork."
-                },
-                {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Repo ready.",
-                    "requiresItems": [
-                        {
-                            "id": "52593d07-908b-4109-92cf-826b2184ef6f",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "quiz-3",
+                    "text": "Try again"
                 }
             ]
         },
         {
-            "id": "setup",
-            "text": "Clone the repo, install dependencies, and warm the build cache on your laptop.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "prepare-local-testbed",
-                    "text": "Clone and install dependencies."
-                },
-                {
-                    "type": "goto",
-                    "goto": "workflow",
-                    "text": "Workspace is primed.",
-                    "requiresItems": [
-                        {
-                            "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
-                            "count": 1
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "workflow",
-            "text": "Keep the CI workflow file close so your commands match what PRs run.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "create-ci-workflow",
-                    "text": "Add the CI workflow file."
-                },
-                {
-                    "type": "goto",
-                    "goto": "suite",
-                    "text": "CI workflow ready.",
-                    "requiresItems": [
-                        {
-                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "setup",
-                    "text": "Rebuild the workspace."
-                }
-            ]
-        },
-        {
-            "id": "suite",
-            "text": "Run npm run lint, npm run type-check, npm run build, npm run coverage, and the grouped Playwright suite. Capture the log so we know what passed.",
+            "id": "wrap",
+            "text": "You're ready to run the suite. Log a clean run and your PRs will glide through review.",
             "options": [
                 {
                     "type": "process",
                     "process": "execute-dspace-tests",
-                    "text": "Run the full local suite."
+                    "text": "Run the full local suite"
                 },
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Report captured and green.",
-                    "requiresItems": [
-                        {
-                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
-                            "count": 1
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "finish",
-            "text": "Nice work. With a clean report and CI parity, your changes are ready to share without surprising the fleet.",
-            "options": [
-                {
                     "type": "finish",
-                    "text": "Ship the passing run.",
-                    "requiresItems": [
-                        {
-                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Finish quest"
                 }
             ]
         }

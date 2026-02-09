@@ -1,7 +1,7 @@
 {
     "id": "welcome/smart-plug-test",
     "title": "Smart Plug Test",
-    "description": "Use a smart plug to buy 1 kWh from a wall outlet and learn how dWatt and dCarbon work.",
+    "description": "Use a smart plug to buy 1 kWh from the grid and learn how dWatt and dCarbon work.",
     "hardening": {
         "passes": 1,
         "score": 100,
@@ -20,18 +20,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Use the smart plug to buy 1 kWh from a wall outlet. Ready to log some energy?",
+            "text": "Use the smart plug to buy 1 kWh from the grid. It's the quick, always-available way to earn dWatt, but it adds dCarbon.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Sounds fun!"
+                    "text": "Let's do it."
                 }
             ]
         },
         {
             "id": "measure",
-            "text": "Run outlet-dWatt-1e3 with the smart plug. dWatt tracks energy you buy; dCarbon tracks fossil debt and carries a sell tax.",
+            "text": "Run outlet-dWatt-1e3. dWatt is usable energy for machines; dCarbon is your fossil-fuel footprint.",
             "options": [
                 {
                     "type": "process",
@@ -40,24 +40,35 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "wrapup",
+                    "goto": "tax",
                     "requiresItems": [
                         {
                             "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                             "count": 1000
                         }
                     ],
-                    "text": "dWatt generated!"
+                    "text": "dWatt received!"
+                }
+            ]
+        },
+        {
+            "id": "tax",
+            "text": "dCarbon isn't just a score—it taxes selling. For every 1,000 dCarbon, your sell prices drop by 1% (up to 90%). You can see the reduced sell price preview on /inventory when you toggle Sell.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wrapup",
+                    "text": "Got it."
                 }
             ]
         },
         {
             "id": "wrapup",
-            "text": "That was the easy, fossil-fueled path. Renewables are meant to replace it—unplug and plan cleaner sources.",
+            "text": "Nice work. Grid energy is convenient, but renewables are how you scale without the dCarbon drag.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Neat!"
+                    "text": "On to cleaner power."
                 }
             ]
         }
@@ -68,7 +79,11 @@
             "count": 1000
         },
         {
-            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 25
+        },
+        {
+            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
             "count": 1
         }
     ],
