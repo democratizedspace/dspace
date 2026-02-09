@@ -31,7 +31,7 @@
         },
         {
             "id": "measure",
-            "text": "Run outlet-dWatt-1e3 with the smart plug. dWatt is the in-game energy you can spend; dCarbon is the fossil debt created by grid power. When you sell dWatt, a dCarbon tax is deducted—look for the Sell button showing something like “Sell for … (-X%)” and the dCarbon tax notice below it.",
+            "text": "Run outlet-dWatt-1e3 with the smart plug. dWatt is the in-game energy you can spend; dCarbon is the fossil debt created by grid power. When you sell dWatt, a dCarbon tax is deducted—look for the Sell button showing something like “Sell for … (-X%)” and the note that says there’s a tax applied with a link to dCarbon below it.",
             "options": [
                 {
                     "type": "process",

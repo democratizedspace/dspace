@@ -19,7 +19,7 @@
         },
         {
             "id": "view",
-            "text": "Nice. /inventory shows what you own, what you can buy, and what you can sell for dUSD. Open a priced item to view details and click Sell to preview the return (items without a price show Not tradeable). Keep the 9 V battery for this quest—just preview, then cancel—and notice how counts update when you buy or sell.",
+            "text": "Nice. /inventory shows what you own, what you can buy, and what you can sell for dUSD. Open a priced item to view details and click Sell to preview the return (items without a price show Not tradeable). Keep the 9 V battery for this quest—just preview, then cancel—or test a different priced item if you want to complete a sale, and notice how counts update when you buy or sell.",
             "options": [
                 {
                     "type": "goto",
