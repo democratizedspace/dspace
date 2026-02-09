@@ -54,6 +54,11 @@ const getFinishOptions = (quest: any) =>
 const getMissingItems = (required: string[], obtainable: Set<string>) =>
     required.filter((itemId) => !obtainable.has(itemId));
 
+const uniqueItemIds = (items: string[]) => [...new Set(items.filter(Boolean))];
+
+const getItemDependencies = (item: any) =>
+    uniqueItemIds(toItemIdsFromUnknown(item?.dependencies));
+
 const loadQuestPaths = async (baseDir = QUESTS_DIR) => {
     const entries = await fs.readdir(baseDir, { withFileTypes: true });
     const paths = new Map<string, string>();
@@ -86,6 +91,13 @@ describe('quest completion item availability', () => {
         const itemMap = new Map(
             (items as Array<any>).map((item) => [item.id, item])
         );
+        const getItemDependencyInfo = (itemId: string) => {
+            const item = itemMap.get(itemId);
+            const dependencies = getItemDependencies(item);
+            const unknown = dependencies.filter((dependency) => !itemMap.has(dependency));
+            const known = dependencies.filter((dependency) => itemMap.has(dependency));
+            return { known, unknown };
+        };
         const purchasable = new Set(
             (items as Array<any>).filter((item) => item.price).map((item) => item.id)
         );
@@ -123,7 +135,7 @@ describe('quest completion item availability', () => {
             }
         }
 
-        const obtainable = new Set<string>([...purchasable, ...betaPlaceholderItems]);
+        const obtainable = new Set<string>();
         // This validator focuses on item obtainability and assumes GitHub connections can be made.
         const allowGitHubRequirement = true;
         const completableQuests = new Set<string>();
@@ -131,6 +143,18 @@ describe('quest completion item availability', () => {
 
         while (changed) {
             changed = false;
+
+            for (const itemId of [...purchasable, ...betaPlaceholderItems]) {
+                if (obtainable.has(itemId)) continue;
+                const { known, unknown } = getItemDependencyInfo(itemId);
+                if (
+                    unknown.length === 0 &&
+                    known.every((dependency) => obtainable.has(dependency))
+                ) {
+                    obtainable.add(itemId);
+                    changed = true;
+                }
+            }
 
             for (const process of processes as Array<any>) {
                 const requirements = [
@@ -188,7 +212,24 @@ describe('quest completion item availability', () => {
 
         const explainMissingItem = (itemId: string) => {
             const item = itemMap.get(itemId);
+            if (!item) {
+                return `Unknown item (${itemId}) is not defined in inventory.`;
+            }
             const name = item?.name ?? 'Unknown item';
+            const { known, unknown } = getItemDependencyInfo(itemId);
+            if (unknown.length > 0) {
+                return `${name} (${itemId}) depends on unknown item IDs: ${unknown.join(', ')}.`;
+            }
+            const missingDependencies = getMissingItems(
+                known,
+                obtainable
+            );
+            if (missingDependencies.length > 0) {
+                const missingNames = missingDependencies
+                    .map((missingId) => itemMap.get(missingId)?.name ?? missingId)
+                    .join(', ');
+                return `${name} (${itemId}) depends on missing items: ${missingNames}.`;
+            }
             const sources = processSources.get(itemId) ?? [];
             if (sources.length > 0) {
                 const scored = sources.map((process) => {
