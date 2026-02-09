@@ -86,6 +86,11 @@ describe('quest completion item availability', () => {
         const itemMap = new Map(
             (items as Array<any>).map((item) => [item.id, item])
         );
+        const getItemDependencies = (itemId: string) => {
+            const item = itemMap.get(itemId);
+            const dependencies = item?.dependencies;
+            return Array.isArray(dependencies) ? dependencies.filter(Boolean) : [];
+        };
         const purchasable = new Set(
             (items as Array<any>).filter((item) => item.price).map((item) => item.id)
         );
@@ -123,7 +128,7 @@ describe('quest completion item availability', () => {
             }
         }
 
-        const obtainable = new Set<string>([...purchasable, ...betaPlaceholderItems]);
+        const obtainable = new Set<string>();
         // This validator focuses on item obtainability and assumes GitHub connections can be made.
         const allowGitHubRequirement = true;
         const completableQuests = new Set<string>();
@@ -131,6 +136,15 @@ describe('quest completion item availability', () => {
 
         while (changed) {
             changed = false;
+
+            for (const itemId of [...purchasable, ...betaPlaceholderItems]) {
+                if (obtainable.has(itemId)) continue;
+                const dependencies = getItemDependencies(itemId);
+                if (dependencies.every((dependency) => obtainable.has(dependency))) {
+                    obtainable.add(itemId);
+                    changed = true;
+                }
+            }
 
             for (const process of processes as Array<any>) {
                 const requirements = [
@@ -189,6 +203,16 @@ describe('quest completion item availability', () => {
         const explainMissingItem = (itemId: string) => {
             const item = itemMap.get(itemId);
             const name = item?.name ?? 'Unknown item';
+            const missingDependencies = getMissingItems(
+                getItemDependencies(itemId),
+                obtainable
+            );
+            if (missingDependencies.length > 0) {
+                const missingNames = missingDependencies
+                    .map((missingId) => itemMap.get(missingId)?.name ?? missingId)
+                    .join(', ');
+                return `${name} (${itemId}) depends on missing items: ${missingNames}.`;
+            }
             const sources = processSources.get(itemId) ?? [];
             if (sources.length > 0) {
                 const scored = sources.map((process) => {

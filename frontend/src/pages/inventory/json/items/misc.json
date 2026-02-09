@@ -1546,7 +1546,7 @@
         "name": "M.2 PoE+ HAT",
         "description": "Provides power over Ethernet and an M.2 slot for NVMe drives.",
         "image": "/assets/m2_poe_hat.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "75 dUSD",
         "category": "Electronics & Robotics"
     },
     {
@@ -1554,7 +1554,7 @@
         "name": "1TB 2230 M.2 SSD",
         "description": "A tiny NVMe drive perfect for booting a Pi.",
         "image": "/assets/m2_2230_nvme_module_closeup.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "110 dUSD",
         "category": "Electronics & Robotics"
     },
     {
@@ -1562,7 +1562,7 @@
         "name": "64GB microSD card",
         "description": "Used to flash the operating system before cloning to the SSD.",
         "image": "/assets/microsd_card_64gb.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "12 dUSD",
         "category": "Electronics & Robotics"
     },
     {
@@ -1586,7 +1586,7 @@
         "name": "fan case",
         "description": "Keeps a Raspberry Pi cool during heavy workloads.",
         "image": "/assets/raspberry_pi_fan_case.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "25 dUSD",
         "category": "Electronics & Robotics"
     },
     {
@@ -1610,7 +1610,12 @@
         "name": "Pi cluster node",
         "description": "A Raspberry Pi assembled with HAT, SSD and cooling.",
         "image": "/assets/pi_cluster_node_hat_ssd.jpg",
-        "dependencies": ["129", "131"],
+        "dependencies": [
+            "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+            "926cd4e3-3704-423b-96d9-d3da0421b67a",
+            "4af856b5-b5c1-494f-8037-9b6559785633",
+            "231ad01a-fa78-46a7-a590-827bd0c84dec"
+        ],
         "price": "450 dUSD",
         "category": "Electronics & Robotics"
     },
@@ -1691,8 +1696,11 @@
         "name": "basic telescope",
         "description": "A simple refracting telescope for backyard astronomy.",
         "image": "/assets/basic_refracting_telescope_backyard.jpg",
-        "dependencies": ["0", "3"],
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "dependencies": [
+            "98f6252e-95c2-468a-b110-69d47604df2c",
+            "9a72fb16-fc69-45c5-beca-f25c27028977"
+        ],
+        "price": "65 dUSD",
         "category": "Astronomy & Observation"
     },
     {
@@ -1700,7 +1708,7 @@
         "name": "planisphere star chart",
         "description": "A rotating sky map for matching constellations to the current date and time.",
         "image": "/assets/planisphere_star_chart.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "14 dUSD",
         "category": "Astronomy & Observation"
     },
     {
