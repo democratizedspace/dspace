@@ -1,11 +1,11 @@
 import '@testing-library/jest-dom';
-import { render, fireEvent } from '@testing-library/svelte';
+import { render, fireEvent, waitFor } from '@testing-library/svelte';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { tick } from 'svelte';
 import FinishOption from '../src/pages/quests/svelte/option/FinishOption.svelte';
 
 const { stateStore, finishQuestMock, getStateSnapshot } = vi.hoisted(() => {
-    let snapshot = { inventory: {} as Record<string, number> };
+    let snapshot = { inventory: {} as Record<string, number>, github: { token: '' } };
     const subscribers = new Set<(value: typeof snapshot) => void>();
     const stateStore = {
         subscribe: (run: (value: typeof snapshot) => void) => {
@@ -41,11 +41,6 @@ vi.mock('../src/utils/gameState.js', () => ({
     finishQuest: finishQuestMock,
 }));
 
-vi.mock('../src/utils/githubToken.js', () => ({
-    loadGitHubToken: vi.fn(() => ''),
-    isValidGitHubToken: vi.fn(() => false),
-}));
-
 vi.mock('../src/utils/itemResolver.js', () => ({
     getItemMap: vi.fn(async (ids = []) => {
         const namesById: Record<string, string> = {
@@ -70,7 +65,7 @@ vi.mock('../src/utils/itemResolver.js', () => ({
 describe('FinishOption quest requirements', () => {
     beforeEach(() => {
         finishQuestMock.mockClear();
-        stateStore.set({ inventory: {} });
+        stateStore.set({ inventory: {}, github: { token: '' } });
     });
 
     it('disables finish option and shows required items when missing inventory', async () => {
@@ -134,5 +129,48 @@ describe('FinishOption quest requirements', () => {
         expect(button).toBeEnabled();
         await fireEvent.click(button);
         expect(finishQuestMock).toHaveBeenCalledWith('quest-1', quest.rewards);
+    });
+
+    it('shows a GitHub requirement message when not connected', async () => {
+        const quest = {
+            id: 'quest-1',
+            rewards: [{ id: 'reward-1', count: 1 }],
+        };
+        const option = {
+            text: 'Finish quest',
+            requiresGitHub: true,
+        };
+
+        const { getByRole, getByText } = render(FinishOption, { props: { quest, option } });
+
+        const button = getByRole('button', { name: /Finish quest/ });
+        expect(button).toBeDisabled();
+        expect(getByText('Connect GitHub to finish this quest.')).toBeInTheDocument();
+    });
+
+    it('enables finish option when GitHub is connected', async () => {
+        const quest = {
+            id: 'quest-1',
+            rewards: [{ id: 'reward-1', count: 1 }],
+        };
+        const option = {
+            text: 'Finish quest',
+            requiresGitHub: true,
+        };
+
+        const { getByRole, queryByText } = render(FinishOption, { props: { quest, option } });
+        const button = getByRole('button', { name: /Finish quest/ });
+
+        expect(button).toBeDisabled();
+        expect(queryByText('Connect GitHub to finish this quest.')).toBeInTheDocument();
+
+        stateStore.set({
+            inventory: {},
+            github: { token: `ghp_${'a'.repeat(36)}` },
+        });
+
+        await waitFor(() => expect(button).toBeEnabled());
+
+        expect(queryByText('Connect GitHub to finish this quest.')).not.toBeInTheDocument();
     });
 });

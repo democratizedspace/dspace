@@ -1184,7 +1184,7 @@
         "name": "Laptop Computer",
         "description": "A portable computer capable of running the Arduino IDE and uploading sketches.",
         "image": "/assets/laptop_running_ide_on_desk.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "300 dUSD",
         "category": "Electronics & Robotics"
     },
     {
@@ -1192,7 +1192,7 @@
         "name": "thermistor logging rig",
         "description": "An Arduino Uno wired with a 10k NTC thermistor voltage divider for continuous temperature logging.",
         "image": "/assets/thermistor_logging_rig_arduino_voltage_divider.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "120 dUSD",
         "category": "Electronics & Robotics"
     },
     {
@@ -1248,7 +1248,7 @@
         "name": "pan-tilt ultrasonic rig",
         "description": "Two-servo pan-tilt assembly wired to an Arduino with an ultrasonic module mounted and centered.",
         "image": "/assets/pan_tilt_ultrasonic_rig_assembled.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "80 dUSD",
         "category": "Electronics & Robotics"
     },
     {
@@ -1538,7 +1538,7 @@
         "name": "Raspberry Pi 5 board",
         "description": "A compact single-board computer with plenty of power for small clusters.",
         "image": "/assets/raspberry_pi5_board_closeup.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "95 dUSD",
         "category": "Electronics & Robotics"
     },
     {
@@ -1611,7 +1611,7 @@
         "description": "A Raspberry Pi assembled with HAT, SSD and cooling.",
         "image": "/assets/pi_cluster_node_hat_ssd.jpg",
         "dependencies": ["129", "131"],
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "450 dUSD",
         "category": "Electronics & Robotics"
     },
     {
@@ -1729,7 +1729,7 @@
         "name": "polar-aligned camera rig",
         "description": "A leveled tripod with a focused camera locked on Polaris and framed for star trails.",
         "image": "/assets/polar_aligned_camera_star_trails_rig.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "150 dUSD",
         "category": "Astronomy & Observation"
     },
     {

@@ -1,10 +1,10 @@
 {
     "id": "welcome/smart-plug-test",
     "title": "Smart Plug Test",
-    "description": "Use a smart plug to buy 1 kWh from a wall outlet and mint 1,000 dWatt tokens.",
+    "description": "Use a smart plug to buy 1 kWh from a wall outlet and learn how dWatt and dCarbon work.",
     "hardening": {
         "passes": 1,
-        "score": 95,
+        "score": 100,
         "emoji": "🌀",
         "history": [
             {
@@ -20,7 +20,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Plug a lamp into the smart plug. Under 15 A and dry. Ready to capture energy?",
+            "text": "Use the smart plug to buy 1 kWh from a wall outlet. Ready to log some energy?",
             "options": [
                 {
                     "type": "goto",
@@ -31,7 +31,7 @@
         },
         {
             "id": "measure",
-            "text": "Run outlet-dWatt-1e3 with the smart plug and watch 1,000 dWatt appear.",
+            "text": "Run outlet-dWatt-1e3 with the smart plug. dWatt tracks energy you buy; dCarbon tracks fossil debt and carries a sell tax.",
             "options": [
                 {
                     "type": "process",
@@ -53,7 +53,7 @@
         },
         {
             "id": "wrapup",
-            "text": "Nice surge! Unplug the load—this smart plug will help with bigger quests.",
+            "text": "That was the easy, fossil-fueled path. Renewables are meant to replace it—unplug and plan cleaner sources.",
             "options": [
                 {
                     "type": "finish",
@@ -64,7 +64,11 @@
     ],
     "rewards": [
         {
-            "id": "7318a5ba-fac3-476e-a532-c813ed9b18e5",
+            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+            "count": 1000
+        },
+        {
+            "id": "02b32152-a7b2-458e-9643-7b754c722165",
             "count": 1
         }
     ],

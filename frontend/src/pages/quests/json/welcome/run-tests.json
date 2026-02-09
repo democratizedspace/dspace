@@ -8,25 +8,94 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Testing keeps DSPACE cooperative for everyone. Want a quick tour before we hammer the suite?",
+            "text": "Testing keeps DSPACE cooperative for everyone. Nail the quiz and we'll set up your local run.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "overview",
-                    "text": "Give me the map."
+                    "goto": "quiz-1",
+                    "text": "Quiz me."
+                }
+            ]
+        },
+        {
+            "id": "quiz-1",
+            "text": "Which command runs the full pre-PR suite with grouped Playwright tests?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "npm run test:pr"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "npm run qa:smoke"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "npm run lint"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2",
+            "text": "Which command runs CI-parity checks without Playwright E2E?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "npm run qa:smoke"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "npm test"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "npm run build"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "If Playwright browsers are missing, how do you skip E2E tests?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep-repo",
+                    "text": "SKIP_E2E=1 npm test"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "E2E_SKIP=1 npm test"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "npm test --no-e2e"
+                }
+            ]
+        },
+        {
+            "id": "prep-repo",
+            "text": "Start by creating a GitHub repo for your fork so you can mirror CI locally.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "create-github-repo",
+                    "text": "Create the GitHub repo fork."
                 },
                 {
                     "type": "goto",
                     "goto": "setup",
-                    "text": "Skip to setup.",
-                    "process": "prepare-local-testbed",
+                    "text": "Repo ready.",
                     "requiresItems": [
                         {
                             "id": "52593d07-908b-4109-92cf-826b2184ef6f",
-                            "count": 1
-                        },
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
                             "count": 1
                         }
                     ]
@@ -34,23 +103,17 @@
             ]
         },
         {
-            "id": "overview",
-            "text": "We run lint, type checks, unit tests, and shard the Playwright suite. Keep the CI workflow close so your local run mirrors what ships.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "setup",
-                    "text": "Ready to prep the workspace."
-                }
-            ]
-        },
-        {
             "id": "setup",
-            "text": "Clone the repo, install dependencies, and warm the build cache. Keep the CI workflow file handy so the commands match what PRs run.",
+            "text": "Clone the repo, install dependencies, and warm the build cache on your laptop.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "prepare-local-testbed",
+                    "text": "Clone and install dependencies."
+                },
+                {
                     "type": "goto",
-                    "goto": "suite",
+                    "goto": "workflow",
                     "text": "Workspace is primed.",
                     "requiresItems": [
                         {
@@ -58,28 +121,23 @@
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "overview",
-                    "text": "Review the plan again."
                 }
             ]
         },
         {
-            "id": "suite",
-            "text": "Run lint, type checks, Vitest coverage, then both Playwright shards. Capture the log so we know what passed.",
+            "id": "workflow",
+            "text": "Keep the CI workflow file close so your commands match what PRs run.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "create-ci-workflow",
+                    "text": "Add the CI workflow file."
+                },
+                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Report captured and green.",
-                    "process": "execute-dspace-tests",
+                    "goto": "suite",
+                    "text": "CI workflow ready.",
                     "requiresItems": [
-                        {
-                            "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
-                            "count": 1
-                        },
                         {
                             "id": "306793ac-e420-4859-9742-9076fff6ab57",
                             "count": 1
@@ -89,7 +147,29 @@
                 {
                     "type": "goto",
                     "goto": "setup",
-                    "text": "Dependencies changed—reinstall and retry."
+                    "text": "Rebuild the workspace."
+                }
+            ]
+        },
+        {
+            "id": "suite",
+            "text": "Run npm run lint, npm run type-check, npm run build, npm run coverage, and the grouped Playwright suite. Capture the log so we know what passed.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "execute-dspace-tests",
+                    "text": "Run the full local suite."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Report captured and green.",
+                    "requiresItems": [
+                        {
+                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -110,11 +190,16 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "rewards": [
+        {
+            "id": "82b369fe-0ef4-4ca1-881c-14e5a7feeff5",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["welcome/connect-github"],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }
