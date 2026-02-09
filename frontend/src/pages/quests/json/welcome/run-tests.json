@@ -8,81 +8,125 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Testing keeps DSPACE cooperative for everyone. Nail the quiz and we'll set up your local run.",
+            "text": "Tests catch regressions early and speed up reviews. Let’s map the real commands first.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "commands",
+                    "text": "Show me the command map"
+                }
+            ]
+        },
+        {
+            "id": "commands",
+            "text": "Quick map: npm run qa:smoke (type-check + link-check + itemValidation + test:ci, skips Playwright), npm run test:pr (full pre-PR suite with grouped Playwright), and focused checks like npm run lint, npm run type-check, and npm run build.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-1",
-                    "text": "Quiz me."
+                    "text": "Quiz me"
                 }
             ]
         },
         {
             "id": "quiz-1",
-            "text": "Which command runs the full pre-PR suite with grouped Playwright tests?",
+            "text": "Which command is the quick smoke that skips Playwright?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-2",
+                    "text": "npm run qa:smoke"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-smoke",
                     "text": "npm run test:pr"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "npm run qa:smoke"
-                },
-                {
-                    "type": "goto",
-                    "goto": "start",
-                    "text": "npm run lint"
-                }
-            ]
-        },
-        {
-            "id": "quiz-2",
-            "text": "Which command runs CI-parity checks without Playwright E2E?",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "quiz-3",
-                    "text": "npm run qa:smoke"
-                },
-                {
-                    "type": "goto",
-                    "goto": "start",
-                    "text": "npm test"
-                },
-                {
-                    "type": "goto",
-                    "goto": "start",
+                    "goto": "retry-smoke",
                     "text": "npm run build"
                 }
             ]
         },
         {
+            "id": "retry-smoke",
+            "text": "qa:smoke is the fast check that skips Playwright while still hitting CI-parity scripts.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Back to start"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2",
+            "text": "Which command runs the full pre-PR suite with grouped Playwright tests?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "npm run test:pr"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-pr",
+                    "text": "npm run qa:smoke"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-pr",
+                    "text": "npm run lint"
+                }
+            ]
+        },
+        {
+            "id": "retry-pr",
+            "text": "test:pr is the full pre-PR suite, including grouped Playwright E2E runs.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Back to start"
+                }
+            ]
+        },
+        {
             "id": "quiz-3",
-            "text": "If Playwright browsers are missing, how do you skip E2E tests?",
+            "text": "Which command mirrors CI checks without Playwright?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep-repo",
-                    "text": "SKIP_E2E=1 npm test"
+                    "text": "npm run test:ci"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "E2E_SKIP=1 npm test"
+                    "goto": "retry-ci",
+                    "text": "npm run test:pr"
                 },
                 {
                     "type": "goto",
+                    "goto": "retry-ci",
+                    "text": "npm run link-check"
+                }
+            ]
+        },
+        {
+            "id": "retry-ci",
+            "text": "test:ci runs the CI-parity checks without Playwright E2E, and qa:smoke wraps it with extra validation.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "start",
-                    "text": "npm test --no-e2e"
+                    "text": "Back to start"
                 }
             ]
         },
         {
             "id": "prep-repo",
-            "text": "Start by creating a GitHub repo for your fork so you can mirror CI locally.",
+            "text": "If you want to mirror CI locally, start with a GitHub repo for your fork.",
             "options": [
                 {
                     "type": "process",
@@ -153,7 +197,7 @@
         },
         {
             "id": "suite",
-            "text": "Run npm run lint, npm run type-check, npm run build, npm run coverage, and the grouped Playwright suite. Capture the log so we know what passed.",
+            "text": "Run npm run lint, npm run type-check, npm run build, and then npm run test:pr (or npm run qa:smoke if you’re skipping Playwright). Capture the log so we know what passed.",
             "options": [
                 {
                     "type": "process",

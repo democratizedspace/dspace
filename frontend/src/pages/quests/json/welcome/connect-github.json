@@ -8,8 +8,13 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's hook up your GitHub account so you can back up progress and share quests. We'll use a classic personal access token.",
+            "text": "Let’s link GitHub so your progress can sync, quests can be submitted, and your work stays portable.",
             "options": [
+                {
+                    "type": "goto",
+                    "goto": "why",
+                    "text": "Why does GitHub matter?"
+                },
                 {
                     "type": "goto",
                     "goto": "steps",
@@ -23,8 +28,24 @@
             ]
         },
         {
+            "id": "why",
+            "text": "GitHub keeps your quests and progress backed up in the cloud, unlocks submissions, and lets you move between machines without losing work. We’ll use a classic personal access token (PAT).",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "steps",
+                    "text": "Got it—show me the steps"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "I’m ready for the quiz"
+                }
+            ]
+        },
+        {
             "id": "steps",
-            "text": "Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic). Create a token with repo + gist scopes, then paste it into /cloudsync and click Save.",
+            "text": "PAT steps: GitHub Settings → Developer settings → Personal access tokens → Tokens (classic). Generate a new token with repo + gist scopes, copy it, then paste it into /cloudsync and click Save.",
             "options": [
                 {
                     "type": "goto",
@@ -35,64 +56,129 @@
         },
         {
             "id": "quiz-1",
-            "text": "Where do you create the personal access token?",
+            "text": "What do PAT scopes control?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-2",
-                    "text": "GitHub Settings → Developer settings → Personal access tokens"
+                    "text": "They define what the token is allowed to do"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "Inside the DSPACE settings page"
+                    "goto": "retry-scopes",
+                    "text": "They pick which repo name I have to use"
                 },
                 {
                     "type": "goto",
+                    "goto": "retry-scopes",
+                    "text": "They change my GitHub username"
+                }
+            ]
+        },
+        {
+            "id": "retry-scopes",
+            "text": "Scopes are permissions. Choose only what DSPACE needs so your token isn’t overpowered.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "start",
-                    "text": "From the GitHub repository README"
+                    "text": "Back to start"
                 }
             ]
         },
         {
             "id": "quiz-2",
-            "text": "Which classic PAT scopes cover quest submissions and Cloud Sync?",
+            "text": "How should you handle a personal access token?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-3",
-                    "text": "repo + gist"
+                    "text": "Treat it like a password and keep it secret"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "public_repo only"
+                    "goto": "retry-secret",
+                    "text": "Share it in chat so teammates can use it"
                 },
                 {
                     "type": "goto",
+                    "goto": "retry-secret",
+                    "text": "Paste it into issue comments for backup"
+                }
+            ]
+        },
+        {
+            "id": "retry-secret",
+            "text": "Tokens are sensitive. Store them only where needed (like /cloudsync) and never share them publicly.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "start",
-                    "text": "admin:org"
+                    "text": "Back to start"
                 }
             ]
         },
         {
             "id": "quiz-3",
-            "text": "Where do you paste the token in DSPACE to enable GitHub features?",
+            "text": "What does connecting GitHub unlock in DSPACE?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "Cloud sync and quest submissions"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-why",
+                    "text": "Unlimited dUSD and instant quest skips"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-why",
+                    "text": "Private multiplayer servers"
+                }
+            ]
+        },
+        {
+            "id": "retry-why",
+            "text": "Connecting GitHub is about syncing and sharing your work—not granting gameplay power-ups.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Back to start"
+                }
+            ]
+        },
+        {
+            "id": "quiz-4",
+            "text": "If you ever want to revoke the token, where do you do it?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "/cloudsync (then click Save)"
+                    "text": "GitHub Settings → Developer settings → Personal access tokens"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "/quests/submit"
+                    "goto": "retry-revoke",
+                    "text": "Delete the repo on your machine"
                 },
                 {
                     "type": "goto",
+                    "goto": "retry-revoke",
+                    "text": "Email GitHub support to reset it"
+                }
+            ]
+        },
+        {
+            "id": "retry-revoke",
+            "text": "Revoking happens in GitHub’s token list. You can delete or regenerate a token anytime.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "start",
-                    "text": "/inventory"
+                    "text": "Back to start"
                 }
             ]
         },
