@@ -12,19 +12,82 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "token",
-                    "text": "I'm ready"
+                    "goto": "setup",
+                    "text": "I'm ready."
                 }
             ]
         },
         {
-            "id": "token",
-            "text": "Visit the cloud sync page and paste your personal access token. I'll store it locally so you can upload saves and create PRs.",
+            "id": "setup",
+            "text": "Create a classic PAT (personal access token) in GitHub → Settings → Developer settings → Personal access tokens (classic). Enable `gist` for cloud sync and `repo` for quest PRs, then paste it on `/cloudsync`.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz1",
+                    "text": "Quiz me."
+                }
+            ]
+        },
+        {
+            "id": "quiz1",
+            "text": "Where do you create a classic personal access token?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz2",
+                    "text": "GitHub Settings → Developer settings → Personal access tokens (classic)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "In the DSPACE inventory page."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Inside the GitHub repository README."
+                }
+            ]
+        },
+        {
+            "id": "quiz2",
+            "text": "Which scopes should you enable for DSPACE cloud sync and quest submissions?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz3",
+                    "text": "`gist` for cloud sync and `repo` for quest PRs."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "`admin:org` only."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "No scopes are needed."
+                }
+            ]
+        },
+        {
+            "id": "quiz3",
+            "text": "Where do you paste the token in DSPACE?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Token saved"
+                    "text": "On the `/cloudsync` page."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "In the quest editor."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "In the process manager."
                 }
             ]
         },
@@ -40,11 +103,16 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "rewards": [
+        {
+            "id": "d2b27124-3bd0-4f3b-9d6b-1d32e2fa91d4",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["welcome/intro-inventory"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

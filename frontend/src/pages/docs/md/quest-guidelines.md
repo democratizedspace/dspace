@@ -218,6 +218,8 @@ Before submitting a quest, verify:
 -   All dialogue paths lead to completion
 -   Item grants and requirements function correctly
 -   Process integrations work as expected
+-   Required items are obtainable via purchase, process outputs, or upstream quest rewards (CI
+    validates this automatically)
 -   Educational content is accurate and clear
 -   Safety warnings are included where appropriate
 

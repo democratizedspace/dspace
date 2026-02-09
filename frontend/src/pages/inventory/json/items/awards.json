@@ -204,6 +204,32 @@
         }
     },
     {
+        "id": "d2b27124-3bd0-4f3b-9d6b-1d32e2fa91d4",
+        "name": "GitHub Connection Trophy",
+        "description": "Polished desktop trophy celebrating a verified GitHub connection and cloud sync setup.",
+        "image": "/assets/benchy_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "2d6e7d6f-6ad4-4e0b-b9c1-4b3cb8ad6b7b",
+        "name": "Test Suite Trophy",
+        "description": "Commemorative trophy for running the full DSPACE test suite with CI parity.",
+        "image": "/assets/rocket_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "fd8bdb69-0f29-469c-9383-93f97b6ea015",
         "name": "V2 Upgrade Trophy",
         "description": "Awarded for migrating a v2 localStorage save to the v3 IndexedDB format.",

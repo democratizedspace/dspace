@@ -8,25 +8,94 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Testing keeps DSPACE cooperative for everyone. Want a quick tour before we hammer the suite?",
+            "text": "Testing keeps DSPACE cooperative for everyone. The repo docs call out `npm test` for the PR suite, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run coverage`. If Playwright browsers are unavailable, use `SKIP_E2E=1 npm test`.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "overview",
-                    "text": "Give me the map."
+                    "goto": "quiz1",
+                    "text": "Quiz me."
+                }
+            ]
+        },
+        {
+            "id": "quiz1",
+            "text": "Which command runs the PR test suite locally?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz2",
+                    "text": "`npm test`"
                 },
                 {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Skip to setup.",
-                    "process": "prepare-local-testbed",
+                    "goto": "start",
+                    "text": "`npm run lint`"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "`npm run type-check`"
+                }
+            ]
+        },
+        {
+            "id": "quiz2",
+            "text": "What do you run when browsers are unavailable for Playwright?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz3",
+                    "text": "`SKIP_E2E=1 npm test`"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "`npm test --skip-e2e`"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "`SKIP_E2E=1 npm run lint`"
+                }
+            ]
+        },
+        {
+            "id": "quiz3",
+            "text": "Which command checks lint issues before you open a PR?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "`npm run lint`"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "`npm run build`"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "`npm run coverage`"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Time to set up the workspace. Buy a laptop in the inventory shop, then clone the repo so you have a GitHub repository ready for CI parity.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "clone-github-repo",
+                    "text": "Clone the DSPACE repo."
+                },
+                {
+                    "type": "goto",
+                    "goto": "workflow",
+                    "text": "Repo cloned.",
                     "requiresItems": [
                         {
                             "id": "52593d07-908b-4109-92cf-826b2184ef6f",
-                            "count": 1
-                        },
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
                             "count": 1
                         }
                     ]
@@ -34,20 +103,36 @@
             ]
         },
         {
-            "id": "overview",
-            "text": "We run lint, type checks, unit tests, and shard the Playwright suite. Keep the CI workflow close so your local run mirrors what ships.",
+            "id": "workflow",
+            "text": "Add the CI workflow file so your local run matches what ships.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "create-ci-workflow",
+                    "text": "Add the CI workflow."
+                },
                 {
                     "type": "goto",
                     "goto": "setup",
-                    "text": "Ready to prep the workspace."
+                    "text": "Workflow file added.",
+                    "requiresItems": [
+                        {
+                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "setup",
-            "text": "Clone the repo, install dependencies, and warm the build cache. Keep the CI workflow file handy so the commands match what PRs run.",
+            "text": "Clone the repo locally, install dependencies, and warm the cache.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "prepare-local-testbed",
+                    "text": "Prep the local checkout."
+                },
                 {
                     "type": "goto",
                     "goto": "suite",
@@ -58,38 +143,28 @@
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "overview",
-                    "text": "Review the plan again."
                 }
             ]
         },
         {
             "id": "suite",
-            "text": "Run lint, type checks, Vitest coverage, then both Playwright shards. Capture the log so we know what passed.",
+            "text": "Run lint, type checks, coverage, and the Playwright shards. Capture the report for review.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "execute-dspace-tests",
+                    "text": "Run the full suite."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Report captured and green.",
-                    "process": "execute-dspace-tests",
                     "requiresItems": [
                         {
-                            "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
-                            "count": 1
-                        },
-                        {
-                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "setup",
-                    "text": "Dependencies changed—reinstall and retry."
                 }
             ]
         },
@@ -99,22 +174,21 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "Ship the passing run.",
-                    "requiresItems": [
-                        {
-                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Ship the passing run."
                 }
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "rewards": [
+        {
+            "id": "2d6e7d6f-6ad4-4e0b-b9c1-4b3cb8ad6b7b",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["welcome/connect-github"],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }
