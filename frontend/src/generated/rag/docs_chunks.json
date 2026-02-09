@@ -376,7 +376,7 @@
         "title": "Backups",
         "heading": "Exporting and importing game saves",
         "anchor": "exporting-and-importing-game-saves",
-        "text": "1. Open Import/export gamesaves. 2. Click Copy to place a Base64-encoded JSON snapshot on your clipboard (works even if the Clipboard API is unavailable) or download the text manually. 3. To restore, paste a previously saved string and select Import. Your quests, inventory, and processes will be replaced with the imported data.\n The encoded JSON stores quests, inventory, and processes keys. Keep the output somewhere you control (password manager, notes app, or version-controlled gist).",
+        "text": "1. Open Import/export gamesaves. 2. Click Copy to place a Base64-encoded JSON snapshot on your clipboard. The export panel shows the backup envelope so you can paste it into a notes app if needed. 3. To restore, paste the backup string into the field and select Import. Your quests, inventory, and processes will be replaced with the imported data. Field label: Paste a game state backup string (envelope or raw state) here:\n The encoded JSON stores quests, inventory, and processes keys. Keep the output somewhere you control (password manager, notes app, or version-controlled gist).",
         "kind": "doc"
     },
     {
@@ -386,7 +386,7 @@
         "title": "Backups",
         "heading": "Exporting and importing custom content",
         "anchor": "exporting-and-importing-custom-content",
-        "text": "1. Open Custom Content Backup. 2. Click Copy to export only user-created items, quests, and processes as a Base64-encoded JSON string. 3. To restore, paste the saved string and choose Import.\n The encoded JSON contains items, processes, and quests keys. Use this path if you want to move custom creations between profiles without touching your main save.",
+        "text": "1. Open Custom Content Backup. 2. Under Export custom content, click Prepare backup. Wait for the prepared summary to appear. Status text: Preparing backup… 3. Click Download backup to save the .json file to your device. 4. To restore, drag and drop the .json or .dspace-backup backup file onto the import area or click Choose backup file to browse. Status text: Importing… and Import complete when the import finishes.\n The backup file contains items, processes, and quests records. Use this path if you want to move custom creations between profiles without touching your main save.",
         "kind": "doc"
     },
     {
@@ -3806,7 +3806,7 @@
         "title": "Quest Development Guidelines",
         "heading": "Required Fields",
         "anchor": "required-fields",
-        "text": "Every quest JSON file must include:\n - id: Unique identifier following the pattern category/name - title: Display title of the quest - description: Brief description explaining the quest purpose - image: Path to quest image - npc: Path to NPC avatar image (choose from the NPC list in /docs/npcs) - start: ID of the starting dialogue node - dialogue: Array of dialogue nodes, each containing: - id: Node identifier - text: NPC's dialogue text - options: Array of player response options, including: - type: Action type (goto, finish, process, grantsItems) - text: Player's response text - goto: For type:goto, target node ID - process: For type:process, process ID - requiresItems: Optional items needed to select option - grantsItems: Optional items given when selecting option - requiresGitHub: Optional schema field used by the quest runtime to gate an option - rewards: Items given upon quest completion - requiresQuests: Array of quest IDs that must be completed first (select these in the quest form under Quest Requirements). Automated tests ensure these dependencies reference existing quests and avoid cycles.\n Quest data is validated against a JSON schema. In the in-game editor, titles and descriptions reject characters, and image must be a data URL, an absolute HTTP(S) link, or a root-relative path. Quest titles must be unique across all existing quests.",
+        "text": "Every quest JSON file must include:\n - id: Unique identifier following the pattern category/name - title: Display title of the quest - description: Brief description explaining the quest purpose - image: Path to quest image - npc: Path to NPC avatar image (choose from the NPC list in /docs/npcs) - start: ID of the starting dialogue node - dialogue: Array of dialogue nodes, each containing: - id: Node identifier - text: NPC's dialogue text - options: Array of player response options, including: - type: Action type (goto, finish, process, grantsItems) - text: Player's response text - goto: For type:goto, target node ID - process: For type:process, process ID - requiresItems: Optional items needed to select option - grantsItems: Optional items given when selecting option - requiresGitHub: Optional schema field used by the quest runtime to gate an option - rewards: Items given upon quest completion - requiresQuests: Array of quest IDs that must be completed first (select these in the quest form under Quest Requirements). Automated tests ensure these dependencies reference existing quests and avoid cycles.\n Quest data is validated against a JSON schema. In the in-game editor, titles and descriptions reject characters, and image must be a data URL, an absolute HTTP(S) link, or a root-relative path. Quest titles must be unique across all existing quests.\n Automated tests also verify that any requiresItems entries are obtainable via purchases, quest rewards, or processes. Avoid gating quests on items that cannot be acquired through those paths.",
         "kind": "doc"
     },
     {
@@ -4340,7 +4340,17 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:editormanage-entrypoints-cta-labels:7:0",
+        "id": "doc:/docs/routes:settings-page-click-paths:7:0",
+        "path": "frontend/src/pages/docs/md/routes.md",
+        "slug": "/docs/routes",
+        "title": "Routes",
+        "heading": "Settings page click-paths",
+        "anchor": "settings-page-click-paths",
+        "text": "- Settings → Debug opens /chat#prompt-debug.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/routes:editormanage-entrypoints-cta-labels:8:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4350,7 +4360,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:canonical-route-index:8:0",
+        "id": "doc:/docs/routes:canonical-route-index:9:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4360,7 +4370,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:custom-content-authoring:9:0",
+        "id": "doc:/docs/routes:custom-content-authoring:10:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4370,7 +4380,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:core-pages:10:0",
+        "id": "doc:/docs/routes:core-pages:11:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4380,7 +4390,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:cookie-management:11:0",
+        "id": "doc:/docs/routes:cookie-management:12:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4390,7 +4400,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:profile--achievements:12:0",
+        "id": "doc:/docs/routes:profile--achievements:13:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4400,7 +4410,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:game-systems:13:0",
+        "id": "doc:/docs/routes:game-systems:14:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4410,7 +4420,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:chat--debug:14:0",
+        "id": "doc:/docs/routes:chat--debug:15:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4420,7 +4430,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:documentation:15:0",
+        "id": "doc:/docs/routes:documentation:16:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4430,7 +4440,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:inventory:16:0",
+        "id": "doc:/docs/routes:inventory:17:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4440,7 +4450,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:items-alternative-inventory-routes:17:0",
+        "id": "doc:/docs/routes:items-alternative-inventory-routes:18:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4450,7 +4460,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:processes:18:0",
+        "id": "doc:/docs/routes:processes:19:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4460,7 +4470,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:quests:19:0",
+        "id": "doc:/docs/routes:quests:20:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4470,7 +4480,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:shop:20:0",
+        "id": "doc:/docs/routes:shop:21:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4480,7 +4490,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:importmigration:21:0",
+        "id": "doc:/docs/routes:importmigration:22:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4490,7 +4500,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:route-resolution-for-link-checking:22:0",
+        "id": "doc:/docs/routes:route-resolution-for-link-checking:23:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4500,7 +4510,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:static-assets:23:0",
+        "id": "doc:/docs/routes:static-assets:24:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -4510,7 +4520,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:adding-new-routes:24:0",
+        "id": "doc:/docs/routes:adding-new-routes:25:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -5200,72 +5210,72 @@
         "kind": "changelog"
     },
     {
-        "id": "changelog:/changelog:20230130:0:0",
+        "id": "changelog:/changelog:20230131:0:0",
         "path": "frontend/src/pages/docs/md/changelog/20230131.md",
         "slug": "/changelog",
         "title": "January 31, 2023",
         "heading": "January 31, 2023",
-        "anchor": "20230130",
+        "anchor": "20230131",
         "text": "We're happy to unveil the January 2023 content update!\n This update adds 7 new quests, a 64% increase!! We've also added new items. There are updates on the Energy and Wallet pages as well.\n The following quests have been added:",
         "kind": "changelog"
     },
     {
-        "id": "changelog:/changelog:20230130:1:0",
+        "id": "changelog:/changelog:20230131:1:0",
         "path": "frontend/src/pages/docs/md/changelog/20230131.md",
         "slug": "/changelog",
         "title": "January 31, 2023",
         "heading": "Reusable rocket with a parachute",
-        "anchor": "20230130",
+        "anchor": "20230131",
         "text": "A quest that involves launching a virtual rocket with a parachute has been added to the game.",
         "kind": "changelog"
     },
     {
-        "id": "changelog:/changelog:20230130:2:0",
+        "id": "changelog:/changelog:20230131:2:0",
         "path": "frontend/src/pages/docs/md/changelog/20230131.md",
         "slug": "/changelog",
         "title": "January 31, 2023",
         "heading": "Solar energy generation",
-        "anchor": "20230130",
+        "anchor": "20230131",
         "text": "A new solar quest has been added, which tasks the player with increasing their solar panel grid to a total of 1000 kW and buying the appropriate energy storage.",
         "kind": "changelog"
     },
     {
-        "id": "changelog:/changelog:20230130:3:0",
+        "id": "changelog:/changelog:20230131:3:0",
         "path": "frontend/src/pages/docs/md/changelog/20230131.md",
         "slug": "/changelog",
         "title": "January 31, 2023",
         "heading": "Basic income",
-        "anchor": "20230130",
+        "anchor": "20230131",
         "text": "A quest that introduces the game's basic income system. Earn 100 dUSD every week, no strings attached!",
         "kind": "changelog"
     },
     {
-        "id": "changelog:/changelog:20230130:4:0",
+        "id": "changelog:/changelog:20230131:4:0",
         "path": "frontend/src/pages/docs/md/changelog/20230131.md",
         "slug": "/changelog",
         "title": "January 31, 2023",
         "heading": "Electric vehicle charger",
-        "anchor": "20230130",
+        "anchor": "20230131",
         "text": "A quest that involves installing an electric vehicle charger, promoting the use of sustainable transportation.",
         "kind": "changelog"
     },
     {
-        "id": "changelog:/changelog:20230130:5:0",
+        "id": "changelog:/changelog:20230131:5:0",
         "path": "frontend/src/pages/docs/md/changelog/20230131.md",
         "slug": "/changelog",
         "title": "January 31, 2023",
         "heading": "Offsets",
-        "anchor": "20230130",
+        "anchor": "20230131",
         "text": "A quest teaching the player how to buy dOffset using dCarbon.",
         "kind": "changelog"
     },
     {
-        "id": "changelog:/changelog:20230130:6:0",
+        "id": "changelog:/changelog:20230131:6:0",
         "path": "frontend/src/pages/docs/md/changelog/20230131.md",
         "slug": "/changelog",
         "title": "January 31, 2023",
         "heading": "Goldfish aquarium",
-        "anchor": "20230130",
+        "anchor": "20230131",
         "text": "A quest that involves setting up a goldfish aquarium. You buy all the components needed to set up a healthy aquarium of an appropriate size, and then you add a goldfish. Feed the goldfish up to 3 times per day.",
         "kind": "changelog"
     },
@@ -5556,7 +5566,7 @@
         "title": "March 1, 2026",
         "heading": "AI Integration Updates",
         "anchor": "20260301",
-        "text": "Instead of relying on commercial LLM providers like OpenAI, DSPACE now uses our own distributed computing project token.place. This allows us to use idle resources at home (and other people's homes, eventually) to fulfill the LLM needs of non‑business‑critical applications such as DSPACE. Both DSPACE and token.place are intended to be fully runnable on cheap home hardware, and are therefore both fully open source and permissively licensed.",
+        "text": "v3 ships with OpenAI-only chat in production today. token.place integration is implemented but deferred to v3.1 while the token.place API stabilizes. See v3 Release State and token.place.",
         "kind": "changelog"
     },
     {
@@ -5616,7 +5626,7 @@
         "title": "Routes",
         "heading": "Routes",
         "anchor": "top",
-        "text": "DSPACE Routes Documentation\n This document describes all routes served by the Astro SSR server. Understanding these routes is essential for link checking, testing, and development. Route patterns\n Astro uses file-based routing where files in frontend/src/pages/ map to URL paths. In this catalog, dynamic segments use :param notation (for example, /quests/:id). Nav map (click-path grounding)\n \n This nav map is the citeable click-path grounding reference. It mirrors the /docs/routes page and uses the exact UI labels from frontend/src/config/menu.json. Top navigation (pinned)\n | UI label | Route | Notes | | --- | --- | --- | | Home | / | Homepage | | Quests | /quests | Quest list | | Inventory | /inventory | Inventory list | | Energy | /energy | Energy management | | Wallet | /wallet | Wallet overview | | Profile | /profile | Player profile | | Docs | /docs | Documentation index | | Chat | /chat | Chat interface | | Changelog | /changelog | Release notes | More menu (unpinned)\n | UI label | Route | Notes | | --- | --- | --- | | Processes | /processes | Process list | | Import/export gamesaves | /gamesaves | Save import/export | | Cloud Sync | /cloudsync | Cloud sync setup | | Custom Content Backup | /contentbackup | Backup management | | Guilds | /guilds | Coming soon | | Stats | /stats | Player statistics | | Achievements | /achievements | Achievement list | | Leaderboard | /leaderboard | Global leaderboard | | Locations | /locations | Coming soon | | Titles | /titles | Player titles | | Toolbox | /toolbox | Utilities & QA tools | | Settings | /settings | User settings | | Discord | https://discord.gg/A3UAfYvnxM | External link | | Twitter | https://twitter.com/dspacegame | External link | | Github | https://github.com/democratizedspace/dspace | External link | Navigation click-paths (canonical)\n These click-path sentences use the exact UI labels shown in the navigation so /chat can answer \"how do I get there?\" with citeable pathing. More menu click-paths\n - More → Processes opens /processes. - More → Import/export gamesaves opens /gamesaves. - More → Cloud Sync opens /cloudsync. - More → Custom Content Backup opens /contentbackup. - More → Guilds is marked Coming soon (no navigation yet). - More → Stats opens /stats. - More → Achievements opens /achievements. - More → Leaderboard opens /leaderboard. - More → Locations is marked Coming soon (no navigation yet). - More → Titles opens /titles. - More → Toolbox opens /toolbox. - More → Settings opens /settings. - More → Discord opens https://discord.gg/A3UAfYvnxM. - More → Twitter opens https://twitter.com/dspacegame. - More → Github opens https://github.com/democratizedspace/dspace. Editor/manage entrypoints (CTA labels)\n - Quests page → Manage button opens /quests/manage. - Quests manage page → Create button opens /quests/create. - Inventory page → Manage button opens /inventory/manage. - Inventory manage page → Create button opens /inventory/create. - Processes page → Manage button opens /processes/manage. - Processes manage page → Create button opens /processes/create. Canonical route index\n \n This section is the citeable route catalog and anchors the canonical routes under /docs/routes#canonical-route-index. Custom content authoring\n | Route | Description | | --- | --- | | /quests/create | Create a custom quest | | /quests/manage | Manage custom quests | | /quests/:id/edit | Edit a custom quest | | /inventory/create | Create a custom item | | /inventory/manage | Manage custom inventory | | /inventory/item/:itemId/edit | Edit a custom inventory item | | /processes/create | Create a custom process | | /processes/manage | Manage custom processes | | /processes/:processId/edit | Edit a custom process | Static routes Core pages\n - / - Homepage (index.astro) - /404 - 404 error page - /settings - User settings - /stats - User statistics - /skills - Skills page - /task - Task page - /launch - Launch page - /changelog - Changelog page - /wallet - Wallet overview - /toolbox - Toolbox utilities Cookie management\n - /accept_cookies - Cookie acceptance page - /accepted_cookies - Cookie acceptance confirmation Profile & achievements\n - /profile - User profile page - /profile/avatar - Avatar selection - /achievements - User achievements page - /titles - User titles page - /leaderboard - Global leaderboard Game systems\n - /energy - Energy management page - /gamesaves - Game save import/export - /cloudsync - Cloud synchronization - /contentbackup - Content backup management Chat & debug\n - /chat - Chat interface - /dchat - dChat interface (AI assistant) - /debug - Debug tools Dynamic routes Documentation\n - /docs - Documentation index - /docs/:slug - Individual documentation pages - Examples: /docs/about, /docs/solar, /docs/team, /docs/processes Inventory\n - /inventory - Inventory list - /inventory/create - Create new item - /inventory/manage - Manage inventory - /inventory/item/:itemId - Individual item details - Examples: /inventory/item/1, /inventory/item/37, /inventory/item/50 - /inventory/item/:itemId/edit - Edit custom item - Examples: /inventory/item/1/edit, /inventory/item/37/edit, /inventory/item/50/edit Items (alternative inventory routes)\n - /items/create - Create new item (alternative path) - /item/:slug - Removed legacy route (no longer available) Processes\n - /process/:slug - Process by slug (legacy pattern) - /processes - Processes list - /processes/:processId - Individual process details - Examples: /processes/launch-rocket, /processes/feed-goldfish - /processes/:processId/edit - Edit custom process - /processes/create - Create new process - /processes/manage - Manage processes Quests\n - /quests - Quest list - /quests/create - Create new quest - /quests/manage - Manage quests - /quests/review - Review quests - /quests/submit - Submit quest - /quests/:id - Quest by ID (simple pattern) - /quests/fixtures/ancestor-highlights - Quest graph fixture used for ancestor/descendant QA - /quests/:id/edit - Edit quest by ID - /quests/:pathId/:questId - Quest by path and ID (nested pattern) - Examples: /quests/play/2, /quests/custom/5 - /quests/:pathId/:questId/edit - Edit nested quest - /quests/:pathId/:questId/finished - Quest completion page Shop\n - /shop - Shop index - /shop/buy/:itemId - Buy item page - /shop/buy/:itemId/:count - Buy specific quantity - /shop/buy/:itemId/:count/insufficient_balance - Insufficient balance error - /shop/sell/:itemId - Sell item page - /shop/sell/:itemId/:count - Sell specific quantity - /shop/sell/:itemId/:count/insufficient_items - Insufficient items error Import/migration\n - /import/:newVersion/:oldVersion - Import from old version - /import/:newVersion/:oldVersion/done - Import completion Route resolution for link checking\n When validating internal links in markdown files, the link checker (scripts/link-check.mjs) resolves paths by:\n 1. Exact match: /inventory → frontend/src/pages/inventory/index.astro 2. Index pattern: /quests → frontend/src/pages/quests/index.astro 3. Slug pattern: /docs/about → frontend/src/pages/docs/{slug}.astro 4. ID pattern: /quests/1 → frontend/src/pages/quests/{id}.astro 5. Nested dynamic: /quests/play/2 → frontend/src/pages/quests/{pathId}/{questId}.astro 6. Parameterized: /inventory/item/37 → frontend/src/pages/inventory/item/{itemId}/index.astro Static assets\n Static assets are served from:\n - frontend/public/ - Main public directory - /assets/ - Images and media files\n Examples:\n - /assets/rescue.jpg - /assets/changelog/20230105/back_forward.jpg - /assets/rocket_min.gif Adding new routes\n When adding new routes:\n 1. Create the .astro file in frontend/src/pages/ 2. Update this documentation if introducing a new route pattern 3. Ensure scripts/link-check.mjs can resolve the pattern 4. Test with node scripts/link-check.mjs Testing route resolution\n To verify the link checker correctly resolves routes: Notes for AI agents\n - Routes starting with / are internal Astro SSR routes. - Dynamic route segments in this catalog use :param notation. - All routes must map to a physical .astro or .md file. - The link checker validates these routes without requiring server startup. - External links (containing ://) are validated by lychee in CI.",
+        "text": "DSPACE Routes Documentation\n This document describes all routes served by the Astro SSR server. Understanding these routes is essential for link checking, testing, and development. Route patterns\n Astro uses file-based routing where files in frontend/src/pages/ map to URL paths. In this catalog, dynamic segments use :param notation (for example, /quests/:id). Nav map (click-path grounding)\n \n This nav map is the citeable click-path grounding reference. It mirrors the /docs/routes page and uses the exact UI labels from frontend/src/config/menu.json. Top navigation (pinned)\n | UI label | Route | Notes | | --- | --- | --- | | Home | / | Homepage | | Quests | /quests | Quest list | | Inventory | /inventory | Inventory list | | Energy | /energy | Energy management | | Wallet | /wallet | Wallet overview | | Profile | /profile | Player profile | | Docs | /docs | Documentation index | | Chat | /chat | Chat interface | | Changelog | /changelog | Release notes | More menu (unpinned)\n | UI label | Route | Notes | | --- | --- | --- | | Processes | /processes | Process list | | Import/export gamesaves | /gamesaves | Save import/export | | Cloud Sync | /cloudsync | Cloud sync setup | | Custom Content Backup | /contentbackup | Backup management | | Guilds | /guilds | Coming soon | | Stats | /stats | Player statistics | | Achievements | /achievements | Achievement list | | Leaderboard | /leaderboard | Global leaderboard | | Locations | /locations | Coming soon | | Titles | /titles | Player titles | | Toolbox | /toolbox | Utilities & QA tools | | Settings | /settings | User settings | | Discord | https://discord.gg/A3UAfYvnxM | External link | | Twitter | https://twitter.com/dspacegame | External link | | Github | https://github.com/democratizedspace/dspace | External link | Navigation click-paths (canonical)\n These click-path sentences use the exact UI labels shown in the navigation so /chat can answer \"how do I get there?\" with citeable pathing. More menu click-paths\n - More → Processes opens /processes. - More → Import/export gamesaves opens /gamesaves. - More → Cloud Sync opens /cloudsync. - More → Custom Content Backup opens /contentbackup. - More → Guilds is marked Coming soon (no navigation yet). - More → Stats opens /stats. - More → Achievements opens /achievements. - More → Leaderboard opens /leaderboard. - More → Locations is marked Coming soon (no navigation yet). - More → Titles opens /titles. - More → Toolbox opens /toolbox. - More → Settings opens /settings. - More → Discord opens https://discord.gg/A3UAfYvnxM. - More → Twitter opens https://twitter.com/dspacegame. - More → Github opens https://github.com/democratizedspace/dspace. Settings page click-paths\n - Settings → Debug opens /chat#prompt-debug. Editor/manage entrypoints (CTA labels)\n - Quests page → Manage button opens /quests/manage. - Quests manage page → Create button opens /quests/create. - Inventory page → Manage button opens /inventory/manage. - Inventory manage page → Create button opens /inventory/create. - Processes page → Manage button opens /processes/manage. - Processes manage page → Create button opens /processes/create. Canonical route index\n \n This section is the citeable route catalog and anchors the canonical routes under /docs/routes#canonical-route-index. Custom content authoring\n | Route | Description | | --- | --- | | /quests/create | Create a custom quest | | /quests/manage | Manage custom quests | | /quests/:id/edit | Edit a custom quest | | /inventory/create | Create a custom item | | /inventory/manage | Manage custom inventory | | /inventory/item/:itemId/edit | Edit a custom inventory item | | /processes/create | Create a custom process | | /processes/manage | Manage custom processes | | /processes/:processId/edit | Edit a custom process | Static routes Core pages\n - / - Homepage (index.astro) - /404 - 404 error page - /settings - User settings - /stats - User statistics - /skills - Skills page - /task - Task page - /launch - Launch page - /changelog - Changelog page - /wallet - Wallet overview - /toolbox - Toolbox utilities Cookie management\n - /accept_cookies - Cookie acceptance page - /accepted_cookies - Cookie acceptance confirmation Profile & achievements\n - /profile - User profile page - /profile/avatar - Avatar selection - /achievements - User achievements page - /titles - User titles page - /leaderboard - Global leaderboard Game systems\n - /energy - Energy management page - /gamesaves - Game save import/export - /cloudsync - Cloud synchronization - /contentbackup - Content backup management Chat & debug\n - /chat - Chat interface - /dchat - dChat interface (AI assistant) - /debug - Debug tools Dynamic routes Documentation\n - /docs - Documentation index - /docs/:slug - Individual documentation pages - Examples: /docs/about, /docs/solar, /docs/team, /docs/processes Inventory\n - /inventory - Inventory list - /inventory/create - Create new item - /inventory/manage - Manage inventory - /inventory/item/:itemId - Individual item details - Examples: /inventory/item/1, /inventory/item/37, /inventory/item/50 - /inventory/item/:itemId/edit - Edit custom item - Examples: /inventory/item/1/edit, /inventory/item/37/edit, /inventory/item/50/edit Items (alternative inventory routes)\n - /items/create - Create new item (alternative path) - /item/:slug - Removed legacy route (no longer available) Processes\n - /process/:slug - Process by slug (legacy pattern) - /processes - Processes list - /processes/:processId - Individual process details - Examples: /processes/launch-rocket, /processes/feed-goldfish - /processes/:processId/edit - Edit custom process - /processes/create - Create new process - /processes/manage - Manage processes Quests\n - /quests - Quest list - /quests/create - Create new quest - /quests/manage - Manage quests - /quests/review - Review quests - /quests/submit - Submit quest - /quests/:id - Quest by ID (simple pattern) - /quests/fixtures/ancestor-highlights - Quest graph fixture used for ancestor/descendant QA - /quests/:id/edit - Edit quest by ID - /quests/:pathId/:questId - Quest by path and ID (nested pattern) - Examples: /quests/play/2, /quests/custom/5 - /quests/:pathId/:questId/edit - Edit nested quest - /quests/:pathId/:questId/finished - Quest completion page Shop\n - /shop - Shop index - /shop/buy/:itemId - Buy item page - /shop/buy/:itemId/:count - Buy specific quantity - /shop/buy/:itemId/:count/insufficient_balance - Insufficient balance error - /shop/sell/:itemId - Sell item page - /shop/sell/:itemId/:count - Sell specific quantity - /shop/sell/:itemId/:count/insufficient_items - Insufficient items error Import/migration\n - /import/:newVersion/:oldVersion - Import from old version - /import/:newVersion/:oldVersion/done - Import completion Route resolution for link checking\n When validating internal links in markdown files, the link checker (scripts/link-check.mjs) resolves paths by:\n 1. Exact match: /inventory → frontend/src/pages/inventory/index.astro 2. Index pattern: /quests → frontend/src/pages/quests/index.astro 3. Slug pattern: /docs/about → frontend/src/pages/docs/{slug}.astro 4. ID pattern: /quests/1 → frontend/src/pages/quests/{id}.astro 5. Nested dynamic: /quests/play/2 → frontend/src/pages/quests/{pathId}/{questId}.astro 6. Parameterized: /inventory/item/37 → frontend/src/pages/inventory/item/{itemId}/index.astro Static assets\n Static assets are served from:\n - frontend/public/ - Main public directory - /assets/ - Images and media files\n Examples:\n - /assets/rescue.jpg - /assets/changelog/20230105/back_forward.jpg - /assets/rocket_min.gif Adding new routes\n When adding new routes:\n 1. Create the .astro file in frontend/src/pages/ 2. Update this documentation if introducing a new route pattern 3. Ensure scripts/link-check.mjs can resolve the pattern 4. Test with node scripts/link-check.mjs Testing route resolution\n To verify the link checker correctly resolves routes: Notes for AI agents\n - Routes starting with / are internal Astro SSR routes. - Dynamic route segments in this catalog use :param notation. - All routes must map to a physical .astro or .md file. - The link checker validates these routes without requiring server startup. - External links (containing ://) are validated by lychee in CI.",
         "kind": "route"
     }
 ]

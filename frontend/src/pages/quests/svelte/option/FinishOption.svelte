@@ -50,6 +50,9 @@
                 </div>
             </Chip>
         {/if}
+        {#if option.requiresGitHub && !githubConnected}
+            <p class="gate-warning">Connect GitHub to finish this quest.</p>
+        {/if}
     </div>
 </Chip>
 
@@ -61,5 +64,11 @@
 
     .requirements {
         gap: 4px;
+    }
+
+    .gate-warning {
+        margin: 6px 0 0;
+        font-size: 0.9em;
+        color: #f6c453;
     }
 </style>

@@ -1,6 +1,6 @@
 {
-    "generatedAt": "2026-02-02T22:25:57.774Z",
-    "envName": "test",
+    "generatedAt": "2026-02-09T06:32:09.266Z",
+    "envName": "unknown",
     "sourceRef": null,
     "generatedFrom": {
         "routes": "docs/ROUTES.md",
@@ -53,7 +53,7 @@
             "frontend/src/pages/docs/md/changelog/20230915.md"
         ]
     },
-    "counts": { "totalChunks": 562, "docs": 506, "routes": 1, "changelog": 55 },
-    "gitSha": "b30e72b44be1c572df9100711bd1ee8150e0345d",
-    "docsGitSha": "b30e72b44be1c572df9100711bd1ee8150e0345d"
+    "counts": { "totalChunks": 563, "docs": 507, "routes": 1, "changelog": 55 },
+    "gitSha": "86955eecddfcc1ea64c2ddf1f489e0f64c8b1e5b",
+    "docsGitSha": "86955eecddfcc1ea64c2ddf1f489e0f64c8b1e5b"
 }

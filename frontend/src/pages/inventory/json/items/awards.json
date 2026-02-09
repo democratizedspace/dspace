@@ -215,5 +215,31 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "9ca64aa7-03b1-4503-aa30-ebcc9ddc33a3",
+        "name": "GitHub Connection Trophy",
+        "description": "Desk trophy stamped with a GitHub mark; awarded for linking your account.",
+        "image": "/assets/benchy_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "c143a649-7560-45ca-af05-5ed11b16998c",
+        "name": "Test Suite Trophy",
+        "description": "Polished metal trophy engraved 'CI Green' for a clean DSPACE test run.",
+        "image": "/assets/rocketeer_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

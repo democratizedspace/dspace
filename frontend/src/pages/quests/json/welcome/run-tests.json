@@ -8,18 +8,114 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Testing keeps DSPACE cooperative for everyone. Want a quick tour before we hammer the suite?",
+            "text": "Testing keeps DSPACE cooperative for everyone. Let's align on the real commands from the docs.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "overview",
-                    "text": "Give me the map."
+                    "goto": "quiz-1",
+                    "text": "Start the quiz."
+                }
+            ]
+        },
+        {
+            "id": "quiz-1",
+            "text": "Which command mirrors CI in one shot for PRs?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "npm run test:ci"
                 },
                 {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Skip to setup.",
+                    "goto": "start",
+                    "text": "npm run test:watch"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "npm run test:e2e"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2",
+            "text": "Which command runs the lint checks before you commit?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "npm run lint"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "npm run lint:fix"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "npm run format"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "Which command runs the TypeScript checks?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clone",
+                    "text": "npm run type-check"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "npm run build"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "npm run test:root"
+                }
+            ]
+        },
+        {
+            "id": "clone",
+            "text": "Grab a laptop and clone the repo so you have a GitHub repository to work from.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "clone-github-repo",
+                    "text": "Run git clone.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "workspace",
+                    "text": "Repository cloned.",
+                    "requiresItems": [
+                        {
+                            "id": "52593d07-908b-4109-92cf-826b2184ef6f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "workspace",
+            "text": "Install dependencies and warm caches so the workspace is ready for test runs.",
+            "options": [
+                {
+                    "type": "process",
                     "process": "prepare-local-testbed",
+                    "text": "Run npm install and build the cache.",
                     "requiresItems": [
                         {
                             "id": "52593d07-908b-4109-92cf-826b2184ef6f",
@@ -30,51 +126,60 @@
                             "count": 1
                         }
                     ]
-                }
-            ]
-        },
-        {
-            "id": "overview",
-            "text": "We run lint, type checks, unit tests, and shard the Playwright suite. Keep the CI workflow close so your local run mirrors what ships.",
-            "options": [
+                },
                 {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Ready to prep the workspace."
-                }
-            ]
-        },
-        {
-            "id": "setup",
-            "text": "Clone the repo, install dependencies, and warm the build cache. Keep the CI workflow file handy so the commands match what PRs run.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "suite",
-                    "text": "Workspace is primed.",
+                    "goto": "workflow",
+                    "text": "Workspace is ready.",
                     "requiresItems": [
                         {
                             "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "workflow",
+            "text": "Create or confirm the CI workflow file so your local run matches the PR pipeline.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "create-ci-workflow",
+                    "text": "Add the CI workflow file.",
+                    "requiresItems": [
+                        {
+                            "id": "52593d07-908b-4109-92cf-826b2184ef6f",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
-                    "goto": "overview",
-                    "text": "Review the plan again."
+                    "goto": "suite",
+                    "text": "Workflow file is in place.",
+                    "requiresItems": [
+                        {
+                            "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
+                            "count": 1
+                        },
+                        {
+                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "suite",
-            "text": "Run lint, type checks, Vitest coverage, then both Playwright shards. Capture the log so we know what passed.",
+            "text": "Run npm run lint, npm run type-check, npm run build, then npm run test:ci. Capture the log.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Report captured and green.",
+                    "type": "process",
                     "process": "execute-dspace-tests",
+                    "text": "Execute the suite.",
                     "requiresItems": [
                         {
                             "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
@@ -88,8 +193,14 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Dependencies changed—reinstall and retry."
+                    "goto": "finish",
+                    "text": "Report captured and green.",
+                    "requiresItems": [
+                        {
+                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -110,11 +221,16 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "rewards": [
+        {
+            "id": "c143a649-7560-45ca-af05-5ed11b16998c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["welcome/connect-github"],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

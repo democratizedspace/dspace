@@ -157,6 +157,9 @@ Quest data is validated against a JSON schema. In the in-game editor, titles and
 reject `<` and `>` characters, and `image` must be a data URL, an absolute HTTP(S) link, or a
 root-relative path. Quest titles must be unique across all existing quests.
 
+Automated tests also verify that any `requiresItems` entries are obtainable via purchases, quest
+rewards, or processes. Avoid gating quests on items that cannot be acquired through those paths.
+
 ### Current Implementation State
 
 > **Note:** The quest editor lets you build branching dialogue directly in the browser. The current
