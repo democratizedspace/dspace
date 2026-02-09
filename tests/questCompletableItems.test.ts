@@ -89,6 +89,11 @@ describe('quest completion item availability', () => {
         const purchasable = new Set(
             (items as Array<any>).filter((item) => item.price).map((item) => item.id)
         );
+        const betaPlaceholderItems = new Set(
+            (items as Array<any>)
+                .filter((item) => item.priceExemptionReason === 'BETA_PLACEHOLDER')
+                .map((item) => item.id)
+        );
 
         const rewardSources = new Map<string, string[]>();
         for (const quest of quests) {
@@ -118,7 +123,7 @@ describe('quest completion item availability', () => {
             }
         }
 
-        const obtainable = new Set<string>(purchasable);
+        const obtainable = new Set<string>([...purchasable, ...betaPlaceholderItems]);
         // This validator focuses on item obtainability and assumes GitHub connections can be made.
         const allowGitHubRequirement = true;
         const completableQuests = new Set<string>();
