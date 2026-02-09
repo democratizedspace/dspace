@@ -86,14 +86,13 @@ describe('quest completion item availability', () => {
         const itemMap = new Map(
             (items as Array<any>).map((item) => [item.id, item])
         );
-        const purchasable = new Set(
-            (items as Array<any>).filter((item) => item.price).map((item) => item.id)
+        const purchasableItems = (items as Array<any>).filter(
+            (item) => item.price || item.priceExemptionReason === 'BETA_PLACEHOLDER'
         );
-        const betaPlaceholderItems = new Set(
-            (items as Array<any>)
-                .filter((item) => item.priceExemptionReason === 'BETA_PLACEHOLDER')
-                .map((item) => item.id)
+        const itemDependencies = new Map(
+            (items as Array<any>).map((item) => [item.id, item.dependencies ?? []])
         );
+        const getItemDependencies = (itemId: string) => itemDependencies.get(itemId) ?? [];
 
         const rewardSources = new Map<string, string[]>();
         for (const quest of quests) {
@@ -123,7 +122,7 @@ describe('quest completion item availability', () => {
             }
         }
 
-        const obtainable = new Set<string>([...purchasable, ...betaPlaceholderItems]);
+        const obtainable = new Set<string>();
         // This validator focuses on item obtainability and assumes GitHub connections can be made.
         const allowGitHubRequirement = true;
         const completableQuests = new Set<string>();
@@ -132,6 +131,16 @@ describe('quest completion item availability', () => {
         while (changed) {
             changed = false;
 
+            for (const item of purchasableItems) {
+                const deps = getItemDependencies(item.id);
+                if (deps.every((id) => obtainable.has(id))) {
+                    if (!obtainable.has(item.id)) {
+                        obtainable.add(item.id);
+                        changed = true;
+                    }
+                }
+            }
+
             for (const process of processes as Array<any>) {
                 const requirements = [
                     ...toItemIds(process.requireItems),
@@ -139,7 +148,8 @@ describe('quest completion item availability', () => {
                 ];
                 if (requirements.every((id) => obtainable.has(id))) {
                     for (const created of toItemIds(process.createItems)) {
-                        if (!obtainable.has(created)) {
+                        const deps = getItemDependencies(created);
+                        if (!obtainable.has(created) && deps.every((id) => obtainable.has(id))) {
                             obtainable.add(created);
                             changed = true;
                         }
@@ -189,6 +199,15 @@ describe('quest completion item availability', () => {
         const explainMissingItem = (itemId: string) => {
             const item = itemMap.get(itemId);
             const name = item?.name ?? 'Unknown item';
+            const missingDependencies = getItemDependencies(itemId).filter(
+                (dependencyId) => !obtainable.has(dependencyId)
+            );
+            if (missingDependencies.length > 0) {
+                const dependencyNames = missingDependencies
+                    .map((dependencyId) => itemMap.get(dependencyId)?.name ?? dependencyId)
+                    .join(', ');
+                return `${name} (${itemId}) depends on unobtainable items: ${dependencyNames}.`;
+            }
             const sources = processSources.get(itemId) ?? [];
             if (sources.length > 0) {
                 const scored = sources.map((process) => {
