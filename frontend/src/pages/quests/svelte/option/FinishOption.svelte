@@ -37,6 +37,9 @@
     <div class="vertical">
         Finish this quest and receive the following items:
         <CompactItemList itemList={quest.rewards || []} increase={true} />
+        {#if option.requiresGitHub && !githubConnected}
+            <span class="gate-note">Connect GitHub to finish this quest.</span>
+        {/if}
         {#if option.requiresItems && option.requiresItems.length > 0}
             <Chip inverted={true} disabled={isDisabled} text="">
                 <div class="vertical requirements">
@@ -61,5 +64,11 @@
 
     .requirements {
         gap: 4px;
+    }
+
+    .gate-note {
+        font-size: 0.85rem;
+        opacity: 0.8;
+        margin-top: 6px;
     }
 </style>

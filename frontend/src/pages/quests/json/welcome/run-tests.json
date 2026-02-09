@@ -8,17 +8,100 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Testing keeps DSPACE cooperative for everyone. Want a quick tour before we hammer the suite?",
+            "text": "Testing keeps DSPACE cooperative for everyone. First quiz: which command runs the full pre-PR suite?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "overview",
-                    "text": "Give me the map."
+                    "goto": "clone",
+                    "text": "npm run test:pr"
                 },
                 {
                     "type": "goto",
+                    "goto": "start",
+                    "text": "npm run test:e2e:groups"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "npm run lint"
+                }
+            ]
+        },
+        {
+            "id": "clone",
+            "text": "Grab the repo and keep it handy. You'll need a laptop to clone and a GitHub repo to work from.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "setup",
-                    "text": "Skip to setup.",
+                    "text": "Clone the repo",
+                    "process": "clone-github-repo",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "I need the command again."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Next quiz: if browsers are unavailable, how do you skip the E2E portion when running the full suite?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "workflow",
+                    "text": "SKIP_E2E=1 npm test"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "SKIP_E2E=1 npm run lint"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "npm run test:e2e"
+                }
+            ]
+        },
+        {
+            "id": "workflow",
+            "text": "Add the CI workflow file so local commands mirror the PR pipeline.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "workspace",
+                    "text": "Create the workflow file",
+                    "process": "create-ci-workflow",
+                    "requiresItems": [
+                        {
+                            "id": "52593d07-908b-4109-92cf-826b2184ef6f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Start the quiz over."
+                }
+            ]
+        },
+        {
+            "id": "workspace",
+            "text": "Install dependencies and warm caches. This is what makes the test run fast and consistent.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-ci",
+                    "text": "Prepare the local testbed",
                     "process": "prepare-local-testbed",
                     "requiresItems": [
                         {
@@ -30,45 +113,38 @@
                             "count": 1
                         }
                     ]
-                }
-            ]
-        },
-        {
-            "id": "overview",
-            "text": "We run lint, type checks, unit tests, and shard the Playwright suite. Keep the CI workflow close so your local run mirrors what ships.",
-            "options": [
+                },
                 {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Ready to prep the workspace."
+                    "goto": "start",
+                    "text": "Back to the quiz."
                 }
             ]
         },
         {
-            "id": "setup",
-            "text": "Clone the repo, install dependencies, and warm the build cache. Keep the CI workflow file handy so the commands match what PRs run.",
+            "id": "quiz-ci",
+            "text": "Which commands show up in the CI checklist before tests run?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "suite",
-                    "text": "Workspace is primed.",
-                    "requiresItems": [
-                        {
-                            "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
-                            "count": 1
-                        }
-                    ]
+                    "text": "npm run lint, npm run type-check, npm run build"
                 },
                 {
                     "type": "goto",
-                    "goto": "overview",
-                    "text": "Review the plan again."
+                    "goto": "start",
+                    "text": "npm run audit:ci only"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "npm run test:e2e only"
                 }
             ]
         },
         {
             "id": "suite",
-            "text": "Run lint, type checks, Vitest coverage, then both Playwright shards. Capture the log so we know what passed.",
+            "text": "Run lint, type checks, build, and the full test suite. Capture the log so we know what passed.",
             "options": [
                 {
                     "type": "goto",
@@ -88,7 +164,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "setup",
+                    "goto": "workspace",
                     "text": "Dependencies changed—reinstall and retry."
                 }
             ]
@@ -110,11 +186,16 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "rewards": [
+        {
+            "id": "230bf056-ba53-4a6e-a717-2db1c33090ac",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["welcome/connect-github"],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
