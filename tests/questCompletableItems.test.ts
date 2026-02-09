@@ -54,6 +54,11 @@ const getFinishOptions = (quest: any) =>
 const getMissingItems = (required: string[], obtainable: Set<string>) =>
     required.filter((itemId) => !obtainable.has(itemId));
 
+const uniqueItemIds = (items: string[]) => [...new Set(items.filter(Boolean))];
+
+const getItemDependencies = (item: any) =>
+    uniqueItemIds(toItemIdsFromUnknown(item?.dependencies));
+
 const loadQuestPaths = async (baseDir = QUESTS_DIR) => {
     const entries = await fs.readdir(baseDir, { withFileTypes: true });
     const paths = new Map<string, string>();
@@ -88,7 +93,7 @@ describe('quest completion item availability', () => {
         );
         const getItemDependencyInfo = (itemId: string) => {
             const item = itemMap.get(itemId);
-            const dependencies = toItemIdsFromUnknown(item?.dependencies);
+            const dependencies = getItemDependencies(item);
             const unknown = dependencies.filter((dependency) => !itemMap.has(dependency));
             const known = dependencies.filter((dependency) => itemMap.has(dependency));
             return { known, unknown };
@@ -207,6 +212,9 @@ describe('quest completion item availability', () => {
 
         const explainMissingItem = (itemId: string) => {
             const item = itemMap.get(itemId);
+            if (!item) {
+                return `Unknown item (${itemId}) is not defined in inventory.`;
+            }
             const name = item?.name ?? 'Unknown item';
             const { known, unknown } = getItemDependencyInfo(itemId);
             if (unknown.length > 0) {
