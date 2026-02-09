@@ -8,8 +8,13 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Testing keeps DSPACE cooperative for everyone. Nail the quiz and we'll set up your local run.",
+            "text": "Testing catches regressions early and keeps reviews fast. Learn the commands, then we’ll set up your local run.",
             "options": [
+                {
+                    "type": "goto",
+                    "goto": "guide",
+                    "text": "Show me the command list."
+                },
                 {
                     "type": "goto",
                     "goto": "quiz-1",
@@ -18,49 +23,114 @@
             ]
         },
         {
+            "id": "guide",
+            "text": "Use npm run qa:smoke for a fast sanity check (type-check, link-check, item validation, CI-parity tests without Playwright). Use npm run test:pr (or npm test) for the full pre-PR suite with grouped Playwright E2E. For targeted content checks, run npm test -- questQuality or npm test -- itemQuality.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Got it—quiz me."
+                }
+            ]
+        },
+        {
             "id": "quiz-1",
-            "text": "Which command runs the full pre-PR suite with grouped Playwright tests?",
+            "text": "Which command is the fastest sanity check before a longer run?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-2",
-                    "text": "npm run test:pr"
-                },
-                {
-                    "type": "goto",
-                    "goto": "start",
                     "text": "npm run qa:smoke"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
+                    "goto": "quiz-1-wrong",
+                    "text": "npm run test:pr"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-1-wrong",
                     "text": "npm run lint"
                 }
             ]
         },
         {
+            "id": "quiz-1-wrong",
+            "text": "Close, but qa:smoke is the quick sanity pass before the full suite.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Back to start"
+                }
+            ]
+        },
+        {
             "id": "quiz-2",
-            "text": "Which command runs CI-parity checks without Playwright E2E?",
+            "text": "Which command runs the full pre-PR suite with grouped Playwright E2E?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-3",
+                    "text": "npm run test:pr"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-2-wrong",
                     "text": "npm run qa:smoke"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "npm test"
-                },
-                {
-                    "type": "goto",
-                    "goto": "start",
+                    "goto": "quiz-2-wrong",
                     "text": "npm run build"
                 }
             ]
         },
         {
+            "id": "quiz-2-wrong",
+            "text": "qa:smoke is the fast pass, but test:pr is the full pre-PR suite with grouped Playwright.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Reset and try again"
+                }
+            ]
+        },
+        {
             "id": "quiz-3",
+            "text": "What should you run before opening a PR?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "npm test (same as npm run test:pr)"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-3-wrong",
+                    "text": "npm run lint"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-3-wrong",
+                    "text": "npm run qa:smoke"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3-wrong",
+            "text": "Lint and qa:smoke are useful, but the pre-PR expectation is npm test (test:pr).",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Try again"
+                }
+            ]
+        },
+        {
+            "id": "quiz-4",
             "text": "If Playwright browsers are missing, how do you skip E2E tests?",
             "options": [
                 {
@@ -70,13 +140,24 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
+                    "goto": "quiz-4-wrong",
                     "text": "E2E_SKIP=1 npm test"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
+                    "goto": "quiz-4-wrong",
                     "text": "npm test --no-e2e"
+                }
+            ]
+        },
+        {
+            "id": "quiz-4-wrong",
+            "text": "Use the documented flag: SKIP_E2E=1 npm test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Back to start"
                 }
             ]
         },
@@ -153,7 +234,7 @@
         },
         {
             "id": "suite",
-            "text": "Run npm run lint, npm run type-check, npm run build, npm run coverage, and the grouped Playwright suite. Capture the log so we know what passed.",
+            "text": "Run npm run lint, npm run type-check, npm run build, npm run coverage, and npm run test:pr. Capture the log so we know what passed.",
             "options": [
                 {
                     "type": "process",

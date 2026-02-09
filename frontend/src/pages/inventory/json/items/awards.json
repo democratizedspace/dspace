@@ -219,7 +219,7 @@
     {
         "id": "d5d62069-c77d-44b1-8848-b355f8410f74",
         "name": "GitHub Connection Trophy",
-        "description": "Chrome trophy with a tiny Octocat silhouette, awarded for linking your GitHub account.",
+        "description": "Chrome trophy with a tiny Octocat silhouette, celebrating your first GitHub link-up.",
         "image": "/assets/motor_award.jpg",
         "priceExemptionReason": "TROPHY",
         "hardening": {
@@ -232,7 +232,7 @@
     {
         "id": "82b369fe-0ef4-4ca1-881c-14e5a7feeff5",
         "name": "Test Suite Triumph Trophy",
-        "description": "Anodized aluminum trophy celebrating a clean, CI-parity test run.",
+        "description": "Anodized aluminum trophy honoring a tested-and-verified, CI-parity run.",
         "image": "/assets/rocket_award.jpg",
         "priceExemptionReason": "TROPHY",
         "hardening": {

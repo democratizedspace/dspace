@@ -1,7 +1,7 @@
 {
     "id": "welcome/smart-plug-test",
     "title": "Smart Plug Test",
-    "description": "Use a smart plug to buy 1 kWh from a wall outlet and learn how dWatt and dCarbon work.",
+    "description": "Use a smart plug to buy 1 kWh from the grid and learn how dWatt and dCarbon work.",
     "hardening": {
         "passes": 1,
         "score": 100,
@@ -20,7 +20,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Use the smart plug to buy 1 kWh from a wall outlet. Ready to log some energy?",
+            "text": "Use the smart plug to buy 1 kWh from the grid. It is convenient, but it accrues dCarbon.",
             "options": [
                 {
                     "type": "goto",
@@ -31,7 +31,7 @@
         },
         {
             "id": "measure",
-            "text": "Run outlet-dWatt-1e3 with the smart plug. dWatt tracks energy you buy; dCarbon tracks fossil debt and carries a sell tax.",
+            "text": "Run outlet-dWatt-1e3 with the smart plug. dWatt is usable electricity; dCarbon is your fossil CO₂ debt. Selling items is taxed by dCarbon—every 1,000 dCarbon cuts shop sell prices by 1% (up to 90%). You can see the tax in /inventory under Sell.",
             "options": [
                 {
                     "type": "process",
@@ -53,7 +53,7 @@
         },
         {
             "id": "wrapup",
-            "text": "That was the easy, fossil-fueled path. Renewables are meant to replace it—unplug and plan cleaner sources.",
+            "text": "Grid power is the easy early option. Later, renewables and storage let you earn dWatt without piling up dCarbon.",
             "options": [
                 {
                     "type": "finish",
@@ -68,7 +68,11 @@
             "count": 1000
         },
         {
-            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 100
+        },
+        {
+            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
             "count": 1
         }
     ],

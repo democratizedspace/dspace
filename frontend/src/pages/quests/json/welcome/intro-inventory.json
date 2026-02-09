@@ -1,14 +1,14 @@
 {
     "id": "welcome/intro-inventory",
     "title": "Check Your Inventory",
-    "description": "Learn how to view items you've collected so far.",
+    "description": "Learn how to buy and sell items from your inventory.",
     "image": "/assets/quests/intro_inventory_grid.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Before bigger tasks, open /inventory and buy a USB Type-A to Type-B cable with dUSD. Use search, check the price, and hit Buy.",
+            "text": "Open /inventory and buy a solar charge controller with dUSD. Use search, check the price, and hit Buy.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "view",
-            "text": "Nice. The inventory page shows what you own, what you can buy, and what you can sell back for dUSD. Try filtering by category and scanning prices.",
+            "text": "Nice. /inventory shows what you own, what you can buy, and what you can sell back for dUSD. Switch to Sell to see resale prices, then remember: quests check your current item counts, so selling or consuming items can change what you qualify for.",
             "options": [
                 {
                     "type": "goto",
@@ -27,7 +27,7 @@
                     "text": "Cable purchased",
                     "requiresItems": [
                         {
-                            "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
                             "count": 1
                         }
                     ]
@@ -48,14 +48,14 @@
     "rewards": [
         {
             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-            "count": 150
-        },
-        {
-            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
-            "count": 1
+            "count": 200
         },
         {
             "id": "02b32152-a7b2-458e-9643-7b754c722165",
+            "count": 1
+        },
+        {
+            "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
             "count": 1
         }
     ],

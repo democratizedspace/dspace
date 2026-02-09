@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's hook up your GitHub account so you can back up progress and share quests. We'll use a classic personal access token.",
+            "text": "GitHub unlocks cloud sync, quest submissions, and moving your progress between devices. We'll connect with a classic personal access token (PAT).",
             "options": [
                 {
                     "type": "goto",
@@ -24,7 +24,7 @@
         },
         {
             "id": "steps",
-            "text": "Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic). Create a token with repo + gist scopes, then paste it into /cloudsync and click Save.",
+            "text": "GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic). Create a token with repo + gist scopes, copy it once, then paste it into /cloudsync and click Save.",
             "options": [
                 {
                     "type": "goto",
@@ -35,64 +35,129 @@
         },
         {
             "id": "quiz-1",
-            "text": "Where do you create the personal access token?",
+            "text": "What does connecting GitHub enable in DSPACE?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-2",
-                    "text": "GitHub Settings → Developer settings → Personal access tokens"
+                    "text": "Cloud sync, quest submissions, and portability"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "Inside the DSPACE settings page"
+                    "goto": "quiz-1-wrong",
+                    "text": "Direct access to your private repos"
                 },
                 {
                     "type": "goto",
+                    "goto": "quiz-1-wrong",
+                    "text": "It just unlocks cosmetic themes"
+                }
+            ]
+        },
+        {
+            "id": "quiz-1-wrong",
+            "text": "Close, but not quite. Connecting GitHub is about syncing saves and submitting quests, not repo control or cosmetics.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "start",
-                    "text": "From the GitHub repository README"
+                    "text": "Try again"
                 }
             ]
         },
         {
             "id": "quiz-2",
-            "text": "Which classic PAT scopes cover quest submissions and Cloud Sync?",
+            "text": "At a high level, what do PAT scopes mean?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-3",
-                    "text": "repo + gist"
+                    "text": "They are permissions; pick only what you need (repo + gist here)"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "public_repo only"
+                    "goto": "quiz-2-wrong",
+                    "text": "They are billing tiers for GitHub accounts"
                 },
                 {
                     "type": "goto",
+                    "goto": "quiz-2-wrong",
+                    "text": "They control your local browser settings"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2-wrong",
+            "text": "Scopes are permissions on the token, not billing or browser settings. Keep them minimal.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "start",
-                    "text": "admin:org"
+                    "text": "Back to start"
                 }
             ]
         },
         {
             "id": "quiz-3",
-            "text": "Where do you paste the token in DSPACE to enable GitHub features?",
+            "text": "How should you treat your PAT?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "Treat it as sensitive and keep it private"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-3-wrong",
+                    "text": "Post it in a repo issue so teammates can reuse it"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-3-wrong",
+                    "text": "Store it in a public gist for convenience"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3-wrong",
+            "text": "Tokens are sensitive. Treat them like passwords and keep them private.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Try again"
+                }
+            ]
+        },
+        {
+            "id": "quiz-4",
+            "text": "Where can you revoke a token if it ever leaks?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "/cloudsync (then click Save)"
+                    "text": "GitHub Settings → Developer settings → Personal access tokens"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "/quests/submit"
+                    "goto": "quiz-4-wrong",
+                    "text": "In the DSPACE /inventory page"
                 },
                 {
                     "type": "goto",
+                    "goto": "quiz-4-wrong",
+                    "text": "By deleting your local save file"
+                }
+            ]
+        },
+        {
+            "id": "quiz-4-wrong",
+            "text": "Token control lives on GitHub, under Personal access tokens. Revoke it there and create a new one if needed.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "start",
-                    "text": "/inventory"
+                    "text": "Reset and try again"
                 }
             ]
         },
