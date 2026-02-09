@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Before bigger tasks, open /inventory and buy a USB Type-A to Type-B cable with dUSD. Use search, check the price, and hit Buy.",
+            "text": "Before bigger tasks, head to /inventory and buy a 9 V battery with dUSD. Use search, check the price, and hit Buy.",
             "options": [
                 {
                     "type": "goto",
@@ -19,15 +19,15 @@
         },
         {
             "id": "view",
-            "text": "Nice. The inventory page shows what you own, what you can buy, and what you can sell back for dUSD. Try filtering by category and scanning prices.",
+            "text": "Nice. /inventory shows what you own, what you can buy, and what you can sell for dUSD. Open a priced item to view details and click Sell to preview the return (items without a price show Not tradeable). Keep the 9 V battery for this quest—just preview, then cancel—or test a different priced item if you want to complete a sale, and notice how counts update when you buy or sell.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Cable purchased",
+                    "text": "Battery purchased",
                     "requiresItems": [
                         {
-                            "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                            "id": "80d30825-a42b-4add-b715-322e1713952c",
                             "count": 1
                         }
                     ]
@@ -36,7 +36,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Keep an eye on this list as you craft, buy, and sell new gear.",
+            "text": "Nice work! Keep checking this list as you craft, buy, and sell new gear.",
             "options": [
                 {
                     "type": "finish",
@@ -48,14 +48,14 @@
     "rewards": [
         {
             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-            "count": 150
+            "count": 75
         },
         {
-            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
             "count": 1
         },
         {
-            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+            "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
             "count": 1
         }
     ],

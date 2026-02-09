@@ -20,7 +20,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Use the smart plug to buy 1 kWh from a wall outlet. Ready to log some energy?",
+            "text": "We'll use the smart plug to buy 1 kWh from the grid—convenient, but it creates dCarbon.",
             "options": [
                 {
                     "type": "goto",
@@ -31,7 +31,7 @@
         },
         {
             "id": "measure",
-            "text": "Run outlet-dWatt-1e3 with the smart plug. dWatt tracks energy you buy; dCarbon tracks fossil debt and carries a sell tax.",
+            "text": "Run outlet-dWatt-1e3 with the smart plug. dWatt is the in-game energy you can spend; dCarbon is the fossil debt created by grid power. When you sell dWatt, a dCarbon tax is deducted—look for the Sell button showing something like “Sell for … (-X%)” and the note that says there’s a tax applied with a link to dCarbon below it.",
             "options": [
                 {
                     "type": "process",
@@ -47,13 +47,13 @@
                             "count": 1000
                         }
                     ],
-                    "text": "dWatt generated!"
+                    "text": "dWatt received!"
                 }
             ]
         },
         {
             "id": "wrapup",
-            "text": "That was the easy, fossil-fueled path. Renewables are meant to replace it—unplug and plan cleaner sources.",
+            "text": "That was the easy, fossil-fueled path. Later you’ll earn dWatt from renewables or stored energy to avoid dCarbon.",
             "options": [
                 {
                     "type": "finish",
@@ -68,7 +68,11 @@
             "count": 1000
         },
         {
-            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 100
+        },
+        {
+            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
             "count": 1
         }
     ],
