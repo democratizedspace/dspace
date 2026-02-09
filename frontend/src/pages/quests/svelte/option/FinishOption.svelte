@@ -20,7 +20,9 @@
         finishQuest(quest.id, quest.rewards || []);
     }
 
-    $: itemRequirementsMet.set(areItemRequirementsMet(option.requiresItems, $state?.inventory));
+    $: itemRequirementsMet.set(
+        areItemRequirementsMet(option.requiresItems, $state?.inventory)
+    );
 
     $: githubConnected = option.requiresGitHub
         ? isValidGitHubToken($state?.github?.token)
