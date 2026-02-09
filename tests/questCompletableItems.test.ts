@@ -86,10 +86,12 @@ describe('quest completion item availability', () => {
         const itemMap = new Map(
             (items as Array<any>).map((item) => [item.id, item])
         );
-        const getItemDependencies = (itemId: string) => {
+        const getItemDependencyInfo = (itemId: string) => {
             const item = itemMap.get(itemId);
-            const dependencies = item?.dependencies;
-            return Array.isArray(dependencies) ? dependencies.filter(Boolean) : [];
+            const dependencies = toItemIdsFromUnknown(item?.dependencies);
+            const unknown = dependencies.filter((dependency) => !itemMap.has(dependency));
+            const known = dependencies.filter((dependency) => itemMap.has(dependency));
+            return { known, unknown };
         };
         const purchasable = new Set(
             (items as Array<any>).filter((item) => item.price).map((item) => item.id)
@@ -139,8 +141,11 @@ describe('quest completion item availability', () => {
 
             for (const itemId of [...purchasable, ...betaPlaceholderItems]) {
                 if (obtainable.has(itemId)) continue;
-                const dependencies = getItemDependencies(itemId);
-                if (dependencies.every((dependency) => obtainable.has(dependency))) {
+                const { known, unknown } = getItemDependencyInfo(itemId);
+                if (
+                    unknown.length === 0 &&
+                    known.every((dependency) => obtainable.has(dependency))
+                ) {
                     obtainable.add(itemId);
                     changed = true;
                 }
@@ -203,8 +208,12 @@ describe('quest completion item availability', () => {
         const explainMissingItem = (itemId: string) => {
             const item = itemMap.get(itemId);
             const name = item?.name ?? 'Unknown item';
+            const { known, unknown } = getItemDependencyInfo(itemId);
+            if (unknown.length > 0) {
+                return `${name} (${itemId}) depends on unknown item IDs: ${unknown.join(', ')}.`;
+            }
             const missingDependencies = getMissingItems(
-                getItemDependencies(itemId),
+                known,
                 obtainable
             );
             if (missingDependencies.length > 0) {
