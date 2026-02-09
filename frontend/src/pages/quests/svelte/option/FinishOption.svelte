@@ -4,8 +4,7 @@
     import { get, writable } from 'svelte/store';
     import { finishQuest } from '../../../../utils/gameState.js';
     import { state } from '../../../../utils/gameState/common.js';
-    import { loadGitHubToken, isValidGitHubToken } from '../../../../utils/githubToken.js';
-    import { onMount } from 'svelte';
+    import { isValidGitHubToken } from '../../../../utils/githubToken.js';
     import { areItemRequirementsMet } from './itemRequirements.js';
 
     export let quest, option;
@@ -15,13 +14,6 @@
     );
     let isDisabled = false;
 
-    async function checkConnection() {
-        const token = await loadGitHubToken();
-        githubConnected = isValidGitHubToken(token);
-    }
-
-    onMount(checkConnection);
-
     function onClick() {
         if (option.requiresGitHub && !githubConnected) return;
         if (!$itemRequirementsMet) return;
@@ -29,6 +21,10 @@
     }
 
     $: itemRequirementsMet.set(areItemRequirementsMet(option.requiresItems, $state?.inventory));
+
+    $: githubConnected = option.requiresGitHub
+        ? isValidGitHubToken($state?.github?.token)
+        : false;
 
     $: isDisabled = (option.requiresGitHub && !githubConnected) || !$itemRequirementsMet;
 </script>

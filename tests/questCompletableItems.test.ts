@@ -10,6 +10,11 @@ type ItemEntry = { id: string; count: number };
 const toItemIds = (entries: ItemEntry[] | undefined) =>
     (entries ?? []).map((entry) => entry.id);
 
+const getGrantedItems = (quest: any) =>
+    (quest.dialogue ?? []).flatMap((node: any) =>
+        (node.options ?? []).flatMap((option: any) => toItemIds(option.grantsItems))
+    );
+
 const getFinishOptions = (quest: any) =>
     (quest.dialogue ?? []).flatMap((node: any) =>
         (node.options ?? []).filter((option: any) => option.type === 'finish')
@@ -30,11 +35,19 @@ describe('quest completion item availability', () => {
 
         const rewardSources = new Map<string, string[]>();
         for (const quest of quests) {
-            for (const reward of quest.rewards ?? []) {
-                if (!rewardSources.has(reward.id)) {
-                    rewardSources.set(reward.id, []);
+            const addRewardSource = (itemId: string) => {
+                if (!rewardSources.has(itemId)) {
+                    rewardSources.set(itemId, []);
                 }
-                rewardSources.get(reward.id)?.push(quest.id);
+                rewardSources.get(itemId)?.push(quest.id);
+            };
+
+            for (const reward of quest.rewards ?? []) {
+                addRewardSource(reward.id);
+            }
+
+            for (const itemId of getGrantedItems(quest)) {
+                addRewardSource(itemId);
             }
         }
 
@@ -49,6 +62,8 @@ describe('quest completion item availability', () => {
         }
 
         const obtainable = new Set<string>(purchasable);
+        // This validator focuses on item obtainability and assumes GitHub connections can be made.
+        const allowGitHubRequirement = true;
         const completableQuests = new Set<string>();
         let changed = true;
 
@@ -83,13 +98,21 @@ describe('quest completion item availability', () => {
                 const finishOptions = getFinishOptions(quest);
                 if (finishOptions.length === 0) continue;
 
-                const canFinish = finishOptions.some((option: any) =>
-                    toItemIds(option.requiresItems).every((id) => obtainable.has(id))
-                );
+                const canFinish = finishOptions.some((option: any) => {
+                    const itemsMet = toItemIds(option.requiresItems).every((id) =>
+                        obtainable.has(id)
+                    );
+                    const githubRequirementMet = !option.requiresGitHub || allowGitHubRequirement;
+                    return itemsMet && githubRequirementMet;
+                });
 
                 if (canFinish) {
                     completableQuests.add(quest.id);
-                    for (const reward of toItemIds(quest.rewards)) {
+                    const questRewards = [
+                        ...toItemIds(quest.rewards),
+                        ...getGrantedItems(quest),
+                    ];
+                    for (const reward of questRewards) {
                         if (!obtainable.has(reward)) {
                             obtainable.add(reward);
                             changed = true;
@@ -154,18 +177,29 @@ describe('quest completion item availability', () => {
 
             const missingByOption = finishOptions.map((option: any) => {
                 const missing = getMissingItems(toItemIds(option.requiresItems), obtainable);
-                return { option, missing };
+                const requiresGitHub = Boolean(option.requiresGitHub);
+                return { option, missing, requiresGitHub };
             });
 
-            const viable = missingByOption.find((entry) => entry.missing.length === 0);
+            const viable = missingByOption.find(
+                (entry) =>
+                    entry.missing.length === 0 &&
+                    (!entry.requiresGitHub || allowGitHubRequirement)
+            );
             if (viable) continue;
 
             missingByOption.sort((a, b) => a.missing.length - b.missing.length);
             const best = missingByOption[0];
-            const details =
+            const missingItemsDetail =
                 best.missing.length === 0
-                    ? 'Unknown missing requirements.'
-                    : best.missing.map(explainMissingItem).join('\n  - ');
+                    ? []
+                    : best.missing.map(explainMissingItem);
+            const missingRequirementsDetail = best.requiresGitHub
+                ? ['GitHub connection required.']
+                : [];
+            const details = [...missingItemsDetail, ...missingRequirementsDetail]
+                .filter(Boolean)
+                .join('\n  - ');
             errors.push(`Quest "${quest.id}" missing items:\n  - ${details}`);
         }
 
