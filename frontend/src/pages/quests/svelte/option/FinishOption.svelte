@@ -27,9 +27,7 @@
     }
 
     $: {
-        githubConnected = option.requiresGitHub
-            ? isValidGitHubToken($state?.github?.token)
-            : false;
+        githubConnected = option.requiresGitHub ? isValidGitHubToken($state?.github?.token) : false;
     }
 
     $: isDisabled = (option.requiresGitHub && !githubConnected) || !$itemRequirementsMet;
