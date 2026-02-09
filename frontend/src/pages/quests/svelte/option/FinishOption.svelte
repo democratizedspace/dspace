@@ -20,13 +20,17 @@
         finishQuest(quest.id, quest.rewards || []);
     }
 
-    $: itemRequirementsMet.set(
-        areItemRequirementsMet(option.requiresItems, $state?.inventory)
-    );
+    $: {
+        if ($state) {
+            itemRequirementsMet.set(areItemRequirementsMet(option.requiresItems, $state.inventory));
+        }
+    }
 
-    $: githubConnected = option.requiresGitHub
-        ? isValidGitHubToken($state?.github?.token)
-        : false;
+    $: {
+        githubConnected = option.requiresGitHub
+            ? isValidGitHubToken($state?.github?.token)
+            : false;
+    }
 
     $: isDisabled = (option.requiresGitHub && !githubConnected) || !$itemRequirementsMet;
 </script>
