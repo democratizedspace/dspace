@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 import processes from '../frontend/src/generated/processes.json' assert {
     type: 'json',
 };
@@ -7,8 +9,37 @@ import { loadQuests } from '../scripts/gen-quest-tree.mjs';
 
 type ItemEntry = { id: string; count: number };
 
+const QUESTS_DIR = path.join(process.cwd(), 'frontend/src/pages/quests/json');
+
 const toItemIds = (entries: ItemEntry[] | undefined) =>
     (entries ?? []).map((entry) => entry.id);
+
+const toItemIdsFromUnknown = (value: unknown) => {
+    if (!value) return [];
+    if (Array.isArray(value)) {
+        if (value.length === 0) return [];
+        if (typeof value[0] === 'string') {
+            return (value as string[]).filter(Boolean);
+        }
+        return (value as ItemEntry[]).map((entry) => entry.id).filter(Boolean);
+    }
+    if (typeof value === 'string') return [value];
+    if (typeof value === 'object' && value && 'id' in value) {
+        const entry = value as ItemEntry;
+        return entry.id ? [entry.id] : [];
+    }
+    return [];
+};
+
+const getRequiredItemIds = (option: any) => {
+    const required = [
+        ...toItemIdsFromUnknown(option?.requiresItems),
+        ...toItemIdsFromUnknown(option?.requiredItems),
+        ...toItemIdsFromUnknown(option?.requiredItemIds),
+        ...toItemIdsFromUnknown(option?.requiredItemId),
+    ];
+    return [...new Set(required)];
+};
 
 const getGrantedItems = (quest: any) =>
     (quest.dialogue ?? []).flatMap((node: any) =>
@@ -23,9 +54,35 @@ const getFinishOptions = (quest: any) =>
 const getMissingItems = (required: string[], obtainable: Set<string>) =>
     required.filter((itemId) => !obtainable.has(itemId));
 
+const loadQuestPaths = async (baseDir = QUESTS_DIR) => {
+    const entries = await fs.readdir(baseDir, { withFileTypes: true });
+    const paths = new Map<string, string>();
+
+    for (const entry of entries) {
+        const fullPath = path.join(baseDir, entry.name);
+        if (entry.isDirectory()) {
+            const nested = await loadQuestPaths(fullPath);
+            for (const [id, filePath] of nested) {
+                paths.set(id, filePath);
+            }
+            continue;
+        }
+
+        if (!entry.isFile() || !entry.name.endsWith('.json')) continue;
+        const raw = await fs.readFile(fullPath, 'utf8');
+        const quest = JSON.parse(raw);
+        if (quest?.id) {
+            paths.set(quest.id, path.relative(process.cwd(), fullPath));
+        }
+    }
+
+    return paths;
+};
+
 describe('quest completion item availability', () => {
     it('ensures finish requirements are obtainable', async () => {
         const quests = await loadQuests();
+        const questPaths = await loadQuestPaths();
         const itemMap = new Map(
             (items as Array<any>).map((item) => [item.id, item])
         );
@@ -99,7 +156,7 @@ describe('quest completion item availability', () => {
                 if (finishOptions.length === 0) continue;
 
                 const canFinish = finishOptions.some((option: any) => {
-                    const itemsMet = toItemIds(option.requiresItems).every((id) =>
+                    const itemsMet = getRequiredItemIds(option).every((id) =>
                         obtainable.has(id)
                     );
                     const githubRequirementMet = !option.requiresGitHub || allowGitHubRequirement;
@@ -166,17 +223,18 @@ describe('quest completion item availability', () => {
             );
         };
 
-        const enforcedQuests = quests.filter((quest) => quest.id.startsWith('welcome/'));
-
-        for (const quest of enforcedQuests) {
+        for (const quest of quests) {
             const finishOptions = getFinishOptions(quest);
+            const questPath = questPaths.get(quest.id);
             if (finishOptions.length === 0) {
-                errors.push(`Quest "${quest.id}" has no finish option.`);
+                errors.push(
+                    `Quest "${quest.id}" (${questPath ?? 'unknown path'}) has no finish option.`
+                );
                 continue;
             }
 
             const missingByOption = finishOptions.map((option: any) => {
-                const missing = getMissingItems(toItemIds(option.requiresItems), obtainable);
+                const missing = getMissingItems(getRequiredItemIds(option), obtainable);
                 const requiresGitHub = Boolean(option.requiresGitHub);
                 return { option, missing, requiresGitHub };
             });
@@ -200,7 +258,9 @@ describe('quest completion item availability', () => {
             const details = [...missingItemsDetail, ...missingRequirementsDetail]
                 .filter(Boolean)
                 .join('\n  - ');
-            errors.push(`Quest "${quest.id}" missing items:\n  - ${details}`);
+            errors.push(
+                `Quest "${quest.id}" (${questPath ?? 'unknown path'}) missing items:\n  - ${details}`
+            );
         }
 
         expect(errors).toEqual([]);
