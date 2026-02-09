@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Before diving into bigger tasks, open the inventory page and make sure your new smart plug shows up.",
+            "text": "Before bigger tasks, open /inventory and buy a USB Type-A to Type-B cable with dUSD. Use search, check the price, and hit Buy.",
             "options": [
                 {
                     "type": "goto",
@@ -19,15 +19,15 @@
         },
         {
             "id": "view",
-            "text": "Great! Seeing your items helps track progress. You'll use many of them in upcoming quests.",
+            "text": "Nice. The inventory page shows what you own, what you can buy, and what you can sell back for dUSD. Try filtering by category and scanning prices.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Smart plug is there",
+                    "text": "Cable purchased",
                     "requiresItems": [
                         {
-                            "id": "a5395e29-1862-4eb7-8517-5d161635e032",
+                            "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
                             "count": 1
                         }
                     ]
@@ -36,7 +36,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Keep an eye on this list as you craft and discover new gear.",
+            "text": "Nice work! Keep an eye on this list as you craft, buy, and sell new gear.",
             "options": [
                 {
                     "type": "finish",
@@ -45,11 +45,24 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 150
+        },
+        {
+            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+            "count": 1
+        },
+        {
+            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["welcome/howtodoquests"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 80,
         "emoji": "🛠️",
         "history": []
     }

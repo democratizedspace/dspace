@@ -1184,7 +1184,7 @@
         "name": "Laptop Computer",
         "description": "A portable computer capable of running the Arduino IDE and uploading sketches.",
         "image": "/assets/laptop_running_ide_on_desk.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "300 dUSD",
         "category": "Electronics & Robotics"
     },
     {

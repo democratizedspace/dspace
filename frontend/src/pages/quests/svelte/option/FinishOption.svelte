@@ -50,6 +50,14 @@
                 </div>
             </Chip>
         {/if}
+        {#if option.requiresGitHub && !githubConnected}
+            <Chip inverted={true} disabled={isDisabled} text="">
+                <div class="vertical requirements">
+                    Requires:
+                    <span>Connect GitHub to finish this quest.</span>
+                </div>
+            </Chip>
+        {/if}
     </div>
 </Chip>
 
