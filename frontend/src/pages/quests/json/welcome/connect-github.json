@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Time to connect GitHub. This unlocks cloud sync, quest submissions, and easy switching between machines.",
+            "text": "Time to connect GitHub. Think of it as your mission backpack in the cloud: your progress syncs, submissions work, and switching machines is painless.",
             "options": [
                 {
                     "type": "goto",

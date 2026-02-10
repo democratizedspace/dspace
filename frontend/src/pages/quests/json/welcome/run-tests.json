@@ -19,7 +19,7 @@
         },
         {
             "id": "commands",
-            "text": "Quick map:\n\u2022 `npm run qa:smoke` (`type-check` + `link-check` + `itemValidation` + `test:ci`)\n\u2022 `npm run test:ci` (CI-oriented checks from the repo scripts)\n\u2022 `npm run test:pr` (full pre-PR suite with grouped Playwright E2E)\nFocused checks include `npm run lint`, `npm run type-check`, and `npm run build`.",
+            "text": "Command ladder:\n\u2022 `npm run qa:smoke` for the fastest sanity pass\n\u2022 `npm run test:ci` for CI-parity checks from the repo scripts\n\u2022 `npm run test:pr` for the full pre-PR suite\nUse focused checks like `npm run lint`, `npm run type-check`, and `npm run build` when debugging.",
             "options": [
                 {
                     "type": "goto",
@@ -30,7 +30,7 @@
         },
         {
             "id": "quiz-1",
-            "text": "Which command is the quick smoke that chains `type-check`, `link-check`, `itemValidation`, and `test:ci`?",
+            "text": "Which command is fastest to sanity-check your changes?",
             "options": [
                 {
                     "type": "goto",
@@ -51,7 +51,7 @@
         },
         {
             "id": "retry-smoke",
-            "text": "`qa:smoke` is the fast check that bundles `type-check`, `link-check`, `itemValidation`, and `test:ci`.",
+            "text": "Not quite. Start with `npm run qa:smoke` when you want the quickest sanity pass.",
             "options": [
                 {
                     "type": "goto",
@@ -62,7 +62,7 @@
         },
         {
             "id": "quiz-2",
-            "text": "Which command should you run for CI-oriented checks from the repo scripts?",
+            "text": "Which command best matches CI parity?",
             "options": [
                 {
                     "type": "goto",
@@ -83,7 +83,7 @@
         },
         {
             "id": "retry-pr",
-            "text": "`test:pr` is the full pre-PR suite, including grouped Playwright E2E runs.",
+            "text": "Close. `npm run test:ci` is the CI-parity command from the repo scripts.",
             "options": [
                 {
                     "type": "goto",
@@ -94,39 +94,7 @@
         },
         {
             "id": "quiz-3",
-            "text": "Which command is the full local pre-PR gate, including grouped Playwright E2E runs?",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "quiz-4",
-                    "text": "npm run test:pr"
-                },
-                {
-                    "type": "goto",
-                    "goto": "retry-ci",
-                    "text": "npm run test:ci"
-                },
-                {
-                    "type": "goto",
-                    "goto": "retry-ci",
-                    "text": "npm run link-check"
-                }
-            ]
-        },
-        {
-            "id": "retry-ci",
-            "text": "`test:pr` is the full pre-PR suite, including grouped Playwright E2E runs.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "start",
-                    "text": "Retry from start"
-                }
-            ]
-        },
-        {
-            "id": "quiz-4",
-            "text": "What should you run before opening a PR when you want the full local gate?",
+            "text": "What do you run before opening a PR?",
             "options": [
                 {
                     "type": "goto",
@@ -147,7 +115,7 @@
         },
         {
             "id": "retry-full-gate",
-            "text": "Good instinct to be fast, but before a PR you should run test:pr for the full local pre-PR suite.",
+            "text": "Before you open a PR, run `npm run test:pr` for the full local gate.",
             "options": [
                 {
                     "type": "goto",
@@ -171,6 +139,10 @@
         {
             "id": "82b369fe-0ef4-4ca1-881c-14e5a7feeff5",
             "count": 1
+        },
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 250
         }
     ],
     "requiresQuests": [
