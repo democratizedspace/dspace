@@ -6,6 +6,7 @@
     import { state } from '../../../utils/gameState/common.js';
     import { isBrowser } from '../../../utils/ssr.js';
     import { getItemMap } from '../../../utils/itemResolver.js';
+    import { formatDialogue } from '../../../utils/formatDialogue.ts';
 
     export let quest;
     export let pointer;
@@ -138,7 +139,7 @@
                     <div class="left">
                         <img src={npc} alt="NPC" />
                         <p class="npcDialogue left">
-                            {dialogueMap.get(pointer)?.text}
+                            {@html formatDialogue(dialogueMap.get(pointer)?.text)}
                         </p>
                     </div>
                     <div class="right options">
@@ -224,6 +225,15 @@
 
     .npcDialogue:hover {
         opacity: 1;
+    }
+
+    .npcDialogue :global(code) {
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        font-size: 0.95em;
+        background: rgba(36, 207, 47, 0.2);
+        padding: 2px 6px;
+        border-radius: 8px;
+        border: 1px solid rgba(36, 207, 47, 0.35);
     }
 
     .quest-banner {

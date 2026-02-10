@@ -19,7 +19,7 @@
         },
         {
             "id": "commands",
-            "text": "Use the real repo commands: npm run qa:smoke for a fast sanity pass, npm run test:ci for CI-parity checks without Playwright E2E, and npm run test:pr for the full pre-PR suite including grouped Playwright runs.",
+            "text": "Quick map:\n• `npm run qa:smoke` (`type-check` + `link-check` + `itemValidation` + `test:ci`)\n• `npm run test:pr` (full pre-PR suite with grouped Playwright)\nFocused checks include `npm run lint`, `npm run type-check`, and `npm run build`.\n`test:ci` runs build + `verify:chat-build-stamp` and then `test:pr` with `SKIP_E2E=1` so Playwright E2E is skipped when the runner honors the flag.",
             "options": [
                 {
                     "type": "goto",
@@ -30,7 +30,7 @@
         },
         {
             "id": "quiz-1",
-            "text": "Which command is the fastest sanity-check pass?",
+            "text": "Which command is the quick smoke that chains `type-check`, `link-check`, `itemValidation`, and `test:ci`?",
             "options": [
                 {
                     "type": "goto",
@@ -51,7 +51,7 @@
         },
         {
             "id": "retry-smoke",
-            "text": "Almost. qa:smoke is the quick bundled sanity check before deeper runs.",
+            "text": "`qa:smoke` is the fast check that bundles `type-check`, `link-check`, `itemValidation`, and `test:ci`.",
             "options": [
                 {
                     "type": "goto",
@@ -71,6 +71,38 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "retry-pr",
+                    "text": "npm run qa:smoke"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-pr",
+                    "text": "npm run lint"
+                }
+            ]
+        },
+        {
+            "id": "retry-pr",
+            "text": "`test:pr` is the full pre-PR suite, including grouped Playwright E2E runs.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Back to start"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "Which command mirrors CI checks by running build + `verify:chat-build-stamp` and then `test:pr` with `SKIP_E2E=1`?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep-repo",
+                    "text": "npm run test:ci"
+                },
+                {
+                    "type": "goto",
                     "goto": "retry-ci",
                     "text": "npm run test:pr"
                 },
@@ -83,7 +115,7 @@
         },
         {
             "id": "retry-ci",
-            "text": "Close. test:ci is the CI-parity command; it mirrors the non-E2E CI path.",
+            "text": "`test:ci` runs build + `verify:chat-build-stamp` and then `test:pr` with `SKIP_E2E=1`; `qa:smoke` wraps that with `type-check`, `link-check`, and `itemValidation`.",
             "options": [
                 {
                     "type": "goto",
