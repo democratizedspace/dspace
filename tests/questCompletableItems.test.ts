@@ -8,6 +8,17 @@ import items from '../frontend/src/pages/inventory/json/items';
 import { loadQuests } from '../scripts/gen-quest-tree.mjs';
 
 type ItemEntry = { id: string; count: number };
+type DialogueOption = {
+    type?: string;
+    text?: string;
+    goto?: string;
+    process?: string;
+    requiresItems?: ItemEntry[];
+    requiredItems?: ItemEntry[];
+    requiredItemIds?: string[];
+    requiredItemId?: string;
+};
+type DialogueNode = { id?: string; text?: string; options?: DialogueOption[] };
 
 const QUESTS_DIR = path.join(process.cwd(), 'frontend/src/pages/quests/json');
 
@@ -51,6 +62,136 @@ const getFinishOptions = (quest: any) =>
         (node.options ?? []).filter((option: any) => option.type === 'finish')
     );
 
+const getNodeSnippet = (node: DialogueNode) => {
+    const text = (node?.text ?? '').trim().replace(/\s+/g, ' ');
+    const optionTexts = (node?.options ?? [])
+        .map((option) => option?.text?.trim())
+        .filter(Boolean)
+        .slice(0, 3)
+        .join(' | ');
+    return `text="${text.slice(0, 140)}" options="${optionTexts.slice(0, 140)}"`;
+};
+
+const collectReachableNodes = (quest: any) => {
+    const nodes = new Map<string, DialogueNode>();
+    for (const node of quest?.dialogue ?? []) {
+        if (node?.id) {
+            nodes.set(node.id, node);
+        }
+    }
+
+    const startId = quest?.start ?? 'start';
+    const visited = new Set<string>();
+    if (!nodes.has(startId)) {
+        return { nodes, visited, startId, missingStart: true };
+    }
+
+    const queue = [startId];
+    while (queue.length > 0) {
+        const nodeId = queue.shift() as string;
+        if (visited.has(nodeId)) continue;
+        visited.add(nodeId);
+        const node = nodes.get(nodeId);
+        if (!node) continue;
+
+        for (const option of node.options ?? []) {
+            if (option?.goto && nodes.has(option.goto)) {
+                queue.push(option.goto);
+            }
+        }
+    }
+
+    return { nodes, visited, startId, missingStart: false };
+};
+
+const validateDialogueGraph = (quest: any) => {
+    const { nodes, visited, startId, missingStart } = collectReachableNodes(quest);
+    const deadEnds: string[] = [];
+    let reachableFinishFound = false;
+
+    for (const nodeId of visited) {
+        const node = nodes.get(nodeId);
+        if (!node) continue;
+        const options = node.options ?? [];
+        const hasFinishOption = options.some((option) => option?.type === 'finish');
+        if (hasFinishOption) {
+            reachableFinishFound = true;
+        }
+
+        const hasProgressOption = options.some(
+            (option) =>
+                option?.type === 'finish' ||
+                (typeof option?.goto === 'string' && option.goto.length > 0 && nodes.has(option.goto))
+        );
+
+        if (!hasProgressOption) {
+            deadEnds.push(
+                `node "${nodeId}" ${getNodeSnippet(node)} in quest "${quest.id}"`
+            );
+        }
+    }
+
+    const finishNodeIds = [...nodes.entries()]
+        .filter(([, node]) => (node.options ?? []).some((option) => option?.type === 'finish'))
+        .map(([nodeId]) => nodeId);
+
+    const unreachableFinishNodes = finishNodeIds.filter((nodeId) => !visited.has(nodeId));
+
+    return {
+        deadEnds,
+        missingStart,
+        startId,
+        reachableFinishFound,
+        unreachableFinishNodes,
+    };
+};
+
+const getReachableRequiredItemIds = (quest: any) => {
+    const { nodes, visited } = collectReachableNodes(quest);
+    const reverseEdges = new Map<string, Set<string>>();
+    const canReachFinish = new Set<string>();
+
+    for (const [nodeId, node] of nodes.entries()) {
+        for (const option of node.options ?? []) {
+            if (option?.type === 'finish') {
+                canReachFinish.add(nodeId);
+            }
+            if (!option?.goto || !nodes.has(option.goto)) continue;
+            if (!reverseEdges.has(option.goto)) {
+                reverseEdges.set(option.goto, new Set());
+            }
+            reverseEdges.get(option.goto)?.add(nodeId);
+        }
+    }
+
+    const queue = [...canReachFinish];
+    while (queue.length > 0) {
+        const nodeId = queue.shift() as string;
+        for (const predecessor of reverseEdges.get(nodeId) ?? []) {
+            if (canReachFinish.has(predecessor)) continue;
+            canReachFinish.add(predecessor);
+            queue.push(predecessor);
+        }
+    }
+
+    const required = new Set<string>();
+    for (const nodeId of visited) {
+        if (!canReachFinish.has(nodeId)) continue;
+        const node = nodes.get(nodeId);
+        for (const option of node?.options ?? []) {
+            const leadsToFinish =
+                option?.type === 'finish' ||
+                (Boolean(option?.goto) && canReachFinish.has(option.goto as string));
+            if (!leadsToFinish) continue;
+            for (const itemId of getRequiredItemIds(option)) {
+                required.add(itemId);
+            }
+        }
+    }
+
+    return [...required];
+};
+
 const getMissingItems = (required: string[], obtainable: Set<string>) =>
     required.filter((itemId) => !obtainable.has(itemId));
 
@@ -85,6 +226,81 @@ const loadQuestPaths = async (baseDir = QUESTS_DIR) => {
 };
 
 describe('quest completion item availability', () => {
+    it('ensures reachable dialogue nodes are not dead-ends and can reach finish', async () => {
+        const quests = await loadQuests();
+        const questPaths = await loadQuestPaths();
+        const errors: string[] = [];
+
+        for (const quest of quests) {
+            if (!Array.isArray(quest.dialogue) || quest.dialogue.length === 0) continue;
+
+            const result = validateDialogueGraph(quest);
+            const questPath = questPaths.get(quest.id) ?? 'unknown path';
+
+            if (result.missingStart) {
+                errors.push(
+                    `Quest "${quest.id}" (${questPath}) start node "${result.startId}" is missing.`
+                );
+            }
+            if (result.deadEnds.length > 0) {
+                errors.push(
+                    `Quest "${quest.id}" (${questPath}) has reachable dead-end nodes:\n  - ${result.deadEnds.join('\n  - ')}`
+                );
+            }
+            if (!result.reachableFinishFound) {
+                errors.push(
+                    `Quest "${quest.id}" (${questPath}) has no reachable finish option from start node "${result.startId}".`
+                );
+            }
+            if (result.unreachableFinishNodes.length > 0) {
+                errors.push(
+                    `Quest "${quest.id}" (${questPath}) has finish nodes that are unreachable: ${result.unreachableFinishNodes.join(', ')}.`
+                );
+            }
+        }
+
+        expect(errors).toEqual([]);
+    });
+
+    it('regresses composting/turn-pile temp branch dead-end checks', async () => {
+        const quests = await loadQuests();
+        const quest = quests.find((entry: any) => entry.id === 'composting/turn-pile');
+        expect(quest).toBeTruthy();
+
+        const result = validateDialogueGraph(quest);
+        expect(result.deadEnds).toEqual([]);
+        expect(result.reachableFinishFound).toBe(true);
+    });
+
+    it('detects dead-end fixtures that cannot reach finish', () => {
+        const fixture = {
+            id: 'test/dead-end',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Start',
+                    options: [{ type: 'goto', text: 'Go', goto: 'temp' }],
+                },
+                {
+                    id: 'temp',
+                    text: 'Trap node',
+                    options: [{ type: 'process', text: 'Loop without goto', process: 'noop' }],
+                },
+                {
+                    id: 'finish',
+                    text: 'Finish',
+                    options: [{ type: 'finish', text: 'Done' }],
+                },
+            ],
+        };
+
+        const result = validateDialogueGraph(fixture);
+        expect(result.deadEnds).toHaveLength(1);
+        expect(result.reachableFinishFound).toBe(false);
+        expect(result.unreachableFinishNodes).toEqual(['finish']);
+    });
+
     it('ensures finish requirements are obtainable', async () => {
         const quests = await loadQuests();
         const questPaths = await loadQuestPaths();
@@ -306,6 +522,22 @@ describe('quest completion item availability', () => {
                 .join('\n  - ');
             errors.push(
                 `Quest "${quest.id}" (${questPath ?? 'unknown path'}) missing items:\n  - ${details}`
+            );
+
+        }
+
+        for (const quest of quests) {
+            const requiredInReachableDialogue = getReachableRequiredItemIds(quest);
+            const unreachableRequired = getMissingItems(requiredInReachableDialogue, obtainable);
+            if (unreachableRequired.length === 0) continue;
+
+            const questPath = questPaths.get(quest.id);
+            const diagnostics = unreachableRequired
+                .slice(0, 5)
+                .map(explainMissingItem)
+                .join('\n  - ');
+            errors.push(
+                `Quest "${quest.id}" (${questPath ?? 'unknown path'}) has unobtainable required dialogue items:\n  - ${diagnostics}`
             );
         }
 

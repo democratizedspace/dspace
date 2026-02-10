@@ -56,13 +56,7 @@
                 {
                     "type": "goto",
                     "goto": "fin",
-                    "text": "Gas production started",
-                    "requiresItems": [
-                        {
-                            "id": "dc9c057e-2bd1-4bcc-b06c-2e18344ce3e5",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Gas production started"
                 }
             ]
         },
