@@ -218,8 +218,8 @@
     },
     {
         "id": "d5d62069-c77d-44b1-8848-b355f8410f74",
-        "name": "GitHub Connection Trophy",
-        "description": "Chrome trophy with a tiny Octocat silhouette, celebrating your first GitHub sync.",
+        "name": "GitHub Link-Up Trophy",
+        "description": "A celebratory Octocat badge awarded for securely connecting GitHub and enabling cloud sync.",
         "image": "/assets/motor_award.jpg",
         "priceExemptionReason": "TROPHY",
         "hardening": {
