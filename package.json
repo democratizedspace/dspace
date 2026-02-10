@@ -46,7 +46,7 @@
     "backup": "node scripts/backup.mjs",
     "helm:lint": "helm lint charts/dspace",
     "helm:template": "helm template dspace charts/dspace -f charts/dspace/values.dev.yaml",
-    "test:quest-validation": "npm run test:root -- tests/questDialogueValidation.test.ts tests/questCompletableItems.test.ts"
+    "test:quest-validation": "npm run test:root -- tests/questDialogueValidation.test.ts tests/questCompletableItems.test.ts tests/runTestsQuestRegression.test.ts"
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",
