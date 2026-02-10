@@ -145,9 +145,7 @@
             "count": 250
         }
     ],
-    "requiresQuests": [
-        "welcome/connect-github"
-    ],
+    "requiresQuests": ["welcome/connect-github"],
     "hardening": {
         "passes": 0,
         "score": 95,
