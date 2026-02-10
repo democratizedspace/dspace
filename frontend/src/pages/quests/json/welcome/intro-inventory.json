@@ -1,30 +1,30 @@
 {
     "id": "welcome/intro-inventory",
     "title": "Check Your Inventory",
-    "description": "Learn how to view items you've collected so far.",
+    "description": "Learn where inventory lives, then buy and review an item trade.",
     "image": "/assets/quests/intro_inventory_grid.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Before bigger tasks, head to /inventory and buy a 9 V battery with dUSD. Use search, check the price, and hit Buy.",
+            "text": "Let's learn the market loop. Open /inventory, search for a 9 V battery, and buy one with dUSD.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "view",
-                    "text": "Opening inventory"
+                    "goto": "trade-tips",
+                    "text": "Heading to /inventory"
                 }
             ]
         },
         {
-            "id": "view",
-            "text": "Nice. /inventory shows what you own, what you can buy, and what you can sell for dUSD. Open a priced item to view details and click Sell to preview the return (items without a price show Not tradeable). Keep the 9 V battery for this quest—just preview, then cancel—or test a different priced item if you want to complete a sale, and notice how counts update when you buy or sell.",
+            "id": "trade-tips",
+            "text": "On /inventory, each item page shows Buy and Sell actions when trading is available. Buy increases your item count immediately; selling lowers that count and gives dUSD back. Watch the quantity badge change so you can see how quest requirements are checked.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Battery purchased",
+                    "text": "I bought the 9 V battery",
                     "requiresItems": [
                         {
                             "id": "80d30825-a42b-4add-b715-322e1713952c",
@@ -36,11 +36,11 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Keep checking this list as you craft, buy, and sell new gear.",
+            "text": "Perfect. You now know where to buy gear, where to sell extras, and how inventory counts unlock quests.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "Ready for the next lesson"
                 }
             ]
         }
@@ -48,18 +48,20 @@
     "rewards": [
         {
             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-            "count": 75
+            "count": 150
         },
         {
-            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+            "id": "d1105b87-8185-4a30-ba55-406384be169f",
             "count": 1
         },
         {
-            "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
+            "id": "6301ff22-49c9-468b-88aa-cafedfd5dcd3",
             "count": 1
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "hardening": {
         "passes": 0,
         "score": 80,

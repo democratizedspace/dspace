@@ -218,8 +218,8 @@
     },
     {
         "id": "d5d62069-c77d-44b1-8848-b355f8410f74",
-        "name": "GitHub Connection Trophy",
-        "description": "Chrome trophy with a tiny Octocat silhouette, celebrating your first GitHub sync.",
+        "name": "Cloud Link Trophy",
+        "description": "Polished chrome trophy with an Octocat crest, awarded for securely connecting GitHub and unlocking cloud sync.",
         "image": "/assets/motor_award.jpg",
         "priceExemptionReason": "TROPHY",
         "hardening": {
@@ -231,8 +231,8 @@
     },
     {
         "id": "82b369fe-0ef4-4ca1-881c-14e5a7feeff5",
-        "name": "Test Suite Triumph Trophy",
-        "description": "Anodized aluminum trophy for a clean, tested-and-verified CI-parity run.",
+        "name": "Tested & Verified Trophy",
+        "description": "Launch-ready trophy awarded for completing a clean, tested-and-verified run before shipping your PR.",
         "image": "/assets/rocket_award.jpg",
         "priceExemptionReason": "TROPHY",
         "hardening": {

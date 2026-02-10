@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let’s link GitHub so your progress can sync, quests can be submitted, and your work stays portable.",
+            "text": "Let's link GitHub so your saves sync in the cloud, quest submissions work, and your setup stays portable across machines.",
             "options": [
                 {
                     "type": "goto",
@@ -45,7 +45,7 @@
         },
         {
             "id": "steps",
-            "text": "PAT steps: GitHub Settings → Developer settings → Personal access tokens → Tokens (classic). Generate a new token with repo + gist scopes, copy it, then paste it into /cloudsync and click Save.",
+            "text": "Quick PAT setup: GitHub Settings → Developer settings → Personal access tokens → Tokens (classic). Create a token with only the scopes DSPACE needs (repo + gist), set an expiration, copy it once, then paste it into /cloudsync and click Save.",
             "options": [
                 {
                     "type": "goto",
@@ -184,7 +184,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Your GitHub account is connected. The finish button unlocks once a valid token is saved.",
+            "text": "Excellent—GitHub is connected. This finish option unlocks after a valid token is saved in /cloudsync.",
             "options": [
                 {
                     "type": "finish",
@@ -200,7 +200,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["welcome/intro-inventory"],
+    "requiresQuests": [
+        "welcome/intro-inventory"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
