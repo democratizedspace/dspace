@@ -244,7 +244,7 @@
         opacity: 1;
     }
 
-    .npcDialogue code {
+    .npcDialogue :global(code) {
         font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
         font-size: 0.95em;
         background: rgba(36, 207, 47, 0.2);
