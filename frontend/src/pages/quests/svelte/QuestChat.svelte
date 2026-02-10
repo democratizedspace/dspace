@@ -22,6 +22,22 @@
     let rewardItemsKey = '';
     let isMounted = false;
 
+    const formatDialogue = (text) => {
+        if (!text) {
+            return '';
+        }
+
+        const escaped = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+
+        const withInlineCode = escaped.replace(/`([^`]+)`/g, '<code>$1</code>');
+        return withInlineCode.replace(/\n/g, '<br />');
+    };
+
     const releaseRewardImages = (items) => {
         items.forEach((item) => item?.releaseImage?.());
     };
@@ -138,7 +154,7 @@
                     <div class="left">
                         <img src={npc} alt="NPC" />
                         <p class="npcDialogue left">
-                            {dialogueMap.get(pointer)?.text}
+                            {@html formatDialogue(dialogueMap.get(pointer)?.text)}
                         </p>
                     </div>
                     <div class="right options">
@@ -224,6 +240,13 @@
 
     .npcDialogue:hover {
         opacity: 1;
+    }
+
+    .npcDialogue code {
+        background-color: rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        padding: 2px 6px;
     }
 
     .quest-banner {
