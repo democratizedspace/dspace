@@ -3241,7 +3241,7 @@
     },
     {
         "id": "prepare-local-testbed",
-        "title": "Clone DSPACE and install dependencies for local test runs",
+        "title": "Clone DSPACE (`git clone ... && cd dspace`) and install dependencies (`npm install`)",
         "requireItems": [
             {
                 "id": "52593d07-908b-4109-92cf-826b2184ef6f",
@@ -3269,25 +3269,54 @@
     },
     {
         "id": "execute-dspace-tests",
-        "title": "Run lint, type-check, coverage, and Playwright shards locally",
+        "title": "Run the local test suite (`npm test` / `npm run test:ci`) and capture raw output",
         "requireItems": [
             {
                 "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
-                "count": 1
-            },
-            {
-                "id": "306793ac-e420-4859-9742-9076fff6ab57",
                 "count": 1
             }
         ],
         "consumeItems": [],
         "createItems": [
             {
+                "id": "8df837c6-8e6e-4c4e-b5b9-9e01306c8887",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "generate-dspace-test-report",
+        "title": "Generate a local test report artifact (`npm test -- --reporter=json > test-report.json`)",
+        "requireItems": [
+            {
+                "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
+                "count": 1
+            },
+            {
+                "id": "8df837c6-8e6e-4c4e-b5b9-9e01306c8887",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "8df837c6-8e6e-4c4e-b5b9-9e01306c8887",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
                 "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
                 "count": 1
             }
         ],
-        "duration": "25m",
+        "duration": "5m",
         "hardening": {
             "passes": 0,
             "score": 90,

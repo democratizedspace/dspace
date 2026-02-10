@@ -19,7 +19,7 @@
         },
         {
             "id": "commands",
-            "text": "Command ladder:\n\u2022 `npm run qa:smoke` for the fastest sanity pass\n\u2022 `npm run test:ci` for CI-parity checks from the repo scripts\n\u2022 `npm run test:pr` for the full pre-PR suite\nUse focused checks like `npm run lint`, `npm run type-check`, and `npm run build` when debugging.",
+            "text": "Command ladder:\n• `npm run qa:smoke` for the fastest sanity pass\n• `npm run test:ci` for CI-parity checks from the repo scripts\n• `npm run test:pr` for the full pre-PR suite\nUse focused checks like `npm run lint`, `npm run type-check`, and `npm run build` when debugging.",
             "options": [
                 {
                     "type": "goto",
@@ -98,7 +98,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "repo-setup",
                     "text": "npm run test:pr"
                 },
                 {
@@ -125,12 +125,106 @@
             ]
         },
         {
+            "id": "repo-setup",
+            "text": "Step 1: fork and prepare a GitHub repository for your DSPACE branch.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "create-github-repo",
+                    "text": "Create or confirm your GitHub repository."
+                },
+                {
+                    "type": "goto",
+                    "goto": "clone",
+                    "text": "Repository is ready.",
+                    "requiresItems": [
+                        {
+                            "id": "52593d07-908b-4109-92cf-826b2184ef6f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "clone",
+            "text": "Step 2: clone locally with `git clone https://github.com/<you>/dspace.git && cd dspace`, then install dependencies with `npm install`.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "prepare-local-testbed",
+                    "text": "Run clone + install workflow."
+                },
+                {
+                    "type": "goto",
+                    "goto": "run-suite",
+                    "text": "Local checkout ready.",
+                    "requiresItems": [
+                        {
+                            "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "run-suite",
+            "text": "Step 3: execute the suite in your checkout (`npm test` or project scripts like `npm run test:ci`).",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "execute-dspace-tests",
+                    "text": "Run the test suite."
+                },
+                {
+                    "type": "goto",
+                    "goto": "report",
+                    "text": "Test suite finished.",
+                    "requiresItems": [
+                        {
+                            "id": "8df837c6-8e6e-4c4e-b5b9-9e01306c8887",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "report",
+            "text": "Step 4: capture an artifact with `npm test -- --reporter=json > test-report.json` (or redirect your preferred reporter output).",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "generate-dspace-test-report",
+                    "text": "Generate local test report artifact."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Report captured and attached.",
+                    "requiresItems": [
+                        {
+                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Verified mindset unlocked. You now know the test ladder from smoke check to full pre-PR confidence.",
+            "text": "Verified mindset unlocked. You now know the test ladder from smoke checks to reproducible local reports.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Claim testing trophy"
+                    "text": "Claim testing trophy",
+                    "requiresItems": [
+                        {
+                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -149,7 +243,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

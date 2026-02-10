@@ -1652,6 +1652,14 @@
         "category": "Digital & Records"
     },
     {
+        "id": "8df837c6-8e6e-4c4e-b5b9-9e01306c8887",
+        "name": "local test suite output",
+        "description": "Raw console output from running the local DSPACE test suite before summarizing results.",
+        "image": "/assets/local_test_report.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
         "name": "local test report",
         "description": "Captured logs from lint, type-check, coverage, and Playwright shards on the current branch.",
