@@ -22,6 +22,30 @@
     let rewardItemsKey = '';
     let isMounted = false;
 
+    const escapeHtml = (value) =>
+        value
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+
+    const formatDialogue = (text = '') => {
+        if (!text) {
+            return '';
+        }
+        return text
+            .split('`')
+            .map((segment, index) => {
+                const escaped = escapeHtml(segment).replace(/\n/g, '<br />');
+                if (index % 2 === 1) {
+                    return `<code>${escaped}</code>`;
+                }
+                return escaped;
+            })
+            .join('');
+    };
+
     const releaseRewardImages = (items) => {
         items.forEach((item) => item?.releaseImage?.());
     };
@@ -138,7 +162,7 @@
                     <div class="left">
                         <img src={npc} alt="NPC" />
                         <p class="npcDialogue left">
-                            {dialogueMap.get(pointer)?.text}
+                            {@html formatDialogue(dialogueMap.get(pointer)?.text)}
                         </p>
                     </div>
                     <div class="right options">
@@ -220,6 +244,16 @@
         border: 1px solid #24cf2f;
         width: 80%;
         margin-top: 10px;
+    }
+
+    .npcDialogue code {
+        background-color: rgba(0, 0, 0, 0.12);
+        border-radius: 6px;
+        padding: 2px 6px;
+        font-family:
+            'Fira Code', 'SFMono-Regular', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+            'Liberation Mono', 'Courier New', monospace;
+        font-size: 0.95em;
     }
 
     .npcDialogue:hover {
