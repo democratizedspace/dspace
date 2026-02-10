@@ -146,33 +146,11 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "workflow",
+                    "goto": "suite",
                     "text": "Local checkout is ready",
                     "requiresItems": [
                         {
                             "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
-                            "count": 1
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "workflow",
-            "text": "Mirror CI locally by creating a workflow file before running the full suite.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "create-ci-workflow",
-                    "text": "Create CI workflow file"
-                },
-                {
-                    "type": "goto",
-                    "goto": "suite",
-                    "text": "Workflow is ready",
-                    "requiresItems": [
-                        {
-                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
                             "count": 1
                         }
                     ]
@@ -228,7 +206,9 @@
             "count": 250
         }
     ],
-    "requiresQuests": ["welcome/connect-github"],
+    "requiresQuests": [
+        "welcome/connect-github"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

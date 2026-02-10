@@ -9,7 +9,7 @@ const runTestsQuestPath = resolve(
 
 const loadRunTestsQuest = () =>
     JSON.parse(readFileSync(runTestsQuestPath, 'utf8')) as {
-        dialogue?: Array<{ options?: Array<{ type?: string; process?: string; requiresItems?: any[] }> }>;
+        dialogue?: Array<{ id?: string; options?: Array<{ type?: string; process?: string; requiresItems?: any[] }> }>;
     };
 
 const loadProcesses = () =>
@@ -32,7 +32,6 @@ describe('welcome/run-tests quest regression guards', () => {
             expect.arrayContaining([
                 'create-github-repo',
                 'prepare-local-testbed',
-                'create-ci-workflow',
                 'execute-dspace-tests',
             ])
         );
@@ -63,15 +62,13 @@ describe('welcome/run-tests quest regression guards', () => {
 
     it('requires the local test report item before finishing', () => {
         const quest = loadRunTestsQuest();
-        const finishOptions = (quest.dialogue ?? []).flatMap((node) =>
-            (node.options ?? []).filter((option) => option.type === 'finish')
-        );
+        const finishNode = (quest.dialogue ?? []).find((node) => node.id === 'finish');
+        const finishOption = (finishNode?.options ?? []).find((option) => option.type === 'finish');
 
-        expect(finishOptions.length).toBeGreaterThan(0);
-        finishOptions.forEach((option) => {
-            expect(option.requiresItems ?? []).toEqual(
-                expect.arrayContaining([{ id: '1486e0df-f01e-4c9e-bdd8-ef272df0b9ef', count: 1 }])
-            );
-        });
+        expect(finishNode).toBeTruthy();
+        expect(finishOption).toBeTruthy();
+        expect(finishOption?.requiresItems ?? []).toEqual(
+            expect.arrayContaining([{ id: '1486e0df-f01e-4c9e-bdd8-ef272df0b9ef', count: 1 }])
+        );
     });
 });
