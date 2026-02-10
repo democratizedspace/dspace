@@ -31,7 +31,7 @@
         },
         {
             "id": "what-it-means",
-            "text": "dWatt is your spendable in-game energy for running machines. dCarbon tracks fossil-fuel impact from grid energy. When you sell dWatt, a dCarbon tax is deducted from the sale value—check the Sell button and tax note on an item detail page in /inventory for the exact deduction.",
+            "text": "dWatt is your spendable in-game energy for running machines. dCarbon tracks fossil-fuel impact from grid energy. Selling items applies a dCarbon tax percentage based on how much dCarbon you hold—check the Sell button and tax note on an item detail page in /inventory for your current rate. You can also spend dUSD to pay down dCarbon and convert it into dOffset, helping fund renewables for other Metaguild members.",
             "options": [
                 {
                     "type": "goto",
