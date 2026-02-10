@@ -1,15 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { promises as fs } from 'node:fs';
-import path from 'node:path';
 import processes from '../frontend/src/generated/processes.json' assert {
     type: 'json',
 };
 import items from '../frontend/src/pages/inventory/json/items';
 import { loadQuests } from '../scripts/gen-quest-tree.mjs';
+import { loadQuestPaths } from './utils/questPaths';
 
 type ItemEntry = { id: string; count: number };
-
-const QUESTS_DIR = path.join(process.cwd(), 'frontend/src/pages/quests/json');
 
 const toItemIds = (entries: ItemEntry[] | undefined) =>
     (entries ?? []).map((entry) => entry.id);
@@ -59,6 +56,95 @@ const getFinishOptions = (quest: any) =>
         (node.options ?? []).filter((option: any) => option.type === 'finish')
     );
 
+const getRequiredItemsFromDialoguePath = (quest: any) => {
+    const dialogue = quest.dialogue ?? [];
+    if (dialogue.length === 0) return [];
+
+    const idToNode = new Map<string, any>(
+        dialogue
+            .filter((node: any) => typeof node?.id === 'string' && node.id.trim())
+            .map((node: any) => [node.id.trim(), node])
+    );
+    const startId =
+        typeof quest.start === 'string' && quest.start.trim()
+            ? quest.start.trim()
+            : (dialogue[0]?.id ?? '').trim();
+    if (!startId || !idToNode.has(startId)) return [];
+
+    const reverseEdges = new Map<string, string[]>();
+    for (const node of dialogue) {
+        const sourceId = typeof node?.id === 'string' ? node.id.trim() : '';
+        if (!sourceId) continue;
+        for (const option of node.options ?? []) {
+            if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
+            const target = option.goto.trim();
+            if (!idToNode.has(target)) continue;
+            if (!reverseEdges.has(target)) reverseEdges.set(target, []);
+            reverseEdges.get(target)?.push(sourceId);
+        }
+    }
+
+    const canReachFinish = new Set<string>();
+    const queue: string[] = [];
+    for (const node of dialogue) {
+        const nodeId = typeof node?.id === 'string' ? node.id.trim() : '';
+        if (!nodeId) continue;
+        const hasFinish = (node.options ?? []).some((option: any) => option.type === 'finish');
+        if (!hasFinish) continue;
+        canReachFinish.add(nodeId);
+        queue.push(nodeId);
+    }
+
+    while (queue.length > 0) {
+        const nodeId = queue.shift();
+        if (!nodeId) continue;
+        for (const previous of reverseEdges.get(nodeId) ?? []) {
+            if (canReachFinish.has(previous)) continue;
+            canReachFinish.add(previous);
+            queue.push(previous);
+        }
+    }
+
+    const reachableFromStart = new Set<string>();
+    const walkQueue = [startId];
+    while (walkQueue.length > 0) {
+        const nodeId = walkQueue.shift();
+        if (!nodeId || reachableFromStart.has(nodeId)) continue;
+        reachableFromStart.add(nodeId);
+        const node = idToNode.get(nodeId);
+        if (!node) continue;
+        for (const option of node.options ?? []) {
+            if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
+            const target = option.goto.trim();
+            if (!idToNode.has(target) || reachableFromStart.has(target)) continue;
+            walkQueue.push(target);
+        }
+    }
+
+    const required = new Set<string>();
+    for (const nodeId of reachableFromStart) {
+        if (!canReachFinish.has(nodeId)) continue;
+        const node = idToNode.get(nodeId);
+        if (!node) continue;
+
+        const hasFinishOption = (node.options ?? []).some((option: any) => option.type === 'finish');
+        if (hasFinishOption) continue;
+
+        const validTransitions = (node.options ?? []).filter((option: any) => {
+            if (option.type !== 'goto' || typeof option.goto !== 'string') return false;
+            const target = option.goto.trim();
+            return canReachFinish.has(target) && idToNode.has(target);
+        });
+
+        if (validTransitions.length !== 1) continue;
+        for (const itemId of getRequiredItemIds(validTransitions[0])) {
+            required.add(itemId);
+        }
+    }
+
+    return [...required];
+};
+
 const getMissingItems = (required: string[], obtainable: Set<string>) =>
     required.filter((itemId) => !obtainable.has(itemId));
 
@@ -67,32 +153,59 @@ const uniqueItemIds = (items: string[]) => [...new Set(items.filter(Boolean))];
 const getItemDependencies = (item: any) =>
     uniqueItemIds(toItemIdsFromUnknown(item?.dependencies));
 
-const loadQuestPaths = async (baseDir = QUESTS_DIR) => {
-    const entries = await fs.readdir(baseDir, { withFileTypes: true });
-    const paths = new Map<string, string>();
-
-    for (const entry of entries) {
-        const fullPath = path.join(baseDir, entry.name);
-        if (entry.isDirectory()) {
-            const nested = await loadQuestPaths(fullPath);
-            for (const [id, filePath] of nested) {
-                paths.set(id, filePath);
-            }
-            continue;
-        }
-
-        if (!entry.isFile() || !entry.name.endsWith('.json')) continue;
-        const raw = await fs.readFile(fullPath, 'utf8');
-        const quest = JSON.parse(raw);
-        if (quest?.id) {
-            paths.set(quest.id, path.relative(process.cwd(), fullPath));
-        }
-    }
-
-    return paths;
-};
-
 describe('quest completion item availability', () => {
+
+
+    it('flags unobtainable dialogue-path required items with a clear reason', () => {
+        const quest = {
+            id: 'fixture/unobtainable-required-item',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    options: [
+                        {
+                            type: 'goto',
+                            goto: 'finish',
+                            requiresItems: [{ id: 'missing-item', count: 1 }],
+                            text: 'Attempt finish',
+                        },
+                    ],
+                },
+                {
+                    id: 'finish',
+                    options: [{ type: 'finish', text: 'Done' }],
+                },
+            ],
+        };
+        const questPath = 'frontend/src/pages/quests/json/fixtures/unobtainable-required-item.json';
+        const obtainable = new Set<string>();
+        const questRequiredItems = getQuestLevelRequiredItemIds(quest);
+        const dialoguePathRequiredItems = getRequiredItemsFromDialoguePath(quest);
+        const finishOptions = getFinishOptions(quest);
+
+        const missingByOption = finishOptions.map((option: any) =>
+            getMissingItems(
+                uniqueItemIds([
+                    ...questRequiredItems,
+                    ...dialoguePathRequiredItems,
+                    ...getRequiredItemIds(option),
+                ]),
+                obtainable
+            )
+        );
+
+        const explainMissingItem = (itemId: string) =>
+            `Missing Item (${itemId}) has no price, no producing process, and no rewarding quest.`;
+
+        const detail = missingByOption[0].map(explainMissingItem).join('\n  - ');
+        const error = `Quest "${quest.id}" (${questPath}) missing items:\n  - ${detail}`;
+
+        expect(error).toContain('fixture/unobtainable-required-item');
+        expect(error).toContain(questPath);
+        expect(error).toContain('has no price, no producing process, and no rewarding quest.');
+    });
+
     it('ensures finish requirements are obtainable', async () => {
         const quests = await loadQuests();
         const questPaths = await loadQuestPaths();
@@ -283,6 +396,9 @@ describe('quest completion item availability', () => {
             const finishOptions = getFinishOptions(quest);
             const questPath = questPaths.get(quest.id);
             const questRequiredItems = getQuestLevelRequiredItemIds(quest);
+            const dialoguePathRequiredItems = getRequiredItemsFromDialoguePath(quest).filter((id) =>
+                itemMap.has(id)
+            );
             if (finishOptions.length === 0) {
                 errors.push(
                     `Quest "${quest.id}" (${questPath ?? 'unknown path'}) has no finish option.`
@@ -294,6 +410,7 @@ describe('quest completion item availability', () => {
                 const missing = getMissingItems(
                     uniqueItemIds([
                         ...questRequiredItems,
+                        ...dialoguePathRequiredItems,
                         ...getRequiredItemIds(option),
                     ]),
                     obtainable
@@ -321,8 +438,11 @@ describe('quest completion item availability', () => {
             const details = [...missingItemsDetail, ...missingRequirementsDetail]
                 .filter(Boolean)
                 .join('\n  - ');
+            const pathRequirementSummary = dialoguePathRequiredItems.length
+                ? `\n  - Path-required items considered: ${dialoguePathRequiredItems.join(', ')}`
+                : '';
             errors.push(
-                `Quest "${quest.id}" (${questPath ?? 'unknown path'}) missing items:\n  - ${details}`
+                `Quest "${quest.id}" (${questPath ?? 'unknown path'}) missing items:\n  - ${details}${pathRequirementSummary}`
             );
         }
 

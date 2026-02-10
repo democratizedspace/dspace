@@ -41,6 +41,9 @@ function runTests(exec = execSync, platform = os.platform()) {
                 console.error(`${colors.red}Error: no root tests were run.${colors.reset}`);
                 return 1;
             }
+
+            console.log(`${colors.yellow}Running quest validation regression tests...${colors.reset}`);
+            exec('npm run test:quest-validation', { stdio: 'inherit' });
         } else {
             console.log(
                 `${colors.yellow}Skipping root unit tests — coverage already generated in CI.${colors.reset}`
