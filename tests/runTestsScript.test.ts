@@ -38,16 +38,21 @@ describe('run-tests.js', () => {
         );
         expect(execSyncMock).toHaveBeenNthCalledWith(
             2,
-            'npm run hardening:validate',
+            'npm run test:quest-validation',
             expect.objectContaining({ stdio: 'inherit' })
         );
         expect(execSyncMock).toHaveBeenNthCalledWith(
             3,
-            'npm run test:docs-rag',
+            'npm run hardening:validate',
             expect.objectContaining({ stdio: 'inherit' })
         );
         expect(execSyncMock).toHaveBeenNthCalledWith(
             4,
+            'npm run test:docs-rag',
+            expect.objectContaining({ stdio: 'inherit' })
+        );
+        expect(execSyncMock).toHaveBeenNthCalledWith(
+            5,
             'bash ./frontend/scripts/prepare-pr.sh',
             expect.objectContaining({
                 stdio: 'inherit',

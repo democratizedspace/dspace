@@ -173,7 +173,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "composting/start"
-    ]
+    "requiresQuests": ["composting/start"]
 }
