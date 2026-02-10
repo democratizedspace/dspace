@@ -1,25 +1,25 @@
 {
     "id": "welcome/run-tests",
     "title": "Run the Test Suite",
-    "description": "Learn how to run DSPACE's automated tests to ensure your changes are correct.",
+    "description": "Learn the real DSPACE test commands before opening a PR.",
     "image": "/assets/quests/run_tests_terminal_dashboard.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Tests catch regressions early and speed up reviews. Let’s map the real commands first.",
+            "text": "Before you ship code, run tests. They catch regressions early and make reviews faster.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "commands",
-                    "text": "Show me the command map"
+                    "text": "Show me the command playbook"
                 }
             ]
         },
         {
             "id": "commands",
-            "text": "Quick map:\n• `npm run qa:smoke` (`type-check` + `link-check` + `itemValidation` + `test:ci`)\n• `npm run test:pr` (full pre-PR suite with grouped Playwright)\nFocused checks include `npm run lint`, `npm run type-check`, and `npm run build`.\n`test:ci` runs build + `verify:chat-build-stamp` and then `test:pr` with `SKIP_E2E=1` so Playwright E2E is skipped when the runner honors the flag.",
+            "text": "Command ladder:\n\u2022 `npm run qa:smoke` for the fastest sanity pass\n\u2022 `npm run test:ci` for CI-parity checks from the repo scripts\n\u2022 `npm run test:pr` for the full pre-PR suite\nUse focused checks like `npm run lint`, `npm run type-check`, and `npm run build` when debugging.",
             "options": [
                 {
                     "type": "goto",
@@ -30,7 +30,7 @@
         },
         {
             "id": "quiz-1",
-            "text": "Which command is the quick smoke that chains `type-check`, `link-check`, `itemValidation`, and `test:ci`?",
+            "text": "Which command is fastest to sanity-check your changes?",
             "options": [
                 {
                     "type": "goto",
@@ -45,29 +45,29 @@
                 {
                     "type": "goto",
                     "goto": "retry-smoke",
-                    "text": "npm run build"
+                    "text": "npm run lint"
                 }
             ]
         },
         {
             "id": "retry-smoke",
-            "text": "`qa:smoke` is the fast check that bundles `type-check`, `link-check`, `itemValidation`, and `test:ci`.",
+            "text": "Not quite. Start with `npm run qa:smoke` when you want the quickest sanity pass.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "start",
-                    "text": "Back to start"
+                    "text": "Retry from start"
                 }
             ]
         },
         {
             "id": "quiz-2",
-            "text": "Which command runs the full pre-PR suite with grouped Playwright tests?",
+            "text": "Which command best matches CI parity?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-3",
-                    "text": "npm run test:pr"
+                    "text": "npm run test:ci"
                 },
                 {
                     "type": "goto",
@@ -83,7 +83,7 @@
         },
         {
             "id": "retry-pr",
-            "text": "`test:pr` is the full pre-PR suite, including grouped Playwright E2E runs.",
+            "text": "Close. `npm run test:ci` is the CI-parity command from the repo scripts.",
             "options": [
                 {
                     "type": "goto",
@@ -94,142 +94,43 @@
         },
         {
             "id": "quiz-3",
-            "text": "Which command mirrors CI checks by running build + `verify:chat-build-stamp` and then `test:pr` with `SKIP_E2E=1`?",
+            "text": "What do you run before opening a PR?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "prep-repo",
-                    "text": "npm run test:ci"
-                },
-                {
-                    "type": "goto",
-                    "goto": "retry-ci",
+                    "goto": "finish",
                     "text": "npm run test:pr"
                 },
                 {
                     "type": "goto",
-                    "goto": "retry-ci",
-                    "text": "npm run link-check"
+                    "goto": "retry-full-gate",
+                    "text": "npm run qa:smoke only"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-full-gate",
+                    "text": "Skip tests and rely on CI"
                 }
             ]
         },
         {
-            "id": "retry-ci",
-            "text": "`test:ci` runs build + `verify:chat-build-stamp` and then `test:pr` with `SKIP_E2E=1`; `qa:smoke` wraps that with `type-check`, `link-check`, and `itemValidation`.",
+            "id": "retry-full-gate",
+            "text": "Before you open a PR, run `npm run test:pr` for the full local gate.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "start",
-                    "text": "Back to start"
-                }
-            ]
-        },
-        {
-            "id": "prep-repo",
-            "text": "If you want to mirror CI locally, start with a GitHub repo for your fork.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "create-github-repo",
-                    "text": "Create the GitHub repo fork."
-                },
-                {
-                    "type": "goto",
-                    "goto": "setup",
-                    "text": "Repo ready.",
-                    "requiresItems": [
-                        {
-                            "id": "52593d07-908b-4109-92cf-826b2184ef6f",
-                            "count": 1
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "setup",
-            "text": "Clone the repo, install dependencies, and warm the build cache on your laptop.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "prepare-local-testbed",
-                    "text": "Clone and install dependencies."
-                },
-                {
-                    "type": "goto",
-                    "goto": "workflow",
-                    "text": "Workspace is primed.",
-                    "requiresItems": [
-                        {
-                            "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
-                            "count": 1
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "workflow",
-            "text": "Keep the CI workflow file close so your commands match what PRs run.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "create-ci-workflow",
-                    "text": "Add the CI workflow file."
-                },
-                {
-                    "type": "goto",
-                    "goto": "suite",
-                    "text": "CI workflow ready.",
-                    "requiresItems": [
-                        {
-                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "setup",
-                    "text": "Rebuild the workspace."
-                }
-            ]
-        },
-        {
-            "id": "suite",
-            "text": "Run `npm run lint`, `npm run type-check`, `npm run build`, and then `npm run test:pr` (or `npm run test:ci` / `qa:smoke` if you need `SKIP_E2E=1` for Playwright E2E). Capture the log so we know what passed.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "execute-dspace-tests",
-                    "text": "Run the full local suite."
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Report captured and green.",
-                    "requiresItems": [
-                        {
-                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Retry from start"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work. With a clean report and CI parity, your changes are ready to share without surprising the fleet.",
+            "text": "Verified mindset unlocked. You now know the test ladder from smoke check to full pre-PR confidence.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Ship the passing run.",
-                    "requiresItems": [
-                        {
-                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Claim testing trophy"
                 }
             ]
         }
@@ -238,13 +139,17 @@
         {
             "id": "82b369fe-0ef4-4ca1-881c-14e5a7feeff5",
             "count": 1
+        },
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 250
         }
     ],
     "requiresQuests": ["welcome/connect-github"],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
