@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import processes from '../frontend/src/generated/processes.json' assert { type: 'json' };
 
 const runTestsQuestPath = resolve(
     process.cwd(),
@@ -13,7 +12,11 @@ const loadRunTestsQuest = () =>
         dialogue?: Array<{ options?: Array<{ type?: string; process?: string; requiresItems?: any[] }> }>;
     };
 
-const processById = new Map((processes as Array<any>).map((process) => [process.id, process]));
+const loadProcesses = () =>
+    JSON.parse(
+        readFileSync(resolve(process.cwd(), 'frontend/src/generated/processes.json'), 'utf8')
+    ) as Array<{ id: string; title?: string; createItems?: any[] }>;
+const processById = new Map(loadProcesses().map((process) => [process.id, process]));
 
 describe('welcome/run-tests quest regression guards', () => {
     it('keeps non-empty process steps and references expected process ids', () => {
@@ -33,6 +36,10 @@ describe('welcome/run-tests quest regression guards', () => {
                 'execute-dspace-tests',
             ])
         );
+
+        processOptionIds.forEach((id) => {
+            expect(processById.has(id)).toBe(true);
+        });
     });
 
     it('keeps clone/setup and report-producing process definitions intact', () => {
@@ -41,7 +48,7 @@ describe('welcome/run-tests quest regression guards', () => {
 
         expect(cloneProcess).toBeTruthy();
         expect(cloneProcess.title).toMatch(/git clone/i);
-        expect(cloneProcess.title).toMatch(/npm install/i);
+        expect(cloneProcess.title).toMatch(/pnpm install/i);
         expect(cloneProcess.createItems).toEqual(
             expect.arrayContaining([{ id: 'c4807e67-4e40-452f-8cdc-e326f3e34444', count: 1 }])
         );
@@ -61,8 +68,10 @@ describe('welcome/run-tests quest regression guards', () => {
         );
 
         expect(finishOptions.length).toBeGreaterThan(0);
-        expect(finishOptions[0]?.requiresItems ?? []).toEqual(
-            expect.arrayContaining([{ id: '1486e0df-f01e-4c9e-bdd8-ef272df0b9ef', count: 1 }])
-        );
+        finishOptions.forEach((option) => {
+            expect(option.requiresItems ?? []).toEqual(
+                expect.arrayContaining([{ id: '1486e0df-f01e-4c9e-bdd8-ef272df0b9ef', count: 1 }])
+            );
+        });
     });
 });

@@ -3241,7 +3241,7 @@
     },
     {
         "id": "prepare-local-testbed",
-        "title": "Clone DSPACE (`git clone ...`), `cd dspace`, and run `npm install`",
+        "title": "Clone DSPACE (git clone ...), cd dspace, and run pnpm install",
         "requireItems": [
             {
                 "id": "52593d07-908b-4109-92cf-826b2184ef6f",
@@ -3269,7 +3269,7 @@
     },
     {
         "id": "execute-dspace-tests",
-        "title": "Run `npm run qa:smoke`, `npm run test:ci`, then capture a local test report artifact",
+        "title": "Run npm run qa:smoke, npm run test:ci, then capture a local test report artifact",
         "requireItems": [
             {
                 "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
