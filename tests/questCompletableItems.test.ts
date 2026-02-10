@@ -41,6 +41,14 @@ const getRequiredItemIds = (option: any) => {
     return [...new Set(required)];
 };
 
+const getQuestLevelRequiredItemIds = (quest: any) =>
+    uniqueItemIds([
+        ...toItemIdsFromUnknown(quest?.requiresItems),
+        ...toItemIdsFromUnknown(quest?.requiredItems),
+        ...toItemIdsFromUnknown(quest?.requiredItemIds),
+        ...toItemIdsFromUnknown(quest?.requiredItemId),
+    ]);
+
 const getGrantedItems = (quest: any) =>
     (quest.dialogue ?? []).flatMap((node: any) =>
         (node.options ?? []).flatMap((option: any) => toItemIds(option.grantsItems))
@@ -272,6 +280,7 @@ describe('quest completion item availability', () => {
         for (const quest of quests) {
             const finishOptions = getFinishOptions(quest);
             const questPath = questPaths.get(quest.id);
+            const questRequiredItems = getQuestLevelRequiredItemIds(quest);
             if (finishOptions.length === 0) {
                 errors.push(
                     `Quest "${quest.id}" (${questPath ?? 'unknown path'}) has no finish option.`
@@ -280,7 +289,13 @@ describe('quest completion item availability', () => {
             }
 
             const missingByOption = finishOptions.map((option: any) => {
-                const missing = getMissingItems(getRequiredItemIds(option), obtainable);
+                const missing = getMissingItems(
+                    uniqueItemIds([
+                        ...questRequiredItems,
+                        ...getRequiredItemIds(option),
+                    ]),
+                    obtainable
+                );
                 const requiresGitHub = Boolean(option.requiresGitHub);
                 return { option, missing, requiresGitHub };
             });
