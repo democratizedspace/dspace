@@ -1,14 +1,14 @@
 {
     "id": "welcome/intro-inventory",
     "title": "Check Your Inventory",
-    "description": "Learn how to view items you've collected so far.",
+    "description": "Learn how to use /inventory to buy, review, and sell items with dUSD.",
     "image": "/assets/quests/intro_inventory_grid.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Before bigger tasks, head to /inventory and buy a 9 V battery with dUSD. Use search, check the price, and hit Buy.",
+            "text": "Time to learn the inventory loop. Open /inventory, search for \"9 V battery,\" check its price, and buy one with dUSD.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "view",
-            "text": "Nice. /inventory shows what you own, what you can buy, and what you can sell for dUSD. Open a priced item to view details and click Sell to preview the return (items without a price show Not tradeable). Keep the 9 V battery for this quest—just preview, then cancel—or test a different priced item if you want to complete a sale, and notice how counts update when you buy or sell.",
+            "text": "Great. /inventory is your market + backpack in one place: buy priced items with dUSD, and sell eligible items back for dUSD. Open any tradeable item to preview Sell value, then confirm a sale if you want to test it. Item counts update immediately after each buy/sell, and quest requirements read from those counts—so keep at least one 9 V battery for this objective.",
             "options": [
                 {
                     "type": "goto",
@@ -36,7 +36,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Keep checking this list as you craft, buy, and sell new gear.",
+            "text": "Perfect. You now know how to navigate /inventory, buy what you need, and manage counts so quests complete smoothly.",
             "options": [
                 {
                     "type": "finish",
@@ -48,7 +48,7 @@
     "rewards": [
         {
             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-            "count": 75
+            "count": 125
         },
         {
             "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",

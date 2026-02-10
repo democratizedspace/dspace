@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let’s link GitHub so your progress can sync, quests can be submitted, and your work stays portable.",
+            "text": "Let’s link GitHub so your progress syncs to the cloud, quest submissions work, and your setup travels with you.",
             "options": [
                 {
                     "type": "goto",
@@ -29,7 +29,7 @@
         },
         {
             "id": "why",
-            "text": "GitHub keeps your quests and progress backed up in the cloud, unlocks submissions, and lets you move between machines without losing work. We’ll use a classic personal access token (PAT).",
+            "text": "GitHub keeps your quests and progress backed up, unlocks submissions, and makes switching machines painless. We’ll connect using a classic personal access token (PAT).",
             "options": [
                 {
                     "type": "goto",
@@ -45,7 +45,7 @@
         },
         {
             "id": "steps",
-            "text": "PAT steps: GitHub Settings → Developer settings → Personal access tokens → Tokens (classic). Generate a new token with repo + gist scopes, copy it, then paste it into /cloudsync and click Save.",
+            "text": "PAT setup in 4 quick steps: 1) GitHub Settings → Developer settings → Personal access tokens → Tokens (classic). 2) Generate new token. 3) Grant only the scopes DSPACE needs (commonly repo + gist). 4) Copy once, paste in /cloudsync, then Save.",
             "options": [
                 {
                     "type": "goto",
@@ -77,7 +77,7 @@
         },
         {
             "id": "retry-scopes",
-            "text": "Scopes are permissions. Choose only what DSPACE needs so your token isn’t overpowered.",
+            "text": "Close! Scopes are permission boundaries. Least privilege keeps your account safer.",
             "options": [
                 {
                     "type": "goto",
@@ -109,7 +109,7 @@
         },
         {
             "id": "retry-secret",
-            "text": "Tokens are sensitive. Store them only where needed (like /cloudsync) and never share them publicly.",
+            "text": "Nope—treat PATs like passwords. Store them only in trusted places (like /cloudsync) and never post them in chats, issues, or screenshots.",
             "options": [
                 {
                     "type": "goto",
@@ -141,7 +141,7 @@
         },
         {
             "id": "retry-why",
-            "text": "Connecting GitHub is about syncing and sharing your work—not granting gameplay power-ups.",
+            "text": "Not this time. GitHub connection helps sync and collaboration, not gameplay buffs.",
             "options": [
                 {
                     "type": "goto",
@@ -173,7 +173,7 @@
         },
         {
             "id": "retry-revoke",
-            "text": "Revoking happens in GitHub’s token list. You can delete or regenerate a token anytime.",
+            "text": "Almost. Token cleanup lives in GitHub’s token settings—you can revoke or regenerate anytime.",
             "options": [
                 {
                     "type": "goto",

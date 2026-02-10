@@ -1,7 +1,7 @@
 {
     "id": "welcome/smart-plug-test",
     "title": "Smart Plug Test",
-    "description": "Use a smart plug to buy 10 kWh from a wall outlet and learn how dWatt and dCarbon work.",
+    "description": "Use a smart plug to buy grid energy, then learn how dWatt, dCarbon, and sell tax tradeoffs work.",
     "hardening": {
         "passes": 1,
         "score": 100,
@@ -20,7 +20,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "We'll use the smart plug to buy 10 kWh from the grid—convenient, but it creates dCarbon.",
+            "text": "Quick tutorial: you can always buy grid energy with a smart plug. It's convenient, but that convenience creates dCarbon.",
             "options": [
                 {
                     "type": "goto",
@@ -31,7 +31,7 @@
         },
         {
             "id": "measure",
-            "text": "Run outlet-dWatt-1e3 with the smart plug until you have 10,000 dWatt. dWatt is the in-game energy you can spend; dCarbon is the fossil debt created by grid power. When you sell dWatt, a dCarbon tax is deducted—look for the Sell button showing something like “Sell for … (-X%)” and the note that says there’s a tax applied with a link to dCarbon below it.",
+            "text": "Run outlet-dWatt-1e3 until you reach 10,000 dWatt. dWatt is your spendable in-game energy for machines and processes. dCarbon tracks fossil-fuel impact from grid power. When you sell dWatt, a dCarbon tax is deducted from the payout. In /inventory, open dWatt and check the Sell action—the button preview shows the reduced return and links to dCarbon details.",
             "options": [
                 {
                     "type": "process",
@@ -53,7 +53,7 @@
         },
         {
             "id": "wrapup",
-            "text": "That was the easy, fossil-fueled path. Later you’ll earn dWatt from renewables or stored energy to avoid dCarbon.",
+            "text": "Nice run. Grid power is the easy path for early progress, but renewables and batteries let you earn dWatt with less dCarbon later.",
             "options": [
                 {
                     "type": "finish",
@@ -65,11 +65,11 @@
     "rewards": [
         {
             "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
-            "count": 1000
+            "count": 2500
         },
         {
             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-            "count": 100
+            "count": 150
         },
         {
             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
