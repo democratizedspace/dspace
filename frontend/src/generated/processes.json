@@ -3244,10 +3244,6 @@
         "title": "Clone DSPACE and install dependencies for local test runs",
         "requireItems": [
             {
-                "id": "52593d07-908b-4109-92cf-826b2184ef6f",
-                "count": 1
-            },
-            {
                 "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
                 "count": 1
             }
@@ -3269,14 +3265,29 @@
     },
     {
         "id": "execute-dspace-tests",
-        "title": "Run lint, type-check, coverage, and Playwright shards locally",
+        "title": "Run the local test ladder (qa:smoke, test:ci, and test:pr)",
         "requireItems": [
             {
                 "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
                 "count": 1
-            },
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "25m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "create-local-test-report",
+        "title": "Capture test output into a local report artifact",
+        "requireItems": [
             {
-                "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
                 "count": 1
             }
         ],
@@ -3287,7 +3298,7 @@
                 "count": 1
             }
         ],
-        "duration": "25m",
+        "duration": "10m",
         "hardening": {
             "passes": 0,
             "score": 90,

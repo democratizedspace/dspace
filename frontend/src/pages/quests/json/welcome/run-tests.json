@@ -19,12 +19,54 @@
         },
         {
             "id": "commands",
-            "text": "Command ladder:\n\u2022 `npm run qa:smoke` for the fastest sanity pass\n\u2022 `npm run test:ci` for CI-parity checks from the repo scripts\n\u2022 `npm run test:pr` for the full pre-PR suite\nUse focused checks like `npm run lint`, `npm run type-check`, and `npm run build` when debugging.",
+            "text": "Command ladder:\n\u2022 `git clone https://github.com/democratizedspace/dspace.git && cd dspace`\n\u2022 `npm install`\n\u2022 `npm run qa:smoke`, `npm run test:ci`, then `npm run test:pr`\n\u2022 Save outputs with `npm run test:pr > test-report.log 2>&1`\nUse focused checks like `npm run lint`, `npm run type-check`, and `npm run build` when debugging.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "prepare-local-testbed",
+                    "text": "Clone the repo and install dependencies"
+                },
+                {
+                    "type": "goto",
+                    "goto": "run-suite",
+                    "text": "Workspace ready"
+                },
                 {
                     "type": "goto",
                     "goto": "quiz-1",
-                    "text": "Quiz me"
+                    "text": "Skip to quiz"
+                }
+            ]
+        },
+        {
+            "id": "run-suite",
+            "text": "Now run the suite: start with `npm run qa:smoke`, then `npm run test:ci`, and finish with `npm run test:pr` for the full local gate.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "execute-dspace-tests",
+                    "text": "Run the local test ladder"
+                },
+                {
+                    "type": "goto",
+                    "goto": "report",
+                    "text": "Tests complete"
+                }
+            ]
+        },
+        {
+            "id": "report",
+            "text": "Capture your report artifact so reviewers can trace what passed. For example: `npm run test:pr > test-report.log 2>&1`.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "create-local-test-report",
+                    "text": "Generate local test report"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Report saved"
                 }
             ]
         },
@@ -130,7 +172,13 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "Claim testing trophy"
+                    "text": "Claim testing trophy",
+                    "requiresItems": [
+                        {
+                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
