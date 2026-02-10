@@ -6,6 +6,7 @@
     import { state } from '../../../utils/gameState/common.js';
     import { isBrowser } from '../../../utils/ssr.js';
     import { getItemMap } from '../../../utils/itemResolver.js';
+    import { formatDialogue } from '../../../utils/formatDialogue.ts';
 
     export let quest;
     export let pointer;
@@ -21,24 +22,6 @@
     let rewardRequestId = 0;
     let rewardItemsKey = '';
     let isMounted = false;
-
-    const escapeHtml = (value) =>
-        value
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
-
-    const formatDialogue = (text = '') => {
-        const segments = String(text).split('`');
-        return segments
-            .map((segment, index) => {
-                const escaped = escapeHtml(segment).replace(/\n/g, '<br />');
-                return index % 2 === 1 ? `<code>${escaped}</code>` : escaped;
-            })
-            .join('');
-    };
 
     const releaseRewardImages = (items) => {
         items.forEach((item) => item?.releaseImage?.());
