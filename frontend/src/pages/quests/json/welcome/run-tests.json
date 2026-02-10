@@ -19,7 +19,7 @@
         },
         {
             "id": "commands",
-            "text": "Quick map:\n• `npm run qa:smoke` (`type-check` + `link-check` + `itemValidation` + `test:ci`)\n• `npm run test:pr` (full pre-PR suite with grouped Playwright)\nFocused checks include `npm run lint`, `npm run type-check`, and `npm run build`.\n`test:ci` runs build + `verify:chat-build-stamp` and then `test:pr` with `SKIP_E2E=1` so Playwright E2E is skipped when the runner honors the flag.",
+            "text": "Quick map:\n\u2022 `npm run qa:smoke` (`type-check` + `link-check` + `itemValidation` + `test:ci`)\n\u2022 `npm run test:ci` (CI-oriented checks from the repo scripts)\n\u2022 `npm run test:pr` (full pre-PR suite with grouped Playwright E2E)\nFocused checks include `npm run lint`, `npm run type-check`, and `npm run build`.",
             "options": [
                 {
                     "type": "goto",
@@ -62,7 +62,7 @@
         },
         {
             "id": "quiz-2",
-            "text": "Which command is CI parity (build + verify stamp + test:pr with SKIP_E2E=1)?",
+            "text": "Which command should you run for CI-oriented checks from the repo scripts?",
             "options": [
                 {
                     "type": "goto",
@@ -94,17 +94,17 @@
         },
         {
             "id": "quiz-3",
-            "text": "Which command mirrors CI checks by running build + `verify:chat-build-stamp` and then `test:pr` with `SKIP_E2E=1`?",
+            "text": "Which command is the full local pre-PR gate, including grouped Playwright E2E runs?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "prep-repo",
-                    "text": "npm run test:ci"
+                    "goto": "quiz-4",
+                    "text": "npm run test:pr"
                 },
                 {
                     "type": "goto",
                     "goto": "retry-ci",
-                    "text": "npm run test:pr"
+                    "text": "npm run test:ci"
                 },
                 {
                     "type": "goto",
@@ -115,7 +115,7 @@
         },
         {
             "id": "retry-ci",
-            "text": "`test:ci` runs build + `verify:chat-build-stamp` and then `test:pr` with `SKIP_E2E=1`; `qa:smoke` wraps that with `type-check`, `link-check`, and `itemValidation`.",
+            "text": "`test:pr` is the full pre-PR suite, including grouped Playwright E2E runs.",
             "options": [
                 {
                     "type": "goto",
@@ -125,7 +125,7 @@
             ]
         },
         {
-            "id": "quiz-3",
+            "id": "quiz-4",
             "text": "What should you run before opening a PR when you want the full local gate?",
             "options": [
                 {
@@ -135,18 +135,18 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "retry-pr",
+                    "goto": "retry-full-gate",
                     "text": "npm run qa:smoke only"
                 },
                 {
                     "type": "goto",
-                    "goto": "retry-pr",
+                    "goto": "retry-full-gate",
                     "text": "Skip tests and rely on CI"
                 }
             ]
         },
         {
-            "id": "retry-pr",
+            "id": "retry-full-gate",
             "text": "Good instinct to be fast, but before a PR you should run test:pr for the full local pre-PR suite.",
             "options": [
                 {
@@ -173,11 +173,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["welcome/connect-github"],
+    "requiresQuests": [
+        "welcome/connect-github"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

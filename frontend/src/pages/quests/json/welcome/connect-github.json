@@ -24,7 +24,7 @@
         },
         {
             "id": "steps",
-            "text": "Quick setup: GitHub Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token. Give it a short expiration, grant only required scopes, copy it once, then paste it into /cloudsync and press Save.",
+            "text": "Quick setup: GitHub Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token. Give it a short expiration, grant only the required scopes (`gist` for cloud sync, plus `repo` if you also want to use this token for quest submissions), copy it once, then paste it into /cloudsync and press Save.",
             "options": [
                 {
                     "type": "goto",
