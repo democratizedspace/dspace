@@ -1,21 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { resolve } from 'node:path';
 
 describe('Quest copy regressions', () => {
   it('welcome/smart-plug-test avoids fixed dCarbon deduction phrasing', () => {
-    const questPath = join(
-      __dirname,
-      '../frontend/src/pages/quests/json/welcome/smart-plug-test.json'
+    const questPath = resolve(
+      process.cwd(),
+      'frontend/src/pages/quests/json/welcome/smart-plug-test.json'
     );
-    const quest = JSON.parse(readFileSync(questPath, 'utf8')) as {
-      dialogue: Array<{ text?: string }>;
-    };
+    const questCopy = readFileSync(questPath, 'utf8');
 
-    const combinedDialogue = quest.dialogue.map((node) => node.text ?? '').join(' ');
-
-    expect(combinedDialogue).not.toMatch(/deducted from the sale value/i);
-    expect(combinedDialogue).not.toMatch(/exact deduction/i);
-    expect(combinedDialogue).toMatch(/current rate/i);
+    expect(questCopy).not.toMatch(/deducted from the sale value/i);
+    expect(questCopy).not.toMatch(/exact deduction/i);
+    expect(questCopy).toMatch(/current rate/i);
   });
 });
