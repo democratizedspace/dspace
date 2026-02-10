@@ -22,6 +22,31 @@
     let rewardItemsKey = '';
     let isMounted = false;
 
+    const escapeHtml = (value) =>
+        value
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+
+    const formatDialogue = (value) => {
+        if (!value) {
+            return '';
+        }
+
+        const parts = escapeHtml(value).split('`');
+        return parts
+            .map((part, index) => {
+                const withLineBreaks = part.replaceAll('\n', '<br />');
+                if (index % 2 === 1) {
+                    return `<code>${withLineBreaks}</code>`;
+                }
+                return withLineBreaks;
+            })
+            .join('');
+    };
+
     const releaseRewardImages = (items) => {
         items.forEach((item) => item?.releaseImage?.());
     };
@@ -138,7 +163,7 @@
                     <div class="left">
                         <img src={npc} alt="NPC" />
                         <p class="npcDialogue left">
-                            {dialogueMap.get(pointer)?.text}
+                            {@html formatDialogue(dialogueMap.get(pointer)?.text)}
                         </p>
                     </div>
                     <div class="right options">

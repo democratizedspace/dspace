@@ -19,7 +19,7 @@
         },
         {
             "id": "commands",
-            "text": "Quick map: npm run qa:smoke (type-check + link-check + itemValidation + test:ci), npm run test:pr (full pre-PR suite with grouped Playwright), and focused checks like npm run lint, npm run type-check, and npm run build. test:ci runs build + verify:chat-build-stamp and then test:pr with SKIP_E2E=1 so Playwright E2E is skipped when the runner honors the flag.",
+            "text": "Quick map:\n`npm run qa:smoke` (type-check + link-check + itemValidation + `test:ci`)\n`npm run test:pr` (full pre-PR suite with grouped Playwright)\nFocused checks: `npm run lint`, `npm run type-check`, `npm run build`.\n\n`test:ci` runs `build` + `verify:chat-build-stamp` and then `test:pr` with `SKIP_E2E=1` so Playwright E2E is skipped when the runner honors the flag.",
             "options": [
                 {
                     "type": "goto",
@@ -51,7 +51,7 @@
         },
         {
             "id": "retry-smoke",
-            "text": "qa:smoke is the fast check that bundles type-check, link-check, itemValidation, and test:ci.",
+            "text": "`qa:smoke` is the fast check that bundles `type-check`, `link-check`, `itemValidation`, and `test:ci`.",
             "options": [
                 {
                     "type": "goto",
@@ -83,7 +83,7 @@
         },
         {
             "id": "retry-pr",
-            "text": "test:pr is the full pre-PR suite, including grouped Playwright E2E runs.",
+            "text": "`test:pr` is the full pre-PR suite, including grouped Playwright E2E runs.",
             "options": [
                 {
                     "type": "goto",
@@ -115,7 +115,7 @@
         },
         {
             "id": "retry-ci",
-            "text": "test:ci runs build + verify:chat-build-stamp and then test:pr with SKIP_E2E=1; qa:smoke wraps that with type-check, link-check, and itemValidation.",
+            "text": "`test:ci` runs `build` + `verify:chat-build-stamp` and then `test:pr` with `SKIP_E2E=1`; `qa:smoke` wraps that with `type-check`, `link-check`, and `itemValidation`.",
             "options": [
                 {
                     "type": "goto",
@@ -197,7 +197,7 @@
         },
         {
             "id": "suite",
-            "text": "Run npm run lint, npm run type-check, npm run build, and then npm run test:pr (or npm run test:ci / qa:smoke if you need SKIP_E2E=1 for Playwright E2E). Capture the log so we know what passed.",
+            "text": "Run `npm run lint`, `npm run type-check`, `npm run build`, and then `npm run test:pr`.\nNeed to skip Playwright E2E? Use `npm run test:ci` or `npm run qa:smoke` with `SKIP_E2E=1`.\nCapture the log so we know what passed.",
             "options": [
                 {
                     "type": "process",
