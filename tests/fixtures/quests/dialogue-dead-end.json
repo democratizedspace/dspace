@@ -1,0 +1,32 @@
+{
+    "id": "fixture/dialogue-dead-end",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Welcome",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "temp",
+                    "text": "Inspect thermometer"
+                }
+            ]
+        },
+        {
+            "id": "temp",
+            "text": "Probe reads 55C.",
+            "options": []
+        },
+        {
+            "id": "finish",
+            "text": "Done",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Complete"
+                }
+            ]
+        }
+    ]
+}

@@ -1,45 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { promises as fs } from 'node:fs';
-import path from 'node:path';
 import processes from '../frontend/src/generated/processes.json' assert {
     type: 'json',
 };
 import items from '../frontend/src/pages/inventory/json/items';
 import { loadQuests } from '../scripts/gen-quest-tree.mjs';
-
-type ItemEntry = { id: string; count: number };
-
-const QUESTS_DIR = path.join(process.cwd(), 'frontend/src/pages/quests/json');
-
-const toItemIds = (entries: ItemEntry[] | undefined) =>
-    (entries ?? []).map((entry) => entry.id);
-
-const toItemIdsFromUnknown = (value: unknown) => {
-    if (!value) return [];
-    if (Array.isArray(value)) {
-        if (value.length === 0) return [];
-        if (typeof value[0] === 'string') {
-            return (value as string[]).filter(Boolean);
-        }
-        return (value as ItemEntry[]).map((entry) => entry.id).filter(Boolean);
-    }
-    if (typeof value === 'string') return [value];
-    if (typeof value === 'object' && value && 'id' in value) {
-        const entry = value as ItemEntry;
-        return entry.id ? [entry.id] : [];
-    }
-    return [];
-};
-
-const getRequiredItemIds = (option: any) => {
-    const required = [
-        ...toItemIdsFromUnknown(option?.requiresItems),
-        ...toItemIdsFromUnknown(option?.requiredItems),
-        ...toItemIdsFromUnknown(option?.requiredItemIds),
-        ...toItemIdsFromUnknown(option?.requiredItemId),
-    ];
-    return [...new Set(required)];
-};
+import {
+    formatDialogueIssues,
+    getRequiredItemIds,
+    loadQuestPaths,
+    toItemIds,
+    uniqueItemIds,
+    validateQuestDialogueGraph,
+} from './utils/questCompletableValidation';
 
 const getGrantedItems = (quest: any) =>
     (quest.dialogue ?? []).flatMap((node: any) =>
@@ -54,43 +26,23 @@ const getFinishOptions = (quest: any) =>
 const getMissingItems = (required: string[], obtainable: Set<string>) =>
     required.filter((itemId) => !obtainable.has(itemId));
 
-const uniqueItemIds = (items: string[]) => [...new Set(items.filter(Boolean))];
-
-const getItemDependencies = (item: any) =>
-    uniqueItemIds(toItemIdsFromUnknown(item?.dependencies));
-
-const loadQuestPaths = async (baseDir = QUESTS_DIR) => {
-    const entries = await fs.readdir(baseDir, { withFileTypes: true });
-    const paths = new Map<string, string>();
-
-    for (const entry of entries) {
-        const fullPath = path.join(baseDir, entry.name);
-        if (entry.isDirectory()) {
-            const nested = await loadQuestPaths(fullPath);
-            for (const [id, filePath] of nested) {
-                paths.set(id, filePath);
-            }
-            continue;
-        }
-
-        if (!entry.isFile() || !entry.name.endsWith('.json')) continue;
-        const raw = await fs.readFile(fullPath, 'utf8');
-        const quest = JSON.parse(raw);
-        if (quest?.id) {
-            paths.set(quest.id, path.relative(process.cwd(), fullPath));
-        }
-    }
-
-    return paths;
-};
+const getItemDependencies = (item: any) => uniqueItemIds(toItemIds(item?.dependencies));
 
 describe('quest completion item availability', () => {
-    it('ensures finish requirements are obtainable', async () => {
+    it('rejects reachable dialogue dead-ends and unreachable finish nodes', async () => {
         const quests = await loadQuests();
         const questPaths = await loadQuestPaths();
-        const itemMap = new Map(
-            (items as Array<any>).map((item) => [item.id, item])
+        const issues = quests.flatMap((quest) =>
+            validateQuestDialogueGraph(quest, questPaths.get(quest.id) ?? 'unknown path')
         );
+
+        expect(issues, formatDialogueIssues(issues)).toEqual([]);
+    });
+
+    it('ensures required quest items are obtainable', async () => {
+        const quests = await loadQuests();
+        const questPaths = await loadQuestPaths();
+        const itemMap = new Map((items as Array<any>).map((item) => [item.id, item]));
         const getItemDependencyInfo = (itemId: string) => {
             const item = itemMap.get(itemId);
             const dependencies = getItemDependencies(item);
@@ -147,20 +99,14 @@ describe('quest completion item availability', () => {
             for (const itemId of [...purchasable, ...betaPlaceholderItems]) {
                 if (obtainable.has(itemId)) continue;
                 const { known, unknown } = getItemDependencyInfo(itemId);
-                if (
-                    unknown.length === 0 &&
-                    known.every((dependency) => obtainable.has(dependency))
-                ) {
+                if (unknown.length === 0 && known.every((dependency) => obtainable.has(dependency))) {
                     obtainable.add(itemId);
                     changed = true;
                 }
             }
 
             for (const process of processes as Array<any>) {
-                const requirements = [
-                    ...toItemIds(process.requireItems),
-                    ...toItemIds(process.consumeItems),
-                ];
+                const requirements = [...toItemIds(process.requireItems), ...toItemIds(process.consumeItems)];
                 if (requirements.every((id) => obtainable.has(id))) {
                     for (const created of toItemIds(process.createItems)) {
                         if (!obtainable.has(created)) {
@@ -173,11 +119,7 @@ describe('quest completion item availability', () => {
 
             for (const quest of quests) {
                 if (completableQuests.has(quest.id)) continue;
-                if (
-                    (quest.requiresQuests ?? []).some(
-                        (id: string) => !completableQuests.has(id)
-                    )
-                ) {
+                if ((quest.requiresQuests ?? []).some((id: string) => !completableQuests.has(id))) {
                     continue;
                 }
 
@@ -185,19 +127,14 @@ describe('quest completion item availability', () => {
                 if (finishOptions.length === 0) continue;
 
                 const canFinish = finishOptions.some((option: any) => {
-                    const itemsMet = getRequiredItemIds(option).every((id) =>
-                        obtainable.has(id)
-                    );
+                    const itemsMet = getRequiredItemIds(option).every((id) => obtainable.has(id));
                     const githubRequirementMet = !option.requiresGitHub || allowGitHubRequirement;
                     return itemsMet && githubRequirementMet;
                 });
 
                 if (canFinish) {
                     completableQuests.add(quest.id);
-                    const questRewards = [
-                        ...toItemIds(quest.rewards),
-                        ...getGrantedItems(quest),
-                    ];
+                    const questRewards = [...toItemIds(quest.rewards), ...getGrantedItems(quest)];
                     for (const reward of questRewards) {
                         if (!obtainable.has(reward)) {
                             obtainable.add(reward);
@@ -220,10 +157,7 @@ describe('quest completion item availability', () => {
             if (unknown.length > 0) {
                 return `${name} (${itemId}) depends on unknown item IDs: ${unknown.join(', ')}.`;
             }
-            const missingDependencies = getMissingItems(
-                known,
-                obtainable
-            );
+            const missingDependencies = getMissingItems(known, obtainable);
             if (missingDependencies.length > 0) {
                 const missingNames = missingDependencies
                     .map((missingId) => itemMap.get(missingId)?.name ?? missingId)
@@ -234,10 +168,7 @@ describe('quest completion item availability', () => {
             if (sources.length > 0) {
                 const scored = sources.map((process) => {
                     const missing = getMissingItems(
-                        [
-                            ...toItemIds(process.requireItems),
-                            ...toItemIds(process.consumeItems),
-                        ],
+                        [...toItemIds(process.requireItems), ...toItemIds(process.consumeItems)],
                         obtainable
                     );
                     return { process, missing };
@@ -248,9 +179,7 @@ describe('quest completion item availability', () => {
                     const missingNames = best.missing
                         .map((missingId) => itemMap.get(missingId)?.name ?? missingId)
                         .join(', ');
-                    return (
-                        `${name} (${itemId}) requires "${best.process.id}" inputs: ${missingNames}.`
-                    );
+                    return `${name} (${itemId}) requires "${best.process.id}" inputs: ${missingNames}.`;
                 }
                 return `${name} (${itemId}) is produced by "${best.process.id}".`;
             }
@@ -264,18 +193,31 @@ describe('quest completion item availability', () => {
                 );
             }
 
-            return (
-                `${name} (${itemId}) has no price, no producing process, and no rewarding quest.`
-            );
+            return `${name} (${itemId}) has no price, no producing process, and no rewarding quest.`;
         };
 
         for (const quest of quests) {
-            const finishOptions = getFinishOptions(quest);
-            const questPath = questPaths.get(quest.id);
-            if (finishOptions.length === 0) {
+            const questPath = questPaths.get(quest.id) ?? 'unknown path';
+            const requiredByQuest = getRequiredItemIds(quest);
+            const requiredByOptions = (quest.dialogue ?? []).flatMap((node: any) =>
+                (node.options ?? []).flatMap((option: any) => getRequiredItemIds(option))
+            );
+            const requiredItems = [...new Set([...requiredByQuest, ...requiredByOptions])];
+            const knownRequiredItems = requiredItems.filter((itemId) => itemMap.has(itemId));
+
+            const missingRequirements = getMissingItems(knownRequiredItems, obtainable);
+            if (missingRequirements.length > 0) {
                 errors.push(
-                    `Quest "${quest.id}" (${questPath ?? 'unknown path'}) has no finish option.`
+                    `Quest "${quest.id}" (${questPath}) has unobtainable required items:\n  - ${missingRequirements
+                        .slice(0, 5)
+                        .map(explainMissingItem)
+                        .join('\n  - ')}`
                 );
+            }
+
+            const finishOptions = getFinishOptions(quest);
+            if (finishOptions.length === 0) {
+                errors.push(`Quest "${quest.id}" (${questPath}) has no finish option.`);
                 continue;
             }
 
@@ -295,18 +237,12 @@ describe('quest completion item availability', () => {
             missingByOption.sort((a, b) => a.missing.length - b.missing.length);
             const best = missingByOption[0];
             const missingItemsDetail =
-                best.missing.length === 0
-                    ? []
-                    : best.missing.map(explainMissingItem);
-            const missingRequirementsDetail = best.requiresGitHub
-                ? ['GitHub connection required.']
-                : [];
+                best.missing.length === 0 ? [] : best.missing.map(explainMissingItem);
+            const missingRequirementsDetail = best.requiresGitHub ? ['GitHub connection required.'] : [];
             const details = [...missingItemsDetail, ...missingRequirementsDetail]
                 .filter(Boolean)
                 .join('\n  - ');
-            errors.push(
-                `Quest "${quest.id}" (${questPath ?? 'unknown path'}) missing items:\n  - ${details}`
-            );
+            errors.push(`Quest "${quest.id}" (${questPath}) missing items:\n  - ${details}`);
         }
 
         expect(errors).toEqual([]);
