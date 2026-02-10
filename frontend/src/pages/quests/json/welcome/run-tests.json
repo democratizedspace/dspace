@@ -8,23 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Before you ship code, run tests. They catch regressions early and make reviews faster.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "commands",
-                    "text": "Show me the command playbook"
-                }
-            ]
-        },
-        {
-            "id": "commands",
-            "text": "Command ladder:\n\u2022 `npm run qa:smoke` for the fastest sanity pass\n\u2022 `npm run test:ci` for CI-parity checks from the repo scripts\n\u2022 `npm run test:pr` for the full pre-PR suite\nUse focused checks like `npm run lint`, `npm run type-check`, and `npm run build` when debugging.",
+            "text": "Before you ship code, run tests. We'll quiz your command ladder first, then walk the full local workflow end to end.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "quiz-1",
-                    "text": "Quiz me"
+                    "text": "Start the command quiz"
                 }
             ]
         },
@@ -71,18 +60,18 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "retry-pr",
+                    "goto": "retry-ci",
                     "text": "npm run qa:smoke"
                 },
                 {
                     "type": "goto",
-                    "goto": "retry-pr",
+                    "goto": "retry-ci",
                     "text": "npm run lint"
                 }
             ]
         },
         {
-            "id": "retry-pr",
+            "id": "retry-ci",
             "text": "Close. `npm run test:ci` is the CI-parity command from the repo scripts.",
             "options": [
                 {
@@ -98,23 +87,23 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "prep-repo",
                     "text": "npm run test:pr"
                 },
                 {
                     "type": "goto",
-                    "goto": "retry-full-gate",
+                    "goto": "retry-pr",
                     "text": "npm run qa:smoke only"
                 },
                 {
                     "type": "goto",
-                    "goto": "retry-full-gate",
+                    "goto": "retry-pr",
                     "text": "Skip tests and rely on CI"
                 }
             ]
         },
         {
-            "id": "retry-full-gate",
+            "id": "retry-pr",
             "text": "Before you open a PR, run `npm run test:pr` for the full local gate.",
             "options": [
                 {
@@ -125,12 +114,106 @@
             ]
         },
         {
+            "id": "prep-repo",
+            "text": "Start by creating your DSPACE GitHub fork so your local run can mirror CI.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "create-github-repo",
+                    "text": "Create the GitHub fork"
+                },
+                {
+                    "type": "goto",
+                    "goto": "clone",
+                    "text": "Fork ready",
+                    "requiresItems": [
+                        {
+                            "id": "52593d07-908b-4109-92cf-826b2184ef6f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "clone",
+            "text": "Clone the repo and enter it (`git clone ...` then `cd dspace`) before installing deps.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "prepare-local-testbed",
+                    "text": "Clone repo and install dependencies"
+                },
+                {
+                    "type": "goto",
+                    "goto": "workflow",
+                    "text": "Local checkout is ready",
+                    "requiresItems": [
+                        {
+                            "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "workflow",
+            "text": "Mirror CI locally by creating a workflow file before running the full suite.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "create-ci-workflow",
+                    "text": "Create CI workflow file"
+                },
+                {
+                    "type": "goto",
+                    "goto": "suite",
+                    "text": "Workflow is ready",
+                    "requiresItems": [
+                        {
+                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "suite",
+            "text": "Now run your local test suite and capture a report artifact before submission.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "execute-dspace-tests",
+                    "text": "Run tests and generate local report"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Report captured and green",
+                    "requiresItems": [
+                        {
+                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Verified mindset unlocked. You now know the test ladder from smoke check to full pre-PR confidence.",
+            "text": "Great run. You now know the test ladder and proved it with a local report artifact.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Claim testing trophy"
+                    "text": "Claim testing trophy",
+                    "requiresItems": [
+                        {
+                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -149,7 +232,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
