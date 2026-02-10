@@ -192,10 +192,12 @@ describe('quest completion item availability', () => {
                 const finishOptions = getFinishOptions(quest);
                 if (finishOptions.length === 0) continue;
 
+                const questRequiredItems = getQuestLevelRequiredItemIds(quest);
                 const canFinish = finishOptions.some((option: any) => {
-                    const itemsMet = getRequiredItemIds(option).every((id) =>
-                        obtainable.has(id)
-                    );
+                    const itemsMet = uniqueItemIds([
+                        ...questRequiredItems,
+                        ...getRequiredItemIds(option),
+                    ]).every((id) => obtainable.has(id));
                     const githubRequirementMet = !option.requiresGitHub || allowGitHubRequirement;
                     return itemsMet && githubRequirementMet;
                 });

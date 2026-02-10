@@ -119,21 +119,21 @@
             ]
         },
         {
-          "id": "temp",
-          "text": "Thermometer reads 55 °C—ideal. Remove the probe carefully; it may be hot.",
-          "options": [
-            {
-              "type": "process",
-              "process": "measure-compost-temperature",
-              "goto": "moisture",
-              "text": "Log the temperature"
-            },
-            {
-              "type": "goto",
-              "goto": "mix",
-              "text": "Return to turning the pile"
-            }
-          ]
+            "id": "temp",
+            "text": "Thermometer reads 55 °C—ideal. Remove the probe carefully; it may be hot.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-compost-temperature",
+                    "goto": "moisture",
+                    "text": "Log the temperature"
+                },
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Return to turning the pile"
+                }
+            ]
         },
         {
             "id": "moisture",
@@ -173,5 +173,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["composting/start"]
+    "requiresQuests": [
+        "composting/start"
+    ]
 }

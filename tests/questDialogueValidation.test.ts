@@ -25,12 +25,12 @@ type QuestLike = {
 type DialogueValidationError = {
     questId: string;
     nodeId: string;
-    reason: 'dead-end' | 'unreachable-finish';
+    reason: 'dead-end' | 'unreachable-finish' | 'invalid-start';
     snippet: string;
 };
 
 const normalizeNodeId = (id: string | undefined, index: number) =>
-    id?.trim() ? id : `__missing_id_${index}`;
+    id?.trim() ? id.trim() : `__missing_id_${index}`;
 
 const isTerminalNode = (node: DialogueNode) => {
     const nodeType = node.type?.toLowerCase();
@@ -60,9 +60,19 @@ export const validateQuestDialogueCompletable = (
         id: normalizeNodeId(node.id, index),
     }));
     const nodeMap = new Map(normalizedNodes.map((node) => [node.id as string, node]));
-    const startId = quest.start && nodeMap.has(quest.start)
-        ? quest.start
-        : normalizedNodes[0]?.id;
+    const requestedStartId = quest.start?.trim();
+    if (requestedStartId && !nodeMap.has(requestedStartId)) {
+        return [
+            {
+                questId: quest.id ?? 'unknown-quest',
+                nodeId: requestedStartId,
+                reason: 'invalid-start',
+                snippet: `start node "${requestedStartId}" was not found in dialogue node IDs`,
+            },
+        ];
+    }
+
+    const startId = requestedStartId || normalizedNodes[0]?.id;
     if (!startId) return [];
 
     const reachable = new Set<string>();
@@ -76,6 +86,7 @@ export const validateQuestDialogueCompletable = (
         if (!node) continue;
 
         for (const option of node.options ?? []) {
+            if (option.type !== 'goto') continue;
             if (!option.goto) continue;
             if (nodeMap.has(option.goto) && !reachable.has(option.goto)) {
                 queue.push(option.goto);
@@ -97,7 +108,9 @@ export const validateQuestDialogueCompletable = (
         }
 
         const hasTransition = options.some(
-            (option) => option.type === 'finish' || (option.goto ? nodeMap.has(option.goto) : false)
+            (option) =>
+                option.type === 'finish' ||
+                (option.type === 'goto' && option.goto ? nodeMap.has(option.goto) : false)
         );
 
         if (!hasTransition && !isTerminalNode(node)) {
@@ -137,7 +150,7 @@ describe('quest dialogue completable validation', () => {
                 {
                     id: 'temp',
                     text: 'Probe is hot.',
-                    options: [{ type: 'process', text: 'Log temp' }],
+                    options: [{ type: 'process', goto: 'finish', text: 'Log temp' }],
                 },
                 {
                     id: 'finish',
@@ -152,7 +165,7 @@ describe('quest dialogue completable validation', () => {
                 questId: 'fixture/dead-end',
                 nodeId: 'temp',
                 reason: 'dead-end',
-                snippet: 'text="Probe is hot." options=[process (Log temp)]',
+                snippet: 'text="Probe is hot." options=[process -> finish (Log temp)]',
             },
             {
                 questId: 'fixture/dead-end',
