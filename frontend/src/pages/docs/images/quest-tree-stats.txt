@@ -13,7 +13,7 @@ chemistry: 10 quests, 733 lines
 rocketry: 10 quests, 1186 lines
 woodworking: 10 quests, 1378 lines
 completionist: 5 quests, 442 lines
-welcome: 5 quests, 822 lines
+welcome: 5 quests, 717 lines
 composting: 4 quests, 525 lines
 ubi: 4 quests, 330 lines
 sysadmin: 3 quests, 171 lines
