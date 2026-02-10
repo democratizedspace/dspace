@@ -29,12 +29,6 @@
                 {
                     "type": "goto",
                     "goto": "ready",
-                    "requiresItems": [
-                        {
-                            "id": "451d86d9-96e0-4829-af27-8a8b0be65ae4",
-                            "count": 1
-                        }
-                    ],
                     "text": "Reading taken—winds are calm."
                 }
             ]
