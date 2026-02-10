@@ -25,16 +25,19 @@ describe('runTests', () => {
       .mockReturnValueOnce('');
     const code = runTests(exec, 'linux');
     expect(code).toBe(0);
-    expect(exec).toHaveBeenNthCalledWith(2, 'npm run hardening:validate', {
+    expect(exec).toHaveBeenNthCalledWith(2, 'npm run test:quest-validation', {
+      stdio: 'inherit'
+    });
+    expect(exec).toHaveBeenNthCalledWith(3, 'npm run hardening:validate', {
       stdio: 'inherit'
     });
     expect(exec).toHaveBeenNthCalledWith(
-      3,
+      4,
       'npm run test:docs-rag',
       expect.objectContaining({ stdio: 'inherit' })
     );
     expect(exec).toHaveBeenNthCalledWith(
-      4,
+      5,
       'bash ./frontend/scripts/prepare-pr.sh',
       expect.objectContaining({
         stdio: 'inherit',

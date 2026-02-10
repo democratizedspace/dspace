@@ -127,6 +127,11 @@
                     "process": "measure-compost-temperature",
                     "goto": "moisture",
                     "text": "Log the temperature"
+                },
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Return to turning the pile"
                 }
             ]
         },
