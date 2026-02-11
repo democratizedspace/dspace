@@ -8299,5 +8299,163 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "sysadmin-capture-shell-transcript",
+        "title": "Run a Linux command drill and save output to commands-output.txt",
+        "image": "/assets/quests/linux_basic_shell_commands.jpg",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "5ed5047d-54fc-4dd7-abb5-7d8d6423ba45",
+                "count": 1
+            }
+        ],
+        "duration": "4m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sysadmin-build-command-cheatsheet",
+        "title": "Use grep, awk, and sed outputs to draft command-cheatsheet.md",
+        "image": "/assets/quests/linux_basic_shell_commands.jpg",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "5ed5047d-54fc-4dd7-abb5-7d8d6423ba45",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "92b24135-d667-40be-9684-d2a9e9c3bcf2",
+                "count": 1
+            }
+        ],
+        "duration": "4m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sysadmin-capture-local-resource-snapshot",
+        "title": "Capture `top -b -n 1`, `free -m`, and `df -h` from your Ubuntu laptop",
+        "image": "/assets/quests/linux_resource_monitoring_dashboard.jpg",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "6d49ab13-1a76-4022-a4ad-fafed2f30687",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sysadmin-capture-colony-node-resource-snapshot",
+        "title": "SSH into the remote colony node and collect comparative `top` and `df` snapshots",
+        "image": "/assets/quests/linux_resource_monitoring_dashboard.jpg",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "0a7796cd-f5ff-4e48-9403-2cdf03b0cbed",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sysadmin-export-journalctl-incident-window",
+        "title": "Export the latest 200 journal lines for a target service into an incident file",
+        "image": "/assets/quests/linux_system_log_analysis.jpg",
+        "requireItems": [
+            {
+                "id": "6d49ab13-1a76-4022-a4ad-fafed2f30687",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "8c53ef31-c63c-4f7e-8570-9370d1c0643a",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sysadmin-capture-tail-followup-report",
+        "title": "Tail live service logs and compile a follow-up remediation report",
+        "image": "/assets/quests/linux_system_log_analysis.jpg",
+        "requireItems": [
+            {
+                "id": "8c53ef31-c63c-4f7e-8570-9370d1c0643a",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "2c87205a-5bd9-4c17-91fd-43da70e7021e",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

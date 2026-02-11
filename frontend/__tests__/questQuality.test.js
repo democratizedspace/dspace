@@ -462,6 +462,47 @@ function checkProgressionBalance() {
     return maxAvg - minAvg;
 }
 
+function checkSysadminQuestRequirements() {
+    const issues = [];
+    const required = {
+        'sysadmin/basic-commands': { minQuizQuestions: 5, minProcessOptions: 2 },
+        'sysadmin/resource-monitoring': { minQuizQuestions: 5, minProcessOptions: 2 },
+        'sysadmin/log-analysis': { minQuizQuestions: 5, minProcessOptions: 2 },
+    };
+
+    Object.entries(required).forEach(([questId, constraints]) => {
+        const quest = quests.get(questId);
+        if (!quest) {
+            issues.push(`Missing required quest ${questId}`);
+            return;
+        }
+
+        if (!Array.isArray(quest.rewards) || quest.rewards.length === 0) {
+            issues.push(`Quest ${questId} must define non-empty rewards`);
+        }
+
+        const processOptions = quest.dialogue.flatMap((node) =>
+            (node.options || []).filter((opt) => opt.type === 'process' || Boolean(opt.process))
+        );
+        if (processOptions.length < constraints.minProcessOptions) {
+            issues.push(
+                `Quest ${questId} must include at least ${constraints.minProcessOptions} process options`
+            );
+        }
+
+        const quizNodes = quest.dialogue.filter(
+            (node) => node.id?.startsWith('quiz-') || node.text?.toLowerCase().startsWith('quiz ')
+        );
+        if (quizNodes.length < constraints.minQuizQuestions) {
+            issues.push(
+                `Quest ${questId} must include at least ${constraints.minQuizQuestions} quiz questions`
+            );
+        }
+    });
+
+    return issues;
+}
+
 describe('Quest Quality Validation', () => {
     beforeAll(() => {
         loadAllQuests();
@@ -535,5 +576,14 @@ describe('Quest Quality Validation', () => {
     test('Quest progression is balanced across categories', () => {
         const diff = checkProgressionBalance();
         expect(diff).toBeLessThanOrEqual(7);
+    });
+
+    test('Sysadmin quests include rewards, process steps, and quiz depth', () => {
+        const issues = checkSysadminQuestRequirements();
+        if (issues.length > 0) {
+            console.warn('Sysadmin Quest Requirement Issues:');
+            issues.forEach((issue) => console.warn(`- ${issue}`));
+        }
+        expect(issues.length).toBe(0);
     });
 });

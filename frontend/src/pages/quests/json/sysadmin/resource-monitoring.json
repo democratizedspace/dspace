@@ -1,33 +1,63 @@
 {
     "id": "sysadmin/resource-monitoring",
     "title": "Monitor System Resources",
-    "description": "Track CPU, memory, and disk on Ubuntu 24.04 LTS Minimal using top and df.",
+    "description": "Track CPU, memory, and disk on your Ubuntu laptop, then level up by observing a remote colony node.",
     "image": "/assets/quests/linux_resource_monitoring_dashboard.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's watch how the system behaves under load.",
+            "text": "Monitoring starts local. Your Ubuntu laptop is enough to learn `top`, `free`, and `df` before you coordinate multiple machines.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "monitor",
-                    "text": "Open top"
+                    "goto": "multi-node-brief",
+                    "text": "Why involve a Raspberry Pi node at all?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "operations",
+                    "text": "Let's capture resource snapshots"
                 }
             ]
         },
         {
-            "id": "monitor",
-            "text": "Use top for processes and df for disk space. Notice memory hungry tasks.",
+            "id": "multi-node-brief",
+            "text": "Metaguild runs remote colony infrastructure on dedicated nodes. Your laptop is the dev cockpit; the Pi node is the live colony device. This quest teaches both single-node basics and next-level multi-node observability.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Resources monitored",
+                    "goto": "operations",
+                    "text": "Got it\u2014teach me both levels"
+                }
+            ]
+        },
+        {
+            "id": "operations",
+            "text": "Capture one baseline from your laptop, then one from the remote colony node. Save command outputs with timestamps so incidents can be traced later.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-capture-local-resource-snapshot",
+                    "text": "Run top/free/df on Ubuntu laptop and save resource-snapshot.txt"
+                },
+                {
+                    "type": "process",
+                    "process": "sysadmin-capture-colony-node-resource-snapshot",
+                    "text": "Collect top/df output from remote colony node"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Both snapshots ready\u2014start monitoring quiz",
                     "requiresItems": [
                         {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "id": "6d49ab13-1a76-4022-a4ad-fafed2f30687",
+                            "count": 1
+                        },
+                        {
+                            "id": "0a7796cd-f5ff-4e48-9403-2cdf03b0cbed",
                             "count": 1
                         }
                     ]
@@ -35,22 +65,159 @@
             ]
         },
         {
+            "id": "quiz-1",
+            "text": "Quiz 1/5: In `top`, what usually indicates CPU saturation?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "High `%us`/`%sy` and consistently high load averages"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "A large amount of free disk space"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "The hostname ends with .local"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2",
+            "text": "Quiz 2/5: Which command gives a quick, human-readable filesystem usage summary?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "df -h"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "du -a /"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "free -m"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "Quiz 3/5: Which command shows memory totals in mebibytes?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "free -m"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "pwd -m"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "lsmem --disk"
+                }
+            ]
+        },
+        {
+            "id": "quiz-4",
+            "text": "Quiz 4/5: Why capture snapshots with timestamps during investigations?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-5",
+                    "text": "To compare behavior over time and correlate with incidents"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "To reduce RAM usage by itself"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "Because `top` requires UTC for output"
+                }
+            ]
+        },
+        {
+            "id": "quiz-5",
+            "text": "Quiz 5/5: What's the key value of monitoring both laptop and colony node?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "You can separate local dev issues from remote production-node problems"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "It doubles CPU speed on both devices"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "It disables the need for logs"
+                }
+            ]
+        },
+        {
+            "id": "retry-quiz",
+            "text": "Not quite. Re-check your snapshots, then retry the monitoring quiz.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "operations",
+                    "text": "Retry from operations"
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Your Ubuntu 24.04 LTS Minimal node stays healthy with your watchful eye.",
+            "text": "Great monitoring discipline. You can observe a single Ubuntu machine and scale your instincts to a remote colony node.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Done"
+                    "text": "Claim monitoring rewards",
+                    "requiresItems": [
+                        {
+                            "id": "6d49ab13-1a76-4022-a4ad-fafed2f30687",
+                            "count": 1
+                        },
+                        {
+                            "id": "0a7796cd-f5ff-4e48-9403-2cdf03b0cbed",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["sysadmin/basic-commands"],
+    "rewards": [
+        {
+            "id": "6d49ab13-1a76-4022-a4ad-fafed2f30687",
+            "count": 1
+        },
+        {
+            "id": "0a7796cd-f5ff-4e48-9403-2cdf03b0cbed",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "sysadmin/basic-commands"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
-        "emoji": "🛠️",
+        "score": 88,
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

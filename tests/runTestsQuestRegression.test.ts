@@ -72,3 +72,57 @@ describe('welcome/run-tests quest regression guards', () => {
         );
     });
 });
+
+
+describe('sysadmin quest regression guards', () => {
+    const loadQuest = (slug: string) =>
+        JSON.parse(
+            readFileSync(
+                resolve(process.cwd(), `frontend/src/pages/quests/json/${slug}.json`),
+                'utf8'
+            )
+        ) as {
+            rewards?: Array<{ id: string; count?: number }>;
+            dialogue?: Array<{ id?: string; text?: string; options?: Array<{ type?: string; process?: string }> }>;
+        };
+
+    const processById = new Map(loadProcesses().map((process) => [process.id, process]));
+
+    it('requires rewards and >=2 process hooks for each updated sysadmin quest', () => {
+        const targets = [
+            'sysadmin/basic-commands',
+            'sysadmin/resource-monitoring',
+            'sysadmin/log-analysis',
+        ];
+
+        targets.forEach((target) => {
+            const quest = loadQuest(target);
+            expect((quest.rewards ?? []).length).toBeGreaterThan(0);
+
+            const processOptionIds = (quest.dialogue ?? []).flatMap((node) =>
+                (node.options ?? [])
+                    .filter((option) => option.type === 'process' && typeof option.process === 'string')
+                    .map((option) => option.process as string)
+            );
+
+            expect(processOptionIds.length).toBeGreaterThanOrEqual(2);
+            processOptionIds.forEach((id) => expect(processById.has(id)).toBe(true));
+        });
+    });
+
+    it('keeps quiz depth for sysadmin quests (>=5 for basic commands)', () => {
+        const minQuizByQuest: Record<string, number> = {
+            'sysadmin/basic-commands': 5,
+            'sysadmin/resource-monitoring': 5,
+            'sysadmin/log-analysis': 5,
+        };
+
+        Object.entries(minQuizByQuest).forEach(([target, minQuiz]) => {
+            const quest = loadQuest(target);
+            const quizNodes = (quest.dialogue ?? []).filter(
+                (node) => node.id?.startsWith('quiz-') || node.text?.toLowerCase().startsWith('quiz ')
+            );
+            expect(quizNodes.length).toBeGreaterThanOrEqual(minQuiz);
+        });
+    });
+});

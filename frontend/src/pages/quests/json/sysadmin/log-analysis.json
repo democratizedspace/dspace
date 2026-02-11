@@ -1,33 +1,47 @@
 {
     "id": "sysadmin/log-analysis",
     "title": "Inspect System Logs",
-    "description": "Use journalctl and tail to spot issues on Ubuntu 24.04 LTS Minimal.",
+    "description": "Use journalctl and tail to extract incident evidence and build a concise report.",
     "image": "/assets/quests/linux_system_log_analysis.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Services leave breadcrumbs everywhere. Ready to sift through the log stream?",
+            "text": "Services leave breadcrumbs everywhere. We'll transform noisy logs into actionable evidence.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "scan",
-                    "text": "Show me the log"
+                    "goto": "triage",
+                    "text": "Open the incident playbook"
                 }
             ]
         },
         {
-            "id": "scan",
-            "text": "Use journalctl -xe and tail -n 100 /var/log/syslog to find recent errors.",
+            "id": "triage",
+            "text": "First gather a bounded journal extract, then capture a live tail report. Tangible artifacts make handoffs faster during outages.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "sysadmin-export-journalctl-incident-window",
+                    "text": "Export last 200 lines for a service with journalctl"
+                },
+                {
+                    "type": "process",
+                    "process": "sysadmin-capture-tail-followup-report",
+                    "text": "Tail service logs and compile follow-up notes"
+                },
+                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Logs reviewed",
+                    "goto": "quiz-1",
+                    "text": "Incident artifacts ready\u2014start log quiz",
                     "requiresItems": [
                         {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "id": "8c53ef31-c63c-4f7e-8570-9370d1c0643a",
+                            "count": 1
+                        },
+                        {
+                            "id": "2c87205a-5bd9-4c17-91fd-43da70e7021e",
                             "count": 1
                         }
                     ]
@@ -35,22 +49,159 @@
             ]
         },
         {
+            "id": "quiz-1",
+            "text": "Quiz 1/5: Which command shows the newest 200 journal entries for nginx?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "journalctl -u nginx -n 200 --no-pager"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "tail -u nginx -n 200"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "journalctl --tail nginx"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2",
+            "text": "Quiz 2/5: Which command follows new lines as a log file updates?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "tail -f /var/log/syslog"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "cat -n /var/log/syslog"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "grep -f /var/log/syslog"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "Quiz 3/5: Why is `--no-pager` useful in scripted incident captures?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "It prints directly without interactive paging, so output can be redirected cleanly"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "It hides warnings automatically"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "It compresses logs by default"
+                }
+            ]
+        },
+        {
+            "id": "quiz-4",
+            "text": "Quiz 4/5: Which pattern is best for a concise incident extract?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-5",
+                    "text": "Bound time or line count, then annotate key errors"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "Dump all historical logs with no filtering"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "Delete old logs before reading"
+                }
+            ]
+        },
+        {
+            "id": "quiz-5",
+            "text": "Quiz 5/5: After collecting logs, what should you include in a handoff note?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Timestamp, affected service, observed error pattern, and next action"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "Only the hostname"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-quiz",
+                    "text": "A screenshot with no text context"
+                }
+            ]
+        },
+        {
+            "id": "retry-quiz",
+            "text": "Almost there. Re-check your journal and tail outputs, then retry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "triage",
+                    "text": "Retry log triage"
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Solid work. Keeping tabs on logs keeps incidents small.",
+            "text": "Outstanding. You can now convert raw logs into evidence the whole ops crew can act on.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Done"
+                    "text": "Claim log analysis rewards",
+                    "requiresItems": [
+                        {
+                            "id": "8c53ef31-c63c-4f7e-8570-9370d1c0643a",
+                            "count": 1
+                        },
+                        {
+                            "id": "2c87205a-5bd9-4c17-91fd-43da70e7021e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["sysadmin/resource-monitoring"],
+    "rewards": [
+        {
+            "id": "8c53ef31-c63c-4f7e-8570-9370d1c0643a",
+            "count": 1
+        },
+        {
+            "id": "2c87205a-5bd9-4c17-91fd-43da70e7021e",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "sysadmin/resource-monitoring"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
-        "emoji": "🛠️",
+        "score": 88,
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
