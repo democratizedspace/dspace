@@ -1,51 +1,241 @@
 {
     "id": "sysadmin/resource-monitoring",
     "title": "Monitor System Resources",
-    "description": "Track CPU, memory, and disk on Ubuntu 24.04 LTS Minimal using top and df.",
+    "description": "Track CPU, memory, and disk on Ubuntu with local checks first, then level up to remote node monitoring.",
     "image": "/assets/quests/linux_resource_monitoring_dashboard.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's watch how the system behaves under load.",
+            "text": "Resource monitoring works on your Ubuntu laptop immediately. Metaguild's next level is observing a remote colony node so you can compare local and fleet health.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "monitor",
-                    "text": "Open top"
+                    "goto": "local-scan",
+                    "text": "Start with my laptop"
                 }
             ]
         },
         {
-            "id": "monitor",
-            "text": "Use top for processes and df for disk space. Notice memory hungry tasks.",
+            "id": "local-scan",
+            "text": "Capture a baseline snapshot using top -b -n 1, free -h, and df -h on your Ubuntu machine.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-monitor-capture-local-snapshot",
+                    "text": "Generate local resource snapshot"
+                },
+                {
+                    "type": "goto",
+                    "goto": "remote-scan",
+                    "text": "Baseline captured"
+                }
+            ]
+        },
+        {
+            "id": "remote-scan",
+            "text": "Now run the same checks on a Raspberry Pi colony node. This dedicated server device is separate from your dev laptop and helps you learn true multi-node operations.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-monitor-collect-remote-node-telemetry",
+                    "text": "Collect remote colony node telemetry"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Remote telemetry captured"
+                }
+            ]
+        },
+        {
+            "id": "quiz-1",
+            "text": "Which command is commonly used for a live process view sorted by CPU and memory activity?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "top"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-1",
+                    "text": "mkdir"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-1",
+                    "text": "chmod"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2",
+            "text": "What does df -h help you inspect?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "Filesystem disk usage in human-readable units"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-2",
+                    "text": "Running kernel modules"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-2",
+                    "text": "Open TCP sockets only"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "Which command quickly summarizes memory and swap usage in readable units?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "free -h"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-3",
+                    "text": "pwd -h"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-3",
+                    "text": "grep -h"
+                }
+            ]
+        },
+        {
+            "id": "quiz-4",
+            "text": "Why compare laptop metrics with remote colony node metrics?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-5",
+                    "text": "To detect node-specific bottlenecks and capacity drift"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-4",
+                    "text": "To disable all monitoring alerts"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-4",
+                    "text": "To avoid collecting any baselines"
+                }
+            ]
+        },
+        {
+            "id": "quiz-5",
+            "text": "What is a good first response when CPU appears saturated in top?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Resources monitored",
-                    "requiresItems": [
-                        {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Identify the top processes and confirm whether load is expected"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-5",
+                    "text": "Immediately wipe the server"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-5",
+                    "text": "Ignore it forever"
+                }
+            ]
+        },
+        {
+            "id": "retry-1",
+            "text": "top is the classic live monitor for process activity.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Retry"
+                }
+            ]
+        },
+        {
+            "id": "retry-2",
+            "text": "df -h reports disk consumption by filesystem.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "Retry"
+                }
+            ]
+        },
+        {
+            "id": "retry-3",
+            "text": "free -h is ideal for a fast memory baseline.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "Retry"
+                }
+            ]
+        },
+        {
+            "id": "retry-4",
+            "text": "Cross-node comparisons reveal where incidents are local versus systemic.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "Retry"
+                }
+            ]
+        },
+        {
+            "id": "retry-5",
+            "text": "Investigate first, then decide whether to optimize, scale, or schedule work.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-5",
+                    "text": "Retry"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Your Ubuntu 24.04 LTS Minimal node stays healthy with your watchful eye.",
+            "text": "Strong work. You can monitor local Ubuntu systems now and you're ready for multi-node observability.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Done"
+                    "text": "Monitoring mission complete",
+                    "requiresItems": [
+                        {
+                            "id": "f5a1b52f-6c31-4dd1-aeb3-4919cb3d6d4b",
+                            "count": 1
+                        },
+                        {
+                            "id": "d49faf4f-a228-4738-92da-378a2d766238",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "74a0707b-7292-4ac8-95f2-2b258210064f",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["sysadmin/basic-commands"],
     "hardening": {
         "passes": 0,
