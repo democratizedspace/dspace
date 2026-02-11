@@ -16,4 +16,4 @@ completionist: 5 quests, 442 lines
 welcome: 5 quests, 778 lines
 composting: 4 quests, 530 lines
 ubi: 4 quests, 330 lines
-sysadmin: 3 quests, 171 lines
+sysadmin: 3 quests, 741 lines
