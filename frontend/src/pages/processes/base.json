@@ -8299,5 +8299,157 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "sysadmin-basic-generate-shell-transcript",
+        "title": "Run pwd, ls -la, grep, awk, and sed examples and save the output to commands-output.txt",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "91923542-45d5-46f5-82eb-6367b26ef8cc",
+                "count": 1
+            }
+        ],
+        "duration": "4m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sysadmin-basic-compile-command-cheatsheet",
+        "title": "Summarize command patterns from the transcript into a reusable shell cheatsheet",
+        "requireItems": [
+            {
+                "id": "91923542-45d5-46f5-82eb-6367b26ef8cc",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "f17410cd-8c38-4612-9666-7bd1c399874d",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sysadmin-monitor-capture-local-snapshot",
+        "title": "Capture top -b -n 1, free -h, and df -h output from your Ubuntu laptop",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "f5a1b52f-6c31-4dd1-aeb3-4919cb3d6d4b",
+                "count": 1
+            }
+        ],
+        "duration": "4m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sysadmin-monitor-collect-remote-node-telemetry",
+        "title": "Collect the same resource metrics from a dedicated Raspberry Pi colony node and compare baselines",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            },
+            {
+                "id": "f5a1b52f-6c31-4dd1-aeb3-4919cb3d6d4b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "d49faf4f-a228-4738-92da-378a2d766238",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sysadmin-logs-export-journalctl-report",
+        "title": "Export the last 200 journal lines for a target systemd service into a report file",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sysadmin-logs-tail-incident-extract",
+        "title": "Tail the latest system log lines into an incident extract and annotate suspicious events",
+        "requireItems": [
+            {
+                "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

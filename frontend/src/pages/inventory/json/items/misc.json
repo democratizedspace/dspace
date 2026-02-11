@@ -2381,5 +2381,77 @@
         "image": "/assets/mission_log_entry_handwritten.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
+    },
+    {
+        "id": "91923542-45d5-46f5-82eb-6367b26ef8cc",
+        "name": "shell transcript",
+        "description": "Captured command session showing pwd, ls, grep, awk, and sed usage in a reproducible sequence.",
+        "image": "/assets/mission_log_entry_page.json",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "f17410cd-8c38-4612-9666-7bd1c399874d",
+        "name": "command cheatsheet",
+        "description": "Concise reference mapping core Linux commands to practical sysadmin use cases.",
+        "image": "/assets/early_adopter_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "d2b39a23-cdfb-428d-a6ed-694ff0c0fc11",
+        "name": "basic shell operator badge",
+        "description": "Credential proving you can navigate Linux fundamentals and document your output.",
+        "image": "/assets/completionist_award_ii_pla_core_print.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "f5a1b52f-6c31-4dd1-aeb3-4919cb3d6d4b",
+        "name": "resource snapshot",
+        "description": "Timestamped CPU, memory, and disk baseline collected from Ubuntu monitoring commands.",
+        "image": "/assets/rocket_field.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "d49faf4f-a228-4738-92da-378a2d766238",
+        "name": "remote node telemetry report",
+        "description": "Monitoring dossier comparing local metrics with readings from a dedicated Raspberry Pi colony node.",
+        "image": "/assets/mission_log_entry_page.json",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "74a0707b-7292-4ac8-95f2-2b258210064f",
+        "name": "observability checkpoint badge",
+        "description": "Issued after completing multi-node health monitoring and baseline interpretation drills.",
+        "image": "/assets/lab_coat_white.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+        "name": "journalctl report",
+        "description": "Exported journal slice capturing the latest service events for incident triage.",
+        "image": "/assets/pine_board_plank.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+        "name": "incident log extract",
+        "description": "Focused tail output containing the most recent high-signal lines from a system log.",
+        "image": "/assets/3d_printed_rocket_fincan_35mm_80mm_length.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "aaef54ec-eed4-43d6-a4e4-e1b22fbb5a69",
+        "name": "incident response analyst badge",
+        "description": "Recognition for turning journalctl and tail outputs into actionable incident evidence.",
+        "image": "/assets/mission_log_entry_page.json",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
     }
 ]

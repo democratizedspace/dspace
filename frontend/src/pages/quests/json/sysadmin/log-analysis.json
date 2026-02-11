@@ -1,55 +1,245 @@
 {
     "id": "sysadmin/log-analysis",
     "title": "Inspect System Logs",
-    "description": "Use journalctl and tail to spot issues on Ubuntu 24.04 LTS Minimal.",
+    "description": "Use journalctl and tail to extract incident evidence from Ubuntu services.",
     "image": "/assets/quests/linux_system_log_analysis.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Services leave breadcrumbs everywhere. Ready to sift through the log stream?",
+            "text": "Services leave breadcrumbs everywhere. Let's turn noisy logs into useful incident artifacts.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "scan",
-                    "text": "Show me the log"
+                    "goto": "journal-pass",
+                    "text": "Start with journalctl"
                 }
             ]
         },
         {
-            "id": "scan",
-            "text": "Use journalctl -xe and tail -n 100 /var/log/syslog to find recent errors.",
+            "id": "journal-pass",
+            "text": "Export the last 200 lines for a critical unit using journalctl (for example: sudo journalctl -u ssh --no-pager -n 200 > journalctl-report.txt).",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Create journalctl report"
+                },
+                {
+                    "type": "goto",
+                    "goto": "tail-pass",
+                    "text": "Journal report created"
+                }
+            ]
+        },
+        {
+            "id": "tail-pass",
+            "text": "Now tail live logs into a concise incident summary (for example: tail -n 120 /var/log/syslog > incident-log-extract.txt).",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Capture incident log extract"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Incident extract complete"
+                }
+            ]
+        },
+        {
+            "id": "quiz-1",
+            "text": "What does journalctl -u nginx filter by?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "Entries from the nginx systemd unit"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-1",
+                    "text": "Only kernel boot logs"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-1",
+                    "text": "Only package install history"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2",
+            "text": "Which command follows new log lines in real time from a file?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "tail -f /var/log/syslog"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-2",
+                    "text": "ls -f /var/log/syslog"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-2",
+                    "text": "who -f /var/log/syslog"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "Why use --no-pager with journalctl during scripted analysis?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "To emit plain output without interactive paging"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-3",
+                    "text": "To encrypt log lines"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-3",
+                    "text": "To delete old logs"
+                }
+            ]
+        },
+        {
+            "id": "quiz-4",
+            "text": "What is a useful reason to tail only the last N lines before an incident review?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-5",
+                    "text": "It narrows focus to recent context and reduces noise"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-4",
+                    "text": "It permanently compresses all logs"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-4",
+                    "text": "It turns text logs into binary telemetry"
+                }
+            ]
+        },
+        {
+            "id": "quiz-5",
+            "text": "After finding repeated auth failures in logs, what is the best next step?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Logs reviewed",
-                    "requiresItems": [
-                        {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Correlate timestamps, identify source IPs, and open an incident action plan"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-5",
+                    "text": "Ignore it because the service is still online"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-5",
+                    "text": "Delete all logs immediately"
+                }
+            ]
+        },
+        {
+            "id": "retry-1",
+            "text": "-u filters by service unit, which is key for targeted troubleshooting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Retry"
+                }
+            ]
+        },
+        {
+            "id": "retry-2",
+            "text": "tail -f is the classic way to stream appended log lines.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "Retry"
+                }
+            ]
+        },
+        {
+            "id": "retry-3",
+            "text": "--no-pager keeps journalctl script-friendly and easy to redirect to files.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "Retry"
+                }
+            ]
+        },
+        {
+            "id": "retry-4",
+            "text": "Focused excerpts improve triage speed and reduce false leads.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "Retry"
+                }
+            ]
+        },
+        {
+            "id": "retry-5",
+            "text": "Log evidence should trigger investigation and remediation, not silence.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-5",
+                    "text": "Retry"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Solid work. Keeping tabs on logs keeps incidents small.",
+            "text": "Great analysis. You've turned raw system noise into incident-ready evidence.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Done"
+                    "text": "Log analysis mission complete",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        },
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "aaef54ec-eed4-43d6-a4e4-e1b22fbb5a69",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["sysadmin/resource-monitoring"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }
