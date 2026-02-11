@@ -8299,5 +8299,153 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "sysadmin-capture-shell-transcript",
+        "title": "Run cd/ls/grep/awk/sed drills and save results to commands-output.txt",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "6f7a8c3d-11a3-4f3e-a8a5-08cbe0d8e7b1",
+                "count": 1
+            }
+        ],
+        "duration": "4m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sysadmin-parse-command-transcript",
+        "title": "Use grep, awk, and sed to turn commands-output.txt into a concise operations report",
+        "requireItems": [
+            {
+                "id": "6f7a8c3d-11a3-4f3e-a8a5-08cbe0d8e7b1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "61c9f6d2-2e5f-4a21-95a9-85378ea7d4a4",
+                "count": 1
+            }
+        ],
+        "duration": "3m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sysadmin-capture-local-resource-snapshot",
+        "title": "Capture top -b -n 1 and df -h output on your Ubuntu laptop into resource-snapshot.txt",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "d2f36c0a-7b90-4fdd-9ac5-3a66a2fbe4b2",
+                "count": 1
+            }
+        ],
+        "duration": "4m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sysadmin-capture-remote-node-telemetry",
+        "title": "SSH from laptop to a Raspberry Pi colony node and collect top/df telemetry for comparison",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            },
+            {
+                "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "1d432280-ff62-42ff-a5c2-df17da8ab8fa",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 92,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sysadmin-journalctl-unit-report",
+        "title": "Export journalctl -u <service> -n 200 output and annotate recurring warnings",
+        "requireItems": [
+            {
+                "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "d75ad540-c6ef-4fd6-b001-00f9ed9a33ad",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "sysadmin-tail-incident-extract",
+        "title": "Use tail -n 200 on syslog/application logs and compile an incident extract report",
+        "requireItems": [
+            {
+                "id": "d75ad540-c6ef-4fd6-b001-00f9ed9a33ad",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "3de0f8f0-6fa9-4e6f-8d66-aadf546f5bcb",
+                "count": 1
+            }
+        ],
+        "duration": "4m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

@@ -1,33 +1,43 @@
 {
     "id": "sysadmin/basic-commands",
     "title": "Learn Basic Linux Commands",
-    "description": "Practice core shell commands on an Ubuntu 24.04 LTS Minimal server.",
+    "description": "Practice core shell commands, generate artifacts, and pass a Linux basics quiz.",
     "image": "/assets/quests/linux_basic_shell_commands.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ubuntu 24.04 LTS Minimal is rock solid in 2030. Ready to navigate its shell?",
+            "text": "Welcome to shell ops training. We will use cd, ls, grep, awk, and sed to create a real command transcript, then validate your command fundamentals with a quiz.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "practice",
-                    "text": "Show me the basics"
+                    "goto": "prep",
+                    "text": "Let's train"
                 }
             ]
         },
         {
-            "id": "practice",
-            "text": "Use cd, ls, grep, awk and sed to explore directories and files.",
+            "id": "prep",
+            "text": "First mission: run commands on your Ubuntu laptop to create commands-output.txt, then parse it into a compact report. These files become audit artifacts for your sysadmin portfolio.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "sysadmin-capture-shell-transcript",
+                    "text": "Run command drill and save commands-output.txt"
+                },
+                {
+                    "type": "process",
+                    "process": "sysadmin-parse-command-transcript",
+                    "text": "Parse transcript into command-parse-report.txt"
+                },
+                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Commands practiced",
+                    "goto": "quiz-1",
+                    "text": "Artifacts ready\u2014start the quiz",
                     "requiresItems": [
                         {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "id": "61c9f6d2-2e5f-4a21-95a9-85378ea7d4a4",
                             "count": 1
                         }
                     ]
@@ -35,22 +45,155 @@
             ]
         },
         {
+            "id": "quiz-1",
+            "text": "Which command changes your current directory?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "cd /path/to/folder"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "ls /path/to/folder"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "pwd /path/to/folder"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2",
+            "text": "You need to list files, including hidden dotfiles. Which command fits?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "ls -la"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "cd -la"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "grep -la"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "What does grep do in a shell workflow?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "Searches text for lines that match a pattern"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "Renames files recursively"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "Displays disk usage in gigabytes"
+                }
+            ]
+        },
+        {
+            "id": "quiz-4",
+            "text": "In awk, what does this print: awk \"{print $1}\" access.log ?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-5",
+                    "text": "The first whitespace-delimited column from each line"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "Only the last line of the file"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "The number of lines in the file"
+                }
+            ]
+        },
+        {
+            "id": "quiz-5",
+            "text": "Which sed command replaces all occurrences of ERROR with WARN in a stream?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "sed \"s/ERROR/WARN/g\""
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "sed \"p/ERROR/WARN/g\""
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "sed \"grep ERROR WARN\""
+                }
+            ]
+        },
+        {
+            "id": "quiz-retry",
+            "text": "Good attempt. Review the command drills, then retake the quiz\u2014muscle memory matters in incident response.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Retry drills and quiz"
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice work. Those commands are the backbone of every sysadmin.",
+            "text": "Excellent execution. You produced tangible command artifacts and proved command fluency under pressure.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "On to the next task"
+                    "text": "Complete basic commands training",
+                    "requiresItems": [
+                        {
+                            "id": "61c9f6d2-2e5f-4a21-95a9-85378ea7d4a4",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "rewards": [
+        {
+            "id": "6f7a8c3d-11a3-4f3e-a8a5-08cbe0d8e7b1",
+            "count": 1
+        },
+        {
+            "id": "61c9f6d2-2e5f-4a21-95a9-85378ea7d4a4",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
-        "emoji": "🛠️",
+        "score": 88,
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

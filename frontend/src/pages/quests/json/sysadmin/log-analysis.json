@@ -1,33 +1,43 @@
 {
     "id": "sysadmin/log-analysis",
     "title": "Inspect System Logs",
-    "description": "Use journalctl and tail to spot issues on Ubuntu 24.04 LTS Minimal.",
+    "description": "Extract actionable findings with journalctl and tail, then verify log-analysis fundamentals in a quiz.",
     "image": "/assets/quests/linux_system_log_analysis.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Services leave breadcrumbs everywhere. Ready to sift through the log stream?",
+            "text": "Incidents are won by fast evidence. We will collect a journalctl report and a tail-based incident extract you can hand to any teammate.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "scan",
-                    "text": "Show me the log"
+                    "goto": "collect",
+                    "text": "Start log collection"
                 }
             ]
         },
         {
-            "id": "scan",
-            "text": "Use journalctl -xe and tail -n 100 /var/log/syslog to find recent errors.",
+            "id": "collect",
+            "text": "First export the latest 200 lines for a systemd service using journalctl, then create a second report with tail from syslog or an app log.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "sysadmin-journalctl-unit-report",
+                    "text": "Generate journalctl service report"
+                },
+                {
+                    "type": "process",
+                    "process": "sysadmin-tail-incident-extract",
+                    "text": "Generate tail-based incident extract"
+                },
+                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Logs reviewed",
+                    "goto": "quiz-1",
+                    "text": "Artifacts ready\u2014quiz me",
                     "requiresItems": [
                         {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "id": "3de0f8f0-6fa9-4e6f-8d66-aadf546f5bcb",
                             "count": 1
                         }
                     ]
@@ -35,22 +45,134 @@
             ]
         },
         {
+            "id": "quiz-1",
+            "text": "What does journalctl -u nginx -n 200 show?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "The most recent 200 log lines for the nginx systemd unit"
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-retry",
+                    "text": "Every file in /var/log recursively"
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-retry",
+                    "text": "Disk usage by nginx filesystems"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2",
+            "text": "Why use tail -n 200 /var/log/syslog during triage?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "To focus on the most recent events around an incident window"
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-retry",
+                    "text": "To permanently delete old log lines"
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-retry",
+                    "text": "To restart logging services"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "Which pairing gives stronger evidence for incident reports?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "journalctl unit logs plus tail extract from related system/application logs"
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-retry",
+                    "text": "Only memory usage screenshots"
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-retry",
+                    "text": "Only package manager output"
+                }
+            ]
+        },
+        {
+            "id": "quiz-4",
+            "text": "If you spot repeated authentication failures, what is the best next step?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Document timestamps, affected service, and escalate with the extracted evidence"
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-retry",
+                    "text": "Ignore it if the server is still online"
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-retry",
+                    "text": "Delete logs immediately to save space"
+                }
+            ]
+        },
+        {
+            "id": "log-retry",
+            "text": "Not yet. Review your journalctl and tail artifacts and retake the quiz with evidence-first thinking.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "collect",
+                    "text": "Retry collection + quiz"
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Solid work. Keeping tabs on logs keeps incidents small.",
+            "text": "Excellent analysis. You converted noisy logs into a concise incident package.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Done"
+                    "text": "Complete log analysis",
+                    "requiresItems": [
+                        {
+                            "id": "3de0f8f0-6fa9-4e6f-8d66-aadf546f5bcb",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["sysadmin/resource-monitoring"],
+    "rewards": [
+        {
+            "id": "d75ad540-c6ef-4fd6-b001-00f9ed9a33ad",
+            "count": 1
+        },
+        {
+            "id": "3de0f8f0-6fa9-4e6f-8d66-aadf546f5bcb",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "sysadmin/resource-monitoring"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
-        "emoji": "🛠️",
+        "score": 88,
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
