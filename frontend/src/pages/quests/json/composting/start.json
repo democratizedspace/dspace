@@ -270,7 +270,7 @@
         },
         {
             "id": "run-process-hint",
-            "text": "Now execute the build. Open the 5 gallon bucket item page, go to its Processes section, run \"Vent and layer a kitchen compost bucket,\" and confirm it consumes basil scraps and outputs a layered compost bucket.",
+            "text": "Now execute the build. Open the 5 gallon bucket item page, go to its Processes section, run \"Vent and layer a kitchen compost bucket,\" and confirm it consumes a bundle of basil leaves and a harvested basil plant and outputs a layered compost bucket.",
             "options": [
                 {
                     "type": "process",
@@ -323,7 +323,7 @@
     ],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 100,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
