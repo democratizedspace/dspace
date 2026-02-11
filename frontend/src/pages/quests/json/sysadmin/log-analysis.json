@@ -236,9 +236,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "sysadmin/resource-monitoring"
-    ],
+    "requiresQuests": ["sysadmin/resource-monitoring"],
     "hardening": {
         "passes": 0,
         "score": 95,
