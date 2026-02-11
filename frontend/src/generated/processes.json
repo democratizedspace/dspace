@@ -192,12 +192,21 @@
                 "count": 1
             }
         ],
-        "consumeItems": [],
+        "consumeItems": [
+            {
+                "id": "29190faf-8581-4769-b871-f0ee283840e1",
+                "count": 1
+            },
+            {
+                "id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",
+                "count": 2
+            }
+        ],
         "createItems": [],
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 80,
+            "score": 85,
             "emoji": "🌀",
             "history": [
                 {
@@ -7252,7 +7261,16 @@
                 "count": 1
             }
         ],
-        "consumeItems": [],
+        "consumeItems": [
+            {
+                "id": "29190faf-8581-4769-b871-f0ee283840e1",
+                "count": 1
+            },
+            {
+                "id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",
+                "count": 2
+            }
+        ],
         "createItems": [
             {
                 "id": "025862b3-8377-4396-ab32-aa572bdc3260",
@@ -7262,7 +7280,7 @@
         "duration": "15m",
         "hardening": {
             "passes": 1,
-            "score": 90,
+            "score": 95,
             "emoji": "🌀",
             "history": [
                 {
@@ -8319,7 +8337,7 @@
         "duration": "4m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 85,
             "emoji": "🛠️",
             "history": []
         }
@@ -8343,7 +8361,7 @@
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 85,
             "emoji": "🛠️",
             "history": []
         }
@@ -8367,7 +8385,7 @@
         "duration": "4m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 85,
             "emoji": "🛠️",
             "history": []
         }
@@ -8399,7 +8417,7 @@
         "duration": "6m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 85,
             "emoji": "🛠️",
             "history": []
         }
@@ -8423,7 +8441,7 @@
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 85,
             "emoji": "🛠️",
             "history": []
         }
@@ -8447,7 +8465,7 @@
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 85,
             "emoji": "🛠️",
             "history": []
         }
