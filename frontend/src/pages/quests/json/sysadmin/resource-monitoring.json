@@ -1,51 +1,173 @@
 {
     "id": "sysadmin/resource-monitoring",
     "title": "Monitor System Resources",
-    "description": "Track CPU, memory, and disk on Ubuntu 24.04 LTS Minimal using top and df.",
+    "description": "Track CPU, memory, and disk on Ubuntu 24.04 LTS, then graduate to observing a remote colony node.",
     "image": "/assets/quests/linux_resource_monitoring_dashboard.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's watch how the system behaves under load.",
+            "text": "Monitoring starts on your Ubuntu laptop, but Metaguild's next level is watching a remote colony node too. Same skills, bigger responsibility.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "monitor",
-                    "text": "Open top"
+                    "text": "Let's monitor both"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Skip ahead to the knowledge check"
                 }
             ]
         },
         {
             "id": "monitor",
-            "text": "Use top for processes and df for disk space. Notice memory hungry tasks.",
+            "text": "Capture a point-in-time snapshot with `top -b -n 1` and `df -h`. Do one pass on your laptop and one pass on the remote Pi node to compare environments.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-capture-resource-snapshot",
+                    "text": "Capture top/df output from laptop"
+                },
+                {
+                    "type": "process",
+                    "process": "sysadmin-compare-colony-node-resource-snapshot",
+                    "text": "Capture and compare the remote colony node snapshot"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "requiresItems": [
+                        {
+                            "id": "2440478b-7a4d-4202-a114-ae8570625591",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Snapshots captured—start quiz"
+                }
+            ]
+        },
+        {
+            "id": "quiz-1",
+            "text": "Which command gives a non-interactive CPU/memory snapshot useful for reports?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "top -b -n 1"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-1",
+                    "text": "nano"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-1",
+                    "text": "chmod"
+                }
+            ]
+        },
+        {
+            "id": "retry-1",
+            "text": "Use `top -b -n 1` for batch snapshots you can redirect into files.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Retry"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2",
+            "text": "What does `df -h` primarily report?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "Disk usage and free space in human-readable units"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-2",
+                    "text": "Kernel module versions"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-2",
+                    "text": "Open network sockets"
+                }
+            ]
+        },
+        {
+            "id": "retry-2",
+            "text": "`df -h` is for filesystem capacity, not networking or modules.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "Retry"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "Why monitor both laptop and Pi node in this questline?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Resources monitored",
-                    "requiresItems": [
-                        {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
-                            "count": 1
-                        }
-                    ]
+                    "text": "To learn local monitoring first, then compare it with a dedicated remote service node"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-3",
+                    "text": "Because top only works on Raspberry Pi"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-3",
+                    "text": "Because laptops cannot run Ubuntu"
+                }
+            ]
+        },
+        {
+            "id": "retry-3",
+            "text": "You can monitor Ubuntu on either device. Multi-node observation is training for distributed operations.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "Retry"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Your Ubuntu 24.04 LTS Minimal node stays healthy with your watchful eye.",
+            "text": "Excellent telemetry discipline. You've proven you can inspect one machine and reason across two.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Done"
+                    "text": "Resource monitoring complete",
+                    "requiresItems": [
+                        {
+                            "id": "2440478b-7a4d-4202-a114-ae8570625591",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "2440478b-7a4d-4202-a114-ae8570625591",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["sysadmin/basic-commands"],
     "hardening": {
         "passes": 0,

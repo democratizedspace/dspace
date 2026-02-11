@@ -1,51 +1,173 @@
 {
     "id": "sysadmin/log-analysis",
     "title": "Inspect System Logs",
-    "description": "Use journalctl and tail to spot issues on Ubuntu 24.04 LTS Minimal.",
+    "description": "Use journalctl and tail to capture actionable incident evidence on Ubuntu 24.04 LTS.",
     "image": "/assets/quests/linux_system_log_analysis.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Services leave breadcrumbs everywhere. Ready to sift through the log stream?",
+            "text": "Services leave breadcrumbs everywhere. We'll turn raw logs into a concise incident packet.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "scan",
-                    "text": "Show me the log"
+                    "text": "Show me the analysis workflow"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "I already practiced—start quiz"
                 }
             ]
         },
         {
             "id": "scan",
-            "text": "Use journalctl -xe and tail -n 100 /var/log/syslog to find recent errors.",
+            "text": "Export the latest 200 lines for a service with `journalctl -u <service> -n 200` and grab a rolling tail report with `tail -n 100 /var/log/syslog`.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-export-journalctl-report",
+                    "text": "Export journalctl report"
+                },
+                {
+                    "type": "process",
+                    "process": "sysadmin-build-tail-incident-extract",
+                    "text": "Build tail-based incident extract"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "requiresItems": [
+                        {
+                            "id": "35330b0b-0e03-4eda-ae3a-77c960a281bc",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Incident packet assembled—start quiz"
+                }
+            ]
+        },
+        {
+            "id": "quiz-1",
+            "text": "Which command follows new lines from a live log file in real time?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "tail -f /var/log/syslog"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-1",
+                    "text": "df -h"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-1",
+                    "text": "uname -a"
+                }
+            ]
+        },
+        {
+            "id": "retry-1",
+            "text": "Use `tail -f` when you need continuous updates as events arrive.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Retry"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2",
+            "text": "What is the most focused way to inspect one systemd service's logs?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "journalctl -u my-service"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-2",
+                    "text": "ls /etc"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-2",
+                    "text": "pwd"
+                }
+            ]
+        },
+        {
+            "id": "retry-2",
+            "text": "`journalctl -u <service>` scopes logs to one unit and cuts noise.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "Retry"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "Why save extracted logs into an artifact file before escalating?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Logs reviewed",
-                    "requiresItems": [
-                        {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
-                            "count": 1
-                        }
-                    ]
+                    "text": "It creates reproducible evidence teammates can review asynchronously"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-3",
+                    "text": "Because journalctl cannot display plain text"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-3",
+                    "text": "Because tail deletes old lines"
+                }
+            ]
+        },
+        {
+            "id": "retry-3",
+            "text": "Artifact files help handoff and postmortems; they are about collaboration, not command limitations.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "Retry"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Solid work. Keeping tabs on logs keeps incidents small.",
+            "text": "Solid work. You can move from noisy logs to evidence-backed incident summaries.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Done"
+                    "text": "Log analysis complete",
+                    "requiresItems": [
+                        {
+                            "id": "35330b0b-0e03-4eda-ae3a-77c960a281bc",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "35330b0b-0e03-4eda-ae3a-77c960a281bc",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["sysadmin/resource-monitoring"],
     "hardening": {
         "passes": 0,

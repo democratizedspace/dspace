@@ -1,51 +1,249 @@
 {
     "id": "sysadmin/basic-commands",
     "title": "Learn Basic Linux Commands",
-    "description": "Practice core shell commands on an Ubuntu 24.04 LTS Minimal server.",
+    "description": "Practice core shell commands on an Ubuntu 24.04 LTS workstation and produce a shareable command transcript.",
     "image": "/assets/quests/linux_basic_shell_commands.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ubuntu 24.04 LTS Minimal is rock solid in 2030. Ready to navigate its shell?",
+            "text": "Ubuntu 24.04 LTS Minimal is rock solid in 2030. We'll train on your laptop first, then package what you learned as a clean operations artifact.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "practice",
-                    "text": "Show me the basics"
+                    "goto": "prep",
+                    "text": "Show me the command drills"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "I know the basics—quiz me"
                 }
             ]
         },
         {
-            "id": "practice",
-            "text": "Use cd, ls, grep, awk and sed to explore directories and files.",
+            "id": "prep",
+            "text": "Run `pwd`, `ls -la`, and `cd` to orient yourself, then use `grep`, `awk`, and `sed` on a sample file. You're building fluency for incident response.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-capture-shell-transcript",
+                    "text": "Create commands-output.txt from your shell session"
+                },
+                {
+                    "type": "process",
+                    "process": "sysadmin-parse-command-transcript",
+                    "text": "Extract a quick command summary from the transcript"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "requiresItems": [
+                        {
+                            "id": "41289a46-b4fe-4d22-8f15-f91bdb0024c8",
+                            "count": 1
+                        },
+                        {
+                            "id": "7fff5c91-3c76-4996-b04d-27e507dcc2d6",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Transcript and summary complete—start quiz"
+                }
+            ]
+        },
+        {
+            "id": "quiz-1",
+            "text": "Which command prints your current working directory?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "pwd"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-1",
+                    "text": "whoami"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-1",
+                    "text": "touch"
+                }
+            ]
+        },
+        {
+            "id": "retry-1",
+            "text": "Close. `pwd` reports where you are in the filesystem.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Try again"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2",
+            "text": "How do you list hidden files too?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "ls -a"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-2",
+                    "text": "cd -h"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-2",
+                    "text": "grep ."
+                }
+            ]
+        },
+        {
+            "id": "retry-2",
+            "text": "Not quite. `ls -a` includes dotfiles.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "Retry"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "`grep -i error syslog.txt` does what?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "Finds lines containing 'error', case-insensitive"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-3",
+                    "text": "Deletes every line with error"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-3",
+                    "text": "Sorts the file alphabetically"
+                }
+            ]
+        },
+        {
+            "id": "retry-3",
+            "text": "`grep` searches; it does not delete or sort unless piped with other tools.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "Retry"
+                }
+            ]
+        },
+        {
+            "id": "quiz-4",
+            "text": "Which command is best for printing selected columns from structured text?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-5",
+                    "text": "awk"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-4",
+                    "text": "mkdir"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-4",
+                    "text": "rm"
+                }
+            ]
+        },
+        {
+            "id": "retry-4",
+            "text": "Correct tool is `awk`; it excels at field and column extraction.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "Retry"
+                }
+            ]
+        },
+        {
+            "id": "quiz-5",
+            "text": "What does `sed 's/fail/warn/g' alerts.txt` do?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Commands practiced",
-                    "requiresItems": [
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Replaces all 'fail' occurrences with 'warn'"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-5",
+                    "text": "Appends warn to the end of file"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-5",
+                    "text": "Changes file permissions"
+                }
+            ]
+        },
+        {
+            "id": "retry-5",
+            "text": "Good effort. That `sed` pattern performs global in-line text substitution in the stream.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-5",
+                    "text": "Retry"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work. Those commands are the backbone of every sysadmin.",
+            "text": "Nice work. You can navigate, filter, and transform logs like a real sysadmin. Claim your records and move to multi-node operations.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "On to the next task"
+                    "text": "Basic commands mastered",
+                    "requiresItems": [
+                        {
+                            "id": "41289a46-b4fe-4d22-8f15-f91bdb0024c8",
+                            "count": 1
+                        },
+                        {
+                            "id": "7fff5c91-3c76-4996-b04d-27e507dcc2d6",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "41289a46-b4fe-4d22-8f15-f91bdb0024c8",
+            "count": 1
+        },
+        {
+            "id": "7fff5c91-3c76-4996-b04d-27e507dcc2d6",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["welcome/howtodoquests"],
     "hardening": {
         "passes": 0,
