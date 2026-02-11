@@ -1,83 +1,239 @@
 {
     "id": "composting/start",
     "title": "Start a Compost Bucket",
-    "description": "Begin recycling kitchen scraps into soil.",
+    "description": "Build a compost bucket using hydroponic plant leftovers and kitchen-style browns.",
     "image": "/assets/quests/compost_start_bucket.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Waste not, friend! Let's turn scraps into nutrient-rich compost with a bucket starter.",
+            "text": "Waste not, friend! We'll turn your hydroponic leftovers into compost. I'll show you exactly where to run the process so you don't get stuck.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "bucket",
-                    "text": "What do I need?"
-                }
-            ]
-        },
-        {
-            "id": "bucket",
-            "text": "Grab a 5 gal bucket, drill a few vent holes near the top, and set out gloves plus a scoop of dry browns.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "layer",
-                    "requiresItems": [
-                        {
-                            "id": "0564d441-7367-412e-b709-dad770814a39",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Bucket drilled and gloves on."
+                    "goto": "where-to-run",
+                    "text": "Perfect—where do I do this?"
                 },
                 {
                     "type": "goto",
-                    "goto": "prep",
-                    "text": "Remind me about greens vs browns."
+                    "goto": "quiz-1",
+                    "text": "I know the basics—quiz me first"
                 }
             ]
         },
         {
-            "id": "prep",
-            "text": "Greens = fresh scraps and coffee grounds; browns = shredded paper, dried leaves, or cardboard. Keep handfuls of each nearby.",
+            "id": "where-to-run",
+            "text": "Open Inventory, find your **5 gallon bucket**, then open that item's page. Processes live on item pages in the Process section. Look for **Start a Compost Bucket** and check its required inputs and output item before you click run.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "layer",
-                    "requiresItems": [
-                        {
-                            "id": "0564d441-7367-412e-b709-dad770814a39",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Supplies staged."
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "I'll come back once I find a bucket."
+                    "goto": "inputs",
+                    "text": "Got it: inventory item page → process section"
                 }
             ]
         },
         {
-            "id": "layer",
-            "text": "Add a brown base, mix in kitchen scraps, then cap with dry browns. Keep it damp like a wrung sponge and close the lid.",
+            "id": "inputs",
+            "text": "For this run you'll need: a bucket, gloves, plus organic matter. Use hydroponic leftovers like a **harvested basil plant** and **bundle of basil leaves** as your green feedstock.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "basics",
+                    "text": "Teach me the compost basics before I run it"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Quiz me now"
+                }
+            ]
+        },
+        {
+            "id": "basics",
+            "text": "Fast rules: aim for roughly 2:1 browns to greens, moisture like a wrung sponge, and regular aeration. Avoid meat, dairy, oily food, and pet waste in this small bucket system.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Let's do the quiz"
+                },
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Skip quiz and build now"
+                }
+            ]
+        },
+        {
+            "id": "quiz-1",
+            "text": "Quiz 1: Which materials count as compost greens?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "Fresh plant scraps and coffee grounds"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-greens",
+                    "text": "Dry cardboard and sawdust"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-greens",
+                    "text": "Plastic wrappers"
+                }
+            ]
+        },
+        {
+            "id": "retry-greens",
+            "text": "Close! Greens are nitrogen-rich wet organics like fresh trimmings. Dry paper and leaves are browns.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Retry quiz"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2",
+            "text": "Quiz 2: What's the target moisture level?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "Damp like a wrung-out sponge"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-moisture",
+                    "text": "Bone dry so mold cannot grow"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-moisture",
+                    "text": "Soaked and dripping"
+                }
+            ]
+        },
+        {
+            "id": "retry-moisture",
+            "text": "Not quite. Too dry slows microbes; too wet causes odor and compaction.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "Retry quiz"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "Quiz 3: Why do we turn or fluff a compost bucket?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "To add oxygen and keep decomposition aerobic"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-aeration",
+                    "text": "To remove all microbes"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-aeration",
+                    "text": "To cool it to freezer temperatures"
+                }
+            ]
+        },
+        {
+            "id": "retry-aeration",
+            "text": "Yep, aeration is for oxygen and even decomposition. Anaerobic pockets are what create foul smells.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "Retry quiz"
+                }
+            ]
+        },
+        {
+            "id": "quiz-4",
+            "text": "Quiz 4: Which input should you avoid in this bucket compost?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-5",
+                    "text": "Meat and dairy scraps"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-avoid",
+                    "text": "Shredded paper"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-avoid",
+                    "text": "Dry leaves"
+                }
+            ]
+        },
+        {
+            "id": "retry-avoid",
+            "text": "Correct materials to avoid include meat, dairy, oily foods, and pet waste because they attract pests and smell.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "Retry quiz"
+                }
+            ]
+        },
+        {
+            "id": "quiz-5",
+            "text": "Quiz 5: What active compost temperature range usually indicates strong microbial activity?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "About 50–65 °C (122–149 °F)"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-temp",
+                    "text": "0–10 °C (32–50 °F)"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-temp",
+                    "text": "90–100 °C (194–212 °F)"
+                }
+            ]
+        },
+        {
+            "id": "retry-temp",
+            "text": "Hot compost is warm, not boiling. Around 50–65 °C helps decomposition and suppresses many weed seeds.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-5",
+                    "text": "Retry quiz"
+                }
+            ]
+        },
+        {
+            "id": "build",
+            "text": "Great. Back to execution: go to the 5 gallon bucket item page, open its Process section, verify required inputs, and run **Start a Compost Bucket**. If the output says layered compost bucket, you're done right.",
             "options": [
                 {
                     "type": "process",
                     "process": "start-compost-bin",
-                    "goto": "layer",
-                    "text": "Layer and vent the bucket"
+                    "goto": "build",
+                    "text": "Run Start a Compost Bucket on the item page"
                 },
                 {
                     "type": "goto",
@@ -88,13 +244,13 @@
                             "count": 1
                         }
                     ],
-                    "text": "Bucket is layered and capped"
+                    "text": "Process ran and I got the layered compost bucket"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice build! Keep adding scraps under that brown cap and you have your first active bucket.",
+            "text": "Excellent work. You set up airflow, fed real organic matter, and confirmed the output correctly. Keep adding greens under a brown cap and turn it regularly.",
             "options": [
                 {
                     "type": "finish",
@@ -104,13 +260,22 @@
                             "count": 1
                         }
                     ],
-                    "text": "Ready to start collecting scraps"
+                    "text": "Compost bucket started"
                 }
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "rewards": [
+        {
+            "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb",
+            "count": 1
+        },
+        {
+            "id": "ea830e47-5996-4886-b5ee-74bb2b932988",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["hydroponics/basil"],
     "hardening": {
         "passes": 0,
         "score": 90,
