@@ -1,29 +1,61 @@
 {
     "id": "composting/start",
     "title": "Start a Compost Bucket",
-    "description": "Begin recycling kitchen scraps into soil.",
+    "description": "Build a realistic compost bucket using hydroponic trimmings and kitchen scraps.",
     "image": "/assets/quests/compost_start_bucket.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Waste not, friend! Let's turn scraps into nutrient-rich compost with a bucket starter.",
+            "text": "Waste not, friend! We'll build a real compost bucket and turn plant scraps into future soil food.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "bucket",
-                    "text": "What do I need?"
+                    "goto": "map",
+                    "text": "I am in. Walk me through it."
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Skip to the compost quiz"
                 }
             ]
         },
         {
-            "id": "bucket",
-            "text": "Grab a 5 gal bucket, drill a few vent holes near the top, and set out gloves plus a scoop of dry browns.",
+            "id": "map",
+            "text": "First UX tip: in DSPACE, crafting processes live on item pages. Open Inventory \u2192 the required item, then scroll to its Process section to run the action.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "layer",
+                    "goto": "find-items",
+                    "text": "Where exactly do I find the required item pages?"
+                }
+            ]
+        },
+        {
+            "id": "find-items",
+            "text": "You need a 5 gallon bucket and gloves. In Inventory, open each item page, then check the Process section for \"Vent and layer a kitchen compost bucket.\" The process card shows required inputs and the output item before you run it.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "organic-inputs",
+                    "text": "Got it. What inputs should I gather first?"
+                }
+            ]
+        },
+        {
+            "id": "organic-inputs",
+            "text": "For realistic compost we need greens + browns. Greens here are hydroponic trimmings: bundle of basil leaves and bundle of stevia leaves. Browns are dry paper/cardboard you stage mentally while we track the organic inputs as items.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Teach me the science with a quick quiz"
+                },
+                {
+                    "type": "goto",
+                    "goto": "bucket-ready",
                     "requiresItems": [
                         {
                             "id": "0564d441-7367-412e-b709-dad770814a39",
@@ -32,52 +64,145 @@
                         {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
+                        },
+                        {
+                            "id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",
+                            "count": 3
+                        },
+                        {
+                            "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
+                            "count": 3
                         }
                     ],
-                    "text": "Bucket drilled and gloves on."
-                },
-                {
-                    "type": "goto",
-                    "goto": "prep",
-                    "text": "Remind me about greens vs browns."
+                    "text": "I have bucket, gloves, and hydroponic trimmings ready"
                 }
             ]
         },
         {
-            "id": "prep",
-            "text": "Greens = fresh scraps and coffee grounds; browns = shredded paper, dried leaves, or cardboard. Keep handfuls of each nearby.",
+            "id": "quiz-1",
+            "text": "Quiz 1: In composting, what are \"greens\"?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "layer",
-                    "requiresItems": [
-                        {
-                            "id": "0564d441-7367-412e-b709-dad770814a39",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Supplies staged."
+                    "goto": "quiz-2",
+                    "text": "Nitrogen-rich fresh material like food scraps and green trimmings"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "I'll come back once I find a bucket."
+                    "goto": "quiz-retry",
+                    "text": "Only dry cardboard and wood chips"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "Sterile gravel to improve drainage"
                 }
             ]
         },
         {
-            "id": "layer",
-            "text": "Add a brown base, mix in kitchen scraps, then cap with dry browns. Keep it damp like a wrung sponge and close the lid.",
+            "id": "quiz-2",
+            "text": "Quiz 2: Moisture target?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "Damp like a wrung-out sponge"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "Bone-dry so mold cannot form"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "Completely saturated with standing water"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "Quiz 3: Why turn/aerate a compost bucket?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-4",
+                    "text": "To keep oxygen flowing for aerobic microbes and reduce odors"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "To cool it down below freezing"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "Because anaerobic slime is faster and safer"
+                }
+            ]
+        },
+        {
+            "id": "quiz-4",
+            "text": "Quiz 4: Which material should stay OUT of this beginner bucket?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-5",
+                    "text": "Meat, oily food, or dairy that attracts pests"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "Shredded paper and dry leaves"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "Vegetable and herb trimmings"
+                }
+            ]
+        },
+        {
+            "id": "quiz-5",
+            "text": "Quiz 5: What core temperature usually signals active hot composting?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "bucket-ready",
+                    "text": "Roughly 43-65 C (110-150 F) once the pile is established"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "0-5 C (32-41 F) for peak microbial activity"
+                },
+                {
+                    "type": "goto",
+                    "goto": "quiz-retry",
+                    "text": "Above 95 C (203 F) nonstop"
+                }
+            ]
+        },
+        {
+            "id": "quiz-retry",
+            "text": "Nice attempt. Compost works best with balanced greens and browns, oxygen, moderate moisture, and pest-safe inputs. Retry the quiz and lock it in.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Retry quiz"
+                }
+            ]
+        },
+        {
+            "id": "bucket-ready",
+            "text": "Great. Now open the 5 gallon bucket item page and run the process in its Process section. Confirm the required inputs include basil and stevia leaf bundles, then run it and watch for the layered compost bucket output item.",
             "options": [
                 {
                     "type": "process",
                     "process": "start-compost-bin",
-                    "goto": "layer",
-                    "text": "Layer and vent the bucket"
+                    "goto": "bucket-ready",
+                    "text": "Run process from the bucket item page"
                 },
                 {
                     "type": "goto",
@@ -88,13 +213,13 @@
                             "count": 1
                         }
                     ],
-                    "text": "Bucket is layered and capped"
+                    "text": "Process complete: I have a layered compost bucket"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice build! Keep adding scraps under that brown cap and you have your first active bucket.",
+            "text": "Perfect start. Keep feeding the bucket small chopped scraps, cover each green layer with dry browns, and aerate on schedule. You earned compost monitoring gear plus a finished blend sample for your garden loop.",
             "options": [
                 {
                     "type": "finish",
@@ -104,17 +229,33 @@
                             "count": 1
                         }
                     ],
-                    "text": "Ready to start collecting scraps"
+                    "text": "Compost bucket started"
                 }
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "rewards": [
+        {
+            "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
+            "count": 1
+        },
+        {
+            "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+            "count": 1
+        },
+        {
+            "id": "5e165cbc-f4f2-4e9d-ac92-9588ff1ac9c1",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "hydroponics/basil",
+        "hydroponics/stevia"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
