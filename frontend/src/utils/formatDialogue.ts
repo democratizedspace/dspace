@@ -90,7 +90,10 @@ export const formatDialogue = (text: string = ''): string => {
             if (hasLeadingBoundaryBreak && previousNewlineLength > 0) {
                 const previousSegment = htmlSegments.at(-1);
                 if (typeof previousSegment === 'string' && previousSegment.endsWith(lineBreakTag)) {
-                    htmlSegments[htmlSegments.length - 1] = previousSegment.slice(0, -lineBreakTag.length);
+                    htmlSegments[htmlSegments.length - 1] = previousSegment.slice(
+                        0,
+                        -lineBreakTag.length
+                    );
                     if (
                         htmlSegments[htmlSegments.length - 1].length > 0 &&
                         !htmlSegments[htmlSegments.length - 1].endsWith(' ')
