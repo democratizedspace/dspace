@@ -13,10 +13,11 @@ describe('formatDialogue', () => {
 
     it('keeps inline code inline when source contains line breaks around tokens', () => {
         const formatted = formatDialogue('Scopes: (`\ngist\n`, plus `\nrepo\n`) are enough.');
+        const codeSegments = formatted.match(/<code[^>]*>.*?<\/code>/g) ?? [];
 
         expect(formatted).toContain('<code>gist</code>');
         expect(formatted).toContain('<code>repo</code>');
-        expect(formatted).not.toContain('<code><br');
+        expect(codeSegments.every((segment) => !segment.includes('<br />'))).toBe(true);
     });
 
     it('preserves non-newline whitespace inside inline code spans', () => {
@@ -31,6 +32,14 @@ describe('formatDialogue', () => {
         expect(formatted).toContain('<pre><code>line 1\nline 2</code></pre>');
         expect(formatted).toContain('Use this:<br />');
         expect(formatted).toContain('<br />Done.');
+    });
+
+    it('renders fenced code blocks with a language class and preserved newlines', () => {
+        const formatted = formatDialogue('```bash\nnpm test\nnpm run lint\n```');
+
+        expect(formatted).toContain(
+            '<pre><code class="language-bash">npm test\nnpm run lint</code></pre>'
+        );
     });
 
     it('keeps inner triple-backticks when they are not on a fence-closing line', () => {

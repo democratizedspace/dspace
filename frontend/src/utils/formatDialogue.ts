@@ -16,6 +16,19 @@ const closingFencePattern = /(^|\r?\n)```[ \t]*(?=\r?\n|$)/;
 const replaceNewlinesWithBreaks = (value: string): string =>
     value.replace(newlinePattern, '<br />');
 
+const extractFenceLanguage = (value: string): { language: string | null; code: string } => {
+    const firstNewlineIndex = value.indexOf('\n');
+    const firstLine = firstNewlineIndex === -1 ? value : value.slice(0, firstNewlineIndex);
+    const languageMatch = firstLine.match(/^[A-Za-z0-9_-]+$/);
+
+    if (!languageMatch) {
+        return { language: null, code: value };
+    }
+
+    const code = firstNewlineIndex === -1 ? '' : value.slice(firstNewlineIndex + 1);
+    return { language: languageMatch[0], code };
+};
+
 const findClosingFenceIndex = (source: string, startIndex: number): number => {
     const match = closingFencePattern.exec(source.slice(startIndex));
     if (!match || match.index === undefined) {
@@ -41,7 +54,15 @@ export const formatDialogue = (text: string = ''): string => {
             }
 
             const fencedContent = trimFencePadding(source.slice(index + 3, closingIndex));
-            htmlSegments.push(`<pre><code>${escapeHtml(fencedContent)}</code></pre>`);
+            const { language, code } = extractFenceLanguage(fencedContent);
+
+            if (language) {
+                htmlSegments.push(
+                    `<pre><code class="language-${escapeHtml(language)}">${escapeHtml(code)}</code></pre>`
+                );
+            } else {
+                htmlSegments.push(`<pre><code>${escapeHtml(fencedContent)}</code></pre>`);
+            }
             index = closingIndex + 3;
             continue;
         }
