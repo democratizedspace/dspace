@@ -36,6 +36,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Go back and review the prep steps"
                 }
             ]
         },

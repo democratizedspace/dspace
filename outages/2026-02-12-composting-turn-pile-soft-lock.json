@@ -1,0 +1,11 @@
+{
+  "id": "2026-02-12-composting-turn-pile-soft-lock",
+  "date": "2026-02-12",
+  "component": "frontend/quests",
+  "rootCause": "The \"moisture\" node in composting/turn-pile only offered a process action that advanced to finish, so players who took that branch without all finish requirements could not navigate back and got soft-locked.",
+  "resolution": "Added a fallback goto option from the moisture node back to mix, granted monitoring-tool rewards on completion, and strengthened quest dialogue validation to fail CI when process-to-finish nodes omit fallback navigation.",
+  "references": [
+    "frontend/src/pages/quests/json/composting/turn-pile.json",
+    "tests/questDialogueValidation.test.ts"
+  ]
+}

@@ -27,7 +27,7 @@ type DialogueValidationError = {
     questId: string;
     questPath: string;
     nodeId: string;
-    reason: 'dead-end' | 'unreachable-finish' | 'invalid-start';
+    reason: 'dead-end' | 'unreachable-finish' | 'invalid-start' | 'missing-fallback-navigation';
     snippet: string;
 };
 
@@ -50,6 +50,9 @@ const toNodeSnippet = (node: DialogueNode) => {
     });
     return `text="${compactText}" options=[${options.join('; ')}]`;
 };
+
+const hasFallbackNavigation = (node: DialogueNode) =>
+    (node.options ?? []).some((option) => option.type === 'goto' || option.type === 'finish');
 
 export const validateQuestDialogueCompletable = (
     quest: QuestLike,
@@ -129,6 +132,19 @@ export const validateQuestDialogueCompletable = (
                 snippet: toNodeSnippet(node),
             });
         }
+
+        const hasProcessRouteToFinish = options.some(
+            (option) => option.type === 'process' && option.goto === 'finish'
+        );
+        if (hasProcessRouteToFinish && !hasFallbackNavigation(node)) {
+            errors.push({
+                questId: quest.id ?? 'unknown-quest',
+                questPath,
+                nodeId,
+                reason: 'missing-fallback-navigation',
+                snippet: toNodeSnippet(node),
+            });
+        }
     }
 
     if (hasFinishDefinition && !hasReachableFinish) {
@@ -193,6 +209,19 @@ describe('quest dialogue completable validation', () => {
 
         expect(quest).toBeDefined();
         expect(validateQuestDialogueCompletable(quest as QuestLike)).toEqual([]);
+    });
+
+    it('requires fallback navigation when process options jump straight to finish', async () => {
+        const quests = await loadQuests();
+        const questPaths = await loadQuestPaths();
+        const violations = quests.flatMap((quest: QuestLike) =>
+            validateQuestDialogueCompletable(
+                quest,
+                questPaths.get(quest.id ?? '') ?? 'unknown path'
+            ).filter((error) => error.reason === 'missing-fallback-navigation')
+        );
+
+        expect(violations).toEqual([]);
     });
 
     it('validates all quest dialogue trees as completable', async () => {
