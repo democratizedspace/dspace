@@ -111,7 +111,10 @@ export const formatDialogue = (text: string = ''): string => {
                 if (nextLineBreak === 0) {
                     htmlSegments.push(' ');
                     nextIndex = lookaheadIndex;
-                    while (source[nextIndex] === ' ' || source[nextIndex] === '\t') {
+                    while (
+                        nextIndex < source.length &&
+                        (source[nextIndex] === ' ' || source[nextIndex] === '\t')
+                    ) {
                         nextIndex += 1;
                     }
                 }
