@@ -1,0 +1,10 @@
+{
+  "id": "2026-02-12-connect-github-inline-scope-wrap",
+  "date": "2026-02-12",
+  "component": "frontend-quests",
+  "rootCause": "The welcome/connect-github quest used a long parenthetical sentence in the steps node, causing inline scope labels to wrap awkwardly and appear isolated with line breaks around `gist` and `repo` in the chat bubble.",
+  "resolution": "Rewrote the steps copy to keep scope guidance concise and inline (\`gist\` for cloud sync and \`repo\` for submissions) so the labels render naturally in-flow.",
+  "references": [
+    "frontend/src/pages/quests/json/welcome/connect-github.json"
+  ]
+}
