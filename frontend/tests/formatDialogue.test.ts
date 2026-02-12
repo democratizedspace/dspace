@@ -19,11 +19,33 @@ describe('formatDialogue', () => {
         expect(formatted).not.toContain('<code><br');
     });
 
+    it('preserves non-newline whitespace inside inline code spans', () => {
+        const formatted = formatDialogue('Run `npm   run\ttest` now.');
+
+        expect(formatted).toContain('<code>npm   run\ttest</code>');
+    });
+
     it('renders fenced multiline code blocks with preserved newlines', () => {
         const formatted = formatDialogue('Use this:\n```\nline 1\nline 2\n```\nDone.');
 
         expect(formatted).toContain('<pre><code>line 1\nline 2</code></pre>');
         expect(formatted).toContain('Use this:<br />');
         expect(formatted).toContain('<br />Done.');
+    });
+
+    it('keeps inner triple-backticks when they are not on a fence-closing line', () => {
+        const formatted = formatDialogue('```\nconst sample = "```";\nconsole.log(sample);\n```');
+
+        expect(formatted).toContain(
+            '<pre><code>const sample = &quot;```&quot;;\nconsole.log(sample);</code></pre>'
+        );
+    });
+
+    it('converts CRLF newlines to br tags without leaving carriage returns', () => {
+        const formatted = formatDialogue('Line 1\r\nLine 2\r\n`code\r\nspan`');
+
+        expect(formatted).toContain('Line 1<br />Line 2<br />');
+        expect(formatted).toContain('<code>code span</code>');
+        expect(formatted).not.toContain('\r');
     });
 });

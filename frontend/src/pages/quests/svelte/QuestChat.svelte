@@ -138,9 +138,9 @@
                     </div>
                     <div class="left">
                         <img src={npc} alt="NPC" />
-                        <p class="npcDialogue left">
+                        <div class="npcDialogue left">
                             {@html formatDialogue(dialogueMap.get(pointer)?.text)}
-                        </p>
+                        </div>
                     </div>
                     <div class="right options">
                         <img src={avatar} alt="Avatar" />

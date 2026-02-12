@@ -6,10 +6,26 @@ export const escapeHtml = (value: string): string =>
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 
-const normalizeInlineCode = (value: string): string => value.replace(/\s+/g, ' ').trim();
-
 const trimFencePadding = (value: string): string =>
     value.replace(/^\r?\n/, '').replace(/\r?\n$/, '');
+
+const newlinePattern = /\r?\n/g;
+const specialTokenPattern = /```|`/;
+const closingFencePattern = /(^|\r?\n)```[ \t]*(?=\r?\n|$)/;
+
+const replaceNewlinesWithBreaks = (value: string): string =>
+    value.replace(newlinePattern, '<br />');
+
+const findClosingFenceIndex = (source: string, startIndex: number): number => {
+    const match = closingFencePattern.exec(source.slice(startIndex));
+    if (!match || match.index === undefined) {
+        return -1;
+    }
+
+    return startIndex + match.index + match[1].length;
+};
+
+const normalizeInlineCode = (value: string): string => value.replace(newlinePattern, ' ').trim();
 
 export const formatDialogue = (text: string = ''): string => {
     const source = String(text);
@@ -18,9 +34,9 @@ export const formatDialogue = (text: string = ''): string => {
 
     while (index < source.length) {
         if (source.startsWith('```', index)) {
-            const closingIndex = source.indexOf('```', index + 3);
+            const closingIndex = findClosingFenceIndex(source, index + 3);
             if (closingIndex === -1) {
-                htmlSegments.push(escapeHtml(source.slice(index)).replace(/\n/g, '<br />'));
+                htmlSegments.push(replaceNewlinesWithBreaks(escapeHtml(source.slice(index))));
                 break;
             }
 
@@ -33,7 +49,7 @@ export const formatDialogue = (text: string = ''): string => {
         if (source[index] === '`') {
             const closingIndex = source.indexOf('`', index + 1);
             if (closingIndex === -1) {
-                htmlSegments.push(escapeHtml(source.slice(index)).replace(/\n/g, '<br />'));
+                htmlSegments.push(replaceNewlinesWithBreaks(escapeHtml(source.slice(index))));
                 break;
             }
 
@@ -43,9 +59,9 @@ export const formatDialogue = (text: string = ''): string => {
             continue;
         }
 
-        const nextSpecial = source.slice(index).search(/```|`/);
+        const nextSpecial = source.slice(index).search(specialTokenPattern);
         const endIndex = nextSpecial === -1 ? source.length : index + nextSpecial;
-        htmlSegments.push(escapeHtml(source.slice(index, endIndex)).replace(/\n/g, '<br />'));
+        htmlSegments.push(replaceNewlinesWithBreaks(escapeHtml(source.slice(index, endIndex))));
         index = endIndex;
     }
 
