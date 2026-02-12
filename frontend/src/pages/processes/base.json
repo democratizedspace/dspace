@@ -7252,7 +7252,16 @@
                 "count": 1
             }
         ],
-        "consumeItems": [],
+        "consumeItems": [
+            {
+                "id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",
+                "count": 2
+            },
+            {
+                "id": "29190faf-8581-4769-b871-f0ee283840e1",
+                "count": 1
+            }
+        ],
         "createItems": [
             {
                 "id": "025862b3-8377-4396-ab32-aa572bdc3260",
