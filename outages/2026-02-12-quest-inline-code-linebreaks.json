@@ -1,0 +1,12 @@
+{
+  "id": "2026-02-12-quest-inline-code-linebreaks",
+  "date": "2026-02-12",
+  "component": "/quests/welcome/connect-github dialogue formatting",
+  "rootCause": "Inline code parsing allowed newline-to-<br /> conversion to remain on inline-code boundaries, so `gist`/`repo` could render with forced line breaks around the token.",
+  "resolution": "Updated the formatter to collapse boundary <br /> tags around inline <code> spans and added a regression test using the exact connect-github steps text.",
+  "references": [
+    "frontend/src/utils/formatDialogue.ts",
+    "frontend/tests/formatDialogue.test.ts",
+    "frontend/src/pages/quests/json/welcome/connect-github.json"
+  ]
+}
