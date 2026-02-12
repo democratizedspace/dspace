@@ -8,9 +8,9 @@ costs low, while generating it cleanly earns you dWatt without dCarbon penalties
 
 ## Non-renewable energy (dCarbon impact)
 
-If you pull power from fossil-fuel sources, DSPACE applies a built-in carbon tax. For every 1,000
-[dCarbon](/docs/dCarbon) generated, shop sell prices drop by 1% (up to a 90% reduction). The goal is
-simple: reward renewable energy and make wasteful usage expensive.
+If you pull power from fossil-fuel sources, DSPACE applies a built-in carbon tax. Selling any priced
+item is taxed by `dCarbon / 1000` percent (continuous, capped at a 90% reduction), and dWatt itself
+is not sold. The goal is simple: reward renewable energy and make wasteful usage expensive.
 
 ## Renewable energy and storage
 

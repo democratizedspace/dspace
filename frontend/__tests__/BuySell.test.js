@@ -1,9 +1,10 @@
 /**
  * @jest-environment jsdom
  */
-import { render } from '@testing-library/svelte';
+import { fireEvent, render } from '@testing-library/svelte';
 import BuySell from '../src/components/svelte/BuySell.svelte';
 import { db, ENTITY_TYPES } from '../src/utils/customcontent.js';
+import { getSalesTaxPercentage, sellItems } from '../src/utils/gameState/inventory.js';
 
 const mockItems = [
     { id: 'dusd-id', name: 'dUSD', price: '1 dUSD' },
@@ -97,6 +98,37 @@ describe('BuySell', () => {
 
         const notTradeableLabel = await findByText('Not tradeable');
         expect(notTradeableLabel).toBeTruthy();
+    });
+
+    it('sends base price to sellItems so tax is applied only once', async () => {
+        mockItems.push({
+            id: 'taxed-item',
+            name: 'Taxed Item',
+            description: 'Taxable catalog item',
+            image: '/taxed.png',
+            price: '10 dUSD',
+            unit: 'unit',
+        });
+        getSalesTaxPercentage.mockReturnValue(20);
+
+        const { findByText } = render(BuySell, { props: { itemId: 'taxed-item' } });
+
+        const sellToggle = await findByText('Sell');
+        await fireEvent.click(sellToggle.closest('button'));
+
+        const sellButtonLabel = await findByText('Sell for 8 dUSD (-20%)');
+        await fireEvent.click(sellButtonLabel.closest('button'));
+
+        expect(sellItems).toHaveBeenCalledWith(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    id: 'taxed-item',
+                    quantity: 1,
+                    price: 10,
+                    symbol: 'dUSD',
+                }),
+            ])
+        );
     });
 
     it('uses catalog items without querying IndexedDB', async () => {
