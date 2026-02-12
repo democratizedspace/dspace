@@ -36,6 +36,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Back up and review the steps"
                 }
             ]
         },

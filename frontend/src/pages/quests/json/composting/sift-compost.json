@@ -50,6 +50,11 @@
                         }
                     ],
                     "text": "Sift the compost"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "I need to gather tools first"
                 }
             ]
         },

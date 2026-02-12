@@ -15,6 +15,11 @@
                     "process": "heat-walstad",
                     "text": "Install the heater.",
                     "goto": "acquire"
+                },
+                {
+                    "type": "goto",
+                    "goto": "acquire",
+                    "text": "Heater is already installed"
                 }
             ]
         },
@@ -38,6 +43,11 @@
                     "process": "stock-guppies",
                     "text": "Introduce them.",
                     "goto": "finish"
+                },
+                {
+                    "type": "goto",
+                    "goto": "acquire",
+                    "text": "Hold on, I need to re-check acclimation"
                 }
             ]
         },

@@ -144,6 +144,11 @@
                     "process": "measure-compost-moisture",
                     "goto": "finish",
                     "text": "Record the moisture"
+                },
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Return to turning the pile"
                 }
             ]
         },
@@ -172,6 +177,15 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "e034d081-a29e-4040-830f-a192304db50d",
+            "count": 1
+        },
+        {
+            "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["composting/start"]
 }

@@ -27,7 +27,7 @@ type DialogueValidationError = {
     questId: string;
     questPath: string;
     nodeId: string;
-    reason: 'dead-end' | 'unreachable-finish' | 'invalid-start';
+    reason: 'dead-end' | 'unreachable-finish' | 'invalid-start' | 'process-only-trap';
     snippet: string;
 };
 
@@ -119,6 +119,13 @@ export const validateQuestDialogueCompletable = (
             (option) =>
                 option.type === 'finish' || (option.goto ? nodeMap.has(option.goto) : false)
         );
+        const hasProcessOption = options.some((option) => option.type === 'process');
+        const hasNonProcessEscape = options.some(
+            (option) =>
+                option.type === 'finish' ||
+                option.type === 'goto' ||
+                (option.type && option.type !== 'process' && Boolean(option.goto))
+        );
 
         if (!hasTransition && !isTerminalNode(node)) {
             errors.push({
@@ -126,6 +133,16 @@ export const validateQuestDialogueCompletable = (
                 questPath,
                 nodeId,
                 reason: 'dead-end',
+                snippet: toNodeSnippet(node),
+            });
+        }
+
+        if (hasProcessOption && !hasNonProcessEscape && !isTerminalNode(node)) {
+            errors.push({
+                questId: quest.id ?? 'unknown-quest',
+                questPath,
+                nodeId,
+                reason: 'process-only-trap',
                 snippet: toNodeSnippet(node),
             });
         }
@@ -183,6 +200,40 @@ describe('quest dialogue completable validation', () => {
                 nodeId: 'start',
                 reason: 'unreachable-finish',
                 snippet: 'text="Entry" options=[goto -> temp (Continue)]',
+            },
+        ]);
+    });
+
+    it('flags process-only nodes without an escape route', () => {
+        const quest: QuestLike = {
+            id: 'fixture/process-trap',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Begin work',
+                    options: [{ type: 'goto', goto: 'workbench', text: 'Begin' }],
+                },
+                {
+                    id: 'workbench',
+                    text: 'Try the operation',
+                    options: [{ type: 'process', goto: 'finish', text: 'Run process' }],
+                },
+                {
+                    id: 'finish',
+                    text: 'Done',
+                    options: [{ type: 'finish', text: 'Complete' }],
+                },
+            ],
+        };
+
+        expect(validateQuestDialogueCompletable(quest, 'fixtures/process-trap.json')).toEqual([
+            {
+                questId: 'fixture/process-trap',
+                questPath: 'fixtures/process-trap.json',
+                nodeId: 'workbench',
+                reason: 'process-only-trap',
+                snippet: 'text="Try the operation" options=[process -> finish (Run process)]',
             },
         ]);
     });

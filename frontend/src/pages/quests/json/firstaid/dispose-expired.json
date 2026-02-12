@@ -26,6 +26,11 @@
                     "process": "wash-hands",
                     "text": "Hands are washed",
                     "goto": "sort"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Back up and review safety prep"
                 }
             ]
         },

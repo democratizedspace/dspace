@@ -1,0 +1,17 @@
+{
+  "id": "OUT-2026-02-12-turn-pile-process-trap",
+  "date": "2026-02-12",
+  "component": "frontend/quests",
+  "rootCause": "The quest dialogue completable validator treated process actions as guaranteed exits, so nodes with only process options passed CI even though players could get trapped when process requirements were unmet or the process could not be started.",
+  "resolution": "Added explicit non-process escape-route validation for process-bearing nodes, updated affected quests to include a navigation fallback option, and patched composting/turn-pile moisture with a return path and completion rewards.",
+  "references": [
+    "tests/questDialogueValidation.test.ts",
+    "frontend/src/pages/quests/json/composting/turn-pile.json",
+    "frontend/src/pages/quests/json/composting/sift-compost.json",
+    "frontend/src/pages/quests/json/aquaria/guppy.json",
+    "frontend/src/pages/quests/json/firstaid/assemble-kit.json",
+    "frontend/src/pages/quests/json/firstaid/change-bandage.json",
+    "frontend/src/pages/quests/json/firstaid/dispose-expired.json",
+    "frontend/src/pages/quests/json/firstaid/remove-splinter.json"
+  ]
+}

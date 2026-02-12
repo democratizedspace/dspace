@@ -26,6 +26,11 @@
                     "process": "wash-hands",
                     "text": "Hands are clean",
                     "goto": "dry"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Back up and review the checklist"
                 }
             ]
         },
@@ -38,6 +43,11 @@
                     "process": "dry-hands",
                     "text": "Hands are dry",
                     "goto": "pack"
+                },
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "I need to wash my hands again"
                 }
             ]
         },

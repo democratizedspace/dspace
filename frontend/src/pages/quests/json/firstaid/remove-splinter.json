@@ -26,6 +26,11 @@
                     "process": "wash-hands",
                     "text": "Hands are clean",
                     "goto": "remove"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Back up and review the prep steps"
                 }
             ]
         },
