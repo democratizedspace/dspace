@@ -1,0 +1,12 @@
+{
+  "id": "2026-02-12-quest-inline-code-linebreaks",
+  "date": "2026-02-12",
+  "component": "quest dialogue inline-code formatting",
+  "rootCause": "The quest dialogue formatter converted raw newlines to <br /> before/after inline code spans, so multiline-authored inline tokens rendered with forced line breaks around entries like `gist` and `repo`.",
+  "resolution": "Normalized rendered quest dialogue HTML to collapse <br /> tags adjacent to inline <code> spans and added regression assertions for the connect-github scope examples.",
+  "references": [
+    "frontend/src/utils/formatDialogue.ts",
+    "frontend/tests/formatDialogue.test.ts",
+    "frontend/src/pages/quests/json/welcome/connect-github.json"
+  ]
+}

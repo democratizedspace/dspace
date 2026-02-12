@@ -40,6 +40,13 @@ const findClosingFenceIndex = (source: string, startIndex: number): number => {
 
 const normalizeInlineCode = (value: string): string => value.replace(newlinePattern, ' ').trim();
 
+const getNewlineLengthAt = (source: string, index: number): number => {
+    if (source.startsWith('\r\n', index)) {
+        return 2;
+    }
+    return source[index] === '\n' ? 1 : 0;
+};
+
 export const formatDialogue = (text: string = ''): string => {
     const source = String(text);
     const htmlSegments: string[] = [];
@@ -74,9 +81,43 @@ export const formatDialogue = (text: string = ''): string => {
                 break;
             }
 
-            const inlineContent = normalizeInlineCode(source.slice(index + 1, closingIndex));
+            const rawInlineContent = source.slice(index + 1, closingIndex);
+            const hasLeadingBoundaryBreak = /^\r?\n/.test(rawInlineContent);
+            const hasTrailingBoundaryBreak = /\r?\n$/.test(rawInlineContent);
+
+            const previousNewlineLength = getNewlineLengthAt(source, index - 1);
+            if (hasLeadingBoundaryBreak && previousNewlineLength > 0) {
+                const previousSegment = htmlSegments.at(-1);
+                if (typeof previousSegment === 'string' && previousSegment.endsWith('<br />')) {
+                    htmlSegments[htmlSegments.length - 1] = previousSegment.slice(0, -6);
+                    if (
+                        htmlSegments[htmlSegments.length - 1].length > 0 &&
+                        !htmlSegments[htmlSegments.length - 1].endsWith(' ')
+                    ) {
+                        htmlSegments[htmlSegments.length - 1] += ' ';
+                    }
+                }
+            }
+
+            const inlineContent = normalizeInlineCode(rawInlineContent);
             htmlSegments.push(`<code>${escapeHtml(inlineContent)}</code>`);
-            index = closingIndex + 1;
+
+            let nextIndex = closingIndex + 1;
+            const followingNewlineLength = getNewlineLengthAt(source, nextIndex);
+            if (hasTrailingBoundaryBreak && followingNewlineLength > 0) {
+                const lookaheadIndex = nextIndex + followingNewlineLength;
+                const nextLineBreak = getNewlineLengthAt(source, lookaheadIndex);
+
+                if (nextLineBreak === 0) {
+                    htmlSegments.push(' ');
+                    nextIndex = lookaheadIndex;
+                    while (source[nextIndex] === ' ' || source[nextIndex] === '\t') {
+                        nextIndex += 1;
+                    }
+                }
+            }
+
+            index = nextIndex;
             continue;
         }
 

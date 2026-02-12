@@ -18,6 +18,10 @@ describe('formatDialogue', () => {
         expect(formatted).toContain('<code>gist</code>');
         expect(formatted).toContain('<code>repo</code>');
         expect(codeSegments.every((segment) => !segment.includes('<br />'))).toBe(true);
+        expect(formatted).not.toContain('<br /><code>gist</code>');
+        expect(formatted).not.toContain('<code>gist</code><br />');
+        expect(formatted).not.toContain('<br /><code>repo</code>');
+        expect(formatted).not.toContain('<code>repo</code><br />');
     });
 
     it('preserves non-newline whitespace inside inline code spans', () => {
