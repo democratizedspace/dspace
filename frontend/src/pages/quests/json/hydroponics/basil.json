@@ -84,7 +84,7 @@
         },
         {
             "id": "bucket",
-            "text": "I know, right? It's almost like the gamedev is awkwardly reusing existing game systems instead of building a proper one! But I digress. Now that you've got your sink installed, why don't you fill a bucket up with water? I'll show you how, if you need...",
+            "text": "Good call. Now that your sink is installed, fill a bucket with tap water and we can prep it for the hydroponics tub.",
             "options": [
                 {
                     "type": "process",
@@ -128,7 +128,7 @@
         },
         {
             "id": "fill",
-            "text": "Well, look who's back! You would be correct! Next up, we've gotta make some seedlings! And what better way than with seeds? Later you can propagate from existing plants, but for now let's start from scratch so that you get the full experience. You gotta soak some rockwool in water for like 15 minutes or so. That way the water's fully permeated them! Rockwool is a great growing medium for hydroponics.",
+            "text": "Perfect, that's exactly what we needed. Next we'll make seedlings from scratch so you can learn the full workflow. Start by soaking 10 starter plugs for about 15 minutes so they're evenly hydrated. Rockwool holds moisture well, which makes it great for hydroponics.",
             "options": [
                 {
                     "type": "process",
@@ -141,16 +141,16 @@
                     "requiresItems": [
                         {
                             "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
-                            "count": 11
+                            "count": 10
                         }
                     ],
-                    "text": "I can add the seeds now, right?"
+                    "text": "The plugs are soaked and ready. Time to plant?"
                 }
             ]
         },
         {
             "id": "germinate",
-            "text": "You sure can! Just plop a few seeds in each pre-drilled hole. Afterwards you can just leave them in a window for a few weeks and come back when they've grown into little baby seedlings! Don't worry, I'll be around!",
+            "text": "Exactly. Drop a seed or two into each starter plug, keep them moist, and give them light. In about a week you should have 10 healthy basil seedlings ready to transplant.",
             "options": [
                 {
                     "type": "process",
@@ -163,16 +163,16 @@
                     "requiresItems": [
                         {
                             "id": "5712947f-716c-4f71-b28d-fcb811631080",
-                            "count": 11
+                            "count": 10
                         }
                     ],
-                    "text": "Alright, I'm definitely seeing a bunch of seedlings. It seems like all of them were successful!"
+                    "text": "Great news: the seedlings came in strong. Ready for the tub transfer."
                 }
             ]
         },
         {
             "id": "transfer",
-            "text": "Fancy seeing you again! By my calculations, at least two weeks have passed! Your seedlings are looking fantastic! And all of them?? That's some great beginner's luck! It's time to transfer them to their new home! If you still have that hydroponics tub I gave you (and the dechlorinated water), you can complete the transfer now! Also, you'll need to add some nutrients to the water. I've got some here for you.",
+            "text": "Welcome back! Your seedlings look great. Let's move all 10 into the hydroponics tub with fresh dechlorinated water and nutrients. I've got nutrients ready for you now.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -204,7 +204,7 @@
         },
         {
             "id": "lighting",
-            "text": "Before we start the main event and grow you some basil, we've gotta ensure that we have sufficient lighting. They make dedicated grow lamps for hydroponics, and for now let's keep it super simple. Here, have a grow lamp! This one uses 36 Watt-hours (that is, 36 dWatt for every hour), which is not too shabby, but it'll definitely add up over the next 4 weeks you'll need to fully grow your basil. I'd head on over to the Energy page and make sure you have enough dWatt. Also, just so you're ready, I'd prep another bucket of dechlorinated water because after harvest we'll be replacing it. There are more water-efficient techniques, but I don't want to overwhelm you just yet. Don't worry, we'll hit that aspirational 95% water savings someday! I guarantee it!",
+            "text": "Now for the grow phase. Basil needs steady light, so let's use a dedicated grow lamp. This one draws 36 dWatt per hour, and the full grow takes about 4 weeks, so check the Energy page before you start. Also prep one extra bucket of dechlorinated water now so your post-harvest refresh is ready.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -232,7 +232,7 @@
                     "requiresItems": [
                         {
                             "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
-                            "count": 11
+                            "count": 10
                         }
                     ],
                     "text": "A month older and a month wiser. I've got a bunch of basil now! Is it time to harvest?"
@@ -241,7 +241,7 @@
         },
         {
             "id": "harvest",
-            "text": "You bet, buddy! I'm so proud of you! Look at those gorgeous plants! Think of all the tasty dishes you could make with this! I'm getting hungry just thinking about it. To promote healthy growth for your successive harvests, prune your basil plants by pinching off the tops of the stems! This encourages the plant to become bushier because it stimulates the growth of two new stems from each pinch point. Also, you should aim to remove no more than one-third of the total amount of foliage at any one time. Otherwise, you won't have enough leaves to promote photosynthesis! I'll leave you to it. I'm sure you'll do great!",
+            "text": "Beautiful work! Those basil plants are harvest-ready. Snip the tops to encourage bushier regrowth, and try not to remove more than one-third of the foliage at once so photosynthesis stays strong.",
             "options": [
                 {
                     "type": "process",
@@ -254,7 +254,7 @@
                     "requiresItems": [
                         {
                             "id": "29190faf-8581-4769-b871-f0ee283840e1",
-                            "count": 11
+                            "count": 10
                         }
                     ],
                     "text": "I've got these fresh bundles of basil! How do they look?"
