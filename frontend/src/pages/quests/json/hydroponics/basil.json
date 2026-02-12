@@ -128,7 +128,7 @@
         },
         {
             "id": "fill",
-            "text": "Well, look who's back! You would be correct! Next up, we've gotta make some seedlings! And what better way than with seeds? Later you can propagate from existing plants, but for now let's start from scratch so that you get the full experience. You gotta soak some rockwool in water for like 15 minutes or so. That way the water's fully permeated them! Rockwool is a great growing medium for hydroponics.",
+            "text": "Well, look who's back! You would be correct! Next up, we've gotta make some seedlings! And what better way than with seeds? Later you can propagate from existing plants, but for now let's start from scratch so you get the full experience. Soak 10 starter plugs in water for about 15 minutes so they're fully saturated. Rockwool is a great growing medium for hydroponics.",
             "options": [
                 {
                     "type": "process",
@@ -141,7 +141,7 @@
                     "requiresItems": [
                         {
                             "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
-                            "count": 11
+                            "count": 10
                         }
                     ],
                     "text": "I can add the seeds now, right?"
@@ -150,7 +150,7 @@
         },
         {
             "id": "germinate",
-            "text": "You sure can! Just plop a few seeds in each pre-drilled hole. Afterwards you can just leave them in a window for a few weeks and come back when they've grown into little baby seedlings! Don't worry, I'll be around!",
+            "text": "You sure can! Place a couple of basil seeds in each pre-drilled starter plug. Then keep them somewhere bright and warm for about a week while they sprout into seedlings. Don't worry, I'll be around!",
             "options": [
                 {
                     "type": "process",
@@ -163,16 +163,16 @@
                     "requiresItems": [
                         {
                             "id": "5712947f-716c-4f71-b28d-fcb811631080",
-                            "count": 11
+                            "count": 10
                         }
                     ],
-                    "text": "Alright, I'm definitely seeing a bunch of seedlings. It seems like all of them were successful!"
+                    "text": "Alright, I'm seeing a healthy batch of seedlings and they're ready to move."
                 }
             ]
         },
         {
             "id": "transfer",
-            "text": "Fancy seeing you again! By my calculations, at least two weeks have passed! Your seedlings are looking fantastic! And all of them?? That's some great beginner's luck! It's time to transfer them to their new home! If you still have that hydroponics tub I gave you (and the dechlorinated water), you can complete the transfer now! Also, you'll need to add some nutrients to the water. I've got some here for you.",
+            "text": "Fancy seeing you again! By my calculations, about a week has passed. Your seedlings look fantastic. Time to transfer them to their new home! If you still have that hydroponics tub I gave you (and dechlorinated water), you can complete the transfer now. You'll also need to add nutrients to the water; I've got some here for you.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -232,7 +232,7 @@
                     "requiresItems": [
                         {
                             "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
-                            "count": 11
+                            "count": 10
                         }
                     ],
                     "text": "A month older and a month wiser. I've got a bunch of basil now! Is it time to harvest?"
@@ -254,7 +254,7 @@
                     "requiresItems": [
                         {
                             "id": "29190faf-8581-4769-b871-f0ee283840e1",
-                            "count": 11
+                            "count": 10
                         }
                     ],
                     "text": "I've got these fresh bundles of basil! How do they look?"

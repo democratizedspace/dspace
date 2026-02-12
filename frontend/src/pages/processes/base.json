@@ -1040,7 +1040,7 @@
     },
     {
         "id": "grow-basil",
-        "title": "Grow 11 basil seedlings under a hydroponic lamp for four weeks until harvest-ready",
+        "title": "Grow 10 basil seedlings under a hydroponic lamp for four weeks until harvest-ready",
         "image": "/assets/hydroponic_basil_adult.jpg",
         "requireItems": [
             {
@@ -1051,7 +1051,7 @@
         "consumeItems": [
             {
                 "id": "5712947f-716c-4f71-b28d-fcb811631080",
-                "count": 11
+                "count": 10
             },
             {
                 "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
@@ -1065,7 +1065,7 @@
         "createItems": [
             {
                 "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
-                "count": 11
+                "count": 10
             },
             {
                 "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
@@ -1088,13 +1088,13 @@
     },
     {
         "id": "regrow-basil",
-        "title": "Regrow 11 harvested basil plants in a ready hydroponics tub using 8,064 dWatts",
+        "title": "Regrow 10 harvested basil plants in a ready hydroponics tub using 8,064 dWatts",
         "image": "/assets/hydroponic_basil_adult.jpg",
         "requireItems": [],
         "consumeItems": [
             {
                 "id": "29190faf-8581-4769-b871-f0ee283840e1",
-                "count": 11
+                "count": 10
             },
             {
                 "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
@@ -1108,7 +1108,7 @@
         "createItems": [
             {
                 "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
-                "count": 11
+                "count": 10
             },
             {
                 "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
@@ -1137,17 +1137,17 @@
         "consumeItems": [
             {
                 "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
-                "count": 11
+                "count": 10
             }
         ],
         "createItems": [
             {
                 "id": "5d48cefb-fc1f-4962-b2c6-9b014151d0ae",
-                "count": 11
+                "count": 10
             },
             {
                 "id": "29190faf-8581-4769-b871-f0ee283840e1",
-                "count": 11
+                "count": 10
             }
         ],
         "duration": "5m",
