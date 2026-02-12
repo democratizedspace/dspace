@@ -38,6 +38,11 @@
                     "process": "stock-guppies",
                     "text": "Introduce them.",
                     "goto": "finish"
+                },
+                {
+                    "type": "goto",
+                    "goto": "acquire",
+                    "text": "I need to recheck and acclimate longer."
                 }
             ]
         },
@@ -61,7 +66,7 @@
     "requiresQuests": ["aquaria/water-testing", "aquaria/heater-install"],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }
