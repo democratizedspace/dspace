@@ -3,7 +3,7 @@
   "date": "2026-02-12",
   "component": "frontend/quests",
   "rootCause": "The composting/turn-pile quest allowed a transition from the temp node into the moisture node via a process option that did not guarantee the moisture-meter requirements needed for any option on moisture. Because moisture only exposed a process action, players without the meter reached a state-locked node and could not continue or backtrack.",
-  "resolution": "Added a non-blocking return option from moisture back to mix, added quest rewards, and expanded quest dialogue validation to detect transitions that can enter a node without guaranteed requirements for any outgoing option so CI fails on similar state-lock regressions.",
+  "resolution": "Added a non-blocking return option from moisture back to mix, added quest rewards, expanded quest dialogue validation to detect transitions that can enter a node without guaranteed requirements for any outgoing option so CI fails on similar state-lock regressions, and verified both reward item IDs exist in the generated inventory/process data.",
   "references": [
     "frontend/src/pages/quests/json/composting/turn-pile.json",
     "tests/questDialogueValidation.test.ts"
