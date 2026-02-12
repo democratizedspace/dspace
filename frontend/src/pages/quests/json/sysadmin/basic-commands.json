@@ -29,7 +29,13 @@
                 {
                     "type": "goto",
                     "goto": "parse",
-                    "text": "Transcript generated"
+                    "text": "Transcript generated",
+                    "requiresItems": [
+                        {
+                            "id": "91923542-45d5-46f5-82eb-6367b26ef8cc",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -45,7 +51,13 @@
                 {
                     "type": "goto",
                     "goto": "quiz-1",
-                    "text": "Cheatsheet complete"
+                    "text": "Cheatsheet complete",
+                    "requiresItems": [
+                        {
+                            "id": "f17410cd-8c38-4612-9666-7bd1c399874d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
