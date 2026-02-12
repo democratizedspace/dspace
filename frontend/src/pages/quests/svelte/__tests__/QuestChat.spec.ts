@@ -40,4 +40,31 @@ describe('QuestChat', () => {
             expect(dialogue?.querySelector('img')).toBeNull();
         });
     });
+
+    it('keeps inline scope tokens attached to surrounding words', async () => {
+        const quest = {
+            id: 'quest-inline-scopes',
+            title: 'Scope formatting',
+            description: 'Quest with inline scope names',
+            image: '/quest.png',
+            npc: '/npc.png',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Grant (`gist` for sync, plus `repo` if you submit quests).',
+                    options: [{ id: 'finish', text: 'Finish', type: 'finish' }],
+                },
+            ],
+            rewards: [{ id: 'item-1', count: 1 }],
+        };
+
+        const { container } = render(QuestChat, { props: { quest } });
+
+        await waitFor(() => {
+            const dialogue = container.querySelector('.npcDialogue');
+            expect(dialogue?.innerHTML).toContain('(<code>gist</code>&nbsp;for');
+            expect(dialogue?.innerHTML).toContain('plus&nbsp;<code>repo</code>&nbsp;if');
+        });
+    });
 });

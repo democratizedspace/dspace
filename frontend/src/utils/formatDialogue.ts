@@ -40,6 +40,16 @@ const findClosingFenceIndex = (source: string, startIndex: number): number => {
 
 const normalizeInlineCode = (value: string): string => value.replace(newlinePattern, ' ').trim();
 
+const nonBreakingSpace = '&nbsp;';
+
+const replaceTrailingSpaceWithNbsp = (value: string): string => {
+    if (!value.endsWith(' ')) {
+        return value;
+    }
+
+    return `${value.slice(0, -1)}${nonBreakingSpace}`;
+};
+
 export const formatDialogue = (text: string = ''): string => {
     const source = String(text);
     const htmlSegments: string[] = [];
@@ -74,9 +84,18 @@ export const formatDialogue = (text: string = ''): string => {
                 break;
             }
 
+            if (htmlSegments.length > 0) {
+                const lastSegmentIndex = htmlSegments.length - 1;
+                htmlSegments[lastSegmentIndex] = replaceTrailingSpaceWithNbsp(
+                    htmlSegments[lastSegmentIndex]
+                );
+            }
+
             const inlineContent = normalizeInlineCode(source.slice(index + 1, closingIndex));
-            htmlSegments.push(`<code>${escapeHtml(inlineContent)}</code>`);
-            index = closingIndex + 1;
+            const trailingSpace = source[closingIndex + 1] === ' ' ? nonBreakingSpace : '';
+
+            htmlSegments.push(`<code>${escapeHtml(inlineContent)}</code>${trailingSpace}`);
+            index = closingIndex + 1 + (trailingSpace ? 1 : 0);
             continue;
         }
 
