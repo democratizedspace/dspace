@@ -240,6 +240,16 @@ describe('gameState - inventory', () => {
         expect(mockGameState.inventory[dUSDId]).toBe(75); // dUSD should have increased correctly
     });
 
+    test('sellItems should apply dCarbon tax once using the base sell price', () => {
+        mockGameState.inventory[dCarbonId] = 2000;
+        const itemsToSell = [{ id: '1', quantity: 1, price: 10 }];
+
+        sellItems(itemsToSell);
+
+        expect(mockGameState.inventory['1']).toBe(9);
+        expect(mockGameState.inventory[dUSDId]).toBe(58);
+    });
+
     test('sellItems should reject items with negative price', () => {
         const itemsToSell = [{ id: '1', quantity: 5, price: -5 }];
 
@@ -305,6 +315,11 @@ describe('gameState - inventory', () => {
         expect(getSalesTaxPercentage()).toBe(1);
     });
 
+    test('getSalesTaxPercentage should return 0.5% for 500 dCarbon', () => {
+        mockGameState.inventory[dCarbonId] = 500;
+        expect(getSalesTaxPercentage()).toBe(0.5);
+    });
+
     test('getSalesTaxPercentage should return 2% for 2000 dCarbon', () => {
         mockGameState.inventory[dCarbonId] = 2000;
         expect(getSalesTaxPercentage()).toBe(2);
@@ -316,7 +331,7 @@ describe('gameState - inventory', () => {
     });
 
     test('getSalesTaxPercentage should cap at 90% for values greater than 90000 dCarbon', () => {
-        mockGameState.inventory[dCarbonId] = 95000;
+        mockGameState.inventory[dCarbonId] = 1000000;
         expect(getSalesTaxPercentage()).toBe(90);
     });
 });

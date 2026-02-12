@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { render } from '@testing-library/svelte';
+import { fireEvent, render } from '@testing-library/svelte';
 import BuySell from '../src/components/svelte/BuySell.svelte';
 import { db, ENTITY_TYPES } from '../src/utils/customcontent.js';
 
@@ -37,21 +37,29 @@ jest.mock('../src/utils', () => ({
     }),
 }));
 
+const sellItemsMock = jest.fn();
+const buyItemsMock = jest.fn();
+const getSalesTaxPercentageMock = jest.fn(() => 0);
+
 jest.mock('../../utils/gameState/inventory.js', () => ({
-    buyItems: jest.fn(),
-    sellItems: jest.fn(),
-    getSalesTaxPercentage: jest.fn(() => 0),
+    buyItems: buyItemsMock,
+    sellItems: sellItemsMock,
+    getSalesTaxPercentage: getSalesTaxPercentageMock,
 }));
 jest.mock('../src/utils/gameState/inventory.js', () => ({
-    buyItems: jest.fn(),
-    sellItems: jest.fn(),
-    getSalesTaxPercentage: jest.fn(() => 0),
+    buyItems: buyItemsMock,
+    sellItems: sellItemsMock,
+    getSalesTaxPercentage: getSalesTaxPercentageMock,
 }));
 
 describe('BuySell', () => {
     beforeEach(() => {
         db.get.mockReset();
         mockItems.splice(2, mockItems.length);
+        buyItemsMock.mockReset();
+        sellItemsMock.mockReset();
+        getSalesTaxPercentageMock.mockReset();
+        getSalesTaxPercentageMock.mockReturnValue(0);
     });
 
     it('loads custom items from IndexedDB without crashing', async () => {
@@ -97,6 +105,28 @@ describe('BuySell', () => {
 
         const notTradeableLabel = await findByText('Not tradeable');
         expect(notTradeableLabel).toBeTruthy();
+    });
+
+    it('sells using the base item price so tax is not applied twice', async () => {
+        getSalesTaxPercentageMock.mockReturnValue(20);
+        mockItems.push({
+            id: 'sellable-item',
+            name: 'Sellable Item',
+            description: 'Static catalog entry',
+            image: '/sellable.png',
+            price: '10 dUSD',
+            unit: 'unit',
+        });
+
+        const { findByText } = render(BuySell, { props: { itemId: 'sellable-item' } });
+
+        await findByText('Buy for 10 dUSD');
+        await fireEvent.click(await findByText('Sell'));
+        await fireEvent.click(await findByText('Sell for 8 dUSD (-20%)'));
+
+        expect(sellItemsMock).toHaveBeenCalledWith([
+            expect.objectContaining({ id: 'sellable-item', price: 10, quantity: 1 }),
+        ]);
     });
 
     it('uses catalog items without querying IndexedDB', async () => {

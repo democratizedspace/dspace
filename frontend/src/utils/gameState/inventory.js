@@ -45,11 +45,12 @@ export const getCurrentdUSD = () => {
 export const getSalesTaxPercentage = () => {
     const gameState = loadGameState();
 
-    if (dCarbonId && getItemCount(dCarbonId) > 0) {
+    if (dCarbonId) {
         const dCarbonCount = gameState.inventory[dCarbonId] || 0;
-        return Math.min(Math.floor(dCarbonCount / 1000), 90);
+        return Math.min(dCarbonCount / 1000, 90);
     }
-    return 0; // No tax for other items
+
+    return 0;
 };
 
 export const buyItems = (items) => {
@@ -82,7 +83,7 @@ export const sellItems = (items) => {
         if (quantity <= 0 || price <= 0) return;
 
         if (gameState.inventory[item.id] && gameState.inventory[item.id] >= quantity) {
-            const taxPercentage = getSalesTaxPercentage(id);
+            const taxPercentage = getSalesTaxPercentage();
             const taxedPrice = price * (1 - taxPercentage / 100);
             const totalPriceAfterTax = taxedPrice * quantity;
 
