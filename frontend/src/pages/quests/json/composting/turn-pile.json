@@ -4,7 +4,7 @@
     "description": "Aerate the compost by stirring the mix so microbes stay active.",
     "hardening": {
         "passes": 3,
-        "score": 90,
+        "score": 95,
         "emoji": "💯",
         "history": [
             {
@@ -187,7 +187,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "composting/start"
-    ]
+    "requiresQuests": ["composting/start"]
 }
