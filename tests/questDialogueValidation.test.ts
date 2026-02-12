@@ -76,7 +76,11 @@ const toItemCountMap = (entries: ItemCount[] | undefined) => {
 const requirementsForOption = (option: DialogueOption) => {
     if (option.type === 'process' && option.process) {
         const process = processMap.get(option.process);
-        const requirements = toItemCountMap(process?.requireItems as ItemCount[] | undefined);
+        const requirements = toItemCountMap(option.requiresItems);
+
+        for (const required of (process?.requireItems as ItemCount[] | undefined) ?? []) {
+            requirements.set(required.id, (requirements.get(required.id) ?? 0) + required.count);
+        }
 
         for (const consumed of (process?.consumeItems as ItemCount[] | undefined) ?? []) {
             requirements.set(consumed.id, (requirements.get(consumed.id) ?? 0) + consumed.count);
@@ -95,7 +99,15 @@ const transitionGuarantees = (option: DialogueOption) => {
             return new Map<string, number>();
         }
 
-        const guarantees = toItemCountMap(process.requireItems as ItemCount[] | undefined);
+        const guarantees = toItemCountMap(option.requiresItems);
+
+        for (const required of (process.requireItems as ItemCount[] | undefined) ?? []) {
+            guarantees.set(required.id, (guarantees.get(required.id) ?? 0) + required.count);
+        }
+
+        for (const consumed of (process.consumeItems as ItemCount[] | undefined) ?? []) {
+            guarantees.set(consumed.id, (guarantees.get(consumed.id) ?? 0) + consumed.count);
+        }
 
         for (const consumed of (process.consumeItems as ItemCount[] | undefined) ?? []) {
             const nextCount = (guarantees.get(consumed.id) ?? 0) - consumed.count;
@@ -412,6 +424,64 @@ describe('quest dialogue completable validation', () => {
                 },
             ]
         );
+    });
+
+    it('treats process option requiresItems as required for actionability checks', () => {
+        const quest: QuestLike = {
+            id: 'fixture/state-locked-process-option-requires-items',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Entry',
+                    options: [{ type: 'goto', goto: 'prep', text: 'Continue' }],
+                },
+                {
+                    id: 'prep',
+                    text: 'Proceed to process step.',
+                    options: [{ type: 'goto', goto: 'craft', text: 'Ready' }],
+                },
+                {
+                    id: 'craft',
+                    text: 'Need quest-level required item to proceed.',
+                    options: [
+                        {
+                            type: 'process',
+                            process: 'bucket-water-dechlorinated',
+                            requiresItems: [
+                                {
+                                    id: '4d21c498-9225-4d0b-9a1a-ed65e349f0a8',
+                                    count: 1,
+                                },
+                            ],
+                            goto: 'finish',
+                            text: 'Prepare water',
+                        },
+                    ],
+                },
+                {
+                    id: 'finish',
+                    text: 'Done',
+                    options: [{ type: 'finish', text: 'Complete' }],
+                },
+            ],
+        };
+
+        expect(
+            validateQuestDialogueCompletable(
+                quest,
+                'fixtures/state-locked-process-option-requires-items.json'
+            )
+        ).toEqual([
+            {
+                questId: 'fixture/state-locked-process-option-requires-items',
+                questPath: 'fixtures/state-locked-process-option-requires-items.json',
+                nodeId: 'craft',
+                reason: 'state-locked',
+                snippet:
+                    'entered from "prep" but lacks guaranteed items for any option; text="Need quest-level required item to proceed." options=[process -> finish (Prepare water)]',
+            },
+        ]);
     });
 
     it('keeps composting/turn-pile completable from temp node to finish', async () => {
