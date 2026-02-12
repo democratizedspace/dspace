@@ -25,3 +25,17 @@ process lives in the **Processes** tab:
 - Each run consumes dCarbon and a small amount of
   [dUSD](/inventory/item/5247a603-294a-4a34-a884-1ae20969b2a1) to retire the emissions and mint
   dOffset in return.
+
+## dCarbon sales-tax effect
+
+Your current dCarbon inventory applies a **sales tax to any sellable item** in `/inventory`:
+
+- Tax rate = `dCarbon / 1000` percent.
+- 1,000 dCarbon (1 metric ton CO₂) = 1% tax.
+- The rate is continuous (for example, 500 dCarbon = 0.5% tax).
+- The tax is capped at 90%.
+
+Examples:
+
+- 2,000 dCarbon selling a 10 dUSD item → 2% tax → receive 9.8 dUSD.
+- 1,000,000 dCarbon selling a 10 dUSD item → capped 90% tax → receive 1 dUSD.

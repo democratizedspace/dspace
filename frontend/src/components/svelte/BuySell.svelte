@@ -43,7 +43,7 @@
         }
         const transactionItem = {
             ...item,
-            price: activeType === 'buy' ? price : effectiveSellPrice,
+            price,
             symbol,
             quantity,
         };
@@ -55,6 +55,11 @@
             sellItems(transactionList);
         }
     }
+
+    const formatTaxPercentage = (value) => {
+        const rounded = Number(value.toFixed(2));
+        return Number.isInteger(rounded) ? String(rounded) : String(rounded);
+    };
 
     onMount(async () => {
         if (item) {
@@ -82,7 +87,7 @@
             const components = getPriceStringComponents(item.price);
             price = components.price;
             symbol = components.symbol;
-            taxAmount = getSalesTaxPercentage(item.price);
+            taxAmount = getSalesTaxPercentage();
             effectiveSellPrice = taxAmount > 0 ? price * (1 - taxAmount / 100) : price;
         } else {
             price = 0;
@@ -123,6 +128,7 @@
                 <label>
                     <input
                         type="number"
+                        step="any"
                         min="1"
                         value={quantity}
                         on:input={handleQuantityInput}
@@ -132,7 +138,9 @@
                 <Chip
                     text={buyChipActive
                         ? `Buy for ${quantity * price} ${symbol}`
-                        : `Sell for ${quantity * effectiveSellPrice} ${symbol} (-${taxAmount}%)`}
+                        : `Sell for ${quantity * effectiveSellPrice} ${symbol} (-${formatTaxPercentage(
+                              taxAmount
+                          )}%)`}
                     onClick={handleTransactionClick}
                     priceInRed={displaySellPriceInRed}
                     red={sellChipActive}
@@ -141,7 +149,8 @@
 
             {#if sellChipActive && taxAmount > 0}
                 <p class="tax-notice">
-                    Note: There's a {taxAmount}% tax applied. Reduce the amount of
+                    Note: There's a {formatTaxPercentage(taxAmount)}% tax applied. Reduce the amount
+                    of
                     <a href="/docs/dCarbon">dCarbon</a> in your inventory:
                 </p>
 
