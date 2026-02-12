@@ -1,0 +1,11 @@
+{
+  "id": "quest-process-only-dialogue-trap",
+  "date": "2026-02-12",
+  "component": "frontend:quests",
+  "rootCause": "Quest dialogue completable validation only required a graph path to finish. It did not assert that specific high-risk nodes had a non-process escape route, so `composting/turn-pile` node `moisture` shipped with only a process action and could trap players when that action was unavailable.",
+  "resolution": "Added a CI regression test that requires `composting/turn-pile` node `moisture` to include a non-process fallback (`goto: mix`), updated the quest node with that fallback option, and added a completion reward (compost sifter) so the quest has meaningful progression incentives.",
+  "references": [
+    "tests/questDialogueValidation.test.ts",
+    "frontend/src/pages/quests/json/composting/turn-pile.json"
+  ]
+}

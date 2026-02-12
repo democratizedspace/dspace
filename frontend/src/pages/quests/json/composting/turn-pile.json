@@ -4,8 +4,8 @@
     "description": "Aerate the compost by stirring the mix so microbes stay active.",
     "hardening": {
         "passes": 3,
-        "score": 90,
-        "emoji": "💯",
+        "score": 95,
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-hardening-2025-08-12",
@@ -120,7 +120,7 @@
         },
         {
             "id": "temp",
-            "text": "Thermometer reads 55 °C—ideal. Remove the probe carefully; it may be hot.",
+            "text": "Thermometer reads 55 \u00b0C\u2014ideal. Remove the probe carefully; it may be hot.",
             "options": [
                 {
                     "type": "process",
@@ -137,13 +137,18 @@
         },
         {
             "id": "moisture",
-            "text": "Meter shows 55% moisture—ideal for microbes. Rinse the probe after use.",
+            "text": "Meter shows 55% moisture\u2014ideal for microbes. Rinse the probe after use.",
             "options": [
                 {
                     "type": "process",
                     "process": "measure-compost-moisture",
                     "goto": "finish",
                     "text": "Record the moisture"
+                },
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Go back to turning the pile"
                 }
             ]
         },
@@ -172,6 +177,11 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["composting/start"]
 }
