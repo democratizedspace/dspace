@@ -234,6 +234,24 @@
         padding: 2px 6px;
         border-radius: 8px;
         border: 1px solid rgba(36, 207, 47, 0.35);
+        display: inline;
+    }
+
+    .npcDialogue :global(pre) {
+        margin: 0.6rem 0;
+        padding: 0.6rem;
+        border-radius: 8px;
+        border: 1px solid rgba(36, 207, 47, 0.35);
+        background: rgba(36, 207, 47, 0.1);
+        overflow-x: auto;
+    }
+
+    .npcDialogue :global(pre code) {
+        display: block;
+        background: transparent;
+        border: none;
+        padding: 0;
+        border-radius: 0;
     }
 
     .quest-banner {
