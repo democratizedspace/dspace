@@ -12,9 +12,13 @@ const trimFencePadding = (value: string): string =>
 const newlinePattern = /\r?\n/g;
 const specialTokenPattern = /```|`/;
 const closingFencePattern = /(^|\r?\n)```[ \t]*(?=\r?\n|$)/;
+const wrappedInlineCodePattern = /\r?\n[ \t]*`([^`\r\n]+)`[ \t]*\r?\n/g;
 
 const replaceNewlinesWithBreaks = (value: string): string =>
     value.replace(newlinePattern, '<br />');
+
+const normalizeWrappedInlineCode = (value: string): string =>
+    value.replace(wrappedInlineCodePattern, (_match, code: string) => ` \`${code}\` `);
 
 const extractFenceLanguage = (value: string): { language: string | null; code: string } => {
     const firstNewlineIndex = value.indexOf('\n');
@@ -41,7 +45,7 @@ const findClosingFenceIndex = (source: string, startIndex: number): number => {
 const normalizeInlineCode = (value: string): string => value.replace(newlinePattern, ' ').trim();
 
 export const formatDialogue = (text: string = ''): string => {
-    const source = String(text);
+    const source = normalizeWrappedInlineCode(String(text));
     const htmlSegments: string[] = [];
     let index = 0;
 

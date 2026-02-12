@@ -20,6 +20,16 @@ describe('formatDialogue', () => {
         expect(codeSegments.every((segment) => !segment.includes('<br />'))).toBe(true);
     });
 
+    it('does not emit line breaks before or after inline code spans', () => {
+        const formatted = formatDialogue('Scopes (\n`gist`\nfor sync and\n`repo`\nfor submissions).');
+
+        expect(formatted).toContain('Scopes ( <code>gist</code> for sync and <code>repo</code>');
+        expect(formatted).not.toContain('(<br /><code>gist</code>');
+        expect(formatted).not.toContain('</code><br />for sync');
+        expect(formatted).not.toContain('and<br /><code>repo</code>');
+        expect(formatted).not.toContain('</code><br />for submissions');
+    });
+
     it('preserves non-newline whitespace inside inline code spans', () => {
         const formatted = formatDialogue('Run `npm   run\ttest` now.');
 

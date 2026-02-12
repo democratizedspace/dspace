@@ -1,0 +1,11 @@
+{
+  "id": "2026-02-12-quest-inline-code-linebreaks",
+  "date": "2026-02-12",
+  "component": "frontend-quests",
+  "rootCause": "Quest dialogue formatting treated any newline as a hard line break, including hard-wrapped source text that placed inline code spans on their own lines, causing unwanted breaks around inline tokens like `gist` and `repo`.",
+  "resolution": "Normalized inline code spans that are wrapped by newlines on both sides before rendering, so accidental hard-wraps around inline tokens render inline instead of injecting `<br />` separators.",
+  "references": [
+    "frontend/src/utils/formatDialogue.ts",
+    "frontend/tests/formatDialogue.test.ts"
+  ]
+}
