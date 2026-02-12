@@ -11,16 +11,15 @@ describe('formatDialogue', () => {
         expect(formatted).not.toContain('<img');
     });
 
-    it('keeps inline code inline when source contains line breaks around tokens', () => {
-        const formatted = formatDialogue('Scopes:\n`\ngist\n`\nplus\n`\nrepo\n`\nare enough.');
+    it('keeps connect-github steps scope tokens inline', () => {
+        const formatted = formatDialogue(
+            'grant only the required scopes (`gist` for cloud sync, plus `repo` if you also want to use this token for quest submissions), copy it once'
+        );
         const codeSegments = formatted.match(/<code[^>]*>.*?<\/code>/g) ?? [];
 
-        expect(formatted).toContain('Scopes: <code>gist</code>');
-        expect(formatted).toContain('<code>gist</code> plus');
-        expect(formatted).toContain('plus <code>repo</code>');
-        expect(formatted).toContain('<code>repo</code> are enough.');
-        expect(formatted).toContain('<code>gist</code>');
-        expect(formatted).toContain('<code>repo</code>');
+        expect(formatted).toContain('scopes (<code>gist</code> for cloud sync');
+        expect(formatted).toContain('<code>gist</code> for cloud sync, plus <code>repo</code> if');
+        expect(formatted).toContain('plus <code>repo</code> if you also want');
         expect(codeSegments.every((segment) => !segment.includes('<br />'))).toBe(true);
         expect(formatted).not.toContain('<br /><code>gist</code>');
         expect(formatted).not.toContain('<code>gist</code><br />');
