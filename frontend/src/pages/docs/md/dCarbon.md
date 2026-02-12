@@ -16,6 +16,16 @@ Currently, the only way to generate dCarbon is by drawing power from your outlet
 
 <img src="/assets/docs/generate_dCarbon.jpg" alt="screenshot of processes producing dCarbon" width="100%" />
 
+## dCarbon tax on sellable items
+
+Your current dCarbon also affects how much dUSD you receive when selling any item with a price:
+
+- Sales tax is **1% per 1,000 dCarbon** in your inventory.
+- The tax is **continuous** (for example, 500 dCarbon = 0.5% tax).
+- Tax is **capped at 90%**.
+
+Example: at 20,000 dCarbon, selling a 10 dUSD item yields 8 dUSD after a 20% tax.
+
 ## Reducing your dCarbon footprint
 
 You can burn down accumulated dCarbon by converting it to [dOffset](/docs/doffset). The conversion

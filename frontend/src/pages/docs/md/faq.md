@@ -106,9 +106,10 @@ ID. You can also use the **Clear** button next to the token input field. See
 
 ## How do energy sources affect the economy?
 
-Generating power from fossil-fuel outlets increases dCarbon. For every 1000 dCarbon, shop sell
-prices drop by 1% (up to 90%), so renewable energy like [solar power](/docs/solar) or wind turbines
-is the best long-term strategy. See [Electricity](/docs/electricity) for the full rules.
+Generating power from fossil-fuel outlets increases dCarbon. Selling any priced item applies a
+continuous tax of 1% per 1,000 dCarbon (up to 90%), so renewable energy like
+[solar power](/docs/solar) or wind turbines is the best long-term strategy. See
+[Electricity](/docs/electricity) for the full rules.
 
 ## How do I reduce dCarbon?
 
