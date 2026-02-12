@@ -298,7 +298,7 @@ describe('gameState - inventory', () => {
 
     test('sellItems should apply continuous dCarbon tax to sale proceeds', () => {
         mockGameState.inventory[dCarbonId] = 500;
-        const itemsToSell = [{ id: '1', quantity: 1, price: 10 }];
+        const itemsToSell = [{ id: ITEM1, quantity: 1, price: 10 }];
 
         sellItems(itemsToSell);
 
@@ -308,7 +308,7 @@ describe('gameState - inventory', () => {
 
     test('sellItems should cap dCarbon tax at 90%', () => {
         mockGameState.inventory[dCarbonId] = 1000000;
-        const itemsToSell = [{ id: '1', quantity: 1, price: 10 }];
+        const itemsToSell = [{ id: ITEM1, quantity: 1, price: 10 }];
 
         sellItems(itemsToSell);
 

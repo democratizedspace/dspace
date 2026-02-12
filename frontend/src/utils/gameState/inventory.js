@@ -79,6 +79,7 @@ export const buyItems = (items) => {
 export const sellItems = (items) => {
     const gameState = loadGameState();
     const currencyId = dUSDId;
+    const taxPercentage = getSalesTaxPercentage();
 
     items.forEach((item) => {
         const { id, quantity, price } = item;
@@ -86,12 +87,11 @@ export const sellItems = (items) => {
         if (price === undefined) return;
         if (quantity <= 0 || price <= 0) return;
 
-        if (gameState.inventory[item.id] && gameState.inventory[item.id] >= quantity) {
-            const taxPercentage = getSalesTaxPercentage();
+        if (gameState.inventory[id] && gameState.inventory[id] >= quantity) {
             const taxedPrice = price * (1 - taxPercentage / 100);
             const totalPriceAfterTax = taxedPrice * quantity;
 
-            gameState.inventory[item.id] -= quantity; // Subtracting the sold item from inventory.
+            gameState.inventory[id] -= quantity; // Subtracting the sold item from inventory.
             gameState.inventory[currencyId] += totalPriceAfterTax; // Adding the currency from sale.
         }
     });
