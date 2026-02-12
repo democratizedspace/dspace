@@ -22,7 +22,7 @@ describe('QuestChat', () => {
             dialogue: [
                 {
                     id: 'start',
-                    text: 'Run `npm test`\n<img src=x onerror=alert(1)>',
+                    text: 'Run `npm test` and save your token.\n```bash\nnpm test\nnpm run lint\n```\n<img src=x onerror=alert(1)>',
                     options: [{ id: 'finish', text: 'Finish', type: 'finish' }],
                 },
             ],
@@ -35,6 +35,10 @@ describe('QuestChat', () => {
             const dialogue = container.querySelector('.npcDialogue');
             expect(dialogue).not.toBeNull();
             expect(dialogue?.innerHTML).toContain('<code>npm test</code>');
+            expect(dialogue?.innerHTML).not.toContain('<code>npm<br />test</code>');
+            expect(dialogue?.innerHTML).toContain(
+                '<pre><code class="language-bash">npm test\nnpm run lint\n</code></pre>'
+            );
             expect(dialogue?.innerHTML).toContain('<br');
             expect(dialogue?.innerHTML).toContain('&lt;img src=x onerror=alert(1)&gt;');
             expect(dialogue?.querySelector('img')).toBeNull();

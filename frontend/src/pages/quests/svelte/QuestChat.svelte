@@ -138,9 +138,9 @@
                     </div>
                     <div class="left">
                         <img src={npc} alt="NPC" />
-                        <p class="npcDialogue left">
+                        <div class="npcDialogue left">
                             {@html formatDialogue(dialogueMap.get(pointer)?.text)}
-                        </p>
+                        </div>
                     </div>
                     <div class="right options">
                         <img src={avatar} alt="Avatar" />
@@ -234,6 +234,25 @@
         padding: 2px 6px;
         border-radius: 8px;
         border: 1px solid rgba(36, 207, 47, 0.35);
+        display: inline;
+        white-space: normal;
+    }
+
+    .npcDialogue :global(pre) {
+        margin: 12px 0;
+        padding: 10px;
+        border-radius: 10px;
+        background: rgba(36, 207, 47, 0.15);
+        border: 1px solid rgba(36, 207, 47, 0.35);
+        overflow-x: auto;
+    }
+
+    .npcDialogue :global(pre code) {
+        display: block;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        white-space: pre;
     }
 
     .quest-banner {
