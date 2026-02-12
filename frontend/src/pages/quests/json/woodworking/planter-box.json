@@ -125,7 +125,13 @@
                 {
                     "type": "goto",
                     "goto": "seal",
-                    "text": "Can I add a liner?"
+                    "text": "Can I add a liner?",
+                    "requiresItems": [
+                        {
+                            "id": "ea830e47-5996-4886-b5ee-74bb2b932988",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },

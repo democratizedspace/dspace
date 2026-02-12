@@ -29,7 +29,13 @@
                 {
                     "type": "goto",
                     "goto": "tail-pass",
-                    "text": "Journal report created"
+                    "text": "Journal report created",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -45,7 +51,13 @@
                 {
                     "type": "goto",
                     "goto": "quiz-1",
-                    "text": "Incident extract complete"
+                    "text": "Incident extract complete",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },

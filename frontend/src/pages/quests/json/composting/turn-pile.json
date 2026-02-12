@@ -131,7 +131,13 @@
                 {
                     "type": "goto",
                     "goto": "mix",
-                    "text": "Return to turning the pile"
+                    "text": "Return to turning the pile",
+                    "requiresItems": [
+                        {
+                            "id": "e034d081-a29e-4040-830f-a192304db50d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
