@@ -11,7 +11,7 @@ vi.mock('../../../../utils/itemResolver.js', () => ({
 }));
 
 describe('QuestChat', () => {
-    it('renders newline and inline code formatting while escaping raw HTML', async () => {
+    it('keeps inline code inline while escaping raw HTML', async () => {
         const quest = {
             id: 'quest-2',
             title: 'Formatting quest',
@@ -35,7 +35,7 @@ describe('QuestChat', () => {
             const dialogue = container.querySelector('.npcDialogue');
             expect(dialogue).not.toBeNull();
             expect(dialogue?.innerHTML).toContain('<code>npm test</code>');
-            expect(dialogue?.innerHTML).toContain('<br');
+            expect(dialogue?.innerHTML).not.toContain('<br');
             expect(dialogue?.innerHTML).toContain('&lt;img src=x onerror=alert(1)&gt;');
             expect(dialogue?.querySelector('img')).toBeNull();
         });
