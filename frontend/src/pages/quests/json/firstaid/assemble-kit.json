@@ -38,6 +38,11 @@
                     "process": "dry-hands",
                     "text": "Hands are dry",
                     "goto": "pack"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Let me restart the checklist before handling supplies."
                 }
             ]
         },

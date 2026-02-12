@@ -76,7 +76,13 @@ const toItemCountMap = (entries: ItemCount[] | undefined) => {
 const requirementsForOption = (option: DialogueOption) => {
     if (option.type === 'process' && option.process) {
         const process = processMap.get(option.process);
-        return toItemCountMap(process?.requireItems as ItemCount[] | undefined);
+        const requirements = toItemCountMap(process?.requireItems as ItemCount[] | undefined);
+
+        for (const consumed of (process?.consumeItems as ItemCount[] | undefined) ?? []) {
+            requirements.set(consumed.id, (requirements.get(consumed.id) ?? 0) + consumed.count);
+        }
+
+        return requirements;
     }
 
     return toItemCountMap(option.requiresItems);
@@ -357,6 +363,55 @@ describe('quest dialogue completable validation', () => {
                     'entered from "temp" but lacks guaranteed items for any option; text="Need a moisture meter here." options=[process -> finish (Measure moisture)]',
             },
         ]);
+    });
+
+    it('treats process consumeItems as required for actionability checks', () => {
+        const quest: QuestLike = {
+            id: 'fixture/state-locked-consume-items',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Entry',
+                    options: [{ type: 'goto', goto: 'prep', text: 'Continue' }],
+                },
+                {
+                    id: 'prep',
+                    text: 'Gather your tools first.',
+                    options: [{ type: 'goto', goto: 'craft', text: 'Ready' }],
+                },
+                {
+                    id: 'craft',
+                    text: 'Need consumables to proceed.',
+                    options: [
+                        {
+                            type: 'process',
+                            process: 'bucket-water-dechlorinated',
+                            goto: 'finish',
+                            text: 'Prepare water',
+                        },
+                    ],
+                },
+                {
+                    id: 'finish',
+                    text: 'Done',
+                    options: [{ type: 'finish', text: 'Complete' }],
+                },
+            ],
+        };
+
+        expect(validateQuestDialogueCompletable(quest, 'fixtures/state-locked-consume-items.json')).toEqual(
+            [
+                {
+                    questId: 'fixture/state-locked-consume-items',
+                    questPath: 'fixtures/state-locked-consume-items.json',
+                    nodeId: 'craft',
+                    reason: 'state-locked',
+                    snippet:
+                        'entered from "prep" but lacks guaranteed items for any option; text="Need consumables to proceed." options=[process -> finish (Prepare water)]',
+                },
+            ]
+        );
     });
 
     it('keeps composting/turn-pile completable from temp node to finish', async () => {

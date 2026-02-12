@@ -38,6 +38,11 @@
                     "process": "stock-guppies",
                     "text": "Introduce them.",
                     "goto": "finish"
+                },
+                {
+                    "type": "goto",
+                    "goto": "acquire",
+                    "text": "I need to recheck and acclimate longer."
                 }
             ]
         },
