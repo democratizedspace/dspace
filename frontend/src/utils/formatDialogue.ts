@@ -12,9 +12,10 @@ const trimFencePadding = (value: string): string =>
 const newlinePattern = /\r?\n/g;
 const specialTokenPattern = /```|`/;
 const closingFencePattern = /(^|\r?\n)```[ \t]*(?=\r?\n|$)/;
+const lineBreakTag = '<br />';
 
 const replaceNewlinesWithBreaks = (value: string): string =>
-    value.replace(newlinePattern, '<br />');
+    value.replace(newlinePattern, lineBreakTag);
 
 const extractFenceLanguage = (value: string): { language: string | null; code: string } => {
     const firstNewlineIndex = value.indexOf('\n');
@@ -88,8 +89,8 @@ export const formatDialogue = (text: string = ''): string => {
             const previousNewlineLength = getNewlineLengthAt(source, index - 1);
             if (hasLeadingBoundaryBreak && previousNewlineLength > 0) {
                 const previousSegment = htmlSegments.at(-1);
-                if (typeof previousSegment === 'string' && previousSegment.endsWith('<br />')) {
-                    htmlSegments[htmlSegments.length - 1] = previousSegment.slice(0, -6);
+                if (typeof previousSegment === 'string' && previousSegment.endsWith(lineBreakTag)) {
+                    htmlSegments[htmlSegments.length - 1] = previousSegment.slice(0, -lineBreakTag.length);
                     if (
                         htmlSegments[htmlSegments.length - 1].length > 0 &&
                         !htmlSegments[htmlSegments.length - 1].endsWith(' ')

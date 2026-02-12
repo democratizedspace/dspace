@@ -12,9 +12,13 @@ describe('formatDialogue', () => {
     });
 
     it('keeps inline code inline when source contains line breaks around tokens', () => {
-        const formatted = formatDialogue('Scopes: (`\ngist\n`, plus `\nrepo\n`) are enough.');
+        const formatted = formatDialogue('Scopes:\n`\ngist\n`\nplus\n`\nrepo\n`\nare enough.');
         const codeSegments = formatted.match(/<code[^>]*>.*?<\/code>/g) ?? [];
 
+        expect(formatted).toContain('Scopes: <code>gist</code>');
+        expect(formatted).toContain('<code>gist</code> plus');
+        expect(formatted).toContain('plus <code>repo</code>');
+        expect(formatted).toContain('<code>repo</code> are enough.');
         expect(formatted).toContain('<code>gist</code>');
         expect(formatted).toContain('<code>repo</code>');
         expect(codeSegments.every((segment) => !segment.includes('<br />'))).toBe(true);
