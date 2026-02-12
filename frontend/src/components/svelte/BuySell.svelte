@@ -43,7 +43,7 @@
         }
         const transactionItem = {
             ...item,
-            price: activeType === 'buy' ? price : effectiveSellPrice,
+            price,
             symbol,
             quantity,
         };
@@ -82,7 +82,7 @@
             const components = getPriceStringComponents(item.price);
             price = components.price;
             symbol = components.symbol;
-            taxAmount = getSalesTaxPercentage(item.price);
+            taxAmount = getSalesTaxPercentage();
             effectiveSellPrice = taxAmount > 0 ? price * (1 - taxAmount / 100) : price;
         } else {
             price = 0;

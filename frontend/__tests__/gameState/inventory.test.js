@@ -296,8 +296,33 @@ describe('gameState - inventory', () => {
         expect(mockGameState.inventory).toEqual(expectedInventory);
     });
 
+    test('sellItems should apply continuous dCarbon tax to sale proceeds', () => {
+        mockGameState.inventory[dCarbonId] = 500;
+        const itemsToSell = [{ id: '1', quantity: 1, price: 10 }];
+
+        sellItems(itemsToSell);
+
+        expect(mockGameState.inventory[ITEM1]).toBe(9);
+        expect(mockGameState.inventory[dUSDId]).toBeCloseTo(59.95);
+    });
+
+    test('sellItems should cap dCarbon tax at 90%', () => {
+        mockGameState.inventory[dCarbonId] = 1000000;
+        const itemsToSell = [{ id: '1', quantity: 1, price: 10 }];
+
+        sellItems(itemsToSell);
+
+        expect(mockGameState.inventory[ITEM1]).toBe(9);
+        expect(mockGameState.inventory[dUSDId]).toBeCloseTo(51);
+    });
+
     test('getSalesTaxPercentage should return 0% if there is no dCarbon', () => {
         expect(getSalesTaxPercentage()).toBe(0);
+    });
+
+    test('getSalesTaxPercentage should return 0.5% for 500 dCarbon', () => {
+        mockGameState.inventory[dCarbonId] = 500;
+        expect(getSalesTaxPercentage()).toBe(0.5);
     });
 
     test('getSalesTaxPercentage should return 1% for 1000 dCarbon', () => {
@@ -310,13 +335,13 @@ describe('gameState - inventory', () => {
         expect(getSalesTaxPercentage()).toBe(2);
     });
 
-    test('getSalesTaxPercentage should return 9% for 9000 dCarbon', () => {
-        mockGameState.inventory[dCarbonId] = 9000;
-        expect(getSalesTaxPercentage()).toBe(9);
+    test('getSalesTaxPercentage should return 2.5% for 2500 dCarbon', () => {
+        mockGameState.inventory[dCarbonId] = 2500;
+        expect(getSalesTaxPercentage()).toBe(2.5);
     });
 
     test('getSalesTaxPercentage should cap at 90% for values greater than 90000 dCarbon', () => {
-        mockGameState.inventory[dCarbonId] = 95000;
+        mockGameState.inventory[dCarbonId] = 1000000;
         expect(getSalesTaxPercentage()).toBe(90);
     });
 });

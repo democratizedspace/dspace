@@ -11,6 +11,21 @@ This measurement increases when you generate energy from non-renewable sources, 
 source explicitly doesn't release carbon dioxide. Players are encouraged to find ways to minimize
 their dCarbon footprint through sustainable energy solutions.
 
+## How dCarbon affects selling items
+
+dCarbon does **not** prevent you from using [dWatt](/docs/dwatt), and dWatt itself is not sold for
+dUSD. Instead, dCarbon applies a sales tax whenever you sell a priced inventory item.
+
+- Sales tax rate = `dCarbon / 1000` percent
+- 1000 dCarbon = 1% tax, 500 dCarbon = 0.5% tax
+- The tax is continuous (not rounded down to whole percentages)
+- The tax is capped at 90%
+
+Examples:
+
+- Selling a 10 dUSD item with 2000 dCarbon (2% tax) yields 9.8 dUSD.
+- Selling a 10 dUSD item with 1000000 dCarbon yields 1 dUSD due to the 90% cap.
+
 Currently, the only way to generate dCarbon is by drawing power from your outlet using your
 [smart plug](/inventory/item/a5395e29-1862-4eb7-8517-5d161635e032):
 
