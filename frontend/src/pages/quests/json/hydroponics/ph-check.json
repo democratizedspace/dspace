@@ -29,7 +29,13 @@
                 {
                     "type": "goto",
                     "goto": "adjust",
-                    "text": "It's out of range"
+                    "text": "It's out of range",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
