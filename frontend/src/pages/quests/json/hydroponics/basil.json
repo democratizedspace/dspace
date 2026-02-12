@@ -141,7 +141,7 @@
                     "requiresItems": [
                         {
                             "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
-                            "count": 11
+                            "count": 10
                         }
                     ],
                     "text": "I can add the seeds now, right?"
@@ -150,7 +150,7 @@
         },
         {
             "id": "germinate",
-            "text": "You sure can! Just plop a few seeds in each pre-drilled hole. Afterwards you can just leave them in a window for a few weeks and come back when they've grown into little baby seedlings! Don't worry, I'll be around!",
+            "text": "You sure can! Pop a seed into each plug, keep them warm, and give them gentle light. In about a week, you'll have little basil seedlings ready to transplant. Don't worry, I'll be around!",
             "options": [
                 {
                     "type": "process",
@@ -163,16 +163,16 @@
                     "requiresItems": [
                         {
                             "id": "5712947f-716c-4f71-b28d-fcb811631080",
-                            "count": 11
+                            "count": 10
                         }
                     ],
-                    "text": "Alright, I'm definitely seeing a bunch of seedlings. It seems like all of them were successful!"
+                    "text": "Alright, I can see a healthy batch of basil seedlings. Looks like it worked!"
                 }
             ]
         },
         {
             "id": "transfer",
-            "text": "Fancy seeing you again! By my calculations, at least two weeks have passed! Your seedlings are looking fantastic! And all of them?? That's some great beginner's luck! It's time to transfer them to their new home! If you still have that hydroponics tub I gave you (and the dechlorinated water), you can complete the transfer now! Also, you'll need to add some nutrients to the water. I've got some here for you.",
+            "text": "Fancy seeing you again! Looks like about a week has passed, and your seedlings are looking fantastic. Time to transfer them into their new home. If you still have that hydroponics tub and dechlorinated water, you can do the transfer now. You'll also need nutrients for the water, and I've got you covered.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -232,7 +232,7 @@
                     "requiresItems": [
                         {
                             "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
-                            "count": 11
+                            "count": 10
                         }
                     ],
                     "text": "A month older and a month wiser. I've got a bunch of basil now! Is it time to harvest?"
@@ -254,7 +254,7 @@
                     "requiresItems": [
                         {
                             "id": "29190faf-8581-4769-b871-f0ee283840e1",
-                            "count": 11
+                            "count": 10
                         }
                     ],
                     "text": "I've got these fresh bundles of basil! How do they look?"
