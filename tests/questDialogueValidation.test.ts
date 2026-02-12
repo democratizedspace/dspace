@@ -1,11 +1,21 @@
 import { describe, expect, it } from 'vitest';
+import processes from '../frontend/src/generated/processes.json' assert {
+    type: 'json',
+};
 import { loadQuests } from '../scripts/gen-quest-tree.mjs';
 import { loadQuestPaths } from './utils/questPaths';
+
+type ItemCount = {
+    id: string;
+    count: number;
+};
 
 type DialogueOption = {
     type?: string;
     goto?: string;
     text?: string;
+    process?: string;
+    requiresItems?: ItemCount[];
 };
 
 type DialogueNode = {
@@ -27,9 +37,11 @@ type DialogueValidationError = {
     questId: string;
     questPath: string;
     nodeId: string;
-    reason: 'dead-end' | 'unreachable-finish' | 'invalid-start';
+    reason: 'dead-end' | 'unreachable-finish' | 'invalid-start' | 'state-locked';
     snippet: string;
 };
+
+const processMap = new Map(processes.map((process) => [process.id, process]));
 
 const normalizeNodeId = (id: string | undefined, index: number) =>
     id?.trim() ? id.trim() : `__missing_id_${index}`;
@@ -49,6 +61,117 @@ const toNodeSnippet = (node: DialogueNode) => {
         return `${type}${target}${label}`;
     });
     return `text="${compactText}" options=[${options.join('; ')}]`;
+};
+
+const toItemCountMap = (entries: ItemCount[] | undefined) => {
+    const counts = new Map<string, number>();
+    for (const entry of entries ?? []) {
+        if (!entry?.id || typeof entry.count !== 'number') continue;
+        counts.set(entry.id, (counts.get(entry.id) ?? 0) + entry.count);
+    }
+
+    return counts;
+};
+
+const requirementsForOption = (option: DialogueOption) => {
+    if (option.type === 'process' && option.process) {
+        const process = processMap.get(option.process);
+        return toItemCountMap(process?.requireItems as ItemCount[] | undefined);
+    }
+
+    return toItemCountMap(option.requiresItems);
+};
+
+const transitionGuarantees = (option: DialogueOption) => {
+    if (option.type === 'process' && option.process) {
+        const process = processMap.get(option.process);
+        if (!process) {
+            return new Map<string, number>();
+        }
+
+        const guarantees = toItemCountMap(process.requireItems as ItemCount[] | undefined);
+
+        for (const consumed of (process.consumeItems as ItemCount[] | undefined) ?? []) {
+            const nextCount = (guarantees.get(consumed.id) ?? 0) - consumed.count;
+            if (nextCount > 0) {
+                guarantees.set(consumed.id, nextCount);
+            } else {
+                guarantees.delete(consumed.id);
+            }
+        }
+
+        for (const created of (process.createItems as ItemCount[] | undefined) ?? []) {
+            guarantees.set(created.id, (guarantees.get(created.id) ?? 0) + created.count);
+        }
+
+        return guarantees;
+    }
+
+    return toItemCountMap(option.requiresItems);
+};
+
+const satisfiesRequirements = (
+    requirements: Map<string, number>,
+    guarantees: Map<string, number>
+) => {
+    for (const [itemId, count] of requirements.entries()) {
+        if ((guarantees.get(itemId) ?? 0) < count) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
+const getStateLockErrors = (
+    nodeMap: Map<string, DialogueNode>,
+    reachable: Set<string>,
+    quest: QuestLike,
+    questPath: string,
+    startId: string
+): DialogueValidationError[] => {
+    const incomingTransitions = new Map<string, { from: string; guarantees: Map<string, number> }[]>();
+
+    for (const [nodeId, node] of nodeMap.entries()) {
+        if (!reachable.has(nodeId)) continue;
+        for (const option of node.options ?? []) {
+            if (!option.goto || !nodeMap.has(option.goto)) continue;
+            const transitions = incomingTransitions.get(option.goto) ?? [];
+            transitions.push({ from: nodeId, guarantees: transitionGuarantees(option) });
+            incomingTransitions.set(option.goto, transitions);
+        }
+    }
+
+    const errors: DialogueValidationError[] = [];
+
+    for (const [targetNodeId, transitions] of incomingTransitions.entries()) {
+        if (!reachable.has(targetNodeId)) continue;
+        const targetNode = nodeMap.get(targetNodeId);
+        if (!targetNode) continue;
+
+        const targetOptions = targetNode.options ?? [];
+        const hasEscapeOption = targetOptions.some((option) => option.type !== 'process');
+        if (hasEscapeOption) continue;
+
+        for (const transition of transitions) {
+            if (transition.from === startId) continue;
+            const hasActionableOption = targetOptions.some((option) =>
+                satisfiesRequirements(requirementsForOption(option), transition.guarantees)
+            );
+
+            if (hasActionableOption) continue;
+
+            errors.push({
+                questId: quest.id ?? 'unknown-quest',
+                questPath,
+                nodeId: targetNodeId,
+                reason: 'state-locked',
+                snippet: `entered from "${transition.from}" but lacks guaranteed items for any option; ${toNodeSnippet(targetNode)}`,
+            });
+        }
+    }
+
+    return errors;
 };
 
 export const validateQuestDialogueCompletable = (
@@ -131,6 +254,8 @@ export const validateQuestDialogueCompletable = (
         }
     }
 
+    errors.push(...getStateLockErrors(nodeMap, reachable, quest, questPath, startId));
+
     if (hasFinishDefinition && !hasReachableFinish) {
         const startNode = nodeMap.get(startId);
         errors.push({
@@ -183,6 +308,53 @@ describe('quest dialogue completable validation', () => {
                 nodeId: 'start',
                 reason: 'unreachable-finish',
                 snippet: 'text="Entry" options=[goto -> temp (Continue)]',
+            },
+        ]);
+    });
+
+    it('flags transitions that can enter an action-locked node', () => {
+        const quest: QuestLike = {
+            id: 'fixture/state-locked',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Entry',
+                    options: [{ type: 'goto', goto: 'temp', text: 'Continue' }],
+                },
+                {
+                    id: 'temp',
+                    text: 'Core temp logged.',
+                    options: [{ type: 'goto', goto: 'measure', text: 'Check moisture' }],
+                },
+                {
+                    id: 'measure',
+                    text: 'Need a moisture meter here.',
+                    options: [
+                        {
+                            type: 'process',
+                            process: 'measure-compost-moisture',
+                            goto: 'finish',
+                            text: 'Measure moisture',
+                        },
+                    ],
+                },
+                {
+                    id: 'finish',
+                    text: 'Done',
+                    options: [{ type: 'finish', text: 'Complete' }],
+                },
+            ],
+        };
+
+        expect(validateQuestDialogueCompletable(quest, 'fixtures/state-locked.json')).toEqual([
+            {
+                questId: 'fixture/state-locked',
+                questPath: 'fixtures/state-locked.json',
+                nodeId: 'measure',
+                reason: 'state-locked',
+                snippet:
+                    'entered from "temp" but lacks guaranteed items for any option; text="Need a moisture meter here." options=[process -> finish (Measure moisture)]',
             },
         ]);
     });
