@@ -52,14 +52,14 @@
     ],
     "rewards": [
         {
-            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
             "count": 1
         }
     ],
     "requiresQuests": ["devops/k3s-deploy"],
     "hardening": {
         "passes": 0,
-        "score": 95,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

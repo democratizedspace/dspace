@@ -110,14 +110,14 @@
     ],
     "rewards": [
         {
-            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
-            "count": 2
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "count": 1
         }
     ],
     "requiresQuests": ["woodworking/birdhouse", "woodworking/planter-box"],
     "hardening": {
         "passes": 1,
-        "score": 90,
+        "score": 85,
         "emoji": "🌀",
         "history": [
             {

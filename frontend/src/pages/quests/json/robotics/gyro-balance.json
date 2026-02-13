@@ -52,13 +52,13 @@
     "requiresQuests": ["robotics/odometry-basics"],
     "rewards": [
         {
-            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
             "count": 1
         }
     ],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 80,
         "emoji": "🛠️",
         "history": []
     }

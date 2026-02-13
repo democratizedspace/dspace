@@ -4,24 +4,12 @@
     "description": "Use pH strips to check solution acidity while wearing protective gear.",
     "hardening": {
         "passes": 3,
-        "score": 95,
+        "score": 92,
         "emoji": "💯",
         "history": [
-            {
-                "task": "codex-hardening-2025-08-04",
-                "date": "2025-08-04",
-                "score": 60
-            },
-            {
-                "task": "codex-hardening-2025-08-05",
-                "date": "2025-08-05",
-                "score": 80
-            },
-            {
-                "task": "codex-upgrade-2025-08-06",
-                "date": "2025-08-06",
-                "score": 92
-            }
+            { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 },
+            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 80 },
+            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 }
         ]
     },
     "image": "/assets/quests/chemistry_ph_strip_test_lab.jpg",
@@ -86,7 +74,7 @@
     ],
     "rewards": [
         {
-            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
             "count": 1
         }
     ],

@@ -73,14 +73,14 @@
     ],
     "rewards": [
         {
-            "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
             "count": 1
         }
     ],
     "requiresQuests": ["astronomy/iss-flyover"],
     "hardening": {
         "passes": 0,
-        "score": 95,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

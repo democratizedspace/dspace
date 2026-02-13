@@ -55,14 +55,14 @@
     ],
     "rewards": [
         {
-            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
             "count": 1
         }
     ],
     "requiresQuests": ["robotics/servo-control"],
     "hardening": {
         "passes": 2,
-        "score": 85,
+        "score": 80,
         "emoji": "✅",
         "history": [
             {

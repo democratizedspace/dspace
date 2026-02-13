@@ -56,14 +56,14 @@
     ],
     "rewards": [
         {
-            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
             "count": 1
         }
     ],
     "requiresQuests": ["astronomy/constellations"],
     "hardening": {
         "passes": 0,
-        "score": 95,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

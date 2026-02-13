@@ -52,14 +52,14 @@
     ],
     "rewards": [
         {
-            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
             "count": 1
         }
     ],
     "requiresQuests": ["chemistry/ph-test"],
     "hardening": {
         "passes": 0,
-        "score": 95,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

@@ -15,14 +15,8 @@
                     "goto": "measure",
                     "text": "Bench is clear and kit is open.",
                     "requiresItems": [
-                        {
-                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
+                        { "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 }
                     ]
                 }
             ]
@@ -37,26 +31,15 @@
                     "text": "Run the liquid tests.",
                     "goto": "log",
                     "requiresItems": [
-                        {
-                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
+                        { "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 }
                     ]
                 },
                 {
                     "type": "goto",
                     "goto": "log",
                     "text": "Readings are ready to log.",
-                    "requiresItems": [
-                        {
-                            "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
-                            "count": 1
-                        }
-                    ]
+                    "requiresItems": [{ "id": "9748fccc-ec16-4664-982e-c79b1c082e5e", "count": 1 }]
                 }
             ]
         },
@@ -70,34 +53,17 @@
                     "text": "Record the results in the logbook.",
                     "goto": "finish",
                     "requiresItems": [
-                        {
-                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
-                            "count": 1
-                        },
-                        {
-                            "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
-                            "count": 1
-                        },
-                        {
-                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
+                        { "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2", "count": 1 },
+                        { "id": "9748fccc-ec16-4664-982e-c79b1c082e5e", "count": 1 },
+                        { "id": "b8602362-2035-4f00-9376-f48d8668cf38", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 }
                     ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Entry logged with today's readings.",
-                    "requiresItems": [
-                        {
-                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
-                            "count": 1
-                        }
-                    ]
+                    "requiresItems": [{ "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c", "count": 1 }]
                 }
             ]
         },
@@ -114,14 +80,14 @@
     ],
     "rewards": [
         {
-            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
             "count": 1
         }
     ],
     "requiresQuests": ["aquaria/water-testing"],
     "hardening": {
         "passes": 1,
-        "score": 100,
+        "score": 95,
         "emoji": "🌀",
         "history": [
             {

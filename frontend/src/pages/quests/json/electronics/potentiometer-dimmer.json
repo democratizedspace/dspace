@@ -4,7 +4,7 @@
     "description": "Adjust LED brightness using a potentiometer and an Arduino.",
     "hardening": {
         "passes": 4,
-        "score": 95,
+        "score": 93,
         "emoji": "💯",
         "history": [
             {
@@ -132,11 +132,11 @@
             ]
         }
     ],
-    "requiresQuests": ["electronics/arduino-blink"],
     "rewards": [
         {
-            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
             "count": 1
         }
-    ]
+    ],
+    "requiresQuests": ["electronics/arduino-blink"]
 }

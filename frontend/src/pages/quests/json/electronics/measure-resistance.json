@@ -56,14 +56,14 @@
     ],
     "rewards": [
         {
-            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
             "count": 1
         }
     ],
     "requiresQuests": ["electronics/resistor-color-check"],
     "hardening": {
         "passes": 2,
-        "score": 85,
+        "score": 80,
         "emoji": "✅",
         "history": [
             {

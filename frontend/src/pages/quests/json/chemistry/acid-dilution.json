@@ -4,7 +4,7 @@
     "description": "Slowly stir 37% hydrochloric acid into water in full PPE over a spill tray. Never add water to acid.",
     "hardening": {
         "passes": 3,
-        "score": 100,
+        "score": 95,
         "emoji": "💯",
         "history": [
             {
@@ -102,7 +102,7 @@
     ],
     "rewards": [
         {
-            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
             "count": 1
         }
     ],

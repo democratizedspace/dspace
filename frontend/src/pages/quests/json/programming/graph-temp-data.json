@@ -58,14 +58,14 @@
     ],
     "rewards": [
         {
-            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
             "count": 1
         }
     ],
     "requiresQuests": ["programming/graph-temp"],
     "hardening": {
         "passes": 2,
-        "score": 100,
+        "score": 98,
         "emoji": "✅",
         "history": [
             {

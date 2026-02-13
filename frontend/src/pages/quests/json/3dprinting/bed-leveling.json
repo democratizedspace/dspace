@@ -26,30 +26,16 @@
                     "process": "level-3d-printer-bed",
                     "text": "Walk me through each pass.",
                     "requiresItems": [
-                        {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
-                            "count": 1
-                        },
-                        {
-                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        }
+                        { "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f", "count": 1 },
+                        { "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
                     ]
                 },
                 {
                     "type": "goto",
                     "goto": "first-layer",
                     "text": "Corners all tug the paper evenly.",
-                    "requiresItems": [
-                        {
-                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
-                            "count": 1
-                        }
-                    ]
+                    "requiresItems": [{ "id": "a42e441a-5569-490c-86e4-ce711117cd22", "count": 1 }]
                 }
             ]
         },
@@ -66,12 +52,7 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Skirt looks even and glossy.",
-                    "requiresItems": [
-                        {
-                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
-                            "count": 1
-                        }
-                    ]
+                    "requiresItems": [{ "id": "a42e441a-5569-490c-86e4-ce711117cd22", "count": 1 }]
                 }
             ]
         },
@@ -88,7 +69,7 @@
     ],
     "rewards": [
         {
-            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
             "count": 1
         }
     ],

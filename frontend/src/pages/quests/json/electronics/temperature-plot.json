@@ -63,14 +63,14 @@
     ],
     "rewards": [
         {
-            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
             "count": 1
         }
     ],
     "requiresQuests": ["electronics/data-logger"],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 75,
         "emoji": "🛠️",
         "history": []
     }

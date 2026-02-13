@@ -15,18 +15,9 @@
                     "goto": "code",
                     "text": "Sounds great.",
                     "requiresItems": [
-                        {
-                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
-                        },
-                        {
-                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
-                            "count": 1
-                        },
-                        {
-                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
-                            "count": 1
-                        }
+                        { "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8", "count": 1 },
+                        { "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2", "count": 1 },
+                        { "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf", "count": 1 }
                     ]
                 }
             ]
@@ -66,7 +57,7 @@
     ],
     "rewards": [
         {
-            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
             "count": 1
         }
     ],
