@@ -51,6 +51,39 @@ const buildDocIndex = async () => {
 };
 
 const docSearchIndex = await buildDocIndex();
+const questTreeModules = await Astro.glob('../quests/json/**/*.json');
+
+const formatSkillLabel = (slug = '') =>
+    slug
+        .split('-')
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' ');
+
+const buildSkillLinks = () => {
+    const treeSlugs = new Set();
+
+    for (const questTreeModule of questTreeModules) {
+        const id = String(questTreeModule?.id ?? '');
+
+        if (!id.includes('/quests/json/')) {
+            continue;
+        }
+
+        const relativePath = id.split('/quests/json/')[1] ?? '';
+        const treeSlug = relativePath.split('/')[0] ?? '';
+
+        if (treeSlug) {
+            treeSlugs.add(treeSlug);
+        }
+    }
+
+    return [...treeSlugs].sort().map((treeSlug) => ({
+        title: formatSkillLabel(treeSlug),
+        href: `/docs/${treeSlug}`,
+    }));
+};
+
+const skillLinks = buildSkillLinks();
 
 const getSlugFromHref = (href = '') => {
     const clean = href.split('#')[0].split('?')[0];
@@ -63,17 +96,21 @@ const getSlugFromHref = (href = '') => {
     return trimmed.toLowerCase();
 };
 
-const docsSections = sections.map((section) => ({
-    title: section.title,
-    links: section.links.map((link) => {
-        const slug = getSlugFromHref(link.href);
-        const docData = slug ? docSearchIndex.get(slug) ?? null : null;
-        const features = docData?.features ?? [];
-        const bodyText = docData?.bodyText ?? '';
+const docsSections = sections.map((section) => {
+    const links = section.title === 'Skills' ? skillLinks : section.links;
 
-        return { ...link, features, bodyText };
-    }),
-}));
+    return {
+        title: section.title,
+        links: links.map((link) => {
+            const slug = getSlugFromHref(link.href);
+            const docData = slug ? docSearchIndex.get(slug) ?? null : null;
+            const features = docData?.features ?? [];
+            const bodyText = docData?.bodyText ?? '';
+
+            return { ...link, features, bodyText };
+        }),
+    };
+});
 ---
 
 <Page title="Docs">
