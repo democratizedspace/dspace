@@ -26,6 +26,11 @@
                     "process": "wash-hands",
                     "text": "Hands are washed",
                     "goto": "sort"
+                },
+                {
+                    "type": "goto",
+                    "goto": "sort",
+                    "text": "I already washed my hands."
                 }
             ]
         },
@@ -70,7 +75,7 @@
     "requiresQuests": ["firstaid/restock-kit"],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 100,
         "emoji": "🛠️",
         "history": []
     }
