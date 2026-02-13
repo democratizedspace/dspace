@@ -26,6 +26,17 @@
                     "process": "wash-hands",
                     "text": "Hands are clean",
                     "goto": "remove"
+                },
+                {
+                    "type": "goto",
+                    "goto": "remove",
+                    "requiresItems": [
+                        {
+                            "id": "799ace33-1336-46c0-904a-9f16778230f1",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Hands are clean. Let's remove the splinter."
                 }
             ]
         },
@@ -66,11 +77,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["firstaid/wound-care"],
+    "requiresQuests": [
+        "firstaid/wound-care"
+    ],
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

@@ -43,6 +43,10 @@ type DialogueValidationError = {
 
 const processMap = new Map(processes.map((process) => [process.id, process]));
 
+
+const isDialogueGotoOption = (option: DialogueOption) =>
+    option.type === 'goto' && typeof option.goto === 'string' && option.goto.trim().length > 0;
+
 const normalizeNodeId = (id: string | undefined, index: number) =>
     id?.trim() ? id.trim() : `__missing_id_${index}`;
 
@@ -153,7 +157,7 @@ const getStateLockErrors = (
     for (const [nodeId, node] of nodeMap.entries()) {
         if (!reachable.has(nodeId)) continue;
         for (const option of node.options ?? []) {
-            if (!option.goto || !nodeMap.has(option.goto)) continue;
+            if (!isDialogueGotoOption(option) || !nodeMap.has(option.goto)) continue;
             const transitions = incomingTransitions.get(option.goto) ?? [];
             transitions.push({ from: nodeId, guarantees: transitionGuarantees(option) });
             incomingTransitions.set(option.goto, transitions);
@@ -231,7 +235,7 @@ export const validateQuestDialogueCompletable = (
         if (!node) continue;
 
         for (const option of node.options ?? []) {
-            if (!option.goto) continue;
+            if (!isDialogueGotoOption(option)) continue;
             if (nodeMap.has(option.goto) && !reachable.has(option.goto)) {
                 queue.push(option.goto);
             }
@@ -258,7 +262,7 @@ export const validateQuestDialogueCompletable = (
 
         const hasTransition = options.some(
             (option) =>
-                option.type === 'finish' || (option.goto ? nodeMap.has(option.goto) : false)
+                option.type === 'finish' || (isDialogueGotoOption(option) ? nodeMap.has(option.goto) : false)
         );
 
         if (!hasTransition && !isTerminalNode(node)) {
@@ -370,9 +374,23 @@ describe('quest dialogue completable validation', () => {
                 questId: 'fixture/state-locked',
                 questPath: 'fixtures/state-locked.json',
                 nodeId: 'measure',
+                reason: 'dead-end',
+                snippet: 'text="Need a moisture meter here." options=[process -> finish (Measure moisture)]',
+            },
+            {
+                questId: 'fixture/state-locked',
+                questPath: 'fixtures/state-locked.json',
+                nodeId: 'measure',
                 reason: 'state-locked',
                 snippet:
                     'entered from "temp" but lacks guaranteed items for any option; text="Need a moisture meter here." options=[process -> finish (Measure moisture)]',
+            },
+            {
+                questId: 'fixture/state-locked',
+                questPath: 'fixtures/state-locked.json',
+                nodeId: 'start',
+                reason: 'unreachable-finish',
+                snippet: 'text="Entry" options=[goto -> temp (Continue)]',
             },
         ]);
     });
@@ -418,9 +436,23 @@ describe('quest dialogue completable validation', () => {
                     questId: 'fixture/state-locked-consume-items',
                     questPath: 'fixtures/state-locked-consume-items.json',
                     nodeId: 'craft',
+                    reason: 'dead-end',
+                    snippet: 'text="Need consumables to proceed." options=[process -> finish (Prepare water)]',
+                },
+                {
+                    questId: 'fixture/state-locked-consume-items',
+                    questPath: 'fixtures/state-locked-consume-items.json',
+                    nodeId: 'craft',
                     reason: 'state-locked',
                     snippet:
                         'entered from "prep" but lacks guaranteed items for any option; text="Need consumables to proceed." options=[process -> finish (Prepare water)]',
+                },
+                {
+                    questId: 'fixture/state-locked-consume-items',
+                    questPath: 'fixtures/state-locked-consume-items.json',
+                    nodeId: 'start',
+                    reason: 'unreachable-finish',
+                    snippet: 'text="Entry" options=[goto -> prep (Continue)]',
                 },
             ]
         );
@@ -477,9 +509,68 @@ describe('quest dialogue completable validation', () => {
                 questId: 'fixture/state-locked-process-option-requires-items',
                 questPath: 'fixtures/state-locked-process-option-requires-items.json',
                 nodeId: 'craft',
+                reason: 'dead-end',
+                snippet:
+                    'text="Need quest-level required item to proceed." options=[process -> finish (Prepare water)]',
+            },
+            {
+                questId: 'fixture/state-locked-process-option-requires-items',
+                questPath: 'fixtures/state-locked-process-option-requires-items.json',
+                nodeId: 'craft',
                 reason: 'state-locked',
                 snippet:
                     'entered from "prep" but lacks guaranteed items for any option; text="Need quest-level required item to proceed." options=[process -> finish (Prepare water)]',
+            },
+            {
+                questId: 'fixture/state-locked-process-option-requires-items',
+                questPath: 'fixtures/state-locked-process-option-requires-items.json',
+                nodeId: 'start',
+                reason: 'unreachable-finish',
+                snippet: 'text="Entry" options=[goto -> prep (Continue)]',
+            },
+        ]);
+    });
+
+
+    it('flags nodes that only expose process options with goto metadata', () => {
+        const quest: QuestLike = {
+            id: 'fixture/process-only-navigation',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Begin',
+                    options: [
+                        {
+                            type: 'process',
+                            process: 'measure-compost-moisture',
+                            goto: 'finish',
+                            text: 'Run process',
+                        },
+                    ],
+                },
+                {
+                    id: 'finish',
+                    text: 'Done',
+                    options: [{ type: 'finish', text: 'Complete' }],
+                },
+            ],
+        };
+
+        expect(validateQuestDialogueCompletable(quest, 'fixtures/process-only-navigation.json')).toEqual([
+            {
+                questId: 'fixture/process-only-navigation',
+                questPath: 'fixtures/process-only-navigation.json',
+                nodeId: 'start',
+                reason: 'dead-end',
+                snippet: 'text="Begin" options=[process -> finish (Run process)]',
+            },
+            {
+                questId: 'fixture/process-only-navigation',
+                questPath: 'fixtures/process-only-navigation.json',
+                nodeId: 'start',
+                reason: 'unreachable-finish',
+                snippet: 'text="Begin" options=[process -> finish (Run process)]',
             },
         ]);
     });

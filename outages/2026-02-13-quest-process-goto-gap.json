@@ -1,0 +1,17 @@
+{
+  "id": "2026-02-13-quest-process-goto-gap",
+  "date": "2026-02-13",
+  "component": "quest dialogue navigation validation",
+  "rootCause": "Quest completion simulation treated any option with a `goto` field as traversable, including `process` options. This masked dialogue nodes that had no actual `type: \"goto\"` navigation path, so quests could pass tests while becoming stuck in the UI.",
+  "resolution": "Restricted simulation traversal to explicit `type: \"goto\"` options, added a regression test for process-only pseudo-navigation, and added missing goto dialogue options to affected quests.",
+  "references": [
+    "frontend/src/utils/simulateQuest.js",
+    "frontend/__tests__/questSimulation.test.js",
+    "frontend/src/pages/quests/json/composting/sift-compost.json",
+    "frontend/src/pages/quests/json/aquaria/guppy.json",
+    "frontend/src/pages/quests/json/firstaid/assemble-kit.json",
+    "frontend/src/pages/quests/json/firstaid/dispose-expired.json",
+    "frontend/src/pages/quests/json/firstaid/remove-splinter.json",
+    "frontend/src/pages/quests/json/firstaid/change-bandage.json"
+  ]
+}

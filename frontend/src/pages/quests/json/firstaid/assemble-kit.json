@@ -26,6 +26,17 @@
                     "process": "wash-hands",
                     "text": "Hands are clean",
                     "goto": "dry"
+                },
+                {
+                    "type": "goto",
+                    "goto": "dry",
+                    "requiresItems": [
+                        {
+                            "id": "799ace33-1336-46c0-904a-9f16778230f1",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Hands are washed and ready to dry."
                 }
             ]
         },
@@ -43,6 +54,17 @@
                     "type": "goto",
                     "goto": "start",
                     "text": "Let me restart the checklist before handling supplies."
+                },
+                {
+                    "type": "goto",
+                    "goto": "pack",
+                    "requiresItems": [
+                        {
+                            "id": "799ace33-1336-46c0-904a-9f16778230f1",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Hands are dry. Time to pack the kit."
                 }
             ]
         },
@@ -81,7 +103,9 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "hardening": {
         "passes": 6,
         "score": 95,

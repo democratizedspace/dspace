@@ -44,6 +44,24 @@ describe('Quest simulation', () => {
         expect(questHasFinishPath(quest)).toBe(true);
     });
 
+    test('process options with goto metadata do not count as dialogue navigation', () => {
+        const quest = {
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    options: [{ type: 'process', process: 'demo', goto: 'finish' }],
+                },
+                {
+                    id: 'finish',
+                    options: [{ type: 'finish', text: 'Done' }],
+                },
+            ],
+        };
+
+        expect(questHasFinishPath(quest)).toBe(false);
+    });
+
     test('simulation summary reports missing start and unreachable nodes', () => {
         const quest = JSON.parse(fs.readFileSync(missingStartFile));
         const summary = getQuestSimulationSummary(quest);

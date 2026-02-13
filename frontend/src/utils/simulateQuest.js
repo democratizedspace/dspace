@@ -27,7 +27,7 @@ export function getQuestSimulationSummary(quest) {
             if (opt.type === 'finish') {
                 hasFinishPath = true;
             }
-            if (opt.goto) {
+            if (opt.type === 'goto' && typeof opt.goto === 'string' && opt.goto.trim()) {
                 queue.push(opt.goto);
             }
         }
