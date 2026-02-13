@@ -50,6 +50,17 @@
                         }
                     ],
                     "text": "Sift the compost"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "5e165cbc-f4f2-4e9d-ac92-9588ff1ac9c1",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Screening complete."
                 }
             ]
         },
@@ -71,7 +82,9 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["composting/check-temperature"],
+    "requiresQuests": [
+        "composting/check-temperature"
+    ],
     "hardening": {
         "passes": 0,
         "score": 80,

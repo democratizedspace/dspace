@@ -26,6 +26,11 @@
                     "process": "wash-hands",
                     "text": "Hands are clean",
                     "goto": "remove"
+                },
+                {
+                    "type": "goto",
+                    "goto": "remove",
+                    "text": "Hands are clean"
                 }
             ]
         },
@@ -66,7 +71,9 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["firstaid/wound-care"],
+    "requiresQuests": [
+        "firstaid/wound-care"
+    ],
     "hardening": {
         "passes": 0,
         "score": 80,

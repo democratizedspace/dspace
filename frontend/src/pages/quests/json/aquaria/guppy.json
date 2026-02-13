@@ -15,6 +15,17 @@
                     "process": "heat-walstad",
                     "text": "Install the heater.",
                     "goto": "acquire"
+                },
+                {
+                    "type": "goto",
+                    "goto": "acquire",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Tank is at guppy-friendly temperature."
                 }
             ]
         },
@@ -43,6 +54,17 @@
                     "type": "goto",
                     "goto": "acquire",
                     "text": "I need to recheck and acclimate longer."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Guppies are now in the tank."
                 }
             ]
         },
@@ -63,7 +85,10 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/water-testing", "aquaria/heater-install"],
+    "requiresQuests": [
+        "aquaria/water-testing",
+        "aquaria/heater-install"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

@@ -36,6 +36,17 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Fresh bandage is on."
                 }
             ]
         },
@@ -51,7 +62,9 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["firstaid/wound-care"],
+    "requiresQuests": [
+        "firstaid/wound-care"
+    ],
     "hardening": {
         "passes": 0,
         "score": 80,
