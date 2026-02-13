@@ -29,7 +29,7 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "measure-compost-temperature",
+                    "process": "measure-compost-temperature-cooldown",
                     "requiresItems": [
                         {
                             "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
@@ -86,11 +86,11 @@
                     "requiresItems": [
                         {
                             "id": "e034d081-a29e-4040-830f-a192304db50d",
-                            "count": 1
+                            "count": 2
                         },
                         {
                             "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
-                            "count": 1
+                            "count": 2
                         }
                     ],
                     "text": "Readings logged"
@@ -99,7 +99,7 @@
         },
         {
             "id": "cooldown",
-            "text": "If temps hold steady or dip below 50 °C and moisture is balanced, let the bucket rest and cure.",
+            "text": "If temps hold steady or dip below 50 \u00b0C and moisture is balanced, let the bucket rest and cure.",
             "options": [
                 {
                     "type": "process",
@@ -137,12 +137,19 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["composting/turn-pile"],
+    "rewards": [
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "composting/turn-pile"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

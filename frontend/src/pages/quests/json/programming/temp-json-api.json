@@ -15,9 +15,18 @@
                     "goto": "code",
                     "text": "Sounds great.",
                     "requiresItems": [
-                        { "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8", "count": 1 },
-                        { "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2", "count": 1 },
-                        { "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf", "count": 1 }
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -55,12 +64,19 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["programming/json-api"],
+    "rewards": [
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "programming/json-api"
+    ],
     "hardening": {
         "passes": 2,
         "score": 95,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-hardening-2025-12-01",

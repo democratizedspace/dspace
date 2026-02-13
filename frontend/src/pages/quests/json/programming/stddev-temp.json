@@ -45,12 +45,19 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["programming/median-temp"],
+    "rewards": [
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "programming/median-temp"
+    ],
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

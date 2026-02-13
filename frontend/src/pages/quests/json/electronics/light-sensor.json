@@ -123,8 +123,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["electronics/basic-circuit"],
+    "rewards": [
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "electronics/basic-circuit"
+    ],
     "hardening": {
         "passes": 6,
         "score": 97,

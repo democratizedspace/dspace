@@ -1,14 +1,14 @@
 {
     "id": "aquaria/heater-install",
     "title": "Install an aquarium heater",
-    "description": "Install a 150 W heater in a Walstad tank and verify 26°C with a stick-on thermometer.",
+    "description": "Install a 150 W heater in a Walstad tank and verify 26\u00b0C with a stick-on thermometer.",
     "image": "/assets/quests/install_aquarium_heater.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Tropical fish need 26°C. Make sure the Walstad tank already has the strip thermometer on and flow running before you mount the heater.",
+            "text": "Tropical fish need 26\u00b0C. Make sure the Walstad tank already has the strip thermometer on and flow running before you mount the heater.",
             "options": [
                 {
                     "type": "goto",
@@ -33,7 +33,7 @@
         },
         {
             "id": "mount",
-            "text": "Unplug other gear, submerge the heater near flow, and set it to 26°C. Leave it unplugged for 20 minutes so the glass temp matches the water.",
+            "text": "Unplug other gear, submerge the heater near flow, and set it to 26\u00b0C. Leave it unplugged for 20 minutes so the glass temp matches the water.",
             "options": [
                 {
                     "type": "process",
@@ -55,7 +55,7 @@
         },
         {
             "id": "verify",
-            "text": "Watch the strip for the next few minutes and log the temperature once it stabilizes. Aim for 26°C ±1°C before you add fish.",
+            "text": "Watch the strip for the next few minutes and log the temperature once it stabilizes. Aim for 26\u00b0C \u00b11\u00b0C before you add fish.",
             "options": [
                 {
                     "type": "process",
@@ -86,12 +86,21 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["aquaria/sponge-filter", "aquaria/thermometer", "aquaria/walstad"],
+    "rewards": [
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "aquaria/sponge-filter",
+        "aquaria/thermometer",
+        "aquaria/walstad"
+    ],
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-16",

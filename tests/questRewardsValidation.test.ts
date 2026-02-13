@@ -74,6 +74,22 @@ const collectRewardsAndProcesses = (
 };
 
 describe('quest reward validation', () => {
+    it('requires each quest to grant at least one top-level reward', () => {
+        const rewardlessQuests: string[] = [];
+
+        for (const file of questFiles) {
+            const quest = JSON.parse(readFileSync(file, 'utf8'));
+            if (!Array.isArray(quest.rewards) || quest.rewards.length === 0) {
+                rewardlessQuests.push(path.relative(questDir, file));
+            }
+        }
+
+        expect(
+            rewardlessQuests,
+            `Quests without rewards:\n${rewardlessQuests.join('\n')}`
+        ).toEqual([]);
+    });
+
     it('uses known item/process ids and positive counts for rewards and process launches', () => {
         const seenRewardPlaceholders = new Set<string>();
         const seenPlaceholderProcesses = new Set<string>();

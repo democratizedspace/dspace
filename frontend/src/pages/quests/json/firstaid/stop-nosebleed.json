@@ -19,7 +19,7 @@
         },
         {
             "id": "pressure",
-            "text": "Sit upright and lean forward about 30° so blood drains out, not down your throat. Put on nitrile gloves from a first aid kit, fold a sterile gauze pad over the soft part of your nose, and pinch firmly. Breathe through your mouth and hold steady pressure for at least 10 minutes without checking early. When bleeding slows, wipe around the nostrils with an antiseptic wipe without inserting anything into the nose. Do not tilt your head back or stuff anything into the nostrils.",
+            "text": "Sit upright and lean forward about 30\u00b0 so blood drains out, not down your throat. Put on nitrile gloves from a first aid kit, fold a sterile gauze pad over the soft part of your nose, and pinch firmly. Breathe through your mouth and hold steady pressure for at least 10 minutes without checking early. When bleeding slows, wipe around the nostrils with an antiseptic wipe without inserting anything into the nose. Do not tilt your head back or stuff anything into the nostrils.",
             "options": [
                 {
                     "type": "goto",
@@ -62,12 +62,19 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["firstaid/assemble-kit"],
+    "rewards": [
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "firstaid/assemble-kit"
+    ],
     "hardening": {
         "passes": 5,
         "score": 96,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-hardening-2025-08-05",
