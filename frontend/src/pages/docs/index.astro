@@ -6,6 +6,43 @@ import { detectDocFeatures } from '../../utils/docsSearchFeatures.js';
 import { stripMarkdownToText } from '../../lib/docs/fullTextSearch';
 
 const docModules = await Astro.glob('./md/**/*.md');
+const questModules = await Astro.glob('../quests/json/*/*.json');
+
+const formatSkillTitle = (slug = '') => {
+    if (!slug) return '';
+
+    const overrides = {
+        '3dprinting': '3D Printing',
+        'ubi': 'UBI',
+        'devops': 'DevOps',
+        'firstaid': 'First Aid',
+    };
+
+    if (overrides[slug]) {
+        return overrides[slug];
+    }
+
+    return slug
+        .split(/[-_]/g)
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' ');
+};
+
+const skillLinks = Array.from(
+    new Set(
+        questModules
+            .map((questDoc) => String(questDoc?.id ?? ''))
+            .map((id) => id.match(/\.\.\/quests\/json\/([^/]+)\//)?.[1] ?? '')
+            .filter(Boolean)
+    )
+)
+    .sort((a, b) => a.localeCompare(b))
+    .map((slug) => ({
+        title: formatSkillTitle(slug),
+        href: `/docs/${slug}`,
+        keywords: [],
+    }));
 
 const buildDocIndex = async () => {
     const entries = await Promise.all(
@@ -65,7 +102,7 @@ const getSlugFromHref = (href = '') => {
 
 const docsSections = sections.map((section) => ({
     title: section.title,
-    links: section.links.map((link) => {
+    links: (section.title === 'Skills' ? skillLinks : section.links).map((link) => {
         const slug = getSlugFromHref(link.href);
         const docData = slug ? docSearchIndex.get(slug) ?? null : null;
         const features = docData?.features ?? [];
