@@ -8,36 +8,58 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to swap colors? We'll unload the old spool, purge 10 g, and load green PLA—level the bed first so you can verify first-layer adhesion after the swap.",
+            "text": "Ready to swap colors? We'll unload the old spool, purge 10 g, and load green PLA\u2014level the bed first so you can verify first-layer adhesion after the swap.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "heat",
                     "text": "Leveled and ready to heat.",
-                    "requiresItems": [{ "id": "a42e441a-5569-490c-86e4-ce711117cd22", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "heat",
-            "text": "Power on, preheat to 200 °C, and move the hotend away from the bed. Keep goggles on and fingers clear of the drive gears while you release the lever.",
+            "text": "Power on, preheat to 200 \u00b0C, and move the hotend away from the bed. Keep goggles on and fingers clear of the drive gears while you release the lever.",
             "options": [
                 {
                     "type": "process",
                     "process": "swap-green-pla-filament",
                     "text": "Unload and load green PLA.",
                     "requiresItems": [
-                        { "id": "a42e441a-5569-490c-86e4-ce711117cd22", "count": 1 },
-                        { "id": "d3590107-25ff-4de5-af3a-46e2497bfc52", "count": 10 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
-                        { "id": "ce92a1a9-c817-40f0-92b1-24aff053903d", "count": 1 }
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 10
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                            "count": 1
+                        }
                     ]
                 },
                 {
                     "type": "goto",
                     "goto": "purge",
                     "text": "Green filament is flowing without bubbles.",
-                    "requiresItems": [{ "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -49,7 +71,12 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Swap locked in and purge line is solid.",
-                    "requiresItems": [{ "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -65,16 +92,34 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["3dprinter/start"],
+    "requiresQuests": [
+        "3dprinting/calibration-cube"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
-            { "task": "codex-quest-hardening-2025-08-12", "date": "2025-08-12", "score": 60 },
-            { "task": "codex-quest-refinement-2025-08-17", "date": "2025-08-17", "score": 80 },
-            { "task": "codex-quest-clarity-2025-08-19", "date": "2025-08-19", "score": 90 },
-            { "task": "codex-quest-polish-2025-08-22", "date": "2025-08-22", "score": 95 }
+            {
+                "task": "codex-quest-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-17",
+                "date": "2025-08-17",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-clarity-2025-08-19",
+                "date": "2025-08-19",
+                "score": 90
+            },
+            {
+                "task": "codex-quest-polish-2025-08-22",
+                "date": "2025-08-22",
+                "score": 95
+            }
         ]
     }
 }

@@ -124,7 +124,9 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/basic-circuit"],
+    "requiresQuests": [
+        "electronics/measure-arduino-5v"
+    ],
     "hardening": {
         "passes": 6,
         "score": 97,
