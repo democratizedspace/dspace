@@ -5,6 +5,8 @@ import { describe, expect, it } from 'vitest';
 type QuestOption = {
   type: string;
   process?: string;
+  text?: string;
+  requiresItems?: Array<{ id: string; count: number }>;
 };
 
 type QuestDialogueNode = {
@@ -60,5 +62,28 @@ describe('composting quest regressions', () => {
 
     const consumedItemIds = new Set((compostProcess?.consumeItems ?? []).map((item) => item.id));
     expect(consumedItemIds.has('5d48cefb-fc1f-4962-b2c6-9b014151d0ae')).toBe(true);
+  });
+
+  it('composting/check-temperature gates cooldown on two temperature logs', () => {
+    const quest = readJson<QuestDefinition>(
+      'frontend/src/pages/quests/json/composting/check-temperature.json'
+    );
+    const cooldownNode = (quest.dialogue ?? []).find((node) => node.id === 'cooldown');
+
+    const cureProcessOption = (cooldownNode?.options ?? []).find(
+      (option) => option.type === 'process' && option.process === 'cure-compost-bucket'
+    );
+    const twoTempsSkipOption = (quest.dialogue ?? [])
+      .find((node) => node.id === 'recheck')
+      ?.options?.find((option) => option.text === 'Two temps and moisture are logged');
+
+    expect(cureProcessOption?.requiresItems).toContainEqual({
+      id: 'e034d081-a29e-4040-830f-a192304db50d',
+      count: 2,
+    });
+    expect(twoTempsSkipOption?.requiresItems).toContainEqual({
+      id: 'e034d081-a29e-4040-830f-a192304db50d',
+      count: 2,
+    });
   });
 });
