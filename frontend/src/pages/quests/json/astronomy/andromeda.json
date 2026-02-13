@@ -29,7 +29,7 @@
         },
         {
             "id": "search",
-            "text": "Shield the red flashlight to avoid glare and trace Cassiopeia's W on the star chart. From the midpoint, sweep the basic telescope slowly at low magnification toward a faint smudge—that's Andromeda. Keep footing sure, mind your surroundings and never aim near the Sun or aircraft.",
+            "text": "Shield the red flashlight to avoid glare and trace Cassiopeia's W on the star chart. From the midpoint, sweep the basic telescope slowly at low magnification toward a faint smudge\u2014that's Andromeda. Keep footing sure, mind your surroundings and never aim near the Sun or aircraft.",
             "options": [
                 {
                     "type": "process",
@@ -70,7 +70,7 @@
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-06",

@@ -13,7 +13,7 @@
                 {
                     "type": "goto",
                     "goto": "stage",
-                    "text": "Yes—show me the steps",
+                    "text": "Yes\u2014show me the steps",
                     "requiresItems": [
                         {
                             "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
@@ -133,7 +133,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

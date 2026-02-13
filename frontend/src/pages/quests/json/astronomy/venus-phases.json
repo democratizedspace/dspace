@@ -39,8 +39,13 @@
                 {
                     "type": "goto",
                     "goto": "view",
-                    "text": "Timing locked—let's observe.",
-                    "requiresItems": [{ "id": "4b328572-69f2-4fa6-8005-dc64ac434cef", "count": 1 }]
+                    "text": "Timing locked\u2014let's observe.",
+                    "requiresItems": [
+                        {
+                            "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -57,7 +62,12 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Phase recorded with date and time.",
-                    "requiresItems": [{ "id": "85d4fb76-9591-4b70-b88d-e74ff133215d", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -72,12 +82,17 @@
             ]
         }
     ],
-    "rewards": [{ "id": "85d4fb76-9591-4b70-b88d-e74ff133215d", "count": 1 }],
+    "rewards": [
+        {
+            "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["astronomy/saturn-rings"],
     "hardening": {
         "passes": 1,
         "score": 100,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-18",

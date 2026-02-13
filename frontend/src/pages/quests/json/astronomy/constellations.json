@@ -29,7 +29,7 @@
                 {
                     "type": "goto",
                     "goto": "chart",
-                    "text": "Plan is ready—let's star hop.",
+                    "text": "Plan is ready\u2014let's star hop.",
                     "requiresItems": [
                         {
                             "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
@@ -82,7 +82,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-16",

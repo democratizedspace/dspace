@@ -40,7 +40,7 @@
         },
         {
             "id": "sand",
-            "text": "Move with the grain through 120 → 180 → 220 grit. Wipe between passes so fresh grit cuts cleanly.",
+            "text": "Move with the grain through 120 \u2192 180 \u2192 220 grit. Wipe between passes so fresh grit cuts cleanly.",
             "options": [
                 {
                     "type": "goto",
@@ -117,7 +117,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

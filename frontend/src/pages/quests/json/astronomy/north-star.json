@@ -46,7 +46,12 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "requiresItems": [{ "id": "6102f07b-384b-437f-b78f-d1e9b5431e97", "count": 1 }],
+                    "requiresItems": [
+                        {
+                            "id": "6102f07b-384b-437f-b78f-d1e9b5431e97",
+                            "count": 1
+                        }
+                    ],
                     "text": "Polaris spotted."
                 }
             ]
@@ -62,12 +67,17 @@
             ]
         }
     ],
-    "rewards": [{ "id": "6102f07b-384b-437f-b78f-d1e9b5431e97", "count": 1 }],
+    "rewards": [
+        {
+            "id": "6102f07b-384b-437f-b78f-d1e9b5431e97",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["astronomy/constellations"],
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-17",

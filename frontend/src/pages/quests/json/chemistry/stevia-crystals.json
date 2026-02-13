@@ -19,7 +19,7 @@
         },
         {
             "id": "purify",
-            "text": "Add a splash of food-grade ethanol and let the solution evaporate. Crystals form as it dries—slow is fine.",
+            "text": "Add a splash of food-grade ethanol and let the solution evaporate. Crystals form as it dries\u2014slow is fine.",
             "options": [
                 {
                     "type": "process",
@@ -60,7 +60,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

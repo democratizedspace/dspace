@@ -101,11 +101,11 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinter/start"],
+    "requiresQuests": ["3dprinting/filament-change"],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Orion again! Ready to add some movement to your projects? We'll wire a servo test rig and sweep it safely—ESD strap on, and keep fingers clear of the horn.",
+            "text": "Orion again! Ready to add some movement to your projects? We'll wire a servo test rig and sweep it safely\u2014ESD strap on, and keep fingers clear of the horn.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "hookup",
-                    "text": "Gear is ready—let's wire it.",
+                    "text": "Gear is ready\u2014let's wire it.",
                     "requiresItems": [
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
@@ -116,7 +116,7 @@
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

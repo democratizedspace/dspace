@@ -126,7 +126,7 @@
         },
         {
             "id": "cooldown",
-            "text": "If temps hold steady or dip below 50 °C and moisture is balanced, let the bucket rest and cure.",
+            "text": "If temps hold steady or dip below 50 \u00b0C and moisture is balanced, let the bucket rest and cure.",
             "options": [
                 {
                     "type": "process",
@@ -174,7 +174,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

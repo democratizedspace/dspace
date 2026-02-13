@@ -92,7 +92,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice! Coil any slack, label the fuse rating, and keep ventilation clear. Your inverter is ready for laptops and lights—no toasters yet.",
+            "text": "Nice! Coil any slack, label the fuse rating, and keep ventilation clear. Your inverter is ready for laptops and lights\u2014no toasters yet.",
             "options": [
                 {
                     "type": "finish",
@@ -111,7 +111,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

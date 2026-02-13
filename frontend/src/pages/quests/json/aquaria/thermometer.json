@@ -15,9 +15,18 @@
                     "goto": "attach",
                     "text": "Glass is clean and dry",
                     "requiresItems": [
-                        { "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48", "count": 1 },
-                        { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 },
-                        { "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50", "count": 1 }
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        },
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        },
+                        {
+                            "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -35,7 +44,12 @@
                     "type": "goto",
                     "goto": "check",
                     "text": "Strip is attached and seated",
-                    "requiresItems": [{ "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -52,14 +66,24 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Reading recorded",
-                    "requiresItems": [{ "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Plug equipment back in with dry hands. Keep the strip away from direct sun and check it daily until the heater is installed.",
-            "options": [{ "type": "finish", "text": "Temperature logged" }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Temperature logged"
+                }
+            ]
         }
     ],
     "rewards": [
@@ -72,12 +96,28 @@
     "hardening": {
         "passes": 4,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
-            { "task": "codex-quest-hardening-2025-08-13", "date": "2025-08-13", "score": 60 },
-            { "task": "codex-quest-hardening-2025-08-14", "date": "2025-08-14", "score": 80 },
-            { "task": "codex-quest-hardening-2025-08-16", "date": "2025-08-16", "score": 90 },
-            { "task": "codex-quest-hardening-2025-08-16-2", "date": "2025-08-16", "score": 95 }
+            {
+                "task": "codex-quest-hardening-2025-08-13",
+                "date": "2025-08-13",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-14",
+                "date": "2025-08-14",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-16",
+                "date": "2025-08-16",
+                "score": 90
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-16-2",
+                "date": "2025-08-16",
+                "score": 95
+            }
         ]
     }
 }

@@ -70,7 +70,7 @@
         },
         {
             "id": "wire",
-            "text": "Connect battery first, then panel MC4s, keeping red to positive (+) and black to negative (−). Torque ring terminals, seat the fuse, and tuck the controller off the ground.",
+            "text": "Connect battery first, then panel MC4s, keeping red to positive (+) and black to negative (\u2212). Torque ring terminals, seat the fuse, and tuck the controller off the ground.",
             "options": [
                 {
                     "type": "process",
@@ -114,7 +114,7 @@
         },
         {
             "id": "charge",
-            "text": "Point the panel at the sun and let it soak up 200 Wh. Check the controller display after 10 minutes—cool cables and steady voltage mean you're good.",
+            "text": "Point the panel at the sun and let it soak up 200 Wh. Check the controller display after 10 minutes\u2014cool cables and steady voltage mean you're good.",
             "options": [
                 {
                     "type": "process",
@@ -155,7 +155,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

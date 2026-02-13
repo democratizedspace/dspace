@@ -24,7 +24,7 @@
         },
         {
             "id": "finish-choice",
-            "text": "Wipe-on poly dries in 4–6 hours. Hardwax oil feels natural but needs longer between coats.",
+            "text": "Wipe-on poly dries in 4\u20136 hours. Hardwax oil feels natural but needs longer between coats.",
             "options": [
                 {
                     "type": "goto",
@@ -83,7 +83,7 @@
         },
         {
             "id": "dry",
-            "text": "If you're using wipe-on poly, let it dry about 6 hours before handling. Hardwax oil often needs longer—follow the can's instructions. For durability, scuff with 320 grit and add a second coat.",
+            "text": "If you're using wipe-on poly, let it dry about 6 hours before handling. Hardwax oil often needs longer\u2014follow the can's instructions. For durability, scuff with 320 grit and add a second coat.",
             "options": [
                 {
                     "type": "goto",
@@ -122,7 +122,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

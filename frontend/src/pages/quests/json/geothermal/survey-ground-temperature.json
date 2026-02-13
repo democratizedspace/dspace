@@ -51,7 +51,7 @@
                 {
                     "type": "goto",
                     "goto": "fin",
-                    "text": "The ground is a steady 12°C."
+                    "text": "The ground is a steady 12\u00b0C."
                 }
             ]
         },
@@ -76,7 +76,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
