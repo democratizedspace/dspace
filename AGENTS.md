@@ -120,6 +120,9 @@ If CI formatting checks fail but local checks pass:
 - Quest JSON lives in `frontend/src/pages/quests/json` and must follow the schema in `frontend/src/pages/quests/jsonSchemas`.
 - Each quest needs start, middle and completion nodes with at least one option per node and a final `finish` option.
 - Reference at least one inventory item or process in every quest or the `questQuality` test will fail.
+- If you add or materially change quests in a tree, update or add a matching Skills-category doc in
+  `frontend/src/pages/docs/md/` (for example, `/docs/composting`) that maps the full quest tree and
+  the relevant item/process gates used for QA walkthroughs.
 - Consult `frontend/src/pages/docs/md/npcs.md` for character voice and keep it updated.
 - Use `npm run generate-quest [--template <name>]` to scaffold dialogue quickly; templates live in `frontend/src/pages/quests/templates`.
 - Archive deprecated quests under `frontend/src/pages/quests/archive`.

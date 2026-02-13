@@ -52,6 +52,23 @@ Current trees include:
 -   **Welcome**
 -   **Woodworking**
 
+### Quest Tree Documentation Requirement
+
+When you add a quest to an existing tree (or create a new tree), update a matching doc in the
+Skills category under `frontend/src/pages/docs/md/` so reviewers can audit progression without
+reverse-engineering JSON. Use [Composting](/docs/composting) as the reference format.
+
+Each tree doc should include:
+
+-   Quest order and `requiresQuests` relationships
+-   Dialogue-level `requiresItems` gates that affect progression
+-   Quest-level `grantsItems` (or an explicit “None” when absent)
+-   Quest `rewards`
+-   Linked process references with accurate Requires / Consumes / Creates summaries
+
+If you change quest gating or inventory flow, update the corresponding Skills doc in the same pull
+request.
+
 ## Quest Structure Guidelines
 
 ### Progressive Difficulty
@@ -237,9 +254,11 @@ Before submitting a quest, verify:
 1. Develop your quest locally following these guidelines. Start with
    `npm run generate-quest --template basic` for a ready-made template.
 2. Validate the quest JSON with `node scripts/validate-quest.js path/to/quest.json`.
-3. Submit a [pull request](https://github.com/democratizedspace/dspace/pulls) with your quest JSON
+3. Update the matching Skills-category quest-tree doc (for example, `/docs/composting`) so it
+   reflects any new quests or changed gates/rewards.
+4. Submit a [pull request](https://github.com/democratizedspace/dspace/pulls) with your quest JSON
    file.
-4. Respond to feedback during code review.
+5. Respond to feedback during code review.
 
 ## Areas Needing More Content
 
