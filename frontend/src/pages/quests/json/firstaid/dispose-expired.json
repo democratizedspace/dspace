@@ -62,7 +62,9 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["firstaid/restock-kit"],
+    "requiresQuests": [
+        "firstaid/restock-kit"
+    ],
     "hardening": {
         "passes": 0,
         "score": 80,

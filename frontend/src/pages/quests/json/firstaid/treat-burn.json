@@ -46,7 +46,9 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["firstaid/assemble-kit"],
+    "requiresQuests": [
+        "firstaid/assemble-kit"
+    ],
     "hardening": {
         "passes": 0,
         "score": 75,

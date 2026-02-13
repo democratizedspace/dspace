@@ -51,7 +51,9 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["energy/solar"],
+    "requiresQuests": [
+        "energy/charge-controller-setup"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

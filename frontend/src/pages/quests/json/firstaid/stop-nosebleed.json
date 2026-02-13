@@ -63,7 +63,9 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["firstaid/assemble-kit"],
+    "requiresQuests": [
+        "firstaid/wound-care"
+    ],
     "hardening": {
         "passes": 5,
         "score": 96,

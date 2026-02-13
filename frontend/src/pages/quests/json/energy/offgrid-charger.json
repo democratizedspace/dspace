@@ -182,7 +182,9 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["energy/solar"],
+    "requiresQuests": [
+        "energy/solar"
+    ],
     "hardening": {
         "passes": 3,
         "score": 95,

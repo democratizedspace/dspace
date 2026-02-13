@@ -67,7 +67,9 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["geothermal/survey-ground-temperature"],
+    "requiresQuests": [
+        "geothermal/check-loop-pressure"
+    ],
     "hardening": {
         "passes": 0,
         "score": 85,
