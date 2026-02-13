@@ -51,6 +51,22 @@ const buildDocIndex = async () => {
 };
 
 const docSearchIndex = await buildDocIndex();
+const questTreeModules = await Astro.glob('../quests/json/*/*.json');
+
+const allQuestTrees = Array.from(
+    new Set(
+        questTreeModules
+            .map((mod) => mod?.id?.split('/quests/json/')[1]?.split('/')[0] ?? '')
+            .filter(Boolean)
+    )
+).sort((a, b) => a.localeCompare(b));
+
+const toTitleCase = (value = '') =>
+    value
+        .split(/[-_]/g)
+        .filter(Boolean)
+        .map((word) => (word.length <= 3 ? word.toUpperCase() : word[0].toUpperCase() + word.slice(1)))
+        .join(' ');
 
 const getSlugFromHref = (href = '') => {
     const clean = href.split('#')[0].split('?')[0];
@@ -65,14 +81,31 @@ const getSlugFromHref = (href = '') => {
 
 const docsSections = sections.map((section) => ({
     title: section.title,
-    links: section.links.map((link) => {
+    links:
+        section.title === 'Skills'
+            ? allQuestTrees.map((tree) => {
+                  const href = `/docs/${tree}`;
+                  const slug = getSlugFromHref(href);
+                  const docData = slug ? docSearchIndex.get(slug) ?? null : null;
+                  const features = docData?.features ?? [];
+                  const bodyText = docData?.bodyText ?? '';
+
+                  return {
+                      title: toTitleCase(tree),
+                      href,
+                      keywords: [tree],
+                      features,
+                      bodyText,
+                  };
+              })
+            : section.links.map((link) => {
         const slug = getSlugFromHref(link.href);
         const docData = slug ? docSearchIndex.get(slug) ?? null : null;
         const features = docData?.features ?? [];
         const bodyText = docData?.bodyText ?? '';
 
         return { ...link, features, bodyText };
-    }),
+              }),
 }));
 ---
 
