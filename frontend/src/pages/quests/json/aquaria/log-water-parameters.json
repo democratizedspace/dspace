@@ -79,7 +79,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["aquaria/water-testing"],
+    "requiresQuests": ["aquaria/ph-strip-test"],
     "hardening": {
         "passes": 1,
         "score": 95,

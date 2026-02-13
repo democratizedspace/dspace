@@ -57,7 +57,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/temp-logger"],
+    "requiresQuests": ["programming/graph-temp"],
     "hardening": {
         "passes": 0,
         "score": 90,

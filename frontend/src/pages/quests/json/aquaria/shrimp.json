@@ -84,7 +84,6 @@
         }
     ],
     "requiresQuests": [
-        "aquaria/water-testing",
         "aquaria/heater-install",
         "aquaria/log-water-parameters"
     ],

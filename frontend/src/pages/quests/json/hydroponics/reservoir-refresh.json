@@ -51,7 +51,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/basil"],
+    "requiresQuests": ["hydroponics/lettuce"],
     "hardening": {
         "passes": 0,
         "score": 90,

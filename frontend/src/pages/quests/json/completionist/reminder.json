@@ -57,7 +57,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["completionist/v2"],
+    "requiresQuests": ["completionist/display"],
     "hardening": {
         "passes": 0,
         "score": 90,

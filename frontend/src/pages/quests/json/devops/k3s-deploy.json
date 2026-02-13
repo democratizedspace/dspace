@@ -73,7 +73,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/docker-compose"],
+    "requiresQuests": ["devops/private-registry"],
     "hardening": {
         "passes": 0,
         "score": 90,

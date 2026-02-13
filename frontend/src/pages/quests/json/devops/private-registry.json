@@ -51,7 +51,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/docker-compose"],
+    "requiresQuests": ["devops/ci-pipeline"],
     "hardening": {
         "passes": 0,
         "score": 90,

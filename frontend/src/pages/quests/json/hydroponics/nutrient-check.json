@@ -92,7 +92,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["hydroponics/basil"],
+    "requiresQuests": ["hydroponics/bucket_10"],
     "hardening": {
         "passes": 4,
         "score": 95,

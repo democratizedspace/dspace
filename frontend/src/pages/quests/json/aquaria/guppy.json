@@ -63,7 +63,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/water-testing", "aquaria/heater-install"],
+    "requiresQuests": ["aquaria/heater-install", "aquaria/log-water-parameters"],
     "hardening": {
         "passes": 0,
         "score": 95,
