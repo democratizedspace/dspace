@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 4,
         "score": 93,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-hardening-2025-08-06",
@@ -35,7 +35,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Orion here again! Let's add interactivity by twisting a 10 kΩ potentiometer to control an LED. Work on a dry, static-safe surface, wear safety goggles and keep the Arduino unplugged while wiring to avoid shorts.",
+            "text": "Orion here again! Let's add interactivity by twisting a 10 k\u03a9 potentiometer to control an LED. Work on a dry, static-safe surface, wear safety goggles and keep the Arduino unplugged while wiring to avoid shorts.",
             "options": [
                 {
                     "type": "goto",
@@ -46,7 +46,7 @@
         },
         {
             "id": "materials",
-            "text": "Gather an Arduino Uno, a breadboard, three jumper wires, a 5 mm LED, a 220 Ω resistor, a 10 kΩ potentiometer, a USB Type-A to USB-B cable and a laptop with the Arduino IDE installed. Check the resistor's red-red-brown bands, confirm the LED's longer leg is the anode and verify the potentiometer's center pin is the wiper.",
+            "text": "Gather an Arduino Uno, a breadboard, three jumper wires, a 5 mm LED, a 220 \u03a9 resistor, a 10 k\u03a9 potentiometer, a USB Type-A to USB-B cable and a laptop with the Arduino IDE installed. Check the resistor's red-red-brown bands, confirm the LED's longer leg is the anode and verify the potentiometer's center pin is the wiper.",
             "options": [
                 {
                     "type": "process",
@@ -96,7 +96,7 @@
         },
         {
             "id": "wire",
-            "text": "Disconnect the USB cable. Seat the potentiometer on the breadboard with its flat side toward you. Wire the outer legs to 5 V and GND, run the center wiper to A0 and route the LED's anode to pin 9 through the 220 Ω resistor with the cathode to GND. Arrange jumper wires neatly and double-check for shorts before powering up.",
+            "text": "Disconnect the USB cable. Seat the potentiometer on the breadboard with its flat side toward you. Wire the outer legs to 5\u202fV and GND, run the center wiper to A0 and route the LED's anode to pin 9 through the 220\u202f\u03a9 resistor with the cathode to GND. Arrange jumper wires neatly and double-check for shorts before powering up.",
             "options": [
                 {
                     "type": "goto",
@@ -107,7 +107,7 @@
         },
         {
             "id": "program",
-            "text": "Reconnect the USB cable and open the Arduino IDE. Load File > Examples > 03.Analog > AnalogInOutSerial; it reads analogRead(A0), maps 0‑1023 to 0‑255, then analogWrite(9, value) to dim the LED. Select the correct board and port, upload and turn the knob to vary brightness. Avoid staring into the LED or touching the board while powered.",
+            "text": "Reconnect the USB cable and open the Arduino IDE. Load File > Examples > 03.Analog > AnalogInOutSerial; it reads analogRead(A0), maps 0\u20111023 to 0\u2011255, then analogWrite(9, value) to dim the LED. Select the correct board and port, upload and turn the knob to vary brightness. Avoid staring into the LED or touching the board while powered.",
             "options": [
                 {
                     "type": "goto",
@@ -132,5 +132,13 @@
             ]
         }
     ],
-    "requiresQuests": ["electronics/arduino-blink"]
+    "requiresQuests": [
+        "electronics/arduino-blink"
+    ],
+    "rewards": [
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 1
+        }
+    ]
 }

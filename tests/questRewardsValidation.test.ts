@@ -82,6 +82,11 @@ describe('quest reward validation', () => {
 
         for (const file of questFiles) {
             const quest = JSON.parse(readFileSync(file, 'utf8'));
+            expect(Array.isArray(quest.rewards), `Quest rewards must be an array in ${file}`).toBe(true);
+            expect(
+                quest.rewards.length,
+                `Quest must define at least one reward in ${file}`
+            ).toBeGreaterThan(0);
             const rewardContexts: RewardContext[] = [];
             const processContexts: ProcessContext[] = [];
 
