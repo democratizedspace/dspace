@@ -68,7 +68,7 @@
         }
     ],
     "requiresQuests": [
-        "3dprinting/blob-of-death"
+        "3dprinting/nozzle-clog"
     ],
     "hardening": {
         "passes": 0,

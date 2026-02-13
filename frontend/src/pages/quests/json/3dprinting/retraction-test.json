@@ -99,7 +99,7 @@
         }
     ],
     "requiresQuests": [
-        "3dprinting/phone-stand"
+        "3dprinting/spool-holder"
     ],
     "hardening": {
         "passes": 0,

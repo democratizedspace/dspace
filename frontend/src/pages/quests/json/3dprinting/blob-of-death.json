@@ -68,7 +68,7 @@
         }
     ],
     "requiresQuests": [
-        "3dprinting/nozzle-clog"
+        "3dprinting/nozzle-cleaning"
     ],
     "hardening": {
         "passes": 0,
