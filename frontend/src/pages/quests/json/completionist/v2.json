@@ -135,14 +135,14 @@
         "ubi/basicincome",
         "3dprinter/start",
         "aquaria/water-testing",
-        "energy/solar-1kWh",
+        "energy/solar",
         "rocketry/parachute",
         "hydroponics/basil"
     ],
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -187,7 +187,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "composting/start"
-    ]
+    "requiresQuests": ["composting/start"]
 }

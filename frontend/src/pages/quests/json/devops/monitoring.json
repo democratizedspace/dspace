@@ -56,9 +56,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "devops/k3s-deploy"
-    ],
+    "requiresQuests": ["devops/k3s-deploy"],
     "hardening": {
         "passes": 0,
         "score": 90,

@@ -51,9 +51,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "firstaid/stop-nosebleed"
-    ],
+    "requiresQuests": ["firstaid/stop-nosebleed"],
     "hardening": {
         "passes": 0,
         "score": 75,

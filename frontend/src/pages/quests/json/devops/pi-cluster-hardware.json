@@ -75,9 +75,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "sysadmin/basic-commands"
-    ],
+    "requiresQuests": ["sysadmin/basic-commands"],
     "hardening": {
         "passes": 0,
         "score": 75,

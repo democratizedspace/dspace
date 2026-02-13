@@ -125,9 +125,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "woodworking/tool-rack"
-    ],
+    "requiresQuests": ["woodworking/tool-rack"],
     "hardening": {
         "passes": 0,
         "score": 90,

@@ -117,9 +117,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/planetary-alignment"
-    ],
+    "requiresQuests": ["astronomy/planetary-alignment"],
     "hardening": {
         "passes": 0,
         "score": 90,

@@ -127,7 +127,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/observe-moon"
-    ]
+    "requiresQuests": ["astronomy/observe-moon"]
 }

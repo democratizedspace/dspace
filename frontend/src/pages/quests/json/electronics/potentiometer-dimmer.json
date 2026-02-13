@@ -138,7 +138,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "electronics/arduino-blink"
-    ]
+    "requiresQuests": ["electronics/arduino-blink"]
 }

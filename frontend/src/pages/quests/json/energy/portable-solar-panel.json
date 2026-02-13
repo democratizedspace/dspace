@@ -129,9 +129,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "energy/offgrid-charger"
-    ],
+    "requiresQuests": ["energy/offgrid-charger"],
     "hardening": {
         "passes": 0,
         "score": 90,

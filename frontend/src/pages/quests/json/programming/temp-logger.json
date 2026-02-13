@@ -78,9 +78,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "electronics/thermistor-reading"
-    ],
+    "requiresQuests": ["electronics/thermistor-reading"],
     "hardening": {
         "passes": 2,
         "score": 95,

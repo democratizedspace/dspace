@@ -60,9 +60,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "electronics/check-battery-voltage"
-    ],
+    "requiresQuests": ["electronics/check-battery-voltage"],
     "hardening": {
         "passes": 5,
         "score": 96,

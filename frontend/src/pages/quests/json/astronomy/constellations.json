@@ -78,9 +78,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/jupiter-moons"
-    ],
+    "requiresQuests": ["astronomy/jupiter-moons"],
     "hardening": {
         "passes": 1,
         "score": 95,

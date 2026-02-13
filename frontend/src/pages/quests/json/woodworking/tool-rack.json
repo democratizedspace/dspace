@@ -163,9 +163,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "woodworking/workbench"
-    ],
+    "requiresQuests": ["woodworking/workbench"],
     "hardening": {
         "passes": 0,
         "score": 90,

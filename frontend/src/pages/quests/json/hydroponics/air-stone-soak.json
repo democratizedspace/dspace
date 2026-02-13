@@ -78,9 +78,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "hydroponics/filter-clean"
-    ],
+    "requiresQuests": ["hydroponics/filter-clean"],
     "hardening": {
         "passes": 0,
         "score": 90,

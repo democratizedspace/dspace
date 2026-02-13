@@ -92,11 +92,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "aquaria/sponge-filter",
-        "aquaria/thermometer",
-        "aquaria/walstad"
-    ],
+    "requiresQuests": ["aquaria/sponge-filter", "aquaria/thermometer", "aquaria/walstad"],
     "hardening": {
         "passes": 3,
         "score": 95,

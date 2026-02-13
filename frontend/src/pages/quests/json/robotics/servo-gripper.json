@@ -51,9 +51,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "robotics/servo-control"
-    ],
+    "requiresQuests": ["robotics/servo-control"],
     "hardening": {
         "passes": 0,
         "score": 80,

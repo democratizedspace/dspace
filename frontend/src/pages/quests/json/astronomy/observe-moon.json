@@ -72,9 +72,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "welcome/howtodoquests"
-    ],
+    "requiresQuests": ["welcome/howtodoquests"],
     "hardening": {
         "passes": 3,
         "score": 95,

@@ -187,9 +187,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "energy/hand-crank-generator"
-    ],
+    "requiresQuests": ["energy/hand-crank-generator"],
     "hardening": {
         "passes": 3,
         "score": 95,

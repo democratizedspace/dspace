@@ -67,9 +67,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "3dprinting/nozzle-clog"
-    ],
+    "requiresQuests": ["3dprinting/nozzle-clog"],
     "hardening": {
         "passes": 0,
         "score": 90,

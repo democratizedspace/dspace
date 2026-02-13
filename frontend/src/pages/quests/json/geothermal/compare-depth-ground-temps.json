@@ -52,9 +52,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "geothermal/log-ground-temperature"
-    ],
+    "requiresQuests": ["geothermal/log-ground-temperature"],
     "hardening": {
         "passes": 0,
         "score": 75,

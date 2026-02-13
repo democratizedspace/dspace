@@ -206,9 +206,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "woodworking/planter-box"
-    ],
+    "requiresQuests": ["woodworking/planter-box"],
     "hardening": {
         "passes": 1,
         "score": 95,

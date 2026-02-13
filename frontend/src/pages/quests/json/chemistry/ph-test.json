@@ -90,7 +90,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "chemistry/safe-reaction"
-    ]
+    "requiresQuests": ["chemistry/safe-reaction"]
 }

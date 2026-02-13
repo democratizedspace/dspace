@@ -120,9 +120,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "aquaria/water-testing"
-    ],
+    "requiresQuests": ["aquaria/water-testing"],
     "hardening": {
         "passes": 0,
         "score": 90,

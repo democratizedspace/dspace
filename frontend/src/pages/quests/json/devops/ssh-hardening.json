@@ -94,7 +94,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "devops/firewall-rules"
-    ]
+    "requiresQuests": ["devops/firewall-rules"]
 }

@@ -104,9 +104,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "devops/monitoring"
-    ],
+    "requiresQuests": ["devops/monitoring"],
     "hardening": {
         "passes": 0,
         "score": 85,

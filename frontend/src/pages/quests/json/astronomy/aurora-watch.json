@@ -100,9 +100,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/light-pollution"
-    ],
+    "requiresQuests": ["astronomy/light-pollution"],
     "hardening": {
         "passes": 1,
         "score": 95,

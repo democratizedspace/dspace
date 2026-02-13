@@ -63,9 +63,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "electronics/resistor-color-check"
-    ],
+    "requiresQuests": ["electronics/resistor-color-check"],
     "hardening": {
         "passes": 3,
         "score": 75,

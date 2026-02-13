@@ -73,9 +73,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "devops/pi-cluster-hardware"
-    ],
+    "requiresQuests": ["devops/pi-cluster-hardware"],
     "hardening": {
         "passes": 0,
         "score": 90,

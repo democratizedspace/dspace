@@ -92,9 +92,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "3dprinter/start"
-    ],
+    "requiresQuests": ["3dprinter/start"],
     "hardening": {
         "passes": 4,
         "score": 95,

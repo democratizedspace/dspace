@@ -62,9 +62,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "programming/temp-logger"
-    ],
+    "requiresQuests": ["programming/temp-logger"],
     "hardening": {
         "passes": 2,
         "score": 98,

@@ -66,9 +66,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/basic-telescope"
-    ],
+    "requiresQuests": ["astronomy/basic-telescope"],
     "hardening": {
         "passes": 3,
         "score": 95,

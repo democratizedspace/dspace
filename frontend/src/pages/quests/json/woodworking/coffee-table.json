@@ -88,9 +88,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "woodworking/bookshelf"
-    ],
+    "requiresQuests": ["woodworking/bookshelf"],
     "hardening": {
         "passes": 0,
         "score": 85,

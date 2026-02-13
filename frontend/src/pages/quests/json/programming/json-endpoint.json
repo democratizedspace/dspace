@@ -101,9 +101,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "programming/web-server"
-    ],
+    "requiresQuests": ["programming/web-server"],
     "hardening": {
         "passes": 0,
         "score": 90,
