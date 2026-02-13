@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Place the loose resistor, digital multimeter, and safety goggles on a dry, non-conductive surface.\nPut on the goggles. Insert the black probe into COM and the red probe into VΩmA, then set the meter to resistance (Ω) mode at a range above the resistor's expected value.",
+            "text": "Place the loose resistor, digital multimeter, and safety goggles on a dry, non-conductive surface.\nPut on the goggles. Insert the black probe into COM and the red probe into V\u03a9mA, then set the meter to resistance (\u03a9) mode at a range above the resistor's expected value.",
             "options": [
                 {
                     "type": "goto",
@@ -55,11 +55,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/resistor-color-check"],
+    "requiresQuests": [
+        "electronics/resistor-color-check"
+    ],
     "hardening": {
         "passes": 2,
         "score": 80,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-quest-refine-2025-08-12",

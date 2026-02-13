@@ -124,7 +124,9 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/basic-circuit"],
+    "requiresQuests": [
+        "electronics/arduino-blink"
+    ],
     "hardening": {
         "passes": 6,
         "score": 97,

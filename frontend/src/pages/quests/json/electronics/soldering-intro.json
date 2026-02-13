@@ -58,11 +58,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/basic-circuit"],
+    "requiresQuests": [
+        "electronics/measure-led-current"
+    ],
     "hardening": {
         "passes": 3,
         "score": 75,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-14",

@@ -51,11 +51,13 @@
             "count": 10
         }
     ],
-    "requiresQuests": ["energy/dSolar-10kW"],
+    "requiresQuests": [
+        "energy/dSolar-10kW"
+    ],
     "hardening": {
         "passes": 0,
         "score": 85,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

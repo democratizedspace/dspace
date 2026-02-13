@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here. Saturn is up tonight—let's aim your scope and catch those rings.",
+            "text": "Nova here. Saturn is up tonight\u2014let's aim your scope and catch those rings.",
             "options": [
                 {
                     "type": "goto",
@@ -50,11 +50,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/basic-telescope"],
+    "requiresQuests": [
+        "astronomy/jupiter-moons"
+    ],
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
