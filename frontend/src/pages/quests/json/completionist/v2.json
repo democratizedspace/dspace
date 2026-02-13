@@ -126,7 +126,7 @@
     ],
     "rewards": [],
     "requiresQuests": [
-        "welcome/howtodoquests",
+        "completionist/polish",
         "ubi/basicincome",
         "3dprinter/start",
         "aquaria/water-testing",
@@ -137,7 +137,7 @@
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

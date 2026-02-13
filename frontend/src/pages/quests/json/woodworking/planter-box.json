@@ -24,7 +24,7 @@
         },
         {
             "id": "layout",
-            "text": "Cut four pine boards for a 60×25×20 cm box. Bevel the base to shed water and keep corners square.",
+            "text": "Cut four pine boards for a 60\u00d725\u00d720 cm box. Bevel the base to shed water and keep corners square.",
             "options": [
                 {
                     "type": "goto",
@@ -166,11 +166,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

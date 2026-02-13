@@ -57,11 +57,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["programming/graph-temp"],
+    "requiresQuests": [
+        "programming/hello-sensor"
+    ],
     "hardening": {
         "passes": 2,
         "score": 98,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-hardening-2025-12-08",

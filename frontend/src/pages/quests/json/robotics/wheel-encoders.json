@@ -54,11 +54,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["robotics/servo-control"],
+    "requiresQuests": [
+        "robotics/odometry-basics"
+    ],
     "hardening": {
         "passes": 2,
         "score": 80,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-09",

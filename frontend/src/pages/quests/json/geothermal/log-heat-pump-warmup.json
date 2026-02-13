@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Crack a window near the manifold and keep towels handy—condensation happens fast. Ready to capture the warmup curve?",
+            "text": "Crack a window near the manifold and keep towels handy\u2014condensation happens fast. Ready to capture the warmup curve?",
             "options": [
                 {
                     "type": "goto",
@@ -129,11 +129,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["geothermal/log-ground-temperature"],
+    "requiresQuests": [
+        "geothermal/check-loop-pressure"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

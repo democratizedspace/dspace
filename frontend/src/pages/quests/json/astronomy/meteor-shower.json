@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-17",
@@ -75,5 +75,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/jupiter-moons"]
+    "requiresQuests": [
+        "astronomy/comet-tracking"
+    ]
 }

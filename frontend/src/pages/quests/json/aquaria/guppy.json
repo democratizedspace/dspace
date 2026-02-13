@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Those shrimp are thriving! Ready for some guppies? They prefer 24-28°C water, so let's warm the tank first.",
+            "text": "Those shrimp are thriving! Ready for some guppies? They prefer 24-28\u00b0C water, so let's warm the tank first.",
             "options": [
                 {
                     "type": "process",
@@ -63,11 +63,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/water-testing", "aquaria/heater-install"],
+    "requiresQuests": [
+        "aquaria/breeding"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

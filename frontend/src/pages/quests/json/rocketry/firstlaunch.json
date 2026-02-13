@@ -134,7 +134,7 @@
         },
         {
             "id": "launch",
-            "text": "Almost there. You'll need a launch pad, igniter, and launch controller. The pad keeps it straight; the controller lights it. Here—spares from my kit.",
+            "text": "Almost there. You'll need a launch pad, igniter, and launch controller. The pad keeps it straight; the controller lights it. Here\u2014spares from my kit.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -214,11 +214,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinter/start"],
+    "requiresQuests": [
+        "3dprinter/start"
+    ],
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

@@ -73,11 +73,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/docker-compose"],
+    "requiresQuests": [
+        "devops/daily-backups"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

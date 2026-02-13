@@ -115,11 +115,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["chemistry/stevia-crystals"],
+    "requiresQuests": [
+        "chemistry/ph-adjustment"
+    ],
     "hardening": {
         "passes": 0,
         "score": 85,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

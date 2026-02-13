@@ -119,11 +119,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/arduino-blink"],
+    "requiresQuests": [
+        "electronics/arduino-blink"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

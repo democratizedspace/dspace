@@ -99,12 +99,14 @@
             ]
         }
     ],
-    "requiresQuests": ["robotics/pan-tilt", "robotics/ultrasonic-rangefinder"],
+    "requiresQuests": [
+        "robotics/obstacle-avoidance"
+    ],
     "rewards": [],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

@@ -47,11 +47,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["geothermal/install-backup-thermistor"],
+    "requiresQuests": [
+        "geothermal/check-loop-temp-delta"
+    ],
     "hardening": {
         "passes": 0,
         "score": 75,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

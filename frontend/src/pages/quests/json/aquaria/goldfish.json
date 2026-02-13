@@ -120,11 +120,14 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests", "aquaria/breeding"],
+    "requiresQuests": [
+        "welcome/howtodoquests",
+        "aquaria/balance-ph"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

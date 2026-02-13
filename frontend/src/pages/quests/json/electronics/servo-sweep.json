@@ -1,14 +1,14 @@
 {
     "id": "electronics/servo-sweep",
     "title": "Sweep a Servo",
-    "description": "Use the Arduino IDE's Servo library 'Sweep' example to rotate a hobby servo from 0° to 180°.",
+    "description": "Use the Arduino IDE's Servo library 'Sweep' example to rotate a hobby servo from 0\u00b0 to 180\u00b0.",
     "image": "/assets/quests/electronics_servo_sweep_arduino.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to move beyond LEDs? Gather an Arduino Uno, USB cable, servo motor, jumper wires, and a 5 V supply to sweep a servo arm back and forth.",
+            "text": "Ready to move beyond LEDs? Gather an Arduino Uno, USB cable, servo motor, jumper wires, and a 5\u202fV supply to sweep a servo arm back and forth.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "wire",
-            "text": "Disconnect the USB cable before wiring. Connect the servo signal to digital pin 9, red to 5 V, and brown or black to GND. If it draws over 500 mA, power it from an external 5 V supply and tie the grounds together to avoid brownouts.",
+            "text": "Disconnect the USB cable before wiring. Connect the servo signal to digital pin\u202f9, red to 5\u202fV, and brown or black to GND. If it draws over 500\u202fmA, power it from an external 5\u202fV supply and tie the grounds together to avoid brownouts.",
             "options": [
                 {
                     "type": "goto",
@@ -52,7 +52,7 @@
         },
         {
             "id": "code",
-            "text": "Reconnect the USB cable, open the Arduino IDE, and load File > Examples > Servo > Sweep. If it's not installed, run the 'Install the Arduino IDE' process. Select the correct board and port, then upload. Secure the servo and keep fingers clear as it sweeps between 0° and 180°.",
+            "text": "Reconnect the USB cable, open the Arduino IDE, and load File > Examples > Servo > Sweep. If it's not installed, run the 'Install the Arduino IDE' process. Select the correct board and port, then upload. Secure the servo and keep fingers clear as it sweeps between 0\u00b0 and 180\u00b0.",
             "options": [
                 {
                     "type": "process",
@@ -79,11 +79,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/arduino-blink"],
+    "requiresQuests": [
+        "electronics/led-polarity"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-02",

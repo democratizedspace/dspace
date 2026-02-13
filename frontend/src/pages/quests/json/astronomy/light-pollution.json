@@ -59,11 +59,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["astronomy/constellations"],
+    "requiresQuests": [
+        "astronomy/binary-star"
+    ],
     "hardening": {
         "passes": 3,
         "score": 90,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-light-pollution-2025-08-05",

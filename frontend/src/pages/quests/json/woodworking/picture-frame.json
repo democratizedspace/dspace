@@ -24,7 +24,7 @@
         },
         {
             "id": "style",
-            "text": "Pick a 20×25 cm opening with a 3 cm rail. Decide between a natural finish or a painted accent.",
+            "text": "Pick a 20\u00d725 cm opening with a 3 cm rail. Decide between a natural finish or a painted accent.",
             "options": [
                 {
                     "type": "goto",
@@ -125,11 +125,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["woodworking/tool-rack"],
+    "requiresQuests": [
+        "woodworking/birdhouse"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

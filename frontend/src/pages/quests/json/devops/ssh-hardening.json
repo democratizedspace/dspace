@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 1,
         "score": 90,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-hardening-2025-08-18",
@@ -89,5 +89,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/firewall-rules"]
+    "requiresQuests": [
+        "devops/fail2ban"
+    ]
 }

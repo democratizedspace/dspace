@@ -20,7 +20,13 @@
         {
             "id": "prep",
             "text": "Gather the soldering iron kit, desoldering pump, solder wick, flux pen and safety goggles. Keep the iron on its stand and cords clear.",
-            "options": [{ "type": "goto", "goto": "desolder", "text": "Tools ready." }]
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "desolder",
+                    "text": "Tools ready."
+                }
+            ]
         },
         {
             "id": "desolder",
@@ -32,11 +38,26 @@
                     "text": "Component removed.",
                     "process": "desolder-through-hole",
                     "requiresItems": [
-                        { "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
-                        { "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22", "count": 1 },
-                        { "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03", "count": 1 },
-                        { "id": "dad7f853-ccc9-40be-b226-89272708db84", "count": 1 }
+                        {
+                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22",
+                            "count": 1
+                        },
+                        {
+                            "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03",
+                            "count": 1
+                        },
+                        {
+                            "id": "dad7f853-ccc9-40be-b226-89272708db84",
+                            "count": 1
+                        }
                     ]
                 }
             ]
@@ -44,15 +65,22 @@
         {
             "id": "finish",
             "text": "Nice work! Clean the tip, unplug the iron, let it cool, and recycle the scrap PCB.",
-            "options": [{ "type": "finish", "text": "All cleaned up." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All cleaned up."
+                }
+            ]
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/solder-wire"],
+    "requiresQuests": [
+        "electronics/check-battery-voltage"
+    ],
     "hardening": {
         "passes": 3,
         "score": 80,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-desolder-component-hardening-2025-08-13",

@@ -99,11 +99,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["devops/monitoring"],
+    "requiresQuests": [
+        "devops/pi-cluster-hardware"
+    ],
     "hardening": {
         "passes": 0,
         "score": 85,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

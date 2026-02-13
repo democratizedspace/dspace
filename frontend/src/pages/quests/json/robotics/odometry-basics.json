@@ -49,12 +49,14 @@
             ]
         }
     ],
-    "requiresQuests": ["robotics/wheel-encoders"],
+    "requiresQuests": [
+        "robotics/line-follower"
+    ],
     "rewards": [],
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

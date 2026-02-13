@@ -19,7 +19,7 @@
         },
         {
             "id": "materials",
-            "text": "Gather an Arduino Uno, Breadboard, two Jumper Wires, a 220 Ω Resistor, a 5 mm LED, Safety Goggles, a USB Type-A to Type-B cable, a Laptop Computer with the Arduino IDE installed, and a Resistor Color Chart. If the IDE isn't installed, run the 'Install the Arduino IDE' process. Use the chart to confirm the resistor bands read red-red-brown (220 Ω). Place the LED's long leg (anode) into digital pin 13 through the resistor and its short leg (cathode) to GND. Keep power unplugged while wiring.",
+            "text": "Gather an Arduino Uno, Breadboard, two Jumper Wires, a 220 \u03a9 Resistor, a 5 mm LED, Safety Goggles, a USB Type-A to Type-B cable, a Laptop Computer with the Arduino IDE installed, and a Resistor Color Chart. If the IDE isn't installed, run the 'Install the Arduino IDE' process. Use the chart to confirm the resistor bands read red-red-brown (220 \u03a9). Place the LED's long leg (anode) into digital pin 13 through the resistor and its short leg (cathode) to GND. Keep power unplugged while wiring.",
             "options": [
                 {
                     "type": "process",
@@ -84,7 +84,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work—you just programmed a microcontroller. Always unplug the USB Type-A to Type-B cable before adjusting wiring and avoid staring directly into the LED. For a detailed walkthrough, open the 'Blink an LED with Arduino' process. Experiment with new patterns or sensors to build skills for bigger projects.",
+            "text": "Nice work\u2014you just programmed a microcontroller. Always unplug the USB Type-A to Type-B cable before adjusting wiring and avoid staring directly into the LED. For a detailed walkthrough, open the 'Blink an LED with Arduino' process. Experiment with new patterns or sensors to build skills for bigger projects.",
             "options": [
                 {
                     "type": "process",
@@ -98,7 +98,9 @@
             ]
         }
     ],
-    "requiresQuests": ["electronics/basic-circuit"],
+    "requiresQuests": [
+        "electronics/basic-circuit"
+    ],
     "rewards": [
         {
             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
@@ -108,7 +110,7 @@
     "hardening": {
         "passes": 10,
         "score": 100,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-04",
