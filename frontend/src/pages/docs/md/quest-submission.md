@@ -72,6 +72,8 @@ For manual submissions via command-line:
 3. **Create a pull request** manually with your bundle file
 4. **Regenerate the new quests list** by running `npm run new-quests:update` and
    committing the updated `/docs/new-quests.md` to keep quest counts accurate.
+5. **Update the matching Skills quest-tree documentation** under `frontend/src/pages/docs/md/`
+   (for example, `/docs/composting`) whenever quests are added or quest gates/rewards change.
 
 Maintainers can review submitted quests at `/quests/review`, approving or rejecting them before merge.
 
