@@ -15,19 +15,37 @@
                     "goto": "prep",
                     "text": "Gear gathered and tank is safe to work",
                     "requiresItems": [
-                        { "id": "8c0f72a2-db79-4238-b80f-97721def169f", "count": 1 },
-                        { "id": "97317bc3-507a-4e2c-912b-507d586cee87", "count": 1 },
-                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
-                        { "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1", "count": 1 },
-                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
-                        { "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0", "count": 1 }
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0",
+                            "count": 1
+                        }
                     ]
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "Fill the bucket with tap water, add conditioner, and match the temperature within 2 °C before you touch the tank. Keep cords dripped below outlets.",
+            "text": "Fill the bucket with tap water, add conditioner, and match the temperature within 2 \u00b0C before you touch the tank. Keep cords dripped below outlets.",
             "options": [
                 {
                     "type": "process",
@@ -38,7 +56,12 @@
                     "type": "goto",
                     "goto": "remove",
                     "text": "Replacement water is conditioned and matched",
-                    "requiresItems": [{ "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -55,7 +78,12 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Water swapped and heater restarted",
-                    "requiresItems": [{ "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -76,11 +104,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/guppy"],
+    "requiresQuests": [
+        "aquaria/guppy"
+    ],
     "hardening": {
         "passes": 4,
         "score": 100,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-15",

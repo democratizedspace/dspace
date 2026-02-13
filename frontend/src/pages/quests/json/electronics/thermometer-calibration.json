@@ -25,7 +25,7 @@
         },
         {
             "id": "calibrate",
-            "text": "Immerse the thermometer in ice water to check 0°C, then in warm water to confirm higher readings. Adjust the offset in your code if needed.",
+            "text": "Immerse the thermometer in ice water to check 0\u00b0C, then in warm water to confirm higher readings. Adjust the offset in your code if needed.",
             "options": [
                 {
                     "type": "goto",
@@ -51,11 +51,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/thermistor-reading"],
+    "requiresQuests": [
+        "electronics/thermistor-reading"
+    ],
     "hardening": {
         "passes": 0,
         "score": 75,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

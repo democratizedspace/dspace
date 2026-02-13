@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Want off-grid power on the go? I have a 200 W portable panel, charge controller, and 200 Wh pack—if you wire them right.",
+            "text": "Want off-grid power on the go? I have a 200 W portable panel, charge controller, and 200 Wh pack\u2014if you wire them right.",
             "options": [
                 {
                     "type": "goto",
@@ -70,7 +70,7 @@
         },
         {
             "id": "wire",
-            "text": "Crimped lugs go battery-side, MC4s point to the panel. Fuse on the positive lead—red to positive, black to negative—torque to spec, and zip-tie strain relief so nothing yanks free.",
+            "text": "Crimped lugs go battery-side, MC4s point to the panel. Fuse on the positive lead\u2014red to positive, black to negative\u2014torque to spec, and zip-tie strain relief so nothing yanks free.",
             "options": [
                 {
                     "type": "process",
@@ -92,7 +92,7 @@
         },
         {
             "id": "harvest",
-            "text": "Face the panel toward the sun, shade the battery, and start charging. Stop if connectors warm up or voltage dips below the controller’s low-cutoff.",
+            "text": "Face the panel toward the sun, shade the battery, and start charging. Stop if connectors warm up or voltage dips below the controller\u2019s low-cutoff.",
             "options": [
                 {
                     "type": "process",
@@ -129,11 +129,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/solar"],
+    "requiresQuests": [
+        "energy/offgrid-charger"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

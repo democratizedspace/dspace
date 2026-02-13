@@ -29,7 +29,7 @@
         },
         {
             "id": "lift",
-            "text": "I'll take most of the weight. On three—one, two, three. Keep the tank level and your back straight.",
+            "text": "I'll take most of the weight. On three\u2014one, two, three. Keep the tank level and your back straight.",
             "options": [
                 {
                     "type": "goto",
@@ -56,7 +56,7 @@
                 {
                     "type": "process",
                     "process": "heat-walstad",
-                    "text": "Install the heater and set it to 26°C",
+                    "text": "Install the heater and set it to 26\u00b0C",
                     "requiresItems": [
                         {
                             "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
@@ -75,7 +75,10 @@
             ]
         }
     ],
-    "requiresQuests": ["aquaria/walstad", "aquaria/thermometer"],
+    "requiresQuests": [
+        "aquaria/walstad",
+        "aquaria/thermometer"
+    ],
     "rewards": [
         {
             "id": "8c0f72a2-db79-4238-b80f-97721def169f",
@@ -85,7 +88,7 @@
     "hardening": {
         "passes": 1,
         "score": 100,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-07",

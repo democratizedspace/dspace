@@ -19,7 +19,7 @@
         },
         {
             "id": "measure",
-            "text": "Dip a strip for a few seconds, then match the color chart. 5.5–6.5 keeps leafy greens mellow.",
+            "text": "Dip a strip for a few seconds, then match the color chart. 5.5\u20136.5 keeps leafy greens mellow.",
             "options": [
                 {
                     "type": "process",
@@ -84,7 +84,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work. Keep 5.5–6.5 and recheck weekly to avoid nutrient lockout.",
+            "text": "Nice work. Keep 5.5\u20136.5 and recheck weekly to avoid nutrient lockout.",
             "options": [
                 {
                     "type": "finish",
@@ -99,11 +99,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/nutrient-check"],
+    "requiresQuests": [
+        "hydroponics/nutrient-check"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

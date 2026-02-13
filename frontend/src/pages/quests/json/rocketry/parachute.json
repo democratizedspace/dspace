@@ -108,11 +108,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["rocketry/firstlaunch"],
+    "requiresQuests": [
+        "rocketry/firstlaunch"
+    ],
     "hardening": {
         "passes": 1,
         "score": 100,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-23",

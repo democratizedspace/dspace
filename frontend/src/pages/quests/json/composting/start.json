@@ -318,11 +318,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/basil"],
+    "requiresQuests": [
+        "hydroponics/basil"
+    ],
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

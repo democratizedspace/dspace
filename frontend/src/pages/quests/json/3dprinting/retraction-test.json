@@ -14,29 +14,48 @@
                     "type": "goto",
                     "goto": "setup",
                     "text": "Green PLA is loaded and ready.",
-                    "requiresItems": [{ "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "setup",
-            "text": "Slice the model with a 1–2 mm retraction distance step between test sections. Keep goggles on and note the settings in your slicer comments.",
+            "text": "Slice the model with a 1\u20132 mm retraction distance step between test sections. Keep goggles on and note the settings in your slicer comments.",
             "options": [
                 {
                     "type": "process",
                     "process": "tune-retraction-benchy",
                     "text": "Print the stepped Benchy.",
                     "requiresItems": [
-                        { "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
-                        { "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c", "count": 1 }
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
                     ]
                 },
                 {
                     "type": "goto",
                     "goto": "inspect",
                     "text": "Benchy finished and cooled.",
-                    "requiresItems": [{ "id": "141581bf-be69-4522-973b-3d22292a85fa", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "141581bf-be69-4522-973b-3d22292a85fa",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -53,13 +72,18 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Stringing is gone and notes are saved.",
-                    "requiresItems": [{ "id": "141581bf-be69-4522-973b-3d22292a85fa", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "141581bf-be69-4522-973b-3d22292a85fa",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Keep those slicer notes handy—future prints can start from this dialed-in retraction.",
+            "text": "Great! Keep those slicer notes handy\u2014future prints can start from this dialed-in retraction.",
             "options": [
                 {
                     "type": "finish",
@@ -74,11 +98,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/phone-stand"],
+    "requiresQuests": [
+        "3dprinting/phone-stand"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

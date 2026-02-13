@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 1,
         "score": 90,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-hardening-2025-08-19",
@@ -68,5 +68,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["devops/docker-compose"]
+    "requiresQuests": [
+        "devops/docker-compose"
+    ]
 }

@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-hardening-2025-08-12",
@@ -120,7 +120,7 @@
         },
         {
             "id": "temp",
-            "text": "Thermometer reads 55 °C—ideal. Remove the probe carefully; it may be hot.",
+            "text": "Thermometer reads 55 \u00b0C\u2014ideal. Remove the probe carefully; it may be hot.",
             "options": [
                 {
                     "type": "process",
@@ -137,7 +137,7 @@
         },
         {
             "id": "moisture",
-            "text": "Meter shows 55% moisture—ideal for microbes. Rinse the probe after use.",
+            "text": "Meter shows 55% moisture\u2014ideal for microbes. Rinse the probe after use.",
             "options": [
                 {
                     "type": "process",
@@ -187,5 +187,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["composting/start"]
+    "requiresQuests": [
+        "composting/start"
+    ]
 }

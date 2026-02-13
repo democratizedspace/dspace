@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's expand your sensor skills. Pair a 10 kΩ NTC thermistor with a 10 kΩ resistor for an Arduino Uno voltage divider. Work on a non-conductive surface and unplug the USB cable before wiring.",
+            "text": "Let's expand your sensor skills. Pair a 10\u202fk\u03a9 NTC thermistor with a 10\u202fk\u03a9 resistor for an Arduino Uno voltage divider. Work on a non-conductive surface and unplug the USB cable before wiring.",
             "options": [
                 {
                     "type": "process",
@@ -24,7 +24,7 @@
         },
         {
             "id": "wire",
-            "text": "With the USB cable still unplugged, place the thermistor and 10 kΩ resistor in series on the breadboard between 5 V and GND to form a voltage divider. Use jumper wires to link their junction to A0 on the Arduino Uno. Keep leads separated, verify resistor values and double-check connections before restoring power.",
+            "text": "With the USB cable still unplugged, place the thermistor and 10\u202fk\u03a9 resistor in series on the breadboard between 5\u202fV and GND to form a voltage divider. Use jumper wires to link their junction to A0 on the Arduino Uno. Keep leads separated, verify resistor values and double-check connections before restoring power.",
             "options": [
                 {
                     "type": "goto",
@@ -92,11 +92,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/potentiometer-dimmer"],
+    "requiresQuests": [
+        "electronics/potentiometer-dimmer"
+    ],
     "hardening": {
         "passes": 5,
         "score": 97,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-03",

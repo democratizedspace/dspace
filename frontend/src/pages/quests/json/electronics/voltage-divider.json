@@ -1,14 +1,14 @@
 {
     "id": "electronics/voltage-divider",
     "title": "Build a Voltage Divider",
-    "description": "Split 5 V to about 2.5 V using 220 Ω and 10 kΩ resistors on a Breadboard.",
+    "description": "Split 5 V to about 2.5 V using 220 \u03a9 and 10 k\u03a9 resistors on a Breadboard.",
     "image": "/assets/quests/electronics_voltage_divider_breadboard.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Orion here. Gather a Breadboard, 220 Ω resistor, 10 kΩ resistor, two Jumper Wires, a 5 V Power Supply and a digital multimeter. Keep the supply unplugged while wiring.",
+            "text": "Orion here. Gather a Breadboard, 220 \u03a9 resistor, 10 k\u03a9 resistor, two Jumper Wires, a 5 V Power Supply and a digital multimeter. Keep the supply unplugged while wiring.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "build",
-            "text": "Place the 220 Ω and 10 kΩ resistors in series on the Breadboard. Use two Jumper Wires to connect the 5 V Power Supply across them and clip the multimeter probes to the junction. Double-check resistor color bands before powering.",
+            "text": "Place the 220 \u03a9 and 10 k\u03a9 resistors in series on the Breadboard. Use two Jumper Wires to connect the 5 V Power Supply across them and clip the multimeter probes to the junction. Double-check resistor color bands before powering.",
             "options": [
                 {
                     "type": "process",
@@ -87,11 +87,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/basic-circuit"],
+    "requiresQuests": [
+        "electronics/tin-soldering-iron"
+    ],
     "hardening": {
         "passes": 1,
         "score": 90,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-18",

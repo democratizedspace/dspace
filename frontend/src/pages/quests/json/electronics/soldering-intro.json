@@ -63,11 +63,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/basic-circuit"],
+    "requiresQuests": [
+        "electronics/resistor-color-check"
+    ],
     "hardening": {
         "passes": 3,
         "score": 75,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-14",

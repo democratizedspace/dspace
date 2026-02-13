@@ -96,11 +96,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/thermistor-reading"],
+    "requiresQuests": [
+        "electronics/thermistor-reading"
+    ],
     "hardening": {
         "passes": 2,
         "score": 90,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-refine-2025-08-09",

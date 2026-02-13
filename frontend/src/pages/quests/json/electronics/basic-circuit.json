@@ -77,7 +77,9 @@
             ]
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "rewards": [
         {
             "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",

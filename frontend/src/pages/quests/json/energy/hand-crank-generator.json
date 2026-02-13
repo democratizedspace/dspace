@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-hardening-2025-08-06",
@@ -194,5 +194,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/solar"]
+    "requiresQuests": [
+        "energy/dWatt-1e3"
+    ]
 }

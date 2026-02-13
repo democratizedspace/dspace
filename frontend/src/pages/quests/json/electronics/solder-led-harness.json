@@ -1,7 +1,7 @@
 {
     "id": "electronics/solder-led-harness",
     "title": "Solder an LED Harness",
-    "description": "Join a 5 mm LED and 220 Ω resistor to two jumper wires using a soldering iron kit. Ventilate and wear safety goggles.",
+    "description": "Join a 5 mm LED and 220 \u03a9 resistor to two jumper wires using a soldering iron kit. Ventilate and wear safety goggles.",
     "image": "/assets/quests/electronics_solder_led_harness.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -19,7 +19,7 @@
         },
         {
             "id": "prep",
-            "text": "Gather the soldering iron kit, flux pen, and wire stripper. Add a 5 mm LED, a 220 Ω resistor, two jumper wires, and safety goggles. Heat the iron, tin the tip, and slide heat-shrink over one wire before soldering.",
+            "text": "Gather the soldering iron kit, flux pen, and wire stripper. Add a 5 mm LED, a 220 \u03a9 resistor, two jumper wires, and safety goggles. Heat the iron, tin the tip, and slide heat-shrink over one wire before soldering.",
             "options": [
                 {
                     "type": "process",
@@ -72,11 +72,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/tin-soldering-iron"],
+    "requiresQuests": [
+        "electronics/tin-soldering-iron"
+    ],
     "hardening": {
         "passes": 1,
         "score": 100,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-quest-create-2025-11-29",

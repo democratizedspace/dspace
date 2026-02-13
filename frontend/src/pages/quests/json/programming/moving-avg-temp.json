@@ -51,11 +51,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["programming/avg-temp"],
+    "requiresQuests": [
+        "programming/avg-temp"
+    ],
     "hardening": {
         "passes": 0,
         "score": 75,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
