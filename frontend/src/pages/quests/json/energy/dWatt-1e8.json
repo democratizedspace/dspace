@@ -51,11 +51,13 @@
             "count": 50
         }
     ],
-    "requiresQuests": ["energy/dWatt-1e7"],
+    "requiresQuests": [
+        "energy/dWatt-1e7"
+    ],
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

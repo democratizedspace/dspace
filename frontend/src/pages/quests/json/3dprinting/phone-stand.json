@@ -60,7 +60,7 @@
         },
         {
             "id": "print",
-            "text": "Open the Phone Stand STL. Slice at 0.2 mm layers, 3 perimeters, 5 top/bottom layers, 15% gyroid infill. Lay it flat. Supports off unless you see real overhangs. Add a 3–5 mm brim if adhesion is weak. PLA around 200°C nozzle, 60°C bed. Watch the first layer, then let it finish and cool before releasing.",
+            "text": "Open the Phone Stand STL. Slice at 0.2 mm layers, 3 perimeters, 5 top/bottom layers, 15% gyroid infill. Lay it flat. Supports off unless you see real overhangs. Add a 3\u20135 mm brim if adhesion is weak. PLA around 200\u00b0C nozzle, 60\u00b0C bed. Watch the first layer, then let it finish and cool before releasing.",
             "options": [
                 {
                     "type": "process",
@@ -82,7 +82,7 @@
         },
         {
             "id": "finish",
-            "text": "Test-fit the phone. It should lean 60–70° and keep the port clear. Tight? Light sanding. Loose? Scale up 1–2% and reprint. Power down and log the settings.",
+            "text": "Test-fit the phone. It should lean 60\u201370\u00b0 and keep the port clear. Tight? Light sanding. Loose? Scale up 1\u20132% and reprint. Power down and log the settings.",
             "options": [
                 {
                     "type": "finish",
@@ -91,11 +91,13 @@
             ]
         }
     ],
-    "requiresQuests": ["3dprinter/start"],
+    "requiresQuests": [
+        "3dprinting/filament-change"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

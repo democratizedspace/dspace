@@ -137,11 +137,13 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["geothermal/survey-ground-temperature"],
+    "requiresQuests": [
+        "geothermal/survey-ground-temperature"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
