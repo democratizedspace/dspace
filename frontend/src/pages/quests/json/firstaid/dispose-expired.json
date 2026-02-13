@@ -26,6 +26,11 @@
                     "process": "wash-hands",
                     "text": "Hands are washed",
                     "goto": "sort"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "I need to gather safety gear first."
                 }
             ]
         },

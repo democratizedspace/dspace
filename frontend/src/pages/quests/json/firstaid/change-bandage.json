@@ -36,6 +36,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "I need to gather clean supplies first."
                 }
             ]
         },

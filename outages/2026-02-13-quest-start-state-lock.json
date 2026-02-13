@@ -1,0 +1,15 @@
+{
+  "id": "OUT-2026-02-13-quest-start-state-lock",
+  "date": "2026-02-13",
+  "component": "frontend/quests",
+  "rootCause": "The quest dialogue completable validator skipped state-lock checks for transitions that originated from the start node. Quests with a start->process-only step could pass CI even when the destination step had no actionable option for players lacking required items, leaving them trapped without a goto escape path.",
+  "resolution": "Removed the start-node exemption in state-lock detection, added a regression test that exercises a start-originating lock, and updated affected quests to include explicit non-process goto escape options on previously process-only nodes so players can navigate out instead of being stranded.",
+  "references": [
+    "tests/questDialogueValidation.test.ts",
+    "frontend/src/pages/quests/json/composting/sift-compost.json",
+    "frontend/src/pages/quests/json/firstaid/assemble-kit.json",
+    "frontend/src/pages/quests/json/firstaid/change-bandage.json",
+    "frontend/src/pages/quests/json/firstaid/dispose-expired.json",
+    "frontend/src/pages/quests/json/firstaid/remove-splinter.json"
+  ]
+}
