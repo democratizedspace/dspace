@@ -136,6 +136,19 @@ function validateQuest(filePath, options = {}) {
       continue;
     }
 
+    const hasFinishOption = node.options.some((option) => option.type === 'finish');
+    const hasGotoOption = node.options.some(
+      (option) => option.type === 'goto' && typeof option.goto === 'string' && option.goto.trim().length > 0
+    );
+
+    if (!hasFinishOption && !hasGotoOption) {
+      const nodeId = typeof node.id === 'string' && node.id.trim().length > 0 ? node.id : '<unknown>';
+      console.error(
+        `Validation failed for ${filePath}: dialogue node "${nodeId}" must include at least one goto option or a finish option.`
+      );
+      return false;
+    }
+
     const missingProcessIds = node.options
       .filter((option) => option.type === 'process')
       .map((option) => option.process)

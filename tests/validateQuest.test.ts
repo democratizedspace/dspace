@@ -163,3 +163,31 @@ test('passes when all process references exist in the known process set', () => 
     expect(result).toBe(true);
 });
 
+test('fails when a non-terminal dialogue node has no goto option', () => {
+    const questWithOrphanNode = {
+        id: 'q-orphan-node',
+        title: 'Missing transition',
+        description: 'desc',
+        image: 'img.png',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'hello',
+                options: [{ type: 'process', process: 'existing-process', text: 'run it' }],
+            },
+            {
+                id: 'finish',
+                text: 'done',
+                options: [{ type: 'finish', text: 'done' }],
+            },
+        ],
+        hardening: defaultHardening,
+    };
+
+    const file = writeQuestFile(questWithOrphanNode);
+    const result = validateQuest(file, { knownProcessIds: new Set(['existing-process']) });
+    rmSync(path.dirname(file), { recursive: true, force: true });
+    expect(result).toBe(false);
+});

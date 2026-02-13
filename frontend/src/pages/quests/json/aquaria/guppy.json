@@ -15,6 +15,11 @@
                     "process": "heat-walstad",
                     "text": "Install the heater.",
                     "goto": "acquire"
+                },
+                {
+                    "type": "goto",
+                    "goto": "acquire",
+                    "text": "Heater is set and water is stable."
                 }
             ]
         },

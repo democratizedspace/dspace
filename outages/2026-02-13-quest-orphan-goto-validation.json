@@ -1,0 +1,19 @@
+{
+  "id": "2026-02-13-quest-orphan-goto-validation",
+  "date": "2026-02-13",
+  "component": "quest dialogue traversal validation",
+  "rootCause": "Quest traversal checks treated any option with a `goto` field as a navigation edge, including `process` options. The Quest chat UI only navigates on explicit `goto` options, so process-only nodes could pass tests while being non-completable in-game.",
+  "resolution": "Restricted traversal to `type: \"goto\"` options, enforced quest validation so non-terminal dialogue nodes must include an explicit goto option, and added missing goto choices to affected quests.",
+  "references": [
+    "frontend/src/utils/simulateQuest.js",
+    "scripts/validate-quest.js",
+    "tests/validateQuest.test.ts",
+    "frontend/__tests__/questSimulation.test.js",
+    "frontend/src/pages/quests/json/composting/sift-compost.json",
+    "frontend/src/pages/quests/json/aquaria/guppy.json",
+    "frontend/src/pages/quests/json/firstaid/assemble-kit.json",
+    "frontend/src/pages/quests/json/firstaid/change-bandage.json",
+    "frontend/src/pages/quests/json/firstaid/dispose-expired.json",
+    "frontend/src/pages/quests/json/firstaid/remove-splinter.json"
+  ]
+}

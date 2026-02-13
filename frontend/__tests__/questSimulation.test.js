@@ -39,6 +39,24 @@ describe('Quest simulation', () => {
         expect(questHasFinishPath(quest)).toBe(false);
     });
 
+
+    test('process options do not create dialogue traversal edges', () => {
+        const quest = {
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    options: [{ type: 'process', process: 'heat-walstad', goto: 'finish' }],
+                },
+                {
+                    id: 'finish',
+                    options: [{ type: 'finish', text: 'done' }],
+                },
+            ],
+        };
+
+        expect(questHasFinishPath(quest)).toBe(false);
+    });
     test('quest requiring GitHub token still has finish path', () => {
         const quest = JSON.parse(fs.readFileSync(githubFinishQuestFile));
         expect(questHasFinishPath(quest)).toBe(true);
