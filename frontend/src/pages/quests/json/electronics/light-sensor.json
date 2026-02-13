@@ -129,7 +129,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/basic-circuit"],
+    "requiresQuests": [
+        "electronics/voltage-divider"
+    ],
     "hardening": {
         "passes": 6,
         "score": 97,
