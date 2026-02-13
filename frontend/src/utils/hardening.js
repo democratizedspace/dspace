@@ -239,10 +239,6 @@ export const evaluateQuestQuality = (quest) => {
         }
     }
 
-    if (Array.isArray(quest.rewards) && quest.rewards.length > 0) {
-        score += 5;
-    }
-
     if (Array.isArray(quest.requiresQuests) && quest.requiresQuests.length > 0) {
         score += 5;
     }

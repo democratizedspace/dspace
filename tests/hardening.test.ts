@@ -39,7 +39,7 @@ describe('hardening evaluators', () => {
             requiresQuests: ['get-ready'],
         };
 
-        expect(evaluateQuestQuality(quest)).toBe(100);
+        expect(evaluateQuestQuality(quest)).toBe(95);
     });
 
     it('scores processes with duration, relationships, and media', () => {
