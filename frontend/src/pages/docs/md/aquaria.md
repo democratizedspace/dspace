@@ -455,13 +455,13 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
   - cured compost bucket ×1
 - Processes used:
   - [catch-fish](/processes/catch-fish)
-    - Requires: Unknown process
-    - Consumes: Unknown process
-    - Creates: Unknown process
+    - Requires: TBD (known gap; process IO not yet specified)
+    - Consumes: TBD (known gap; process IO not yet specified)
+    - Creates: TBD (known gap; process IO not yet specified)
   - [return-fish](/processes/return-fish)
-    - Requires: Unknown process
-    - Consumes: Unknown process
-    - Creates: Unknown process
+    - Requires: TBD (known gap; process IO not yet specified)
+    - Consumes: TBD (known gap; process IO not yet specified)
+    - Creates: TBD (known gap; process IO not yet specified)
 
 ## 19) Top Off Evaporated Water (`aquaria/top-off`)
 

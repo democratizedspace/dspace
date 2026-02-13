@@ -319,7 +319,7 @@ Electronics quests build practical progression through the electronics skill tre
 - Processes used:
   - None
 
-## 16) Tin a Soldering Iron (`electronics/tin-soldering-iron`)
+## 16) Tin a Soldering Iron (`electronics/soldering-intro`)
 
 - Quest link: [/quests/electronics/soldering-intro](/quests/electronics/soldering-intro)
 - Unlock prerequisite:

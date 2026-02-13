@@ -129,9 +129,9 @@ Geothermal quests build practical progression through the geothermal skill tree.
   - cured compost bucket ×1
 - Processes used:
   - [pressure-gauge-read](/processes/pressure-gauge-read)
-    - Requires: Unknown process
-    - Consumes: Unknown process
-    - Creates: Unknown process
+    - Requires: TBD — known gap; process IO not yet specified
+    - Consumes: TBD — known gap; process IO not yet specified
+    - Creates: TBD — known gap; process IO not yet specified
 
 ## 6) Check Loop Temperature Delta (`geothermal/check-loop-temp-delta`)
 

@@ -83,9 +83,9 @@ Chemistry quests build practical progression through the chemistry skill tree. T
   - cured compost bucket ×1
 - Processes used:
   - [neutralize-acid](/processes/neutralize-acid)
-    - Requires: Unknown process
-    - Consumes: Unknown process
-    - Creates: Unknown process
+    - Requires: TBD — known gap; process IO not yet specified
+    - Consumes: TBD — known gap; process IO not yet specified
+    - Creates: TBD — known gap; process IO not yet specified
 
 ## 5) Prepare a Buffer Solution (`chemistry/buffer-solution`)
 

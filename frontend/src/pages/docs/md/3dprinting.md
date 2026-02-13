@@ -1,9 +1,9 @@
 ---
-title: '3DPRINTING'
+title: '3D Printing'
 slug: '3dprinting'
 ---
 
-3DPRINTING quests build practical progression through the 3dprinting skill tree. This page is a QA-oriented map of quest dependencies, process IO, and inventory gates.
+3D Printing quests build practical progression through the 3dprinting skill tree. This page is a QA-oriented map of quest dependencies, process IO, and inventory gates.
 
 ## Quest tree
 

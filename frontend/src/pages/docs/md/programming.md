@@ -7,7 +7,7 @@ Programming quests build practical progression through the programming skill tre
 
 ## Quest tree
 
-1. [Log Temperature Data](/quests/programming/hello-sensor)
+1. [Set Up Temperature Logger](/quests/programming/hello-sensor)
 2. [Log Temperature Data](/quests/programming/temp-logger)
 3. [Compute Average Temperature](/quests/programming/avg-temp)
 4. [Graph Temperature Logs](/quests/programming/graph-temp)
@@ -26,7 +26,7 @@ Programming quests build practical progression through the programming skill tre
 17. [Set Temperature Alert](/quests/programming/temp-alert)
 18. [Email Temperature Alert](/quests/programming/temp-email)
 
-## 1) Log Temperature Data (`programming/hello-sensor`)
+## 1) Set Up Temperature Logger (`programming/hello-sensor`)
 
 - Quest link: [/quests/programming/hello-sensor](/quests/programming/hello-sensor)
 - Unlock prerequisite:

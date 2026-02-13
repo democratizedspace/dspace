@@ -66,14 +66,20 @@ const toTitleCase = (value = '') =>
         })
         .join(' ');
 
-const getTreeFromQuestPath = (filePath = '') => {
-    const normalizedPath = String(filePath).replace(/\\/g, '/');
+const getTreeFromQuestModule = (questModule = {}) => {
+    const questId = String(questModule?.default?.id ?? '').toLowerCase();
+
+    if (questId.includes('/')) {
+        return questId.split('/')[0];
+    }
+
+    const normalizedPath = String(questModule?.file ?? '').replace(/\\/g, '/');
     const match = normalizedPath.match(/\/quests\/json\/([^/]+)\//);
 
     return match?.[1] ?? '';
 };
 
-const questSkillLinks = [...new Set(questTreeModules.map(({ file }) => getTreeFromQuestPath(file)))]
+const questSkillLinks = [...new Set(questTreeModules.map((questModule) => getTreeFromQuestModule(questModule)))]
     .filter(Boolean)
     .sort((left, right) => left.localeCompare(right))
     .map((tree) => ({
@@ -110,9 +116,13 @@ const mergeSkillLinks = (baseLinks, treeLinks) => {
 
     for (const link of treeLinks) {
         const existingLink = byHref.get(link.href);
+        const slug = getSlugFromHref(link.href);
+        const docData = slug ? docSearchIndex.get(slug) ?? null : null;
+        const features = docData?.features ?? [];
+        const bodyText = docData?.bodyText ?? '';
 
         if (!existingLink) {
-            byHref.set(link.href, { ...link, features: [], bodyText: '' });
+            byHref.set(link.href, { ...link, features, bodyText });
             continue;
         }
 

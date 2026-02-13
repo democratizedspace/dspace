@@ -301,9 +301,9 @@ Hydroponics quests build practical progression through the hydroponics skill tre
   - cured compost bucket ×1
 - Processes used:
   - [prime-pump](/processes/prime-pump)
-    - Requires: Unknown process
-    - Consumes: Unknown process
-    - Creates: Unknown process
+    - Requires: TBD — process IO not yet specified (known gap)
+    - Consumes: TBD — process IO not yet specified (known gap)
+    - Creates: TBD — process IO not yet specified (known gap)
 
 ## 13) Grow Stevia Hydroponically (`hydroponics/stevia`)
 
