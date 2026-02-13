@@ -51,7 +51,9 @@
             "count": 10
         }
     ],
-    "requiresQuests": ["energy/dWatt-1e4"],
+    "requiresQuests": [
+        "energy/dWatt-1e5"
+    ],
     "hardening": {
         "passes": 0,
         "score": 85,

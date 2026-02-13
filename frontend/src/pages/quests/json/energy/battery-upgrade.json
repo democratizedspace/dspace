@@ -56,7 +56,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/solar"],
+    "requiresQuests": [
+        "energy/battery-maintenance"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

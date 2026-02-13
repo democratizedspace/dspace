@@ -168,9 +168,8 @@
         }
     ],
     "requiresQuests": [
-        "rocketry/recovery-run",
-        "rocketry/preflight-check",
-        "rocketry/guided-rocket-build"
+        "rocketry/guided-rocket-build",
+        "rocketry/recovery-run"
     ],
     "hardening": {
         "passes": 0,

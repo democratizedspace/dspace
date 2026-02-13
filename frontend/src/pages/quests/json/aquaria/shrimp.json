@@ -84,9 +84,7 @@
         }
     ],
     "requiresQuests": [
-        "aquaria/water-testing",
-        "aquaria/heater-install",
-        "aquaria/log-water-parameters"
+        "aquaria/heater-install"
     ],
     "hardening": {
         "passes": 4,

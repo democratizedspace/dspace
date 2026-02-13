@@ -26,9 +26,18 @@
                     "process": "tighten-x-belt",
                     "text": "Walk me through each step.",
                     "requiresItems": [
-                        { "id": "a42e441a-5569-490c-86e4-ce711117cd22", "count": 1 },
-                        { "id": "8299ac3f-c232-46d4-a007-2ad86ec70361", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
                     ]
                 },
                 {
@@ -61,7 +70,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinter/start"],
+    "requiresQuests": [
+        "3dprinting/cable-clip"
+    ],
     "hardening": {
         "passes": 1,
         "score": 90,

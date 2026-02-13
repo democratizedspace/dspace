@@ -14,7 +14,12 @@
                     "type": "goto",
                     "goto": "setup",
                     "text": "Green PLA is loaded and ready.",
-                    "requiresItems": [{ "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -27,16 +32,30 @@
                     "process": "tune-retraction-benchy",
                     "text": "Print the stepped Benchy.",
                     "requiresItems": [
-                        { "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
-                        { "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c", "count": 1 }
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
                     ]
                 },
                 {
                     "type": "goto",
                     "goto": "inspect",
                     "text": "Benchy finished and cooled.",
-                    "requiresItems": [{ "id": "141581bf-be69-4522-973b-3d22292a85fa", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "141581bf-be69-4522-973b-3d22292a85fa",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -53,7 +72,12 @@
                     "type": "goto",
                     "goto": "finish",
                     "text": "Stringing is gone and notes are saved.",
-                    "requiresItems": [{ "id": "141581bf-be69-4522-973b-3d22292a85fa", "count": 1 }]
+                    "requiresItems": [
+                        {
+                            "id": "141581bf-be69-4522-973b-3d22292a85fa",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -74,7 +98,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/phone-stand"],
+    "requiresQuests": [
+        "3dprinting/spool-holder"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

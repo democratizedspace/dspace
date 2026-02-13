@@ -93,5 +93,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["devops/prepare-first-node"]
+    "requiresQuests": [
+        "devops/ssd-boot"
+    ]
 }

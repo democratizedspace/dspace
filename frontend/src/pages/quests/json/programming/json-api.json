@@ -93,9 +93,7 @@
         }
     ],
     "requiresQuests": [
-        "programming/web-server",
-        "programming/json-endpoint",
-        "programming/avg-temp"
+        "programming/json-endpoint"
     ],
     "hardening": {
         "passes": 0,

@@ -191,7 +191,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["geothermal/check-loop-inlet-temp", "geothermal/check-loop-outlet-temp"],
+    "requiresQuests": [
+        "geothermal/check-loop-outlet-temp"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

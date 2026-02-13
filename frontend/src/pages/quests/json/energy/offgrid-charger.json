@@ -187,7 +187,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/solar"],
+    "requiresQuests": [
+        "energy/charge-controller-setup"
+    ],
     "hardening": {
         "passes": 3,
         "score": 95,

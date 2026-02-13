@@ -45,7 +45,9 @@
             ]
         }
     ],
-    "requiresQuests": ["robotics/servo-control", "robotics/reflectance-sensors"],
+    "requiresQuests": [
+        "robotics/reflectance-sensors"
+    ],
     "rewards": [
         {
             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",

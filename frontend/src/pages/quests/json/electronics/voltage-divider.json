@@ -87,7 +87,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/basic-circuit"],
+    "requiresQuests": [
+        "electronics/measure-resistance"
+    ],
     "hardening": {
         "passes": 1,
         "score": 90,

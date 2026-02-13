@@ -55,11 +55,26 @@
                     "process": "partial-water-change",
                     "text": "Nitrate is high—start a partial water change.",
                     "requiresItems": [
-                        { "id": "8c0f72a2-db79-4238-b80f-97721def169f", "count": 1 },
-                        { "id": "97317bc3-507a-4e2c-912b-507d586cee87", "count": 1 },
-                        { "id": "0564d441-7367-412e-b709-dad770814a39", "count": 1 },
-                        { "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50", "count": 1 },
-                        { "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07", "count": 1 }
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
                     ]
                 },
                 {
@@ -75,7 +90,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/thermometer"],
+    "requiresQuests": [
+        "aquaria/sponge-filter"
+    ],
     "hardening": {
         "passes": 5,
         "score": 100,

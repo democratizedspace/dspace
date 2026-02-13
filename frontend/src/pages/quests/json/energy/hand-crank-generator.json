@@ -194,5 +194,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/solar"]
+    "requiresQuests": [
+        "energy/battery-maintenance"
+    ]
 }

@@ -95,7 +95,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinter/start"],
+    "requiresQuests": [
+        "3dprinting/bed-leveling"
+    ],
     "hardening": {
         "passes": 3,
         "score": 90,

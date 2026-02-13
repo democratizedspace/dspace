@@ -75,7 +75,9 @@
             ]
         }
     ],
-    "requiresQuests": ["aquaria/walstad", "aquaria/thermometer"],
+    "requiresQuests": [
+        "aquaria/thermometer"
+    ],
     "rewards": [
         {
             "id": "8c0f72a2-db79-4238-b80f-97721def169f",

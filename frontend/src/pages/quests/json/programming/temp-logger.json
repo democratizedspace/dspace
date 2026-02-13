@@ -78,7 +78,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/thermistor-reading"],
+    "requiresQuests": [
+        "programming/hello-sensor"
+    ],
     "hardening": {
         "passes": 2,
         "score": 95,
