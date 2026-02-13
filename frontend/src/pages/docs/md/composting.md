@@ -123,6 +123,10 @@ compact bucket composting with repeatable measurements so QA can validate state 
   - Consumes: active compost bucket ×1
   - Creates: cured compost bucket ×1
 
+> Note: The process itself requires one temperature log, but this quest deliberately adds a stricter
+> gate at `cooldown` and `finish` that requires **two** temperature logs plus one moisture log so QA
+> can verify the second-reading progression explicitly.
+
 **Quest requiresItems gates**
 
 - `start` → “Ready to take readings.”
