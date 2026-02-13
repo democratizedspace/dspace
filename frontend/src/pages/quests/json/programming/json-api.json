@@ -86,7 +86,12 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+            "count": 1
+        }
+    ],
     "requiresQuests": [
         "programming/web-server",
         "programming/json-endpoint",
@@ -94,7 +99,7 @@
     ],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

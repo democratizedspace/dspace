@@ -54,11 +54,16 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["hydroponics/ec-calibrate"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

@@ -51,11 +51,16 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["firstaid/change-bandage"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

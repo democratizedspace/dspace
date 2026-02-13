@@ -49,11 +49,16 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["astronomy/basic-telescope"],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 85,
         "emoji": "🛠️",
         "history": []
     }

@@ -91,11 +91,16 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["hydroponics/basil"],
     "hardening": {
         "passes": 4,
-        "score": 95,
+        "score": 100,
         "emoji": "💯",
         "history": [
             {

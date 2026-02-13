@@ -50,10 +50,15 @@
         }
     ],
     "requiresQuests": ["robotics/odometry-basics"],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+            "count": 1
+        }
+    ],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 85,
         "emoji": "🛠️",
         "history": []
     }

@@ -124,7 +124,12 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+            "count": 1
+        }
+    ],
     "requiresQuests": [
         "welcome/howtodoquests",
         "ubi/basicincome",

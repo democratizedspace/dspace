@@ -45,11 +45,16 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["programming/json-api"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 80,
         "emoji": "🛠️",
         "history": []
     }

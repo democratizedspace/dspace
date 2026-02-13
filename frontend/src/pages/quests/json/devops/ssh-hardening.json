@@ -4,7 +4,7 @@
     "description": "Use key-based authentication and disable password logins.",
     "hardening": {
         "passes": 1,
-        "score": 90,
+        "score": 95,
         "emoji": "🌀",
         "history": [
             {
@@ -88,6 +88,11 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["devops/firewall-rules"]
 }

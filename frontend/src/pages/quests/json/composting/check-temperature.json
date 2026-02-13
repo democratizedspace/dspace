@@ -77,12 +77,12 @@
                             "count": 1
                         }
                     ],
-                    "goto": "cooldown",
+                    "goto": "recheck",
                     "text": "Record the moisture"
                 },
                 {
                     "type": "goto",
-                    "goto": "cooldown",
+                    "goto": "recheck",
                     "requiresItems": [
                         {
                             "id": "e034d081-a29e-4040-830f-a192304db50d",
@@ -94,6 +94,33 @@
                         }
                     ],
                     "text": "Readings logged"
+                }
+            ]
+        },
+        {
+            "id": "recheck",
+            "text": "Take one more temperature reading after moisture balancing so you can confirm the bucket is cooling.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "recheck-compost-temperature",
+                    "goto": "cooldown",
+                    "text": "Confirm cooldown trend"
+                },
+                {
+                    "type": "goto",
+                    "goto": "cooldown",
+                    "requiresItems": [
+                        {
+                            "id": "e034d081-a29e-4040-830f-a192304db50d",
+                            "count": 2
+                        },
+                        {
+                            "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Two temps and moisture are logged"
                 }
             ]
         },
@@ -137,11 +164,16 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["composting/turn-pile"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

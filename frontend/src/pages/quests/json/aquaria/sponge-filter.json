@@ -120,11 +120,16 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["aquaria/position-tank"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

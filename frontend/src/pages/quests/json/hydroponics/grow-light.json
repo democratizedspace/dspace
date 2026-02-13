@@ -81,6 +81,11 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["hydroponics/bucket_10"]
 }

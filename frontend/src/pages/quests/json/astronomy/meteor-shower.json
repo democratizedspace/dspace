@@ -4,7 +4,7 @@
     "description": "Track meteors during a peak shower using a basic telescope, planisphere, red flashlight and mission logbook.",
     "hardening": {
         "passes": 1,
-        "score": 95,
+        "score": 100,
         "emoji": "🌀",
         "history": [
             {
@@ -74,6 +74,11 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["astronomy/jupiter-moons"]
 }

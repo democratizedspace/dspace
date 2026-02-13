@@ -45,11 +45,16 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["rocketry/parachute"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 80,
         "emoji": "🛠️",
         "history": []
     }

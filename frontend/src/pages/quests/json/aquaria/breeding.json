@@ -142,11 +142,16 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["aquaria/guppy", "aquaria/floating-plants"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

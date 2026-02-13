@@ -123,11 +123,16 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["energy/solar"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

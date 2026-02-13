@@ -4,7 +4,7 @@
     "description": "Print parts and assemble a hand crank generator to charge a 200 Wh battery pack.",
     "hardening": {
         "passes": 3,
-        "score": 95,
+        "score": 100,
         "emoji": "💯",
         "history": [
             {
@@ -188,6 +188,11 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["energy/solar"]
 }

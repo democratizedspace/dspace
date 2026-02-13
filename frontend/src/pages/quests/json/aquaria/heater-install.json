@@ -86,11 +86,16 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["aquaria/sponge-filter", "aquaria/thermometer", "aquaria/walstad"],
     "hardening": {
         "passes": 3,
-        "score": 95,
+        "score": 100,
         "emoji": "💯",
         "history": [
             {

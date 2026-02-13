@@ -89,11 +89,16 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["3dprinter/start"],
     "hardening": {
         "passes": 3,
-        "score": 90,
+        "score": 95,
         "emoji": "💯",
         "history": [
             {

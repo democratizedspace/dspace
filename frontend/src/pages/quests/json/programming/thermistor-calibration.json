@@ -60,11 +60,16 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["programming/hello-sensor"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 80,
         "emoji": "🛠️",
         "history": []
     }

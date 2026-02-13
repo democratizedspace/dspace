@@ -123,11 +123,16 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["welcome/howtodoquests"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

@@ -50,11 +50,16 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["hydroponics/reservoir-refresh"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }
