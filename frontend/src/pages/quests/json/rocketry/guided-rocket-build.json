@@ -156,11 +156,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["rocketry/firstlaunch", "rocketry/parachute", "rocketry/preflight-check"],
+    "requiresQuests": [
+        "rocketry/static-test"
+    ],
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

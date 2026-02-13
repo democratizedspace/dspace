@@ -35,7 +35,7 @@
                             "count": 1
                         }
                     ],
-                    "text": "Reading taken—winds are calm."
+                    "text": "Reading taken\u2014winds are calm."
                 }
             ]
         },
@@ -67,11 +67,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["rocketry/preflight-check"],
+    "requiresQuests": [
+        "rocketry/preflight-check"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

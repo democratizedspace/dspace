@@ -98,11 +98,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["woodworking/step-stool"],
+    "requiresQuests": [
+        "woodworking/planter-box"
+    ],
     "hardening": {
         "passes": 0,
         "score": 85,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

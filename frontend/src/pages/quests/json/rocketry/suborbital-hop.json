@@ -168,14 +168,12 @@
         }
     ],
     "requiresQuests": [
-        "rocketry/recovery-run",
-        "rocketry/preflight-check",
         "rocketry/guided-rocket-build"
     ],
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

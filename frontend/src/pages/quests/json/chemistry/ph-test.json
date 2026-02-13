@@ -5,11 +5,23 @@
     "hardening": {
         "passes": 3,
         "score": 92,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
-            { "task": "codex-hardening-2025-08-04", "date": "2025-08-04", "score": 60 },
-            { "task": "codex-hardening-2025-08-05", "date": "2025-08-05", "score": 80 },
-            { "task": "codex-upgrade-2025-08-06", "date": "2025-08-06", "score": 92 }
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 80
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 92
+            }
         ]
     },
     "image": "/assets/quests/chemistry_ph_strip_test_lab.jpg",
@@ -78,5 +90,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/safe-reaction"]
+    "requiresQuests": []
 }

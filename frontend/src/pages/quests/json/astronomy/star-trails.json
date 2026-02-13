@@ -69,7 +69,7 @@
         },
         {
             "id": "setup",
-            "text": "Dial in a 20–30 second base exposure, use your red light to frame foreground, and lock focus on a bright star.",
+            "text": "Dial in a 20\u201330 second base exposure, use your red light to frame foreground, and lock focus on a bright star.",
             "options": [
                 {
                     "type": "goto",
@@ -90,7 +90,7 @@
                 {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "I bumped the tripod—realign."
+                    "text": "I bumped the tripod\u2014realign."
                 }
             ]
         },
@@ -117,11 +117,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/constellations"],
+    "requiresQuests": [
+        "astronomy/constellations"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

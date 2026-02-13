@@ -84,7 +84,7 @@
         },
         {
             "id": "wire",
-            "text": "Battery first, then panel—keep red to positive, black to negative, fuse in line, and controller off the ground. If anything sparks or heats up, pull the fuse.",
+            "text": "Battery first, then panel\u2014keep red to positive, black to negative, fuse in line, and controller off the ground. If anything sparks or heats up, pull the fuse.",
             "options": [
                 {
                     "type": "process",
@@ -187,11 +187,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/solar"],
+    "requiresQuests": [
+        "energy/power-inverter"
+    ],
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-hardening-2025-08-05",

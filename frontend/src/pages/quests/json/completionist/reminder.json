@@ -62,11 +62,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["completionist/v2"],
+    "requiresQuests": [
+        "completionist/polish"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

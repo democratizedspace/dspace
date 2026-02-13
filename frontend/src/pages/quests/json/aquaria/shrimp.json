@@ -36,7 +36,7 @@
         },
         {
             "id": "acclimate",
-            "text": "Set up drip acclimation with airline tubing and a clean 5 gallon bucket reserved for aquarium use. Start a siphon at 2–4 drops per second for about an hour until parameters match.",
+            "text": "Set up drip acclimation with airline tubing and a clean 5 gallon bucket reserved for aquarium use. Start a siphon at 2\u20134 drops per second for about an hour until parameters match.",
             "options": [
                 {
                     "type": "process",
@@ -84,14 +84,12 @@
         }
     ],
     "requiresQuests": [
-        "aquaria/water-testing",
-        "aquaria/heater-install",
-        "aquaria/log-water-parameters"
+        "aquaria/guppy"
     ],
     "hardening": {
         "passes": 4,
         "score": 100,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",

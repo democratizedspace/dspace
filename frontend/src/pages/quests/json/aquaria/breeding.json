@@ -148,11 +148,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/guppy", "aquaria/floating-plants"],
+    "requiresQuests": [
+        "aquaria/net-fish"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

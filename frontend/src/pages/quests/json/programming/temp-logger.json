@@ -78,11 +78,14 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/thermistor-reading"],
+    "requiresQuests": [
+        "electronics/thermistor-reading",
+        "programming/hello-sensor"
+    ],
     "hardening": {
         "passes": 2,
         "score": 95,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-hardening-2025-12-01",
