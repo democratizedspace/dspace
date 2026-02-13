@@ -144,7 +144,7 @@ compact bucket composting with repeatable measurements so QA can validate state 
 - `cooldown` → “Start the cure rest” (process option gate)
   - active compost bucket ×1, compost temperature log ×2, compost moisture log ×1
 - `cooldown` → “Bucket has cooled and smells earthy”
-  - cured compost bucket ×1
+  - cured compost bucket ×1, compost temperature log ×2, compost moisture log ×1
 - `finish` → “On to sifting!”
   - cured compost bucket ×1, compost temperature log ×2, compost moisture log ×1
 
