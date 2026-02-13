@@ -7400,6 +7400,43 @@
         }
     },
     {
+        "id": "recheck-compost-temperature",
+        "title": "Re-check compost temperature after moisture adjustment",
+        "image": "/assets/compost_thermometer_30cm_probe.jpg",
+        "requireItems": [
+            {
+                "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
+                "count": 1
+            },
+            {
+                "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
+                "count": 1
+            },
+            {
+                "id": "e034d081-a29e-4040-830f-a192304db50d",
+                "count": 1
+            },
+            {
+                "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "e034d081-a29e-4040-830f-a192304db50d",
+                "count": 1
+            }
+        ],
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "measure-compost-moisture",
         "title": "Gauge compost moisture with a probe meter",
         "image": "/assets/compost_moisture_meter_probe.jpg",

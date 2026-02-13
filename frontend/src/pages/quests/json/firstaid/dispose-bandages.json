@@ -51,7 +51,12 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "count": 1
+        }
+    ],
     "requiresQuests": ["firstaid/change-bandage"],
     "hardening": {
         "passes": 0,
