@@ -30,7 +30,7 @@
                 {
                     "type": "goto",
                     "goto": "remove",
-                    "text": "Hands are clean"
+                    "text": "I already washed my hands."
                 }
             ]
         },

@@ -30,7 +30,7 @@
                 {
                     "type": "goto",
                     "goto": "dry",
-                    "text": "Hands are clean"
+                    "text": "I already washed my hands."
                 }
             ]
         },
@@ -52,7 +52,7 @@
                 {
                     "type": "goto",
                     "goto": "pack",
-                    "text": "Hands are dry"
+                    "text": "My hands are already dry."
                 }
             ]
         },

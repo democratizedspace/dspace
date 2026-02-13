@@ -30,7 +30,7 @@
                 {
                     "type": "goto",
                     "goto": "sort",
-                    "text": "Hands are washed"
+                    "text": "I already washed my hands."
                 }
             ]
         },
