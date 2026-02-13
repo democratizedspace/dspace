@@ -61,8 +61,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["aquaria/water-change"],
+    "rewards": [
+        {
+            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "aquaria/water-change"
+    ],
     "hardening": {
         "passes": 0,
         "score": 75,

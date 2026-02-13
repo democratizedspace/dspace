@@ -50,12 +50,20 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["electronics/light-sensor", "programming/hello-sensor"],
+    "rewards": [
+        {
+            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "electronics/light-sensor",
+        "programming/hello-sensor"
+    ],
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

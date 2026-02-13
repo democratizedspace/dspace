@@ -78,8 +78,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["programming/temp-logger"],
+    "rewards": [
+        {
+            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "programming/temp-logger"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

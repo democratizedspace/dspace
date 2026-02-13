@@ -86,7 +86,12 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+            "count": 1
+        }
+    ],
     "requiresQuests": [
         "programming/web-server",
         "programming/json-endpoint",

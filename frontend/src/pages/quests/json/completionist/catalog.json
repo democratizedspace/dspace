@@ -60,8 +60,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["completionist/v2"],
+    "rewards": [
+        {
+            "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "completionist/v2"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

@@ -95,8 +95,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["3dprinting/retraction-test"],
+    "rewards": [
+        {
+            "id": "efcf79a5-1616-490e-add7-40f7fdb628b4",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "3dprinting/retraction-test"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

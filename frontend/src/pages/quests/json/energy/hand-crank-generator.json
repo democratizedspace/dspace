@@ -188,6 +188,13 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["energy/solar"]
+    "rewards": [
+        {
+            "id": "d715cf3d-c616-47a6-b753-ae24c87714f3",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "energy/solar"
+    ]
 }

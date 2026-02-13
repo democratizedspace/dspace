@@ -62,6 +62,13 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["devops/docker-compose"]
+    "rewards": [
+        {
+            "id": "306793ac-e420-4859-9742-9076fff6ab57",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "devops/docker-compose"
+    ]
 }

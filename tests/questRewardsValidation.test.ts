@@ -82,6 +82,10 @@ describe('quest reward validation', () => {
 
         for (const file of questFiles) {
             const quest = JSON.parse(readFileSync(file, 'utf8'));
+            expect(
+                Array.isArray(quest.rewards) && quest.rewards.length > 0,
+                `Quest ${file} must define at least one top-level reward item`
+            ).toBe(true);
             const rewardContexts: RewardContext[] = [];
             const processContexts: ProcessContext[] = [];
 

@@ -50,8 +50,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["hydroponics/stevia"],
+    "rewards": [
+        {
+            "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "hydroponics/stevia"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

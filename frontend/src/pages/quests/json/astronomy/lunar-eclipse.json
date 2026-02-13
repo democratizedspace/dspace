@@ -50,8 +50,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["astronomy/observe-moon"],
+    "rewards": [
+        {
+            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "astronomy/observe-moon"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

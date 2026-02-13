@@ -99,8 +99,16 @@
             ]
         }
     ],
-    "requiresQuests": ["robotics/pan-tilt", "robotics/ultrasonic-rangefinder"],
-    "rewards": [],
+    "requiresQuests": [
+        "robotics/pan-tilt",
+        "robotics/ultrasonic-rangefinder"
+    ],
+    "rewards": [
+        {
+            "id": "054d7c58-0e39-4f60-b072-e62cd5e879cf",
+            "count": 1
+        }
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

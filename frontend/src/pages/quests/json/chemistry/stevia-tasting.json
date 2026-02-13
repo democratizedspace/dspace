@@ -114,8 +114,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["chemistry/stevia-crystals"],
+    "rewards": [
+        {
+            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "chemistry/stevia-crystals"
+    ],
     "hardening": {
         "passes": 0,
         "score": 85,

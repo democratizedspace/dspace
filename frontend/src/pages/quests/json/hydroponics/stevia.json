@@ -77,8 +77,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["hydroponics/lettuce"],
+    "rewards": [
+        {
+            "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "hydroponics/lettuce"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

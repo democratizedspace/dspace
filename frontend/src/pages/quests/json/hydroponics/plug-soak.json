@@ -50,8 +50,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["hydroponics/top-off"],
+    "rewards": [
+        {
+            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "hydroponics/top-off"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

@@ -82,8 +82,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["woodworking/bookshelf"],
+    "rewards": [
+        {
+            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "woodworking/bookshelf"
+    ],
     "hardening": {
         "passes": 0,
         "score": 85,

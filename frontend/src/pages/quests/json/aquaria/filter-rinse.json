@@ -126,8 +126,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["aquaria/sponge-filter"],
+    "rewards": [
+        {
+            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "aquaria/sponge-filter"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,

@@ -76,8 +76,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["firstaid/learn-cpr"],
+    "rewards": [
+        {
+            "id": "55ace400-79ee-4b24-b7da-0b0435ab7d72",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "firstaid/learn-cpr"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,

@@ -50,8 +50,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["chemistry/stevia-extraction"],
+    "rewards": [
+        {
+            "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "chemistry/stevia-extraction"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

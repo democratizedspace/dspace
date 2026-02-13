@@ -101,8 +101,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["energy/battery-upgrade"],
+    "rewards": [
+        {
+            "id": "466cb507-6beb-4c20-967b-4f1fda1d6463",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "energy/battery-upgrade"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

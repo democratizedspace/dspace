@@ -200,8 +200,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["woodworking/planter-box"],
+    "rewards": [
+        {
+            "id": "0e6f2e1c-1e8a-4c05-b1db-38f1eec6f64a",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "woodworking/planter-box"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,

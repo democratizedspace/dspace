@@ -110,8 +110,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["energy/solar-1kWh"],
+    "rewards": [
+        {
+            "id": "34540aad-4c25-4268-a158-a291283bc7a0",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "energy/solar-1kWh"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

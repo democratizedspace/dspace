@@ -61,8 +61,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["aquaria/ph-strip-test"],
+    "rewards": [
+        {
+            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "aquaria/ph-strip-test"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

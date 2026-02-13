@@ -61,8 +61,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["3dprinter/start"],
+    "rewards": [
+        {
+            "id": "564a76de-925b-4457-a548-d015168abe0c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "3dprinter/start"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

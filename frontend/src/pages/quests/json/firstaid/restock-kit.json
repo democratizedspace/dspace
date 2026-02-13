@@ -53,8 +53,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["firstaid/assemble-kit"],
+    "rewards": [
+        {
+            "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "firstaid/assemble-kit"
+    ],
     "hardening": {
         "passes": 0,
         "score": 75,

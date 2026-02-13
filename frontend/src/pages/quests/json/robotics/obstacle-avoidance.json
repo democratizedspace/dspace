@@ -45,8 +45,16 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["robotics/line-follower", "robotics/ultrasonic-rangefinder"],
+    "rewards": [
+        {
+            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "robotics/line-follower",
+        "robotics/ultrasonic-rangefinder"
+    ],
     "hardening": {
         "passes": 0,
         "score": 80,

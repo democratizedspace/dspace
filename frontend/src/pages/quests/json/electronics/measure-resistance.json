@@ -54,8 +54,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["electronics/resistor-color-check"],
+    "rewards": [
+        {
+            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "electronics/resistor-color-check"
+    ],
     "hardening": {
         "passes": 2,
         "score": 80,

@@ -60,8 +60,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["astronomy/basic-telescope"],
+    "rewards": [
+        {
+            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "astronomy/basic-telescope"
+    ],
     "hardening": {
         "passes": 3,
         "score": 95,

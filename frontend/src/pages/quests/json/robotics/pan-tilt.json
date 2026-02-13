@@ -45,8 +45,15 @@
             ]
         }
     ],
-    "requiresQuests": ["robotics/servo-control"],
-    "rewards": [],
+    "requiresQuests": [
+        "robotics/servo-control"
+    ],
+    "rewards": [
+        {
+            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+            "count": 1
+        }
+    ],
     "hardening": {
         "passes": 0,
         "score": 80,

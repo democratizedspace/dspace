@@ -66,8 +66,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "rewards": [
+        {
+            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "hardening": {
         "passes": 3,
         "score": 95,

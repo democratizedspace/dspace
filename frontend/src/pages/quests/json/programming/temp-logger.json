@@ -72,8 +72,15 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["electronics/thermistor-reading"],
+    "rewards": [
+        {
+            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "electronics/thermistor-reading"
+    ],
     "hardening": {
         "passes": 2,
         "score": 95,

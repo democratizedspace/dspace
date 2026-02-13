@@ -19,7 +19,7 @@
         },
         {
             "id": "materials",
-            "text": "Gather one Arduino Uno, a breadboard, three jumper wires, one photoresistor, one 10 k\u03a9 resistor, one USB Type-A to Type-B cable, a digital multimeter, safety goggles, an anti-static wrist strap, and a laptop with the Arduino IDE installed. Keep components in a tray so leads don't touch or short.",
+            "text": "Gather one Arduino Uno, a breadboard, three jumper wires, one photoresistor, one 10 kΩ resistor, one USB Type-A to Type-B cable, a digital multimeter, safety goggles, an anti-static wrist strap, and a laptop with the Arduino IDE installed. Keep components in a tray so leads don't touch or short.",
             "options": [
                 {
                     "type": "process",
@@ -77,7 +77,7 @@
         },
         {
             "id": "wire",
-            "text": "Disconnect the USB cable. Build a voltage divider by connecting one leg of the photoresistor to 5\u202fV and the other to one side of the 10\u202fk\u03a9 resistor, then connect the resistor's far leg to GND. Measure the photoresistor's resistance in ambient light with the multimeter, run a jumper from the junction to A0, keep your goggles on, and ensure no bare wires touch before powering up.",
+            "text": "Disconnect the USB cable. Build a voltage divider by connecting one leg of the photoresistor to 5 V and the other to one side of the 10 kΩ resistor, then connect the resistor's far leg to GND. Measure the photoresistor's resistance in ambient light with the multimeter, run a jumper from the junction to A0, keep your goggles on, and ensure no bare wires touch before powering up.",
             "options": [
                 {
                     "type": "goto",
@@ -123,12 +123,19 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": ["electronics/basic-circuit"],
+    "rewards": [
+        {
+            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "electronics/basic-circuit"
+    ],
     "hardening": {
         "passes": 6,
         "score": 97,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-05",
