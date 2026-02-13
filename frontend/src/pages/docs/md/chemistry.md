@@ -75,17 +75,14 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
   - `requiresQuests`: `chemistry/ph-test`
 - Dialogue `requiresItems` gates:
-  - `neutralize` → "The spill is neutralized." — pH strip ×1
+  - `verify` → "The spill is neutralized." — pH strip ×1
 - Grants:
   - Dialogue options/steps grantsItems: None
   - Quest-level `grantsItems`: None
 - Rewards:
   - cured compost bucket ×1
 - Processes used:
-  - [neutralize-acid](/processes/neutralize-acid)
-    - Requires: TBD — known gap; process IO not yet specified
-    - Consumes: TBD — known gap; process IO not yet specified
-    - Creates: TBD — known gap; process IO not yet specified
+  - None
 
 ## 5) Prepare a Buffer Solution (`chemistry/buffer-solution`)
 

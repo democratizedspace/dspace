@@ -22,19 +22,8 @@
             "text": "Hold an anemometer at launch height and take a reading. Then take a second one.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "measure-wind-speed",
-                    "text": "Hold up the anemometer and note the gusts."
-                },
-                {
                     "type": "goto",
                     "goto": "ready",
-                    "requiresItems": [
-                        {
-                            "id": "451d86d9-96e0-4829-af27-8a8b0be65ae4",
-                            "count": 1
-                        }
-                    ],
                     "text": "Reading taken\u2014winds are calm."
                 }
             ]

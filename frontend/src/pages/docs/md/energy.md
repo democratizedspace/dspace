@@ -358,17 +358,13 @@ Energy quests build practical progression through the energy skill tree. This pa
   - `requiresQuests`: `energy/solar-1kWh`
 - Dialogue `requiresItems` gates:
   - `assemble` → "Frame is assembled and wired" — 200 Wh battery pack ×1
-  - `feed` → "Gas production started" — placeholder feedstock item (canonical ID: dc9c057e-2bd1-4bcc-b06c-2e18344ce3e5) ×1
 - Grants:
   - `assemble` → "I'll grab the battery pack" — 200 Wh battery pack ×1
   - Quest-level `grantsItems`: None
 - Rewards:
   - cured compost bucket ×1
 - Processes used:
-  - [biogas-ferment-50Wh](/processes/biogas-ferment-50Wh)
-    - Requires: TBD — known gap; process IO not yet specified
-    - Consumes: TBD — known gap; process IO not yet specified
-    - Creates: TBD — known gap; process IO not yet specified
+  - None
 
 ## 17) Accrue 1,000 dSolar (`energy/dSolar-1kW`)
 

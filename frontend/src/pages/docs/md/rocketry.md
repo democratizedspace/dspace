@@ -248,17 +248,14 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Unlock prerequisite:
   - `requiresQuests`: `rocketry/preflight-check`
 - Dialogue `requiresItems` gates:
-  - `measure` → "Reading taken—winds are calm." — placeholder wind-reading item (canonical ID: 451d86d9-96e0-4829-af27-8a8b0be65ae4) ×1
+  - None
 - Grants:
   - Dialogue options/steps grantsItems: None
   - Quest-level `grantsItems`: None
 - Rewards:
   - placeholder reward item (canonical ID: 15e3dd7e-374b-4233-b8c9-117e3057f009) ×1
 - Processes used:
-  - [measure-wind-speed](/processes/measure-wind-speed)
-    - Requires: TBD input items (known gap; process IO not yet finalized)
-    - Consumes: TBD consumed items (known gap; process IO not yet finalized)
-    - Creates: TBD output items (known gap; process IO not yet finalized)
+  - None
 
 ## QA flow notes
 
