@@ -51,6 +51,36 @@ const buildDocIndex = async () => {
 };
 
 const docSearchIndex = await buildDocIndex();
+const questTreeModules = await Astro.glob('../quests/json/*/*.json');
+
+const toTitleCase = (value = '') =>
+    value
+        .split(/[-_\s]+/)
+        .filter(Boolean)
+        .map((segment) => {
+            if (/^\d/.test(segment)) {
+                return segment.toUpperCase();
+            }
+
+            return segment.charAt(0).toUpperCase() + segment.slice(1);
+        })
+        .join(' ');
+
+const getTreeFromQuestPath = (filePath = '') => {
+    const normalizedPath = String(filePath).replace(/\\/g, '/');
+    const match = normalizedPath.match(/\/quests\/json\/([^/]+)\//);
+
+    return match?.[1] ?? '';
+};
+
+const questSkillLinks = [...new Set(questTreeModules.map(({ file }) => getTreeFromQuestPath(file)))]
+    .filter(Boolean)
+    .sort((left, right) => left.localeCompare(right))
+    .map((tree) => ({
+        title: toTitleCase(tree),
+        href: `/docs/${tree}`,
+        keywords: [tree],
+    }));
 
 const getSlugFromHref = (href = '') => {
     const clean = href.split('#')[0].split('?')[0];
@@ -74,10 +104,42 @@ const docsSections = sections.map((section) => ({
         return { ...link, features, bodyText };
     }),
 }));
+
+const mergeSkillLinks = (baseLinks, treeLinks) => {
+    const byHref = new Map(baseLinks.map((link) => [link.href, link]));
+
+    for (const link of treeLinks) {
+        const existingLink = byHref.get(link.href);
+
+        if (!existingLink) {
+            byHref.set(link.href, { ...link, features: [], bodyText: '' });
+            continue;
+        }
+
+        byHref.set(link.href, {
+            ...existingLink,
+            title: link.title,
+            keywords: [...new Set([...(existingLink.keywords ?? []), ...(link.keywords ?? [])])],
+        });
+    }
+
+    return [...byHref.values()].sort((left, right) => left.title.localeCompare(right.title));
+};
+
+const docsSectionsWithAllSkills = docsSections.map((section) => {
+    if (section.title !== 'Skills') {
+        return section;
+    }
+
+    return {
+        ...section,
+        links: mergeSkillLinks(section.links, questSkillLinks),
+    };
+});
 ---
 
 <Page title="Docs">
-    <DocsIndex sections={docsSections} client:load />
+    <DocsIndex sections={docsSectionsWithAllSkills} client:load />
 </Page>
 
 <style>
