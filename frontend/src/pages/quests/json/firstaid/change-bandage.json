@@ -62,9 +62,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "firstaid/wound-care"
-    ],
+    "requiresQuests": ["firstaid/wound-care"],
     "hardening": {
         "passes": 0,
         "score": 80,

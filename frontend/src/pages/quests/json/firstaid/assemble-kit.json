@@ -91,13 +91,11 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "welcome/howtodoquests"
-    ],
+    "requiresQuests": ["welcome/howtodoquests"],
     "hardening": {
         "passes": 6,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",

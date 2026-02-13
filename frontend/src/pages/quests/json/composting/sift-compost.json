@@ -82,9 +82,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "composting/check-temperature"
-    ],
+    "requiresQuests": ["composting/check-temperature"],
     "hardening": {
         "passes": 0,
         "score": 80,
