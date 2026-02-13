@@ -92,9 +92,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "3dprinting/calibration-cube"
-    ],
+    "requiresQuests": ["3dprinting/calibration-cube"],
     "hardening": {
         "passes": 4,
         "score": 95,

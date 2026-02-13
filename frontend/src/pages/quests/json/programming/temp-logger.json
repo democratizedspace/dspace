@@ -73,7 +73,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": ["electronics/thermistor-reading"],
+    "requiresQuests": ["welcome/howtodoquests"],
     "hardening": {
         "passes": 2,
         "score": 95,

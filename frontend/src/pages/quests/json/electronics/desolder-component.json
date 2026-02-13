@@ -74,9 +74,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "electronics/solder-wire"
-    ],
+    "requiresQuests": ["electronics/solder-wire"],
     "hardening": {
         "passes": 3,
         "score": 80,

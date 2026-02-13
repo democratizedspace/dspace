@@ -73,9 +73,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "astronomy/constellations"
-    ],
+    "requiresQuests": ["astronomy/constellations"],
     "hardening": {
         "passes": 5,
         "score": 96,

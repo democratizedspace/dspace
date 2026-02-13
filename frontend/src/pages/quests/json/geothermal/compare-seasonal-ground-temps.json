@@ -47,9 +47,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "geothermal/compare-depth-ground-temps"
-    ],
+    "requiresQuests": ["geothermal/compare-depth-ground-temps"],
     "hardening": {
         "passes": 0,
         "score": 75,

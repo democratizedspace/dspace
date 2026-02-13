@@ -85,7 +85,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "chemistry/safe-reaction"
-    ]
+    "requiresQuests": ["chemistry/safe-reaction"]
 }

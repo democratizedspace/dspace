@@ -111,9 +111,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "energy/solar-tracker"
-    ],
+    "requiresQuests": ["energy/solar-tracker"],
     "hardening": {
         "passes": 0,
         "score": 90,

@@ -51,9 +51,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "chemistry/acid-dilution"
-    ],
+    "requiresQuests": ["chemistry/acid-dilution"],
     "hardening": {
         "passes": 0,
         "score": 90,

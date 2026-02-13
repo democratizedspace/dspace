@@ -82,9 +82,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "electronics/measure-resistance"
-    ],
+    "requiresQuests": ["electronics/measure-resistance"],
     "hardening": {
         "passes": 1,
         "score": 90,

@@ -58,9 +58,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "electronics/measure-led-current"
-    ],
+    "requiresQuests": ["electronics/measure-led-current"],
     "hardening": {
         "passes": 3,
         "score": 75,

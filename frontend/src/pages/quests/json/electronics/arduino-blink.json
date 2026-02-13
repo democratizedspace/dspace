@@ -98,9 +98,7 @@
             ]
         }
     ],
-    "requiresQuests": [
-        "electronics/led-polarity"
-    ],
+    "requiresQuests": ["electronics/led-polarity"],
     "rewards": [
         {
             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",

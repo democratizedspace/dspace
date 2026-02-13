@@ -51,9 +51,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "energy/battery-maintenance"
-    ],
+    "requiresQuests": ["energy/battery-maintenance"],
     "hardening": {
         "passes": 0,
         "score": 90,

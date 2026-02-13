@@ -51,9 +51,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "electronics/continuity-test"
-    ],
+    "requiresQuests": ["electronics/continuity-test"],
     "hardening": {
         "passes": 0,
         "score": 90,

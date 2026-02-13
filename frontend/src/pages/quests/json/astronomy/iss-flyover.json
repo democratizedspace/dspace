@@ -127,7 +127,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/basic-telescope"
-    ]
+    "requiresQuests": ["astronomy/basic-telescope"]
 }

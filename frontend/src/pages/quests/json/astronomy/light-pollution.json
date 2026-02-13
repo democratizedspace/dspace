@@ -59,9 +59,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "astronomy/north-star"
-    ],
+    "requiresQuests": ["astronomy/north-star"],
     "hardening": {
         "passes": 3,
         "score": 90,

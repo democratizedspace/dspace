@@ -62,9 +62,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "3dprinting/blob-of-death"
-    ],
+    "requiresQuests": ["3dprinting/blob-of-death"],
     "hardening": {
         "passes": 0,
         "score": 90,

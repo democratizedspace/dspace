@@ -189,7 +189,5 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "energy/solar"
-    ]
+    "requiresQuests": ["energy/solar"]
 }

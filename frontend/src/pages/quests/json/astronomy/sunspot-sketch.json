@@ -50,9 +50,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "astronomy/lunar-eclipse"
-    ],
+    "requiresQuests": ["astronomy/lunar-eclipse"],
     "hardening": {
         "passes": 0,
         "score": 80,

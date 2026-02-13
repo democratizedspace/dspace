@@ -87,9 +87,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "electronics/measure-arduino-5v"
-    ],
+    "requiresQuests": ["electronics/measure-arduino-5v"],
     "hardening": {
         "passes": 5,
         "score": 97,

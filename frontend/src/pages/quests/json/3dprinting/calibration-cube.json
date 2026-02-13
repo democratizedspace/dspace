@@ -90,9 +90,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "3dprinting/bed-leveling"
-    ],
+    "requiresQuests": ["3dprinting/bed-leveling"],
     "hardening": {
         "passes": 3,
         "score": 90,

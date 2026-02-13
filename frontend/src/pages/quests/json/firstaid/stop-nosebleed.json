@@ -63,9 +63,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "firstaid/flashlight-battery"
-    ],
+    "requiresQuests": ["firstaid/flashlight-battery"],
     "hardening": {
         "passes": 5,
         "score": 96,

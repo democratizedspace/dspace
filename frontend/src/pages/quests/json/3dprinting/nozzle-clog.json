@@ -142,9 +142,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "3dprinting/filament-change"
-    ],
+    "requiresQuests": ["3dprinting/filament-change"],
     "hardening": {
         "passes": 0,
         "score": 95,

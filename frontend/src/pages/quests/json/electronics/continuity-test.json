@@ -72,9 +72,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "electronics/solder-wire"
-    ],
+    "requiresQuests": ["electronics/solder-wire"],
     "hardening": {
         "passes": 8,
         "score": 100,

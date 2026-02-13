@@ -124,9 +124,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "electronics/arduino-blink"
-    ],
+    "requiresQuests": ["electronics/arduino-blink"],
     "hardening": {
         "passes": 6,
         "score": 97,

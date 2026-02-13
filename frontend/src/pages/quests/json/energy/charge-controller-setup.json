@@ -146,9 +146,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "energy/portable-solar-panel"
-    ],
+    "requiresQuests": ["energy/portable-solar-panel"],
     "hardening": {
         "passes": 0,
         "score": 90,

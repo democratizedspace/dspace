@@ -93,9 +93,7 @@
         }
     ],
     "rewards": [],
-    "requiresQuests": [
-        "3dprinting/phone-stand"
-    ],
+    "requiresQuests": ["3dprinting/phone-stand"],
     "hardening": {
         "passes": 0,
         "score": 90,
