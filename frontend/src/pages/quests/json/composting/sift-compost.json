@@ -85,7 +85,7 @@
     "requiresQuests": ["composting/check-temperature"],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 100,
         "emoji": "🛠️",
         "history": []
     }
