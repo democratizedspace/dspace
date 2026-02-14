@@ -81,6 +81,10 @@ describe('ItemPage', () => {
             expect(getByRole('heading', { level: 2 }).textContent).toBe(builtIn.name);
         });
 
+        const outerChipNav = container.querySelector('nav');
+        expect(outerChipNav?.firstElementChild?.tagName).toBe('DIV');
+        expect(outerChipNav?.firstElementChild?.classList.contains('chip-container')).toBe(true);
+
         const heroImage = container.querySelector('img:not(.icon)');
         expect(heroImage?.getAttribute('src')).toBe(builtIn.image);
     });
