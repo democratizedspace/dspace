@@ -4111,7 +4111,12 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "5cadd1cd-d855-42bb-91ef-6ddec83e6074",
+                "count": 1
+            }
+        ],
         "duration": "1m",
         "hardening": {
             "passes": 0,
