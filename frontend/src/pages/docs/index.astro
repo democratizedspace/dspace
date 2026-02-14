@@ -61,6 +61,14 @@ const TITLE_OVERRIDES = {
     firstaid: 'First Aid',
 };
 
+const SKILL_SLUG_TREE_ALIASES = {
+    'chemistry-lab': 'chemistry',
+    'energy-systems': 'energy',
+    'first-aid': 'firstaid',
+    rockets: 'rocketry',
+    'sysadmin-devops': 'sysadmin',
+};
+
 const toTitleCase = (value = '') =>
     value
         .split(/[-_\s]+/)
@@ -105,6 +113,8 @@ const getSlugFromHref = (href = '') => {
     return trimmed.toLowerCase();
 };
 
+const getCanonicalTreeFromSlug = (slug = '') => SKILL_SLUG_TREE_ALIASES[slug] ?? slug;
+
 const docsSections = sections.map((section) => ({
     title: section.title,
     links: section.links.map((link) => {
@@ -122,33 +132,27 @@ const docsSectionsWithAllSkills = docsSections.map((section) => {
         return section;
     }
 
-    const questTrees = new Set(questSkillLinks.map((link) => getSlugFromHref(link.href)));
-    const curatedSkillLinksByTree = new Map(
-        section.links
-            .map((link) => [getSlugFromHref(link.href), link])
-            .filter(([slug]) => questTrees.has(slug))
-    );
-
-    const mergedQuestSkillLinks = questSkillLinks.map((link) => {
+    const curatedSkillLinksByTree = new Map();
+    const curatedLinks = section.links.map((link) => {
         const slug = getSlugFromHref(link.href);
-        const curatedLink = curatedSkillLinksByTree.get(slug);
+        const canonicalTree = getCanonicalTreeFromSlug(slug);
 
-        if (!curatedLink) {
-            return link;
+        if (!curatedSkillLinksByTree.has(canonicalTree)) {
+            curatedSkillLinksByTree.set(canonicalTree, link);
         }
 
-        return {
-            ...curatedLink,
-            ...link,
-            title: TITLE_OVERRIDES[slug] ?? curatedLink.title ?? link.title,
-            href: `/docs/${slug}`,
-            keywords: [...new Set([...(curatedLink.keywords ?? []), ...(link.keywords ?? [])])],
-        };
+        return link;
     });
+
+    const mergedQuestSkillLinks = questSkillLinks.filter(
+        (link) => !curatedSkillLinksByTree.has(getSlugFromHref(link.href))
+    );
 
     return {
         ...section,
-        links: [...mergedQuestSkillLinks].sort((left, right) => left.title.localeCompare(right.title)),
+        links: [...curatedLinks, ...mergedQuestSkillLinks].sort((left, right) =>
+            left.title.localeCompare(right.title)
+        ),
     };
 });
 ---
