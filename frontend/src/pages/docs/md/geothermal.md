@@ -3,37 +3,363 @@ title: 'Geothermal'
 slug: 'geothermal'
 ---
 
-Geothermal quests focus on monitoring ground-loop systems and keeping heat pump infrastructure
-healthy over time.
+Geothermal quests build practical progression through the geothermal skill tree. This page is a QA-oriented map of quest dependencies, process IO, and inventory gates.
 
-## What you learn
+## Quest tree
 
-- How to survey ground temperature and compare seasonal trends
-- How to read loop pressure, inlet/outlet temperatures, and deltas
-- How to keep sensors calibrated and air purged from the loop
+1. [Survey for Geothermal Heat](/quests/geothermal/survey-ground-temperature)
+2. [Calibrate Ground Sensor](/quests/geothermal/calibrate-ground-sensor)
+3. [Check Loop Inlet Temperature](/quests/geothermal/check-loop-inlet-temp)
+4. [Check Loop Outlet Temperature](/quests/geothermal/check-loop-outlet-temp)
+5. [Check Loop Pressure](/quests/geothermal/check-loop-pressure)
+6. [Check Loop Temperature Delta](/quests/geothermal/check-loop-temp-delta)
+7. [Install Backup Thermistor](/quests/geothermal/install-backup-thermistor)
+8. [Log Ground Temperature](/quests/geothermal/log-ground-temperature)
+9. [Compare Depth Ground Temps](/quests/geothermal/compare-depth-ground-temps)
+10. [Compare Seasonal Ground Temps](/quests/geothermal/compare-seasonal-ground-temps)
+11. [Log Heat Pump Warmup](/quests/geothermal/log-heat-pump-warmup)
+12. [Monitor Heat Pump Energy Use](/quests/geothermal/monitor-heat-pump-energy)
+13. [Purge Air from Ground Loop](/quests/geothermal/purge-loop-air)
+14. [Backflush Loop Filter](/quests/geothermal/backflush-loop-filter)
+15. [Replace Faulty Thermistor](/quests/geothermal/replace-faulty-thermistor)
 
-## Quest trailheads
+## 1) Survey for Geothermal Heat (`geothermal/survey-ground-temperature`)
 
-- [Survey for Geothermal Heat](/quests/geothermal/survey-ground-temperature)
-- [Log Ground Temperature](/quests/geothermal/log-ground-temperature)
-- [Calibrate Ground Sensor](/quests/geothermal/calibrate-ground-sensor)
-- [Check Loop Pressure](/quests/geothermal/check-loop-pressure)
-- [Monitor Heat Pump Energy Use](/quests/geothermal/monitor-heat-pump-energy)
-- [Purge Air from Ground Loop](/quests/geothermal/purge-loop-air)
+- Quest link: [/quests/geothermal/survey-ground-temperature](/quests/geothermal/survey-ground-temperature)
+- Unlock prerequisite:
+    - `requiresQuests`: `energy/solar`
+- Dialogue `requiresItems` gates:
+    - `materials` → "I've got the tool ready." — aquarium thermometer (0–50°C) ×1
+- Grants:
+    - `materials` → "Thanks for the thermometer!" — aquarium thermometer (0–50°C) ×1
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - Solarpunk Award ×1
+- Processes used:
+    - None
 
-## Key gear
+## 2) Calibrate Ground Sensor (`geothermal/calibrate-ground-sensor`)
 
-- Thermistor logging rig and digital multimeter for sensor verification
-- Temperature log CSV and temperature line chart to compare trends
-- Clean calibration notes stored with your ground-loop records
+- Quest link: [/quests/geothermal/calibrate-ground-sensor](/quests/geothermal/calibrate-ground-sensor)
+- Unlock prerequisite:
+    - `requiresQuests`: `geothermal/survey-ground-temperature`
+- Dialogue `requiresItems` gates:
+    - `calibrate` → "Calibration complete" — Arduino Uno ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - cured compost bucket ×1
+- Processes used:
+    - [arduino-thermistor-read](/processes/arduino-thermistor-read)
+        - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
+        - Consumes: none
+        - Creates: none
 
-## Common pitfalls
+## 3) Check Loop Inlet Temperature (`geothermal/check-loop-inlet-temp`)
 
-- Sampling at inconsistent times, which hides seasonal patterns
-- Moving sensors between locations without noting offsets
-- Clearing air from the loop without logging before-and-after readings
+- Quest link: [/quests/geothermal/check-loop-inlet-temp](/quests/geothermal/check-loop-inlet-temp)
+- Unlock prerequisite:
+    - `requiresQuests`: `geothermal/survey-ground-temperature`
+- Dialogue `requiresItems` gates:
+    - `start` → "Rig is on the bench." — Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×4, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
+    - `build` → "Rig is already built" — thermistor logging rig ×1
+    - `log` → "Capture the inlet trace" — thermistor logging rig ×1, Laptop Computer ×1
+    - `log` → "Trace saved" — temperature log CSV ×1
+    - `plot` → "Plot the inlet run" — temperature log CSV ×1, Laptop Computer ×1
+    - `plot` → "Chart reviewed" — temperature line chart ×1
+    - `finish` → "Inlet trend logged" — temperature line chart ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - cured compost bucket ×1
+- Processes used:
+    - [assemble-thermistor-logger](/processes/assemble-thermistor-logger)
+        - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×4, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, USB Type-A to Type-B cable ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: thermistor logging rig ×1
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
+    - [plot-temperature-data](/processes/plot-temperature-data)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature line chart ×1
 
-## Next steps
+## 4) Check Loop Outlet Temperature (`geothermal/check-loop-outlet-temp`)
 
-- Keep a seasonal baseline and revisit it after each maintenance quest.
-- Compare your thermal performance to energy logs in [Energy Systems](/docs/energy-systems).
+- Quest link: [/quests/geothermal/check-loop-outlet-temp](/quests/geothermal/check-loop-outlet-temp)
+- Unlock prerequisite:
+    - `requiresQuests`: `geothermal/check-loop-inlet-temp`
+- Dialogue `requiresItems` gates:
+    - `start` → "Rig is already staged on the outlet" — thermistor logging rig ×1, temperature log CSV ×1
+    - `reposition` → "Log the outlet run" — thermistor logging rig ×1, Laptop Computer ×1
+    - `reposition` → "Outlet trace captured" — temperature log CSV ×1
+    - `stream` → "Publish the outlet endpoint" — thermistor logging rig ×1, temperature log CSV ×1, Raspberry Pi 5 board ×1
+    - `stream` → "Endpoint is live" — live temperature JSON endpoint ×1
+    - `finish` → "Outlet stream pinned" — live temperature JSON endpoint ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - cured compost bucket ×1
+- Processes used:
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
+    - [deploy-temperature-json-endpoint](/processes/deploy-temperature-json-endpoint)
+        - Requires: thermistor logging rig ×1, temperature log CSV ×1, Raspberry Pi 5 board ×1
+        - Consumes: none
+        - Creates: live temperature JSON endpoint ×1
+
+## 5) Check Loop Pressure (`geothermal/check-loop-pressure`)
+
+- Quest link: [/quests/geothermal/check-loop-pressure](/quests/geothermal/check-loop-pressure)
+- Unlock prerequisite:
+    - `requiresQuests`: `geothermal/survey-ground-temperature`
+- Dialogue `requiresItems` gates:
+    - None
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - cured compost bucket ×1
+- Processes used:
+    - [pressure-gauge-read](/processes/pressure-gauge-read)
+        - Requires: TBD — known gap; process IO not yet specified
+        - Consumes: TBD — known gap; process IO not yet specified
+        - Creates: TBD — known gap; process IO not yet specified
+
+## 6) Check Loop Temperature Delta (`geothermal/check-loop-temp-delta`)
+
+- Quest link: [/quests/geothermal/check-loop-temp-delta](/quests/geothermal/check-loop-temp-delta)
+- Unlock prerequisite:
+    - `requiresQuests`: `geothermal/check-loop-inlet-temp`, `geothermal/check-loop-outlet-temp`
+- Dialogue `requiresItems` gates:
+    - `start` → "Both probes are mounted" — thermistor logging rig ×1, live temperature JSON endpoint ×1
+    - `align` → "Capture the paired trace" — thermistor logging rig ×1, Laptop Computer ×1
+    - `align` → "Trace is saved" — temperature log CSV ×1
+    - `plot` → "Plot both runs" — temperature log CSV ×1, Laptop Computer ×1
+    - `plot` → "Plot looks clean" — temperature line chart ×1
+    - `annotate` → "Add notes to the overlay" — temperature line chart ×1, Laptop Computer ×1, live temperature JSON endpoint ×1
+    - `annotate` → "Notes are logged" — annotated temperature graph ×1
+    - `publish` → "Push a live delta dashboard" — live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
+    - `publish` → "Dashboard is live" — live temperature dashboard ×1
+    - `finish` → "Delta is monitored" — live temperature dashboard ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - cured compost bucket ×1
+- Processes used:
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
+    - [plot-temperature-data](/processes/plot-temperature-data)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature line chart ×1
+    - [refine-temperature-graph](/processes/refine-temperature-graph)
+        - Requires: temperature line chart ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: annotated temperature graph ×1
+    - [publish-live-temperature-graph](/processes/publish-live-temperature-graph)
+        - Requires: live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: live temperature dashboard ×1
+
+## 7) Install Backup Thermistor (`geothermal/install-backup-thermistor`)
+
+- Quest link: [/quests/geothermal/install-backup-thermistor](/quests/geothermal/install-backup-thermistor)
+- Unlock prerequisite:
+    - `requiresQuests`: `geothermal/calibrate-ground-sensor`
+- Dialogue `requiresItems` gates:
+    - `materials` → "I've got the parts." — Arduino Uno ×1
+    - `install` → "Reading logged." — Arduino Uno ×1
+- Grants:
+    - `materials` → "Here's a spare thermistor." — Arduino Uno ×1
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - cured compost bucket ×1
+- Processes used:
+    - [arduino-thermistor-read](/processes/arduino-thermistor-read)
+        - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
+        - Consumes: none
+        - Creates: none
+
+## 8) Log Ground Temperature (`geothermal/log-ground-temperature`)
+
+- Quest link: [/quests/geothermal/log-ground-temperature](/quests/geothermal/log-ground-temperature)
+- Unlock prerequisite:
+    - `requiresQuests`: `geothermal/check-loop-pressure`
+- Dialogue `requiresItems` gates:
+    - `prep` → "Rig is already sealed" — thermistor logging rig ×1
+    - `bury` → "Start a buried 24 h log" — thermistor logging rig ×1, Laptop Computer ×1
+    - `bury` → "Baseline log exported" — temperature log CSV ×1
+    - `chart` → "Plot the baseline curve" — temperature log CSV ×1, Laptop Computer ×1
+    - `chart` → "Annotate weather notes" — temperature line chart ×1, Laptop Computer ×1
+    - `chart` → "Baseline chart saved" — annotated temperature graph ×1
+    - `finish` → "Ground curve logged" — annotated temperature graph ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - cured compost bucket ×1
+- Processes used:
+    - [assemble-thermistor-logger](/processes/assemble-thermistor-logger)
+        - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×4, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, USB Type-A to Type-B cable ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: thermistor logging rig ×1
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
+    - [plot-temperature-data](/processes/plot-temperature-data)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature line chart ×1
+    - [refine-temperature-graph](/processes/refine-temperature-graph)
+        - Requires: temperature line chart ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: annotated temperature graph ×1
+
+## 9) Compare Depth Ground Temps (`geothermal/compare-depth-ground-temps`)
+
+- Quest link: [/quests/geothermal/compare-depth-ground-temps](/quests/geothermal/compare-depth-ground-temps)
+- Unlock prerequisite:
+    - `requiresQuests`: `geothermal/log-ground-temperature`
+- Dialogue `requiresItems` gates:
+    - `deploy` → "Logs collected" — Arduino Uno ×2
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - cured compost bucket ×1
+- Processes used:
+    - [arduino-thermistor-read](/processes/arduino-thermistor-read)
+        - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
+        - Consumes: none
+        - Creates: none
+
+## 10) Compare Seasonal Ground Temps (`geothermal/compare-seasonal-ground-temps`)
+
+- Quest link: [/quests/geothermal/compare-seasonal-ground-temps](/quests/geothermal/compare-seasonal-ground-temps)
+- Unlock prerequisite:
+    - `requiresQuests`: `geothermal/log-ground-temperature`
+- Dialogue `requiresItems` gates:
+    - `deploy` → "Sensor logging" — Arduino Uno ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - cured compost bucket ×1
+- Processes used:
+    - [arduino-thermistor-read](/processes/arduino-thermistor-read)
+        - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
+        - Consumes: none
+        - Creates: none
+
+## 11) Log Heat Pump Warmup (`geothermal/log-heat-pump-warmup`)
+
+- Quest link: [/quests/geothermal/log-heat-pump-warmup](/quests/geothermal/log-heat-pump-warmup)
+- Unlock prerequisite:
+    - `requiresQuests`: `geothermal/log-ground-temperature`
+- Dialogue `requiresItems` gates:
+    - `start` → "Rig and towels are ready" — thermistor logging rig ×1, Laptop Computer ×1
+    - `stage` → "Capture the warmup trace" — thermistor logging rig ×1, Laptop Computer ×1
+    - `stage` → "Trace exported" — temperature log CSV ×1
+    - `analyze` → "Plot the warmup curve" — temperature log CSV ×1, Laptop Computer ×1
+    - `analyze` → "Annotate compressor ramp" — temperature line chart ×1, Laptop Computer ×1
+    - `analyze` → "Curve annotated" — annotated temperature graph ×1
+    - `finish` → "Warmup benchmarked" — annotated temperature graph ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - cured compost bucket ×1
+- Processes used:
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
+    - [plot-temperature-data](/processes/plot-temperature-data)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature line chart ×1
+    - [refine-temperature-graph](/processes/refine-temperature-graph)
+        - Requires: temperature line chart ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: annotated temperature graph ×1
+
+## 12) Monitor Heat Pump Energy Use (`geothermal/monitor-heat-pump-energy`)
+
+- Quest link: [/quests/geothermal/monitor-heat-pump-energy](/quests/geothermal/monitor-heat-pump-energy)
+- Unlock prerequisite:
+    - `requiresQuests`: `geothermal/log-ground-temperature`
+- Dialogue `requiresItems` gates:
+    - `materials` → "I've got one ready." — smart plug ×1
+- Grants:
+    - `materials` → "Here's the smart plug." — smart plug ×1
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - dWatt ×1
+- Processes used:
+    - None
+
+## 13) Purge Air from Ground Loop (`geothermal/purge-loop-air`)
+
+- Quest link: [/quests/geothermal/purge-loop-air](/quests/geothermal/purge-loop-air)
+- Unlock prerequisite:
+    - `requiresQuests`: `geothermal/monitor-heat-pump-energy`
+- Dialogue `requiresItems` gates:
+    - `materials` → "I have a pump ready." — submersible water pump ×1
+- Grants:
+    - `materials` → "Take this pump." — submersible water pump ×1
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - cured compost bucket ×1
+- Processes used:
+    - None
+
+## 14) Backflush Loop Filter (`geothermal/backflush-loop-filter`)
+
+- Quest link: [/quests/geothermal/backflush-loop-filter](/quests/geothermal/backflush-loop-filter)
+- Unlock prerequisite:
+    - `requiresQuests`: `geothermal/purge-loop-air`
+- Dialogue `requiresItems` gates:
+    - `materials` → "I have a pump ready." — submersible water pump ×1
+- Grants:
+    - `materials` → "Take this pump." — submersible water pump ×1
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - cured compost bucket ×1
+- Processes used:
+    - None
+
+## 15) Replace Faulty Thermistor (`geothermal/replace-faulty-thermistor`)
+
+- Quest link: [/quests/geothermal/replace-faulty-thermistor](/quests/geothermal/replace-faulty-thermistor)
+- Unlock prerequisite:
+    - `requiresQuests`: `geothermal/install-backup-thermistor`
+- Dialogue `requiresItems` gates:
+    - `replace` → "Probe replaced and reading logged." — Arduino Uno ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - cured compost bucket ×1
+- Processes used:
+    - [arduino-thermistor-read](/processes/arduino-thermistor-read)
+        - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
+        - Consumes: none
+        - Creates: none
+
+## QA flow notes
+
+- Cross-quest dependencies: follow quest unlocks in order; each quest above lists exact `requiresQuests` and inventory gates that must be present before completion paths appear.
+- Progression integrity checks: verify each process-backed step can be completed either by running the process or by satisfying the documented continuation gate items.
+- Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.

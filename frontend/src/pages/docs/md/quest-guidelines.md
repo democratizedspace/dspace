@@ -69,6 +69,47 @@ Each tree doc should include:
 If you change quest gating or inventory flow, update the corresponding Skills doc in the same pull
 request.
 
+
+## Quest ↔ Docs 1:1 Contract (Required)
+
+Every quest tree directory under `frontend/src/pages/quests/json/<tree>/` must have a matching
+`/docs/<tree>` page and a Skills chip on `/docs`. Treat quest JSON and tree docs as a single
+change unit in the same pull request.
+
+### Required workflow checklist (copy/paste)
+
+- [ ] If a tree directory is added/removed/renamed under `frontend/src/pages/quests/json/<tree>/`:
+  - [ ] Ensure `/docs/<tree>` is present in the `/docs` Skills section via merged auto-discovery.
+  - [ ] Ensure `frontend/src/pages/docs/md/<tree>.md` exists and documents the full tree.
+- [ ] If any quest JSON changes:
+  - [ ] Update `frontend/src/pages/docs/md/<tree>.md` in the same PR (gates, grants, rewards,
+        process IO, QA notes).
+  - [ ] Run `npm run lint`, `npm run link-check`, and the bulk quest validator.
+- [ ] **Don't invent grants**: docs may only list `grantsItems` that exist in quest JSON (quest or
+      option level). Process `creates` are process outputs and must not be labeled as quest grants
+      unless explicitly granted by quest JSON.
+- [ ] **Branched trees**: when `requiresQuests` branches, document Main path + Branches (or a clear
+      edge list). Do not force false linear ordering.
+- [ ] **After docs, tweak quests**: update docs first, then apply minimal quest JSON fixes justified
+      by the docs review.
+
+### Deterministic QA audit checklist
+
+1. Anti-pattern scan (process option gated by its own output, or equivalent redundant gates):
+   `rg -n "\"requiresItems\"|\"process\"\s*:\s*\"" frontend/src/pages/quests/json/<tree> -S`
+2. Repeated-log minimum counts: when later quests require repeated measurements/logging, gate
+   continue/skip options on count `>= N` instead of forcing process reruns for players who already
+   have enough.
+3. Rewards sanity: only tune rewards when docs expose a clear progression blocker.
+
+### Required verification commands for PR descriptions
+
+```bash
+npm run lint
+npm run link-check
+for f in frontend/src/pages/quests/json/*/*.json; do node scripts/validate-quest.js "$f" || exit 1; done
+```
+
 ## Quest Structure Guidelines
 
 ### Progressive Difficulty

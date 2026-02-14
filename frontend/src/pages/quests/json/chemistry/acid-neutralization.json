@@ -24,8 +24,20 @@
                 {
                     "type": "process",
                     "process": "neutralize-acid",
-                    "text": "Sprinkling baking soda."
+                    "goto": "verify",
+                    "text": "Use the spill cleanup kit."
                 },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Sprinkling baking soda."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Now check the area with a pH strip to confirm the spill is neutralized.",
+            "options": [
                 {
                     "type": "goto",
                     "goto": "finish",

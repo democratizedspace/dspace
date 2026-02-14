@@ -24,17 +24,12 @@
                 {
                     "type": "process",
                     "process": "measure-wind-speed",
-                    "text": "Hold up the anemometer and note the gusts."
+                    "goto": "ready",
+                    "text": "Take an anemometer reading."
                 },
                 {
                     "type": "goto",
                     "goto": "ready",
-                    "requiresItems": [
-                        {
-                            "id": "451d86d9-96e0-4829-af27-8a8b0be65ae4",
-                            "count": 1
-                        }
-                    ],
                     "text": "Reading taken\u2014winds are calm."
                 }
             ]

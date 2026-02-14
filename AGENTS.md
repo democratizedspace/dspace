@@ -129,6 +129,30 @@ If CI formatting checks fail but local checks pass:
 - After adding or removing quests, run `npm run new-quests:update` and commit the
   generated `docs/new-quests.md` and its frontend copy to keep quest counts in sync.
 
+
+## Quest ↔ Docs 1:1 Contract (Required)
+
+When modifying quest content, treat quest JSON and Skills docs as one coupled system. These rules
+are mandatory for humans and agents.
+
+### Required checklist (copy/paste)
+
+- [ ] If you add/remove/rename a quest tree directory in `frontend/src/pages/quests/json/<tree>/`:
+  - [ ] Ensure `/docs` Skills includes `/docs/<tree>` via merge + auto-discovery (do not clobber curated links).
+  - [ ] Ensure `frontend/src/pages/docs/md/<tree>.md` exists and documents the full tree.
+- [ ] If you change any quest JSON:
+  - [ ] Update the corresponding `frontend/src/pages/docs/md/<tree>.md` sections in the same PR
+        (gates, grants, rewards, process IO, QA notes).
+  - [ ] Run `npm run lint`, `npm run link-check`, and bulk quest validation:
+        `for f in frontend/src/pages/quests/json/*/*.json; do node scripts/validate-quest.js "$f" || exit 1; done`
+- [ ] **Don't invent grants**:
+  - Docs may only list `grantsItems` that actually exist in quest JSON (quest-level or option-level).
+  - Process `creates` are process outputs; do not describe them as quest grants unless quest JSON grants them.
+- [ ] **Don't fake linearity**:
+  - If `requiresQuests` branches, docs must show Main path + Branches (or an explicit edge list).
+- [ ] **After docs, tweak quests**:
+  - Update docs first, then apply minimal quest JSON adjustments justified by that review.
+
 ## UI Guidelines
 
 - Astro renders pages on the server and hydrates Svelte components in the client.
