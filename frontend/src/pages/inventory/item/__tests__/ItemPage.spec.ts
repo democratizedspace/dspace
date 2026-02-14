@@ -81,6 +81,9 @@ describe('ItemPage', () => {
             expect(getByRole('heading', { level: 2 }).textContent).toBe(builtIn.name);
         });
 
+        expect(container.querySelector('nav button')).toBeNull();
+        expect(container.querySelector('nav .chip-container')).not.toBeNull();
+
         const heroImage = container.querySelector('img:not(.icon)');
         expect(heroImage?.getAttribute('src')).toBe(builtIn.image);
     });

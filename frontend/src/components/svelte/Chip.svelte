@@ -13,6 +13,7 @@
         dataTestId = undefined;
 
     const dispatch = createEventDispatcher();
+    const isStaticContainer = !href && typeof onClick !== 'function' && !text;
 
     const handleClick = (event) => {
         if (disabled === true) {
@@ -30,6 +31,20 @@
 <nav>
     {#if href}
         <a {href} data-testid={dataTestId}>{text}</a>
+    {:else if isStaticContainer}
+        <div
+            class="chip-container"
+            class:disabled={disabled === true}
+            class:inverted={inverted === true}
+            class:red={red === true}
+            class:hazard={hazard === true}
+            class:cheat={cheat === true}
+            data-testid={dataTestId}
+        >
+            <div class="slot">
+                <slot />
+            </div>
+        </div>
     {:else}
         <button
             type="button"
@@ -61,7 +76,9 @@
     }
 
     nav a,
-    nav button {
+    nav button,
+    nav .chip-container {
+        display: flex;
         opacity: 0.8;
         background-color: #007006;
         border-radius: 0.4rem;
@@ -73,6 +90,11 @@
         text-align: center;
         -webkit-transition: 200ms linear;
         transition: 200ms linear;
+    }
+
+    nav .chip-container {
+        -webkit-user-select: text;
+        user-select: text;
     }
 
     nav button {
