@@ -20,6 +20,10 @@ For general content rules see the [Item Development Guidelines](/docs/item-guide
 >    `npm run test:ci -- itemQuality`.
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
 >    commit with an emoji prefix.
+> 6. Codex cannot create new binary image files right now—when adding a
+>    new item, reuse an existing repository image and ask a human to
+>    replace it later via the
+>    [DEVELOPER_GUIDE image analysis CLI](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli).
 
 ---
 
@@ -80,7 +84,9 @@ REQUIREMENTS
 2. Reflect real-world materials or devices.
 3. Ensure the item is referenced by at least one quest or process; update those
    files and create missing processes as needed.
-4. Use only existing image assets; do not add new image files.
+4. Codex cannot create new binary image files in this workflow, so reuse only
+   existing image assets; do not add new image files. A human should replace
+   the reused image after the PR via the DEVELOPER_GUIDE image analysis CLI.
 5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm run test:ci`.
 6. Run `npm run itemValidation` and `npm run test:ci -- itemQuality`, fixing any failures.

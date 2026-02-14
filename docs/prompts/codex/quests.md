@@ -21,6 +21,10 @@ which covers quests, items and processes in detail.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`;
 >    scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
 >    commit with an emoji prefix.
+> 5. Codex cannot create new binary image files right now—when adding a
+>    new quest, reuse an existing repository image and ask a human to
+>    replace it later via the
+>    [DEVELOPER_GUIDE image analysis CLI](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli).
 
 ---
 
@@ -74,7 +78,9 @@ REQUIREMENTS
    processes in their registries and link them in the quest.
 3. Find the most natural predecessor quest and update the `requiresQuests`
    chain so progression flows logically.
-4. Use only existing image assets; do not add new image files.
+4. Codex cannot create new binary image files in this workflow, so reuse only
+   existing image assets; do not add new image files. A human should replace
+   the reused image after the PR via the DEVELOPER_GUIDE image analysis CLI.
 5. Run `npm run lint`, `npm run type-check`, and `npm run build`.
 6. Run `npm run test:ci -- questCanonical questQuality` and fix any failures.
 7. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.

@@ -115,6 +115,14 @@ If CI formatting checks fail but local checks pass:
 
 - GitHub Dependabot automatically opens weekly PRs for npm updates (see `.github/dependabot.yml`).
 
+## Codex Binary Asset Limitation (Images)
+
+- Codex currently cannot create new binary files (including image assets) in this repository workflow.
+- When a Codex task adds a **new item** or **new quest**, reuse an existing image already in the repo
+  instead of introducing a new image file.
+- After the Codex PR is merged, a human should replace the reused placeholder image by following the
+  [DEVELOPER_GUIDE image analysis CLI workflow](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli).
+
 ## Quest Creation Guidelines
 
 - Quest JSON lives in `frontend/src/pages/quests/json` and must follow the schema in `frontend/src/pages/quests/jsonSchemas`.

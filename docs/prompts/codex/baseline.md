@@ -36,6 +36,10 @@ When adding a new prompt doc, link it here and in
 >    `npm run test:ci`.
 > 7. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and
 >    commit with an emoji prefix.
+> 8. Codex cannot create new binary image files right now—when adding a new
+>    item or quest, reuse an existing repository image and leave final image
+>    creation/replacement to a human via the
+>    [DEVELOPER_GUIDE image analysis CLI](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli).
 
 ---
 
