@@ -54,10 +54,12 @@
     .quest-img {
         flex: 0 0 200px;
         width: 200px;
-        height: 400px;
+        aspect-ratio: 1 / 1;
+        height: 200px;
         border-radius: 20px;
         margin: -10px;
-        object-fit: cover;
+        object-fit: contain;
+        background: #0f1016;
         border: 5px solid #68d46d;
         box-sizing: border-box;
     }
@@ -83,6 +85,7 @@
         .quest-img {
             width: calc(100% - 20px);
             height: auto;
+            aspect-ratio: 1 / 1;
             margin: 0 10px;
         }
     }
