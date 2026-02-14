@@ -4,7 +4,7 @@ import DocsIndex from '../../components/svelte/DocsIndex.svelte';
 import sections from './json/sections.json';
 import { detectDocFeatures } from '../../utils/docsSearchFeatures.js';
 import { stripMarkdownToText } from '../../lib/docs/fullTextSearch';
-import { getQuestTreesFromModulePaths } from '../../utils/docsSkillsIndex.js';
+import { getQuestTreesFromModulePaths, mergeSkillLinks } from '../../utils/docsSkillsIndex.js';
 
 const docModules = await Astro.glob('./md/**/*.md');
 
@@ -113,8 +113,6 @@ const getSlugFromHref = (href = '') => {
     return trimmed.toLowerCase();
 };
 
-const getCanonicalTreeFromSlug = (slug = '') => SKILL_SLUG_TREE_ALIASES[slug] ?? slug;
-
 const docsSections = sections.map((section) => ({
     title: section.title,
     links: section.links.map((link) => {
@@ -132,27 +130,13 @@ const docsSectionsWithAllSkills = docsSections.map((section) => {
         return section;
     }
 
-    const curatedSkillLinksByTree = new Map();
-    const curatedLinks = section.links.map((link) => {
-        const slug = getSlugFromHref(link.href);
-        const canonicalTree = getCanonicalTreeFromSlug(slug);
-
-        if (!curatedSkillLinksByTree.has(canonicalTree)) {
-            curatedSkillLinksByTree.set(canonicalTree, link);
-        }
-
-        return link;
-    });
-
-    const mergedQuestSkillLinks = questSkillLinks.filter(
-        (link) => !curatedSkillLinksByTree.has(getSlugFromHref(link.href))
-    );
-
     return {
         ...section,
-        links: [...curatedLinks, ...mergedQuestSkillLinks].sort((left, right) =>
-            left.title.localeCompare(right.title)
-        ),
+        links: mergeSkillLinks({
+            curatedLinks: section.links,
+            generatedLinks: questSkillLinks,
+            aliases: SKILL_SLUG_TREE_ALIASES,
+        }),
     };
 });
 ---

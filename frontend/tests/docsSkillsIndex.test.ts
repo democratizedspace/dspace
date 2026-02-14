@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { describe, expect, it } from 'vitest';
-import { getQuestTreesFromModulePaths } from '../src/utils/docsSkillsIndex.js';
+import { getQuestTreesFromModulePaths, mergeSkillLinks } from '../src/utils/docsSkillsIndex.js';
 
 const questsJsonRoot = path.join(process.cwd(), 'frontend/src/pages/quests/json');
 
@@ -43,5 +43,29 @@ describe('docs Skills quest-tree mapping', () => {
         const missingDocSlugs = questTreeDirectories.filter((tree) => !docsSlugs.includes(tree));
 
         expect(missingDocSlugs).toEqual([]);
+    });
+
+    it('preserves curated non-tree skill links while deduping aliased tree links', () => {
+        const curatedLinks = [
+            { title: 'Solar power', href: '/docs/solar', keywords: ['energy'] },
+            { title: 'First aid', href: '/docs/first-aid', keywords: ['health'] },
+        ];
+        const generatedLinks = [
+            { title: 'First Aid', href: '/docs/firstaid', keywords: ['firstaid'] },
+            { title: 'Chemistry', href: '/docs/chemistry', keywords: ['chemistry'] },
+        ];
+
+        const mergedLinks = mergeSkillLinks({
+            curatedLinks,
+            generatedLinks,
+            aliases: { 'first-aid': 'firstaid' },
+        });
+
+        expect(mergedLinks.map((link) => link.href)).toEqual([
+            '/docs/chemistry',
+            '/docs/first-aid',
+            '/docs/solar',
+        ]);
+        expect(mergedLinks.filter((link) => link.href === '/docs/firstaid')).toHaveLength(0);
     });
 });
