@@ -145,6 +145,10 @@ Prompts for AI-assisted development:
 - [Item Prompts](./docs/prompts/codex/items.md) - AI-assisted item creation
 - [Process Prompts](./docs/prompts/codex/processes.md) - AI-assisted process creation
 - [Other Codex Prompts](./docs/prompts/codex/) - Frontend, backend, testing, and more
+- Codex image limitation: when adding new items/quests in Codex PRs, reuse existing
+  in-repo images and let a human replace them later via
+  [DEVELOPER_GUIDE image analysis CLI](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli)
+  because Codex cannot currently create new binary image files.
 
 ### Game Documentation
 

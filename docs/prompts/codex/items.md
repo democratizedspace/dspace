@@ -80,7 +80,10 @@ REQUIREMENTS
 2. Reflect real-world materials or devices.
 3. Ensure the item is referenced by at least one quest or process; update those
    files and create missing processes as needed.
-4. Use only existing image assets; do not add new image files.
+4. Codex cannot create new binary image files. Reuse an existing in-repo
+   image asset (especially for new items), and leave final image
+   creation/replacement to a human via
+   https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli.
 5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm run test:ci`.
 6. Run `npm run itemValidation` and `npm run test:ci -- itemQuality`, fixing any failures.
@@ -104,7 +107,10 @@ appropriate category file. Ensure realistic details, required fields, and
 passing checks (`npm run audit:ci`, `npm run lint`, `npm run type-check`,
 `npm run build`, `npm run test:ci`, `npm run itemValidation`, and
 `npm run test:ci -- itemQuality`). Verify the item appears in at least one quest or process,
-reuse existing image assets, and scan for secrets with
+reuse existing image assets (Codex cannot create new binary images; a
+human should replace reused placeholders via
+https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli), and
+scan for secrets with
 `git diff --cached | ./scripts/scan-secrets.py` before committing.
 If a quest's text changes, run `npm run test:ci -- questQuality` and update
 the quest's
@@ -135,8 +141,10 @@ USER:
 2. Improve clarity, realism and units. Ensure prices and descriptions match
    real-world expectations and that related processes reference the item
    correctly.
-3. When modifying the `image` field, reuse an existing image URL already in the
-   repository; do not add new or external images.
+3. When modifying the `image` field, remember Codex cannot create new binary
+   image files. Reuse an existing image URL already in the repository and
+   have a human replace it later via
+   https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli (do not add new or external images in Codex PRs).
 4. Update or create the item's `hardening` block, incrementing `passes`,
     refreshing the evaluator `score`, swapping the status `emoji` and appending a
     history entry with the Codex task ID, date and score. Choose the emoji based

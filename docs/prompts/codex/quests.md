@@ -74,7 +74,10 @@ REQUIREMENTS
    processes in their registries and link them in the quest.
 3. Find the most natural predecessor quest and update the `requiresQuests`
    chain so progression flows logically.
-4. Use only existing image assets; do not add new image files.
+4. Codex cannot create new binary image files. Reuse an existing in-repo
+   image asset (especially for new quests), and leave final image
+   creation/replacement to a human via
+   https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli.
 5. Run `npm run lint`, `npm run type-check`, and `npm run build`.
 6. Run `npm run test:ci -- questCanonical questQuality` and fix any failures.
 7. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
@@ -97,7 +100,9 @@ completion nodes, at least one item or process reference, and passing checks
 (`npm run lint`, `npm run type-check`, `npm run build`, and
 `npm run test:ci -- questCanonical questQuality`). Survey existing quests to
 pick a natural predecessor and update `requiresQuests` accordingly. Add missing
-items or processes to their registries, reuse existing image assets, and scan
+items or processes to their registries, reuse existing image assets (Codex
+cannot create new binary images; a human should replace reused placeholders via
+https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli), and scan
 for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
 committing.
 
@@ -157,8 +162,10 @@ USER:
     `frontend/src/pages/inventory/json/items` or
     `frontend/src/generated/processes.json`. Add missing items or
    processes so quests stay grounded in reality and are reproducible IRL.
-4. If the quest includes an image, reuse an existing image URL already in the
-   repository; do not add new or external images.
+4. If the quest includes an image, remember Codex cannot create new binary
+   image files. Reuse an existing image URL already in the repository and
+   have a human replace it later via
+   https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli (do not add new or external images in Codex PRs).
 5. Update the quest's `hardening` block, incrementing `passes`, refreshing the
    evaluator `score`, swapping the status `emoji` and appending a history entry
    with the Codex task ID, date and score. Choose the emoji based on:

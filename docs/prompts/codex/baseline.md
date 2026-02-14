@@ -36,6 +36,9 @@ When adding a new prompt doc, link it here and in
 >    `npm run test:ci`.
 > 7. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py` and
 >    commit with an emoji prefix.
+> 8. Codex cannot create new binary image files; for new item/quest content, reuse an existing
+>    image in the PR and leave final image generation to a human using
+>    `DEVELOPER_GUIDE.md#image-analysis-cli`.
 
 ---
 
@@ -114,6 +117,9 @@ REQUIREMENTS
 5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`.
 6. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
 7. Use an emoji-prefixed commit message.
+8. Do not add new binary image files; when adding new items/quests, reuse an existing image
+   and note that a human should replace it later via
+   https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli.
 
 OUTPUT
 A pull request with the required changes and tests.
