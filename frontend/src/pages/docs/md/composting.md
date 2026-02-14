@@ -68,14 +68,13 @@ Composting quests build practical progression through the composting skill tree.
     - `requiresQuests`: `composting/turn-pile`
 - Dialogue `requiresItems` gates:
     - `start` → "Ready to take readings." — active compost bucket ×1
-    - `probe` → "Log the temperature" — compost thermometer ×1, active compost bucket ×1
-    - `probe` → "Check moisture too" — compost moisture meter ×1, active compost bucket ×1
-    - `moisture` → "Record the moisture" — compost moisture meter ×1, active compost bucket ×1
-    - `moisture` → "Readings logged" — compost temperature log ×1, compost moisture log ×1
-    - `recheck` → "Two temps and moisture are logged" — compost temperature log ×2, compost moisture log ×1
-    - `cooldown` → "Start the cure rest" — active compost bucket ×1, compost temperature log ×2, compost moisture log ×1
-    - `cooldown` → "Bucket has cooled and smells earthy" — cured compost bucket ×1, compost temperature log ×2, compost moisture log ×1
-    - `finish` → "On to sifting!" — cured compost bucket ×1, compost temperature log ×2, compost moisture log ×1
+    - `readings` → "Log the temperature" — compost thermometer ×1, active compost bucket ×1
+    - `readings` → "Record the moisture" — compost moisture meter ×1, active compost bucket ×1
+    - `readings` → "Both recheck readings are logged" — compost temperature log ×2, compost moisture log ×2
+    - `recheck` → "Two temps and two moisture logs are ready" — compost temperature log ×2, compost moisture log ×2
+    - `cooldown` → "Start the cure rest" — active compost bucket ×1, compost temperature log ×2, compost moisture log ×2
+    - `cooldown` → "Bucket has cooled and smells earthy" — cured compost bucket ×1, compost temperature log ×2, compost moisture log ×2
+    - `finish` → "On to sifting!" — cured compost bucket ×1, compost temperature log ×2, compost moisture log ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
