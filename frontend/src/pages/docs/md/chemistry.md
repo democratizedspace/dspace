@@ -24,17 +24,18 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
-    - None
+    - `prep` → "Bench staged and PPE on." — nitrile gloves (pair) ×1, safety goggles ×1, 250 mL glass beaker ×1
+    - `reaction` → "Reaction complete and logged." — safe reaction lab log ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - safe reaction lab log ×1
 - Processes used:
-    - [neutralize-acid](/processes/neutralize-acid)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
+    - [run-safe-reaction-demo](/processes/run-safe-reaction-demo)
+        - Requires: nitrile gloves (pair) ×1, safety goggles ×1, 250 mL glass beaker ×1
+        - Consumes: none
+        - Creates: safe reaction lab log ×1
 
 ## 2) Measure Solution pH (`chemistry/ph-test`)
 

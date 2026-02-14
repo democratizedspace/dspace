@@ -27,14 +27,19 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/light-sensor`, `programming/hello-sensor`
 - Dialogue `requiresItems` gates:
-    - None
+    - `start` → "I have the sensor pair and controller ready." — IR reflectance sensor pair ×1, Arduino Uno ×1
+    - `wire` → "Calibration data captured." — reflectance calibration log ×1
+    - `validate` → "Validation passed with stable thresholds." — reflectance calibration log ×1
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: IR reflectance sensor pair ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - reflectance calibration log ×1
 - Processes used:
-    - None
+    - [calibrate-reflectance-sensors](/processes/calibrate-reflectance-sensors)
+        - Requires: IR reflectance sensor pair ×1, Arduino Uno ×1
+        - Consumes: none
+        - Creates: reflectance calibration log ×1
 
 ## 2) Control a Servo Motor (`robotics/servo-control`)
 

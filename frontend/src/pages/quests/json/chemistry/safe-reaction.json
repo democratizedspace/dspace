@@ -1,51 +1,89 @@
 {
     "id": "chemistry/safe-reaction",
     "title": "Demonstrate a Safe Chemical Reaction",
-    "description": "Phoenix walks you through a harmless experiment that introduces eco-friendly propellant basics.",
+    "description": "Phoenix guides a complete safety-first reaction workflow with PPE, measurement, and reaction logging.",
     "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. Up for a safe reaction that shows how green propellants release energy?",
+            "text": "Phoenix here. We'll run a safe reaction the same way professionals do: prep PPE, run the reaction, then record outcomes.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "mix",
-                    "text": "Absolutely!"
+                    "goto": "prep",
+                    "text": "Show me the workflow."
                 }
             ]
         },
         {
-            "id": "mix",
-            "text": "Combine baking soda and vinegar in an open bottle. Harmless fizz, real thrust potential.",
+            "id": "prep",
+            "text": "Suit up and stage your glassware first. Consistency matters more than speed in chemistry.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "It's bubbling!"
+                    "goto": "reaction",
+                    "text": "Bench staged and PPE on.",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "finish",
-            "text": "Nice work! We'll scale reactions like this into clean rocket fuel.",
+            "id": "reaction",
+            "text": "Now run the demonstration in an open container and observe gas release without sealing pressure.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "run-safe-reaction-demo",
+                    "text": "Run and log the reaction."
+                },
+                {
+                    "type": "goto",
+                    "goto": "debrief",
+                    "text": "Reaction complete and logged.",
+                    "requiresItems": [
+                        {
+                            "id": "883558ea-17b9-44ca-8ad3-65f3f73ca0d4",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "debrief",
+            "text": "Great execution. You controlled hazards, captured data, and left the station cleaner than you found it.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait!"
+                    "text": "Ready for advanced propellant chemistry."
                 }
             ]
         }
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "883558ea-17b9-44ca-8ad3-65f3f73ca0d4",
             "count": 1
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "hardening": {
         "passes": 0,
         "score": 80,

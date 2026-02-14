@@ -140,17 +140,37 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/basil`
 - Dialogue `requiresItems` gates:
-    - `plant` → "Seedlings look great!" — Lettuce Seeds ×1
+    - `prep` → "Plugs are soaked and ready." — soaked hydroponic starter plug ×10, Lettuce Seeds ×10
+    - `germinate` → "Seedlings are established." — lettuce seedling ×10
+    - `tub` → "Tub is mixed and stable." — hydroponics tub (ready) ×1
+    - `grow` → "Lettuce reached harvest size." — harvestable lettuce plant ×10
+    - `harvest` → "Harvest complete." — bundle of lettuce leaves ×10
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: hydroponic nutrient concentrate (1 L) ×1, hydroponic grow lamp ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Lettuce Seeds ×1
+    - bundle of lettuce leaves ×2
 - Processes used:
-    - [prime-pump](/processes/prime-pump)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
+    - [rockwool-soak](/processes/rockwool-soak)
+        - Requires: none
+        - Consumes: 10× bucket-water-chlorinated item bundle
+        - Creates: soaked hydroponic starter plug ×10
+    - [germinate-lettuce](/processes/germinate-lettuce)
+        - Requires: hydroponic grow lamp ×1
+        - Consumes: Lettuce Seeds ×10, soaked hydroponic starter plug ×10
+        - Creates: lettuce seedling ×10
+    - [prepare-hydroponic-tub](/processes/prepare-hydroponic-tub)
+        - Requires: none
+        - Consumes: hydroponics tub ×1, 5 gallon bucket of dechlorinated tap water ×1, hydroponic nutrient concentrate (1 L) ×1
+        - Creates: hydroponics tub (ready) ×1
+    - [grow-lettuce](/processes/grow-lettuce)
+        - Requires: hydroponic grow lamp ×1
+        - Consumes: lettuce seedling ×10, hydroponics tub (ready) ×1, dWatt ×13,440
+        - Creates: harvestable lettuce plant ×10, hydroponics tub (nutrient deficient) ×1
+    - [harvest-lettuce](/processes/harvest-lettuce)
+        - Requires: none
+        - Consumes: harvestable lettuce plant ×10
+        - Creates: bundle of lettuce leaves ×10
 
 ## 5) Refresh Nutrient Solution (`hydroponics/nutrient-check`)
 

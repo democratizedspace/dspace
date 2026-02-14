@@ -8497,5 +8497,168 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "germinate-lettuce",
+        "title": "Germinate lettuce seeds in starter plugs",
+        "image": "/assets/basil_seedlings.jpg",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
+                "count": 10
+            },
+            {
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                "count": 10
+            }
+        ],
+        "createItems": [
+            {
+                "id": "4f2a495f-8f5d-4519-a696-65ba9f7b6706",
+                "count": 10
+            }
+        ],
+        "duration": "7d",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "grow-lettuce",
+        "title": "Grow lettuce seedlings to harvest size in a hydroponic tub",
+        "image": "/assets/hydroponic_basil_adult.jpg",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "4f2a495f-8f5d-4519-a696-65ba9f7b6706",
+                "count": 10
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 13440
+            }
+        ],
+        "createItems": [
+            {
+                "id": "fc10d535-9b6e-4e32-9088-b5f0ca4f78ec",
+                "count": 10
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
+        ],
+        "duration": "28d",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "harvest-lettuce",
+        "title": "Harvest mature hydroponic lettuce plants",
+        "image": "/assets/basil_harvested.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "fc10d535-9b6e-4e32-9088-b5f0ca4f78ec",
+                "count": 10
+            }
+        ],
+        "createItems": [
+            {
+                "id": "88ce9cf6-f4dd-45ee-aa9e-928f999baee0",
+                "count": 10
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "run-safe-reaction-demo",
+        "title": "Run and document a safe baking soda and vinegar reaction demo",
+        "image": "/assets/beaker_250ml_glass.jpg",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "883558ea-17b9-44ca-8ad3-65f3f73ca0d4",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "calibrate-reflectance-sensors",
+        "title": "Calibrate a reflectance sensor pair and record threshold data",
+        "image": "/assets/quests/robotics_reflectance_sensors.jpg",
+        "requireItems": [
+            {
+                "id": "d9a2f00d-4189-48af-b6eb-6f44d43f4de8",
+                "count": 1
+            },
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "831ef2ca-7ce4-4f91-b5d8-1d35a267eec9",
+                "count": 1
+            }
+        ],
+        "duration": "30m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

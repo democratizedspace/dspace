@@ -1,33 +1,96 @@
 {
     "id": "hydroponics/lettuce",
-    "title": "Grow Lettuce Hydroponically",
-    "description": "Plant lettuce seeds and harvest fresh leaves using your hydroponic setup.",
+    "title": "Grow Lettuce Hydroponically (Full Cycle)",
+    "description": "Run a full lettuce cycle: germinate seeds, prep nutrients, grow to maturity, and harvest leaves.",
     "image": "/assets/quests/hydroponic_lettuce_tub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nice work with the basil! Ready for another crop? Lettuce is easy to grow and perfect for salads.",
+            "text": "Nice work with basil. Lettuce is next, and this time we'll run a full production cycle from seed to harvest.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "plant",
-                    "text": "Sounds tasty! How do I start?"
+                    "goto": "prep",
+                    "text": "Let's do the full workflow."
                 }
             ]
         },
         {
-            "id": "plant",
-            "text": "Place lettuce seeds in damp starter plugs. Keep them under light for about a week until they sprout.",
+            "id": "prep",
+            "text": "First, stage your tray. Soak starter plugs and keep your lettuce seeds ready before we germinate.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "rockwool-soak",
+                    "text": "Soaking starter plugs now."
+                },
+                {
                     "type": "goto",
-                    "goto": "harvest",
-                    "text": "Seedlings look great!",
+                    "goto": "germinate",
+                    "text": "Plugs are soaked and ready.",
                     "requiresItems": [
                         {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 10
+                        },
+                        {
                             "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
+                            "count": 10
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "germinate",
+            "text": "Great. Keep plugs moist and under gentle light for about a week so roots establish cleanly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "germinate-lettuce",
+                    "text": "Start lettuce germination."
+                },
+                {
+                    "type": "goto",
+                    "goto": "tub",
+                    "text": "Seedlings are established.",
+                    "requiresItems": [
+                        {
+                            "id": "4f2a495f-8f5d-4519-a696-65ba9f7b6706",
+                            "count": 10
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "tub",
+            "text": "Now prep your hydroponic tub with fresh nutrient solution. Good EC and circulation now means fewer problems later.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                            "count": 1
+                        }
+                    ],
+                    "text": "I need nutrient concentrate."
+                },
+                {
+                    "type": "process",
+                    "process": "prepare-hydroponic-tub",
+                    "text": "Fill and charge the tub."
+                },
+                {
+                    "type": "goto",
+                    "goto": "grow",
+                    "text": "Tub is mixed and stable.",
+                    "requiresItems": [
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                             "count": 1
                         }
                     ]
@@ -35,21 +98,77 @@
             ]
         },
         {
+            "id": "grow",
+            "text": "Transplant seedlings into the net cups, run the lamp daily, and monitor water level while lettuce heads bulk up.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Give me a grow lamp for this batch."
+                },
+                {
+                    "type": "process",
+                    "process": "grow-lettuce",
+                    "text": "Run the 4-week grow cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "text": "Lettuce reached harvest size.",
+                    "requiresItems": [
+                        {
+                            "id": "fc10d535-9b6e-4e32-9088-b5f0ca4f78ec",
+                            "count": 10
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "harvest",
-            "text": "Transfer the plugs to your tub and let them grow for a few weeks. Harvest outer leaves as needed for fresh salads!",
+            "text": "Harvest outer leaves first to keep plants productive. Nice clean cuts and quick cooling preserve quality.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "harvest-lettuce",
+                    "text": "Harvest mature lettuce."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Harvest complete.",
+                    "requiresItems": [
+                        {
+                            "id": "88ce9cf6-f4dd-45ee-aa9e-928f999baee0",
+                            "count": 10
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Perfect run. You just completed a full hydroponic lettuce production loop with proper process controls.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait to taste it!"
+                    "text": "Mission complete."
                 }
             ]
         }
     ],
-    "requiresQuests": ["hydroponics/basil"],
+    "requiresQuests": [
+        "hydroponics/basil"
+    ],
     "rewards": [
         {
-            "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
-            "count": 1
+            "id": "88ce9cf6-f4dd-45ee-aa9e-928f999baee0",
+            "count": 2
         }
     ],
     "hardening": {
