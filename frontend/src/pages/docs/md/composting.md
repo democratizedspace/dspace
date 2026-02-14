@@ -68,14 +68,13 @@ Composting quests build practical progression through the composting skill tree.
     - `requiresQuests`: `composting/turn-pile`
 - Dialogue `requiresItems` gates:
     - `start` → "Ready to take readings." — active compost bucket ×1
-    - `probe` → "Log the temperature" — compost thermometer ×1, active compost bucket ×1
-    - `probe` → "Check moisture too" — compost moisture meter ×1, active compost bucket ×1
-    - `moisture` → "Record the moisture" — compost moisture meter ×1, active compost bucket ×1
-    - `moisture` → "Readings logged" — compost temperature log ×1, compost moisture log ×1
-    - `recheck` → "Two temps and moisture are logged" — compost temperature log ×2, compost moisture log ×1
-    - `cooldown` → "Start the cure rest" — active compost bucket ×1, compost temperature log ×2, compost moisture log ×1
-    - `cooldown` → "Bucket has cooled and smells earthy" — cured compost bucket ×1, compost temperature log ×2, compost moisture log ×1
-    - `finish` → "On to sifting!" — cured compost bucket ×1, compost temperature log ×2, compost moisture log ×1
+    - `readings` → "Log a temperature reading" — compost thermometer ×1, active compost bucket ×1
+    - `readings` → "Log a moisture reading" — compost moisture meter ×1, active compost bucket ×1
+    - `readings` → "Two temperature and two moisture logs are ready" — compost temperature log ×2, compost moisture log ×2
+    - `recheck` → "Third temperature confirms cooldown trend" — compost temperature log ×3, compost moisture log ×2
+    - `cooldown` → "Start the cure rest" — active compost bucket ×1, compost temperature log ×3, compost moisture log ×2
+    - `cooldown` → "Bucket has cooled and smells earthy" — cured compost bucket ×1, compost temperature log ×3, compost moisture log ×2
+    - `finish` → "On to sifting!" — cured compost bucket ×1, compost temperature log ×3, compost moisture log ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -124,4 +123,5 @@ Composting quests build practical progression through the composting skill tree.
 
 - Cross-quest dependencies: follow quest unlocks in order; each quest above lists exact `requiresQuests` and inventory gates that must be present before completion paths appear.
 - Progression integrity checks: verify each process-backed step can be completed either by running the process or by satisfying the documented continuation gate items.
+- Recheck expectations: `composting/check-temperature` now expects two complete reading pairs before recheck, then one additional cooldown temperature log to prevent skipping implied repeat measurements.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.

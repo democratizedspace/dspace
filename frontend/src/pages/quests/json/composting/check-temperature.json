@@ -12,7 +12,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "probe",
+                    "goto": "readings",
                     "requiresItems": [
                         {
                             "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
@@ -24,8 +24,8 @@
             ]
         },
         {
-            "id": "probe",
-            "text": "Insert the compost thermometer to the core, wait 30 seconds, then note the reading. Replace the brown cap when done.",
+            "id": "readings",
+            "text": "Capture both readings again: probe temperature at the core, then check moisture and compare with your prior log.",
             "options": [
                 {
                     "type": "process",
@@ -40,30 +40,9 @@
                             "count": 1
                         }
                     ],
-                    "goto": "moisture",
-                    "text": "Log the temperature"
+                    "goto": "readings",
+                    "text": "Log a temperature reading"
                 },
-                {
-                    "type": "goto",
-                    "goto": "moisture",
-                    "requiresItems": [
-                        {
-                            "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
-                            "count": 1
-                        },
-                        {
-                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Check moisture too"
-                }
-            ]
-        },
-        {
-            "id": "moisture",
-            "text": "Probe the core again. If it smears, wipe the probe and note if it feels wetter or drier than last time.",
-            "options": [
                 {
                     "type": "process",
                     "process": "measure-compost-moisture",
@@ -77,8 +56,8 @@
                             "count": 1
                         }
                     ],
-                    "goto": "recheck",
-                    "text": "Record the moisture"
+                    "goto": "readings",
+                    "text": "Log a moisture reading"
                 },
                 {
                     "type": "goto",
@@ -86,14 +65,14 @@
                     "requiresItems": [
                         {
                             "id": "e034d081-a29e-4040-830f-a192304db50d",
-                            "count": 1
+                            "count": 2
                         },
                         {
                             "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
-                            "count": 1
+                            "count": 2
                         }
                     ],
-                    "text": "Readings logged"
+                    "text": "Two temperature and two moisture logs are ready"
                 }
             ]
         },
@@ -113,14 +92,14 @@
                     "requiresItems": [
                         {
                             "id": "e034d081-a29e-4040-830f-a192304db50d",
-                            "count": 2
+                            "count": 3
                         },
                         {
                             "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
-                            "count": 1
+                            "count": 2
                         }
                     ],
-                    "text": "Two temps and moisture are logged"
+                    "text": "Third temperature confirms cooldown trend"
                 }
             ]
         },
@@ -140,11 +119,11 @@
                         },
                         {
                             "id": "e034d081-a29e-4040-830f-a192304db50d",
-                            "count": 2
+                            "count": 3
                         },
                         {
                             "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 },
@@ -158,11 +137,11 @@
                         },
                         {
                             "id": "e034d081-a29e-4040-830f-a192304db50d",
-                            "count": 2
+                            "count": 3
                         },
                         {
                             "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
-                            "count": 1
+                            "count": 2
                         }
                     ],
                     "text": "Bucket has cooled and smells earthy"
@@ -182,11 +161,11 @@
                         },
                         {
                             "id": "e034d081-a29e-4040-830f-a192304db50d",
-                            "count": 2
+                            "count": 3
                         },
                         {
                             "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
-                            "count": 1
+                            "count": 2
                         }
                     ],
                     "text": "On to sifting!"
