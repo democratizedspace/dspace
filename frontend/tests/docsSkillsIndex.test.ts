@@ -26,4 +26,22 @@ describe('docs Skills quest-tree mapping', () => {
         expect(mappedTrees).toEqual(questTreeDirectories);
         expect(new Set(mappedTrees).size).toBe(questTreeDirectories.length);
     });
+
+    it('has a docs slug for every discovered quest tree', () => {
+        const questTreeDirectories = fs
+            .readdirSync(questsJsonRoot, { withFileTypes: true })
+            .filter((entry) => entry.isDirectory())
+            .map((entry) => entry.name)
+            .sort((left, right) => left.localeCompare(right));
+
+        const docsRoot = path.join(process.cwd(), 'frontend/src/pages/docs/md');
+        const docsSlugs = fs
+            .readdirSync(docsRoot, { withFileTypes: true })
+            .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
+            .map((entry) => entry.name.replace(/\.md$/, '').toLowerCase());
+
+        const missingDocSlugs = questTreeDirectories.filter((tree) => !docsSlugs.includes(tree));
+
+        expect(missingDocSlugs).toEqual([]);
+    });
 });
