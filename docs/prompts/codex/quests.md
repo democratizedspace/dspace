@@ -21,6 +21,10 @@ which covers quests, items and processes in detail.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`;
 >    scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
 >    commit with an emoji prefix.
+> 5. Codex cannot create new binary image files; when adding a new quest,
+>    reuse an existing quest image in the PR and leave final image creation
+>    to a human using
+>    <https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli>.
 
 ---
 

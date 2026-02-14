@@ -20,6 +20,10 @@ For general content rules see the [Item Development Guidelines](/docs/item-guide
 >    `npm run test:ci -- itemQuality`.
 > 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
 >    commit with an emoji prefix.
+> 6. Codex cannot create new binary image files; when adding a new item,
+>    reuse an existing item image in the PR and leave final image creation
+>    to a human using
+>    <https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli>.
 
 ---
 

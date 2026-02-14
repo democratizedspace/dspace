@@ -10,6 +10,17 @@
 - `frontend/src/pages/` – Astro SSR routes (see [Routes Documentation](docs/ROUTES.md))
 - `scripts/` – utilities for data and tests
 
+## Binary Asset Limitation for Codex Tasks
+
+- Codex currently does **not** support creating new binary files (for example,
+  `.png`, `.jpg`, `.webp`, `.gif`).
+- For Codex-authored PRs that add or update an **item** or **quest**, reuse an
+  existing image reference from the repository instead of introducing a new
+  image file.
+- After the Codex PR lands, a human should replace the reused image by
+  following the Image Analysis CLI process in the developer guide:
+  <https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli>.
+
 ## Astro Routes & Link Checking
 
 DSPACE uses Astro for SSR with file-based routing. All routes served by the application are documented in [docs/ROUTES.md](docs/ROUTES.md).
