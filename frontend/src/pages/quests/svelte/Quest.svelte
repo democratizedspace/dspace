@@ -54,10 +54,12 @@
     .quest-img {
         flex: 0 0 200px;
         width: 200px;
-        height: 400px;
+        height: 200px;
         border-radius: 20px;
         margin: -10px;
-        object-fit: cover;
+        object-fit: contain;
+        object-position: center;
+        background: #1d1d2e;
         border: 5px solid #68d46d;
         box-sizing: border-box;
     }
