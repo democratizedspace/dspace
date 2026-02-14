@@ -75,7 +75,7 @@
 </script>
 
 {#if $mounted}
-    <Chip inverted={true} text="">
+    <Chip inverted={true} text="" staticChip={true}>
         {#if isLoading}
             <div class="vertical">
                 <p class="placeholder">Loading item…</p>

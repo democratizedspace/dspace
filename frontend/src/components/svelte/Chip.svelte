@@ -5,6 +5,7 @@
         text,
         onClick = undefined,
         disabled = false,
+        staticChip = false,
         inverted = false,
         red = false,
         hazard = false,
@@ -30,6 +31,20 @@
 <nav>
     {#if href}
         <a {href} data-testid={dataTestId}>{text}</a>
+    {:else if staticChip}
+        <div
+            class="static-chip"
+            class:inverted={inverted === true}
+            class:red={red === true}
+            class:hazard={hazard === true}
+            class:cheat={cheat === true}
+            data-testid={dataTestId}
+        >
+            <div class="slot">
+                <slot />
+            </div>
+            <p>{text}</p>
+        </div>
     {:else}
         <button
             type="button"
@@ -61,12 +76,14 @@
     }
 
     nav a,
-    nav button {
+    nav button,
+    .static-chip {
         opacity: 0.8;
         background-color: #007006;
         border-radius: 0.4rem;
         color: white;
         text-decoration: none;
+        display: flex;
         flex-direction: row;
         margin: 1px;
         padding: 5px;
@@ -81,8 +98,13 @@
         font-size: 1em;
     }
 
+    .static-chip {
+        font-size: 1em;
+    }
+
     nav a:hover,
-    nav button:hover {
+    nav button:hover,
+    .static-chip:hover {
         opacity: 1;
     }
 

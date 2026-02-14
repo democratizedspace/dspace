@@ -81,6 +81,9 @@ describe('ItemPage', () => {
             expect(getByRole('heading', { level: 2 }).textContent).toBe(builtIn.name);
         });
 
+        const heading = getByRole('heading', { level: 2 });
+        expect(heading.closest('button')).toBeNull();
+
         const heroImage = container.querySelector('img:not(.icon)');
         expect(heroImage?.getAttribute('src')).toBe(builtIn.image);
     });
@@ -105,6 +108,9 @@ describe('ItemPage', () => {
         await waitFor(() => {
             expect(getByRole('heading', { level: 2 }).textContent).toBe('foobar');
         });
+
+        const heading = getByRole('heading', { level: 2 });
+        expect(heading.closest('button')).toBeNull();
 
         const heroImage = container.querySelector('img:not(.icon)');
 
