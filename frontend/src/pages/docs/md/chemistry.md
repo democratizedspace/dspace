@@ -24,17 +24,23 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
-    - None
+    - `safety` → "Safety gear is on and tools are ready." — nitrile gloves (pair) ×1, safety goggles ×1, 250 mL glass beaker ×1, 100 mL graduated cylinder ×1
+    - `mix` → "Reaction complete and controlled." — pH strip ×1
+    - `log` → "Logged and ready for the next experiment." — 250 mL glass beaker ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - dScience ×1
 - Processes used:
-    - [neutralize-acid](/processes/neutralize-acid)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
+    - [run-safe-fizz-reaction](/processes/run-safe-fizz-reaction)
+        - Requires: nitrile gloves (pair) ×1, safety goggles ×1, 250 mL glass beaker ×1, 100 mL graduated cylinder ×1
+        - Consumes: pH strip ×1
+        - Creates: pH strip ×1
+    - [log-safe-reaction](/processes/log-safe-reaction)
+        - Requires: 250 mL glass beaker ×1
+        - Consumes: none
+        - Creates: none
 
 ## 2) Measure Solution pH (`chemistry/ph-test`)
 

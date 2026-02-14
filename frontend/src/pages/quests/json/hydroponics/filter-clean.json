@@ -1,33 +1,85 @@
 {
     "id": "hydroponics/filter-clean",
     "title": "Rinse Grow Bed Filter",
-    "description": "Clear out the gunk so the roots can breathe.",
+    "description": "Restore sponge filter flow without nuking beneficial bacteria.",
     "image": "/assets/quests/hydroponics_grow_bed_filter_rinse.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "The filter's looking grimy. A quick rinse will keep the roots happy.",
+            "text": "The grow bed flow is slowing down. Let's service the sponge filter before the roots suffocate.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Walk me through it."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "You'll need dechlorinated rinse water, gloves, and the sponge filter core. Never rinse this with chlorinated tap water.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "rinse",
-                    "text": "I'll clean it now."
+                    "text": "I have the cleaning kit.",
+                    "requiresItems": [
+                        {
+                            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "rinse",
-            "text": "Remove the sponge and rinse it with a bucket of fresh dechlorinated water.",
+            "text": "Rinse by squeezing and swishing in the dechlorinated bucket until sludge clears, but keep the biofilm intact.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "rinse-aquarium-filter",
+                    "text": "Rinsing filter media now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "restart",
+                    "text": "Filter core is rinsed.",
+                    "requiresItems": [
+                        {
+                            "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "restart",
+            "text": "Great. Reassemble the filter and restart aeration so dissolved oxygen rebounds quickly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "restart-sponge-filter",
+                    "text": "Restarting the filter."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Filter's all clean!",
+                    "text": "Flow is restored.",
                     "requiresItems": [
                         {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
                             "count": 1
                         }
                     ]
@@ -36,11 +88,11 @@
         },
         {
             "id": "finish",
-            "text": "Nice work. Clean filters keep nutrient flow steady.",
+            "text": "Perfect maintenance pass. Keep this cadence and you'll avoid anaerobic root zones.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Back to growing."
+                    "text": "Filter maintenance complete."
                 }
             ]
         }
@@ -54,8 +106,8 @@
     "requiresQuests": ["hydroponics/top-off"],
     "hardening": {
         "passes": 0,
-        "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 88,
+        "emoji": "🛠️",
         "history": []
     }
 }

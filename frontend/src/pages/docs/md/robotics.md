@@ -27,14 +27,23 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/light-sensor`, `programming/hello-sensor`
 - Dialogue `requiresItems` gates:
-    - None
+    - `bench` → "Hardware bench is ready." — Arduino Uno ×1, ultrasonic distance sensor ×1, Wheel Encoder ×1
+    - `calibrate` → "Calibration values are recorded." — Arduino Uno ×1
+    - `validate` → "Threshold is stable in motion." — Wheel Encoder ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - dScience ×1
 - Processes used:
-    - None
+    - [calibrate-reflectance-sensors](/processes/calibrate-reflectance-sensors)
+        - Requires: Arduino Uno ×1, ultrasonic distance sensor ×1
+        - Consumes: none
+        - Creates: none
+    - [validate-line-thresholds](/processes/validate-line-thresholds)
+        - Requires: Arduino Uno ×1, Wheel Encoder ×1
+        - Consumes: none
+        - Creates: none
 
 ## 2) Control a Servo Motor (`robotics/servo-control`)
 
