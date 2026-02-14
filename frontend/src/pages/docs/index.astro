@@ -4,6 +4,7 @@ import DocsIndex from '../../components/svelte/DocsIndex.svelte';
 import sections from './json/sections.json';
 import { detectDocFeatures } from '../../utils/docsSearchFeatures.js';
 import { stripMarkdownToText } from '../../lib/docs/fullTextSearch';
+import { getQuestTreesFromModulePaths } from '../../utils/docsSkillsIndex.js';
 
 const docModules = await Astro.glob('./md/**/*.md');
 
@@ -51,7 +52,7 @@ const buildDocIndex = async () => {
 };
 
 const docSearchIndex = await buildDocIndex();
-const questTreeModules = await Astro.glob('../quests/json/*/*.json');
+const questTreeModules = Object.keys(import.meta.glob('../quests/json/*/*.json'));
 
 const TITLE_OVERRIDES = {
     '3dprinting': '3D Printing',
@@ -73,21 +74,7 @@ const toTitleCase = (value = '') =>
         })
         .join(' ');
 
-const getTreeFromQuestModule = (questModule = {}) => {
-    const normalizedPath = String(questModule?.file ?? '').replace(/\\/g, '/');
-    const match = normalizedPath.match(/\/quests\/json\/([^/]+)\//);
-
-    if (match?.[1]) {
-        return match[1].toLowerCase();
-    }
-
-    return '';
-};
-
-const questSkillLinks = [...new Set(questTreeModules.map((questModule) => getTreeFromQuestModule(questModule)))]
-    .filter(Boolean)
-    .sort((left, right) => left.localeCompare(right))
-    .map((tree) => {
+const questSkillLinks = getQuestTreesFromModulePaths(questTreeModules).map((tree) => {
         const href = `/docs/${tree}`;
         const docData = docSearchIndex.get(tree) ?? null;
         const missingDoc = !docData;
