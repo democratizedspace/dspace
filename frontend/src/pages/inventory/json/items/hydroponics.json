@@ -415,6 +415,19 @@
         }
     },
     {
+        "id": "3dd66b13-ce12-4d11-9601-01b17cf73316",
+        "name": "hydroponic nutrient solution EC log",
+        "description": "One page logging nutrient solution EC readings, meter calibration status, and timestamp for a hydroponic tub.",
+        "image": "/assets/compost_temperature_log.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "d3d8bb59-8364-46b2-ad42-c5f56cc72b40",
         "name": "EC calibration solution (1000 ppm)",
         "description": "100 mL bottle of 1000 ppm standard for EC meter calibration.",
