@@ -53,6 +53,13 @@ const buildDocIndex = async () => {
 const docSearchIndex = await buildDocIndex();
 const questTreeModules = await Astro.glob('../quests/json/*/*.json');
 
+const TITLE_OVERRIDES = {
+    '3dprinting': '3D Printing',
+    ubi: 'UBI',
+    devops: 'DevOps',
+    firstaid: 'First Aid',
+};
+
 const toTitleCase = (value = '') =>
     value
         .split(/[-_\s]+/)
@@ -67,26 +74,40 @@ const toTitleCase = (value = '') =>
         .join(' ');
 
 const getTreeFromQuestModule = (questModule = {}) => {
+    const normalizedPath = String(questModule?.file ?? '').replace(/\\/g, '/');
+    const match = normalizedPath.match(/\/quests\/json\/([^/]+)\//);
+
+    if (match?.[1]) {
+        return match[1].toLowerCase();
+    }
+
     const questId = String(questModule?.default?.id ?? '').toLowerCase();
 
     if (questId.includes('/')) {
         return questId.split('/')[0];
     }
 
-    const normalizedPath = String(questModule?.file ?? '').replace(/\\/g, '/');
-    const match = normalizedPath.match(/\/quests\/json\/([^/]+)\//);
-
-    return match?.[1] ?? '';
+    return '';
 };
 
 const questSkillLinks = [...new Set(questTreeModules.map((questModule) => getTreeFromQuestModule(questModule)))]
     .filter(Boolean)
     .sort((left, right) => left.localeCompare(right))
-    .map((tree) => ({
-        title: toTitleCase(tree),
-        href: `/docs/${tree}`,
-        keywords: [tree],
-    }));
+    .map((tree) => {
+        const href = `/docs/${tree}`;
+        const docData = docSearchIndex.get(tree) ?? null;
+        const missingDoc = !docData;
+
+        if (missingDoc) {
+            console.warn(`Quest tree '${tree}' is missing matching docs page at ${href}`);
+        }
+
+        return {
+            title: TITLE_OVERRIDES[tree] ?? toTitleCase(tree),
+            href,
+            keywords: missingDoc ? [tree, 'missing-doc'] : [tree],
+        };
+    });
 
 const getSlugFromHref = (href = '') => {
     const clean = href.split('#')[0].split('?')[0];
