@@ -34,6 +34,7 @@
     {:else if isStaticContainer}
         <div
             class="chip-container"
+            class:disabled={disabled === true}
             class:inverted={inverted === true}
             class:red={red === true}
             class:hazard={hazard === true}
@@ -77,6 +78,7 @@
     nav a,
     nav button,
     nav .chip-container {
+        display: flex;
         opacity: 0.8;
         background-color: #007006;
         border-radius: 0.4rem;
@@ -94,10 +96,6 @@
         border: none;
         padding: 6px 5px;
         font-size: 1em;
-    }
-
-    nav .chip-container {
-        display: flex;
     }
 
     nav a:hover,
