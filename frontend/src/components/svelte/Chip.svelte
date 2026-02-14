@@ -92,6 +92,11 @@
         transition: 200ms linear;
     }
 
+    nav .chip-container {
+        -webkit-user-select: text;
+        user-select: text;
+    }
+
     nav button {
         border: none;
         padding: 6px 5px;
