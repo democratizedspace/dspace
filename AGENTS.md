@@ -136,7 +136,7 @@ If CI formatting checks fail but local checks pass:
   reference from a similar item/quest instead of introducing a new asset.
 - Add a follow-up note in the PR summary that a human should replace the reused image by
   following the Image Analysis CLI workflow in
-  [`DEVELOPER_GUIDE.md#image-analysis-cli`](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli).
+  [DEVELOPER_GUIDE.md#image-analysis-cli](DEVELOPER_GUIDE.md#image-analysis-cli).
 
 
 ## Quest ↔ Docs 1:1 Contract (Required)

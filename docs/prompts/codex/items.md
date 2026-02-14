@@ -83,7 +83,7 @@ REQUIREMENTS
 4. Use only existing image assets; do not add new image files because Codex cannot
    create new binary assets yet. For new items, reuse an existing image in the PR and
    note that a human should replace it later via
-   `DEVELOPER_GUIDE.md#image-analysis-cli`.
+   [DEVELOPER_GUIDE.md#image-analysis-cli](../../../DEVELOPER_GUIDE.md#image-analysis-cli).
 5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm run test:ci`.
 6. Run `npm run itemValidation` and `npm run test:ci -- itemQuality`, fixing any failures.
@@ -110,7 +110,7 @@ passing checks (`npm run audit:ci`, `npm run lint`, `npm run type-check`,
 reuse existing image assets (Codex cannot create new binary image files), and
 scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
 committing. In the PR summary, ask a human to replace reused placeholder imagery
-via `DEVELOPER_GUIDE.md#image-analysis-cli`.
+via [DEVELOPER_GUIDE.md#image-analysis-cli](../../../DEVELOPER_GUIDE.md#image-analysis-cli).
 If a quest's text changes, run `npm run test:ci -- questQuality` and update
 the quest's
 `hardening` block with a fresh evaluation score.
@@ -143,7 +143,7 @@ USER:
 3. When modifying the `image` field, reuse an existing image URL already in the
    repository; do not add new or external images. For Codex-created PRs, reuse an
    existing image and explicitly mark human follow-up via
-   `DEVELOPER_GUIDE.md#image-analysis-cli`.
+   [DEVELOPER_GUIDE.md#image-analysis-cli](../../../DEVELOPER_GUIDE.md#image-analysis-cli).
 4. Update or create the item's `hardening` block, incrementing `passes`,
     refreshing the evaluator `score`, swapping the status `emoji` and appending a
     history entry with the Codex task ID, date and score. Choose the emoji based

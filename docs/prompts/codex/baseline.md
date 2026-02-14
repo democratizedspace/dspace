@@ -38,7 +38,7 @@ When adding a new prompt doc, link it here and in
 >    commit with an emoji prefix.
 > 8. Codex cannot create new binary files yet; for new items/quests, reuse an existing
 >    image and note that a human should finalize imagery via
->    `DEVELOPER_GUIDE.md#image-analysis-cli`.
+>    [DEVELOPER_GUIDE.md#image-analysis-cli](../../../DEVELOPER_GUIDE.md#image-analysis-cli).
 
 ---
 
@@ -119,7 +119,7 @@ REQUIREMENTS
 7. Use an emoji-prefixed commit message.
 8. Do not create new binary image files in Codex tasks. Reuse an existing item/quest
    image and call out the required human follow-up via
-   `DEVELOPER_GUIDE.md#image-analysis-cli`.
+   [DEVELOPER_GUIDE.md#image-analysis-cli](../../../DEVELOPER_GUIDE.md#image-analysis-cli).
 
 OUTPUT
 A pull request with the required changes and tests.
