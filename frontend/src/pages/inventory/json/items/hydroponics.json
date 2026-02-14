@@ -143,6 +143,13 @@
         "priceExemptionReason": "SOULBOUND"
     },
     {
+        "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
+        "name": "hydroponic nutrient solution EC log",
+        "description": "EC meter reading log entry for the nutrient reservoir with timestamp and calibration note.",
+        "image": "/assets/hydroponic_ph_log_entry.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
         "id": "15ff1896-7a19-4060-bfb3-77b62ec4fd5a",
         "name": "rinsed hydroponic root zone",
         "description": "Grow media thoroughly flushed with fresh water to clear salts before recharging nutrients.",

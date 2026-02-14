@@ -132,7 +132,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - [smart-plug-schedule-12h](/processes/smart-plug-schedule-12h)
         - Requires: smart plug ×1
         - Consumes: none
-        - Creates: none
+        - Creates: hydroponic nutrient solution EC log ×1
 
 ## 4) Grow Lettuce Hydroponically (`hydroponics/lettuce`)
 
@@ -174,7 +174,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - [measure-ec-solution](/processes/measure-ec-solution)
         - Requires: EC meter ×1, hydroponics tub (ready) ×1
         - Consumes: none
-        - Creates: none
+        - Creates: hydroponic nutrient solution EC log ×1
 
 ## 6) Check Solution pH (`hydroponics/ph-check`)
 
@@ -237,7 +237,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - [measure-ec-solution](/processes/measure-ec-solution)
         - Requires: EC meter ×1, hydroponics tub (ready) ×1
         - Consumes: none
-        - Creates: none
+        - Creates: hydroponic nutrient solution EC log ×1
 
 ## 9) Test Hydroponic pH (`hydroponics/ph-test`)
 
