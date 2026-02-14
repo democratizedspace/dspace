@@ -502,7 +502,7 @@
         "duration": "25m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
@@ -733,7 +733,7 @@
         "duration": "8m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
@@ -766,7 +766,7 @@
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
@@ -1153,7 +1153,7 @@
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
@@ -8527,7 +8527,7 @@
         "duration": "7d",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
@@ -8569,7 +8569,7 @@
         "duration": "21d",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
@@ -8611,9 +8611,26 @@
             {
                 "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                 "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
             }
         ],
-        "consumeItems": [],
+        "consumeItems": [
+            {
+                "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                "count": 1
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            }
+        ],
         "createItems": [
             {
                 "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
@@ -8623,7 +8640,7 @@
         "duration": "8m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
@@ -8653,7 +8670,7 @@
         "duration": "15m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
@@ -8680,18 +8697,8 @@
                 "count": 1
             }
         ],
-        "consumeItems": [
-            {
-                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
-                "count": 1
-            }
-        ],
-        "createItems": [
-            {
-                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
-                "count": 1
-            }
-        ],
+        "consumeItems": [],
+        "createItems": [],
         "duration": "15m",
         "hardening": {
             "passes": 0,
