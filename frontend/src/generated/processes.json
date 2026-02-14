@@ -3305,11 +3305,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "c95edb7c-df2e-4aa4-889b-f7304b8fac22",
+                "count": 1
+            }
+        ],
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 80,
+            "score": 85,
             "emoji": "🛠️",
             "history": []
         }
@@ -4111,11 +4116,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "c95edb7c-df2e-4aa4-889b-f7304b8fac22",
+                "count": 1
+            }
+        ],
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 85,
+            "score": 90,
             "emoji": "🛠️",
             "history": []
         }
