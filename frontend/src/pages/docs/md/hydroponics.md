@@ -132,7 +132,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - [smart-plug-schedule-12h](/processes/smart-plug-schedule-12h)
         - Requires: smart plug ×1
         - Consumes: none
-        - Creates: hydroponic nutrient solution EC log ×1
+        - Creates: none
 
 ## 4) Grow Lettuce Hydroponically (`hydroponics/lettuce`)
 
