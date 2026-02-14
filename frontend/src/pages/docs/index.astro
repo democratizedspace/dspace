@@ -122,9 +122,33 @@ const docsSectionsWithAllSkills = docsSections.map((section) => {
         return section;
     }
 
+    const questTrees = new Set(questSkillLinks.map((link) => getSlugFromHref(link.href)));
+    const curatedSkillLinksByTree = new Map(
+        section.links
+            .map((link) => [getSlugFromHref(link.href), link])
+            .filter(([slug]) => questTrees.has(slug))
+    );
+
+    const mergedQuestSkillLinks = questSkillLinks.map((link) => {
+        const slug = getSlugFromHref(link.href);
+        const curatedLink = curatedSkillLinksByTree.get(slug);
+
+        if (!curatedLink) {
+            return link;
+        }
+
+        return {
+            ...curatedLink,
+            ...link,
+            title: TITLE_OVERRIDES[slug] ?? curatedLink.title ?? link.title,
+            href: `/docs/${slug}`,
+            keywords: [...new Set([...(curatedLink.keywords ?? []), ...(link.keywords ?? [])])],
+        };
+    });
+
     return {
         ...section,
-        links: [...questSkillLinks].sort((left, right) => left.title.localeCompare(right.title)),
+        links: [...mergedQuestSkillLinks].sort((left, right) => left.title.localeCompare(right.title)),
     };
 });
 ---
