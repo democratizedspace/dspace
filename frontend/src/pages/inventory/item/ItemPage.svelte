@@ -1,7 +1,6 @@
 <script>
     import { onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
-    import Chip from '../../../components/svelte/Chip.svelte';
     import BuySell from '../../../components/svelte/BuySell.svelte';
     import {
         getProcessesForItem,
@@ -75,7 +74,7 @@
 </script>
 
 {#if $mounted}
-    <Chip inverted={true} text="">
+    <section class="item-card" aria-label="Item details">
         {#if isLoading}
             <div class="vertical">
                 <p class="placeholder">Loading item…</p>
@@ -130,10 +129,20 @@
                 {/if}
             </div>
         {/if}
-    </Chip>
+    </section>
 {/if}
 
 <style>
+    .item-card {
+        opacity: 0.8;
+        background-color: #68d46d;
+        border-radius: 0.4rem;
+        color: black;
+        margin: 1px;
+        padding: 6px 5px;
+        text-align: center;
+    }
+
     .vertical {
         display: flex;
         flex-direction: column;

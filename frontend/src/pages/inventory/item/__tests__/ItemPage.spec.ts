@@ -85,6 +85,26 @@ describe('ItemPage', () => {
         expect(heroImage?.getAttribute('src')).toBe(builtIn.image);
     });
 
+    it('renders item details in selectable static content (not a button)', async () => {
+        const builtIn =
+            items.find((item) => typeof item.description === 'string' && item.description.length > 0) ??
+            items[0];
+
+        getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
+        isGameStateReadyMock.mockReturnValue(true);
+
+        const { getByText } = render(ItemPage, {
+            props: { itemId: builtIn.id },
+        });
+
+        await waitFor(() => {
+            expect(getByText(builtIn.description, { exact: false })).toBeTruthy();
+        });
+
+        const description = getByText(builtIn.description, { exact: false });
+        expect(description.closest('button')).toBeNull();
+    });
+
     it('renders custom item details and matching icon', async () => {
         const customId = 'custom-item-foobar';
 
