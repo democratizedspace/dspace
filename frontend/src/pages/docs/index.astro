@@ -81,12 +81,6 @@ const getTreeFromQuestModule = (questModule = {}) => {
         return match[1].toLowerCase();
     }
 
-    const questId = String(questModule?.default?.id ?? '').toLowerCase();
-
-    if (questId.includes('/')) {
-        return questId.split('/')[0];
-    }
-
     return '';
 };
 
@@ -97,6 +91,8 @@ const questSkillLinks = [...new Set(questTreeModules.map((questModule) => getTre
         const href = `/docs/${tree}`;
         const docData = docSearchIndex.get(tree) ?? null;
         const missingDoc = !docData;
+        const features = docData?.features ?? [];
+        const bodyText = docData?.bodyText ?? '';
 
         if (missingDoc) {
             console.warn(`Quest tree '${tree}' is missing matching docs page at ${href}`);
@@ -106,6 +102,8 @@ const questSkillLinks = [...new Set(questTreeModules.map((questModule) => getTre
             title: TITLE_OVERRIDES[tree] ?? toTitleCase(tree),
             href,
             keywords: missingDoc ? [tree, 'missing-doc'] : [tree],
+            features,
+            bodyText,
         };
     });
 
@@ -132,31 +130,6 @@ const docsSections = sections.map((section) => ({
     }),
 }));
 
-const mergeSkillLinks = (baseLinks, treeLinks) => {
-    const byHref = new Map(baseLinks.map((link) => [link.href, link]));
-
-    for (const link of treeLinks) {
-        const existingLink = byHref.get(link.href);
-        const slug = getSlugFromHref(link.href);
-        const docData = slug ? docSearchIndex.get(slug) ?? null : null;
-        const features = docData?.features ?? [];
-        const bodyText = docData?.bodyText ?? '';
-
-        if (!existingLink) {
-            byHref.set(link.href, { ...link, features, bodyText });
-            continue;
-        }
-
-        byHref.set(link.href, {
-            ...existingLink,
-            title: link.title,
-            keywords: [...new Set([...(existingLink.keywords ?? []), ...(link.keywords ?? [])])],
-        });
-    }
-
-    return [...byHref.values()].sort((left, right) => left.title.localeCompare(right.title));
-};
-
 const docsSectionsWithAllSkills = docsSections.map((section) => {
     if (section.title !== 'Skills') {
         return section;
@@ -164,7 +137,7 @@ const docsSectionsWithAllSkills = docsSections.map((section) => {
 
     return {
         ...section,
-        links: mergeSkillLinks(section.links, questSkillLinks),
+        links: [...questSkillLinks].sort((left, right) => left.title.localeCompare(right.title)),
     };
 });
 ---
