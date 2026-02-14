@@ -174,7 +174,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - [measure-ec-solution](/processes/measure-ec-solution)
         - Requires: EC meter ×1, hydroponics tub (ready) ×1
         - Consumes: none
-        - Creates: none
+        - Creates: hydroponic nutrient solution EC log ×1
 
 ## 6) Check Solution pH (`hydroponics/ph-check`)
 
@@ -237,7 +237,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - [measure-ec-solution](/processes/measure-ec-solution)
         - Requires: EC meter ×1, hydroponics tub (ready) ×1
         - Consumes: none
-        - Creates: none
+        - Creates: hydroponic nutrient solution EC log ×1
 
 ## 9) Test Hydroponic pH (`hydroponics/ph-test`)
 
