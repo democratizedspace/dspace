@@ -131,12 +131,12 @@ If CI formatting checks fail but local checks pass:
 
 ## Codex Binary Asset Limitation (Important)
 
-- Codex currently cannot create new binary files (for example `.png`, `.jpg`, `.webp`).
+- Codex currently cannot create new binary image files (for example `.png`, `.jpg`, `.webp`).
 - When a Codex task adds a **new item** or **new quest**, reuse an existing in-repo image
   reference from a similar item/quest instead of introducing a new asset.
 - Add a follow-up note in the PR summary that a human should replace the reused image by
-  following the Image Analysis CLI workflow in
-  [DEVELOPER_GUIDE.md#image-analysis-cli](DEVELOPER_GUIDE.md#image-analysis-cli).
+  following the Image Analysis CLI workflow:
+  [https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli).
 
 
 ## Quest ↔ Docs 1:1 Contract (Required)
