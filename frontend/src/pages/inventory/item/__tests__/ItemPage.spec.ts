@@ -115,4 +115,26 @@ describe('ItemPage', () => {
             expect(iconImage?.getAttribute('src')).toBe(heroImage?.getAttribute('src'));
         });
     });
+
+    it('renders item content in a text-selectable container instead of a button', async () => {
+        const builtIn = items.find((item) => !item.price) ?? items[0];
+
+        getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
+        isGameStateReadyMock.mockReturnValue(true);
+
+        const { container, getByRole } = render(ItemPage, {
+            props: { itemId: builtIn.id },
+        });
+
+        await waitFor(() => {
+            expect(getByRole('heading', { level: 2 }).textContent).toBe(builtIn.name);
+        });
+
+        const heading = getByRole('heading', { level: 2 });
+        expect(heading.closest('button')).toBeNull();
+
+        const itemCard = container.querySelector('.item-card');
+        expect(itemCard).not.toBeNull();
+        expect(itemCard?.tagName).toBe('SECTION');
+    });
 });
