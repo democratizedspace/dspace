@@ -307,8 +307,8 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - dScience ×1
 - Processes used:
     - [install-submersible-pump](/processes/install-submersible-pump)
-        - Requires: submersible water pump ×1, hydroponics tub (ready) ×1
-        - Consumes: none
+        - Requires: submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
+        - Consumes: submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
         - Creates: installed submersible pump loop ×1
     - [verify-hydroponic-flow](/processes/verify-hydroponic-flow)
         - Requires: installed submersible pump loop ×1
