@@ -22,6 +22,12 @@
             "text": "Hold an anemometer at launch height and take a reading. Then take a second one.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "measure-wind-speed",
+                    "goto": "ready",
+                    "text": "Take an anemometer reading."
+                },
+                {
                     "type": "goto",
                     "goto": "ready",
                     "text": "Reading taken\u2014winds are calm."

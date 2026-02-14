@@ -22,6 +22,12 @@
             "text": "Fill the pump housing with nutrient solution and run it a moment to push out air bubbles.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "prime-pump",
+                    "goto": "finish",
+                    "text": "Run the priming cycle."
+                },
+                {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Pump is primed"

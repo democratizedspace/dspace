@@ -49,6 +49,12 @@
             "text": "Add scraps and water, seal the drum, and keep flames away while it ferments.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "biogas-ferment-50Wh",
+                    "goto": "fin",
+                    "text": "Start the fermentation run."
+                },
+                {
                     "type": "goto",
                     "goto": "fin",
                     "text": "Gas production started"
