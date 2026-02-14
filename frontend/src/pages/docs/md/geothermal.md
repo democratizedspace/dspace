@@ -96,7 +96,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Dialogue `requiresItems` gates:
     - `start` → "Rig is already staged on the outlet" — thermistor logging rig ×1, temperature log CSV ×1
     - `reposition` → "Log the outlet run" — thermistor logging rig ×1, Laptop Computer ×1
-    - `reposition` → "Outlet trace captured" — temperature log CSV ×1
+    - `reposition` → "Outlet trace captured" — temperature log CSV ×2
     - `stream` → "Publish the outlet endpoint" — thermistor logging rig ×1, temperature log CSV ×1, Raspberry Pi 5 board ×1
     - `stream` → "Endpoint is live" — live temperature JSON endpoint ×1
     - `finish` → "Outlet stream pinned" — live temperature JSON endpoint ×1
