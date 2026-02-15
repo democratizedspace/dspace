@@ -74,10 +74,22 @@ For manual submissions via command-line:
    committing the updated `/docs/new-quests.md` to keep quest counts accurate.
 5. **Update the matching Skills quest-tree documentation** under `frontend/src/pages/docs/md/`
    (for example, `/docs/composting`) whenever quests are added or quest gates/rewards change.
+6. **Document process-loop math explicitly** when a quest gate needs stacked outputs:
+    - If a dialogue `requiresItems` gate asks for `count > 1` of logs/outputs,
+      confirm whether this comes
+      from **repeating a process**.
+    - Process `requireItems` lists are per-run prerequisites, so they may stay at
+      `count: 1` even when
+      quest continuation gates require `count: 2+` accumulated outputs across multiple runs.
+    - In your Skills doc (for example, `/docs/composting`), call out this
+      distinction so reviewers do not
+      "normalize" process requirements to match quest gate counts by mistake.
 
-Maintainers can review submitted quests at `/quests/review`, approving or rejecting them before merge.
+Maintainers can review submitted quests at `/quests/review`, approving or
+rejecting them before merge.
 
-If something goes wrong, the submission form will display an error message so you can adjust and try again.
+If something goes wrong, the submission form will display an error message so
+you can adjust and try again.
 
 Once merged, your quest will be included in the next game update!
 
@@ -85,9 +97,11 @@ For the full workflow, see the [Quest Contribution Guidelines](/docs/quest-contr
 
 ### GitHub Token Setup
 
-1. Visit [github.com/settings/tokens](https://github.com/settings/tokens) and generate a new **classic** token with `repo` scope.
+1. Visit [github.com/settings/tokens](https://github.com/settings/tokens) and
+   generate a new **classic** token with `repo` scope.
 2. Copy the token and keep it somewhere safe. You can revoke it at any time.
-3. When using the submission form, paste the token into the "GitHub Token" field. The token is used solely in your browser to create the pull request.
+3. When using the submission form, paste the token into the "GitHub Token"
+   field. The token is used solely in your browser to create the pull request.
 4. The token is saved in IndexedDB under `gameState.github.token` for
    convenience. Use the **Clear Token** button when you're finished or revoke it
    on GitHub. See the [Authentication Flow](/docs/authentication) for more
