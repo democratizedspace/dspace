@@ -8502,5 +8502,282 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "germinate-lettuce",
+        "title": "Germinate lettuce seeds in soaked starter plugs",
+        "image": "/assets/quests/hydroponic_lettuce_tub.jpg",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
+                "count": 10
+            },
+            {
+                "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                "count": 10
+            }
+        ],
+        "createItems": [
+            {
+                "id": "021c1c24-06f6-4917-b054-0fa3e33868f0",
+                "count": 10
+            }
+        ],
+        "duration": "7d",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "grow-lettuce",
+        "title": "Grow 10 lettuce seedlings hydroponically until harvestable",
+        "image": "/assets/quests/hydroponic_lettuce_tub.jpg",
+        "requireItems": [
+            {
+                "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "021c1c24-06f6-4917-b054-0fa3e33868f0",
+                "count": 10
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 18144
+            }
+        ],
+        "createItems": [
+            {
+                "id": "7d119fa6-26e3-42c5-bbe4-3e7be458ab96",
+                "count": 10
+            },
+            {
+                "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                "count": 1
+            }
+        ],
+        "duration": "21d",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "harvest-lettuce",
+        "title": "Harvest mature lettuce heads from your hydroponic bed",
+        "image": "/assets/quests/hydroponic_lettuce_tub.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "7d119fa6-26e3-42c5-bbe4-3e7be458ab96",
+                "count": 10
+            }
+        ],
+        "createItems": [
+            {
+                "id": "fbf2d3a5-1d80-431b-84f4-6bf4677ed619",
+                "count": 10
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "install-submersible-pump",
+        "title": "Install a submersible pump and route return tubing in a hydroponic reservoir",
+        "image": "/assets/quests/hydroponics_submersible_pump_install.jpg",
+        "requireItems": [
+            {
+                "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                "count": 1
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                "count": 1
+            },
+            {
+                "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "verify-hydroponic-flow",
+        "title": "Run and verify hydroponic pump circulation flow",
+        "image": "/assets/quests/hydroponics_submersible_pump_install.jpg",
+        "requireItems": [
+            {
+                "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "run-safe-fizz-reaction",
+        "title": "Run a controlled, low-risk fizz reaction with PPE",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "15m",
+        "hardening": {
+            "passes": 0,
+            "score": 88,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "log-safe-reaction",
+        "title": "Log observations from a safe chemistry reaction",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 88,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "calibrate-reflectance-sensors",
+        "title": "Calibrate floor-versus-line reflectance thresholds",
+        "image": "/assets/quests/robotics_reflectance_sensors.jpg",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 88,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "validate-line-thresholds",
+        "title": "Validate reflectance thresholds during motion",
+        "image": "/assets/quests/robotics_reflectance_sensors.jpg",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 88,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

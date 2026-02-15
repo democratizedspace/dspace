@@ -1,51 +1,87 @@
 {
     "id": "robotics/reflectance-sensors",
     "title": "Calibrate reflectance sensors",
-    "description": "Dial in IR reflectance sensors so your robot can tell a dark line from the floor before you attempt closed-loop control.",
+    "description": "Build a repeatable calibration workflow for floor-vs-line reflectance before closed-loop control.",
     "image": "/assets/quests/robotics_reflectance_sensors.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Line followers need clean sensor signals. Let's mount a pair of reflectance sensors and record how they react to the line versus the floor.",
+            "text": "Line followers need reliable sensor contrast. We'll mount, calibrate, then validate thresholds before you write steering logic.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "wire",
-                    "text": "Let's wire them up."
+                    "goto": "bench",
+                    "text": "Let's build the calibration bench."
                 }
             ]
         },
         {
-            "id": "wire",
-            "text": "Attach two or three IR reflectance sensors to the chassis, angled slightly toward the floor. Wire VCC, GND, and the signal pins to your microcontroller so you can sample each one.",
+            "id": "bench",
+            "text": "Bring your controller, sensor module, and a wheel encoder so you can track repeatable passes over the line.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "calibrate",
-                    "text": "Sensors mounted and reading."
+                    "text": "Hardware bench is ready.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
+                            "count": 1
+                        },
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "calibrate",
-            "text": "Write a short script that streams the raw sensor values over serial. Sweep the bot across dark tape and the surrounding surface to capture minimum and maximum readings, then pick a threshold (or small deadband) that clearly separates the two.",
+            "text": "Stream raw readings while sweeping over dark tape and floor. Capture min/max windows and compute a robust threshold.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "calibrate-reflectance-sensors",
+                    "text": "Capture and calibrate sensor ranges."
+                },
+                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Threshold dialed in!"
+                    "goto": "validate",
+                    "text": "Calibration values are recorded.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "finish",
-            "text": "Nice work. With calibrated thresholds you can trust the sensors to keep your bot on track.",
+            "id": "validate",
+            "text": "Now validate under motion so your threshold survives speed changes and lighting shifts.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "validate-line-thresholds",
+                    "text": "Run a moving validation pass."
+                },
+                {
                     "type": "finish",
-                    "text": "Ready to follow lines"
+                    "text": "Threshold is stable in motion.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -59,8 +95,8 @@
     "requiresQuests": ["electronics/light-sensor", "programming/hello-sensor"],
     "hardening": {
         "passes": 0,
-        "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }

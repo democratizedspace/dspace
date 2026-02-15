@@ -1,34 +1,118 @@
 {
     "id": "hydroponics/lettuce",
     "title": "Grow Lettuce Hydroponically",
-    "description": "Plant lettuce seeds and harvest fresh leaves using your hydroponic setup.",
+    "description": "Scale your hydroponics workflow from seed prep to steady lettuce harvest cycles.",
     "image": "/assets/quests/hydroponic_lettuce_tub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nice work with the basil! Ready for another crop? Lettuce is easy to grow and perfect for salads.",
+            "text": "Nice work with basil! Lettuce grows faster, but it still needs clean prep and steady conditions. Ready for a full run from seed to harvest?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "plant",
-                    "text": "Sounds tasty! How do I start?"
+                    "goto": "kit",
+                    "text": "Let's do a full lettuce cycle."
                 }
             ]
         },
         {
-            "id": "plant",
-            "text": "Place lettuce seeds in damp starter plugs. Keep them under light for about a week until they sprout.",
+            "id": "kit",
+            "text": "Great. First grab fresh lettuce seeds and another set of starter plugs. We'll do this the reliable way so your germination rate stays high.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
+                            "count": 10
+                        },
+                        {
+                            "id": "78a45c1f-a791-44f1-88f4-dc5059c66c89",
+                            "count": 10
+                        }
+                    ],
+                    "text": "Stock me up."
+                },
+                {
                     "type": "goto",
-                    "goto": "harvest",
-                    "text": "Seedlings look great!",
+                    "goto": "soak",
+                    "text": "I've got seeds and plugs ready.",
                     "requiresItems": [
                         {
                             "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
-                            "count": 1
+                            "count": 10
+                        },
+                        {
+                            "id": "78a45c1f-a791-44f1-88f4-dc5059c66c89",
+                            "count": 10
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "soak",
+            "text": "Prep the plugs by soaking them with dechlorinated water so roots can establish evenly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "rockwool-soak",
+                    "text": "Soaking plugs now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "germinate",
+                    "text": "Plugs are soaked and drained.",
+                    "requiresItems": [
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 10
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "germinate",
+            "text": "Time to germinate. Keep the lamp steady and avoid overwatering while the lettuce sprouts.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "germinate-lettuce",
+                    "text": "Starting germination under lights."
+                },
+                {
+                    "type": "goto",
+                    "goto": "transfer",
+                    "text": "Seedlings are up and healthy.",
+                    "requiresItems": [
+                        {
+                            "id": "021c1c24-06f6-4917-b054-0fa3e33868f0",
+                            "count": 10
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "transfer",
+            "text": "Load those seedlings into a nutrient-ready tub and give them a full grow cycle.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "grow-lettuce",
+                    "text": "Transplanting and setting the grow cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "text": "Heads are mature and ready.",
+                    "requiresItems": [
+                        {
+                            "id": "7d119fa6-26e3-42c5-bbe4-3e7be458ab96",
+                            "count": 10
                         }
                     ]
                 }
@@ -36,11 +120,22 @@
         },
         {
             "id": "harvest",
-            "text": "Transfer the plugs to your tub and let them grow for a few weeks. Harvest outer leaves as needed for fresh salads!",
+            "text": "Excellent canopy. Harvest the outer leaves first and leave the crown when possible so you can extend production.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "harvest-lettuce",
+                    "text": "Harvesting now."
+                },
+                {
                     "type": "finish",
-                    "text": "Can't wait to taste it!"
+                    "text": "Fresh lettuce secured.",
+                    "requiresItems": [
+                        {
+                            "id": "fbf2d3a5-1d80-431b-84f4-6bf4677ed619",
+                            "count": 10
+                        }
+                    ]
                 }
             ]
         }
@@ -49,13 +144,13 @@
     "rewards": [
         {
             "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
-            "count": 1
+            "count": 10
         }
     ],
     "hardening": {
         "passes": 0,
-        "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }
