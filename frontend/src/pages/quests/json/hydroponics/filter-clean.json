@@ -106,7 +106,7 @@
     "requiresQuests": ["hydroponics/top-off"],
     "hardening": {
         "passes": 0,
-        "score": 88,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }

@@ -99,7 +99,7 @@
     "requiresQuests": ["welcome/howtodoquests"],
     "hardening": {
         "passes": 0,
-        "score": 88,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

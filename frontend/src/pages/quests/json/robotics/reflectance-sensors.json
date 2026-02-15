@@ -95,7 +95,7 @@
     "requiresQuests": ["electronics/light-sensor", "programming/hello-sensor"],
     "hardening": {
         "passes": 0,
-        "score": 88,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }
