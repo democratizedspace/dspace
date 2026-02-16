@@ -120,6 +120,11 @@ If CI formatting checks fail but local checks pass:
 - Quest JSON lives in `frontend/src/pages/quests/json` and must follow the schema in `frontend/src/pages/quests/jsonSchemas`.
 - Each quest needs start, middle and completion nodes with at least one option per node and a final `finish` option.
 - Reference at least one inventory item or process in every quest or the `questQuality` test will fail.
+- Before shipping quest edits, run the anti-pattern self-check in
+  `docs/design/quest-quality-gap-v3.md` and explicitly avoid:
+  - overly linear 3-node click-through quests with no meaningful branch/failure path,
+  - `type: "goto"` options that also carry a `process` field,
+  - generic completion copy that does not verify an actual DSPACE mechanic.
 - If you add or materially change quests in a tree, update or add a matching Skills-category doc in
   `frontend/src/pages/docs/md/` (for example, `/docs/composting`) that maps the full quest tree and
   the relevant item/process gates used for QA walkthroughs.

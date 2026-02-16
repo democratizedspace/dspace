@@ -18,7 +18,8 @@ which covers quests, items and processes in detail.
 > 2. Say exactly what output you expect (tests, docs).
 > 3. Stop when the spec is complete. Codex treats all remaining text as
 >    mandatory instructions.
-> 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`;
+> 4. Reject quest anti-patterns listed in `docs/design/quest-quality-gap-v3.md`.
+> 5. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`;
 >    scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
 >    commit with an emoji prefix.
 
@@ -83,10 +84,29 @@ REQUIREMENTS
 7. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
 8. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
 9. Update docs or dialogue as needed.
+10. Run an anti-pattern rejection pass before committing:
+   - Ensure at least one meaningful branch (not just start -> middle -> finish).
+   - Ensure at least one failure/recovery path for non-intro quests.
+   - Ensure any option with a `process` key uses `"type": "process"` (never `"type": "goto"`).
+   - Compare structure against at least one manually validated quest from
+     `docs/qa/v3.md` section 4.5 and summarize the comparison in the PR.
 
 OUTPUT
 A pull request with the completed quest and passing checks.
 ```
+
+## Anti-pattern rejection checklist (required)
+
+Before considering a quest “done”, verify all checks below:
+
+- [ ] Not a pure linear click-through unless the quest is explicitly introductory.
+- [ ] Includes at least one player decision with different outcomes or corrective feedback.
+- [ ] Includes at least one concrete DSPACE mechanic verification (route, process, item gate, or
+      observable output), not only generic narration.
+- [ ] No option mixes `"type": "goto"` with a `process` field.
+- [ ] Completion text references what was actually validated in-game.
+- [ ] Compared with at least one manually validated quest in
+      `docs/qa/v3.md#45-quest-by-quest-qa-checklist`.
 
 ## Implementation Prompt
 
