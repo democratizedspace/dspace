@@ -18,6 +18,11 @@ agents authoring quests.
 - Source of content quality observations: quest JSON under
   `frontend/src/pages/quests/json/<tree>/<quest>.json`.
 
+Interpretation rule for this document:
+
+- “Checked quests” always means entries marked checked in `docs/qa/v3.md` §4.5.
+- “New in v3” always means quests listed in `docs/new-quests.md`.
+
 Quick quantitative scan (scripted locally):
 
 - Scan run on **2026-02-16** at commit **`80eb7ce9dc11c30817089a511277fc29832026f2`**.
@@ -34,6 +39,42 @@ Average structural complexity (dialogue graph only):
   **3.19 gated options**, **2.19 quiz-like nodes**.
 - Unchecked quests: **3.81 dialogue nodes**, **5.31 options**, **1.17 process options**,
   **1.95 gated options**, **~0 quiz-like nodes**.
+
+## Manually validated quest set (from `docs/qa/v3.md` §4.5)
+
+Checked quest IDs (16 total):
+
+- `3dprinting/start`
+- `composting/check-temperature`
+- `composting/sift-compost`
+- `composting/start`
+- `composting/turn-pile`
+- `hydroponics/basil`
+- `hydroponics/nutrient-check`
+- `sysadmin/basic-commands`
+- `sysadmin/log-analysis`
+- `sysadmin/resource-monitoring`
+- `ubi/basicincome`
+- `welcome/connect-github`
+- `welcome/howtodoquests`
+- `welcome/intro-inventory`
+- `welcome/run-tests`
+- `welcome/smart-plug-test`
+
+Exemplars from the checked set (what they do well):
+
+- `hydroponics/nutrient-check`: ties progress to concrete process + item gating, not just narration.
+- `sysadmin/basic-commands`: includes interpretation checks that build operator literacy and recap.
+- `composting/start`: combines setup/safety/science checkpoints with retry loops.
+- `welcome/run-tests`: bridges player action to next-step workflow expectations.
+
+Contrast with unchecked quests that are also listed as new in v3 (`docs/new-quests.md`):
+
+- `astronomy/saturn-rings`: currently tends toward a thin shell (observe then finish) with little
+  troubleshooting path.
+- `devops/fail2ban`: lacks explicit staged verification artifacts for install/config/validate flow.
+- `energy/dWatt-1e8`: accumulation-heavy target with limited strategic branching.
+- `programming/web-server`: can finish without strong failure-mode handling or evidence artifacts.
 
 ## What the checked quests are doing better
 
@@ -97,6 +138,8 @@ Use this as an actionable backlog for quest polishing passes.
 ### 3) `energy/dWatt-1e8` (and sibling `dWatt-*`, `dSolar-*` ladder quests)
 
 - [ ] Replace pure threshold gating with mixed goals (efficiency, uptime, storage strategy).
+- [ ] Add at least one mechanics-backed checkpoint (`requiresItems`/`process` output proof)
+      before final completion.
 - [ ] Add at least one decision branch (invest vs conserve, automation vs manual).
 - [ ] Normalize copy tone to avoid repetitive superlative inflation.
 
@@ -109,6 +152,7 @@ Use this as an actionable backlog for quest polishing passes.
 ### 5) `woodworking/workbench`
 
 - [ ] Add measurement/tolerance verification gate (level/square outcomes).
+- [ ] Add mechanics-backed proof step (e.g., process log or required measuring tool item gate).
 - [ ] Add branch for common recovery (racked frame, wobble correction).
 - [ ] Replace one-shot grant/finish with a validated build checklist process.
 
@@ -116,6 +160,7 @@ Use this as an actionable backlog for quest polishing passes.
 
 - [ ] Add triage branch (minor vs severe burn escalation).
 - [ ] Gate completion on correct safe response sequence.
+- [ ] Require evidence-backed step (e.g., correct kit item/process selection) before completion.
 - [ ] Add misuse warnings (ice/direct ointment on severe burns, etc.).
 
 ### 7) `geothermal/calibrate-ground-sensor`

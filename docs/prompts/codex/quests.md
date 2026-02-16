@@ -93,6 +93,16 @@ failures during review:
 
 Reference analysis: `docs/design/v3-quest-quality-review.md`.
 
+## 2.3 Required quality linkage notes (authors + LLMs)
+
+When writing or rewriting a quest, treat the v3 quality review as the structural baseline:
+
+- Read `docs/design/v3-quest-quality-review.md` before drafting quest changes.
+- In PR notes, name at least one checked quest from `docs/qa/v3.md` §4.5 used as structural inspiration.
+- In PR notes, name the anti-patterns you verified were avoided (for example: thin shell,
+  accumulation-only ladder, giant prose node).
+- Keep these notes lightweight (brief bullets are enough), but always include them.
+
 ---
 
 ## 3. Reusable template
@@ -125,6 +135,9 @@ REQUIREMENTS
     - What does the player prove using mechanics?
     - What can go wrong, and where is recovery modeled?
     - Why are prerequisites and rewards proportionate?
+11. In PR notes, include (a) checked quest inspiration from `docs/qa/v3.md` §4.5 and
+    (b) anti-patterns explicitly avoided, using `docs/design/v3-quest-quality-review.md`
+    as your reference.
 
 OUTPUT
 A pull request with the completed quest and passing checks.
