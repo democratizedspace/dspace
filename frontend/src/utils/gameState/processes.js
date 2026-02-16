@@ -50,7 +50,7 @@ const hasItemCountOperationRequirements = (process) => {
         }
 
         if (operation.operation === 'withdraw-all') {
-            return getStoredItemCount(containerItemId, itemId) > 0;
+            return true;
         }
 
         if (operation.operation === 'deposit') {

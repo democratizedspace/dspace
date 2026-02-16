@@ -81,4 +81,68 @@ test.describe('Savings jar mechanics', () => {
         expect(finalState.brokenJar).toBe(1);
         expect(finalState.stored).toBe(0);
     });
+
+    test('breaking an empty jar keeps dUSD unchanged and still creates broken jar', async ({
+        page,
+    }) => {
+        await page.goto('/');
+
+        await page.evaluate(
+            ({ dUsdId, savingsJarId }) => {
+                const now = Date.now();
+                const seededState = {
+                    quests: {},
+                    inventory: {
+                        [dUsdId]: 25,
+                        [savingsJarId]: 1,
+                    },
+                    inventoryItemCounts: {
+                        [savingsJarId]: {
+                            [dUsdId]: 0,
+                        },
+                    },
+                    processes: {},
+                    settings: {},
+                    versionNumberString: '3',
+                    _meta: { lastUpdated: now },
+                };
+
+                localStorage.setItem('gameState', JSON.stringify(seededState));
+                localStorage.setItem('gameStateBackup', JSON.stringify(seededState));
+            },
+            { dUsdId: DUSD_ID, savingsJarId: SAVINGS_JAR_ID }
+        );
+
+        await page.goto(`/inventory/item/${SAVINGS_JAR_ID}`);
+        await waitForHydration(page);
+
+        await expect(page.getByText(/^dUSD: 0$/)).toBeVisible();
+
+        const breakProcess = page.locator('div').filter({
+            has: page.getByRole('heading', { name: /Break your savings jar/i }),
+        });
+        await breakProcess.getByRole('button', { name: 'Start' }).first().click();
+        await expect(breakProcess.getByRole('button', { name: 'Finish' })).toBeVisible({
+            timeout: 10000,
+        });
+        await breakProcess.getByRole('button', { name: 'Finish' }).click();
+
+        const finalState = await page.evaluate(
+            ({ dUsdId, savingsJarId, brokenJarId }) => {
+                const saved = JSON.parse(localStorage.getItem('gameState') || '{}');
+                return {
+                    dUsd: saved.inventory?.[dUsdId] ?? 0,
+                    savingsJar: saved.inventory?.[savingsJarId] ?? 0,
+                    brokenJar: saved.inventory?.[brokenJarId] ?? 0,
+                    stored: saved.inventoryItemCounts?.[savingsJarId]?.[dUsdId] ?? 0,
+                };
+            },
+            { dUsdId: DUSD_ID, savingsJarId: SAVINGS_JAR_ID, brokenJarId: BROKEN_JAR_ID }
+        );
+
+        expect(finalState.dUsd).toBe(25);
+        expect(finalState.savingsJar).toBe(0);
+        expect(finalState.brokenJar).toBe(1);
+        expect(finalState.stored).toBe(0);
+    });
 });

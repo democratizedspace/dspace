@@ -111,7 +111,7 @@ describe('process itemCountOperations', () => {
         expect(addStoredItemsMock).toHaveBeenCalledWith('jar', 'dusd', 10);
     });
 
-    test('withdraw-all operations must have stored balance and add retrieved inventory on finish', () => {
+    test('withdraw-all operations with stored balance add retrieved inventory on finish', () => {
         const definition = {
             id: 'break-savings-jar',
             duration: '1s',
@@ -139,5 +139,35 @@ describe('process itemCountOperations', () => {
         expect(removeAllStoredItemsMock).toHaveBeenCalledWith('jar', 'dusd');
         expect(addItemsMock).toHaveBeenCalledWith([{ id: 'broken-jar', count: 1 }]);
         expect(addItemsMock).toHaveBeenCalledWith([{ id: 'dusd', count: 15.75 }]);
+    });
+
+    test('withdraw-all operations can start with zero stored balance and still break jar', () => {
+        const definition = {
+            id: 'break-empty-savings-jar',
+            duration: '1s',
+            requireItems: [],
+            consumeItems: [{ id: 'jar', count: 1 }],
+            createItems: [{ id: 'broken-jar', count: 1 }],
+            itemCountOperations: [
+                {
+                    operation: 'withdraw-all',
+                    containerItemId: 'jar',
+                    itemId: 'dusd',
+                },
+            ],
+        };
+
+        getStoredItemCountMock.mockReturnValue(0);
+        removeAllStoredItemsMock.mockReturnValue(0);
+
+        expect(hasRequiredAndConsumedItems(definition.id, definition)).toBe(true);
+
+        startProcess(definition.id, definition);
+        vi.advanceTimersByTime(1500);
+        finishProcess(definition.id, definition);
+
+        expect(removeAllStoredItemsMock).toHaveBeenCalledWith('jar', 'dusd');
+        expect(addItemsMock).toHaveBeenCalledWith([{ id: 'broken-jar', count: 1 }]);
+        expect(addItemsMock).not.toHaveBeenCalledWith([{ id: 'dusd', count: 0 }]);
     });
 });
