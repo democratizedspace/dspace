@@ -6,6 +6,14 @@ const SAVINGS_JAR_ID = '66c2cdc6-9517-4c96-937f-1ddb4ee06ef3';
 const BROKEN_JAR_ID = '6d4dfbe7-55c7-43bf-aba8-de7b05ff66a9';
 
 test.describe('Savings jar mechanics', () => {
+    async function startAndCollectProcess(processCard) {
+        await processCard.getByRole('button', { name: 'Start' }).first().click();
+        await expect(processCard.getByRole('button', { name: 'Collect' })).toBeVisible({
+            timeout: 15000,
+        });
+        await processCard.getByRole('button', { name: 'Collect' }).click();
+    }
+
     async function readSavingsState(page) {
         return page.evaluate(
             ({ dUsdId, savingsJarId, brokenJarId }) => {
@@ -52,7 +60,7 @@ test.describe('Savings jar mechanics', () => {
 
         await page.goto(`/inventory/item/${SAVINGS_JAR_ID}`);
         await waitForHydration(page);
-        await expect(page.getByRole('heading', { name: /savings jar/i })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'savings jar', exact: true })).toBeVisible();
 
         const initialState = await readSavingsState(page);
         expect(initialState.stored).toBe(0);
@@ -60,11 +68,7 @@ test.describe('Savings jar mechanics', () => {
         const depositProcess = page.locator('div').filter({
             has: page.getByRole('heading', { name: /Deposit 10 dUSD into your savings jar/i }),
         });
-        await depositProcess.getByRole('button', { name: 'Start' }).first().click();
-        await expect(depositProcess.getByRole('button', { name: 'Finish' })).toBeVisible({
-            timeout: 10000,
-        });
-        await depositProcess.getByRole('button', { name: 'Finish' }).click();
+        await startAndCollectProcess(depositProcess);
 
         await expect
             .poll(async () => {
@@ -76,11 +80,7 @@ test.describe('Savings jar mechanics', () => {
         const breakProcess = page.locator('div').filter({
             has: page.getByRole('heading', { name: /Break your savings jar/i }),
         });
-        await breakProcess.getByRole('button', { name: 'Start' }).first().click();
-        await expect(breakProcess.getByRole('button', { name: 'Finish' })).toBeVisible({
-            timeout: 10000,
-        });
-        await breakProcess.getByRole('button', { name: 'Finish' }).click();
+        await startAndCollectProcess(breakProcess);
 
         const finalState = await readSavingsState(page);
 
@@ -130,11 +130,7 @@ test.describe('Savings jar mechanics', () => {
         const breakProcess = page.locator('div').filter({
             has: page.getByRole('heading', { name: /Break your savings jar/i }),
         });
-        await breakProcess.getByRole('button', { name: 'Start' }).first().click();
-        await expect(breakProcess.getByRole('button', { name: 'Finish' })).toBeVisible({
-            timeout: 10000,
-        });
-        await breakProcess.getByRole('button', { name: 'Finish' }).click();
+        await startAndCollectProcess(breakProcess);
 
         const finalState = await readSavingsState(page);
 
