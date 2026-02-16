@@ -22,11 +22,6 @@
             "text": "Quick note: DSpace cannot create reminders for you. Open your phone's Clock/Reminders app, make it repeat daily, and label it \"Claim dUSD in DSpace\".",
             "options": [
                 {
-                    "type": "process",
-                    "process": "basic-income",
-                    "text": "Open the UBI claim flow while I set the phone reminder."
-                },
-                {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Done. Reminder saved on my phone."
@@ -35,7 +30,7 @@
         },
         {
             "id": "finish",
-            "text": "Perfect. When your real-world reminder fires, return to DSpace and run your daily basic-income claim.",
+            "text": "Perfect. When your real-world reminder fires, return to DSpace and run your daily basic-income claim from the UBI flow.",
             "options": [
                 {
                     "type": "finish",

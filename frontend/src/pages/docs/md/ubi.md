@@ -64,10 +64,7 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [basic-income](/processes/basic-income)
-        - Requires: none
-        - Consumes: none
-        - Creates: dUSD ×100, dBI ×100
+    - None (player action is setting an IRL phone reminder; the UBI claim process is run later outside this quest dialogue)
 
 ## 4) Start a Savings Jar (`ubi/savings-goal`)
 
