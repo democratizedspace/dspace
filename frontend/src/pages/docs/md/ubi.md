@@ -65,6 +65,11 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
         - Requires: none
         - Consumes: none
         - Creates: dUSD ×100, dBI ×100
+- QA notes:
+    - This quest explicitly instructs the player to set a recurring reminder on their real-world
+      smartphone (outside the game).
+    - The `basic-income` process link is a timing reference for player planning, not an in-game
+      reminder scheduler.
 
 ## 4) Start a Savings Jar (`ubi/savings-goal`)
 

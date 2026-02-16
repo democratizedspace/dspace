@@ -1,45 +1,45 @@
 {
     "id": "ubi/reminder",
     "title": "Set a UBI Reminder",
-    "description": "Schedule a daily reminder so you never miss your dUSD payout.",
+    "description": "Set a recurring reminder on your real-world phone so you never miss a dUSD payout.",
     "image": "/assets/quests/ubi_daily_reminder.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Want help remembering to claim your basic income each day? I can set up a reminder for you.",
+            "text": "Want help remembering to claim your basic income each day? I can't set phone alarms in-game, but I can walk you through a quick setup.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "setup",
-                    "text": "Yes, please set a reminder."
+                    "text": "Yes, show me how to set it on my phone."
                 }
             ]
         },
         {
             "id": "setup",
-            "text": "Great! This will ping you when it's time to claim tomorrow's payment.",
+            "text": "Open your phone's reminder or calendar app. Create a recurring reminder for your daily UBI claim, choose a time you'll actually notice, and name it something obvious like 'Claim dUSD'.",
             "options": [
                 {
                     "type": "process",
                     "process": "basic-income",
-                    "text": "Schedule the reminder."
+                    "text": "Open the basic-income process so I can match the reminder time to my claim routine."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "All set!"
+                    "text": "Done — recurring phone reminder is set."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "You're good to go. Come back each day when the reminder fires to keep the dUSD flowing.",
+            "text": "Perfect. This reminder lives on your real-world phone, so you'll get a nudge even when you're away from the game.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks for the tip!"
+                    "text": "Nice — I'll claim on schedule."
                 }
             ]
         }
