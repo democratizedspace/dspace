@@ -39,18 +39,13 @@ test.describe('Savings jar mechanics', () => {
         }, seededState);
     }
 
-    function getProcessCard(page, title) {
-        const heading = page.getByRole('heading', { name: title, exact: true });
-        return heading.locator('xpath=ancestor::*[contains(@class, "container")][1]');
-    }
-
-    async function startAndCollectProcess(processCard) {
-        await expect(processCard.getByRole('button', { name: 'Start' })).toBeVisible();
-        await processCard.getByRole('button', { name: 'Start' }).first().click();
-        await expect(processCard.getByRole('button', { name: 'Collect' })).toBeVisible({
+    async function startAndCollectProcess(page) {
+        await expect(page.getByTestId('process-start-button').first()).toBeVisible();
+        await page.getByTestId('process-start-button').first().click();
+        await expect(page.getByRole('button', { name: 'Collect' }).first()).toBeVisible({
             timeout: 15000,
         });
-        await processCard.getByRole('button', { name: 'Collect' }).click();
+        await page.getByRole('button', { name: 'Collect' }).first().click();
     }
 
     async function readSavingsState(page) {
@@ -94,9 +89,8 @@ test.describe('Savings jar mechanics', () => {
     });
 
     test('tracks stored dUSD and returns it when jar is broken', async ({ page }) => {
-        await page.goto('/');
-
         const now = Date.now();
+        await page.goto('/processes/save-dusd-in-jar');
         await seedGameState(page, {
             quests: {},
             inventory: {
@@ -109,8 +103,7 @@ test.describe('Savings jar mechanics', () => {
             versionNumberString: '3',
             _meta: { lastUpdated: now },
         });
-
-        await page.goto('/processes/save-dusd-in-jar');
+        await page.reload();
         await waitForHydration(page);
         await expect(
             page.getByRole('heading', {
@@ -122,9 +115,7 @@ test.describe('Savings jar mechanics', () => {
         const initialState = await readSavingsState(page);
         expect(initialState.stored).toBe(0);
 
-        const depositProcess = getProcessCard(page, 'Deposit 10 dUSD into your savings jar');
-        await page.getByTestId('process-deposit-amount-input').first().fill('10');
-        await startAndCollectProcess(depositProcess);
+        await startAndCollectProcess(page);
 
         await expect
             .poll(async () => {
@@ -136,11 +127,7 @@ test.describe('Savings jar mechanics', () => {
         await page.goto('/processes/break-savings-jar');
         await waitForHydration(page);
 
-        const breakProcess = getProcessCard(
-            page,
-            'Break your savings jar to retrieve all stored dUSD'
-        );
-        await startAndCollectProcess(breakProcess);
+        await startAndCollectProcess(page);
 
         const finalState = await readSavingsState(page);
 
@@ -153,9 +140,8 @@ test.describe('Savings jar mechanics', () => {
     test('breaking an empty jar keeps dUSD unchanged and still creates broken jar', async ({
         page,
     }) => {
-        await page.goto('/');
-
         const now = Date.now();
+        await page.goto('/processes/break-savings-jar');
         await seedGameState(page, {
             quests: {},
             inventory: {
@@ -172,18 +158,13 @@ test.describe('Savings jar mechanics', () => {
             versionNumberString: '3',
             _meta: { lastUpdated: now },
         });
-
-        await page.goto('/processes/break-savings-jar');
+        await page.reload();
         await waitForHydration(page);
 
         const initialState = await readSavingsState(page);
         expect(initialState.stored).toBe(0);
 
-        const breakProcess = getProcessCard(
-            page,
-            'Break your savings jar to retrieve all stored dUSD'
-        );
-        await startAndCollectProcess(breakProcess);
+        await startAndCollectProcess(page);
 
         const finalState = await readSavingsState(page);
 
