@@ -55,6 +55,9 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
     - `requiresQuests`: `ubi/first-payment`
 - Dialogue `requiresItems` gates:
     - None
+- Player action expectation:
+    - This quest instructs the player to create a recurring reminder in their IRL phone reminder/alarm app.
+    - DSpace does **not** create in-game reminders for this quest.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
