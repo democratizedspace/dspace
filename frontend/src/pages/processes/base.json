@@ -8779,5 +8779,64 @@
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
+    },
+    {
+        "id": "deposit-savings-jar",
+        "title": "Deposit 10 dUSD into sealed savings jar",
+        "description": "Move 10 dUSD from your wallet into the jar. Funds remain locked until the jar is broken.",
+        "duration": "1s",
+        "requireItems": [
+            {
+                "id": "cc89cbc9-7d07-4dbb-a8ea-0ba34951c080",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 10
+            }
+        ],
+        "createItems": [],
+        "storeItems": [
+            {
+                "containerId": "cc89cbc9-7d07-4dbb-a8ea-0ba34951c080",
+                "itemId": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 10
+            }
+        ],
+        "image": "/assets/quests/ubi_savings_jar.jpg"
+    },
+    {
+        "id": "break-savings-jar",
+        "title": "Break sealed savings jar and recover savings",
+        "description": "Break the jar to withdraw everything stored inside and recover your locked dUSD.",
+        "duration": "1s",
+        "requireItems": [
+            {
+                "id": "cc89cbc9-7d07-4dbb-a8ea-0ba34951c080",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "cc89cbc9-7d07-4dbb-a8ea-0ba34951c080",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "dc2626d8-4bec-4105-bfbe-625fd045250b",
+                "count": 1
+            }
+        ],
+        "releaseItems": [
+            {
+                "containerId": "cc89cbc9-7d07-4dbb-a8ea-0ba34951c080",
+                "itemId": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": "all"
+            }
+        ],
+        "image": "/assets/quests/ubi_savings_jar.jpg"
     }
 ]

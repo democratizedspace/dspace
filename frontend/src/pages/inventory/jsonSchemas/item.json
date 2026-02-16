@@ -2,14 +2,30 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
     "properties": {
-        "id": { "type": "string" },
-        "name": { "type": "string" },
-        "description": { "type": "string" },
-        "image": { "type": "string" },
-        "price": { "type": "string" },
-        "unit": { "type": "string" },
-        "priceExemptionReason": { "type": "string" },
-        "type": { "type": "string" },
+        "id": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "image": {
+            "type": "string"
+        },
+        "price": {
+            "type": "string"
+        },
+        "unit": {
+            "type": "string"
+        },
+        "priceExemptionReason": {
+            "type": "string"
+        },
+        "type": {
+            "type": "string"
+        },
         "category": {
             "type": "string",
             "enum": [
@@ -33,10 +49,23 @@
         },
         "dependencies": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+                "type": "string"
+            },
             "default": []
         },
-        "hardening": { "$ref": "https://dspace.local/schemas/hardening.json" }
+        "hardening": {
+            "$ref": "https://dspace.local/schemas/hardening.json"
+        },
+        "itemCounts": {
+            "type": "object",
+            "description": "Optional map of contained item IDs to default counts for container-capable items.",
+            "additionalProperties": {
+                "type": "number",
+                "minimum": 0
+            },
+            "default": {}
+        }
     },
     "required": ["id", "name", "description", "image"],
     "additionalProperties": false

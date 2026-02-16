@@ -1,5 +1,11 @@
 import { loadGameState, saveGameState } from './common.js';
-import { hasItems, burnItems, addItems } from './inventory.js';
+import {
+    hasItems,
+    burnItems,
+    addItems,
+    releaseItemsFromContainer,
+    storeItemsInContainer,
+} from './inventory.js';
 import { durationInSeconds } from '../../utils.js';
 
 // Using import assertions for JSON imports
@@ -7,6 +13,33 @@ import processes from '../../generated/processes.json' assert { type: 'json' };
 
 const resolveProcessDefinition = (processId, processDefinition) =>
     processDefinition ?? processes.find((p) => p.id === processId);
+
+const applyStoreItems = (storeItems = []) => {
+    storeItems.forEach(({ containerId, itemId, count }) => {
+        if (!containerId || !itemId || !Number.isFinite(Number(count)) || Number(count) <= 0) {
+            return;
+        }
+        storeItemsInContainer(containerId, itemId, Number(count));
+    });
+};
+
+const applyReleaseItems = (releaseItems = []) => {
+    releaseItems.forEach(({ containerId, itemId, count }) => {
+        if (!containerId || !itemId) {
+            return;
+        }
+        if (count === 'all') {
+            releaseItemsFromContainer(containerId, itemId, 'all');
+            return;
+        }
+
+        if (!Number.isFinite(Number(count)) || Number(count) <= 0) {
+            return;
+        }
+
+        releaseItemsFromContainer(containerId, itemId, Number(count));
+    });
+};
 
 export const hasRequiredAndConsumedItems = (processId, processDefinition) => {
     const process = resolveProcessDefinition(processId, processDefinition);
@@ -39,6 +72,9 @@ export const startProcess = (processId, processDefinition) => {
     saveGameState(gameState);
     if (process.consumeItems) {
         burnItems(process.consumeItems);
+    }
+    if (process.storeItems) {
+        applyStoreItems(process.storeItems);
     }
 };
 
@@ -164,6 +200,10 @@ export const finishProcess = (processId, processDefinition) => {
 
     if (createItems) {
         addItems(createItems);
+    }
+
+    if (process.releaseItems) {
+        applyReleaseItems(process.releaseItems);
     }
 
     const gameState = loadGameState();

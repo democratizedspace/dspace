@@ -1,31 +1,24 @@
 {
     "id": "ubi/savings-goal",
     "title": "Start a Savings Jar",
-    "description": "Set aside some dUSD for future plans.",
+    "description": "Buy a sealed savings jar, lock in dUSD, and break it when you truly need a withdrawal.",
     "image": "/assets/quests/ubi_savings_jar.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You're collecting dUSD regularly. Want to stash a bit away for a rainy day?",
+            "text": "Let's make your savings real: buy a sealed jar that you can only open by breaking.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "decide",
-                    "text": "Sure, let's save."
-                }
-            ]
-        },
-        {
-            "id": "decide",
-            "text": "Saving helps you reach bigger goals. Set aside at least 10 dUSD now.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "deposit",
-                    "text": "Deposit 10 dUSD.",
+                    "type": "process",
+                    "process": "deposit-savings-jar",
+                    "text": "Deposit 10 dUSD into the sealed savings jar.",
                     "requiresItems": [
+                        {
+                            "id": "cc89cbc9-7d07-4dbb-a8ea-0ba34951c080",
+                            "count": 1
+                        },
                         {
                             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
                             "count": 10
@@ -33,19 +26,80 @@
                     ]
                 },
                 {
-                    "type": "process",
-                    "process": "basic-income",
-                    "text": "Need to claim more first."
+                    "type": "goto",
+                    "goto": "break",
+                    "text": "I deposited savings. Continue to the withdrawal drill.",
+                    "requiresItems": [
+                        {
+                            "id": "cc89cbc9-7d07-4dbb-a8ea-0ba34951c080",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "buy",
+                    "text": "I need to buy the jar first."
                 }
             ]
         },
         {
-            "id": "deposit",
-            "text": "Nice! Keep adding to that jar and watch it grow.",
+            "id": "buy",
+            "text": "Grab a sealed savings jar from the shop, then come back when you're ready to lock in 10 dUSD.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "I bought the jar. Let's deposit.",
+                    "requiresItems": [
+                        {
+                            "id": "cc89cbc9-7d07-4dbb-a8ea-0ba34951c080",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "process",
+                    "process": "basic-income",
+                    "text": "I need to claim more dUSD first."
+                }
+            ]
+        },
+        {
+            "id": "break",
+            "text": "Savings locked in. When you really need that money, break the jar to recover everything inside.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "break-savings-jar",
+                    "text": "Break the jar and recover the saved dUSD.",
+                    "requiresItems": [
+                        {
+                            "id": "cc89cbc9-7d07-4dbb-a8ea-0ba34951c080",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "complete",
+                    "text": "I already broke it and withdrew my savings.",
+                    "requiresItems": [
+                        {
+                            "id": "dc2626d8-4bec-4105-bfbe-625fd045250b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "complete",
+            "text": "Perfect. You experienced both sides of disciplined savings: commitment now, deliberate withdrawal later.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All saved up for now."
+                    "text": "Savings jar complete."
                 }
             ]
         }

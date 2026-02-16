@@ -39,7 +39,14 @@ const countFinishedQuests = (quests) =>
 
 const getInventoryCount = (inventory, itemId) => {
     if (!itemId) return 0;
-    return toSafeNumber(inventory?.[itemId] ?? 0);
+    const entry = inventory?.[itemId];
+    if (typeof entry === 'number') {
+        return toSafeNumber(entry);
+    }
+    if (entry && typeof entry === 'object') {
+        return toSafeNumber(entry.count);
+    }
+    return 0;
 };
 
 const definitions = [
