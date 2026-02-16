@@ -39,6 +39,8 @@ Every item requires the following basic properties:
 - **description**: Detailed explanation of the item's purpose and use (required)
     - **image**: Visual representation of the item (required)
 - **price**: Value in game currency (optional). Enter a positive amount and select the currency; the form stores the combined string (e.g., `25 dUSD`).
+- **priceExemptionReason**: Required when an item has no `price`. Use this for non-shop items such as `COMPONENT`, `SOULBOUND`, or `TROPHY`.
+    - **Important**: Omitting `price` does not mean an item should be auto-buyable. In process UIs, non-priced items are intentionally skipped by **Buy required items**, so keep process-only gates process-crafted.
 - **unit**: Measurement unit for the item (e.g., kg, L, watts) (optional)
 - **type**: Classification or category (optional)
 
