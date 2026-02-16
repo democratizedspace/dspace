@@ -1,51 +1,89 @@
 {
     "id": "ubi/savings-goal",
     "title": "Start a Savings Jar",
-    "description": "Set aside some dUSD for future plans.",
+    "description": "Buy a sealed savings jar, stash dUSD inside it, and break it open to recover your savings.",
     "image": "/assets/quests/ubi_savings_jar.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You're collecting dUSD regularly. Want to stash a bit away for a rainy day?",
+            "text": "Let's make savings real: buy a sealed jar, stash dUSD inside, and only recover it by breaking the jar.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "decide",
-                    "text": "Sure, let's save."
+                    "goto": "buy",
+                    "text": "I am in. Let's set this up."
                 }
             ]
         },
         {
-            "id": "decide",
-            "text": "Saving helps you reach bigger goals. Set aside at least 10 dUSD now.",
+            "id": "buy",
+            "text": "First, buy a sealed savings jar so your dUSD has a dedicated home.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "deposit",
-                    "text": "Deposit 10 dUSD.",
-                    "requiresItems": [
-                        {
-                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-                            "count": 10
-                        }
-                    ]
+                    "type": "process",
+                    "process": "buy-sealed-savings-jar",
+                    "text": "Buy the jar (5 dUSD)."
                 },
                 {
                     "type": "process",
                     "process": "basic-income",
-                    "text": "Need to claim more first."
+                    "text": "Need to claim more dUSD first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "deposit",
+                    "text": "I bought the jar.",
+                    "requiresItems": [
+                        {
+                            "id": "7fe0d9c4-6b61-4e4f-b26d-2f150f95c6c9",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "deposit",
-            "text": "Nice! Keep adding to that jar and watch it grow.",
+            "text": "Great. Now stash 10 dUSD in the sealed jar. You can track the balance on the jar item page.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "stash-dusd-in-savings-jar",
+                    "text": "Deposit 10 dUSD into the jar."
+                },
+                {
+                    "type": "goto",
+                    "goto": "break",
+                    "text": "I've stashed at least 10 dUSD.",
+                    "requiresItems": [
+                        {
+                            "id": "7fe0d9c4-6b61-4e4f-b26d-2f150f95c6c9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "break",
+            "text": "When you really need the money, break the jar to recover every dUSD stored inside.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "break-savings-jar",
+                    "text": "Break the savings jar and recover funds."
+                },
+                {
                     "type": "finish",
-                    "text": "All saved up for now."
+                    "text": "Done. I understand the savings jar mechanics.",
+                    "requiresItems": [
+                        {
+                            "id": "2d4f7e3f-3cb7-4e3e-9e7b-0ecf984f57a1",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }

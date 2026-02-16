@@ -42,6 +42,25 @@
                 "additionalProperties": false
             }
         },
+        "itemCountTransfers": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "containerId": { "type": "string" },
+                    "itemId": { "type": "string" },
+                    "direction": {
+                        "type": "string",
+                        "enum": ["inventoryToContainer", "containerToInventory"]
+                    },
+                    "amount": {
+                        "oneOf": [{ "type": "number", "exclusiveMinimum": 0 }, { "const": "all" }]
+                    }
+                },
+                "required": ["containerId", "itemId", "direction"],
+                "additionalProperties": false
+            }
+        },
         "duration": { "type": "string" },
         "hardening": { "$ref": "https://dspace.local/schemas/hardening.json" }
     },

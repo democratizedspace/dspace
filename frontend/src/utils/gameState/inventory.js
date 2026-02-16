@@ -3,6 +3,35 @@ import items from '../../pages/inventory/json/items';
 
 const dUSDId = items.find((i) => i.name === 'dUSD')?.id;
 const dCarbonId = items.find((i) => i.name === 'dCarbon')?.id;
+const containerItemCountMap = new Map(
+    items
+        .filter((item) => item?.itemCounts && typeof item.itemCounts === 'object')
+        .map((item) => [item.id, Object.keys(item.itemCounts)])
+);
+
+const normalizeCount = (value) => {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const getContainerSupportedItemIds = (containerId) => containerItemCountMap.get(containerId) ?? [];
+
+const ensureContainerCountPath = (gameState, containerId, itemId) => {
+    if (!gameState.itemCounts || typeof gameState.itemCounts !== 'object') {
+        gameState.itemCounts = {};
+    }
+
+    if (
+        !gameState.itemCounts[containerId] ||
+        typeof gameState.itemCounts[containerId] !== 'object'
+    ) {
+        gameState.itemCounts[containerId] = {};
+    }
+
+    if (typeof gameState.itemCounts[containerId][itemId] !== 'number') {
+        gameState.itemCounts[containerId][itemId] = 0;
+    }
+};
 
 export const addItems = (items) => {
     const gameState = loadGameState();
@@ -108,5 +137,76 @@ export const hasItems = (itemList) => {
             return false;
         }
     }
+    return true;
+};
+
+export const supportsContainerItem = (containerId, itemId) => {
+    const supportedItemIds = getContainerSupportedItemIds(containerId);
+    return supportedItemIds.includes(itemId);
+};
+
+export const getContainerItemCount = (containerId, itemId) => {
+    if (!supportsContainerItem(containerId, itemId)) {
+        return 0;
+    }
+
+    const gameState = loadGameState();
+    const stored = gameState.itemCounts?.[containerId]?.[itemId];
+    return normalizeCount(stored);
+};
+
+export const getContainerItemCounts = (containerId) => {
+    const supportedItemIds = getContainerSupportedItemIds(containerId);
+    if (supportedItemIds.length === 0) {
+        return {};
+    }
+
+    const gameState = loadGameState();
+    const counts = {};
+
+    supportedItemIds.forEach((itemId) => {
+        counts[itemId] = normalizeCount(gameState.itemCounts?.[containerId]?.[itemId]);
+    });
+
+    return counts;
+};
+
+export const addContainerItems = (containerId, itemId, count) => {
+    if (!supportsContainerItem(containerId, itemId)) {
+        return false;
+    }
+
+    const delta = normalizeCount(count);
+    if (delta <= 0) {
+        return false;
+    }
+
+    const gameState = loadGameState();
+    ensureContainerCountPath(gameState, containerId, itemId);
+    gameState.itemCounts[containerId][itemId] += delta;
+    saveGameState(gameState);
+    return true;
+};
+
+export const removeContainerItems = (containerId, itemId, count) => {
+    if (!supportsContainerItem(containerId, itemId)) {
+        return false;
+    }
+
+    const delta = normalizeCount(count);
+    if (delta <= 0) {
+        return false;
+    }
+
+    const gameState = loadGameState();
+    ensureContainerCountPath(gameState, containerId, itemId);
+
+    const currentCount = normalizeCount(gameState.itemCounts[containerId][itemId]);
+    if (currentCount < delta) {
+        return false;
+    }
+
+    gameState.itemCounts[containerId][itemId] = currentCount - delta;
+    saveGameState(gameState);
     return true;
 };

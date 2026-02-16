@@ -8779,5 +8779,98 @@
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
+    },
+    {
+        "id": "buy-sealed-savings-jar",
+        "title": "buy sealed savings jar",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 5
+            }
+        ],
+        "createItems": [
+            {
+                "id": "7fe0d9c4-6b61-4e4f-b26d-2f150f95c6c9",
+                "count": 1
+            }
+        ],
+        "duration": "1s",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "stash-dusd-in-savings-jar",
+        "title": "stash dUSD in savings jar",
+        "requireItems": [
+            {
+                "id": "7fe0d9c4-6b61-4e4f-b26d-2f150f95c6c9",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 10
+            }
+        ],
+        "createItems": [],
+        "itemCountTransfers": [
+            {
+                "containerId": "7fe0d9c4-6b61-4e4f-b26d-2f150f95c6c9",
+                "itemId": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "direction": "inventoryToContainer",
+                "amount": 10
+            }
+        ],
+        "duration": "1s",
+        "hardening": {
+            "passes": 0,
+            "score": 92,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "break-savings-jar",
+        "title": "break savings jar",
+        "requireItems": [
+            {
+                "id": "7fe0d9c4-6b61-4e4f-b26d-2f150f95c6c9",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "7fe0d9c4-6b61-4e4f-b26d-2f150f95c6c9",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "2d4f7e3f-3cb7-4e3e-9e7b-0ecf984f57a1",
+                "count": 1
+            }
+        ],
+        "itemCountTransfers": [
+            {
+                "containerId": "7fe0d9c4-6b61-4e4f-b26d-2f150f95c6c9",
+                "itemId": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "direction": "containerToInventory",
+                "amount": "all"
+            }
+        ],
+        "duration": "1s",
+        "hardening": {
+            "passes": 0,
+            "score": 94,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
     }
 ]

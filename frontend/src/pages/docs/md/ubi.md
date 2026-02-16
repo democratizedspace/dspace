@@ -72,17 +72,29 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
 - Unlock prerequisite:
     - `requiresQuests`: `ubi/first-payment`
 - Dialogue `requiresItems` gates:
-    - `decide` → "Deposit 10 dUSD." — dUSD ×10
+    - `buy` → "I bought the jar." — sealed savings jar ×1
+    - `deposit` → "I've stashed at least 10 dUSD." — sealed savings jar ×1
+    - `break` → "Done. I understand the savings jar mechanics." — broken savings jar ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [basic-income](/processes/basic-income)
+    - [buy-sealed-savings-jar](/processes/buy-sealed-savings-jar)
         - Requires: none
-        - Consumes: none
-        - Creates: dUSD ×100, dBI ×100
+        - Consumes: dUSD ×5
+        - Creates: sealed savings jar ×1
+    - [stash-dusd-in-savings-jar](/processes/stash-dusd-in-savings-jar)
+        - Requires: sealed savings jar ×1
+        - Consumes: dUSD ×10
+        - Creates: none
+        - Container transfer: adds dUSD ×10 into sealed savings jar `itemCounts`
+    - [break-savings-jar](/processes/break-savings-jar)
+        - Requires: sealed savings jar ×1
+        - Consumes: sealed savings jar ×1
+        - Creates: broken savings jar ×1
+        - Container transfer: returns all stored dUSD from jar `itemCounts` to inventory
 
 ## QA flow notes
 

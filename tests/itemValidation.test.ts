@@ -14,7 +14,10 @@ const schema = JSON.parse(
   )
 );
 const hardeningSchema = JSON.parse(
-  readFileSync(join(__dirname, '../frontend/src/pages/sharedSchemas/hardening.json'), 'utf8')
+  readFileSync(
+    join(__dirname, '../frontend/src/pages/sharedSchemas/hardening.json'),
+    'utf8'
+  )
 );
 const itemsDir = join(__dirname, '../frontend/src/pages/inventory/json/items');
 const items = readdirSync(itemsDir)
@@ -31,5 +34,21 @@ test('items conform to schema', () => {
       console.error(validate.errors);
     }
     expect(valid).toBe(true);
+  }
+});
+
+test('itemCounts keys reference existing items and use non-negative values', () => {
+  const itemIds = new Set(items.map((item) => item.id));
+
+  for (const item of items) {
+    const itemCounts = item.itemCounts ?? {};
+    expect(typeof itemCounts).toBe('object');
+
+    for (const [nestedItemId, count] of Object.entries(itemCounts)) {
+      expect(itemIds.has(nestedItemId)).toBe(true);
+      expect(typeof count).toBe('number');
+      expect(Number.isFinite(count)).toBe(true);
+      expect(count).toBeGreaterThanOrEqual(0);
+    }
   }
 });

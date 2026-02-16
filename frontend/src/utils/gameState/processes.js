@@ -1,5 +1,13 @@
 import { loadGameState, saveGameState } from './common.js';
-import { hasItems, burnItems, addItems } from './inventory.js';
+import {
+    hasItems,
+    burnItems,
+    addItems,
+    supportsContainerItem,
+    getContainerItemCount,
+    addContainerItems,
+    removeContainerItems,
+} from './inventory.js';
 import { durationInSeconds } from '../../utils.js';
 
 // Using import assertions for JSON imports
@@ -13,7 +21,77 @@ export const hasRequiredAndConsumedItems = (processId, processDefinition) => {
     if (!process) {
         return false;
     }
-    return hasItems(process.requireItems || []) && hasItems(process.consumeItems || []);
+    const hasInventoryRequirements =
+        hasItems(process.requireItems || []) && hasItems(process.consumeItems || []);
+
+    if (!hasInventoryRequirements) {
+        return false;
+    }
+
+    for (const transfer of process.itemCountTransfers || []) {
+        if (!supportsContainerItem(transfer.containerId, transfer.itemId)) {
+            return false;
+        }
+
+        if (transfer.direction !== 'containerToInventory') {
+            continue;
+        }
+
+        if (transfer.amount === 'all') {
+            continue;
+        }
+
+        const amount = Number(transfer.amount);
+        if (!Number.isFinite(amount) || amount <= 0) {
+            return false;
+        }
+
+        if (getContainerItemCount(transfer.containerId, transfer.itemId) < amount) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
+const applyItemCountTransfers = (process) => {
+    for (const transfer of process.itemCountTransfers || []) {
+        if (!supportsContainerItem(transfer.containerId, transfer.itemId)) {
+            console.warn(
+                `Skipping invalid itemCount transfer for process ${process.id}: unsupported ${transfer.itemId} in ${transfer.containerId}`
+            );
+            continue;
+        }
+
+        if (transfer.direction === 'inventoryToContainer') {
+            const amount = Number(transfer.amount);
+            if (!Number.isFinite(amount) || amount <= 0) {
+                continue;
+            }
+
+            addContainerItems(transfer.containerId, transfer.itemId, amount);
+            continue;
+        }
+
+        if (transfer.direction !== 'containerToInventory') {
+            continue;
+        }
+
+        const currentCount = getContainerItemCount(transfer.containerId, transfer.itemId);
+        const amount =
+            transfer.amount === 'all'
+                ? currentCount
+                : Math.min(currentCount, Math.max(0, Number(transfer.amount)));
+
+        if (!Number.isFinite(amount) || amount <= 0) {
+            continue;
+        }
+
+        const removed = removeContainerItems(transfer.containerId, transfer.itemId, amount);
+        if (removed) {
+            addItems([{ id: transfer.itemId, count: amount }]);
+        }
+    }
 };
 
 export const startProcess = (processId, processDefinition) => {
@@ -165,6 +243,8 @@ export const finishProcess = (processId, processDefinition) => {
     if (createItems) {
         addItems(createItems);
     }
+
+    applyItemCountTransfers(process);
 
     const gameState = loadGameState();
     gameState.processes[processId] = undefined;
