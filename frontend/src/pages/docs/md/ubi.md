@@ -54,17 +54,14 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
 - Unlock prerequisite:
     - `requiresQuests`: `ubi/first-payment`
 - Dialogue `requiresItems` gates:
-    - None
+    - `confirm` → "Done. Reminder is scheduled." — dBI ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [basic-income](/processes/basic-income)
-        - Requires: none
-        - Consumes: none
-        - Creates: dUSD ×100, dBI ×100
+    - None (quest instructs the player to set an IRL smartphone reminder; it does not trigger an in-game reminder process)
 
 ## 4) Start a Savings Jar (`ubi/savings-goal`)
 

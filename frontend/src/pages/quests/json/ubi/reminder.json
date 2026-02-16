@@ -1,45 +1,73 @@
 {
     "id": "ubi/reminder",
     "title": "Set a UBI Reminder",
-    "description": "Schedule a daily reminder so you never miss your dUSD payout.",
+    "description": "Set an IRL phone reminder so you remember your daily dUSD claim.",
     "image": "/assets/quests/ubi_daily_reminder.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Want help remembering to claim your basic income each day? I can set up a reminder for you.",
+            "text": "Nice work claiming your first payout. Want a simple way to remember tomorrow's claim?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Yes, please set a reminder."
+                    "goto": "platform",
+                    "text": "Yes, show me how to set one on my phone."
                 }
             ]
         },
         {
-            "id": "setup",
-            "text": "Great! This will ping you when it's time to claim tomorrow's payment.",
+            "id": "platform",
+            "text": "Use your real phone's Clock or Reminders app—there isn't an in-game reminder yet. Set a repeating alert for your usual claim time.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "basic-income",
-                    "text": "Schedule the reminder."
+                    "type": "goto",
+                    "goto": "confirm",
+                    "text": "I'll set a recurring reminder now."
                 },
                 {
                     "type": "goto",
+                    "goto": "tips",
+                    "text": "Any tips so I don't miss it?"
+                }
+            ]
+        },
+        {
+            "id": "tips",
+            "text": "Good defaults: label it 'Claim dUSD', make it daily, and add one backup reminder 15 minutes later.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "confirm",
+                    "text": "Perfect. I'll use that setup."
+                }
+            ]
+        },
+        {
+            "id": "confirm",
+            "text": "Once your reminder is saved, come back tomorrow and run the basic-income claim again.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "All set!"
+                    "text": "Done. Reminder is scheduled.",
+                    "requiresItems": [
+                        {
+                            "id": "016d4758-d114-4e04-9e6a-853db93a2eee",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "You're good to go. Come back each day when the reminder fires to keep the dUSD flowing.",
+            "text": "Great habit. Your phone handles the reminder, and you handle the daily claim.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks for the tip!"
+                    "text": "Thanks, I'll keep the streak going."
                 }
             ]
         }
