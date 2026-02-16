@@ -1,5 +1,14 @@
 import { loadGameState, saveGameState } from './common.js';
-import { hasItems, burnItems, addItems } from './inventory.js';
+import {
+    hasItems,
+    burnItems,
+    addItems,
+    moveInventoryItemToContainer,
+    moveContainerItemToInventory,
+    withdrawAllFromContainerToInventory,
+    getContainerItemCount,
+    isContainerItemAllowed,
+} from './inventory.js';
 import { durationInSeconds } from '../../utils.js';
 
 // Using import assertions for JSON imports
@@ -8,12 +17,111 @@ import processes from '../../generated/processes.json' assert { type: 'json' };
 const resolveProcessDefinition = (processId, processDefinition) =>
     processDefinition ?? processes.find((p) => p.id === processId);
 
+const normalizeTransferCount = (value) => {
+    if (value === 'all') {
+        return 'all';
+    }
+
+    const parsed = Number.parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const getContainerTransfers = (process) =>
+    Array.isArray(process?.containerItemTransfers) ? process.containerItemTransfers : [];
+
+const hasContainerTransferRequirements = (process) => {
+    const transfers = getContainerTransfers(process);
+
+    for (const transfer of transfers) {
+        const containerId = typeof transfer?.containerId === 'string' ? transfer.containerId : '';
+        const itemId = typeof transfer?.itemId === 'string' ? transfer.itemId : '';
+        const direction = transfer?.direction;
+        const count = normalizeTransferCount(transfer?.count);
+
+        if (!containerId || !itemId || !isContainerItemAllowed(containerId, itemId)) {
+            return false;
+        }
+
+        if (direction === 'toContainer') {
+            if (!hasItems([{ id: containerId, count: 1 }])) {
+                return false;
+            }
+            if (typeof count !== 'number' || count <= 0 || !hasItems([{ id: itemId, count }])) {
+                return false;
+            }
+            continue;
+        }
+
+        if (direction === 'toInventory') {
+            const available = getContainerItemCount(containerId, itemId);
+            const required = count === 'all' ? 0 : count;
+            if (count !== 'all' && (typeof required !== 'number' || required <= 0)) {
+                return false;
+            }
+            if (available < required) {
+                return false;
+            }
+            continue;
+        }
+
+        return false;
+    }
+
+    return true;
+};
+
+const applyContainerTransfers = (process) => {
+    const transfers = getContainerTransfers(process);
+
+    for (const transfer of transfers) {
+        const containerId = transfer?.containerId;
+        const itemId = transfer?.itemId;
+        const direction = transfer?.direction;
+        const count = normalizeTransferCount(transfer?.count);
+
+        if (direction === 'toContainer') {
+            if (typeof count !== 'number' || count <= 0) {
+                return false;
+            }
+
+            if (!moveInventoryItemToContainer(containerId, itemId, count)) {
+                return false;
+            }
+            continue;
+        }
+
+        if (direction === 'toInventory') {
+            if (count === 'all') {
+                withdrawAllFromContainerToInventory(containerId, itemId);
+                continue;
+            }
+
+            if (typeof count !== 'number' || count <= 0) {
+                return false;
+            }
+
+            if (!moveContainerItemToInventory(containerId, itemId, count)) {
+                return false;
+            }
+            continue;
+        }
+
+        return false;
+    }
+
+    return true;
+};
+
 export const hasRequiredAndConsumedItems = (processId, processDefinition) => {
     const process = resolveProcessDefinition(processId, processDefinition);
     if (!process) {
         return false;
     }
-    return hasItems(process.requireItems || []) && hasItems(process.consumeItems || []);
+    return (
+        hasItems(process.requireItems || []) &&
+        hasItems(process.consumeItems || []) &&
+        hasContainerTransferRequirements(process)
+    );
 };
 
 export const startProcess = (processId, processDefinition) => {
@@ -162,6 +270,10 @@ export const finishProcess = (processId, processDefinition) => {
     }
     const createItems = process.createItems;
 
+    if (!applyContainerTransfers(process)) {
+        return;
+    }
+
     if (createItems) {
         addItems(createItems);
     }
@@ -303,6 +415,28 @@ export const getProcessesForItem = (itemId) => {
                 }
             });
         }
+
+        if (Array.isArray(process.containerItemTransfers)) {
+            process.containerItemTransfers.forEach((transfer) => {
+                const touchesItem = transfer?.itemId === itemId || transfer?.containerId === itemId;
+                if (!touchesItem) {
+                    return;
+                }
+
+                if (transfer?.direction === 'toContainer') {
+                    processMap[ProcessItemTypes.CONSUME_ITEM] =
+                        processMap[ProcessItemTypes.CONSUME_ITEM] || [];
+                    processMap[ProcessItemTypes.CONSUME_ITEM].push(process.id);
+                    return;
+                }
+
+                if (transfer?.direction === 'toInventory') {
+                    processMap[ProcessItemTypes.CREATE_ITEM] =
+                        processMap[ProcessItemTypes.CREATE_ITEM] || [];
+                    processMap[ProcessItemTypes.CREATE_ITEM].push(process.id);
+                }
+            });
+        }
     });
 
     return processMap;
@@ -312,10 +446,33 @@ const getMatchingProcessBuckets = (process, itemId) => {
     const matchesItem = (items) =>
         Array.isArray(items) && items.some((item) => item?.id === itemId);
 
+    const matchesContainerTransfer = Array.isArray(process?.containerItemTransfers)
+        ? process.containerItemTransfers.some(
+              (transfer) => transfer?.itemId === itemId || transfer?.containerId === itemId
+          )
+        : false;
+
+    const createsFromContainerTransfer = Array.isArray(process?.containerItemTransfers)
+        ? process.containerItemTransfers.some(
+              (transfer) =>
+                  (transfer?.itemId === itemId || transfer?.containerId === itemId) &&
+                  transfer?.direction === 'toInventory'
+          )
+        : false;
+
+    const consumesFromContainerTransfer = Array.isArray(process?.containerItemTransfers)
+        ? process.containerItemTransfers.some(
+              (transfer) =>
+                  (transfer?.itemId === itemId || transfer?.containerId === itemId) &&
+                  transfer?.direction === 'toContainer'
+          )
+        : false;
+
     return {
         require: matchesItem(process?.requireItems),
-        consume: matchesItem(process?.consumeItems),
-        create: matchesItem(process?.createItems),
+        consume: matchesItem(process?.consumeItems) || consumesFromContainerTransfer,
+        create: matchesItem(process?.createItems) || createsFromContainerTransfer,
+        transfer: matchesContainerTransfer,
     };
 };
 
@@ -393,6 +550,10 @@ export const skipProcess = (processId, processDefinition) => {
     // have already been burned.
     if (processState.state === ProcessStates.NOT_STARTED && process.consumeItems) {
         burnItems(process.consumeItems);
+    }
+
+    if (!applyContainerTransfers(process)) {
+        return;
     }
 
     if (process.createItems) {

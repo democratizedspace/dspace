@@ -8,7 +8,7 @@
         getProcessesForItemIncludingCustom,
         ProcessItemTypes,
     } from '../../../utils/gameState/processes.js';
-    import { getItemCounts } from '../../../utils/gameState/inventory.js';
+    import { getItemCounts, getContainerItemCounts } from '../../../utils/gameState/inventory.js';
     import { getQuestsForItem } from '../../../utils/itemDependencies.js';
     import Process from '../../../components/svelte/Process.svelte';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
@@ -27,6 +27,7 @@
     let releaseImage = null;
 
     let processes = {};
+    let containerBalances = [];
     const quests = getQuestsForItem(itemId);
     let hasProcesses = false;
 
@@ -66,6 +67,16 @@
         }
         const itemCount = getItemCounts([{ id: itemId }])[itemId];
         count.set(itemCount);
+
+        if (item?.itemCounts && typeof item.itemCounts === 'object') {
+            const balances = getContainerItemCounts(itemId);
+            containerBalances = Object.entries(balances)
+                .filter(([, value]) => Number(value) > 0)
+                .map(([storedItemId, value]) => ({ id: storedItemId, count: Number(value) }));
+        } else {
+            containerBalances = [];
+        }
+
         mounted.set(true);
     });
 
@@ -91,6 +102,10 @@
                 <CompactItemList {itemList} inverted={true} />
                 {item.description}
                 <BuySell {itemId} />
+                {#if containerBalances.length > 0}
+                    <p>Stored in this container:</p>
+                    <CompactItemList itemList={containerBalances} inverted={true} />
+                {/if}
                 {#if hasProcesses}
                     <p>Processes:</p>
                 {/if}

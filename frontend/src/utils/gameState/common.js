@@ -216,6 +216,7 @@ async function clearStore(store) {
 const initializeGameState = () => ({
     quests: {},
     inventory: {},
+    itemContainerCounts: {},
     processes: {},
     settings: { ...DEFAULT_SETTINGS },
     versionNumberString: CURRENT_VERSION,
@@ -243,6 +244,9 @@ export const validateGameState = (state) => {
     }
     if (typeof state.inventory !== 'object' || state.inventory === null) {
         state.inventory = {};
+    }
+    if (typeof state.itemContainerCounts !== 'object' || state.itemContainerCounts === null) {
+        state.itemContainerCounts = {};
     }
     if (typeof state.processes !== 'object' || state.processes === null) {
         state.processes = {};

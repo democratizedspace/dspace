@@ -36,6 +36,15 @@
             "items": { "type": "string" },
             "default": []
         },
+        "itemCounts": {
+            "type": "object",
+            "propertyNames": { "type": "string", "minLength": 1 },
+            "additionalProperties": {
+                "type": "number",
+                "minimum": 0
+            },
+            "default": {}
+        },
         "hardening": { "$ref": "https://dspace.local/schemas/hardening.json" }
     },
     "required": ["id", "name", "description", "image"],

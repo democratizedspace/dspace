@@ -1,31 +1,46 @@
 {
     "id": "ubi/savings-goal",
     "title": "Start a Savings Jar",
-    "description": "Set aside some dUSD for future plans.",
+    "description": "Buy a sealed savings jar, deposit dUSD, and learn the break-to-withdraw tradeoff.",
     "image": "/assets/quests/ubi_savings_jar.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You're collecting dUSD regularly. Want to stash a bit away for a rainy day?",
+            "text": "Let's make savings tangible: buy a sealed jar, then drop in some dUSD. You can only get it back by breaking the jar.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "buy-savings-jar",
+                    "text": "Buy a sealed savings jar (12 dUSD)."
+                },
+                {
                     "type": "goto",
-                    "goto": "decide",
-                    "text": "Sure, let's save."
+                    "goto": "deposit",
+                    "text": "I already have a jar.",
+                    "requiresItems": [
+                        {
+                            "id": "b7046e45-1cce-4cb8-9a23-6045c74cd667",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "decide",
-            "text": "Saving helps you reach bigger goals. Set aside at least 10 dUSD now.",
+            "id": "deposit",
+            "text": "Great. Deposit 10 dUSD into the sealed jar. We'll track that amount inside the jar itself.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "deposit",
-                    "text": "Deposit 10 dUSD.",
+                    "type": "process",
+                    "process": "deposit-dusd-into-savings-jar",
+                    "text": "Deposit 10 dUSD into the jar.",
                     "requiresItems": [
+                        {
+                            "id": "b7046e45-1cce-4cb8-9a23-6045c74cd667",
+                            "count": 1
+                        },
                         {
                             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
                             "count": 10
@@ -35,17 +50,28 @@
                 {
                     "type": "process",
                     "process": "basic-income",
-                    "text": "Need to claim more first."
+                    "text": "Need more dUSD first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "complete",
+                    "text": "I've already deposited at least 10 dUSD.",
+                    "requiresItems": [
+                        {
+                            "id": "b7046e45-1cce-4cb8-9a23-6045c74cd667",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "deposit",
-            "text": "Nice! Keep adding to that jar and watch it grow.",
+            "id": "complete",
+            "text": "Nice work. Your jar balance is now tracked. If you need the funds back later, run the break process to convert jar savings back into inventory dUSD.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All saved up for now."
+                    "text": "Savings jar started."
                 }
             ]
         }
@@ -59,8 +85,8 @@
     "requiresQuests": ["ubi/first-payment"],
     "hardening": {
         "passes": 0,
-        "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 90,
+        "emoji": "🛠️",
         "history": []
     }
 }
