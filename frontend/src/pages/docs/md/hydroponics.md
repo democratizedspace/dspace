@@ -105,11 +105,11 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Hydro Award ×1
 - Processes used:
     - [stage-ten-buckets](/processes/stage-ten-buckets)
         - Requires: 5 gallon bucket of dechlorinated tap water ×10
-        - Consumes: 5 gallon bucket of dechlorinated tap water ×10
+        - Consumes: none
         - Creates: ten-bucket water haul ×1
     - [award-hydro-haul](/processes/award-hydro-haul)
         - Requires: ten-bucket water haul ×1
