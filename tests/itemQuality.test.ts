@@ -8,6 +8,7 @@ enum PriceExemptionReason {
   EVENT_REWARD = "EVENT_REWARD",
   CURRENCY = "CURRENCY",
   COMPONENT = "COMPONENT",
+  TIME_GATED = "TIME_GATED",
   BETA_PLACEHOLDER = "BETA_PLACEHOLDER",
   ALIEN_TECH = "ALIEN_TECH",
 }
@@ -175,7 +176,7 @@ describe("item quality", () => {
     expect(dechlorinatedWater).toBeDefined();
     expect(dechlorinatedWater?.price).toBeUndefined();
     expect(dechlorinatedWater?.priceExemptionReason).toBe(
-      PriceExemptionReason.COMPONENT
+      PriceExemptionReason.TIME_GATED
     );
   });
 });
