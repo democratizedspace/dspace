@@ -110,11 +110,11 @@
         user-select: text;
     }
 
-    :global(nav .chip-container.static-container) {
+    nav .chip-container.static-container {
         opacity: 1;
     }
 
-    :global(nav .chip-container.static-container.inverted) {
+    nav .chip-container.static-container.inverted {
         box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
     }
 
