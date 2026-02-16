@@ -134,6 +134,50 @@ Organize quests in a **clear progression** from beginner to advanced:
 
 ## Content Guidelines
 
+## Quest Quality Gate (Required for Humans + LLMs)
+
+The v3 QA checklist has shown a recurring quality gap between manually validated quests and many
+newly added quests. Before opening a PR, run this gate to avoid shallow, template-like content.
+
+### Minimum interaction depth
+
+Treat these as minimums, not aspirational goals:
+
+-   At least **4 dialogue nodes** for simple quests and **6+** for technical quests
+    (programming/devops/electronics/geothermal).
+-   At least one **remediation branch** ("what if this fails?") before finish.
+-   At least one **learning recap** in the finish path (what changed, why it matters, what unlocks
+    next).
+-   Option text should signal consequence (for example, "Run calibration process" vs "Continue").
+
+### Common anti-patterns to avoid
+
+These patterns have repeatedly appeared in v3 quests and should be corrected before merge:
+
+1. **Three-node skeleton quest**
+   - Start → action → finish with no troubleshooting or concept reinforcement.
+   - Example to avoid: `programming/stddev-temp`.
+2. **Context/process mismatch**
+   - Quest copy implies one domain while process reference is cross-domain without explanation.
+   - Example to avoid: `hydroponics/temp-check` calling `check-aquarium-temperature` without
+     clarifying shared process semantics.
+3. **Generic praise ending only**
+   - Finish text says "Nice work"/"Great job" but does not summarize learning or next steps.
+   - Examples to avoid: `aquaria/balance-ph`, `geothermal/check-loop-pressure`.
+4. **Security/science compressed to one click**
+   - High-risk topics presented as a single completion gate.
+   - Example to avoid: `devops/fail2ban` without verification branch.
+
+### Author self-review checklist (copy/paste into PR)
+
+- [ ] I explained where to run required process(es) in DSPACE UI.
+- [ ] I included at least one failure/recovery path.
+- [ ] I included concrete safety or troubleshooting detail (not generic warning text).
+- [ ] My finish node recaps learning and points to a logical next quest.
+- [ ] My quest avoids repetitive filler praise and template phrasing.
+- [ ] If I reused a process from another domain, I explicitly explained why.
+- [ ] I validated the quest with `node scripts/validate-quest.js path/to/quest.json`.
+
 ### Dialogue Best Practices
 
 1. **Authentic Voice**: Each NPC should have a consistent personality
