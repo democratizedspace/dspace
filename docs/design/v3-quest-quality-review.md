@@ -3,7 +3,7 @@
 ## Why this doc exists
 
 The v3 QA checklist already has a quest-by-quest validation list in
-`docs/qa/v3.md` §4.5. At the time of writing, only 16 quests are checked, while 231 remain unchecked.
+`docs/qa/v3.md` §4.5. At the time of writing, only 16 quests are checked, while 221 remain unchecked.
 Most unchecked quests are newly added in v3 (`docs/new-quests.md`) and deserve focused quality review
 before release hardening.
 
@@ -20,10 +20,13 @@ agents authoring quests.
 
 Quick quantitative scan (scripted locally):
 
+- Scan run on **2026-02-16** at commit **`80eb7ce9dc11c30817089a511277fc29832026f2`**.
+- Reproduction method: parse quest IDs from `docs/qa/v3.md` §4.5, intersect with `docs/new-quests.md`, then compute structural counts from corresponding quest JSON files.
+
 - Checked quests: **16**
-- Unchecked quests: **231**
+- Unchecked quests: **221**
 - Checked quests that are new in v3: **15/16**
-- Unchecked quests that are new in v3: **221/231**
+- Unchecked quests that are new in v3: **221/221**
 
 Average structural complexity (dialogue graph only):
 
@@ -62,7 +65,7 @@ Checked quests are not uniformly perfect, but they more often demonstrate:
    - Especially visible in `energy/dWatt-*` style quests.
    - Risk: inflated goals with minimal narrative/mechanical variety.
 
-4. **Generic rewarding and weak differentiation**
+4. **Generic rewards and weak differentiation**
    - Many quests grant the same trophy-like item regardless of topic/effort.
    - Risk: progression and domain identity blur together.
 
@@ -100,7 +103,7 @@ Use this as an actionable backlog for quest polishing passes.
 ### 4) `electronics/soldering-intro` (file) / `electronics/tin-soldering-iron` (ID)
 
 - [ ] Align file basename and quest ID for canonical clarity.
-- [ ] Add an explicit quality check branch (cold joint detection, retin step).
+- [ ] Add an explicit quality check branch (cold joint detection, re-tinning step).
 - [ ] Add process-backed verification before completion.
 
 ### 5) `woodworking/workbench`

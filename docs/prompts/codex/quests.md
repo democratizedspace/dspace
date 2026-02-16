@@ -154,7 +154,9 @@ USER:
 3. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
 4. Summarize the new or updated quest in the PR description.
 5. Include a brief self-review using the four quality questions above.
-6. Use an emoji-prefixed commit message.
+6. Include a short anti-pattern note explaining how the quest avoids thin-shell
+   and accumulation-only designs.
+7. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request implementing the quest with all tests green.
@@ -174,8 +176,8 @@ existing quests in that tree as examples for tone and structure.
 USER:
 1. Create a new quest JSON in the chosen tree following the quest schema.
 2. Reference at least one inventory item or process.
-   3. Run `npm run lint`, `npm run type-check`, `npm run build`, and
-      `npm run test:ci -- questCanonical questQuality`. Fix any failures.
+3. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+   `npm run test:ci -- questCanonical questQuality`. Fix any failures.
 4. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
 5. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
 6. Use an emoji-prefixed commit message.
@@ -227,11 +229,13 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-   6. Run `npm run lint`, `npm run type-check`, `npm run build`, and
-      `npm run test:ci -- questCanonical questQuality`. Update docs if needed.
-   7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
-   8. Include a four-question self-review note (learn / prove / failure / proportion).
-   9. Use an emoji-prefixed commit message.
+6. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+   `npm run test:ci -- questCanonical questQuality`. Update docs if needed.
+7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+8. Include a four-question self-review note (learn / prove / failure / proportion).
+9. Include a short anti-pattern note explaining how the update avoids thin-shell
+   and accumulation-only patterns.
+10. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request with the refined quest, updated hardening block and passing tests.
