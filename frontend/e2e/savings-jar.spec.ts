@@ -41,7 +41,7 @@ test.describe('Savings jar mechanics', () => {
 
     function getProcessCard(page, title) {
         const heading = page.getByRole('heading', { name: title, exact: true });
-        return heading.locator('xpath=..');
+        return heading.locator('xpath=ancestor::*[contains(@class, "container")][1]');
     }
 
     async function startAndCollectProcess(processCard) {
@@ -55,8 +55,29 @@ test.describe('Savings jar mechanics', () => {
 
     async function readSavingsState(page) {
         return page.evaluate(
-            ({ dUsdId, savingsJarId, brokenJarId }) => {
-                const saved = JSON.parse(localStorage.getItem('gameState') || '{}');
+            async ({ dUsdId, savingsJarId, brokenJarId }) => {
+                const readLocalState = () => JSON.parse(localStorage.getItem('gameState') || '{}');
+                const readIndexedDbState = async () => {
+                    return await new Promise((resolve) => {
+                        const request = indexedDB.open('dspaceGameState', 1);
+                        request.onerror = () => resolve(null);
+                        request.onsuccess = () => {
+                            const db = request.result;
+                            const tx = db.transaction('state', 'readonly');
+                            const getReq = tx.objectStore('state').get('root');
+                            getReq.onsuccess = () => {
+                                db.close();
+                                resolve(getReq.result ?? null);
+                            };
+                            getReq.onerror = () => {
+                                db.close();
+                                resolve(null);
+                            };
+                        };
+                    });
+                };
+
+                const saved = (await readIndexedDbState()) ?? readLocalState();
                 return {
                     dUsd: saved.inventory?.[dUsdId] ?? 0,
                     savingsJar: saved.inventory?.[savingsJarId] ?? 0,
@@ -102,7 +123,7 @@ test.describe('Savings jar mechanics', () => {
         expect(initialState.stored).toBe(0);
 
         const depositProcess = getProcessCard(page, 'Deposit 10 dUSD into your savings jar');
-        await depositProcess.getByTestId('process-deposit-amount-input').fill('10');
+        await page.getByTestId('process-deposit-amount-input').first().fill('10');
         await startAndCollectProcess(depositProcess);
 
         await expect
