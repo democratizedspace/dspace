@@ -82,7 +82,11 @@ describe('ItemPage', () => {
         });
 
         expect(container.querySelector('nav button')).toBeNull();
-        expect(container.querySelector('nav .chip-container')).not.toBeNull();
+
+        const outerContainer = container.querySelector(
+            'nav .chip-container.static-container.inverted'
+        );
+        expect(outerContainer).not.toBeNull();
 
         const heroImage = container.querySelector('img:not(.icon)');
         expect(heroImage?.getAttribute('src')).toBe(builtIn.image);

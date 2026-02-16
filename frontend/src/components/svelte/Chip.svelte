@@ -33,13 +33,14 @@
         <a {href} data-testid={dataTestId}>{text}</a>
     {:else if isStaticContainer}
         <div
-            class="chip-container"
+            class="chip-container static-container"
             class:disabled={disabled === true}
             class:inverted={inverted === true}
             class:red={red === true}
             class:hazard={hazard === true}
             class:cheat={cheat === true}
             data-testid={dataTestId}
+            style="opacity: 1"
         >
             <div class="slot">
                 <slot />
