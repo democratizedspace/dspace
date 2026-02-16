@@ -6,6 +6,39 @@ const SAVINGS_JAR_ID = '66c2cdc6-9517-4c96-937f-1ddb4ee06ef3';
 const BROKEN_JAR_ID = '6d4dfbe7-55c7-43bf-aba8-de7b05ff66a9';
 
 test.describe('Savings jar mechanics', () => {
+    async function seedGameState(page, seededState) {
+        await page.evaluate(async (state) => {
+            localStorage.setItem('gameState', JSON.stringify(state));
+            localStorage.setItem('gameStateBackup', JSON.stringify(state));
+
+            await new Promise((resolve, reject) => {
+                const request = indexedDB.open('dspaceGameState', 1);
+                request.onupgradeneeded = () => {
+                    const db = request.result;
+                    if (!db.objectStoreNames.contains('state')) {
+                        db.createObjectStore('state');
+                    }
+                    if (!db.objectStoreNames.contains('backup')) {
+                        db.createObjectStore('backup');
+                    }
+                };
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    const db = request.result;
+                    const tx = db.transaction(['state', 'backup'], 'readwrite');
+                    tx.objectStore('state').put(state, 'root');
+                    tx.objectStore('backup').put(state, 'root');
+                    tx.oncomplete = () => {
+                        db.close();
+                        resolve(undefined);
+                    };
+                    tx.onerror = () => reject(tx.error);
+                    tx.onabort = () => reject(tx.error);
+                };
+            });
+        }, seededState);
+    }
+
     function getProcessCard(page, title) {
         const heading = page.getByRole('heading', { name: title, exact: true });
         return heading.locator('xpath=..');
@@ -42,27 +75,19 @@ test.describe('Savings jar mechanics', () => {
     test('tracks stored dUSD and returns it when jar is broken', async ({ page }) => {
         await page.goto('/');
 
-        await page.evaluate(
-            ({ dUsdId, savingsJarId }) => {
-                const now = Date.now();
-                const seededState = {
-                    quests: {},
-                    inventory: {
-                        [dUsdId]: 25,
-                        [savingsJarId]: 1,
-                    },
-                    inventoryItemCounts: {},
-                    processes: {},
-                    settings: {},
-                    versionNumberString: '3',
-                    _meta: { lastUpdated: now },
-                };
-
-                localStorage.setItem('gameState', JSON.stringify(seededState));
-                localStorage.setItem('gameStateBackup', JSON.stringify(seededState));
+        const now = Date.now();
+        await seedGameState(page, {
+            quests: {},
+            inventory: {
+                [DUSD_ID]: 25,
+                [SAVINGS_JAR_ID]: 1,
             },
-            { dUsdId: DUSD_ID, savingsJarId: SAVINGS_JAR_ID }
-        );
+            inventoryItemCounts: {},
+            processes: {},
+            settings: {},
+            versionNumberString: '3',
+            _meta: { lastUpdated: now },
+        });
 
         await page.goto('/processes/save-dusd-in-jar');
         await waitForHydration(page);
@@ -109,31 +134,23 @@ test.describe('Savings jar mechanics', () => {
     }) => {
         await page.goto('/');
 
-        await page.evaluate(
-            ({ dUsdId, savingsJarId }) => {
-                const now = Date.now();
-                const seededState = {
-                    quests: {},
-                    inventory: {
-                        [dUsdId]: 25,
-                        [savingsJarId]: 1,
-                    },
-                    inventoryItemCounts: {
-                        [savingsJarId]: {
-                            [dUsdId]: 0,
-                        },
-                    },
-                    processes: {},
-                    settings: {},
-                    versionNumberString: '3',
-                    _meta: { lastUpdated: now },
-                };
-
-                localStorage.setItem('gameState', JSON.stringify(seededState));
-                localStorage.setItem('gameStateBackup', JSON.stringify(seededState));
+        const now = Date.now();
+        await seedGameState(page, {
+            quests: {},
+            inventory: {
+                [DUSD_ID]: 25,
+                [SAVINGS_JAR_ID]: 1,
             },
-            { dUsdId: DUSD_ID, savingsJarId: SAVINGS_JAR_ID }
-        );
+            inventoryItemCounts: {
+                [SAVINGS_JAR_ID]: {
+                    [DUSD_ID]: 0,
+                },
+            },
+            processes: {},
+            settings: {},
+            versionNumberString: '3',
+            _meta: { lastUpdated: now },
+        });
 
         await page.goto('/processes/break-savings-jar');
         await waitForHydration(page);
