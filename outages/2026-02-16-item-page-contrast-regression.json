@@ -6,6 +6,7 @@
   "resolution": "Made static Chip containers fully opaque and added regression coverage so static item-detail wrappers keep strong visual contrast while remaining selectable.",
   "references": [
     "frontend/src/components/svelte/Chip.svelte",
-    "frontend/src/pages/inventory/item/__tests__/ItemPage.spec.ts"
+    "frontend/src/pages/inventory/item/__tests__/ItemPage.spec.ts",
+    "https://github.com/democratizedspace/dspace/pull/3544"
   ]
 }
