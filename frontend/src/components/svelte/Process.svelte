@@ -195,10 +195,6 @@
 
     // Start the missing-requirements pulse sequence and manage queued reruns.
     const beginPulse = (targets, message) => {
-        if (!message && !targets.require && !targets.consume) {
-            return;
-        }
-
         clearTimeout(pulseTimeoutId);
         rerunQueued = false;
         queuedPulseTargets = null;
