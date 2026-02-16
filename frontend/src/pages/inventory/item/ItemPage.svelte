@@ -97,9 +97,7 @@
             return;
         }
 
-        const trackedItemIds = Object.keys(item.itemCounts).filter((itemKey) =>
-            Boolean(item.itemCounts[itemKey])
-        );
+        const trackedItemIds = Object.keys(item.itemCounts);
 
         if (trackedItemIds.length === 0) {
             containedItemCounts = [];

@@ -140,7 +140,7 @@ describe('ItemPage', () => {
     });
 
     it('renders container item balances from itemCounts metadata', async () => {
-        const savingsJar = items.find((item) => item.id === '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec');
+        const savingsJar = items.find((item) => item.id === '66c2cdc6-9517-4c96-937f-1ddb4ee06ef3');
 
         expect(savingsJar).toBeDefined();
 
