@@ -147,6 +147,24 @@ describe('gameState - inventory', () => {
         expect(mockGameState.inventory).toEqual(expectedInventory);
     });
 
+    test('buyItems should reject free or invalid purchases', () => {
+        const itemsToBuy = [
+            { id: '1', quantity: 2, price: 0 },
+            { id: '2', quantity: 2, price: -1 },
+            { id: '2', quantity: 0, price: 3 },
+        ];
+
+        buyItems(itemsToBuy);
+
+        const expectedInventory = {
+            1: 10,
+            [dUSDId]: 50,
+            [dCarbonId]: 0,
+        };
+
+        expect(mockGameState.inventory).toEqual(expectedInventory);
+    });
+
     test('buyItems count should equal inventory count if there were no previous items', () => {
         const itemsToBuy = [{ id: '1', quantity: 2, price: 5 }];
 

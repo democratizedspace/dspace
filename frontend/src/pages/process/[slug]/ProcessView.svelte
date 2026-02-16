@@ -16,26 +16,52 @@
     let toastVisible = false;
     let toastMessage = '';
 
-    const canBuyRequired = () =>
-        Boolean(
-            builtInProcess && builtInProcess.requireItems && builtInProcess.requireItems.length
-        );
+    const getUnitPrice = (item) => {
+        const { price } = getPriceStringComponents(item?.price);
+        return Number.isFinite(price) && price > 0 ? price : null;
+    };
+
+    const canBuyRequired = () => {
+        if (!displayProcess?.requireItems?.length) {
+            return false;
+        }
+
+        return displayProcess.requireItems.some((req) => {
+            const item = items.find((i) => i.id === req.id);
+            return getUnitPrice(item) !== null;
+        });
+    };
 
     const updateDisabled = () => {
         if (!displayProcess || !displayProcess.requireItems) {
             disableBuy = true;
             return;
         }
-        disableBuy = displayProcess.requireItems.every(
-            (item) => getItemCount(item.id) >= item.count
-        );
+
+        const hasPurchasableGap = displayProcess.requireItems.some((req) => {
+            const have = getItemCount(req.id);
+            const need = req.count - have;
+            if (need <= 0) {
+                return false;
+            }
+
+            const item = items.find((i) => i.id === req.id);
+            return getUnitPrice(item) !== null;
+        });
+
+        disableBuy = !hasPurchasableGap;
     };
 
     const buyItem = (id, qty) => {
         const item = items.find((i) => i.id === id);
         if (!item) return;
-        const { price } = getPriceStringComponents(item.price);
-        buyItems([{ id, quantity: qty, price }]);
+
+        const unitPrice = getUnitPrice(item);
+        if (unitPrice === null) {
+            return;
+        }
+
+        buyItems([{ id, quantity: qty, price: unitPrice }]);
     };
 
     const buyRequired = () => {

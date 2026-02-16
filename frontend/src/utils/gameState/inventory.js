@@ -64,12 +64,16 @@ export const buyItems = (items) => {
         const { price, quantity } = item;
         const currencyId = dUSDId;
 
-        const totalPrice = parseFloat(price) * parseFloat(quantity);
+        const parsedPrice = parseFloat(price);
+        const parsedQuantity = parseFloat(quantity);
+        const totalPrice = parsedPrice * parsedQuantity;
+
+        if (!Number.isFinite(parsedPrice) || parsedPrice <= 0) return;
+        if (!Number.isFinite(parsedQuantity) || parsedQuantity <= 0) return;
 
         if (gameState.inventory[currencyId] && gameState.inventory[currencyId] >= totalPrice) {
             gameState.inventory[currencyId] -= totalPrice; // Subtracting the currency for buying.
-            gameState.inventory[item.id] =
-                (gameState.inventory[item.id] || 0) + parseFloat(quantity); // Adding the bought item to inventory.
+            gameState.inventory[item.id] = (gameState.inventory[item.id] || 0) + parsedQuantity; // Adding the bought item to inventory.
         }
     });
 

@@ -77,6 +77,8 @@ FILES OF INTEREST
 
 REQUIREMENTS
 1. Follow the item schema.
+   - If an item is intentionally not sold in the shop, remove `price` **and** set `priceExemptionReason` to an allowed value.
+   - Never assume a missing `price` should become `0` for purchasing; process-only components must stay non-buyable.
 2. Reflect real-world materials or devices.
 3. Ensure the item is referenced by at least one quest or process; update those
    files and create missing processes as needed.
@@ -139,7 +141,8 @@ USER:
    `hardening` block or has a low score.
 2. Improve clarity, realism and units. Ensure prices and descriptions match
    real-world expectations and that related processes reference the item
-   correctly.
+   correctly. For non-priced items, ensure `priceExemptionReason` is present and
+   add/adjust a regression test if process flow could accidentally grant the item.
 3. When modifying the `image` field, reuse an existing image URL already in the
    repository; do not add new or external images. For Codex-created PRs, reuse an
    existing image and explicitly mark human follow-up via

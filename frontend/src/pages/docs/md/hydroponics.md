@@ -61,7 +61,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
         - Creates: 5 gallon bucket of tap water (chlorinated) ×1
     - [bucket-water-dechlorinated](/processes/bucket-water-dechlorinated)
         - Requires: none
-        - Note: this dechlorinated bucket is intentionally process-only (not sold in the shop), preserving the 48-hour wait gate.
+        - Note: this dechlorinated bucket is intentionally process-only (not sold in the shop), preserving the 48-hour wait gate. The process page Buy required items action skips non-priced requirements so this gate cannot be bypassed by auto-purchase.
         - Consumes: 5 gallon bucket of tap water (chlorinated) ×1
         - Creates: 5 gallon bucket of dechlorinated tap water ×1
     - [rockwool-soak](/processes/rockwool-soak)
