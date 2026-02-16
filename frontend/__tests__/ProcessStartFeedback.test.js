@@ -5,7 +5,7 @@ import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render } from '@testing-library/svelte';
 import { tick } from 'svelte';
 import Process from '../src/components/svelte/Process.svelte';
-import { startProcess } from '../src/utils/gameState/processes.js';
+import { hasRequiredAndConsumedItems, startProcess } from '../src/utils/gameState/processes.js';
 
 let mockCounts = {};
 const pulseDurationMs = 1050;
@@ -64,6 +64,7 @@ vi.mock('../src/utils/gameState/processes.js', async () => {
             progress: 0,
         })),
         getProcessStartedAt: vi.fn(() => Date.now()),
+        hasRequiredAndConsumedItems: vi.fn(() => true),
     };
 });
 
@@ -147,6 +148,25 @@ describe('Process start feedback', () => {
         expect(startProcess).toHaveBeenCalledWith(
             'test-process',
             expect.objectContaining({ id: 'test-process' })
+        );
+    });
+
+
+    it('shows feedback when non-inventory start requirements are not met', async () => {
+        mockCounts = { 'req-item': 2, 'cons-item': 1 };
+        hasRequiredAndConsumedItems.mockReturnValue(false);
+
+        const { getByTestId } = render(Process, {
+            props: { processId: 'test-process' },
+        });
+
+        await fireEvent.click(getByTestId('process-start-button'));
+        await tick();
+
+        expect(startProcess).not.toHaveBeenCalled();
+        expect(getByTestId('process-start-action').classList.contains('pulse')).toBe(true);
+        expect(getByTestId('process-start-feedback').textContent).toContain(
+            'Cannot start yet: process storage requirements are not met.'
         );
     });
 

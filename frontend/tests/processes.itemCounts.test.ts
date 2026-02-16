@@ -4,6 +4,7 @@ import {
     finishProcess,
     getProcessState,
     hasRequiredAndConsumedItems,
+    skipProcess,
     startProcess,
 } from '../src/utils/gameState/processes.js';
 
@@ -84,6 +85,30 @@ describe('process itemCountOperations', () => {
 
         finishProcess(definition.id, definition);
 
+        expect(addStoredItemsMock).toHaveBeenCalledWith('jar', 'dusd', 10);
+    });
+
+
+    test('skip applies itemCountOperations when process is not started', () => {
+        const definition = {
+            id: 'skip-save-dusd-in-jar',
+            duration: '1s',
+            requireItems: [],
+            consumeItems: [{ id: 'dusd', count: 10 }],
+            createItems: [],
+            itemCountOperations: [
+                {
+                    operation: 'deposit',
+                    containerItemId: 'jar',
+                    itemId: 'dusd',
+                    count: 10,
+                },
+            ],
+        };
+
+        skipProcess(definition.id, definition);
+
+        expect(burnItemsMock).toHaveBeenCalledWith([{ id: 'dusd', count: 10 }]);
         expect(addStoredItemsMock).toHaveBeenCalledWith('jar', 'dusd', 10);
     });
 

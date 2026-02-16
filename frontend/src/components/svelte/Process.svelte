@@ -12,6 +12,7 @@
         getProcessState,
         ProcessStates,
         getProcessStartedAt,
+        hasRequiredAndConsumedItems,
     } from '../../utils/gameState/processes.js';
     import processes from '../../generated/processes.json';
     import { durationInSeconds } from '../../utils.js';
@@ -192,7 +193,7 @@
 
     // Start the missing-requirements pulse sequence and manage queued reruns.
     const beginPulse = (targets, message) => {
-        if (!targets.require && !targets.consume) {
+        if (!message && !targets.require && !targets.consume) {
             return;
         }
 
@@ -263,6 +264,14 @@
             }
 
             beginPulse(targets, message);
+            return;
+        }
+
+        if (!hasRequiredAndConsumedItems(processId, process)) {
+            beginPulse(
+                { require: false, consume: false },
+                'Cannot start yet: process storage requirements are not met.'
+            );
             return;
         }
 

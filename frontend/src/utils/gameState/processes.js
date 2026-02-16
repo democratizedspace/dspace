@@ -478,6 +478,8 @@ export const skipProcess = (processId, processDefinition) => {
         addItems(process.createItems);
     }
 
+    applyItemCountOperations(process);
+
     const gameState = loadGameState();
     gameState.processes[processId] = undefined;
     saveGameState(gameState);
