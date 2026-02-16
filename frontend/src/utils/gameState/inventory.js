@@ -38,6 +38,52 @@ export const getItemCount = (itemId) => {
     return getItemCounts([{ id: itemId }])[itemId];
 };
 
+const getContainerMap = (gameState, containerItemId) => {
+    const maps = gameState.itemContainerCounts || {};
+    const existing = maps[containerItemId];
+    if (!existing || typeof existing !== 'object') {
+        maps[containerItemId] = {};
+        gameState.itemContainerCounts = maps;
+        return maps[containerItemId];
+    }
+    return existing;
+};
+
+export const getContainedItemCount = (containerItemId, itemId) => {
+    const gameState = loadGameState();
+    const containerMap = gameState.itemContainerCounts?.[containerItemId];
+    return Number(containerMap?.[itemId] || 0);
+};
+
+export const getContainedItemCounts = (containerItemId, itemIds = []) => {
+    const gameState = loadGameState();
+    const containerMap = gameState.itemContainerCounts?.[containerItemId] || {};
+
+    return itemIds.reduce((acc, itemId) => {
+        acc[itemId] = Number(containerMap[itemId] || 0);
+        return acc;
+    }, {});
+};
+
+export const addContainedItems = (containerItemId, itemId, count) => {
+    const normalizedCount = Number(count);
+    if (!Number.isFinite(normalizedCount) || normalizedCount <= 0) {
+        return;
+    }
+
+    const gameState = loadGameState();
+    const containerMap = getContainerMap(gameState, containerItemId);
+    containerMap[itemId] = Number(containerMap[itemId] || 0) + normalizedCount;
+    saveGameState(gameState);
+};
+
+export const clearContainedItemCount = (containerItemId, itemId) => {
+    const gameState = loadGameState();
+    const containerMap = getContainerMap(gameState, containerItemId);
+    containerMap[itemId] = 0;
+    saveGameState(gameState);
+};
+
 export const getCurrentdUSD = () => {
     return getItemCount(dUSDId);
 };

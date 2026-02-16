@@ -3,16 +3,26 @@
     "$id": "https://dspace.local/schemas/process.json",
     "type": "object",
     "properties": {
-        "id": { "type": "string" },
-        "title": { "type": "string" },
-        "image": { "type": "string" },
+        "id": {
+            "type": "string"
+        },
+        "title": {
+            "type": "string"
+        },
+        "image": {
+            "type": "string"
+        },
         "requireItems": {
             "type": "array",
             "items": {
                 "type": "object",
                 "properties": {
-                    "id": { "type": "string" },
-                    "count": { "type": "number" }
+                    "id": {
+                        "type": "string"
+                    },
+                    "count": {
+                        "type": "number"
+                    }
                 },
                 "required": ["id", "count"],
                 "additionalProperties": false
@@ -23,8 +33,12 @@
             "items": {
                 "type": "object",
                 "properties": {
-                    "id": { "type": "string" },
-                    "count": { "type": "number" }
+                    "id": {
+                        "type": "string"
+                    },
+                    "count": {
+                        "type": "number"
+                    }
                 },
                 "required": ["id", "count"],
                 "additionalProperties": false
@@ -35,15 +49,56 @@
             "items": {
                 "type": "object",
                 "properties": {
-                    "id": { "type": "string" },
-                    "count": { "type": "number" }
+                    "id": {
+                        "type": "string"
+                    },
+                    "count": {
+                        "type": "number"
+                    }
                 },
                 "required": ["id", "count"],
                 "additionalProperties": false
             }
         },
-        "duration": { "type": "string" },
-        "hardening": { "$ref": "https://dspace.local/schemas/hardening.json" }
+        "duration": {
+            "type": "string"
+        },
+        "hardening": {
+            "$ref": "https://dspace.local/schemas/hardening.json"
+        },
+        "containerDeposit": {
+            "type": "object",
+            "properties": {
+                "containerItemId": {
+                    "type": "string"
+                },
+                "itemId": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "min": {
+                    "type": "number",
+                    "minimum": 0
+                }
+            },
+            "required": ["containerItemId", "itemId"],
+            "additionalProperties": false
+        },
+        "containerWithdrawAll": {
+            "type": "object",
+            "properties": {
+                "containerItemId": {
+                    "type": "string"
+                },
+                "itemId": {
+                    "type": "string"
+                }
+            },
+            "required": ["containerItemId", "itemId"],
+            "additionalProperties": false
+        }
     },
     "required": [
         "id",
