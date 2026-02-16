@@ -56,6 +56,53 @@ See the [OpenAI CLI repository][openai-cli] for more flags.
 Codex merges those instructions with any `AGENTS.md` files it finds, so keep
 prompt‑level rules short and concrete.
 
+## 2.1 Quest quality bar (required for new and upgraded quests)
+
+Passing schema/tests is necessary but not sufficient. A quest should also clear
+this quality bar:
+
+1. **Depth over thin shells**
+   - Avoid `start -> one instruction -> finish` unless it is explicitly a micro-quest.
+   - Prefer meaningful intermediate steps (setup, execute, verify, reflect).
+2. **Mechanics-backed proof**
+   - At least one completion-critical step should be evidenced by DSPACE mechanics
+     (`process`, `requiresItems`, or equivalent gates), not only narrative text.
+3. **Troubleshooting branch**
+   - Technical quests should include at least one “what went wrong” branch
+     (bad reading, failed run, unsafe condition) and recovery action.
+4. **Safety + realism**
+   - Include concrete safety checks when the domain implies risk.
+   - Use tool/material sequencing that can be reproduced in real life.
+5. **Proportionate rewards and prerequisites**
+   - Reward should fit effort and unlock value; avoid repetitive generic rewards
+     that flatten progression identity.
+
+If you intentionally violate one of these, document why in the PR summary.
+
+## 2.2 Anti-patterns to avoid
+
+These patterns repeatedly produce low-quality quests and should be treated as
+failures during review:
+
+- **Three-node thin shell** with no meaningful branch or verification.
+- **Accumulation-only grind ladder** with no strategic decisions.
+- **Single giant prose node** that does all teaching without in-game checks.
+- **Decorative hardening metadata** (high scores/passes without substantive edits).
+- **Identity drift** where quest ID, filename, and narrative labels diverge enough
+  to confuse QA or graph diagnostics.
+
+Reference analysis: `docs/design/v3-quest-quality-review.md`.
+
+## 2.3 Required quality linkage notes (authors + LLMs)
+
+When writing or rewriting a quest, treat the v3 quality review as the structural baseline:
+
+- Read `docs/design/v3-quest-quality-review.md` before drafting quest changes.
+- In PR notes, name at least one checked quest from `docs/qa/v3.md` §4.5 used as structural inspiration.
+- In PR notes, name the anti-patterns you verified were avoided (for example: thin shell,
+  accumulation-only ladder, giant prose node).
+- Keep these notes lightweight (brief bullets are enough), but always include them.
+
 ---
 
 ## 3. Reusable template
@@ -83,6 +130,14 @@ REQUIREMENTS
 7. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
 8. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
 9. Update docs or dialogue as needed.
+10. Run a self-review and include the results in your PR notes:
+    - What does the player learn?
+    - What does the player prove using mechanics?
+    - What can go wrong, and where is recovery modeled?
+    - Why are prerequisites and rewards proportionate?
+11. In PR notes, include (a) checked quest inspiration from `docs/qa/v3.md` §4.5 and
+    (b) anti-patterns explicitly avoided, using `docs/design/v3-quest-quality-review.md`
+    as your reference.
 
 OUTPUT
 A pull request with the completed quest and passing checks.
@@ -111,7 +166,10 @@ USER:
 2. Run the commands listed in the system prompt before committing.
 3. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
 4. Summarize the new or updated quest in the PR description.
-5. Use an emoji-prefixed commit message.
+5. Include a brief self-review using the four quality questions above.
+6. Include a short anti-pattern note explaining how the quest avoids thin-shell
+   and accumulation-only designs.
+7. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request implementing the quest with all tests green.
@@ -131,11 +189,13 @@ existing quests in that tree as examples for tone and structure.
 USER:
 1. Create a new quest JSON in the chosen tree following the quest schema.
 2. Reference at least one inventory item or process.
-   3. Run `npm run lint`, `npm run type-check`, `npm run build`, and
-      `npm run test:ci -- questCanonical questQuality`. Fix any failures.
+3. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+   `npm run test:ci -- questCanonical questQuality`. Fix any failures.
 4. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
 5. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
 6. Use an emoji-prefixed commit message.
+7. Include a short note explaining how the quest avoids thin-shell and
+   accumulation-only anti-patterns.
 
 OUTPUT:
 A pull request with the new quest.
@@ -182,10 +242,13 @@ USER:
        { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
      ]
    }
-   6. Run `npm run lint`, `npm run type-check`, `npm run build`, and
-      `npm run test:ci -- questCanonical questQuality`. Update docs if needed.
-   7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
-   8. Use an emoji-prefixed commit message.
+6. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+   `npm run test:ci -- questCanonical questQuality`. Update docs if needed.
+7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+8. Include a four-question self-review note (learn / prove / failure / proportion).
+9. Include a short anti-pattern note explaining how the update avoids thin-shell
+   and accumulation-only patterns.
+10. Use an emoji-prefixed commit message.
 
 OUTPUT:
 A pull request with the refined quest, updated hardening block and passing tests.

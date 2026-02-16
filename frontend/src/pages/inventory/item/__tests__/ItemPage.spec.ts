@@ -7,6 +7,7 @@ import { db } from '../../../../utils/customcontent.js';
 import { clearItemResolverCache } from '../../../../utils/itemResolver.js';
 
 const getItemCountsMock = vi.fn();
+const getContainedItemCountsMock = vi.fn();
 const isGameStateReadyMock = vi.fn();
 
 vi.mock('../../../../utils/gameState/processes.js', () => {
@@ -35,6 +36,7 @@ vi.mock('../../../../utils/gameState/inventory.js', async (importOriginal) => {
     return {
         ...actual,
         getItemCounts: (...args) => getItemCountsMock(...args),
+        getContainedItemCounts: (...args) => getContainedItemCountsMock(...args),
     };
 });
 
@@ -74,6 +76,7 @@ afterEach(async () => {
     clearItemResolverCache();
     await deleteCustomContentDb();
     getItemCountsMock.mockReset();
+    getContainedItemCountsMock.mockReset();
     isGameStateReadyMock.mockReset();
 });
 
@@ -133,6 +136,27 @@ describe('ItemPage', () => {
         await waitFor(() => {
             const iconImage = container.querySelector('img.icon');
             expect(iconImage?.getAttribute('src')).toBe(heroImage?.getAttribute('src'));
+        });
+    });
+
+    it('renders container item balances from itemCounts metadata', async () => {
+        const savingsJar = items.find((item) => item.id === '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec');
+
+        expect(savingsJar).toBeDefined();
+
+        getItemCountsMock.mockReturnValue({ [savingsJar!.id]: 1 });
+        getContainedItemCountsMock.mockReturnValue({
+            '5247a603-294a-4a34-a884-1ae20969b2a1': 42,
+        });
+        isGameStateReadyMock.mockReturnValue(true);
+
+        const { getByText } = render(ItemPage, {
+            props: { itemId: savingsJar!.id },
+        });
+
+        await waitFor(() => {
+            expect(getByText('Contained items:')).toBeTruthy();
+            expect(getByText(/dUSD: 42/)).toBeTruthy();
         });
     });
 });

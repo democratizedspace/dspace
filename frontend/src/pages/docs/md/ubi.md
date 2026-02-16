@@ -72,17 +72,21 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
 - Unlock prerequisite:
     - `requiresQuests`: `ubi/first-payment`
 - Dialogue `requiresItems` gates:
-    - `decide` → "Deposit 10 dUSD." — dUSD ×10
+    - `buy-jar` → "I bought the savings jar." — savings jar ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - None
 - Processes used:
-    - [basic-income](/processes/basic-income)
-        - Requires: none
-        - Consumes: none
-        - Creates: dUSD ×100, dBI ×100
+    - [savings-jar-deposit](/processes/savings-jar-deposit)
+        - Requires: savings jar ×1
+        - Consumes: dUSD ×(user-entered amount)
+        - Creates: none (stores dUSD in jar container balance)
+    - [savings-jar-withdraw-all](/processes/savings-jar-withdraw-all)
+        - Requires: savings jar ×1
+        - Consumes: savings jar ×1
+        - Creates: none (returns all stored dUSD from container balance)
 
 ## QA flow notes
 

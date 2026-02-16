@@ -217,6 +217,7 @@ const initializeGameState = () => ({
     quests: {},
     inventory: {},
     processes: {},
+    itemContainerCounts: {},
     settings: { ...DEFAULT_SETTINGS },
     versionNumberString: CURRENT_VERSION,
     [META_KEY]: { lastUpdated: Date.now() },
@@ -246,6 +247,9 @@ export const validateGameState = (state) => {
     }
     if (typeof state.processes !== 'object' || state.processes === null) {
         state.processes = {};
+    }
+    if (typeof state.itemContainerCounts !== 'object' || state.itemContainerCounts === null) {
+        state.itemContainerCounts = {};
     }
     state.settings = normalizeSettings(state.settings);
     if (typeof state.versionNumberString !== 'string' || !state.versionNumberString.trim()) {

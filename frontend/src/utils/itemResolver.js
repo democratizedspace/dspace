@@ -29,6 +29,7 @@ function normalizeItem(rawItem, fallbackId) {
         image: rawItem.image ?? null,
         imageBlob: rawItem.imageBlob ?? null,
         custom: rawItem.custom ?? false,
+        itemCounts: rawItem.itemCounts ?? null,
     };
 }
 

@@ -36,6 +36,12 @@
             "items": { "type": "string" },
             "default": []
         },
+        "itemCounts": {
+            "type": "object",
+            "description": "Map of item ids this item can contain; truthy values indicate tracked contents",
+            "additionalProperties": { "type": "boolean" },
+            "default": {}
+        },
         "hardening": { "$ref": "https://dspace.local/schemas/hardening.json" }
     },
     "required": ["id", "name", "description", "image"],

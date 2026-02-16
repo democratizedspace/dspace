@@ -1,47 +1,58 @@
 {
     "id": "ubi/savings-goal",
     "title": "Start a Savings Jar",
-    "description": "Set aside some dUSD for future plans.",
+    "description": "Buy a savings jar and deposit dUSD for future plans.",
     "image": "/assets/quests/ubi_savings_jar.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You're collecting dUSD regularly. Want to stash a bit away for a rainy day?",
+            "text": "You're collecting dUSD regularly. Let's set up a real savings habit with a dedicated jar.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "decide",
-                    "text": "Sure, let's save."
+                    "goto": "buy-jar",
+                    "text": "Sounds good."
                 }
             ]
         },
         {
-            "id": "decide",
-            "text": "Saving helps you reach bigger goals. Set aside at least 10 dUSD now.",
+            "id": "buy-jar",
+            "text": "First, buy a savings jar from inventory. It costs a small amount of dUSD and tracks what you put inside.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "deposit",
-                    "text": "Deposit 10 dUSD.",
+                    "text": "I bought the savings jar.",
                     "requiresItems": [
                         {
-                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-                            "count": 10
+                            "id": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec",
+                            "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "process",
-                    "process": "basic-income",
-                    "text": "Need to claim more first."
                 }
             ]
         },
         {
             "id": "deposit",
-            "text": "Nice! Keep adding to that jar and watch it grow.",
+            "text": "Great. Run the savings jar deposit process and enter how much dUSD you want to stash right now.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "savings-jar-deposit",
+                    "text": "Deposit dUSD into the jar."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Deposit complete."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Your savings jar now holds dUSD that you can only withdraw all at once by consuming the jar.",
             "options": [
                 {
                     "type": "finish",
@@ -52,15 +63,15 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
             "count": 1
         }
     ],
     "requiresQuests": ["ubi/first-payment"],
     "hardening": {
         "passes": 0,
-        "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 90,
+        "emoji": "🛠️",
         "history": []
     }
 }
