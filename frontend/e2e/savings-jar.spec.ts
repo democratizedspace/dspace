@@ -6,6 +6,13 @@ const SAVINGS_JAR_ID = '66c2cdc6-9517-4c96-937f-1ddb4ee06ef3';
 const BROKEN_JAR_ID = '6d4dfbe7-55c7-43bf-aba8-de7b05ff66a9';
 
 test.describe('Savings jar mechanics', () => {
+    function getProcessCard(page, title) {
+        const heading = page.getByRole('heading', { name: title, exact: true });
+        return heading.locator(
+            'xpath=ancestor::div[.//button[normalize-space()="Start" or normalize-space()="Collect"]][1]'
+        );
+    }
+
     async function startAndCollectProcess(processCard) {
         await processCard.getByRole('button', { name: 'Start' }).first().click();
         await expect(processCard.getByRole('button', { name: 'Collect' })).toBeVisible({
@@ -65,9 +72,7 @@ test.describe('Savings jar mechanics', () => {
         const initialState = await readSavingsState(page);
         expect(initialState.stored).toBe(0);
 
-        const depositProcess = page.locator('div').filter({
-            has: page.getByRole('heading', { name: /Deposit 10 dUSD into your savings jar/i }),
-        });
+        const depositProcess = getProcessCard(page, 'Deposit 10 dUSD into your savings jar');
         await startAndCollectProcess(depositProcess);
 
         await expect
@@ -77,9 +82,10 @@ test.describe('Savings jar mechanics', () => {
             })
             .toBe(10);
 
-        const breakProcess = page.locator('div').filter({
-            has: page.getByRole('heading', { name: /Break your savings jar/i }),
-        });
+        const breakProcess = getProcessCard(
+            page,
+            'Break your savings jar to retrieve all stored dUSD'
+        );
         await startAndCollectProcess(breakProcess);
 
         const finalState = await readSavingsState(page);
@@ -127,9 +133,10 @@ test.describe('Savings jar mechanics', () => {
         const initialState = await readSavingsState(page);
         expect(initialState.stored).toBe(0);
 
-        const breakProcess = page.locator('div').filter({
-            has: page.getByRole('heading', { name: /Break your savings jar/i }),
-        });
+        const breakProcess = getProcessCard(
+            page,
+            'Break your savings jar to retrieve all stored dUSD'
+        );
         await startAndCollectProcess(breakProcess);
 
         const finalState = await readSavingsState(page);
