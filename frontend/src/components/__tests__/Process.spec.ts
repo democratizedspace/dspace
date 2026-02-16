@@ -457,6 +457,35 @@ test('renders custom process start controls when rendering a custom process', as
     expect(startProcess).toHaveBeenCalledWith('custom-1', customProcess);
 });
 
+test('shows storage requirement feedback when non-inventory checks fail', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    hasRequiredAndConsumedItems.mockReturnValue(false);
+
+    const customProcess = {
+        id: 'custom-storage-check',
+        title: 'Storage Check Process',
+        duration: '5s',
+        requireItems: [],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByTestId } = render(Process, {
+        processId: 'custom-storage-check',
+        processData: customProcess,
+    });
+
+    await tick();
+    await fireEvent.click(getByTestId('process-start-button'));
+
+    expect(startProcess).not.toHaveBeenCalled();
+    expect(getByTestId('process-start-feedback').textContent).toContain(
+        'Cannot start yet: process storage requirements are not met.'
+    );
+});
+
 test('prefers provided process data over built-in catalog lookup', async () => {
     stateInfo.state = ProcessStates.NOT_STARTED;
     getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
