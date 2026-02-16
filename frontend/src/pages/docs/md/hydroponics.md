@@ -60,6 +60,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
         - Consumes: 5 gallon bucket ×1
         - Creates: 5 gallon bucket of tap water (chlorinated) ×1
     - [bucket-water-dechlorinated](/processes/bucket-water-dechlorinated)
+        - QA note: This output is intentionally not purchasable and must be produced via the 48-hour dechlorination process.
         - Requires: none
         - Consumes: 5 gallon bucket of tap water (chlorinated) ×1
         - Creates: 5 gallon bucket of dechlorinated tap water ×1
