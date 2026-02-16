@@ -8,34 +8,40 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Want help remembering to claim your basic income each day? I can set up a reminder for you.",
+            "text": "Want to stop missing daily UBI claims? Let's set a recurring reminder on your real phone now.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "setup",
-                    "text": "Yes, please set a reminder."
+                    "text": "Yes, walk me through it."
                 }
             ]
         },
         {
             "id": "setup",
-            "text": "Great! This will ping you when it's time to claim tomorrow's payment.",
+            "text": "Open your phone's Clock or Calendar app outside the game. Create a repeating daily reminder titled 'Claim UBI' at a time you'll actually notice.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "basic-income",
-                    "text": "Schedule the reminder."
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Done. I set a daily phone reminder outside the game.",
+                    "requiresItems": [
+                        {
+                            "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "All set!"
+                    "text": "Done. I used a non-phone reminder method instead."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "You're good to go. Come back each day when the reminder fires to keep the dUSD flowing.",
+            "text": "Perfect. This quest is about a real-world reminder habit, not an in-game timer. When your reminder fires, come claim your UBI.",
             "options": [
                 {
                     "type": "finish",
