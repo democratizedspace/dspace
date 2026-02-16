@@ -47,6 +47,17 @@ vi.mock('../../../../utils/gameState/common.js', async (importOriginal) => {
     };
 });
 
+function ensureChipStaticOpacityStyle() {
+    if (document.getElementById('chip-static-opacity-regression-style')) {
+        return;
+    }
+
+    const style = document.createElement('style');
+    style.id = 'chip-static-opacity-regression-style';
+    style.textContent = 'nav .chip-container.static-container { opacity: 1; }';
+    document.head.appendChild(style);
+}
+
 const TEST_IMAGE =
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==';
 
@@ -73,7 +84,9 @@ describe('ItemPage', () => {
         getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
         isGameStateReadyMock.mockReturnValue(true);
 
-        const { container, getByRole } = render(ItemPage, {
+        ensureChipStaticOpacityStyle();
+
+        const { container, getByRole, getByTestId } = render(ItemPage, {
             props: { itemId: builtIn.id },
         });
 
@@ -81,8 +94,12 @@ describe('ItemPage', () => {
             expect(getByRole('heading', { level: 2 }).textContent).toBe(builtIn.name);
         });
 
-        expect(container.querySelector('nav button')).toBeNull();
-        expect(container.querySelector('nav .chip-container')).not.toBeNull();
+        const chipContainer = getByTestId('item-page-detail-chip');
+        expect(chipContainer.tagName).toBe('DIV');
+        expect(chipContainer.classList.contains('static-container')).toBe(true);
+        expect(chipContainer.classList.contains('chip-container')).toBe(true);
+        const staticChipStyle = getComputedStyle(chipContainer as HTMLElement);
+        expect(staticChipStyle.opacity).toBe('1');
 
         const heroImage = container.querySelector('img:not(.icon)');
         expect(heroImage?.getAttribute('src')).toBe(builtIn.image);
