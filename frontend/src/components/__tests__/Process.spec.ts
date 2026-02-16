@@ -20,6 +20,7 @@ const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
 const startProcess = vi.hoisted(() => vi.fn());
+const hasRequiredAndConsumedItems = vi.hoisted(() => vi.fn(() => true));
 const dbGetMock = vi.hoisted(() => vi.fn<(entityType: string, id: string) => Promise<unknown>>());
 
 const getProcessState = vi.mocked(getProcessStateMock);
@@ -96,6 +97,7 @@ vi.mock('../../generated/processes.json', () => ({
 
 vi.mock('../../utils/gameState/processes.js', () => ({
     startProcess,
+    hasRequiredAndConsumedItems,
     cancelProcess: vi.fn(),
     finishProcess: vi.fn(),
     getProcessState: vi.fn(() => stateInfo),
@@ -134,6 +136,8 @@ beforeEach(() => {
     getProcessStartedAtMock.mockReset();
     getProcessStartedAtMock.mockImplementation(() => Date.now());
     startProcess.mockClear();
+    hasRequiredAndConsumedItems.mockReset();
+    hasRequiredAndConsumedItems.mockReturnValue(true);
     dbGetMock.mockReset();
     getItemMapMock.mockResolvedValue(
         new Map([

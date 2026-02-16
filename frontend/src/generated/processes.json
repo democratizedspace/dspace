@@ -3085,7 +3085,7 @@
         "duration": "5s",
         "hardening": {
             "passes": 0,
-            "score": 95,
+            "score": 75,
             "emoji": "🛠️",
             "history": []
         }
@@ -3116,7 +3116,7 @@
         "duration": "3s",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 75,
             "emoji": "🛠️",
             "history": []
         }

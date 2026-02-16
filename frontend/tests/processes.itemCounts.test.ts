@@ -88,7 +88,6 @@ describe('process itemCountOperations', () => {
         expect(addStoredItemsMock).toHaveBeenCalledWith('jar', 'dusd', 10);
     });
 
-
     test('skip applies itemCountOperations when process is not started', () => {
         const definition = {
             id: 'skip-save-dusd-in-jar',

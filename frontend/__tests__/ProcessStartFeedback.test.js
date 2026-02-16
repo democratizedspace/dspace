@@ -151,7 +151,6 @@ describe('Process start feedback', () => {
         );
     });
 
-
     it('shows feedback when non-inventory start requirements are not met', async () => {
         mockCounts = { 'req-item': 2, 'cons-item': 1 };
         hasRequiredAndConsumedItems.mockReturnValue(false);
