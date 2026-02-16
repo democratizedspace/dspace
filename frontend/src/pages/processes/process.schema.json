@@ -42,6 +42,35 @@
                 "additionalProperties": false
             }
         },
+        "itemCountOperations": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "operation": {
+                        "type": "string",
+                        "enum": ["deposit", "withdraw", "withdraw-all"]
+                    },
+                    "containerItemId": { "type": "string" },
+                    "itemId": { "type": "string" },
+                    "count": { "type": "number", "exclusiveMinimum": 0 }
+                },
+                "required": ["operation", "containerItemId", "itemId"],
+                "allOf": [
+                    {
+                        "if": {
+                            "properties": {
+                                "operation": { "enum": ["deposit", "withdraw"] }
+                            }
+                        },
+                        "then": {
+                            "required": ["count"]
+                        }
+                    }
+                ],
+                "additionalProperties": false
+            }
+        },
         "duration": { "type": "string" },
         "hardening": { "$ref": "https://dspace.local/schemas/hardening.json" }
     },

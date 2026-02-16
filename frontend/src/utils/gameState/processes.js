@@ -1,5 +1,12 @@
 import { loadGameState, saveGameState } from './common.js';
 import { hasItems, burnItems, addItems } from './inventory.js';
+import {
+    addStoredItems,
+    canStoreItemInContainer,
+    getStoredItemCount,
+    removeAllStoredItems,
+    removeStoredItems,
+} from './itemContainers.js';
 import { durationInSeconds } from '../../utils.js';
 
 // Using import assertions for JSON imports
@@ -13,7 +20,77 @@ export const hasRequiredAndConsumedItems = (processId, processDefinition) => {
     if (!process) {
         return false;
     }
-    return hasItems(process.requireItems || []) && hasItems(process.consumeItems || []);
+    return (
+        hasItems(process.requireItems || []) &&
+        hasItems(process.consumeItems || []) &&
+        hasItemCountOperationRequirements(process)
+    );
+};
+
+const hasItemCountOperationRequirements = (process) => {
+    const operations = Array.isArray(process?.itemCountOperations)
+        ? process.itemCountOperations
+        : [];
+
+    return operations.every((operation) => {
+        const containerItemId = operation?.containerItemId;
+        const itemId = operation?.itemId;
+
+        if (!canStoreItemInContainer(containerItemId, itemId)) {
+            return false;
+        }
+
+        if (operation.operation === 'withdraw') {
+            const count = Number(operation?.count ?? 0);
+            return (
+                Number.isFinite(count) &&
+                count > 0 &&
+                getStoredItemCount(containerItemId, itemId) >= count
+            );
+        }
+
+        if (operation.operation === 'withdraw-all') {
+            return getStoredItemCount(containerItemId, itemId) > 0;
+        }
+
+        if (operation.operation === 'deposit') {
+            const count = Number(operation?.count ?? 0);
+            return Number.isFinite(count) && count > 0;
+        }
+
+        return false;
+    });
+};
+
+const applyItemCountOperations = (process) => {
+    const operations = Array.isArray(process?.itemCountOperations)
+        ? process.itemCountOperations
+        : [];
+
+    operations.forEach((operation) => {
+        const containerItemId = operation.containerItemId;
+        const itemId = operation.itemId;
+
+        if (operation.operation === 'deposit') {
+            addStoredItems(containerItemId, itemId, operation.count);
+            return;
+        }
+
+        if (operation.operation === 'withdraw') {
+            const removedCount = removeStoredItems(containerItemId, itemId, operation.count);
+            if (removedCount > 0) {
+                addItems([{ id: itemId, count: removedCount }]);
+            }
+            return;
+        }
+
+        if (operation.operation === 'withdraw-all') {
+            const removedCount = removeAllStoredItems(containerItemId, itemId);
+            if (removedCount > 0) {
+                addItems([{ id: itemId, count: removedCount }]);
+            }
+        }
+    });
 };
 
 export const startProcess = (processId, processDefinition) => {
@@ -165,6 +242,8 @@ export const finishProcess = (processId, processDefinition) => {
     if (createItems) {
         addItems(createItems);
     }
+
+    applyItemCountOperations(process);
 
     const gameState = loadGameState();
     gameState.processes[processId] = undefined;

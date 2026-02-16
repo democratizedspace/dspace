@@ -492,6 +492,25 @@
         "category": "Digital Currency & Tokens"
     },
     {
+        "id": "66c2cdc6-9517-4c96-937f-1ddb4ee06ef3",
+        "name": "savings jar",
+        "description": "Glass jar with a tamper band. You can only retrieve saved cash by breaking it.",
+        "image": "/assets/stevia_crystals_jar.jpg",
+        "price": "8 dUSD",
+        "category": "Digital Currency & Tokens",
+        "itemCounts": {
+            "5247a603-294a-4a34-a884-1ae20969b2a1": 0
+        }
+    },
+    {
+        "id": "6d4dfbe7-55c7-43bf-aba8-de7b05ff66a9",
+        "name": "broken savings jar",
+        "description": "Shattered savings jar. The seal is broken, so it can no longer hold dUSD.",
+        "image": "/assets/stevia_crystals_jar.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital Currency & Tokens"
+    },
+    {
         "id": "799ace33-1336-46c0-904a-9f16778230f1",
         "name": "sink",
         "description": "Steel sink with faucet; ~50×40×20 cm basin (~5 kg). Provides tap water.",

@@ -35,7 +35,13 @@ describe('process validation', () => {
     });
 
     it('keeps recipe references valid with sane counts and durations', () => {
-        const itemIds = new Set((items as Array<Record<string, any>>).map((item) => item.id));
+        const itemList = items as Array<Record<string, any>>;
+        const itemIds = new Set(itemList.map((item) => item.id));
+        const containerCompatibility = new Map(
+            itemList
+                .filter((item) => item?.itemCounts && typeof item.itemCounts === 'object')
+                .map((item) => [item.id, new Set(Object.keys(item.itemCounts))])
+        );
         const durationPattern = /^(?:\d+(?:\.\d+)?[dhmsDHMS]\s*)+$/;
         const canonicalizeDuration = (duration: string) =>
             prettyPrintDuration(durationInSeconds(duration));
@@ -57,6 +63,20 @@ describe('process validation', () => {
                     expect(itemIds.has(entry.id)).toBe(true);
                     expect(Number.isFinite(entry.count)).toBe(true);
                     expect(entry.count).toBeGreaterThan(0);
+                }
+            }
+
+            for (const operation of process.itemCountOperations ?? []) {
+                expect(itemIds.has(operation.containerItemId)).toBe(true);
+                expect(itemIds.has(operation.itemId)).toBe(true);
+                expect(['deposit', 'withdraw', 'withdraw-all']).toContain(operation.operation);
+
+                const allowedStoredItems = containerCompatibility.get(operation.containerItemId);
+                expect(allowedStoredItems?.has(operation.itemId)).toBe(true);
+
+                if (operation.operation === 'deposit' || operation.operation === 'withdraw') {
+                    expect(Number.isFinite(operation.count)).toBe(true);
+                    expect(operation.count).toBeGreaterThan(0);
                 }
             }
         }

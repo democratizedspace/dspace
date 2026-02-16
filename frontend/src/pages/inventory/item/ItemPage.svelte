@@ -9,10 +9,12 @@
         ProcessItemTypes,
     } from '../../../utils/gameState/processes.js';
     import { getItemCounts } from '../../../utils/gameState/inventory.js';
+    import { getStoredItemCounts } from '../../../utils/gameState/itemContainers.js';
     import { getQuestsForItem } from '../../../utils/itemDependencies.js';
     import Process from '../../../components/svelte/Process.svelte';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
     import { getItemById } from '../../../utils/itemResolver.js';
+    import items from '../json/items';
 
     export let itemId;
 
@@ -29,10 +31,41 @@
     let processes = {};
     const quests = getQuestsForItem(itemId);
     let hasProcesses = false;
+    let storedItemEntries = [];
+    let countIntervalId;
 
     const hasQuests = quests.requires.length > 0 || quests.rewards.length > 0;
+    const itemNameMap = new Map(
+        (Array.isArray(items) ? items : []).map((entry) => [entry.id, entry.name])
+    );
 
     $: hasProcesses = Object.values(processes).some((arr) => Array.isArray(arr) && arr.length > 0);
+
+    const formatStoredCount = (value) => {
+        const parsed = Number(value ?? 0);
+        if (!Number.isFinite(parsed)) {
+            return '0';
+        }
+
+        return Number.isInteger(parsed) ? String(parsed) : parsed.toFixed(2);
+    };
+
+    const refreshItemCounts = () => {
+        const itemCount = getItemCounts([{ id: itemId }])[itemId];
+        count.set(itemCount);
+
+        if (!item?.itemCounts || typeof item.itemCounts !== 'object') {
+            storedItemEntries = [];
+            return;
+        }
+
+        const runtimeCounts = getStoredItemCounts(item.id);
+        storedItemEntries = Object.keys(item.itemCounts).map((storedItemId) => ({
+            id: storedItemId,
+            name: itemNameMap.get(storedItemId) ?? storedItemId,
+            count: runtimeCounts[storedItemId] ?? 0,
+        }));
+    };
 
     async function loadItem() {
         isLoading = true;
@@ -64,12 +97,13 @@
         } catch (error) {
             processes = getProcessesForItem(itemId);
         }
-        const itemCount = getItemCounts([{ id: itemId }])[itemId];
-        count.set(itemCount);
+        refreshItemCounts();
+        countIntervalId = setInterval(refreshItemCounts, 1000);
         mounted.set(true);
     });
 
     onDestroy(() => {
+        clearInterval(countIntervalId);
         releaseImage?.();
     });
 </script>
@@ -90,6 +124,14 @@
                 <h2>{item.name}</h2>
                 <CompactItemList {itemList} inverted={true} />
                 {item.description}
+                {#if storedItemEntries.length > 0}
+                    <p><strong>Stored contents:</strong></p>
+                    <ul>
+                        {#each storedItemEntries as storedItem}
+                            <li>{storedItem.name}: {formatStoredCount(storedItem.count)}</li>
+                        {/each}
+                    </ul>
+                {/if}
                 <BuySell {itemId} />
                 {#if hasProcesses}
                     <p>Processes:</p>

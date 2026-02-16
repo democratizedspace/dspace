@@ -1,0 +1,84 @@
+import { expect, test } from '@playwright/test';
+import { purgeClientState, waitForHydration } from './test-helpers';
+
+const DUSD_ID = '5247a603-294a-4a34-a884-1ae20969b2a1';
+const SAVINGS_JAR_ID = '66c2cdc6-9517-4c96-937f-1ddb4ee06ef3';
+const BROKEN_JAR_ID = '6d4dfbe7-55c7-43bf-aba8-de7b05ff66a9';
+
+test.describe('Savings jar mechanics', () => {
+    test.beforeEach(async ({ page }) => {
+        await purgeClientState(page);
+    });
+
+    test('tracks stored dUSD and returns it when jar is broken', async ({ page }) => {
+        await page.goto('/');
+
+        await page.evaluate(
+            ({ dUsdId, savingsJarId }) => {
+                const now = Date.now();
+                const seededState = {
+                    quests: {},
+                    inventory: {
+                        [dUsdId]: 25,
+                        [savingsJarId]: 1,
+                    },
+                    inventoryItemCounts: {},
+                    processes: {},
+                    settings: {},
+                    versionNumberString: '3',
+                    _meta: { lastUpdated: now },
+                };
+
+                localStorage.setItem('gameState', JSON.stringify(seededState));
+                localStorage.setItem('gameStateBackup', JSON.stringify(seededState));
+            },
+            { dUsdId: DUSD_ID, savingsJarId: SAVINGS_JAR_ID }
+        );
+
+        await page.goto(`/inventory/item/${SAVINGS_JAR_ID}`);
+        await waitForHydration(page);
+
+        await expect(page.getByText(/Stored contents:/i)).toBeVisible();
+        await expect(page.getByText(/^dUSD: 0$/)).toBeVisible();
+
+        const depositProcess = page.locator('div').filter({
+            has: page.getByRole('heading', { name: /Deposit 10 dUSD into your savings jar/i }),
+        });
+        await depositProcess.getByRole('button', { name: 'Start' }).first().click();
+        await expect(depositProcess.getByRole('button', { name: 'Finish' })).toBeVisible({
+            timeout: 10000,
+        });
+        await depositProcess.getByRole('button', { name: 'Finish' }).click();
+
+        await expect(page.getByText(/^dUSD: 10$/)).toBeVisible();
+
+        const breakProcess = page.locator('div').filter({
+            has: page.getByRole('heading', { name: /Break your savings jar/i }),
+        });
+        await breakProcess.getByRole('button', { name: 'Start' }).first().click();
+        await expect(breakProcess.getByRole('button', { name: 'Finish' })).toBeVisible({
+            timeout: 10000,
+        });
+        await breakProcess.getByRole('button', { name: 'Finish' }).click();
+
+        await expect(page.getByText(/^dUSD: 0$/)).toBeVisible();
+
+        const finalState = await page.evaluate(
+            ({ dUsdId, savingsJarId, brokenJarId }) => {
+                const saved = JSON.parse(localStorage.getItem('gameState') || '{}');
+                return {
+                    dUsd: saved.inventory?.[dUsdId] ?? 0,
+                    savingsJar: saved.inventory?.[savingsJarId] ?? 0,
+                    brokenJar: saved.inventory?.[brokenJarId] ?? 0,
+                    stored: saved.inventoryItemCounts?.[savingsJarId]?.[dUsdId] ?? 0,
+                };
+            },
+            { dUsdId: DUSD_ID, savingsJarId: SAVINGS_JAR_ID, brokenJarId: BROKEN_JAR_ID }
+        );
+
+        expect(finalState.dUsd).toBeCloseTo(25);
+        expect(finalState.savingsJar).toBe(0);
+        expect(finalState.brokenJar).toBe(1);
+        expect(finalState.stored).toBe(0);
+    });
+});
