@@ -23,7 +23,13 @@ import { loadGameState, saveGameState } from '../src/utils/gameState/common.js';
 import { getContainedItemCount } from '../src/utils/gameState/inventory.js';
 
 describe('container process behavior', () => {
-    let mockGameState: Record<string, any>;
+    type MockGameState = {
+        inventory: Record<string, number>;
+        itemContainerCounts: Record<string, Record<string, number>>;
+        processes: Record<string, { startedAt: number }>;
+    };
+
+    let mockGameState: MockGameState;
 
     beforeEach(() => {
         mockGameState = {
@@ -35,8 +41,8 @@ describe('container process behavior', () => {
             processes: {},
         };
 
-        vi.mocked(loadGameState).mockImplementation(() => mockGameState as any);
-        vi.mocked(saveGameState).mockImplementation((newState: any) => {
+        vi.mocked(loadGameState).mockImplementation(() => mockGameState);
+        vi.mocked(saveGameState).mockImplementation((newState: MockGameState) => {
             mockGameState = newState;
         });
     });
