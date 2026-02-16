@@ -1,0 +1,14 @@
+{
+  "id": "item-page-contrast-regression",
+  "date": "2026-02-16",
+  "component": "inventory item detail visual styling",
+  "rootCause": "The static selectable Chip surface on item detail pages did not enforce strong visual separation from nested inventory/process elements after text selection support landed, reducing perceived contrast on the page.",
+  "resolution": "Added a stronger contrast treatment for inverted static Chip containers, introduced a dedicated high-contrast item detail panel style, and added regression tests for both Chip styling and item page surface styling.",
+  "references": [
+    "frontend/src/components/svelte/Chip.svelte",
+    "frontend/src/components/__tests__/Chip.spec.ts",
+    "frontend/src/pages/inventory/item/ItemPage.svelte",
+    "frontend/src/pages/inventory/item/__tests__/ItemPage.spec.ts",
+    "https://github.com/democratizedspace/dspace/pull/3544"
+  ]
+}

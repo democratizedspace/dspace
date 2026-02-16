@@ -34,6 +34,8 @@
     {:else if isStaticContainer}
         <div
             class="chip-container"
+            class:selectable-static={true}
+            class:high-contrast={inverted === true}
             class:disabled={disabled === true}
             class:inverted={inverted === true}
             class:red={red === true}
@@ -95,6 +97,11 @@
     nav .chip-container {
         -webkit-user-select: text;
         user-select: text;
+    }
+
+    nav .chip-container.high-contrast {
+        opacity: 1;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.28);
     }
 
     nav button {

@@ -77,19 +77,19 @@
 {#if $mounted}
     <Chip inverted={true} text="">
         {#if isLoading}
-            <div class="vertical">
+            <div class="vertical detail-surface">
                 <p class="placeholder">Loading item…</p>
             </div>
         {:else if itemNotFound}
-            <div class="vertical">
+            <div class="vertical detail-surface">
                 <p class="placeholder">Item not found.</p>
             </div>
         {:else if item}
-            <div class="vertical">
+            <div class="vertical detail-surface">
                 <img src={item.image} alt={item.name} />
                 <h2>{item.name}</h2>
                 <CompactItemList {itemList} inverted={true} />
-                {item.description}
+                <p class="description">{item.description}</p>
                 <BuySell {itemId} />
                 {#if hasProcesses}
                     <p>Processes:</p>
@@ -138,6 +138,13 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        background-color: rgba(8, 38, 8, 0.76);
+        color: #f5fff5;
+        border-radius: 16px;
+        border: 1px solid rgba(176, 255, 176, 0.35);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+        padding: 1rem;
+        max-width: min(44rem, 100%);
     }
 
     img {
@@ -153,5 +160,9 @@
 
     .placeholder {
         color: #d0ffd0;
+    }
+
+    .description {
+        text-align: center;
     }
 </style>

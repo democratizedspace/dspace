@@ -86,6 +86,12 @@ describe('ItemPage', () => {
 
         const heroImage = container.querySelector('img:not(.icon)');
         expect(heroImage?.getAttribute('src')).toBe(builtIn.image);
+
+        const panel = container.querySelector('.vertical.detail-surface');
+        expect(panel).not.toBeNull();
+
+        const description = container.querySelector('p.description');
+        expect(description?.textContent).toBe(builtIn.description);
     });
 
     it('renders custom item details and matching icon', async () => {
