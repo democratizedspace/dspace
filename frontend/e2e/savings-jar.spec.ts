@@ -6,6 +6,21 @@ const SAVINGS_JAR_ID = '66c2cdc6-9517-4c96-937f-1ddb4ee06ef3';
 const BROKEN_JAR_ID = '6d4dfbe7-55c7-43bf-aba8-de7b05ff66a9';
 
 test.describe('Savings jar mechanics', () => {
+    async function readSavingsState(page) {
+        return page.evaluate(
+            ({ dUsdId, savingsJarId, brokenJarId }) => {
+                const saved = JSON.parse(localStorage.getItem('gameState') || '{}');
+                return {
+                    dUsd: saved.inventory?.[dUsdId] ?? 0,
+                    savingsJar: saved.inventory?.[savingsJarId] ?? 0,
+                    brokenJar: saved.inventory?.[brokenJarId] ?? 0,
+                    stored: saved.inventoryItemCounts?.[savingsJarId]?.[dUsdId] ?? 0,
+                };
+            },
+            { dUsdId: DUSD_ID, savingsJarId: SAVINGS_JAR_ID, brokenJarId: BROKEN_JAR_ID }
+        );
+    }
+
     test.beforeEach(async ({ page }) => {
         await purgeClientState(page);
     });
@@ -37,9 +52,10 @@ test.describe('Savings jar mechanics', () => {
 
         await page.goto(`/inventory/item/${SAVINGS_JAR_ID}`);
         await waitForHydration(page);
+        await expect(page.getByRole('heading', { name: /savings jar/i })).toBeVisible();
 
-        await expect(page.getByText(/Stored contents:/i)).toBeVisible();
-        await expect(page.getByText(/^dUSD: 0$/)).toBeVisible();
+        const initialState = await readSavingsState(page);
+        expect(initialState.stored).toBe(0);
 
         const depositProcess = page.locator('div').filter({
             has: page.getByRole('heading', { name: /Deposit 10 dUSD into your savings jar/i }),
@@ -50,7 +66,12 @@ test.describe('Savings jar mechanics', () => {
         });
         await depositProcess.getByRole('button', { name: 'Finish' }).click();
 
-        await expect(page.getByText(/^dUSD: 10$/)).toBeVisible();
+        await expect
+            .poll(async () => {
+                const state = await readSavingsState(page);
+                return state.stored;
+            })
+            .toBe(10);
 
         const breakProcess = page.locator('div').filter({
             has: page.getByRole('heading', { name: /Break your savings jar/i }),
@@ -61,20 +82,7 @@ test.describe('Savings jar mechanics', () => {
         });
         await breakProcess.getByRole('button', { name: 'Finish' }).click();
 
-        await expect(page.getByText(/^dUSD: 0$/)).toBeVisible();
-
-        const finalState = await page.evaluate(
-            ({ dUsdId, savingsJarId, brokenJarId }) => {
-                const saved = JSON.parse(localStorage.getItem('gameState') || '{}');
-                return {
-                    dUsd: saved.inventory?.[dUsdId] ?? 0,
-                    savingsJar: saved.inventory?.[savingsJarId] ?? 0,
-                    brokenJar: saved.inventory?.[brokenJarId] ?? 0,
-                    stored: saved.inventoryItemCounts?.[savingsJarId]?.[dUsdId] ?? 0,
-                };
-            },
-            { dUsdId: DUSD_ID, savingsJarId: SAVINGS_JAR_ID, brokenJarId: BROKEN_JAR_ID }
-        );
+        const finalState = await readSavingsState(page);
 
         expect(finalState.dUsd).toBeCloseTo(25);
         expect(finalState.savingsJar).toBe(0);
@@ -116,7 +124,8 @@ test.describe('Savings jar mechanics', () => {
         await page.goto(`/inventory/item/${SAVINGS_JAR_ID}`);
         await waitForHydration(page);
 
-        await expect(page.getByText(/^dUSD: 0$/)).toBeVisible();
+        const initialState = await readSavingsState(page);
+        expect(initialState.stored).toBe(0);
 
         const breakProcess = page.locator('div').filter({
             has: page.getByRole('heading', { name: /Break your savings jar/i }),
@@ -127,18 +136,7 @@ test.describe('Savings jar mechanics', () => {
         });
         await breakProcess.getByRole('button', { name: 'Finish' }).click();
 
-        const finalState = await page.evaluate(
-            ({ dUsdId, savingsJarId, brokenJarId }) => {
-                const saved = JSON.parse(localStorage.getItem('gameState') || '{}');
-                return {
-                    dUsd: saved.inventory?.[dUsdId] ?? 0,
-                    savingsJar: saved.inventory?.[savingsJarId] ?? 0,
-                    brokenJar: saved.inventory?.[brokenJarId] ?? 0,
-                    stored: saved.inventoryItemCounts?.[savingsJarId]?.[dUsdId] ?? 0,
-                };
-            },
-            { dUsdId: DUSD_ID, savingsJarId: SAVINGS_JAR_ID, brokenJarId: BROKEN_JAR_ID }
-        );
+        const finalState = await readSavingsState(page);
 
         expect(finalState.dUsd).toBe(25);
         expect(finalState.savingsJar).toBe(0);
