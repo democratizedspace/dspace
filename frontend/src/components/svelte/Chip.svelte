@@ -97,6 +97,12 @@
         user-select: text;
     }
 
+    nav .chip-container.inverted {
+        background-color: #68d46d;
+        color: #041b08;
+        opacity: 1;
+    }
+
     nav button {
         border: none;
         padding: 6px 5px;

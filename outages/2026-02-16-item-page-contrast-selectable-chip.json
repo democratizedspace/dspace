@@ -1,0 +1,12 @@
+{
+  "id": "item-page-contrast-selectable-chip",
+  "date": "2026-02-16",
+  "component": "frontend/ui/inventory-item-page",
+  "rootCause": "Static Chip containers became text-selectable without an explicit high-contrast inverted style, which reduced visual separation on inventory item detail pages that render in a static inverted Chip shell.",
+  "resolution": "Added an explicit `nav .chip-container.inverted` style to restore contrast for selectable static Chip containers and added regression tests covering the item page container class and Chip static inverted rendering.",
+  "references": [
+    "frontend/src/components/svelte/Chip.svelte",
+    "frontend/src/components/__tests__/Chip.spec.ts",
+    "frontend/src/pages/inventory/item/__tests__/ItemPage.spec.ts"
+  ]
+}
