@@ -31,11 +31,6 @@
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "process",
-                    "process": "basic-income",
-                    "text": "I need more dUSD first."
                 }
             ]
         },
@@ -58,6 +53,11 @@
                     "type": "process",
                     "process": "save-dusd-in-jar",
                     "text": "Deposit 10 dUSD into savings jar."
+                },
+                {
+                    "type": "process",
+                    "process": "basic-income",
+                    "text": "I need more dUSD first."
                 }
             ]
         },
@@ -74,7 +74,7 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
             "count": 1
         }
     ],

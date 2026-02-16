@@ -454,7 +454,7 @@ test('renders custom process start controls when rendering a custom process', as
     const startButton = getByTestId('process-start-button');
     expect(startButton).toBeTruthy();
     await fireEvent.click(startButton);
-    expect(startProcess).toHaveBeenCalledWith('custom-1', customProcess);
+    expect(startProcess).toHaveBeenCalledWith('custom-1', customProcess, {});
 });
 
 test('shows storage requirement feedback when non-inventory checks fail', async () => {

@@ -46,6 +46,8 @@
     let rerunQueued = false;
     let pulseTargets = { require: false, consume: false };
     let startFeedbackMessage = '';
+    let depositAmountInput = '';
+    let startInputError = '';
     let pulseTimeoutId;
     let queuedPulseTargets = null;
     let queuedPulseMessage = '';
@@ -243,6 +245,22 @@
     };
 
     const onProcessStart = async () => {
+        const processOptions = {};
+
+        if (process?.containerDeposit) {
+            const rawAmount = Number.parseFloat(depositAmountInput);
+            const minimumAmount = Number(process.containerDeposit.min ?? 1);
+            const safeMinimum = Number.isFinite(minimumAmount) ? Math.max(minimumAmount, 0) : 0;
+
+            if (!Number.isFinite(rawAmount) || rawAmount < safeMinimum) {
+                startInputError = `Enter a valid amount (minimum ${safeMinimum}).`;
+                return;
+            }
+
+            processOptions.containerDepositAmount = rawAmount;
+            startInputError = '';
+        }
+
         const requirementItems = [
             ...(process?.requireItems ?? []),
             ...(process?.consumeItems ?? []),
@@ -276,7 +294,7 @@
         }
 
         clearInterval(intervalId);
-        startProcess(processId, process);
+        startProcess(processId, process, processOptions);
         intervalId = setInterval(updateState, updateIntervalMs);
         updateState();
     };
@@ -431,6 +449,10 @@
         updateState();
     }
 
+    $: if (state !== ProcessStates.NOT_STARTED) {
+        startInputError = '';
+    }
+
     $: if (mounted && process) {
         const requirementItems = [...(process.requireItems ?? []), ...(process.consumeItems ?? [])];
         const nextKey = requirementItems.map((item) => item?.id ?? '').join('|');
@@ -478,6 +500,26 @@
             <h4>Duration: {process.duration}</h4>
 
             {#if state === ProcessStates.NOT_STARTED}
+                {#if process.containerDeposit}
+                    <label class="deposit-input-label" for={`deposit-${processId}`}
+                        >{process.containerDeposit.label ?? 'Amount to deposit'}</label
+                    >
+                    <input
+                        id={`deposit-${processId}`}
+                        class="deposit-input"
+                        type="number"
+                        min={process.containerDeposit.min ?? 1}
+                        step="0.01"
+                        bind:value={depositAmountInput}
+                        placeholder={`Minimum ${process.containerDeposit.min ?? 1}`}
+                        data-testid="process-deposit-amount-input"
+                    />
+                    {#if startInputError}
+                        <p class="start-feedback" data-testid="process-start-input-error">
+                            {startInputError}
+                        </p>
+                    {/if}
+                {/if}
                 <div
                     class="start-action"
                     class:pulse={isPulsing}
@@ -603,6 +645,19 @@
         font-size: 0.9rem;
         color: #fff7ed;
         text-align: center;
+    }
+
+    .deposit-input-label {
+        color: #ffffff;
+        font-size: 0.9rem;
+    }
+
+    .deposit-input {
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 8px;
+        background: rgba(17, 24, 39, 0.45);
+        color: #ffffff;
+        padding: 8px 10px;
     }
 
     .process-error {

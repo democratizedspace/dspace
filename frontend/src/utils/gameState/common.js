@@ -218,6 +218,7 @@ const initializeGameState = () => ({
     inventory: {},
     inventoryItemCounts: {},
     processes: {},
+    itemContainerCounts: {},
     settings: { ...DEFAULT_SETTINGS },
     versionNumberString: CURRENT_VERSION,
     [META_KEY]: { lastUpdated: Date.now() },

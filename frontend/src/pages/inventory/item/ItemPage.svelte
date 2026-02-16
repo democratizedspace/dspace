@@ -8,12 +8,12 @@
         getProcessesForItemIncludingCustom,
         ProcessItemTypes,
     } from '../../../utils/gameState/processes.js';
-    import { getItemCounts } from '../../../utils/gameState/inventory.js';
+    import { getContainedItemCounts, getItemCounts } from '../../../utils/gameState/inventory.js';
     import { getStoredItemCounts } from '../../../utils/gameState/itemContainers.js';
     import { getQuestsForItem } from '../../../utils/itemDependencies.js';
     import Process from '../../../components/svelte/Process.svelte';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
-    import { getItemById } from '../../../utils/itemResolver.js';
+    import { getItemById, getItemMap } from '../../../utils/itemResolver.js';
     import items from '../json/items';
 
     export let itemId;
@@ -27,6 +27,7 @@
     let isLoading = true;
     let itemNotFound = false;
     let releaseImage = null;
+    let containedItemCounts = [];
 
     let processes = {};
     const quests = getQuestsForItem(itemId);
@@ -90,6 +91,31 @@
         isLoading = false;
     }
 
+    async function loadContainedItemCounts() {
+        if (!item || !item.itemCounts || typeof item.itemCounts !== 'object') {
+            containedItemCounts = [];
+            return;
+        }
+
+        const trackedItemIds = Object.keys(item.itemCounts).filter((itemKey) =>
+            Boolean(item.itemCounts[itemKey])
+        );
+
+        if (trackedItemIds.length === 0) {
+            containedItemCounts = [];
+            return;
+        }
+
+        const counts = getContainedItemCounts(item.id, trackedItemIds);
+        const itemMap = await getItemMap(trackedItemIds);
+
+        containedItemCounts = trackedItemIds.map((trackedItemId) => ({
+            id: trackedItemId,
+            name: itemMap.get(trackedItemId)?.name ?? trackedItemId,
+            count: Number(counts[trackedItemId] || 0),
+        }));
+    }
+
     onMount(async () => {
         await loadItem();
         try {
@@ -99,6 +125,7 @@
         }
         refreshItemCounts();
         countIntervalId = setInterval(refreshItemCounts, 1000);
+        await loadContainedItemCounts();
         mounted.set(true);
     });
 
@@ -109,7 +136,7 @@
 </script>
 
 {#if $mounted}
-    <Chip inverted={true} text="">
+    <Chip inverted={true} text="" dataTestId="item-page-detail-chip">
         {#if isLoading}
             <div class="vertical">
                 <p class="placeholder">Loading item…</p>
@@ -123,6 +150,14 @@
                 <img src={item.image} alt={item.name} />
                 <h2>{item.name}</h2>
                 <CompactItemList {itemList} inverted={true} />
+                {#if containedItemCounts.length > 0}
+                    <p>Contained items:</p>
+                    <ul>
+                        {#each containedItemCounts as containedItem}
+                            <li>{containedItem.name}: {containedItem.count}</li>
+                        {/each}
+                    </ul>
+                {/if}
                 {item.description}
                 {#if storedItemEntries.length > 0}
                     <p><strong>Stored contents:</strong></p>

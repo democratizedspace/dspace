@@ -1,45 +1,40 @@
 {
     "id": "ubi/reminder",
     "title": "Set a UBI Reminder",
-    "description": "Schedule a daily reminder so you never miss your dUSD payout.",
+    "description": "Set a recurring reminder on your phone so you never miss a daily dUSD claim.",
     "image": "/assets/quests/ubi_daily_reminder.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Want help remembering to claim your basic income each day? I can set up a reminder for you.",
+            "text": "Want to avoid missing daily UBI claims? Let's set up a recurring reminder on your real phone.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "setup",
-                    "text": "Yes, please set a reminder."
+                    "text": "Yes, walk me through it."
                 }
             ]
         },
         {
             "id": "setup",
-            "text": "Great! This will ping you when it's time to claim tomorrow's payment.",
+            "text": "Quick note: DSpace cannot create reminders for you. Open your phone's Clock/Reminders app, make it repeat daily, and label it \"Claim dUSD in DSpace\".",
             "options": [
-                {
-                    "type": "process",
-                    "process": "basic-income",
-                    "text": "Schedule the reminder."
-                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "All set!"
+                    "text": "Done. Reminder saved on my phone."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "You're good to go. Come back each day when the reminder fires to keep the dUSD flowing.",
+            "text": "Perfect. When your real-world reminder fires, return to DSpace and run your daily basic-income claim from the UBI flow.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks for the tip!"
+                    "text": "Got it. I'll use my phone reminder."
                 }
             ]
         }

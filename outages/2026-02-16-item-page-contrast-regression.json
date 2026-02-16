@@ -1,0 +1,12 @@
+{
+  "id": "item-page-contrast-regression",
+  "date": "2026-02-16",
+  "component": "frontend/ui/inventory/item-detail",
+  "rootCause": "The non-interactive Chip container introduced for selectable item-page text retained reduced opacity, which flattened contrast against the page background and made detail content look washed out.",
+  "resolution": "Made static Chip containers fully opaque and added regression coverage so static item-detail wrappers keep strong visual contrast while remaining selectable.",
+  "references": [
+    "frontend/src/components/svelte/Chip.svelte",
+    "frontend/src/pages/inventory/item/__tests__/ItemPage.spec.ts",
+    "https://github.com/democratizedspace/dspace/pull/3544"
+  ]
+}

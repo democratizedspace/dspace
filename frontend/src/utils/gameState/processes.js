@@ -15,14 +15,42 @@ import processes from '../../generated/processes.json' assert { type: 'json' };
 const resolveProcessDefinition = (processId, processDefinition) =>
     processDefinition ?? processes.find((p) => p.id === processId);
 
-export const hasRequiredAndConsumedItems = (processId, processDefinition) => {
+const getRuntimeConsumeItems = (process, runtimeOptions = {}) => {
+    const consumeItems = [...(process.consumeItems || [])];
+    const depositRule = process.containerDeposit;
+
+    if (!depositRule) {
+        return consumeItems;
+    }
+
+    const normalizedAmount = Number(runtimeOptions.containerDepositAmount);
+    const minimumAmount = Number(depositRule.min ?? 1);
+    const safeMinimum = Number.isFinite(minimumAmount) ? Math.max(minimumAmount, 0) : 0;
+
+    if (!Number.isFinite(normalizedAmount) || normalizedAmount < safeMinimum) {
+        return consumeItems;
+    }
+
+    return consumeItems.map((item) => {
+        if (item.id !== depositRule.itemId) {
+            return item;
+        }
+        return {
+            ...item,
+            count: normalizedAmount,
+        };
+    });
+};
+
+export const hasRequiredAndConsumedItems = (processId, processDefinition, runtimeOptions = {}) => {
     const process = resolveProcessDefinition(processId, processDefinition);
     if (!process) {
         return false;
     }
+    const runtimeConsumeItems = getRuntimeConsumeItems(process, runtimeOptions);
     return (
         hasItems(process.requireItems || []) &&
-        hasItems(process.consumeItems || []) &&
+        hasItems(runtimeConsumeItems || []) &&
         hasItemCountOperationRequirements(process)
     );
 };
@@ -93,7 +121,7 @@ const applyItemCountOperations = (process) => {
     });
 };
 
-export const startProcess = (processId, processDefinition) => {
+export const startProcess = (processId, processDefinition, runtimeOptions = {}) => {
     const gameState = loadGameState();
 
     const process = resolveProcessDefinition(processId, processDefinition);
@@ -101,7 +129,9 @@ export const startProcess = (processId, processDefinition) => {
         return;
     }
 
-    if (!hasRequiredAndConsumedItems(processId, process)) {
+    const runtimeConsumeItems = getRuntimeConsumeItems(process, runtimeOptions);
+
+    if (!hasRequiredAndConsumedItems(processId, process, runtimeOptions)) {
         console.log('Missing required items or consumed items');
         return;
     }
@@ -112,10 +142,26 @@ export const startProcess = (processId, processDefinition) => {
         pausedAt: null,
         elapsedBeforePause: 0,
         pauseModelVersion: 2,
+        consumeItemsSnapshot: runtimeConsumeItems,
+        containerEffects: {
+            deposit: process.containerDeposit
+                ? {
+                      containerItemId: process.containerDeposit.containerItemId,
+                      itemId: process.containerDeposit.itemId,
+                      amount: Number(runtimeOptions.containerDepositAmount || 0),
+                  }
+                : null,
+            withdrawAll: process.containerWithdrawAll
+                ? {
+                      containerItemId: process.containerWithdrawAll.containerItemId,
+                      itemId: process.containerWithdrawAll.itemId,
+                  }
+                : null,
+        },
     };
     saveGameState(gameState);
-    if (process.consumeItems) {
-        burnItems(process.consumeItems);
+    if (runtimeConsumeItems) {
+        burnItems(runtimeConsumeItems);
     }
 };
 
@@ -237,6 +283,9 @@ export const finishProcess = (processId, processDefinition) => {
     if (!process) {
         return;
     }
+    const gameState = loadGameState();
+    const processState = gameState.processes[processId];
+
     const createItems = process.createItems;
 
     if (createItems) {
@@ -245,7 +294,6 @@ export const finishProcess = (processId, processDefinition) => {
 
     applyItemCountOperations(process);
 
-    const gameState = loadGameState();
     gameState.processes[processId] = undefined;
     saveGameState(gameState);
 };
@@ -266,7 +314,8 @@ export const cancelProcess = (processId, processDefinition) => {
         return;
     }
 
-    const consumeItems = process.consumeItems;
+    const consumeItems =
+        gameState.processes[processId]?.consumeItemsSnapshot ?? process.consumeItems;
     // Return the consumed items to the player's inventory
     gameState.processes[processId] = undefined;
     saveGameState(gameState);

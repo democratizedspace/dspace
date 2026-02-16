@@ -55,16 +55,16 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
     - `requiresQuests`: `ubi/first-payment`
 - Dialogue `requiresItems` gates:
     - None
+- Player action expectation:
+    - This quest instructs the player to create a recurring reminder in their IRL phone reminder/alarm app.
+    - DSpace does **not** create in-game reminders for this quest.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [basic-income](/processes/basic-income)
-        - Requires: none
-        - Consumes: none
-        - Creates: dUSD ×100, dBI ×100
+    - None (player action is setting an IRL phone reminder; the UBI claim process is run later outside this quest dialogue)
 
 ## 4) Start a Savings Jar (`ubi/savings-goal`)
 
@@ -78,7 +78,7 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - None
 - Processes used:
     - [basic-income](/processes/basic-income)
         - Requires: none

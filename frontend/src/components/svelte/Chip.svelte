@@ -33,7 +33,7 @@
         <a {href} data-testid={dataTestId}>{text}</a>
     {:else if isStaticContainer}
         <div
-            class="chip-container"
+            class="chip-container static-container"
             class:disabled={disabled === true}
             class:inverted={inverted === true}
             class:red={red === true}
@@ -76,8 +76,7 @@
     }
 
     nav a,
-    nav button,
-    nav .chip-container {
+    nav button {
         display: flex;
         opacity: 0.8;
         background-color: #007006;
@@ -93,8 +92,30 @@
     }
 
     nav .chip-container {
+        display: flex;
+        background-color: #007006;
+        border-radius: 0.4rem;
+        color: white;
+        text-decoration: none;
+        flex-direction: row;
+        margin: 1px;
+        padding: 5px;
+        text-align: center;
+        -webkit-transition: 200ms linear;
+        transition: 200ms linear;
+    }
+
+    nav .chip-container {
         -webkit-user-select: text;
         user-select: text;
+    }
+
+    nav .chip-container.static-container {
+        opacity: 1;
+    }
+
+    nav .chip-container.static-container.inverted {
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
     }
 
     nav button {
