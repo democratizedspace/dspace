@@ -8,9 +8,7 @@ const BROKEN_JAR_ID = '6d4dfbe7-55c7-43bf-aba8-de7b05ff66a9';
 test.describe('Savings jar mechanics', () => {
     function getProcessCard(page, title) {
         const heading = page.getByRole('heading', { name: title, exact: true });
-        return heading.locator(
-            'xpath=ancestor::div[contains(concat(" ", normalize-space(@class), " "), " container ")][1]'
-        );
+        return heading.locator('xpath=..');
     }
 
     async function startAndCollectProcess(processCard) {
@@ -66,14 +64,20 @@ test.describe('Savings jar mechanics', () => {
             { dUsdId: DUSD_ID, savingsJarId: SAVINGS_JAR_ID }
         );
 
-        await page.goto(`/inventory/item/${SAVINGS_JAR_ID}`);
+        await page.goto('/processes/save-dusd-in-jar');
         await waitForHydration(page);
-        await expect(page.getByRole('heading', { name: 'savings jar', exact: true })).toBeVisible();
+        await expect(
+            page.getByRole('heading', {
+                name: 'Deposit 10 dUSD into your savings jar',
+                exact: true,
+            })
+        ).toBeVisible();
 
         const initialState = await readSavingsState(page);
         expect(initialState.stored).toBe(0);
 
         const depositProcess = getProcessCard(page, 'Deposit 10 dUSD into your savings jar');
+        await depositProcess.getByTestId('process-deposit-amount-input').fill('10');
         await startAndCollectProcess(depositProcess);
 
         await expect
@@ -82,6 +86,9 @@ test.describe('Savings jar mechanics', () => {
                 return state.stored;
             })
             .toBe(10);
+
+        await page.goto('/processes/break-savings-jar');
+        await waitForHydration(page);
 
         const breakProcess = getProcessCard(
             page,
@@ -128,7 +135,7 @@ test.describe('Savings jar mechanics', () => {
             { dUsdId: DUSD_ID, savingsJarId: SAVINGS_JAR_ID }
         );
 
-        await page.goto(`/inventory/item/${SAVINGS_JAR_ID}`);
+        await page.goto('/processes/break-savings-jar');
         await waitForHydration(page);
 
         const initialState = await readSavingsState(page);
