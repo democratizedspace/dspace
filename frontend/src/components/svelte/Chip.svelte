@@ -40,6 +40,7 @@
             class:hazard={hazard === true}
             class:cheat={cheat === true}
             data-testid={dataTestId}
+            style="opacity: 1;"
         >
             <div class="slot">
                 <slot />
@@ -95,6 +96,7 @@
     nav .chip-container {
         -webkit-user-select: text;
         user-select: text;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
     }
 
     nav button {
