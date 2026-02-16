@@ -166,4 +166,16 @@ describe("item quality", () => {
       PriceExemptionReason.BETA_PLACEHOLDER
     );
   });
+
+  it("keeps dechlorinated tap water as a non-purchasable time-gated component", () => {
+    const dechlorinatedWater = (items as Array<Record<string, any>>).find(
+      (item) => item.id === "71efa72a-8c87-4dc2-8e2c-9119bb28fe50"
+    );
+
+    expect(dechlorinatedWater).toBeDefined();
+    expect(dechlorinatedWater?.price).toBeUndefined();
+    expect(dechlorinatedWater?.priceExemptionReason).toBe(
+      PriceExemptionReason.COMPONENT
+    );
+  });
 });
