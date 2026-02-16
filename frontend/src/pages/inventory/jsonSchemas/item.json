@@ -8,7 +8,10 @@
         "image": { "type": "string" },
         "price": { "type": "string" },
         "unit": { "type": "string" },
-        "priceExemptionReason": { "type": "string" },
+        "priceExemptionReason": {
+            "type": "string",
+            "enum": ["BETA_PLACEHOLDER", "CURRENCY", "SOULBOUND", "TIME_GATED", "TROPHY"]
+        },
         "type": { "type": "string" },
         "category": {
             "type": "string",

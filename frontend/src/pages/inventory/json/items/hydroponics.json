@@ -114,7 +114,7 @@
         "name": "5 gallon bucket of dechlorinated tap water",
         "description": "A standard 19 L (5 gal) bucket filled with tap water that's been left for 48 hours so chlorine dissipates. Ready for hydroponic use.",
         "image": "/assets/5_gallon_bucket_dechlorinated_tap_water.jpg",
-        "price": "8.20 dUSD",
+        "priceExemptionReason": "TIME_GATED",
         "hardening": {
             "passes": 1,
             "score": 65,
