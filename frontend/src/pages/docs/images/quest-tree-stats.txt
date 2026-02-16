@@ -15,5 +15,5 @@ woodworking: 10 quests, 1403 lines
 completionist: 5 quests, 467 lines
 welcome: 5 quests, 778 lines
 composting: 4 quests, 809 lines
-ubi: 4 quests, 340 lines
+ubi: 4 quests, 351 lines
 sysadmin: 3 quests, 777 lines
