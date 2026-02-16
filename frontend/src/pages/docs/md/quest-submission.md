@@ -14,6 +14,33 @@ This guide describes how to submit your custom quests to become part of the offi
 - Optional: start from the [Quest Template Example](/docs/quest-template) for a minimal JSON
   structure
 
+## Quest Quality Rubric (Required Before Submission)
+
+Use this rubric for both human-authored and LLM-authored quests.
+
+### Definition of done
+
+- [ ] Quest has a meaningful learning arc (not just `start -> do -> finish`).
+- [ ] Quest includes at least one remediation branch (`retry-*`, misconception correction,
+      or safety correction).
+- [ ] Dialogue maps explicitly to DSPACE mechanics (item page, process card, inventory proof).
+- [ ] Finish gate requires concrete evidence (item/process output), not a generic "done" click.
+- [ ] Safety-critical quests include hazard notes and escalation guidance when relevant.
+- [ ] `requiresQuests` progression is logical and does not skip prerequisite learning steps.
+- [ ] Rewards match effort and avoid economy distortion.
+- [ ] Hardening metadata reflects actual improvements (depth, branching, safety), not prose polish
+      alone.
+
+### Common anti-patterns to reject during review
+
+- **Three-node linear scripts** with no branch for mistakes or misconceptions.
+- **Vague completion text** ("Looks good", "Done") without evidence-based gating.
+- **Process name-dropping** without showing required inputs/outputs and player verification.
+- **Safety glossing** in chemistry/electronics/first-aid/energy/workshop domains.
+- **Inflated hardening scores** on mechanically shallow quests.
+
+If a quest triggers multiple anti-patterns, request revision before submission.
+
 ## Submission Options
 
 You have two ways to submit your quest. Both submission forms accept raw JSON in a text area, so

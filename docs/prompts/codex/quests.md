@@ -21,6 +21,8 @@ which covers quests, items and processes in detail.
 > 4. Run `npm run lint`, `npm run type-check`, `npm run build`, and `npm run test:ci`;
 >    scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
 >    commit with an emoji prefix.
+> 5. Avoid known v3 anti-patterns: 3-node linear flows, vague finish gates,
+>    and high hardening scores without evidence-rich branching.
 
 ---
 
@@ -58,6 +60,27 @@ prompt‑level rules short and concrete.
 
 ---
 
+## 2.1 v3 quest anti-pattern guardrails (required)
+
+When writing prompts for quest creation/refinement, include these guardrails explicitly:
+
+1. **Depth bar**
+   - Target at least 5 dialogue nodes for non-tutorial quests.
+   - Include at least one remediation branch (`retry-*`, safety correction, or misconception fix).
+2. **Evidence-based completion**
+   - Avoid finish options that only say "Done"/"Looks good".
+   - Require item/process evidence that proves the player executed the key mechanic.
+3. **Mechanics literacy**
+   - Explain where in DSPACE the action happens (item page, process card, inventory check),
+     not just real-world instructions.
+4. **Safety realism** (chemistry, electronics, first aid, energy, woodworking)
+   - Include at least one explicit "what can go wrong" branch with corrective action.
+5. **Hardening integrity**
+   - Do not raise hardening score based on prose polish alone.
+   - Scores >90 should correspond to demonstrable depth, branching, and robust gates.
+
+---
+
 ## 3. Reusable template
 
 ```text
@@ -74,15 +97,22 @@ REQUIREMENTS
    processes in their registries and link them in the quest.
 3. Find the most natural predecessor quest and update the `requiresQuests`
    chain so progression flows logically.
-4. Use only existing image assets; do not add new image files because Codex cannot
+4. Meet the quest quality bar:
+   - avoid 3-node linear structures unless explicitly requested for micro-tutorials,
+   - include at least one remediation or misconception branch,
+   - ensure finish requires concrete evidence (items/process output), not only acknowledgements.
+5. Use only existing image assets; do not add new image files because Codex cannot
    create new binary image files (for example `.png`, `.jpg`, `.webp`). For new quests,
    reuse an existing image in the PR and note that a human should replace it later via
    [https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli).
-5. Run `npm run lint`, `npm run type-check`, and `npm run build`.
-6. Run `npm run test:ci -- questCanonical questQuality` and fix any failures.
-7. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
-8. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
-9. Update docs or dialogue as needed.
+6. For safety-critical trees, include explicit hazard/mitigation text and branch logic.
+7. If modifying hardening metadata, justify score increases in PR notes with evidence
+   (branching added, gates strengthened, safety checks introduced).
+8. Run `npm run lint`, `npm run type-check`, and `npm run build`.
+9. Run `npm run test:ci -- questCanonical questQuality` and fix any failures.
+10. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
+11. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+12. Update docs or dialogue as needed.
 
 OUTPUT
 A pull request with the completed quest and passing checks.
@@ -131,8 +161,8 @@ existing quests in that tree as examples for tone and structure.
 USER:
 1. Create a new quest JSON in the chosen tree following the quest schema.
 2. Reference at least one inventory item or process.
-   3. Run `npm run lint`, `npm run type-check`, `npm run build`, and
-      `npm run test:ci -- questCanonical questQuality`. Fix any failures.
+3. Run `npm run lint`, `npm run type-check`, `npm run build`, and
+   `npm run test:ci -- questCanonical questQuality`. Fix any failures.
 4. Run `npm run new-quests:update` and commit `/docs/new-quests.md`.
 5. Scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before committing.
 6. Use an emoji-prefixed commit message.
