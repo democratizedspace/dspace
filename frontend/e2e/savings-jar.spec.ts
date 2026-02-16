@@ -9,11 +9,12 @@ test.describe('Savings jar mechanics', () => {
     function getProcessCard(page, title) {
         const heading = page.getByRole('heading', { name: title, exact: true });
         return heading.locator(
-            'xpath=ancestor::div[.//button[normalize-space()="Start" or normalize-space()="Collect"]][1]'
+            'xpath=ancestor::div[contains(concat(" ", normalize-space(@class), " "), " container ")][1]'
         );
     }
 
     async function startAndCollectProcess(processCard) {
+        await expect(processCard.getByRole('button', { name: 'Start' })).toBeVisible();
         await processCard.getByRole('button', { name: 'Start' }).first().click();
         await expect(processCard.getByRole('button', { name: 'Collect' })).toBeVisible({
             timeout: 15000,
