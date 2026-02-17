@@ -34,6 +34,29 @@ describe('process validation', () => {
         }
     });
 
+
+    it('allows only declared container item pairs in itemCountOperations', () => {
+        const itemMap = new Map((items as Array<Record<string, any>>).map((item) => [item.id, item]));
+
+        for (const process of processes as Array<Record<string, any>>) {
+            for (const operation of (process.itemCountOperations as Array<Record<string, any>>) ?? []) {
+                const container = itemMap.get(operation.containerItemId);
+                expect(container).toBeDefined();
+                expect(container?.itemCounts).toBeDefined();
+                expect(Object.prototype.hasOwnProperty.call(container?.itemCounts ?? {}, operation.itemId)).toBe(true);
+
+                if (operation.operation === 'deposit' || operation.operation === 'withdraw') {
+                    expect(Number.isFinite(operation.count)).toBe(true);
+                    expect(operation.count).toBeGreaterThan(0);
+                }
+
+                if (operation.operation === 'withdraw-all') {
+                    expect(operation.count).toBeUndefined();
+                }
+            }
+        }
+    });
+
     it('keeps recipe references valid with sane counts and durations', () => {
         const itemIds = new Set((items as Array<Record<string, any>>).map((item) => item.id));
         const durationPattern = /^(?:\d+(?:\.\d+)?[dhmsDHMS]\s*)+$/;

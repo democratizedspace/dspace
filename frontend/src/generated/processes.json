@@ -3060,7 +3060,7 @@
     },
     {
         "id": "savings-jar-deposit",
-        "title": "Deposit dUSD into a savings jar",
+        "title": "Deposit 10 dUSD into savings jar",
         "requireItems": [
             {
                 "id": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec",
@@ -3070,27 +3070,35 @@
         "consumeItems": [
             {
                 "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-                "count": 1
+                "count": 10
             }
         ],
         "createItems": [],
         "duration": "5s",
-        "containerDeposit": {
-            "containerItemId": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec",
-            "itemId": "5247a603-294a-4a34-a884-1ae20969b2a1",
-            "label": "dUSD to deposit",
-            "min": 1
-        },
         "hardening": {
-            "passes": 0,
-            "score": 92,
-            "emoji": "🛠️",
-            "history": []
-        }
+            "passes": 1,
+            "score": 100,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2026-02-16",
+                    "date": "2026-02-16",
+                    "score": 60
+                }
+            ]
+        },
+        "itemCountOperations": [
+            {
+                "operation": "deposit",
+                "containerItemId": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec",
+                "itemId": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                "count": 10
+            }
+        ]
     },
     {
-        "id": "savings-jar-withdraw-all",
-        "title": "Withdraw all dUSD from a savings jar (consumes jar)",
+        "id": "savings-jar-break",
+        "title": "Break savings jar and retrieve all dUSD",
         "requireItems": [
             {
                 "id": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec",
@@ -3103,18 +3111,26 @@
                 "count": 1
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "d6df111f-6d30-4720-ab2f-cd6f27e9e3f3",
+                "count": 1
+            }
+        ],
         "duration": "5s",
-        "containerWithdrawAll": {
-            "containerItemId": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec",
-            "itemId": "5247a603-294a-4a34-a884-1ae20969b2a1"
-        },
         "hardening": {
             "passes": 0,
             "score": 92,
             "emoji": "🛠️",
             "history": []
-        }
+        },
+        "itemCountOperations": [
+            {
+                "operation": "withdraw-all",
+                "containerItemId": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec",
+                "itemId": "5247a603-294a-4a34-a884-1ae20969b2a1"
+            }
+        ]
     },
     {
         "id": "charge-hypercar",

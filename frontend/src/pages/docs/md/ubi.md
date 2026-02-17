@@ -81,12 +81,13 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
 - Processes used:
     - [savings-jar-deposit](/processes/savings-jar-deposit)
         - Requires: savings jar ×1
-        - Consumes: dUSD ×(user-entered amount)
-        - Creates: none (stores dUSD in jar container balance)
-    - [savings-jar-withdraw-all](/processes/savings-jar-withdraw-all)
+        - Consumes: dUSD ×10
+        - Creates: none (deposits 10 dUSD into `itemContainerCounts` for savings jar)
+    - [savings-jar-break](/processes/savings-jar-break)
         - Requires: savings jar ×1
         - Consumes: savings jar ×1
-        - Creates: none (returns all stored dUSD from container balance)
+        - Creates: broken savings jar ×1
+        - Also withdraws all stored dUSD from savings jar back into inventory
 
 ## QA flow notes
 

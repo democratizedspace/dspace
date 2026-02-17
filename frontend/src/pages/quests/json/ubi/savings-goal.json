@@ -1,25 +1,25 @@
 {
     "id": "ubi/savings-goal",
     "title": "Start a Savings Jar",
-    "description": "Buy a savings jar and deposit dUSD for future plans.",
+    "description": "Buy a savings jar, deposit dUSD, and track what is stored until you break it.",
     "image": "/assets/quests/ubi_savings_jar.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You're collecting dUSD regularly. Let's set up a real savings habit with a dedicated jar.",
+            "text": "Let's make your savings tangible. Buy a savings jar, put dUSD inside it, and only break it when you need the funds back.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "buy-jar",
-                    "text": "Sounds good."
+                    "text": "I want to try that."
                 }
             ]
         },
         {
             "id": "buy-jar",
-            "text": "First, buy a savings jar from inventory. It costs a small amount of dUSD and tracks what you put inside.",
+            "text": "Buy a savings jar from inventory. It costs a little dUSD and tracks stored balance on the item page.",
             "options": [
                 {
                     "type": "goto",
@@ -36,27 +36,55 @@
         },
         {
             "id": "deposit",
-            "text": "Great. Run the savings jar deposit process and enter how much dUSD you want to stash right now.",
+            "text": "Run the deposit process to move exactly 10 dUSD from inventory into the jar.",
             "options": [
                 {
                     "type": "process",
                     "process": "savings-jar-deposit",
-                    "text": "Deposit dUSD into the jar."
+                    "text": "Deposit 10 dUSD into the jar."
+                },
+                {
+                    "type": "goto",
+                    "goto": "check-balance",
+                    "text": "I deposited 10 dUSD.",
+                    "requiresItems": [
+                        {
+                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "check-balance",
+            "text": "Open the savings jar item page and confirm Stored contents shows your dUSD balance. When ready, break the jar to retrieve everything.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "savings-jar-break",
+                    "text": "Break the jar and retrieve stored dUSD."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Deposit complete."
+                    "text": "I broke the jar and got my dUSD back.",
+                    "requiresItems": [
+                        {
+                            "id": "d6df111f-6d30-4720-ab2f-cd6f27e9e3f3",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! Your savings jar now holds dUSD that you can only withdraw all at once by consuming the jar.",
+            "text": "Great work. You used a real save-and-break loop: deposit to store, break to withdraw all.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All saved up for now."
+                    "text": "Savings habit started."
                 }
             ]
         }

@@ -7,7 +7,7 @@ import { db } from '../../../../utils/customcontent.js';
 import { clearItemResolverCache } from '../../../../utils/itemResolver.js';
 
 const getItemCountsMock = vi.fn();
-const getContainedItemCountsMock = vi.fn();
+const getStoredItemCountsMock = vi.fn();
 const isGameStateReadyMock = vi.fn();
 
 vi.mock('../../../../utils/gameState/processes.js', () => {
@@ -36,9 +36,12 @@ vi.mock('../../../../utils/gameState/inventory.js', async (importOriginal) => {
     return {
         ...actual,
         getItemCounts: (...args) => getItemCountsMock(...args),
-        getContainedItemCounts: (...args) => getContainedItemCountsMock(...args),
     };
 });
+
+vi.mock('../../../../utils/gameState/itemContainers.js', () => ({
+    getStoredItemCounts: (...args) => getStoredItemCountsMock(...args),
+}));
 
 vi.mock('../../../../utils/gameState/common.js', async (importOriginal) => {
     const actual = await importOriginal();
@@ -76,7 +79,7 @@ afterEach(async () => {
     clearItemResolverCache();
     await deleteCustomContentDb();
     getItemCountsMock.mockReset();
-    getContainedItemCountsMock.mockReset();
+    getStoredItemCountsMock.mockReset();
     isGameStateReadyMock.mockReset();
 });
 
@@ -145,7 +148,7 @@ describe('ItemPage', () => {
         expect(savingsJar).toBeDefined();
 
         getItemCountsMock.mockReturnValue({ [savingsJar!.id]: 1 });
-        getContainedItemCountsMock.mockReturnValue({
+        getStoredItemCountsMock.mockReturnValue({
             '5247a603-294a-4a34-a884-1ae20969b2a1': 42,
         });
         isGameStateReadyMock.mockReturnValue(true);
@@ -155,7 +158,7 @@ describe('ItemPage', () => {
         });
 
         await waitFor(() => {
-            expect(getByText('Contained items:')).toBeTruthy();
+            expect(getByText('Stored contents:')).toBeTruthy();
             expect(getByText(/dUSD: 42/)).toBeTruthy();
         });
     });
