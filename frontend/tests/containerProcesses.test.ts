@@ -48,6 +48,7 @@ describe('container process behavior', () => {
         vi.mocked(loadGameState).mockImplementation(() => mockGameState);
         vi.mocked(saveGameState).mockImplementation((newState: MockGameState) => {
             mockGameState = newState;
+            return Promise.resolve();
         });
     });
 

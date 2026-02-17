@@ -46,13 +46,7 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "I deposited 10 dUSD and checked Stored contents on the jar page.",
-                    "requiresItems": [
-                        {
-                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-                            "count": 0
-                        }
-                    ]
+                    "text": "I deposited 10 dUSD and checked Stored contents on the jar page."
                 }
             ]
         },

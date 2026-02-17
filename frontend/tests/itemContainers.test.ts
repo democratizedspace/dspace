@@ -37,6 +37,7 @@ describe('itemContainers helpers', () => {
         vi.mocked(loadGameState).mockImplementation(() => mockGameState);
         vi.mocked(saveGameState).mockImplementation((nextState: typeof mockGameState) => {
             mockGameState = nextState;
+            return Promise.resolve();
         });
     });
 
