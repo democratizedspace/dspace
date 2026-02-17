@@ -489,7 +489,9 @@ test('shows start feedback when container-operation validation fails', async () 
     await fireEvent.click(getByTestId('process-start-button'));
 
     expect(startProcess).not.toHaveBeenCalled();
-    expect(getByTestId('process-start-feedback').textContent).toContain('Cannot start yet: test error');
+    expect(getByTestId('process-start-feedback').textContent).toContain(
+        'Cannot start yet: test error'
+    );
 });
 
 test('prefers provided process data over built-in catalog lookup', async () => {
