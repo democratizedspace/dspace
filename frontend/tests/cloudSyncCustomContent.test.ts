@@ -3,6 +3,7 @@ import {
     exportGameStateString,
     importGameStateString,
     resetGameState,
+    loadGameState,
 } from '../src/utils/gameState/common.js';
 import * as cloudSync from '../src/utils/cloudSync.js';
 import * as customContentBackup from '../src/utils/customContentBackup.js';
@@ -151,6 +152,19 @@ describe('cloud sync custom content', () => {
         const encoded = exportGameStateString({
             providerHint: 'github-gist',
             customContent,
+            stateOverride: {
+                quests: {},
+                inventory: {},
+                processes: {},
+                itemContainerCounts: {
+                    '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec': {
+                        '5247a603-294a-4a34-a884-1ae20969b2a1': 7,
+                    },
+                },
+                settings: {},
+                versionNumberString: '3',
+                _meta: { lastUpdated: Date.now() },
+            },
         });
         const decoded = decodeBackup(encoded);
 
@@ -158,6 +172,9 @@ describe('cloud sync custom content', () => {
         expect(decoded.customContent.items).toHaveLength(1);
         expect(decoded.customContent.processes).toHaveLength(1);
         expect(decoded.customContent.quests).toHaveLength(1);
+        expect(decoded.payload.itemContainerCounts['830d74da-9de5-44c7-8b9f-83a1ed3aa8ec']).toEqual({
+            '5247a603-294a-4a34-a884-1ae20969b2a1': 7,
+        });
 
         await deleteCustomContentDatabase();
         await importGameStateString(encoded);
@@ -170,6 +187,13 @@ describe('cloud sync custom content', () => {
         expect(items.map((item) => item.id)).toContain('custom-item-1');
         expect(processes.map((process) => process.id)).toContain('custom-process-1');
         expect(quests.map((quest) => quest.id)).toContain('custom-quest-1');
+
+        const importedState = loadGameState();
+        expect(
+            importedState.itemContainerCounts['830d74da-9de5-44c7-8b9f-83a1ed3aa8ec']?.[
+                '5247a603-294a-4a34-a884-1ae20969b2a1'
+            ]
+        ).toBe(7);
     });
 
     test('overwrites existing custom content during import', async () => {
@@ -178,6 +202,19 @@ describe('cloud sync custom content', () => {
         const encoded = exportGameStateString({
             providerHint: 'github-gist',
             customContent,
+            stateOverride: {
+                quests: {},
+                inventory: {},
+                processes: {},
+                itemContainerCounts: {
+                    '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec': {
+                        '5247a603-294a-4a34-a884-1ae20969b2a1': 7,
+                    },
+                },
+                settings: {},
+                versionNumberString: '3',
+                _meta: { lastUpdated: Date.now() },
+            },
         });
 
         await overwriteCustomContent();

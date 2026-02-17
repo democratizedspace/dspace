@@ -1013,3 +1013,15 @@ export function registerClientStateHooks(testApi: Hookable): void {
         await purgeClientState(page);
     });
 }
+
+export async function flushGameStateWrites(page: Page): Promise<void> {
+    await page.evaluate(async () => {
+        const maybeGlobal = globalThis as {
+            __dspaceFlushGameStateWrites?: () => Promise<void>;
+        };
+
+        if (typeof maybeGlobal.__dspaceFlushGameStateWrites === 'function') {
+            await maybeGlobal.__dspaceFlushGameStateWrites();
+        }
+    });
+}

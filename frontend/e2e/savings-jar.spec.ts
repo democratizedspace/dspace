@@ -1,13 +1,18 @@
 import { expect, test } from '@playwright/test';
-import { clearUserData } from './test-helpers';
+import type { Page } from '@playwright/test';
+import { clearUserData, flushGameStateWrites } from './test-helpers';
 
 const JAR_ID = '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec';
 const BROKEN_JAR_ID = 'f797d8de-11c5-4f89-a725-c2ac2255d173';
 const DUSD_ID = '5247a603-294a-4a34-a884-1ae20969b2a1';
 
-type GameStatePayload = Record<string, unknown>;
+type GameStatePayload = {
+    inventory?: Record<string, number>;
+    itemContainerCounts?: Record<string, Record<string, number>>;
+    [key: string]: unknown;
+};
 
-async function seedGameState(page, state: GameStatePayload) {
+async function seedGameState(page: Page, state: GameStatePayload) {
     await page.goto('/');
     await page.evaluate(async (seed) => {
         const db = await new Promise<IDBDatabase>((resolve, reject) => {
@@ -33,7 +38,7 @@ async function seedGameState(page, state: GameStatePayload) {
     }, state);
 }
 
-async function readGameState(page): Promise<GameStatePayload> {
+async function readGameState(page: Page): Promise<GameStatePayload> {
     return page.evaluate(async () => {
         const db = await new Promise<IDBDatabase>((resolve, reject) => {
             const request = indexedDB.open('dspaceGameState', 1);
@@ -53,11 +58,12 @@ async function readGameState(page): Promise<GameStatePayload> {
     });
 }
 
-async function runProcessFromItemPage(page, title: string) {
+async function runProcessFromItemPage(page: Page, title: string) {
     const card = page.locator('.container').filter({ has: page.getByRole('heading', { name: title }) });
     await card.getByTestId('process-start-button').click();
-    await page.waitForTimeout(5500);
+    await expect(card.getByText('Collect')).toBeVisible({ timeout: 15000 });
     await card.getByText('Collect').click();
+    await flushGameStateWrites(page);
 }
 
 test.describe('savings jar mechanics', () => {

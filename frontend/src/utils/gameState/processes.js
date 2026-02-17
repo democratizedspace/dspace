@@ -1,11 +1,11 @@
 import { loadGameState, saveGameState } from './common.js';
 import { hasItems, burnItems, addItems } from './inventory.js';
 import {
-    addStoredItems,
+    addStoredItemsToState,
     canStoreItemInContainer,
     getStoredItemCount,
-    removeAllStoredItems,
-    removeStoredItems,
+    removeAllStoredItemsFromState,
+    removeStoredItemsFromState,
 } from './itemContainers.js';
 import { durationInSeconds } from '../../utils.js';
 
@@ -18,6 +18,17 @@ const resolveProcessDefinition = (processId, processDefinition) =>
 const getRuntimeConsumeItems = (process) => [...(process.consumeItems || [])];
 
 const isPositiveNumber = (value) => Number.isFinite(value) && value > 0;
+
+
+const addItemsToState = (gameState, items = []) => {
+    if (!gameState.inventory || typeof gameState.inventory !== 'object') {
+        gameState.inventory = {};
+    }
+
+    items.forEach(({ id, count }) => {
+        gameState.inventory[id] = (gameState.inventory[id] || 0) + count;
+    });
+};
 
 const validateItemCountOperation = (operation) => {
     if (!operation || typeof operation !== 'object') {
@@ -49,33 +60,43 @@ const hasRequiredItemCountOperations = (operations = []) => {
     });
 };
 
-const applyItemCountOperations = (operations = []) => {
+const applyItemCountOperations = (gameState, operations = []) => {
     operations.forEach((operation) => {
         if (!validateItemCountOperation(operation)) {
             return;
         }
 
         if (operation.operation === 'deposit') {
-            addStoredItems(operation.containerItemId, operation.itemId, Number(operation.count));
+            addStoredItemsToState(
+                gameState,
+                operation.containerItemId,
+                operation.itemId,
+                Number(operation.count)
+            );
             return;
         }
 
         if (operation.operation === 'withdraw') {
-            const removed = removeStoredItems(
+            const removed = removeStoredItemsFromState(
+                gameState,
                 operation.containerItemId,
                 operation.itemId,
                 Number(operation.count)
             );
             if (removed > 0) {
-                addItems([{ id: operation.itemId, count: removed }]);
+                addItemsToState(gameState, [{ id: operation.itemId, count: removed }]);
             }
             return;
         }
 
         if (operation.operation === 'withdraw-all') {
-            const removed = removeAllStoredItems(operation.containerItemId, operation.itemId);
+            const removed = removeAllStoredItemsFromState(
+                gameState,
+                operation.containerItemId,
+                operation.itemId
+            );
             if (removed > 0) {
-                addItems([{ id: operation.itemId, count: removed }]);
+                addItemsToState(gameState, [{ id: operation.itemId, count: removed }]);
             }
         }
     });
@@ -271,10 +292,10 @@ export const finishProcess = (processId, processDefinition) => {
     const createItems = process.createItems;
 
     if (createItems) {
-        addItems(createItems);
+        addItemsToState(gameState, createItems);
     }
 
-    applyItemCountOperations(process.itemCountOperations || []);
+    applyItemCountOperations(gameState, process.itemCountOperations || []);
 
     gameState.processes[processId] = undefined;
     saveGameState(gameState);
@@ -505,13 +526,13 @@ export const skipProcess = (processId, processDefinition) => {
         burnItems(process.consumeItems);
     }
 
+    const gameState = loadGameState();
+
     if (process.createItems) {
-        addItems(process.createItems);
+        addItemsToState(gameState, process.createItems);
     }
 
-    applyItemCountOperations(process.itemCountOperations || []);
-
-    const gameState = loadGameState();
+    applyItemCountOperations(gameState, process.itemCountOperations || []);
     gameState.processes[processId] = undefined;
     saveGameState(gameState);
 };

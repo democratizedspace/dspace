@@ -80,14 +80,13 @@ export const canStoreItemInContainer = (containerItemId, storedItemId) => {
     return getAllowedStoredItemIds(containerItemId).includes(storedItemId);
 };
 
-export const getStoredItemCounts = (containerItemId) => {
+export const getStateStoredItemCounts = (gameState, containerItemId) => {
     refreshMergedItemCatalog();
 
-    if (!isValidId(containerItemId)) {
+    if (!gameState || typeof gameState !== 'object' || !isValidId(containerItemId)) {
         return {};
     }
 
-    const gameState = loadGameState();
     const containerMap = gameState.itemContainerCounts?.[containerItemId] ?? {};
     const allowedIds = new Set(getAllowedStoredItemIds(containerItemId));
 
@@ -103,54 +102,88 @@ export const getStoredItemCounts = (containerItemId) => {
     }, {});
 };
 
-export const getStoredItemCount = (containerItemId, storedItemId) => {
+export const getStoredItemCounts = (containerItemId) => {
+    const gameState = loadGameState();
+    return getStateStoredItemCounts(gameState, containerItemId);
+};
+
+const getStateStoredItemCount = (gameState, containerItemId, storedItemId) => {
+    if (!gameState || typeof gameState !== 'object') {
+        return 0;
+    }
+
     if (!canStoreItemInContainer(containerItemId, storedItemId)) {
         return 0;
     }
 
-    const gameState = loadGameState();
     const containerMap = gameState.itemContainerCounts?.[containerItemId] ?? {};
     return Math.max(0, Number(containerMap[storedItemId] ?? 0));
 };
 
-export const addStoredItems = (containerItemId, storedItemId, delta) => {
+export const getStoredItemCount = (containerItemId, storedItemId) => {
+    const gameState = loadGameState();
+    return getStateStoredItemCount(gameState, containerItemId, storedItemId);
+};
+
+export const addStoredItemsToState = (gameState, containerItemId, storedItemId, delta) => {
     const safeDelta = normalizePositiveCount(delta);
     if (!canStoreItemInContainer(containerItemId, storedItemId) || safeDelta === 0) {
         return false;
     }
 
-    const gameState = loadGameState();
     const containerMap = ensureContainerMap(gameState, containerItemId);
-    containerMap[storedItemId] = Math.max(0, Number(containerMap[storedItemId] ?? 0)) + safeDelta;
-    saveGameState(gameState);
+    containerMap[storedItemId] = getStateStoredItemCount(gameState, containerItemId, storedItemId) + safeDelta;
     return true;
 };
 
-export const removeStoredItems = (containerItemId, storedItemId, delta) => {
+export const addStoredItems = (containerItemId, storedItemId, delta) => {
+    const gameState = loadGameState();
+    const changed = addStoredItemsToState(gameState, containerItemId, storedItemId, delta);
+    if (changed) {
+        saveGameState(gameState);
+    }
+    return changed;
+};
+
+export const removeStoredItemsFromState = (gameState, containerItemId, storedItemId, delta) => {
     const safeDelta = normalizePositiveCount(delta);
     if (!canStoreItemInContainer(containerItemId, storedItemId) || safeDelta === 0) {
         return 0;
     }
 
-    const gameState = loadGameState();
     const containerMap = ensureContainerMap(gameState, containerItemId);
-    const currentCount = Math.max(0, Number(containerMap[storedItemId] ?? 0));
+    const currentCount = getStateStoredItemCount(gameState, containerItemId, storedItemId);
     const removed = Math.min(currentCount, safeDelta);
 
     containerMap[storedItemId] = currentCount - removed;
-    saveGameState(gameState);
     return removed;
 };
 
-export const removeAllStoredItems = (containerItemId, storedItemId) => {
+export const removeStoredItems = (containerItemId, storedItemId, delta) => {
+    const gameState = loadGameState();
+    const removed = removeStoredItemsFromState(gameState, containerItemId, storedItemId, delta);
+    if (removed > 0) {
+        saveGameState(gameState);
+    }
+    return removed;
+};
+
+export const removeAllStoredItemsFromState = (gameState, containerItemId, storedItemId) => {
     if (!canStoreItemInContainer(containerItemId, storedItemId)) {
         return 0;
     }
 
-    const gameState = loadGameState();
     const containerMap = ensureContainerMap(gameState, containerItemId);
-    const currentCount = Math.max(0, Number(containerMap[storedItemId] ?? 0));
+    const currentCount = getStateStoredItemCount(gameState, containerItemId, storedItemId);
     containerMap[storedItemId] = 0;
-    saveGameState(gameState);
     return currentCount;
+};
+
+export const removeAllStoredItems = (containerItemId, storedItemId) => {
+    const gameState = loadGameState();
+    const removed = removeAllStoredItemsFromState(gameState, containerItemId, storedItemId);
+    if (removed > 0) {
+        saveGameState(gameState);
+    }
+    return removed;
 };

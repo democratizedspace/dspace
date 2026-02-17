@@ -111,6 +111,53 @@ describe('container process behavior', () => {
         expect(getStoredItemCount(jarId, dusdId)).toBe(0);
     });
 
+
+    test('finishProcess saves container updates without stale overwrite', () => {
+        const stateSnapshot: MockGameState = {
+            inventory: {
+                [jarId]: 1,
+                [dusdId]: 10,
+            },
+            itemContainerCounts: {
+                [jarId]: {
+                    [dusdId]: 0,
+                },
+            },
+            processes: {
+                deposit: {
+                    startedAt: Date.now() - 5000,
+                },
+            },
+        };
+
+        vi.mocked(loadGameState).mockImplementation(() => structuredClone(stateSnapshot));
+        vi.mocked(saveGameState).mockImplementation((newState: MockGameState) => {
+            Object.assign(stateSnapshot, structuredClone(newState));
+            return Promise.resolve();
+        });
+
+        const depositDefinition = {
+            id: 'deposit',
+            duration: '1s',
+            requireItems: [{ id: jarId, count: 1 }],
+            consumeItems: [{ id: dusdId, count: 10 }],
+            createItems: [{ id: dusdId, count: 10 }],
+            itemCountOperations: [
+                {
+                    operation: 'deposit',
+                    containerItemId: jarId,
+                    itemId: dusdId,
+                    count: 10,
+                },
+            ],
+        };
+
+        finishProcess('deposit', depositDefinition);
+
+        expect(stateSnapshot.inventory[dusdId]).toBe(20);
+        expect(stateSnapshot.itemContainerCounts[jarId][dusdId]).toBe(10);
+    });
+
     test('skipProcess applies itemCountOperations', () => {
         mockGameState.itemContainerCounts = {
             [jarId]: {
