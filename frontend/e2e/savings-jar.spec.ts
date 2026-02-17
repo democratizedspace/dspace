@@ -73,7 +73,16 @@ test.describe('Savings jar mechanics', () => {
                     });
                 };
 
-                const saved = (await readIndexedDbState()) ?? readLocalState();
+                const localState = readLocalState();
+                const hasStateShape =
+                    localState &&
+                    typeof localState === 'object' &&
+                    typeof localState.inventory === 'object' &&
+                    typeof localState.inventoryItemCounts === 'object';
+
+                const saved = hasStateShape
+                    ? localState
+                    : ((await readIndexedDbState()) ?? localState);
                 return {
                     dUsd: saved.inventory?.[dUsdId] ?? 0,
                     savingsJar: saved.inventory?.[savingsJarId] ?? 0,
@@ -136,6 +145,17 @@ test.describe('Savings jar mechanics', () => {
         ).toBeVisible();
         await startAndCollectProcess(page);
 
+        await expect
+            .poll(async () => {
+                const state = await readSavingsState(page);
+                return {
+                    savingsJar: state.savingsJar,
+                    brokenJar: state.brokenJar,
+                    stored: state.stored,
+                };
+            })
+            .toEqual({ savingsJar: 0, brokenJar: 1, stored: 0 });
+
         const finalState = await readSavingsState(page);
 
         expect(finalState.dUsd).toBeCloseTo(25);
@@ -179,6 +199,17 @@ test.describe('Savings jar mechanics', () => {
         expect(initialState.stored).toBe(0);
 
         await startAndCollectProcess(page);
+
+        await expect
+            .poll(async () => {
+                const state = await readSavingsState(page);
+                return {
+                    savingsJar: state.savingsJar,
+                    brokenJar: state.brokenJar,
+                    stored: state.stored,
+                };
+            })
+            .toEqual({ savingsJar: 0, brokenJar: 1, stored: 0 });
 
         const finalState = await readSavingsState(page);
 
