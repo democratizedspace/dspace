@@ -12,6 +12,7 @@
         getProcessState,
         ProcessStates,
         getProcessStartedAt,
+        getItemCountOperationStartIssue,
     } from '../../utils/gameState/processes.js';
     import processes from '../../generated/processes.json';
     import { durationInSeconds } from '../../utils.js';
@@ -266,6 +267,12 @@
         ];
         if (requirementItems.length > 0 && requirementItemMap.size === 0) {
             await loadRequirementItemMap(requirementItems);
+        }
+
+        const operationStartIssue = getItemCountOperationStartIssue(process, processOptions);
+        if (operationStartIssue) {
+            startFeedbackMessage = operationStartIssue;
+            return;
         }
 
         const { missingEntries, targets, message } = getMissingRequirementInfo();

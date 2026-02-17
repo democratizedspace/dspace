@@ -1,26 +1,21 @@
 import { describe, beforeEach, expect, test, vi } from 'vitest';
 
-vi.mock('../src/utils/gameState/common.js', () => {
-    return {
-        loadGameState: vi.fn(),
-        saveGameState: vi.fn().mockResolvedValue(undefined),
-    };
-});
+vi.mock('../src/utils/gameState/common.js', () => ({
+    loadGameState: vi.fn(),
+    saveGameState: vi.fn().mockResolvedValue(undefined),
+}));
 
-vi.mock('../src/generated/processes.json', () => {
-    return {
-        default: [],
-    };
-});
+vi.mock('../src/generated/processes.json', () => ({ default: [] }));
 
 import {
     ProcessStates,
     finishProcess,
     getProcessState,
+    skipProcess,
     startProcess,
 } from '../src/utils/gameState/processes.js';
 import { loadGameState, saveGameState } from '../src/utils/gameState/common.js';
-import { getContainedItemCount } from '../src/utils/gameState/inventory.js';
+import { getStoredItemCount } from '../src/utils/gameState/itemContainers.js';
 
 describe('container process behavior', () => {
     type MockGameState = {
@@ -30,83 +25,63 @@ describe('container process behavior', () => {
     };
 
     let mockGameState: MockGameState;
+    const jarId = '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec';
+    const dusdId = '5247a603-294a-4a34-a884-1ae20969b2a1';
 
     beforeEach(() => {
         mockGameState = {
-            inventory: {
-                '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec': 1,
-                '5247a603-294a-4a34-a884-1ae20969b2a1': 20,
-            },
+            inventory: { [jarId]: 1, [dusdId]: 20 },
             itemContainerCounts: {},
             processes: {},
         };
 
-        vi.mocked(loadGameState).mockImplementation(() => mockGameState);
+        vi.mocked(loadGameState).mockImplementation(() => mockGameState as never);
         vi.mocked(saveGameState).mockImplementation((newState: MockGameState) => {
             mockGameState = newState;
         });
     });
 
-    test('deposit process consumes user-entered dUSD and stores it in container balance', () => {
+    test('deposit process consumes dUSD and stores it through finish', () => {
         const depositDefinition = {
             id: 'deposit',
             duration: '1s',
-            requireItems: [{ id: '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec', count: 1 }],
-            consumeItems: [{ id: '5247a603-294a-4a34-a884-1ae20969b2a1', count: 1 }],
+            requireItems: [{ id: jarId, count: 1 }],
+            consumeItems: [{ id: dusdId, count: 10 }],
             createItems: [],
-            containerDeposit: {
-                containerItemId: '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec',
-                itemId: '5247a603-294a-4a34-a884-1ae20969b2a1',
-                min: 1,
-            },
+            itemCountOperations: [
+                { operation: 'deposit', containerItemId: jarId, itemId: dusdId, count: 10 },
+            ],
         };
 
-        startProcess('deposit', depositDefinition, { containerDepositAmount: 7 });
+        startProcess('deposit', depositDefinition);
 
-        expect(mockGameState.inventory['5247a603-294a-4a34-a884-1ae20969b2a1']).toBe(13);
+        expect(mockGameState.inventory[dusdId]).toBe(10);
         expect(getProcessState('deposit').state).toBe(ProcessStates.IN_PROGRESS);
 
-        mockGameState.processes.deposit.startedAt = Date.now() - 5000;
+        mockGameState.processes.deposit.startedAt = Date.now() - 5_000;
         finishProcess('deposit', depositDefinition);
 
-        expect(
-            getContainedItemCount(
-                '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec',
-                '5247a603-294a-4a34-a884-1ae20969b2a1'
-            )
-        ).toBe(7);
+        expect(getStoredItemCount(jarId, dusdId)).toBe(10);
     });
 
-    test('withdraw-all process returns full container balance and clears it', () => {
-        mockGameState.itemContainerCounts = {
-            '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec': {
-                '5247a603-294a-4a34-a884-1ae20969b2a1': 9,
-            },
-        };
+    test('withdraw-all through skip process returns full stored balance and clears it', () => {
+        mockGameState.itemContainerCounts = { [jarId]: { [dusdId]: 9 } };
 
-        const withdrawDefinition = {
-            id: 'withdraw-all',
+        const breakDefinition = {
+            id: 'break',
             duration: '1s',
-            requireItems: [{ id: '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec', count: 1 }],
-            consumeItems: [{ id: '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec', count: 1 }],
+            requireItems: [{ id: jarId, count: 1 }],
+            consumeItems: [{ id: jarId, count: 1 }],
             createItems: [],
-            containerWithdrawAll: {
-                containerItemId: '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec',
-                itemId: '5247a603-294a-4a34-a884-1ae20969b2a1',
-            },
+            itemCountOperations: [
+                { operation: 'withdraw-all', containerItemId: jarId, itemId: dusdId },
+            ],
         };
 
-        startProcess('withdraw-all', withdrawDefinition);
-        mockGameState.processes['withdraw-all'].startedAt = Date.now() - 5000;
-        finishProcess('withdraw-all', withdrawDefinition);
+        skipProcess('break', breakDefinition);
 
-        expect(mockGameState.inventory['830d74da-9de5-44c7-8b9f-83a1ed3aa8ec']).toBe(0);
-        expect(mockGameState.inventory['5247a603-294a-4a34-a884-1ae20969b2a1']).toBe(29);
-        expect(
-            getContainedItemCount(
-                '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec',
-                '5247a603-294a-4a34-a884-1ae20969b2a1'
-            )
-        ).toBe(0);
+        expect(mockGameState.inventory[jarId]).toBe(0);
+        expect(mockGameState.inventory[dusdId]).toBe(29);
+        expect(getStoredItemCount(jarId, dusdId)).toBe(0);
     });
 });

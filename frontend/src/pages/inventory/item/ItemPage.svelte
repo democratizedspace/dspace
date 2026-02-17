@@ -64,9 +64,7 @@
             return;
         }
 
-        const trackedItemIds = Object.keys(item.itemCounts).filter((itemKey) =>
-            Boolean(item.itemCounts[itemKey])
-        );
+        const trackedItemIds = Object.keys(item.itemCounts);
 
         if (trackedItemIds.length === 0) {
             containedItemCounts = [];
@@ -117,7 +115,7 @@
                 <h2>{item.name}</h2>
                 <CompactItemList {itemList} inverted={true} />
                 {#if containedItemCounts.length > 0}
-                    <p>Contained items:</p>
+                    <p>Stored contents:</p>
                     <ul>
                         {#each containedItemCounts as containedItem}
                             <li>{containedItem.name}: {containedItem.count}</li>

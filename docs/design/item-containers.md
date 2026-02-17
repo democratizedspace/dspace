@@ -1,41 +1,50 @@
-# Item Containers Design (Savings Jar v1)
+# Item Containers Design
 
-This document defines the item-container model and the first implemented use case: the savings jar.
+## Catalog schema: `itemCounts`
 
-## Goals
+Container-capable catalog items may declare:
 
-1. Savings jar is purchased with a small amount of dUSD.
-2. Only dUSD can be deposited into the savings jar.
-3. Deposits are amount-based via process input.
-4. Withdrawals are all-or-nothing and consume the savings jar item.
-5. Container balances appear on item detail pages for any item with a truthy `itemCounts` map.
+```json
+"itemCounts": {
+  "<storedItemId>": 0
+}
+```
 
-## Data model
+Rules:
+- keys must reference valid inventory item IDs.
+- values are numeric and must be `>= 0`.
+- source JSON defaults must be exactly `0` (no non-zero seeded container balances).
 
-- Item-level declaration uses `itemCounts` as a map of `itemId -> truthy`.
-- Runtime storage uses game state `itemContainerCounts` keyed by container `itemId` then contained `itemId`.
-- Savings jar declares one allowed key: `dUSD`.
+## Runtime state: `gameState.itemContainerCounts`
 
-## Savings jar flows
+Runtime balances are tracked separately from inventory stack counts:
 
-### Buy
+- Inventory stacks: `gameState.inventory: Record<itemId, number>`
+- Container balances: `gameState.itemContainerCounts: Record<containerItemId, Record<storedItemId, number>>`
 
-- The jar is a regular inventory item with price `2 dUSD`.
+Semantics:
+- aggregate by container item type, not per-instance item UID.
+- runtime-only and persisted in IndexedDB as part of game state.
+- import/export of `/gamesaves` round-trips `itemContainerCounts` through serialized game state.
 
-### Deposit (`savings-jar-deposit`)
+## Process integration
 
-- Requires savings jar in inventory.
-- UI prompts for a numeric amount.
-- Process consumes exactly that amount of dUSD and records it inside the jar balance.
+Processes can define `itemCountOperations`:
 
-### Withdraw all (`savings-jar-withdraw-all`)
+- `deposit` `{ operation, containerItemId, itemId, count }`
+- `withdraw` `{ operation, containerItemId, itemId, count }`
+- `withdraw-all` `{ operation, containerItemId, itemId }`
 
-- Requires and consumes one savings jar.
-- Returns all dUSD currently stored in the jar balance.
-- Clears stored dUSD count for that container item.
+Validation and runtime gates enforce that:
+- `containerItemId -> itemId` pair is allowed by catalog `itemCounts` keys.
+- withdraw requires sufficient stored runtime balance.
+- all deltas remain non-negative.
 
-## Item page behavior
+## Savings jar use case
 
-- On `/inventory/item/[itemId]`, if the item has `itemCounts`, render a "Contained items" list.
-- For each truthy map key, show current stored count.
-- This generalizes to any multi-currency container (for example, both dUSD and dCarbon).
+Savings jar item declares dUSD in `itemCounts` with default `0`.
+
+- Deposit process consumes 10 dUSD and deposits 10 dUSD into jar storage.
+- Break process consumes 1 savings jar, creates 1 broken savings jar, and withdraws all stored dUSD.
+
+This preserves the tangible mechanic: balances are visible while jar exists, and liquidity requires breakage.

@@ -3,10 +3,14 @@ import {
     hasItems,
     burnItems,
     addItems,
-    addContainedItems,
-    getContainedItemCount,
-    clearContainedItemCount,
 } from './inventory.js';
+import {
+    addStoredItems,
+    canStoreItemInContainer,
+    getStoredItemCount,
+    removeAllStoredItems,
+    removeStoredItems,
+} from './itemContainers.js';
 import { durationInSeconds } from '../../utils.js';
 
 // Using import assertions for JSON imports
@@ -42,6 +46,63 @@ const getRuntimeConsumeItems = (process, runtimeOptions = {}) => {
     });
 };
 
+const getItemCountOperations = (process, runtimeOptions = {}) => {
+    if (Array.isArray(process.itemCountOperations) && process.itemCountOperations.length > 0) {
+        return process.itemCountOperations;
+    }
+
+    const legacyOperations = [];
+    if (process.containerDeposit) {
+        legacyOperations.push({
+            operation: 'deposit',
+            containerItemId: process.containerDeposit.containerItemId,
+            itemId: process.containerDeposit.itemId,
+            count: Number(runtimeOptions.containerDepositAmount || 0),
+        });
+    }
+
+    if (process.containerWithdrawAll) {
+        legacyOperations.push({
+            operation: 'withdraw-all',
+            containerItemId: process.containerWithdrawAll.containerItemId,
+            itemId: process.containerWithdrawAll.itemId,
+        });
+    }
+
+    return legacyOperations;
+};
+
+export const getItemCountOperationStartIssue = (process, runtimeOptions = {}) => {
+    const operations = getItemCountOperations(process, runtimeOptions);
+
+    for (const operation of operations) {
+        const { operation: action, containerItemId, itemId } = operation;
+
+        if (!canStoreItemInContainer(containerItemId, itemId)) {
+            return 'Cannot start yet: container does not support that stored item.';
+        }
+
+        if (action === 'deposit') {
+            const count = Number(operation.count);
+            if (!Number.isFinite(count) || count <= 0) {
+                return 'Cannot start yet: deposit amount must be greater than zero.';
+            }
+        }
+
+        if (action === 'withdraw') {
+            const count = Number(operation.count);
+            if (!Number.isFinite(count) || count <= 0) {
+                return 'Cannot start yet: withdrawal amount must be greater than zero.';
+            }
+            if (getStoredItemCount(containerItemId, itemId) < count) {
+                return 'Cannot start yet: container balance is too low.';
+            }
+        }
+    }
+
+    return '';
+};
+
 export const hasRequiredAndConsumedItems = (processId, processDefinition, runtimeOptions = {}) => {
     const process = resolveProcessDefinition(processId, processDefinition);
     if (!process) {
@@ -49,7 +110,8 @@ export const hasRequiredAndConsumedItems = (processId, processDefinition, runtim
     }
 
     const runtimeConsumeItems = getRuntimeConsumeItems(process, runtimeOptions);
-    return hasItems(process.requireItems || []) && hasItems(runtimeConsumeItems || []);
+    const operationIssue = getItemCountOperationStartIssue(process, runtimeOptions);
+    return !operationIssue && hasItems(process.requireItems || []) && hasItems(runtimeConsumeItems || []);
 };
 
 export const startProcess = (processId, processDefinition, runtimeOptions = {}) => {
@@ -63,7 +125,7 @@ export const startProcess = (processId, processDefinition, runtimeOptions = {}) 
     const runtimeConsumeItems = getRuntimeConsumeItems(process, runtimeOptions);
 
     if (!hasRequiredAndConsumedItems(processId, process, runtimeOptions)) {
-        console.log('Missing required items or consumed items');
+        console.log('Cannot start process yet');
         return;
     }
 
@@ -74,21 +136,7 @@ export const startProcess = (processId, processDefinition, runtimeOptions = {}) 
         elapsedBeforePause: 0,
         pauseModelVersion: 2,
         consumeItemsSnapshot: runtimeConsumeItems,
-        containerEffects: {
-            deposit: process.containerDeposit
-                ? {
-                      containerItemId: process.containerDeposit.containerItemId,
-                      itemId: process.containerDeposit.itemId,
-                      amount: Number(runtimeOptions.containerDepositAmount || 0),
-                  }
-                : null,
-            withdrawAll: process.containerWithdrawAll
-                ? {
-                      containerItemId: process.containerWithdrawAll.containerItemId,
-                      itemId: process.containerWithdrawAll.itemId,
-                  }
-                : null,
-        },
+        itemCountOperationsSnapshot: getItemCountOperations(process, runtimeOptions),
     };
     saveGameState(gameState);
     if (runtimeConsumeItems) {
@@ -223,19 +271,26 @@ export const finishProcess = (processId, processDefinition) => {
         addItems(createItems);
     }
 
-    const deposit = processState?.containerEffects?.deposit;
-    if (deposit && deposit.amount > 0) {
-        addContainedItems(deposit.containerItemId, deposit.itemId, deposit.amount);
-    }
-
-    const withdraw = processState?.containerEffects?.withdrawAll;
-    if (withdraw) {
-        const withdrawalAmount = getContainedItemCount(withdraw.containerItemId, withdraw.itemId);
-        if (withdrawalAmount > 0) {
-            addItems([{ id: withdraw.itemId, count: withdrawalAmount }]);
-            clearContainedItemCount(withdraw.containerItemId, withdraw.itemId);
+    const operations =
+        processState?.itemCountOperationsSnapshot ?? getItemCountOperations(process);
+    operations.forEach((operation) => {
+        const amount = Number(operation.count ?? 0);
+        if (operation.operation === 'deposit') {
+            addStoredItems(operation.containerItemId, operation.itemId, amount);
         }
-    }
+        if (operation.operation === 'withdraw') {
+            const removedAmount = removeStoredItems(operation.containerItemId, operation.itemId, amount);
+            if (removedAmount > 0) {
+                addItems([{ id: operation.itemId, count: removedAmount }]);
+            }
+        }
+        if (operation.operation === 'withdraw-all') {
+            const removedAmount = removeAllStoredItems(operation.containerItemId, operation.itemId);
+            if (removedAmount > 0) {
+                addItems([{ id: operation.itemId, count: removedAmount }]);
+            }
+        }
+    });
 
     gameState.processes[processId] = undefined;
     saveGameState(gameState);
@@ -469,6 +524,25 @@ export const skipProcess = (processId, processDefinition) => {
     if (process.createItems) {
         addItems(process.createItems);
     }
+
+    getItemCountOperations(process).forEach((operation) => {
+        const amount = Number(operation.count ?? 0);
+        if (operation.operation === 'deposit') {
+            addStoredItems(operation.containerItemId, operation.itemId, amount);
+        }
+        if (operation.operation === 'withdraw') {
+            const removedAmount = removeStoredItems(operation.containerItemId, operation.itemId, amount);
+            if (removedAmount > 0) {
+                addItems([{ id: operation.itemId, count: removedAmount }]);
+            }
+        }
+        if (operation.operation === 'withdraw-all') {
+            const removedAmount = removeAllStoredItems(operation.containerItemId, operation.itemId);
+            if (removedAmount > 0) {
+                addItems([{ id: operation.itemId, count: removedAmount }]);
+            }
+        }
+    });
 
     const gameState = loadGameState();
     gameState.processes[processId] = undefined;
