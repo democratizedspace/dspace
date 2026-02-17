@@ -33,3 +33,19 @@ test('items conform to schema', () => {
     expect(valid).toBe(true);
   }
 });
+
+
+test('itemCounts keys reference valid item ids and defaults are zero', () => {
+  const itemIds = new Set(items.map((item: any) => item.id));
+
+  for (const item of items as Array<any>) {
+    if (!item.itemCounts || typeof item.itemCounts !== 'object') {
+      continue;
+    }
+
+    for (const [storedItemId, defaultCount] of Object.entries(item.itemCounts)) {
+      expect(itemIds.has(storedItemId)).toBe(true);
+      expect(defaultCount).toBe(0);
+    }
+  }
+});

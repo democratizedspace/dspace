@@ -14,6 +14,23 @@ describe('process quality', () => {
     }
   });
 
+  it('itemCountOperations reference allowed container/item pairs', () => {
+    const itemMap = new Map((items as Array<any>).map((item) => [item.id, item]));
+
+    for (const proc of processes as Array<any>) {
+      for (const operation of proc.itemCountOperations || []) {
+        const container = itemMap.get(operation.containerItemId);
+        expect(Boolean(container)).toBe(true);
+
+        const allowed = container?.itemCounts && typeof container.itemCounts === 'object'
+          ? Object.prototype.hasOwnProperty.call(container.itemCounts, operation.itemId)
+          : false;
+
+        expect(allowed).toBe(true);
+      }
+    }
+  });
+
   it('includes required fields', () => {
     const required = [
       'id',
