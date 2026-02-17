@@ -58,11 +58,22 @@ async function readGameState(page: Page): Promise<GameStatePayload> {
     });
 }
 
+async function readStoredDusdFromIdb(page: Page): Promise<number> {
+    const state = await readGameState(page);
+    return state.itemContainerCounts?.[JAR_ID]?.[DUSD_ID] ?? 0;
+}
+
 async function runProcessFromItemPage(page: Page, title: string) {
-    const card = page.locator('.container').filter({ has: page.getByRole('heading', { name: title }) });
-    await card.getByTestId('process-start-button').click();
-    await expect(card.getByText('Collect')).toBeVisible({ timeout: 15000 });
-    await card.getByText('Collect').click();
+    const card = page
+        .locator('.container')
+        .filter({ has: page.getByRole('heading', { name: title, exact: true }) })
+        .first();
+    const start = card.getByTestId('process-start-button').first();
+    const collect = card.getByRole('button', { name: 'Collect' }).first();
+
+    await start.click();
+    await expect(collect).toBeVisible({ timeout: 15000 });
+    await collect.click();
     await flushGameStateWrites(page);
 }
 
@@ -85,36 +96,26 @@ test.describe('savings jar mechanics', () => {
         await page.goto(`/inventory/item/${JAR_ID}`);
         await runProcessFromItemPage(page, 'Deposit 10 dUSD into savings jar');
 
+        await expect.poll(async () => readStoredDusdFromIdb(page)).toBe(10);
+
+        await page.goto(`/inventory/item/${JAR_ID}`);
+
         await expect(page.getByText('Stored contents:')).toBeVisible();
-        await expect(page.getByText('dUSD: 10')).toBeVisible();
+        await expect(page.getByText(/dUSD:\s*10(\.0+)?/)).toBeVisible();
 
         await runProcessFromItemPage(page, 'Break savings jar and retrieve all dUSD');
 
-        await page.waitForFunction(
-            async ({ jarId, brokenJarId, dusdId }) => {
-                const db = await new Promise<IDBDatabase>((resolve, reject) => {
-                    const request = indexedDB.open('dspaceGameState', 1);
-                    request.onsuccess = () => resolve(request.result);
-                    request.onerror = () => reject(request.error);
-                });
-
-                const state = await new Promise<GameStatePayload>((resolve, reject) => {
-                    const tx = db.transaction('state', 'readonly');
-                    const req = tx.objectStore('state').get('root');
-                    req.onsuccess = () => resolve(req.result || {});
-                    req.onerror = () => reject(req.error);
-                });
-                db.close();
-
-                return (
-                    (state.inventory?.[jarId] || 0) === 0 &&
-                    (state.inventory?.[brokenJarId] || 0) === 1 &&
-                    (state.inventory?.[dusdId] || 0) === 50 &&
-                    (state.itemContainerCounts?.[jarId]?.[dusdId] || 0) === 0
-                );
-            },
-            { jarId: JAR_ID, brokenJarId: BROKEN_JAR_ID, dusdId: DUSD_ID }
-        );
+        await expect.poll(async () => readStoredDusdFromIdb(page)).toBe(0);
+        await expect
+            .poll(async () => {
+                const state = await readGameState(page);
+                return {
+                    brokenJar: state.inventory?.[BROKEN_JAR_ID] ?? 0,
+                    dusd: state.inventory?.[DUSD_ID] ?? 0,
+                    jar: state.inventory?.[JAR_ID] ?? 0,
+                };
+            })
+            .toEqual({ brokenJar: 1, dusd: 50, jar: 0 });
 
         const state = await readGameState(page);
         expect(state.inventory[JAR_ID]).toBe(0);
@@ -136,6 +137,18 @@ test.describe('savings jar mechanics', () => {
 
         await page.goto(`/inventory/item/${JAR_ID}`);
         await runProcessFromItemPage(page, 'Break savings jar and retrieve all dUSD');
+
+        await expect.poll(async () => readStoredDusdFromIdb(page)).toBe(0);
+        await expect
+            .poll(async () => {
+                const state = await readGameState(page);
+                return {
+                    brokenJar: state.inventory?.[BROKEN_JAR_ID] ?? 0,
+                    dusd: state.inventory?.[DUSD_ID] ?? 0,
+                    jar: state.inventory?.[JAR_ID] ?? 0,
+                };
+            })
+            .toEqual({ brokenJar: 1, dusd: 25, jar: 0 });
 
         const state = await readGameState(page);
         expect(state.inventory[JAR_ID]).toBe(0);
