@@ -44,7 +44,11 @@ const getAllowedStoredItemIds = (containerItemId) => {
     }
 
     const containerItem = getContainerItem(containerItemId);
-    if (!containerItem || typeof containerItem.itemCounts !== 'object' || !containerItem.itemCounts) {
+    if (
+        !containerItem ||
+        typeof containerItem.itemCounts !== 'object' ||
+        !containerItem.itemCounts
+    ) {
         return [];
     }
 
@@ -132,7 +136,8 @@ export const addStoredItemsToState = (gameState, containerItemId, storedItemId, 
     }
 
     const containerMap = ensureContainerMap(gameState, containerItemId);
-    containerMap[storedItemId] = getStateStoredItemCount(gameState, containerItemId, storedItemId) + safeDelta;
+    containerMap[storedItemId] =
+        getStateStoredItemCount(gameState, containerItemId, storedItemId) + safeDelta;
     return true;
 };
 

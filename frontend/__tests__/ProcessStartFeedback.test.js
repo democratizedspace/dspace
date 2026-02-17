@@ -53,7 +53,8 @@ vi.mock('../src/utils/gameState/processes.js', async () => {
     const actual = await vi.importActual('../src/utils/gameState/processes.js');
     return {
         ...actual,
-        startProcess: vi.fn(),
+        startProcess: vi.fn(() => true),
+        getItemCountOperationStartError: vi.fn(() => ''),
         cancelProcess: vi.fn(),
         finishProcess: vi.fn(),
         pauseProcess: vi.fn(),

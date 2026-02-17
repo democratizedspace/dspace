@@ -19,8 +19,10 @@ async function seedGameState(page: Page, state: GameStatePayload) {
             const request = indexedDB.open('dspaceGameState', 1);
             request.onupgradeneeded = () => {
                 const upgradeDb = request.result;
-                if (!upgradeDb.objectStoreNames.contains('state')) upgradeDb.createObjectStore('state');
-                if (!upgradeDb.objectStoreNames.contains('backup')) upgradeDb.createObjectStore('backup');
+                if (!upgradeDb.objectStoreNames.contains('state'))
+                    upgradeDb.createObjectStore('state');
+                if (!upgradeDb.objectStoreNames.contains('backup'))
+                    upgradeDb.createObjectStore('backup');
             };
             request.onsuccess = () => resolve(request.result);
             request.onerror = () => reject(request.error);

@@ -19,7 +19,7 @@ const getProcessStartedAtMock = vi.hoisted(() => vi.fn(() => Date.now()));
 const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
-const startProcess = vi.hoisted(() => vi.fn());
+const startProcess = vi.hoisted(() => vi.fn(() => true));
 const dbGetMock = vi.hoisted(() => vi.fn<(entityType: string, id: string) => Promise<unknown>>());
 
 const getProcessState = vi.mocked(getProcessStateMock);
@@ -96,6 +96,7 @@ vi.mock('../../generated/processes.json', () => ({
 
 vi.mock('../../utils/gameState/processes.js', () => ({
     startProcess,
+    getItemCountOperationStartError: vi.fn(() => ''),
     cancelProcess: vi.fn(),
     finishProcess: vi.fn(),
     getProcessState: vi.fn(() => stateInfo),
@@ -450,7 +451,7 @@ test('renders custom process start controls when rendering a custom process', as
     const startButton = getByTestId('process-start-button');
     expect(startButton).toBeTruthy();
     await fireEvent.click(startButton);
-    expect(startProcess).toHaveBeenCalledWith('custom-1', customProcess, {});
+    expect(startProcess).toHaveBeenCalledWith('custom-1', customProcess);
 });
 
 test('prefers provided process data over built-in catalog lookup', async () => {

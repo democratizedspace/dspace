@@ -19,7 +19,6 @@ const getRuntimeConsumeItems = (process) => [...(process.consumeItems || [])];
 
 const isPositiveNumber = (value) => Number.isFinite(value) && value > 0;
 
-
 const addItemsToState = (gameState, items = []) => {
     if (!gameState.inventory || typeof gameState.inventory !== 'object') {
         gameState.inventory = {};
@@ -53,7 +52,10 @@ const hasRequiredItemCountOperations = (operations = []) => {
         }
 
         if (operation.operation === 'withdraw') {
-            return getStoredItemCount(operation.containerItemId, operation.itemId) >= Number(operation.count);
+            return (
+                getStoredItemCount(operation.containerItemId, operation.itemId) >=
+                Number(operation.count)
+            );
         }
 
         return true;
@@ -136,7 +138,8 @@ export const hasRequiredAndConsumedItems = (processId, processDefinition) => {
     }
 
     const runtimeConsumeItems = getRuntimeConsumeItems(process);
-    const hasItemsReady = hasItems(process.requireItems || []) && hasItems(runtimeConsumeItems || []);
+    const hasItemsReady =
+        hasItems(process.requireItems || []) && hasItems(runtimeConsumeItems || []);
     return hasItemsReady && hasRequiredItemCountOperations(process.itemCountOperations || []);
 };
 

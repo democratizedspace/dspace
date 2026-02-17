@@ -507,7 +507,7 @@
         "name": "broken savings jar",
         "description": "Shattered remains of a savings jar after cashing out stored dUSD.",
         "image": "/assets/stevia_crystals_jar.jpg",
-        "price": "0 dUSD",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital Currency & Tokens"
     },
     {

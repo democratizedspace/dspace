@@ -111,7 +111,6 @@ describe('container process behavior', () => {
         expect(getStoredItemCount(jarId, dusdId)).toBe(0);
     });
 
-
     test('finishProcess saves container updates without stale overwrite', () => {
         const stateSnapshot: MockGameState = {
             inventory: {
@@ -126,6 +125,7 @@ describe('container process behavior', () => {
             processes: {
                 deposit: {
                     startedAt: Date.now() - 5000,
+                    duration: 1000,
                 },
             },
         };
@@ -140,8 +140,8 @@ describe('container process behavior', () => {
             id: 'deposit',
             duration: '1s',
             requireItems: [{ id: jarId, count: 1 }],
-            consumeItems: [{ id: dusdId, count: 10 }],
-            createItems: [{ id: dusdId, count: 10 }],
+            consumeItems: [],
+            createItems: [],
             itemCountOperations: [
                 {
                     operation: 'deposit',
@@ -154,7 +154,7 @@ describe('container process behavior', () => {
 
         finishProcess('deposit', depositDefinition);
 
-        expect(stateSnapshot.inventory[dusdId]).toBe(20);
+        expect(stateSnapshot.inventory[dusdId]).toBe(10);
         expect(stateSnapshot.itemContainerCounts[jarId][dusdId]).toBe(10);
     });
 

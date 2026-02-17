@@ -243,7 +243,6 @@
     };
 
     const onProcessStart = async () => {
-
         const requirementItems = [
             ...(process?.requireItems ?? []),
             ...(process?.consumeItems ?? []),
@@ -433,7 +432,6 @@
 
         updateState();
     }
-
 
     $: if (mounted && process) {
         const requirementItems = [...(process.requireItems ?? []), ...(process.consumeItems ?? [])];
