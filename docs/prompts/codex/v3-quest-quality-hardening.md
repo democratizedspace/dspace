@@ -4,6 +4,18 @@ Use these prompts to pick problematic quests from
 `docs/design/v3-quest-quality-review.md#problematic-quests-to-prioritize-with-improvement-checklist`
 and upgrade them to parity with QA-validated quest quality in `docs/qa/v3.md`.
 
+## How to read the backlog
+
+Before picking quests, read the target tree section in
+`docs/design/v3-quest-quality-review.md#problematic-quests-to-prioritize-with-improvement-checklist`:
+
+- Use that tree’s **Exemplar anchors (checked in docs/qa/v3.md §4.5)** as parity references when
+  shaping branching, evidence gates, and recovery logic.
+- Determine each quest’s **Checklist rubric** type from its ID keywords (install/setup,
+  measure/test/check, calibrate/adjust, log/monitor/maintenance, clean/rinse/purge/prime/scrub,
+  grow/lifecycle/outcome, astronomy observation) and implement the required structure for that
+  type instead of generic boilerplate.
+
 ## Main prompt
 
 Use this when you want Codex to select one or more problematic v3 quests and implement robust,
