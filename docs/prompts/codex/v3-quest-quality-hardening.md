@@ -16,6 +16,14 @@ Before picking quests, read the target tree section in
   grow/lifecycle/outcome, astronomy observation) and implement the required structure for that
   type instead of generic boilerplate.
 
+## Rubric enforcement
+
+For each selected quest, identify its checklist-rubric type by keyword (**first match wins**) and implement that exact structure; do not fall back to generic boilerplate.
+
+## Anchor verification
+
+When citing exemplars, copy quest IDs only from the tree-level `Exemplar anchors (checked...)` lines in `docs/design/v3-quest-quality-review.md`; do not invent new exemplar IDs.
+
 ## Main prompt
 
 Use this when you want Codex to select one or more problematic v3 quests and implement robust,

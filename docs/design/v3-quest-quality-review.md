@@ -151,971 +151,975 @@ Checklist rubric (type-driven, applied by quest-id keywords):
   - seeing/weather/light-pollution fallback branch
   - observation artifact (log/sketch/photo) + interpretation node
 
-Matching rule: assign each quest to the **first** matching type above and use that checklist shape. Include an explicit `Safety note:` bullet only for chemistry, firstaid, devops, electronics, energy, and rocketry entries where risk handling is plausible.
+Type matching: **FIRST keyword match wins.**
+
+Fallback policy for exemplar anchors: if a tree has no checked quests in `docs/qa/v3.md` §4.5, use exactly two checked nearest-neighbor exemplars from measurement/logging/procedural workflows and label the line with `(fallback: no checked <tree> quests yet)`.
+
+Include an explicit `Safety note:` bullet only for chemistry, firstaid, devops, electronics, energy, and rocketry entries where risk handling is plausible.
 
 ### 3dprinting (15 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start
+Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/run-tests
 
 - `3dprinting/bed-leveling`
-  - [ ] Convert `3dprinting/bed-leveling` to baseline → adjust → re-test, with an explicit tolerance target that gates completion.
-  - [ ] Attach mechanics-backed artifacts to each phase (baseline capture, adjustment action, and post-adjust verification).
-  - [ ] Add a drift branch: if results do not hold after a short interval, route to diagnosis and repeat the loop.
+  - [ ] Structure `3dprinting/bed-leveling` as baseline → adjust → re-test with a stated tolerance target that gates completion.
+  - [ ] Require evidence artifacts for both baseline and post-adjust states (reading snapshots, process output, or logged values).
+  - [ ] Add a drift/variance branch: if results do not hold on follow-up, roll back to last-known-good settings and repeat the loop.
 - `3dprinting/benchy_10`
-  - [ ] Split `3dprinting/benchy_10` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `benchy_10` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `3dprinting/benchy_10` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `3dprinting/benchy_100`
-  - [ ] Split `3dprinting/benchy_100` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `benchy_100` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `3dprinting/benchy_100` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `3dprinting/benchy_25`
-  - [ ] Split `3dprinting/benchy_25` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `benchy_25` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `3dprinting/benchy_25` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `3dprinting/blob-of-death`
-  - [ ] Split `3dprinting/blob-of-death` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `blob of death` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `3dprinting/blob-of-death` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `3dprinting/cable-clip`
-  - [ ] Split `3dprinting/cable-clip` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `cable clip` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `3dprinting/cable-clip` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `3dprinting/calibration-cube`
-  - [ ] Convert `3dprinting/calibration-cube` to baseline → adjust → re-test, with an explicit tolerance target that gates completion.
-  - [ ] Attach mechanics-backed artifacts to each phase (baseline capture, adjustment action, and post-adjust verification).
-  - [ ] Add a drift branch: if results do not hold after a short interval, route to diagnosis and repeat the loop.
+  - [ ] Split `3dprinting/calibration-cube` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `3dprinting/filament-change`
-  - [ ] Split `3dprinting/filament-change` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `filament change` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `3dprinting/filament-change` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `3dprinting/nozzle-cleaning`
-  - [ ] Split `3dprinting/nozzle-cleaning` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `nozzle cleaning` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Define `3dprinting/nozzle-cleaning` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
+  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
 - `3dprinting/nozzle-clog`
-  - [ ] Split `3dprinting/nozzle-clog` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `nozzle clog` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Define acceptance criteria for `3dprinting/nozzle-clog` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
+  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
+  - [ ] require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
 - `3dprinting/phone-stand`
-  - [ ] Split `3dprinting/phone-stand` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `phone stand` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Require `3dprinting/phone-stand` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `3dprinting/retraction-test`
-  - [ ] Require `3dprinting/retraction-test` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `3dprinting/retraction-test` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `3dprinting/spool-holder`
-  - [ ] Split `3dprinting/spool-holder` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `spool holder` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `3dprinting/spool-holder` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `3dprinting/temperature-tower`
-  - [ ] Split `3dprinting/temperature-tower` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `temperature tower` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Require `3dprinting/temperature-tower` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `3dprinting/x-belt-tension`
-  - [ ] Convert `3dprinting/x-belt-tension` to baseline → adjust → re-test, with an explicit tolerance target that gates completion.
-  - [ ] Attach mechanics-backed artifacts to each phase (baseline capture, adjustment action, and post-adjust verification).
-  - [ ] Add a drift branch: if results do not hold after a short interval, route to diagnosis and repeat the loop.
+  - [ ] Structure `3dprinting/x-belt-tension` as baseline → adjust → re-test with a stated tolerance target that gates completion.
+  - [ ] Require evidence artifacts for both baseline and post-adjust states (reading snapshots, process output, or logged values).
+  - [ ] Add a drift/variance branch: if results do not hold on follow-up, roll back to last-known-good settings and repeat the loop.
 
 ### aquaria (19 quests)
 
 Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature (fallback: no checked aquaria quests yet)
 
 - `aquaria/aquarium-light`
-  - [ ] Split `aquaria/aquarium-light` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `aquarium light` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `aquaria/aquarium-light` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `aquaria/balance-ph`
-  - [ ] Require `aquaria/balance-ph` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `aquaria/balance-ph` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `aquaria/breeding`
-  - [ ] Stage `aquaria/breeding` with two proofs: setup artifact first, then lifecycle/outcome artifact later; require both before `finish`.
+  - [ ] Stage `aquaria/breeding` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
   - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Include pause/abort criteria so progression halts when outcomes regress and resumes only after recovery evidence.
+  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
 - `aquaria/filter-rinse`
-  - [ ] Define before/after condition checks in `aquaria/filter-rinse` so “clean” is measurable (residue, flow, clarity, signal quality, etc.).
-  - [ ] Gate completion on paired mechanics-backed artifacts (pre-clean state + post-clean state), not narration alone.
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint, then loop until after-check criteria pass.
+  - [ ] Define `aquaria/filter-rinse` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
+  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
 - `aquaria/floating-plants`
-  - [ ] Split `aquaria/floating-plants` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `floating plants` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `aquaria/floating-plants` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `aquaria/goldfish`
-  - [ ] Stage `aquaria/goldfish` with two proofs: setup artifact first, then lifecycle/outcome artifact later; require both before `finish`.
+  - [ ] Stage `aquaria/goldfish` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
   - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Include pause/abort criteria so progression halts when outcomes regress and resumes only after recovery evidence.
+  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
 - `aquaria/guppy`
-  - [ ] Stage `aquaria/guppy` with two proofs: setup artifact first, then lifecycle/outcome artifact later; require both before `finish`.
+  - [ ] Stage `aquaria/guppy` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
   - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Include pause/abort criteria so progression halts when outcomes regress and resumes only after recovery evidence.
+  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
 - `aquaria/heater-install`
-  - [ ] Structure `aquaria/heater-install` as install → verify → rollback, with `finish` gated by a post-change artifact (status output, config diff, or expected-state item).
-  - [ ] Make verification explicit in mechanics: capture a process/log artifact and add an interpretation node that confirms the change works under normal conditions.
-  - [ ] Add a failed-verify branch for `heater install` that forces rollback, then reruns verification before success can resume.
+  - [ ] Rewrite `aquaria/heater-install` as install → verify → rollback, with each stage in a separate node before `finish` is reachable.
+  - [ ] Gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item) and a brief interpretation checkpoint.
+  - [ ] add rollback/lockout-avoidance handling for `heater install`, then require a clean re-verify pass before retrying the install path.
 - `aquaria/log-water-parameters`
-  - [ ] Define acceptance criteria for `aquaria/log-water-parameters` monitoring output (required fields, cadence, and threshold bounds) and gate `finish` on that artifact.
-  - [ ] Add an anomaly branch that requires classification + corrective action before returning to nominal monitoring.
-  - [ ] Require a follow-up verification window after correction (fresh log slice or monitor snapshot) before closure.
+  - [ ] Define acceptance criteria for `aquaria/log-water-parameters` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
+  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
+  - [ ] require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
 - `aquaria/net-fish`
-  - [ ] Split `aquaria/net-fish` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `net fish` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `aquaria/net-fish` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `aquaria/ph-strip-test`
-  - [ ] Require `aquaria/ph-strip-test` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `aquaria/ph-strip-test` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `aquaria/position-tank`
-  - [ ] Split `aquaria/position-tank` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `position tank` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `aquaria/position-tank` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `aquaria/shrimp`
-  - [ ] Stage `aquaria/shrimp` with two proofs: setup artifact first, then lifecycle/outcome artifact later; require both before `finish`.
+  - [ ] Stage `aquaria/shrimp` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
   - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Include pause/abort criteria so progression halts when outcomes regress and resumes only after recovery evidence.
+  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
 - `aquaria/sponge-filter`
-  - [ ] Split `aquaria/sponge-filter` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `sponge filter` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `aquaria/sponge-filter` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `aquaria/thermometer`
-  - [ ] Split `aquaria/thermometer` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `thermometer` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `aquaria/thermometer` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `aquaria/top-off`
-  - [ ] Split `aquaria/top-off` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `top off` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `aquaria/top-off` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `aquaria/walstad`
-  - [ ] Stage `aquaria/walstad` with two proofs: setup artifact first, then lifecycle/outcome artifact later; require both before `finish`.
+  - [ ] Stage `aquaria/walstad` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
   - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Include pause/abort criteria so progression halts when outcomes regress and resumes only after recovery evidence.
+  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
 - `aquaria/water-change`
-  - [ ] Split `aquaria/water-change` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `water change` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `aquaria/water-change` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `aquaria/water-testing`
-  - [ ] Split `aquaria/water-testing` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `water testing` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Require `aquaria/water-testing` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 
 ### astronomy (21 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/log-analysis, hydroponics/nutrient-check (fallback: no checked astronomy quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature (fallback: no checked astronomy quests yet)
 
 - `astronomy/andromeda`
-  - [ ] Split `astronomy/andromeda` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `andromeda` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `astronomy/andromeda` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `astronomy/aurora-watch`
-  - [ ] Add seeing-condition fallback paths in `astronomy/aurora-watch` for weather, cloud cover, light pollution, or timing-window misses.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate item) plus an interpretation node with at least one concrete finding.
-  - [ ] Add failed-session troubleshooting (alternate target/location/setup) and require a follow-up observation check before completion.
+  - [ ] Add an explicit seeing/weather/light-pollution fallback branch in `astronomy/aurora-watch` before observation can be marked complete.
+  - [ ] Require an observation artifact (log, sketch, or photo surrogate) plus an interpretation node before `finish` unlocks.
+  - [ ] Add failed-session troubleshooting (conditions and adjustments) with a follow-up observation check before closure.
 - `astronomy/basic-telescope`
-  - [ ] Split `astronomy/basic-telescope` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `basic telescope` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `astronomy/basic-telescope` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `astronomy/binary-star`
-  - [ ] Split `astronomy/binary-star` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `binary star` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `astronomy/binary-star` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `astronomy/comet-tracking`
-  - [ ] Split `astronomy/comet-tracking` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `comet tracking` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `astronomy/comet-tracking` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `astronomy/constellations`
-  - [ ] Split `astronomy/constellations` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `constellations` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `astronomy/constellations` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `astronomy/iss-flyover`
-  - [ ] Add seeing-condition fallback paths in `astronomy/iss-flyover` for weather, cloud cover, light pollution, or timing-window misses.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate item) plus an interpretation node with at least one concrete finding.
-  - [ ] Add failed-session troubleshooting (alternate target/location/setup) and require a follow-up observation check before completion.
+  - [ ] Add an explicit seeing/weather/light-pollution fallback branch in `astronomy/iss-flyover` before observation can be marked complete.
+  - [ ] Require an observation artifact (log, sketch, or photo surrogate) plus an interpretation node before `finish` unlocks.
+  - [ ] Add failed-session troubleshooting (conditions and adjustments) with a follow-up observation check before closure.
 - `astronomy/iss-photo`
-  - [ ] Add seeing-condition fallback paths in `astronomy/iss-photo` for weather, cloud cover, light pollution, or timing-window misses.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate item) plus an interpretation node with at least one concrete finding.
-  - [ ] Add failed-session troubleshooting (alternate target/location/setup) and require a follow-up observation check before completion.
+  - [ ] Require `astronomy/iss-photo` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `astronomy/jupiter-moons`
-  - [ ] Split `astronomy/jupiter-moons` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `jupiter moons` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `astronomy/jupiter-moons` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `astronomy/light-pollution`
-  - [ ] Split `astronomy/light-pollution` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `light pollution` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `astronomy/light-pollution` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `astronomy/lunar-eclipse`
-  - [ ] Add seeing-condition fallback paths in `astronomy/lunar-eclipse` for weather, cloud cover, light pollution, or timing-window misses.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate item) plus an interpretation node with at least one concrete finding.
-  - [ ] Add failed-session troubleshooting (alternate target/location/setup) and require a follow-up observation check before completion.
+  - [ ] Require `astronomy/lunar-eclipse` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `astronomy/meteor-shower`
-  - [ ] Add seeing-condition fallback paths in `astronomy/meteor-shower` for weather, cloud cover, light pollution, or timing-window misses.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate item) plus an interpretation node with at least one concrete finding.
-  - [ ] Add failed-session troubleshooting (alternate target/location/setup) and require a follow-up observation check before completion.
+  - [ ] Add an explicit seeing/weather/light-pollution fallback branch in `astronomy/meteor-shower` before observation can be marked complete.
+  - [ ] Require an observation artifact (log, sketch, or photo surrogate) plus an interpretation node before `finish` unlocks.
+  - [ ] Add failed-session troubleshooting (conditions and adjustments) with a follow-up observation check before closure.
 - `astronomy/north-star`
-  - [ ] Split `astronomy/north-star` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `north star` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `astronomy/north-star` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `astronomy/observe-moon`
-  - [ ] Add seeing-condition fallback paths in `astronomy/observe-moon` for weather, cloud cover, light pollution, or timing-window misses.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate item) plus an interpretation node with at least one concrete finding.
-  - [ ] Add failed-session troubleshooting (alternate target/location/setup) and require a follow-up observation check before completion.
+  - [ ] Add an explicit seeing/weather/light-pollution fallback branch in `astronomy/observe-moon` before observation can be marked complete.
+  - [ ] Require an observation artifact (log, sketch, or photo surrogate) plus an interpretation node before `finish` unlocks.
+  - [ ] Add failed-session troubleshooting (conditions and adjustments) with a follow-up observation check before closure.
 - `astronomy/orion-nebula`
-  - [ ] Add seeing-condition fallback paths in `astronomy/orion-nebula` for weather, cloud cover, light pollution, or timing-window misses.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate item) plus an interpretation node with at least one concrete finding.
-  - [ ] Add failed-session troubleshooting (alternate target/location/setup) and require a follow-up observation check before completion.
+  - [ ] Add an explicit seeing/weather/light-pollution fallback branch in `astronomy/orion-nebula` before observation can be marked complete.
+  - [ ] Require an observation artifact (log, sketch, or photo surrogate) plus an interpretation node before `finish` unlocks.
+  - [ ] Add failed-session troubleshooting (conditions and adjustments) with a follow-up observation check before closure.
 - `astronomy/planetary-alignment`
-  - [ ] Split `astronomy/planetary-alignment` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `planetary alignment` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `astronomy/planetary-alignment` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `astronomy/satellite-pass`
-  - [ ] Add seeing-condition fallback paths in `astronomy/satellite-pass` for weather, cloud cover, light pollution, or timing-window misses.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate item) plus an interpretation node with at least one concrete finding.
-  - [ ] Add failed-session troubleshooting (alternate target/location/setup) and require a follow-up observation check before completion.
+  - [ ] Add an explicit seeing/weather/light-pollution fallback branch in `astronomy/satellite-pass` before observation can be marked complete.
+  - [ ] Require an observation artifact (log, sketch, or photo surrogate) plus an interpretation node before `finish` unlocks.
+  - [ ] Add failed-session troubleshooting (conditions and adjustments) with a follow-up observation check before closure.
 - `astronomy/saturn-rings`
-  - [ ] Add seeing-condition fallback paths in `astronomy/saturn-rings` for weather, cloud cover, light pollution, or timing-window misses.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate item) plus an interpretation node with at least one concrete finding.
-  - [ ] Add failed-session troubleshooting (alternate target/location/setup) and require a follow-up observation check before completion.
+  - [ ] Add an explicit seeing/weather/light-pollution fallback branch in `astronomy/saturn-rings` before observation can be marked complete.
+  - [ ] Require an observation artifact (log, sketch, or photo surrogate) plus an interpretation node before `finish` unlocks.
+  - [ ] Add failed-session troubleshooting (conditions and adjustments) with a follow-up observation check before closure.
 - `astronomy/star-trails`
-  - [ ] Split `astronomy/star-trails` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `star trails` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `astronomy/star-trails` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `astronomy/sunspot-sketch`
-  - [ ] Split `astronomy/sunspot-sketch` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `sunspot sketch` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `astronomy/sunspot-sketch` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `astronomy/venus-phases`
-  - [ ] Split `astronomy/venus-phases` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `venus phases` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Require `astronomy/venus-phases` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 
 ### chemistry (10 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/start, hydroponics/nutrient-check (fallback: no checked chemistry quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature (fallback: no checked chemistry quests yet)
 
 - `chemistry/acid-dilution`
-  - [ ] Split `chemistry/acid-dilution` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `chemistry/acid-dilution` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `chemistry/acid-neutralization`
-  - [ ] Split `chemistry/acid-neutralization` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `chemistry/acid-neutralization` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `chemistry/buffer-solution`
-  - [ ] Split `chemistry/buffer-solution` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `chemistry/buffer-solution` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `chemistry/ph-adjustment`
-  - [ ] Require `chemistry/ph-adjustment` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Safety note: set stop thresholds for unsafe readings and require pause/escalation until follow-up measurements return to a safe range.
+  - [ ] Require `chemistry/ph-adjustment` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `chemistry/ph-test`
-  - [ ] Require `chemistry/ph-test` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Safety note: set stop thresholds for unsafe readings and require pause/escalation until follow-up measurements return to a safe range.
+  - [ ] Require `chemistry/ph-test` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `chemistry/precipitation-reaction`
-  - [ ] Split `chemistry/precipitation-reaction` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Require `chemistry/precipitation-reaction` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `chemistry/safe-reaction`
-  - [ ] Split `chemistry/safe-reaction` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `chemistry/safe-reaction` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `chemistry/stevia-crystals`
-  - [ ] Stage `chemistry/stevia-crystals` with two proofs: setup artifact first, then lifecycle/outcome artifact later; require both before `finish`.
+  - [ ] Stage `chemistry/stevia-crystals` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
   - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Safety note: define humane/safe pause-or-abort criteria and require stabilization evidence before progression resumes.
+  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
 - `chemistry/stevia-extraction`
-  - [ ] Stage `chemistry/stevia-extraction` with two proofs: setup artifact first, then lifecycle/outcome artifact later; require both before `finish`.
+  - [ ] Stage `chemistry/stevia-extraction` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
   - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Safety note: define humane/safe pause-or-abort criteria and require stabilization evidence before progression resumes.
+  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
 - `chemistry/stevia-tasting`
-  - [ ] Stage `chemistry/stevia-tasting` with two proofs: setup artifact first, then lifecycle/outcome artifact later; require both before `finish`.
+  - [ ] Stage `chemistry/stevia-tasting` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
   - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Safety note: define humane/safe pause-or-abort criteria and require stabilization evidence before progression resumes.
+  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
 
 ### completionist (5 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/intro-inventory, ubi/basicincome (fallback: no checked completionist quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, welcome/intro-inventory (fallback: no checked completionist quests yet)
 
 - `completionist/catalog`
-  - [ ] Split `completionist/catalog` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `catalog` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Define acceptance criteria for `completionist/catalog` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
+  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
+  - [ ] require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
 - `completionist/display`
-  - [ ] Split `completionist/display` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `display` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `completionist/display` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `completionist/polish`
-  - [ ] Split `completionist/polish` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `polish` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `completionist/polish` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `completionist/reminder`
-  - [ ] Split `completionist/reminder` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `reminder` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `completionist/reminder` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `completionist/v2`
-  - [ ] Split `completionist/v2` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `v2` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `completionist/v2` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 
 ### devops (15 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, sysadmin/resource-monitoring (fallback: no checked devops quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/log-analysis, sysadmin/resource-monitoring (fallback: no checked devops quests yet)
 
 - `devops/auto-updates`
-  - [ ] Split `devops/auto-updates` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `devops/auto-updates` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `devops/ci-pipeline`
-  - [ ] Split `devops/ci-pipeline` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `devops/ci-pipeline` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `devops/daily-backups`
-  - [ ] Split `devops/daily-backups` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `devops/daily-backups` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `devops/docker-compose`
-  - [ ] Split `devops/docker-compose` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `devops/docker-compose` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `devops/enable-https`
-  - [ ] Structure `devops/enable-https` as install → verify → rollback, with `finish` gated by a post-change artifact (status output, config diff, or expected-state item).
-  - [ ] Make verification explicit in mechanics: capture a process/log artifact and add an interpretation node that confirms the change works under normal conditions.
-  - [ ] Safety note: add lockout-avoidance rollback steps (backup path, safe defaults, and re-entry checks) before any retry after failed verification.
+  - [ ] Rewrite `devops/enable-https` as install → verify → rollback, with each stage in a separate node before `finish` is reachable.
+  - [ ] Gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item) and a brief interpretation checkpoint.
+  - [ ] Safety note: add rollback/lockout-avoidance handling for `enable https`, then require a clean re-verify pass before retrying the install path.
 - `devops/fail2ban`
-  - [ ] Split `devops/fail2ban` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `devops/fail2ban` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `devops/firewall-rules`
-  - [ ] Split `devops/firewall-rules` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `devops/firewall-rules` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `devops/k3s-deploy`
-  - [ ] Structure `devops/k3s-deploy` as install → verify → rollback, with `finish` gated by a post-change artifact (status output, config diff, or expected-state item).
-  - [ ] Make verification explicit in mechanics: capture a process/log artifact and add an interpretation node that confirms the change works under normal conditions.
-  - [ ] Safety note: add lockout-avoidance rollback steps (backup path, safe defaults, and re-entry checks) before any retry after failed verification.
+  - [ ] Rewrite `devops/k3s-deploy` as install → verify → rollback, with each stage in a separate node before `finish` is reachable.
+  - [ ] Gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item) and a brief interpretation checkpoint.
+  - [ ] Safety note: add rollback/lockout-avoidance handling for `k3s deploy`, then require a clean re-verify pass before retrying the install path.
 - `devops/log-maintenance`
-  - [ ] Define acceptance criteria for `devops/log-maintenance` monitoring output (required fields, cadence, and threshold bounds) and gate `finish` on that artifact.
-  - [ ] Add an anomaly branch that requires classification + corrective action before returning to nominal monitoring.
-  - [ ] Safety note: include escalation and fail-safe handling when anomalies imply security/electrical/operational risk, then require follow-up verification.
+  - [ ] Define acceptance criteria for `devops/log-maintenance` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
+  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
+  - [ ] Safety note: require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
 - `devops/monitoring`
-  - [ ] Split `devops/monitoring` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Define acceptance criteria for `devops/monitoring` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
+  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
+  - [ ] Safety note: require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
 - `devops/pi-cluster-hardware`
-  - [ ] Split `devops/pi-cluster-hardware` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `devops/pi-cluster-hardware` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `devops/prepare-first-node`
-  - [ ] Split `devops/prepare-first-node` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `devops/prepare-first-node` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `devops/private-registry`
-  - [ ] Split `devops/private-registry` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `devops/private-registry` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `devops/ssd-boot`
-  - [ ] Split `devops/ssd-boot` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `devops/ssd-boot` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `devops/ssh-hardening`
-  - [ ] Split `devops/ssh-hardening` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `devops/ssh-hardening` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 
 ### electronics (22 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, hydroponics/nutrient-check (fallback: no checked electronics quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring, hydroponics/nutrient-check (fallback: no checked electronics quests yet)
 
 - `electronics/arduino-blink`
-  - [ ] Split `electronics/arduino-blink` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `electronics/arduino-blink` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `electronics/basic-circuit`
-  - [ ] Split `electronics/basic-circuit` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `electronics/basic-circuit` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `electronics/check-battery-voltage`
-  - [ ] Require `electronics/check-battery-voltage` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Safety note: set stop thresholds for unsafe readings and require pause/escalation until follow-up measurements return to a safe range.
+  - [ ] Require `electronics/check-battery-voltage` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `electronics/continuity-test`
-  - [ ] Require `electronics/continuity-test` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Safety note: set stop thresholds for unsafe readings and require pause/escalation until follow-up measurements return to a safe range.
+  - [ ] Require `electronics/continuity-test` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `electronics/data-logger`
-  - [ ] Split `electronics/data-logger` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Define acceptance criteria for `electronics/data-logger` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
+  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
+  - [ ] Safety note: require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
 - `electronics/desolder-component`
-  - [ ] Split `electronics/desolder-component` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `electronics/desolder-component` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `electronics/led-polarity`
-  - [ ] Split `electronics/led-polarity` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `electronics/led-polarity` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `electronics/light-sensor`
-  - [ ] Split `electronics/light-sensor` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `electronics/light-sensor` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `electronics/measure-arduino-5v`
-  - [ ] Require `electronics/measure-arduino-5v` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Safety note: set stop thresholds for unsafe readings and require pause/escalation until follow-up measurements return to a safe range.
+  - [ ] Require `electronics/measure-arduino-5v` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `electronics/measure-led-current`
-  - [ ] Require `electronics/measure-led-current` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Safety note: set stop thresholds for unsafe readings and require pause/escalation until follow-up measurements return to a safe range.
+  - [ ] Require `electronics/measure-led-current` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `electronics/measure-resistance`
-  - [ ] Require `electronics/measure-resistance` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Safety note: set stop thresholds for unsafe readings and require pause/escalation until follow-up measurements return to a safe range.
+  - [ ] Require `electronics/measure-resistance` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `electronics/potentiometer-dimmer`
-  - [ ] Split `electronics/potentiometer-dimmer` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `electronics/potentiometer-dimmer` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `electronics/resistor-color-check`
-  - [ ] Require `electronics/resistor-color-check` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Safety note: set stop thresholds for unsafe readings and require pause/escalation until follow-up measurements return to a safe range.
+  - [ ] Require `electronics/resistor-color-check` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `electronics/servo-sweep`
-  - [ ] Split `electronics/servo-sweep` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `electronics/servo-sweep` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `electronics/solder-led-harness`
-  - [ ] Split `electronics/solder-led-harness` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `electronics/solder-led-harness` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `electronics/solder-wire`
-  - [ ] Split `electronics/solder-wire` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `electronics/solder-wire` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `electronics/soldering-intro`
-  - [ ] Split `electronics/soldering-intro` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `electronics/soldering-intro` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `electronics/temperature-plot`
-  - [ ] Split `electronics/temperature-plot` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Require `electronics/temperature-plot` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `electronics/test-gfci-outlet`
-  - [ ] Require `electronics/test-gfci-outlet` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Safety note: set stop thresholds for unsafe readings and require pause/escalation until follow-up measurements return to a safe range.
+  - [ ] Require `electronics/test-gfci-outlet` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `electronics/thermistor-reading`
-  - [ ] Split `electronics/thermistor-reading` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `electronics/thermistor-reading` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `electronics/thermometer-calibration`
-  - [ ] Convert `electronics/thermometer-calibration` to baseline → adjust → re-test, with an explicit tolerance target that gates completion.
-  - [ ] Attach mechanics-backed artifacts to each phase (baseline capture, adjustment action, and post-adjust verification).
-  - [ ] Safety note: if tuned values drift, force rollback to last-known-safe settings before another adjustment pass.
+  - [ ] Split `electronics/thermometer-calibration` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `electronics/voltage-divider`
-  - [ ] Require `electronics/voltage-divider` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Safety note: set stop thresholds for unsafe readings and require pause/escalation until follow-up measurements return to a safe range.
+  - [ ] Require `electronics/voltage-divider` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 
 ### energy (11 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, sysadmin/resource-monitoring (fallback: no checked energy quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring, hydroponics/nutrient-check (fallback: no checked energy quests yet)
 
 - `energy/battery-maintenance`
-  - [ ] Define acceptance criteria for `energy/battery-maintenance` monitoring output (required fields, cadence, and threshold bounds) and gate `finish` on that artifact.
-  - [ ] Add an anomaly branch that requires classification + corrective action before returning to nominal monitoring.
-  - [ ] Safety note: include escalation and fail-safe handling when anomalies imply security/electrical/operational risk, then require follow-up verification.
+  - [ ] Define acceptance criteria for `energy/battery-maintenance` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
+  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
+  - [ ] Safety note: require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
 - `energy/battery-upgrade`
-  - [ ] Split `energy/battery-upgrade` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `energy/battery-upgrade` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `energy/biogas-digester`
-  - [ ] Split `energy/biogas-digester` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `energy/biogas-digester` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `energy/charge-controller-setup`
-  - [ ] Structure `energy/charge-controller-setup` as install → verify → rollback, with `finish` gated by a post-change artifact (status output, config diff, or expected-state item).
-  - [ ] Make verification explicit in mechanics: capture a process/log artifact and add an interpretation node that confirms the change works under normal conditions.
-  - [ ] Safety note: add lockout-avoidance rollback steps (backup path, safe defaults, and re-entry checks) before any retry after failed verification.
+  - [ ] Rewrite `energy/charge-controller-setup` as install → verify → rollback, with each stage in a separate node before `finish` is reachable.
+  - [ ] Gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item) and a brief interpretation checkpoint.
+  - [ ] Safety note: add rollback/lockout-avoidance handling for `charge controller setup`, then require a clean re-verify pass before retrying the install path.
 - `energy/hand-crank-generator`
-  - [ ] Split `energy/hand-crank-generator` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `energy/hand-crank-generator` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `energy/offgrid-charger`
-  - [ ] Split `energy/offgrid-charger` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `energy/offgrid-charger` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `energy/portable-solar-panel`
-  - [ ] Split `energy/portable-solar-panel` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `energy/portable-solar-panel` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `energy/power-inverter`
-  - [ ] Split `energy/power-inverter` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `energy/power-inverter` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `energy/solar-tracker`
-  - [ ] Split `energy/solar-tracker` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `energy/solar-tracker` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `energy/solar`
-  - [ ] Split `energy/solar` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `energy/solar` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `energy/wind-turbine`
-  - [ ] Split `energy/wind-turbine` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `energy/wind-turbine` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 
 ### firstaid (13 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/start, welcome/howtodoquests (fallback: no checked firstaid quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, welcome/intro-inventory (fallback: no checked firstaid quests yet)
 
 - `firstaid/assemble-kit`
-  - [ ] Split `firstaid/assemble-kit` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `firstaid/assemble-kit` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `firstaid/change-bandage`
-  - [ ] Split `firstaid/change-bandage` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `firstaid/change-bandage` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `firstaid/dispose-bandages`
-  - [ ] Split `firstaid/dispose-bandages` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `firstaid/dispose-bandages` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `firstaid/dispose-expired`
-  - [ ] Split `firstaid/dispose-expired` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `firstaid/dispose-expired` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `firstaid/flashlight-battery`
-  - [ ] Split `firstaid/flashlight-battery` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `firstaid/flashlight-battery` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `firstaid/learn-cpr`
-  - [ ] Split `firstaid/learn-cpr` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `firstaid/learn-cpr` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `firstaid/remove-splinter`
-  - [ ] Split `firstaid/remove-splinter` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `firstaid/remove-splinter` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `firstaid/restock-kit`
-  - [ ] Split `firstaid/restock-kit` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `firstaid/restock-kit` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `firstaid/sanitize-pocket-mask`
-  - [ ] Split `firstaid/sanitize-pocket-mask` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `firstaid/sanitize-pocket-mask` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `firstaid/splint-limb`
-  - [ ] Split `firstaid/splint-limb` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `firstaid/splint-limb` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `firstaid/stop-nosebleed`
-  - [ ] Split `firstaid/stop-nosebleed` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `firstaid/stop-nosebleed` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `firstaid/treat-burn`
-  - [ ] Split `firstaid/treat-burn` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `firstaid/treat-burn` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `firstaid/wound-care`
-  - [ ] Split `firstaid/wound-care` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `firstaid/wound-care` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 
 ### geothermal (15 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, sysadmin/resource-monitoring (fallback: no checked geothermal quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature (fallback: no checked geothermal quests yet)
 
 - `geothermal/backflush-loop-filter`
-  - [ ] Split `geothermal/backflush-loop-filter` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `backflush loop filter` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `geothermal/backflush-loop-filter` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `geothermal/calibrate-ground-sensor`
-  - [ ] Convert `geothermal/calibrate-ground-sensor` to baseline → adjust → re-test, with an explicit tolerance target that gates completion.
-  - [ ] Attach mechanics-backed artifacts to each phase (baseline capture, adjustment action, and post-adjust verification).
-  - [ ] Add a drift branch: if results do not hold after a short interval, route to diagnosis and repeat the loop.
+  - [ ] Structure `geothermal/calibrate-ground-sensor` as baseline → adjust → re-test with a stated tolerance target that gates completion.
+  - [ ] Require evidence artifacts for both baseline and post-adjust states (reading snapshots, process output, or logged values).
+  - [ ] Add a drift/variance branch: if results do not hold on follow-up, roll back to last-known-good settings and repeat the loop.
 - `geothermal/check-loop-inlet-temp`
-  - [ ] Require `geothermal/check-loop-inlet-temp` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `geothermal/check-loop-inlet-temp` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `geothermal/check-loop-outlet-temp`
-  - [ ] Require `geothermal/check-loop-outlet-temp` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `geothermal/check-loop-outlet-temp` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `geothermal/check-loop-pressure`
-  - [ ] Require `geothermal/check-loop-pressure` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `geothermal/check-loop-pressure` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `geothermal/check-loop-temp-delta`
-  - [ ] Require `geothermal/check-loop-temp-delta` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `geothermal/check-loop-temp-delta` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `geothermal/compare-depth-ground-temps`
-  - [ ] Split `geothermal/compare-depth-ground-temps` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `compare depth ground temps` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Require `geothermal/compare-depth-ground-temps` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `geothermal/compare-seasonal-ground-temps`
-  - [ ] Split `geothermal/compare-seasonal-ground-temps` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `compare seasonal ground temps` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Require `geothermal/compare-seasonal-ground-temps` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `geothermal/install-backup-thermistor`
-  - [ ] Structure `geothermal/install-backup-thermistor` as install → verify → rollback, with `finish` gated by a post-change artifact (status output, config diff, or expected-state item).
-  - [ ] Make verification explicit in mechanics: capture a process/log artifact and add an interpretation node that confirms the change works under normal conditions.
-  - [ ] Add a failed-verify branch for `install backup thermistor` that forces rollback, then reruns verification before success can resume.
+  - [ ] Rewrite `geothermal/install-backup-thermistor` as install → verify → rollback, with each stage in a separate node before `finish` is reachable.
+  - [ ] Gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item) and a brief interpretation checkpoint.
+  - [ ] add rollback/lockout-avoidance handling for `install backup thermistor`, then require a clean re-verify pass before retrying the install path.
 - `geothermal/log-ground-temperature`
-  - [ ] Define acceptance criteria for `geothermal/log-ground-temperature` monitoring output (required fields, cadence, and threshold bounds) and gate `finish` on that artifact.
-  - [ ] Add an anomaly branch that requires classification + corrective action before returning to nominal monitoring.
-  - [ ] Require a follow-up verification window after correction (fresh log slice or monitor snapshot) before closure.
+  - [ ] Require `geothermal/log-ground-temperature` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `geothermal/log-heat-pump-warmup`
-  - [ ] Define acceptance criteria for `geothermal/log-heat-pump-warmup` monitoring output (required fields, cadence, and threshold bounds) and gate `finish` on that artifact.
-  - [ ] Add an anomaly branch that requires classification + corrective action before returning to nominal monitoring.
-  - [ ] Require a follow-up verification window after correction (fresh log slice or monitor snapshot) before closure.
+  - [ ] Define acceptance criteria for `geothermal/log-heat-pump-warmup` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
+  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
+  - [ ] require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
 - `geothermal/monitor-heat-pump-energy`
-  - [ ] Define acceptance criteria for `geothermal/monitor-heat-pump-energy` monitoring output (required fields, cadence, and threshold bounds) and gate `finish` on that artifact.
-  - [ ] Add an anomaly branch that requires classification + corrective action before returning to nominal monitoring.
-  - [ ] Require a follow-up verification window after correction (fresh log slice or monitor snapshot) before closure.
+  - [ ] Define acceptance criteria for `geothermal/monitor-heat-pump-energy` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
+  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
+  - [ ] require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
 - `geothermal/purge-loop-air`
-  - [ ] Define before/after condition checks in `geothermal/purge-loop-air` so “clean” is measurable (residue, flow, clarity, signal quality, etc.).
-  - [ ] Gate completion on paired mechanics-backed artifacts (pre-clean state + post-clean state), not narration alone.
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint, then loop until after-check criteria pass.
+  - [ ] Define `geothermal/purge-loop-air` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
+  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
 - `geothermal/replace-faulty-thermistor`
-  - [ ] Split `geothermal/replace-faulty-thermistor` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `replace faulty thermistor` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `geothermal/replace-faulty-thermistor` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `geothermal/survey-ground-temperature`
-  - [ ] Split `geothermal/survey-ground-temperature` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `survey ground temperature` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Require `geothermal/survey-ground-temperature` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 
 ### hydroponics (21 quests)
 
 Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponics/nutrient-check
 
 - `hydroponics/air-stone-soak`
-  - [ ] Split `hydroponics/air-stone-soak` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `air stone soak` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `hydroponics/air-stone-soak` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `hydroponics/bucket_10`
-  - [ ] Split `hydroponics/bucket_10` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `bucket_10` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `hydroponics/bucket_10` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `hydroponics/ec-calibrate`
-  - [ ] Require `hydroponics/ec-calibrate` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `hydroponics/ec-calibrate` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `hydroponics/ec-check`
-  - [ ] Require `hydroponics/ec-check` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `hydroponics/ec-check` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `hydroponics/filter-clean`
-  - [ ] Define before/after condition checks in `hydroponics/filter-clean` so “clean” is measurable (residue, flow, clarity, signal quality, etc.).
-  - [ ] Gate completion on paired mechanics-backed artifacts (pre-clean state + post-clean state), not narration alone.
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint, then loop until after-check criteria pass.
+  - [ ] Define `hydroponics/filter-clean` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
+  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
 - `hydroponics/grow-light`
-  - [ ] Split `hydroponics/grow-light` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `grow light` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `hydroponics/grow-light` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `hydroponics/lettuce`
-  - [ ] Stage `hydroponics/lettuce` with two proofs: setup artifact first, then lifecycle/outcome artifact later; require both before `finish`.
+  - [ ] Stage `hydroponics/lettuce` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
   - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Include pause/abort criteria so progression halts when outcomes regress and resumes only after recovery evidence.
+  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
 - `hydroponics/mint-cutting`
-  - [ ] Stage `hydroponics/mint-cutting` with two proofs: setup artifact first, then lifecycle/outcome artifact later; require both before `finish`.
+  - [ ] Stage `hydroponics/mint-cutting` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
   - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Include pause/abort criteria so progression halts when outcomes regress and resumes only after recovery evidence.
+  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
 - `hydroponics/netcup-clean`
-  - [ ] Define before/after condition checks in `hydroponics/netcup-clean` so “clean” is measurable (residue, flow, clarity, signal quality, etc.).
-  - [ ] Gate completion on paired mechanics-backed artifacts (pre-clean state + post-clean state), not narration alone.
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint, then loop until after-check criteria pass.
+  - [ ] Define `hydroponics/netcup-clean` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
+  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
 - `hydroponics/ph-check`
-  - [ ] Require `hydroponics/ph-check` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `hydroponics/ph-check` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `hydroponics/ph-test`
-  - [ ] Require `hydroponics/ph-test` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `hydroponics/ph-test` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `hydroponics/plug-soak`
-  - [ ] Split `hydroponics/plug-soak` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `plug soak` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `hydroponics/plug-soak` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `hydroponics/pump-install`
-  - [ ] Structure `hydroponics/pump-install` as install → verify → rollback, with `finish` gated by a post-change artifact (status output, config diff, or expected-state item).
-  - [ ] Make verification explicit in mechanics: capture a process/log artifact and add an interpretation node that confirms the change works under normal conditions.
-  - [ ] Add a failed-verify branch for `pump install` that forces rollback, then reruns verification before success can resume.
+  - [ ] Rewrite `hydroponics/pump-install` as install → verify → rollback, with each stage in a separate node before `finish` is reachable.
+  - [ ] Gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item) and a brief interpretation checkpoint.
+  - [ ] add rollback/lockout-avoidance handling for `pump install`, then require a clean re-verify pass before retrying the install path.
 - `hydroponics/pump-prime`
-  - [ ] Define before/after condition checks in `hydroponics/pump-prime` so “clean” is measurable (residue, flow, clarity, signal quality, etc.).
-  - [ ] Gate completion on paired mechanics-backed artifacts (pre-clean state + post-clean state), not narration alone.
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint, then loop until after-check criteria pass.
+  - [ ] Define `hydroponics/pump-prime` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
+  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
 - `hydroponics/regrow-stevia`
-  - [ ] Stage `hydroponics/regrow-stevia` with two proofs: setup artifact first, then lifecycle/outcome artifact later; require both before `finish`.
+  - [ ] Stage `hydroponics/regrow-stevia` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
   - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Include pause/abort criteria so progression halts when outcomes regress and resumes only after recovery evidence.
+  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
 - `hydroponics/reservoir-refresh`
-  - [ ] Split `hydroponics/reservoir-refresh` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `reservoir refresh` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `hydroponics/reservoir-refresh` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `hydroponics/root-rinse`
-  - [ ] Define before/after condition checks in `hydroponics/root-rinse` so “clean” is measurable (residue, flow, clarity, signal quality, etc.).
-  - [ ] Gate completion on paired mechanics-backed artifacts (pre-clean state + post-clean state), not narration alone.
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint, then loop until after-check criteria pass.
+  - [ ] Define `hydroponics/root-rinse` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
+  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
 - `hydroponics/stevia`
-  - [ ] Stage `hydroponics/stevia` with two proofs: setup artifact first, then lifecycle/outcome artifact later; require both before `finish`.
+  - [ ] Stage `hydroponics/stevia` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
   - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Include pause/abort criteria so progression halts when outcomes regress and resumes only after recovery evidence.
+  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
 - `hydroponics/temp-check`
-  - [ ] Require `hydroponics/temp-check` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `hydroponics/temp-check` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `hydroponics/top-off`
-  - [ ] Split `hydroponics/top-off` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `top off` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `hydroponics/top-off` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `hydroponics/tub-scrub`
-  - [ ] Define before/after condition checks in `hydroponics/tub-scrub` so “clean” is measurable (residue, flow, clarity, signal quality, etc.).
-  - [ ] Gate completion on paired mechanics-backed artifacts (pre-clean state + post-clean state), not narration alone.
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint, then loop until after-check criteria pass.
+  - [ ] Define `hydroponics/tub-scrub` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
+  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
 
 ### programming (18 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, welcome/run-tests (fallback: no checked programming quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, sysadmin/log-analysis (fallback: no checked programming quests yet)
 
 - `programming/avg-temp`
-  - [ ] Require `programming/avg-temp` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `programming/avg-temp` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `programming/graph-temp-data`
-  - [ ] Require `programming/graph-temp-data` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `programming/graph-temp-data` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `programming/graph-temp`
-  - [ ] Require `programming/graph-temp` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `programming/graph-temp` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `programming/hello-sensor`
-  - [ ] Split `programming/hello-sensor` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `hello sensor` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `programming/hello-sensor` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `programming/http-post`
-  - [ ] Split `programming/http-post` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `http post` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `programming/http-post` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `programming/json-api`
-  - [ ] Split `programming/json-api` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `json api` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `programming/json-api` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `programming/json-endpoint`
-  - [ ] Split `programming/json-endpoint` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `json endpoint` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `programming/json-endpoint` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `programming/median-temp`
-  - [ ] Require `programming/median-temp` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `programming/median-temp` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `programming/moving-avg-temp`
-  - [ ] Require `programming/moving-avg-temp` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `programming/moving-avg-temp` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `programming/plot-temp-cli`
-  - [ ] Require `programming/plot-temp-cli` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `programming/plot-temp-cli` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `programming/stddev-temp`
-  - [ ] Require `programming/stddev-temp` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `programming/stddev-temp` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `programming/temp-alert`
-  - [ ] Require `programming/temp-alert` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `programming/temp-alert` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `programming/temp-email`
-  - [ ] Require `programming/temp-email` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `programming/temp-email` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `programming/temp-graph`
-  - [ ] Require `programming/temp-graph` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `programming/temp-graph` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `programming/temp-json-api`
-  - [ ] Require `programming/temp-json-api` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `programming/temp-json-api` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `programming/temp-logger`
-  - [ ] Require `programming/temp-logger` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Require baseline + follow-up readings so players evaluate trend direction, not a single isolated number.
+  - [ ] Require `programming/temp-logger` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `programming/thermistor-calibration`
-  - [ ] Convert `programming/thermistor-calibration` to baseline → adjust → re-test, with an explicit tolerance target that gates completion.
-  - [ ] Attach mechanics-backed artifacts to each phase (baseline capture, adjustment action, and post-adjust verification).
-  - [ ] Add a drift branch: if results do not hold after a short interval, route to diagnosis and repeat the loop.
+  - [ ] Split `programming/thermistor-calibration` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `programming/web-server`
-  - [ ] Split `programming/web-server` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `web server` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `programming/web-server` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 
 ### robotics (13 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, hydroponics/nutrient-check (fallback: no checked robotics quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, sysadmin/resource-monitoring (fallback: no checked robotics quests yet)
 
 - `robotics/gyro-balance`
-  - [ ] Split `robotics/gyro-balance` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `gyro balance` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `robotics/gyro-balance` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `robotics/line-follower`
-  - [ ] Split `robotics/line-follower` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `line follower` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `robotics/line-follower` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `robotics/maze-navigation`
-  - [ ] Split `robotics/maze-navigation` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `maze navigation` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `robotics/maze-navigation` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `robotics/obstacle-avoidance`
-  - [ ] Split `robotics/obstacle-avoidance` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `obstacle avoidance` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `robotics/obstacle-avoidance` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `robotics/odometry-basics`
-  - [ ] Split `robotics/odometry-basics` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `odometry basics` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `robotics/odometry-basics` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `robotics/pan-tilt`
-  - [ ] Split `robotics/pan-tilt` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `pan tilt` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `robotics/pan-tilt` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `robotics/reflectance-sensors`
-  - [ ] Split `robotics/reflectance-sensors` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `reflectance sensors` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Require `robotics/reflectance-sensors` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `robotics/servo-arm`
-  - [ ] Split `robotics/servo-arm` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `servo arm` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `robotics/servo-arm` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `robotics/servo-control`
-  - [ ] Split `robotics/servo-control` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `servo control` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `robotics/servo-control` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `robotics/servo-gripper`
-  - [ ] Split `robotics/servo-gripper` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `servo gripper` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `robotics/servo-gripper` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `robotics/servo-radar`
-  - [ ] Split `robotics/servo-radar` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `servo radar` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `robotics/servo-radar` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `robotics/ultrasonic-rangefinder`
-  - [ ] Split `robotics/ultrasonic-rangefinder` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `ultrasonic rangefinder` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `robotics/ultrasonic-rangefinder` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `robotics/wheel-encoders`
-  - [ ] Split `robotics/wheel-encoders` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `wheel encoders` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `robotics/wheel-encoders` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 
 ### rocketry (10 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/start, sysadmin/resource-monitoring (fallback: no checked rocketry quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/run-tests, sysadmin/resource-monitoring (fallback: no checked rocketry quests yet)
 
 - `rocketry/firstlaunch`
-  - [ ] Split `rocketry/firstlaunch` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `rocketry/firstlaunch` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `rocketry/fuel-mixture`
-  - [ ] Split `rocketry/fuel-mixture` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `rocketry/fuel-mixture` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `rocketry/guided-rocket-build`
-  - [ ] Split `rocketry/guided-rocket-build` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `rocketry/guided-rocket-build` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `rocketry/night-launch`
-  - [ ] Split `rocketry/night-launch` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `rocketry/night-launch` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `rocketry/parachute`
-  - [ ] Split `rocketry/parachute` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `rocketry/parachute` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `rocketry/preflight-check`
-  - [ ] Require `rocketry/preflight-check` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Safety note: set stop thresholds for unsafe readings and require pause/escalation until follow-up measurements return to a safe range.
+  - [ ] Require `rocketry/preflight-check` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `rocketry/recovery-run`
-  - [ ] Split `rocketry/recovery-run` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Require `rocketry/recovery-run` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `rocketry/static-test`
-  - [ ] Require `rocketry/static-test` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Safety note: set stop thresholds for unsafe readings and require pause/escalation until follow-up measurements return to a safe range.
+  - [ ] Require `rocketry/static-test` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 - `rocketry/suborbital-hop`
-  - [ ] Split `rocketry/suborbital-hop` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Safety note: add risk-aware recovery steps (safe stop, rollback, re-entry verification) before retries.
+  - [ ] Split `rocketry/suborbital-hop` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `rocketry/wind-check`
-  - [ ] Require `rocketry/wind-check` to record a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action (adjust, replace, or stabilize) and a mandatory re-test loop.
-  - [ ] Safety note: set stop thresholds for unsafe readings and require pause/escalation until follow-up measurements return to a safe range.
+  - [ ] Require `rocketry/wind-check` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
+  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
+  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
 
 ### ubi (3 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): ubi/basicincome
+Exemplar anchors (checked in docs/qa/v3.md §4.5): ubi/basicincome, welcome/howtodoquests
 
 - `ubi/first-payment`
-  - [ ] Split `ubi/first-payment` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `first payment` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `ubi/first-payment` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `ubi/reminder`
-  - [ ] Split `ubi/reminder` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `reminder` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `ubi/reminder` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `ubi/savings-goal`
-  - [ ] Split `ubi/savings-goal` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `savings goal` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `ubi/savings-goal` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 
 ### woodworking (10 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/intro-inventory (fallback: no checked woodworking quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/howtodoquests (fallback: no checked woodworking quests yet)
 
 - `woodworking/apply-finish`
-  - [ ] Split `woodworking/apply-finish` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `apply finish` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `woodworking/apply-finish` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `woodworking/birdhouse`
-  - [ ] Split `woodworking/birdhouse` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `birdhouse` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `woodworking/birdhouse` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `woodworking/bookshelf`
-  - [ ] Split `woodworking/bookshelf` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `bookshelf` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `woodworking/bookshelf` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `woodworking/coffee-table`
-  - [ ] Split `woodworking/coffee-table` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `coffee table` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `woodworking/coffee-table` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `woodworking/finish-sanding`
-  - [ ] Split `woodworking/finish-sanding` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `finish sanding` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `woodworking/finish-sanding` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `woodworking/picture-frame`
-  - [ ] Split `woodworking/picture-frame` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `picture frame` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `woodworking/picture-frame` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `woodworking/planter-box`
-  - [ ] Split `woodworking/planter-box` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `planter box` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `woodworking/planter-box` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `woodworking/step-stool`
-  - [ ] Split `woodworking/step-stool` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `step stool` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `woodworking/step-stool` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `woodworking/tool-rack`
-  - [ ] Split `woodworking/tool-rack` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `tool rack` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `woodworking/tool-rack` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 - `woodworking/workbench`
-  - [ ] Split `woodworking/workbench` into a primary path and an alternate strategy path so the player makes a meaningful progression decision.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or resulting log/result item) with a short interpretation checkpoint.
-  - [ ] Add a troubleshooting branch for `workbench` that records failure signals, recovery actions, and a verification retry.
+  - [ ] Split `woodworking/workbench` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
+  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
+  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
 
 ## Documentation improvements needed for quest authoring
 
