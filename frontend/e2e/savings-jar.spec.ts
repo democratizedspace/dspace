@@ -6,12 +6,6 @@ const SAVINGS_JAR_ID = '66c2cdc6-9517-4c96-937f-1ddb4ee06ef3';
 const BROKEN_JAR_ID = '6d4dfbe7-55c7-43bf-aba8-de7b05ff66a9';
 
 test.describe('Savings jar mechanics', () => {
-    async function getProcessCard(page, processTitle) {
-        const heading = page.getByRole('heading', { name: processTitle, exact: true });
-        await expect(heading).toBeVisible();
-        return page.locator('.container').filter({ has: heading }).first();
-    }
-
     async function seedGameState(page, seededState) {
         await page.evaluate(async (state) => {
             localStorage.setItem('gameState', JSON.stringify(state));
@@ -45,12 +39,12 @@ test.describe('Savings jar mechanics', () => {
         }, seededState);
     }
 
-    async function startAndCollectProcess(processCard) {
-        const startButton = processCard.getByTestId('process-start-button');
+    async function startAndCollectProcess(page) {
+        const startButton = page.getByTestId('process-start-button').first();
         await expect(startButton).toBeVisible();
         await startButton.click();
 
-        const collectButton = processCard.getByRole('button', { name: 'Collect' });
+        const collectButton = page.getByRole('button', { name: 'Collect' }).first();
         await expect(collectButton).toBeVisible({ timeout: 15000 });
         await collectButton.click();
     }
@@ -112,12 +106,17 @@ test.describe('Savings jar mechanics', () => {
         });
         await page.reload();
         await waitForHydration(page);
-        const depositProcess = await getProcessCard(page, 'Deposit 10 dUSD into your savings jar');
+        await expect(
+            page.getByRole('heading', {
+                name: 'Deposit 10 dUSD into your savings jar',
+                exact: true,
+            })
+        ).toBeVisible();
 
         const initialState = await readSavingsState(page);
         expect(initialState.stored).toBe(0);
 
-        await startAndCollectProcess(depositProcess);
+        await startAndCollectProcess(page);
 
         await expect
             .poll(async () => {
@@ -129,11 +128,13 @@ test.describe('Savings jar mechanics', () => {
         await page.goto('/processes/break-savings-jar');
         await waitForHydration(page);
 
-        const breakProcess = await getProcessCard(
-            page,
-            'Break your savings jar to retrieve all stored dUSD'
-        );
-        await startAndCollectProcess(breakProcess);
+        await expect(
+            page.getByRole('heading', {
+                name: 'Break your savings jar to retrieve all stored dUSD',
+                exact: true,
+            })
+        ).toBeVisible();
+        await startAndCollectProcess(page);
 
         const finalState = await readSavingsState(page);
 
@@ -167,15 +168,17 @@ test.describe('Savings jar mechanics', () => {
         await page.reload();
         await waitForHydration(page);
 
-        const breakProcess = await getProcessCard(
-            page,
-            'Break your savings jar to retrieve all stored dUSD'
-        );
+        await expect(
+            page.getByRole('heading', {
+                name: 'Break your savings jar to retrieve all stored dUSD',
+                exact: true,
+            })
+        ).toBeVisible();
 
         const initialState = await readSavingsState(page);
         expect(initialState.stored).toBe(0);
 
-        await startAndCollectProcess(breakProcess);
+        await startAndCollectProcess(page);
 
         const finalState = await readSavingsState(page);
 
