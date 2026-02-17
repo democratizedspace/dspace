@@ -15,6 +15,7 @@ For task-specific templates see [Quest prompts](quests.md),
 [Vitest test prompts](vitest.md), [Frontend prompts](frontend.md), [Chat UI prompts](chat-ui.md),
 [Backend prompts](backend.md), [Refactor prompts](refactors.md),
 [Implementation prompt](implement.md),
+[V3 quest parity prompts](v3-quest-parity.md),
 [Accessibility prompts](accessibility.md), and the
 [Structural polish playbook](polish.md).
 For specialized workflows use the [Codex CI-failure fix prompt](ci-fix.md),
@@ -64,6 +65,7 @@ When adding a new prompt doc, link it here and in
 - [Vitest Test Prompts](vitest.md)
 - [Refactor Prompts](refactors.md)
 - [Implementation Prompt](implement.md)
+- [V3 quest parity prompts](v3-quest-parity.md)
 - [Quest polish prompt](quests-polish.md)
 - [Structural polish playbook](polish.md)
 - [Codex CI-Failure Fix Prompt](ci-fix.md)

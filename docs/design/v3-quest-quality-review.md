@@ -120,60 +120,1165 @@ Checked quests are not uniformly perfect, but they more often demonstrate:
 
 ## Problematic quests to prioritize (with improvement checklist)
 
-Use this as an actionable backlog for quest polishing passes.
+This backlog enumerates every **new in v3** quest that is still unchecked against the
+manual QA quality bar. These entries should be brought to parity with the validated
+exemplars by adding deeper mechanics, failure handling, and evidence-based gates.
 
-### 1) `astronomy/saturn-rings`
+- Total new-in-v3 quests: **225**
+- Already manually checked exemplars in v3: **12**
+- Remaining problematic quests to prioritize: **213**
 
-- [ ] Add at least one branch with meaningful outcomes (weather fallback, seeing conditions,
-      alternative target).
-- [ ] Add an evidence step (e.g., logged observation quality or sketch process output).
-- [ ] Add explicit troubleshooting loop (focus drift, light pollution adaptation).
+### 3dprinting (12 quests)
 
-### 2) `devops/fail2ban`
+- `3dprinting/bed-leveling`
+  - [ ] Add a calibration/diagnostic checkpoint before final completion (bed, flow, or temp proof).
+  - [ ] Add a branch for a common print failure mode with a recovery loop.
+  - [ ] Require one process- or item-backed artifact (test print, measurement, or photo log).
 
-- [ ] Split install/config/verify into separate gated steps.
-- [ ] Add verification artifact process (e.g., parse ban logs, confirm jail status).
-- [ ] Add safe rollback guidance to avoid lockout.
+- `3dprinting/blob-of-death`
+  - [ ] Add a calibration/diagnostic checkpoint before final completion (bed, flow, or temp proof).
+  - [ ] Add a branch for a common print failure mode with a recovery loop.
+  - [ ] Require one process- or item-backed artifact (test print, measurement, or photo log).
 
-### 3) `energy/dWatt-1e8` (and sibling `dWatt-*`, `dSolar-*` ladder quests)
+- `3dprinting/cable-clip`
+  - [ ] Add a calibration/diagnostic checkpoint before final completion (bed, flow, or temp proof).
+  - [ ] Add a branch for a common print failure mode with a recovery loop.
+  - [ ] Require one process- or item-backed artifact (test print, measurement, or photo log).
 
-- [ ] Replace pure threshold gating with mixed goals (efficiency, uptime, storage strategy).
-- [ ] Add at least one mechanics-backed checkpoint (`requiresItems`/`process` output proof)
-      before final completion.
-- [ ] Add at least one decision branch (invest vs conserve, automation vs manual).
-- [ ] Normalize copy tone to avoid repetitive superlative inflation.
+- `3dprinting/calibration-cube`
+  - [ ] Add a calibration/diagnostic checkpoint before final completion (bed, flow, or temp proof).
+  - [ ] Add a branch for a common print failure mode with a recovery loop.
+  - [ ] Require one process- or item-backed artifact (test print, measurement, or photo log).
+  - [ ] Add explicit before/after calibration readings and acceptable error bounds.
 
-### 4) `electronics/soldering-intro` (file) / `electronics/tin-soldering-iron` (ID)
+- `3dprinting/filament-change`
+  - [ ] Add a calibration/diagnostic checkpoint before final completion (bed, flow, or temp proof).
+  - [ ] Add a branch for a common print failure mode with a recovery loop.
+  - [ ] Require one process- or item-backed artifact (test print, measurement, or photo log).
 
-- [ ] Align file basename and quest ID for canonical clarity.
-- [ ] Add an explicit quality check branch (cold joint detection, re-tinning step).
-- [ ] Add process-backed verification before completion.
+- `3dprinting/nozzle-cleaning`
+  - [ ] Add a calibration/diagnostic checkpoint before final completion (bed, flow, or temp proof).
+  - [ ] Add a branch for a common print failure mode with a recovery loop.
+  - [ ] Require one process- or item-backed artifact (test print, measurement, or photo log).
 
-### 5) `woodworking/workbench`
+- `3dprinting/nozzle-clog`
+  - [ ] Add a calibration/diagnostic checkpoint before final completion (bed, flow, or temp proof).
+  - [ ] Add a branch for a common print failure mode with a recovery loop.
+  - [ ] Require one process- or item-backed artifact (test print, measurement, or photo log).
 
-- [ ] Add measurement/tolerance verification gate (level/square outcomes).
-- [ ] Add mechanics-backed proof step (e.g., process log or required measuring tool item gate).
-- [ ] Add branch for common recovery (racked frame, wobble correction).
-- [ ] Replace one-shot grant/finish with a validated build checklist process.
+- `3dprinting/phone-stand`
+  - [ ] Add a calibration/diagnostic checkpoint before final completion (bed, flow, or temp proof).
+  - [ ] Add a branch for a common print failure mode with a recovery loop.
+  - [ ] Require one process- or item-backed artifact (test print, measurement, or photo log).
 
-### 6) `firstaid/treat-burn`
+- `3dprinting/retraction-test`
+  - [ ] Add a calibration/diagnostic checkpoint before final completion (bed, flow, or temp proof).
+  - [ ] Add a branch for a common print failure mode with a recovery loop.
+  - [ ] Require one process- or item-backed artifact (test print, measurement, or photo log).
 
-- [ ] Add triage branch (minor vs severe burn escalation).
-- [ ] Gate completion on correct safe response sequence.
-- [ ] Require evidence-backed step (e.g., correct kit item/process selection) before completion.
-- [ ] Add misuse warnings (ice/direct ointment on severe burns, etc.).
+- `3dprinting/spool-holder`
+  - [ ] Add a calibration/diagnostic checkpoint before final completion (bed, flow, or temp proof).
+  - [ ] Add a branch for a common print failure mode with a recovery loop.
+  - [ ] Require one process- or item-backed artifact (test print, measurement, or photo log).
 
-### 7) `geothermal/calibrate-ground-sensor`
+- `3dprinting/temperature-tower`
+  - [ ] Add a calibration/diagnostic checkpoint before final completion (bed, flow, or temp proof).
+  - [ ] Add a branch for a common print failure mode with a recovery loop.
+  - [ ] Require one process- or item-backed artifact (test print, measurement, or photo log).
+  - [ ] Require logged measurements with target ranges and corrective loops.
 
-- [ ] Expand from single calibration step to baseline + verification + drift follow-up.
-- [ ] Gate with logged before/after readings.
-- [ ] Add fault branch (sensor out-of-range / replacement escalation).
+- `3dprinting/x-belt-tension`
+  - [ ] Add a calibration/diagnostic checkpoint before final completion (bed, flow, or temp proof).
+  - [ ] Add a branch for a common print failure mode with a recovery loop.
+  - [ ] Require one process- or item-backed artifact (test print, measurement, or photo log).
 
-### 8) `programming/web-server`
+### aquaria (18 quests)
 
-- [ ] Add explicit request/response validation and error branch.
-- [ ] Add one observable artifact output (endpoint response snapshot, log excerpt).
-- [ ] Connect reward to a downstream quest dependency with specific capability unlock.
+- `aquaria/aquarium-light`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+- `aquaria/balance-ph`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `aquaria/breeding`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+- `aquaria/filter-rinse`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+- `aquaria/floating-plants`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+- `aquaria/guppy`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+- `aquaria/heater-install`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+- `aquaria/log-water-parameters`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+- `aquaria/net-fish`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+- `aquaria/ph-strip-test`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `aquaria/position-tank`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+- `aquaria/shrimp`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+- `aquaria/sponge-filter`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+- `aquaria/thermometer`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+- `aquaria/top-off`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+- `aquaria/walstad`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+- `aquaria/water-change`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+- `aquaria/water-testing`
+  - [ ] Split setup, water-parameter validation, and livestock-care into gated stages.
+  - [ ] Add at least one risk branch (stress signs, contamination, or equipment fault).
+  - [ ] Require logged water metrics or maintenance evidence before completion.
+
+### astronomy (21 quests)
+
+- `astronomy/andromeda`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/aurora-watch`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/basic-telescope`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/binary-star`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/comet-tracking`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/constellations`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/iss-flyover`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/iss-photo`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/jupiter-moons`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/light-pollution`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/lunar-eclipse`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/meteor-shower`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/north-star`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/observe-moon`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/orion-nebula`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/planetary-alignment`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/satellite-pass`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/saturn-rings`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/star-trails`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/sunspot-sketch`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+- `astronomy/venus-phases`
+  - [ ] Add fallback branches for weather, light pollution, or seeing conditions.
+  - [ ] Require an observation artifact (log, sketch, or timed pass capture).
+  - [ ] Add troubleshooting prompts for alignment/focus before finish.
+
+### chemistry (10 quests)
+
+- `chemistry/acid-dilution`
+  - [ ] Gate completion on explicit safety sequence and PPE checks.
+  - [ ] Require measurement evidence (pH, volume, concentration, or yield).
+  - [ ] Add a branch for off-target outcomes with corrective action.
+
+- `chemistry/acid-neutralization`
+  - [ ] Gate completion on explicit safety sequence and PPE checks.
+  - [ ] Require measurement evidence (pH, volume, concentration, or yield).
+  - [ ] Add a branch for off-target outcomes with corrective action.
+
+- `chemistry/buffer-solution`
+  - [ ] Gate completion on explicit safety sequence and PPE checks.
+  - [ ] Require measurement evidence (pH, volume, concentration, or yield).
+  - [ ] Add a branch for off-target outcomes with corrective action.
+
+- `chemistry/ph-adjustment`
+  - [ ] Gate completion on explicit safety sequence and PPE checks.
+  - [ ] Require measurement evidence (pH, volume, concentration, or yield).
+  - [ ] Add a branch for off-target outcomes with corrective action.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `chemistry/ph-test`
+  - [ ] Gate completion on explicit safety sequence and PPE checks.
+  - [ ] Require measurement evidence (pH, volume, concentration, or yield).
+  - [ ] Add a branch for off-target outcomes with corrective action.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `chemistry/precipitation-reaction`
+  - [ ] Gate completion on explicit safety sequence and PPE checks.
+  - [ ] Require measurement evidence (pH, volume, concentration, or yield).
+  - [ ] Add a branch for off-target outcomes with corrective action.
+
+- `chemistry/safe-reaction`
+  - [ ] Gate completion on explicit safety sequence and PPE checks.
+  - [ ] Require measurement evidence (pH, volume, concentration, or yield).
+  - [ ] Add a branch for off-target outcomes with corrective action.
+
+- `chemistry/stevia-crystals`
+  - [ ] Gate completion on explicit safety sequence and PPE checks.
+  - [ ] Require measurement evidence (pH, volume, concentration, or yield).
+  - [ ] Add a branch for off-target outcomes with corrective action.
+
+- `chemistry/stevia-extraction`
+  - [ ] Gate completion on explicit safety sequence and PPE checks.
+  - [ ] Require measurement evidence (pH, volume, concentration, or yield).
+  - [ ] Add a branch for off-target outcomes with corrective action.
+
+- `chemistry/stevia-tasting`
+  - [ ] Gate completion on explicit safety sequence and PPE checks.
+  - [ ] Require measurement evidence (pH, volume, concentration, or yield).
+  - [ ] Add a branch for off-target outcomes with corrective action.
+
+### completionist (4 quests)
+
+- `completionist/catalog`
+  - [ ] Tie completion to verifiable inventory/process milestones instead of narration only.
+  - [ ] Add one branch that lets players optimize order or strategy.
+  - [ ] Clarify why rewards are proportional to effort and novelty.
+
+- `completionist/display`
+  - [ ] Tie completion to verifiable inventory/process milestones instead of narration only.
+  - [ ] Add one branch that lets players optimize order or strategy.
+  - [ ] Clarify why rewards are proportional to effort and novelty.
+
+- `completionist/polish`
+  - [ ] Tie completion to verifiable inventory/process milestones instead of narration only.
+  - [ ] Add one branch that lets players optimize order or strategy.
+  - [ ] Clarify why rewards are proportional to effort and novelty.
+
+- `completionist/reminder`
+  - [ ] Tie completion to verifiable inventory/process milestones instead of narration only.
+  - [ ] Add one branch that lets players optimize order or strategy.
+  - [ ] Clarify why rewards are proportional to effort and novelty.
+
+### devops (15 quests)
+
+- `devops/auto-updates`
+  - [ ] Split into provision, configure, verify, and rollback checkpoints.
+  - [ ] Require a concrete verification artifact (logs, status output, health check).
+  - [ ] Add an outage/recovery branch to demonstrate operational resilience.
+
+- `devops/ci-pipeline`
+  - [ ] Split into provision, configure, verify, and rollback checkpoints.
+  - [ ] Require a concrete verification artifact (logs, status output, health check).
+  - [ ] Add an outage/recovery branch to demonstrate operational resilience.
+
+- `devops/daily-backups`
+  - [ ] Split into provision, configure, verify, and rollback checkpoints.
+  - [ ] Require a concrete verification artifact (logs, status output, health check).
+  - [ ] Add an outage/recovery branch to demonstrate operational resilience.
+
+- `devops/docker-compose`
+  - [ ] Split into provision, configure, verify, and rollback checkpoints.
+  - [ ] Require a concrete verification artifact (logs, status output, health check).
+  - [ ] Add an outage/recovery branch to demonstrate operational resilience.
+
+- `devops/enable-https`
+  - [ ] Split into provision, configure, verify, and rollback checkpoints.
+  - [ ] Require a concrete verification artifact (logs, status output, health check).
+  - [ ] Add an outage/recovery branch to demonstrate operational resilience.
+
+- `devops/fail2ban`
+  - [ ] Split into provision, configure, verify, and rollback checkpoints.
+  - [ ] Require a concrete verification artifact (logs, status output, health check).
+  - [ ] Add an outage/recovery branch to demonstrate operational resilience.
+
+- `devops/firewall-rules`
+  - [ ] Split into provision, configure, verify, and rollback checkpoints.
+  - [ ] Require a concrete verification artifact (logs, status output, health check).
+  - [ ] Add an outage/recovery branch to demonstrate operational resilience.
+
+- `devops/k3s-deploy`
+  - [ ] Split into provision, configure, verify, and rollback checkpoints.
+  - [ ] Require a concrete verification artifact (logs, status output, health check).
+  - [ ] Add an outage/recovery branch to demonstrate operational resilience.
+
+- `devops/log-maintenance`
+  - [ ] Split into provision, configure, verify, and rollback checkpoints.
+  - [ ] Require a concrete verification artifact (logs, status output, health check).
+  - [ ] Add an outage/recovery branch to demonstrate operational resilience.
+
+- `devops/monitoring`
+  - [ ] Split into provision, configure, verify, and rollback checkpoints.
+  - [ ] Require a concrete verification artifact (logs, status output, health check).
+  - [ ] Add an outage/recovery branch to demonstrate operational resilience.
+
+- `devops/pi-cluster-hardware`
+  - [ ] Split into provision, configure, verify, and rollback checkpoints.
+  - [ ] Require a concrete verification artifact (logs, status output, health check).
+  - [ ] Add an outage/recovery branch to demonstrate operational resilience.
+
+- `devops/prepare-first-node`
+  - [ ] Split into provision, configure, verify, and rollback checkpoints.
+  - [ ] Require a concrete verification artifact (logs, status output, health check).
+  - [ ] Add an outage/recovery branch to demonstrate operational resilience.
+
+- `devops/private-registry`
+  - [ ] Split into provision, configure, verify, and rollback checkpoints.
+  - [ ] Require a concrete verification artifact (logs, status output, health check).
+  - [ ] Add an outage/recovery branch to demonstrate operational resilience.
+
+- `devops/ssd-boot`
+  - [ ] Split into provision, configure, verify, and rollback checkpoints.
+  - [ ] Require a concrete verification artifact (logs, status output, health check).
+  - [ ] Add an outage/recovery branch to demonstrate operational resilience.
+
+- `devops/ssh-hardening`
+  - [ ] Split into provision, configure, verify, and rollback checkpoints.
+  - [ ] Require a concrete verification artifact (logs, status output, health check).
+  - [ ] Add an outage/recovery branch to demonstrate operational resilience.
+
+### electronics (22 quests)
+
+- `electronics/arduino-blink`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+- `electronics/basic-circuit`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+- `electronics/check-battery-voltage`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+- `electronics/continuity-test`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+- `electronics/data-logger`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+- `electronics/desolder-component`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+  - [ ] Add quality-inspection branch for cold joints/bridges and rework validation.
+
+- `electronics/led-polarity`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+- `electronics/light-sensor`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+- `electronics/measure-arduino-5v`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+- `electronics/measure-led-current`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+- `electronics/measure-resistance`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+- `electronics/potentiometer-dimmer`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+- `electronics/resistor-color-check`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+- `electronics/servo-sweep`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+- `electronics/solder-led-harness`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+  - [ ] Add quality-inspection branch for cold joints/bridges and rework validation.
+
+- `electronics/solder-wire`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+  - [ ] Add quality-inspection branch for cold joints/bridges and rework validation.
+
+- `electronics/soldering-intro`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+- `electronics/temperature-plot`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `electronics/test-gfci-outlet`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+- `electronics/thermistor-reading`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `electronics/thermometer-calibration`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+  - [ ] Add explicit before/after calibration readings and acceptable error bounds.
+
+- `electronics/voltage-divider`
+  - [ ] Add instrument-backed validation (voltage/current/resistance) before finish.
+  - [ ] Introduce a fault-isolation branch (polarity, continuity, or component failure).
+  - [ ] Require a build-quality or safety confirmation gate.
+
+### energy (11 quests)
+
+- `energy/battery-maintenance`
+  - [ ] Reduce pure grind gating by adding strategy decisions (efficiency vs throughput, storage vs spend).
+  - [ ] Require process-backed proof of generation/consumption checkpoints.
+  - [ ] Add at least one maintenance or failure-mode branch.
+
+- `energy/battery-upgrade`
+  - [ ] Reduce pure grind gating by adding strategy decisions (efficiency vs throughput, storage vs spend).
+  - [ ] Require process-backed proof of generation/consumption checkpoints.
+  - [ ] Add at least one maintenance or failure-mode branch.
+
+- `energy/biogas-digester`
+  - [ ] Reduce pure grind gating by adding strategy decisions (efficiency vs throughput, storage vs spend).
+  - [ ] Require process-backed proof of generation/consumption checkpoints.
+  - [ ] Add at least one maintenance or failure-mode branch.
+
+- `energy/charge-controller-setup`
+  - [ ] Reduce pure grind gating by adding strategy decisions (efficiency vs throughput, storage vs spend).
+  - [ ] Require process-backed proof of generation/consumption checkpoints.
+  - [ ] Add at least one maintenance or failure-mode branch.
+
+- `energy/dWatt-1e8`
+  - [ ] Reduce pure grind gating by adding strategy decisions (efficiency vs throughput, storage vs spend).
+  - [ ] Require process-backed proof of generation/consumption checkpoints.
+  - [ ] Add at least one maintenance or failure-mode branch.
+  - [ ] Replace threshold-only progression with mixed objectives and strategy branches.
+
+- `energy/hand-crank-generator`
+  - [ ] Reduce pure grind gating by adding strategy decisions (efficiency vs throughput, storage vs spend).
+  - [ ] Require process-backed proof of generation/consumption checkpoints.
+  - [ ] Add at least one maintenance or failure-mode branch.
+
+- `energy/offgrid-charger`
+  - [ ] Reduce pure grind gating by adding strategy decisions (efficiency vs throughput, storage vs spend).
+  - [ ] Require process-backed proof of generation/consumption checkpoints.
+  - [ ] Add at least one maintenance or failure-mode branch.
+
+- `energy/portable-solar-panel`
+  - [ ] Reduce pure grind gating by adding strategy decisions (efficiency vs throughput, storage vs spend).
+  - [ ] Require process-backed proof of generation/consumption checkpoints.
+  - [ ] Add at least one maintenance or failure-mode branch.
+
+- `energy/power-inverter`
+  - [ ] Reduce pure grind gating by adding strategy decisions (efficiency vs throughput, storage vs spend).
+  - [ ] Require process-backed proof of generation/consumption checkpoints.
+  - [ ] Add at least one maintenance or failure-mode branch.
+
+- `energy/solar-tracker`
+  - [ ] Reduce pure grind gating by adding strategy decisions (efficiency vs throughput, storage vs spend).
+  - [ ] Require process-backed proof of generation/consumption checkpoints.
+  - [ ] Add at least one maintenance or failure-mode branch.
+
+- `energy/wind-turbine`
+  - [ ] Reduce pure grind gating by adding strategy decisions (efficiency vs throughput, storage vs spend).
+  - [ ] Require process-backed proof of generation/consumption checkpoints.
+  - [ ] Add at least one maintenance or failure-mode branch.
+
+### firstaid (13 quests)
+
+- `firstaid/assemble-kit`
+  - [ ] Gate completion on correct triage order and safety constraints.
+  - [ ] Add escalation branch for red-flag symptoms requiring professional care.
+  - [ ] Require evidence-backed kit/process selection before completion.
+
+- `firstaid/change-bandage`
+  - [ ] Gate completion on correct triage order and safety constraints.
+  - [ ] Add escalation branch for red-flag symptoms requiring professional care.
+  - [ ] Require evidence-backed kit/process selection before completion.
+
+- `firstaid/dispose-bandages`
+  - [ ] Gate completion on correct triage order and safety constraints.
+  - [ ] Add escalation branch for red-flag symptoms requiring professional care.
+  - [ ] Require evidence-backed kit/process selection before completion.
+
+- `firstaid/dispose-expired`
+  - [ ] Gate completion on correct triage order and safety constraints.
+  - [ ] Add escalation branch for red-flag symptoms requiring professional care.
+  - [ ] Require evidence-backed kit/process selection before completion.
+
+- `firstaid/flashlight-battery`
+  - [ ] Gate completion on correct triage order and safety constraints.
+  - [ ] Add escalation branch for red-flag symptoms requiring professional care.
+  - [ ] Require evidence-backed kit/process selection before completion.
+
+- `firstaid/learn-cpr`
+  - [ ] Gate completion on correct triage order and safety constraints.
+  - [ ] Add escalation branch for red-flag symptoms requiring professional care.
+  - [ ] Require evidence-backed kit/process selection before completion.
+  - [ ] Ensure medically safe sequencing and explicit escalation criteria.
+
+- `firstaid/remove-splinter`
+  - [ ] Gate completion on correct triage order and safety constraints.
+  - [ ] Add escalation branch for red-flag symptoms requiring professional care.
+  - [ ] Require evidence-backed kit/process selection before completion.
+
+- `firstaid/restock-kit`
+  - [ ] Gate completion on correct triage order and safety constraints.
+  - [ ] Add escalation branch for red-flag symptoms requiring professional care.
+  - [ ] Require evidence-backed kit/process selection before completion.
+
+- `firstaid/sanitize-pocket-mask`
+  - [ ] Gate completion on correct triage order and safety constraints.
+  - [ ] Add escalation branch for red-flag symptoms requiring professional care.
+  - [ ] Require evidence-backed kit/process selection before completion.
+
+- `firstaid/splint-limb`
+  - [ ] Gate completion on correct triage order and safety constraints.
+  - [ ] Add escalation branch for red-flag symptoms requiring professional care.
+  - [ ] Require evidence-backed kit/process selection before completion.
+  - [ ] Ensure medically safe sequencing and explicit escalation criteria.
+
+- `firstaid/stop-nosebleed`
+  - [ ] Gate completion on correct triage order and safety constraints.
+  - [ ] Add escalation branch for red-flag symptoms requiring professional care.
+  - [ ] Require evidence-backed kit/process selection before completion.
+  - [ ] Ensure medically safe sequencing and explicit escalation criteria.
+
+- `firstaid/treat-burn`
+  - [ ] Gate completion on correct triage order and safety constraints.
+  - [ ] Add escalation branch for red-flag symptoms requiring professional care.
+  - [ ] Require evidence-backed kit/process selection before completion.
+  - [ ] Ensure medically safe sequencing and explicit escalation criteria.
+
+- `firstaid/wound-care`
+  - [ ] Gate completion on correct triage order and safety constraints.
+  - [ ] Add escalation branch for red-flag symptoms requiring professional care.
+  - [ ] Require evidence-backed kit/process selection before completion.
+  - [ ] Ensure medically safe sequencing and explicit escalation criteria.
+
+### geothermal (15 quests)
+
+- `geothermal/backflush-loop-filter`
+  - [ ] Expand to baseline, intervention, and post-change verification phases.
+  - [ ] Require before/after readings and acceptable tolerance checks.
+  - [ ] Add branch for sensor or loop faults with escalation steps.
+
+- `geothermal/calibrate-ground-sensor`
+  - [ ] Expand to baseline, intervention, and post-change verification phases.
+  - [ ] Require before/after readings and acceptable tolerance checks.
+  - [ ] Add branch for sensor or loop faults with escalation steps.
+  - [ ] Add explicit before/after calibration readings and acceptable error bounds.
+
+- `geothermal/check-loop-inlet-temp`
+  - [ ] Expand to baseline, intervention, and post-change verification phases.
+  - [ ] Require before/after readings and acceptable tolerance checks.
+  - [ ] Add branch for sensor or loop faults with escalation steps.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `geothermal/check-loop-outlet-temp`
+  - [ ] Expand to baseline, intervention, and post-change verification phases.
+  - [ ] Require before/after readings and acceptable tolerance checks.
+  - [ ] Add branch for sensor or loop faults with escalation steps.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `geothermal/check-loop-pressure`
+  - [ ] Expand to baseline, intervention, and post-change verification phases.
+  - [ ] Require before/after readings and acceptable tolerance checks.
+  - [ ] Add branch for sensor or loop faults with escalation steps.
+
+- `geothermal/check-loop-temp-delta`
+  - [ ] Expand to baseline, intervention, and post-change verification phases.
+  - [ ] Require before/after readings and acceptable tolerance checks.
+  - [ ] Add branch for sensor or loop faults with escalation steps.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `geothermal/compare-depth-ground-temps`
+  - [ ] Expand to baseline, intervention, and post-change verification phases.
+  - [ ] Require before/after readings and acceptable tolerance checks.
+  - [ ] Add branch for sensor or loop faults with escalation steps.
+
+- `geothermal/compare-seasonal-ground-temps`
+  - [ ] Expand to baseline, intervention, and post-change verification phases.
+  - [ ] Require before/after readings and acceptable tolerance checks.
+  - [ ] Add branch for sensor or loop faults with escalation steps.
+
+- `geothermal/install-backup-thermistor`
+  - [ ] Expand to baseline, intervention, and post-change verification phases.
+  - [ ] Require before/after readings and acceptable tolerance checks.
+  - [ ] Add branch for sensor or loop faults with escalation steps.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `geothermal/log-ground-temperature`
+  - [ ] Expand to baseline, intervention, and post-change verification phases.
+  - [ ] Require before/after readings and acceptable tolerance checks.
+  - [ ] Add branch for sensor or loop faults with escalation steps.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `geothermal/log-heat-pump-warmup`
+  - [ ] Expand to baseline, intervention, and post-change verification phases.
+  - [ ] Require before/after readings and acceptable tolerance checks.
+  - [ ] Add branch for sensor or loop faults with escalation steps.
+
+- `geothermal/monitor-heat-pump-energy`
+  - [ ] Expand to baseline, intervention, and post-change verification phases.
+  - [ ] Require before/after readings and acceptable tolerance checks.
+  - [ ] Add branch for sensor or loop faults with escalation steps.
+
+- `geothermal/purge-loop-air`
+  - [ ] Expand to baseline, intervention, and post-change verification phases.
+  - [ ] Require before/after readings and acceptable tolerance checks.
+  - [ ] Add branch for sensor or loop faults with escalation steps.
+
+- `geothermal/replace-faulty-thermistor`
+  - [ ] Expand to baseline, intervention, and post-change verification phases.
+  - [ ] Require before/after readings and acceptable tolerance checks.
+  - [ ] Add branch for sensor or loop faults with escalation steps.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `geothermal/survey-ground-temperature`
+  - [ ] Expand to baseline, intervention, and post-change verification phases.
+  - [ ] Require before/after readings and acceptable tolerance checks.
+  - [ ] Add branch for sensor or loop faults with escalation steps.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+### hydroponics (20 quests)
+
+- `hydroponics/air-stone-soak`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+
+- `hydroponics/ec-calibrate`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+  - [ ] Add explicit before/after calibration readings and acceptable error bounds.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `hydroponics/ec-check`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `hydroponics/filter-clean`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+
+- `hydroponics/grow-light`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+
+- `hydroponics/lettuce`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+
+- `hydroponics/mint-cutting`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+
+- `hydroponics/netcup-clean`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+
+- `hydroponics/ph-check`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `hydroponics/ph-test`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `hydroponics/plug-soak`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+
+- `hydroponics/pump-install`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+
+- `hydroponics/pump-prime`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+
+- `hydroponics/regrow-stevia`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+
+- `hydroponics/reservoir-refresh`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+
+- `hydroponics/root-rinse`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+
+- `hydroponics/stevia`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+
+- `hydroponics/temp-check`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `hydroponics/top-off`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+
+- `hydroponics/tub-scrub`
+  - [ ] Add staged checks for chemistry, hardware, and plant-response outcomes.
+  - [ ] Require logged readings/artifacts before progression.
+  - [ ] Add troubleshooting branch for root, pump, or nutrient failure modes.
+
+### programming (18 quests)
+
+- `programming/avg-temp`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `programming/graph-temp`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `programming/graph-temp-data`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `programming/hello-sensor`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+
+- `programming/http-post`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Add request/response failure-path handling and artifact capture.
+
+- `programming/json-api`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Add request/response failure-path handling and artifact capture.
+
+- `programming/json-endpoint`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Add request/response failure-path handling and artifact capture.
+
+- `programming/median-temp`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `programming/moving-avg-temp`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `programming/plot-temp-cli`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `programming/stddev-temp`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `programming/temp-alert`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `programming/temp-email`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `programming/temp-graph`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `programming/temp-json-api`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Add request/response failure-path handling and artifact capture.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `programming/temp-logger`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `programming/thermistor-calibration`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Add explicit before/after calibration readings and acceptable error bounds.
+  - [ ] Require logged measurements with target ranges and corrective loops.
+
+- `programming/web-server`
+  - [ ] Require runnable output validation (tests, endpoint output, or parsed logs).
+  - [ ] Add branch for common runtime/data errors with debugging steps.
+  - [ ] Link reward to a concrete downstream capability unlock.
+  - [ ] Add request/response failure-path handling and artifact capture.
+
+### robotics (13 quests)
+
+- `robotics/gyro-balance`
+  - [ ] Gate completion on measurable behavior (accuracy, repeatability, or latency).
+  - [ ] Add branch for calibration drift or sensor-actuator mismatch.
+  - [ ] Require a test-run artifact or telemetry proof before finish.
+
+- `robotics/line-follower`
+  - [ ] Gate completion on measurable behavior (accuracy, repeatability, or latency).
+  - [ ] Add branch for calibration drift or sensor-actuator mismatch.
+  - [ ] Require a test-run artifact or telemetry proof before finish.
+
+- `robotics/maze-navigation`
+  - [ ] Gate completion on measurable behavior (accuracy, repeatability, or latency).
+  - [ ] Add branch for calibration drift or sensor-actuator mismatch.
+  - [ ] Require a test-run artifact or telemetry proof before finish.
+
+- `robotics/obstacle-avoidance`
+  - [ ] Gate completion on measurable behavior (accuracy, repeatability, or latency).
+  - [ ] Add branch for calibration drift or sensor-actuator mismatch.
+  - [ ] Require a test-run artifact or telemetry proof before finish.
+
+- `robotics/odometry-basics`
+  - [ ] Gate completion on measurable behavior (accuracy, repeatability, or latency).
+  - [ ] Add branch for calibration drift or sensor-actuator mismatch.
+  - [ ] Require a test-run artifact or telemetry proof before finish.
+
+- `robotics/pan-tilt`
+  - [ ] Gate completion on measurable behavior (accuracy, repeatability, or latency).
+  - [ ] Add branch for calibration drift or sensor-actuator mismatch.
+  - [ ] Require a test-run artifact or telemetry proof before finish.
+
+- `robotics/reflectance-sensors`
+  - [ ] Gate completion on measurable behavior (accuracy, repeatability, or latency).
+  - [ ] Add branch for calibration drift or sensor-actuator mismatch.
+  - [ ] Require a test-run artifact or telemetry proof before finish.
+
+- `robotics/servo-arm`
+  - [ ] Gate completion on measurable behavior (accuracy, repeatability, or latency).
+  - [ ] Add branch for calibration drift or sensor-actuator mismatch.
+  - [ ] Require a test-run artifact or telemetry proof before finish.
+
+- `robotics/servo-control`
+  - [ ] Gate completion on measurable behavior (accuracy, repeatability, or latency).
+  - [ ] Add branch for calibration drift or sensor-actuator mismatch.
+  - [ ] Require a test-run artifact or telemetry proof before finish.
+
+- `robotics/servo-gripper`
+  - [ ] Gate completion on measurable behavior (accuracy, repeatability, or latency).
+  - [ ] Add branch for calibration drift or sensor-actuator mismatch.
+  - [ ] Require a test-run artifact or telemetry proof before finish.
+
+- `robotics/servo-radar`
+  - [ ] Gate completion on measurable behavior (accuracy, repeatability, or latency).
+  - [ ] Add branch for calibration drift or sensor-actuator mismatch.
+  - [ ] Require a test-run artifact or telemetry proof before finish.
+
+- `robotics/ultrasonic-rangefinder`
+  - [ ] Gate completion on measurable behavior (accuracy, repeatability, or latency).
+  - [ ] Add branch for calibration drift or sensor-actuator mismatch.
+  - [ ] Require a test-run artifact or telemetry proof before finish.
+
+- `robotics/wheel-encoders`
+  - [ ] Gate completion on measurable behavior (accuracy, repeatability, or latency).
+  - [ ] Add branch for calibration drift or sensor-actuator mismatch.
+  - [ ] Require a test-run artifact or telemetry proof before finish.
+
+### rocketry (8 quests)
+
+- `rocketry/fuel-mixture`
+  - [ ] Separate prep, safety, launch/stand test, and post-run review checkpoints.
+  - [ ] Require objective telemetry or checklist evidence before completion.
+  - [ ] Add weather/safety abort branch with recovery plan.
+  - [ ] Add safety go/no-go checklist and abort-path verification.
+
+- `rocketry/guided-rocket-build`
+  - [ ] Separate prep, safety, launch/stand test, and post-run review checkpoints.
+  - [ ] Require objective telemetry or checklist evidence before completion.
+  - [ ] Add weather/safety abort branch with recovery plan.
+
+- `rocketry/night-launch`
+  - [ ] Separate prep, safety, launch/stand test, and post-run review checkpoints.
+  - [ ] Require objective telemetry or checklist evidence before completion.
+  - [ ] Add weather/safety abort branch with recovery plan.
+  - [ ] Add safety go/no-go checklist and abort-path verification.
+
+- `rocketry/preflight-check`
+  - [ ] Separate prep, safety, launch/stand test, and post-run review checkpoints.
+  - [ ] Require objective telemetry or checklist evidence before completion.
+  - [ ] Add weather/safety abort branch with recovery plan.
+  - [ ] Add safety go/no-go checklist and abort-path verification.
+
+- `rocketry/recovery-run`
+  - [ ] Separate prep, safety, launch/stand test, and post-run review checkpoints.
+  - [ ] Require objective telemetry or checklist evidence before completion.
+  - [ ] Add weather/safety abort branch with recovery plan.
+
+- `rocketry/static-test`
+  - [ ] Separate prep, safety, launch/stand test, and post-run review checkpoints.
+  - [ ] Require objective telemetry or checklist evidence before completion.
+  - [ ] Add weather/safety abort branch with recovery plan.
+  - [ ] Add safety go/no-go checklist and abort-path verification.
+
+- `rocketry/suborbital-hop`
+  - [ ] Separate prep, safety, launch/stand test, and post-run review checkpoints.
+  - [ ] Require objective telemetry or checklist evidence before completion.
+  - [ ] Add weather/safety abort branch with recovery plan.
+
+- `rocketry/wind-check`
+  - [ ] Separate prep, safety, launch/stand test, and post-run review checkpoints.
+  - [ ] Require objective telemetry or checklist evidence before completion.
+  - [ ] Add weather/safety abort branch with recovery plan.
+
+### ubi (3 quests)
+
+- `ubi/first-payment`
+  - [ ] Add decision branch showing tradeoffs (save, spend, invest, or share).
+  - [ ] Require evidence of budget outcome rather than single-click completion.
+  - [ ] Differentiate rewards so progression feels meaningful, not cosmetic only.
+
+- `ubi/reminder`
+  - [ ] Add decision branch showing tradeoffs (save, spend, invest, or share).
+  - [ ] Require evidence of budget outcome rather than single-click completion.
+  - [ ] Differentiate rewards so progression feels meaningful, not cosmetic only.
+
+- `ubi/savings-goal`
+  - [ ] Add decision branch showing tradeoffs (save, spend, invest, or share).
+  - [ ] Require evidence of budget outcome rather than single-click completion.
+  - [ ] Differentiate rewards so progression feels meaningful, not cosmetic only.
+
+### woodworking (10 quests)
+
+- `woodworking/apply-finish`
+  - [ ] Require measurement/tolerance checks before completion.
+  - [ ] Add branch for common fabrication defects and correction steps.
+  - [ ] Require process- or tool-backed proof of fit/finish quality.
+
+- `woodworking/birdhouse`
+  - [ ] Require measurement/tolerance checks before completion.
+  - [ ] Add branch for common fabrication defects and correction steps.
+  - [ ] Require process- or tool-backed proof of fit/finish quality.
+
+- `woodworking/bookshelf`
+  - [ ] Require measurement/tolerance checks before completion.
+  - [ ] Add branch for common fabrication defects and correction steps.
+  - [ ] Require process- or tool-backed proof of fit/finish quality.
+
+- `woodworking/coffee-table`
+  - [ ] Require measurement/tolerance checks before completion.
+  - [ ] Add branch for common fabrication defects and correction steps.
+  - [ ] Require process- or tool-backed proof of fit/finish quality.
+
+- `woodworking/finish-sanding`
+  - [ ] Require measurement/tolerance checks before completion.
+  - [ ] Add branch for common fabrication defects and correction steps.
+  - [ ] Require process- or tool-backed proof of fit/finish quality.
+
+- `woodworking/picture-frame`
+  - [ ] Require measurement/tolerance checks before completion.
+  - [ ] Add branch for common fabrication defects and correction steps.
+  - [ ] Require process- or tool-backed proof of fit/finish quality.
+
+- `woodworking/planter-box`
+  - [ ] Require measurement/tolerance checks before completion.
+  - [ ] Add branch for common fabrication defects and correction steps.
+  - [ ] Require process- or tool-backed proof of fit/finish quality.
+
+- `woodworking/step-stool`
+  - [ ] Require measurement/tolerance checks before completion.
+  - [ ] Add branch for common fabrication defects and correction steps.
+  - [ ] Require process- or tool-backed proof of fit/finish quality.
+
+- `woodworking/tool-rack`
+  - [ ] Require measurement/tolerance checks before completion.
+  - [ ] Add branch for common fabrication defects and correction steps.
+  - [ ] Require process- or tool-backed proof of fit/finish quality.
+
+- `woodworking/workbench`
+  - [ ] Require measurement/tolerance checks before completion.
+  - [ ] Add branch for common fabrication defects and correction steps.
+  - [ ] Require process- or tool-backed proof of fit/finish quality.
 
 ## Documentation improvements needed for quest authoring
 
