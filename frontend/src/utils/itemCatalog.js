@@ -1,6 +1,8 @@
 import items from '../pages/inventory/json/items';
 import { onBrowserAsync } from './ssr.js';
 
+let mergedItemCatalogCache = [...items];
+
 export function mergeItemLists(builtInItems = [], customItems = []) {
     return [...builtInItems, ...customItems];
 }
@@ -50,13 +52,20 @@ export async function getMergedItemCatalog({
             }
         }, []);
 
-        return mergeItemLists(builtInItems, customItems);
+        const merged = mergeItemLists(builtInItems, customItems);
+        mergedItemCatalogCache = merged;
+        return merged;
     } catch (error) {
         if (onError) {
             onError(error);
         } else {
             console.warn('Failed to load custom items:', error);
         }
+        mergedItemCatalogCache = [...builtInItems];
         return builtInItems;
     }
+}
+
+export function getCachedMergedItemCatalog() {
+    return mergedItemCatalogCache;
 }

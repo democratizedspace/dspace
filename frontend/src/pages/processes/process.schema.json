@@ -17,12 +17,8 @@
             "items": {
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "string"
-                    },
-                    "count": {
-                        "type": "number"
-                    }
+                    "id": { "type": "string" },
+                    "count": { "type": "number" }
                 },
                 "required": ["id", "count"],
                 "additionalProperties": false
@@ -33,12 +29,8 @@
             "items": {
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "string"
-                    },
-                    "count": {
-                        "type": "number"
-                    }
+                    "id": { "type": "string" },
+                    "count": { "type": "number" }
                 },
                 "required": ["id", "count"],
                 "additionalProperties": false
@@ -49,12 +41,8 @@
             "items": {
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "string"
-                    },
-                    "count": {
-                        "type": "number"
-                    }
+                    "id": { "type": "string" },
+                    "count": { "type": "number" }
                 },
                 "required": ["id", "count"],
                 "additionalProperties": false
@@ -66,38 +54,49 @@
         "hardening": {
             "$ref": "https://dspace.local/schemas/hardening.json"
         },
-        "containerDeposit": {
-            "type": "object",
-            "properties": {
-                "containerItemId": {
-                    "type": "string"
+        "itemCountOperations": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "operation": {
+                        "type": "string",
+                        "enum": ["deposit", "withdraw", "withdraw-all"]
+                    },
+                    "containerItemId": {
+                        "type": "string"
+                    },
+                    "itemId": {
+                        "type": "string"
+                    },
+                    "count": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                    }
                 },
-                "itemId": {
-                    "type": "string"
-                },
-                "label": {
-                    "type": "string"
-                },
-                "min": {
-                    "type": "number",
-                    "minimum": 0
-                }
-            },
-            "required": ["containerItemId", "itemId"],
-            "additionalProperties": false
-        },
-        "containerWithdrawAll": {
-            "type": "object",
-            "properties": {
-                "containerItemId": {
-                    "type": "string"
-                },
-                "itemId": {
-                    "type": "string"
-                }
-            },
-            "required": ["containerItemId", "itemId"],
-            "additionalProperties": false
+                "required": ["operation", "containerItemId", "itemId"],
+                "allOf": [
+                    {
+                        "if": {
+                            "properties": { "operation": { "enum": ["deposit", "withdraw"] } },
+                            "required": ["operation"]
+                        },
+                        "then": { "required": ["count"] }
+                    },
+                    {
+                        "if": {
+                            "properties": { "operation": { "const": "withdraw-all" } },
+                            "required": ["operation"]
+                        },
+                        "then": {
+                            "not": {
+                                "required": ["count"]
+                            }
+                        }
+                    }
+                ],
+                "additionalProperties": false
+            }
         }
     },
     "required": [

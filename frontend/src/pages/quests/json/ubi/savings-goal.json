@@ -1,7 +1,7 @@
 {
     "id": "ubi/savings-goal",
     "title": "Start a Savings Jar",
-    "description": "Buy a savings jar and deposit dUSD for future plans.",
+    "description": "Buy a savings jar, deposit 10 dUSD, and track your stored balance.",
     "image": "/assets/quests/ubi_savings_jar.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
@@ -19,7 +19,7 @@
         },
         {
             "id": "buy-jar",
-            "text": "First, buy a savings jar from inventory. It costs a small amount of dUSD and tracks what you put inside.",
+            "text": "First, buy a savings jar from inventory. It costs 2 dUSD and tracks what you store in it.",
             "options": [
                 {
                     "type": "goto",
@@ -36,23 +36,23 @@
         },
         {
             "id": "deposit",
-            "text": "Great. Run the savings jar deposit process and enter how much dUSD you want to stash right now.",
+            "text": "Great. Run the savings jar deposit process to stash exactly 10 dUSD.",
             "options": [
                 {
                     "type": "process",
                     "process": "savings-jar-deposit",
-                    "text": "Deposit dUSD into the jar."
+                    "text": "Deposit 10 dUSD into the jar."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Deposit complete."
+                    "text": "I deposited 10 dUSD and checked Stored contents on the jar page."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! Your savings jar now holds dUSD that you can only withdraw all at once by consuming the jar.",
+            "text": "Nice! The savings jar now tracks your stored dUSD separately. To retrieve it, you must run the break process.",
             "options": [
                 {
                     "type": "finish",
@@ -71,7 +71,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

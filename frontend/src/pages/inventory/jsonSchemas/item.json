@@ -38,8 +38,8 @@
         },
         "itemCounts": {
             "type": "object",
-            "description": "Map of item ids this item can contain; truthy values indicate tracked contents",
-            "additionalProperties": { "type": "boolean" },
+            "description": "Map of item ids this item can contain; values must default to 0 in catalog data",
+            "additionalProperties": { "type": "number", "minimum": 0 },
             "default": {}
         },
         "hardening": { "$ref": "https://dspace.local/schemas/hardening.json" }

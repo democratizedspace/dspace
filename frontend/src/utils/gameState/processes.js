@@ -1,12 +1,12 @@
 import { loadGameState, saveGameState } from './common.js';
+import { hasItems, burnItems, addItems } from './inventory.js';
 import {
-    hasItems,
-    burnItems,
-    addItems,
-    addContainedItems,
-    getContainedItemCount,
-    clearContainedItemCount,
-} from './inventory.js';
+    addStoredItemsToState,
+    canStoreItemInContainer,
+    getStoredItemCount,
+    removeAllStoredItemsFromState,
+    removeStoredItemsFromState,
+} from './itemContainers.js';
 import { durationInSeconds } from '../../utils.js';
 
 // Using import assertions for JSON imports
@@ -15,44 +15,135 @@ import processes from '../../generated/processes.json' assert { type: 'json' };
 const resolveProcessDefinition = (processId, processDefinition) =>
     processDefinition ?? processes.find((p) => p.id === processId);
 
-const getRuntimeConsumeItems = (process, runtimeOptions = {}) => {
-    const consumeItems = [...(process.consumeItems || [])];
-    const depositRule = process.containerDeposit;
+const getRuntimeConsumeItems = (process) => [...(process.consumeItems || [])];
 
-    if (!depositRule) {
-        return consumeItems;
+const isPositiveNumber = (value) => Number.isFinite(value) && value > 0;
+
+const addItemsToState = (gameState, items = []) => {
+    if (!gameState.inventory || typeof gameState.inventory !== 'object') {
+        gameState.inventory = {};
     }
 
-    const normalizedAmount = Number(runtimeOptions.containerDepositAmount);
-    const minimumAmount = Number(depositRule.min ?? 1);
-    const safeMinimum = Number.isFinite(minimumAmount) ? Math.max(minimumAmount, 0) : 0;
-
-    if (!Number.isFinite(normalizedAmount) || normalizedAmount < safeMinimum) {
-        return consumeItems;
-    }
-
-    return consumeItems.map((item) => {
-        if (item.id !== depositRule.itemId) {
-            return item;
-        }
-        return {
-            ...item,
-            count: normalizedAmount,
-        };
+    items.forEach(({ id, count }) => {
+        gameState.inventory[id] = (gameState.inventory[id] || 0) + count;
     });
 };
 
-export const hasRequiredAndConsumedItems = (processId, processDefinition, runtimeOptions = {}) => {
+const validateItemCountOperation = (operation) => {
+    if (!operation || typeof operation !== 'object') {
+        return false;
+    }
+
+    if (!canStoreItemInContainer(operation.containerItemId, operation.itemId)) {
+        return false;
+    }
+
+    if (operation.operation === 'withdraw-all') {
+        return true;
+    }
+
+    return isPositiveNumber(Number(operation.count));
+};
+
+const hasRequiredItemCountOperations = (operations = []) => {
+    return operations.every((operation) => {
+        if (!validateItemCountOperation(operation)) {
+            return false;
+        }
+
+        if (operation.operation === 'withdraw') {
+            return (
+                getStoredItemCount(operation.containerItemId, operation.itemId) >=
+                Number(operation.count)
+            );
+        }
+
+        return true;
+    });
+};
+
+const applyItemCountOperations = (gameState, operations = []) => {
+    operations.forEach((operation) => {
+        if (!validateItemCountOperation(operation)) {
+            return;
+        }
+
+        if (operation.operation === 'deposit') {
+            addStoredItemsToState(
+                gameState,
+                operation.containerItemId,
+                operation.itemId,
+                Number(operation.count)
+            );
+            return;
+        }
+
+        if (operation.operation === 'withdraw') {
+            const removed = removeStoredItemsFromState(
+                gameState,
+                operation.containerItemId,
+                operation.itemId,
+                Number(operation.count)
+            );
+            if (removed > 0) {
+                addItemsToState(gameState, [{ id: operation.itemId, count: removed }]);
+            }
+            return;
+        }
+
+        if (operation.operation === 'withdraw-all') {
+            const removed = removeAllStoredItemsFromState(
+                gameState,
+                operation.containerItemId,
+                operation.itemId
+            );
+            if (removed > 0) {
+                addItemsToState(gameState, [{ id: operation.itemId, count: removed }]);
+            }
+        }
+    });
+};
+
+export const getItemCountOperationStartError = (processId, processDefinition) => {
+    const process = resolveProcessDefinition(processId, processDefinition);
+    if (!process) {
+        return 'Process definition not found.';
+    }
+
+    const operations = process.itemCountOperations || [];
+    for (const operation of operations) {
+        if (!canStoreItemInContainer(operation.containerItemId, operation.itemId)) {
+            return 'Cannot start yet: this container cannot store that item.';
+        }
+
+        if (operation.operation !== 'withdraw-all' && !isPositiveNumber(Number(operation.count))) {
+            return 'Cannot start yet: container operation count must be greater than zero.';
+        }
+
+        if (operation.operation === 'withdraw') {
+            const current = getStoredItemCount(operation.containerItemId, operation.itemId);
+            if (current < Number(operation.count)) {
+                return 'Cannot start yet: not enough stored balance in the container.';
+            }
+        }
+    }
+
+    return '';
+};
+
+export const hasRequiredAndConsumedItems = (processId, processDefinition) => {
     const process = resolveProcessDefinition(processId, processDefinition);
     if (!process) {
         return false;
     }
 
-    const runtimeConsumeItems = getRuntimeConsumeItems(process, runtimeOptions);
-    return hasItems(process.requireItems || []) && hasItems(runtimeConsumeItems || []);
+    const runtimeConsumeItems = getRuntimeConsumeItems(process);
+    const hasItemsReady =
+        hasItems(process.requireItems || []) && hasItems(runtimeConsumeItems || []);
+    return hasItemsReady && hasRequiredItemCountOperations(process.itemCountOperations || []);
 };
 
-export const startProcess = (processId, processDefinition, runtimeOptions = {}) => {
+export const startProcess = (processId, processDefinition) => {
     const gameState = loadGameState();
 
     const process = resolveProcessDefinition(processId, processDefinition);
@@ -60,11 +151,11 @@ export const startProcess = (processId, processDefinition, runtimeOptions = {}) 
         return;
     }
 
-    const runtimeConsumeItems = getRuntimeConsumeItems(process, runtimeOptions);
+    const runtimeConsumeItems = getRuntimeConsumeItems(process);
 
-    if (!hasRequiredAndConsumedItems(processId, process, runtimeOptions)) {
-        console.log('Missing required items or consumed items');
-        return;
+    if (!hasRequiredAndConsumedItems(processId, process)) {
+        console.log('Missing required items, consumed items, or container requirements');
+        return false;
     }
 
     gameState.processes[processId] = {
@@ -74,26 +165,12 @@ export const startProcess = (processId, processDefinition, runtimeOptions = {}) 
         elapsedBeforePause: 0,
         pauseModelVersion: 2,
         consumeItemsSnapshot: runtimeConsumeItems,
-        containerEffects: {
-            deposit: process.containerDeposit
-                ? {
-                      containerItemId: process.containerDeposit.containerItemId,
-                      itemId: process.containerDeposit.itemId,
-                      amount: Number(runtimeOptions.containerDepositAmount || 0),
-                  }
-                : null,
-            withdrawAll: process.containerWithdrawAll
-                ? {
-                      containerItemId: process.containerWithdrawAll.containerItemId,
-                      itemId: process.containerWithdrawAll.itemId,
-                  }
-                : null,
-        },
     };
     saveGameState(gameState);
     if (runtimeConsumeItems) {
         burnItems(runtimeConsumeItems);
     }
+    return true;
 };
 
 export const ProcessStates = {
@@ -215,27 +292,13 @@ export const finishProcess = (processId, processDefinition) => {
         return;
     }
     const gameState = loadGameState();
-    const processState = gameState.processes[processId];
-
     const createItems = process.createItems;
 
     if (createItems) {
-        addItems(createItems);
+        addItemsToState(gameState, createItems);
     }
 
-    const deposit = processState?.containerEffects?.deposit;
-    if (deposit && deposit.amount > 0) {
-        addContainedItems(deposit.containerItemId, deposit.itemId, deposit.amount);
-    }
-
-    const withdraw = processState?.containerEffects?.withdrawAll;
-    if (withdraw) {
-        const withdrawalAmount = getContainedItemCount(withdraw.containerItemId, withdraw.itemId);
-        if (withdrawalAmount > 0) {
-            addItems([{ id: withdraw.itemId, count: withdrawalAmount }]);
-            clearContainedItemCount(withdraw.containerItemId, withdraw.itemId);
-        }
-    }
+    applyItemCountOperations(gameState, process.itemCountOperations || []);
 
     gameState.processes[processId] = undefined;
     saveGameState(gameState);
@@ -466,11 +529,13 @@ export const skipProcess = (processId, processDefinition) => {
         burnItems(process.consumeItems);
     }
 
+    const gameState = loadGameState();
+
     if (process.createItems) {
-        addItems(process.createItems);
+        addItemsToState(gameState, process.createItems);
     }
 
-    const gameState = loadGameState();
+    applyItemCountOperations(gameState, process.itemCountOperations || []);
     gameState.processes[processId] = undefined;
     saveGameState(gameState);
 };

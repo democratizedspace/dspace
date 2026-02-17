@@ -155,7 +155,7 @@ describe('ItemPage', () => {
         });
 
         await waitFor(() => {
-            expect(getByText('Contained items:')).toBeTruthy();
+            expect(getByText('Stored contents:')).toBeTruthy();
             expect(getByText(/dUSD: 42/)).toBeTruthy();
         });
     });

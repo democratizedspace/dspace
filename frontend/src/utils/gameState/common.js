@@ -284,6 +284,14 @@ export const ready = isBrowser
 
 let writeQueue = Promise.resolve();
 
+export const flushGameStateWritesForTesting = async () => {
+    await writeQueue.catch(() => undefined);
+};
+
+if (isBrowser) {
+    globalThis.__dspaceFlushGameStateWrites = flushGameStateWritesForTesting;
+}
+
 export const loadGameState = () => structuredClone(gameState);
 
 export const isGameStateReady = () => readyResolved;
