@@ -52,7 +52,7 @@ Run and fix failures for:
 1. `npm run lint`
 2. `npm run type-check`
 3. `npm run build`
-4. `npm run test:ci -- questCanonical questGraphValidation questRewardsValidation questQuality`
+4. `npm run test:ci` (do not pass additional selector arguments)
 5. `node scripts/link-check.mjs` (if markdown/docs changed)
 6. Bulk quest schema validation for changed trees:
    `for f in frontend/src/pages/quests/json/<tree>/*.json; do node scripts/validate-quest.js "$f" || exit 1; done`
