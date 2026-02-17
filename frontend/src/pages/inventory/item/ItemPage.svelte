@@ -8,11 +8,12 @@
         getProcessesForItemIncludingCustom,
         ProcessItemTypes,
     } from '../../../utils/gameState/processes.js';
-    import { getContainedItemCounts, getItemCounts } from '../../../utils/gameState/inventory.js';
+    import { getItemCounts } from '../../../utils/gameState/inventory.js';
     import { getQuestsForItem } from '../../../utils/itemDependencies.js';
     import Process from '../../../components/svelte/Process.svelte';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
     import { getItemById, getItemMap } from '../../../utils/itemResolver.js';
+    import { getStoredItemCounts } from '../../../utils/gameState/itemContainers.js';
 
     export let itemId;
 
@@ -64,16 +65,14 @@
             return;
         }
 
-        const trackedItemIds = Object.keys(item.itemCounts).filter((itemKey) =>
-            Boolean(item.itemCounts[itemKey])
-        );
+        const trackedItemIds = Object.keys(item.itemCounts);
 
         if (trackedItemIds.length === 0) {
             containedItemCounts = [];
             return;
         }
 
-        const counts = getContainedItemCounts(item.id, trackedItemIds);
+        const counts = getStoredItemCounts(item.id);
         const itemMap = await getItemMap(trackedItemIds);
 
         containedItemCounts = trackedItemIds.map((trackedItemId) => ({
@@ -117,7 +116,7 @@
                 <h2>{item.name}</h2>
                 <CompactItemList {itemList} inverted={true} />
                 {#if containedItemCounts.length > 0}
-                    <p>Contained items:</p>
+                    <p>Stored contents:</p>
                     <ul>
                         {#each containedItemCounts as containedItem}
                             <li>{containedItem.name}: {containedItem.count}</li>

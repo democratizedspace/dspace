@@ -12,6 +12,7 @@
         getProcessState,
         ProcessStates,
         getProcessStartedAt,
+        getItemCountOperationStartIssues,
     } from '../../utils/gameState/processes.js';
     import processes from '../../generated/processes.json';
     import { durationInSeconds } from '../../utils.js';
@@ -281,6 +282,16 @@
             }
 
             beginPulse(targets, message);
+            return;
+        }
+
+        const containerIssues = getItemCountOperationStartIssues(
+            processId,
+            process,
+            processOptions
+        );
+        if (containerIssues.length > 0) {
+            startFeedbackMessage = `Cannot start yet: ${containerIssues[0]}.`;
             return;
         }
 

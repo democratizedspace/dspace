@@ -14,6 +14,7 @@ const items = fs
     .filter((f) => f.endsWith('.json'))
     .flatMap((f) => JSON.parse(fs.readFileSync(path.join(itemsDir, f))));
 const itemIds = new Set(items.map((i) => i.id));
+const itemById = new Map(items.map((item) => [item.id, item]));
 
 function checkProcess(proc) {
     const issues = [];
@@ -48,6 +49,27 @@ function checkProcess(proc) {
                 issues.push(`unknown item ${entry.id} in ${key}`);
             }
         });
+    });
+
+    (proc.itemCountOperations || []).forEach((operation) => {
+        if (!itemIds.has(operation.containerItemId)) {
+            issues.push(
+                `unknown container item ${operation.containerItemId} in itemCountOperations`
+            );
+            return;
+        }
+        if (!itemIds.has(operation.itemId)) {
+            issues.push(`unknown stored item ${operation.itemId} in itemCountOperations`);
+            return;
+        }
+
+        const container = itemById.get(operation.containerItemId);
+        const allowed = container?.itemCounts || {};
+        if (!Object.prototype.hasOwnProperty.call(allowed, operation.itemId)) {
+            issues.push(
+                `disallowed container pair ${operation.containerItemId} -> ${operation.itemId}`
+            );
+        }
     });
 
     return issues;
