@@ -265,6 +265,15 @@ export async function purgeClientState(page: Page): Promise<void> {
     );
 }
 
+export async function flushGameStateWrites(page: Page): Promise<void> {
+    await page.evaluate(async () => {
+        const flush = (
+            globalThis as typeof globalThis & { __dspaceFlushGameStateWrites?: () => Promise<void> }
+        ).__dspaceFlushGameStateWrites;
+        await flush?.();
+    });
+}
+
 export async function waitForImagePreview(
     page: Page,
     fileInput: Locator,

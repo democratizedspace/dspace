@@ -45,7 +45,7 @@ Semantics:
 
 - Keys are storable item IDs allowed in this container.
 - Values are default counts and must be `0` in source JSON.
-- Runtime balances are persisted in game state, not mutated in source catalog JSON.
+- Runtime balances are persisted in IndexedDB via game state (no localStorage mirror), not mutated in source catalog JSON.
 
 ### Game state
 
@@ -149,8 +149,10 @@ A dedicated e2e test covers the first use case:
 - container-to-container transfers
 - per-instance containers via inventory instance IDs
 - quest option-level requirements on container balances
-``` 
+
+```
 
 
 
 
+```

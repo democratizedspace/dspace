@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { purgeClientState, waitForHydration } from './test-helpers';
+import { flushGameStateWrites, purgeClientState, waitForHydration } from './test-helpers';
 
 const DUSD_ID = '5247a603-294a-4a34-a884-1ae20969b2a1';
 const SAVINGS_JAR_ID = '66c2cdc6-9517-4c96-937f-1ddb4ee06ef3';
@@ -8,9 +8,6 @@ const BROKEN_JAR_ID = '6d4dfbe7-55c7-43bf-aba8-de7b05ff66a9';
 test.describe('Savings jar mechanics', () => {
     async function seedGameState(page, seededState) {
         await page.evaluate(async (state) => {
-            localStorage.setItem('gameState', JSON.stringify(state));
-            localStorage.setItem('gameStateBackup', JSON.stringify(state));
-
             await new Promise((resolve, reject) => {
                 const request = indexedDB.open('dspaceGameState', 1);
                 request.onupgradeneeded = () => {
@@ -47,42 +44,29 @@ test.describe('Savings jar mechanics', () => {
         const collectButton = page.getByRole('button', { name: 'Collect' }).first();
         await expect(collectButton).toBeVisible({ timeout: 15000 });
         await collectButton.click();
+        await flushGameStateWrites(page);
     }
 
     async function readSavingsState(page) {
         return page.evaluate(
             async ({ dUsdId, savingsJarId, brokenJarId }) => {
-                const readLocalState = () => JSON.parse(localStorage.getItem('gameState') || '{}');
-                const readIndexedDbState = async () => {
-                    return await new Promise((resolve) => {
-                        const request = indexedDB.open('dspaceGameState', 1);
-                        request.onerror = () => resolve(null);
-                        request.onsuccess = () => {
-                            const db = request.result;
-                            const tx = db.transaction('state', 'readonly');
-                            const getReq = tx.objectStore('state').get('root');
-                            getReq.onsuccess = () => {
-                                db.close();
-                                resolve(getReq.result ?? null);
-                            };
-                            getReq.onerror = () => {
-                                db.close();
-                                resolve(null);
-                            };
+                const saved = await new Promise((resolve) => {
+                    const request = indexedDB.open('dspaceGameState', 1);
+                    request.onerror = () => resolve(null);
+                    request.onsuccess = () => {
+                        const db = request.result;
+                        const tx = db.transaction('state', 'readonly');
+                        const getReq = tx.objectStore('state').get('root');
+                        getReq.onsuccess = () => {
+                            db.close();
+                            resolve(getReq.result ?? null);
                         };
-                    });
-                };
-
-                const localState = readLocalState();
-                const hasStateShape =
-                    localState &&
-                    typeof localState === 'object' &&
-                    typeof localState.inventory === 'object' &&
-                    typeof localState.inventoryItemCounts === 'object';
-
-                const saved = hasStateShape
-                    ? localState
-                    : ((await readIndexedDbState()) ?? localState);
+                        getReq.onerror = () => {
+                            db.close();
+                            resolve(null);
+                        };
+                    };
+                });
                 return {
                     dUsd: saved.inventory?.[dUsdId] ?? 0,
                     savingsJar: saved.inventory?.[savingsJarId] ?? 0,
@@ -113,6 +97,7 @@ test.describe('Savings jar mechanics', () => {
             versionNumberString: '3',
             _meta: { lastUpdated: now },
         });
+        await flushGameStateWrites(page);
         await page.reload();
         await waitForHydration(page);
         await expect(
@@ -185,6 +170,7 @@ test.describe('Savings jar mechanics', () => {
             versionNumberString: '3',
             _meta: { lastUpdated: now },
         });
+        await flushGameStateWrites(page);
         await page.reload();
         await waitForHydration(page);
 

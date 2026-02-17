@@ -10,8 +10,6 @@ const DB_VERSION = 1;
 const STATE_STORE = 'state';
 const BACKUP_STORE = 'backup';
 const ROOT_KEY = 'root';
-const LS_STATE_KEY = 'gameState';
-const LS_BACKUP_KEY = 'gameStateBackup';
 const META_KEY = '_meta';
 const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
@@ -31,23 +29,9 @@ const logPersistenceIssue = (message, error) => {
 
 let dbPromise;
 let dbInstance;
-let useLocalStorage = false;
-let warnedFallback = false;
 let readyResolved = false;
 let loadedFromPersistence = false;
-export const isUsingLocalStorage = () => useLocalStorage;
-
-function warnFallback() {
-    if (warnedFallback) return;
-    warnedFallback = true;
-    const message =
-        'IndexedDB is unavailable; falling back to localStorage. Storage may be limited.';
-    if (isBrowser && typeof window.alert === 'function') {
-        window.alert(message);
-    } else {
-        console.warn(message);
-    }
-}
+export const isUsingLocalStorage = () => false;
 
 function openDB() {
     if (!isBrowser || !('indexedDB' in globalThis)) {
@@ -125,91 +109,34 @@ function idbClear(store) {
     );
 }
 
-function lsKey(store) {
-    return store === STATE_STORE ? LS_STATE_KEY : LS_BACKUP_KEY;
-}
-
-function lsRead(store) {
+async function read(store) {
+    // On server, return undefined - storage is client-only
     if (!isBrowser) return undefined;
     try {
-        const raw = localStorage.getItem(lsKey(store));
-        return raw ? JSON.parse(raw) : undefined;
+        return await idbRead(store);
     } catch (err) {
-        logPersistenceIssue('Error reading from localStorage:', err);
+        logPersistenceIssue('IndexedDB read failed:', err);
         return undefined;
     }
 }
 
-function lsWrite(store, value) {
-    if (!isBrowser) return;
-    try {
-        localStorage.setItem(lsKey(store), JSON.stringify(value));
-    } catch (err) {
-        logPersistenceIssue('Error writing to localStorage:', err);
-    }
-}
-
-function lsClear(store) {
-    if (!isBrowser) return;
-    try {
-        localStorage.removeItem(lsKey(store));
-    } catch (err) {
-        logPersistenceIssue('Error clearing localStorage:', err);
-    }
-}
-
-async function read(store) {
-    // On server, return undefined - storage is client-only
-    if (!isBrowser) return undefined;
-    const localValue = lsRead(store);
-    if (useLocalStorage) return localValue;
-    try {
-        const idbValue = await idbRead(store);
-        if (store === STATE_STORE) {
-            const idbUpdated = idbValue?.[META_KEY]?.lastUpdated ?? 0;
-            const localUpdated = localValue?.[META_KEY]?.lastUpdated ?? 0;
-            if (localUpdated > idbUpdated) {
-                return localValue ?? idbValue;
-            }
-        }
-        return idbValue ?? localValue;
-    } catch (err) {
-        logPersistenceIssue('IndexedDB read failed:', err);
-        useLocalStorage = true;
-        warnFallback();
-        return localValue;
-    }
-}
-
-async function write(store, value, options = {}) {
+async function write(store, value) {
     // On server, skip all persistence - storage is client-only
     if (!isBrowser) return;
-    const { skipLocalStorage = false } = options;
-
-    if (!skipLocalStorage) {
-        lsWrite(store, value);
-    }
-    if (useLocalStorage) return;
     try {
         await idbWrite(store, value);
     } catch (err) {
         logPersistenceIssue('IndexedDB write failed:', err);
-        useLocalStorage = true;
-        warnFallback();
     }
 }
 
 async function clearStore(store) {
     // On server, skip all persistence - storage is client-only
     if (!isBrowser) return;
-    lsClear(store);
-    if (useLocalStorage) return;
     try {
         await idbClear(store);
     } catch (err) {
         logPersistenceIssue('IndexedDB clear failed:', err);
-        useLocalStorage = true;
-        warnFallback();
     }
 }
 
@@ -300,19 +227,20 @@ export const saveGameState = async (newState) => {
     gameState = nextState;
     state.set(gameState);
 
-    // Persist the latest snapshots to localStorage immediately so data survives
-    // page refreshes even if the pending IndexedDB writes are interrupted.
-    lsWrite(BACKUP_STORE, previousSnapshot);
-    lsWrite(STATE_STORE, gameState);
-
     writeQueue = writeQueue.then(async () => {
-        await write(BACKUP_STORE, previousSnapshot, { skipLocalStorage: true }).catch(
-            () => undefined
-        );
-        await write(STATE_STORE, gameState, { skipLocalStorage: true }).catch(() => undefined);
+        await write(BACKUP_STORE, previousSnapshot).catch(() => undefined);
+        await write(STATE_STORE, gameState).catch(() => undefined);
     });
     return writeQueue;
 };
+
+export const flushGameStateWritesForTesting = async () => {
+    await writeQueue.catch(() => undefined);
+};
+
+if (isBrowser) {
+    globalThis.__dspaceFlushGameStateWrites = flushGameStateWritesForTesting;
+}
 
 export const closeGameStateDatabaseForTesting = async () => {
     try {
@@ -448,16 +376,13 @@ export const rollbackGameState = async () => {
 
 export const inspectGameStateStorage = async () => {
     const supportsIndexedDB = isBrowser && 'indexedDB' in globalThis;
-
-    const localStorageState = isBrowser ? lsRead(STATE_STORE) : undefined;
-    const localStorageBackup = isBrowser ? lsRead(BACKUP_STORE) : undefined;
     const legacyV2Read = isBrowser ? readLegacyV2LocalStorage() : null;
     const legacyV2State = legacyV2Read?.state;
     const legacyV2ParseIssues = legacyV2Read?.errors ?? [];
     const hasLegacyV2Keys = Boolean(legacyV2State) || legacyV2ParseIssues.length > 0;
 
     let indexedDbState;
-    if (supportsIndexedDB && !useLocalStorage) {
+    if (supportsIndexedDB) {
         try {
             indexedDbState = await idbRead(STATE_STORE);
         } catch (err) {
@@ -468,12 +393,10 @@ export const inspectGameStateStorage = async () => {
     return {
         indexedDbSupported: supportsIndexedDB,
         indexedDbState,
-        localStorageState,
-        localStorageBackup,
         legacyV2State,
         legacyV2ParseIssues,
         hasLegacyV2Keys,
-        usesLocalStorageFallback: useLocalStorage,
+        usesLocalStorageFallback: false,
         loadedFromPersistence,
     };
 };
