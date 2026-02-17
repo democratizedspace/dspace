@@ -65,6 +65,7 @@ When adding a new prompt doc, link it here and in
 - [Refactor Prompts](refactors.md)
 - [Implementation Prompt](implement.md)
 - [Quest polish prompt](quests-polish.md)
+- [v3 quest parity prompt](v3-quest-parity.md)
 - [Structural polish playbook](polish.md)
 - [Codex CI-Failure Fix Prompt](ci-fix.md)
 - [Codex Merge Conflict Prompt](merge-conflicts.md)

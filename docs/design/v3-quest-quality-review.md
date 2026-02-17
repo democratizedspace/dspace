@@ -120,60 +120,946 @@ Checked quests are not uniformly perfect, but they more often demonstrate:
 
 ## Problematic quests to prioritize (with improvement checklist)
 
-Use this as an actionable backlog for quest polishing passes.
+This backlog enumerates every **unchecked quest that is newly added in v3** (231 total), using `docs/new-quests.md` intersected with unchecked entries from `docs/qa/v3.md` §4.5.
 
-### 1) `astronomy/saturn-rings`
+Legend: each entry lists detected quality risks + a parity checklist derived from patterns in checked quests (`composting/*`, `hydroponics/nutrient-check`, `sysadmin/*`, `welcome/*`).
+### 3dprinting (15)
+- `3dprinting/bed-leveling` — issues: thin dialogue graph (nodes=4, options=6, processOptions=1, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add a quality-control checkpoint (tolerance/alignment/continuity) before finish.
+- `3dprinting/blob-of-death` — issues: thin dialogue graph, low decision density (nodes=3, options=5, processOptions=2, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `3dprinting/cable-clip` — issues: thin dialogue graph (nodes=4, options=7, processOptions=3, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add a quality-control checkpoint (tolerance/alignment/continuity) before finish.
+- `3dprinting/calibration-cube` — issues: thin dialogue graph (nodes=4, options=7, processOptions=3, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add a quality-control checkpoint (tolerance/alignment/continuity) before finish.
+- `3dprinting/filament-change` — issues: thin dialogue graph, low decision density (nodes=4, options=5, processOptions=1, gatedOptions=4).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `3dprinting/nozzle-cleaning` — issues: thin dialogue graph, low decision density (nodes=3, options=5, processOptions=2, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `3dprinting/nozzle-clog` — issues: thin dialogue graph (nodes=4, options=7, processOptions=3, gatedOptions=6).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add a quality-control checkpoint (tolerance/alignment/continuity) before finish.
+- `3dprinting/phone-stand` — issues: thin dialogue graph (nodes=4, options=7, processOptions=3, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add a quality-control checkpoint (tolerance/alignment/continuity) before finish.
+- `3dprinting/retraction-test` — issues: thin dialogue graph (nodes=4, options=6, processOptions=1, gatedOptions=4).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add a quality-control checkpoint (tolerance/alignment/continuity) before finish.
+- `3dprinting/spool-holder` — issues: thin dialogue graph (nodes=4, options=8, processOptions=4, gatedOptions=4).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add a quality-control checkpoint (tolerance/alignment/continuity) before finish.
+- `3dprinting/temperature-tower` — issues: thin dialogue graph, low decision density (nodes=4, options=5, processOptions=1, gatedOptions=4).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `3dprinting/x-belt-tension` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `3dprinting/benchy_10` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=4, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `3dprinting/benchy_100` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=4, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `3dprinting/benchy_25` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=4, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
 
-- [ ] Add at least one branch with meaningful outcomes (weather fallback, seeing conditions,
-      alternative target).
-- [ ] Add an evidence step (e.g., logged observation quality or sketch process output).
-- [ ] Add explicit troubleshooting loop (focus drift, light pollution adaptation).
+### aquaria (19)
+- `aquaria/aquarium-light` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=4, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `aquaria/balance-ph` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=4, options=5, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `aquaria/breeding` — issues: thin dialogue graph (nodes=4, options=8, processOptions=3, gatedOptions=6).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `aquaria/filter-rinse` — issues: thin dialogue graph (nodes=4, options=7, processOptions=3, gatedOptions=5).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `aquaria/floating-plants` — issues: thin dialogue graph (nodes=4, options=7, processOptions=3, gatedOptions=5).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `aquaria/guppy` — issues: thin dialogue graph (nodes=4, options=7, processOptions=2, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `aquaria/heater-install` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `aquaria/log-water-parameters` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=5).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `aquaria/net-fish` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=4, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `aquaria/ph-strip-test` — issues: thin dialogue graph (nodes=4, options=7, processOptions=2, gatedOptions=5).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `aquaria/position-tank` — issues: thin dialogue graph, low decision density (nodes=4, options=5, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `aquaria/shrimp` — issues: thin dialogue graph, low decision density (nodes=4, options=5, processOptions=1, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `aquaria/sponge-filter` — issues: needs manual parity pass against QA exemplars (nodes=5, options=8, processOptions=3, gatedOptions=4).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `aquaria/thermometer` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `aquaria/top-off` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=4, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `aquaria/walstad` — issues: needs manual parity pass against QA exemplars (nodes=5, options=7, processOptions=2, gatedOptions=4).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `aquaria/water-change` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `aquaria/water-testing` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `aquaria/goldfish` — issues: needs manual parity pass against QA exemplars (nodes=6, options=11, processOptions=4, gatedOptions=2).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
 
-### 2) `devops/fail2ban`
+### astronomy (21)
+- `astronomy/andromeda` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `astronomy/aurora-watch` — issues: needs manual parity pass against QA exemplars (nodes=5, options=8, processOptions=3, gatedOptions=3).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `astronomy/basic-telescope` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `astronomy/binary-star` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `astronomy/comet-tracking` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `astronomy/constellations` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `astronomy/iss-flyover` — issues: needs manual parity pass against QA exemplars (nodes=5, options=8, processOptions=3, gatedOptions=3).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `astronomy/iss-photo` — issues: thin dialogue graph, low decision density (nodes=4, options=5, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `astronomy/jupiter-moons` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `astronomy/light-pollution` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `astronomy/lunar-eclipse` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `astronomy/meteor-shower` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `astronomy/north-star` — issues: thin dialogue graph, low decision density (nodes=4, options=5, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `astronomy/observe-moon` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `astronomy/orion-nebula` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `astronomy/planetary-alignment` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=5, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `astronomy/satellite-pass` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `astronomy/saturn-rings` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `astronomy/star-trails` — issues: thin dialogue graph, no process-backed evidence (nodes=4, options=6, processOptions=0, gatedOptions=4).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add a process step that generates an observable artifact used by a gate.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `astronomy/sunspot-sketch` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `astronomy/venus-phases` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
 
-- [ ] Split install/config/verify into separate gated steps.
-- [ ] Add verification artifact process (e.g., parse ban logs, confirm jail status).
-- [ ] Add safe rollback guidance to avoid lockout.
+### chemistry (10)
+- `chemistry/acid-dilution` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `chemistry/acid-neutralization` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=4, options=5, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `chemistry/buffer-solution` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `chemistry/ph-adjustment` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `chemistry/ph-test` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `chemistry/precipitation-reaction` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `chemistry/safe-reaction` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `chemistry/stevia-crystals` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `chemistry/stevia-extraction` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `chemistry/stevia-tasting` — issues: thin dialogue graph, no process-backed evidence (nodes=4, options=6, processOptions=0, gatedOptions=4).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add a process step that generates an observable artifact used by a gate.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
 
-### 3) `energy/dWatt-1e8` (and sibling `dWatt-*`, `dSolar-*` ladder quests)
+### completionist (5)
+- `completionist/catalog` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `completionist/display` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] replace passive completion checks with multi-tree evidence requirements.
+- `completionist/polish` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `completionist/reminder` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `completionist/v2` — issues: needs manual parity pass against QA exemplars (nodes=6, options=10, processOptions=4, gatedOptions=4).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] replace passive completion checks with multi-tree evidence requirements.
 
-- [ ] Replace pure threshold gating with mixed goals (efficiency, uptime, storage strategy).
-- [ ] Add at least one mechanics-backed checkpoint (`requiresItems`/`process` output proof)
-      before final completion.
-- [ ] Add at least one decision branch (invest vs conserve, automation vs manual).
-- [ ] Normalize copy tone to avoid repetitive superlative inflation.
+### devops (15)
+- `devops/auto-updates` — issues: thin dialogue graph, no process-backed evidence (nodes=4, options=6, processOptions=0, gatedOptions=4).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add a process step that generates an observable artifact used by a gate.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `devops/ci-pipeline` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `devops/daily-backups` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `devops/docker-compose` — issues: thin dialogue graph, low decision density (nodes=3, options=5, processOptions=2, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `devops/enable-https` — issues: thin dialogue graph, no process-backed evidence (nodes=4, options=6, processOptions=0, gatedOptions=4).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add a process step that generates an observable artifact used by a gate.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `devops/fail2ban` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `devops/firewall-rules` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `devops/k3s-deploy` — issues: weak gated proof (nodes=5, options=6, processOptions=1, gatedOptions=1).
+  - [ ] require at least two gated checkpoints across setup and verification.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `devops/log-maintenance` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `devops/monitoring` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `devops/pi-cluster-hardware` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `devops/prepare-first-node` — issues: thin dialogue graph, low decision density (nodes=4, options=5, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `devops/private-registry` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `devops/ssd-boot` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `devops/ssh-hardening` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
 
-### 4) `electronics/soldering-intro` (file) / `electronics/tin-soldering-iron` (ID)
+### electronics (22)
+- `electronics/arduino-blink` — issues: thin dialogue graph, weak gated proof (nodes=4, options=6, processOptions=2, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] require at least two gated checkpoints across setup and verification.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `electronics/basic-circuit` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=4, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `electronics/check-battery-voltage` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `electronics/continuity-test` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `electronics/data-logger` — issues: thin dialogue graph, weak gated proof (nodes=4, options=6, processOptions=2, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] require at least two gated checkpoints across setup and verification.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `electronics/desolder-component` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=4, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `electronics/led-polarity` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `electronics/light-sensor` — issues: needs manual parity pass against QA exemplars (nodes=5, options=6, processOptions=1, gatedOptions=2).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+  - [ ] add a quality-control checkpoint (tolerance/alignment/continuity) before finish.
+- `electronics/measure-arduino-5v` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=4, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `electronics/measure-led-current` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=4, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `electronics/measure-resistance` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `electronics/potentiometer-dimmer` — issues: weak gated proof (nodes=5, options=7, processOptions=2, gatedOptions=1).
+  - [ ] require at least two gated checkpoints across setup and verification.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `electronics/resistor-color-check` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `electronics/servo-sweep` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=4, options=5, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `electronics/solder-led-harness` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `electronics/solder-wire` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=5, processOptions=2, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `electronics/soldering-intro` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `electronics/temperature-plot` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=4, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `electronics/test-gfci-outlet` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `electronics/thermistor-reading` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=4, options=5, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `electronics/thermometer-calibration` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `electronics/voltage-divider` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=4, options=5, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
 
-- [ ] Align file basename and quest ID for canonical clarity.
-- [ ] Add an explicit quality check branch (cold joint detection, re-tinning step).
-- [ ] Add process-backed verification before completion.
+### energy (21)
+- `energy/battery-maintenance` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `energy/battery-upgrade` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `energy/biogas-digester` — issues: thin dialogue graph, weak gated proof (nodes=4, options=6, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] require at least two gated checkpoints across setup and verification.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `energy/charge-controller-setup` — issues: needs manual parity pass against QA exemplars (nodes=6, options=10, processOptions=3, gatedOptions=4).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `energy/dWatt-1e8` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `energy/hand-crank-generator` — issues: needs manual parity pass against QA exemplars (nodes=6, options=10, processOptions=4, gatedOptions=5).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `energy/offgrid-charger` — issues: needs manual parity pass against QA exemplars (nodes=7, options=12, processOptions=4, gatedOptions=6).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `energy/portable-solar-panel` — issues: needs manual parity pass against QA exemplars (nodes=5, options=8, processOptions=2, gatedOptions=3).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `energy/power-inverter` — issues: needs manual parity pass against QA exemplars (nodes=5, options=7, processOptions=2, gatedOptions=3).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `energy/solar-tracker` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=5, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `energy/wind-turbine` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `energy/dSolar-100kW` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `energy/dSolar-10kW` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `energy/dSolar-1kW` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `energy/dWatt-1e3` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `energy/dWatt-1e4` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `energy/dWatt-1e5` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `energy/dWatt-1e6` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `energy/dWatt-1e7` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `energy/solar` — issues: needs manual parity pass against QA exemplars (nodes=6, options=9, processOptions=2, gatedOptions=3).
+  - [ ] add explicit failure-mode handling and safe rollback language.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `energy/solar-1kWh` — issues: weak gated proof (nodes=5, options=9, processOptions=3, gatedOptions=1).
+  - [ ] require at least two gated checkpoints across setup and verification.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
 
-### 5) `woodworking/workbench`
+### firstaid (13)
+- `firstaid/assemble-kit` — issues: weak gated proof (nodes=5, options=9, processOptions=3, gatedOptions=1).
+  - [ ] require at least two gated checkpoints across setup and verification.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `firstaid/change-bandage` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `firstaid/dispose-bandages` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `firstaid/dispose-expired` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=4, options=5, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `firstaid/flashlight-battery` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `firstaid/learn-cpr` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `firstaid/remove-splinter` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=4, options=5, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `firstaid/restock-kit` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `firstaid/sanitize-pocket-mask` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `firstaid/splint-limb` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `firstaid/stop-nosebleed` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `firstaid/treat-burn` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `firstaid/wound-care` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
 
-- [ ] Add measurement/tolerance verification gate (level/square outcomes).
-- [ ] Add mechanics-backed proof step (e.g., process log or required measuring tool item gate).
-- [ ] Add branch for common recovery (racked frame, wobble correction).
-- [ ] Replace one-shot grant/finish with a validated build checklist process.
+### geothermal (15)
+- `geothermal/backflush-loop-filter` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=5, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `geothermal/calibrate-ground-sensor` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `geothermal/check-loop-inlet-temp` — issues: needs manual parity pass against QA exemplars (nodes=5, options=9, processOptions=2, gatedOptions=7).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `geothermal/check-loop-outlet-temp` — issues: thin dialogue graph (nodes=4, options=7, processOptions=2, gatedOptions=6).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `geothermal/check-loop-pressure` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=0).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `geothermal/check-loop-temp-delta` — issues: needs manual parity pass against QA exemplars (nodes=6, options=11, processOptions=4, gatedOptions=10).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `geothermal/compare-depth-ground-temps` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `geothermal/compare-seasonal-ground-temps` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `geothermal/install-backup-thermistor` — issues: thin dialogue graph, low decision density, no process-backed evidence (nodes=4, options=5, processOptions=0, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `geothermal/log-ground-temperature` — issues: needs manual parity pass against QA exemplars (nodes=5, options=9, processOptions=3, gatedOptions=7).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `geothermal/log-heat-pump-warmup` — issues: thin dialogue graph (nodes=4, options=8, processOptions=3, gatedOptions=7).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `geothermal/monitor-heat-pump-energy` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=5, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `geothermal/purge-loop-air` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=5, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `geothermal/replace-faulty-thermistor` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `geothermal/survey-ground-temperature` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=5, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
 
-### 6) `firstaid/treat-burn`
+### hydroponics (21)
+- `hydroponics/air-stone-soak` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `hydroponics/ec-calibrate` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `hydroponics/ec-check` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `hydroponics/filter-clean` — issues: needs manual parity pass against QA exemplars (nodes=5, options=7, processOptions=2, gatedOptions=3).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `hydroponics/grow-light` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `hydroponics/lettuce` — issues: needs manual parity pass against QA exemplars (nodes=6, options=11, processOptions=4, gatedOptions=5).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `hydroponics/mint-cutting` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `hydroponics/netcup-clean` — issues: needs manual parity pass against QA exemplars (nodes=6, options=11, processOptions=4, gatedOptions=4).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `hydroponics/ph-check` — issues: needs manual parity pass against QA exemplars (nodes=5, options=9, processOptions=3, gatedOptions=2).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `hydroponics/ph-test` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `hydroponics/plug-soak` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `hydroponics/pump-install` — issues: needs manual parity pass against QA exemplars (nodes=5, options=7, processOptions=2, gatedOptions=3).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `hydroponics/pump-prime` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=0).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `hydroponics/regrow-stevia` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `hydroponics/reservoir-refresh` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `hydroponics/root-rinse` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `hydroponics/stevia` — issues: thin dialogue graph (nodes=4, options=7, processOptions=3, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
+- `hydroponics/temp-check` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `hydroponics/top-off` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `hydroponics/tub-scrub` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `hydroponics/bucket_10` — issues: needs manual parity pass against QA exemplars (nodes=5, options=7, processOptions=2, gatedOptions=3).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] log baseline vs after-action measurements and gate on the delta.
 
-- [ ] Add triage branch (minor vs severe burn escalation).
-- [ ] Gate completion on correct safe response sequence.
-- [ ] Require evidence-backed step (e.g., correct kit item/process selection) before completion.
-- [ ] Add misuse warnings (ice/direct ointment on severe burns, etc.).
+### programming (18)
+- `programming/avg-temp` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `programming/graph-temp` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `programming/graph-temp-data` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `programming/hello-sensor` — issues: needs manual parity pass against QA exemplars (nodes=5, options=8, processOptions=3, gatedOptions=3).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+  - [ ] attach verifiable output artifacts (logs, endpoint responses, command output).
+- `programming/http-post` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `programming/json-api` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `programming/json-endpoint` — issues: thin dialogue graph (nodes=4, options=7, processOptions=3, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `programming/median-temp` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `programming/moving-avg-temp` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `programming/plot-temp-cli` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `programming/stddev-temp` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `programming/temp-alert` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `programming/temp-email` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `programming/temp-graph` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `programming/temp-json-api` — issues: thin dialogue graph, low decision density (nodes=3, options=4, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `programming/temp-logger` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `programming/thermistor-calibration` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=4, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `programming/web-server` — issues: thin dialogue graph, low decision density (nodes=4, options=5, processOptions=1, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
 
-### 7) `geothermal/calibrate-ground-sensor`
+### robotics (13)
+- `robotics/gyro-balance` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `robotics/line-follower` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `robotics/maze-navigation` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `robotics/obstacle-avoidance` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `robotics/odometry-basics` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `robotics/pan-tilt` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `robotics/reflectance-sensors` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `robotics/servo-arm` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `robotics/servo-control` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `robotics/servo-gripper` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `robotics/servo-radar` — issues: thin dialogue graph, low decision density (nodes=3, options=5, processOptions=2, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `robotics/ultrasonic-rangefinder` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=4, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `robotics/wheel-encoders` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
 
-- [ ] Expand from single calibration step to baseline + verification + drift follow-up.
-- [ ] Gate with logged before/after readings.
-- [ ] Add fault branch (sensor out-of-range / replacement escalation).
+### rocketry (10)
+- `rocketry/fuel-mixture` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=4, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `rocketry/guided-rocket-build` — issues: needs manual parity pass against QA exemplars (nodes=7, options=12, processOptions=5, gatedOptions=5).
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `rocketry/night-launch` — issues: thin dialogue graph, low decision density (nodes=4, options=5, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `rocketry/preflight-check` — issues: thin dialogue graph, low decision density (nodes=4, options=5, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `rocketry/recovery-run` — issues: thin dialogue graph, low decision density (nodes=4, options=5, processOptions=1, gatedOptions=2).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+- `rocketry/static-test` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `rocketry/suborbital-hop` — issues: needs manual parity pass against QA exemplars (nodes=7, options=11, processOptions=4, gatedOptions=5).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `rocketry/wind-check` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=4, options=5, processOptions=1, gatedOptions=0).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `rocketry/firstlaunch` — issues: needs manual parity pass against QA exemplars (nodes=10, options=17, processOptions=6, gatedOptions=4).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `rocketry/parachute` — issues: thin dialogue graph (nodes=4, options=6, processOptions=2, gatedOptions=3).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add explicit failure-mode handling and safe rollback language.
 
-### 8) `programming/web-server`
+### ubi (3)
+- `ubi/first-payment` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=3, options=4, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `ubi/reminder` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=3, options=3, processOptions=0, gatedOptions=0).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `ubi/savings-goal` — issues: thin dialogue graph, low decision density, weak gated proof (nodes=4, options=5, processOptions=1, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] require at least two gated checkpoints across setup and verification.
 
-- [ ] Add explicit request/response validation and error branch.
-- [ ] Add one observable artifact output (endpoint response snapshot, log excerpt).
-- [ ] Connect reward to a downstream quest dependency with specific capability unlock.
+### woodworking (10)
+- `woodworking/apply-finish` — issues: no process-backed evidence, weak gated proof (nodes=6, options=11, processOptions=0, gatedOptions=1).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+  - [ ] require at least two gated checkpoints across setup and verification.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `woodworking/birdhouse` — issues: needs manual parity pass against QA exemplars (nodes=7, options=15, processOptions=3, gatedOptions=4).
+  - [ ] differentiate rewards with domain-specific grants or unlock links.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+  - [ ] add a quality-control checkpoint (tolerance/alignment/continuity) before finish.
+- `woodworking/bookshelf` — issues: thin dialogue graph, no process-backed evidence, weak gated proof (nodes=4, options=6, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add a process step that generates an observable artifact used by a gate.
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `woodworking/coffee-table` — issues: thin dialogue graph, low decision density, no process-backed evidence, weak gated proof (nodes=4, options=5, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add an alternate path with tradeoffs (speed vs safety, quality vs cost).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+- `woodworking/finish-sanding` — issues: no process-backed evidence, weak gated proof (nodes=6, options=11, processOptions=0, gatedOptions=1).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+  - [ ] require at least two gated checkpoints across setup and verification.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `woodworking/picture-frame` — issues: no process-backed evidence, weak gated proof (nodes=6, options=11, processOptions=0, gatedOptions=1).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+  - [ ] require at least two gated checkpoints across setup and verification.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+- `woodworking/planter-box` — issues: weak gated proof (nodes=8, options=15, processOptions=1, gatedOptions=1).
+  - [ ] require at least two gated checkpoints across setup and verification.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+  - [ ] add a quality-control checkpoint (tolerance/alignment/continuity) before finish.
+- `woodworking/step-stool` — issues: thin dialogue graph, no process-backed evidence, weak gated proof (nodes=4, options=6, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add a process step that generates an observable artifact used by a gate.
+  - [ ] require at least two gated checkpoints across setup and verification.
+- `woodworking/tool-rack` — issues: no process-backed evidence (nodes=7, options=13, processOptions=0, gatedOptions=2).
+  - [ ] add a process step that generates an observable artifact used by a gate.
+  - [ ] add explicit failure-mode handling and safe rollback language.
+  - [ ] add a quality-control checkpoint (tolerance/alignment/continuity) before finish.
+- `woodworking/workbench` — issues: thin dialogue graph, no process-backed evidence, weak gated proof (nodes=4, options=6, processOptions=0, gatedOptions=1).
+  - [ ] add one recovery/troubleshooting branch before completion.
+  - [ ] add a process step that generates an observable artifact used by a gate.
+  - [ ] require at least two gated checkpoints across setup and verification.
 
 ## Documentation improvements needed for quest authoring
 

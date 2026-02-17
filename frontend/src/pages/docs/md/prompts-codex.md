@@ -41,6 +41,7 @@ canonical Markdown files.
 - **Items:** [Item prompts][items]
 - **Quests:** [Quest prompts][quests]
 - **Quest quality:** [Quest polish prompt][quests-polish]
+- **Quest parity:** [v3 quest parity prompt][v3-quest-parity]
 - **NPCs:** [NPC prompts][npcs]
 - **QA coverage:** [QA test coverage prompt][qa-coverage]
 - **K3s deployments:** [DSPACE v3 k3s prompt][k3s]
@@ -79,6 +80,7 @@ Have ideas for improving the prompts? Open a pull request that updates the Markd
 [items]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/items.md
 [quests]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/quests.md
 [quests-polish]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/quests-polish.md
+[v3-quest-parity]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/v3-quest-parity.md
 [npcs]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/npcs.md
 [implementation]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/implement.md
 [polish]: https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/polish.md
