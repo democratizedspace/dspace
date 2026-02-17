@@ -9,6 +9,12 @@ and upgrade them to parity with QA-validated quest quality in `docs/qa/v3.md`.
 Use this when you want Codex to select one or more problematic v3 quests and implement robust,
 lore-friendly fixes with structural depth and validation.
 
+## Backlog selection strategy
+
+When selecting quests from the backlog, prefer one tree per pass and include a mix of quest
+types so the rubric is exercised broadly (for example: one install/setup quest, one
+measure/test quest, and one log/monitor quest).
+
 ```markdown
 # DSPACE v3 quest quality hardening (problematic backlog → parity)
 
