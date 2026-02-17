@@ -20,6 +20,7 @@ const cheatsAvailabilityStore = writable(false);
 const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
 const startProcess = vi.hoisted(() => vi.fn(() => true));
+const getItemCountOperationStartError = vi.hoisted(() => vi.fn(() => ''));
 const dbGetMock = vi.hoisted(() => vi.fn<(entityType: string, id: string) => Promise<unknown>>());
 
 const getProcessState = vi.mocked(getProcessStateMock);
@@ -96,7 +97,7 @@ vi.mock('../../generated/processes.json', () => ({
 
 vi.mock('../../utils/gameState/processes.js', () => ({
     startProcess,
-    getItemCountOperationStartError: vi.fn(() => ''),
+    getItemCountOperationStartError,
     cancelProcess: vi.fn(),
     finishProcess: vi.fn(),
     getProcessState: vi.fn(() => stateInfo),
@@ -135,6 +136,8 @@ beforeEach(() => {
     getProcessStartedAtMock.mockReset();
     getProcessStartedAtMock.mockImplementation(() => Date.now());
     startProcess.mockClear();
+    getItemCountOperationStartError.mockReset();
+    getItemCountOperationStartError.mockReturnValue('');
     dbGetMock.mockReset();
     getItemMapMock.mockResolvedValue(
         new Map([
@@ -452,6 +455,41 @@ test('renders custom process start controls when rendering a custom process', as
     expect(startButton).toBeTruthy();
     await fireEvent.click(startButton);
     expect(startProcess).toHaveBeenCalledWith('custom-1', customProcess);
+});
+
+test('shows start feedback when container-operation validation fails', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountOperationStartError.mockReturnValue('Cannot start yet: test error');
+
+    const customProcess = {
+        id: 'custom-start-error',
+        title: 'Start Error Process',
+        duration: '5s',
+        requireItems: [],
+        consumeItems: [],
+        createItems: [],
+        itemCountOperations: [
+            {
+                operation: 'deposit',
+                containerItemId: 'container-1',
+                itemId: 'item-1',
+                count: 1,
+            },
+        ],
+        custom: true,
+    };
+
+    const { getByTestId } = render(Process, {
+        processId: 'custom-start-error',
+        processData: customProcess,
+    });
+
+    await tick();
+    await fireEvent.click(getByTestId('process-start-button'));
+
+    expect(startProcess).not.toHaveBeenCalled();
+    expect(getByTestId('process-start-feedback').textContent).toContain('Cannot start yet: test error');
 });
 
 test('prefers provided process data over built-in catalog lookup', async () => {

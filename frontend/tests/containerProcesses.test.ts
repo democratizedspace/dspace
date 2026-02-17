@@ -16,6 +16,7 @@ vi.mock('../src/generated/processes.json', () => {
 import {
     ProcessStates,
     finishProcess,
+    getItemCountOperationStartError,
     getProcessState,
     skipProcess,
     startProcess,
@@ -183,6 +184,99 @@ describe('container process behavior', () => {
         skipProcess('withdraw', withdrawDefinition);
 
         expect(mockGameState.inventory[dusdId]).toBe(24);
+        expect(getStoredItemCount(jarId, dusdId)).toBe(0);
+    });
+
+    test('returns start errors for invalid container operations', () => {
+        expect(
+            getItemCountOperationStartError('invalid-pair', {
+                id: 'invalid-pair',
+                duration: '1s',
+                itemCountOperations: [
+                    {
+                        operation: 'deposit',
+                        containerItemId: jarId,
+                        itemId: 'not-storable',
+                        count: 1,
+                    },
+                ],
+            })
+        ).toContain('container cannot store that item');
+
+        expect(
+            getItemCountOperationStartError('invalid-count', {
+                id: 'invalid-count',
+                duration: '1s',
+                itemCountOperations: [
+                    {
+                        operation: 'deposit',
+                        containerItemId: jarId,
+                        itemId: dusdId,
+                        count: 0,
+                    },
+                ],
+            })
+        ).toContain('must be greater than zero');
+
+        mockGameState.itemContainerCounts = {
+            [jarId]: {
+                [dusdId]: 1,
+            },
+        };
+        expect(
+            getItemCountOperationStartError('insufficient', {
+                id: 'insufficient',
+                duration: '1s',
+                itemCountOperations: [
+                    {
+                        operation: 'withdraw',
+                        containerItemId: jarId,
+                        itemId: dusdId,
+                        count: 2,
+                    },
+                ],
+            })
+        ).toContain('not enough stored balance');
+    });
+
+    test('withdraw operation adds removed items back to inventory', () => {
+        mockGameState.itemContainerCounts = {
+            [jarId]: {
+                [dusdId]: 6,
+            },
+        };
+
+        skipProcess('withdraw-some', {
+            id: 'withdraw-some',
+            duration: '1s',
+            itemCountOperations: [
+                {
+                    operation: 'withdraw',
+                    containerItemId: jarId,
+                    itemId: dusdId,
+                    count: 4,
+                },
+            ],
+        });
+
+        expect(mockGameState.inventory[dusdId]).toBe(24);
+        expect(getStoredItemCount(jarId, dusdId)).toBe(2);
+    });
+
+    test('withdraw-all with empty storage does not add zero-count inventory', () => {
+        skipProcess('withdraw-empty', {
+            id: 'withdraw-empty',
+            duration: '1s',
+            itemCountOperations: [
+                {
+                    operation: 'withdraw-all',
+                    containerItemId: jarId,
+                    itemId: dusdId,
+                },
+            ],
+        });
+
+        expect(mockGameState.inventory[dusdId]).toBe(20);
         expect(getStoredItemCount(jarId, dusdId)).toBe(0);
     });
 });

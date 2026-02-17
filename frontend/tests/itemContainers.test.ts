@@ -53,6 +53,8 @@ describe('itemContainers helpers', () => {
     });
 
     test('rejects invalid container-item pairs and invalid counts', () => {
+        expect(canStoreItemInContainer('', dusdId)).toBe(false);
+        expect(canStoreItemInContainer(jarId, '')).toBe(false);
         expect(canStoreItemInContainer(jarId, 'invalid-item')).toBe(false);
         expect(addStoredItems(jarId, 'invalid-item', 5)).toBe(false);
         expect(addStoredItems(jarId, dusdId, -1)).toBe(false);
@@ -60,13 +62,21 @@ describe('itemContainers helpers', () => {
 
         expect(getStoredItemCount(jarId, 'invalid-item')).toBe(0);
         expect(removeStoredItems(jarId, 'invalid-item', 1)).toBe(0);
+        expect(removeStoredItems(jarId, dusdId, 0)).toBe(0);
+        expect(removeStoredItems(jarId, dusdId, -1)).toBe(0);
+        expect(removeAllStoredItems(jarId, 'invalid-item')).toBe(0);
     });
 
     test('returns tracked defaults and supports remove-all', () => {
+        expect(getStoredItemCounts(jarId)).toEqual({ [dusdId]: 0 });
+        expect(getStoredItemCounts('missing-container')).toEqual({});
+
+        mockGameState.itemContainerCounts[jarId] = {};
         expect(getStoredItemCounts(jarId)).toEqual({ [dusdId]: 0 });
 
         addStoredItems(jarId, dusdId, 12.5);
         expect(removeAllStoredItems(jarId, dusdId)).toBe(12.5);
         expect(getStoredItemCount(jarId, dusdId)).toBe(0);
+        expect(removeAllStoredItems(jarId, dusdId)).toBe(0);
     });
 });
