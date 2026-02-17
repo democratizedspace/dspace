@@ -120,60 +120,292 @@ Checked quests are not uniformly perfect, but they more often demonstrate:
 
 ## Problematic quests to prioritize (with improvement checklist)
 
-Use this as an actionable backlog for quest polishing passes.
+Use this as an actionable backlog for quest polishing passes. Every unchecked “new in v3” quest is listed below with a shared issue profile and parity suggestions.
 
-### 1) `astronomy/saturn-rings`
+Current coverage snapshot (from `docs/new-quests.md` + `docs/qa/v3.md` §4.5):
+- New-in-v3 quests: **225**
+- New-in-v3 quests already manually checked: **12**
+- New-in-v3 quests still unchecked/problematic: **213**
 
-- [ ] Add at least one branch with meaningful outcomes (weather fallback, seeing conditions,
-      alternative target).
-- [ ] Add an evidence step (e.g., logged observation quality or sketch process output).
-- [ ] Add explicit troubleshooting loop (focus drift, light pollution adaptation).
+Shared issue profile used for triage tags: **thin-flow**, **no-branch**, **no-process-evidence**, **weak-gating**, **low-interaction**.
 
-### 2) `devops/fail2ban`
+### 3dprinting (12 quests)
+Parity focus: Add calibration diagnostics, explicit reprint loop, and process-backed output proof before `finish`.
 
-- [ ] Split install/config/verify into separate gated steps.
-- [ ] Add verification artifact process (e.g., parse ban logs, confirm jail status).
-- [ ] Add safe rollback guidance to avoid lockout.
+- [ ] `3dprinting/bed-leveling` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add calibration diagnostics, explicit reprint loop, and process-backed output proof before `finish`.
+- [ ] `3dprinting/blob-of-death` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add calibration diagnostics, explicit reprint loop, and process-backed output proof before `finish`.
+- [ ] `3dprinting/cable-clip` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add calibration diagnostics, explicit reprint loop, and process-backed output proof before `finish`.
+- [ ] `3dprinting/calibration-cube` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add calibration diagnostics, explicit reprint loop, and process-backed output proof before `finish`.
+- [ ] `3dprinting/filament-change` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add calibration diagnostics, explicit reprint loop, and process-backed output proof before `finish`.
+- [ ] `3dprinting/nozzle-cleaning` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add calibration diagnostics, explicit reprint loop, and process-backed output proof before `finish`.
+- [ ] `3dprinting/nozzle-clog` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add calibration diagnostics, explicit reprint loop, and process-backed output proof before `finish`.
+- [ ] `3dprinting/phone-stand` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add calibration diagnostics, explicit reprint loop, and process-backed output proof before `finish`.
+- [ ] `3dprinting/retraction-test` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add calibration diagnostics, explicit reprint loop, and process-backed output proof before `finish`.
+- [ ] `3dprinting/spool-holder` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add calibration diagnostics, explicit reprint loop, and process-backed output proof before `finish`.
+- [ ] `3dprinting/temperature-tower` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add calibration diagnostics, explicit reprint loop, and process-backed output proof before `finish`.
+- [ ] `3dprinting/x-belt-tension` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add calibration diagnostics, explicit reprint loop, and process-backed output proof before `finish`.
 
-### 3) `energy/dWatt-1e8` (and sibling `dWatt-*`, `dSolar-*` ladder quests)
+### aquaria (18 quests)
+Parity focus: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
 
-- [ ] Replace pure threshold gating with mixed goals (efficiency, uptime, storage strategy).
-- [ ] Add at least one mechanics-backed checkpoint (`requiresItems`/`process` output proof)
-      before final completion.
-- [ ] Add at least one decision branch (invest vs conserve, automation vs manual).
-- [ ] Normalize copy tone to avoid repetitive superlative inflation.
+- [ ] `aquaria/aquarium-light` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/balance-ph` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/breeding` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/filter-rinse` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/floating-plants` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/guppy` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/heater-install` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/log-water-parameters` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/net-fish` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/ph-strip-test` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/position-tank` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/shrimp` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/sponge-filter` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/thermometer` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/top-off` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/walstad` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/water-change` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
+- [ ] `aquaria/water-testing` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter logging checkpoints, fish/stress safety branch, and maintenance evidence artifacts.
 
-### 4) `electronics/soldering-intro` (file) / `electronics/tin-soldering-iron` (ID)
+### astronomy (21 quests)
+Parity focus: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
 
-- [ ] Align file basename and quest ID for canonical clarity.
-- [ ] Add an explicit quality check branch (cold joint detection, re-tinning step).
-- [ ] Add process-backed verification before completion.
+- [ ] `astronomy/andromeda` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/aurora-watch` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/basic-telescope` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/binary-star` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/comet-tracking` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/constellations` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/iss-flyover` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/iss-photo` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/jupiter-moons` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/light-pollution` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/lunar-eclipse` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/meteor-shower` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/north-star` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/observe-moon` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/orion-nebula` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/planetary-alignment` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/satellite-pass` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/saturn-rings` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/star-trails` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/sunspot-sketch` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
+- [ ] `astronomy/venus-phases` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add seeing-condition fallback branches, observation evidence, and troubleshooting for weather/light pollution.
 
-### 5) `woodworking/workbench`
+### chemistry (10 quests)
+Parity focus: Add PPE + hazard verification gates, measurement evidence, and corrective branch for off-target readings.
 
-- [ ] Add measurement/tolerance verification gate (level/square outcomes).
-- [ ] Add mechanics-backed proof step (e.g., process log or required measuring tool item gate).
-- [ ] Add branch for common recovery (racked frame, wobble correction).
-- [ ] Replace one-shot grant/finish with a validated build checklist process.
+- [ ] `chemistry/acid-dilution` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add PPE + hazard verification gates, measurement evidence, and corrective branch for off-target readings.
+- [ ] `chemistry/acid-neutralization` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add PPE + hazard verification gates, measurement evidence, and corrective branch for off-target readings.
+- [ ] `chemistry/buffer-solution` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add PPE + hazard verification gates, measurement evidence, and corrective branch for off-target readings.
+- [ ] `chemistry/ph-adjustment` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add PPE + hazard verification gates, measurement evidence, and corrective branch for off-target readings.
+- [ ] `chemistry/ph-test` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add PPE + hazard verification gates, measurement evidence, and corrective branch for off-target readings.
+- [ ] `chemistry/precipitation-reaction` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add PPE + hazard verification gates, measurement evidence, and corrective branch for off-target readings.
+- [ ] `chemistry/safe-reaction` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add PPE + hazard verification gates, measurement evidence, and corrective branch for off-target readings.
+- [ ] `chemistry/stevia-crystals` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add PPE + hazard verification gates, measurement evidence, and corrective branch for off-target readings.
+- [ ] `chemistry/stevia-extraction` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add PPE + hazard verification gates, measurement evidence, and corrective branch for off-target readings.
+- [ ] `chemistry/stevia-tasting` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add PPE + hazard verification gates, measurement evidence, and corrective branch for off-target readings.
 
-### 6) `firstaid/treat-burn`
+### completionist (4 quests)
+Parity focus: Add multi-step curation criteria, inventory proof checkpoints, and anti-grind branching goals.
 
-- [ ] Add triage branch (minor vs severe burn escalation).
-- [ ] Gate completion on correct safe response sequence.
-- [ ] Require evidence-backed step (e.g., correct kit item/process selection) before completion.
-- [ ] Add misuse warnings (ice/direct ointment on severe burns, etc.).
+- [ ] `completionist/catalog` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add multi-step curation criteria, inventory proof checkpoints, and anti-grind branching goals.
+- [ ] `completionist/display` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add multi-step curation criteria, inventory proof checkpoints, and anti-grind branching goals.
+- [ ] `completionist/polish` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add multi-step curation criteria, inventory proof checkpoints, and anti-grind branching goals.
+- [ ] `completionist/reminder` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add multi-step curation criteria, inventory proof checkpoints, and anti-grind branching goals.
 
-### 7) `geothermal/calibrate-ground-sensor`
+### devops (15 quests)
+Parity focus: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
 
-- [ ] Expand from single calibration step to baseline + verification + drift follow-up.
-- [ ] Gate with logged before/after readings.
-- [ ] Add fault branch (sensor out-of-range / replacement escalation).
+- [ ] `devops/auto-updates` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
+- [ ] `devops/ci-pipeline` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
+- [ ] `devops/daily-backups` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
+- [ ] `devops/docker-compose` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
+- [ ] `devops/enable-https` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
+- [ ] `devops/fail2ban` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
+- [ ] `devops/firewall-rules` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
+- [ ] `devops/k3s-deploy` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
+- [ ] `devops/log-maintenance` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
+- [ ] `devops/monitoring` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
+- [ ] `devops/pi-cluster-hardware` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
+- [ ] `devops/prepare-first-node` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
+- [ ] `devops/private-registry` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
+- [ ] `devops/ssd-boot` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
+- [ ] `devops/ssh-hardening` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Split setup/config/verify gates, capture command/log artifacts, and add rollback/lockout recovery branches.
 
-### 8) `programming/web-server`
+### electronics (22 quests)
+Parity focus: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
 
-- [ ] Add explicit request/response validation and error branch.
-- [ ] Add one observable artifact output (endpoint response snapshot, log excerpt).
-- [ ] Connect reward to a downstream quest dependency with specific capability unlock.
+- [ ] `electronics/arduino-blink` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/basic-circuit` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/check-battery-voltage` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/continuity-test` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/data-logger` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/desolder-component` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/led-polarity` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/light-sensor` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/measure-arduino-5v` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/measure-led-current` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/measure-resistance` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/potentiometer-dimmer` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/resistor-color-check` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/servo-sweep` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/solder-led-harness` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/solder-wire` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/soldering-intro` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/temperature-plot` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/test-gfci-outlet` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/thermistor-reading` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/thermometer-calibration` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+- [ ] `electronics/voltage-divider` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add measurement validation branches, fault isolation loops, and process/item evidence before completion.
+
+### energy (11 quests)
+Parity focus: Replace pure accumulation with strategy branches (efficiency/storage/uptime), plus process-backed checkpoints.
+
+- [ ] `energy/battery-maintenance` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Replace pure accumulation with strategy branches (efficiency/storage/uptime), plus process-backed checkpoints.
+- [ ] `energy/battery-upgrade` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Replace pure accumulation with strategy branches (efficiency/storage/uptime), plus process-backed checkpoints.
+- [ ] `energy/biogas-digester` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Replace pure accumulation with strategy branches (efficiency/storage/uptime), plus process-backed checkpoints.
+- [ ] `energy/charge-controller-setup` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Replace pure accumulation with strategy branches (efficiency/storage/uptime), plus process-backed checkpoints.
+- [ ] `energy/dWatt-1e8` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Replace pure accumulation with strategy branches (efficiency/storage/uptime), plus process-backed checkpoints.
+- [ ] `energy/hand-crank-generator` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Replace pure accumulation with strategy branches (efficiency/storage/uptime), plus process-backed checkpoints.
+- [ ] `energy/offgrid-charger` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Replace pure accumulation with strategy branches (efficiency/storage/uptime), plus process-backed checkpoints.
+- [ ] `energy/portable-solar-panel` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Replace pure accumulation with strategy branches (efficiency/storage/uptime), plus process-backed checkpoints.
+- [ ] `energy/power-inverter` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Replace pure accumulation with strategy branches (efficiency/storage/uptime), plus process-backed checkpoints.
+- [ ] `energy/solar-tracker` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Replace pure accumulation with strategy branches (efficiency/storage/uptime), plus process-backed checkpoints.
+- [ ] `energy/wind-turbine` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Replace pure accumulation with strategy branches (efficiency/storage/uptime), plus process-backed checkpoints.
+
+### firstaid (13 quests)
+Parity focus: Add triage severity branching, safe-sequence gates, and misuse warnings with kit-item evidence.
+
+- [ ] `firstaid/assemble-kit` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add triage severity branching, safe-sequence gates, and misuse warnings with kit-item evidence.
+- [ ] `firstaid/change-bandage` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add triage severity branching, safe-sequence gates, and misuse warnings with kit-item evidence.
+- [ ] `firstaid/dispose-bandages` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add triage severity branching, safe-sequence gates, and misuse warnings with kit-item evidence.
+- [ ] `firstaid/dispose-expired` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add triage severity branching, safe-sequence gates, and misuse warnings with kit-item evidence.
+- [ ] `firstaid/flashlight-battery` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add triage severity branching, safe-sequence gates, and misuse warnings with kit-item evidence.
+- [ ] `firstaid/learn-cpr` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add triage severity branching, safe-sequence gates, and misuse warnings with kit-item evidence.
+- [ ] `firstaid/remove-splinter` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add triage severity branching, safe-sequence gates, and misuse warnings with kit-item evidence.
+- [ ] `firstaid/restock-kit` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add triage severity branching, safe-sequence gates, and misuse warnings with kit-item evidence.
+- [ ] `firstaid/sanitize-pocket-mask` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add triage severity branching, safe-sequence gates, and misuse warnings with kit-item evidence.
+- [ ] `firstaid/splint-limb` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add triage severity branching, safe-sequence gates, and misuse warnings with kit-item evidence.
+- [ ] `firstaid/stop-nosebleed` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add triage severity branching, safe-sequence gates, and misuse warnings with kit-item evidence.
+- [ ] `firstaid/treat-burn` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add triage severity branching, safe-sequence gates, and misuse warnings with kit-item evidence.
+- [ ] `firstaid/wound-care` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add triage severity branching, safe-sequence gates, and misuse warnings with kit-item evidence.
+
+### geothermal (15 quests)
+Parity focus: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+
+- [ ] `geothermal/backflush-loop-filter` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+- [ ] `geothermal/calibrate-ground-sensor` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+- [ ] `geothermal/check-loop-inlet-temp` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+- [ ] `geothermal/check-loop-outlet-temp` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+- [ ] `geothermal/check-loop-pressure` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+- [ ] `geothermal/check-loop-temp-delta` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+- [ ] `geothermal/compare-depth-ground-temps` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+- [ ] `geothermal/compare-seasonal-ground-temps` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+- [ ] `geothermal/install-backup-thermistor` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+- [ ] `geothermal/log-ground-temperature` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+- [ ] `geothermal/log-heat-pump-warmup` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+- [ ] `geothermal/monitor-heat-pump-energy` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+- [ ] `geothermal/purge-loop-air` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+- [ ] `geothermal/replace-faulty-thermistor` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+- [ ] `geothermal/survey-ground-temperature` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add baseline→calibration→verification cadence, before/after readings, and fault escalation branches.
+
+### hydroponics (20 quests)
+Parity focus: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+
+- [ ] `hydroponics/air-stone-soak` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/ec-calibrate` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/ec-check` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/filter-clean` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/grow-light` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/lettuce` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/mint-cutting` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/netcup-clean` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/ph-check` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/ph-test` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/plug-soak` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/pump-install` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/pump-prime` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/regrow-stevia` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/reservoir-refresh` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/root-rinse` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/stevia` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/temp-check` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/top-off` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+- [ ] `hydroponics/tub-scrub` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add parameter drift troubleshooting, multi-checkpoint care loops, and process evidence for interventions.
+
+### programming (18 quests)
+Parity focus: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+
+- [ ] `programming/avg-temp` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/graph-temp` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/graph-temp-data` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/hello-sensor` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/http-post` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/json-api` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/json-endpoint` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/median-temp` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/moving-avg-temp` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/plot-temp-cli` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/stddev-temp` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/temp-alert` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/temp-email` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/temp-graph` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/temp-json-api` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/temp-logger` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/thermistor-calibration` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+- [ ] `programming/web-server` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add failing-test/verify loops, observable artifacts (logs/output), and error-handling branches.
+
+### robotics (13 quests)
+Parity focus: Add sensor-calibration checkpoints, recovery branches for drift/collision, and telemetry-based evidence.
+
+- [ ] `robotics/gyro-balance` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add sensor-calibration checkpoints, recovery branches for drift/collision, and telemetry-based evidence.
+- [ ] `robotics/line-follower` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add sensor-calibration checkpoints, recovery branches for drift/collision, and telemetry-based evidence.
+- [ ] `robotics/maze-navigation` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add sensor-calibration checkpoints, recovery branches for drift/collision, and telemetry-based evidence.
+- [ ] `robotics/obstacle-avoidance` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add sensor-calibration checkpoints, recovery branches for drift/collision, and telemetry-based evidence.
+- [ ] `robotics/odometry-basics` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add sensor-calibration checkpoints, recovery branches for drift/collision, and telemetry-based evidence.
+- [ ] `robotics/pan-tilt` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add sensor-calibration checkpoints, recovery branches for drift/collision, and telemetry-based evidence.
+- [ ] `robotics/reflectance-sensors` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add sensor-calibration checkpoints, recovery branches for drift/collision, and telemetry-based evidence.
+- [ ] `robotics/servo-arm` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add sensor-calibration checkpoints, recovery branches for drift/collision, and telemetry-based evidence.
+- [ ] `robotics/servo-control` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add sensor-calibration checkpoints, recovery branches for drift/collision, and telemetry-based evidence.
+- [ ] `robotics/servo-gripper` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add sensor-calibration checkpoints, recovery branches for drift/collision, and telemetry-based evidence.
+- [ ] `robotics/servo-radar` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add sensor-calibration checkpoints, recovery branches for drift/collision, and telemetry-based evidence.
+- [ ] `robotics/ultrasonic-rangefinder` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add sensor-calibration checkpoints, recovery branches for drift/collision, and telemetry-based evidence.
+- [ ] `robotics/wheel-encoders` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add sensor-calibration checkpoints, recovery branches for drift/collision, and telemetry-based evidence.
+
+### rocketry (8 quests)
+Parity focus: Add safety hold points, preflight/postflight evidence, and contingency branches for abort/recovery.
+
+- [ ] `rocketry/fuel-mixture` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add safety hold points, preflight/postflight evidence, and contingency branches for abort/recovery.
+- [ ] `rocketry/guided-rocket-build` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add safety hold points, preflight/postflight evidence, and contingency branches for abort/recovery.
+- [ ] `rocketry/night-launch` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add safety hold points, preflight/postflight evidence, and contingency branches for abort/recovery.
+- [ ] `rocketry/preflight-check` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add safety hold points, preflight/postflight evidence, and contingency branches for abort/recovery.
+- [ ] `rocketry/recovery-run` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add safety hold points, preflight/postflight evidence, and contingency branches for abort/recovery.
+- [ ] `rocketry/static-test` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add safety hold points, preflight/postflight evidence, and contingency branches for abort/recovery.
+- [ ] `rocketry/suborbital-hop` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add safety hold points, preflight/postflight evidence, and contingency branches for abort/recovery.
+- [ ] `rocketry/wind-check` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add safety hold points, preflight/postflight evidence, and contingency branches for abort/recovery.
+
+### ubi (3 quests)
+Parity focus: Add decision branches with measurable budgeting outcomes and proof artifacts beyond reminder-style completion.
+
+- [ ] `ubi/first-payment` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add decision branches with measurable budgeting outcomes and proof artifacts beyond reminder-style completion.
+- [ ] `ubi/reminder` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add decision branches with measurable budgeting outcomes and proof artifacts beyond reminder-style completion.
+- [ ] `ubi/savings-goal` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add decision branches with measurable budgeting outcomes and proof artifacts beyond reminder-style completion.
+
+### woodworking (10 quests)
+Parity focus: Add tolerance/measurement gates, rework branches for miscuts, and process-backed build checklists.
+
+- [ ] `woodworking/apply-finish` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add tolerance/measurement gates, rework branches for miscuts, and process-backed build checklists.
+- [ ] `woodworking/birdhouse` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add tolerance/measurement gates, rework branches for miscuts, and process-backed build checklists.
+- [ ] `woodworking/bookshelf` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add tolerance/measurement gates, rework branches for miscuts, and process-backed build checklists.
+- [ ] `woodworking/coffee-table` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add tolerance/measurement gates, rework branches for miscuts, and process-backed build checklists.
+- [ ] `woodworking/finish-sanding` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add tolerance/measurement gates, rework branches for miscuts, and process-backed build checklists.
+- [ ] `woodworking/picture-frame` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add tolerance/measurement gates, rework branches for miscuts, and process-backed build checklists.
+- [ ] `woodworking/planter-box` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add tolerance/measurement gates, rework branches for miscuts, and process-backed build checklists.
+- [ ] `woodworking/step-stool` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add tolerance/measurement gates, rework branches for miscuts, and process-backed build checklists.
+- [ ] `woodworking/tool-rack` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add tolerance/measurement gates, rework branches for miscuts, and process-backed build checklists.
+- [ ] `woodworking/workbench` — issues: `thin-flow`, `no-branch`, `no-process-evidence`, `weak-gating`, `low-interaction`; parity checklist: Add tolerance/measurement gates, rework branches for miscuts, and process-backed build checklists.
+
 
 ## Documentation improvements needed for quest authoring
 
