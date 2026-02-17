@@ -39,11 +39,11 @@ export const getItemCount = (itemId) => {
 };
 
 const getContainerMap = (gameState, containerItemId) => {
-    const maps = gameState.itemContainerCounts || {};
+    const maps = gameState.inventoryItemCounts || {};
     const existing = maps[containerItemId];
     if (!existing || typeof existing !== 'object') {
         maps[containerItemId] = {};
-        gameState.itemContainerCounts = maps;
+        gameState.inventoryItemCounts = maps;
         return maps[containerItemId];
     }
     return existing;
@@ -51,13 +51,13 @@ const getContainerMap = (gameState, containerItemId) => {
 
 export const getContainedItemCount = (containerItemId, itemId) => {
     const gameState = loadGameState();
-    const containerMap = gameState.itemContainerCounts?.[containerItemId];
+    const containerMap = gameState.inventoryItemCounts?.[containerItemId];
     return Number(containerMap?.[itemId] || 0);
 };
 
 export const getContainedItemCounts = (containerItemId, itemIds = []) => {
     const gameState = loadGameState();
-    const containerMap = gameState.itemContainerCounts?.[containerItemId] || {};
+    const containerMap = gameState.inventoryItemCounts?.[containerItemId] || {};
 
     return itemIds.reduce((acc, itemId) => {
         acc[itemId] = Number(containerMap[itemId] || 0);
