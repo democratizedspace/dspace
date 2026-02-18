@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Skipping first-layer checks can snowball into a blob of death. We'll recreate the failure, recover safely, then verify with logged purge snapshots.",
+            "text": "Skipping first-layer checks can snowball into a blob of death. We'll recreate the failure, recover safely, then verify with timestamped purge snapshots.",
             "options": [
                 {
                     "type": "process",
@@ -111,12 +111,12 @@
         },
         {
             "id": "monitor",
-            "text": "Run three purge snapshots (10 mm each, ~5 minutes apart). Log strand width, skipping sounds, and any smoke/odor alerts on paper for each pass.",
+            "text": "Run three purge snapshots (10 mm each, ~5 minutes apart). Log timestamp, strand width estimate, skipped steps, and odor/smoke status for every pass.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "verify",
-                    "text": "Logs show stable flow and no anomalies across all three checks.",
+                    "text": "Logs show all three snapshots are stable and within limits.",
                     "requiresItems": [
                         {
                             "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
@@ -124,25 +124,36 @@
                         },
                         {
                             "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
-                            "count": 2
+                            "count": 3
                         }
                     ]
                 },
                 {
                     "type": "goto",
                     "goto": "anomaly",
-                    "text": "At least one snapshot failed (skips, smoke, or uneven strand)."
+                    "text": "At least one snapshot failed (skip, smoke, or uneven strand).",
+                    "requiresItems": [
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Persistent smoke or burnt odor appeared; stop and cool down now."
                 }
             ]
         },
         {
             "id": "anomaly",
-            "text": "Classify the issue before retry: partial obstruction (repeat cleaning), thermal creep (cooldown + slower feed), or nozzle damage (replace). Re-run the snapshot cadence after correction.",
+            "text": "Classify the issue before retry: partial obstruction (repeat cleaning), thermal creep (cooldown + slower feed), or nozzle damage (replace). Re-run the same three-snapshot cadence after correction.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "monitor",
-                    "text": "Adjusted cooling/feed settings and logged the change; rerun snapshots.",
+                    "text": "Adjusted cooling/feed settings and logged corrective notes.",
                     "requiresItems": [
                         {
                             "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
@@ -150,7 +161,7 @@
                         },
                         {
                             "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
-                            "count": 2
+                            "count": 3
                         }
                     ]
                 },
@@ -164,11 +175,17 @@
                             "count": 1
                         }
                     ]
-                },
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Good call. Cut heater power, ventilate, and wait for a full cool-down before touching the hotend. Safety overrides uptime.",
+            "options": [
                 {
                     "type": "goto",
-                    "goto": "monitor",
-                    "text": "Corrective action applied; start a fresh monitoring window.",
+                    "goto": "cooldown",
+                    "text": "Printer is cool and workspace is safe again.",
                     "requiresItems": [
                         {
                             "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
@@ -185,7 +202,7 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "First layer holds and monitoring log is complete.",
+                    "text": "First layer holds and the three-entry monitoring log is complete.",
                     "requiresItems": [
                         {
                             "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
@@ -193,7 +210,7 @@
                         },
                         {
                             "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
-                            "count": 2
+                            "count": 3
                         }
                     ]
                 }

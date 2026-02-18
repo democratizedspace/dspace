@@ -198,11 +198,13 @@ slug: '3dprinting'
     - `cooldown` → "Clear the nozzle and reseat it." — safety goggles ×1, needle-nose pliers ×1, sheet of printer paper ×1, entry-level FDM 3D printer (clogged nozzle) ×1, green PLA filament ×5
     - `cooldown` → "Swap in a new nozzle." — safety goggles ×1, needle-nose pliers ×1, 0.4 mm brass nozzle ×1, entry-level FDM 3D printer (clogged nozzle) ×1
     - `cooldown` → "Hotend is rebuilt and ready for monitored purge." — entry-level FDM 3D printer (clean nozzle) ×1
-    - `monitor` → "Logs show stable flow and no anomalies across all three checks." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
-    - `anomaly` → "Adjusted cooling/feed settings and logged the change; rerun snapshots." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
+    - `monitor` → "Logs show all three snapshots are stable and within limits." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×3
+    - `monitor` → "At least one snapshot failed (skip, smoke, or uneven strand)." — sheet of printer paper ×1
+    - `monitor` → "Persistent smoke or burnt odor appeared; stop and cool down now." — no `requiresItems` gate
+    - `anomaly` → "Adjusted cooling/feed settings and logged corrective notes." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×3
     - `anomaly` → "Symptoms look like a hard clog; return to teardown and service." — entry-level FDM 3D printer (clogged nozzle) ×1
-    - `anomaly` → "Corrective action applied; start a fresh monitoring window." — entry-level FDM 3D printer (clean nozzle) ×1
-    - `verify` → "First layer holds and monitoring log is complete." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
+    - `safety-stop` → "Printer is cool and workspace is safe again." — entry-level FDM 3D printer (clean nozzle) ×1
+    - `verify` → "First layer holds and the three-entry monitoring log is complete." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×3
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -311,10 +313,15 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/phone-stand`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Tension the belts so layers stack straight." — entry-level FDM 3D printer (leveled bed) ×1
-    - `prep` → "Load white PLA and purge 10 grams of filament." — entry-level FDM 3D printer (leveled bed) ×1, safety goggles ×1, wire cutters ×1
-    - `prep` → "Ready to print the spool holder." — entry-level FDM 3D printer (white PLA loaded) ×1, safety goggles ×1
-    - `print` → "Holder cooled and fits the spool axle." — 3D printed filament spool holder ×1
+    - `prep` → "Bed is already leveled and verified." — entry-level FDM 3D printer (leveled bed) ×1, safety goggles ×1
+    - `strategy` → "Main path: tune X-belt tension first." — entry-level FDM 3D printer (leveled bed) ×1
+    - `strategy` → "Load white PLA and purge 10 grams before slicing." — entry-level FDM 3D printer (leveled bed) ×1, safety goggles ×1, wire cutters ×1
+    - `strategy` → "Prep complete; begin spool-holder print." — entry-level FDM 3D printer (white PLA loaded) ×1, safety goggles ×1
+    - `print` → "Holder cooled and ready for feed-path checks." — 3D printed filament spool holder ×1
+    - `evidence` → "All three sweeps are smooth and no wobble appears." — 3D printed filament spool holder ×1, sheet of printer paper ×1
+    - `evidence` → "I hear dragging, feel binding, or see arm wobble." — 3D printed filament spool holder ×1, sheet of printer paper ×1
+    - `troubleshoot` → "Part is warped or cracked; reprint with corrected settings." — entry-level FDM 3D printer (white PLA loaded) ×1, safety goggles ×1
+    - `troubleshoot` → "Feed path adjusted; rerun three-sweep verification." — 3D printed filament spool holder ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -368,7 +375,11 @@ slug: '3dprinting'
     - `start` → "Benchy notes are ready; let's slice it." — entry-level FDM 3D printer ×1, stringing-tuned Benchy ×1
     - `slice` → "Print the temperature tower." — entry-level FDM 3D printer ×1, safety goggles ×1, white PLA filament ×30
     - `slice` → "Tower cooled and labeled." — temperature tower sample ×1
-    - `review` → "Picked the best-looking band." — temperature tower sample ×1, digital calipers ×1
+    - `review` → "Measurements logged for at least three temperature bands." — temperature tower sample ×1, digital calipers ×1, sheet of printer paper ×1
+    - `evaluate` → "One band meets all thresholds; temp profile is ready." — temperature tower sample ×1, digital calipers ×1, sheet of printer paper ×1
+    - `evaluate` → "Bands are inconsistent or all fail thresholds." — temperature tower sample ×1, sheet of printer paper ×1
+    - `correct` → "Reprint with corrected temperature range." — entry-level FDM 3D printer ×1, safety goggles ×1, white PLA filament ×30
+    - `correct` → "Corrective run complete; re-evaluate all bands." — temperature tower sample ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
