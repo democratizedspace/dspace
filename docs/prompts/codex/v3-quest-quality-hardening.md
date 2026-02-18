@@ -24,9 +24,10 @@ Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3
 2. For that tree, read `Exemplar anchors (checked in docs/qa/v3.md §4.5)` from
    `docs/design/v3-quest-quality-review.md`.
 3. Extract only anchor quest ID tokens (`<tree>/<quest>`) and ignore any trailing commentary
-   (for example fallback parentheticals); treat the resulting IDs as the **only allowed exemplar
-   IDs**.
-4. Verify each anchor is actually checked in `docs/qa/v3.md` §4.5 before using it.
+   (for example fallback parentheticals); **only** anchors listed on that tree's
+   `Exemplar anchors (checked in docs/qa/v3.md §4.5)` line are allowed exemplar IDs.
+4. Verify each candidate anchor is actually checked in `docs/qa/v3.md` §4.5 before using it;
+   unchecked anchors must not be used.
 5. Determine each selected quest's checklist-rubric type by keyword (**first match wins**) and
    apply only that type's structure.
 6. Prefer a mixed set of rubric types when selecting multiple quests (for example install +
@@ -69,8 +70,10 @@ Output exactly these sections in order:
    - Bullet list of selected quest IDs.
 2. `Unchecked QA boxes targeted`
    - Bullet list mapping each selected quest to the still-unchecked per-quest checkbox row(s) in
-     `docs/qa/v3.md` §4.5 it is intended to unlock, referenced by `<tree>/<quest>` entries
-     (not tree-level header boxes).
+     `docs/qa/v3.md` §4.5 it is intended to unlock, using the exact checkbox label text copied
+     verbatim from §4.5 (not paraphrased and not tree-level header boxes).
+   - For each mapped checkbox, include a nearest subsection header or anchor-like breadcrumb so a
+     human can find it quickly (for example `§4.5 > Quest quality > <tree>`).
 3. `Exemplar anchors used`
    - Bullet list mapping each selected quest to verified anchor ID(s).
 4. `Before/after structural summary`
