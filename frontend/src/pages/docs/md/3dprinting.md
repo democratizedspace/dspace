@@ -200,6 +200,7 @@ slug: '3dprinting'
     - `cooldown` → "Hotend is rebuilt and ready for monitored purge." — entry-level FDM 3D printer (clean nozzle) ×1
     - `monitor` → "Logs show all three snapshots are stable and within limits." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×3
     - `monitor` → "At least one snapshot failed (skip, smoke, or uneven strand)." — sheet of printer paper ×1
+    - `monitor` → "Persistent smoke or burnt odor appeared; stop and cool down now." — no `requiresItems` gate
     - `anomaly` → "Adjusted cooling/feed settings and logged corrective notes." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×3
     - `anomaly` → "Symptoms look like a hard clog; return to teardown and service." — entry-level FDM 3D printer (clogged nozzle) ×1
     - `safety-stop` → "Printer is cool and workspace is safe again." — entry-level FDM 3D printer (clean nozzle) ×1
