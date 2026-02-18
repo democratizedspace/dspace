@@ -1,14 +1,14 @@
 {
     "id": "3dprinting/filament-change",
     "title": "Swap Filament",
-    "description": "Swap to green PLA on your entry-level FDM printer with goggles, wire cutters, and a 10 g purge.",
+    "description": "Swap to green PLA on your entry-level FDM printer with goggles, wire cutters, and a documented purge check.",
     "image": "/assets/quests/filament_swap_green_pla.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to swap colors? We'll unload the old spool, purge 10 g, and load green PLA\u2014level the bed first so you can verify first-layer adhesion after the swap.",
+            "text": "Ready to swap colors? We'll unload the old spool, purge cleanly, and prove first-layer adhesion before we call it done.",
             "options": [
                 {
                     "type": "goto",
@@ -25,7 +25,7 @@
         },
         {
             "id": "heat",
-            "text": "Power on, preheat to 200 \u00b0C, and move the hotend away from the bed. Keep goggles on and fingers clear of the drive gears while you release the lever.",
+            "text": "Power on, preheat to 200 °C, and move the hotend clear of the bed. Keep goggles on and fingers clear of the drive gears while you release the lever.",
             "options": [
                 {
                     "type": "process",
@@ -52,7 +52,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "purge",
+                    "goto": "purge-check",
                     "text": "Green filament is flowing without bubbles.",
                     "requiresItems": [
                         {
@@ -64,13 +64,77 @@
             ]
         },
         {
-            "id": "purge",
-            "text": "Check that the extruder gears are gripping, clip the stringing, and extrude 20 mm to confirm the feed path is clear.",
+            "id": "purge-check",
+            "text": "Extrude 20 mm, clip the strand, and log what you see: color consistency, gear noise, and whether flow stutters.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Record purge observations in the mission log.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Swap locked in and purge line is solid.",
+                    "goto": "adhesion-check",
+                    "text": "Purge data logged; move to first-layer verification.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "jam-recovery",
+                    "text": "Flow is sputtering or gear clicks started."
+                }
+            ]
+        },
+        {
+            "id": "jam-recovery",
+            "text": "Pause and recover safely: trim filament tip, re-seat the spool path, and purge again. If clicking persists, unload and repeat the swap.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "swap-green-pla-filament",
+                    "text": "Re-run the swap and purge with a fresh cut filament tip.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 10
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "purge-check",
+                    "text": "Recovered. Re-check purge quality.",
                     "requiresItems": [
                         {
                             "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
@@ -81,8 +145,52 @@
             ]
         },
         {
+            "id": "adhesion-check",
+            "text": "Run a short first-layer line. If drag is uneven, re-level before finishing. Smooth, even squish means the swap is production-safe.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Re-level bed before the verification line.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "First layer is even and documented.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great! Your printer is purged, tensioned, and ready to lay down that fresh green plastic.",
+            "text": "Great work. You swapped, verified, and logged the result like an operator, not a gambler.",
             "options": [
                 {
                     "type": "finish",
@@ -97,11 +205,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/calibration-cube"],
+    "requiresQuests": [
+        "3dprinting/calibration-cube"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-12",

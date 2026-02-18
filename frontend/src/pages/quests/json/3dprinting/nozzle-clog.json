@@ -1,19 +1,19 @@
 {
     "id": "3dprinting/nozzle-clog",
     "title": "Fix a Clogged Nozzle",
-    "description": "Disassemble your printer after a blob of death from skipping the first layer to unclog or replace the nozzle.",
+    "description": "Disassemble your printer after a blob event, classify the clog, and restore reliable flow with logged verification.",
     "image": "/assets/quests/nozzle_clog_disassembly.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Skipping the first-layer check let filament pile around the hotend. We'll cool, clear the blob, and get flow back.",
+            "text": "Skipping the first-layer check let filament pile around the hotend. We'll cool, classify the failure, repair, and verify stable flow before release.",
             "options": [
                 {
                     "type": "process",
                     "process": "3dprint-nozzle-clog",
-                    "text": "Document the failure and how it clogged.",
+                    "text": "Document the failure and reproduce the clog.",
                     "requiresItems": [
                         {
                             "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
@@ -31,7 +31,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "cooldown",
+                    "goto": "classify",
                     "text": "Printer is powered down and cool.",
                     "requiresItems": [
                         {
@@ -43,13 +43,49 @@
             ]
         },
         {
-            "id": "cooldown",
-            "text": "Ventilate the area, check heaters are off, and peel away loose plastic to expose the nozzle threads.",
+            "id": "classify",
+            "text": "Tag the failure before touching hardware: partial clog (sputter), full clog (no flow), or leak at nozzle threads. Log symptoms and likely cause.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Record symptom class, last print temp, and suspected cause.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "repair",
+                    "text": "Failure class logged. Proceed with safe disassembly.",
+                    "requiresItems": [
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "repair",
+            "text": "Ventilate, confirm heaters are off, and keep goggles on. Clear plastic around the block before unscrewing anything to avoid thread damage.",
             "options": [
                 {
                     "type": "process",
                     "process": "repair-clogged-nozzle",
-                    "text": "Clear the nozzle and reseat it.",
+                    "text": "Clear the existing nozzle and reseat it.",
                     "requiresItems": [
                         {
                             "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
@@ -76,7 +112,7 @@
                 {
                     "type": "process",
                     "process": "replace-brass-nozzle",
-                    "text": "Swap in a new nozzle.",
+                    "text": "Swap in a new nozzle if threads or bore are damaged.",
                     "requiresItems": [
                         {
                             "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
@@ -98,7 +134,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "purge",
+                    "goto": "monitor",
                     "text": "Hotend is rebuilt and moves smoothly.",
                     "requiresItems": [
                         {
@@ -110,13 +146,33 @@
             ]
         },
         {
-            "id": "purge",
-            "text": "Heat to 200 \u00b0C, extrude 30 mm, and rerun a paper check at the center. Watch the next first layer and re-level if the skirt drifts.",
+            "id": "monitor",
+            "text": "Heat to 200 °C, extrude 30 mm, and watch flow for two checks spaced a few minutes apart. Log flow quality, noise, and any pressure spikes.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Log verification readings from both checks.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly",
+                    "text": "Flow still pulses or clicks under load."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Flow is smooth and first layer is verified.",
+                    "text": "Flow is stable and first layer passes paper drag check.",
                     "requiresItems": [
                         {
                             "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
@@ -125,6 +181,77 @@
                         {
                             "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
                             "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "anomaly",
+            "text": "Classify the anomaly: contamination, heat creep, or damaged nozzle seat. Apply one correction, then return to monitoring to verify the fix.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "repair-clogged-nozzle",
+                    "text": "Purge and clean again for contamination.",
+                    "requiresItems": [
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        },
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 5
+                        }
+                    ]
+                },
+                {
+                    "type": "process",
+                    "process": "replace-brass-nozzle",
+                    "text": "Replace nozzle if the seat is compromised.",
+                    "requiresItems": [
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                            "count": 1
+                        },
+                        {
+                            "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
+                            "count": 1
+                        },
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Correction applied. Re-open the verification window.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
                         }
                     ]
                 }
@@ -132,7 +259,7 @@
         },
         {
             "id": "finish",
-            "text": "The printer is ready again. Watch the first layer on future prints to avoid blobs of death.",
+            "text": "Recovered cleanly. You now have both a root-cause record and a stable-flow verification log.",
             "options": [
                 {
                     "type": "finish",
@@ -147,11 +274,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/filament-change"],
+    "requiresQuests": [
+        "3dprinting/filament-change"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

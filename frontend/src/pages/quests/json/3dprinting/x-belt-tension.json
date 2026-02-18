@@ -1,30 +1,80 @@
 {
     "id": "3dprinting/x-belt-tension",
     "title": "Tighten the X-axis Belt",
-    "description": "Keep your prints sharp by safely tightening a loose X-axis belt.",
+    "description": "Calibrate X-axis belt tension with baseline notes, controlled adjustment, and drift re-checks.",
     "image": "/assets/quests/x_belt_tension_adjust.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Noticing layer shifts? Let's tension and square both belts. Power off, unplug, and keep goggles on while you work around sharp hardware.",
+            "text": "Noticing layer shifts? We'll run this like a calibration: baseline, adjust, and re-test. Power off, unplug, and keep goggles on around exposed hardware.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "tension",
-                    "text": "Show me how."
+                    "goto": "baseline",
+                    "text": "Ready for baseline checks.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "tension",
-            "text": "Release belt clamps, tension until firm with a gentle twang, then re-square the gantry before locking hardware. Avoid overtightening so bearings don't bind.",
+            "id": "baseline",
+            "text": "Record baseline symptoms before touching tension: resonance sound, carriage smoothness, and whether shifts favor one direction.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Log baseline belt behavior.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Baseline logged. Start controlled adjustment.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Tighten in quarter-turn increments only. Re-square the gantry after each increment and stop immediately if bearings bind.",
             "options": [
                 {
                     "type": "process",
                     "process": "tighten-x-belt",
-                    "text": "Walk me through each step.",
+                    "text": "Apply controlled belt tensioning.",
                     "requiresItems": [
                         {
                             "id": "a42e441a-5569-490c-86e4-ce711117cd22",
@@ -42,8 +92,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Belt tightened and moving smoothly.",
+                    "goto": "retest",
+                    "text": "Adjustment complete. Run re-test window.",
                     "requiresItems": [
                         {
                             "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
@@ -54,8 +104,70 @@
             ]
         },
         {
+            "id": "retest",
+            "text": "Run a motion sweep and compare to baseline. Target: no audible skip and no visible shift over repeated passes. Log pass/fail and variance.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Log post-adjust readings and variance.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "drift-recovery",
+                    "text": "Drift returned after a few passes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Re-test holds within tolerance and is logged.",
+                    "requiresItems": [
+                        {
+                            "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "drift-recovery",
+            "text": "If drift comes back, roll to last-known-good settings: back off one increment, re-square, and repeat the re-test before calling it stable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Apply rollback adjustment and retry.",
+                    "requiresItems": [
+                        {
+                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! Your printer should track cleanly along the X-axis now.",
+            "text": "Nice work. You hit target tension with a documented baseline and a verified hold window.",
             "options": [
                 {
                     "type": "finish",
@@ -70,11 +182,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/cable-clip"],
+    "requiresQuests": [
+        "3dprinting/cable-clip"
+    ],
     "hardening": {
         "passes": 1,
         "score": 90,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-10-15",

@@ -1,14 +1,14 @@
 {
     "id": "3dprinting/phone-stand",
     "title": "Print a Phone Stand",
-    "description": "Practice 3D printing by making a handy phone stand.",
+    "description": "Practice 3D printing by making a phone stand with measurable fit checks and a correction loop.",
     "image": "/assets/quests/phone_stand_print.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Sydney here. We'll tune the printer, slice a simple stand, and print in white PLA for clean detail.",
+            "text": "Sydney here. We'll tune the printer, slice a simple stand, and verify final fit with measurements before sign-off.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "prep",
-            "text": "Ventilate, tie back hair, keep sleeves clear. Heat to PLA temps, wipe the nozzle, paper-level the bed with light drag. Clean the plate with isopropyl, then purge to white PLA until the flow is clean.",
+            "text": "Ventilate, tie back hair, keep sleeves clear. Heat to PLA temps, wipe the nozzle, paper-level the bed with light drag, and purge to white PLA until flow is clean.",
             "options": [
                 {
                     "type": "process",
@@ -60,7 +60,7 @@
         },
         {
             "id": "print",
-            "text": "Open the Phone Stand STL. Slice at 0.2 mm layers, 3 perimeters, 5 top/bottom layers, 15% gyroid infill. Lay it flat. Supports off unless you see real overhangs. Add a 3\u20135 mm brim if adhesion is weak. PLA around 200\u00b0C nozzle, 60\u00b0C bed. Watch the first layer, then let it finish and cool before releasing.",
+            "text": "Slice at 0.2 mm layers, 3 perimeters, 5 top/bottom layers, and 15% gyroid. Use a 3–5 mm brim if adhesion is weak. Watch first layer and let the part fully cool.",
             "options": [
                 {
                     "type": "process",
@@ -69,20 +69,97 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "inspect",
                     "requiresItems": [
                         {
                             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
                             "count": 1
                         }
                     ],
-                    "text": "The stand is finished and cooled!"
+                    "text": "The stand is finished and cooled."
+                }
+            ]
+        },
+        {
+            "id": "inspect",
+            "text": "Measure the phone slot width and backrest angle. Pass band: slot width within ±1.0 mm of your phone thickness and resting angle between 60° and 70°.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Log measured dimensions and fit notes.",
+                    "requiresItems": [
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Measurements pass and the phone sits securely."
+                },
+                {
+                    "type": "goto",
+                    "goto": "correct",
+                    "text": "It's out of range or wobbly. Rework it."
+                }
+            ]
+        },
+        {
+            "id": "correct",
+            "text": "Troubleshoot: if tight, scale up X/Y 1–2%. If loose, scale down 1%. If angle is off, rotate model to keep full bed contact and reprint.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-phone-stand",
+                    "text": "Run a corrected reprint.",
+                    "requiresItems": [
+                        {
+                            "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "Reprint cooled. Re-measure against pass band.",
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Test-fit the phone. It should lean 60\u201370\u00b0 and keep the port clear. Tight? Light sanding. Loose? Scale up 1\u20132% and reprint. Power down and log the settings.",
+            "text": "Clean pass. You validated geometry with numbers and closed the loop with evidence.",
             "options": [
                 {
                     "type": "finish",
@@ -97,11 +174,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/filament-change"],
+    "requiresQuests": [
+        "3dprinting/filament-change"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
