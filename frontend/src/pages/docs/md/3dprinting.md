@@ -202,7 +202,7 @@ slug: '3dprinting'
     - `monitor` → "At least one snapshot failed (skip, smoke, or uneven strand)." — sheet of printer paper ×1
     - `anomaly` → "Adjusted cooling/feed settings and logged corrective notes." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×3
     - `anomaly` → "Symptoms look like a hard clog; return to teardown and service." — entry-level FDM 3D printer (clogged nozzle) ×1
-    - `safety-stop` → "Printer is cool and workspace is safe again." — entry-level FDM 3D printer (clogged nozzle) ×1
+    - `safety-stop` → "Printer is cool and workspace is safe again." — entry-level FDM 3D printer (clean nozzle) ×1
     - `verify` → "First layer holds and the three-entry monitoring log is complete." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×3
 - Grants:
     - Dialogue options/steps grantsItems: None

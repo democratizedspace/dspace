@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "With retraction dialed, let's lock nozzle temperatures using a labeled white PLA tower and evidence notes.",
+            "text": "With retraction dialed, let's lock in nozzle temperatures using a labeled white PLA tower and evidence notes.",
             "options": [
                 {
                     "type": "goto",
@@ -185,7 +185,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

@@ -188,7 +188,7 @@
                     "text": "Printer is cool and workspace is safe again.",
                     "requiresItems": [
                         {
-                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
                             "count": 1
                         }
                     ]
@@ -237,7 +237,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
