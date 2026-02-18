@@ -100,6 +100,7 @@ slug: '3dprinting'
     - `heat` → "Unload old filament and load green PLA." — entry-level FDM 3D printer (leveled bed) ×1, green PLA filament ×10, safety goggles ×1, wire cutters ×1
     - `heat` → "Green filament is flowing without bubbles." — entry-level FDM 3D printer (green PLA loaded) ×1
     - `flow-check` → "Purge line is steady and first-layer strip looks clean." — entry-level FDM 3D printer (green PLA loaded) ×1, sheet of printer paper ×1
+    - `flow-check` → "I see bubbles, brittle feed, or inconsistent flow." — entry-level FDM 3D printer (green PLA loaded) ×1, sheet of printer paper ×1
     - `recover` → "Run a recovery swap and purge cycle." — entry-level FDM 3D printer (leveled bed) ×1, green PLA filament ×5, safety goggles ×1, wire cutters ×1
     - `recover` → "Recovery done, rechecking purge quality." — entry-level FDM 3D printer (green PLA loaded) ×1
 - Grants:
@@ -390,6 +391,7 @@ slug: '3dprinting'
     - `adjust` → "Apply controlled tension adjustment." — entry-level FDM 3D printer (leveled bed) ×1, precision screwdriver set ×1, safety goggles ×1
     - `adjust` → "Adjustment complete; run tolerance retest." — entry-level FDM 3D printer (belt tensioned) ×1
     - `retest` → "Tolerance holds and motion is smooth." — entry-level FDM 3D printer (belt tensioned) ×1, digital calipers ×1, sheet of printer paper ×1
+    - `retest` → "Error drifts or carriage binds outside tolerance." — entry-level FDM 3D printer (belt tensioned) ×1, digital calipers ×1, sheet of printer paper ×1
     - `drift` → "Apply a corrective micro-adjustment." — entry-level FDM 3D printer (leveled bed) ×1, precision screwdriver set ×1, safety goggles ×1
     - `drift` → "Correction made; retesting tolerance." — entry-level FDM 3D printer (belt tensioned) ×1
 - Grants:

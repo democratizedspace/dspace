@@ -123,7 +123,21 @@
                 {
                     "type": "goto",
                     "goto": "drift",
-                    "text": "Error drifts or carriage binds outside tolerance."
+                    "text": "Error drifts or carriage binds outside tolerance.",
+                    "requiresItems": [
+                        {
+                            "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },

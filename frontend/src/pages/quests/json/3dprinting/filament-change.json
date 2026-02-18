@@ -89,7 +89,17 @@
                 {
                     "type": "goto",
                     "goto": "recover",
-                    "text": "I see bubbles, brittle feed, or inconsistent flow."
+                    "text": "I see bubbles, brittle feed, or inconsistent flow.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
