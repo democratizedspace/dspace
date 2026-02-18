@@ -198,6 +198,8 @@ slug: '3dprinting'
     - `cooldown` → "Swap in a new nozzle." — safety goggles ×1, needle-nose pliers ×1, 0.4 mm brass nozzle ×1, entry-level FDM 3D printer (clogged nozzle) ×1
     - `cooldown` → "Hotend is rebuilt and ready for monitored purge." — entry-level FDM 3D printer (clean nozzle) ×1
     - `monitor` → "Logs show stable flow and no anomalies across all three checks." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
+    - `anomaly` → "Adjusted cooling/feed settings and logged the change; rerun snapshots." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
+    - `anomaly` → "Symptoms look like a hard clog; return to teardown and service." — entry-level FDM 3D printer (clogged nozzle) ×1
     - `anomaly` → "Corrective action applied; start a fresh monitoring window." — entry-level FDM 3D printer (clean nozzle) ×1
     - `verify` → "First layer holds and monitoring log is complete." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
 - Grants:
@@ -231,6 +233,7 @@ slug: '3dprinting'
     - `clean` → "Nozzle is rebuilt; run post-clean verification." — entry-level FDM 3D printer (clean nozzle) ×1
     - `postcheck` → "Before/after check passed and flow is stable." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
     - `contamination` → "Area cleaned; retrying the cleaning cycle." — entry-level FDM 3D printer (clogged nozzle) ×1
+    - `contamination` → "Residue cleared on a clean nozzle; rerun post-check." — entry-level FDM 3D printer (clean nozzle) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -382,7 +385,8 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/cable-clip`
 - Dialogue `requiresItems` gates:
-    - `baseline` → "Baseline logged; start adjustment." — digital calipers ×1, sheet of printer paper ×1
+    - `baseline` → "Baseline logged; start adjustment." — digital calipers ×1, sheet of printer paper ×1, entry-level FDM 3D printer (leveled bed) ×1
+    - `baseline` → "Baseline is inconsistent between repeated moves." — digital calipers ×1, sheet of printer paper ×1, entry-level FDM 3D printer (leveled bed) ×1
     - `adjust` → "Apply controlled tension adjustment." — entry-level FDM 3D printer (leveled bed) ×1, precision screwdriver set ×1, safety goggles ×1
     - `adjust` → "Adjustment complete; run tolerance retest." — entry-level FDM 3D printer (belt tensioned) ×1
     - `retest` → "Tolerance holds and motion is smooth." — entry-level FDM 3D printer (belt tensioned) ×1, digital calipers ×1, sheet of printer paper ×1

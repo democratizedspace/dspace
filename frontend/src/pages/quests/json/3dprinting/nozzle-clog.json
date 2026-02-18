@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Skipping first-layer checks can snowball into a blob-of-death. We'll recreate the failure, recover safely, then verify with logged purge snapshots.",
+            "text": "Skipping first-layer checks can snowball into a blob of death. We'll recreate the failure, recover safely, then verify with logged purge snapshots.",
             "options": [
                 {
                     "type": "process",
@@ -140,14 +140,30 @@
             "text": "Classify the issue before retry: partial obstruction (repeat cleaning), thermal creep (cooldown + slower feed), or nozzle damage (replace). Re-run the snapshot cadence after correction.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "repair-clogged-nozzle",
-                    "text": "Treat as partial obstruction and clean again."
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Adjusted cooling/feed settings and logged the change; rerun snapshots.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 2
+                        }
+                    ]
                 },
                 {
-                    "type": "process",
-                    "process": "replace-brass-nozzle",
-                    "text": "Treat as nozzle damage and replace."
+                    "type": "goto",
+                    "goto": "cooldown",
+                    "text": "Symptoms look like a hard clog; return to teardown and service.",
+                    "requiresItems": [
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",

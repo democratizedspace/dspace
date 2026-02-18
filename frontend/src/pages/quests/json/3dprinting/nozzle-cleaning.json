@@ -139,6 +139,17 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "postcheck",
+                    "text": "Residue cleared on a clean nozzle; rerun post-check.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
