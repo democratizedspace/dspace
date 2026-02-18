@@ -1,47 +1,55 @@
 # v3 quest quality hardening prompts
 
-This file provides copy/paste prompts for hardening v3 quests using the backlog in
-`docs/design/v3-quest-quality-review.md`.
+Use these copy/paste prompts to harden unchecked quest rows in `docs/qa/v3.md` §4.5 using the
+prioritized backlog in `docs/design/v3-quest-quality-review.md`.
 
 ## Main prompt
 
 ```markdown
-# DSPACE v3 quest quality hardening (problematic backlog → parity)
+# DSPACE v3 quest quality hardening (unchecked QA rows → parity)
 
 You are Codex working in `democratizedspace/dspace`.
 
 ## Objective
 
 Select 3–8 quests from `docs/design/v3-quest-quality-review.md` under
-**Problematic quests to prioritize (with improvement checklist)** and harden them to parity with
-checked quests in `docs/qa/v3.md` §4.5.
+**Problematic quests to prioritize (with improvement checklist)** and harden them so they are
+ready for a human to manually verify and check in `docs/qa/v3.md` §4.5.
 
-## How to use the backlog (required)
+## Deterministic source rules (required)
 
-1. Work within a single tree when possible.
-2. Read that tree's `Exemplar anchors (checked in docs/qa/v3.md §4.5)` line and use only those
-   quest IDs as parity exemplars.
-3. Determine each selected quest's checklist-rubric type by keyword (**first match wins**) and
-   apply that type's structure (do not use generic boilerplate).
-4. Prefer a mixed set of types when selecting multiple quests (for example install + measure +
-   log/monitor) so rubric coverage is explicit.
+1. Treat `docs/design/v3-quest-quality-review.md` as the task selector and rubric source.
+2. For each quest tree, use only quest IDs listed on that tree's
+   `Exemplar anchors (checked in docs/qa/v3.md §4.5)` line.
+3. Determine rubric type by checklist keyword with **first-match wins**. Use this fixed order:
+   - `measurement/check`
+   - `logging/monitoring`
+   - `install/config/validate`
+   - `calibration/tolerance`
+   - `before/after cleaning cycle`
+   - `lifecycle/staged outcome`
+   - fallback: `thin-shell branching + evidence`
+4. Apply only the matched rubric's structure; do not blend multiple rubric templates unless the
+   checklist text explicitly requires it.
 
-## Quality bar (must satisfy for each selected quest)
+## Quality bar per quest (must satisfy)
 
-- Remove thin-shell flow (`start -> one step -> finish`) unless explicitly justified.
+- Replace thin-shell progression (`start -> one step -> finish`) unless explicitly justified.
 - Add at least one mechanics-backed evidence gate (`requiresItems`, `launchesProcess`,
   measurement/log artifact, or equivalent).
-- Add at least one troubleshooting/recovery branch.
-- Add safety/operational checks where domain-relevant.
-- Keep lore voice aligned with `frontend/src/pages/docs/md/npcs.md`.
+- Add at least one troubleshooting/recovery branch with retry before `finish`.
+- Add safety or operational checks when domain-relevant.
+- Keep voice aligned with `frontend/src/pages/docs/md/npcs.md`.
 
 ## Implementation requirements
 
-- Edit quest JSON under `frontend/src/pages/quests/json/<tree>/<quest>.json`.
+- Edit quests in `frontend/src/pages/quests/json/<tree>/<quest>.json`.
 - Keep quest IDs stable unless correcting a proven canonical mismatch.
-- If quest flow changes materially, update paired docs in `frontend/src/pages/docs/md/<tree>.md`.
-- Do not add new binary image assets.
-- Ensure requirements, rewards, and process references resolve to valid IDs.
+- If quest flow changes materially, update matching docs in
+  `frontend/src/pages/docs/md/<tree>.md` in the same PR.
+- Codex cannot create/edit binary image assets: if new items/quests need images, reuse existing
+  in-repo image references and document follow-up dedup/replacement work.
+- Ensure all quest requirements, rewards, item IDs, and process IDs resolve to valid IDs.
 
 ## Validation commands (required)
 
@@ -52,20 +60,25 @@ checked quests in `docs/qa/v3.md` §4.5.
 5. `npm run link-check` (run when docs/markdown changed)
 6. `for f in frontend/src/pages/quests/json/<tree>/*.json; do node scripts/validate-quest.js "$f" || exit 1; done`
 
-## REQUIRED output format for your PR summary
+## REQUIRED output format
 
-Output exactly these sections in order:
+Output exactly these sections in this exact order:
 
 1. `Selected quests`
    - Bullet list of selected quest IDs.
-2. `Exemplar anchors used`
-   - Bullet list mapping each quest to anchor ID(s) copied from the tree's anchor line.
-3. `Before/after structural summary`
-   - Per quest: what branches, evidence gates, and troubleshooting/safety paths were added.
-4. `Tests and checks run`
-   - Bullet list of commands and pass/fail status.
-5. `Follow-ups`
-   - Deferred work or explicit `None`.
+2. `Unchecked QA rows targeted`
+   - Bullet list mapping each selected quest ID to its row in `docs/qa/v3.md` §4.5.
+3. `Exemplar anchors used`
+   - Bullet list mapping each selected quest to anchor ID(s) copied from the tree anchor line.
+4. `Rubric type assignment (first-match)`
+   - Bullet list mapping each selected quest to its matched rubric type and matched keyword.
+5. `Before/after structural summary`
+   - Per quest: branches, evidence gates, troubleshooting/safety additions.
+6. `Tests and checks run`
+   - Bullet list of commands with pass/fail status.
+7. `Manual verification follow-ups`
+   - List any remaining human verification needed before checking boxes in `docs/qa/v3.md`, or
+     explicit `None`.
 ```
 
 ## Upgrade prompt
@@ -81,6 +94,9 @@ Goals:
 - Keep all referenced paths and commands valid for this repository.
 - Preserve deterministic rules: verified exemplar anchors, rubric type first-match behavior, and
   required output format.
+- Keep the prompt optimized for hardening still-unchecked quest rows in `docs/qa/v3.md` §4.5.
+- Preserve the Codex binary-asset limitation guidance (reuse existing image references; note
+  human follow-up for dedup/replacement).
 
 Constraints:
 
@@ -90,7 +106,8 @@ Constraints:
 Return the fully updated markdown document.
 ```
 
-## Notes (non-copy)
+## Notes
 
-- The backlog's exemplar anchors are the only allowed source for exemplar IDs.
-- If commands or scripts change, update this file to keep automation deterministic.
+- `docs/qa/v3.md` checkboxes remain human-verified; this prompt prepares high-quality candidates.
+- If repository scripts or paths change, update this file immediately so automation stays
+  deterministic.
