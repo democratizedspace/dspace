@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Skipping the first-layer check let filament pile around the hotend. We'll cool, clear the blob, and get flow back.",
+            "text": "Skipping first-layer checks can snowball into a blob-of-death. We'll recreate the failure, recover safely, then verify with logged purge snapshots.",
             "options": [
                 {
                     "type": "process",
                     "process": "3dprint-nozzle-clog",
-                    "text": "Document the failure and how it clogged.",
+                    "text": "Document the failure and trigger a clog state.",
                     "requiresItems": [
                         {
                             "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
@@ -32,7 +32,7 @@
                 {
                     "type": "goto",
                     "goto": "cooldown",
-                    "text": "Printer is powered down and cool.",
+                    "text": "Printer is powered down, ventilated, and cool.",
                     "requiresItems": [
                         {
                             "id": "564a76de-925b-4457-a548-d015168abe0c",
@@ -44,7 +44,7 @@
         },
         {
             "id": "cooldown",
-            "text": "Ventilate the area, check heaters are off, and peel away loose plastic to expose the nozzle threads.",
+            "text": "Confirm heaters are off, peel away loose plastic, and keep tools clear of thermistor wires before service.",
             "options": [
                 {
                     "type": "process",
@@ -98,8 +98,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "purge",
-                    "text": "Hotend is rebuilt and moves smoothly.",
+                    "goto": "monitor",
+                    "text": "Hotend is rebuilt and ready for monitored purge.",
                     "requiresItems": [
                         {
                             "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
@@ -110,13 +110,13 @@
             ]
         },
         {
-            "id": "purge",
-            "text": "Heat to 200 \u00b0C, extrude 30 mm, and rerun a paper check at the center. Watch the next first layer and re-level if the skirt drifts.",
+            "id": "monitor",
+            "text": "Run three purge snapshots (10 mm each, ~5 minutes apart). Log strand width, skipping sounds, and any smoke/odor alerts on paper for each pass.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Flow is smooth and first layer is verified.",
+                    "goto": "verify",
+                    "text": "Logs show stable flow and no anomalies across all three checks.",
                     "requiresItems": [
                         {
                             "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
@@ -124,6 +124,38 @@
                         },
                         {
                             "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly",
+                    "text": "At least one snapshot failed (skips, smoke, or uneven strand)."
+                }
+            ]
+        },
+        {
+            "id": "anomaly",
+            "text": "Classify the issue before retry: partial obstruction (repeat cleaning), thermal creep (cooldown + slower feed), or nozzle damage (replace). Re-run the snapshot cadence after correction.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "repair-clogged-nozzle",
+                    "text": "Treat as partial obstruction and clean again."
+                },
+                {
+                    "type": "process",
+                    "process": "replace-brass-nozzle",
+                    "text": "Treat as nozzle damage and replace."
+                },
+                {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Corrective action applied; start a fresh monitoring window.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
                             "count": 1
                         }
                     ]
@@ -131,8 +163,29 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Finish with a center-paper check and first-layer watch so the recovery is safe under print load, not just during purges.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "First layer holds and monitoring log is complete.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "The printer is ready again. Watch the first layer on future prints to avoid blobs of death.",
+            "text": "The printer is recovered with a repeatable monitoring record you can reuse the next time flow drifts.",
             "options": [
                 {
                     "type": "finish",
@@ -147,7 +200,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/filament-change"],
+    "requiresQuests": [
+        "3dprinting/filament-change"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
