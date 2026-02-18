@@ -49,9 +49,14 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinter/start`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Walk me through each pass." — entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
-    - `prep` → "Corners all tug the paper evenly." — entry-level FDM 3D printer (leveled bed) ×1
-    - `first-layer` → "Skirt looks even and glossy." — entry-level FDM 3D printer (leveled bed) ×1
+    - `prep` → "Run an initial leveling pass and capture baseline drag notes." — entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
+    - `prep` → "Baseline pass complete; compare corner drag consistency." — entry-level FDM 3D printer (leveled bed) ×1, sheet of printer paper ×1
+    - `baseline` → "Baseline mismatch found; apply a controlled corner correction." — entry-level FDM 3D printer (leveled bed) ×1, sheet of printer paper ×1
+    - `baseline` → "Baseline drag is consistent at all four corners." — entry-level FDM 3D printer (leveled bed) ×1, sheet of printer paper ×1
+    - `adjust` → "Re-level after corrective adjustment." — entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
+    - `adjust` → "Correction logged; recheck baseline drag map." — entry-level FDM 3D printer (leveled bed) ×1, sheet of printer paper ×1
+    - `first-layer` → "Skirt shows tearing/gaps; return to controlled corner correction." — entry-level FDM 3D printer (leveled bed) ×1
+    - `first-layer` → "Skirt is even and tolerance holds across the bed." — entry-level FDM 3D printer (leveled bed) ×1, sheet of printer paper ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -260,8 +265,15 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/nozzle-cleaning`
 - Dialogue `requiresItems` gates:
-    - `start` → "Kill power, let the blob cool, and list the damage." — entry-level FDM 3D printer (blob of death) ×1
-    - `cooldown` → "Printer cleaned and reassembled." — entry-level FDM 3D printer ×1
+    - `start` → "Trigger and document the failure state." — entry-level FDM 3D printer ×1
+    - `start` → "Blob detected; isolate power and begin incident checklist." — entry-level FDM 3D printer (blob of death) ×1, sheet of printer paper ×1
+    - `isolate` → "Hotend is cool, wires look intact, and tools are staged." — entry-level FDM 3D printer (blob of death) ×1, safety goggles ×1
+    - `isolate` → "I see insulation damage or smell burnt electronics." — entry-level FDM 3D printer (blob of death) ×1
+    - `safety-hold` → "Wiring repaired and safety re-check complete." — safety goggles ×1, sheet of printer paper ×1
+    - `teardown` → "Perform controlled teardown and rebuild." — safety goggles ×1
+    - `teardown` → "Nozzle replaced, wiring seated, and carriage moves freely." — entry-level FDM 3D printer ×1, sheet of printer paper ×1
+    - `verify` → "Recovery verified with stable first-layer behavior." — entry-level FDM 3D printer ×1, sheet of printer paper ×1
+    - `verify` → "Flow still inconsistent; repeat teardown and inspect nozzle path again." — entry-level FDM 3D printer ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -285,7 +297,13 @@ slug: '3dprinting'
 - Dialogue `requiresItems` gates:
     - `prep` → "Swap to white PLA and purge." — entry-level FDM 3D printer (leveled bed) ×1, safety goggles ×1, wire cutters ×1
     - `prep` → "Ready to slice and print." — entry-level FDM 3D printer (white PLA loaded) ×1
-    - `print` → "The stand is finished and cooled!" — 3D Printed Phone Stand ×1
+    - `print` → "The stand is finished and cooled; start fit measurements." — 3D Printed Phone Stand ×1, digital calipers ×1, sheet of printer paper ×1
+    - `measure` → "Measurements recorded; interpret pass/fail bounds." — 3D Printed Phone Stand ×1, digital calipers ×1, sheet of printer paper ×1
+    - `measure` → "Fit is out of range or phone wobbles; start corrective branch." — 3D Printed Phone Stand ×1, digital calipers ×1, sheet of printer paper ×1
+    - `interpret` → "Within bounds and stable under a 30-second wobble check." — 3D Printed Phone Stand ×1, sheet of printer paper ×1
+    - `interpret` → "Out of bounds; apply correction and rerun measurement." — 3D Printed Phone Stand ×1, sheet of printer paper ×1
+    - `recover` → "Run a corrected reprint for fit recovery." — entry-level FDM 3D printer (white PLA loaded) ×1
+    - `recover` → "Corrective action complete; repeat fit measurements." — 3D Printed Phone Stand ×1, digital calipers ×1, sheet of printer paper ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

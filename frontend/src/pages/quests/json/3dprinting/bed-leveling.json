@@ -1,30 +1,30 @@
 {
     "id": "3dprinting/bed-leveling",
     "title": "Level the Print Bed",
-    "description": "After power-off and cooling, level the FDM bed with a sheet of printer paper.",
+    "description": "After power-off and cooling, level the FDM bed with paper, capture baseline drag notes, then retest first-layer tolerance.",
     "image": "/assets/quests/bed_leveling_printer_paper_test.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Sydney here. Power off, cool down, clear crumbs. We'll level each corner with a sheet of paper.",
+            "text": "Sydney here. Power off, cool down, and clear crumbs. We'll run a baseline drag map, adjust in small moves, and verify with a first-layer tolerance check.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Bed is cool and cleared."
+                    "text": "Bed is cool, clear, and ready for baseline mapping."
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "Loosen each wheel a quarter turn, home the axes, wipe the surface. Keep fingers clear while the gantry moves.",
+            "text": "Loosen each wheel a quarter turn, home axes, and wipe the surface. Keep fingers clear while the gantry moves. Record front-left, front-right, rear-left, rear-right drag notes in your logbook.",
             "options": [
                 {
                     "type": "process",
                     "process": "level-3d-printer-bed",
-                    "text": "Walk me through each pass.",
+                    "text": "Run an initial leveling pass and capture baseline drag notes.",
                     "requiresItems": [
                         {
                             "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
@@ -42,11 +42,91 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "first-layer",
-                    "text": "Corners all tug the paper evenly.",
+                    "goto": "baseline",
+                    "text": "Baseline pass complete; compare corner drag consistency.",
                     "requiresItems": [
                         {
                             "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "If one corner still pinches or slips, adjust only that corner by 1/8 turn, then rerun a full loop. Target: each corner shows similar paper drag before heating.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Baseline mismatch found; apply a controlled corner correction.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "first-layer",
+                    "text": "Baseline drag is consistent at all four corners.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Recovery branch: confirm springs are seated, inspect for debris under the plate, and repeat the leveling process after each small adjustment. Avoid over-tightening to protect threads.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Re-level after corrective adjustment.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Correction logged; recheck baseline drag map.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
                             "count": 1
                         }
                     ]
@@ -55,20 +135,30 @@
         },
         {
             "id": "first-layer",
-            "text": "Heat the nozzle, run a single-line skirt, recheck drag at center. Light scratch = good first layer.",
+            "text": "Heat the nozzle, run a single-line skirt, then check center drag. Pass only if the skirt is continuous, lightly squished, and no corner tears or gaps appear.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "prep",
-                    "text": "Need to tweak another corner."
+                    "goto": "adjust",
+                    "text": "Skirt shows tearing/gaps; return to controlled corner correction.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Skirt looks even and glossy.",
+                    "text": "Skirt is even and tolerance holds across the bed.",
                     "requiresItems": [
                         {
                             "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
                             "count": 1
                         }
                     ]
@@ -77,7 +167,7 @@
         },
         {
             "id": "finish",
-            "text": "Bed level, skirt clean. Log the knob positions and move on.",
+            "text": "Bed leveled with baseline notes, corrective history, and a verified first-layer tolerance check. Reuse this record when drift appears.",
             "options": [
                 {
                     "type": "finish",

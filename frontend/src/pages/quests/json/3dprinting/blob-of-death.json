@@ -1,24 +1,66 @@
 {
     "id": "3dprinting/blob-of-death",
     "title": "Witness a Blob of Death",
-    "description": "Skipping a first-layer check lets a failed Z homing extrude in mid-air, engulfing the nozzle in molten plastic.",
+    "description": "Recreate and safely recover from a blob-of-death failure with staged damage logging, cleanup, and recovery verification.",
     "image": "/assets/quests/blob_of_death_nozzle_fail.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Sydney here. You skip the first-layer check, the Z axis mis-homes, and molten PLA begins wrapping the hotend. Goggles on, stay clear of moving axes, and keep a fire extinguisher within reach.",
+            "text": "Sydney here. We will recreate a blob-of-death failure, then recover safely with documented checkpoints. Goggles on, keep a fire extinguisher nearby, and never touch a hot nozzle.",
             "options": [
                 {
                     "type": "process",
                     "process": "3dprint-blob-of-death",
-                    "text": "Let it run and document the failure."
+                    "text": "Trigger and document the failure state.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
-                    "goto": "cooldown",
-                    "text": "Kill power, let the blob cool, and list the damage.",
+                    "goto": "isolate",
+                    "text": "Blob detected; isolate power and begin incident checklist.",
+                    "requiresItems": [
+                        {
+                            "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "isolate",
+            "text": "Emergency branch start: cut heater power, unplug mains, and wait until the hotend reaches room temperature. Confirm no scorched cable insulation before touching anything.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "teardown",
+                    "text": "Hotend is cool, wires look intact, and tools are staged.",
+                    "requiresItems": [
+                        {
+                            "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-hold",
+                    "text": "I see insulation damage or smell burnt electronics.",
                     "requiresItems": [
                         {
                             "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
@@ -29,18 +71,81 @@
             ]
         },
         {
-            "id": "cooldown",
-            "text": "Unplug the printer, wait for the hotend to reach room temp, then move the gantry by hand to confirm it's free. Lay out goggles, pliers, a spare nozzle, and paper towels.",
+            "id": "safety-hold",
+            "text": "Stop and do not reheat. Route wiring away from molten residue, replace damaged leads, and only continue once electrical safety is restored.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "teardown",
+                    "text": "Wiring repaired and safety re-check complete.",
+                    "requiresItems": [
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "teardown",
+            "text": "Use pliers to peel plastic in small sections, protect thermistor leads, and replace the nozzle if threads are fouled. Log what was damaged so recurrence checks are easier.",
             "options": [
                 {
                     "type": "process",
                     "process": "repair-blob-of-death",
-                    "text": "Peel away plastic, swap the nozzle, re-seat wiring."
+                    "text": "Perform controlled teardown and rebuild.",
+                    "requiresItems": [
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
+                    "goto": "verify",
+                    "text": "Nozzle replaced, wiring seated, and carriage moves freely.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Run a short purge and first-layer watch. Pass only if extrusion is smooth, no smoke/odor appears, and the first line adheres evenly.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Printer cleaned and reassembled.",
+                    "text": "Recovery verified with stable first-layer behavior.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "teardown",
+                    "text": "Flow still inconsistent; repeat teardown and inspect nozzle path again.",
                     "requiresItems": [
                         {
                             "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
@@ -52,7 +157,7 @@
         },
         {
             "id": "finish",
-            "text": "Blob removed, new nozzle installed. Next time, stay for the first layer, check Z offset, and keep the bed clean so you don't repeat the mess.",
+            "text": "Blob incident closed. You now have a safety-first recovery checklist with evidence logs and a verified print-readiness test.",
             "options": [
                 {
                     "type": "finish",
