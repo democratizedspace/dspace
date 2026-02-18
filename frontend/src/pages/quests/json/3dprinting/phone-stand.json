@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Sydney here. We'll tune the printer, slice a simple stand, and print in white PLA for clean detail.",
+            "text": "Sydney here. We'll tune the printer, slice a simple stand, and verify fit with hard numbers before calling it done.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "prep",
-            "text": "Ventilate, tie back hair, keep sleeves clear. Heat to PLA temps, wipe the nozzle, paper-level the bed with light drag. Clean the plate with isopropyl, then purge to white PLA until the flow is clean.",
+            "text": "Ventilate, tie back hair, keep sleeves clear. Heat to PLA temps, wipe the nozzle, paper-level the bed with light drag. Clean the plate with isopropyl, then purge to white PLA until flow is clean.",
             "options": [
                 {
                     "type": "process",
@@ -60,7 +60,7 @@
         },
         {
             "id": "print",
-            "text": "Open the Phone Stand STL. Slice at 0.2 mm layers, 3 perimeters, 5 top/bottom layers, 15% gyroid infill. Lay it flat. Supports off unless you see real overhangs. Add a 3\u20135 mm brim if adhesion is weak. PLA around 200\u00b0C nozzle, 60\u00b0C bed. Watch the first layer, then let it finish and cool before releasing.",
+            "text": "Open the Phone Stand STL. Slice at 0.2 mm layers, 3 perimeters, 5 top/bottom layers, 15% gyroid infill. Lay it flat. Supports off unless you see real overhangs. Add a 3\u20135 mm brim if adhesion is weak. PLA around 200\u00b0C nozzle, 60\u00b0C bed.",
             "options": [
                 {
                     "type": "process",
@@ -69,20 +69,78 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "measure",
                     "requiresItems": [
                         {
                             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
                             "count": 1
                         }
                     ],
-                    "text": "The stand is finished and cooled!"
+                    "text": "The stand is finished and cooled."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Record two checks before release: backrest angle should land between 60\u201370\u00b0, and the cable cutout must clear your charging plug. Measure with calipers and note pass/fail.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Both checks passed and measurements are logged.",
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rework",
+                    "text": "One check failed (angle or port clearance).",
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rework",
+            "text": "Troubleshoot safely: if the phone slips, raise infill/perimeters; if the port binds, widen the cutout or scale X/Y 1\u20132%. Re-slice, reprint, and re-measure before sign-off.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-phone-stand",
+                    "text": "Reprint with corrected dimensions."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Corrective print cooled; run the measurement checks again.",
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Test-fit the phone. It should lean 60\u201370\u00b0 and keep the port clear. Tight? Light sanding. Loose? Scale up 1\u20132% and reprint. Power down and log the settings.",
+            "text": "Nice work. You shipped a stand with measurable fit and a documented recovery loop, not a lucky one-off print.",
             "options": [
                 {
                     "type": "finish",
@@ -97,7 +155,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/filament-change"],
+    "requiresQuests": [
+        "3dprinting/filament-change"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

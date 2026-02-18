@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Sydney here. Filament keeps wandering? Let's print a sturdy spool holder. Clear the bench, wear goggles, and keep the hotend area clear.",
+            "text": "Sydney here. Filament keeps wandering? We'll print a sturdy spool holder with a baseline check, then validate smooth feed before closure.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "prep",
-            "text": "Level the bed, purge to white PLA, and check belt tension so tall parts stay square. Slice with 4 walls and 30% infill for the uprights.",
+            "text": "Safety first: goggles on, sleeves clear, and keep fingers off moving belts. Level the bed, purge to white PLA, and confirm belt tension so tall parts stay square.",
             "options": [
                 {
                     "type": "process",
@@ -75,7 +75,7 @@
         },
         {
             "id": "print",
-            "text": "Preheat, run a skirt to confirm flow, then start the holder. Check the arms stay flat and pause if any wobble appears.",
+            "text": "Preheat, run a skirt to confirm flow, then print the holder. Pause immediately if upright wobble or layer split appears.",
             "options": [
                 {
                     "type": "process",
@@ -84,8 +84,73 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "feed-check",
+                    "text": "Holder cooled and mounted for feed testing.",
+                    "requiresItems": [
+                        {
+                            "id": "3721d5e0-a148-4f67-9150-55492873a576",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "feed-check",
+            "text": "Run a manual unwind test and measure axle alignment: the spool should rotate without binding for 30 seconds and the arm gap should stay even. Record pass/fail before finish.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Holder cooled and fits the spool axle.",
+                    "text": "Feed is smooth and alignment checks passed.",
+                    "requiresItems": [
+                        {
+                            "id": "3721d5e0-a148-4f67-9150-55492873a576",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Feed binds or wobble appeared during testing.",
+                    "requiresItems": [
+                        {
+                            "id": "3721d5e0-a148-4f67-9150-55492873a576",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery loop: retension the X belt, rotate the model 90\u00b0 on the bed, and reprint at slower outer-wall speed. Re-run feed checks before sign-off.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "tighten-x-belt",
+                    "text": "Retension before reprint.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "process",
+                    "process": "3dprint-spool-holder",
+                    "text": "Reprint with corrected orientation and speed."
+                },
+                {
+                    "type": "goto",
+                    "goto": "feed-check",
+                    "text": "Corrective print cooled; rerun feed and alignment checks.",
                     "requiresItems": [
                         {
                             "id": "3721d5e0-a148-4f67-9150-55492873a576",
@@ -97,7 +162,7 @@
         },
         {
             "id": "finish",
-            "text": "Mount the spool, check it unwinds smoothly, and log belt tension so you can retighten after a few heavy rolls.",
+            "text": "Great recovery discipline. Your spool path is stable, documented, and safe for long prints.",
             "options": [
                 {
                     "type": "finish",
@@ -112,7 +177,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/phone-stand"],
+    "requiresQuests": [
+        "3dprinting/phone-stand"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

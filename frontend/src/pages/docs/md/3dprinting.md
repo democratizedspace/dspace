@@ -197,11 +197,14 @@ slug: '3dprinting'
     - `start` → "Printer is powered down, ventilated, and cool." — entry-level FDM 3D printer (clogged nozzle) ×1
     - `cooldown` → "Clear the nozzle and reseat it." — safety goggles ×1, needle-nose pliers ×1, sheet of printer paper ×1, entry-level FDM 3D printer (clogged nozzle) ×1, green PLA filament ×5
     - `cooldown` → "Swap in a new nozzle." — safety goggles ×1, needle-nose pliers ×1, 0.4 mm brass nozzle ×1, entry-level FDM 3D printer (clogged nozzle) ×1
-    - `cooldown` → "Hotend is rebuilt and ready for monitored purge." — entry-level FDM 3D printer (clean nozzle) ×1
+    - `cooldown` → "Hotend is rebuilt and ready to prepare the monitoring sheet." — entry-level FDM 3D printer (clean nozzle) ×1
+    - `log-setup` → "Log sheet is staged with all required fields." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
+    - `log-setup` → "I missed fields; returning to safe teardown before retesting." — entry-level FDM 3D printer (clogged nozzle) ×1
     - `monitor` → "Logs show stable flow and no anomalies across all three checks." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
     - `anomaly` → "Adjusted cooling/feed settings and logged the change; rerun snapshots." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
     - `anomaly` → "Symptoms look like a hard clog; return to teardown and service." — entry-level FDM 3D printer (clogged nozzle) ×1
     - `anomaly` → "Corrective action applied; start a fresh monitoring window." — entry-level FDM 3D printer (clean nozzle) ×1
+    - `anomaly` → "Restart with a fresh log template before another purge window." — entry-level FDM 3D printer (clean nozzle) ×1
     - `verify` → "First layer holds and monitoring log is complete." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -285,7 +288,10 @@ slug: '3dprinting'
 - Dialogue `requiresItems` gates:
     - `prep` → "Swap to white PLA and purge." — entry-level FDM 3D printer (leveled bed) ×1, safety goggles ×1, wire cutters ×1
     - `prep` → "Ready to slice and print." — entry-level FDM 3D printer (white PLA loaded) ×1
-    - `print` → "The stand is finished and cooled!" — 3D Printed Phone Stand ×1
+    - `print` → "The stand is finished and cooled." — 3D Printed Phone Stand ×1
+    - `measure` → "Both checks passed and measurements are logged." — 3D Printed Phone Stand ×1, digital calipers ×1
+    - `measure` → "One check failed (angle or port clearance)." — 3D Printed Phone Stand ×1, digital calipers ×1
+    - `rework` → "Corrective print cooled; run the measurement checks again." — 3D Printed Phone Stand ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -314,7 +320,11 @@ slug: '3dprinting'
     - `prep` → "Tension the belts so layers stack straight." — entry-level FDM 3D printer (leveled bed) ×1
     - `prep` → "Load white PLA and purge 10 grams of filament." — entry-level FDM 3D printer (leveled bed) ×1, safety goggles ×1, wire cutters ×1
     - `prep` → "Ready to print the spool holder." — entry-level FDM 3D printer (white PLA loaded) ×1, safety goggles ×1
-    - `print` → "Holder cooled and fits the spool axle." — 3D printed filament spool holder ×1
+    - `print` → "Holder cooled and mounted for feed testing." — 3D printed filament spool holder ×1
+    - `feed-check` → "Feed is smooth and alignment checks passed." — 3D printed filament spool holder ×1, digital calipers ×1
+    - `feed-check` → "Feed binds or wobble appeared during testing." — 3D printed filament spool holder ×1
+    - `recover` → "Retension before reprint." — entry-level FDM 3D printer (leveled bed) ×1
+    - `recover` → "Corrective print cooled; rerun feed and alignment checks." — 3D printed filament spool holder ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

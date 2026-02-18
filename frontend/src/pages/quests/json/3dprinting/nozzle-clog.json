@@ -110,9 +110,52 @@
             ]
         },
         {
-            "id": "monitor",
-            "text": "Run three purge snapshots (10 mm each, ~5 minutes apart). Log strand width, skipping sounds, and any smoke/odor alerts on paper for each pass.",
+            "id": "log-setup",
+            "text": "Before purging, stage your log sheet with three rows: timestamp, strand width consistency, and safety notes (smoke/odor/skips). No log template, no restart.",
             "options": [
+                {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Log sheet is staged with all required fields.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "cooldown",
+                    "text": "I missed fields; returning to safe teardown before retesting.",
+                    "requiresItems": [
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "monitor",
+            "text": "Run three purge snapshots (10 mm each, ~5 minutes apart). Each row must include width trend, skip/noise notes, and smoke/odor status before you can pass.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "log-setup",
+                    "text": "Hotend is rebuilt and ready to prepare the monitoring sheet.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        }
+                    ]
+                },
                 {
                     "type": "goto",
                     "goto": "verify",
@@ -175,12 +218,23 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-setup",
+                    "text": "Restart with a fresh log template before another purge window.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "verify",
-            "text": "Finish with a center-paper check and first-layer watch so the recovery is safe under print load, not just during purges.",
+            "text": "Finish with a center-paper check and first-layer watch so the recovery is safe under print load, not just during purges. Keep the completed monitoring sheet with the printer notes.",
             "options": [
                 {
                     "type": "goto",
@@ -216,7 +270,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/filament-change"],
+    "requiresQuests": [
+        "3dprinting/filament-change"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
