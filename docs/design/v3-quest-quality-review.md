@@ -120,1006 +120,1016 @@ Checked quests are not uniformly perfect, but they more often demonstrate:
 
 ## Problematic quests to prioritize (with improvement checklist)
 
-Use this as an actionable backlog for quest polishing passes. This section now enumerates **every unchecked quest that was newly added in v3**.
+Use this as an actionable backlog for quest polishing passes. This section enumerates **every unchecked quest that is also listed as new in v3**.
 
 - Newly added in v3 (`docs/new-quests.md`): **236**
 - Checked in `docs/qa/v3.md` §4.5 that are also new in v3: **15**
 - Remaining newly added v3 quests with quality gaps to prioritize: **221**
 
-Checklist rubric (type-driven, applied by quest-id keywords):
+### How this list is generated / verified
 
-- **A) install/setup** (`install`, `setup`, `deploy`, `enable`, `configure`)
-  - install → verify → rollback structure
-  - concrete verification artifact (status output / log snapshot / expected state)
-  - rollback or lockout-avoidance handling (especially for devops/electronics/energy)
-- **B) measure/test/check** (`check`, `test`, `measure`, `voltage`, `pressure`, `temp`, `ph`, `ec`)
-  - recorded measurement artifact + interpretation node before `finish`
-  - out-of-range branch with corrective action + re-test loop
-- **C) calibrate/adjust** (`calibrate`, `leveling`, `tension`, `retraction`, `trim`)
-  - baseline → adjust → re-test loop with tolerance target
-  - drift/variance follow-up branch when results do not hold
-- **D) log/monitor/maintenance** (`log`, `monitor`, `maintenance`)
-  - explicit acceptance criteria for log/monitor output
-  - anomaly branch with corrective action + follow-up verification
-- **E) clean/rinse/purge/prime/scrub** (`clean`, `rinse`, `purge`, `prime`, `scrub`)
-  - before/after condition check defining what “clean” means
-  - contamination/failure branch with a safe re-entry point
-- **F) grow/lifecycle/outcome** (`breeding`, `lettuce`, `stevia`, `basil`, `mint`, `shrimp`, `guppy`, `goldfish`, `walstad`)
-  - staged proof with setup artifact **and** outcome artifact
-  - contingency branch for stress/failure signs + pause/abort criteria
-- **G) astronomy observation** (`observe`, `eclipse`, `meteor`, `rings`, `nebula`, `aurora`, `satellite`, `iss`)
-  - seeing/weather/light-pollution fallback branch
-  - observation artifact (log/sketch/photo) + interpretation node
+- Source-of-truth set A: quest IDs listed in `docs/new-quests.md`.
+- Source-of-truth set B: checked IDs from `docs/qa/v3.md` §4.5 (`- [x]` quest rows under each tree).
+- Intersection rule for this backlog: **new in v3 AND unchecked** = (`docs/new-quests.md`) ∩ (unchecked IDs in `docs/qa/v3.md` §4.5).
+- Reproduction recipe (manual, copy/paste):
+  1. `rg -n "^### |^\s*-\s+[a-z0-9_-]+/[a-z0-9_-]+$" docs/new-quests.md`
+  2. `sed -n "/^### 4.5 /,/^---$/p" docs/qa/v3.md`
+  3. `python -c 'import pathlib,re; qa=pathlib.Path("docs/qa/v3.md").read_text().splitlines(); new=pathlib.Path("docs/new-quests.md").read_text().splitlines(); in45=False; t=None; checked=set(); unchecked=set();\
+for line in qa:\
+    in45 = in45 or line.startswith("### 4.5 ");\
+    if in45 and line.startswith("---"): break;\
+    m_tree=re.match(r"- \[[ xX]\] ([a-z0-9_-]+)$", line);\
+    m_q=re.match(r"\s{2}- \[([ xX])\] ([a-z0-9_-]+)$", line);\
+    t = m_tree.group(1) if m_tree else t;\
+    q=f"{t}/{m_q.group(2)}" if (m_q and t) else None;\
+    (checked if (m_q and m_q.group(1).lower()=="x") else unchecked).add(q) if q else None;\
+new_ids={m.group(1) for row in new if (m:=re.match(r"\s*-\s+([a-z0-9_-]+/[a-z0-9_-]+)$", row))}; print("new",len(new_ids),"checked_and_new",len(new_ids & checked),"prioritized_backlog",len(new_ids & unchecked))'`
+  4. This is explicitly a manual verification method (no dedicated repo script currently exists for this exact intersection query).
 
-Type matching: **FIRST keyword match wins.**
+### Completeness check
 
-Fallback policy for exemplar anchors: if a tree has no checked quests in `docs/qa/v3.md` §4.5, use exactly two checked nearest-neighbor exemplars from measurement/logging/procedural workflows and label the line with `(fallback: no checked <tree> quests yet)`.
+- Confirm each tree under `frontend/src/pages/quests/json/` appears as a `### <tree>` heading **when** it has at least one `new in v3 AND unchecked` quest.
+- Confirm per-tree heading counts match the number of quest IDs listed under each heading.
+- Confirm totals equation: **(new-in-v3 count) - (checked-and-new-in-v3 count) = (prioritized backlog count)**, i.e. **236 - 15 = 221**.
 
-Include an explicit `Safety note:` bullet only for chemistry, firstaid, devops, electronics, energy, and rocketry entries where risk handling is plausible.
+Checklist rubric (type-driven, applied by quest ID keyword; first keyword match wins):
+
+- install/setup (`install`, `setup`, `deploy`, `enable`, `configure`)
+- measure/test/check (`check`, `test`, `measure`, `voltage`, `pressure`, `temp`, `ph`, `ec`)
+- calibrate/adjust (`calibrate`, `leveling`, `tension`, `retraction`, `trim`)
+- log/monitor/maintenance (`log`, `monitor`, `maintenance`)
+- clean/rinse/purge/prime/scrub (`clean`, `rinse`, `purge`, `prime`, `scrub`)
+- grow/lifecycle/outcome (`breeding`, `lettuce`, `stevia`, `basil`, `mint`, `shrimp`, `guppy`, `goldfish`, `walstad`)
+- astronomy observation (`observe`, `eclipse`, `meteor`, `rings`, `nebula`, `aurora`, `satellite`, `iss`)
+- fallback/default (when no keyword above matches)
+
+Hard rule: exemplar anchors must be chosen **only** from checked quest IDs in `docs/qa/v3.md` §4.5 and must be stable quest IDs (no invented anchors).
+
+Fallback policy: if a tree has no checked quests in `docs/qa/v3.md` §4.5, list **exactly two** cross-tree checked anchors and append `(fallback: no checked <tree> quests yet)`.
 
 ### 3dprinting (15 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/run-tests
+Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature (fallback: no checked 3dprinting quests yet)
 
 - `3dprinting/bed-leveling`
-  - [ ] Structure `3dprinting/bed-leveling` as baseline → adjust → re-test with a stated tolerance target that gates completion.
-  - [ ] Require evidence artifacts for both baseline and post-adjust states (reading snapshots, process output, or logged values).
-  - [ ] Add a drift/variance branch: if results do not hold on follow-up, roll back to last-known-good settings and repeat the loop.
+  - [ ] Observed issue: `3dprinting/bed-leveling` implies calibration work, but baseline/adjust/retest tolerance handling is under-specified.
+  - [ ] Structure progression as baseline → adjust → re-test with a tolerance target and artifacts captured at baseline and post-adjust states.
+  - [ ] Add a drift/variance follow-up branch that rolls back to last-known-good settings when readings do not hold.
 - `3dprinting/benchy_10`
-  - [ ] Split `3dprinting/benchy_10` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `3dprinting/benchy_10` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `3dprinting/benchy_100`
-  - [ ] Split `3dprinting/benchy_100` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `3dprinting/benchy_100` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `3dprinting/benchy_25`
-  - [ ] Split `3dprinting/benchy_25` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `3dprinting/benchy_25` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `3dprinting/blob-of-death`
-  - [ ] Split `3dprinting/blob-of-death` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `3dprinting/blob-of-death` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `3dprinting/cable-clip`
-  - [ ] Split `3dprinting/cable-clip` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `3dprinting/cable-clip` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `3dprinting/calibration-cube`
-  - [ ] Split `3dprinting/calibration-cube` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `3dprinting/calibration-cube` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `3dprinting/filament-change`
-  - [ ] Split `3dprinting/filament-change` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `3dprinting/filament-change` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `3dprinting/nozzle-cleaning`
-  - [ ] Define `3dprinting/nozzle-cleaning` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
-  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
+  - [ ] Observed issue: `3dprinting/nozzle-cleaning` describes a cleaning cycle without a measurable before/after success definition.
+  - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
 - `3dprinting/nozzle-clog`
-  - [ ] Define acceptance criteria for `3dprinting/nozzle-clog` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
-  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
-  - [ ] require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
+  - [ ] Observed issue: `3dprinting/nozzle-clog` asks for logging/monitoring but pass criteria and anomaly response are not explicit.
+  - [ ] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact.
+  - [ ] Add an anomaly classification branch with corrective action and a follow-up verification window before closure.
 - `3dprinting/phone-stand`
-  - [ ] Require `3dprinting/phone-stand` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `3dprinting/phone-stand` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `3dprinting/retraction-test`
-  - [ ] Require `3dprinting/retraction-test` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `3dprinting/retraction-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `3dprinting/spool-holder`
-  - [ ] Split `3dprinting/spool-holder` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `3dprinting/spool-holder` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `3dprinting/temperature-tower`
-  - [ ] Require `3dprinting/temperature-tower` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `3dprinting/temperature-tower` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `3dprinting/x-belt-tension`
-  - [ ] Structure `3dprinting/x-belt-tension` as baseline → adjust → re-test with a stated tolerance target that gates completion.
-  - [ ] Require evidence artifacts for both baseline and post-adjust states (reading snapshots, process output, or logged values).
-  - [ ] Add a drift/variance branch: if results do not hold on follow-up, roll back to last-known-good settings and repeat the loop.
+  - [ ] Observed issue: `3dprinting/x-belt-tension` implies calibration work, but baseline/adjust/retest tolerance handling is under-specified.
+  - [ ] Structure progression as baseline → adjust → re-test with a tolerance target and artifacts captured at baseline and post-adjust states.
+  - [ ] Add a drift/variance follow-up branch that rolls back to last-known-good settings when readings do not hold.
 
 ### aquaria (19 quests)
 
 Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature (fallback: no checked aquaria quests yet)
 
 - `aquaria/aquarium-light`
-  - [ ] Split `aquaria/aquarium-light` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `aquaria/aquarium-light` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `aquaria/balance-ph`
-  - [ ] Require `aquaria/balance-ph` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `aquaria/balance-ph` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `aquaria/breeding`
-  - [ ] Stage `aquaria/breeding` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
-  - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
+  - [ ] Observed issue: `aquaria/breeding` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
+  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
+  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
 - `aquaria/filter-rinse`
-  - [ ] Define `aquaria/filter-rinse` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
-  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
+  - [ ] Observed issue: `aquaria/filter-rinse` describes a cleaning cycle without a measurable before/after success definition.
+  - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
 - `aquaria/floating-plants`
-  - [ ] Split `aquaria/floating-plants` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `aquaria/floating-plants` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `aquaria/goldfish`
-  - [ ] Stage `aquaria/goldfish` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
-  - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
+  - [ ] Observed issue: `aquaria/goldfish` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
+  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
+  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
 - `aquaria/guppy`
-  - [ ] Stage `aquaria/guppy` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
-  - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
+  - [ ] Observed issue: `aquaria/guppy` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
+  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
+  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
 - `aquaria/heater-install`
-  - [ ] Rewrite `aquaria/heater-install` as install → verify → rollback, with each stage in a separate node before `finish` is reachable.
-  - [ ] Gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item) and a brief interpretation checkpoint.
-  - [ ] add rollback/lockout-avoidance handling for `heater install`, then require a clean re-verify pass before retrying the install path.
+  - [ ] Observed issue: `aquaria/heater-install` reads like a one-pass install task, with verify/rollback state changes not clearly represented.
+  - [ ] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item).
+  - [ ] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path.
 - `aquaria/log-water-parameters`
-  - [ ] Define acceptance criteria for `aquaria/log-water-parameters` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
-  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
-  - [ ] require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
+  - [ ] Observed issue: `aquaria/log-water-parameters` asks for logging/monitoring but pass criteria and anomaly response are not explicit.
+  - [ ] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact.
+  - [ ] Add an anomaly classification branch with corrective action and a follow-up verification window before closure.
 - `aquaria/net-fish`
-  - [ ] Split `aquaria/net-fish` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `aquaria/net-fish` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `aquaria/ph-strip-test`
-  - [ ] Require `aquaria/ph-strip-test` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `aquaria/ph-strip-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `aquaria/position-tank`
-  - [ ] Split `aquaria/position-tank` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `aquaria/position-tank` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `aquaria/shrimp`
-  - [ ] Stage `aquaria/shrimp` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
-  - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
+  - [ ] Observed issue: `aquaria/shrimp` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
+  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
+  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
 - `aquaria/sponge-filter`
-  - [ ] Split `aquaria/sponge-filter` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `aquaria/sponge-filter` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `aquaria/thermometer`
-  - [ ] Split `aquaria/thermometer` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `aquaria/thermometer` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `aquaria/top-off`
-  - [ ] Split `aquaria/top-off` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `aquaria/top-off` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `aquaria/walstad`
-  - [ ] Stage `aquaria/walstad` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
-  - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
+  - [ ] Observed issue: `aquaria/walstad` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
+  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
+  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
 - `aquaria/water-change`
-  - [ ] Split `aquaria/water-change` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `aquaria/water-change` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `aquaria/water-testing`
-  - [ ] Require `aquaria/water-testing` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `aquaria/water-testing` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 
 ### astronomy (21 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature (fallback: no checked astronomy quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring, composting/check-temperature (fallback: no checked astronomy quests yet)
 
 - `astronomy/andromeda`
-  - [ ] Split `astronomy/andromeda` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `astronomy/andromeda` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/aurora-watch`
-  - [ ] Add an explicit seeing/weather/light-pollution fallback branch in `astronomy/aurora-watch` before observation can be marked complete.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate) plus an interpretation node before `finish` unlocks.
-  - [ ] Add failed-session troubleshooting (conditions and adjustments) with a follow-up observation check before closure.
+  - [ ] Observed issue: `astronomy/aurora-watch` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
+  - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
+  - [ ] Include failed-session troubleshooting and a scheduled follow-up observation check before completion.
 - `astronomy/basic-telescope`
-  - [ ] Split `astronomy/basic-telescope` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `astronomy/basic-telescope` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/binary-star`
-  - [ ] Split `astronomy/binary-star` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `astronomy/binary-star` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/comet-tracking`
-  - [ ] Split `astronomy/comet-tracking` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `astronomy/comet-tracking` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/constellations`
-  - [ ] Split `astronomy/constellations` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `astronomy/constellations` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/iss-flyover`
-  - [ ] Add an explicit seeing/weather/light-pollution fallback branch in `astronomy/iss-flyover` before observation can be marked complete.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate) plus an interpretation node before `finish` unlocks.
-  - [ ] Add failed-session troubleshooting (conditions and adjustments) with a follow-up observation check before closure.
+  - [ ] Observed issue: `astronomy/iss-flyover` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
+  - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
+  - [ ] Include failed-session troubleshooting and a scheduled follow-up observation check before completion.
 - `astronomy/iss-photo`
-  - [ ] Require `astronomy/iss-photo` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `astronomy/iss-photo` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `astronomy/jupiter-moons`
-  - [ ] Split `astronomy/jupiter-moons` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `astronomy/jupiter-moons` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/light-pollution`
-  - [ ] Split `astronomy/light-pollution` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `astronomy/light-pollution` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/lunar-eclipse`
-  - [ ] Require `astronomy/lunar-eclipse` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `astronomy/lunar-eclipse` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `astronomy/meteor-shower`
-  - [ ] Add an explicit seeing/weather/light-pollution fallback branch in `astronomy/meteor-shower` before observation can be marked complete.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate) plus an interpretation node before `finish` unlocks.
-  - [ ] Add failed-session troubleshooting (conditions and adjustments) with a follow-up observation check before closure.
+  - [ ] Observed issue: `astronomy/meteor-shower` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
+  - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
+  - [ ] Include failed-session troubleshooting and a scheduled follow-up observation check before completion.
 - `astronomy/north-star`
-  - [ ] Split `astronomy/north-star` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `astronomy/north-star` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/observe-moon`
-  - [ ] Add an explicit seeing/weather/light-pollution fallback branch in `astronomy/observe-moon` before observation can be marked complete.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate) plus an interpretation node before `finish` unlocks.
-  - [ ] Add failed-session troubleshooting (conditions and adjustments) with a follow-up observation check before closure.
+  - [ ] Observed issue: `astronomy/observe-moon` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
+  - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
+  - [ ] Include failed-session troubleshooting and a scheduled follow-up observation check before completion.
 - `astronomy/orion-nebula`
-  - [ ] Add an explicit seeing/weather/light-pollution fallback branch in `astronomy/orion-nebula` before observation can be marked complete.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate) plus an interpretation node before `finish` unlocks.
-  - [ ] Add failed-session troubleshooting (conditions and adjustments) with a follow-up observation check before closure.
+  - [ ] Observed issue: `astronomy/orion-nebula` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
+  - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
+  - [ ] Include failed-session troubleshooting and a scheduled follow-up observation check before completion.
 - `astronomy/planetary-alignment`
-  - [ ] Split `astronomy/planetary-alignment` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `astronomy/planetary-alignment` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/satellite-pass`
-  - [ ] Add an explicit seeing/weather/light-pollution fallback branch in `astronomy/satellite-pass` before observation can be marked complete.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate) plus an interpretation node before `finish` unlocks.
-  - [ ] Add failed-session troubleshooting (conditions and adjustments) with a follow-up observation check before closure.
+  - [ ] Observed issue: `astronomy/satellite-pass` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
+  - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
+  - [ ] Include failed-session troubleshooting and a scheduled follow-up observation check before completion.
 - `astronomy/saturn-rings`
-  - [ ] Add an explicit seeing/weather/light-pollution fallback branch in `astronomy/saturn-rings` before observation can be marked complete.
-  - [ ] Require an observation artifact (log, sketch, or photo surrogate) plus an interpretation node before `finish` unlocks.
-  - [ ] Add failed-session troubleshooting (conditions and adjustments) with a follow-up observation check before closure.
+  - [ ] Observed issue: `astronomy/saturn-rings` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
+  - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
+  - [ ] Include failed-session troubleshooting and a scheduled follow-up observation check before completion.
 - `astronomy/star-trails`
-  - [ ] Split `astronomy/star-trails` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `astronomy/star-trails` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/sunspot-sketch`
-  - [ ] Split `astronomy/sunspot-sketch` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `astronomy/sunspot-sketch` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/venus-phases`
-  - [ ] Require `astronomy/venus-phases` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `astronomy/venus-phases` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 
 ### chemistry (10 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature (fallback: no checked chemistry quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/check-temperature, welcome/run-tests (fallback: no checked chemistry quests yet)
 
 - `chemistry/acid-dilution`
-  - [ ] Split `chemistry/acid-dilution` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `chemistry/acid-dilution` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `chemistry/acid-neutralization`
-  - [ ] Split `chemistry/acid-neutralization` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `chemistry/acid-neutralization` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `chemistry/buffer-solution`
-  - [ ] Split `chemistry/buffer-solution` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `chemistry/buffer-solution` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `chemistry/ph-adjustment`
-  - [ ] Require `chemistry/ph-adjustment` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `chemistry/ph-adjustment` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `chemistry/ph-test`
-  - [ ] Require `chemistry/ph-test` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `chemistry/ph-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `chemistry/precipitation-reaction`
-  - [ ] Require `chemistry/precipitation-reaction` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `chemistry/precipitation-reaction` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `chemistry/safe-reaction`
-  - [ ] Split `chemistry/safe-reaction` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `chemistry/safe-reaction` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `chemistry/stevia-crystals`
-  - [ ] Stage `chemistry/stevia-crystals` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
-  - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
+  - [ ] Observed issue: `chemistry/stevia-crystals` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
+  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
+  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `chemistry/stevia-extraction`
-  - [ ] Stage `chemistry/stevia-extraction` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
-  - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
+  - [ ] Observed issue: `chemistry/stevia-extraction` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
+  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
+  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `chemistry/stevia-tasting`
-  - [ ] Stage `chemistry/stevia-tasting` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
-  - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
+  - [ ] Observed issue: `chemistry/stevia-tasting` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
+  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
+  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming; include domain-appropriate safety stop conditions where risk handling is relevant.
 
 ### completionist (5 quests)
 
 Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, welcome/intro-inventory (fallback: no checked completionist quests yet)
 
 - `completionist/catalog`
-  - [ ] Define acceptance criteria for `completionist/catalog` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
-  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
-  - [ ] require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
+  - [ ] Observed issue: `completionist/catalog` asks for logging/monitoring but pass criteria and anomaly response are not explicit.
+  - [ ] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact.
+  - [ ] Add an anomaly classification branch with corrective action and a follow-up verification window before closure.
 - `completionist/display`
-  - [ ] Split `completionist/display` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `completionist/display` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `completionist/polish`
-  - [ ] Split `completionist/polish` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `completionist/polish` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `completionist/reminder`
-  - [ ] Split `completionist/reminder` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `completionist/reminder` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `completionist/v2`
-  - [ ] Split `completionist/v2` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `completionist/v2` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 
 ### devops (15 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/log-analysis, sysadmin/resource-monitoring (fallback: no checked devops quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, sysadmin/log-analysis (fallback: no checked devops quests yet)
 
 - `devops/auto-updates`
-  - [ ] Split `devops/auto-updates` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `devops/auto-updates` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `devops/ci-pipeline`
-  - [ ] Split `devops/ci-pipeline` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `devops/ci-pipeline` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `devops/daily-backups`
-  - [ ] Split `devops/daily-backups` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `devops/daily-backups` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `devops/docker-compose`
-  - [ ] Split `devops/docker-compose` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `devops/docker-compose` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `devops/enable-https`
-  - [ ] Rewrite `devops/enable-https` as install → verify → rollback, with each stage in a separate node before `finish` is reachable.
-  - [ ] Gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item) and a brief interpretation checkpoint.
-  - [ ] Safety note: add rollback/lockout-avoidance handling for `enable https`, then require a clean re-verify pass before retrying the install path.
+  - [ ] Observed issue: `devops/enable-https` reads like a one-pass install task, with verify/rollback state changes not clearly represented.
+  - [ ] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item).
+  - [ ] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `devops/fail2ban`
-  - [ ] Split `devops/fail2ban` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `devops/fail2ban` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `devops/firewall-rules`
-  - [ ] Split `devops/firewall-rules` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `devops/firewall-rules` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `devops/k3s-deploy`
-  - [ ] Rewrite `devops/k3s-deploy` as install → verify → rollback, with each stage in a separate node before `finish` is reachable.
-  - [ ] Gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item) and a brief interpretation checkpoint.
-  - [ ] Safety note: add rollback/lockout-avoidance handling for `k3s deploy`, then require a clean re-verify pass before retrying the install path.
+  - [ ] Observed issue: `devops/k3s-deploy` reads like a one-pass install task, with verify/rollback state changes not clearly represented.
+  - [ ] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item).
+  - [ ] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `devops/log-maintenance`
-  - [ ] Define acceptance criteria for `devops/log-maintenance` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
-  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
-  - [ ] Safety note: require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
+  - [ ] Observed issue: `devops/log-maintenance` asks for logging/monitoring but pass criteria and anomaly response are not explicit.
+  - [ ] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact.
+  - [ ] Add an anomaly classification branch with corrective action and a follow-up verification window before closure; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `devops/monitoring`
-  - [ ] Define acceptance criteria for `devops/monitoring` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
-  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
-  - [ ] Safety note: require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
+  - [ ] Observed issue: `devops/monitoring` asks for logging/monitoring but pass criteria and anomaly response are not explicit.
+  - [ ] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact.
+  - [ ] Add an anomaly classification branch with corrective action and a follow-up verification window before closure; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `devops/pi-cluster-hardware`
-  - [ ] Split `devops/pi-cluster-hardware` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `devops/pi-cluster-hardware` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `devops/prepare-first-node`
-  - [ ] Split `devops/prepare-first-node` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `devops/prepare-first-node` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `devops/private-registry`
-  - [ ] Split `devops/private-registry` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `devops/private-registry` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `devops/ssd-boot`
-  - [ ] Split `devops/ssd-boot` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `devops/ssd-boot` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `devops/ssh-hardening`
-  - [ ] Split `devops/ssh-hardening` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `devops/ssh-hardening` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 
 ### electronics (22 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring, hydroponics/nutrient-check (fallback: no checked electronics quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, hydroponics/nutrient-check (fallback: no checked electronics quests yet)
 
 - `electronics/arduino-blink`
-  - [ ] Split `electronics/arduino-blink` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `electronics/arduino-blink` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/basic-circuit`
-  - [ ] Split `electronics/basic-circuit` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `electronics/basic-circuit` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/check-battery-voltage`
-  - [ ] Require `electronics/check-battery-voltage` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `electronics/check-battery-voltage` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/continuity-test`
-  - [ ] Require `electronics/continuity-test` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `electronics/continuity-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/data-logger`
-  - [ ] Define acceptance criteria for `electronics/data-logger` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
-  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
-  - [ ] Safety note: require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
+  - [ ] Observed issue: `electronics/data-logger` asks for logging/monitoring but pass criteria and anomaly response are not explicit.
+  - [ ] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact.
+  - [ ] Add an anomaly classification branch with corrective action and a follow-up verification window before closure; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/desolder-component`
-  - [ ] Split `electronics/desolder-component` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `electronics/desolder-component` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/led-polarity`
-  - [ ] Split `electronics/led-polarity` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `electronics/led-polarity` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/light-sensor`
-  - [ ] Split `electronics/light-sensor` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `electronics/light-sensor` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/measure-arduino-5v`
-  - [ ] Require `electronics/measure-arduino-5v` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `electronics/measure-arduino-5v` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/measure-led-current`
-  - [ ] Require `electronics/measure-led-current` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `electronics/measure-led-current` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/measure-resistance`
-  - [ ] Require `electronics/measure-resistance` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `electronics/measure-resistance` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/potentiometer-dimmer`
-  - [ ] Split `electronics/potentiometer-dimmer` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `electronics/potentiometer-dimmer` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/resistor-color-check`
-  - [ ] Require `electronics/resistor-color-check` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `electronics/resistor-color-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/servo-sweep`
-  - [ ] Split `electronics/servo-sweep` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `electronics/servo-sweep` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/solder-led-harness`
-  - [ ] Split `electronics/solder-led-harness` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `electronics/solder-led-harness` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/solder-wire`
-  - [ ] Split `electronics/solder-wire` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `electronics/solder-wire` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/soldering-intro`
-  - [ ] Split `electronics/soldering-intro` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `electronics/soldering-intro` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/temperature-plot`
-  - [ ] Require `electronics/temperature-plot` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `electronics/temperature-plot` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/test-gfci-outlet`
-  - [ ] Require `electronics/test-gfci-outlet` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `electronics/test-gfci-outlet` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/thermistor-reading`
-  - [ ] Split `electronics/thermistor-reading` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `electronics/thermistor-reading` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/thermometer-calibration`
-  - [ ] Split `electronics/thermometer-calibration` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `electronics/thermometer-calibration` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/voltage-divider`
-  - [ ] Require `electronics/voltage-divider` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `electronics/voltage-divider` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 
 ### energy (11 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring, hydroponics/nutrient-check (fallback: no checked energy quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring, composting/check-temperature (fallback: no checked energy quests yet)
 
 - `energy/battery-maintenance`
-  - [ ] Define acceptance criteria for `energy/battery-maintenance` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
-  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
-  - [ ] Safety note: require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
+  - [ ] Observed issue: `energy/battery-maintenance` asks for logging/monitoring but pass criteria and anomaly response are not explicit.
+  - [ ] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact.
+  - [ ] Add an anomaly classification branch with corrective action and a follow-up verification window before closure; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `energy/battery-upgrade`
-  - [ ] Split `energy/battery-upgrade` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `energy/battery-upgrade` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `energy/biogas-digester`
-  - [ ] Split `energy/biogas-digester` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `energy/biogas-digester` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `energy/charge-controller-setup`
-  - [ ] Rewrite `energy/charge-controller-setup` as install → verify → rollback, with each stage in a separate node before `finish` is reachable.
-  - [ ] Gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item) and a brief interpretation checkpoint.
-  - [ ] Safety note: add rollback/lockout-avoidance handling for `charge controller setup`, then require a clean re-verify pass before retrying the install path.
+  - [ ] Observed issue: `energy/charge-controller-setup` reads like a one-pass install task, with verify/rollback state changes not clearly represented.
+  - [ ] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item).
+  - [ ] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `energy/hand-crank-generator`
-  - [ ] Split `energy/hand-crank-generator` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `energy/hand-crank-generator` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `energy/offgrid-charger`
-  - [ ] Split `energy/offgrid-charger` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `energy/offgrid-charger` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `energy/portable-solar-panel`
-  - [ ] Split `energy/portable-solar-panel` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `energy/portable-solar-panel` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `energy/power-inverter`
-  - [ ] Split `energy/power-inverter` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
-- `energy/solar-tracker`
-  - [ ] Split `energy/solar-tracker` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `energy/power-inverter` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `energy/solar`
-  - [ ] Split `energy/solar` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `energy/solar` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
+- `energy/solar-tracker`
+  - [ ] Observed issue: `energy/solar-tracker` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `energy/wind-turbine`
-  - [ ] Split `energy/wind-turbine` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `energy/wind-turbine` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 
 ### firstaid (13 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, welcome/intro-inventory (fallback: no checked firstaid quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, composting/start (fallback: no checked firstaid quests yet)
 
 - `firstaid/assemble-kit`
-  - [ ] Split `firstaid/assemble-kit` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `firstaid/assemble-kit` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/change-bandage`
-  - [ ] Split `firstaid/change-bandage` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `firstaid/change-bandage` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/dispose-bandages`
-  - [ ] Split `firstaid/dispose-bandages` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `firstaid/dispose-bandages` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/dispose-expired`
-  - [ ] Split `firstaid/dispose-expired` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `firstaid/dispose-expired` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/flashlight-battery`
-  - [ ] Split `firstaid/flashlight-battery` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `firstaid/flashlight-battery` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/learn-cpr`
-  - [ ] Split `firstaid/learn-cpr` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `firstaid/learn-cpr` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/remove-splinter`
-  - [ ] Split `firstaid/remove-splinter` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `firstaid/remove-splinter` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/restock-kit`
-  - [ ] Split `firstaid/restock-kit` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `firstaid/restock-kit` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/sanitize-pocket-mask`
-  - [ ] Split `firstaid/sanitize-pocket-mask` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `firstaid/sanitize-pocket-mask` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/splint-limb`
-  - [ ] Split `firstaid/splint-limb` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `firstaid/splint-limb` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/stop-nosebleed`
-  - [ ] Split `firstaid/stop-nosebleed` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `firstaid/stop-nosebleed` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/treat-burn`
-  - [ ] Split `firstaid/treat-burn` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `firstaid/treat-burn` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/wound-care`
-  - [ ] Split `firstaid/wound-care` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `firstaid/wound-care` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 
 ### geothermal (15 quests)
 
 Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature (fallback: no checked geothermal quests yet)
 
 - `geothermal/backflush-loop-filter`
-  - [ ] Split `geothermal/backflush-loop-filter` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `geothermal/backflush-loop-filter` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `geothermal/calibrate-ground-sensor`
-  - [ ] Structure `geothermal/calibrate-ground-sensor` as baseline → adjust → re-test with a stated tolerance target that gates completion.
-  - [ ] Require evidence artifacts for both baseline and post-adjust states (reading snapshots, process output, or logged values).
-  - [ ] Add a drift/variance branch: if results do not hold on follow-up, roll back to last-known-good settings and repeat the loop.
+  - [ ] Observed issue: `geothermal/calibrate-ground-sensor` implies calibration work, but baseline/adjust/retest tolerance handling is under-specified.
+  - [ ] Structure progression as baseline → adjust → re-test with a tolerance target and artifacts captured at baseline and post-adjust states.
+  - [ ] Add a drift/variance follow-up branch that rolls back to last-known-good settings when readings do not hold.
 - `geothermal/check-loop-inlet-temp`
-  - [ ] Require `geothermal/check-loop-inlet-temp` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `geothermal/check-loop-inlet-temp` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `geothermal/check-loop-outlet-temp`
-  - [ ] Require `geothermal/check-loop-outlet-temp` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `geothermal/check-loop-outlet-temp` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `geothermal/check-loop-pressure`
-  - [ ] Require `geothermal/check-loop-pressure` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `geothermal/check-loop-pressure` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `geothermal/check-loop-temp-delta`
-  - [ ] Require `geothermal/check-loop-temp-delta` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `geothermal/check-loop-temp-delta` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `geothermal/compare-depth-ground-temps`
-  - [ ] Require `geothermal/compare-depth-ground-temps` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `geothermal/compare-depth-ground-temps` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `geothermal/compare-seasonal-ground-temps`
-  - [ ] Require `geothermal/compare-seasonal-ground-temps` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `geothermal/compare-seasonal-ground-temps` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `geothermal/install-backup-thermistor`
-  - [ ] Rewrite `geothermal/install-backup-thermistor` as install → verify → rollback, with each stage in a separate node before `finish` is reachable.
-  - [ ] Gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item) and a brief interpretation checkpoint.
-  - [ ] add rollback/lockout-avoidance handling for `install backup thermistor`, then require a clean re-verify pass before retrying the install path.
+  - [ ] Observed issue: `geothermal/install-backup-thermistor` reads like a one-pass install task, with verify/rollback state changes not clearly represented.
+  - [ ] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item).
+  - [ ] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path.
 - `geothermal/log-ground-temperature`
-  - [ ] Require `geothermal/log-ground-temperature` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `geothermal/log-ground-temperature` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `geothermal/log-heat-pump-warmup`
-  - [ ] Define acceptance criteria for `geothermal/log-heat-pump-warmup` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
-  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
-  - [ ] require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
+  - [ ] Observed issue: `geothermal/log-heat-pump-warmup` asks for logging/monitoring but pass criteria and anomaly response are not explicit.
+  - [ ] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact.
+  - [ ] Add an anomaly classification branch with corrective action and a follow-up verification window before closure.
 - `geothermal/monitor-heat-pump-energy`
-  - [ ] Define acceptance criteria for `geothermal/monitor-heat-pump-energy` logs/monitoring (required fields, cadence, and threshold bounds) before `finish` can unlock.
-  - [ ] Add an anomaly branch that classifies abnormal output and records corrective action before returning to normal monitoring.
-  - [ ] require a follow-up verification window (fresh log slice or monitor snapshot) before closure.
+  - [ ] Observed issue: `geothermal/monitor-heat-pump-energy` asks for logging/monitoring but pass criteria and anomaly response are not explicit.
+  - [ ] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact.
+  - [ ] Add an anomaly classification branch with corrective action and a follow-up verification window before closure.
 - `geothermal/purge-loop-air`
-  - [ ] Define `geothermal/purge-loop-air` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
-  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
+  - [ ] Observed issue: `geothermal/purge-loop-air` describes a cleaning cycle without a measurable before/after success definition.
+  - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
 - `geothermal/replace-faulty-thermistor`
-  - [ ] Split `geothermal/replace-faulty-thermistor` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `geothermal/replace-faulty-thermistor` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `geothermal/survey-ground-temperature`
-  - [ ] Require `geothermal/survey-ground-temperature` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `geothermal/survey-ground-temperature` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 
 ### hydroponics (21 quests)
 
 Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponics/nutrient-check
 
 - `hydroponics/air-stone-soak`
-  - [ ] Split `hydroponics/air-stone-soak` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `hydroponics/air-stone-soak` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `hydroponics/bucket_10`
-  - [ ] Split `hydroponics/bucket_10` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `hydroponics/bucket_10` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `hydroponics/ec-calibrate`
-  - [ ] Require `hydroponics/ec-calibrate` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `hydroponics/ec-calibrate` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `hydroponics/ec-check`
-  - [ ] Require `hydroponics/ec-check` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `hydroponics/ec-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `hydroponics/filter-clean`
-  - [ ] Define `hydroponics/filter-clean` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
-  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
+  - [ ] Observed issue: `hydroponics/filter-clean` describes a cleaning cycle without a measurable before/after success definition.
+  - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
 - `hydroponics/grow-light`
-  - [ ] Split `hydroponics/grow-light` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `hydroponics/grow-light` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `hydroponics/lettuce`
-  - [ ] Stage `hydroponics/lettuce` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
-  - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
+  - [ ] Observed issue: `hydroponics/lettuce` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
+  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
+  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
 - `hydroponics/mint-cutting`
-  - [ ] Stage `hydroponics/mint-cutting` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
-  - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
+  - [ ] Observed issue: `hydroponics/mint-cutting` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
+  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
+  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
 - `hydroponics/netcup-clean`
-  - [ ] Define `hydroponics/netcup-clean` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
-  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
+  - [ ] Observed issue: `hydroponics/netcup-clean` describes a cleaning cycle without a measurable before/after success definition.
+  - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
 - `hydroponics/ph-check`
-  - [ ] Require `hydroponics/ph-check` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `hydroponics/ph-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `hydroponics/ph-test`
-  - [ ] Require `hydroponics/ph-test` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `hydroponics/ph-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `hydroponics/plug-soak`
-  - [ ] Split `hydroponics/plug-soak` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `hydroponics/plug-soak` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `hydroponics/pump-install`
-  - [ ] Rewrite `hydroponics/pump-install` as install → verify → rollback, with each stage in a separate node before `finish` is reachable.
-  - [ ] Gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item) and a brief interpretation checkpoint.
-  - [ ] add rollback/lockout-avoidance handling for `pump install`, then require a clean re-verify pass before retrying the install path.
+  - [ ] Observed issue: `hydroponics/pump-install` reads like a one-pass install task, with verify/rollback state changes not clearly represented.
+  - [ ] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item).
+  - [ ] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path.
 - `hydroponics/pump-prime`
-  - [ ] Define `hydroponics/pump-prime` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
-  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
+  - [ ] Observed issue: `hydroponics/pump-prime` describes a cleaning cycle without a measurable before/after success definition.
+  - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
 - `hydroponics/regrow-stevia`
-  - [ ] Stage `hydroponics/regrow-stevia` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
-  - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
+  - [ ] Observed issue: `hydroponics/regrow-stevia` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
+  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
+  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
 - `hydroponics/reservoir-refresh`
-  - [ ] Split `hydroponics/reservoir-refresh` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `hydroponics/reservoir-refresh` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `hydroponics/root-rinse`
-  - [ ] Define `hydroponics/root-rinse` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
-  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
+  - [ ] Observed issue: `hydroponics/root-rinse` describes a cleaning cycle without a measurable before/after success definition.
+  - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
 - `hydroponics/stevia`
-  - [ ] Stage `hydroponics/stevia` with two proofs: a setup artifact first and an outcome artifact later; require both before `finish`.
-  - [ ] Add a contingency branch for stress/failure signs with concrete corrective actions and a timed re-check checkpoint.
-  - [ ] Define pause/abort criteria so progression halts on worsening signals and resumes only after recovery evidence is logged.
+  - [ ] Observed issue: `hydroponics/stevia` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
+  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
+  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
 - `hydroponics/temp-check`
-  - [ ] Require `hydroponics/temp-check` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `hydroponics/temp-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `hydroponics/top-off`
-  - [ ] Split `hydroponics/top-off` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `hydroponics/top-off` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `hydroponics/tub-scrub`
-  - [ ] Define `hydroponics/tub-scrub` clean-state success using measurable before/after condition checks (residue, flow, clarity, or signal quality).
-  - [ ] Gate completion on paired artifacts (pre-state + post-state) proving the state change in mechanics, not just dialogue.
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and a loop that repeats until post-clean criteria pass.
+  - [ ] Observed issue: `hydroponics/tub-scrub` describes a cleaning cycle without a measurable before/after success definition.
+  - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
+  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
 
 ### programming (18 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, sysadmin/log-analysis (fallback: no checked programming quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, welcome/run-tests (fallback: no checked programming quests yet)
 
 - `programming/avg-temp`
-  - [ ] Require `programming/avg-temp` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
-- `programming/graph-temp-data`
-  - [ ] Require `programming/graph-temp-data` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `programming/avg-temp` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `programming/graph-temp`
-  - [ ] Require `programming/graph-temp` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `programming/graph-temp` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+- `programming/graph-temp-data`
+  - [ ] Observed issue: `programming/graph-temp-data` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `programming/hello-sensor`
-  - [ ] Split `programming/hello-sensor` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `programming/hello-sensor` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `programming/http-post`
-  - [ ] Split `programming/http-post` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `programming/http-post` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `programming/json-api`
-  - [ ] Split `programming/json-api` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `programming/json-api` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `programming/json-endpoint`
-  - [ ] Split `programming/json-endpoint` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `programming/json-endpoint` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `programming/median-temp`
-  - [ ] Require `programming/median-temp` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `programming/median-temp` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `programming/moving-avg-temp`
-  - [ ] Require `programming/moving-avg-temp` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `programming/moving-avg-temp` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `programming/plot-temp-cli`
-  - [ ] Require `programming/plot-temp-cli` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `programming/plot-temp-cli` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `programming/stddev-temp`
-  - [ ] Require `programming/stddev-temp` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `programming/stddev-temp` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `programming/temp-alert`
-  - [ ] Require `programming/temp-alert` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `programming/temp-alert` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `programming/temp-email`
-  - [ ] Require `programming/temp-email` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `programming/temp-email` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `programming/temp-graph`
-  - [ ] Require `programming/temp-graph` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `programming/temp-graph` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `programming/temp-json-api`
-  - [ ] Require `programming/temp-json-api` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `programming/temp-json-api` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `programming/temp-logger`
-  - [ ] Require `programming/temp-logger` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `programming/temp-logger` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `programming/thermistor-calibration`
-  - [ ] Split `programming/thermistor-calibration` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `programming/thermistor-calibration` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `programming/web-server`
-  - [ ] Split `programming/web-server` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `programming/web-server` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 
 ### robotics (13 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, sysadmin/resource-monitoring (fallback: no checked robotics quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/run-tests (fallback: no checked robotics quests yet)
 
 - `robotics/gyro-balance`
-  - [ ] Split `robotics/gyro-balance` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `robotics/gyro-balance` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `robotics/line-follower`
-  - [ ] Split `robotics/line-follower` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `robotics/line-follower` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `robotics/maze-navigation`
-  - [ ] Split `robotics/maze-navigation` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `robotics/maze-navigation` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `robotics/obstacle-avoidance`
-  - [ ] Split `robotics/obstacle-avoidance` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `robotics/obstacle-avoidance` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `robotics/odometry-basics`
-  - [ ] Split `robotics/odometry-basics` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `robotics/odometry-basics` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `robotics/pan-tilt`
-  - [ ] Split `robotics/pan-tilt` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `robotics/pan-tilt` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `robotics/reflectance-sensors`
-  - [ ] Require `robotics/reflectance-sensors` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `robotics/reflectance-sensors` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `robotics/servo-arm`
-  - [ ] Split `robotics/servo-arm` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `robotics/servo-arm` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `robotics/servo-control`
-  - [ ] Split `robotics/servo-control` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `robotics/servo-control` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `robotics/servo-gripper`
-  - [ ] Split `robotics/servo-gripper` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `robotics/servo-gripper` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `robotics/servo-radar`
-  - [ ] Split `robotics/servo-radar` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `robotics/servo-radar` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `robotics/ultrasonic-rangefinder`
-  - [ ] Split `robotics/ultrasonic-rangefinder` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `robotics/ultrasonic-rangefinder` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `robotics/wheel-encoders`
-  - [ ] Split `robotics/wheel-encoders` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `robotics/wheel-encoders` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 
 ### rocketry (10 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/run-tests, sysadmin/resource-monitoring (fallback: no checked rocketry quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/start, sysadmin/resource-monitoring (fallback: no checked rocketry quests yet)
 
 - `rocketry/firstlaunch`
-  - [ ] Split `rocketry/firstlaunch` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `rocketry/firstlaunch` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `rocketry/fuel-mixture`
-  - [ ] Split `rocketry/fuel-mixture` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `rocketry/fuel-mixture` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `rocketry/guided-rocket-build`
-  - [ ] Split `rocketry/guided-rocket-build` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `rocketry/guided-rocket-build` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `rocketry/night-launch`
-  - [ ] Split `rocketry/night-launch` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `rocketry/night-launch` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `rocketry/parachute`
-  - [ ] Split `rocketry/parachute` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `rocketry/parachute` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `rocketry/preflight-check`
-  - [ ] Require `rocketry/preflight-check` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `rocketry/preflight-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `rocketry/recovery-run`
-  - [ ] Require `rocketry/recovery-run` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `rocketry/recovery-run` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `rocketry/static-test`
-  - [ ] Require `rocketry/static-test` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `rocketry/static-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `rocketry/suborbital-hop`
-  - [ ] Split `rocketry/suborbital-hop` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `rocketry/suborbital-hop` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `rocketry/wind-check`
-  - [ ] Require `rocketry/wind-check` to capture a measurement artifact and pass through an interpretation node before `finish` unlocks.
-  - [ ] Add an out-of-range branch with corrective action and a mandatory re-test loop before returning to the success path.
-  - [ ] Use explicit acceptance thresholds (target range and fail bounds) so completion depends on measured values, not narration alone.
+  - [ ] Observed issue: `rocketry/wind-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 
 ### ubi (3 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): ubi/basicincome, welcome/howtodoquests
+Exemplar anchors (checked in docs/qa/v3.md §4.5): ubi/basicincome
 
 - `ubi/first-payment`
-  - [ ] Split `ubi/first-payment` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `ubi/first-payment` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `ubi/reminder`
-  - [ ] Split `ubi/reminder` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `ubi/reminder` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `ubi/savings-goal`
-  - [ ] Split `ubi/savings-goal` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `ubi/savings-goal` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 
 ### woodworking (10 quests)
 
 Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/howtodoquests (fallback: no checked woodworking quests yet)
 
 - `woodworking/apply-finish`
-  - [ ] Split `woodworking/apply-finish` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `woodworking/apply-finish` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `woodworking/birdhouse`
-  - [ ] Split `woodworking/birdhouse` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `woodworking/birdhouse` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `woodworking/bookshelf`
-  - [ ] Split `woodworking/bookshelf` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `woodworking/bookshelf` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `woodworking/coffee-table`
-  - [ ] Split `woodworking/coffee-table` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `woodworking/coffee-table` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `woodworking/finish-sanding`
-  - [ ] Split `woodworking/finish-sanding` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `woodworking/finish-sanding` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `woodworking/picture-frame`
-  - [ ] Split `woodworking/picture-frame` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `woodworking/picture-frame` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `woodworking/planter-box`
-  - [ ] Split `woodworking/planter-box` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `woodworking/planter-box` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `woodworking/step-stool`
-  - [ ] Split `woodworking/step-stool` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `woodworking/step-stool` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `woodworking/tool-rack`
-  - [ ] Split `woodworking/tool-rack` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `woodworking/tool-rack` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `woodworking/workbench`
-  - [ ] Split `woodworking/workbench` into a primary build path and an alternate strategy path so completion is a choice, not a single straight-through step.
-  - [ ] Gate completion on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or produced/logged output) with a short interpretation node.
-  - [ ] Add a troubleshooting branch that records failure signals, recovery actions, and a verification retry before `finish`.
+  - [ ] Observed issue: `woodworking/workbench` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 
 ## Documentation improvements needed for quest authoring
 

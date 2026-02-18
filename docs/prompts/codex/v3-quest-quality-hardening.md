@@ -1,120 +1,96 @@
 # v3 quest quality hardening prompts
 
-Use these prompts to pick problematic quests from
-`docs/design/v3-quest-quality-review.md#problematic-quests-to-prioritize-with-improvement-checklist`
-and upgrade them to parity with QA-validated quest quality in `docs/qa/v3.md`.
-
-## How to read the backlog
-
-Before picking quests, read the target tree section in
-`docs/design/v3-quest-quality-review.md#problematic-quests-to-prioritize-with-improvement-checklist`:
-
-- Use that tree’s **Exemplar anchors (checked in docs/qa/v3.md §4.5)** as parity references when
-  shaping branching, evidence gates, and recovery logic.
-- Determine each quest’s **Checklist rubric** type from its ID keywords (install/setup,
-  measure/test/check, calibrate/adjust, log/monitor/maintenance, clean/rinse/purge/prime/scrub,
-  grow/lifecycle/outcome, astronomy observation) and implement the required structure for that
-  type instead of generic boilerplate.
-
-## Rubric enforcement
-
-For each selected quest, identify its checklist-rubric type by keyword (**first match wins**) and implement that exact structure; do not fall back to generic boilerplate.
-
-## Anchor verification
-
-When citing exemplars, copy quest IDs only from the tree-level `Exemplar anchors (checked...)` lines in `docs/design/v3-quest-quality-review.md`; do not invent new exemplar IDs.
+This file provides copy/paste prompts for hardening v3 quests using the backlog in
+`docs/design/v3-quest-quality-review.md`.
 
 ## Main prompt
-
-Use this when you want Codex to select one or more problematic v3 quests and implement robust,
-lore-friendly fixes with structural depth and validation.
-
-## Backlog selection strategy
-
-When selecting quests from the backlog, prefer one tree per pass and include a mix of quest
-types so the rubric is exercised broadly (for example: one install/setup quest, one
-measure/test quest, and one log/monitor quest).
 
 ```markdown
 # DSPACE v3 quest quality hardening (problematic backlog → parity)
 
-You are Codex working in `democratizedspace/dspace` (branch: v3).
+You are Codex working in `democratizedspace/dspace`.
 
 ## Objective
 
-Pick 3–8 quests from:
+Select 3–8 quests from `docs/design/v3-quest-quality-review.md` under
+**Problematic quests to prioritize (with improvement checklist)** and harden them to parity with
+checked quests in `docs/qa/v3.md` §4.5.
 
-- `docs/design/v3-quest-quality-review.md`
-  - section: **Problematic quests to prioritize (with improvement checklist)**
+## How to use the backlog (required)
 
-Upgrade those quests so they match the quality bar demonstrated by checked quests in:
+1. Work within a single tree when possible.
+2. Read that tree's `Exemplar anchors (checked in docs/qa/v3.md §4.5)` line and use only those
+   quest IDs as parity exemplars.
+3. Determine each selected quest's checklist-rubric type by keyword (**first match wins**) and
+   apply that type's structure (do not use generic boilerplate).
+4. Prefer a mixed set of types when selecting multiple quests (for example install + measure +
+   log/monitor) so rubric coverage is explicit.
 
-- `docs/qa/v3.md` §4.5 (checked entries)
+## Quality bar (must satisfy for each selected quest)
 
-## Quality bar (must satisfy)
-
-For each selected quest:
-
-1. Eliminate thin-shell structure (`start -> one step -> finish`).
-2. Add at least one mechanics-backed proof gate (`process`, `requiresItems`, telemetry/log item).
-3. Add at least one troubleshooting/recovery branch.
-4. Add realistic safety/operational checks where domain-relevant.
-5. Keep lore voice consistent with `frontend/src/pages/docs/md/npcs.md`.
+- Remove thin-shell flow (`start -> one step -> finish`) unless explicitly justified.
+- Add at least one mechanics-backed evidence gate (`requiresItems`, `launchesProcess`,
+  measurement/log artifact, or equivalent).
+- Add at least one troubleshooting/recovery branch.
+- Add safety/operational checks where domain-relevant.
+- Keep lore voice aligned with `frontend/src/pages/docs/md/npcs.md`.
 
 ## Implementation requirements
 
 - Edit quest JSON under `frontend/src/pages/quests/json/<tree>/<quest>.json`.
-- Keep quest IDs stable unless a hard canonical mismatch requires correction.
-- If you change quest flow materially, update paired docs in
-  `frontend/src/pages/docs/md/<tree>.md`.
-- Do not add new binary image assets; reuse existing references when needed.
-- Ensure rewards, requirements, and process references all resolve to valid IDs.
-- Prefer structural fixes (branching, gating, verification loops) over cosmetic rewrites.
+- Keep quest IDs stable unless correcting a proven canonical mismatch.
+- If quest flow changes materially, update paired docs in `frontend/src/pages/docs/md/<tree>.md`.
+- Do not add new binary image assets.
+- Ensure requirements, rewards, and process references resolve to valid IDs.
 
-## Testing and validation (required)
-
-Run and fix failures for:
+## Validation commands (required)
 
 1. `npm run lint`
 2. `npm run type-check`
 3. `npm run build`
-4. `npm run test:ci` (do not pass additional selector arguments)
-5. `npm run link-check` (if markdown/docs changed)
-6. Bulk quest schema validation for changed trees:
-   `for f in frontend/src/pages/quests/json/<tree>/*.json; do node scripts/validate-quest.js "$f" || exit 1; done`
+4. `npm run test:ci`
+5. `npm run link-check` (run when docs/markdown changed)
+6. `for f in frontend/src/pages/quests/json/<tree>/*.json; do node scripts/validate-quest.js "$f" || exit 1; done`
 
-## PR expectations
+## REQUIRED output format for your PR summary
 
-In the PR summary include:
+Output exactly these sections in order:
 
-- Selected problematic quest IDs and why they were chosen.
-- For each quest: before/after structural changes (new branches, gates, artifacts, safety checks).
-- Which checked quest(s) from `docs/qa/v3.md` inspired parity.
-- Test commands run and results.
-- Any follow-up work intentionally deferred.
+1. `Selected quests`
+   - Bullet list of selected quest IDs.
+2. `Exemplar anchors used`
+   - Bullet list mapping each quest to anchor ID(s) copied from the tree's anchor line.
+3. `Before/after structural summary`
+   - Per quest: what branches, evidence gates, and troubleshooting/safety paths were added.
+4. `Tests and checks run`
+   - Bullet list of commands and pass/fail status.
+5. `Follow-ups`
+   - Deferred work or explicit `None`.
 ```
 
 ## Upgrade prompt
 
-Use this when the hardening prompt itself needs to be refreshed for new schemas, tests, or quest
-quality guidance.
-
 ```markdown
 # Upgrade the v3 quest quality hardening prompt
 
-You are Codex reviewing `docs/prompts/codex/v3-quest-quality-hardening.md`.
+You are updating `docs/prompts/codex/v3-quest-quality-hardening.md`.
 
-Improve the prompt so it stays copy/paste ready, up to date with repository tooling, and aligned
-with current quest quality policy.
+Goals:
 
-## Instructions
+- Keep the prompt copy/paste-ready.
+- Keep all referenced paths and commands valid for this repository.
+- Preserve deterministic rules: verified exemplar anchors, rubric type first-match behavior, and
+  required output format.
 
-- Verify all referenced paths and commands still exist.
-- Keep the focus on selecting from the problematic quest backlog and lifting quests to parity with
-  QA-validated exemplars.
-- Tighten requirements around structural quest improvements, lore consistency, and robust testing.
-- Ensure the prompt explicitly requires evidence-backed gating and troubleshooting branches.
-- Keep output concise and reusable for both humans and agents.
+Constraints:
 
-Output a single fenced code block containing the fully updated prompt document.
+- Keep one `Main prompt` codeblock and one `Upgrade prompt` codeblock.
+- Move non-reusable commentary into short notes outside those codeblocks.
+
+Return the fully updated markdown document.
 ```
+
+## Notes (non-copy)
+
+- The backlog's exemplar anchors are the only allowed source for exemplar IDs.
+- If commands or scripts change, update this file to keep automation deterministic.
