@@ -23,7 +23,9 @@ Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3
 1. Work within a single tree when possible.
 2. For that tree, read `Exemplar anchors (checked in docs/qa/v3.md §4.5)` from
    `docs/design/v3-quest-quality-review.md`.
-3. Treat those anchors as the **only allowed exemplar IDs**.
+3. Extract only anchor quest ID tokens (`<tree>/<quest>`) and ignore any trailing commentary
+   (for example fallback parentheticals); treat the resulting IDs as the **only allowed exemplar
+   IDs**.
 4. Verify each anchor is actually checked in `docs/qa/v3.md` §4.5 before using it.
 5. Determine each selected quest's checklist-rubric type by keyword (**first match wins**) and
    apply only that type's structure.
@@ -46,8 +48,8 @@ Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3
 - If quest flow changes materially, update paired docs in
   `frontend/src/pages/docs/md/<tree>.md`.
 - Codex cannot create/edit binary images. If quality hardening needs new item imagery,
-  reuse an existing in-repo image reference and note human follow-up for image dedup/replacement.
-- Do not add new binary assets.
+  reuse an existing in-repo image reference, note human follow-up for image dedup/replacement,
+  and do not add new binary assets.
 - Ensure requirements, rewards, and process references resolve to valid IDs.
 
 ## Validation commands (required)
@@ -66,8 +68,9 @@ Output exactly these sections in order:
 1. `Selected quests`
    - Bullet list of selected quest IDs.
 2. `Unchecked QA boxes targeted`
-   - Bullet list mapping each selected quest to the still-unchecked `docs/qa/v3.md` item(s) it
-     is intended to unlock.
+   - Bullet list mapping each selected quest to the still-unchecked per-quest checkbox row(s) in
+     `docs/qa/v3.md` §4.5 it is intended to unlock, referenced by `<tree>/<quest>` entries
+     (not tree-level header boxes).
 3. `Exemplar anchors used`
    - Bullet list mapping each selected quest to verified anchor ID(s).
 4. `Before/after structural summary`
