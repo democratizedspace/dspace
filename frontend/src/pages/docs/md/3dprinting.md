@@ -99,7 +99,7 @@ slug: '3dprinting'
     - `start` → "Leveled and ready to heat." — entry-level FDM 3D printer (leveled bed) ×1
     - `heat` → "Unload and load green PLA." — entry-level FDM 3D printer (leveled bed) ×1, green PLA filament ×10, safety goggles ×1, wire cutters ×1
     - `heat` → "Green filament is flowing without bubbles." — entry-level FDM 3D printer (green PLA loaded) ×1
-    - `purge` → "Swap locked in and purge line is solid." — entry-level FDM 3D printer (green PLA loaded) ×1
+    - `verify-purge` → "Purge is stable and the first-layer check passed." — entry-level FDM 3D printer (green PLA loaded) ×1, mission log entry ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -110,6 +110,10 @@ slug: '3dprinting'
         - Requires: entry-level FDM 3D printer (leveled bed) ×1, safety goggles ×1, wire cutters ×1
         - Consumes: green PLA filament ×10
         - Creates: entry-level FDM 3D printer (green PLA loaded) ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 5) 3D Print 10 Benchies (`3dprinting/benchy_10`)
 
@@ -190,12 +194,14 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/filament-change`
 - Dialogue `requiresItems` gates:
-    - `start` → "Document the failure and how it clogged." — entry-level FDM 3D printer ×1, green PLA filament ×5, dWatt ×50
+    - `start` → "Document the failure and reproduce the clogged state." — entry-level FDM 3D printer ×1, green PLA filament ×5, dWatt ×50
     - `start` → "Printer is powered down and cool." — entry-level FDM 3D printer (clogged nozzle) ×1
+    - `log-review` → "Log captured. Proceed to controlled teardown." — entry-level FDM 3D printer (clogged nozzle) ×1, mission log entry ×1
     - `cooldown` → "Clear the nozzle and reseat it." — safety goggles ×1, needle-nose pliers ×1, sheet of printer paper ×1, entry-level FDM 3D printer (clogged nozzle) ×1, green PLA filament ×5
     - `cooldown` → "Swap in a new nozzle." — safety goggles ×1, needle-nose pliers ×1, 0.4 mm brass nozzle ×1, entry-level FDM 3D printer (clogged nozzle) ×1
     - `cooldown` → "Hotend is rebuilt and moves smoothly." — entry-level FDM 3D printer (clean nozzle) ×1
-    - `purge` → "Flow is smooth and first layer is verified." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×1
+    - `purge` → "Flow is smooth for the full watch window." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×1
+    - `verification-log` → "Verification logged and printer stable." — entry-level FDM 3D printer (clean nozzle) ×1, mission log entry ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -203,8 +209,8 @@ slug: '3dprinting'
     - cured compost bucket ×1
 - Processes used:
     - [3dprint-nozzle-clog](/processes/3dprint-nozzle-clog)
-        - Requires: none
-        - Consumes: entry-level FDM 3D printer ×1, green PLA filament ×5, dWatt ×50
+        - Requires: entry-level FDM 3D printer ×1
+        - Consumes: green PLA filament ×5, dWatt ×50
         - Creates: entry-level FDM 3D printer (clogged nozzle) ×1
     - [repair-clogged-nozzle](/processes/repair-clogged-nozzle)
         - Requires: safety goggles ×1, needle-nose pliers ×1, sheet of printer paper ×1
@@ -214,6 +220,10 @@ slug: '3dprinting'
         - Requires: safety goggles ×1, needle-nose pliers ×1, 0.4 mm brass nozzle ×1
         - Consumes: entry-level FDM 3D printer (clogged nozzle) ×1, 0.4 mm brass nozzle ×1
         - Creates: entry-level FDM 3D printer (clean nozzle) ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 10) Clear a Clogged Nozzle (`3dprinting/nozzle-cleaning`)
 
@@ -331,7 +341,10 @@ slug: '3dprinting'
     - `start` → "Green PLA is loaded and ready." — entry-level FDM 3D printer (green PLA loaded) ×1
     - `setup` → "Print the stepped Benchy." — entry-level FDM 3D printer (green PLA loaded) ×1, safety goggles ×1, digital calipers ×1
     - `setup` → "Benchy finished and cooled." — stringing-tuned Benchy ×1
-    - `inspect` → "Stringing is gone and notes are saved." — stringing-tuned Benchy ×1
+    - `inspect` → "Out of range: wisps or zits exceed tolerance." — digital calipers ×1
+    - `inspect` → "Measurements are in range and repeatable." — digital calipers ×1, stringing-tuned Benchy ×1
+    - `corrective` → "Recheck after trimming stray strings." — stringing-tuned Benchy ×1
+    - `document` → "Settings logged and ready to standardize." — mission log entry ×1, stringing-tuned Benchy ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -342,6 +355,10 @@ slug: '3dprinting'
         - Requires: entry-level FDM 3D printer (green PLA loaded) ×1, safety goggles ×1, digital calipers ×1
         - Consumes: green PLA filament ×20, dWatt ×200
         - Creates: stringing-tuned Benchy ×1, dPrint ×20
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 15) Print a Temperature Tower (`3dprinting/temperature-tower`)
 
@@ -370,8 +387,12 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/cable-clip`
 - Dialogue `requiresItems` gates:
-    - `tension` → "Walk me through each step." — entry-level FDM 3D printer (leveled bed) ×1, precision screwdriver set ×1, safety goggles ×1
-    - `tension` → "Belt tightened and moving smoothly." — entry-level FDM 3D printer (belt tensioned) ×1
+    - `baseline` → "Baseline captured. Start adjustment." — mission log entry ×1
+    - `adjust` → "Walk me through each adjustment step." — entry-level FDM 3D printer (leveled bed) ×1, precision screwdriver set ×1, safety goggles ×1
+    - `adjust` → "Adjustment complete. Run the re-test." — entry-level FDM 3D printer (belt tensioned) ×1
+    - `retest` → "Drift returned or carriage binds during travel." — entry-level FDM 3D printer (belt tensioned) ×1
+    - `retest` → "Re-test passes tolerance and motion checks." — entry-level FDM 3D printer (belt tensioned) ×1
+    - `post-log` → "Both baseline and post-adjust artifacts are logged." — entry-level FDM 3D printer (belt tensioned) ×1, mission log entry ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -382,9 +403,7 @@ slug: '3dprinting'
         - Requires: entry-level FDM 3D printer (leveled bed) ×1, precision screwdriver set ×1, safety goggles ×1
         - Consumes: none
         - Creates: entry-level FDM 3D printer (belt tensioned) ×1
-
-## QA flow notes
-
-- Cross-quest dependencies: follow quest unlocks in order; each quest above lists exact `requiresQuests` and inventory gates that must be present before completion paths appear.
-- Progression integrity checks: verify each process-backed step can be completed either by running the process or by satisfying the documented continuation gate items.
-- Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: black ink ×0.05
+        - Creates: mission log entry ×1

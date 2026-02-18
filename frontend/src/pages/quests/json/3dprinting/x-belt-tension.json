@@ -1,30 +1,62 @@
 {
     "id": "3dprinting/x-belt-tension",
     "title": "Tighten the X-axis Belt",
-    "description": "Keep your prints sharp by safely tightening a loose X-axis belt.",
+    "description": "Keep your prints sharp by safely tightening a loose X-axis belt with baseline, adjustment, and re-test evidence.",
     "image": "/assets/quests/x_belt_tension_adjust.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Noticing layer shifts? Let's tension and square both belts. Power off, unplug, and keep goggles on while you work around sharp hardware.",
+            "text": "Noticing layer shifts? We'll run a baseline → adjust → re-test loop. Power off, unplug, and keep goggles on around sharp hardware.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "tension",
-                    "text": "Show me how."
+                    "goto": "baseline",
+                    "text": "Show me the baseline check."
                 }
             ]
         },
         {
-            "id": "tension",
-            "text": "Release belt clamps, tension until firm with a gentle twang, then re-square the gantry before locking hardware. Avoid overtightening so bearings don't bind.",
+            "id": "baseline",
+            "text": "Measure belt deflection at center span before touching hardware. Record the reading and carriage feel so we can compare after adjustment.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Log baseline belt reading and observed drift.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Baseline captured. Start adjustment.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Release clamp screws, tension until firm with a light twang, then re-square the gantry. Do not overtighten—binding bearings fail faster than loose belts.",
             "options": [
                 {
                     "type": "process",
                     "process": "tighten-x-belt",
-                    "text": "Walk me through each step.",
+                    "text": "Walk me through each adjustment step.",
                     "requiresItems": [
                         {
                             "id": "a42e441a-5569-490c-86e4-ce711117cd22",
@@ -42,8 +74,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Belt tightened and moving smoothly.",
+                    "goto": "retest",
+                    "text": "Adjustment complete. Run the re-test.",
                     "requiresItems": [
                         {
                             "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
@@ -54,8 +86,88 @@
             ]
         },
         {
+            "id": "retest",
+            "text": "Re-test carriage travel and belt deflection. Tolerance: within ±0.2 mm of target and no audible binding across full X travel.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Drift returned or carriage binds during travel.",
+                    "requiresItems": [
+                        {
+                            "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "post-log",
+                    "text": "Re-test passes tolerance and motion checks.",
+                    "requiresItems": [
+                        {
+                            "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rollback",
+            "text": "Variance branch: roll back a quarter turn to last-known-good tension, re-square the gantry, and rerun baseline if readings keep drifting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Apply rollback and re-test tension."
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Start over from baseline to re-establish reference."
+                }
+            ]
+        },
+        {
+            "id": "post-log",
+            "text": "Record post-adjust measurement, tolerance result, and follow-up inspection interval.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Write post-adjust verification entry.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Both baseline and post-adjust artifacts are logged.",
+                    "requiresItems": [
+                        {
+                            "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! Your printer should track cleanly along the X-axis now.",
+            "text": "Nice! Your X-axis tension is calibrated with evidence, and you've got rollback notes if drift returns.",
             "options": [
                 {
                     "type": "finish",
@@ -74,7 +186,7 @@
     "hardening": {
         "passes": 1,
         "score": 90,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-10-15",

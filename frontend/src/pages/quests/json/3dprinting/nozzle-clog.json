@@ -1,19 +1,19 @@
 {
     "id": "3dprinting/nozzle-clog",
     "title": "Fix a Clogged Nozzle",
-    "description": "Disassemble your printer after a blob of death from skipping the first layer to unclog or replace the nozzle.",
+    "description": "Disassemble your printer after a blob of death to unclog or replace the nozzle with explicit logging and verification windows.",
     "image": "/assets/quests/nozzle_clog_disassembly.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Skipping the first-layer check let filament pile around the hotend. We'll cool, clear the blob, and get flow back.",
+            "text": "Skipping the first-layer check let filament pile around the hotend. We'll capture failure data first, then recover safely.",
             "options": [
                 {
                     "type": "process",
                     "process": "3dprint-nozzle-clog",
-                    "text": "Document the failure and how it clogged.",
+                    "text": "Document the failure and reproduce the clogged state.",
                     "requiresItems": [
                         {
                             "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
@@ -31,7 +31,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "cooldown",
+                    "goto": "log-review",
                     "text": "Printer is powered down and cool.",
                     "requiresItems": [
                         {
@@ -43,8 +43,71 @@
             ]
         },
         {
+            "id": "log-review",
+            "text": "Log fields required before repair: nozzle temp at failure, skipped-layer timestamp, observed symptom, and chosen fix path. Escalate if heater behavior was erratic.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Write the failure log entry.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly",
+                    "text": "Anomaly detected (odor, smoke, or unstable heater readings)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "cooldown",
+                    "text": "Log captured. Proceed to controlled teardown.",
+                    "requiresItems": [
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "anomaly",
+            "text": "Safety branch: keep power disconnected, inspect thermistor and heater leads for damage, and do not heat the hotend until wiring is secure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Unsafe condition found. Abort and rebuild from the beginning."
+                },
+                {
+                    "type": "goto",
+                    "goto": "cooldown",
+                    "text": "Wiring is stable. Continue with teardown and cleaning.",
+                    "requiresItems": [
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "cooldown",
-            "text": "Ventilate the area, check heaters are off, and peel away loose plastic to expose the nozzle threads.",
+            "text": "Ventilate the area, confirm heaters are off, and peel away loose plastic to expose nozzle threads. Keep gloves and goggles on while handling residue.",
             "options": [
                 {
                     "type": "process",
@@ -111,12 +174,17 @@
         },
         {
             "id": "purge",
-            "text": "Heat to 200 \u00b0C, extrude 30 mm, and rerun a paper check at the center. Watch the next first layer and re-level if the skirt drifts.",
+            "text": "Heat to 200 °C, extrude 30 mm, and run a first-layer check. Pass criterion: no clicking and a continuous line for a full 10-minute watch window.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Flow is smooth and first layer is verified.",
+                    "goto": "cooldown",
+                    "text": "Flow still stutters. Re-open and clear contamination again."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verification-log",
+                    "text": "Flow is smooth for the full watch window.",
                     "requiresItems": [
                         {
                             "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
@@ -131,8 +199,44 @@
             ]
         },
         {
+            "id": "verification-log",
+            "text": "Finalize the repair record with the corrective action taken and a follow-up check timestamp.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Write the post-repair verification log.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verification logged and printer stable.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "The printer is ready again. Watch the first layer on future prints to avoid blobs of death.",
+            "text": "The printer is recovered, monitored, and documented. Keep that first-layer watch habit to avoid a repeat blob.",
             "options": [
                 {
                     "type": "finish",
@@ -151,7 +255,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

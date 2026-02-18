@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to swap colors? We'll unload the old spool, purge 10 g, and load green PLA\u2014level the bed first so you can verify first-layer adhesion after the swap.",
+            "text": "Ready to swap colors? We'll unload the old spool, purge 10 g, and verify first-layer adhesion before we call it done.",
             "options": [
                 {
                     "type": "goto",
@@ -25,7 +25,7 @@
         },
         {
             "id": "heat",
-            "text": "Power on, preheat to 200 \u00b0C, and move the hotend away from the bed. Keep goggles on and fingers clear of the drive gears while you release the lever.",
+            "text": "Power on, preheat to 200 °C, and move the hotend away from the bed. Keep goggles on and fingers clear of drive gears while you release the lever.",
             "options": [
                 {
                     "type": "process",
@@ -52,7 +52,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "purge",
+                    "goto": "verify-purge",
                     "text": "Green filament is flowing without bubbles.",
                     "requiresItems": [
                         {
@@ -64,16 +64,40 @@
             ]
         },
         {
-            "id": "purge",
-            "text": "Check that the extruder gears are gripping, clip the stringing, and extrude 20 mm to confirm the feed path is clear.",
+            "id": "verify-purge",
+            "text": "Clip the stringing, extrude 20 mm, then print a short first-layer line. Target: no bubbles, no grinding clicks, and an even line width before continuing.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Flow is inconsistent or the line has gaps."
+                },
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Log purge length, nozzle temp, and first-layer result.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Swap locked in and purge line is solid.",
+                    "text": "Purge is stable and the first-layer check passed.",
                     "requiresItems": [
                         {
                             "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
                             "count": 1
                         }
                     ]
@@ -81,8 +105,24 @@
             ]
         },
         {
+            "id": "troubleshoot",
+            "text": "Troubleshooting branch: if you hear clicking, trim and reseat filament; if you hear popping, dry filament and lower humidity. Reheat and rerun the purge check before closure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "heat",
+                    "text": "Reseated feed path. Run another purge cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-purge",
+                    "text": "I corrected moisture issues. Re-test the first layer."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great! Your printer is purged, tensioned, and ready to lay down that fresh green plastic.",
+            "text": "Great! Your printer is purged, documented, and ready to lay down fresh green plastic.",
             "options": [
                 {
                     "type": "finish",
@@ -101,7 +141,7 @@
     "hardening": {
         "passes": 4,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-12",
