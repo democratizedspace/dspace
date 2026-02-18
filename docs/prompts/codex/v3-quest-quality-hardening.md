@@ -1,12 +1,12 @@
 # v3 quest quality hardening prompts
 
-This file provides copy/paste prompts for hardening v3 quests using the backlog in
-`docs/design/v3-quest-quality-review.md`.
+Use these copy/paste prompts to harden v3 quest quality and clear remaining unchecked quest-quality
+items in `docs/qa/v3.md` via deterministic, auditable changes.
 
 ## Main prompt
 
 ```markdown
-# DSPACE v3 quest quality hardening (problematic backlog → parity)
+# DSPACE v3 quest quality hardening (unchecked QA boxes → deterministic parity)
 
 You are Codex working in `democratizedspace/dspace`.
 
@@ -14,17 +14,21 @@ You are Codex working in `democratizedspace/dspace`.
 
 Select 3–8 quests from `docs/design/v3-quest-quality-review.md` under
 **Problematic quests to prioritize (with improvement checklist)** and harden them to parity with
-checked quests in `docs/qa/v3.md` §4.5.
+verified checked exemplars in `docs/qa/v3.md` §4.5.
 
-## How to use the backlog (required)
+Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3.md`.
+
+## Deterministic selection and anchoring rules (required)
 
 1. Work within a single tree when possible.
-2. Read that tree's `Exemplar anchors (checked in docs/qa/v3.md §4.5)` line and use only those
-   quest IDs as parity exemplars.
-3. Determine each selected quest's checklist-rubric type by keyword (**first match wins**) and
-   apply that type's structure (do not use generic boilerplate).
-4. Prefer a mixed set of types when selecting multiple quests (for example install + measure +
-   log/monitor) so rubric coverage is explicit.
+2. For that tree, read `Exemplar anchors (checked in docs/qa/v3.md §4.5)` from
+   `docs/design/v3-quest-quality-review.md`.
+3. Treat those anchors as the **only allowed exemplar IDs**.
+4. Verify each anchor is actually checked in `docs/qa/v3.md` §4.5 before using it.
+5. Determine each selected quest's checklist-rubric type by keyword (**first match wins**) and
+   apply only that type's structure.
+6. Prefer a mixed set of rubric types when selecting multiple quests (for example install +
+   measure + log/monitor) so coverage is explicit.
 
 ## Quality bar (must satisfy for each selected quest)
 
@@ -39,8 +43,11 @@ checked quests in `docs/qa/v3.md` §4.5.
 
 - Edit quest JSON under `frontend/src/pages/quests/json/<tree>/<quest>.json`.
 - Keep quest IDs stable unless correcting a proven canonical mismatch.
-- If quest flow changes materially, update paired docs in `frontend/src/pages/docs/md/<tree>.md`.
-- Do not add new binary image assets.
+- If quest flow changes materially, update paired docs in
+  `frontend/src/pages/docs/md/<tree>.md`.
+- Codex cannot create/edit binary images. If quality hardening needs new item imagery,
+  reuse an existing in-repo image reference and note human follow-up for image dedup/replacement.
+- Do not add new binary assets.
 - Ensure requirements, rewards, and process references resolve to valid IDs.
 
 ## Validation commands (required)
@@ -58,13 +65,18 @@ Output exactly these sections in order:
 
 1. `Selected quests`
    - Bullet list of selected quest IDs.
-2. `Exemplar anchors used`
-   - Bullet list mapping each quest to anchor ID(s) copied from the tree's anchor line.
-3. `Before/after structural summary`
+2. `Unchecked QA boxes targeted`
+   - Bullet list mapping each selected quest to the still-unchecked `docs/qa/v3.md` item(s) it
+     is intended to unlock.
+3. `Exemplar anchors used`
+   - Bullet list mapping each selected quest to verified anchor ID(s).
+4. `Before/after structural summary`
    - Per quest: what branches, evidence gates, and troubleshooting/safety paths were added.
-4. `Tests and checks run`
+5. `Tests and checks run`
    - Bullet list of commands and pass/fail status.
-5. `Follow-ups`
+6. `Asset follow-ups`
+   - Any image reuse performed and required human dedup/replacement steps, or explicit `None`.
+7. `Follow-ups`
    - Deferred work or explicit `None`.
 ```
 
@@ -81,6 +93,9 @@ Goals:
 - Keep all referenced paths and commands valid for this repository.
 - Preserve deterministic rules: verified exemplar anchors, rubric type first-match behavior, and
   required output format.
+- Optimize for clearing still-unchecked quest-quality boxes in `docs/qa/v3.md` after manual human
+  verification.
+- Preserve Codex binary-asset limitations guidance (reuse image references; no new binary assets).
 
 Constraints:
 
@@ -90,7 +105,9 @@ Constraints:
 Return the fully updated markdown document.
 ```
 
-## Notes (non-copy)
+## Notes
 
 - The backlog's exemplar anchors are the only allowed source for exemplar IDs.
-- If commands or scripts change, update this file to keep automation deterministic.
+- If commands/scripts change, update this prompt immediately to keep automation deterministic.
+- Human follow-up is expected for any reused image references that should later be deduplicated or
+  replaced with final art.
