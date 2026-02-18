@@ -8,15 +8,19 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to swap colors? We'll unload the old spool, purge 10 g, and load green PLA\u2014level the bed first so you can verify first-layer adhesion after the swap.",
+            "text": "Ready to swap colors? We'll unload the old spool, purge green PLA, and verify first-layer adhesion before you commit to a long print. Keep goggles on and fingers clear of drive gears.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "heat",
-                    "text": "Leveled and ready to heat.",
+                    "text": "Leveled, unplugged accessories, and ready to heat.",
                     "requiresItems": [
                         {
                             "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
                             "count": 1
                         }
                     ]
@@ -25,12 +29,12 @@
         },
         {
             "id": "heat",
-            "text": "Power on, preheat to 200 \u00b0C, and move the hotend away from the bed. Keep goggles on and fingers clear of the drive gears while you release the lever.",
+            "text": "Preheat to 200 \u00b0C, move the hotend clear of clips, release the idler, and feed trimmed green PLA until it exits cleanly.",
             "options": [
                 {
                     "type": "process",
                     "process": "swap-green-pla-filament",
-                    "text": "Unload and load green PLA.",
+                    "text": "Unload old filament and load green PLA.",
                     "requiresItems": [
                         {
                             "id": "a42e441a-5569-490c-86e4-ce711117cd22",
@@ -52,7 +56,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "purge",
+                    "goto": "flow-check",
                     "text": "Green filament is flowing without bubbles.",
                     "requiresItems": [
                         {
@@ -64,13 +68,72 @@
             ]
         },
         {
-            "id": "purge",
-            "text": "Check that the extruder gears are gripping, clip the stringing, and extrude 20 mm to confirm the feed path is clear.",
+            "id": "flow-check",
+            "text": "Extrude a 20 mm purge line onto paper and inspect it: no popping, no black specks, and steady width. Record anything odd before continuing.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Swap locked in and purge line is solid.",
+                    "text": "Purge line is steady and first-layer strip looks clean.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "I see bubbles, brittle feed, or inconsistent flow.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Troubleshoot before printing: clip the filament tip again, reduce feed speed, and verify the spool path is not snagged. If bubbling persists, run another swap/purge cycle.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "swap-green-pla-filament",
+                    "text": "Run a recovery swap and purge cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 5
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "flow-check",
+                    "text": "Recovery done, rechecking purge quality.",
                     "requiresItems": [
                         {
                             "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
@@ -82,7 +145,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Your printer is purged, tensioned, and ready to lay down that fresh green plastic.",
+            "text": "Great! Your printer is purged, tensioned, and validated for a clean green first layer.",
             "options": [
                 {
                     "type": "finish",

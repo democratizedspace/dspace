@@ -8,23 +8,67 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Noticing layer shifts? Let's tension and square both belts. Power off, unplug, and keep goggles on while you work around sharp hardware.",
+            "text": "Noticing layer shifts? We'll run a baseline-adjust-retest loop so you can tension safely instead of overtightening blindly.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "tension",
-                    "text": "Show me how."
+                    "goto": "baseline",
+                    "text": "Printer is powered off, unplugged, and ready for baseline checks."
                 }
             ]
         },
         {
-            "id": "tension",
-            "text": "Release belt clamps, tension until firm with a gentle twang, then re-square the gantry before locking hardware. Avoid overtightening so bearings don't bind.",
+            "id": "baseline",
+            "text": "Measure current X travel error over 100 mm, note carriage feel, and log baseline values before touching belt hardware.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Baseline logged; start adjustment.",
+                    "requiresItems": [
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        },
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "drift",
+                    "text": "Baseline is inconsistent between repeated moves.",
+                    "requiresItems": [
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        },
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Release clamps, tension to a firm twang, then re-square the gantry before locking hardware. Keep force moderate to protect bearings.",
             "options": [
                 {
                     "type": "process",
                     "process": "tighten-x-belt",
-                    "text": "Walk me through each step.",
+                    "text": "Apply controlled tension adjustment.",
                     "requiresItems": [
                         {
                             "id": "a42e441a-5569-490c-86e4-ce711117cd22",
@@ -42,8 +86,88 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "retest",
+                    "text": "Adjustment complete; run tolerance retest.",
+                    "requiresItems": [
+                        {
+                            "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Repeat the 100 mm move test. Pass when error stays within \u00b10.20 mm and carriage motion remains smooth without chirping.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Belt tightened and moving smoothly.",
+                    "text": "Tolerance holds and motion is smooth.",
+                    "requiresItems": [
+                        {
+                            "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "drift",
+                    "text": "Error drifts or carriage binds outside tolerance.",
+                    "requiresItems": [
+                        {
+                            "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "drift",
+            "text": "Use the recovery branch: roll back toward your last-known-good tension, inspect idlers/set screws, and retest after each small change.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "tighten-x-belt",
+                    "text": "Apply a corrective micro-adjustment.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Correction made; retesting tolerance.",
                     "requiresItems": [
                         {
                             "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
@@ -55,7 +179,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice! Your printer should track cleanly along the X-axis now.",
+            "text": "Nice work. You reached a measured belt setting with a documented baseline and recovery path for future drift.",
             "options": [
                 {
                     "type": "finish",

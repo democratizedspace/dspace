@@ -96,10 +96,13 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/calibration-cube`
 - Dialogue `requiresItems` gates:
-    - `start` → "Leveled and ready to heat." — entry-level FDM 3D printer (leveled bed) ×1
-    - `heat` → "Unload and load green PLA." — entry-level FDM 3D printer (leveled bed) ×1, green PLA filament ×10, safety goggles ×1, wire cutters ×1
+    - `start` → "Leveled, unplugged accessories, and ready to heat." — entry-level FDM 3D printer (leveled bed) ×1, safety goggles ×1
+    - `heat` → "Unload old filament and load green PLA." — entry-level FDM 3D printer (leveled bed) ×1, green PLA filament ×10, safety goggles ×1, wire cutters ×1
     - `heat` → "Green filament is flowing without bubbles." — entry-level FDM 3D printer (green PLA loaded) ×1
-    - `purge` → "Swap locked in and purge line is solid." — entry-level FDM 3D printer (green PLA loaded) ×1
+    - `flow-check` → "Purge line is steady and first-layer strip looks clean." — entry-level FDM 3D printer (green PLA loaded) ×1, sheet of printer paper ×1
+    - `flow-check` → "I see bubbles, brittle feed, or inconsistent flow." — entry-level FDM 3D printer (green PLA loaded) ×1, sheet of printer paper ×1
+    - `recover` → "Run a recovery swap and purge cycle." — entry-level FDM 3D printer (leveled bed) ×1, green PLA filament ×5, safety goggles ×1, wire cutters ×1
+    - `recover` → "Recovery done, rechecking purge quality." — entry-level FDM 3D printer (green PLA loaded) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -190,12 +193,16 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/filament-change`
 - Dialogue `requiresItems` gates:
-    - `start` → "Document the failure and how it clogged." — entry-level FDM 3D printer ×1, green PLA filament ×5, dWatt ×50
-    - `start` → "Printer is powered down and cool." — entry-level FDM 3D printer (clogged nozzle) ×1
+    - `start` → "Document the failure and trigger a clog state." — entry-level FDM 3D printer ×1, green PLA filament ×5, dWatt ×50
+    - `start` → "Printer is powered down, ventilated, and cool." — entry-level FDM 3D printer (clogged nozzle) ×1
     - `cooldown` → "Clear the nozzle and reseat it." — safety goggles ×1, needle-nose pliers ×1, sheet of printer paper ×1, entry-level FDM 3D printer (clogged nozzle) ×1, green PLA filament ×5
     - `cooldown` → "Swap in a new nozzle." — safety goggles ×1, needle-nose pliers ×1, 0.4 mm brass nozzle ×1, entry-level FDM 3D printer (clogged nozzle) ×1
-    - `cooldown` → "Hotend is rebuilt and moves smoothly." — entry-level FDM 3D printer (clean nozzle) ×1
-    - `purge` → "Flow is smooth and first layer is verified." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×1
+    - `cooldown` → "Hotend is rebuilt and ready for monitored purge." — entry-level FDM 3D printer (clean nozzle) ×1
+    - `monitor` → "Logs show stable flow and no anomalies across all three checks." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
+    - `anomaly` → "Adjusted cooling/feed settings and logged the change; rerun snapshots." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
+    - `anomaly` → "Symptoms look like a hard clog; return to teardown and service." — entry-level FDM 3D printer (clogged nozzle) ×1
+    - `anomaly` → "Corrective action applied; start a fresh monitoring window." — entry-level FDM 3D printer (clean nozzle) ×1
+    - `verify` → "First layer holds and monitoring log is complete." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -222,7 +229,12 @@ slug: '3dprinting'
     - `requiresQuests`: `3dprinting/nozzle-clog`
 - Dialogue `requiresItems` gates:
     - `start` → "I already have a clogged hotend." — entry-level FDM 3D printer (clogged nozzle) ×1
-    - `clean` → "Flow restored and test extrusion complete." — entry-level FDM 3D printer (clean nozzle) ×1
+    - `precheck` → "Baseline residue check documented." — entry-level FDM 3D printer (clogged nozzle) ×1, sheet of printer paper ×1
+    - `clean` → "Install a fresh 0.4 mm nozzle." — safety goggles ×1, needle-nose pliers ×1, 0.4 mm brass nozzle ×1, entry-level FDM 3D printer (clogged nozzle) ×1
+    - `clean` → "Nozzle is rebuilt; run post-clean verification." — entry-level FDM 3D printer (clean nozzle) ×1
+    - `postcheck` → "Before/after check passed and flow is stable." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
+    - `contamination` → "Area cleaned; retrying the cleaning cycle." — entry-level FDM 3D printer (clogged nozzle) ×1
+    - `contamination` → "Residue cleared on a clean nozzle; rerun post-check." — entry-level FDM 3D printer (clean nozzle) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -236,6 +248,10 @@ slug: '3dprinting'
     - [repair-clogged-nozzle](/processes/repair-clogged-nozzle)
         - Requires: safety goggles ×1, needle-nose pliers ×1, sheet of printer paper ×1
         - Consumes: entry-level FDM 3D printer (clogged nozzle) ×1, green PLA filament ×5
+        - Creates: entry-level FDM 3D printer (clean nozzle) ×1
+    - [replace-brass-nozzle](/processes/replace-brass-nozzle)
+        - Requires: safety goggles ×1, needle-nose pliers ×1, 0.4 mm brass nozzle ×1
+        - Consumes: entry-level FDM 3D printer (clogged nozzle) ×1, 0.4 mm brass nozzle ×1
         - Creates: entry-level FDM 3D printer (clean nozzle) ×1
 
 ## 11) Witness a Blob of Death (`3dprinting/blob-of-death`)
@@ -370,8 +386,14 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/cable-clip`
 - Dialogue `requiresItems` gates:
-    - `tension` → "Walk me through each step." — entry-level FDM 3D printer (leveled bed) ×1, precision screwdriver set ×1, safety goggles ×1
-    - `tension` → "Belt tightened and moving smoothly." — entry-level FDM 3D printer (belt tensioned) ×1
+    - `baseline` → "Baseline logged; start adjustment." — digital calipers ×1, sheet of printer paper ×1, entry-level FDM 3D printer (leveled bed) ×1
+    - `baseline` → "Baseline is inconsistent between repeated moves." — digital calipers ×1, sheet of printer paper ×1, entry-level FDM 3D printer (leveled bed) ×1
+    - `adjust` → "Apply controlled tension adjustment." — entry-level FDM 3D printer (leveled bed) ×1, precision screwdriver set ×1, safety goggles ×1
+    - `adjust` → "Adjustment complete; run tolerance retest." — entry-level FDM 3D printer (belt tensioned) ×1
+    - `retest` → "Tolerance holds and motion is smooth." — entry-level FDM 3D printer (belt tensioned) ×1, digital calipers ×1, sheet of printer paper ×1
+    - `retest` → "Error drifts or carriage binds outside tolerance." — entry-level FDM 3D printer (belt tensioned) ×1, digital calipers ×1, sheet of printer paper ×1
+    - `drift` → "Apply a corrective micro-adjustment." — entry-level FDM 3D printer (leveled bed) ×1, precision screwdriver set ×1, safety goggles ×1
+    - `drift` → "Correction made; retesting tolerance." — entry-level FDM 3D printer (belt tensioned) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
