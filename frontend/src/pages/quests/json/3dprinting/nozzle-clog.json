@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Skipping the first-layer check let filament pile around the hotend. We'll cool, clear the blob, and get flow back.",
+            "text": "Skipping first-layer watch let filament wrap the hotend. We will recover it like operators: induce or confirm the fault, then document each remediation checkpoint.",
             "options": [
                 {
                     "type": "process",
                     "process": "3dprint-nozzle-clog",
-                    "text": "Document the failure and how it clogged.",
+                    "text": "Document the failure event and induce the clog safely.",
                     "requiresItems": [
                         {
                             "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
@@ -44,7 +44,7 @@
         },
         {
             "id": "cooldown",
-            "text": "Ventilate the area, check heaters are off, and peel away loose plastic to expose the nozzle threads.",
+            "text": "Ventilate, verify heaters are off, and remove loose plastic before touching threads. Keep goggles on and classify the fault before choosing a repair path.",
             "options": [
                 {
                     "type": "process",
@@ -76,7 +76,7 @@
                 {
                     "type": "process",
                     "process": "replace-brass-nozzle",
-                    "text": "Swap in a new nozzle.",
+                    "text": "Swap in a new nozzle if damage is visible.",
                     "requiresItems": [
                         {
                             "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
@@ -98,7 +98,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "purge",
+                    "goto": "log-verify",
                     "text": "Hotend is rebuilt and moves smoothly.",
                     "requiresItems": [
                         {
@@ -110,20 +110,30 @@
             ]
         },
         {
-            "id": "purge",
-            "text": "Heat to 200 \u00b0C, extrude 30 mm, and rerun a paper check at the center. Watch the next first layer and re-level if the skirt drifts.",
+            "id": "log-verify",
+            "text": "Run three purge checks 2 minutes apart and log each one: extrusion continuity, line width consistency, and visible debris. Any failed field means anomaly handling, not finish.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Write the nozzle recovery log (3 checks + threshold result)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly",
+                    "text": "A check failed or drifted outside threshold."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Flow is smooth and first layer is verified.",
+                    "text": "All checks passed and evidence is logged.",
                     "requiresItems": [
                         {
                             "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
                             "count": 1
                         },
                         {
-                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
                             "count": 1
                         }
                     ]
@@ -131,8 +141,29 @@
             ]
         },
         {
+            "id": "anomaly",
+            "text": "Classify the anomaly: under-extrusion, intermittent popping, or ooze blobs. Re-clean for debris faults, replace nozzle for scoring, then repeat the full verification window.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "repair-clogged-nozzle",
+                    "text": "Retry cleaning for debris-related faults."
+                },
+                {
+                    "type": "process",
+                    "process": "replace-brass-nozzle",
+                    "text": "Replace nozzle for mechanical damage faults."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-verify",
+                    "text": "Corrective action complete. Re-run the 3-check verification."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "The printer is ready again. Watch the first layer on future prints to avoid blobs of death.",
+            "text": "Recovered and documented. Keep this log cadence whenever first-layer monitoring is skipped so you catch nozzle drift before the next failure.",
             "options": [
                 {
                     "type": "finish",

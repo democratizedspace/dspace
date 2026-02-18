@@ -8,23 +8,45 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Noticing layer shifts? Let's tension and square both belts. Power off, unplug, and keep goggles on while you work around sharp hardware.",
+            "text": "Layer shifts are usually tension drift. We will run baseline -> adjust -> re-test, and we only close once tolerance holds.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "tension",
-                    "text": "Show me how."
+                    "goto": "baseline",
+                    "text": "Show me the full calibration loop."
                 }
             ]
         },
         {
-            "id": "tension",
-            "text": "Release belt clamps, tension until firm with a gentle twang, then re-square the gantry before locking hardware. Avoid overtightening so bearings don't bind.",
+            "id": "baseline",
+            "text": "Power off and unplug. Check carriage travel by hand and record baseline: audible belt twang, visible slack, and whether motion binds near end stops.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Capture baseline belt condition and safety checks."
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Baseline logged. Start adjustment.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Release clamps, tension gradually, re-square gantry, and lock hardware. Stop if carriage binds or belt twang becomes high-pitched and harsh.",
             "options": [
                 {
                     "type": "process",
                     "process": "tighten-x-belt",
-                    "text": "Walk me through each step.",
+                    "text": "Perform controlled belt adjustment.",
                     "requiresItems": [
                         {
                             "id": "a42e441a-5569-490c-86e4-ce711117cd22",
@@ -42,8 +64,66 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "retest",
+                    "text": "Adjustment complete. Run post-adjust checks.",
+                    "requiresItems": [
+                        {
+                            "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "It feels overtightened or rough. Roll back safely."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Re-test tolerance: smooth left-right travel with no skip, no audible chatter, and no return of layer shift symptoms over a short motion cycle.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Log post-adjust retest results and tolerance verdict."
+                },
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Belt tightened and moving smoothly.",
+                    "text": "Tolerance holds across retest window.",
+                    "requiresItems": [
+                        {
+                            "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Drift returned or variance exceeded tolerance."
+                }
+            ]
+        },
+        {
+            "id": "rollback",
+            "text": "Rollback to last-known-good: ease tension a quarter turn, re-square, and inspect idlers before trying again. Never force a binding carriage.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "tighten-x-belt",
+                    "text": "Apply rollback adjustment and re-square."
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Rollback complete. Re-run tolerance retest.",
                     "requiresItems": [
                         {
                             "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
@@ -55,7 +135,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice! Your printer should track cleanly along the X-axis now.",
+            "text": "Dialed in. Baseline and post-adjust evidence are logged, and the belt holds tolerance under motion.",
             "options": [
                 {
                     "type": "finish",

@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Sydney here. We'll tune the printer, slice a simple stand, and print in white PLA for clean detail.",
+            "text": "Sydney here. We will tune the printer, print a stand, then prove fit quality with measured acceptance bounds before sign-off.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "prep",
-            "text": "Ventilate, tie back hair, keep sleeves clear. Heat to PLA temps, wipe the nozzle, paper-level the bed with light drag. Clean the plate with isopropyl, then purge to white PLA until the flow is clean.",
+            "text": "Ventilate, tie back hair, and clear sleeves. Heat to PLA temps, wipe nozzle, paper-level with light drag, clean the plate, and purge to white PLA until flow is clean.",
             "options": [
                 {
                     "type": "process",
@@ -60,7 +60,7 @@
         },
         {
             "id": "print",
-            "text": "Open the Phone Stand STL. Slice at 0.2 mm layers, 3 perimeters, 5 top/bottom layers, 15% gyroid infill. Lay it flat. Supports off unless you see real overhangs. Add a 3\u20135 mm brim if adhesion is weak. PLA around 200\u00b0C nozzle, 60\u00b0C bed. Watch the first layer, then let it finish and cool before releasing.",
+            "text": "Slice the Phone Stand STL at 0.2 mm, 3 perimeters, 5 top/bottom layers, 15% gyroid. Use a 3-5 mm brim if adhesion is weak. Watch first layer, then cool before release.",
             "options": [
                 {
                     "type": "process",
@@ -69,20 +69,102 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "measure",
                     "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Stand is finished; measure it before approval."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Record three checks: lean angle 60-70\u00b0, base warp gap <=1 mm, and cable-slot clearance >=8 mm. Log values before deciding pass/fail.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Record measured fit data and pass/fail notes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
                         {
                             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
                             "count": 1
                         }
                     ],
-                    "text": "The stand is finished and cooled!"
+                    "text": "Measurements logged. Interpret results."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "If all bounds pass, ship it. If angle/clearance miss target, choose the corrective branch, reprint, and re-measure before finish unlocks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Within bounds: approved stand.",
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Out of bounds: run corrective loop."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Too tight: scale XY up 1-2%. Too loose or warped: raise brim and check first-layer adhesion. Reprint, then return to measurement with new data.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-phone-stand",
+                    "text": "Reprint with corrected settings."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Reprint complete. Re-measure against bounds.",
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 2
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Test-fit the phone. It should lean 60\u201370\u00b0 and keep the port clear. Tight? Light sanding. Loose? Scale up 1\u20132% and reprint. Power down and log the settings.",
+            "text": "Nice work. You closed the loop with measurable acceptance criteria instead of vibes-only fit checks.",
             "options": [
                 {
                     "type": "finish",

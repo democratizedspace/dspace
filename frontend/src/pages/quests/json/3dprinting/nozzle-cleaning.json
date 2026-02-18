@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Sydney here. Filament won't flow? Let's safely recreate the clog, then clear it without burning fingertips.",
+            "text": "Sydney here. We are running a clean-room style nozzle recovery: capture a baseline, clean safely, then prove flow is stable before the next print.",
             "options": [
                 {
                     "type": "process",
@@ -17,7 +17,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "clean",
+                    "goto": "baseline",
                     "text": "I already have a clogged hotend.",
                     "requiresItems": [
                         {
@@ -29,8 +29,34 @@
             ]
         },
         {
+            "id": "baseline",
+            "text": "Before touching hardware, log what failed: purge behavior, visible residue, and whether the first 20 mm skips. Kill power and let the hotend cool before disassembly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Record a pre-clean baseline log (symptoms + safety checks)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "clean",
+                    "text": "Baseline logged. Begin controlled cleaning.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "clean",
-            "text": "Preheat to 200 \u00b0C, wear goggles, and pull the filament while it\u2019s soft. If the blob is stubborn, remove the nozzle with pliers and swap in a fresh 0.4 mm at temp so it seats cleanly.",
+            "text": "Wear goggles, warm to service temperature, and clear debris with pliers. If threads are damaged or flow remains blocked, replace the nozzle instead of forcing it.",
             "options": [
                 {
                     "type": "process",
@@ -39,8 +65,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Flow restored and test extrusion complete.",
+                    "goto": "verify",
+                    "text": "Cleanup complete. Ready for verification.",
                     "requiresItems": [
                         {
                             "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
@@ -51,8 +77,60 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Run three short purge lines at 200 \u00b0C. Pass if all three lines are continuous with no popping or curl-back. If any line fails, classify the failure before retrying.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Log post-clean purge results (line 1-3 continuity + notes)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "contamination",
+                    "text": "One or more purge lines still fail."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All purge lines are stable. Close the incident.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "contamination",
+            "text": "Troubleshoot safely: if residue is external, clean and reheat; if under-extrusion persists, swap to a fresh brass nozzle; if filament is burnt, cut back and purge again.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "repair-clogged-nozzle",
+                    "text": "Retry the cleaning cycle with tighter debris control."
+                },
+                {
+                    "type": "process",
+                    "process": "replace-brass-nozzle",
+                    "text": "Replace the nozzle to recover from internal scoring."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Corrective action applied. Re-run verification."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Extrusion is smooth again. Keep goggles nearby, purge a few lines after each swap, and toss worn nozzles instead of fighting them mid-print.",
+            "text": "Great recovery. You captured before/after evidence, handled failure safely, and verified stable extrusion before returning to production.",
             "options": [
                 {
                     "type": "finish",
