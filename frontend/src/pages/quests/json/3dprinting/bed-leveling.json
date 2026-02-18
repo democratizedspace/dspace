@@ -8,23 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Sydney here. Power off, cool down, clear crumbs. We'll level each corner with a sheet of paper.",
+            "text": "Sydney here. Power off, cool down, clear crumbs. We'll record a baseline, adjust each corner, then retest against a first-layer tolerance.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "prep",
+                    "goto": "baseline",
                     "text": "Bed is cool and cleared."
                 }
             ]
         },
         {
-            "id": "prep",
-            "text": "Loosen each wheel a quarter turn, home the axes, wipe the surface. Keep fingers clear while the gantry moves.",
+            "id": "baseline",
+            "text": "Baseline pass: at front-left, front-right, rear-right, and center, note paper drag as loose / light scratch / too tight. Keep fingers clear while the gantry moves.",
             "options": [
                 {
                     "type": "process",
                     "process": "level-3d-printer-bed",
-                    "text": "Walk me through each pass.",
+                    "text": "Run leveling adjustment after baseline notes.",
                     "requiresItems": [
                         {
                             "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
@@ -42,8 +42,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "first-layer",
-                    "text": "Corners all tug the paper evenly.",
+                    "goto": "retest",
+                    "text": "Baseline logged and corners adjusted once.",
                     "requiresItems": [
                         {
                             "id": "a42e441a-5569-490c-86e4-ce711117cd22",
@@ -54,13 +54,13 @@
             ]
         },
         {
-            "id": "first-layer",
-            "text": "Heat the nozzle, run a single-line skirt, recheck drag at center. Light scratch = good first layer.",
+            "id": "retest",
+            "text": "Retest with a single-line skirt. Pass if center and corners all show light scratch drag and the line is continuous with no gaps or gouges.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "prep",
-                    "text": "Need to tweak another corner."
+                    "goto": "drift",
+                    "text": "Retest failed: drag or line quality still drifts."
                 },
                 {
                     "type": "goto",
@@ -76,8 +76,44 @@
             ]
         },
         {
+            "id": "drift",
+            "text": "Recovery branch: return each wheel to your last-known-good quarter-turn position, clean the nozzle tip, and run one controlled adjustment pass before retesting.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Apply controlled rollback adjustment.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Rollback complete; rerun tolerance check.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Bed level, skirt clean. Log the knob positions and move on.",
+            "text": "Bed level, skirt clean, and tolerance recheck passed. Log wheel positions so drift can be diagnosed later.",
             "options": [
                 {
                     "type": "finish",

@@ -8,27 +8,130 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've made some impressive strides in 3D printing. Your next challenge is to print 10 Benchies. These small boat models will test the capabilities of your printer. Are you up for it?",
+            "text": "You've made some impressive strides in 3D printing. For this run, we are not just counting hulls, we're proving repeatability with quality checks and a recovery plan.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "plan",
+                    "text": "Let's set sail with a batch plan."
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Choose your production strategy. Standard profile is safer for dimensional consistency. Fast profile risks more stringing and warped bows.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-benchy",
+                    "text": "Run a standard-profile test Benchy first.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 15
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
                     "goto": "progress",
-                    "text": "Let's set sail!"
+                    "text": "I documented profile, temperature, and speed. Begin the batch.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "progress",
-            "text": "Keep printing Benchies one by one until your workspace looks like a miniature marina. You'll know you've hit the mark when you can't fit another boat on the shelf!",
+            "text": "Run the fleet in two stages: first 5 boats to verify consistency, then 5 more only if hull quality remains stable. Pause if you see elephant foot, layer shift, or chimney stringing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quality-gate",
+                    "text": "Five Benchies printed; ready for midpoint quality gate.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 5
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I spotted defects before hitting five."
+                }
+            ]
+        },
+        {
+            "id": "quality-gate",
+            "text": "Inspect at least one hull from each batch for overhang droop, first-layer squish, and deck text legibility. Record pass/fail notes before finishing the run.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "congrats",
-                    "text": "I have enough!",
+                    "text": "Ten Benchies complete and quality notes are logged.",
                     "requiresItems": [
                         {
                             "id": "7892ffc6-c651-445f-946b-7edc998cf389",
                             "count": 10
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Midpoint or final quality check failed."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery branch: stop the queue, re-level the bed, purge filament, and lower print speed by 10%. Run one verification Benchy before returning to full production.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Re-level and prep the printer safely.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "progress",
+                    "text": "Verification Benchy passed; resume the batch.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 1
                         }
                     ]
                 }

@@ -111,7 +111,7 @@
         },
         {
             "id": "monitor",
-            "text": "Run three purge snapshots (10 mm each, ~5 minutes apart). Log strand width, skipping sounds, and any smoke/odor alerts on paper for each pass.",
+            "text": "Run three purge snapshots (10 mm each, ~5 minutes apart). Log strand width, skip/click sounds, and smoke/odor status each pass. Pass only if width drift stays under 0.2 mm and all safety checks stay clear.",
             "options": [
                 {
                     "type": "goto",
@@ -124,7 +124,7 @@
                         },
                         {
                             "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
-                            "count": 2
+                            "count": 3
                         }
                     ]
                 },
@@ -137,7 +137,7 @@
         },
         {
             "id": "anomaly",
-            "text": "Classify the issue before retry: partial obstruction (repeat cleaning), thermal creep (cooldown + slower feed), or nozzle damage (replace). Re-run the snapshot cadence after correction.",
+            "text": "Classify anomaly first: partial obstruction (repeat cleaning), thermal creep (cooldown + slower feed), or nozzle damage (replace). Record which class occurred and the corrective action before restarting the monitoring window.",
             "options": [
                 {
                     "type": "goto",
@@ -150,7 +150,7 @@
                         },
                         {
                             "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
-                            "count": 2
+                            "count": 3
                         }
                     ]
                 },
@@ -180,7 +180,7 @@
         },
         {
             "id": "verify",
-            "text": "Finish with a center-paper check and first-layer watch so the recovery is safe under print load, not just during purges.",
+            "text": "Finish with a center-paper check and first-layer watch so recovery is safe under load. If either fails, return to anomaly classification instead of forcing completion.",
             "options": [
                 {
                     "type": "goto",
@@ -193,9 +193,14 @@
                         },
                         {
                             "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
-                            "count": 2
+                            "count": 3
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly",
+                    "text": "Verification failed; classify and correct before another monitoring run."
                 }
             ]
         },
@@ -216,7 +221,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/filament-change"],
+    "requiresQuests": [
+        "3dprinting/filament-change"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

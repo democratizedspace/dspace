@@ -49,9 +49,11 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinter/start`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Walk me through each pass." — entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
-    - `prep` → "Corners all tug the paper evenly." — entry-level FDM 3D printer (leveled bed) ×1
-    - `first-layer` → "Skirt looks even and glossy." — entry-level FDM 3D printer (leveled bed) ×1
+    - `baseline` → "Run leveling adjustment after baseline notes." — entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
+    - `baseline` → "Baseline logged and corners adjusted once." — entry-level FDM 3D printer (leveled bed) ×1
+    - `retest` → "Skirt looks even and glossy." — entry-level FDM 3D printer (leveled bed) ×1
+    - `drift` → "Apply controlled rollback adjustment." — entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
+    - `drift` → "Rollback complete; rerun tolerance check." — entry-level FDM 3D printer (leveled bed) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -120,14 +122,26 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/filament-change`
 - Dialogue `requiresItems` gates:
-    - `progress` → "I have enough!" — Benchy ×10
+    - `plan` → "Run a standard-profile test Benchy first." — entry-level FDM 3D printer (leveled bed) ×1, green PLA filament ×15
+    - `plan` → "I documented profile, temperature, and speed. Begin the batch." — Benchy ×1, sheet of printer paper ×1
+    - `progress` → "Five Benchies printed; ready for midpoint quality gate." — Benchy ×5
+    - `quality-gate` → "Ten Benchies complete and quality notes are logged." — Benchy ×10, sheet of printer paper ×2
+    - `troubleshoot` → "Re-level and prep the printer safely." — entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
+    - `troubleshoot` → "Verification Benchy passed; resume the batch." — Benchy ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - green PLA filament ×1000
 - Processes used:
-    - None
+    - [3dprint-benchy](/processes/3dprint-benchy)
+        - Requires: entry-level FDM 3D printer ×1
+        - Consumes: green PLA filament ×15, dWatt ×150
+        - Creates: Benchy ×1, dPrint ×15
+    - [level-3d-printer-bed](/processes/level-3d-printer-bed)
+        - Requires: entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
+        - Consumes: none
+        - Creates: entry-level FDM 3D printer (leveled bed) ×1
 
 ## 6) 3D Print 25 Benchies (`3dprinting/benchy_25`)
 
@@ -198,11 +212,11 @@ slug: '3dprinting'
     - `cooldown` → "Clear the nozzle and reseat it." — safety goggles ×1, needle-nose pliers ×1, sheet of printer paper ×1, entry-level FDM 3D printer (clogged nozzle) ×1, green PLA filament ×5
     - `cooldown` → "Swap in a new nozzle." — safety goggles ×1, needle-nose pliers ×1, 0.4 mm brass nozzle ×1, entry-level FDM 3D printer (clogged nozzle) ×1
     - `cooldown` → "Hotend is rebuilt and ready for monitored purge." — entry-level FDM 3D printer (clean nozzle) ×1
-    - `monitor` → "Logs show stable flow and no anomalies across all three checks." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
-    - `anomaly` → "Adjusted cooling/feed settings and logged the change; rerun snapshots." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
+    - `monitor` → "Logs show stable flow and no anomalies across all three checks." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×3
+    - `anomaly` → "Adjusted cooling/feed settings and logged the change; rerun snapshots." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×3
     - `anomaly` → "Symptoms look like a hard clog; return to teardown and service." — entry-level FDM 3D printer (clogged nozzle) ×1
     - `anomaly` → "Corrective action applied; start a fresh monitoring window." — entry-level FDM 3D printer (clean nozzle) ×1
-    - `verify` → "First layer holds and monitoring log is complete." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×2
+    - `verify` → "First layer holds and monitoring log is complete." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×3
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -285,7 +299,10 @@ slug: '3dprinting'
 - Dialogue `requiresItems` gates:
     - `prep` → "Swap to white PLA and purge." — entry-level FDM 3D printer (leveled bed) ×1, safety goggles ×1, wire cutters ×1
     - `prep` → "Ready to slice and print." — entry-level FDM 3D printer (white PLA loaded) ×1
-    - `print` → "The stand is finished and cooled!" — 3D Printed Phone Stand ×1
+    - `print` → "The stand is finished and cooled; start dimensional checks." — 3D Printed Phone Stand ×1, digital calipers ×1
+    - `measure` → "Measurements pass and fit is stable." — 3D Printed Phone Stand ×1, digital calipers ×1, sheet of printer paper ×1
+    - `rework` → "Print one corrected verification stand." — entry-level FDM 3D printer (white PLA loaded) ×1
+    - `rework` → "Verification print cooled; re-measure now." — 3D Printed Phone Stand ×1, digital calipers ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -303,7 +320,7 @@ slug: '3dprinting'
     - [print-phone-stand](/processes/print-phone-stand)
         - Requires: entry-level FDM 3D printer (white PLA loaded) ×1
         - Consumes: white PLA filament ×20
-        - Creates: 3D Printed Phone Stand ×1
+        - Creates: 3D Printed Phone Stand ×1, dPrint ×20
 
 ## 13) Print a Spool Holder (`3dprinting/spool-holder`)
 
