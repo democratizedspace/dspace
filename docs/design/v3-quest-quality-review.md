@@ -177,8 +177,8 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [ ] Add a drift/variance follow-up branch that rolls back to last-known-good settings when readings do not hold.
 - `3dprinting/benchy_10`
   - [ ] Observed issue: `3dprinting/benchy_10` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0000)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #0000)
 - `3dprinting/benchy_100`
   - [ ] Observed issue: `3dprinting/benchy_100` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -213,8 +213,8 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure. (PR #3590, #3594)
 - `3dprinting/phone-stand`
   - [ ] Observed issue: `3dprinting/phone-stand` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #0000)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #0000)
 - `3dprinting/retraction-test`
   - [ ] Observed issue: `3dprinting/retraction-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
@@ -237,21 +237,21 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
 Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature (fallback: no checked aquaria quests yet)
 
 - `aquaria/aquarium-light`
-  - [ ] Observed issue: `aquaria/aquarium-light` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `aquaria/aquarium-light` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in PR #0000. (PR #0000)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0000)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #0000)
 - `aquaria/balance-ph`
-  - [ ] Observed issue: `aquaria/balance-ph` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue (addressed): `aquaria/balance-ph` previously centered on a measurement/check action but acceptance thresholds and out-of-range handling were thin; this was hardened in PR #0000. (PR #0000)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #0000)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #0000)
 - `aquaria/breeding`
-  - [ ] Observed issue: `aquaria/breeding` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
-  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
-  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
+  - [x] Observed issue (addressed): `aquaria/breeding` was lifecycle-oriented but could read as narration unless staged setup and outcome proofs were separated; this was hardened in PR #0000. (PR #0000)
+  - [x] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`. (PR #0000)
+  - [x] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming. (PR #0000)
 - `aquaria/filter-rinse`
-  - [ ] Observed issue: `aquaria/filter-rinse` describes a cleaning cycle without a measurable before/after success definition.
-  - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
+  - [x] Observed issue (addressed): `aquaria/filter-rinse` previously described a cleaning cycle without a measurable before/after success definition; this was hardened in PR #0000. (PR #0000)
+  - [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #0000)
+  - [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #0000)
 - `aquaria/floating-plants`
   - [ ] Observed issue: `aquaria/floating-plants` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).

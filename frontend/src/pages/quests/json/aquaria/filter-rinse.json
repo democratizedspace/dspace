@@ -1,39 +1,66 @@
 {
     "id": "aquaria/filter-rinse",
     "title": "Rinse Sponge Filter",
-    "description": "Stage a bucket of dechlorinated water, rinse the sponge core, and restart gentle flow without crashing the biofilter.",
+    "description": "Capture low-flow baseline, rinse safely in conditioned water, and prove restored flow with a recovery loop.",
     "image": "/assets/quests/rinse_sponge_filter_bucket.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Flow is slowing and the shrimp look annoyed. Set out dechlorinated water, kill power to the air pump, and keep the sponge wet while you work.",
+            "text": "When bubbles slow, we clean without nuking bacteria. First capture the low-flow baseline, then stage dechlorinated rinse water.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Flow is clearly reduced; log baseline first.",
+                    "requiresItems": [
+                        {
+                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                            "count": 1
+                        },
+                        {
+                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Record the slowdown and unplug the pump before opening anything wet. Safety first: dry hands, dry outlet zone.",
             "options": [
                 {
                     "type": "process",
                     "process": "bucket-water-dechlorinated",
-                    "text": "Leave out a 5 gal bucket to gas off chlorine first.",
-                    "goto": "prep"
-                },
-                {
-                    "type": "goto",
-                    "goto": "prep",
-                    "text": "Bucket's ready and the pump is unplugged.",
+                    "text": "Prepare conditioned rinse bucket.",
+                    "goto": "rinse",
                     "requiresItems": [
-                        {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
-                            "count": 1
-                        },
-                        {
-                            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
-                            "count": 1
-                        },
                         {
                             "id": "5d5e4e29-94b7-4a03-b73d-7420841ae686",
                             "count": 1
                         },
                         {
+                            "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Bucket ready, power off, sponge still wet.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+                            "count": 1
+                        },
+                        {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
                         }
@@ -42,13 +69,13 @@
             ]
         },
         {
-            "id": "prep",
-            "text": "Lift the sponge out with the airline still attached, dunk it in your dechlorinated bucket, and squeeze gently until the water runs mostly clear. Keep everything submerged so the nitrifiers stay alive.",
+            "id": "rinse",
+            "text": "Squeeze the sponge only in conditioned water until runoff is mostly clear, keeping media submerged so nitrifiers survive.",
             "options": [
                 {
                     "type": "process",
                     "process": "rinse-aquarium-filter",
-                    "text": "Squeeze the sponge only in dechlorinated water.",
+                    "text": "Rinse sponge core in conditioned water.",
                     "goto": "restart",
                     "requiresItems": [
                         {
@@ -67,26 +94,31 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "restart",
-                    "text": "Media is rinsed and still wet.",
-                    "requiresItems": [
-                        {
-                            "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "contamination",
+                    "text": "Oops, I rinsed with untreated tap water."
+                }
+            ]
+        },
+        {
+            "id": "contamination",
+            "text": "Abort and recover: stop, re-condition a fresh bucket, re-seed bacteria from established media if available, then rerun the rinse stage.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Recovery staged; restart from baseline safely."
                 }
             ]
         },
         {
             "id": "restart",
-            "text": "Slide the sponge back, reconnect the airline, crack the valve open, and watch for steady bubbles instead of a sandblaster.",
+            "text": "Reinstall and prime. We need post-rinse evidence that bubbles are steady and gentler than the baseline restriction.",
             "options": [
                 {
                     "type": "process",
                     "process": "restart-sponge-filter",
-                    "text": "Prime the air line and restart the flow.",
-                    "goto": "finish",
+                    "text": "Restart and tune airflow.",
+                    "goto": "verify",
                     "requiresItems": [
                         {
                             "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
@@ -101,27 +133,38 @@
                             "count": 1
                         }
                     ]
-                },
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Compare before/after notes: if flow is still weak or erratic, troubleshoot airline kinks and repeat restart.",
+            "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Flow is restored without blasting the inhabitants.",
+                    "text": "Post-rinse flow is restored and stable.",
                     "requiresItems": [
                         {
                             "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "restart",
+                    "text": "Flow still inconsistent; tune and verify again."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Clean sponge, quiet pump, happy bacteria. Rinse weekly or when the bubbles slow, and you avoid a full cycling restart.",
+            "text": "Clean sponge, preserved bacteria, and documented recovery. That's how you avoid a surprise mini-cycle.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Set a reminder for the next rinse."
+                    "text": "Set next rinse reminder."
                 }
             ]
         }
@@ -136,7 +179,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-19",

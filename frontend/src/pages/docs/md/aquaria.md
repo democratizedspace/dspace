@@ -130,7 +130,13 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/sponge-filter`
 - Dialogue `requiresItems` gates:
-    - `mount` → "Light secured." — aquarium LED light (20 W) ×1
+    - `start` → "Let's mount and cable-manage it." — aquarium LED light (20 W) ×1
+    - `start` → "Lamp flickers when I plug it in." — aquarium LED light (20 W) ×1
+    - `mount` → "Mount is secure and cable is dry-routed." — aquarium LED light (20 W) ×1, aquarium air pump ×1
+    - `schedule` → "Timer set and first light cycle logged." — Logged pH entry ×1
+    - `troubleshoot-power` → "Power is stable after reseating." — aquarium LED light (20 W) ×1
+    - `troubleshoot-glare` → "Intensity adjusted and livestock behavior normalized." — Logged pH entry ×1
+    - `verify` → "Stable cycle confirmed with a logged check." — Logged pH entry ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -145,11 +151,12 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/sponge-filter`
 - Dialogue `requiresItems` gates:
-    - `start` → "Bucket's ready and the pump is unplugged." — 5 gallon bucket of dechlorinated tap water ×1, Sponge filter ×1, aquarium air pump ×1, nitrile gloves (pair) ×1
-    - `prep` → "Squeeze the sponge only in dechlorinated water." — Sponge filter ×1, 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1
-    - `prep` → "Media is rinsed and still wet." — Rinsed sponge filter core ×1
-    - `restart` → "Prime the air line and restart the flow." — Rinsed sponge filter core ×1, Airline tubing ×1, aquarium air pump ×1
-    - `restart` → "Flow is restored without blasting the inhabitants." — Restored sponge filter flow ×1
+    - `start` → "Flow is clearly reduced; log baseline first." — Airline tubing ×1, water test logbook ×1
+    - `baseline` → "Prepare conditioned rinse bucket." — aquarium air pump ×1, Water conditioner ×1
+    - `baseline` → "Bucket ready, power off, sponge still wet." — 5 gallon bucket of dechlorinated tap water ×1, Sponge filter ×1, nitrile gloves (pair) ×1
+    - `rinse` → "Rinse sponge core in conditioned water." — Sponge filter ×1, 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1
+    - `restart` → "Restart and tune airflow." — Rinsed sponge filter core ×1, Airline tubing ×1, aquarium air pump ×1
+    - `verify` → "Post-rinse flow is restored and stable." — Restored sponge filter flow ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -293,7 +300,14 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/ph-strip-test`
 - Dialogue `requiresItems` gates:
-    - `verify` → "pH stable" — pH strip ×1
+    - `start` → "Run baseline strip and log it." — pH strip ×1, water test logbook ×1
+    - `baseline` → "Take baseline pH reading." — pH strip ×1, nitrile gloves (pair) ×1
+    - `baseline` → "Baseline reading is captured." — Aquarium pH reading ×1
+    - `adjust` → "Dose and stir a small adjustment." — nitrile gloves (pair) ×1
+    - `safety-check` → "Tank stabilized; restart from a fresh baseline." — 5 gallon bucket of dechlorinated tap water ×1
+    - `interpret` → "Record post-adjust reading." — pH strip ×1, nitrile gloves (pair) ×1
+    - `log` → "Write stabilized reading to the logbook." — Aquarium pH reading ×1, water test logbook ×1
+    - `log` → "Logged final reading with dose notes." — Logged pH entry ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -304,6 +318,14 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Requires: nitrile gloves (pair) ×1, safety goggles ×1, glass stir rod ×1, pH down solution (500 mL) ×1, pH up solution (potassium carbonate) ×1
         - Consumes: pH down solution (500 mL) ×0.05, pH up solution (potassium carbonate) ×0.05
         - Creates: none
+    - [measure-aquarium-ph](/processes/measure-aquarium-ph)
+        - Requires: pH strip ×1, nitrile gloves (pair) ×1
+        - Consumes: pH strip ×1
+        - Creates: Aquarium pH reading ×1
+    - [log-aquarium-ph-reading](/processes/log-aquarium-ph-reading)
+        - Requires: Aquarium pH reading ×1, water test logbook ×1, nitrile gloves (pair) ×1
+        - Consumes: Aquarium pH reading ×1
+        - Creates: Logged pH entry ×1
 
 ## 13) Add dwarf shrimp (`aquaria/shrimp`)
 
@@ -362,11 +384,12 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `requiresQuests`: `aquaria/guppy`, `aquaria/floating-plants`
 - Dialogue `requiresItems` gates:
     - `start` → "Floating mat and warm tank are ready." — Heated Walstad aquarium with guppies (80 L, 26°C) ×1, Floating plant mat ×1
-    - `cover` → "Thicken the floating cover." — Heated Walstad aquarium with guppies (80 L, 26°C) ×1, Floating plant mat ×1, Hornwort cuttings ×1
+    - `cover` → "Build dense fry cover." — Heated Walstad aquarium with guppies (80 L, 26°C) ×1, Floating plant mat ×1, Hornwort cuttings ×1
     - `cover` → "Cover is dense and sheltering the fry." — Dense fry cover ×1
-    - `feed` → "Powder a week's worth of fry food." — goldfish food ×1
-    - `feed` → "Feed and watch them grow out." — Dense fry cover ×1, Fry food pinch ×1, Heated Walstad aquarium with guppies (80 L, 26°C) ×1, aquarium thermometer (0–50°C) ×1
-    - `feed` → "Juveniles are ready to rehome." — Juvenile guppy brood ×1
+    - `feed` → "Portion a week's fry food." — goldfish food ×1
+    - `stress-check` → "Behavior stabilized; restart small feeding cadence." — Fry food pinch ×1
+    - `raise` → "Track fry through the grow-out period." — Dense fry cover ×1, Fry food pinch ×1, Heated Walstad aquarium with guppies (80 L, 26°C) ×1, aquarium thermometer (0–50°C) ×1
+    - `verify` → "Juveniles are healthy and ready to rehome." — Juvenile guppy brood ×1
 - Grants:
     - `start` → "Send extra stems to weave in." — Guppy grass starter ×1, Hornwort cuttings ×1
     - Quest-level `grantsItems`: None

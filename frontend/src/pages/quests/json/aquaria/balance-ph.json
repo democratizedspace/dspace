@@ -1,49 +1,175 @@
 {
     "id": "aquaria/balance-ph",
     "title": "Balance aquarium pH",
-    "description": "Use buffer solution to adjust tank pH and confirm stability.",
+    "description": "Measure, adjust, and re-check pH with explicit safe bounds before locking in stability.",
     "image": "/assets/quests/aquarium_ph_balance.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "pH is off. Let's bring it back into range.",
+            "text": "pH drift is manageable if we run it like ops: baseline, controlled dose, then verification. Target 6.8-7.4 for this tank.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "buffer",
-                    "text": "Ready to adjust"
+                    "goto": "baseline",
+                    "text": "Run baseline strip and log it.",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        },
+                        {
+                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "buffer",
-            "text": "Add the buffer according to instructions and stir well.",
+            "id": "baseline",
+            "text": "Measure current pH and record the timestamp before adding anything. Never dose blind.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-aquarium-ph",
+                    "text": "Take baseline pH reading.",
+                    "goto": "adjust",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Baseline reading is captured.",
+                    "requiresItems": [
+                        {
+                            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Wear gloves and goggles. Dose buffer in small increments with circulation running, then wait before re-testing.",
             "options": [
                 {
                     "type": "process",
                     "process": "adjust-ph",
-                    "text": "Adjust pH"
+                    "text": "Dose and stir a small adjustment.",
+                    "goto": "interpret",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
-                    "goto": "verify",
-                    "text": "Buffer added"
+                    "goto": "safety-check",
+                    "text": "I spilled reagent or dosed too fast."
                 }
             ]
         },
         {
-            "id": "verify",
-            "text": "Check the pH again to ensure it's stable.",
+            "id": "interpret",
+            "text": "Re-test and interpret: in-range is 6.8-7.4; 6.6-6.79 or 7.41-7.6 is caution and needs a second tiny correction; outside that means stop and recover.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "pH stable",
+                    "type": "process",
+                    "process": "measure-aquarium-ph",
+                    "text": "Record post-adjust reading.",
+                    "goto": "log",
                     "requiresItems": [
                         {
                             "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "correction-loop",
+                    "text": "Reading is still out of range; run a correction cycle."
+                }
+            ]
+        },
+        {
+            "id": "correction-loop",
+            "text": "Apply half-dose correction, wait, and re-test. Repeat until stable, but abort if readings swing wider after two attempts.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Run another controlled adjustment."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Swing is widening; moving to recovery plan."
+                }
+            ]
+        },
+        {
+            "id": "safety-check",
+            "text": "Recovery mode: pause dosing, add fresh conditioned water, and verify fish behavior before any further chemical changes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Tank stabilized; restart from a fresh baseline.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Log final pH, dose amount, and time delta from baseline so future drift has context.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-aquarium-ph-reading",
+                    "text": "Write stabilized reading to the logbook.",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+                            "count": 1
+                        },
+                        {
+                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Logged final reading with dose notes.",
+                    "requiresItems": [
+                        {
+                            "id": "9c392043-4067-4f49-8038-38eef00e0b24",
                             "count": 1
                         }
                     ]
@@ -52,11 +178,11 @@
         },
         {
             "id": "finish",
-            "text": "Nice work keeping your fish comfortable!",
+            "text": "Nice work keeping the system stable. You now have baseline and post-adjust evidence, not just a guess.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Happy fish"
+                    "text": "Maintain weekly pH review."
                 }
             ]
         }
@@ -71,7 +197,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
