@@ -16,6 +16,10 @@ Select 3–8 quests from `docs/design/v3-quest-quality-review.md` under
 **Problematic quests to prioritize (with improvement checklist)** and harden them to parity with
 verified checked exemplars in `docs/qa/v3.md` §4.5.
 
+In the same PR, update `docs/design/v3-quest-quality-review.md` by checking only the line-item
+boxes that are verifiably completed by your quest changes, and append the PR number at the end of
+each checked line in the format `(#<PR_NUMBER>)`.
+
 Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3.md`.
 
 ## Deterministic selection and anchoring rules (required)
@@ -52,6 +56,11 @@ Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3
   reuse an existing in-repo image reference, note human follow-up for image dedup/replacement,
   and do not add new binary assets.
 - Ensure requirements, rewards, and process references resolve to valid IDs.
+- After hardening each selected quest, update only the corresponding checklist lines in
+  `docs/design/v3-quest-quality-review.md` that are demonstrably satisfied by the diff.
+- Do not check speculative or partially-complete items.
+- Every newly checked line in `docs/design/v3-quest-quality-review.md` must end with the current
+  PR reference token `(#<PR_NUMBER>)`.
 
 ## Validation commands (required)
 
@@ -102,6 +111,9 @@ Goals:
 - Optimize for clearing still-unchecked quest-quality boxes in `docs/qa/v3.md` after manual human
   verification.
 - Preserve Codex binary-asset limitations guidance (reuse image references; no new binary assets).
+- Require quest-quality checklist maintenance in
+  `docs/design/v3-quest-quality-review.md`: check only verifiably completed line items and append
+  `(#<PR_NUMBER>)` to each newly checked line.
 
 Constraints:
 
