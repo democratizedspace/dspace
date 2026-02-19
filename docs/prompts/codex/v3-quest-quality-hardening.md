@@ -61,6 +61,11 @@ and optimize for clearing those boxes after manual human verification.
   - leave boxes unchecked when evidence is ambiguous;
   - bookkeeping-only follow-up PRs that do not touch quest JSON may adjust PR tags inside the
     existing parenthetical but must not change any `[ ]`/`[x]` checkbox state.
+- **Mandatory closure rule for hardening PRs:** any PR that uses this prompt to harden quest JSON
+  must switch at least one targeted checklist line from `[ ]` to `[x]` in
+  `docs/design/v3-quest-quality-review.md` and append its PR tag(s) on those exact line(s).
+  Selecting quests that produce zero checkbox transitions is not allowed for this workflow; if no
+  selected line can be verified complete, revise the scope before opening the PR.
 - If quest flow changes materially, update paired docs in
   `frontend/src/pages/docs/md/<tree>.md`.
 - Codex cannot create/edit binary images. If quality hardening needs new item imagery,
@@ -103,6 +108,9 @@ Output exactly these eight sections in order (no extra sections):
    - Bullet list of every line item changed in
      `docs/design/v3-quest-quality-review.md`, quoted verbatim with its final checkbox state and
      appended PR tag(s).
+   - This section must include at least one `[ ]` -> `[x]` transition for hardening PRs that touch
+     quest JSON; outputting `None` is only valid for bookkeeping-only follow-up PRs that do not
+     edit quest JSON.
 ```
 
 ## Upgrade prompt
@@ -123,6 +131,10 @@ Goals:
   quest JSON hardening, keep PR tags in canonical single-parenthetical format `(PR #1234, #5678)`
   when multiple PRs apply, append new PR tags as `, #<number>` within that parenthetical, and
   keep checkbox state unchanged in bookkeeping-only follow-up PRs).
+- Preserve and enforce the mandatory hardening closure rule: any PR that edits quest JSON under
+  this workflow must check at least one targeted checklist box in
+  `docs/design/v3-quest-quality-review.md`; zero-transition hardening PRs are invalid and must
+  tighten scope until at least one line can be verifiably closed.
 - Optimize for clearing still-unchecked quest-quality boxes in `docs/qa/v3.md` after manual human
   verification.
 - Preserve Codex binary-asset limitations guidance (reuse image references; no new binary assets).
