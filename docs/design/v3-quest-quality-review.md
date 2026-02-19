@@ -818,21 +818,21 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
   - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `hydroponics/ec-check`
-  - [ ] Observed issue: `hydroponics/ec-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `hydroponics/ec-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `hydroponics/filter-clean`
-  - [ ] Observed issue: `hydroponics/filter-clean` describes a cleaning cycle without a measurable before/after success definition.
-  - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
+  - [x] Observed issue: `hydroponics/filter-clean` describes a cleaning cycle without a measurable before/after success definition.
+  - [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
+  - [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
 - `hydroponics/grow-light`
   - [ ] Observed issue: `hydroponics/grow-light` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `hydroponics/lettuce`
-  - [ ] Observed issue: `hydroponics/lettuce` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
-  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
-  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
+  - [x] Observed issue: `hydroponics/lettuce` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
+  - [x] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
+  - [x] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
 - `hydroponics/mint-cutting`
   - [ ] Observed issue: `hydroponics/mint-cutting` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
   - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
@@ -882,9 +882,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
   - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `hydroponics/top-off`
-  - [ ] Observed issue: `hydroponics/top-off` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue: `hydroponics/top-off` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `hydroponics/tub-scrub`
   - [ ] Observed issue: `hydroponics/tub-scrub` describes a cleaning cycle without a measurable before/after success definition.
   - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).

@@ -8,23 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's make sure the nutrients are at the right strength.",
+            "text": "Let's verify EC with a defensible reading, not a guess. We log first, interpret second, then correct if needed.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "How's the mix?"
+                    "text": "Ready to sample."
                 }
             ]
         },
         {
             "id": "measure",
-            "text": "Dip the EC meter into the reservoir and compare the reading to your plant's target range.",
+            "text": "Rinse the probe, stir the reservoir, then capture a fresh EC reading. Target 1.2-1.8 mS/cm for leafy greens unless your crop sheet says otherwise.",
             "options": [
                 {
                     "type": "process",
                     "process": "measure-ec-solution",
-                    "text": "Meter reading looks good.",
+                    "text": "Capture EC reading.",
                     "requiresItems": [
                         {
                             "id": "71655665-4a59-41f4-9084-dad4d976df91",
@@ -38,18 +38,80 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "interpret",
+                    "text": "Reading logged; let's interpret it.",
+                    "requiresItems": [
+                        {
+                            "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the log before closing: 1.2-1.8 mS/cm is in range, 1.0-1.2 or 1.8-2.0 is caution, and outside that range needs correction.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "EC adjusted!"
+                    "text": "In range (1.2-1.8). Close and record cadence.",
+                    "requiresItems": [
+                        {
+                            "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Caution or out of range. Correct and re-test."
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Safety check: gloves and goggles on. Adjust concentration in small steps, circulate for 10 minutes, then measure again. No blind dosing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refresh-hydroponic-tub",
+                    "text": "Apply correction and circulate.",
+                    "requiresItems": [
+                        {
+                            "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Correction done; re-test EC now."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Log the value and recheck weekly to keep nutrients on target.",
+            "text": "Great pass. You now have measurement evidence plus interpretation. Recheck on your weekly nutrient round or after any top-off >10%.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "EC check closed with evidence."
                 }
             ]
         }
@@ -60,11 +122,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/ec-calibrate"],
+    "requiresQuests": [
+        "hydroponics/ec-calibrate"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -140,11 +140,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/basil`
 - Dialogue `requiresItems` gates:
-    - `kit` → "I've got seeds and plugs ready." — Lettuce Seeds ×10, hydroponic starter plug ×10
-    - `soak` → "Plugs are soaked and drained." — soaked hydroponic starter plug ×10
-    - `germinate` → "Seedlings are up and healthy." — lettuce seedling ×10
-    - `transfer` → "Heads are mature and ready." — harvestable lettuce head ×10
-    - `harvest` → "Fresh lettuce secured." — harvested lettuce leaves ×10
+    - `kit` → "Seeds and plugs are ready." — Lettuce Seeds ×10, hydroponic starter plug ×10
+    - `soak` → "Setup artifact ready: soaked plugs." — soaked hydroponic starter plug ×10
+    - `germinate` → "Seedlings are healthy and uniform." — lettuce seedling ×10
+    - `transfer` → "Outcome artifact ready: mature heads." — harvestable lettuce head ×10
+    - `harvest` → "Harvest quality passes and leaves are packed." — harvested lettuce leaves ×10
+- Recovery/troubleshooting branches:
+    - `germinate` → `stress` for damping-off/stretching; loops to `germinate` or restart at `soak`
+    - `harvest` can branch back to `transfer` when heads are underdeveloped
 - Grants:
     - `kit` → "Stock me up." — Lettuce Seeds ×10, hydroponic starter plug ×10
     - Quest-level `grantsItems`: None
@@ -152,21 +155,9 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Lettuce Seeds ×10
 - Processes used:
     - [rockwool-soak](/processes/rockwool-soak)
-        - Requires: 5 gallon bucket of dechlorinated tap water ×1
-        - Consumes: hydroponic starter plug ×10
-        - Creates: soaked hydroponic starter plug ×10
     - [germinate-lettuce](/processes/germinate-lettuce)
-        - Requires: hydroponic grow lamp ×1
-        - Consumes: Lettuce Seeds ×10, soaked hydroponic starter plug ×10
-        - Creates: lettuce seedling ×10
     - [grow-lettuce](/processes/grow-lettuce)
-        - Requires: hydroponic grow lamp ×1
-        - Consumes: lettuce seedling ×10, hydroponics tub (ready) ×1, dWatt ×18144
-        - Creates: harvestable lettuce head ×10, hydroponics growth run log ×1
     - [harvest-lettuce](/processes/harvest-lettuce)
-        - Requires: none
-        - Consumes: harvestable lettuce head ×10
-        - Creates: harvested lettuce leaves ×10
 
 ## 5) Refresh Nutrient Solution (`hydroponics/nutrient-check`)
 
@@ -243,7 +234,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/ec-calibrate`
 - Dialogue `requiresItems` gates:
-    - `measure` → "Meter reading looks good." — EC meter ×1, hydroponics tub (ready) ×1
+    - `measure` → "Capture EC reading." — EC meter ×1, hydroponics tub (ready) ×1
+    - `measure` → "Reading logged; let's interpret it." — hydroponic nutrient solution EC log ×1
+    - `interpret` → "In range (1.2-1.8). Close and record cadence." — hydroponic nutrient solution EC log ×1
+    - `adjust` → "Apply correction and circulate." — hydroponic nutrient concentrate (1 L) ×1, nitrile gloves (pair) ×1, 50 mL measuring syringe ×1, hydroponics tub (ready) ×1
+- Recovery/troubleshooting branches:
+    - Out-of-range/caution path routes through `adjust` and loops back to `measure`
+- Safety/ops checks:
+    - Explicit PPE and small-step correction before retesting
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -251,9 +249,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - cured compost bucket ×1
 - Processes used:
     - [measure-ec-solution](/processes/measure-ec-solution)
-        - Requires: EC meter ×1, hydroponics tub (ready) ×1
-        - Consumes: none
-        - Creates: hydroponic nutrient solution EC log ×1
+    - [refresh-hydroponic-tub](/processes/refresh-hydroponic-tub)
 
 ## 9) Test Hydroponic pH (`hydroponics/ph-test`)
 
@@ -402,7 +398,12 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/pump-install`
 - Dialogue `requiresItems` gates:
-    - `fill` → "Water added!" — 5 gallon bucket of dechlorinated tap water ×1
+    - `prep` → "Supplies ready and system looks stable." — 5 gallon bucket of dechlorinated tap water ×1, hydroponics tub (ready) ×1
+    - `fill` → "Record post-top-off EC." — EC meter ×1, hydroponics tub (ready) ×1
+    - `fill` → "Water added and EC measured." — hydroponic nutrient solution EC log ×1
+- Recovery/troubleshooting branches:
+    - `prep` can branch to `diagnose` and `pause` for leak/cavitation recovery before re-entry
+    - `verify` loops back to `fill` when EC remains off-target
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -410,9 +411,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - cured compost bucket ×1
 - Processes used:
     - [bucket-water-dechlorinated](/processes/bucket-water-dechlorinated)
-        - Requires: none
-        - Consumes: 5 gallon bucket of tap water (chlorinated) ×1
-        - Creates: 5 gallon bucket of dechlorinated tap water ×1
+    - [measure-ec-solution](/processes/measure-ec-solution)
 
 ## 17) Rinse Grow Bed Filter (`hydroponics/filter-clean`)
 
@@ -420,9 +419,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/top-off`
 - Dialogue `requiresItems` gates:
-    - `prep` → "I have the cleaning kit." — Sponge filter ×1, 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1
-    - `rinse` → "Filter core is rinsed." — Rinsed sponge filter core ×1
-    - `restart` → "Flow is restored." — Restored sponge filter flow ×1
+    - `prep` → "Kit is staged." — Sponge filter ×1, 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1
+    - `rinse` → "Core is rinsed and still wet." — Rinsed sponge filter core ×1
+    - `restart` → "Flow restored; verify post-clean evidence." — Restored sponge filter flow ×1
+- Recovery/troubleshooting branches:
+    - `rinse` → `contamination` branch for black water/sulfur odor; loops back through second rinse
+    - `verify` loops back to `rinse` if post-clean flow is unstable
+- Safety/ops checks:
+    - Explicit no-chlorine media handling and safe dirty-water disposal in contamination path
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -430,13 +434,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - dScience ×1
 - Processes used:
     - [rinse-aquarium-filter](/processes/rinse-aquarium-filter)
-        - Requires: Sponge filter ×1, 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1
-        - Consumes: 5 gallon bucket of dechlorinated tap water ×1
-        - Creates: Rinsed sponge filter core ×1
     - [restart-sponge-filter](/processes/restart-sponge-filter)
-        - Requires: Rinsed sponge filter core ×1, aquarium air pump ×1, Airline tubing ×1
-        - Consumes: Rinsed sponge filter core ×1
-        - Creates: Restored sponge filter flow ×1
 
 ## 18) Soak Air Stone (`hydroponics/air-stone-soak`)
 

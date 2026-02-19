@@ -8,18 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Nice work with basil! Lettuce grows faster, but it still needs clean prep and steady conditions. Ready for a full run from seed to harvest?",
+            "text": "Nice basil run. Lettuce scales fast, but only if we treat it as staged operations: setup proof first, then growth outcome proof, with stress recovery ready.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "kit",
-                    "text": "Let's do a full lettuce cycle."
+                    "text": "Run staged lettuce cycle."
                 }
             ]
         },
         {
             "id": "kit",
-            "text": "Great. First grab fresh lettuce seeds and another set of starter plugs. We'll do this the reliable way so your germination rate stays high.",
+            "text": "First gather seeds and starter plugs so germination is uniform.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -38,7 +38,7 @@
                 {
                     "type": "goto",
                     "goto": "soak",
-                    "text": "I've got seeds and plugs ready.",
+                    "text": "Seeds and plugs are ready.",
                     "requiresItems": [
                         {
                             "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
@@ -54,17 +54,17 @@
         },
         {
             "id": "soak",
-            "text": "Prep the plugs by soaking them with dechlorinated water so roots can establish evenly.",
+            "text": "Prep plugs with dechlorinated water. This is setup evidence gate #1 before any germination claims.",
             "options": [
                 {
                     "type": "process",
                     "process": "rockwool-soak",
-                    "text": "Soaking plugs now."
+                    "text": "Soak plugs."
                 },
                 {
                     "type": "goto",
                     "goto": "germinate",
-                    "text": "Plugs are soaked and drained.",
+                    "text": "Setup artifact ready: soaked plugs.",
                     "requiresItems": [
                         {
                             "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
@@ -76,17 +76,22 @@
         },
         {
             "id": "germinate",
-            "text": "Time to germinate. Keep the lamp steady and avoid overwatering while the lettuce sprouts.",
+            "text": "Start germination under stable light and moisture. Abort overwatering early instead of pushing weak seedlings forward.",
             "options": [
                 {
                     "type": "process",
                     "process": "germinate-lettuce",
-                    "text": "Starting germination under lights."
+                    "text": "Run germination cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "stress",
+                    "text": "Seedlings are stretching, damping off, or uneven."
                 },
                 {
                     "type": "goto",
                     "goto": "transfer",
-                    "text": "Seedlings are up and healthy.",
+                    "text": "Seedlings are healthy and uniform.",
                     "requiresItems": [
                         {
                             "id": "021c1c24-06f6-4917-b054-0fa3e33868f0",
@@ -97,18 +102,34 @@
             ]
         },
         {
+            "id": "stress",
+            "text": "Stress branch: pause transplanting, correct light height and watering cadence, then re-check seedling vigor before resuming.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "germinate",
+                    "text": "Corrections applied; re-check seedlings."
+                },
+                {
+                    "type": "goto",
+                    "goto": "soak",
+                    "text": "Batch failed; restart from setup artifacts."
+                }
+            ]
+        },
+        {
             "id": "transfer",
-            "text": "Load those seedlings into a nutrient-ready tub and give them a full grow cycle.",
+            "text": "Transplant into a nutrient-ready tub and track the grow run to outcome. Gloves on while handling roots and nutrient water.",
             "options": [
                 {
                     "type": "process",
                     "process": "grow-lettuce",
-                    "text": "Transplanting and setting the grow cycle."
+                    "text": "Start grow-out cycle."
                 },
                 {
                     "type": "goto",
                     "goto": "harvest",
-                    "text": "Heads are mature and ready.",
+                    "text": "Outcome artifact ready: mature heads.",
                     "requiresItems": [
                         {
                             "id": "7d119fa6-26e3-42c5-bbe4-3e7be458ab96",
@@ -120,16 +141,22 @@
         },
         {
             "id": "harvest",
-            "text": "Excellent canopy. Harvest the outer leaves first and leave the crown when possible so you can extend production.",
+            "text": "Harvest outer leaves first. If heads are stressed or bitter, branch back and extend grow-out instead of forcing closure.",
             "options": [
                 {
                     "type": "process",
                     "process": "harvest-lettuce",
-                    "text": "Harvesting now."
+                    "text": "Harvest now."
                 },
                 {
-                    "type": "finish",
-                    "text": "Fresh lettuce secured.",
+                    "type": "goto",
+                    "goto": "transfer",
+                    "text": "Heads underdeveloped; extend grow-out and re-check."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Harvest quality passes and leaves are packed.",
                     "requiresItems": [
                         {
                             "id": "fbf2d3a5-1d80-431b-84f4-6bf4677ed619",
@@ -138,9 +165,21 @@
                     ]
                 }
             ]
+        },
+        {
+            "id": "finish",
+            "text": "Great run: setup proof (soaked plugs) plus outcome proof (harvested leaves) with a stress recovery branch in between.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Lettuce cycle complete."
+                }
+            ]
         }
     ],
-    "requiresQuests": ["hydroponics/basil"],
+    "requiresQuests": [
+        "hydroponics/basil"
+    ],
     "rewards": [
         {
             "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
