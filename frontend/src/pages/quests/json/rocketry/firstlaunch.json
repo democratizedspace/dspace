@@ -170,8 +170,35 @@
                             "count": 1
                         }
                     ],
+                    "goto": "safety-check",
+                    "text": "Gear staged. Let's run a safety check before we arm."
+                },
+                {
+                    "type": "goto",
+                    "goto": "launch-troubleshoot",
+                    "text": "Hold up\u2014the range isn't clear and my setup feels sketchy."
+                }
+            ]
+        },
+        {
+            "id": "safety-check",
+            "text": "Nova voice gets serious here: call a hard stop if people, pets, power lines, or dry brush drift into the hazard arc. If any stop condition trips, we reset instead of gambling.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "go",
-                    "text": "We are go for launch!!! Right?"
+                    "requiresItems": [
+                        {
+                            "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Checklist complete and range is clear. We are go for launch."
+                },
+                {
+                    "type": "goto",
+                    "goto": "launch-troubleshoot",
+                    "text": "Checklist found an issue. Let's fix it before launch."
                 }
             ]
         },
@@ -194,6 +221,33 @@
                         }
                     ],
                     "text": "Whoa! I can't believe I launched a rocket!! It didn't survive the landing, though, unfortunately."
+                },
+                {
+                    "type": "goto",
+                    "goto": "launch-troubleshoot",
+                    "text": "We had a misfire or weird pad behavior\u2014pause and troubleshoot first."
+                }
+            ]
+        },
+        {
+            "id": "launch-troubleshoot",
+            "text": "Good catch. Common culprits: loose igniter clips, a crooked launch rod, or no clean safety perimeter. Re-seat the igniter, straighten the pad, and clear the range.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "requiresItems": [
+                        {
+                            "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Repairs done\u2014verify safety conditions again."
+                },
+                {
+                    "type": "goto",
+                    "goto": "done",
+                    "text": "Stand down. We'll scrub this launch and reschedule in safer conditions."
                 }
             ]
         },
@@ -214,7 +268,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinter/start"],
+    "requiresQuests": [
+        "3dprinter/start"
+    ],
     "hardening": {
         "passes": 0,
         "score": 100,

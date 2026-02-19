@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey friend! Nova here. Before we launch, we need a preflight check. Ready to run through it?",
+            "text": "Hey friend! Nova here. Before we launch, we need a preflight check with pass/fail limits, not vibes. Ready to run through it?",
             "options": [
                 {
                     "type": "goto",
@@ -19,11 +19,11 @@
         },
         {
             "id": "supplies",
-            "text": "You'll need a launch pad, an igniter, and a controller. Once you've got them, we can proceed.",
+            "text": "You'll need a launch pad, an igniter, and a controller. Then we log a checklist pass before we can arm.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "arm",
+                    "goto": "measure",
                     "requiresItems": [
                         {
                             "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
@@ -39,12 +39,72 @@
                         }
                     ],
                     "text": "All set, gear in hand."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "I'm missing hardware\u2014what should I fix first?"
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Run the preflight checklist and verify three bounds: pad angle in range, igniter continuity good, and range clear. Any red flag means no launch.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "requiresItems": [
+                        {
+                            "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Checklist log captured."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "A bound failed or conditions changed."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: launch only if all checks are green and the hazard arc stays clear. If not, scrub and fix the issue.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "arm",
+                    "text": "All checks green. Proceed to launch sequence."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Not green yet. Troubleshoot and re-test."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Troubleshoot path: replace suspect igniter clips, reset pad angle, and clear spectators to the safe perimeter. Re-run the checklist before arming.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "requiresItems": [
+                        {
+                            "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Corrections complete; verify bounds again."
                 }
             ]
         },
         {
             "id": "arm",
-            "text": "Everything looks good. Ready to fire?",
+            "text": "Everything looks good and documented. Ready to fire?",
             "options": [
                 {
                     "type": "process",
@@ -81,7 +141,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["rocketry/parachute"],
+    "requiresQuests": [
+        "rocketry/parachute"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

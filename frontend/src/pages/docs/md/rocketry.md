@@ -26,8 +26,10 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Dialogue `requiresItems` gates:
     - `components` → "Alright, all 4 components are now printed! What's next?" — 3D printed nosecone ×1, 3D printed body tube ×1, 3D printed fincan ×1, 3D printed nosecone coupler ×1
     - `assemble` → "The rocket's assembled! Are we ready for launch?" — launch-capable model rocket ×1
-    - `launch` → "We are go for launch!!! Right?" — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
+    - `launch` → "Gear staged. Let's run a safety check before we arm." — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
+    - `safety-check` → "Checklist complete and range is clear. We are go for launch." — rocket launch checklist ×1
     - `go` → "Whoa! I can't believe I launched a rocket!! It didn't survive the landing, though, unfortunately." — damaged model rocket ×1
+    - `launch-troubleshoot` → "Repairs done—verify safety conditions again." — rocket launch checklist ×1
 - Grants:
     - `launch` → "Oh cool, I'll never turn down free stuff!" — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
     - Quest-level `grantsItems`: None
@@ -108,6 +110,8 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - `requiresQuests`: `rocketry/parachute`
 - Dialogue `requiresItems` gates:
     - `supplies` → "All set, gear in hand." — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
+    - `measure` → "Checklist log captured." — rocket launch checklist ×1
+    - `recovery` → "Corrections complete; verify bounds again." — rocket launch checklist ×1
     - `arm` → "Launch successful!" — damaged model rocket ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -251,7 +255,8 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/preflight-check`
 - Dialogue `requiresItems` gates:
-    - None
+    - `measure` → "Wind log captured." — placeholder reward item (canonical ID: 15e3dd7e-374b-4233-b8c9-117e3057f009) ×1
+    - `corrective` → "New readings logged—evaluate again." — placeholder reward item (canonical ID: 15e3dd7e-374b-4233-b8c9-117e3057f009) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

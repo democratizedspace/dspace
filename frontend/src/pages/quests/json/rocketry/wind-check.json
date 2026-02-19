@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Nimbus here. Wind is data, not vibes. Let's make sure it's safe to fly.",
+            "text": "Nimbus here. Wind is data, not vibes. We'll take measurements, compare them to limits, and only launch if the range stays safe.",
             "options": [
                 {
                     "type": "goto",
@@ -19,29 +19,71 @@
         },
         {
             "id": "measure",
-            "text": "Hold an anemometer at launch height and take a reading. Then take a second one.",
+            "text": "Hold an anemometer at launch height and capture two readings. Keep clear of trees and people while sampling the line of flight.",
             "options": [
                 {
                     "type": "process",
                     "process": "measure-wind-speed",
-                    "goto": "ready",
-                    "text": "Take an anemometer reading."
+                    "text": "Take and log wind readings."
                 },
                 {
                     "type": "goto",
-                    "goto": "ready",
-                    "text": "Reading taken\u2014winds are calm."
+                    "goto": "interpret",
+                    "requiresItems": [
+                        {
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Wind log captured."
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Readings look gusty or inconsistent."
                 }
             ]
         },
         {
-            "id": "ready",
-            "text": "Looks good. Winds are within limits, launch window is open.",
+            "id": "interpret",
+            "text": "Interpretation gate: launch is allowed only when sustained wind is under 20 km/h and gust spread is under 8 km/h. Outside that band, we stand down and retest.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "done",
-                    "text": "Sweet, let's get this bird in the air!"
+                    "text": "Both readings are within limits. Launch window is open."
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Out of range\u2014pause launch ops and correct."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective branch: wait for calmer conditions, lower rod angle if policy allows, and recheck the field perimeter. If gusts persist, scrub the launch.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-wind-speed",
+                    "text": "Re-test after adjustments."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "requiresItems": [
+                        {
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
+                            "count": 1
+                        }
+                    ],
+                    "text": "New readings logged\u2014evaluate again."
+                },
+                {
+                    "type": "goto",
+                    "goto": "done",
+                    "text": "Abort for today and log a no-go decision."
                 }
             ]
         },
@@ -62,7 +104,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["rocketry/preflight-check"],
+    "requiresQuests": [
+        "rocketry/preflight-check"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
