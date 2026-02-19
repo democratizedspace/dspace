@@ -45,6 +45,12 @@ Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3
 ## Implementation requirements
 
 - Edit quest JSON under `frontend/src/pages/quests/json/<tree>/<quest>.json`.
+- For every checklist action you fully complete in
+  `docs/design/v3-quest-quality-review.md` under the selected quest IDs, change that action item
+  from `- [ ]` to `- [x]` in the same PR and append the current PR number at line end as
+  `(#<PR_NUMBER>)`.
+- Only check boxes for work that is verifiably complete in the changed quest JSON/docs; leave
+  partial or unverified items unchecked.
 - Keep quest IDs stable unless correcting a proven canonical mismatch.
 - If quest flow changes materially, update paired docs in
   `frontend/src/pages/docs/md/<tree>.md`.
@@ -84,6 +90,10 @@ Output exactly these sections in order:
    - Any image reuse performed and required human dedup/replacement steps, or explicit `None`.
 7. `Follow-ups`
    - Deferred work or explicit `None`.
+8. `Quest quality review checklist updates`
+   - Bullet list of every checkbox line changed in
+     `docs/design/v3-quest-quality-review.md`, including the exact checked line text and appended
+     `(#<PR_NUMBER>)` tag.
 ```
 
 ## Upgrade prompt
@@ -101,6 +111,8 @@ Goals:
   required output format.
 - Optimize for clearing still-unchecked quest-quality boxes in `docs/qa/v3.md` after manual human
   verification.
+- Ensure the `Main prompt` explicitly requires checking completed items in
+  `docs/design/v3-quest-quality-review.md` and appending `(#<PR_NUMBER>)` on each checked line.
 - Preserve Codex binary-asset limitations guidance (reuse image references; no new binary assets).
 
 Constraints:
