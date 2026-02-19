@@ -179,9 +179,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "aquaria/position-tank"
-    ],
+    "requiresQuests": ["aquaria/position-tank"],
     "hardening": {
         "passes": 0,
         "score": 95,
