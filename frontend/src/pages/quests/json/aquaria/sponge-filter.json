@@ -1,19 +1,19 @@
 {
     "id": "aquaria/sponge-filter",
     "title": "Install a sponge filter",
-    "description": "Add gentle filtration to keep your tank clean without harming shrimp.",
+    "description": "Install and verify gentle biological filtration with evidence gates and a contamination recovery loop.",
     "image": "/assets/quests/install_sponge_filter_aquarium.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "A sponge filter keeps water clean without too much flow. We'll rinse it gently and restart it without shocking the bacteria.",
+            "text": "A sponge filter keeps shrimp safe, but only if we prep rinse water and prove stable flow after startup. Let's stage gear before we touch the tank.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Let's prep the rinse gear",
+                    "text": "Gear staged and PPE on.",
                     "requiresItems": [
                         {
                             "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
@@ -45,17 +45,18 @@
         },
         {
             "id": "prep",
-            "text": "Unplug the pump and set the filter in a bucket. Dechlorinate the rinse water so the sponge bacteria stay alive.",
+            "text": "First decision: condition a fresh bucket for a conservative rinse, or continue if you already staged dechlorinated water. Never rinse bio-media in raw chlorinated tap water.",
             "options": [
                 {
                     "type": "process",
                     "process": "condition-bucket-water",
-                    "text": "Condition rinse water"
+                    "text": "Condition a fresh rinse bucket.",
+                    "goto": "rinse"
                 },
                 {
                     "type": "goto",
                     "goto": "rinse",
-                    "text": "Bucket is full of dechlorinated water",
+                    "text": "Bucket is already dechlorinated and ready.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -67,17 +68,23 @@
         },
         {
             "id": "rinse",
-            "text": "Squeeze the sponge in the dechlorinated bucket until the flow returns but the media stays wet. Keep tubing and the pump dry and upright.",
+            "text": "Squeeze the sponge gently in the bucket and keep the core wet. If sludge stays dark or sour, branch to contamination recovery before restart.",
             "options": [
                 {
                     "type": "process",
                     "process": "rinse-aquarium-filter",
-                    "text": "Rinse and clean the sponge core"
+                    "text": "Run standard rinse cycle.",
+                    "goto": "restart"
+                },
+                {
+                    "type": "goto",
+                    "goto": "contamination",
+                    "text": "Rinse water looks foul; take contamination branch."
                 },
                 {
                     "type": "goto",
                     "goto": "restart",
-                    "text": "Sponge rinsed and still wet",
+                    "text": "Core is rinsed and still wet.",
                     "requiresItems": [
                         {
                             "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
@@ -88,18 +95,42 @@
             ]
         },
         {
+            "id": "contamination",
+            "text": "Good catch. Discard dirty rinse water, stage fresh dechlorinated water, and repeat a gentler squeeze pattern. Pause if livestock is gasping and restore aeration first.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "condition-bucket-water",
+                    "text": "Prepare fresh dechlorinated rinse water.",
+                    "goto": "rinse"
+                },
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Fresh bucket staged and livestock behavior is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "restart",
-            "text": "Reassemble, reinstall, and prime the filter. Keep the outlet pointed at the surface for gas exchange, then check bubbles are even.",
+            "text": "Reconnect airline and pump, then tune airflow for steady bubbles without blasting shrimp. Verify the outflow before closing maintenance.",
             "options": [
                 {
                     "type": "process",
                     "process": "restart-sponge-filter",
-                    "text": "Restart the bubbler"
+                    "text": "Restart and tune filter flow.",
+                    "goto": "verify"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Flow is restored without splashing",
+                    "goto": "verify",
+                    "text": "Flow is restored without splashing.",
                     "requiresItems": [
                         {
                             "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
@@ -110,12 +141,34 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Final verification: if flow remains weak or noisy, return to rinse troubleshooting. Close only when restored-flow evidence is present.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Restored-flow proof captured and livestock behavior is normal.",
+                    "requiresItems": [
+                        {
+                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Flow is still weak; repeat rinse and restart loop."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! Mark the date so you remember the next rinse, and keep a spare bucket nearby for emergencies.",
+            "text": "Great work. You preserved the bacteria colony, verified safe flow, and documented a recovery path if contamination returns.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Filter humming along"
+                    "text": "Filter installed and verified."
                 }
             ]
         }
@@ -130,7 +183,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

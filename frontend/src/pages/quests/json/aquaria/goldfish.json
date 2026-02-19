@@ -1,115 +1,147 @@
 {
     "id": "aquaria/goldfish",
     "title": "Set up an aquarium for a goldfish",
-    "description": "Goldfish need a fairly large aquarium to be happy, but they're easy to raise.",
+    "description": "Stage a goldfish habitat, verify safety checks, and resolve early stress signals before declaring the setup stable.",
     "image": "/assets/quests/goldfish_aquarium_setup.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey there, I'm Vega. I'd love to teach you the basics of aquaria, if you're interested! Aquariums are a very rewarding pastime, and I'd love to help you get set up with the equipment you need!",
+            "text": "Goldfish are hardy, but only when we respect space, filtration, and temperature stability. We'll do this in stages so the fish never gets rushed into unsafe water.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "yes",
-                    "text": "A goldfish? That sounds fun! Tell me more."
+                    "goto": "stage",
+                    "text": "Let's stage the equipment checklist."
                 }
             ]
         },
         {
-            "id": "yes",
-            "text": "Excellent! All you need is a nice surface to put this on. That stand in your garage looks perfect! I'm offering to supply you with all the necessary materials for a basic aquarium setup. You can always upgrade later, add more fish and plants, and so on. But this will get you started!",
+            "id": "stage",
+            "text": "Gather the 150 L tank, stand, heater, sponge filter, gravel, light, thermometer, and dechlorinated water. Then run setup as a single controlled process.",
             "options": [
-                {
-                    "type": "goto",
-                    "goto": "maintenance",
-                    "text": "I've always loved aquariums! Do they need a lot of maintenance?"
-                }
-            ]
-        },
-        {
-            "id": "maintenance",
-            "text": "A little bit of maintenance is certainly required, but if you schedule regular cleaning and monitoring tasks, it's not too bad! Tasks include cleaning the tank, monitoring the water parameters, and feeding the fish. With the right tools and a consistent schedule, these tasks become very manageable!",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "setup",
-                    "text": "Sounds good! Let's get started with the setup."
-                }
-            ]
-        },
-        {
-            "id": "setup",
-            "text": "Great! You'll have to buy the items you need yourself, but here's the basics: a 150 Liter tank (for the fish to swim and grow), some gravel (for the tank bottom), a filter (to clean and purify the water), a heater (to keep the water at the right temperature), a light (to simulate day and night), a thermometer (to monitor the temperature), some fish food, and of course, the fish. These are the absolute basics you'll need, and as you become more comfortable, we'll want to add plants and decorations for the enjoyment of both you and the fish. Oh, I will give you the dechlorinated water, of course, because that is a bit of a pain to make yourself.",
-            "options": [
-                {
-                    "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Mmm, tasty!"
-                },
                 {
                     "type": "process",
                     "process": "prepare-aquarium",
-                    "text": "Let's set this thing up! Can't wait to feed my fishie"
+                    "text": "Run full aquarium setup process.",
+                    "goto": "verify"
                 },
                 {
                     "type": "goto",
-                    "goto": "fish",
+                    "goto": "verify",
+                    "text": "Habitat assembled and filled.",
                     "requiresItems": [
                         {
                             "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
                             "count": 1
                         }
-                    ],
-                    "text": "Aquarium is fully set up! Time to add the fish, right?"
+                    ]
                 }
             ]
         },
         {
-            "id": "fish",
-            "text": "Yep, time to add the fish! Also you can feed your goldfish up to 3 times per day! Once your fish is in the tank, go ahead and feed it!",
+            "id": "verify",
+            "text": "Pre-stock verification: check that filtration runs, temperature is stable, and no electrical cords are wet. If anything drifts, branch to troubleshooting before adding fish.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stock",
+                    "text": "Habitat checks pass and water looks stable.",
+                    "requiresItems": [
+                        {
+                            "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Temperature or filtration drift detected; pause stocking."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Good pause. Re-seat tubing and heater placement, confirm thermometer reading, and rerun baseline checks. Never add fish while equipment is unstable.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-aquarium-temperature",
+                    "text": "Re-check temperature before retrying.",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "System stabilized; return to pre-stock verification.",
+                    "requiresItems": [
+                        {
+                            "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "stock",
+            "text": "Now stock the fish with a net, then feed lightly and observe behavior for stress signs. The quest closes only after a stable stocked-tank artifact exists.",
             "options": [
                 {
                     "type": "process",
                     "process": "add-goldfish",
-                    "text": "Here you go, little buddy! Welcome to your new home!"
-                },
-                {
-                    "type": "process",
-                    "process": "feed-goldfish",
-                    "text": "Wakey wakey, eggs and bakey! I hope you enjoy!"
-                },
-                {
-                    "type": "process",
-                    "process": "check-aquarium-temperature",
-                    "text": "Is the water at a comfy temperature?"
+                    "text": "Net and release the goldfish.",
+                    "goto": "observe"
                 },
                 {
                     "type": "goto",
-                    "goto": "fin",
+                    "goto": "observe",
+                    "text": "Goldfish is in the tank and swimming.",
                     "requiresItems": [
                         {
                             "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
                             "count": 1
                         }
-                    ],
-                    "text": "I'm so excited to have a fish! Thanks for all your help!"
+                    ]
                 }
             ]
         },
         {
-            "id": "fin",
-            "text": "No worries, friend! See you around!",
+            "id": "observe",
+            "text": "Observe the first feed and breathing pattern. If fish gasps at surface or clamps fins, branch back to troubleshooting and re-verify environment before closing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "feed-goldfish",
+                    "text": "Feed a small starter portion."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Fish behavior is normal after feed and setup is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Stress signs detected; troubleshoot before proceeding."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice husbandry. You staged the habitat, verified safety, and handled early stress checks before celebrating.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "See you!"
+                    "text": "Goldfish habitat is stable."
                 }
             ]
         }
@@ -124,7 +156,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
