@@ -52,8 +52,10 @@ Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3
   - switch `[ ]` to `[x]` for each completed line item in PRs that also modify the corresponding
     quest JSON;
   - append the current PR number at end-of-line as `(PR #<number>)`;
-  - if a line already has PR tags, append the new PR as `, #<number>` inside the same
-    parenthetical;
+  - canonical PR-tag format is a single parenthetical with one `PR` prefix:
+    `(PR #<number1>, #<number2>, #<number3>)`;
+  - if a line already has PR tags, append the new PR as `, #<number>` inside that same
+    parenthetical so the line still follows the canonical format above;
   - leave boxes unchecked when evidence is ambiguous;
   - bookkeeping-only follow-up PRs that do not touch quest JSON may adjust PR tags inside the
     existing parenthetical but **must not** change any `[ ]`/`[x]` checkbox state.
@@ -116,8 +118,9 @@ Goals:
   required output format.
 - Preserve checklist bookkeeping rules for
   `docs/design/v3-quest-quality-review.md` (check only verified items when the same PR includes
-  quest JSON hardening, append PR tags on each checked line, and keep checkbox state unchanged in
-  bookkeeping-only follow-up PRs).
+  quest JSON hardening, keep PR tags in canonical single-parenthetical format `(PR #1234, #5678)`
+  when multiple PRs apply, append new PR tags as `, #<number>` within that parenthetical, and
+  keep checkbox state unchanged in bookkeeping-only follow-up PRs).
 - Optimize for clearing still-unchecked quest-quality boxes in `docs/qa/v3.md` after manual human
   verification.
 - Preserve Codex binary-asset limitations guidance (reuse image references; no new binary assets).
