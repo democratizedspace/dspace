@@ -19,6 +19,11 @@ verified checked exemplars in `docs/qa/v3.md` §4.5.
 Prioritize quests that map directly to still-unchecked per-quest boxes in `docs/qa/v3.md` §4.5,
 and optimize for clearing those boxes after manual human verification.
 
+This is a **required closure contract** for any task using this prompt: if quest JSON is hardened,
+the same PR must check the matching checklist box(es) in
+`docs/design/v3-quest-quality-review.md` with canonical PR tags. A hardening PR that changes quest
+JSON but checks zero matching boxes is incomplete.
+
 ## Deterministic selection and anchoring rules (required)
 
 1. Build a target list from still-unchecked **per-quest** rows in `docs/qa/v3.md` §4.5
@@ -61,6 +66,10 @@ and optimize for clearing those boxes after manual human verification.
   - leave boxes unchecked when evidence is ambiguous;
   - bookkeeping-only follow-up PRs that do not touch quest JSON may adjust PR tags inside the
     existing parenthetical but must not change any `[ ]`/`[x]` checkbox state.
+- Minimum bookkeeping outcome for hardening PRs: if you modified at least one selected quest JSON
+  file, at least one corresponding checklist line in
+  `docs/design/v3-quest-quality-review.md` must be switched to `[x]` in that same PR. If none can
+  be verified, do not claim hardening completion and move the PR to explicit prep-only scope.
 - If quest flow changes materially, update paired docs in
   `frontend/src/pages/docs/md/<tree>.md`.
 - Codex cannot create/edit binary images. If quality hardening needs new item imagery,
@@ -123,6 +132,10 @@ Goals:
   quest JSON hardening, keep PR tags in canonical single-parenthetical format `(PR #1234, #5678)`
   when multiple PRs apply, append new PR tags as `, #<number>` within that parenthetical, and
   keep checkbox state unchanged in bookkeeping-only follow-up PRs).
+- Make the closure contract explicit: any PR using this hardening prompt that modifies selected
+  quest JSON must also check corresponding completed checklist line item(s) in
+  `docs/design/v3-quest-quality-review.md` in that same PR; zero checkbox updates means the
+  hardening task is incomplete and must be reframed as prep-only work.
 - Optimize for clearing still-unchecked quest-quality boxes in `docs/qa/v3.md` after manual human
   verification.
 - Preserve Codex binary-asset limitations guidance (reuse image references; no new binary assets).
