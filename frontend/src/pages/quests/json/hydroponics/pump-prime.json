@@ -23,7 +23,7 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "prime-pump",
+                    "process": "install-submersible-pump",
                     "goto": "finish",
                     "text": "Run the priming cycle."
                 },
