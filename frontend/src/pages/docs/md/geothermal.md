@@ -187,7 +187,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `rollback` → "Rollback complete, retry install" — Arduino Uno ×1
     - `finish` → "Backup thermistor validated" — Arduino Uno ×1
 - Grants:
-    - `materials` → "Issue spare thermistor" — Arduino Uno ×1
+    - `materials` → "Issue Arduino Uno logger" — Arduino Uno ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
@@ -309,7 +309,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Dialogue `requiresItems` gates:
     - `materials` → "Hardware staged" — smart plug ×1, thermistor logging rig ×1, Laptop Computer ×1
     - `capture` → "Monitoring log exported" — temperature log CSV ×1
-    - `classify` → "Stable draw in-band" — temperature log CSV ×1
+    - `classify` → "Stable thermal trend in-band" — temperature log CSV ×1
     - `finish` → "Energy monitoring baseline complete" — temperature log CSV ×1
 - Grants:
     - `materials` → "Issue smart plug" — smart plug ×1

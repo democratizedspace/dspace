@@ -1,14 +1,14 @@
 {
     "id": "geothermal/monitor-heat-pump-energy",
     "title": "Monitor Heat Pump Energy Use",
-    "description": "Capture a repeatable energy log, classify anomalies, and verify corrections before closing.",
+    "description": "Capture a repeatable thermal trend log, classify anomalies, and verify corrections before closing.",
     "image": "/assets/quests/heat_pump_smart_plug_monitor.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Use a grounded smart plug only on the pump control load, never on high-current compressor circuits. Ready to capture a clean power trace?",
+            "text": "Use a grounded smart plug only on the pump control load, never on high-current compressor circuits. Ready to capture a clean thermal trend trace?",
             "options": [
                 {
                     "type": "goto",
@@ -24,7 +24,7 @@
         },
         {
             "id": "materials",
-            "text": "We need a smart plug plus logger gear so the watt trace can be compared with loop temperatures.",
+            "text": "We need a smart plug plus logger gear so loop temperatures can be trended against relay cycling events.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -59,7 +59,7 @@
         },
         {
             "id": "capture",
-            "text": "Record at least 15 minutes of wattage plus start/stop timestamps, then export the session log.",
+            "text": "Record at least 15 minutes of inlet/outlet temperatures with start/stop timestamps, then export the session log.",
             "options": [
                 {
                     "type": "process",
@@ -91,12 +91,12 @@
         },
         {
             "id": "classify",
-            "text": "Pass band: stable draw between 500W and 1100W after warmup. Do your logs show stable draw, cycling spikes, or sustained overdraw?",
+            "text": "Pass target: after warmup, inlet/outlet readings should settle into a repeatable band without rapid oscillation (>1.5°C swings every sample). Do your logs show stable trend, cycling spikes, or sustained drift?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Stable draw in-band",
+                    "text": "Stable thermal trend in-band",
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
@@ -107,7 +107,7 @@
                 {
                     "type": "goto",
                     "goto": "corrective",
-                    "text": "Anomaly detected (spike or overdraw)"
+                    "text": "Anomaly detected (spike or drift)"
                 }
             ]
         },

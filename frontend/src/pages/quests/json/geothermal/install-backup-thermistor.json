@@ -34,7 +34,7 @@
                             "count": 1
                         }
                     ],
-                    "text": "Issue spare thermistor"
+                    "text": "Issue Arduino Uno logger"
                 },
                 {
                     "type": "goto",
@@ -54,10 +54,20 @@
             "text": "Install the backup probe with strain relief and run a baseline capture.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "text": "Run backup probe baseline capture",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "goto",
                     "goto": "verify",
                     "text": "Backup probe installed and baseline logged",
-                    "process": "arduino-thermistor-read",
                     "requiresItems": [
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",

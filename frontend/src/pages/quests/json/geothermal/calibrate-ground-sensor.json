@@ -33,10 +33,20 @@
             "text": "Run arduino-thermistor-read for your ice bath first, then boiling water. Save both readings before you interpret drift.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "text": "Run baseline capture",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "goto",
                     "goto": "interpret",
                     "text": "Captured baseline pair",
-                    "process": "arduino-thermistor-read",
                     "requiresItems": [
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -84,10 +94,9 @@
             "text": "Troubleshoot before retry: reseat probe, dry connectors, confirm resistor value, then repeat both reference baths.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "baseline",
-                    "text": "Rewired and ready to retest",
+                    "type": "process",
                     "process": "arduino-thermistor-read",
+                    "text": "Run retest capture",
                     "requiresItems": [
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -99,6 +108,17 @@
                     "type": "goto",
                     "goto": "start",
                     "text": "Restart from safety checklist"
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Rewired and ready to retest",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
