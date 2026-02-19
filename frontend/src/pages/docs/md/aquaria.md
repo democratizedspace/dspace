@@ -72,7 +72,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Consumes: aquarium thermometer (0–50°C) ×1, paper towel ×1
         - Creates: Walstad aquarium with thermometer (80 L) ×1
     - [log-walstad-temperature](/processes/log-walstad-temperature)
-        - Requires: Walstad aquarium with thermometer (80 L) ×1
+        - Requires: none
         - Consumes: none
         - Creates: Aquarium temperature reading ×1
 
@@ -182,7 +182,11 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Dialogue `requiresItems` gates:
     - `start` → "Tank is ready for heat" — Walstad aquarium with thermometer (80 L) ×1, aquarium heater (150 W) ×1, Restored sponge filter flow ×1
     - `mount` → "Heater installed and powered on" — Heated Walstad aquarium (80 L, 26°C) ×1
-    - `verify` → "Reading recorded and steady" — Aquarium temperature reading ×1
+    - `verify` → "Reading recorded" — Aquarium temperature reading ×1
+    - `interpret` → "Range held at 25–27°C for two checks" — Aquarium temperature reading ×1
+    - `interpret` → "Temperature overshot or dropped outside safe range" — Aquarium temperature reading ×1
+    - `rollback` → "Apply rollback and capture a fresh verification reading" — none
+    - `rollback` → "Fresh post-rollback reading is logged" — Aquarium temperature reading ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -194,7 +198,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Consumes: Walstad aquarium with thermometer (80 L) ×1, aquarium heater (150 W) ×1
         - Creates: Heated Walstad aquarium (80 L, 26°C) ×1
     - [log-walstad-temperature](/processes/log-walstad-temperature)
-        - Requires: Walstad aquarium with thermometer (80 L) ×1
+        - Requires: none
         - Consumes: none
         - Creates: Aquarium temperature reading ×1
 
@@ -251,6 +255,9 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `measure` → "Readings are ready to log." — Liquid test readings ×1
     - `log` → "Record the results in the logbook." — Aquarium liquid test kit ×1, Liquid test readings ×1, water test logbook ×1, nitrile gloves (pair) ×1
     - `log` → "Entry logged with today's readings." — Logged water parameters ×1
+    - `interpret` → "All readings are within guardrails" — Logged water parameters ×1
+    - `interpret` → "At least one value is out of range" — Logged water parameters ×1
+    - `corrective` → "Correction complete, re-measure the panel" — Freshly changed aquarium (80 L) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -265,6 +272,10 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Requires: Aquarium liquid test kit ×1, Liquid test readings ×1, water test logbook ×1, nitrile gloves (pair) ×1
         - Consumes: Liquid test readings ×1
         - Creates: Logged water parameters ×1
+    - [partial-water-change](/processes/partial-water-change)
+        - Requires: Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
+        - Consumes: 5 gallon bucket of dechlorinated tap water ×0.25
+        - Creates: Freshly changed aquarium (80 L) ×1
 
 ## 11) Check aquarium pH (`aquaria/ph-strip-test`)
 
@@ -275,10 +286,14 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `start` → "Strip and gloves ready." — pH strip ×1, nitrile gloves (pair) ×1
     - `dip` → "Dip and read the strip." — pH strip ×1, nitrile gloves (pair) ×1
     - `dip` → "Reading recorded from the strip." — Aquarium pH reading ×1
+    - `interpret` → "Reading is within 6.8–7.6" — Aquarium pH reading ×1
+    - `interpret` → "Reading is out of range" — Aquarium pH reading ×1
+    - `corrective` → "Correction staged; run a mandatory re-test" — pH strip ×1, nitrile gloves (pair) ×1
     - `log` → "Write it in the logbook." — Aquarium pH reading ×1, water test logbook ×1
     - `log` → "Entry logged and dated." — Logged pH entry ×1
 - Grants:
     - `start` → "I need a strip." — pH strip ×1
+    - `corrective` (node grant) — pH strip ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
@@ -308,7 +323,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `adjust` → "Dose complete; ready to re-test." — Logged pH entry ×1
     - `retest` → "Capture post-dose reading." — pH strip ×1, nitrile gloves (pair) ×1
     - `retest` → "Post-dose reading captured." — Aquarium pH reading ×1
-    - `interpret` → "Log stable result (6.8-7.6) and close." — Aquarium pH reading ×1, water test logbook ×1
+    - `interpret` → "Log stable result (6.8–7.6) and close." — Aquarium pH reading ×1, water test logbook ×1
     - `interpret` → "Reading still out of range or livestock looks stressed." — Aquarium pH reading ×1
     - `interpret` → "Result logged; close remediation cycle." — none
     - `troubleshoot` → "Apply a smaller corrective dose." — nitrile gloves (pair) ×1, safety goggles ×1
