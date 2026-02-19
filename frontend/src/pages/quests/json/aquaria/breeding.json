@@ -1,29 +1,15 @@
 {
     "id": "aquaria/breeding",
     "title": "Breed your guppies",
-    "description": "Thicken surface cover, portion fry food, and raise a brood of guppy juveniles.",
+    "description": "Stage fry cover and feeding, then prove brood health with water-parameter checks before graduating juveniles.",
     "image": "/assets/quests/aquaria_guppy_breeding_plants.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Guppies multiply quickly, but only if the fry have a leafy hideout and tiny meals. We'll bulk up your floating mat, powder some food, and give the babies time to grow.",
+            "text": "Guppies multiply quickly, but fry survive only when shelter and water quality stay steady. We'll stage habitat first, then validate outcomes before rehoming juveniles.",
             "options": [
-                {
-                    "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
-                            "count": 1
-                        },
-                        {
-                            "id": "a7ba3f18-510d-47cb-b73f-91b8e2a72e73",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Send extra stems to weave in."
-                },
                 {
                     "type": "goto",
                     "goto": "cover",
@@ -38,12 +24,17 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "cover",
+                    "text": "Begin fry-cover setup walkthrough."
                 }
             ]
         },
         {
             "id": "cover",
-            "text": "Pack hornwort and guppy grass at the surface so newborns can dodge curious adults. Keep the mat away from the filter intake so they don't get trapped.",
+            "text": "Pack hornwort and guppy grass at the surface so newborns can dodge adults. Keep intake paths open so fry are not pinned against filter flow.",
             "options": [
                 {
                     "type": "process",
@@ -68,25 +59,30 @@
                 {
                     "type": "goto",
                     "goto": "feed",
-                    "text": "Cover is dense and sheltering the fry.",
+                    "text": "Cover is dense and sheltering fry lanes.",
                     "requiresItems": [
                         {
                             "id": "bda9e450-499d-41d6-ab32-df73528dc68f",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "feed",
+                    "text": "Shelter lanes are confirmed; move to feed planning."
                 }
             ]
         },
         {
             "id": "feed",
-            "text": "Crush flakes into powder and offer tiny pinches two to three times daily while keeping temperature steady. Siphon leftovers so water stays clean.",
+            "text": "Crush flakes into powder and feed tiny portions 2-3 times daily. Siphon leftovers so ammonia spikes don't wipe the brood.",
             "options": [
                 {
                     "type": "process",
                     "process": "portion-fry-food",
-                    "text": "Powder a week's worth of fry food.",
-                    "goto": "feed",
+                    "text": "Powder a week's fry-food reserve.",
+                    "goto": "monitor",
                     "requiresItems": [
                         {
                             "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
@@ -95,9 +91,112 @@
                     ]
                 },
                 {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Fry food is portioned and dosing plan is set.",
+                    "requiresItems": [
+                        {
+                            "id": "eb0f7f00-98dc-44b0-bf7c-9c8d998cbbcb",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Feeding plan drafted; continue to monitoring."
+                }
+            ]
+        },
+        {
+            "id": "monitor",
+            "text": "Now prove the environment is stable while fry grow. Log parameters and branch immediately if ammonia/nitrite drift appears.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-aquarium-test-results",
+                    "text": "Log water parameters before graduation.",
+                    "goto": "outcome",
+                    "requiresItems": [
+                        {
+                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                            "count": 1
+                        },
+                        {
+                            "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
+                            "count": 1
+                        },
+                        {
+                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stress",
+                    "text": "Fry are gasping or losses are appearing.",
+                    "requiresItems": [
+                        {
+                            "id": "bda9e450-499d-41d6-ab32-df73528dc68f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "outcome",
+                    "text": "Monitoring checklist complete; review outcomes."
+                }
+            ]
+        },
+        {
+            "id": "stress",
+            "text": "Pause feeding for a cycle, remove leftovers, and run a partial water change before resuming grow-out. Re-check parameters after intervention.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "partial-water-change",
+                    "text": "Run emergency partial water change.",
+                    "goto": "monitor",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Emergency response complete; return to monitoring."
+                }
+            ]
+        },
+        {
+            "id": "outcome",
+            "text": "With stable logs and steady feeding, run the grow-out process and confirm the brood reached juvenile stage before closure.",
+            "options": [
+                {
                     "type": "process",
                     "process": "raise-guppy-fry",
-                    "text": "Feed and watch them grow out.",
+                    "text": "Advance fry to juvenile stage.",
                     "goto": "finish",
                     "requiresItems": [
                         {
@@ -115,29 +214,42 @@
                         {
                             "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
                             "count": 1
+                        },
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
                         }
                     ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Juveniles are ready to rehome.",
+                    "text": "Juveniles are ready to rehome with stable log evidence.",
                     "requiresItems": [
                         {
                             "id": "18a20f4e-a351-448e-837b-3caca90f71f4",
                             "count": 1
+                        },
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Graduation review complete; close breeding cycle."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work. Dense cover and tiny meals kept the parents from snacking on the babies, and now you have healthy juveniles to trade or keep.",
+            "text": "Nice work. You staged habitat, handled feeding discipline, and validated brood health with real water-quality evidence before graduation.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Time to share some guppies."
+                    "text": "Time to share healthy guppies."
                 }
             ]
         }
@@ -150,9 +262,15 @@
     ],
     "requiresQuests": ["aquaria/guppy", "aquaria/floating-plants"],
     "hardening": {
-        "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
-        "history": []
+        "passes": 1,
+        "score": 95,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2026-02-19",
+                "date": "2026-02-19",
+                "score": 90
+            }
+        ]
     }
 }

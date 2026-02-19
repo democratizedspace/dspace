@@ -145,11 +145,16 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/sponge-filter`
 - Dialogue `requiresItems` gates:
-    - `start` → "Bucket's ready and the pump is unplugged." — 5 gallon bucket of dechlorinated tap water ×1, Sponge filter ×1, aquarium air pump ×1, nitrile gloves (pair) ×1
-    - `prep` → "Squeeze the sponge only in dechlorinated water." — Sponge filter ×1, 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1
-    - `prep` → "Media is rinsed and still wet." — Rinsed sponge filter core ×1
-    - `restart` → "Prime the air line and restart the flow." — Rinsed sponge filter core ×1, Airline tubing ×1, aquarium air pump ×1
-    - `restart` → "Flow is restored without blasting the inhabitants." — Restored sponge filter flow ×1
+    - `start` → "Bucket staged, pump unplugged, and PPE on." — 5 gallon bucket of dechlorinated tap water ×1, Sponge filter ×1, aquarium air pump ×1, nitrile gloves (pair) ×1
+    - `baseline` → "Pre-rinse flow is visibly weak and recorded." — none
+    - `prep` → "Run normal rinse cycle." — Sponge filter ×1, 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1
+    - `prep` → "Water still runs dark or smells off." — none
+    - `contamination` → "Fresh bucket is staged; continue the rinse loop." — none
+    - `prep` → "Core is rinsed and still wet." — Rinsed sponge filter core ×1
+    - `restart` → "Restart and tune airflow." — Rinsed sponge filter core ×1, Airline tubing ×1, aquarium air pump ×1
+    - `restart` → "Flow is restored and livestock behavior looks normal." — Restored sponge filter flow ×1
+    - `verify` → "Pre/post evidence confirms flow recovery." — Restored sponge filter flow ×1
+    - `verify` → "Still weak; repeat rinse loop before closing and return with restored-flow proof." — none
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -293,7 +298,21 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/ph-strip-test`
 - Dialogue `requiresItems` gates:
-    - `verify` → "pH stable" — pH strip ×1
+    - `start` → "Safety gear and logbook are ready." — nitrile gloves (pair) ×1, safety goggles ×1, water test logbook ×1
+    - `start` → "Start baseline capture checklist." — none
+    - `baseline` → "Take baseline pH reading." — pH strip ×1, nitrile gloves (pair) ×1
+    - `baseline` → "Baseline strip reading is captured." — Aquarium pH reading ×1
+    - `baseline-log` → "Record baseline in the logbook." — Aquarium pH reading ×1, water test logbook ×1, nitrile gloves (pair) ×1
+    - `baseline-log` → "Baseline entry is logged with date/time." — Logged pH entry ×1
+    - `adjust` → "Dose and circulate buffer safely." — nitrile gloves (pair) ×1, safety goggles ×1
+    - `adjust` → "Dose complete; ready to re-test." — Logged pH entry ×1
+    - `retest` → "Capture post-dose reading." — pH strip ×1, nitrile gloves (pair) ×1
+    - `retest` → "Post-dose reading captured." — Aquarium pH reading ×1
+    - `interpret` → "Log stable result (6.8-7.6) and close." — Aquarium pH reading ×1, water test logbook ×1
+    - `interpret` → "Reading still out of range or livestock looks stressed." — Aquarium pH reading ×1
+    - `interpret` → "Result logged; close remediation cycle." — none
+    - `troubleshoot` → "Apply a smaller corrective dose." — nitrile gloves (pair) ×1, safety goggles ×1
+    - `troubleshoot` → "Correction step staged; proceed to re-test." — none
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -362,13 +381,22 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `requiresQuests`: `aquaria/guppy`, `aquaria/floating-plants`
 - Dialogue `requiresItems` gates:
     - `start` → "Floating mat and warm tank are ready." — Heated Walstad aquarium with guppies (80 L, 26°C) ×1, Floating plant mat ×1
+    - `start` → "Begin fry-cover setup walkthrough." — none
     - `cover` → "Thicken the floating cover." — Heated Walstad aquarium with guppies (80 L, 26°C) ×1, Floating plant mat ×1, Hornwort cuttings ×1
-    - `cover` → "Cover is dense and sheltering the fry." — Dense fry cover ×1
-    - `feed` → "Powder a week's worth of fry food." — goldfish food ×1
-    - `feed` → "Feed and watch them grow out." — Dense fry cover ×1, Fry food pinch ×1, Heated Walstad aquarium with guppies (80 L, 26°C) ×1, aquarium thermometer (0–50°C) ×1
-    - `feed` → "Juveniles are ready to rehome." — Juvenile guppy brood ×1
+    - `cover` → "Cover is dense and sheltering fry lanes." — Dense fry cover ×1
+    - `cover` → "Shelter lanes are confirmed; move to feed planning." — none
+    - `feed` → "Powder a week's fry-food reserve." — goldfish food ×1
+    - `feed` → "Fry food is portioned and dosing plan is set." — Fry food pinch ×1
+    - `feed` → "Feeding plan drafted; continue to monitoring." — none
+    - `monitor` → "Log water parameters before graduation." — Aquarium liquid test kit ×1, Liquid test readings ×1, water test logbook ×1, nitrile gloves (pair) ×1
+    - `monitor` → "Fry are gasping or losses are appearing." — Dense fry cover ×1
+    - `monitor` → "Monitoring checklist complete; review outcomes." — none
+    - `stress` → "Run emergency partial water change." — Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
+    - `stress` → "Emergency response complete; return to monitoring." — none
+    - `outcome` → "Advance fry to juvenile stage." — Dense fry cover ×1, Fry food pinch ×1, Heated Walstad aquarium with guppies (80 L, 26°C) ×1, aquarium thermometer (0–50°C) ×1, Logged water parameters ×1
+    - `outcome` → "Juveniles are ready to rehome with stable log evidence." — Juvenile guppy brood ×1, Logged water parameters ×1
+    - `outcome` → "Graduation review complete; close breeding cycle." — none
 - Grants:
-    - `start` → "Send extra stems to weave in." — Guppy grass starter ×1, Hornwort cuttings ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
@@ -385,6 +413,14 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Requires: Dense fry cover ×1, Fry food pinch ×1, Heated Walstad aquarium with guppies (80 L, 26°C) ×1, aquarium thermometer (0–50°C) ×1
         - Consumes: Fry food pinch ×1
         - Creates: Juvenile guppy brood ×1
+    - [log-aquarium-test-results](/processes/log-aquarium-test-results)
+        - Requires: Aquarium liquid test kit ×1, Liquid test readings ×1, water test logbook ×1, nitrile gloves (pair) ×1
+        - Consumes: Liquid test readings ×1
+        - Creates: Logged water parameters ×1
+    - [partial-water-change](/processes/partial-water-change)
+        - Requires: Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
+        - Consumes: 5 gallon bucket of dechlorinated tap water ×0.25
+        - Creates: Freshly changed aquarium (80 L) ×1
 
 ## 16) Set up an aquarium for a goldfish (`aquaria/goldfish`)
 
