@@ -191,6 +191,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
         - Requires: EC meter ×1, hydroponics tub (ready) ×1
         - Consumes: none
         - Creates: hydroponic nutrient solution EC log ×1
+    - [refresh-hydroponic-tub](/processes/refresh-hydroponic-tub)
+        - Requires: EC meter ×1, 50 mL measuring syringe ×1
+        - Consumes: hydroponics tub (nutrient deficient) ×1, 5 gallon bucket of dechlorinated tap water ×1, hydroponic nutrient concentrate (1 L) ×0.1
+        - Creates: hydroponics tub (ready) ×1
+    - [calibrate-ec-meter](/processes/calibrate-ec-meter)
+        - Requires: EC meter ×1, EC calibration solution (1000 ppm) ×1
+        - Consumes: EC calibration solution (1000 ppm) ×1
+        - Creates: none
 
 ## 6) Check Solution pH (`hydroponics/ph-check`)
 
@@ -243,7 +251,12 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/ec-calibrate`
 - Dialogue `requiresItems` gates:
-    - `measure` → "Meter reading looks good." — EC meter ×1, hydroponics tub (ready) ×1
+    - `prep` → "Safety check complete." — nitrile gloves (pair) ×1, safety goggles ×1, EC meter ×1, hydroponics tub (ready) ×1
+    - `measure` → "I captured the reading." — hydroponic nutrient solution EC log ×1
+    - `interpret` → "Reading is in range and logged." — hydroponic nutrient solution EC log ×1
+    - `interpret` → "Reading is out of range; apply correction." — hydroponic nutrient concentrate (1 L) ×1, 50 mL measuring syringe ×1
+    - `corrective-refresh` → "Correction complete; re-test now." — hydroponics tub (ready) ×1
+    - `meter-troubleshoot` → "Meter is recalibrated; retry reading." — EC meter ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -254,6 +267,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
         - Requires: EC meter ×1, hydroponics tub (ready) ×1
         - Consumes: none
         - Creates: hydroponic nutrient solution EC log ×1
+    - [refresh-hydroponic-tub](/processes/refresh-hydroponic-tub)
+        - Requires: EC meter ×1, 50 mL measuring syringe ×1
+        - Consumes: hydroponics tub (nutrient deficient) ×1, 5 gallon bucket of dechlorinated tap water ×1, hydroponic nutrient concentrate (1 L) ×0.1
+        - Creates: hydroponics tub (ready) ×1
+    - [calibrate-ec-meter](/processes/calibrate-ec-meter)
+        - Requires: EC meter ×1, EC calibration solution (1000 ppm) ×1
+        - Consumes: EC calibration solution (1000 ppm) ×1
+        - Creates: none
 
 ## 9) Test Hydroponic pH (`hydroponics/ph-test`)
 
@@ -297,9 +318,11 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/reservoir-refresh`
 - Dialogue `requiresItems` gates:
-    - `kit` → "Kit is assembled." — submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
+    - `kit` → "Kit is assembled." — submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1
     - `install` → "Pump is physically installed." — installed submersible pump loop ×1
-    - `verify` → "Flow looks stable." — verified hydroponic circulation loop ×1
+    - `verify` → "Flow is stable and verified." — verified hydroponic circulation loop ×1
+    - `verify` → "Flow is weak or noisy; roll back and inspect." — installed submersible pump loop ×1
+    - `rollback` → "Rollback complete; reinstall and re-verify." — submersible water pump ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -421,8 +444,11 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `requiresQuests`: `hydroponics/top-off`
 - Dialogue `requiresItems` gates:
     - `prep` → "I have the cleaning kit." — Sponge filter ×1, 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1
+    - `baseline` → "Baseline restriction confirmed." — Sponge filter ×1
     - `rinse` → "Filter core is rinsed." — Rinsed sponge filter core ×1
     - `restart` → "Flow is restored." — Restored sponge filter flow ×1
+    - `verify` → "Post-clean flow is steady and odor is clear." — Restored sponge filter flow ×1
+    - `contamination-recovery` → "Fresh rinse water ready; retry cleaning." — 5 gallon bucket of dechlorinated tap water ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

@@ -1,14 +1,14 @@
 {
     "id": "hydroponics/pump-install",
     "title": "Install Submersible Pump",
-    "description": "Install and validate a reservoir pump loop so nutrients circulate evenly.",
+    "description": "Install and verify a reservoir pump loop with rollback handling before final sign-off.",
     "image": "/assets/quests/hydroponics_submersible_pump_install.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Stagnant reservoirs drift out of range fast. Let's install your submersible pump and verify flow.",
+            "text": "Stagnant reservoirs drift out of range fast. We'll install the pump, verify circulation, and recover safely if the first run fails.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "kit",
-            "text": "Gather the pump, a clean hydroponics tub, and PPE so we can set this up safely.",
+            "text": "Gather the pump, a ready reservoir, gloves, and eye protection before you route any tubing.",
             "options": [
                 {
                     "type": "goto",
@@ -37,6 +37,10 @@
                         {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
                         }
                     ]
                 }
@@ -44,12 +48,12 @@
         },
         {
             "id": "install",
-            "text": "Seat the pump in the reservoir, route tubing to the grow bed, then secure return flow to prevent splashing.",
+            "text": "Seat the pump in the reservoir, route tubing to the grow bed, and secure the return line before energizing.",
             "options": [
                 {
                     "type": "process",
                     "process": "install-submersible-pump",
-                    "text": "Installing the pump assembly."
+                    "text": "Install pump assembly."
                 },
                 {
                     "type": "goto",
@@ -66,20 +70,48 @@
         },
         {
             "id": "verify",
-            "text": "Run a short flow test and confirm you get steady circulation without cavitation or dry spots.",
+            "text": "Run a short circulation check and confirm even flow at the bed return with no dry spots.",
             "options": [
                 {
                     "type": "process",
                     "process": "verify-hydroponic-flow",
-                    "text": "Running the flow test now."
+                    "text": "Run the flow verification check."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Flow looks stable.",
+                    "text": "Flow is stable and verified.",
                     "requiresItems": [
                         {
                             "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Flow is weak or noisy; roll back and inspect.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rollback",
+            "text": "Power down, reseat the intake, and recheck tubing for kinks or air leaks. Do not leave the pump running dry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Rollback complete; reinstall and re-verify.",
+                    "requiresItems": [
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
                             "count": 1
                         }
                     ]
@@ -88,7 +120,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice install. Consistent circulation keeps nutrients and oxygen evenly distributed.",
+            "text": "Nice install. You validated flow and used the rollback checkpoint before commissioning the loop.",
             "options": [
                 {
                     "type": "finish",

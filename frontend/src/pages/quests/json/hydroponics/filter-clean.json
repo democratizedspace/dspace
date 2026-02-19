@@ -1,14 +1,14 @@
 {
     "id": "hydroponics/filter-clean",
     "title": "Rinse Grow Bed Filter",
-    "description": "Restore sponge filter flow without nuking beneficial bacteria.",
+    "description": "Restore sponge filter flow with measurable before/after checks and a contamination recovery loop.",
     "image": "/assets/quests/hydroponics_grow_bed_filter_rinse.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "The grow bed flow is slowing down. Let's service the sponge filter before the roots suffocate.",
+            "text": "The grow bed flow is slowing down. We'll inspect, rinse safely, and confirm oxygen flow rebounds before we close this out.",
             "options": [
                 {
                     "type": "goto",
@@ -19,11 +19,11 @@
         },
         {
             "id": "prep",
-            "text": "You'll need dechlorinated rinse water, gloves, and the sponge filter core. Never rinse this with chlorinated tap water.",
+            "text": "Use dechlorinated rinse water and PPE only. Chlorinated tap water can wipe the biofilter.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "rinse",
+                    "goto": "baseline",
                     "text": "I have the cleaning kit.",
                     "requiresItems": [
                         {
@@ -43,13 +43,30 @@
             ]
         },
         {
+            "id": "baseline",
+            "text": "Confirm the filter is currently restricted so we can prove improvement after cleaning.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Baseline restriction confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "rinse",
-            "text": "Rinse by squeezing and swishing in the dechlorinated bucket until sludge clears, but keep the biofilm intact.",
+            "text": "Rinse by squeezing and swishing in dechlorinated water until sludge clears while keeping the bacterial film intact.",
             "options": [
                 {
                     "type": "process",
                     "process": "rinse-aquarium-filter",
-                    "text": "Rinsing filter media now."
+                    "text": "Rinse filter media now."
                 },
                 {
                     "type": "goto",
@@ -66,16 +83,16 @@
         },
         {
             "id": "restart",
-            "text": "Great. Reassemble the filter and restart aeration so dissolved oxygen rebounds quickly.",
+            "text": "Reassemble and restart aeration, then verify the output stream and bubble pattern are steady.",
             "options": [
                 {
                     "type": "process",
                     "process": "restart-sponge-filter",
-                    "text": "Restarting the filter."
+                    "text": "Restart the sponge filter."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
                     "text": "Flow is restored.",
                     "requiresItems": [
                         {
@@ -87,8 +104,47 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "If flow remains weak or foul odor persists, treat it as contamination and repeat with fresh rinse water before finishing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Post-clean flow is steady and odor is clear.",
+                    "requiresItems": [
+                        {
+                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "contamination-recovery",
+                    "text": "Still seeing clumps or sour odor; run contamination recovery."
+                }
+            ]
+        },
+        {
+            "id": "contamination-recovery",
+            "text": "Discard dirty rinse water, prepare a fresh dechlorinated bucket, and repeat the rinse + restart sequence before retesting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Fresh rinse water ready; retry cleaning.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Perfect maintenance pass. Keep this cadence and you'll avoid anaerobic root zones.",
+            "text": "Perfect maintenance pass. You captured a before/after state and recovered safely when contamination signs appeared.",
             "options": [
                 {
                     "type": "finish",

@@ -1,31 +1,39 @@
 {
     "id": "hydroponics/ec-check",
     "title": "Check Solution EC",
-    "description": "Measure nutrient strength with an EC meter.",
+    "description": "Measure nutrient strength with an EC meter and recover quickly when readings drift.",
     "image": "/assets/quests/hydroponic_ec_meter_check.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's make sure the nutrients are at the right strength.",
+            "text": "Let's make sure the nutrients are at the right strength before your roots show stress.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "measure",
-                    "text": "How's the mix?"
+                    "goto": "prep",
+                    "text": "What do I need on hand?"
                 }
             ]
         },
         {
-            "id": "measure",
-            "text": "Dip the EC meter into the reservoir and compare the reading to your plant's target range.",
+            "id": "prep",
+            "text": "Wear gloves and goggles, keep the EC meter clean, and use the ready reservoir so we can trust the reading.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "measure-ec-solution",
-                    "text": "Meter reading looks good.",
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Safety check complete.",
                     "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
                         {
                             "id": "71655665-4a59-41f4-9084-dad4d976df91",
                             "count": 1
@@ -35,21 +43,129 @@
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Take a reading from the circulating reservoir, then compare the result with your crop target before deciding your next move.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ec-solution",
+                    "text": "Capture an EC log sample."
                 },
                 {
                     "type": "goto",
+                    "goto": "interpret",
+                    "text": "I captured the reading.",
+                    "requiresItems": [
+                        {
+                            "id": "ff8d6bdf-47f0-406f-80ce-2428ecd52eb2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "meter-troubleshoot",
+                    "text": "The meter reading is unstable."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "If the EC is in range, log and continue. If it is out of range, run a corrective refresh and then re-test.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "EC adjusted!"
+                    "text": "Reading is in range and logged.",
+                    "requiresItems": [
+                        {
+                            "id": "ff8d6bdf-47f0-406f-80ce-2428ecd52eb2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective-refresh",
+                    "text": "Reading is out of range; apply correction.",
+                    "requiresItems": [
+                        {
+                            "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                            "count": 1
+                        },
+                        {
+                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "corrective-refresh",
+            "text": "Dose nutrient concentrate with the syringe, circulate thoroughly, then capture a fresh EC reading before you close the task.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refresh-hydroponic-tub",
+                    "text": "Run corrective nutrient refresh."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Correction complete; re-test now.",
+                    "requiresItems": [
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "meter-troubleshoot",
+            "text": "Unstable readings usually mean probe contamination or stale calibration. Rinse, recalibrate, and retest before acting.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "calibrate-ec-meter",
+                    "text": "Recalibrate the EC meter.",
+                    "requiresItems": [
+                        {
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3d8bb59-8364-46b2-ad42-c5f56cc72b40",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Meter is recalibrated; retry reading.",
+                    "requiresItems": [
+                        {
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Log the value and recheck weekly to keep nutrients on target.",
+            "text": "Great work. You verified EC with a logged measurement and used the recovery path before finishing.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "EC check complete."
                 }
             ]
         }
@@ -64,7 +180,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
