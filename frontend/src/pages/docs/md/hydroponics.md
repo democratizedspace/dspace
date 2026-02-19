@@ -189,8 +189,15 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/nutrient-check`
 - Dialogue `requiresItems` gates:
-    - `measure` → "Reading looks good" — hydroponic pH reading ×1
-    - `log` → "Logged and synced" — hydroponic pH log ×1
+    - `prep` → "PPE and tools are staged." — nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
+    - `measure` → "Reading captured; interpret result." — hydroponic pH reading ×1
+    - `interpret` → "It's in range; log stable pH." — hydroponic pH reading ×1
+    - `interpret` → "Out of range; begin correction loop." — nitrile gloves (pair) ×1, safety goggles ×1
+    - `log` → "Log completed and verified." — hydroponic pH log ×1
+- Recovery/troubleshooting branches:
+    - Out-of-range values route to `adjust`; unstable readings route to `troubleshoot`, then loop back to `measure`
+- Safety/ops checks:
+    - PPE gate before measurement and small-step dosing guidance before each re-test
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -201,15 +208,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
         - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
         - Consumes: pH strip ×1
         - Creates: hydroponic pH reading ×1
-    - [log-stable-ph](/processes/log-stable-ph)
-        - Requires: hydroponics tub (ready) ×1, hydroponic pH reading ×1
-        - Consumes: hydroponic pH reading ×1
-        - Creates: hydroponic pH log ×1
     - [adjust-ph](/processes/adjust-ph)
         - Requires: nitrile gloves (pair) ×1, safety goggles ×1, glass stir rod ×1, pH down solution (500 mL) ×1, pH up solution (potassium carbonate) ×1
         - Consumes: pH down solution (500 mL) ×0.05, pH up solution (potassium carbonate) ×0.05
         - Creates: none
-
+    - [log-stable-ph](/processes/log-stable-ph)
+        - Requires: hydroponics tub (ready) ×1, hydroponic pH reading ×1
+        - Consumes: hydroponic pH reading ×1
+        - Creates: hydroponic pH log ×1
 ## 7) Calibrate EC Meter (`hydroponics/ec-calibrate`)
 
 - Quest link: [/quests/hydroponics/ec-calibrate](/quests/hydroponics/ec-calibrate)
@@ -293,14 +299,18 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/reservoir-refresh`
 - Dialogue `requiresItems` gates:
-    - `kit` → "Kit is assembled." — submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
-    - `install` → "Pump is physically installed." — installed submersible pump loop ×1
-    - `verify` → "Flow looks stable." — verified hydroponic circulation loop ×1
+    - `kit` → "Kit is assembled and power path is safe." — submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
+    - `install` → "Installation complete; begin verification." — installed submersible pump loop ×1
+    - `verify` → "Verification passed; lock in the install." — verified hydroponic circulation loop ×1
+- Recovery/troubleshooting branches:
+    - Verification failure routes to `rollback`, then loops to `install` for re-seat and re-verify
+- Safety/ops checks:
+    - Explicit splash-safe cable routing before power-up and dry-run avoidance in rollback path
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - dScience ×1
+    - cured compost bucket ×1
 - Processes used:
     - [install-submersible-pump](/processes/install-submersible-pump)
         - Requires: submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
@@ -310,25 +320,33 @@ Hydroponics quests build practical progression through the hydroponics skill tre
         - Requires: installed submersible pump loop ×1
         - Consumes: installed submersible pump loop ×1
         - Creates: verified hydroponic circulation loop ×1
-
 ## 12) Prime Water Pump (`hydroponics/pump-prime`)
 
 - Quest link: [/quests/hydroponics/pump-prime](/quests/hydroponics/pump-prime)
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/pump-install`
 - Dialogue `requiresItems` gates:
-    - None
+    - `baseline` → "Baseline captured; begin priming." — installed submersible pump loop ×1
+    - `prime` → "Priming cycle complete; verify outcome." — installed submersible pump loop ×1
+    - `verify` → "Before/after evidence confirms steady flow." — verified hydroponic circulation loop ×1
+- Recovery/troubleshooting branches:
+    - Prime or verify failures route to `contamination`, then loop back to `prime`
+- Safety/ops checks:
+    - Debris/intake checks and reservoir-level checks before every re-prime to avoid dry-running
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [prime-pump](/processes/prime-pump)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
-
+    - [install-submersible-pump](/processes/install-submersible-pump)
+        - Requires: submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
+        - Consumes: submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
+        - Creates: installed submersible pump loop ×1
+    - [verify-hydroponic-flow](/processes/verify-hydroponic-flow)
+        - Requires: installed submersible pump loop ×1
+        - Consumes: installed submersible pump loop ×1
+        - Creates: verified hydroponic circulation loop ×1
 ## 13) Grow Stevia Hydroponically (`hydroponics/stevia`)
 
 - Quest link: [/quests/hydroponics/stevia](/quests/hydroponics/stevia)

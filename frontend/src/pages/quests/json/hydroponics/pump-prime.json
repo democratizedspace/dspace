@@ -8,39 +8,104 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "New pumps need a bit of water before they work well.",
+            "text": "Even a good install can fail if air stays trapped. We'll capture before/after evidence and only close when prime holds.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Start priming check."
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Record baseline symptoms: sputtering flow, bubble bursts, or dry pump noise. This is your before snapshot.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prime",
-                    "text": "Show me."
+                    "text": "Baseline captured; begin priming.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "prime",
-            "text": "Fill the pump housing with nutrient solution and run it a moment to push out air bubbles.",
+            "text": "Fill the pump housing, purge trapped air, and run a short cycle to stabilize circulation.",
             "options": [
                 {
                     "type": "process",
                     "process": "install-submersible-pump",
-                    "goto": "finish",
-                    "text": "Run the priming cycle."
+                    "text": "Run controlled priming cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Priming cycle complete; verify outcome.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "contamination",
+                    "text": "Prime fails: flow still sputters or air keeps returning"
+                }
+            ]
+        },
+        {
+            "id": "contamination",
+            "text": "Recovery branch: check intake for debris, top reservoir level, and reseat tubing to prevent air ingestion before re-priming.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prime",
+                    "text": "Failure source addressed; re-run prime."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Run post-prime verification. If circulation drops or cavitation returns, loop back and troubleshoot instead of forcing finish.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "verify-hydroponic-flow",
+                    "text": "Capture post-prime flow check"
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Pump is primed"
+                    "text": "Before/after evidence confirms steady flow.",
+                    "requiresItems": [
+                        {
+                            "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "contamination",
+                    "text": "Verification failed; return to troubleshooting"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice. A primed pump circulates nutrients without cavitation.",
+            "text": "Pump prime validated. You now have a repeatable clean startup routine with evidence and recovery steps.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Back to the grow bed."
+                    "text": "Prime complete."
                 }
             ]
         }
@@ -55,7 +120,7 @@
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

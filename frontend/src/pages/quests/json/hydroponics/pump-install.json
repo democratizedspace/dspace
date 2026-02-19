@@ -8,23 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Stagnant reservoirs drift out of range fast. Let's install your submersible pump and verify flow.",
+            "text": "Stagnant reservoirs drift fast. We'll install the pump, verify circulation, and keep a rollback path if startup misbehaves.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "kit",
-                    "text": "Ready to install."
+                    "text": "Start install workflow."
                 }
             ]
         },
         {
             "id": "kit",
-            "text": "Gather the pump, a clean hydroponics tub, and PPE so we can set this up safely.",
+            "text": "Gather the pump, ready reservoir, and PPE. Confirm cords stay above splash lines before powering anything.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "install",
-                    "text": "Kit is assembled.",
+                    "text": "Kit is assembled and power path is safe.",
                     "requiresItems": [
                         {
                             "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
@@ -44,17 +44,17 @@
         },
         {
             "id": "install",
-            "text": "Seat the pump in the reservoir, route tubing to the grow bed, then secure return flow to prevent splashing.",
+            "text": "Seat the pump, route tubing, and secure return flow so the bed doesn't splash or run dry at startup.",
             "options": [
                 {
                     "type": "process",
                     "process": "install-submersible-pump",
-                    "text": "Installing the pump assembly."
+                    "text": "Install pump assembly"
                 },
                 {
                     "type": "goto",
                     "goto": "verify",
-                    "text": "Pump is physically installed.",
+                    "text": "Installation complete; begin verification.",
                     "requiresItems": [
                         {
                             "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
@@ -66,33 +66,49 @@
         },
         {
             "id": "verify",
-            "text": "Run a short flow test and confirm you get steady circulation without cavitation or dry spots.",
+            "text": "Run a flow verification window. Pass criteria: stable circulation and no cavitation pulses.",
             "options": [
                 {
                     "type": "process",
                     "process": "verify-hydroponic-flow",
-                    "text": "Running the flow test now."
+                    "text": "Run circulation verification"
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Flow looks stable.",
+                    "text": "Verification passed; lock in the install.",
                     "requiresItems": [
                         {
                             "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Flow is unstable or cavitating"
+                }
+            ]
+        },
+        {
+            "id": "rollback",
+            "text": "Rollback branch: power down, reseat intake depth, and check for tubing kinks before restarting. Do not leave the pump dry-running.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Reconfigure and reinstall for another verification pass."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice install. Consistent circulation keeps nutrients and oxygen evenly distributed.",
+            "text": "Pump loop commissioned with verification evidence and a documented recovery path.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Pump loop commissioned."
+                    "text": "Install complete."
                 }
             ]
         }
