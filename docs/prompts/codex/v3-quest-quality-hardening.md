@@ -66,6 +66,10 @@ and optimize for clearing those boxes after manual human verification.
   matching checklist updates in `docs/design/v3-quest-quality-review.md` for those quest IDs in
   the same PR. A PR is non-compliant if it hardens quests but does not check/update at least one
   corresponding checklist line with PR tag(s).
+- For that mandatory checklist update, the minimum acceptable bookkeeping is updating relevant
+  checklist line(s) with canonical PR tag(s) for each touched quest ID; do **not** flip `[ ]` to
+  `[x]` unless the completed state is clearly evidenced by the same PR. Leaving `[ ]` while adding
+  traceable PR tags is valid when completion cannot be verified.
 - **Retroactive bookkeeping requirement**: if you discover older hardening PR(s) that changed
   quest JSON but failed to record the corresponding checklist updates in
   `docs/design/v3-quest-quality-review.md`, add a focused bookkeeping commit in the current PR to

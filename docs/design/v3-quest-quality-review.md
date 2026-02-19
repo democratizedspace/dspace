@@ -265,11 +265,11 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
   - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
 - `aquaria/heater-install`
-  - [ ] Observed issue: `aquaria/heater-install` reads like a one-pass install task, with verify/rollback state changes not clearly represented.
+  - [ ] Observed issue: `aquaria/heater-install` reads like a one-pass install task, with verify/rollback state changes not clearly represented. (PR #3614)
   - [ ] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item).
   - [ ] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path.
 - `aquaria/log-water-parameters`
-  - [ ] Observed issue: `aquaria/log-water-parameters` asks for logging/monitoring but pass criteria and anomaly response are not explicit.
+  - [ ] Observed issue: `aquaria/log-water-parameters` asks for logging/monitoring but pass criteria and anomaly response are not explicit. (PR #3614)
   - [ ] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact.
   - [ ] Add an anomaly classification branch with corrective action and a follow-up verification window before closure.
 - `aquaria/net-fish`
@@ -277,7 +277,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `aquaria/ph-strip-test`
-  - [ ] Observed issue: `aquaria/ph-strip-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [ ] Observed issue: `aquaria/ph-strip-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3614)
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
   - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `aquaria/position-tank`
