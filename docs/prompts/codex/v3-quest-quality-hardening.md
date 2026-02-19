@@ -18,6 +18,10 @@ verified checked exemplars in `docs/qa/v3.md` §4.5.
 
 Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3.md`.
 
+When a selected quest's improvements are verifiably complete, update the matching checklist lines in
+`docs/design/v3-quest-quality-review.md` by changing `[ ]` to `[x]` and appending the current PR
+number at line end (format: `(#<PR_NUMBER>)`). Leave boxes unchecked if evidence is ambiguous.
+
 ## Deterministic selection and anchoring rules (required)
 
 1. Work within a single tree when possible.
@@ -48,6 +52,9 @@ Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3
 - Keep quest IDs stable unless correcting a proven canonical mismatch.
 - If quest flow changes materially, update paired docs in
   `frontend/src/pages/docs/md/<tree>.md`.
+- For each selected quest, update only the corresponding line items in
+  `docs/design/v3-quest-quality-review.md` that are demonstrably satisfied in this PR, and append
+  `(#<PR_NUMBER>)` to every line item you check.
 - Codex cannot create/edit binary images. If quality hardening needs new item imagery,
   reuse an existing in-repo image reference, note human follow-up for image dedup/replacement,
   and do not add new binary assets.
@@ -84,6 +91,9 @@ Output exactly these sections in order:
    - Any image reuse performed and required human dedup/replacement steps, or explicit `None`.
 7. `Follow-ups`
    - Deferred work or explicit `None`.
+8. `Checklist boxes updated`
+   - Bullet list of exact lines checked in
+     `docs/design/v3-quest-quality-review.md`, each including the appended `(#<PR_NUMBER>)` token.
 ```
 
 ## Upgrade prompt
@@ -101,6 +111,8 @@ Goals:
   required output format.
 - Optimize for clearing still-unchecked quest-quality boxes in `docs/qa/v3.md` after manual human
   verification.
+- Preserve and enforce the requirement to check verifiably completed line items in
+  `docs/design/v3-quest-quality-review.md` and append `(#<PR_NUMBER>)` on each checked line.
 - Preserve Codex binary-asset limitations guidance (reuse image references; no new binary assets).
 
 Constraints:
