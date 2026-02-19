@@ -44,7 +44,10 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `geothermal/survey-ground-temperature`
 - Dialogue `requiresItems` gates:
-    - `calibrate` → "Calibration complete" — Arduino Uno ×1
+    - `start` → "Safety check done, start baseline" — Arduino Uno ×1
+    - `baseline` → "Captured baseline pair" — Arduino Uno ×1
+    - `baseline` → "Baseline pair already logged" — Arduino Uno ×1
+    - `interpret` → "Both readings are in tolerance" — Arduino Uno ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -178,10 +181,13 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `geothermal/calibrate-ground-sensor`
 - Dialogue `requiresItems` gates:
-    - `materials` → "I've got the parts." — Arduino Uno ×1
-    - `install` → "Reading logged." — Arduino Uno ×1
+    - `materials` → "Parts staged" — Arduino Uno ×1
+    - `install` → "Backup probe installed and baseline logged" — Arduino Uno ×1
+    - `verify` → "Parity verified within 1.5°C" — Arduino Uno ×1
+    - `rollback` → "Rollback complete, retry install" — Arduino Uno ×1
+    - `finish` → "Backup thermistor validated" — Arduino Uno ×1
 - Grants:
-    - `materials` → "Here's a spare thermistor." — Arduino Uno ×1
+    - `materials` → "Issue Arduino Uno logger" — Arduino Uno ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
@@ -301,14 +307,20 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `geothermal/log-ground-temperature`
 - Dialogue `requiresItems` gates:
-    - `materials` → "I've got one ready." — smart plug ×1
+    - `materials` → "Hardware staged" — smart plug ×1, thermistor logging rig ×1, Laptop Computer ×1
+    - `capture` → "Monitoring log exported" — temperature log CSV ×1
+    - `classify` → "Stable thermal trend in-band" — temperature log CSV ×1
+    - `finish` → "Energy monitoring baseline complete" — temperature log CSV ×1
 - Grants:
-    - `materials` → "Here's the smart plug." — smart plug ×1
+    - `materials` → "Issue smart plug" — smart plug ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - dWatt ×1
 - Processes used:
-    - None
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
 
 ## 13) Purge Air from Ground Loop (`geothermal/purge-loop-air`)
 
@@ -316,14 +328,21 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `geothermal/monitor-heat-pump-energy`
 - Dialogue `requiresItems` gates:
-    - `materials` → "I have a pump ready." — submersible water pump ×1
+    - `materials` → "Pump and hoses staged" — submersible water pump ×1
+    - `baseline` → "Baseline trace saved" — temperature log CSV ×1, submersible water pump ×1
+    - `purge` → "Post-purge trace saved" — temperature log CSV ×2, submersible water pump ×1
+    - `verify` → "Yes, purge pass confirmed" — temperature log CSV ×2
+    - `finish` → "Loop purge benchmarked" — temperature log CSV ×2
 - Grants:
-    - `materials` → "Take this pump." — submersible water pump ×1
+    - `materials` → "Issue purge pump" — submersible water pump ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
 
 ## 14) Backflush Loop Filter (`geothermal/backflush-loop-filter`)
 

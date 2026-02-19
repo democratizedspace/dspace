@@ -1,25 +1,30 @@
 {
     "id": "geothermal/monitor-heat-pump-energy",
     "title": "Monitor Heat Pump Energy Use",
-    "description": "Install a smart plug to track how much power your ground loop consumes.",
+    "description": "Capture a repeatable thermal trend log, classify anomalies, and verify corrections before closing.",
     "image": "/assets/quests/heat_pump_smart_plug_monitor.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to see how efficient your setup is? Let's measure the heat pump's appetite for watts.",
+            "text": "Use a grounded smart plug only on the pump control load, never on high-current compressor circuits. Ready to capture a clean thermal trend trace?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "materials",
-                    "text": "Sounds good, what do I need?"
+                    "text": "Safety check done"
+                },
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Show me the setup checklist"
                 }
             ]
         },
         {
             "id": "materials",
-            "text": "Grab a smart plug so we can record power usage over time.",
+            "text": "We need a smart plug plus logger gear so loop temperatures can be trended against relay cycling events.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -29,39 +34,112 @@
                             "count": 1
                         }
                     ],
-                    "text": "Here's the smart plug."
+                    "text": "Issue smart plug"
                 },
                 {
                     "type": "goto",
+                    "goto": "capture",
+                    "text": "Hardware staged",
                     "requiresItems": [
                         {
                             "id": "a5395e29-1862-4eb7-8517-5d161635e032",
                             "count": 1
+                        },
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
                         }
-                    ],
-                    "goto": "monitor",
-                    "text": "I've got one ready."
+                    ]
                 }
             ]
         },
         {
-            "id": "monitor",
-            "text": "Plug the heat pump through the smart plug and note the watts shown in the app.",
+            "id": "capture",
+            "text": "Record at least 15 minutes of inlet/outlet temperatures with start/stop timestamps, then export the session log.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture monitoring session",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "classify",
+                    "text": "Monitoring log exported",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "classify",
+            "text": "Pass target: after warmup, inlet/outlet readings should settle into a repeatable band without rapid oscillation (>1.5°C swings every sample). Do your logs show stable trend, cycling spikes, or sustained drift?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "fin",
-                    "text": "It's drawing 800 watts."
+                    "goto": "finish",
+                    "text": "Stable thermal trend in-band",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Anomaly detected (spike or drift)"
                 }
             ]
         },
         {
-            "id": "fin",
-            "text": "Nice! With this data we can fine-tune the system for maximum efficiency next time.",
+            "id": "corrective",
+            "text": "Corrective branch: check filter clog, trapped loop air, and stuck circulator speed. Apply one fix, then run another 15-minute log before closing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Applied fix, rerun monitoring"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Stop and re-check electrical safety"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. Store this baseline with outdoor conditions so seasonal efficiency drops are obvious.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Looking forward to optimizing."
+                    "text": "Energy monitoring baseline complete",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -75,8 +153,8 @@
     "requiresQuests": ["geothermal/log-ground-temperature"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }
