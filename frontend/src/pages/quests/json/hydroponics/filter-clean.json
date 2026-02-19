@@ -1,30 +1,30 @@
 {
     "id": "hydroponics/filter-clean",
     "title": "Rinse Grow Bed Filter",
-    "description": "Restore sponge filter flow without nuking beneficial bacteria.",
+    "description": "Restore sponge filter flow using pre/post evidence and a contamination-safe recovery loop.",
     "image": "/assets/quests/hydroponics_grow_bed_filter_rinse.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "The grow bed flow is slowing down. Let's service the sponge filter before the roots suffocate.",
+            "text": "Flow slowing down? We'll capture a baseline, rinse safely, and prove flow recovered before closing.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Walk me through it."
+                    "text": "Let's do the maintenance cycle."
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "You'll need dechlorinated rinse water, gloves, and the sponge filter core. Never rinse this with chlorinated tap water.",
+            "text": "Bring dechlorinated rinse water, gloves, sponge filter, air pump, and tubing. Chlorinated tap water can wipe out your biofilter.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "rinse",
-                    "text": "I have the cleaning kit.",
+                    "goto": "baseline",
+                    "text": "Kit and safety checks complete.",
                     "requiresItems": [
                         {
                             "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
@@ -37,6 +37,31 @@
                         {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
+                        },
+                        {
+                            "id": "5d5e4e29-94b7-4a03-b73d-7420841ae686",
+                            "count": 1
+                        },
+                        {
+                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Before cleaning, confirm reduced output so we have a pre-maintenance baseline.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Baseline captured; proceed to rinse.",
+                    "requiresItems": [
+                        {
+                            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+                            "count": 1
                         }
                     ]
                 }
@@ -44,17 +69,17 @@
         },
         {
             "id": "rinse",
-            "text": "Rinse by squeezing and swishing in the dechlorinated bucket until sludge clears, but keep the biofilm intact.",
+            "text": "Squeeze and swish the sponge in dechlorinated water until sludge drops, but do not scrub to a sterile white core.",
             "options": [
                 {
                     "type": "process",
                     "process": "rinse-aquarium-filter",
-                    "text": "Rinsing filter media now."
+                    "text": "Rinse filter media."
                 },
                 {
                     "type": "goto",
                     "goto": "restart",
-                    "text": "Filter core is rinsed.",
+                    "text": "Rinsed core ready for reassembly.",
                     "requiresItems": [
                         {
                             "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
@@ -66,20 +91,31 @@
         },
         {
             "id": "restart",
-            "text": "Great. Reassemble the filter and restart aeration so dissolved oxygen rebounds quickly.",
+            "text": "Reassemble and restart aeration, then watch bubble distribution and outlet flow for a full minute.",
             "options": [
                 {
                     "type": "process",
                     "process": "restart-sponge-filter",
-                    "text": "Restarting the filter."
+                    "text": "Restart filter and aeration."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Flow is restored.",
+                    "text": "Post-clean flow is restored.",
                     "requiresItems": [
                         {
                             "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "contamination",
+                    "text": "Flow is still weak or smells off.",
+                    "requiresItems": [
+                        {
+                            "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
                             "count": 1
                         }
                     ]
@@ -87,8 +123,24 @@
             ]
         },
         {
+            "id": "contamination",
+            "text": "Recovery mode: isolate the filter, discard dirty rinse water, and prepare a fresh dechlorinated bucket before repeating. If odor persists, pause feeding and re-check in one hour.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Reset station with fresh rinse water and retry."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Safe to re-enter rinse loop now."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Perfect maintenance pass. Keep this cadence and you'll avoid anaerobic root zones.",
+            "text": "Nice maintenance pass. Pre/post evidence confirms you restored oxygen delivery without crashing the biofilter.",
             "options": [
                 {
                     "type": "finish",

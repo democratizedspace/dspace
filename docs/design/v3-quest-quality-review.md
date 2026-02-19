@@ -822,9 +822,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
   - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `hydroponics/filter-clean`
-  - [ ] Observed issue: `hydroponics/filter-clean` describes a cleaning cycle without a measurable before/after success definition.
-  - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
+  - [x] Observed issue: `hydroponics/filter-clean` describes a cleaning cycle without a measurable before/after success definition. (PR #0000)
+  - [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #0000)
+  - [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #0000)
 - `hydroponics/grow-light`
   - [ ] Observed issue: `hydroponics/grow-light` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -842,9 +842,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
   - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
   - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
 - `hydroponics/ph-check`
-  - [ ] Observed issue: `hydroponics/ph-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `hydroponics/ph-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #0000)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #0000)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #0000)
 - `hydroponics/ph-test`
   - [ ] Observed issue: `hydroponics/ph-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
@@ -854,9 +854,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `hydroponics/pump-install`
-  - [ ] Observed issue: `hydroponics/pump-install` reads like a one-pass install task, with verify/rollback state changes not clearly represented.
-  - [ ] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item).
-  - [ ] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path.
+  - [x] Observed issue: `hydroponics/pump-install` reads like a one-pass install task, with verify/rollback state changes not clearly represented. (PR #0000)
+  - [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #0000)
+  - [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path. (PR #0000)
 - `hydroponics/pump-prime`
   - [ ] Observed issue: `hydroponics/pump-prime` describes a cleaning cycle without a measurable before/after success definition.
   - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).

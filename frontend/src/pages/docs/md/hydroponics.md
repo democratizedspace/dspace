@@ -198,7 +198,9 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/nutrient-check`
 - Dialogue `requiresItems` gates:
-    - `measure` → "Reading looks good" — hydroponic pH reading ×1
+    - `measure` → "I have a strip reading." — hydroponic pH reading ×1
+    - `interpret` → "Result is in range (5.5-6.5)." — hydroponic pH reading ×1
+    - `interpret` → "Result is out of range (<5.5 or >6.5)." — hydroponic pH reading ×1
     - `log` → "Logged and synced" — hydroponic pH log ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -299,7 +301,9 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Dialogue `requiresItems` gates:
     - `kit` → "Kit is assembled." — submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
     - `install` → "Pump is physically installed." — installed submersible pump loop ×1
-    - `verify` → "Flow looks stable." — verified hydroponic circulation loop ×1
+    - `verify` → "Verification passed all checks." — verified hydroponic circulation loop ×1
+    - `verify` → "Verification failed (noise, dry spot, or leak)." — installed submersible pump loop ×1
+    - `rollback` → "Rollback complete; re-run verification." — installed submersible pump loop ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -420,9 +424,11 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/top-off`
 - Dialogue `requiresItems` gates:
-    - `prep` → "I have the cleaning kit." — Sponge filter ×1, 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1
-    - `rinse` → "Filter core is rinsed." — Rinsed sponge filter core ×1
-    - `restart` → "Flow is restored." — Restored sponge filter flow ×1
+    - `prep` → "Kit and safety checks complete." — Sponge filter ×1, 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1, aquarium air pump ×1, Airline tubing ×1
+    - `baseline` → "Baseline captured; proceed to rinse." — Sponge filter ×1
+    - `rinse` → "Rinsed core ready for reassembly." — Rinsed sponge filter core ×1
+    - `restart` → "Post-clean flow is restored." — Restored sponge filter flow ×1
+    - `restart` → "Flow is still weak or smells off." — Rinsed sponge filter core ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

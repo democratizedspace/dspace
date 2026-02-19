@@ -1,25 +1,25 @@
 {
     "id": "hydroponics/pump-install",
     "title": "Install Submersible Pump",
-    "description": "Install and validate a reservoir pump loop so nutrients circulate evenly.",
+    "description": "Install a reservoir pump loop, verify circulation, and recover safely when commissioning fails.",
     "image": "/assets/quests/hydroponics_submersible_pump_install.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Stagnant reservoirs drift out of range fast. Let's install your submersible pump and verify flow.",
+            "text": "Stagnant reservoirs drift fast. We'll run a full install -> verify -> rollback-ready commissioning sequence.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "kit",
-                    "text": "Ready to install."
+                    "text": "Let's commission the loop."
                 }
             ]
         },
         {
             "id": "kit",
-            "text": "Gather the pump, a clean hydroponics tub, and PPE so we can set this up safely.",
+            "text": "Assemble the pump, ready reservoir, and PPE before wiring anything. Keep hands dry while routing power.",
             "options": [
                 {
                     "type": "goto",
@@ -44,12 +44,12 @@
         },
         {
             "id": "install",
-            "text": "Seat the pump in the reservoir, route tubing to the grow bed, then secure return flow to prevent splashing.",
+            "text": "Seat the pump, route return tubing above the waterline, and secure fittings so siphon-back can't flood your floor.",
             "options": [
                 {
                     "type": "process",
                     "process": "install-submersible-pump",
-                    "text": "Installing the pump assembly."
+                    "text": "Install pump assembly."
                 },
                 {
                     "type": "goto",
@@ -66,20 +66,31 @@
         },
         {
             "id": "verify",
-            "text": "Run a short flow test and confirm you get steady circulation without cavitation or dry spots.",
+            "text": "Run a 15 minute flow check. Pass criteria: no cavitation noise, no dry channels, and stable return flow.",
             "options": [
                 {
                     "type": "process",
                     "process": "verify-hydroponic-flow",
-                    "text": "Running the flow test now."
+                    "text": "Run flow verification."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Flow looks stable.",
+                    "text": "Verification passed all checks.",
                     "requiresItems": [
                         {
                             "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Verification failed (noise, dry spot, or leak).",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
                             "count": 1
                         }
                     ]
@@ -87,8 +98,30 @@
             ]
         },
         {
+            "id": "rollback",
+            "text": "Recovery protocol: power down, reseat the impeller, clear intake debris, and re-clamp tubing before re-verify. Do not leave the pump running dry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Rollback complete; re-run verification.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Rebuild tubing route and try install again."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice install. Consistent circulation keeps nutrients and oxygen evenly distributed.",
+            "text": "Commissioned. Log this flow baseline so future drift is obvious.",
             "options": [
                 {
                     "type": "finish",
