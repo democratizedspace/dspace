@@ -183,6 +183,11 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `start` → "Tank is ready for heat" — Walstad aquarium with thermometer (80 L) ×1, aquarium heater (150 W) ×1, Restored sponge filter flow ×1
     - `mount` → "Heater installed and powered on" — Heated Walstad aquarium (80 L, 26°C) ×1
     - `verify` → "Reading recorded and steady" — Aquarium temperature reading ×1
+    - `interpret` → "We're in the 25–27°C band with stable flow." — Aquarium temperature reading ×1
+- Troubleshooting/safety branches:
+    - `start` → "Outlet area is wet or cords are tangled." routes to `safety-reset`
+    - `mount` → "I powered on before full submersion or forgot the drip loop." routes to `safety-reset`
+    - `verify`/`interpret` can route to `recover-temp` for out-of-range or drifting readings before finish
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -277,6 +282,10 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `dip` → "Reading recorded from the strip." — Aquarium pH reading ×1
     - `log` → "Write it in the logbook." — Aquarium pH reading ×1, water test logbook ×1
     - `log` → "Entry logged and dated." — Logged pH entry ×1
+    - `interpret` → "Logged pH is in the 6.8–7.6 operating range." — Logged pH entry ×1
+- Troubleshooting/safety branches:
+    - `interpret` sends out-of-range readings to `corrective`
+    - `corrective` requires a measured retest before returning to logging and interpretation
 - Grants:
     - `start` → "I need a strip." — pH strip ×1
     - Quest-level `grantsItems`: None
@@ -483,21 +492,18 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/water-change`
 - Dialogue `requiresItems` gates:
-    - `catch` → "Fish is secure in the bucket." — aquarium net ×1
+    - `start` → "Transfer bucket and wet net are ready." — 5 gallon bucket ×1, aquarium net ×1
+    - `catch` → "Fish is secure in the bucket after a calm scoop." — aquarium net ×1
+- Troubleshooting/safety branches:
+    - `start`/`catch`/`release` can route to `recover` if fish shows stress or transfer control is lost
+    - `recover` enforces a calm-down window before retrying transfer
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [catch-fish](/processes/catch-fish)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
-    - [return-fish](/processes/return-fish)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
+    - None (quest progression is now gate-driven via required setup/handling items plus recovery routing).
 
 ## 19) Top Off Evaporated Water (`aquaria/top-off`)
 

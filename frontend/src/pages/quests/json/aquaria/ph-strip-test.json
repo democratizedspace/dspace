@@ -78,7 +78,7 @@
                     "type": "process",
                     "process": "log-aquarium-ph-reading",
                     "text": "Write it in the logbook.",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "requiresItems": [
                         {
                             "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
@@ -92,7 +92,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "text": "Entry logged and dated.",
                     "requiresItems": [
                         {
@@ -100,6 +100,55 @@
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the logged value now: target 6.8\u20137.6 for this community setup. Treat <6.5 as acidic stress risk and >8.0 as alkaline stress risk.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Logged pH is in the 6.8\u20137.6 operating range.",
+                    "requiresItems": [
+                        {
+                            "id": "9c392043-4067-4f49-8038-38eef00e0b24",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Reading is outside safe bounds and needs correction."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective branch: pause feeding, check aeration, and perform a small conditioned-water adjustment instead of a big swing. Retest after 30 minutes before declaring success.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-aquarium-ph",
+                    "text": "Retest pH after corrective step.",
+                    "goto": "log",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Reset PPE and sampling setup before retrying."
                 }
             ]
         },

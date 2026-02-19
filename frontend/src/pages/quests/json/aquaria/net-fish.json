@@ -8,48 +8,93 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The tank needs a quick tidy. Let's move a fish to a bucket with the net first.",
+            "text": "The tank needs a quick tidy. Before we move any fish, prep a calm transfer bucket with tank water and keep the net wet so fins stay protected.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "catch",
-                    "text": "I'll grab the net."
+                    "text": "Transfer bucket and wet net are ready.",
+                    "requiresItems": [
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Fish are darting too hard for a safe scoop."
                 }
             ]
         },
         {
             "id": "catch",
-            "text": "Gently scoop the fish with the net and settle it in a nearby bucket.",
+            "text": "Guide the fish into the net without chasing. Move slowly and keep the fish submerged while transferring to the bucket.",
             "options": [
                 {
                     "type": "goto",
+                    "text": "Fish is secure in the bucket after a calm scoop.",
                     "goto": "release",
-                    "text": "Fish is secure in the bucket.",
-                    "process": "catch-fish",
                     "requiresItems": [
                         {
                             "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "The fish bolted and I lost control of the net."
                 }
             ]
         },
         {
             "id": "release",
-            "text": "With the tank clean, return the fish to its home.",
+            "text": "After cleaning, acclimate for a minute and return the fish gently. Confirm normal swimming before you call it done.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "fin",
-                    "text": "Back in you go!",
-                    "process": "return-fish"
+                    "text": "Fish returned and swimming normally.",
+                    "goto": "fin"
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Fish is gasping or listing after return."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Pause cleanup. Dim lights, reduce movement, and keep hands out of the tank for 10 minutes. If breathing stays rapid, abort and retry only after the fish settles.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "catch",
+                    "text": "Fish has calmed down. Retry the transfer safely.",
+                    "requiresItems": [
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Reset setup before trying again."
                 }
             ]
         },
         {
             "id": "fin",
-            "text": "Great job keeping the fish safe during cleanup!",
+            "text": "Great job\u2014safe transfer, cleanup, and return all verified. That's how you avoid stress injuries during maintenance.",
             "options": [
                 {
                     "type": "finish",

@@ -28,6 +28,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-reset",
+                    "text": "Outlet area is wet or cords are tangled."
                 }
             ]
         },
@@ -50,6 +55,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-reset",
+                    "text": "I powered on before full submersion or forgot the drip loop."
                 }
             ]
         },
@@ -64,7 +74,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "text": "Reading recorded and steady",
                     "requiresItems": [
                         {
@@ -72,6 +82,65 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-temp",
+                    "text": "Temperature is still outside the safe range."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the reading before closure: 25\u201327\u00b0C is acceptable for guppies, but anything outside that range needs correction before stocking.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "We're in the 25\u201327\u00b0C band with stable flow.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-temp",
+                    "text": "Reading drifted after a few minutes."
+                }
+            ]
+        },
+        {
+            "id": "recover-temp",
+            "text": "Recovery path: unplug the heater, verify full submersion and flow, reset to 26\u00b0C, then wait 10 minutes before rechecking. Do not add livestock until readings stabilize.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Corrections made. Re-log the temperature."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-reset",
+                    "text": "I still see unsafe wiring or exposed heater glass."
+                }
+            ]
+        },
+        {
+            "id": "safety-reset",
+            "text": "Safety first. Dry hands and floor, route a drip loop below the outlet, and keep heater power off until fully submerged. Resume only when the area is safe.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Safety reset complete. Resume install."
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Restart from readiness checks."
                 }
             ]
         },
