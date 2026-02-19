@@ -61,6 +61,19 @@ and optimize for clearing those boxes after manual human verification.
   - leave boxes unchecked when evidence is ambiguous;
   - bookkeeping-only follow-up PRs that do not touch quest JSON may adjust PR tags inside the
     existing parenthetical but must not change any `[ ]`/`[x]` checkbox state.
+- **Mandatory completion gate for this prompt**: any Codex task run from this prompt that modifies
+  one or more `frontend/src/pages/quests/json/<tree>/<quest>.json` files must also include
+  matching checklist updates in `docs/design/v3-quest-quality-review.md` for those quest IDs in
+  the same PR. A PR is non-compliant if it hardens quests but does not check/update at least one
+  corresponding checklist line with PR tag(s).
+- For that mandatory checklist update, the minimum acceptable bookkeeping is updating relevant
+  checklist line(s) with canonical PR tag(s) for each touched quest ID; do **not** flip `[ ]` to
+  `[x]` unless the completed state is clearly evidenced by the same PR. Leaving `[ ]` while adding
+  traceable PR tags is valid when completion cannot be verified.
+- **Retroactive bookkeeping requirement**: if you discover older hardening PR(s) that changed
+  quest JSON but failed to record the corresponding checklist updates in
+  `docs/design/v3-quest-quality-review.md`, add a focused bookkeeping commit in the current PR to
+  backfill the missing PR tag(s) and (only when clearly evidenced) checkbox state.
 - If quest flow changes materially, update paired docs in
   `frontend/src/pages/docs/md/<tree>.md`.
 - Codex cannot create/edit binary images. If quality hardening needs new item imagery,
@@ -103,6 +116,8 @@ Output exactly these eight sections in order (no extra sections):
    - Bullet list of every line item changed in
      `docs/design/v3-quest-quality-review.md`, quoted verbatim with its final checkbox state and
      appended PR tag(s).
+   - If no line items were changed, explicitly output `BLOCKED (non-compliant with prompt)` and do
+     not open the PR until checklist updates are included.
 ```
 
 ## Upgrade prompt
@@ -123,6 +138,10 @@ Goals:
   quest JSON hardening, keep PR tags in canonical single-parenthetical format `(PR #1234, #5678)`
   when multiple PRs apply, append new PR tags as `, #<number>` within that parenthetical, and
   keep checkbox state unchanged in bookkeeping-only follow-up PRs).
+- Make it unambiguous that checklist updates are required (not optional) for any Codex task using
+  this prompt that edits quest JSON; PRs without corresponding checklist updates are non-compliant.
+- Require retroactive bookkeeping in the same PR when prior hardening PRs are found to be missing
+  required checklist traceability.
 - Optimize for clearing still-unchecked quest-quality boxes in `docs/qa/v3.md` after manual human
   verification.
 - Preserve Codex binary-asset limitations guidance (reuse image references; no new binary assets).
