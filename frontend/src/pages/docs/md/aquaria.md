@@ -286,7 +286,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `start` → "Strip and gloves ready." — pH strip ×1, nitrile gloves (pair) ×1
     - `dip` → "Dip and read the strip." — pH strip ×1, nitrile gloves (pair) ×1
     - `dip` → "Reading recorded from the strip." — Aquarium pH reading ×1
-    - `interpret` → "Reading is within 6.8-7.6" — Aquarium pH reading ×1
+    - `interpret` → "Reading is within 6.8–7.6" — Aquarium pH reading ×1
     - `interpret` → "Reading is out of range" — Aquarium pH reading ×1
     - `corrective` → "Correction staged; run a mandatory re-test" — pH strip ×1, nitrile gloves (pair) ×1
     - `log` → "Write it in the logbook." — Aquarium pH reading ×1, water test logbook ×1
@@ -323,7 +323,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `adjust` → "Dose complete; ready to re-test." — Logged pH entry ×1
     - `retest` → "Capture post-dose reading." — pH strip ×1, nitrile gloves (pair) ×1
     - `retest` → "Post-dose reading captured." — Aquarium pH reading ×1
-    - `interpret` → "Log stable result (6.8-7.6) and close." — Aquarium pH reading ×1, water test logbook ×1
+    - `interpret` → "Log stable result (6.8–7.6) and close." — Aquarium pH reading ×1, water test logbook ×1
     - `interpret` → "Reading still out of range or livestock looks stressed." — Aquarium pH reading ×1
     - `interpret` → "Result logged; close remediation cycle." — none
     - `troubleshoot` → "Apply a smaller corrective dose." — nitrile gloves (pair) ×1, safety goggles ×1
