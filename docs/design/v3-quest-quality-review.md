@@ -890,6 +890,52 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
   - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
   - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
 
+#### PR #3626 follow-up summary
+
+1. **Selected quests (exact quest IDs)**
+   - `hydroponics/ph-check`
+   - `hydroponics/pump-install`
+   - `hydroponics/root-rinse`
+
+2. **Unchecked QA boxes targeted (copy exact checkbox label text from docs/qa/v3.md §4.5 + breadcrumb)**
+   - `docs/qa/v3.md` §4.5 → `hydroponics` → `- [ ] ph-check`
+   - `docs/qa/v3.md` §4.5 → `hydroponics` → `- [ ] pump-install`
+   - `docs/qa/v3.md` §4.5 → `hydroponics` → `- [ ] root-rinse`
+
+3. **Exemplar anchors used (verified checked anchors only; list only `<tree>/<quest>` tokens)**
+   - `hydroponics/basil`
+   - `hydroponics/nutrient-check`
+
+4. **Before/after structural summary (branches + evidence gates + troubleshooting/safety)**
+   - `hydroponics/ph-check`: expanded from thin measurement flow to prep → measure → interpret with out-of-range corrective loop and re-test gate.
+   - `hydroponics/pump-install`: split install → verify → rollback/re-verify flow with installed-loop evidence gating to avoid dead-end retries.
+   - `hydroponics/root-rinse`: enforces baseline and post-rinse evidence progression with contamination recovery loop and safety gating before finish.
+
+5. **Tests and checks run (pass/fail)**
+   - `npm run lint` (pass)
+   - `npm run type-check` (fail: pre-existing `frontend/e2e/test-helpers.ts` typing errors)
+   - `npm run build` (pass)
+   - `npm run test:ci` (warning: did not complete within session window after entering `run-tests.js` root unit tests)
+   - `npm run link-check` (pass)
+   - `for f in frontend/src/pages/quests/json/hydroponics/*.json; do node scripts/validate-quest.js "$f" || exit 1; done` (pass)
+
+6. **Asset follow-ups (or None)**
+   - None.
+
+7. **Follow-ups (or None)**
+   - None.
+
+8. **Checklist box updates (quote each modified checklist line verbatim with final checkbox state + appended PR tags)**
+   - ``- [x] Observed issue: `hydroponics/ph-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3626)``
+   - ``- [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3626)``
+   - ``- [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3626)``
+   - ``- [x] Observed issue: `hydroponics/pump-install` reads like a one-pass install task, with verify/rollback state changes not clearly represented. (PR #3626)``
+   - ``- [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3626)``
+   - ``- [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path. (PR #3626)``
+   - ``- [x] Observed issue: `hydroponics/root-rinse` describes a cleaning cycle without a measurable before/after success definition. (PR #3626)``
+   - ``- [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #3626)``
+   - ``- [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #3626)``
+
 ### programming (18 quests)
 
 Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, welcome/run-tests (fallback: no checked programming quests yet)
