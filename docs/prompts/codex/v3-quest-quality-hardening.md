@@ -1,36 +1,38 @@
 # v3 quest quality hardening prompts
 
-Use these copy/paste prompts to harden v3 quest quality and clear remaining unchecked quest-quality
-items in `docs/qa/v3.md` via deterministic, auditable changes.
+Use these copy/paste prompts to harden v3 quest quality and clear remaining unchecked
+quest-quality items in `docs/qa/v3.md` via deterministic, auditable changes.
 
 ## Main prompt
 
 ```markdown
-# DSPACE v3 quest quality hardening (unchecked QA boxes → deterministic parity)
+# DSPACE v3 quest quality hardening (unchecked QA boxes -> deterministic parity)
 
 You are Codex working in `democratizedspace/dspace`.
 
 ## Objective
 
-Select 3–8 quests from `docs/design/v3-quest-quality-review.md` under
+Select 3-8 quests from `docs/design/v3-quest-quality-review.md` under
 **Problematic quests to prioritize (with improvement checklist)** and harden them to parity with
 verified checked exemplars in `docs/qa/v3.md` §4.5.
 
-Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3.md`.
+Prioritize quests that map directly to still-unchecked per-quest boxes in `docs/qa/v3.md` §4.5,
+and optimize for clearing those boxes after manual human verification.
 
 ## Deterministic selection and anchoring rules (required)
 
-1. Work within a single tree when possible.
-2. For that tree, read `Exemplar anchors (checked in docs/qa/v3.md §4.5)` from
+1. Build a target list from still-unchecked **per-quest** rows in `docs/qa/v3.md` §4.5
+   (not tree-level header checkboxes).
+2. Work within a single tree when possible.
+3. For that tree, read `Exemplar anchors (checked in docs/qa/v3.md §4.5)` from
    `docs/design/v3-quest-quality-review.md`.
-3. Extract only anchor quest ID tokens (`<tree>/<quest>`) and ignore any trailing commentary
-   (for example fallback parentheticals); **only** anchors listed on that tree's
-   `Exemplar anchors (checked in docs/qa/v3.md §4.5)` line are allowed exemplar IDs.
-4. Verify each candidate anchor is actually checked in `docs/qa/v3.md` §4.5 before using it;
+4. Extract only anchor quest ID tokens (`<tree>/<quest>`) and ignore trailing commentary
+   (for example fallback parentheticals); only IDs on that line are allowed exemplar IDs.
+5. Verify each candidate anchor is actually checked in `docs/qa/v3.md` §4.5 before using it;
    unchecked anchors must not be used.
-5. Determine each selected quest's checklist-rubric type by keyword (**first match wins**) and
+6. Determine each selected quest's checklist-rubric type by keyword (**first match wins**) and
    apply only that type's structure.
-6. Prefer a mixed set of rubric types when selecting multiple quests (for example install +
+7. Prefer a mixed set of rubric types when selecting multiple quests (for example install +
    measure + log/monitor) so coverage is explicit.
 
 ## Quality bar (must satisfy for each selected quest)
@@ -58,7 +60,7 @@ Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3
     parenthetical so the line still follows the canonical format above;
   - leave boxes unchecked when evidence is ambiguous;
   - bookkeeping-only follow-up PRs that do not touch quest JSON may adjust PR tags inside the
-    existing parenthetical but **must not** change any `[ ]`/`[x]` checkbox state.
+    existing parenthetical but must not change any `[ ]`/`[x]` checkbox state.
 - If quest flow changes materially, update paired docs in
   `frontend/src/pages/docs/md/<tree>.md`.
 - Codex cannot create/edit binary images. If quality hardening needs new item imagery,
@@ -77,12 +79,12 @@ Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3
 
 ## REQUIRED output format for your PR summary
 
-Output exactly these sections in order:
+Output exactly these eight sections in order (no extra sections):
 
 1. `Selected quests`
    - Bullet list of selected quest IDs.
 2. `Unchecked QA boxes targeted`
-   - Bullet list mapping each selected quest to the still-unchecked per-quest checkbox row(s) in
+   - Bullet list mapping each selected quest to still-unchecked per-quest checkbox row(s) in
      `docs/qa/v3.md` §4.5 it is intended to unlock, using the exact checkbox label text copied
      verbatim from §4.5 (not paraphrased and not tree-level header boxes).
    - For each mapped checkbox, include a nearest subsection header or anchor-like breadcrumb so a
@@ -127,7 +129,8 @@ Goals:
 
 Constraints:
 
-- Keep one `Main prompt` codeblock and one `Upgrade prompt` codeblock.
+- Keep one `Main prompt` codeblock and one `Upgrade prompt` codeblock; do not add any other
+  fenced code blocks.
 - Move non-reusable commentary into short notes outside those codeblocks.
 
 Return the fully updated markdown document.
@@ -136,6 +139,4 @@ Return the fully updated markdown document.
 ## Notes
 
 - The backlog's exemplar anchors are the only allowed source for exemplar IDs.
-- If commands/scripts change, update this prompt immediately to keep automation deterministic.
-- Human follow-up is expected for any reused image references that should later be deduplicated or
-  replaced with final art.
+- Keep these prompts synchronized with current script names and file paths.
