@@ -1,7 +1,7 @@
 # v3 quest quality hardening prompts
 
 Use these copy/paste prompts to harden v3 quest quality and clear remaining unchecked quest-quality
-items in `docs/qa/v3.md` via deterministic, auditable changes.
+items in `docs/qa/v3.md` through deterministic, auditable changes.
 
 ## Main prompt
 
@@ -16,7 +16,8 @@ Select 3–8 quests from `docs/design/v3-quest-quality-review.md` under
 **Problematic quests to prioritize (with improvement checklist)** and harden them to parity with
 verified checked exemplars in `docs/qa/v3.md` §4.5.
 
-Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3.md`.
+Prioritize quests that map directly to still-unchecked per-quest quest-quality boxes in
+`docs/qa/v3.md` §4.5.
 
 ## Deterministic selection and anchoring rules (required)
 
@@ -24,10 +25,10 @@ Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3
 2. For that tree, read `Exemplar anchors (checked in docs/qa/v3.md §4.5)` from
    `docs/design/v3-quest-quality-review.md`.
 3. Extract only anchor quest ID tokens (`<tree>/<quest>`) and ignore any trailing commentary
-   (for example fallback parentheticals); **only** anchors listed on that tree's
+   (for example fallback parentheticals). **Only** anchors listed on that tree's
    `Exemplar anchors (checked in docs/qa/v3.md §4.5)` line are allowed exemplar IDs.
-4. Verify each candidate anchor is actually checked in `docs/qa/v3.md` §4.5 before using it;
-   unchecked anchors must not be used.
+4. Verify each candidate anchor is actually checked in `docs/qa/v3.md` §4.5 before using it.
+   Unchecked anchors must not be used.
 5. Determine each selected quest's checklist-rubric type by keyword (**first match wins**) and
    apply only that type's structure.
 6. Prefer a mixed set of rubric types when selecting multiple quests (for example install +
@@ -46,24 +47,24 @@ Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3
 
 - Edit quest JSON under `frontend/src/pages/quests/json/<tree>/<quest>.json`.
 - Keep quest IDs stable unless correcting a proven canonical mismatch.
-- For each selected quest in `docs/design/v3-quest-quality-review.md`, update checklist boxes only
-  when the corresponding work is verifiably complete **and** the quest JSON changes are included
-  in the same PR:
-  - switch `[ ]` to `[x]` for each completed line item in PRs that also modify the corresponding
+- For each selected quest line in `docs/design/v3-quest-quality-review.md`, update checklist boxes
+  only when corresponding work is verifiably complete **and** quest JSON hardening for that quest
+  is included in the same PR:
+  - switch `[ ]` to `[x]` for each completed line item in PRs that also modify corresponding
     quest JSON;
   - append the current PR number at end-of-line as `(PR #<number>)`;
   - canonical PR-tag format is a single parenthetical with one `PR` prefix:
     `(PR #<number1>, #<number2>, #<number3>)`;
   - if a line already has PR tags, append the new PR as `, #<number>` inside that same
-    parenthetical so the line still follows the canonical format above;
+    parenthetical so the line remains canonical;
   - leave boxes unchecked when evidence is ambiguous;
   - bookkeeping-only follow-up PRs that do not touch quest JSON may adjust PR tags inside the
     existing parenthetical but **must not** change any `[ ]`/`[x]` checkbox state.
 - If quest flow changes materially, update paired docs in
-  `frontend/src/pages/docs/md/<tree>.md`.
-- Codex cannot create/edit binary images. If quality hardening needs new item imagery,
-  reuse an existing in-repo image reference, note human follow-up for image dedup/replacement,
-  and do not add new binary assets.
+  `frontend/src/pages/docs/md/<tree>.md` in the same PR.
+- Codex cannot create/edit binary images. If quality hardening needs new item imagery, reuse an
+  existing in-repo image reference, note human follow-up for image dedup/replacement, and do not
+  add new binary assets.
 - Ensure requirements, rewards, and process references resolve to valid IDs.
 
 ## Validation commands (required)
@@ -83,8 +84,8 @@ Output exactly these sections in order:
    - Bullet list of selected quest IDs.
 2. `Unchecked QA boxes targeted`
    - Bullet list mapping each selected quest to the still-unchecked per-quest checkbox row(s) in
-     `docs/qa/v3.md` §4.5 it is intended to unlock, using the exact checkbox label text copied
-     verbatim from §4.5 (not paraphrased and not tree-level header boxes).
+     `docs/qa/v3.md` §4.5 it is intended to unlock, using exact checkbox label text copied
+     verbatim from §4.5 (no paraphrase and no tree-level header boxes).
    - For each mapped checkbox, include a nearest subsection header or anchor-like breadcrumb so a
      human can find it quickly (for example `§4.5 > Quest quality > <tree>`).
 3. `Exemplar anchors used`
@@ -136,6 +137,6 @@ Return the fully updated markdown document.
 ## Notes
 
 - The backlog's exemplar anchors are the only allowed source for exemplar IDs.
-- If commands/scripts change, update this prompt immediately to keep automation deterministic.
-- Human follow-up is expected for any reused image references that should later be deduplicated or
+- If commands/scripts change, update this prompt immediately so automation stays deterministic.
+- Human follow-up is expected for reused image references that should later be deduplicated or
   replaced with final art.
