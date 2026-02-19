@@ -8,18 +8,33 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Open ports invite trouble. Let's add a firewall to your node.",
+            "text": "Open ports invite trouble. First capture your current access paths so we do not lock ourselves out.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "setup",
-                    "text": "Show me."
+                    "text": "Access map documented. Apply baseline rules.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "I need an SSH recovery plan first."
                 }
             ]
         },
         {
             "id": "setup",
-            "text": "Install UFW and allow SSH and HTTPS. Deny everything else by default.",
+            "text": "Install UFW and allow only SSH + HTTPS from approved CIDRs. Set default deny for inbound traffic.",
             "options": [
                 {
                     "type": "process",
@@ -28,8 +43,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Rules applied.",
+                    "goto": "verify",
+                    "text": "Rules applied and node still reachable.",
                     "requiresItems": [
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
@@ -44,8 +59,46 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Run inbound checks from allowed and blocked networks. Capture the allowed ports list as evidence.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Only expected ports respond and SSH remains healthy.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Unexpected port exposure or SSH instability detected."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Safety stop: restore last-known-good UFW rules via console, then reapply changes one rule at a time.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Rollback complete. Reapply rules with narrower scope."
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Pause and review the access map before retrying."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! Your node now exposes only the ports it needs.",
+            "text": "Nice. Your node now exposes only approved ports, and you validated recovery paths for future rule changes.",
             "options": [
                 {
                     "type": "finish",
@@ -64,7 +117,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

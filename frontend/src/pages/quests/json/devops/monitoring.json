@@ -8,28 +8,28 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "With the cluster online it's time to keep an eye on resource usage.",
+            "text": "With the cluster online, we need a monitoring baseline before any incidents hit.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "install",
-                    "text": "Show me how."
+                    "text": "Install the stack and define SLO thresholds."
                 }
             ]
         },
         {
             "id": "install",
-            "text": "Use docker compose to run Prometheus and Grafana. Expose Grafana on port 3000.",
+            "text": "Use docker compose to run Prometheus and Grafana. Create dashboards for CPU, memory, disk, and pod restarts.",
             "options": [
                 {
                     "type": "process",
                     "process": "install-monitoring-stack",
-                    "text": "Installing now."
+                    "text": "Monitoring stack installed."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Dashboard up.",
+                    "goto": "verify",
+                    "text": "Dashboards are loading and metrics are scraping.",
                     "requiresItems": [
                         {
                             "id": "849eb5e1-9f63-488b-80d3-913492049090",
@@ -40,8 +40,61 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Record a 15-minute snapshot: CPU < 80%, memory < 85%, disk < 75%, and no crash-looping pods.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Snapshot meets thresholds and is logged in ops notes.",
+                    "requiresItems": [
+                        {
+                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "count": 1
+                        },
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "incident",
+                    "text": "Anomaly detected (alerts firing or scrape gaps)."
+                }
+            ]
+        },
+        {
+            "id": "incident",
+            "text": "Classify the anomaly first: exporter down, resource saturation, or bad alert rule. Stabilize service before tuning dashboards.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Exporter/rule fix applied. Rebuild dashboards and scrape targets."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Load spike mitigated. Re-run the 15-minute verification window.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Safety stop: pause rollout and return after cluster health is stable."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great! You can now track CPU load and memory usage from the browser.",
+            "text": "Great. Monitoring is operational with explicit thresholds, evidence logs, and an incident triage loop.",
             "options": [
                 {
                     "type": "finish",
@@ -60,7 +113,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -122,7 +122,9 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/k3s-deploy`
 - Dialogue `requiresItems` gates:
-    - `install` → "Dashboard up." — external backup SSD ×1
+    - `install` → "Dashboards are loading and metrics are scraping." — external backup SSD ×1
+    - `verify` → "Snapshot meets thresholds and is logged in ops notes." — external backup SSD ×1, Pi cluster node ×1
+    - `incident` → "Load spike mitigated. Re-run the 15-minute verification window." — Pi cluster node ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -183,9 +185,10 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/daily-backups`
 - Dialogue `requiresItems` gates:
-    - `start` → "Stage certbot." — Pi cluster node ×1, auto-update health report ×1
+    - `start` → "Console access confirmed. Stage certbot." — Pi cluster node ×1, auto-update health report ×1
     - `provision` → "Certificates minted." — Pi cluster node ×1, auto-update health report ×1
-    - `verify` → "TLS health verified." — TLS certificate bundle ×1, Pi cluster node ×1
+    - `verify` → "TLS health verified with clean chain and renewal output." — TLS certificate bundle ×1, Pi cluster node ×1
+    - `rollback` → "Rollback complete. Retry certificate provisioning." — Pi cluster node ×1
     - `finish` → "Document the renewal schedule." — HTTPS service check ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -208,7 +211,9 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/auto-updates`
 - Dialogue `requiresItems` gates:
-    - `setup` → "Rules applied." — Pi cluster node ×1, Laptop Computer ×1
+    - `start` → "Access map documented. Apply baseline rules." — Pi cluster node ×1, Laptop Computer ×1
+    - `setup` → "Rules applied and node still reachable." — Pi cluster node ×1, Laptop Computer ×1
+    - `verify` → "Only expected ports respond and SSH remains healthy." — Pi cluster node ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
