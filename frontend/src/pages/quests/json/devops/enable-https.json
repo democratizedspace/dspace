@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your services are running well. Let's lock them down with certs and renewal checks.",
+            "text": "Your services are running well. Before touching certs, confirm you still have console access and a rollback path.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "provision",
-                    "text": "Stage certbot.",
+                    "text": "Console access confirmed. Stage certbot.",
                     "requiresItems": [
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
@@ -24,6 +24,22 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "lockout-plan",
+                    "text": "I do not have recovery access yet."
+                }
+            ]
+        },
+        {
+            "id": "lockout-plan",
+            "text": "Good catch. Never flip TLS on a production node without recovery. Validate local console + DNS control first.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Recovery path documented. Continue with certbot."
                 }
             ]
         },
@@ -56,12 +72,12 @@
         },
         {
             "id": "verify",
-            "text": "Run a renewal dry-run, confirm the chain serves full trust, and log the upstream check result.",
+            "text": "Run a renewal dry-run and validate browser trust from outside your LAN before closing this task.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "TLS health verified.",
+                    "text": "TLS health verified with clean chain and renewal output.",
                     "process": "verify-https-service",
                     "requiresItems": [
                         {
@@ -76,14 +92,36 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "rollback",
+                    "text": "Verification failed or users report certificate warnings."
+                }
+            ]
+        },
+        {
+            "id": "rollback",
+            "text": "Safety stop: restore the prior web config, keep HTTP reachable for control access, then re-run cert issuance.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "provision",
-                    "text": "Re-run ACME challenge."
+                    "text": "Rollback complete. Retry certificate provisioning.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "lockout-plan",
+                    "text": "Pause rollout until recovery checklist is complete."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Excellent! Traffic to your cluster is now encrypted and on autopilot.",
+            "text": "Excellent. HTTPS is live, renewal is proven, and you have a documented rollback if cert health regresses.",
             "options": [
                 {
                     "type": "finish",
@@ -108,7 +146,7 @@
     "hardening": {
         "passes": 0,
         "score": 88,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
