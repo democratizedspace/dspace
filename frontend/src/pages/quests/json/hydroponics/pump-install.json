@@ -8,23 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Stagnant reservoirs drift out of range fast. Let's install your submersible pump and verify flow.",
+            "text": "Stagnant reservoirs drift fast. We will install, verify flow, and keep a rollback path if priming fails.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "kit",
-                    "text": "Ready to install."
+                    "text": "Start install checklist."
                 }
             ]
         },
         {
             "id": "kit",
-            "text": "Gather the pump, a clean hydroponics tub, and PPE so we can set this up safely.",
+            "text": "Gather pump, ready tub, and PPE. Confirm power is off before touching waterline hardware.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "install",
-                    "text": "Kit is assembled.",
+                    "text": "Kit is assembled and power is isolated.",
                     "requiresItems": [
                         {
                             "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
@@ -37,19 +37,38 @@
                         {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Missing PPE or unsafe wiring near reservoir."
                 }
             ]
         },
         {
             "id": "install",
-            "text": "Seat the pump in the reservoir, route tubing to the grow bed, then secure return flow to prevent splashing.",
+            "text": "Seat pump, route tubing, and secure return path to prevent splash and siphon backflow.",
             "options": [
                 {
                     "type": "process",
                     "process": "install-submersible-pump",
-                    "text": "Installing the pump assembly."
+                    "text": "Install pump assembly now.",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -66,20 +85,47 @@
         },
         {
             "id": "verify",
-            "text": "Run a short flow test and confirm you get steady circulation without cavitation or dry spots.",
+            "text": "Run flow verification. If cavitation or dry spots appear, branch to rollback before retrying install.",
             "options": [
                 {
                     "type": "process",
                     "process": "verify-hydroponic-flow",
-                    "text": "Running the flow test now."
+                    "text": "Run circulation verification."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Flow looks stable.",
+                    "text": "Flow is stable and documented.",
                     "requiresItems": [
                         {
                             "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Flow unstable, noisy, or intake pulling air."
+                }
+            ]
+        },
+        {
+            "id": "rollback",
+            "text": "Rollback path: power down, reseat intake depth, clear kinked tubing, and recheck seals before reinstall attempt.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "kit",
+                    "text": "Hardware corrected; return to safety gate."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Re-verify after corrective changes.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
                             "count": 1
                         }
                     ]
@@ -88,11 +134,11 @@
         },
         {
             "id": "finish",
-            "text": "Nice install. Consistent circulation keeps nutrients and oxygen evenly distributed.",
+            "text": "Nice commissioning run. Install plus verified flow means your reservoir is ready for stable dosing.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Pump loop commissioned."
+                    "text": "Pump loop commissioned with rollback checks."
                 }
             ]
         }
