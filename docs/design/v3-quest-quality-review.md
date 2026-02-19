@@ -258,8 +258,8 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `aquaria/goldfish`
   - [ ] Observed issue: `aquaria/goldfish` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
-  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
-  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
+  - [x] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`. (PR #pending)
+  - [x] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming. (PR #pending)
 - `aquaria/guppy`
   - [ ] Observed issue: `aquaria/guppy` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
   - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
@@ -310,8 +310,8 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `aquaria/water-testing`
   - [ ] Observed issue: `aquaria/water-testing` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #pending)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #pending)
 
 ### astronomy (21 quests)
 
@@ -790,8 +790,8 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [ ] Add an anomaly classification branch with corrective action and a follow-up verification window before closure.
 - `geothermal/purge-loop-air`
   - [ ] Observed issue: `geothermal/purge-loop-air` describes a cleaning cycle without a measurable before/after success definition.
-  - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
+  - [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #pending)
+  - [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #pending)
 - `geothermal/replace-faulty-thermistor`
   - [ ] Observed issue: `geothermal/replace-faulty-thermistor` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -858,9 +858,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
   - [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3626)
   - [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path. (PR #3626)
 - `hydroponics/pump-prime`
-  - [ ] Observed issue: `hydroponics/pump-prime` describes a cleaning cycle without a measurable before/after success definition.
-  - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
+  - [x] Observed issue: `hydroponics/pump-prime` describes a cleaning cycle without a measurable before/after success definition. (PR #pending)
+  - [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #pending)
+  - [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #pending)
 - `hydroponics/regrow-stevia`
   - [ ] Observed issue: `hydroponics/regrow-stevia` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
   - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
@@ -874,13 +874,13 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
   - [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #3626)
   - [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #3626)
 - `hydroponics/stevia`
-  - [ ] Observed issue: `hydroponics/stevia` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
-  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
-  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
+  - [x] Observed issue: `hydroponics/stevia` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated. (PR #pending)
+  - [x] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`. (PR #pending)
+  - [x] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming. (PR #pending)
 - `hydroponics/temp-check`
-  - [ ] Observed issue: `hydroponics/temp-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `hydroponics/temp-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #pending)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #pending)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #pending)
 - `hydroponics/top-off`
   - [x] Observed issue: `hydroponics/top-off` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3611)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3611)
@@ -928,13 +928,13 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
 8. **Checklist box updates (quote each modified checklist line verbatim with final checkbox state + appended PR tags)**
    - ``- [x] Observed issue: `hydroponics/ph-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3626)``
    - ``- [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3626)``
-   - ``- [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3626)``
+   - `- [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3626)`
    - ``- [x] Observed issue: `hydroponics/pump-install` reads like a one-pass install task, with verify/rollback state changes not clearly represented. (PR #3626)``
-   - ``- [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3626)``
-   - ``- [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path. (PR #3626)``
+   - `- [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3626)`
+   - `- [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path. (PR #3626)`
    - ``- [x] Observed issue: `hydroponics/root-rinse` describes a cleaning cycle without a measurable before/after success definition. (PR #3626)``
-   - ``- [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #3626)``
-   - ``- [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #3626)``
+   - `- [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #3626)`
+   - `- [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #3626)`
 
 ### programming (18 quests)
 

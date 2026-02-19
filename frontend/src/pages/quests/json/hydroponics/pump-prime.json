@@ -1,46 +1,160 @@
 {
     "id": "hydroponics/pump-prime",
     "title": "Prime Water Pump",
-    "description": "Prep the pump so it doesn't run dry.",
+    "description": "Prime and verify circulation so the pump never runs dry.",
     "image": "/assets/quests/hydroponics_pump_prime.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "New pumps need a bit of water before they work well.",
+            "text": "Before we feed roots, we prove the pump has a wet prime and stable flow. Dry starts cook impellers fast.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Start priming checklist."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Stage PPE, verify reservoir level above intake, and confirm power is off before touching tubing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Prep complete and intake submerged.",
+                    "requiresItems": [
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Unsafe wiring, low level, or dry intake found."
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Capture a pre-prime snapshot: note no/weak return flow and any cavitation noise so we can compare after priming.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prime",
-                    "text": "Show me."
+                    "text": "Baseline captured; run prime cycle."
                 }
             ]
         },
         {
             "id": "prime",
-            "text": "Fill the pump housing with nutrient solution and run it a moment to push out air bubbles.",
+            "text": "Flood the housing, pulse start briefly, then keep intake fully submerged while air clears from the line.",
             "options": [
                 {
                     "type": "process",
                     "process": "install-submersible-pump",
-                    "goto": "finish",
-                    "text": "Run the priming cycle."
+                    "text": "Run controlled prime cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Prime cycle completed; verify flow artifact.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Pump chatters or loses prime during start."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: cut power, refill housing, reseat tubing, and clear trapped air before retrying. Never run dry while troubleshooting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Corrective steps done; restart safety prep."
+                },
+                {
+                    "type": "goto",
+                    "goto": "prime",
+                    "text": "Re-primed manually; retry prime cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Run verification window and compare against baseline. Pass only when return flow is steady and no intake air is visible.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "verify-hydroponic-flow",
+                    "text": "Run post-prime flow verification."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Pump is primed"
+                    "text": "Flow verified and stable.",
+                    "requiresItems": [
+                        {
+                            "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Flow still unstable; return to recovery loop."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice. A primed pump circulates nutrients without cavitation.",
+            "text": "Prime closed with before/after evidence and a safe recovery loop.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Back to the grow bed."
+                    "text": "Pump prime verified."
                 }
             ]
         }
@@ -54,8 +168,8 @@
     "requiresQuests": ["hydroponics/pump-install"],
     "hardening": {
         "passes": 0,
-        "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 90,
+        "emoji": "🛠️",
         "history": []
     }
 }

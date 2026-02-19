@@ -1,35 +1,61 @@
 {
     "id": "hydroponics/stevia",
     "title": "Grow Stevia Hydroponically",
-    "description": "Cultivate stevia plants for a natural sweetener.",
+    "description": "Cultivate stevia with staged setup, growth validation, and stress recovery.",
     "image": "/assets/quests/hydroponic_stevia_starter_tub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hydro here. Stevia's sweet, and the grow is easy if we keep the rhythm.",
+            "text": "Hydro here. Stevia rewards discipline: prep clean media, verify early growth, then harvest only after stress checks pass.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "plant",
-                    "text": "Absolutely, let's plant some stevia!"
+                    "goto": "setup",
+                    "text": "Run setup checklist."
                 }
             ]
         },
         {
-            "id": "plant",
-            "text": "Soak the rockwool plugs, tuck in the seeds, and let them germinate in calm light.",
+            "id": "setup",
+            "text": "Stage soaked plugs, ready tub, and steady light. We don't sow into dry media or unstable reservoir conditions.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "germinate",
+                    "text": "Setup ready for germination.",
+                    "requiresItems": [
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 10
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stabilize",
+                    "text": "Media dryness or light instability detected."
+                }
+            ]
+        },
+        {
+            "id": "germinate",
+            "text": "Run germination and wait for uniform emergence before transplanting.",
             "options": [
                 {
                     "type": "process",
                     "process": "germinate-stevia",
-                    "text": "Starting the germination process."
+                    "text": "Start germination cycle."
                 },
                 {
                     "type": "goto",
-                    "goto": "grow",
-                    "text": "Seedlings look healthy!",
+                    "goto": "transplant",
+                    "text": "Seedlings are established and ready.",
                     "requiresItems": [
                         {
                             "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
@@ -40,8 +66,56 @@
             ]
         },
         {
+            "id": "transplant",
+            "text": "Transplant into the tub and monitor for wilting during the first day. If stress appears, pause and correct environment before growth run.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "grow",
+                    "text": "Canopy looks stable; begin growth cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
+                            "count": 6
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stabilize",
+                    "text": "Wilting or heat stress observed; pause and stabilize first."
+                }
+            ]
+        },
+        {
+            "id": "stabilize",
+            "text": "Recovery path: reduce light intensity, restore reservoir level, and wait one observation window before retrying transplant/growth.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Environment stabilized; restart setup gate."
+                },
+                {
+                    "type": "goto",
+                    "goto": "transplant",
+                    "text": "Plants recovered; retry transplant check.",
+                    "requiresItems": [
+                        {
+                            "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
+                            "count": 6
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "grow",
-            "text": "Move seedlings to the tub and give them steady light for about a month.",
+            "text": "Run the growth process to full maturity and verify leaf mass before harvest.",
             "options": [
                 {
                     "type": "process",
@@ -51,10 +125,37 @@
                 {
                     "type": "goto",
                     "goto": "harvest",
-                    "text": "They're full grown and smell sweet!",
+                    "text": "Mature plants confirmed; proceed to harvest.",
                     "requiresItems": [
                         {
                             "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+                            "count": 6
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stabilize",
+                    "text": "Growth stalled or nutrient stress detected."
+                }
+            ]
+        },
+        {
+            "id": "harvest",
+            "text": "Clip leaves cleanly and verify the first harvest artifact before closing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "harvest-stevia",
+                    "text": "Harvest leaves."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Harvest bundle confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
                             "count": 10
                         }
                     ]
@@ -62,17 +163,12 @@
             ]
         },
         {
-            "id": "harvest",
-            "text": "Clip the leaves for sweetener. Keep them under light and they'll regrow.",
+            "id": "finish",
+            "text": "Stevia run complete: setup proof, growth proof, and stress recovery handling all verified.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "harvest-stevia",
-                    "text": "Harvesting the leaves."
-                },
-                {
                     "type": "finish",
-                    "text": "Thanks for the tips, Hydro!"
+                    "text": "Stevia cycle documented and complete."
                 }
             ]
         }
@@ -87,7 +183,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

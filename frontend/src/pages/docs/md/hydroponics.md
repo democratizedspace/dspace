@@ -328,17 +328,27 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/pump-install`
 - Dialogue `requiresItems` gates:
-    - None
+    - `prep` → "Prep complete and intake submerged." — submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1
+    - `prime` → "Prime cycle completed; verify flow artifact." — installed submersible pump loop ×1
+    - `recover` → "Re-primed manually; retry prime cycle." — submersible water pump ×1
+    - `verify` → "Flow verified and stable." — verified hydroponic circulation loop ×1
+- Recovery/troubleshooting branches:
+    - `prep` can branch to `recover` when low waterline/unsafe wiring is detected
+    - `prime` and `verify` both branch to `recover` for cavitation/loss-of-prime retry loops
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [prime-pump](/processes/prime-pump)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
+    - [install-submersible-pump](/processes/install-submersible-pump)
+        - Requires: nitrile gloves (pair) ×1
+        - Consumes: submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
+        - Creates: installed submersible pump loop ×1
+    - [verify-hydroponic-flow](/processes/verify-hydroponic-flow)
+        - Requires: installed submersible pump loop ×1
+        - Consumes: installed submersible pump loop ×1
+        - Creates: verified hydroponic circulation loop ×1
 
 ## 13) Grow Stevia Hydroponically (`hydroponics/stevia`)
 
@@ -346,8 +356,15 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/lettuce`
 - Dialogue `requiresItems` gates:
-    - `plant` → "Seedlings look healthy!" — stevia seedling ×10
-    - `grow` → "They're full grown and smell sweet!" — harvestable stevia plant ×10
+    - `setup` → "Setup ready for germination." — soaked hydroponic starter plug ×10, hydroponics tub (ready) ×1
+    - `germinate` → "Seedlings are established and ready." — stevia seedling ×10
+    - `transplant` → "Canopy looks stable; begin growth cycle." — stevia seedling ×6, hydroponics tub (ready) ×1
+    - `stabilize` → "Plants recovered; retry transplant check." — stevia seedling ×6
+    - `grow` → "Mature plants confirmed; proceed to harvest." — harvestable stevia plant ×6
+    - `harvest` → "Harvest bundle confirmed." — bundle of stevia leaves ×10
+- Recovery/troubleshooting branches:
+    - `setup` and `transplant` can branch to `stabilize` when media/light stress is observed
+    - `grow` can branch to `stabilize` on nutrient or heat stress before retry
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -391,17 +408,41 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/nutrient-check`
 - Dialogue `requiresItems` gates:
-    - `measure` → "Measure temperature" — 7 pH freshwater aquarium (150 L) ×1, aquarium thermometer (0–50°C) ×1
+    - `prep` → "Attach thermometer strip." — 7 pH freshwater aquarium (150 L) ×1, aquarium thermometer (0–50°C) ×1, Walstad aquarium (80 L) ×1
+    - `prep` → "Thermometer attached and readable." — Walstad aquarium with thermometer (80 L) ×1
+    - `measure` → "Measure temperature." — 7 pH freshwater aquarium (150 L) ×1, Walstad aquarium with thermometer (80 L) ×1
+    - `measure` → "Reading captured; interpret result." — Walstad aquarium with thermometer (80 L) ×1
+    - `interpret` → "In range; log and close." — Walstad aquarium with thermometer (80 L) ×1
+    - `correct` → "Stabilization window complete; re-measure temperature." — verified hydroponic circulation loop ×1
+    - `troubleshoot` → "System stabilized; take a new reading." — Walstad aquarium with thermometer (80 L) ×1
+    - `log` → "Log temperature reading." — Walstad aquarium with thermometer (80 L) ×1
+    - `log` → "Reading logged and trend reviewed." — Aquarium temperature reading ×1
+- Recovery/troubleshooting branches:
+    - `interpret` branches to `correct` when readings are outside 65–75°F
+    - `correct` branches to `troubleshoot` when drift persists after re-test windows
+    - `troubleshoot` loops back to `prep` or `measure` after correcting pump/ambient issues
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
+    - [attach-aquarium-thermometer](/processes/attach-aquarium-thermometer)
+        - Requires: Walstad aquarium (80 L) ×1, aquarium thermometer (0–50°C) ×1, paper towel ×1
+        - Consumes: aquarium thermometer (0–50°C) ×1, paper towel ×1
+        - Creates: Walstad aquarium with thermometer (80 L) ×1
     - [check-aquarium-temperature](/processes/check-aquarium-temperature)
         - Requires: 7 pH freshwater aquarium (150 L) ×1, aquarium thermometer (0–50°C) ×1
         - Consumes: none
         - Creates: none
+    - [verify-hydroponic-flow](/processes/verify-hydroponic-flow)
+        - Requires: installed submersible pump loop ×1
+        - Consumes: installed submersible pump loop ×1
+        - Creates: verified hydroponic circulation loop ×1
+    - [log-walstad-temperature](/processes/log-walstad-temperature)
+        - Requires: Walstad aquarium with thermometer (80 L) ×1
+        - Consumes: none
+        - Creates: Aquarium temperature reading ×1
 
 ## 16) Top Off the Reservoir (`hydroponics/top-off`)
 
