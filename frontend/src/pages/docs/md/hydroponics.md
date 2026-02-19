@@ -257,7 +257,13 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/nutrient-check`
 - Dialogue `requiresItems` gates:
-    - `measure` → "pH adjusted" — digital pH meter ×1, pH down solution (500 mL) ×1
+    - `prep` → "PPE on and tools ready." — nitrile gloves (pair) ×1, hydroponics tub (ready) ×1
+    - `measure` → "Reading captured." — hydroponic pH reading ×1
+    - `log-pass` → "Log complete." — pH-adjusted hydroponic solution ×1, digital pH meter ×1, pH down solution (500 mL) ×1
+- Recovery/troubleshooting branches:
+    - Noisy/out-of-band readings route through `correct` and `troubleshoot` with mandatory retest loops back to `measure`
+- Safety/ops checks:
+    - Explicit PPE gate before measurement; small-step dosing guidance before retries
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -293,9 +299,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/reservoir-refresh`
 - Dialogue `requiresItems` gates:
-    - `kit` → "Kit is assembled." — submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
-    - `install` → "Pump is physically installed." — installed submersible pump loop ×1
-    - `verify` → "Flow looks stable." — verified hydroponic circulation loop ×1
+    - `kit` → "Kit complete and breaker route identified." — submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
+    - `install` → "Hardware installed." — installed submersible pump loop ×1
+    - `verify` → "Verification artifact captured: stable flow." — verified hydroponic circulation loop ×1
+    - `reverify` → "Re-verify passed with stable circulation." — verified hydroponic circulation loop ×1
+- Recovery/troubleshooting branches:
+    - Unsafe routing or failed flow verification routes through `rollback` and `reverify` before returning to `install`
+- Safety/ops checks:
+    - Adds water/electricity safety language, drip-loop checks, and power-down rollback handling
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -335,8 +346,12 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/lettuce`
 - Dialogue `requiresItems` gates:
-    - `plant` → "Seedlings look healthy!" — stevia seedling ×10
-    - `grow` → "They're full grown and smell sweet!" — harvestable stevia plant ×10
+    - `setup` → "Setup artifact ready: seedlings established." — stevia seedling ×10
+    - `monitor` → "Outcome artifact ready: harvestable plants present." — harvestable stevia plant ×10
+- Recovery/troubleshooting branches:
+    - Germination or grow stress routes to `stress`, then re-enters either `setup` or `monitor`
+- Safety/ops checks:
+    - Stress branch calls for pausing feed changes, rechecking pH/EC, and trimming damaged material
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -546,10 +561,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/tub-scrub`
 - Dialogue `requiresItems` gates:
-    - `mix` → "Water is ready" — 5 gallon bucket of dechlorinated tap water ×1, hydrogen peroxide (3%) ×1
-    - `soak` → "Bath is mixed" — peroxide rinse bath ×1
-    - `scrub` → "Cups look clean" — sanitized net cups ×1
-    - `dry` → "Bone dry and ready" — dried net cups ×1
+    - `precheck` → "Pre-clean state documented." — 5 gallon bucket of dechlorinated tap water ×1, hydrogen peroxide (3%) ×1
+    - `mix` → "Bath mixed and labeled." — peroxide rinse bath ×1
+    - `clean` → "Post-clean state captured." — sanitized net cups ×1
+    - `verify` → "Dry and verified clean." — dried net cups ×1
+- Recovery/troubleshooting branches:
+    - Contamination branch loops through `contamination` and back to `mix`/`clean` until clear
+- Safety/ops checks:
+    - Requires peroxide handling with gloves and explicit dry-state verification before completion
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

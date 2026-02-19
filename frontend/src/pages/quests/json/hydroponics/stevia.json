@@ -1,78 +1,115 @@
 {
     "id": "hydroponics/stevia",
     "title": "Grow Stevia Hydroponically",
-    "description": "Cultivate stevia plants for a natural sweetener.",
+    "description": "Grow stevia through staged setup and outcome evidence, with stress recovery checkpoints.",
     "image": "/assets/quests/hydroponic_stevia_starter_tub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hydro here. Stevia's sweet, and the grow is easy if we keep the rhythm.",
+            "text": "Stevia is forgiving if we run it in stages. We will prove setup first, then outcome.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "plant",
-                    "text": "Absolutely, let's plant some stevia!"
+                    "goto": "setup",
+                    "text": "Start staged grow plan."
                 }
             ]
         },
         {
-            "id": "plant",
-            "text": "Soak the rockwool plugs, tuck in the seeds, and let them germinate in calm light.",
+            "id": "setup",
+            "text": "Soak plugs, sow seeds, and keep a gentle light cycle with humidity cover. Record your setup before waiting.",
             "options": [
                 {
                     "type": "process",
                     "process": "germinate-stevia",
-                    "text": "Starting the germination process."
+                    "text": "Run germination setup."
                 },
                 {
                     "type": "goto",
-                    "goto": "grow",
-                    "text": "Seedlings look healthy!",
+                    "goto": "monitor",
+                    "text": "Setup artifact ready: seedlings established.",
                     "requiresItems": [
                         {
                             "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
                             "count": 10
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stress",
+                    "text": "Germination is uneven or damping-off appears."
                 }
             ]
         },
         {
-            "id": "grow",
-            "text": "Move seedlings to the tub and give them steady light for about a month.",
+            "id": "monitor",
+            "text": "Transplant to the tub and run the full growth cycle. Watch for wilt, nutrient burn, and light stress.",
             "options": [
                 {
                     "type": "process",
                     "process": "grow-stevia",
-                    "text": "Start growth cycle."
+                    "text": "Run grow-out cycle."
                 },
                 {
                     "type": "goto",
-                    "goto": "harvest",
-                    "text": "They're full grown and smell sweet!",
+                    "goto": "outcome",
+                    "text": "Outcome artifact ready: harvestable plants present.",
                     "requiresItems": [
                         {
                             "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
                             "count": 10
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stress",
+                    "text": "Plants show stress signals."
                 }
             ]
         },
         {
-            "id": "harvest",
-            "text": "Clip the leaves for sweetener. Keep them under light and they'll regrow.",
+            "id": "stress",
+            "text": "Stress branch: pause feeding changes, verify pH/EC, and trim damaged material before resuming.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Restart from setup controls."
+                },
+                {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Conditions stabilized; resume grow monitoring."
+                }
+            ]
+        },
+        {
+            "id": "outcome",
+            "text": "Harvest leaves and confirm regrowth potential so this is a repeatable production cycle.",
             "options": [
                 {
                     "type": "process",
                     "process": "harvest-stevia",
-                    "text": "Harvesting the leaves."
+                    "text": "Harvest and stage regrowth."
                 },
                 {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Harvest complete and regrowth plan logged."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Sweet run. You validated both setup and outcome with a recovery playbook for setbacks.",
+            "options": [
+                {
                     "type": "finish",
-                    "text": "Thanks for the tips, Hydro!"
+                    "text": "Stevia cycle complete."
                 }
             ]
         }

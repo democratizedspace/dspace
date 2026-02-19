@@ -1,35 +1,35 @@
 {
     "id": "hydroponics/netcup-clean",
     "title": "Clean Net Cups",
-    "description": "Sanitize net cups to keep roots disease-free.",
+    "description": "Run a pre/post sanitation cycle for net cups with contamination recovery checks.",
     "image": "/assets/quests/hydroponics_netcup_cleaning.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Got grimy net cups? A quick scrub prevents root rot.",
+            "text": "Dirty net cups spread pathogens. We need before/after proof, not just a quick rinse.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "mix",
-                    "text": "Let's clean them."
+                    "goto": "precheck",
+                    "text": "Start sanitation cycle."
                 }
             ]
         },
         {
-            "id": "mix",
-            "text": "Fill a bucket with dechlorinated water and mix in 5 mL of 3% hydrogen peroxide.",
+            "id": "precheck",
+            "text": "Inspect cups for residue, roots, or biofilm and stage rinse water + peroxide.",
             "options": [
                 {
                     "type": "process",
                     "process": "bucket-water-dechlorinated",
-                    "text": "Prepare rinse water"
+                    "text": "Prepare dechlorinated rinse water."
                 },
                 {
                     "type": "goto",
-                    "goto": "soak",
-                    "text": "Water is ready",
+                    "goto": "mix",
+                    "text": "Pre-clean state documented.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -44,18 +44,18 @@
             ]
         },
         {
-            "id": "soak",
-            "text": "Combine the peroxide with the bucketed water and give it a quick stir.",
+            "id": "mix",
+            "text": "Mix a measured peroxide bath and keep gloves on to avoid skin irritation.",
             "options": [
                 {
                     "type": "process",
                     "process": "mix-peroxide-bath",
-                    "text": "Mix the peroxide rinse"
+                    "text": "Mix sanitation bath."
                 },
                 {
                     "type": "goto",
-                    "goto": "scrub",
-                    "text": "Bath is mixed",
+                    "goto": "clean",
+                    "text": "Bath mixed and labeled.",
                     "requiresItems": [
                         {
                             "id": "68e50400-fa25-4459-9633-2304a67096c9",
@@ -66,18 +66,18 @@
             ]
         },
         {
-            "id": "scrub",
-            "text": "Scrub each net cup, dip it through the peroxide bath, then rinse until no suds remain.",
+            "id": "clean",
+            "text": "Scrub each cup, soak, then rinse until no film remains. Compare against your pre-clean state.",
             "options": [
                 {
                     "type": "process",
                     "process": "sanitize-net-cups",
-                    "text": "Scrub and soak"
+                    "text": "Perform scrub + soak cycle."
                 },
                 {
                     "type": "goto",
-                    "goto": "dry",
-                    "text": "Cups look clean",
+                    "goto": "verify",
+                    "text": "Post-clean state captured.",
                     "requiresItems": [
                         {
                             "id": "6498967e-284e-46ff-bee7-10e3907f60fd",
@@ -87,40 +87,61 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "soak",
-                    "text": "Need to soak again"
+                    "goto": "contamination",
+                    "text": "I still see slime or odor."
                 }
             ]
         },
         {
-            "id": "dry",
-            "text": "Shake off the bath, set the net cups upside-down on a rack, and let them air dry.",
+            "id": "contamination",
+            "text": "Contamination branch: isolate affected cups, refresh bath, and repeat with longer contact time.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Remix bath and retry cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "clean",
+                    "text": "Resume cleaning with corrected contact time."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Air-dry upside down and verify the cups are dry, residue-free, and ready for planting.",
             "options": [
                 {
                     "type": "process",
                     "process": "dry-net-cups",
-                    "text": "Let them dry"
+                    "text": "Run drying step."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Bone dry and ready",
+                    "text": "Dry and verified clean.",
                     "requiresItems": [
                         {
                             "id": "d4a73557-e5a8-458a-80d9-6c1b46667428",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "contamination",
+                    "text": "Moisture or residue returned; re-enter recovery path."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great work! Let the cups dry before the next planting.",
+            "text": "Excellent. You produced pre/post evidence and handled contamination safely.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All set."
+                    "text": "Net cups ready."
                 }
             ]
         }

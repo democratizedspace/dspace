@@ -1,36 +1,141 @@
 {
     "id": "hydroponics/ph-test",
     "title": "Test Hydroponic pH",
-    "description": "Check acidity so your plants stay healthy.",
+    "description": "Record, interpret, and correct reservoir pH with a safety-first retest loop.",
     "image": "/assets/quests/hydroponics_reservoir_ph_test.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "A stable pH keeps nutrients available to your plants. We'll test the reservoir and adjust if necessary.",
+            "text": "A stable pH keeps nutrients available. We will capture a reading, interpret it against target bounds, then correct and retest if needed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Start pH QA run."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Put on nitrile gloves and goggles, then prep your meter or strip kit so the reading is defensible.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Let's test it."
+                    "text": "PPE on and tools ready.",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "measure",
-            "text": "Use a pH strip or digital meter. Add pH down solution or base slowly until the reading hits 6.5.",
+            "text": "Take a fresh sample and capture the numeric value. Target band for this run is pH 5.8-6.2.",
             "options": [
                 {
                     "type": "process",
                     "process": "measure-ph",
-                    "text": "Checking now."
+                    "text": "Capture pH reading."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Reading captured.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the result before touching chemicals: in-band means log + close; out-of-band means controlled correction.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "log-pass",
+                    "text": "In band (5.8-6.2) \u2014 proceed to log."
+                },
+                {
+                    "type": "goto",
+                    "goto": "correct",
+                    "text": "Out of band \u2014 begin correction loop."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Reading seems noisy or contradictory."
+                }
+            ]
+        },
+        {
+            "id": "correct",
+            "text": "Add pH up/down in tiny increments, stir thoroughly, and wait for mixing. Never free-pour concentrate.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "adjust-ph",
+                    "text": "Dose, stir, and stabilize."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Retest after correction."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Still unstable after correction."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Troubleshooting: rinse probe/strip holder, verify calibration solution date, and check for cross-contamination in sampling cups.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Reset tools and run a clean measurement."
+                },
+                {
+                    "type": "goto",
+                    "goto": "correct",
+                    "text": "Tools look good; continue controlled correction."
+                }
+            ]
+        },
+        {
+            "id": "log-pass",
+            "text": "Log timestamp + final pH so drift can be detected on the next check.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-stable-ph",
+                    "text": "Record final pH log."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "pH adjusted",
+                    "text": "Log complete.",
                     "requiresItems": [
+                        {
+                            "id": "cad7d051-e3fb-4f1c-9d72-358076ee732e",
+                            "count": 1
+                        },
                         {
                             "id": "6360b1e7-84d6-4256-b085-f36fc53ef299",
                             "count": 1
@@ -45,11 +150,11 @@
         },
         {
             "id": "finish",
-            "text": "Great! Monitoring pH will keep your crops thriving and yields high.",
+            "text": "Nice work. You proved the reading, interpreted it, and left an auditable log.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll keep an eye on it."
+                    "text": "pH run complete."
                 }
             ]
         }
