@@ -180,9 +180,12 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/sponge-filter`, `aquaria/thermometer`, `aquaria/walstad`
 - Dialogue `requiresItems` gates:
-    - `start` → "Tank is ready for heat" — Walstad aquarium with thermometer (80 L) ×1, aquarium heater (150 W) ×1, Restored sponge filter flow ×1
-    - `mount` → "Heater installed and powered on" — Heated Walstad aquarium (80 L, 26°C) ×1
-    - `verify` → "Reading recorded and steady" — Aquarium temperature reading ×1
+    - `start` → "Tank, airflow, and drip loop are ready" — Walstad aquarium with thermometer (80 L) ×1, aquarium heater (150 W) ×1, Restored sponge filter flow ×1
+    - `mount` → "Heater is installed and running" — Heated Walstad aquarium (80 L, 26°C) ×1
+    - `verify` → "Reading is stable in the 25-27°C band" — Aquarium temperature reading ×1
+    - `verify` → "Reading is drifting or fish look stressed" — Aquarium temperature reading ×1
+    - `recover` → "Rollback complete; retry install sequence" — Walstad aquarium with thermometer (80 L) ×1, aquarium heater (150 W) ×1
+    - `recover` → "Flow and thermostat look normal; re-verify after 10 minutes" — Heated Walstad aquarium (80 L, 26°C) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -246,11 +249,15 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/water-testing`
 - Dialogue `requiresItems` gates:
-    - `start` → "Bench is clear and kit is open." — Aquarium liquid test kit ×1, nitrile gloves (pair) ×1
-    - `measure` → "Run the liquid tests." — Aquarium liquid test kit ×1, nitrile gloves (pair) ×1
-    - `measure` → "Readings are ready to log." — Liquid test readings ×1
-    - `log` → "Record the results in the logbook." — Aquarium liquid test kit ×1, Liquid test readings ×1, water test logbook ×1, nitrile gloves (pair) ×1
-    - `log` → "Entry logged with today's readings." — Logged water parameters ×1
+    - `start` → "Bench is clear and kit is open" — Aquarium liquid test kit ×1, nitrile gloves (pair) ×1
+    - `measure` → "Run the liquid tests" — Aquarium liquid test kit ×1, nitrile gloves (pair) ×1
+    - `measure` → "Readings are ready to log" — Liquid test readings ×1
+    - `log` → "Record the results in the logbook" — Aquarium liquid test kit ×1, Liquid test readings ×1, water test logbook ×1, nitrile gloves (pair) ×1
+    - `log` → "Entry logged with today's readings" — Logged water parameters ×1
+    - `interpret` → "Readings are in safe range and trend is stable" — Logged water parameters ×1
+    - `interpret` → "Anomaly logged; start corrective water-change response" — Logged water parameters ×1
+    - `corrective` → "Run a corrective partial water change" — Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1
+    - `corrective` → "Corrective action completed; move to timed retest" — Freshly changed aquarium (80 L) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -265,6 +272,10 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Requires: Aquarium liquid test kit ×1, Liquid test readings ×1, water test logbook ×1, nitrile gloves (pair) ×1
         - Consumes: Liquid test readings ×1
         - Creates: Logged water parameters ×1
+    - [partial-water-change](/processes/partial-water-change)
+        - Requires: Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
+        - Consumes: 5 gallon bucket of dechlorinated tap water ×0.25
+        - Creates: Freshly changed aquarium (80 L) ×1
 
 ## 11) Check aquarium pH (`aquaria/ph-strip-test`)
 
@@ -272,13 +283,16 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/water-testing`
 - Dialogue `requiresItems` gates:
-    - `start` → "Strip and gloves ready." — pH strip ×1, nitrile gloves (pair) ×1
-    - `dip` → "Dip and read the strip." — pH strip ×1, nitrile gloves (pair) ×1
-    - `dip` → "Reading recorded from the strip." — Aquarium pH reading ×1
-    - `log` → "Write it in the logbook." — Aquarium pH reading ×1, water test logbook ×1
-    - `log` → "Entry logged and dated." — Logged pH entry ×1
+    - `start` → "Strip and gloves ready" — pH strip ×1, nitrile gloves (pair) ×1
+    - `dip` → "Dip and read the strip" — pH strip ×1, nitrile gloves (pair) ×1
+    - `dip` → "Reading captured from the strip" — Aquarium pH reading ×1
+    - `log` → "Write reading in the logbook" — Aquarium pH reading ×1, water test logbook ×1, nitrile gloves (pair) ×1
+    - `log` → "Entry logged and dated" — Logged pH entry ×1
+    - `interpret` → "Reading is stable in the 6.8-7.6 range" — Logged pH entry ×1
+    - `interpret` → "Reading is out of range; start corrective dosing" — Logged pH entry ×1
+    - `correct` → "Apply controlled pH correction" — nitrile gloves (pair) ×1, safety goggles ×1
 - Grants:
-    - `start` → "I need a strip." — pH strip ×1
+    - `start` → "I need a strip" — pH strip ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
@@ -291,6 +305,10 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Requires: Aquarium pH reading ×1, water test logbook ×1, nitrile gloves (pair) ×1
         - Consumes: Aquarium pH reading ×1
         - Creates: Logged pH entry ×1
+    - [adjust-ph](/processes/adjust-ph)
+        - Requires: nitrile gloves (pair) ×1, safety goggles ×1, glass stir rod ×1, pH down solution (500 mL) ×1, pH up solution (potassium carbonate) ×1
+        - Consumes: pH down solution (500 mL) ×0.05, pH up solution (potassium carbonate) ×0.05
+        - Creates: none
 
 ## 12) Balance aquarium pH (`aquaria/balance-ph`)
 

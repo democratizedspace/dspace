@@ -1,19 +1,19 @@
 {
     "id": "aquaria/log-water-parameters",
     "title": "Log Water Parameters",
-    "description": "Run a full liquid test panel, then log ammonia, nitrite, nitrate, and pH so trends stay visible.",
+    "description": "Run a full liquid panel, log ammonia/nitrite/nitrate/pH, and branch into corrective action when thresholds are exceeded.",
     "image": "/assets/quests/paperwork.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Water tests only help if we write them down. Gloves on, liquid kit ready, and let's capture today's ammonia, nitrite, nitrate, and pH.",
+            "text": "Water tests only help if we write them down. Gloves on, liquid kit open, and the logbook ready for ammonia, nitrite, nitrate, and pH.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Bench is clear and kit is open.",
+                    "text": "Bench is clear and kit is open",
                     "requiresItems": [
                         {
                             "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
@@ -29,12 +29,12 @@
         },
         {
             "id": "measure",
-            "text": "Rinse the vials in tank water, fill to the line, add the right drops, and wait the full time for each reagent before reading. Keep gloves on so skin oils stay out of the sample.",
+            "text": "Rinse vials in tank water, fill to the line, add reagents, and wait full reaction time. Keep gloves on so skin oils do not contaminate readings.",
             "options": [
                 {
                     "type": "process",
                     "process": "measure-liquid-parameters",
-                    "text": "Run the liquid tests.",
+                    "text": "Run the liquid tests",
                     "goto": "log",
                     "requiresItems": [
                         {
@@ -50,7 +50,7 @@
                 {
                     "type": "goto",
                     "goto": "log",
-                    "text": "Readings are ready to log.",
+                    "text": "Readings are ready to log",
                     "requiresItems": [
                         {
                             "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
@@ -62,13 +62,13 @@
         },
         {
             "id": "log",
-            "text": "Write the numbers, date, and time in the logbook. Circle anything over 0 ppm ammonia or nitrite, or nitrate above 40 ppm, so we can act fast.",
+            "text": "Record values with date/time. Flag ammonia or nitrite above 0 ppm, or nitrate above 40 ppm, as an anomaly that needs immediate response.",
             "options": [
                 {
                     "type": "process",
                     "process": "log-aquarium-test-results",
-                    "text": "Record the results in the logbook.",
-                    "goto": "finish",
+                    "text": "Record the results in the logbook",
+                    "goto": "interpret",
                     "requiresItems": [
                         {
                             "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
@@ -90,8 +90,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Entry logged with today's readings.",
+                    "goto": "interpret",
+                    "text": "Entry logged with today's readings",
                     "requiresItems": [
                         {
                             "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
@@ -102,12 +102,96 @@
             ]
         },
         {
+            "id": "interpret",
+            "text": "Interpret the trend: stable logs can close the task, but anomaly logs require immediate mitigation plus a timed retest before completion.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Readings are in safe range and trend is stable",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Anomaly logged; start corrective water-change response",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Mitigation path: feed lightly, perform a partial water change, then wait for circulation before retesting. Escalate if readings worsen.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "partial-water-change",
+                    "text": "Run a corrective partial water change",
+                    "goto": "remeasure",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "remeasure",
+                    "text": "Corrective action completed; move to timed retest",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "remeasure",
+            "text": "After circulation, rerun the panel and capture a fresh log entry to prove the anomaly is resolved before closing this quest.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Start timed retest and capture a new reading"
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great recordkeeping! If numbers creep up, you can schedule a water change or adjust feeding before the fish even notice.",
+            "text": "Great recordkeeping. Keep the cadence daily while stabilizing and at least weekly once trends hold in range.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll keep logging."
+                    "text": "I'll keep logging"
                 }
             ]
         }
@@ -118,11 +202,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/water-testing"],
+    "requiresQuests": [
+        "aquaria/water-testing"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-23",

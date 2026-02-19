@@ -1,14 +1,14 @@
 {
     "id": "aquaria/ph-strip-test",
     "title": "Check aquarium pH",
-    "description": "Grab gloves, dip a strip, and log the pH reading before it drifts.",
+    "description": "Measure aquarium pH with strips, log the reading, and run corrective retest loops when outside safe bounds.",
     "image": "/assets/quests/aquarium_ph_strip_test.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's make sure your aquarium's pH is in range. Put on nitrile gloves so you don't contaminate the sample, then grab a strip and keep the color chart nearby.",
+            "text": "Let's make sure your aquarium pH is in range. Put on nitrile gloves, prep your strip, and keep the color chart next to the tank.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -18,7 +18,7 @@
                             "count": 1
                         }
                     ],
-                    "text": "I need a strip."
+                    "text": "I need a strip"
                 },
                 {
                     "type": "goto",
@@ -33,18 +33,18 @@
                             "count": 1
                         }
                     ],
-                    "text": "Strip and gloves ready."
+                    "text": "Strip and gloves ready"
                 }
             ]
         },
         {
             "id": "dip",
-            "text": "Dip the strip for 2 seconds mid-water column, flick off drips, and read the color within 30 seconds while the chart is right beside you.",
+            "text": "Dip for 2 seconds at mid-water, flick drips, and read within 30 seconds. Do not touch the reactive pad or your reading can drift.",
             "options": [
                 {
                     "type": "process",
                     "process": "measure-aquarium-ph",
-                    "text": "Dip and read the strip.",
+                    "text": "Dip and read the strip",
                     "goto": "log",
                     "requiresItems": [
                         {
@@ -60,7 +60,7 @@
                 {
                     "type": "goto",
                     "goto": "log",
-                    "text": "Reading recorded from the strip.",
+                    "text": "Reading captured from the strip",
                     "requiresItems": [
                         {
                             "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
@@ -72,13 +72,13 @@
         },
         {
             "id": "log",
-            "text": "Note the pH, date, and time so you can spot trends instead of guessing. If it swings, we can course-correct before the fish notice.",
+            "text": "Log pH with date/time and tank notes so trend shifts are visible. This log is your evidence before any buffer adjustment.",
             "options": [
                 {
                     "type": "process",
                     "process": "log-aquarium-ph-reading",
-                    "text": "Write it in the logbook.",
-                    "goto": "finish",
+                    "text": "Write reading in the logbook",
+                    "goto": "interpret",
                     "requiresItems": [
                         {
                             "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
@@ -87,13 +87,17 @@
                         {
                             "id": "b8602362-2035-4f00-9376-f48d8668cf38",
                             "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
                         }
                     ]
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Entry logged and dated.",
+                    "goto": "interpret",
+                    "text": "Entry logged and dated",
                     "requiresItems": [
                         {
                             "id": "9c392043-4067-4f49-8038-38eef00e0b24",
@@ -104,12 +108,78 @@
             ]
         },
         {
+            "id": "interpret",
+            "text": "Interpretation gate: if pH is 6.8-7.6, close out. If outside range or livestock shows stress, run a controlled correction and retest loop.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading is stable in the 6.8-7.6 range",
+                    "requiresItems": [
+                        {
+                            "id": "9c392043-4067-4f49-8038-38eef00e0b24",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "correct",
+                    "text": "Reading is out of range; start corrective dosing",
+                    "requiresItems": [
+                        {
+                            "id": "9c392043-4067-4f49-8038-38eef00e0b24",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "correct",
+            "text": "Wear goggles and gloves, dose in small increments, circulate, and never stack doses without a fresh strip reading.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "adjust-ph",
+                    "text": "Apply controlled pH correction",
+                    "goto": "retest",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Correction complete; move to mandatory retest"
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Wait for circulation, then run a fresh strip and log again. Do not finish this quest until a new in-range reading is recorded.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "dip",
+                    "text": "Run retest loop"
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great! Check weekly to keep fish happy, and flag any drift toward 6.5 or 8.0 so we can act before it stresses them.",
+            "text": "Great stability work. Keep weekly checks, and trigger correction early if readings trend toward 6.5 or 8.0.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll keep the weekly habit."
+                    "text": "I'll keep the weekly habit"
                 }
             ]
         }
@@ -124,7 +194,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
