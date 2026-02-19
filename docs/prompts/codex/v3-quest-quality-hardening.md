@@ -19,6 +19,16 @@ verified checked exemplars in `docs/qa/v3.md` §4.5.
 Prioritize quests that map directly to still-unchecked per-quest boxes in `docs/qa/v3.md` §4.5,
 and optimize for clearing those boxes after manual human verification.
 
+## Non-negotiable completion gate (required for every run)
+
+- This prompt is for checkbox-clearing hardening work. A run is **incomplete/invalid** unless it
+  checks at least one previously unchecked line item in
+  `docs/design/v3-quest-quality-review.md` and appends the current PR tag on each changed line.
+- Do not open or finalize a PR for this prompt if no checklist boxes were switched from `[ ]` to
+  `[x]` in the same PR as the quest JSON hardening changes.
+- If no verifiable checkbox can be checked, stop and report blockers instead of shipping a
+  "no-boxes-updated" hardening PR.
+
 ## Deterministic selection and anchoring rules (required)
 
 1. Build a target list from still-unchecked **per-quest** rows in `docs/qa/v3.md` §4.5
@@ -61,6 +71,8 @@ and optimize for clearing those boxes after manual human verification.
   - leave boxes unchecked when evidence is ambiguous;
   - bookkeeping-only follow-up PRs that do not touch quest JSON may adjust PR tags inside the
     existing parenthetical but must not change any `[ ]`/`[x]` checkbox state.
+- At least one selected quest must result in checklist state transitions (`[ ]` -> `[x]`) in that
+  same PR; otherwise the task is considered incomplete for this prompt.
 - If quest flow changes materially, update paired docs in
   `frontend/src/pages/docs/md/<tree>.md`.
 - Codex cannot create/edit binary images. If quality hardening needs new item imagery,
@@ -103,6 +115,8 @@ Output exactly these eight sections in order (no extra sections):
    - Bullet list of every line item changed in
      `docs/design/v3-quest-quality-review.md`, quoted verbatim with its final checkbox state and
      appended PR tag(s).
+   - This section must contain at least one `[x] ... (PR #<number>)` entry from a line that was
+     previously unchecked; `None` is not allowed for this prompt.
 ```
 
 ## Upgrade prompt
@@ -122,7 +136,9 @@ Goals:
   `docs/design/v3-quest-quality-review.md` (check only verified items when the same PR includes
   quest JSON hardening, keep PR tags in canonical single-parenthetical format `(PR #1234, #5678)`
   when multiple PRs apply, append new PR tags as `, #<number>` within that parenthetical, and
-  keep checkbox state unchanged in bookkeeping-only follow-up PRs).
+  keep checkbox state unchanged in bookkeeping-only follow-up PRs), **plus** preserve/enforce the
+  non-negotiable rule that each hardening run must check at least one previously unchecked
+  checklist box in that same PR.
 - Optimize for clearing still-unchecked quest-quality boxes in `docs/qa/v3.md` after manual human
   verification.
 - Preserve Codex binary-asset limitations guidance (reuse image references; no new binary assets).
