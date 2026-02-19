@@ -153,7 +153,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `restart` → "Restart and tune airflow." — Rinsed sponge filter core ×1, Airline tubing ×1, aquarium air pump ×1
     - `restart` → "Flow is restored and livestock behavior looks normal." — Restored sponge filter flow ×1
     - `verify` → "Pre/post evidence confirms flow recovery." — Restored sponge filter flow ×1
-    - `verify` → "Still weak; repeat rinse loop before closing." — none
+    - `verify` → "Still weak; repeat rinse loop before closing and return with restored-flow proof." — none
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

@@ -161,7 +161,7 @@
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Still weak; repeat rinse loop before closing."
+                    "text": "Still weak; repeat rinse loop before closing and return with restored-flow proof."
                 }
             ]
         },
