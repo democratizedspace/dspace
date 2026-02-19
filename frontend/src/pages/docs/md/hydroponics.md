@@ -189,8 +189,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/nutrient-check`
 - Dialogue `requiresItems` gates:
-    - `measure` → "Reading looks good" — hydroponic pH reading ×1
-    - `log` → "Logged and synced" — hydroponic pH log ×1
+    - `prep` → "Gloves, goggles, and clean sample cylinder are ready." — nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
+    - `measure` → "Reading captured." — hydroponic pH reading ×1
+    - `interpret` → both interpretation choices require hydroponic pH reading ×1
+    - `log` → "Stable reading logged and reviewed." — hydroponic pH log ×1
+- Recovery/troubleshooting branches:
+    - `troubleshoot` branch handles strip/reagent/circulation failures and loops back through `prep`/`measure`
+- Safety/ops checks:
+    - PPE gate before measurement and PPE requirements on correction step
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -293,9 +299,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/reservoir-refresh`
 - Dialogue `requiresItems` gates:
-    - `kit` → "Kit is assembled." — submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
+    - `kit` → "Kit is assembled and power is isolated." — submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1
     - `install` → "Pump is physically installed." — installed submersible pump loop ×1
-    - `verify` → "Flow looks stable." — verified hydroponic circulation loop ×1
+    - `verify` → "Flow is stable and documented." — verified hydroponic circulation loop ×1
+    - `rollback` → "Reinstall after corrective changes." — submersible water pump ×1
+- Recovery/troubleshooting branches:
+    - `rollback` branch enforces power-down, reseat, seal checks, then loops through install/verify
+- Safety/ops checks:
+    - Electrical isolation + PPE before install, with explicit rollback before retry
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -504,9 +515,15 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/filter-clean`
 - Dialogue `requiresItems` gates:
-    - `water` → "Water is ready" — 5 gallon bucket of dechlorinated tap water ×1
-    - `rinse` → "Flush the roots" — 5 gallon bucket of dechlorinated tap water ×1
-    - `rinse` → "Runoff is clear and roots look relieved." — rinsed hydroponic root zone ×1
+    - `water` → "Water ready and tray is isolated." — 5 gallon bucket of dechlorinated tap water ×1
+    - `baseline` → "Take initial runoff sample." — 5 gallon bucket of dechlorinated tap water ×1
+    - `baseline` → "Baseline captured; proceed to full rinse." — rinsed hydroponic root zone ×1
+    - `rinse` → "Perform full root-zone flush." — 5 gallon bucket of dechlorinated tap water ×1
+    - `verify` → "Runoff clear and roots look relieved." — rinsed hydroponic root zone ×1
+- Recovery/troubleshooting branches:
+    - `contam` branch pauses dosing, requires cleanup, and loops back to prep/flush
+- Safety/ops checks:
+    - Pump isolation check before flush and repeat-until-clear verification loop
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

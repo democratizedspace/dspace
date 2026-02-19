@@ -8,31 +8,59 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Salt buildup can stress plants. Let's give those roots a quick rinse.",
+            "text": "Salt buildup stresses roots. We will capture pre-rinse evidence, flush safely, and confirm post-rinse recovery.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "water",
-                    "text": "Sounds good."
+                    "text": "Begin rinse protocol."
                 }
             ]
         },
         {
             "id": "water",
-            "text": "Fill a bucket with dechlorinated water so you can flush the media without shocking roots.",
+            "text": "Prepare dechlorinated rinse water and check pump isolation so you do not flood the tray during flush.",
             "options": [
                 {
                     "type": "process",
                     "process": "bucket-water-dechlorinated",
-                    "text": "I'll prep the fresh water."
+                    "text": "Prepare rinse water."
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Water ready and tray is isolated.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Capture baseline runoff before flushing so you can prove the rinse changed root-zone conditions.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "flush-root-zone",
+                    "text": "Take initial runoff sample.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "rinse",
-                    "text": "Water is ready",
+                    "text": "Baseline captured; proceed to full rinse.",
                     "requiresItems": [
                         {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "id": "15ff1896-7a19-4060-bfb3-77b62ec4fd5a",
                             "count": 1
                         }
                     ]
@@ -41,12 +69,12 @@
         },
         {
             "id": "rinse",
-            "text": "Gently pour the dechlorinated water through the grow media until runoff clears.",
+            "text": "Run a full gentle flush until runoff clarity improves. If runoff stays cloudy, branch to contamination response.",
             "options": [
                 {
                     "type": "process",
                     "process": "flush-root-zone",
-                    "text": "Flush the roots",
+                    "text": "Perform full root-zone flush.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -56,24 +84,73 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
+                    "text": "Runoff visibly improved after rinse.",
                     "requiresItems": [
                         {
                             "id": "15ff1896-7a19-4060-bfb3-77b62ec4fd5a",
                             "count": 1
                         }
-                    ],
-                    "text": "Runoff is clear and roots look relieved."
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "contam",
+                    "text": "Runoff still cloudy or odor persists."
+                }
+            ]
+        },
+        {
+            "id": "contam",
+            "text": "Contamination branch: pause nutrient dosing, inspect for biofilm/slime, clean lines, then re-enter flush only when system is safe.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "water",
+                    "text": "System cleaned; prepare fresh rinse water again."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Immediate repeat flush with corrected setup.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: confirm post-rinse root zone is clear and plants are not wilting before closure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Not clear enough yet; run another flush cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Runoff clear and roots look relieved.",
+                    "requiresItems": [
+                        {
+                            "id": "15ff1896-7a19-4060-bfb3-77b62ec4fd5a",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Clearing excess salts keeps nutrient uptake smooth.",
+            "text": "Nice recovery. Baseline-plus-post evidence confirms the root rinse actually reduced stress conditions.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Back to growing."
+                    "text": "Root rinse complete with contamination safeguards."
                 }
             ]
         }
@@ -88,7 +165,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
