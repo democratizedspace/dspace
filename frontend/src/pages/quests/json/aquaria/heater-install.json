@@ -105,26 +105,21 @@
         },
         {
             "id": "rollback",
-            "text": "Recovery protocol: unplug heater, confirm full submersion depth, reset the dial one notch toward target, then re-run warm-up and log again.",
+            "text": "Recovery protocol: unplug heater, confirm full submersion depth, reset the dial one notch toward target, then take a fresh stabilized reading before deciding next action.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "mount",
-                    "text": "Apply rollback and re-stage install",
-                    "requiresItems": [
-                        {
-                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
-                            "count": 1
-                        }
-                    ]
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "goto": "interpret",
+                    "text": "Apply rollback and capture a fresh verification reading"
                 },
                 {
                     "type": "goto",
-                    "goto": "verify",
-                    "text": "Recovery done, take a fresh verification reading",
+                    "goto": "interpret",
+                    "text": "Fresh post-rollback reading is logged",
                     "requiresItems": [
                         {
-                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
                             "count": 1
                         }
                     ]
