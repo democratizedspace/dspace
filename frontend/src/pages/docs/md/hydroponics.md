@@ -302,9 +302,9 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `kit` → "Kit is assembled and power is isolated." — submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1
     - `install` → "Pump is physically installed." — installed submersible pump loop ×1
     - `verify` → "Flow is stable and documented." — verified hydroponic circulation loop ×1
-    - `rollback` → "Reinstall after corrective changes." — submersible water pump ×1
+    - `rollback` → "Re-verify after corrective changes." — installed submersible pump loop ×1
 - Recovery/troubleshooting branches:
-    - `rollback` branch enforces power-down, reseat, seal checks, then loops through install/verify
+    - `rollback` branch enforces power-down, reseat, seal checks, then loops back to verification with installed hardware
 - Safety/ops checks:
     - Electrical isolation + PPE before install, with explicit rollback before retry
 - Grants:
@@ -515,11 +515,11 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/filter-clean`
 - Dialogue `requiresItems` gates:
-    - `water` → "Water ready and tray is isolated." — 5 gallon bucket of dechlorinated tap water ×1
-    - `baseline` → "Take initial runoff sample." — 5 gallon bucket of dechlorinated tap water ×1
+    - `water` → "Water ready and tray is isolated." — 5 gallon bucket of dechlorinated tap water ×1, Beginner hydroponics tub ×1
+    - `baseline` → "Take initial runoff sample." — 5 gallon bucket of dechlorinated tap water ×1, Beginner hydroponics tub ×1
     - `baseline` → "Baseline captured; proceed to full rinse." — rinsed hydroponic root zone ×1
     - `rinse` → "Perform full root-zone flush." — 5 gallon bucket of dechlorinated tap water ×1
-    - `verify` → "Runoff clear and roots look relieved." — rinsed hydroponic root zone ×1
+    - `verify` → "Runoff clear and roots look relieved." — rinsed hydroponic root zone ×2
 - Recovery/troubleshooting branches:
     - `contam` branch pauses dosing, requires cleanup, and loops back to prep/flush
 - Safety/ops checks:

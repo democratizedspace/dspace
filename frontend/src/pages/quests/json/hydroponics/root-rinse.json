@@ -34,6 +34,10 @@
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
                             "count": 1
+                        },
+                        {
+                            "id": "11aa585c-16f6-4012-9fec-48f6c203f7c7",
+                            "count": 1
                         }
                     ]
                 }
@@ -50,6 +54,10 @@
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "11aa585c-16f6-4012-9fec-48f6c203f7c7",
                             "count": 1
                         }
                     ]
@@ -89,7 +97,7 @@
                     "requiresItems": [
                         {
                             "id": "15ff1896-7a19-4060-bfb3-77b62ec4fd5a",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 },
@@ -138,7 +146,7 @@
                     "requiresItems": [
                         {
                             "id": "15ff1896-7a19-4060-bfb3-77b62ec4fd5a",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 }

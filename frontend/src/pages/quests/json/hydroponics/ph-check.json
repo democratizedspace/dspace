@@ -35,7 +35,7 @@
                             "count": 1
                         },
                         {
-                            "id": "4f3f5ebf-bbe6-416b-b39f-0c418fd140c7",
+                            "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
                             "count": 1
                         }
                     ]
@@ -132,7 +132,7 @@
                     "text": "Re-test after mixing.",
                     "requiresItems": [
                         {
-                            "id": "4f3f5ebf-bbe6-416b-b39f-0c418fd140c7",
+                            "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
                             "count": 1
                         }
                     ]
