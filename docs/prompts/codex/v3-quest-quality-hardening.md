@@ -59,6 +59,8 @@ Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3
   - leave boxes unchecked when evidence is ambiguous;
   - bookkeeping-only follow-up PRs that do not touch quest JSON may adjust PR tags inside the
     existing parenthetical but **must not** change any `[ ]`/`[x]` checkbox state.
+- Optimize selection and edits to maximize future human-verifiable closure of still-unchecked
+  quest-quality rows in `docs/qa/v3.md` §4.5.
 - If quest flow changes materially, update paired docs in
   `frontend/src/pages/docs/md/<tree>.md`.
 - Codex cannot create/edit binary images. If quality hardening needs new item imagery,
@@ -136,6 +138,6 @@ Return the fully updated markdown document.
 ## Notes
 
 - The backlog's exemplar anchors are the only allowed source for exemplar IDs.
-- If commands/scripts change, update this prompt immediately to keep automation deterministic.
+- Keep command references aligned with root `package.json` scripts and current quest validators.
 - Human follow-up is expected for any reused image references that should later be deduplicated or
   replaced with final art.
