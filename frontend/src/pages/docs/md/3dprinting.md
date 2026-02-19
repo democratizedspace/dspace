@@ -139,14 +139,14 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/benchy_10`
 - Dialogue `requiresItems` gates:
-    - `strategy` → "Main path: stable batches with routine checks." — entry-level FDM 3D printer (white PLA loaded) ×1
-    - `strategy` → "Alternate path: burst prints to test throughput." — entry-level FDM 3D printer (white PLA loaded) ×1, safety goggles ×1
+    - `strategy` → "Main path: stable batches with routine checks." — entry-level FDM 3D printer (green PLA loaded) ×1
+    - `strategy` → "Alternate path: burst prints to test throughput." — entry-level FDM 3D printer (green PLA loaded) ×1, safety goggles ×1
     - `steady` → "Print Benchies in controlled batches." — entry-level FDM 3D printer ×1, green PLA filament ×15
     - `steady` → "Checkpoint notes are logged and fleet count reached 25." — Benchy ×25, sheet of printer paper ×1
     - `burst` → "Run burst batch printing." — entry-level FDM 3D printer ×1, green PLA filament ×15
     - `burst` → "Burst run complete with logs and 25 good parts." — Benchy ×25, sheet of printer paper ×1
     - `burst` → "Stringing or warped hulls appeared during bursts." — Benchy ×10
-    - `recover` → "Validation batch passed; return to stable production." — entry-level FDM 3D printer (white PLA loaded) ×1, sheet of printer paper ×1
+    - `recover` → "Validation batch passed; return to stable production." — entry-level FDM 3D printer (green PLA loaded) ×1, sheet of printer paper ×1
     - `evidence` → "Run log is complete and 25 Benchies pass inspection." — Benchy ×25, sheet of printer paper ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -304,7 +304,7 @@ slug: '3dprinting'
     - `prep` → "Ready to slice and print." — entry-level FDM 3D printer (white PLA loaded) ×1
     - `print` → "The stand is finished and I have calipers ready." — 3D Printed Phone Stand ×1, digital calipers ×1
     - `measure` → "Both measurements are in bounds and recorded." — 3D Printed Phone Stand ×1, digital calipers ×1, sheet of printer paper ×1
-    - `measure` → "Angle or clearance failed the threshold." — 3D Printed Phone Stand ×1, digital calipers ×1
+    - `measure` → "Angle or clearance failed the threshold." — 3D Printed Phone Stand ×1, digital calipers ×1, sheet of printer paper ×1
     - `corrective` → "Corrective print cooled; retesting thresholds." — 3D Printed Phone Stand ×1, digital calipers ×1
 - Grants:
     - Dialogue options/steps grantsItems: None

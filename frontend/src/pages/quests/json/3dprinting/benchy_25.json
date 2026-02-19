@@ -27,7 +27,7 @@
                     "text": "Main path: stable batches with routine checks.",
                     "requiresItems": [
                         {
-                            "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
                             "count": 1
                         }
                     ]
@@ -38,7 +38,7 @@
                     "text": "Alternate path: burst prints to test throughput.",
                     "requiresItems": [
                         {
-                            "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
                             "count": 1
                         },
                         {
@@ -63,7 +63,7 @@
                             "count": 1
                         },
                         {
-                            "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
                             "count": 15
                         }
                     ]
@@ -99,7 +99,7 @@
                             "count": 1
                         },
                         {
-                            "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
                             "count": 15
                         }
                     ]
@@ -142,7 +142,7 @@
                     "text": "Validation batch passed; return to stable production.",
                     "requiresItems": [
                         {
-                            "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
                             "count": 1
                         },
                         {

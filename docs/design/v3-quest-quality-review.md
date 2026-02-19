@@ -172,9 +172,9 @@ Fallback policy: if a tree has no checked quests in `docs/qa/v3.md` §4.5, list 
 Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature (fallback: no checked 3dprinting quests yet)
 
 - `3dprinting/bed-leveling`
-  - [x] Observed issue (addressed): `3dprinting/bed-leveling` previously implied calibration work, but baseline/adjust/retest tolerance handling was under-specified; this was hardened in PR #3595. (PR #3595)
-  - [x] Structure progression as baseline → adjust → re-test with a tolerance target and artifacts captured at baseline and post-adjust states. (PR #3595)
-  - [x] Add a drift/variance follow-up branch that rolls back to last-known-good settings when readings do not hold. (PR #3595)
+  - [x] Observed issue (addressed): `3dprinting/bed-leveling` previously implied calibration work, but baseline/adjust/retest tolerance handling was under-specified; this was hardened in PR #3608. (PR #3608)
+  - [x] Structure progression as baseline → adjust → re-test with a tolerance target and artifacts captured at baseline and post-adjust states. (PR #3608)
+  - [x] Add a drift/variance follow-up branch that rolls back to last-known-good settings when readings do not hold. (PR #3608)
 - `3dprinting/benchy_10`
   - [ ] Observed issue: `3dprinting/benchy_10` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -184,9 +184,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `3dprinting/benchy_25`
-  - [x] Observed issue (addressed): `3dprinting/benchy_25` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in PR #3595. (PR #3595)
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3595)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3595)
+  - [x] Observed issue (addressed): `3dprinting/benchy_25` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in PR #3608. (PR #3608)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3608)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3608)
 - `3dprinting/blob-of-death`
   - [ ] Observed issue: `3dprinting/blob-of-death` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -212,9 +212,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [x] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact. (PR #3590, #3594)
   - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure. (PR #3590, #3594)
 - `3dprinting/phone-stand`
-  - [x] Observed issue (addressed): `3dprinting/phone-stand` previously centered on a measurement/check action, but acceptance thresholds and out-of-range handling were thin; this was hardened in PR #3595. (PR #3595)
-  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3595)
-  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3595)
+  - [x] Observed issue (addressed): `3dprinting/phone-stand` previously centered on a measurement/check action, but acceptance thresholds and out-of-range handling were thin; this was hardened in PR #3608. (PR #3608)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3608)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3608)
 - `3dprinting/retraction-test`
   - [ ] Observed issue: `3dprinting/retraction-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
