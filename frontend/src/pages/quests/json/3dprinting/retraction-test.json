@@ -25,7 +25,7 @@
         },
         {
             "id": "setup",
-            "text": "Slice the model with a 1\u20132 mm retraction distance step between test sections. Keep goggles on and note the settings in your slicer comments.",
+            "text": "Slice the model with a 1–2 mm retraction distance step between test sections. Keep goggles on and note the settings in your slicer comments.",
             "options": [
                 {
                     "type": "process",
@@ -56,22 +56,11 @@
                             "count": 1
                         }
                     ]
-                }
-            ]
-        },
-        {
-            "id": "inspect",
-            "text": "Check between the mast and cabin for wisps, then measure surface zits with calipers. Note which retraction distance leaves clean arches.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "setup",
-                    "text": "Run another pass with tweaked settings."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Stringing is gone and notes are saved.",
+                    "goto": "safety-stop",
+                    "text": "I smell burnt filament or see nozzle ooze piling up.",
                     "requiresItems": [
                         {
                             "id": "141581bf-be69-4522-973b-3d22292a85fa",
@@ -82,8 +71,111 @@
             ]
         },
         {
+            "id": "inspect",
+            "text": "Check between the mast and cabin for wisps, then measure surface zits with calipers. Record three bridge/stringing observations before deciding.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Measurements are logged; compare against thresholds.",
+                    "requiresItems": [
+                        {
+                            "id": "141581bf-be69-4522-973b-3d22292a85fa",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Stringing still exceeds 2 mm whiskers on bridges.",
+                    "requiresItems": [
+                        {
+                            "id": "141581bf-be69-4522-973b-3d22292a85fa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Pass criteria: no bridge whisker longer than 2 mm and no more than one zit cluster on the cabin roof. Failed bands must be corrected before closure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Chosen profile meets thresholds and notes are archived.",
+                    "requiresItems": [
+                        {
+                            "id": "141581bf-be69-4522-973b-3d22292a85fa",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "At least one threshold failed; run a corrective pass.",
+                    "requiresItems": [
+                        {
+                            "id": "141581bf-be69-4522-973b-3d22292a85fa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Troubleshooting branch: dry filament, lower nozzle temperature 5–10°C, and reduce travel hops before rerunning. Change only one variable per pass.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Corrective plan logged; rerun the test print.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Hotend is leaking or smoke appears; abort and cool down."
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Pause the print, power down, and wait for full cool-down before touching the hotend. Ventilate and inspect nozzle seating before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Safety checks complete; continue troubleshooting.",
+                    "requiresItems": [
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great! Keep those slicer notes handy\u2014future prints can start from this dialed-in retraction.",
+            "text": "Great! Keep those slicer notes handy—future prints can start from this dialed-in retraction.",
             "options": [
                 {
                     "type": "finish",
@@ -102,7 +194,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
