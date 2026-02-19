@@ -200,17 +200,17 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `3dprinting/filament-change`
-  - [ ] Observed issue: `3dprinting/filament-change` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `3dprinting/filament-change` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in PR #3590. (PR #3590)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3590)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3590)
 - `3dprinting/nozzle-cleaning`
-  - [ ] Observed issue: `3dprinting/nozzle-cleaning` describes a cleaning cycle without a measurable before/after success definition.
-  - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
+  - [x] Observed issue (addressed): `3dprinting/nozzle-cleaning` previously described a cleaning cycle without a measurable before/after success definition; this was hardened in PR #3590. (PR #3590)
+  - [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #3590)
+  - [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #3590)
 - `3dprinting/nozzle-clog`
-  - [ ] Observed issue: `3dprinting/nozzle-clog` asks for logging/monitoring but pass criteria and anomaly response are not explicit.
-  - [ ] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact.
-  - [ ] Add an anomaly classification branch with corrective action and a follow-up verification window before closure.
+  - [x] Observed issue (addressed): `3dprinting/nozzle-clog` previously asked for logging/monitoring but pass criteria and anomaly response were not explicit; this was hardened in PR #3590 and #3594. (PR #3590, #3594)
+  - [x] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact. (PR #3590, #3594)
+  - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure. (PR #3590, #3594)
 - `3dprinting/phone-stand`
   - [ ] Observed issue: `3dprinting/phone-stand` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
@@ -220,17 +220,17 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
   - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `3dprinting/spool-holder`
-  - [ ] Observed issue: `3dprinting/spool-holder` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `3dprinting/spool-holder` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in PR #3594. (PR #3594)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3594)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3594)
 - `3dprinting/temperature-tower`
-  - [ ] Observed issue: `3dprinting/temperature-tower` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue (addressed): `3dprinting/temperature-tower` previously centered on a measurement/check action but lacked explicit acceptance thresholds and out-of-range handling; this was hardened in PR #3594. (PR #3594)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3594)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3594)
 - `3dprinting/x-belt-tension`
-  - [ ] Observed issue: `3dprinting/x-belt-tension` implies calibration work, but baseline/adjust/retest tolerance handling is under-specified.
-  - [ ] Structure progression as baseline → adjust → re-test with a tolerance target and artifacts captured at baseline and post-adjust states.
-  - [ ] Add a drift/variance follow-up branch that rolls back to last-known-good settings when readings do not hold.
+  - [x] Observed issue (addressed): `3dprinting/x-belt-tension` previously implied calibration work, but baseline/adjust/retest tolerance handling was under-specified; this was hardened in PR #3590. (PR #3590)
+  - [x] Structure progression as baseline → adjust → re-test with a tolerance target and artifacts captured at baseline and post-adjust states. (PR #3590)
+  - [x] Add a drift/variance follow-up branch that rolls back to last-known-good settings when readings do not hold. (PR #3590)
 
 ### aquaria (19 quests)
 
