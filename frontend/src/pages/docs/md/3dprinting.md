@@ -49,9 +49,13 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinter/start`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Walk me through each pass." — entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
-    - `prep` → "Corners all tug the paper evenly." — entry-level FDM 3D printer (leveled bed) ×1
-    - `first-layer` → "Skirt looks even and glossy." — entry-level FDM 3D printer (leveled bed) ×1
+    - `baseline` → "Record baseline and run the first leveling pass." — entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
+    - `baseline` → "Baseline notes captured; ready to adjust corners." — entry-level FDM 3D printer (leveled bed) ×1, sheet of printer paper ×1
+    - `adjust` → "Post-adjust pass is within tolerance at all five points." — entry-level FDM 3D printer (leveled bed) ×1, sheet of printer paper ×1
+    - `adjust` → "Readings drift after homing or one corner keeps wandering." — entry-level FDM 3D printer (leveled bed) ×1
+    - `drift` → "Rollback complete; rerun baseline and adjustment sequence." — sheet of printer paper ×1
+    - `verify` → "Skirt is even and post-heat drag still meets tolerance." — entry-level FDM 3D printer (leveled bed) ×1, sheet of printer paper ×1
+    - `verify` → "Center drifted after heat; make another micro-adjustment pass." — entry-level FDM 3D printer (leveled bed) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -135,14 +139,25 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/benchy_10`
 - Dialogue `requiresItems` gates:
-    - `progress` → "I have enough!" — Benchy ×25
+    - `strategy` → "Main path: stable batches with routine checks." — entry-level FDM 3D printer (white PLA loaded) ×1
+    - `strategy` → "Alternate path: burst prints to test throughput." — entry-level FDM 3D printer (white PLA loaded) ×1, safety goggles ×1
+    - `steady` → "Print Benchies in controlled batches." — entry-level FDM 3D printer ×1, green PLA filament ×15
+    - `steady` → "Checkpoint notes are logged and fleet count reached 25." — Benchy ×25, sheet of printer paper ×1
+    - `burst` → "Run burst batch printing." — entry-level FDM 3D printer ×1, green PLA filament ×15
+    - `burst` → "Burst run complete with logs and 25 good parts." — Benchy ×25, sheet of printer paper ×1
+    - `burst` → "Stringing or warped hulls appeared during bursts." — Benchy ×10
+    - `recover` → "Validation batch passed; return to stable production." — entry-level FDM 3D printer (white PLA loaded) ×1, sheet of printer paper ×1
+    - `evidence` → "Run log is complete and 25 Benchies pass inspection." — Benchy ×25, sheet of printer paper ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - green PLA filament ×10000
 - Processes used:
-    - None
+    - [3dprint-benchy](/processes/3dprint-benchy)
+        - Requires: entry-level FDM 3D printer ×1
+        - Consumes: green PLA filament ×15, dWatt ×150
+        - Creates: Benchy ×1, dPrint ×15
 
 ## 7) 3D Print 100 Benchies (`3dprinting/benchy_100`)
 
@@ -287,7 +302,10 @@ slug: '3dprinting'
 - Dialogue `requiresItems` gates:
     - `prep` → "Swap to white PLA and purge." — entry-level FDM 3D printer (leveled bed) ×1, safety goggles ×1, wire cutters ×1
     - `prep` → "Ready to slice and print." — entry-level FDM 3D printer (white PLA loaded) ×1
-    - `print` → "The stand is finished and cooled!" — 3D Printed Phone Stand ×1
+    - `print` → "The stand is finished and I have calipers ready." — 3D Printed Phone Stand ×1, digital calipers ×1
+    - `measure` → "Both measurements are in bounds and recorded." — 3D Printed Phone Stand ×1, digital calipers ×1, sheet of printer paper ×1
+    - `measure` → "Angle or clearance failed the threshold." — 3D Printed Phone Stand ×1, digital calipers ×1
+    - `corrective` → "Corrective print cooled; retesting thresholds." — 3D Printed Phone Stand ×1, digital calipers ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
