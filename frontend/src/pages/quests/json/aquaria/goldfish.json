@@ -82,6 +82,17 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Stocked tank stabilized; continue post-stock observation.",
+                    "requiresItems": [
+                        {
+                            "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },

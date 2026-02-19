@@ -40,14 +40,39 @@
             "text": "Rinse each tube with tank water, fill to 5 mL, dose reagents exactly, then cap and invert. Keep reagents away from skin and food surfaces.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "measure-liquid-parameters",
+                    "text": "Run the full liquid test panel.",
+                    "goto": "log"
+                },
+                {
                     "type": "goto",
-                    "goto": "interpret",
-                    "text": "Panel run complete and readings are logged.",
+                    "goto": "log",
+                    "text": "Panel run complete and readings are ready to log.",
                     "requiresItems": [
                         {
                             "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
                             "count": 1
-                        },
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Log ammonia, nitrite, nitrate, and pH with timestamp before deciding if the tank is in range.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-aquarium-test-results",
+                    "text": "Record the test panel in the logbook.",
+                    "goto": "interpret"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Readings are logged and ready for interpretation.",
+                    "requiresItems": [
                         {
                             "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
                             "count": 1
@@ -132,15 +157,32 @@
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Retest still out of range; repeat corrective loop."
+                    "text": "Run the retest panel now.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Retest still out of range; run another corrective cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Retest passed and the new log confirms safe ranges.",
+                    "text": "Retest passed and fresh readings confirm safe ranges.",
                     "requiresItems": [
                         {
-                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
                             "count": 1
                         }
                     ]

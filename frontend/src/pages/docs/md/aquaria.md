@@ -212,19 +212,29 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `requiresQuests`: `aquaria/thermometer`
 - Dialogue `requiresItems` gates:
     - `start` → "Bench is clear, PPE is on, and the kit is ready." — Aquarium liquid test kit ×1, nitrile gloves (pair) ×1, safety goggles ×1, water test logbook ×1
-    - `measure` → "Panel run complete and readings are logged." — Liquid test readings ×1, Logged water parameters ×1
+    - `measure` → "Panel run complete and readings are ready to log." — Liquid test readings ×1
+    - `log` → "Readings are logged and ready for interpretation." — Logged water parameters ×1
     - `interpret` → "All values are in range; shrimp-safe window confirmed." — Logged water parameters ×1
     - `interpret` → "At least one value is out of range; start corrective response." — Logged water parameters ×1
     - `corrective` → "Run corrective partial water change." — Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
     - `corrective` → "Water change is complete and conditions are stable." — Freshly changed aquarium (80 L) ×1
-    - `retest` → "Retest still out of range; repeat corrective loop." — none
-    - `retest` → "Retest passed and the new log confirms safe ranges." — Logged water parameters ×1
+    - `retest` → "Run the retest panel now." — Freshly changed aquarium (80 L) ×1
+    - `retest` → "Retest still out of range; run another corrective cycle." — Freshly changed aquarium (80 L) ×1
+    - `retest` → "Retest passed and fresh readings confirm safe ranges." — Liquid test readings ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - Duckweed portion ×1
 - Processes used:
+    - [measure-liquid-parameters](/processes/measure-liquid-parameters)
+        - Requires: Aquarium liquid test kit ×1, nitrile gloves (pair) ×1
+        - Consumes: Aquarium liquid test kit ×0.05
+        - Creates: Liquid test readings ×1
+    - [log-aquarium-test-results](/processes/log-aquarium-test-results)
+        - Requires: Aquarium liquid test kit ×1, Liquid test readings ×1, water test logbook ×1, nitrile gloves (pair) ×1
+        - Consumes: Liquid test readings ×1
+        - Creates: Logged water parameters ×1
     - [partial-water-change](/processes/partial-water-change)
         - Requires: Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
         - Consumes: 5 gallon bucket of dechlorinated tap water ×0.25
@@ -455,6 +465,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `stage` → "Habitat assembled and filled." — 7 pH freshwater aquarium (150 L) ×1
     - `verify` → "Habitat checks pass and water looks stable." — 7 pH freshwater aquarium (150 L) ×1
     - `troubleshoot` → "System stabilized; return to pre-stock verification." — 7 pH freshwater aquarium (150 L) ×1
+    - `troubleshoot` → "Stocked tank stabilized; continue post-stock observation." — aquarium (goldfish) (150 L) ×1
     - `stock` → "Goldfish is in the tank and swimming." — aquarium (goldfish) (150 L) ×1
     - `observe` → "Fish behavior is normal after feed and setup is stable." — aquarium (goldfish) (150 L) ×1
     - `observe` → "Stress signs detected; troubleshoot before proceeding." — none
