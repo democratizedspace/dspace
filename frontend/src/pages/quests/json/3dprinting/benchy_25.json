@@ -1,57 +1,186 @@
 {
     "id": "3dprinting/benchy_25",
     "title": "3D Print 25 Benchies",
-    "description": "Increase your 3D printing output! To complete this quest, print at least 25 Benchies.",
+    "description": "Build a fleet of 25 Benchies with a stable production plan, quality checks, and recovery loops.",
     "image": "/assets/quests/benchy_batch_25.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You've shown great progress with your 3D printing! Your next goal is to print 25 Benchies. Can you handle this nautical challenge?",
+            "text": "Phoenix here. Twenty-five Benchies is a production run, not a sprint. Pick a strategy: steady batches or stress-test bursts.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "progress",
-                    "text": "Full steam ahead!"
+                    "goto": "strategy",
+                    "text": "Let's plan the run."
                 }
             ]
         },
         {
-            "id": "progress",
-            "text": "Your printer will be humming for a while. Keep the builds running until you've amassed twenty-five sturdy little Benchies.",
+            "id": "strategy",
+            "text": "Main path uses two quality checkpoints every five prints. Alternate path pushes speed but needs extra failure monitoring for warping and stringing.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "congrats",
-                    "text": "I have enough!",
+                    "goto": "steady",
+                    "text": "Main path: stable batches with routine checks.",
                     "requiresItems": [
                         {
-                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
-                            "count": 25
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "burst",
+                    "text": "Alternate path: burst prints to test throughput.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
                         }
                     ]
                 }
             ]
         },
         {
-            "id": "congrats",
-            "text": "Twenty-five prints later and you've got a respectable armada. Each one is a testament to your patience and persistence.",
+            "id": "steady",
+            "text": "Run repeatable prints and pause every five parts for hull and bridge checks. Log each checkpoint so we can trace defects before the full count is done.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-benchy",
+                    "text": "Print Benchies in controlled batches.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 15
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Checkpoint notes are logged and fleet count reached 25.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 25
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "burst",
+            "text": "Burst mode: queue faster turns, but stop immediately if corners lift or stringing spikes. Keep a cool-down pause between bursts so defects don't cascade.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-benchy",
+                    "text": "Run burst batch printing.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 15
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Burst run complete with logs and 25 good parts.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 25
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Stringing or warped hulls appeared during bursts.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 10
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery path: slow outer-wall speed, dry filament, and rerun a short validation batch before returning to full production. If nozzle buildup persists, pause for maintenance.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "steady",
+                    "text": "Validation batch passed; return to stable production.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Interpret your run log: at least two checkpoints should note defect trends and what you changed. No notes means no reproducibility.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "All done!"
+                    "text": "Run log is complete and 25 Benchies pass inspection.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 25
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Excellent job! Your fleet of Benchies is growing. Keep up the great work. I'll return with an even bigger challenge soon!",
+            "text": "Fleet secured. You didn't just grind to 25\u2014you built a production method with evidence and recovery steps.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'm ready for anything!"
+                    "text": "Onward to larger runs!"
                 }
             ]
         }
@@ -65,7 +194,7 @@
     "requiresQuests": ["3dprinting/benchy_10"],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 95,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
