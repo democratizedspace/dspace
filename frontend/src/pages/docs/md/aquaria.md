@@ -101,10 +101,13 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/position-tank`
 - Dialogue `requiresItems` gates:
-    - `start` → "Let's prep the rinse gear" — Sponge filter ×1, Airline tubing ×1, aquarium air pump ×1, 5 gallon bucket ×1, Water conditioner ×1, nitrile gloves (pair) ×1
-    - `prep` → "Bucket is full of dechlorinated water" — 5 gallon bucket of dechlorinated tap water ×1
-    - `rinse` → "Sponge rinsed and still wet" — Rinsed sponge filter core ×1
-    - `restart` → "Flow is restored without splashing" — Restored sponge filter flow ×1
+    - `start` → "Gear staged and PPE on." — Sponge filter ×1, Airline tubing ×1, aquarium air pump ×1, 5 gallon bucket ×1, Water conditioner ×1, nitrile gloves (pair) ×1
+    - `prep` → "Bucket is already dechlorinated and ready." — 5 gallon bucket of dechlorinated tap water ×1
+    - `rinse` → "Core is rinsed and still wet." — Rinsed sponge filter core ×1
+    - `contamination` → "Fresh bucket staged and livestock behavior is stable." — 5 gallon bucket of dechlorinated tap water ×1
+    - `restart` → "Flow is restored without splashing." — Restored sponge filter flow ×1
+    - `verify` → "Restored-flow proof captured and livestock behavior is normal." — Restored sponge filter flow ×1
+    - `verify` → "Flow is still weak; repeat rinse and restart loop." — none
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -208,14 +211,30 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/thermometer`
 - Dialogue `requiresItems` gates:
-    - `explain` → "Okay, I'll test now." — Aquarium liquid test kit ×1, nitrile gloves (pair) ×1, safety goggles ×1, water test logbook ×1
-    - `results` → "Nitrate is high—start a partial water change." — Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1, aquarium thermometer (0–50°C) ×1
+    - `start` → "Bench is clear, PPE is on, and the kit is ready." — Aquarium liquid test kit ×1, nitrile gloves (pair) ×1, safety goggles ×1, water test logbook ×1
+    - `measure` → "Panel run complete and readings are ready to log." — Liquid test readings ×1
+    - `log` → "Readings are logged and ready for interpretation." — Logged water parameters ×1
+    - `interpret` → "All values are in range; shrimp-safe window confirmed." — Logged water parameters ×1
+    - `interpret` → "At least one value is out of range; start corrective response." — Logged water parameters ×1
+    - `corrective` → "Run corrective partial water change." — Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
+    - `corrective` → "Water change is complete and conditions are stable." — Freshly changed aquarium (80 L) ×1
+    - `retest` → "Run the retest panel now." — Freshly changed aquarium (80 L) ×1
+    - `retest` → "Retest still out of range; run another corrective cycle." — Freshly changed aquarium (80 L) ×1
+    - `retest` → "Retest passed and fresh readings confirm safe ranges." — Liquid test readings ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - Duckweed portion ×1
 - Processes used:
+    - [measure-liquid-parameters](/processes/measure-liquid-parameters)
+        - Requires: Aquarium liquid test kit ×1, nitrile gloves (pair) ×1
+        - Consumes: Aquarium liquid test kit ×0.05
+        - Creates: Liquid test readings ×1
+    - [log-aquarium-test-results](/processes/log-aquarium-test-results)
+        - Requires: Aquarium liquid test kit ×1, Liquid test readings ×1, water test logbook ×1, nitrile gloves (pair) ×1
+        - Consumes: Liquid test readings ×1
+        - Creates: Logged water parameters ×1
     - [partial-water-change](/processes/partial-water-change)
         - Requires: Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
         - Consumes: 5 gallon bucket of dechlorinated tap water ×0.25
@@ -443,10 +462,15 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `welcome/howtodoquests`, `aquaria/breeding`
 - Dialogue `requiresItems` gates:
-    - `setup` → "Aquarium is fully set up! Time to add the fish, right?" — 7 pH freshwater aquarium (150 L) ×1
-    - `fish` → "I'm so excited to have a fish! Thanks for all your help!" — aquarium (goldfish) (150 L) ×1
+    - `stage` → "Habitat assembled and filled." — 7 pH freshwater aquarium (150 L) ×1
+    - `verify` → "Habitat checks pass and water looks stable." — 7 pH freshwater aquarium (150 L) ×1
+    - `troubleshoot` → "System stabilized; return to pre-stock verification." — 7 pH freshwater aquarium (150 L) ×1
+    - `troubleshoot` → "Stocked tank stabilized; continue post-stock observation." — aquarium (goldfish) (150 L) ×1
+    - `stock` → "Goldfish is in the tank and swimming." — aquarium (goldfish) (150 L) ×1
+    - `observe` → "Fish behavior is normal after feed and setup is stable." — aquarium (goldfish) (150 L) ×1
+    - `observe` → "Stress signs detected; troubleshoot before proceeding." — none
 - Grants:
-    - `setup` → "Mmm, tasty!" — 5 gallon bucket of dechlorinated tap water ×1
+    - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - Fish Friend Award ×1

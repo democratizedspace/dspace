@@ -1,30 +1,19 @@
 {
     "id": "aquaria/water-testing",
     "title": "Test water parameters",
-    "description": "Use the Aquarium liquid test kit to check ammonia, nitrite and nitrate before adding shrimp. Put on nitrile gloves and safety goggles, work in a ventilated area and discard reagents per the kit manual.",
+    "description": "Record a full liquid test panel, interpret threshold bounds, and run corrective action with a retest loop before stocking sensitive livestock.",
     "image": "/assets/quests/water_testing.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "The tank should be cycling nicely. Grab the Aquarium liquid test kit, protective gear, and a logbook so we can confirm it's safe for shrimp.",
+            "text": "Before we add shrimp, we need proof that ammonia and nitrite are zero and nitrate stays under control. Stage PPE, the liquid kit, and your logbook so each reading is traceable.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "explain",
-                    "text": "How do I test it?"
-                }
-            ]
-        },
-        {
-            "id": "explain",
-            "text": "Rinse each tube with tank water, fill to the 5 mL line, then add the specified drops from the Aquarium liquid test kit. Cap and shake away from your face. Wear nitrile gloves and safety goggles to avoid contact with the reagents, then log the readings in your water test logbook. Ammonia and nitrite must read 0 ppm; keep nitrate under 40 ppm.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "results",
-                    "text": "Okay, I'll test now.",
+                    "goto": "measure",
+                    "text": "Bench is clear, PPE is on, and the kit is ready.",
                     "requiresItems": [
                         {
                             "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
@@ -47,13 +36,88 @@
             ]
         },
         {
-            "id": "results",
-            "text": "If ammonia or nitrite shows up, let the tank cycle longer. If nitrate reads over 40 ppm, run the partial-water-change process to dilute it. Pour used test water down a sink with running water, rinse the tubes and store them dry.",
+            "id": "measure",
+            "text": "Rinse each tube with tank water, fill to 5 mL, dose reagents exactly, then cap and invert. Keep reagents away from skin and food surfaces.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-liquid-parameters",
+                    "text": "Run the full liquid test panel.",
+                    "goto": "log"
+                },
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Panel run complete and readings are ready to log.",
+                    "requiresItems": [
+                        {
+                            "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Log ammonia, nitrite, nitrate, and pH with timestamp before deciding if the tank is in range.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-aquarium-test-results",
+                    "text": "Record the test panel in the logbook.",
+                    "goto": "interpret"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Readings are logged and ready for interpretation.",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the log before stocking: ammonia = 0 ppm, nitrite = 0 ppm, nitrate < 40 ppm. If any value is out of range, branch to corrective work and retest.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All values are in range; shrimp-safe window confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "At least one value is out of range; start corrective response.",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Pause stocking and run a controlled partial water change. Match replacement water temperature and dechlorination before restarting flow.",
             "options": [
                 {
                     "type": "process",
                     "process": "partial-water-change",
-                    "text": "Nitrate is high\u2014start a partial water change.",
+                    "text": "Run corrective partial water change.",
+                    "goto": "retest",
                     "requiresItems": [
                         {
                             "id": "8c0f72a2-db79-4238-b80f-97721def169f",
@@ -70,16 +134,68 @@
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
                             "count": 1
-                        },
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Water change is complete and conditions are stable.",
+                    "requiresItems": [
                         {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Run the liquid panel again and compare against your previous entry. Do not close this quest until a fresh in-range log exists.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Run the retest panel now.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
                             "count": 1
                         }
                     ]
                 },
                 {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Retest still out of range; run another corrective cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Retest passed and fresh readings confirm safe ranges.",
+                    "requiresItems": [
+                        {
+                            "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent discipline. You documented readings, handled risk safely, and proved recovery before moving livestock.",
+            "options": [
+                {
                     "type": "finish",
-                    "text": "All clear! Levels look good."
+                    "text": "Water parameters verified."
                 }
             ]
         }
@@ -94,7 +210,7 @@
     "hardening": {
         "passes": 5,
         "score": 100,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",
