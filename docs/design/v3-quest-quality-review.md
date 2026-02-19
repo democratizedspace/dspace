@@ -234,7 +234,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
 
 ### aquaria (19 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature (fallback: no checked aquaria quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature
 
 - `aquaria/aquarium-light`
   - [ ] Observed issue: `aquaria/aquarium-light` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
