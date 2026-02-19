@@ -79,7 +79,7 @@ and optimize for clearing those boxes after manual human verification.
 
 ## REQUIRED output format for your PR summary
 
-Output exactly these sections in order:
+Output exactly these eight sections in order (no extra sections):
 
 1. `Selected quests`
    - Bullet list of selected quest IDs.
@@ -129,7 +129,8 @@ Goals:
 
 Constraints:
 
-- Keep one `Main prompt` codeblock and one `Upgrade prompt` codeblock.
+- Keep one `Main prompt` codeblock and one `Upgrade prompt` codeblock; do not add any other
+  fenced code blocks.
 - Move non-reusable commentary into short notes outside those codeblocks.
 
 Return the fully updated markdown document.
