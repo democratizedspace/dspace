@@ -46,6 +46,13 @@ Prioritize quests that map to still-unchecked quest-quality boxes in `docs/qa/v3
 
 - Edit quest JSON under `frontend/src/pages/quests/json/<tree>/<quest>.json`.
 - Keep quest IDs stable unless correcting a proven canonical mismatch.
+- For each selected quest in `docs/design/v3-quest-quality-review.md`, update checklist boxes only
+  when the corresponding work is verifiably complete in the same PR:
+  - switch `[ ]` to `[x]` for each completed line item;
+  - append the current PR number at end-of-line as `(PR #<number>)`;
+  - if a line already has PR tags, append the new PR as `, #<number>` inside the same
+    parenthetical;
+  - leave boxes unchecked when evidence is ambiguous.
 - If quest flow changes materially, update paired docs in
   `frontend/src/pages/docs/md/<tree>.md`.
 - Codex cannot create/edit binary images. If quality hardening needs new item imagery,
@@ -84,6 +91,10 @@ Output exactly these sections in order:
    - Any image reuse performed and required human dedup/replacement steps, or explicit `None`.
 7. `Follow-ups`
    - Deferred work or explicit `None`.
+8. `Checklist box updates`
+   - Bullet list of every line item changed in
+     `docs/design/v3-quest-quality-review.md`, quoted verbatim with its final checkbox state and
+     appended PR tag(s).
 ```
 
 ## Upgrade prompt
@@ -99,6 +110,9 @@ Goals:
 - Keep all referenced paths and commands valid for this repository.
 - Preserve deterministic rules: verified exemplar anchors, rubric type first-match behavior, and
   required output format.
+- Preserve checklist bookkeeping rules for
+  `docs/design/v3-quest-quality-review.md` (check only verified items and append PR tags on each
+  checked line).
 - Optimize for clearing still-unchecked quest-quality boxes in `docs/qa/v3.md` after manual human
   verification.
 - Preserve Codex binary-asset limitations guidance (reuse image references; no new binary assets).
