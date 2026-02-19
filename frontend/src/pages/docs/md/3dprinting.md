@@ -126,9 +126,9 @@ slug: '3dprinting'
 - Dialogue `requiresItems` gates:
     - `strategy` → "Main path: controlled batches." — entry-level FDM 3D printer (green PLA loaded) ×1
     - `strategy` → "Alternate path: short burst run." — entry-level FDM 3D printer (green PLA loaded) ×1, safety goggles ×1
-    - `steady` → "Run a controlled Benchy batch." — entry-level FDM 3D printer (clean nozzle) ×1, green PLA filament ×15
+    - `steady` → "Run a controlled Benchy batch." — entry-level FDM 3D printer ×1, green PLA filament ×15
     - `steady` → "I logged checkpoints and reached ten clean parts." — Benchy ×10, sheet of printer paper ×1
-    - `burst` → "Run a burst batch." — entry-level FDM 3D printer (clean nozzle) ×1, green PLA filament ×15
+    - `burst` → "Run a burst batch." — entry-level FDM 3D printer ×1, green PLA filament ×15
     - `burst` → "I spotted warping/stringing and need a recovery pass." — Benchy ×4
     - `burst` → "Burst run stayed stable and reached ten parts." — Benchy ×10, sheet of printer paper ×1
     - `recover` → "Validation passed; continue with controlled batches." — entry-level FDM 3D printer (green PLA loaded) ×1, sheet of printer paper ×1
@@ -289,11 +289,11 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/nozzle-cleaning`
 - Dialogue `requiresItems` gates:
-    - `start` → "Kill power, let the blob cool, and list the damage." — entry-level FDM 3D printer (clogged nozzle) ×1
-    - `cooldown` → "Printer cleaned and reassembled." — entry-level FDM 3D printer (clean nozzle) ×1
-    - `verify` → "Verification pass is clean and repair notes are logged." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×1
-    - `verify` → "Fresh ooze or smoke appears during verification." — entry-level FDM 3D printer (clean nozzle) ×1
-    - `contamination` → "Safe to retry teardown and rebuild." — entry-level FDM 3D printer (clean nozzle) ×1
+    - `start` → "Kill power, let the blob cool, and list the damage." — entry-level FDM 3D printer (blob of death) ×1
+    - `cooldown` → "Printer cleaned and reassembled." — entry-level FDM 3D printer ×1
+    - `verify` → "Verification pass is clean and repair notes are logged." — entry-level FDM 3D printer ×1, sheet of printer paper ×1
+    - `verify` → "Fresh ooze or smoke appears during verification." — entry-level FDM 3D printer ×1
+    - `contamination` → "Safe to retry teardown and rebuild." — entry-level FDM 3D printer ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -303,11 +303,11 @@ slug: '3dprinting'
     - [3dprint-blob-of-death](/processes/3dprint-blob-of-death)
         - Requires: none
         - Consumes: entry-level FDM 3D printer ×1, green PLA filament ×10, dWatt ×100
-        - Creates: entry-level FDM 3D printer (clogged nozzle) ×1
+        - Creates: entry-level FDM 3D printer (blob of death) ×1
     - [repair-blob-of-death](/processes/repair-blob-of-death)
         - Requires: safety goggles ×1, needle-nose pliers ×1
-        - Consumes: entry-level FDM 3D printer (clogged nozzle) ×1, 0.4 mm brass nozzle ×1
-        - Creates: entry-level FDM 3D printer (clean nozzle) ×1
+        - Consumes: entry-level FDM 3D printer (blob of death) ×1, 0.4 mm brass nozzle ×1
+        - Creates: entry-level FDM 3D printer ×1
 
 
 ## 12) Print a Phone Stand (`3dprinting/phone-stand`)
