@@ -48,17 +48,7 @@
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Pre-rinse flow is visibly weak and recorded.",
-                    "requiresItems": [
-                        {
-                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
-                            "count": 1
-                        },
-                        {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Pre-rinse flow is visibly weak and recorded."
                 }
             ]
         },
@@ -89,13 +79,7 @@
                 {
                     "type": "goto",
                     "goto": "contamination",
-                    "text": "Water still runs dark or smells off.",
-                    "requiresItems": [
-                        {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Water still runs dark or smells off."
                 },
                 {
                     "type": "goto",
@@ -169,10 +153,6 @@
                     "text": "Pre/post evidence confirms flow recovery.",
                     "requiresItems": [
                         {
-                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
-                            "count": 1
-                        },
-                        {
                             "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
                             "count": 1
                         }
@@ -181,13 +161,7 @@
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Still weak; repeat rinse loop before closing.",
-                    "requiresItems": [
-                        {
-                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Still weak; repeat rinse loop before closing."
                 }
             ]
         },

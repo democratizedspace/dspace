@@ -146,14 +146,14 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `requiresQuests`: `aquaria/sponge-filter`
 - Dialogue `requiresItems` gates:
     - `start` → "Bucket staged, pump unplugged, and PPE on." — 5 gallon bucket of dechlorinated tap water ×1, Sponge filter ×1, aquarium air pump ×1, nitrile gloves (pair) ×1
-    - `baseline` → "Pre-rinse flow is visibly weak and recorded." — weak sponge filter flow baseline ×1, 5 gallon bucket of dechlorinated tap water ×1
+    - `baseline` → "Pre-rinse flow is visibly weak and recorded." — none
     - `prep` → "Run normal rinse cycle." — Sponge filter ×1, 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1
-    - `prep` → "Water still runs dark or smells off." — 5 gallon bucket of dechlorinated tap water ×1
+    - `prep` → "Water still runs dark or smells off." — none
     - `prep` → "Core is rinsed and still wet." — Rinsed sponge filter core ×1
-    - `restart` → "Restart and tune airflow." — Rinsed sponge filter core ×1, weak sponge filter flow baseline ×1, aquarium air pump ×1
+    - `restart` → "Restart and tune airflow." — Rinsed sponge filter core ×1, Airline tubing ×1, aquarium air pump ×1
     - `restart` → "Flow is restored and livestock behavior looks normal." — Restored sponge filter flow ×1
-    - `verify` → "Pre/post evidence confirms flow recovery." — weak sponge filter flow baseline ×1, Restored sponge filter flow ×1
-    - `verify` → "Still weak; repeat rinse loop before closing." — weak sponge filter flow baseline ×1
+    - `verify` → "Pre/post evidence confirms flow recovery." — Restored sponge filter flow ×1
+    - `verify` → "Still weak; repeat rinse loop before closing." — none
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
