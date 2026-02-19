@@ -11,20 +11,6 @@
             "text": "Guppies multiply quickly, but fry survive only when shelter and water quality stay steady. We'll stage habitat first, then validate outcomes before rehoming juveniles.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
-                            "count": 1
-                        },
-                        {
-                            "id": "a7ba3f18-510d-47cb-b73f-91b8e2a72e73",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Send extra stems to weave in."
-                },
-                {
                     "type": "goto",
                     "goto": "cover",
                     "text": "Floating mat and warm tank are ready.",
@@ -38,6 +24,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "cover",
+                    "text": "Begin fry-cover setup walkthrough."
                 }
             ]
         },
@@ -75,6 +66,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "feed",
+                    "text": "Shelter lanes are confirmed; move to feed planning."
                 }
             ]
         },
@@ -104,6 +100,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Feeding plan drafted; continue to monitoring."
                 }
             ]
         },
@@ -145,6 +146,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "outcome",
+                    "text": "Monitoring checklist complete; review outcomes."
                 }
             ]
         },
@@ -175,6 +181,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Emergency response complete; return to monitoring."
                 }
             ]
         },
@@ -224,6 +235,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Graduation review complete; close breeding cycle."
                 }
             ]
         },
@@ -246,9 +262,15 @@
     ],
     "requiresQuests": ["aquaria/guppy", "aquaria/floating-plants"],
     "hardening": {
-        "passes": 0,
-        "score": 90,
-        "emoji": "🛠️",
-        "history": []
+        "passes": 1,
+        "score": 95,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2026-02-19",
+                "date": "2026-02-19",
+                "score": 90
+            }
+        ]
     }
 }

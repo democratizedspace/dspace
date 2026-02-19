@@ -103,6 +103,11 @@
                     "process": "bucket-water-dechlorinated",
                     "text": "Prepare fresh dechlorinated rinse water.",
                     "goto": "prep"
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Fresh bucket is staged; continue the rinse loop."
                 }
             ]
         },
@@ -186,7 +191,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-19",
