@@ -8,23 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Sydney here. Power off, cool down, clear crumbs. We'll level each corner with a sheet of paper.",
+            "text": "Sydney here. Power off, cool down, and clear crumbs. We will capture a baseline before touching knobs so you can prove the adjustment worked.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "prep",
-                    "text": "Bed is cool and cleared."
+                    "goto": "baseline",
+                    "text": "Machine is cool and safe to handle."
                 }
             ]
         },
         {
-            "id": "prep",
-            "text": "Loosen each wheel a quarter turn, home the axes, wipe the surface. Keep fingers clear while the gantry moves.",
+            "id": "baseline",
+            "text": "Run a cold paper pass at all four corners and center. Mark where drag is loose or scraping so we have a before-state record.",
             "options": [
                 {
                     "type": "process",
                     "process": "level-3d-printer-bed",
-                    "text": "Walk me through each pass.",
+                    "text": "Capture baseline drag checks.",
                     "requiresItems": [
                         {
                             "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
@@ -42,8 +42,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "first-layer",
-                    "text": "Corners all tug the paper evenly.",
+                    "goto": "adjust",
+                    "text": "Baseline notes are logged.",
                     "requiresItems": [
                         {
                             "id": "a42e441a-5569-490c-86e4-ce711117cd22",
@@ -54,18 +54,51 @@
             ]
         },
         {
-            "id": "first-layer",
-            "text": "Heat the nozzle, run a single-line skirt, recheck drag at center. Light scratch = good first layer.",
+            "id": "adjust",
+            "text": "Adjust only the corners that failed baseline. Quarter-turn max each pass, then re-home and repeat. Keep fingers clear while gantry moves.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "prep",
-                    "text": "Need to tweak another corner."
+                    "goto": "retest",
+                    "text": "Adjustment pass complete.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Readings drifted after I adjusted one corner."
+                }
+            ]
+        },
+        {
+            "id": "rollback",
+            "text": "That drift means a wheel may have over-corrected. Roll back to your last-known-good knob position, re-home, and restart from baseline.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Rollback applied; rerun baseline."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Heat nozzle, run a single-line skirt, then verify paper drag again at center and corners. Target: light, even drag at every point.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Still outside tolerance; I need one more adjustment pass."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Skirt looks even and glossy.",
+                    "text": "Post-adjust retest is within tolerance.",
                     "requiresItems": [
                         {
                             "id": "a42e441a-5569-490c-86e4-ce711117cd22",
@@ -77,11 +110,11 @@
         },
         {
             "id": "finish",
-            "text": "Bed level, skirt clean. Log the knob positions and move on.",
+            "text": "Great parity: baseline, adjustment, and retest all logged. Save those knob positions as your new stable profile.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Time to print!"
+                    "text": "Bed is tuned and documented."
                 }
             ]
         }
@@ -92,7 +125,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinter/start"],
+    "requiresQuests": [
+        "3dprinter/start"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,

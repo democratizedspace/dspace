@@ -8,23 +8,44 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've made some impressive strides in 3D printing. Your next challenge is to print 10 Benchies. These small boat models will test the capabilities of your printer. Are you up for it?",
+            "text": "Phoenix on deck. Ten Benchies is not just grind; we use this run to prove repeatable quality under real production conditions.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "progress",
-                    "text": "Let's set sail!"
+                    "goto": "plan",
+                    "text": "Set the run plan."
                 }
             ]
         },
         {
-            "id": "progress",
-            "text": "Keep printing Benchies one by one until your workspace looks like a miniature marina. You'll know you've hit the mark when you can't fit another boat on the shelf!",
+            "id": "plan",
+            "text": "Pick a strategy: run one validated slicer profile for consistency, or trial two profiles to compare finish versus speed. Either path must produce printed evidence.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "congrats",
-                    "text": "I have enough!",
+                    "goto": "steady-run",
+                    "text": "Use one stable profile for all ten."
+                },
+                {
+                    "type": "goto",
+                    "goto": "a-b-run",
+                    "text": "Compare two slicer profiles before committing."
+                }
+            ]
+        },
+        {
+            "id": "steady-run",
+            "text": "Print in batches and inspect each hull for layer shift, elephant's foot, and stringing. Pause and correct immediately when defects repeat.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "A defect pattern is repeating; stop and diagnose."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Ten clean Benchies are printed.",
                     "requiresItems": [
                         {
                             "id": "7892ffc6-c651-445f-946b-7edc998cf389",
@@ -35,23 +56,62 @@
             ]
         },
         {
-            "id": "congrats",
-            "text": "That's a full fleet of ten Benchies! Your printer handled the run like a champ and each hull looks smooth and shiny.",
+            "id": "a-b-run",
+            "text": "Run profile A on five Benchies and profile B on five. Keep the better profile only if it reduces defects without slowing too much.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Both profiles show recurring defects."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Comparison complete and ten Benchies are ready.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 10
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery drill: dry filament, clean nozzle, and re-level bed before resuming. Print one confirmation Benchy first; if it still fails, repeat corrective cycle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Corrective cycle done; resume production plan."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Final gate: count ten physical Benchies and confirm defect notes were reviewed. No evidence, no fleet completion.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "What's next?"
+                    "text": "Fleet count and quality review are complete.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 10
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Well done! These Benchies look fantastic. Keep honing your 3D printing skills. I'll be back with a new challenge soon!",
+            "text": "Fleet approved. You now have repeatable print discipline, not just a shelf of boats.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'm ready for more!"
+                    "text": "Harbor secured."
                 }
             ]
         }
@@ -62,7 +122,9 @@
             "count": 1000
         }
     ],
-    "requiresQuests": ["3dprinting/filament-change"],
+    "requiresQuests": [
+        "3dprinting/filament-change"
+    ],
     "hardening": {
         "passes": 0,
         "score": 85,

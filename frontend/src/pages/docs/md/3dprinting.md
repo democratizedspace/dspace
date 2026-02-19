@@ -49,9 +49,10 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinter/start`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Walk me through each pass." — entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
-    - `prep` → "Corners all tug the paper evenly." — entry-level FDM 3D printer (leveled bed) ×1
-    - `first-layer` → "Skirt looks even and glossy." — entry-level FDM 3D printer (leveled bed) ×1
+    - `baseline` → "Capture baseline drag checks." — entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
+    - `baseline` → "Baseline notes are logged." — entry-level FDM 3D printer (leveled bed) ×1
+    - `adjust` → "Adjustment pass complete." — entry-level FDM 3D printer (leveled bed) ×1
+    - `retest` → "Post-adjust retest is within tolerance." — entry-level FDM 3D printer (leveled bed) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -120,7 +121,9 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/filament-change`
 - Dialogue `requiresItems` gates:
-    - `progress` → "I have enough!" — Benchy ×10
+    - `steady-run` → "Ten clean Benchies are printed." — Benchy ×10
+    - `a-b-run` → "Comparison complete and ten Benchies are ready." — Benchy ×10
+    - `verify` → "Fleet count and quality review are complete." — Benchy ×10
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -285,23 +288,16 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/filament-change`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Swap to white PLA and purge." — entry-level FDM 3D printer (leveled bed) ×1, safety goggles ×1, wire cutters ×1
     - `prep` → "Ready to slice and print." — entry-level FDM 3D printer (white PLA loaded) ×1
     - `print` → "The stand is finished and cooled!" — 3D Printed Phone Stand ×1
+    - `measure` → "Measurements logged with pass/fail notes." — 3D Printed Phone Stand ×1, digital calipers ×1
+    - `interpret` → "Both measurements pass and test fit is stable." — 3D Printed Phone Stand ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [level-3d-printer-bed](/processes/level-3d-printer-bed)
-        - Requires: entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
-        - Consumes: none
-        - Creates: entry-level FDM 3D printer (leveled bed) ×1
-    - [swap-white-pla-filament](/processes/swap-white-pla-filament)
-        - Requires: entry-level FDM 3D printer (leveled bed) ×1, safety goggles ×1, wire cutters ×1
-        - Consumes: white PLA filament ×10
-        - Creates: entry-level FDM 3D printer (white PLA loaded) ×1
     - [print-phone-stand](/processes/print-phone-stand)
         - Requires: entry-level FDM 3D printer (white PLA loaded) ×1
         - Consumes: white PLA filament ×20
@@ -354,7 +350,8 @@ slug: '3dprinting'
     - `start` → "Green PLA is loaded and ready." — entry-level FDM 3D printer (green PLA loaded) ×1
     - `setup` → "Print the stepped Benchy." — entry-level FDM 3D printer (green PLA loaded) ×1, safety goggles ×1, digital calipers ×1
     - `setup` → "Benchy finished and cooled." — stringing-tuned Benchy ×1
-    - `inspect` → "Stringing is gone and notes are saved." — stringing-tuned Benchy ×1
+    - `measure` → "Measurements and settings are logged." — stringing-tuned Benchy ×1, digital calipers ×1
+    - `interpret` → "Threshold met and winning settings recorded." — stringing-tuned Benchy ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

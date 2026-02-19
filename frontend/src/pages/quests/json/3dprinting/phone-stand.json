@@ -8,59 +8,35 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Sydney here. We'll tune the printer, slice a simple stand, and print in white PLA for clean detail.",
+            "text": "Sydney here. We'll print a phone stand and validate it with measurements, not guesses.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Let's prep first."
+                    "text": "Printer is clear and ready to prep."
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "Ventilate, tie back hair, keep sleeves clear. Heat to PLA temps, wipe the nozzle, paper-level the bed with light drag. Clean the plate with isopropyl, then purge to white PLA until the flow is clean.",
+            "text": "Dry white PLA if it popped last run. Confirm bed clean, belt tension stable, and calipers nearby before slicing.",
             "options": [
-                {
-                    "type": "process",
-                    "process": "level-3d-printer-bed",
-                    "text": "Paper-level the bed."
-                },
-                {
-                    "type": "process",
-                    "process": "swap-white-pla-filament",
-                    "text": "Swap to white PLA and purge.",
-                    "requiresItems": [
-                        {
-                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
-                            "count": 1
-                        }
-                    ]
-                },
                 {
                     "type": "goto",
                     "goto": "print",
+                    "text": "Ready to slice and print.",
                     "requiresItems": [
                         {
                             "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
                             "count": 1
                         }
-                    ],
-                    "text": "Ready to slice and print."
+                    ]
                 }
             ]
         },
         {
             "id": "print",
-            "text": "Open the Phone Stand STL. Slice at 0.2 mm layers, 3 perimeters, 5 top/bottom layers, 15% gyroid infill. Lay it flat. Supports off unless you see real overhangs. Add a 3\u20135 mm brim if adhesion is weak. PLA around 200\u00b0C nozzle, 60\u00b0C bed. Watch the first layer, then let it finish and cool before releasing.",
+            "text": "Slice the Phone Stand STL at 0.2 mm layers, 3 perimeters, 5 top/bottom layers, 15% gyroid infill. Supports off unless overhangs demand it. Use a brim only when adhesion is unstable.",
             "options": [
                 {
                     "type": "process",
@@ -69,24 +45,78 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "measure",
+                    "text": "The stand is finished and cooled.",
                     "requiresItems": [
                         {
                             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
                             "count": 1
                         }
-                    ],
-                    "text": "The stand is finished and cooled!"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Measure two checks with calipers: cradle width and base flatness gap. Pass bounds: width 8-14 mm and gap <= 0.8 mm. Record both values before moving on.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Measurements logged with pass/fail notes.",
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: if both values are in range, approve. If out of range, choose a correction and re-test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "One or more values are out of range."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Both measurements pass and test fit is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective loop: tune scale by 1-2%, add brim for warped bases, or dry filament if surfaces are rough. Reprint, cool, and rerun the same measurement bounds.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Apply corrections and reprint for re-test."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Test-fit the phone. It should lean 60\u201370\u00b0 and keep the port clear. Tight? Light sanding. Loose? Scale up 1\u20132% and reprint. Power down and log the settings.",
+            "text": "Phone stand qualified. Save the passing dimensions and slicer profile so the next print starts from known-good settings.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Sydney!"
+                    "text": "Stand validated and documented."
                 }
             ]
         }
@@ -97,7 +127,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/filament-change"],
+    "requiresQuests": [
+        "3dprinting/filament-change"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
