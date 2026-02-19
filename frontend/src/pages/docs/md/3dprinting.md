@@ -144,7 +144,6 @@ slug: '3dprinting'
         - Consumes: green PLA filament ×15, dWatt ×150
         - Creates: Benchy ×1, dPrint ×15
 
-
 ## 6) 3D Print 25 Benchies (`3dprinting/benchy_25`)
 
 - Quest link: [/quests/3dprinting/benchy_25](/quests/3dprinting/benchy_25)
@@ -309,7 +308,6 @@ slug: '3dprinting'
         - Consumes: entry-level FDM 3D printer (blob of death) ×1, 0.4 mm brass nozzle ×1
         - Creates: entry-level FDM 3D printer ×1
 
-
 ## 12) Print a Phone Stand (`3dprinting/phone-stand`)
 
 - Quest link: [/quests/3dprinting/phone-stand](/quests/3dprinting/phone-stand)
@@ -405,7 +403,6 @@ slug: '3dprinting'
         - Requires: entry-level FDM 3D printer (green PLA loaded) ×1, safety goggles ×1, digital calipers ×1
         - Consumes: green PLA filament ×20, dWatt ×200
         - Creates: stringing-tuned Benchy ×1, dPrint ×20
-
 
 ## 15) Print a Temperature Tower (`3dprinting/temperature-tower`)
 
