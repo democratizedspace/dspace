@@ -8,23 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Fancy some mint tea? Let's clone a cutting.",
+            "text": "Fancy some mint tea? We'll set up the cutting, monitor stress, and only finish once the clone survives the first checks.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Show me how."
+                    "text": "Show me the setup artifact."
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "Trim a healthy stem, pop it into a soaked plug, and set it in a net cup.",
+            "text": "Trim a healthy stem, keep tools clean, and seat the cutting into a soaked plug inside the net cup.",
             "options": [
                 {
                     "type": "process",
                     "process": "clone-mint-cutting",
-                    "text": "Cut and plant",
+                    "text": "Create first clone attempt.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -38,8 +38,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Cutting is nestled in",
+                    "goto": "monitor",
+                    "text": "Setup artifact ready; begin stress check.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -54,12 +54,56 @@
             ]
         },
         {
+            "id": "monitor",
+            "text": "Outcome check: stem should stay upright with no blackening at the cut. If wilt appears, pause and recover before trying again.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Clone looks healthy after the first check.",
+                    "requiresItems": [
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Leaves are drooping or stem tissue is darkening."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: trim back to healthy tissue, keep humidity high, and avoid direct light until turgor returns.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Tissue stabilized; re-run prep and placement."
+                },
+                {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Retry monitoring with corrected conditions.",
+                    "requiresItems": [
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! Keep the cube moist and wait for roots to emerge.",
+            "text": "Nice clone. Keep the plug moist, avoid overhandling, and check daily until roots push through.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait for fresh mint!"
+                    "text": "Mint cutting rooted through first stress check."
                 }
             ]
         }
@@ -74,7 +118,7 @@
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

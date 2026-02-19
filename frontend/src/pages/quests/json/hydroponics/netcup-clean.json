@@ -8,18 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Got grimy net cups? A quick scrub prevents root rot.",
+            "text": "Grimy net cups spread trouble fast. We'll log a baseline, sanitize, then verify dryness before storage.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "mix",
-                    "text": "Let's clean them."
+                    "text": "Start cleaning cycle."
                 }
             ]
         },
         {
             "id": "mix",
-            "text": "Fill a bucket with dechlorinated water and mix in 5 mL of 3% hydrogen peroxide.",
+            "text": "Fill a bucket with dechlorinated water and stage peroxide. Wear gloves and goggles before mixing.",
             "options": [
                 {
                     "type": "process",
@@ -28,8 +28,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "soak",
-                    "text": "Water is ready",
+                    "goto": "baseline",
+                    "text": "Water and reagents are staged.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -44,8 +44,30 @@
             ]
         },
         {
+            "id": "baseline",
+            "text": "Baseline artifact: identify cups with algae film or trapped roots before washing so you can verify improvement after scrubbing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "soak",
+                    "text": "Baseline captured; mix peroxide bath.",
+                    "requiresItems": [
+                        {
+                            "id": "50f2080e-7dd5-4c8d-a764-dfaa02ca59c3",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "contam",
+                    "text": "Heavy biofilm detected; need containment first."
+                }
+            ]
+        },
+        {
             "id": "soak",
-            "text": "Combine the peroxide with the bucketed water and give it a quick stir.",
+            "text": "Combine peroxide with dechlorinated water and stir until the bath is uniform.",
             "options": [
                 {
                     "type": "process",
@@ -67,7 +89,7 @@
         },
         {
             "id": "scrub",
-            "text": "Scrub each net cup, dip it through the peroxide bath, then rinse until no suds remain.",
+            "text": "Scrub each cup, dip through the bath, then inspect for remaining residue before moving on.",
             "options": [
                 {
                     "type": "process",
@@ -77,7 +99,7 @@
                 {
                     "type": "goto",
                     "goto": "dry",
-                    "text": "Cups look clean",
+                    "text": "Post-clean artifact: cups are visibly clear.",
                     "requiresItems": [
                         {
                             "id": "6498967e-284e-46ff-bee7-10e3907f60fd",
@@ -87,14 +109,25 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "soak",
-                    "text": "Need to soak again"
+                    "goto": "contam",
+                    "text": "Residue remains or peroxide looks spent."
+                }
+            ]
+        },
+        {
+            "id": "contam",
+            "text": "Contamination branch: discard exhausted bath safely, refresh PPE if splashed, and restart from mix with fresh solution.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Containment complete; prepare a fresh bath."
                 }
             ]
         },
         {
             "id": "dry",
-            "text": "Shake off the bath, set the net cups upside-down on a rack, and let them air dry.",
+            "text": "Shake off bath and air-dry cups upside down. Do not stack while damp.",
             "options": [
                 {
                     "type": "process",
@@ -116,11 +149,11 @@
         },
         {
             "id": "finish",
-            "text": "Great work! Let the cups dry before the next planting.",
+            "text": "Great work. Baseline + post-clean artifacts confirm the sanitation cycle actually changed cup condition.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All set."
+                    "text": "Net cups cleaned with verified before/after checks."
                 }
             ]
         }
@@ -135,7 +168,7 @@
     "hardening": {
         "passes": 1,
         "score": 90,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-15",

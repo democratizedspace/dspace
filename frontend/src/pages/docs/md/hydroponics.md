@@ -122,7 +122,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/bucket_10`
 - Dialogue `requiresItems` gates:
-    - `install` → "Light installed." — hydroponic grow lamp ×1, smart plug ×1, mechanical outlet timer ×1
+    - `safety` → "Area is dry and cable route is safe." — hydroponic grow lamp ×1, smart plug ×1, mechanical outlet timer ×1
+    - `install` → "Install done; proceed to timer verification." — hydroponic grow lamp ×1, smart plug ×1, mechanical outlet timer ×1
+    - `rollback` → "Retry verification after corrective changes." — hydroponic grow lamp ×1, smart plug ×1, mechanical outlet timer ×1
+- Recovery/troubleshooting branches:
+    - `verify` routes to `rollback` for failed cycle tests, heat spikes, or tripped outlets
+    - `rollback` loops through `safety` or directly back to `verify` after corrective actions
+- Safety/ops checks:
+    - Requires dry workspace + drip-loop routing before installation and after rollback
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -222,7 +229,15 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/ph-check`
 - Dialogue `requiresItems` gates:
-    - `calibrate` → "Calibration complete" — EC meter ×1, EC calibration solution (1000 ppm) ×1
+    - `prep` → "Probe is clean and kit is ready." — EC meter ×1, EC calibration solution (1000 ppm) ×1, hydroponics tub (ready) ×1
+    - `calibrate` → "Calibrate meter now." — EC meter ×1, EC calibration solution (1000 ppm) ×1
+    - `calibrate` → "Capture post-calibration EC reading." — EC meter ×1, hydroponics tub (ready) ×1
+    - `calibrate`/`interpret` → proof + interpretation gates require hydroponic nutrient solution EC log ×1
+- Recovery/troubleshooting branches:
+    - `interpret` routes out-of-range/drifting readings into `correct`, then loops back through `calibrate`
+    - `troubleshoot` handles fouled probes or unstable samples and loops to `prep`
+- Safety/ops checks:
+    - Requires clean probe handling and dry-hands troubleshooting before retry
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -496,8 +511,13 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/plug-soak`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Cut and plant" — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
-    - `prep` → "Cutting is nestled in" — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
+    - `prep` → "Create first clone attempt." — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
+    - `prep` → "Setup artifact ready; begin stress check." — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
+    - `monitor`/`recover` → health checks require soaked hydroponic starter plug ×1 before retry/finish
+- Recovery/troubleshooting branches:
+    - `monitor` routes wilt/blackening to `recover`, then loops through `prep` or back into `monitor`
+- Safety/ops checks:
+    - Recovery guidance now enforces clean cuts, humidity control, and reduced light during stress
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -564,9 +584,15 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `requiresQuests`: `hydroponics/tub-scrub`
 - Dialogue `requiresItems` gates:
     - `mix` → "Water is ready" — 5 gallon bucket of dechlorinated tap water ×1, hydrogen peroxide (3%) ×1
+    - `baseline` → "Baseline captured; mix peroxide bath." — hydrogen peroxide (3%) ×1
     - `soak` → "Bath is mixed" — peroxide rinse bath ×1
-    - `scrub` → "Cups look clean" — sanitized net cups ×1
+    - `scrub` → "Post-clean artifact: cups are visibly clear." — sanitized net cups ×1
     - `dry` → "Bone dry and ready" — dried net cups ×1
+- Recovery/troubleshooting branches:
+    - `baseline` and `scrub` can route to `contam` for heavy biofilm or exhausted peroxide
+    - `contam` loops to `mix` with fresh solution and renewed PPE checks
+- Safety/ops checks:
+    - PPE and safe bath disposal are explicit before any retry path
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

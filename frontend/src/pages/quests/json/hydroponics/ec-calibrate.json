@@ -8,28 +8,53 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "An accurate EC meter keeps nutrients on point. Let's calibrate it with solution.",
+            "text": "An accurate EC meter keeps nutrients on point. We'll prep safely, capture a reading, then interpret before we close.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Start calibration checklist."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Gather EC meter, calibration solution, and a ready tub sample. Rinse the probe and confirm no salt crust remains.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "calibrate",
-                    "text": "Ready to calibrate"
+                    "text": "Probe is clean and kit is ready.",
+                    "requiresItems": [
+                        {
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3d8bb59-8364-46b2-ad42-c5f56cc72b40",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Probe is fouled or the sample is unstable."
                 }
             ]
         },
         {
             "id": "calibrate",
-            "text": "Rinse the probe, dip in 1000 ppm solution, and adjust until the meter matches.",
+            "text": "Run calibration against 1000 ppm solution, then immediately capture an EC reading artifact from the mixed reservoir.",
             "options": [
                 {
                     "type": "process",
                     "process": "calibrate-ec-meter",
-                    "text": "Meter aligned"
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Calibration complete",
+                    "text": "Calibrate meter now.",
                     "requiresItems": [
                         {
                             "id": "71655665-4a59-41f4-9084-dad4d976df91",
@@ -40,16 +65,91 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "process",
+                    "process": "measure-ec-solution",
+                    "text": "Capture post-calibration EC reading.",
+                    "requiresItems": [
+                        {
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Reading captured; interpret calibration health.",
+                    "requiresItems": [
+                        {
+                            "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the reading: if values are stable in target range, close. If drift is erratic or out of range, branch to corrective cleaning and re-test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading is stable and in range; calibration validated.",
+                    "requiresItems": [
+                        {
+                            "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "correct",
+                    "text": "Reading drifted or landed out of range; correct and retest."
+                }
+            ]
+        },
+        {
+            "id": "correct",
+            "text": "Corrective path: rinse probe, remove bubbles, re-mix sample, and verify no nutrient residue is left on electrodes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "calibrate",
+                    "text": "Corrections done; re-run calibration and measurement."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Still unstable after correction."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Troubleshoot safely: replace contaminated solution, inspect damaged probe cap, and keep power and hands dry before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Issue resolved; return to prep gate."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice. A calibrated meter keeps your plants fed properly.",
+            "text": "Nice. This calibration now includes evidence plus interpretation, so future EC checks start from a trusted baseline.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Back to the grow."
+                    "text": "Calibration complete with measurement proof."
                 }
             ]
         }
@@ -64,7 +164,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
