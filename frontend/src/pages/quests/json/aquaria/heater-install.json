@@ -1,14 +1,14 @@
 {
     "id": "aquaria/heater-install",
     "title": "Install an aquarium heater",
-    "description": "Install a 150 W heater in a Walstad tank and verify 26\u00b0C with a stick-on thermometer.",
+    "description": "Install a 150 W heater in a Walstad tank, verify a safe range, and recover if the first reading drifts.",
     "image": "/assets/quests/install_aquarium_heater.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Tropical fish need 26\u00b0C. Make sure the Walstad tank already has the strip thermometer on and flow running before you mount the heater.",
+            "text": "Tropical fish need steady heat, not spikes. Confirm the Walstad tank has flow, thermometer strip, and a drip loop ready before we mount the heater.",
             "options": [
                 {
                     "type": "goto",
@@ -33,7 +33,7 @@
         },
         {
             "id": "mount",
-            "text": "Unplug other gear, submerge the heater near flow, and set it to 26\u00b0C. Leave it unplugged for 20 minutes so the glass temp matches the water.",
+            "text": "Unplug other gear, submerge the heater near flow, set 26°C, and wait 20 minutes before powering so the glass equalizes to water temp.",
             "options": [
                 {
                     "type": "process",
@@ -55,17 +55,17 @@
         },
         {
             "id": "verify",
-            "text": "Watch the strip for the next few minutes and log the temperature once it stabilizes. Aim for 26\u00b0C \u00b11\u00b0C before you add fish.",
+            "text": "Log the stabilized temperature before adding fish. Acceptable range is 25–27°C after a full warm-up window.",
             "options": [
                 {
                     "type": "process",
                     "process": "log-walstad-temperature",
-                    "text": "Log the stabilized reading"
+                    "text": "Log stabilized temperature"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Reading recorded and steady",
+                    "goto": "interpret",
+                    "text": "Reading recorded",
                     "requiresItems": [
                         {
                             "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
@@ -76,8 +76,64 @@
             ]
         },
         {
+            "id": "interpret",
+            "text": "If readings are still drifting, do not stock livestock yet. Classify the issue first so we can recover cleanly.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Range held at 25–27°C for two checks",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Temperature overshot or dropped outside safe range",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rollback",
+            "text": "Recovery protocol: unplug heater, confirm full submersion depth, reset the dial one notch toward target, then re-run warm-up and log again.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Apply rollback and re-stage install",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Recovery done, take a fresh verification reading",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice control. Keep the heater cord dripped below the outlet and recheck daily for a week to confirm the thermostat holds.",
+            "text": "Nice control. Keep the heater cord below outlet height and recheck daily for a week to catch thermostat drift early.",
             "options": [
                 {
                     "type": "finish",
@@ -96,7 +152,7 @@
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-16",

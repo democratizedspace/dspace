@@ -1,14 +1,14 @@
 {
     "id": "aquaria/log-water-parameters",
     "title": "Log Water Parameters",
-    "description": "Run a full liquid test panel, then log ammonia, nitrite, nitrate, and pH so trends stay visible.",
+    "description": "Run a full liquid test panel, classify anomalies, and log a complete record for trend tracking.",
     "image": "/assets/quests/paperwork.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Water tests only help if we write them down. Gloves on, liquid kit ready, and let's capture today's ammonia, nitrite, nitrate, and pH.",
+            "text": "Logs are how we catch trouble before livestock pays the price. Gloves on, kit open, and let's collect ammonia, nitrite, nitrate, and pH as a full snapshot.",
             "options": [
                 {
                     "type": "goto",
@@ -29,7 +29,7 @@
         },
         {
             "id": "measure",
-            "text": "Rinse the vials in tank water, fill to the line, add the right drops, and wait the full time for each reagent before reading. Keep gloves on so skin oils stay out of the sample.",
+            "text": "Rinse vials in tank water, fill to line, add correct drops, and wait full reaction time. Keep gloves on to avoid contaminating readings.",
             "options": [
                 {
                     "type": "process",
@@ -62,13 +62,13 @@
         },
         {
             "id": "log",
-            "text": "Write the numbers, date, and time in the logbook. Circle anything over 0 ppm ammonia or nitrite, or nitrate above 40 ppm, so we can act fast.",
+            "text": "Record date/time plus all four fields. Flag ammonia or nitrite above 0 ppm, nitrate above 40 ppm, or pH outside 6.8–7.6.",
             "options": [
                 {
                     "type": "process",
                     "process": "log-aquarium-test-results",
                     "text": "Record the results in the logbook.",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "requiresItems": [
                         {
                             "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
@@ -90,7 +90,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "text": "Entry logged with today's readings.",
                     "requiresItems": [
                         {
@@ -102,8 +102,58 @@
             ]
         },
         {
+            "id": "interpret",
+            "text": "Now classify today's panel. If all fields are in bounds, close the cycle. If any field is out of bounds, run a corrective action and then re-measure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All readings are within guardrails",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "At least one value is out of range",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective branch: perform a partial water change, then run the test panel again before we sign off the day.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "partial-water-change",
+                    "text": "Run corrective partial water change"
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Correction complete, re-measure the panel",
+                    "requiresItems": [
+                        {
+                            "id": "900ca6ba-c9f6-49c4-9f35-a13fcf38d2e5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great recordkeeping! If numbers creep up, you can schedule a water change or adjust feeding before the fish even notice.",
+            "text": "Great recordkeeping. This log gives you trend evidence for feeding, water-change cadence, and fish stress prevention.",
             "options": [
                 {
                     "type": "finish",
@@ -122,7 +172,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-23",
