@@ -1,93 +1,76 @@
 {
     "id": "rocketry/firstlaunch",
     "title": "First rocket launch!",
-    "description": "Print and launch your own model rocket. Follow the steps to print, assemble, and launch the rocket. Get ready for liftoff!",
+    "description": "Print, assemble, and launch a model rocket with explicit range safety and recovery troubleshooting.",
     "image": "/assets/quests/firstlaunch.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here. First launch is my favorite. We'll print, assemble, and fly safely. Ready to light the fuse?",
+            "text": "Nova here. First launch day! We'll print, assemble, and fly with range discipline. Ready to begin?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "height",
-                    "text": "You betcha! How, uh, how high is this rocket thing launching?"
+                    "text": "Yep. What altitude are we expecting?"
                 }
             ]
         },
         {
             "id": "height",
-            "text": "I've flown this design before. Expect ~35 meters in calm air; wind decides the rest.",
+            "text": "This airframe usually reaches ~35 m in calm conditions. Wind and prep quality decide the rest.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "paperwork",
-                    "text": "Oh, cool, that doesn't sound very high, but I'm sure I'm underestimating what that looks like! And I don't need some special paperwork from the government to launch this thing?"
+                    "text": "Do I need any legal or range checks first?"
                 }
             ]
         },
         {
             "id": "paperwork",
-            "text": "FAA hobby limits are friendly: under 1500 g total and under 125 g propellant. We're around 90 g body and 18 g motor. Find a wide, open launch site.",
+            "text": "Hobby limits are friendly: under 1500 g total and under 125 g propellant. We still need a clear field and a controlled launch line.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "print",
-                    "text": "Gotcha, that quiets my fears a bit. So, what do I need to do to get this thing ready to launch?"
+                    "goto": "print-plan",
+                    "text": "Let's print first, then run a full safety check."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-brief",
+                    "text": "I already have parts. Can we run safety and assembly first?"
                 }
             ]
         },
         {
-            "id": "print",
-            "text": "First step: 3D print the rocket in lightweight PLA. It's about an hour on a tuned printer.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "fun",
-                    "text": "Print the rocket?? Aren't there, like, pre-made rockets I can buy?"
-                }
-            ]
-        },
-        {
-            "id": "fun",
-            "text": "Sure, you can buy one. But building teaches you why it flies. We'll print four parts, glue, and get airborne. MVP now, upgrades later.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "components",
-                    "text": "Works for me! What do I need to print?"
-                }
-            ]
-        },
-        {
-            "id": "components",
-            "text": "Modular parts keep failures small and upgrades easy. Print a nosecone, body tube, fincan, and nosecone coupler. One printer means four runs; take your time.",
+            "id": "print-plan",
+            "text": "Print four modular parts: nosecone, body tube, fincan, and nosecone coupler. Modularity keeps failures small.",
             "options": [
                 {
                     "type": "process",
                     "process": "3dprint-rocket-nosecone",
-                    "text": "One nosecone, coming right up!"
+                    "text": "Print nosecone."
                 },
                 {
                     "type": "process",
                     "process": "3dprint-rocket-body-tube",
-                    "text": "Totally tubular!"
+                    "text": "Print body tube."
                 },
                 {
                     "type": "process",
                     "process": "3dprint-rocket-fincan",
-                    "text": "Fin! Well, not yet, but soon!"
+                    "text": "Print fincan."
                 },
                 {
                     "type": "process",
                     "process": "3dprint-rocket-nosecone-coupler",
-                    "text": "A couple of these should do the trick! Get it? A couple? Nosecone coupler? Hah! Actually I only need the one ..."
+                    "text": "Print nosecone coupler."
                 },
                 {
                     "type": "goto",
-                    "goto": "assemble",
+                    "goto": "safety-brief",
                     "requiresItems": [
                         {
                             "id": "7ca9cad5-4bc2-420b-9733-24d1e38c2324",
@@ -106,35 +89,51 @@
                             "count": 1
                         }
                     ],
-                    "text": "Alright, all 4 components are now printed! What's next?"
+                    "text": "All four printed parts are complete."
+                }
+            ]
+        },
+        {
+            "id": "safety-brief",
+            "text": "Safety branch: if range is crowded, wind shifts hard, or continuity fails twice, we hold launch and troubleshoot before ignition.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Range is clear and safety line is set. Assemble rocket."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Something looks wrong. Start troubleshooting."
                 }
             ]
         },
         {
             "id": "assemble",
-            "text": "Assembly time. You'll need a solid motor, superglue, and Kevlar shock cord. Grab them, then follow the schematic to glue and rig the recovery line.",
+            "text": "Assembly time: motor, superglue, and Kevlar shock cord. Build the airframe before launch staging.",
             "options": [
                 {
                     "type": "process",
                     "process": "assemble-rocket",
-                    "text": "Components, assemble!"
+                    "text": "Assemble launch-capable rocket."
                 },
                 {
                     "type": "goto",
+                    "goto": "launch-gear",
                     "requiresItems": [
                         {
                             "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
                             "count": 1
                         }
                     ],
-                    "goto": "launch",
-                    "text": "The rocket's assembled! Are we ready for launch?"
+                    "text": "Rocket assembled and inspected."
                 }
             ]
         },
         {
-            "id": "launch",
-            "text": "Almost there. You'll need a launch pad, igniter, and launch controller. The pad keeps it straight; the controller lights it. Here\u2014spares from my kit.",
+            "id": "launch-gear",
+            "text": "You'll need launch pad, igniter, and controller. I packed spares so you can run a controlled first flight.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -145,17 +144,18 @@
                         },
                         {
                             "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
-                            "count": 1
+                            "count": 3
                         },
                         {
                             "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
                             "count": 1
                         }
                     ],
-                    "text": "Oh cool, I'll never turn down free stuff!"
+                    "text": "Thanks for the launch kit spares."
                 },
                 {
                     "type": "goto",
+                    "goto": "arm",
                     "requiresItems": [
                         {
                             "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
@@ -170,40 +170,66 @@
                             "count": 1
                         }
                     ],
-                    "goto": "go",
-                    "text": "We are go for launch!!! Right?"
+                    "text": "Pad, igniter, and controller are staged."
                 }
             ]
         },
         {
-            "id": "go",
-            "text": "Place the rocket on the pad, insert the igniter, connect the controller, and step back. On your call, press launch and track the flight.",
+            "id": "troubleshoot",
+            "text": "Troubleshooting branch: fix pad angle, re-seat igniter leads, and clear the field boundary. Then run pre-arm checks again.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-brief",
+                    "text": "Issues corrected. Re-run safety checks."
+                }
+            ]
+        },
+        {
+            "id": "arm",
+            "text": "Final checks complete. Arm the controller and launch only if everyone stays behind the safety line.",
             "options": [
                 {
                     "type": "process",
                     "process": "launch-rocket",
-                    "text": "3 ... 2 ... 1 ... LIFTOFF!!!"
+                    "text": "Initiate launch sequence."
                 },
                 {
                     "type": "goto",
-                    "goto": "done",
+                    "goto": "recovery",
                     "requiresItems": [
                         {
                             "id": "63362e5c-9897-4710-8ef6-26540fabd0ca",
                             "count": 1
                         }
                     ],
-                    "text": "Whoa! I can't believe I launched a rocket!! It didn't survive the landing, though, unfortunately."
+                    "text": "Launch complete. Move to recovery review."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Post-flight check: if body damage is minor, salvage and log lessons. If severe, pause and rebuild before next attempt.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "done",
+                    "text": "Recovery logged and lessons noted."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Damage too high. Loop through troubleshooting before another launch."
                 }
             ]
         },
         {
             "id": "done",
-            "text": "Still a huge win. You're on your way to rocketeer status. We'll iterate the design and aim for a clean recovery next time.",
+            "text": "You earned this one: printed parts, assembled safely, launched with evidence, and handled recovery decisions like a range lead.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Houston, we do not have a problem!"
+                    "text": "First launch complete."
                 }
             ]
         }
@@ -217,8 +243,8 @@
     "requiresQuests": ["3dprinter/start"],
     "hardening": {
         "passes": 0,
-        "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }

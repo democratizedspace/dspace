@@ -19,7 +19,6 @@ const processIds = new Set(processes.map((process) => process.id));
 const allowedProcessPlaceholders = new Set([
     'neutralize-acid',
     'biogas-ferment-50Wh',
-    'measure-wind-speed',
 ]);
 const allowedRewardPlaceholders = new Set(['15e3dd7e-374b-4233-b8c9-117e3057f009']);
 

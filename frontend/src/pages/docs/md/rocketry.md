@@ -23,41 +23,27 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Quest link: [/quests/rocketry/firstlaunch](/quests/rocketry/firstlaunch)
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinter/start`
+- Structural notes:
+    - Adds a non-linear early split: `paperwork` can route to `print-plan` (full build) or directly to `safety-brief` (already stocked path).
+    - Adds troubleshooting loop: `safety-brief` can route to `troubleshoot` and return to safety verification before arming.
+    - Adds post-launch recovery decision: `recovery` can either finish or route back through troubleshooting when damage is high.
 - Dialogue `requiresItems` gates:
-    - `components` → "Alright, all 4 components are now printed! What's next?" — 3D printed nosecone ×1, 3D printed body tube ×1, 3D printed fincan ×1, 3D printed nosecone coupler ×1
-    - `assemble` → "The rocket's assembled! Are we ready for launch?" — launch-capable model rocket ×1
-    - `launch` → "We are go for launch!!! Right?" — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
-    - `go` → "Whoa! I can't believe I launched a rocket!! It didn't survive the landing, though, unfortunately." — damaged model rocket ×1
+    - `print-plan` → "All four printed parts are complete." — 3D printed nosecone ×1, 3D printed body tube ×1, 3D printed fincan ×1, 3D printed nosecone coupler ×1
+    - `assemble` → "Rocket assembled and inspected." — launch-capable model rocket ×1
+    - `launch-gear` → "Pad, igniter, and controller are staged." — Model rocket launchpad ×1, rocket igniter ×1, launch controller ×1
+    - `arm` → "Launch complete. Move to recovery review." — damaged model rocket ×1
 - Grants:
-    - `launch` → "Oh cool, I'll never turn down free stuff!" — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
+    - `launch-gear` → "Thanks for the launch kit spares." — Model rocket launchpad ×1, rocket igniter ×3, launch controller ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - Rocketeer Award ×1
 - Processes used:
     - [3dprint-rocket-nosecone](/processes/3dprint-rocket-nosecone)
-        - Requires: none
-        - Consumes: entry-level FDM 3D printer ×1, green PLA filament ×13.9, dWatt ×223.4375
-        - Creates: entry-level FDM 3D printer ×1, 3D printed nosecone ×1, dPrint ×13.9
     - [3dprint-rocket-body-tube](/processes/3dprint-rocket-body-tube)
-        - Requires: none
-        - Consumes: entry-level FDM 3D printer ×1, green PLA filament ×18.48, dWatt ×266.67
-        - Creates: entry-level FDM 3D printer ×1, 3D printed body tube ×1, dPrint ×18.48
     - [3dprint-rocket-fincan](/processes/3dprint-rocket-fincan)
-        - Requires: none
-        - Consumes: entry-level FDM 3D printer ×1, green PLA filament ×52.3, dWatt ×1006.70139
-        - Creates: entry-level FDM 3D printer ×1, 3D printed fincan ×1, dPrint ×52.3
     - [3dprint-rocket-nosecone-coupler](/processes/3dprint-rocket-nosecone-coupler)
-        - Requires: none
-        - Consumes: entry-level FDM 3D printer ×1, green PLA filament ×6.32, dWatt ×112.92
-        - Creates: entry-level FDM 3D printer ×1, 3D printed nosecone coupler ×1, dPrint ×6.32
     - [assemble-rocket](/processes/assemble-rocket)
-        - Requires: none
-        - Consumes: 3D printed nosecone ×1, 3D printed body tube ×1, 3D printed fincan ×1, 3D printed nosecone coupler ×1, hobbyist solid rocket motor ×1, kevlar shock cord ×1, superglue ×0.1
-        - Creates: launch-capable model rocket ×1
     - [launch-rocket](/processes/launch-rocket)
-        - Requires: launch controller ×1, Model rocket launchpad ×1, rocket launch checklist ×1
-        - Consumes: launch-capable model rocket ×1, rocket igniter ×1
-        - Creates: damaged model rocket ×1, dLaunch ×1
 
 ## 2) Fuel Mixture Calibration (`rocketry/fuel-mixture`)
 
@@ -71,11 +57,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - Quest-level `grantsItems`: None
 - Rewards:
     - Rocketeer Award ×1
-- Processes used:
-    - [measure-wind-speed](/processes/measure-wind-speed)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
+- Processes used: - Requires: TBD (known gap; process IO not yet specified) - Consumes: TBD (known gap; process IO not yet specified) - Creates: TBD (known gap; process IO not yet specified)
 
 ## 3) Add a parachute (`rocketry/parachute`)
 
@@ -106,9 +88,15 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Quest link: [/quests/rocketry/preflight-check](/quests/rocketry/preflight-check)
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/parachute`
+- Structural notes:
+    - Measurement rubric hardening: adds `measure` evidence capture, `interpret` bounds check, and mandatory `retest` loop after corrective actions.
+    - Safety stop logic is explicit: NO-GO when sustained wind > 8 m/s or gust spread > 3 m/s.
 - Dialogue `requiresItems` gates:
-    - `supplies` → "All set, gear in hand." — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
-    - `arm` → "Launch successful!" — damaged model rocket ×1
+    - `supplies` → "Gear staged. Proceed to measurement evidence." — Model rocket launchpad ×1, rocket igniter ×1, launch controller ×1
+    - `measure` → "Measurement card captured. Interpret go/no-go." — placeholder reward item ×1
+    - `interpret` → "GO: values are inside limits. Arm for launch." — placeholder reward item ×1
+    - `retest` → "Re-test captured. Re-check go/no-go bounds." — placeholder reward item ×1
+    - `arm` → "Launch complete with evidence captured." — damaged model rocket ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -116,9 +104,6 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - Rocketeer Award ×1
 - Processes used:
     - [launch-rocket](/processes/launch-rocket)
-        - Requires: launch controller ×1, Model rocket launchpad ×1, rocket launch checklist ×1
-        - Consumes: launch-capable model rocket ×1, rocket igniter ×1
-        - Creates: damaged model rocket ×1, dLaunch ×1
 
 ## 5) Build a Guided Model Rocket (`rocketry/guided-rocket-build`)
 
@@ -201,8 +186,13 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Quest link: [/quests/rocketry/static-test](/quests/rocketry/static-test)
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/parachute`
+- Structural notes:
+    - Measurement rubric hardening: introduces explicit interpretation node with pass/fail logic before finish unlocks.
+    - Adds corrective + mandatory re-test branch: `corrective` routes to `retest`, which loops back to `burn` for fresh evidence.
+    - Safety stop conditions are called out up front for mount slip, side plume, and ignition delay.
 - Dialogue `requiresItems` gates:
-    - `burn` → "Data captured" — parachute ×1
+    - `burn` → "Thrust log captured. Move to interpretation." — static thrust log item ×1
+    - `interpret` → "PASS: stable burn in expected range." — static thrust log item ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -250,18 +240,20 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Quest link: [/quests/rocketry/wind-check](/quests/rocketry/wind-check)
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/preflight-check`
+- Structural notes:
+    - Measurement rubric hardening: requires measurement artifact capture (`measure`) and interpretation (`interpret`) before finish.
+    - Adds out-of-range corrective branch with required re-test loop (`corrective` -> `retest` -> `interpret`).
+    - Safety stop conditions are explicit: sustained wind <= 8 m/s and gust spread <= 3 m/s to proceed.
 - Dialogue `requiresItems` gates:
-    - None
+    - `measure` → "Wind card logged. Let's interpret the results." — placeholder reward item ×1
+    - `interpret` → "PASS: both values are inside limits." — placeholder reward item ×1
+    - `retest` → "Re-test recorded. Return to interpretation." — placeholder reward item ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - placeholder reward item (canonical ID: 15e3dd7e-374b-4233-b8c9-117e3057f009) ×1
 - Processes used:
-    - [measure-wind-speed](/processes/measure-wind-speed)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
 
 ## QA flow notes
 

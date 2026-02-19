@@ -1,29 +1,29 @@
 {
     "id": "rocketry/preflight-check",
     "title": "Preflight Checklist",
-    "description": "Confirm gear and run a quick launch sequence.",
+    "description": "Confirm launch gear, capture a wind-readiness artifact, and enforce go/no-go safety gates.",
     "image": "/assets/quests/model_rocket_preflight_checklist.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey friend! Nova here. Before we launch, we need a preflight check. Ready to run through it?",
+            "text": "Nova here. Preflight is where we earn safe launches. Ready for a real go/no-go review?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "supplies",
-                    "text": "Let's check the gear."
+                    "text": "Let's run the checklist."
                 }
             ]
         },
         {
             "id": "supplies",
-            "text": "You'll need a launch pad, an igniter, and a controller. Once you've got them, we can proceed.",
+            "text": "Stage launch pad, igniter, and controller. We don't continue without all three.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "arm",
+                    "goto": "measure",
                     "requiresItems": [
                         {
                             "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
@@ -38,18 +38,85 @@
                             "count": 1
                         }
                     ],
-                    "text": "All set, gear in hand."
+                    "text": "Gear staged. Proceed to measurement evidence."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Capture an on-pad wind reading for this launch window. This reading is your preflight evidence artifact.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "requiresItems": [
+                        {
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Measurement card captured. Interpret go/no-go."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Go/no-go bounds: sustained wind <= 8 m/s and gust spread <= 3 m/s. Any exceedance is an automatic NO-GO safety stop.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "arm",
+                    "requiresItems": [
+                        {
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
+                            "count": 1
+                        }
+                    ],
+                    "text": "GO: values are inside limits. Arm for launch."
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "NO-GO: out-of-range reading. Begin corrective loop."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective branch: hold launch, reposition pad, and wait for calmer conditions. Then run another measurement before re-evaluating.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Corrections complete. Mandatory re-test next."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Repeat the wind measurement. Preflight cannot finish until a fresh reading passes bounds.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "requiresItems": [
+                        {
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Re-test captured. Re-check go/no-go bounds."
                 }
             ]
         },
         {
             "id": "arm",
-            "text": "Everything looks good. Ready to fire?",
+            "text": "Final safety check: range clear, everyone behind the line, controller continuity confirmed.",
             "options": [
                 {
                     "type": "process",
                     "process": "launch-rocket",
-                    "text": "Initiate launch!"
+                    "text": "Initiate controlled launch sequence."
                 },
                 {
                     "type": "goto",
@@ -60,13 +127,13 @@
                             "count": 1
                         }
                     ],
-                    "text": "Launch successful!"
+                    "text": "Launch complete with evidence captured."
                 }
             ]
         },
         {
             "id": "done",
-            "text": "Nice work! Preflight complete and rocket soaring.",
+            "text": "Excellent preflight discipline. You verified bounds, handled safety stops, and launched responsibly.",
             "options": [
                 {
                     "type": "finish",
@@ -85,7 +152,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

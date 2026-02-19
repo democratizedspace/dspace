@@ -1,46 +1,101 @@
 {
     "id": "rocketry/static-test",
     "title": "Perform a Static Engine Test",
-    "description": "Fire your rocket engine while it's secured to verify thrust and stability.",
+    "description": "Run a restrained burn, interpret thrust evidence, and repeat with corrections when limits fail.",
     "image": "/assets/quests/model_rocket_static_engine_test.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Before launch day let's conduct a static burn. Secure the rocket to a stand and record the thrust curve.",
+            "text": "Before flight, we static-test the motor. Clamp it down, stand clear, and collect real thrust evidence.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Ready for the safety brief."
+                }
+            ]
+        },
+        {
+            "id": "safety",
+            "text": "Safety stop conditions: test aborts immediately on mount slip, side plume, or ignition delay beyond countdown. No exceptions.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "burn",
-                    "text": "Ready."
+                    "text": "Safety limits acknowledged. Run the burn."
                 }
             ]
         },
         {
             "id": "burn",
-            "text": "Ignite the engine remotely and keep clear. Use a scale under the mount to capture thrust data for analysis.",
+            "text": "Ignite remotely and log thrust output. Capture your test artifact before analysis.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Data captured",
+                    "goto": "interpret",
                     "requiresItems": [
                         {
                             "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
                             "count": 1
                         }
-                    ]
+                    ],
+                    "text": "Thrust log captured. Move to interpretation."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation rule: PASS when average thrust stays in the expected band and burn is stable. FAIL when thrust sags, spikes, or oscillates.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
+                            "count": 1
+                        }
+                    ],
+                    "text": "PASS: stable burn in expected range."
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "FAIL: out-of-range or unstable burn."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective branch: inspect nozzle fit, re-seat motor retainer, and verify igniter lead routing. Then re-run a full static test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Corrections complete. Mandatory re-test."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Run another restrained burn and capture a fresh thrust artifact before deciding go/no-go.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "burn",
+                    "text": "Re-run static burn now."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Excellent! Reviewing the numbers will help ensure a safe first flight.",
+            "text": "Great work. You proved performance with evidence and only accepted a launch-ready motor after passing bounds.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "Static test verified."
                 }
             ]
         }
@@ -54,7 +109,7 @@
     "requiresQuests": ["rocketry/parachute"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 95,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }

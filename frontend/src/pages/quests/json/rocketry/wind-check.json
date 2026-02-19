@@ -1,53 +1,103 @@
 {
     "id": "rocketry/wind-check",
     "title": "Check the Launch Winds",
-    "description": "Measure wind speed to ensure safe rocket launches.",
+    "description": "Measure wind speed, interpret limits, and re-test until launch conditions are safe.",
     "image": "/assets/quests/model_rocket_wind_check.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nimbus here. Wind is data, not vibes. Let's make sure it's safe to fly.",
+            "text": "Nimbus here. Wind is data, not vibes. We fly only when the numbers say go.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-brief",
+                    "text": "Copy that. What's the safe range?"
+                }
+            ]
+        },
+        {
+            "id": "safety-brief",
+            "text": "Hard stop if sustained wind is above 8 m/s or gust spread is above 3 m/s. If either limit is exceeded, we scrub and correct before launch.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Got it, let's check the wind."
+                    "text": "Understood. I'll collect a reading artifact now."
                 }
             ]
         },
         {
             "id": "measure",
-            "text": "Hold an anemometer at launch height and take a reading. Then take a second one.",
+            "text": "Take two anemometer readings at launch height and log them to your wind card.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "measure-wind-speed",
-                    "goto": "ready",
-                    "text": "Take an anemometer reading."
-                },
+                    "type": "goto",
+                    "goto": "interpret",
+                    "requiresItems": [
+                        {
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Wind card logged. Let's interpret the results."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation step: PASS means sustained <= 8 m/s and gust spread <= 3 m/s. FAIL means any value above limits.",
+            "options": [
                 {
                     "type": "goto",
                     "goto": "ready",
-                    "text": "Reading taken\u2014winds are calm."
+                    "requiresItems": [
+                        {
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
+                            "count": 1
+                        }
+                    ],
+                    "text": "PASS: both values are inside limits."
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "FAIL: values are out of range. Start corrective plan."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective branch: delay launch, move to a more sheltered pad orientation, and wait for a calmer window. Safety stop remains active until re-test passes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Corrections complete. Re-test required before we continue."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Run a mandatory re-test. No launch clearance without a fresh in-range measurement card.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "requiresItems": [
+                        {
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Re-test recorded. Return to interpretation."
                 }
             ]
         },
         {
             "id": "ready",
-            "text": "Looks good. Winds are within limits, launch window is open.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "done",
-                    "text": "Sweet, let's get this bird in the air!"
-                }
-            ]
-        },
-        {
-            "id": "done",
-            "text": "Good work. Always respect the wind; rockets prefer calm applause.",
+            "text": "Excellent discipline. We have measurement evidence and a documented pass. Launch window is now open.",
             "options": [
                 {
                     "type": "finish",
@@ -66,7 +116,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
