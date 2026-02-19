@@ -293,7 +293,7 @@ slug: '3dprinting'
     - `cooldown` → "Printer cleaned and reassembled." — entry-level FDM 3D printer (clean nozzle) ×1
     - `verify` → "Verification pass is clean and repair notes are logged." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×1
     - `verify` → "Fresh ooze or smoke appears during verification." — entry-level FDM 3D printer (clean nozzle) ×1
-    - `contamination` → "Safe to retry teardown and rebuild." — entry-level FDM 3D printer (clogged nozzle) ×1
+    - `contamination` → "Safe to retry teardown and rebuild." — entry-level FDM 3D printer (clean nozzle) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
