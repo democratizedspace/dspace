@@ -35,11 +35,11 @@
                 {
                     "type": "process",
                     "process": "repair-blob-of-death",
-                    "text": "Peel away plastic, swap the nozzle, re-seat wiring."
+                    "text": "Peel away plastic, swap the nozzle, and re-seat wiring."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
                     "text": "Printer cleaned and reassembled.",
                     "requiresItems": [
                         {
@@ -51,8 +51,57 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Run a controlled first-layer test and log the outcome. Pass only if adhesion is even and no fresh ooze wraps the nozzle in the first minute.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verification pass is clean and repair notes are logged.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "contamination",
+                    "text": "Fresh ooze or smoke appears during verification.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "contamination",
+            "text": "Troubleshooting branch: stop immediately, cool down, inspect heater block insulation, and clean residual filament before retrying. If wiring looks damaged, halt and replace components before power-on.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cooldown",
+                    "text": "Safe to retry teardown and rebuild.",
+                    "requiresItems": [
+                        {
+                            "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Blob removed, new nozzle installed. Next time, stay for the first layer, check Z offset, and keep the bed clean so you don't repeat the mess.",
+            "text": "Blob removed, nozzle stable, and verification logged. Next time, stay for the first layer, check Z offset, and keep the bed clean so you don't repeat the mess.",
             "options": [
                 {
                     "type": "finish",
@@ -71,7 +120,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

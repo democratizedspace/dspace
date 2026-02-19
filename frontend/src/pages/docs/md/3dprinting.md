@@ -124,14 +124,26 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/filament-change`
 - Dialogue `requiresItems` gates:
-    - `progress` → "I have enough!" — Benchy ×10
+    - `strategy` → "Main path: controlled batches." — entry-level FDM 3D printer (green PLA loaded) ×1
+    - `strategy` → "Alternate path: short burst run." — entry-level FDM 3D printer (green PLA loaded) ×1, safety goggles ×1
+    - `steady` → "Run a controlled Benchy batch." — entry-level FDM 3D printer (clean nozzle) ×1, green PLA filament ×15
+    - `steady` → "I logged checkpoints and reached ten clean parts." — Benchy ×10, sheet of printer paper ×1
+    - `burst` → "Run a burst batch." — entry-level FDM 3D printer (clean nozzle) ×1, green PLA filament ×15
+    - `burst` → "I spotted warping/stringing and need a recovery pass." — Benchy ×4
+    - `burst` → "Burst run stayed stable and reached ten parts." — Benchy ×10, sheet of printer paper ×1
+    - `recover` → "Validation passed; continue with controlled batches." — entry-level FDM 3D printer (green PLA loaded) ×1, sheet of printer paper ×1
+    - `evidence` → "Checklist complete: ten Benchies and usable run notes." — Benchy ×10, sheet of printer paper ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - green PLA filament ×1000
 - Processes used:
-    - None
+    - [3dprint-benchy](/processes/3dprint-benchy)
+        - Requires: entry-level FDM 3D printer ×1
+        - Consumes: green PLA filament ×15, dWatt ×150
+        - Creates: Benchy ×1, dPrint ×15
+
 
 ## 6) 3D Print 25 Benchies (`3dprinting/benchy_25`)
 
@@ -277,8 +289,11 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/nozzle-cleaning`
 - Dialogue `requiresItems` gates:
-    - `start` → "Kill power, let the blob cool, and list the damage." — entry-level FDM 3D printer (blob of death) ×1
-    - `cooldown` → "Printer cleaned and reassembled." — entry-level FDM 3D printer ×1
+    - `start` → "Kill power, let the blob cool, and list the damage." — entry-level FDM 3D printer (clogged nozzle) ×1
+    - `cooldown` → "Printer cleaned and reassembled." — entry-level FDM 3D printer (clean nozzle) ×1
+    - `verify` → "Verification pass is clean and repair notes are logged." — entry-level FDM 3D printer (clean nozzle) ×1, sheet of printer paper ×1
+    - `verify` → "Fresh ooze or smoke appears during verification." — entry-level FDM 3D printer (clean nozzle) ×1
+    - `contamination` → "Safe to retry teardown and rebuild." — entry-level FDM 3D printer (clogged nozzle) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -288,11 +303,12 @@ slug: '3dprinting'
     - [3dprint-blob-of-death](/processes/3dprint-blob-of-death)
         - Requires: none
         - Consumes: entry-level FDM 3D printer ×1, green PLA filament ×10, dWatt ×100
-        - Creates: entry-level FDM 3D printer (blob of death) ×1
+        - Creates: entry-level FDM 3D printer (clogged nozzle) ×1
     - [repair-blob-of-death](/processes/repair-blob-of-death)
         - Requires: safety goggles ×1, needle-nose pliers ×1
-        - Consumes: entry-level FDM 3D printer (blob of death) ×1, 0.4 mm brass nozzle ×1
-        - Creates: entry-level FDM 3D printer ×1
+        - Consumes: entry-level FDM 3D printer (clogged nozzle) ×1, 0.4 mm brass nozzle ×1
+        - Creates: entry-level FDM 3D printer (clean nozzle) ×1
+
 
 ## 12) Print a Phone Stand (`3dprinting/phone-stand`)
 
@@ -372,7 +388,13 @@ slug: '3dprinting'
     - `start` → "Green PLA is loaded and ready." — entry-level FDM 3D printer (green PLA loaded) ×1
     - `setup` → "Print the stepped Benchy." — entry-level FDM 3D printer (green PLA loaded) ×1, safety goggles ×1, digital calipers ×1
     - `setup` → "Benchy finished and cooled." — stringing-tuned Benchy ×1
-    - `inspect` → "Stringing is gone and notes are saved." — stringing-tuned Benchy ×1
+    - `setup` → "I smell burnt filament or see nozzle ooze piling up." — stringing-tuned Benchy ×1
+    - `inspect` → "Measurements are logged; compare against thresholds." — stringing-tuned Benchy ×1, digital calipers ×1
+    - `inspect` → "Stringing still exceeds 2 mm whiskers on bridges." — stringing-tuned Benchy ×1
+    - `interpret` → "Chosen profile meets thresholds and notes are archived." — stringing-tuned Benchy ×1, digital calipers ×1
+    - `interpret` → "At least one threshold failed; run a corrective pass." — stringing-tuned Benchy ×1
+    - `retest` → "Corrective plan logged; rerun the test print." — entry-level FDM 3D printer (green PLA loaded) ×1
+    - `safety-stop` → "Safety checks complete; continue troubleshooting." — safety goggles ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -383,6 +405,7 @@ slug: '3dprinting'
         - Requires: entry-level FDM 3D printer (green PLA loaded) ×1, safety goggles ×1, digital calipers ×1
         - Consumes: green PLA filament ×20, dWatt ×200
         - Creates: stringing-tuned Benchy ×1, dPrint ×20
+
 
 ## 15) Print a Temperature Tower (`3dprinting/temperature-tower`)
 
