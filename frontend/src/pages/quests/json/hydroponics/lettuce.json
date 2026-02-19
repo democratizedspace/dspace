@@ -112,7 +112,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "soak",
+                    "goto": "kit",
                     "text": "Batch failed; restart from setup artifacts."
                 }
             ]
@@ -150,8 +150,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "transfer",
-                    "text": "Heads underdeveloped; extend grow-out and re-check."
+                    "goto": "stress",
+                    "text": "Heads underdeveloped or stressed; run recovery checks before next cycle."
                 },
                 {
                     "type": "goto",

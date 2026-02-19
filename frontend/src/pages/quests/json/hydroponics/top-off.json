@@ -11,9 +11,25 @@
             "text": "Evaporation and thirsty roots drop water level fast. We'll top off, then verify EC so concentration drift does not sneak in.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Sync the working reservoir state before top-off."
+                },
+                {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Run the top-off checklist."
+                    "text": "Run the top-off checklist.",
+                    "requiresItems": [
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -77,8 +93,35 @@
         },
         {
             "id": "fill",
-            "text": "Add water slowly to the marked line, avoiding root shock. Then capture a post-top-off EC log to prove the reservoir stayed in workable range.",
+            "text": "Add water slowly to the marked line, avoiding root shock. If EC drifted, re-balance nutrients first, then capture a fresh EC log.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "refresh-hydroponic-tub",
+                    "text": "Re-balance nutrients before measuring EC.",
+                    "requiresItems": [
+                        {
+                            "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                },
                 {
                     "type": "process",
                     "process": "measure-ec-solution",
@@ -109,12 +152,12 @@
         },
         {
             "id": "verify",
-            "text": "Interpret before closing: if EC is now outside your crop band, refresh nutrients and re-test. If in band, lock in the cadence.",
+            "text": "Interpret before closing: if EC is outside your crop band, return to fill for nutrient re-balance and re-test. If in band, lock in cadence.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "fill",
-                    "text": "EC still off-target; re-balance and re-check."
+                    "text": "EC still off-target; return to fill for correction + re-check."
                 },
                 {
                     "type": "goto",

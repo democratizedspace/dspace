@@ -146,8 +146,8 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `transfer` → "Outcome artifact ready: mature heads." — harvestable lettuce head ×10
     - `harvest` → "Harvest quality passes and leaves are packed." — harvested lettuce leaves ×10
 - Recovery/troubleshooting branches:
-    - `germinate` → `stress` for damping-off/stretching; loops to `germinate` or restart at `soak`
-    - `harvest` can branch back to `transfer` when heads are underdeveloped
+    - `germinate` → `stress` for damping-off/stretching; loops to `germinate` or full restart at `kit`
+    - `harvest` routes to `stress` when heads are underdeveloped before restarting the next grow cycle
 - Grants:
     - `kit` → "Stock me up." — Lettuce Seeds ×10, hydroponic starter plug ×10
     - Quest-level `grantsItems`: None
@@ -237,7 +237,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `measure` → "Capture EC reading." — EC meter ×1, hydroponics tub (ready) ×1
     - `measure` → "Reading logged; let's interpret it." — hydroponic nutrient solution EC log ×1
     - `interpret` → "In range (1.2-1.8). Close and record cadence." — hydroponic nutrient solution EC log ×1
-    - `adjust` → "Apply correction and circulate." — hydroponic nutrient concentrate (1 L) ×1, nitrile gloves (pair) ×1, 50 mL measuring syringe ×1, hydroponics tub (ready) ×1
+    - `adjust` → "Apply correction and circulate." — hydroponic nutrient concentrate (1 L) ×1, nitrile gloves (pair) ×1, safety goggles ×1, submersible water pump ×1, hydroponics tub (ready) ×1
 - Recovery/troubleshooting branches:
     - Out-of-range/caution path routes through `adjust` and loops back to `measure`
 - Safety/ops checks:
@@ -398,14 +398,16 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/pump-install`
 - Dialogue `requiresItems` gates:
+    - `start` → "Run the top-off checklist." — hydroponics tub (ready) ×1
     - `prep` → "Supplies ready and system looks stable." — 5 gallon bucket of dechlorinated tap water ×1, hydroponics tub (ready) ×1
+    - `fill` → "Re-balance nutrients before measuring EC." — hydroponic nutrient concentrate (1 L) ×1, nitrile gloves (pair) ×1, safety goggles ×1, submersible water pump ×1, hydroponics tub (ready) ×1
     - `fill` → "Record post-top-off EC." — EC meter ×1, hydroponics tub (ready) ×1
     - `fill` → "Water added and EC measured." — hydroponic nutrient solution EC log ×1
 - Recovery/troubleshooting branches:
     - `prep` can branch to `diagnose` and `pause` for leak/cavitation recovery before re-entry
-    - `verify` loops back to `fill` when EC remains off-target
+    - `verify` loops back to `fill` for nutrient correction + EC re-check when off-target
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - `start` → "Sync the working reservoir state before top-off." — hydroponics tub (ready) ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
