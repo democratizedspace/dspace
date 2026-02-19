@@ -1,49 +1,221 @@
 {
     "id": "aquaria/balance-ph",
     "title": "Balance aquarium pH",
-    "description": "Use buffer solution to adjust tank pH and confirm stability.",
+    "description": "Capture a baseline pH reading, dose buffer safely, then re-test and log a stable window before declaring the tank recovered.",
     "image": "/assets/quests/aquarium_ph_balance.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "pH is off. Let's bring it back into range.",
+            "text": "Before we dose anything, suit up and capture a baseline. Gloves and goggles stay on, and every reading goes in the logbook so we can prove the trend.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "buffer",
-                    "text": "Ready to adjust"
+                    "goto": "baseline",
+                    "text": "Safety gear and logbook are ready.",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "buffer",
-            "text": "Add the buffer according to instructions and stir well.",
+            "id": "baseline",
+            "text": "Run a pH strip now and mark the value as your baseline. If the strip color is ambiguous, repeat before dosing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-aquarium-ph",
+                    "text": "Take baseline pH reading.",
+                    "goto": "baseline-log",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline-log",
+                    "text": "Baseline strip reading is captured.",
+                    "requiresItems": [
+                        {
+                            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline-log",
+            "text": "Log the baseline before dosing so we can compare pre/post values instead of guessing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-aquarium-ph-reading",
+                    "text": "Record baseline in the logbook.",
+                    "goto": "adjust",
+                    "requiresItems": [
+                        {
+                            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+                            "count": 1
+                        },
+                        {
+                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Baseline entry is logged with date/time.",
+                    "requiresItems": [
+                        {
+                            "id": "9c392043-4067-4f49-8038-38eef00e0b24",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Dose in tiny increments, circulate, then wait before retesting. Never mix pH-up and pH-down concentrates directly, and keep livestock observed for stress.",
             "options": [
                 {
                     "type": "process",
                     "process": "adjust-ph",
-                    "text": "Adjust pH"
+                    "text": "Dose and circulate buffer safely.",
+                    "goto": "retest",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
-                    "goto": "verify",
-                    "text": "Buffer added"
+                    "goto": "retest",
+                    "text": "Dose complete; ready to re-test.",
+                    "requiresItems": [
+                        {
+                            "id": "9c392043-4067-4f49-8038-38eef00e0b24",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "verify",
-            "text": "Check the pH again to ensure it's stable.",
+            "id": "retest",
+            "text": "Take a post-dose pH reading and compare against baseline. Stable range is 6.8-7.6 with no sudden swing.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "pH stable",
+                    "type": "process",
+                    "process": "measure-aquarium-ph",
+                    "text": "Capture post-dose reading.",
+                    "goto": "interpret",
                     "requiresItems": [
                         {
                             "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Post-dose reading captured.",
+                    "requiresItems": [
+                        {
+                            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the result before closing: in-range and gentle drift means success; out-of-range or fish stress means troubleshoot first.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-aquarium-ph-reading",
+                    "text": "Log stable result (6.8-7.6) and close.",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+                            "count": 1
+                        },
+                        {
+                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Reading still out of range or livestock looks stressed.",
+                    "requiresItems": [
+                        {
+                            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Pause feeding for one cycle, re-check KH source water, and dose only half-steps until the drift settles. Re-test after each correction.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "adjust-ph",
+                    "text": "Apply a smaller corrective dose.",
+                    "goto": "retest",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
                             "count": 1
                         }
                     ]
@@ -52,11 +224,11 @@
         },
         {
             "id": "finish",
-            "text": "Nice work keeping your fish comfortable!",
+            "text": "Nice recovery. You captured baseline and post-dose evidence, logged the result, and stabilized pH without shock swings.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Happy fish"
+                    "text": "Tank chemistry is back under control."
                 }
             ]
         }
@@ -71,7 +243,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

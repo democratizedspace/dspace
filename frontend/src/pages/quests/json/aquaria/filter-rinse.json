@@ -1,25 +1,25 @@
 {
     "id": "aquaria/filter-rinse",
     "title": "Rinse Sponge Filter",
-    "description": "Stage a bucket of dechlorinated water, rinse the sponge core, and restart gentle flow without crashing the biofilter.",
+    "description": "Capture pre-rinse flow evidence, rinse in dechlorinated water, and verify restored gentle flow before closing maintenance.",
     "image": "/assets/quests/rinse_sponge_filter_bucket.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Flow is slowing and the shrimp look annoyed. Set out dechlorinated water, kill power to the air pump, and keep the sponge wet while you work.",
+            "text": "Flow is slowing and the shrimp look annoyed. Record the pre-rinse state, unplug the pump, and keep the sponge submerged so your bacteria colony survives.",
             "options": [
                 {
                     "type": "process",
                     "process": "bucket-water-dechlorinated",
-                    "text": "Leave out a 5 gal bucket to gas off chlorine first.",
-                    "goto": "prep"
+                    "text": "Stage dechlorinated bucket water first.",
+                    "goto": "baseline"
                 },
                 {
                     "type": "goto",
-                    "goto": "prep",
-                    "text": "Bucket's ready and the pump is unplugged.",
+                    "goto": "baseline",
+                    "text": "Bucket staged, pump unplugged, and PPE on.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -42,13 +42,34 @@
             ]
         },
         {
+            "id": "baseline",
+            "text": "Confirm this is a real maintenance event: note the weak bubble pattern before cleaning so we can compare after restart.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Pre-rinse flow is visibly weak and recorded.",
+                    "requiresItems": [
+                        {
+                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "prep",
-            "text": "Lift the sponge out with the airline still attached, dunk it in your dechlorinated bucket, and squeeze gently until the water runs mostly clear. Keep everything submerged so the nitrifiers stay alive.",
+            "text": "Lift the sponge out with the airline attached and squeeze only in the dechlorinated bucket. If sludge clouds keep returning, branch to a contamination rinse.",
             "options": [
                 {
                     "type": "process",
                     "process": "rinse-aquarium-filter",
-                    "text": "Squeeze the sponge only in dechlorinated water.",
+                    "text": "Run normal rinse cycle.",
                     "goto": "restart",
                     "requiresItems": [
                         {
@@ -67,8 +88,19 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "contamination",
+                    "text": "Water still runs dark or smells off.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
                     "goto": "restart",
-                    "text": "Media is rinsed and still wet.",
+                    "text": "Core is rinsed and still wet.",
                     "requiresItems": [
                         {
                             "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
@@ -79,14 +111,26 @@
             ]
         },
         {
+            "id": "contamination",
+            "text": "Good catch. Discard the dirty bucket, stage fresh dechlorinated water, and repeat a gentle squeeze until the rinse is clear. Never use chlorinated tap water directly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Prepare fresh dechlorinated rinse water.",
+                    "goto": "prep"
+                }
+            ]
+        },
+        {
             "id": "restart",
-            "text": "Slide the sponge back, reconnect the airline, crack the valve open, and watch for steady bubbles instead of a sandblaster.",
+            "text": "Reconnect the airline, start the pump gradually, and verify bubbles are steady but not blasting livestock around the tank.",
             "options": [
                 {
                     "type": "process",
                     "process": "restart-sponge-filter",
-                    "text": "Prime the air line and restart the flow.",
-                    "goto": "finish",
+                    "text": "Restart and tune airflow.",
+                    "goto": "verify",
                     "requiresItems": [
                         {
                             "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
@@ -104,8 +148,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Flow is restored without blasting the inhabitants.",
+                    "goto": "verify",
+                    "text": "Flow is restored and livestock behavior looks normal.",
                     "requiresItems": [
                         {
                             "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
@@ -116,12 +160,44 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Final check: compare post-rinse flow to the weak baseline. If flow is still weak, run one more rinse loop before closing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pre/post evidence confirms flow recovery.",
+                    "requiresItems": [
+                        {
+                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                            "count": 1
+                        },
+                        {
+                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Still weak; repeat rinse loop before closing.",
+                    "requiresItems": [
+                        {
+                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Clean sponge, quiet pump, happy bacteria. Rinse weekly or when the bubbles slow, and you avoid a full cycling restart.",
+            "text": "Clean sponge, stable bubbles, and no chlorine shock. Nice maintenance discipline.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Set a reminder for the next rinse."
+                    "text": "Set the next rinse checkpoint."
                 }
             ]
         }
@@ -136,7 +212,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-19",
