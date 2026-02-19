@@ -1,25 +1,30 @@
 {
     "id": "geothermal/install-backup-thermistor",
     "title": "Install Backup Thermistor",
-    "description": "Add a second probe so you can cross-check ground temperature readings.",
+    "description": "Install a backup probe, verify parity with the primary sensor, and roll back safely if readings drift.",
     "image": "/assets/quests/geothermal_install_backup_thermistor.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Redundancy keeps data honest. Ready to add a backup thermistor?",
+            "text": "Lock out the controller, label the new lead, and keep drip loops below terminals. Ready for install \u2192 verify sequencing?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "materials",
-                    "text": "Sure, what do I need?"
+                    "text": "Safety checks complete"
+                },
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Remind me what to stage first"
                 }
             ]
         },
         {
             "id": "materials",
-            "text": "You'll need another thermistor wired to your logger.",
+            "text": "Stage a spare thermistor and your logger. We only close this task once the backup agrees with the primary sensor.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -29,29 +34,29 @@
                             "count": 1
                         }
                     ],
-                    "text": "Here's a spare thermistor."
+                    "text": "Issue spare thermistor"
                 },
                 {
                     "type": "goto",
                     "goto": "install",
+                    "text": "Parts staged",
                     "requiresItems": [
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
                             "count": 1
                         }
-                    ],
-                    "text": "I've got the parts."
+                    ]
                 }
             ]
         },
         {
             "id": "install",
-            "text": "Wire it up and log a baseline reading with arduino-thermistor-read.",
+            "text": "Install the backup probe with strain relief and run a baseline capture.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Reading logged.",
+                    "goto": "verify",
+                    "text": "Backup probe installed and baseline logged",
                     "process": "arduino-thermistor-read",
                     "requiresItems": [
                         {
@@ -63,12 +68,62 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Verification target: backup and primary differ by no more than 1.5\u00b0C over a 10-minute run.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Parity verified within 1.5\u00b0C",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Drift is too high"
+                }
+            ]
+        },
+        {
+            "id": "rollback",
+            "text": "Rollback path: isolate the new probe, restore last-known-good wiring, then re-seat and retest once connectors are dry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Rollback complete, retry install",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Pause and re-run safety lockout"
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great! Now any drift in your sensors will stand out.",
+            "text": "Excellent. Keep both channel IDs in your notes so future seasonal drift checks have a clear control sensor.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "On to data collection."
+                    "text": "Backup thermistor validated",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -79,7 +134,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["geothermal/calibrate-ground-sensor"],
+    "requiresQuests": [
+        "geothermal/calibrate-ground-sensor"
+    ],
     "hardening": {
         "passes": 0,
         "score": 85,
