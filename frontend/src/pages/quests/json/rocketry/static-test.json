@@ -121,12 +121,10 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "rocketry/parachute"
-    ],
+    "requiresQuests": ["rocketry/parachute"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }

@@ -199,9 +199,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "rocketry/parachute"
-    ],
+    "requiresQuests": ["rocketry/parachute"],
     "hardening": {
         "passes": 0,
         "score": 95,
