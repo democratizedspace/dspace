@@ -69,6 +69,10 @@
                         {
                             "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
                             "count": 1
+                        },
+                        {
+                            "id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
+                            "count": 1
                         }
                     ]
                 }
@@ -80,11 +84,11 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "interpret",
-                    "text": "Both readings logged. Time to interpret.",
-                    "requiresItems": [
+                    "goto": "wind-evidence",
+                    "text": "Record both readings in the pad log.",
+                    "grantsItems": [
                         {
-                            "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
                             "count": 1
                         }
                     ]
@@ -93,6 +97,23 @@
                     "type": "goto",
                     "goto": "troubleshoot",
                     "text": "Readings are gusty or inconsistent. Hold the launch."
+                }
+            ]
+        },
+        {
+            "id": "wind-evidence",
+            "text": "Great. You now have a timestamped wind log with two readings for this launch window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Both readings are documented. Time to interpret.",
+                    "requiresItems": [
+                        {
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
