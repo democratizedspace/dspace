@@ -71,7 +71,7 @@
         },
         {
             "id": "interpret",
-            "text": "Interpretation gate: 5.5-6.5 passes. Out-of-range readings must go through corrective dosing and a mandatory retest.",
+            "text": "Interpretation gate: evaluate only the fresh reading from this loop. 5.5-6.5 passes; out-of-range readings must go through corrective dosing and a mandatory retest.",
             "options": [
                 {
                     "type": "goto",
@@ -80,6 +80,10 @@
                     "requiresItems": [
                         {
                             "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                             "count": 1
                         }
                     ]
@@ -94,7 +98,7 @@
                             "count": 1
                         },
                         {
-                            "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                             "count": 1
                         }
                     ]

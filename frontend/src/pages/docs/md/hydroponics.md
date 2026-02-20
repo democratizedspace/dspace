@@ -266,7 +266,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `prep` → "PPE and meter are staged." — digital pH meter ×1, nitrile gloves (pair) ×1, safety goggles ×1
     - `measure` → "Reading captured; interpret against target band." — hydroponic pH reading ×1
     - `interpret` → "Reading is within 5.5-6.5; proceed to logging." — hydroponic pH reading ×1
-    - `interpret` → "Reading is out of range; start correction cycle." — hydroponic pH reading ×1, pH down solution (500 mL) ×1
+    - `interpret` → "Reading is out of range; start correction cycle." — hydroponic pH reading ×1, hydroponics tub (ready) ×1
     - `log` → "Stable reading logged and reviewed." — hydroponic pH log ×1
 - Recovery/troubleshooting branches:
     - `adjust` loops back to `measure` for mandatory retest
@@ -285,9 +285,9 @@ Hydroponics quests build practical progression through the hydroponics skill tre
         - Consumes: pH strip ×1
         - Creates: hydroponic pH reading ×1
     - [adjust-ph](/processes/adjust-ph)
-        - Requires: hydroponics tub (ready) ×1, pH down solution (500 mL) ×1, nitrile gloves (pair) ×1, safety goggles ×1
-        - Consumes: pH down solution (500 mL) ×0.01
-        - Creates: hydroponics tub (ready) ×1
+        - Requires: nitrile gloves (pair) ×1, safety goggles ×1, glass stir rod ×1, pH down solution (500 mL) ×1, pH up solution (potassium carbonate) ×1
+        - Consumes: pH down solution (500 mL) ×0.05, pH up solution (potassium carbonate) ×0.05
+        - Creates: None
     - [log-stable-ph](/processes/log-stable-ph)
         - Requires: hydroponics tub (ready) ×1, hydroponic pH reading ×1
         - Consumes: hydroponic pH reading ×1
@@ -415,8 +415,8 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `requiresQuests`: `hydroponics/stevia`
 - Dialogue `requiresItems` gates:
     - `setup` → "Mother plants and ready tub are staged." — harvested stevia plant ×10, hydroponics tub (ready) ×1
-    - `regrow` → "New growth appears; verify outcome evidence." — harvestable stevia plant ×10
-    - `verify` → "Outcome verified; regrow cycle is healthy." — harvestable stevia plant ×10, hydroponics tub (ready) ×1
+    - `regrow` → "New growth appears; verify outcome evidence." — harvestable stevia plant ×10, hydroponics tub (nutrient deficient) ×1
+    - `verify` → "Outcome verified; regrow cycle is healthy." — harvestable stevia plant ×10
 - Recovery/troubleshooting branches:
     - `recover` refreshes nutrient chemistry and loops back to `setup`
 - Safety/ops checks:
