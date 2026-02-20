@@ -1,80 +1,139 @@
 {
     "id": "aquaria/guppy",
     "title": "Add guppies",
-    "description": "Introduce colorful guppies to your community tank.",
+    "description": "Introduce colorful guppies with staged acclimation, stress handling, and post-release verification.",
     "image": "/assets/quests/add_guppies_to_tank.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Those shrimp are thriving! Ready for some guppies? They prefer 24-28\u00b0C water, so let's warm the tank first.",
+            "text": "Those shrimp are thriving. Before adding guppies, lock the tank at 24-28°C and keep a net and bucket ready so we can respond if fish show stress.",
             "options": [
                 {
                     "type": "process",
                     "process": "heat-walstad",
-                    "text": "Install the heater.",
-                    "goto": "acquire"
+                    "text": "Heat and stabilize the tank first.",
+                    "goto": "acclimate"
                 },
                 {
                     "type": "goto",
-                    "goto": "acquire",
+                    "goto": "acclimate",
                     "requiresItems": [
                         {
                             "id": "8c0f72a2-db79-4238-b80f-97721def169f",
                             "count": 1
                         }
                     ],
-                    "text": "Tank is at guppy-friendly temperature."
+                    "text": "Tank is already at guppy-safe temperature."
                 }
             ]
         },
         {
-            "id": "acquire",
-            "text": "Pick three females and one male and float the bag in the tank to match temperature.",
+            "id": "acclimate",
+            "text": "Select three females and one male, float the bag for 20 minutes with lights dimmed, and keep store water out of your tank.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "release",
-                    "text": "Temperature matched."
+                    "text": "Temperature matched and fish behavior is calm."
+                },
+                {
+                    "type": "goto",
+                    "goto": "stress-response",
+                    "text": "Fish are gulping or clamping fins; run stress recovery first."
+                }
+            ]
+        },
+        {
+            "id": "stress-response",
+            "text": "Troubleshoot before release: extend float time, reduce room light, and confirm the tank still reads 24-28°C before trying again.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Log a recovery temperature check."
+                },
+                {
+                    "type": "goto",
+                    "goto": "acclimate",
+                    "text": "Recovery check logged; retry acclimation.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "release",
-            "text": "Gently net the guppies into the tank and discard the store water.",
+            "text": "Gently net guppies into the aquarium and discard store water. Keep cords dry and avoid sudden pours that shock fish.",
             "options": [
                 {
                     "type": "process",
                     "process": "stock-guppies",
-                    "text": "Introduce them.",
-                    "goto": "finish"
+                    "text": "Introduce guppies with a net.",
+                    "goto": "verify"
                 },
                 {
                     "type": "goto",
-                    "goto": "acquire",
-                    "text": "I need to recheck and acclimate longer."
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
+                    "text": "Guppies are in the tank without store water.",
                     "requiresItems": [
                         {
                             "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
                             "count": 1
                         }
-                    ],
-                    "text": "Guppies are now in the tank."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification pass: watch breathing and swimming for 10 minutes, then log a temperature reading to prove stable post-release conditions.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Record post-release temperature."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Guppies are active and a post-release reading is logged.",
+                    "requiresItems": [
+                        {
+                            "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                            "count": 1
+                        },
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stress-response",
+                    "text": "Fish are flashing or gasping; pause and recover before closure.",
+                    "requiresItems": [
+                        {
+                            "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Fish are in and seem happy!",
+            "text": "Great work. Continue daily checks this week so guppies settle in without temperature swings.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All done."
+                    "text": "Guppy group acclimated and verified."
                 }
             ]
         }
@@ -89,7 +148,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -42,6 +42,17 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "stabilize",
+                    "text": "Adhesive wrinkled or trapped bubbles formed; reset before taking a reading.",
+                    "requiresItems": [
+                        {
+                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
                     "goto": "check",
                     "text": "Strip is attached and seated",
                     "requiresItems": [
@@ -64,8 +75,58 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "text": "Reading recorded",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the reading before closure: aim for 24-28°C while cycling. If the strip reads outside range, hold stocking and run a corrective check loop.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading is inside 24-28°C and logged.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stabilize",
+                    "text": "Reading is out of range; pause and stabilize before rechecking.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "stabilize",
+            "text": "Troubleshoot safely: confirm no direct sun on the strip, keep heaters unplugged while hands are in the tank area, and wait 10 minutes before re-reading.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Capture a fresh stabilization reading"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Fresh reading logged; re-evaluate range.",
                     "requiresItems": [
                         {
                             "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
@@ -96,7 +157,7 @@
     "hardening": {
         "passes": 4,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-13",

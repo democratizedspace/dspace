@@ -261,9 +261,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [x] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`. (PR #3627)
   - [x] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming. (PR #3627)
 - `aquaria/guppy`
-  - [ ] Observed issue: `aquaria/guppy` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
-  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
-  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
+  - [x] Observed issue: `aquaria/guppy` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated. (PR #3634)
+  - [x] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`. (PR #3634)
+  - [x] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming. (PR #3634)
 - `aquaria/heater-install`
   - [x] Observed issue: `aquaria/heater-install` reads like a one-pass install task, with verify/rollback state changes not clearly represented. (PR #3620)
   - [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3620)
@@ -293,13 +293,13 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3627)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3627)
 - `aquaria/thermometer`
-  - [ ] Observed issue: `aquaria/thermometer` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue: `aquaria/thermometer` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3634)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3634)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3634)
 - `aquaria/top-off`
-  - [ ] Observed issue: `aquaria/top-off` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue: `aquaria/top-off` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3634)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3634)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3634)
 - `aquaria/walstad`
   - [ ] Observed issue: `aquaria/walstad` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
   - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
