@@ -8,44 +8,121 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The nutrient bath gets gunky over time. Let's replace it to keep your roots happy.",
+            "text": "Hydro reporting in. A reservoir refresh should be drain, mix, and verify—not a one-click swap.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "drain",
-                    "text": "Ready to refresh."
+                    "goto": "isolate",
+                    "text": "Start the refresh protocol."
                 }
             ]
         },
         {
-            "id": "drain",
-            "text": "Drain the old solution and dispose of it responsibly. Then mix a new batch of nutrients.",
+            "id": "isolate",
+            "text": "Safety first: isolate pump power and stage measuring tools before opening the tub. If power cannot be isolated, branch to troubleshooting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "refresh",
+                    "text": "Power is isolated and dosing tools are staged.",
+                    "requiresItems": [
+                        {
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "count": 1
+                        },
+                        {
+                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
+                            "count": 1
+                        },
+                        {
+                            "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Pump isolation failed or tubing leaked during prep."
+                }
+            ]
+        },
+        {
+            "id": "refresh",
+            "text": "Drain spent solution and mix a fresh nutrient batch with measured concentrate.",
             "options": [
                 {
                     "type": "process",
                     "process": "refresh-hydroponic-tub",
-                    "text": "Mixing fresh solution."
+                    "text": "Run refresh cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "count": 1
+                        },
+                        {
+                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
+                            "count": 1
+                        },
+                        {
+                            "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
+                    "text": "Fresh solution mixed; verify circulation state.",
                     "requiresItems": [
                         {
                             "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                             "count": 1
                         }
-                    ],
-                    "text": "All filled up!"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: confirm reservoir level is stable and no leaks appeared after refill. If either check fails, return to recovery.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Level dropped or fittings are weeping."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reservoir level is stable and the fresh tub is ready.",
+                    "requiresItems": [
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: reseat lines, tighten clamps, and re-isolate power before running another refresh attempt.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "isolate",
+                    "text": "Repairs complete; restart isolation checks."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Sweet! Fresh nutrients mean faster growth and fewer pathogens.",
+            "text": "Excellent. You validated both fresh-solution evidence and post-fill stability, so this refresh is production-safe.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Back to growing!"
+                    "text": "Reservoir refreshed with verification loop."
                 }
             ]
         }

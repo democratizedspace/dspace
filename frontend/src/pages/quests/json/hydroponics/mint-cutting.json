@@ -8,23 +8,53 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Fancy some mint tea? Let's clone a cutting.",
+            "text": "Hydro here. We'll stage a healthy cutting, plant it cleanly, and confirm the clone can survive the first day.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "prep",
-                    "text": "Show me how."
+                    "goto": "stage",
+                    "text": "Walk me through clone staging."
                 }
             ]
         },
         {
-            "id": "prep",
-            "text": "Trim a healthy stem, pop it into a soaked plug, and set it in a net cup.",
+            "id": "stage",
+            "text": "Select a non-wilted mint tip and stage PPE before handling the plug. If the cutting looks weak, branch to recovery instead of forcing it.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plant",
+                    "text": "Healthy tip selected; gloves and goggles are on.",
+                    "requiresItems": [
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Cutting is stressed or stem tissue looks damaged."
+                }
+            ]
+        },
+        {
+            "id": "plant",
+            "text": "Plant the mint cutting into a soaked plug and keep the media damp while roots establish.",
             "options": [
                 {
                     "type": "process",
                     "process": "clone-mint-cutting",
-                    "text": "Cut and plant",
+                    "text": "Plant and seat the cutting.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -38,15 +68,15 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Cutting is nestled in",
+                    "goto": "stability",
+                    "text": "Cutting is seated and humidity dome is in place.",
                     "requiresItems": [
                         {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
                             "count": 1
                         },
                         {
-                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                             "count": 1
                         }
                     ]
@@ -54,12 +84,45 @@
             ]
         },
         {
+            "id": "stability",
+            "text": "Stability gate: confirm the clone stayed turgid through the first moisture check. If leaves droop, adjust moisture/light and retry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Leaves drooped after setup; run recovery steps."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Clone stayed upright and media stayed evenly damp.",
+                    "requiresItems": [
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: trim damaged tissue, re-seat in a fresh soaked plug, and move the dome out of direct heat before trying again.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stage",
+                    "text": "Recovery complete; stage a healthy replacement cutting."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! Keep the cube moist and wait for roots to emerge.",
+            "text": "Nice clone handoff. With staging proof and a stability check complete, your mint propagation is ready for follow-up growth.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait for fresh mint!"
+                    "text": "Mint cutting cloned with recovery safeguards."
                 }
             ]
         }

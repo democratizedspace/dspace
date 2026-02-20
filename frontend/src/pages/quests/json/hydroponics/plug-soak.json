@@ -8,44 +8,109 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Rockwool cubes arrive dry. They need a good soak before any seeds touch them.",
+            "text": "Hydro here. Dry plugs wick unevenly, so we'll stage clean water, soak, then verify saturation before we move on.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Run the plug-soak checklist."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Prep step: use a clean bucket and dechlorinated water so seedlings avoid chlorine shock. If water looks cloudy, branch to recovery first.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "soak",
-                    "text": "How do I soak them?"
+                    "text": "Bucket is clean and water is clear.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "78a45c1f-a791-44f1-88f4-dc5059c66c89",
+                            "count": 10
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Water is cloudy or bucket was contaminated."
                 }
             ]
         },
         {
             "id": "soak",
-            "text": "Fill a bucket with dechlorinated water and submerge the starter plugs until saturated.",
+            "text": "Run a full soak cycle and gently press cubes under until no dry core remains.",
             "options": [
                 {
                     "type": "process",
                     "process": "rockwool-soak",
-                    "text": "Soak the plugs."
+                    "text": "Start soak cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
+                    "text": "Soak cycle complete; verify plug condition.",
                     "requiresItems": [
                         {
                             "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
                             "count": 10
                         }
-                    ],
-                    "text": "They're fully soaked!"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification: each plug should feel evenly damp, not dripping. If any core is still dry, re-soak before finishing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "soak",
+                    "text": "Some cores are still dry; re-soak the batch."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All 10 plugs are evenly saturated.",
+                    "requiresItems": [
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 10
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery path: dump suspect water, rinse tools, and restart with fresh dechlorinated water so microbes do not hitch a ride into your grow.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Recovery complete; re-run prep checks."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great. Moist cubes give seedlings an even start.",
+            "text": "Great work. You now have consistent starter plugs and a clean handoff for germination and cuttings.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Ready for seeds."
+                    "text": "Plugs are soak-verified."
                 }
             ]
         }
