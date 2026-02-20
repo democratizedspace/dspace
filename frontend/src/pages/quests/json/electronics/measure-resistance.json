@@ -8,24 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Place the loose resistor, digital multimeter, and safety goggles on a dry, non-conductive surface.\nPut on the goggles. Insert the black probe into COM and the red probe into V\u03a9mA, then set the meter to resistance (\u03a9) mode at a range above the resistor's expected value.",
+            "text": "Set up on a dry, non-conductive surface. Put on goggles, insert black probe into COM and red into VΩmA, then set the meter above expected resistance. Keep all circuit power disconnected.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "measure",
-                    "text": "Ready."
+                    "goto": "baseline-check",
+                    "text": "Safety checks complete"
                 }
             ]
         },
         {
-            "id": "measure",
-            "text": "Hold the resistor by its body so fingers stay off the leads. Grip the probes by their insulated handles, touching the black probe to one lead and the red to the other without the probes or your fingers touching.\nWait for the reading to stabilize near the color-band value; stop if the resistor warms, the reading spikes, or the probes slip.",
+            "id": "baseline-check",
+            "text": "Before measuring, confirm the resistor color bands predict about 220 Ω and the leads are clean. This is your baseline expectation artifact.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "It reads about what the color bands predicted.",
-                    "process": "measure-resistance",
+                    "goto": "measure",
+                    "text": "Baseline noted: target band is around 220 Ω",
                     "requiresItems": [
                         {
                             "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
@@ -44,8 +43,48 @@
             ]
         },
         {
+            "id": "measure",
+            "text": "Touch one probe per lead while holding only insulated handles. Wait for a stable reading and record it. Pass band for this quest is 200–240 Ω. Stop immediately if probes slip or the resistor warms.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Recorded reading is between 200 Ω and 240 Ω",
+                    "process": "measure-resistance"
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "Recorded reading is outside 200–240 Ω",
+                    "process": "measure-resistance"
+                }
+            ]
+        },
+        {
+            "id": "out-of-range",
+            "text": "Out-of-range troubleshooting: power remains disconnected, clean probe tips, re-seat leads, and rotate the resistor 90° to avoid hand contact noise. If still out of range, swap in a known-good resistor before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Corrective action done; re-test now"
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation check: the measured value aligns with the color-band estimate and tolerance window, so the component is serviceable for a 220 Ω circuit.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Value interpretation documented"
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Label the resistor's value, turn off the meter, unplug the probes, and store everything.",
+            "text": "Label the resistor value, turn off the meter, cap probe tips, and store tools dry.",
             "options": [
                 {
                     "type": "finish",
@@ -64,7 +103,7 @@
     "hardening": {
         "passes": 2,
         "score": 80,
-        "emoji": "\u2705",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-refine-2025-08-12",

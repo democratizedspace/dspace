@@ -36,7 +36,7 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
-    - `materials` → "Yep, let's assemble it." — solderless breadboard ×1, Jumper Wires ×2, 5 mm LED ×1, 220 Ohm Resistor ×1, resistor color chart ×1, 5 V Power Supply ×1
+    - `materials` → "Kit assembled and power is still unplugged." — solderless breadboard ×1, Jumper Wires ×2, 5 mm LED ×1, 220 Ohm Resistor ×1, resistor color chart ×1, 5 V Power Supply ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -47,6 +47,10 @@ Electronics quests build practical progression through the electronics skill tre
         - Requires: 220 Ohm Resistor ×1, resistor color chart ×1
         - Consumes: none
         - Creates: none
+ - QA flow notes:
+    - Adds two wiring branches (`assemble-main`, `assemble-alt`) before a shared verification gate.
+    - Completion now requires a one-minute stability check, with a mandatory troubleshooting loop on dark/flicker/warm faults.
+    - Includes explicit safety stop conditions: unplug power before rework and before bench teardown.
 
 ## 2) Blink an LED with Arduino (`electronics/arduino-blink`)
 
@@ -208,7 +212,7 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/resistor-color-check`
 - Dialogue `requiresItems` gates:
-    - `measure` → "It reads about what the color bands predicted." — digital multimeter ×1, 220 Ohm Resistor ×1, safety goggles ×1
+    - `baseline-check` → "Baseline noted: target band is around 220 Ω" — digital multimeter ×1, 220 Ohm Resistor ×1, safety goggles ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -219,6 +223,10 @@ Electronics quests build practical progression through the electronics skill tre
         - Requires: digital multimeter ×1, 220 Ohm Resistor ×1, safety goggles ×1
         - Consumes: none
         - Creates: none
+ - QA flow notes:
+    - Measurement now enforces explicit pass bounds (200–240 Ω) with artifact recording before interpretation.
+    - Out-of-range readings route to a corrective branch (probe cleanup/re-seat/swap resistor) and forced re-test.
+    - Safety checks are repeated in troubleshooting so rework cannot proceed on an energized or unstable setup.
 
 ## 11) Sweep a Servo (`electronics/servo-sweep`)
 
@@ -270,7 +278,7 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/thermistor-reading`
 - Dialogue `requiresItems` gates:
-    - `setup` → "Hardware ready" — USB Cable ×1, Raspberry Pi 5 board ×1, Arduino Uno ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, safety goggles ×1, anti-static wrist strap ×1
+    - `setup` → "Install complete; hardware secured" — USB Cable ×1, Raspberry Pi 5 board ×1, Arduino Uno ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, safety goggles ×1, anti-static wrist strap ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -285,6 +293,10 @@ Electronics quests build practical progression through the electronics skill tre
         - Requires: Arduino Uno ×1, Raspberry Pi 5 board ×1, USB Cable ×1
         - Consumes: none
         - Creates: none
+ - QA flow notes:
+    - Logging criteria now require timestamp + °C + note fields across 5+ one-minute samples.
+    - Adds anomaly classification and corrective-action branch for serial drops/missing rows/temperature spikes.
+    - Completion is gated on explicit log review criteria and unresolved anomalies block finish.
 
 ## 14) Plot Temperature Data (`electronics/temperature-plot`)
 

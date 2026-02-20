@@ -8,18 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your thermistor circuit works. Set it on a dry, static-safe surface, put on safety goggles and an anti-static wrist strap, and keep power disconnected until wiring is double-checked.",
+            "text": "Your thermistor circuit works. Set it on a dry, static-safe surface, wear safety goggles plus an anti-static wrist strap, and keep power disconnected until wiring is checked.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "setup",
-                    "text": "Sounds good!"
+                    "text": "Bench is safe and staged"
                 }
             ]
         },
         {
             "id": "setup",
-            "text": "Connect the Arduino Uno to the Raspberry Pi with a USB cable. Run `sudo apt update && sudo apt install python3-serial` to add pyserial. Keep cases closed, avoid tugging cables, and keep drinks away.",
+            "text": "Connect Arduino Uno to Raspberry Pi via USB. Install pyserial and verify cable strain relief so nothing can yank loose during logging.",
             "options": [
                 {
                     "type": "process",
@@ -28,8 +28,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "script",
-                    "text": "Hardware ready",
+                    "goto": "plan-log-fields",
+                    "text": "Install complete; hardware secured",
                     "requiresItems": [
                         {
                             "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
@@ -64,8 +64,19 @@
             ]
         },
         {
-            "id": "script",
-            "text": "Create `log_temp.py` to read `/dev/ttyACM0` at 9600 baud and append timestamped temperatures to `temps.csv` each minute. Use the Raspberry Pi serial logging process for sample code and run `python3 log_temp.py`.",
+            "id": "plan-log-fields",
+            "text": "Define the logging artifact before running: each `temps.csv` row must include timestamp, °C reading, and a note field. Capture at least 5 samples at 1-minute cadence.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "run-logger",
+                    "text": "Logging plan documented"
+                }
+            ]
+        },
+        {
+            "id": "run-logger",
+            "text": "Create `log_temp.py` for `/dev/ttyACM0` at 9600 baud and append readings to `temps.csv`. Safety stop: if cable disconnects or temperature jumps by >5°C between adjacent minutes, stop and classify the anomaly before continuing.",
             "options": [
                 {
                     "type": "process",
@@ -74,14 +85,41 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "review-log",
+                    "text": "Collected 5+ rows with timestamp, °C, and notes"
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly-response",
+                    "text": "Observed missing rows, serial drops, or >5°C jump"
+                }
+            ]
+        },
+        {
+            "id": "anomaly-response",
+            "text": "Classify anomaly source: sensor contact, USB instability, or script parse bug. Apply one fix at a time, then run a fresh 3-sample verification window before returning to full logging.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "run-logger",
+                    "text": "Applied corrective action and ready to re-verify"
+                }
+            ]
+        },
+        {
+            "id": "review-log",
+            "text": "Review pass criteria: cadence held near one minute, no missing required fields, and no unresolved anomalies. This log artifact is your proof gate for completion.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Script is logging data!"
+                    "text": "Log review passed"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Logs help spot trends. Stop the script with Ctrl+C, shut down the Pi, then unplug the USB cable before moving parts.",
+            "text": "Nice work. Stop the script with Ctrl+C, safely shut down the Pi, then unplug USB before moving the rig.",
             "options": [
                 {
                     "type": "finish",
@@ -100,7 +138,7 @@
     "hardening": {
         "passes": 2,
         "score": 90,
-        "emoji": "\u2705",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-refine-2025-08-09",

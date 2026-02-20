@@ -1,30 +1,30 @@
 {
     "id": "electronics/basic-circuit",
     "title": "Build a basic LED circuit",
-    "description": "Wire a 5 mm LED and 220 \u03a9 resistor on a breadboard to learn basic circuits.",
+    "description": "Wire a 5 mm LED and 220 Ω resistor on a breadboard to learn basic circuits.",
     "image": "/assets/quests/electronics_basic_led_breadboard_circuit.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Orion here. Let's light a 5 mm LED with a 220 \u03a9 resistor. Verify the color code, and keep the 5 V supply unplugged for now.",
+            "text": "Orion here. Let's light a 5 mm LED with a 220 Ω resistor. Keep the 5 V supply unplugged, remove metal jewelry, and verify the resistor color code before anything touches power.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "materials",
-                    "text": "Sure, what do I need?"
+                    "text": "Got it. What's in the bench kit?"
                 }
             ]
         },
         {
             "id": "materials",
-            "text": "Collect a breadboard, two jumper wires, one 5 mm LED, one 220 \u03a9 resistor, a color chart, and a 5 V supply. Verify the resistor and keep power unplugged while wiring.",
+            "text": "Collect a breadboard, two jumper wires, one 5 mm LED, one 220 Ω resistor, a color chart, and a 5 V supply. We only energize after a dry-run inspection confirms polarity and no exposed shorts.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "assemble",
-                    "text": "Yep, let's assemble it.",
+                    "goto": "layout-choice",
+                    "text": "Kit assembled and power is still unplugged.",
                     "process": "verify-resistor-color-code",
                     "requiresItems": [
                         {
@@ -56,19 +56,84 @@
             ]
         },
         {
-            "id": "assemble",
-            "text": "Insert the LED with the long leg toward the positive rail. Place the 220 \u03a9 resistor from that anode row to an empty row. Use jumpers to link the resistor to +5 V and the LED's short leg to ground. Check polarity, confirm series resistance, then plug in the 5 V supply.",
+            "id": "layout-choice",
+            "text": "Choose your wiring strategy. Main path: classic series layout. Alternate path: bench preflight, then wire one rail at a time. Either way, we capture an evidence check before finish.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble-main",
+                    "text": "Main path: classic series layout"
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble-alt",
+                    "text": "Alternate path: cautious one-rail-at-a-time"
+                }
+            ]
+        },
+        {
+            "id": "assemble-main",
+            "text": "Insert the LED with the long leg toward the positive rail. Place the 220 Ω resistor in series to +5 V and return the LED short leg to ground. Keep power unplugged while confirming every connection.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "power-on-check",
+                    "text": "Main layout complete and inspected"
+                }
+            ]
+        },
+        {
+            "id": "assemble-alt",
+            "text": "Build in two passes: first place LED + resistor without power, then route jumpers to rails. Pause after each pass to confirm no lead crosses the opposite rail.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "power-on-check",
+                    "text": "Alternate layout complete and inspected"
+                }
+            ]
+        },
+        {
+            "id": "power-on-check",
+            "text": "Plug in 5 V only after final visual inspection. Evidence gate: LED should glow steadily for a full minute with no heat smell and no flicker. If anything is unstable, cut power immediately.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Pass: steady light for one minute"
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Fail: dark, flickering, or warm components"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Safety stop: unplug power before touching the board. Classify the issue: (1) LED reversed, (2) resistor bypassed, or (3) loose jumper. Re-seat parts, then re-test the one-minute stability check.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "power-on-check",
+                    "text": "I corrected wiring and will re-test"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Great. Record that the LED stayed lit for one minute and the resistor remained cool. Unplug the supply before any modifications so the bench remains safe for the next build.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "It works!"
+                    "text": "Evidence logged and power removed"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work. Unplug the 5 V supply before changes and keep metal tools away from the rails.",
+            "text": "Nice work. You completed setup, verification, and a recovery loop like a real lab run.",
             "options": [
                 {
                     "type": "finish",
@@ -87,7 +152,7 @@
     "hardening": {
         "passes": 10,
         "score": 100,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-03",
