@@ -130,13 +130,71 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "measure",
+                    "goto": "retest",
                     "text": "Correction complete; mandatory retest now."
                 },
                 {
                     "type": "goto",
                     "goto": "recover",
                     "text": "Readings are still unstable after correction."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Retest gate: take a fresh measurement after dosing before interpretation can continue.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ph",
+                    "text": "Capture post-adjustment pH reading."
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest-interpret",
+                    "text": "Post-adjustment reading captured; re-interpret latest state.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "retest-interpret",
+            "text": "Retest interpretation gate: only continue once a post-adjustment reading exists alongside the original sample.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Retest is within 5.5-6.5; proceed to logging.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 2
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Retest is still out of range; run another correction cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 2
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },

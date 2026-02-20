@@ -267,9 +267,12 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `measure` → "Reading captured; interpret against target band." — hydroponic pH reading ×1
     - `interpret` → "Reading is within 5.5-6.5; proceed to logging." — hydroponic pH reading ×1
     - `interpret` → "Reading is out of range; start correction cycle." — hydroponic pH reading ×1, hydroponics tub (ready) ×1
+    - `retest` → "Post-adjustment reading captured; re-interpret latest state." — hydroponic pH reading ×2
+    - `retest-interpret` → "Retest is within 5.5-6.5; proceed to logging." — hydroponic pH reading ×2, hydroponics tub (ready) ×1
+    - `retest-interpret` → "Retest is still out of range; run another correction cycle." — hydroponic pH reading ×2, hydroponics tub (ready) ×1
     - `log` → "Stable reading logged and reviewed." — hydroponic pH log ×1
 - Recovery/troubleshooting branches:
-    - `adjust` loops back to `measure` for mandatory retest
+    - `adjust` routes to `retest` and `retest-interpret`, requiring a post-adjustment measurement before interpretation can continue
     - `recover` handles strip/meter/circulation faults, then returns to `prep` or `measure`
 - Safety/ops checks:
     - PPE gate before measurement and before chemical correction
