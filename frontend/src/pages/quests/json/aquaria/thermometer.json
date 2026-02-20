@@ -64,8 +64,85 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "text": "Reading recorded",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the reading before moving on: the target band is 24-28\u00b0C. If it drifts outside that range, do not proceed until you've corrected and rechecked.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading is stable in the 24-28\u00b0C band",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Reading is unstable or out of band"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Pause stocking. Check for air bubbles, direct sun, and poor strip contact. Re-seat the strip, dry the glass again, and run another logged reading before resuming.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "attach-aquarium-thermometer",
+                    "text": "Re-seat the strip and reattach it",
+                    "goto": "recheck",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        },
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recheck",
+                    "text": "Strip is re-seated and ready for a fresh reading",
+                    "requiresItems": [
+                        {
+                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recheck",
+            "text": "Run a second logged reading and confirm the number is repeatable before you close this quest.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Record the verification reading"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Verification reading captured",
                     "requiresItems": [
                         {
                             "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
@@ -94,30 +171,9 @@
     ],
     "requiresQuests": ["aquaria/walstad"],
     "hardening": {
-        "passes": 4,
+        "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
-        "history": [
-            {
-                "task": "codex-quest-hardening-2025-08-13",
-                "date": "2025-08-13",
-                "score": 60
-            },
-            {
-                "task": "codex-quest-hardening-2025-08-14",
-                "date": "2025-08-14",
-                "score": 80
-            },
-            {
-                "task": "codex-quest-hardening-2025-08-16",
-                "date": "2025-08-16",
-                "score": 90
-            },
-            {
-                "task": "codex-quest-hardening-2025-08-16-2",
-                "date": "2025-08-16",
-                "score": 95
-            }
-        ]
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
     }
 }

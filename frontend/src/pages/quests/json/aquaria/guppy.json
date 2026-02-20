@@ -8,73 +8,174 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Those shrimp are thriving! Ready for some guppies? They prefer 24-28\u00b0C water, so let's warm the tank first.",
+            "text": "Those shrimp are thriving. Before release, verify heater stability and prep a fallback bucket so guppies can pause safely if they show stress.",
             "options": [
                 {
                     "type": "process",
                     "process": "heat-walstad",
-                    "text": "Install the heater.",
-                    "goto": "acquire"
+                    "text": "Bring the tank to guppy-safe temperature.",
+                    "goto": "staging"
                 },
                 {
                     "type": "goto",
-                    "goto": "acquire",
+                    "goto": "staging",
                     "requiresItems": [
                         {
                             "id": "8c0f72a2-db79-4238-b80f-97721def169f",
                             "count": 1
+                        },
+                        {
+                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                            "count": 1
                         }
                     ],
-                    "text": "Tank is at guppy-friendly temperature."
+                    "text": "Tank is warm and the fallback bucket is ready."
                 }
             ]
         },
         {
-            "id": "acquire",
-            "text": "Pick three females and one male and float the bag in the tank to match temperature.",
+            "id": "staging",
+            "text": "Float the transport bag for 20-30 minutes and log a tank reading before opening the bag. Target is 24-28\u00b0C.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Record a pre-release temperature reading."
+                },
                 {
                     "type": "goto",
                     "goto": "release",
-                    "text": "Temperature matched."
+                    "text": "Temperature is logged and acclimation time is complete.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "release",
-            "text": "Gently net the guppies into the tank and discard the store water.",
+            "text": "Net guppies gently into the tank and discard store water. Keep room lights dim for the first hour.",
             "options": [
                 {
                     "type": "process",
                     "process": "stock-guppies",
-                    "text": "Introduce them.",
-                    "goto": "finish"
+                    "text": "Release the guppies now.",
+                    "goto": "observe"
                 },
                 {
                     "type": "goto",
-                    "goto": "acquire",
-                    "text": "I need to recheck and acclimate longer."
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
+                    "goto": "observe",
+                    "text": "Guppies are in and swimming.",
                     "requiresItems": [
                         {
                             "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
                             "count": 1
                         }
-                    ],
-                    "text": "Guppies are now in the tank."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "observe",
+            "text": "Watch behavior for a full observation window: normal schooling and surface activity are good signs. Darting, clamped fins, or gasping means pause and recover.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Behavior is normal and temperature remains stable.",
+                    "requiresItems": [
+                        {
+                            "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                            "count": 1
+                        },
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Fish look stressed; trigger recovery protocol.",
+                    "requiresItems": [
+                        {
+                            "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Pause feeding, dim lights, and stabilize the tank with a small corrective water change. Re-log temperature before rechecking behavior.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "partial-water-change",
+                    "text": "Run a corrective partial water change.",
+                    "goto": "recheck",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recheck",
+                    "text": "Stability work complete; run the observation cycle again.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recheck",
+            "text": "Log a fresh temperature reading and re-observe for stress signs. Do not finish until the post-recovery check is clean.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Capture the post-recovery reading."
+                },
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Post-recovery reading is recorded.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Fish are in and seem happy!",
+            "text": "Great husbandry. You staged a fallback, verified temperature, and handled stress safely before closing out.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All done."
+                    "text": "Guppies settled in safely."
                 }
             ]
         }

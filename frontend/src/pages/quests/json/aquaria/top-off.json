@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The waterline dropped. Raise two 5 gal buckets above the tank and prime the gravel vacuum.",
+            "text": "Before touching water, kill power to exposed plugs and check for drips near cords. Stage a bucket of dechlorinated water before you start the siphon.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "topoff",
-                    "text": "Setup done.",
+                    "goto": "stage",
+                    "text": "Safety checks done and tools are staged.",
                     "requiresItems": [
                         {
                             "id": "97317bc3-507a-4e2c-912b-507d586cee87",
@@ -21,42 +21,146 @@
                         },
                         {
                             "id": "0564d441-7367-412e-b709-dad770814a39",
-                            "count": 2
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Condition a fresh top-off bucket now.",
+                    "goto": "stage",
+                    "requiresItems": [
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
                         }
                     ]
                 }
             ]
         },
         {
-            "id": "topoff",
-            "text": "Hand-pump water from the buckets until the tank's level is restored.",
+            "id": "stage",
+            "text": "Match replacement water temperature before topping off. Add water slowly so substrate and livestock are not shocked.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "refill",
-                    "text": "Waterline topped off."
+                    "goto": "topoff",
+                    "text": "Temperature matches and flow is slow.",
+                    "requiresItems": [
+                        {
+                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                            "count": 1
+                        },
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Temperature mismatch or clouding showed up."
                 }
             ]
         },
         {
-            "id": "refill",
-            "text": "Refill both buckets with a hose. Let them sit 24\u201348 h or condition before the next top-off.",
+            "id": "topoff",
+            "text": "Hand-pump water from the bucket until the waterline is restored and filter flow remains stable.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "recover",
+                    "text": "Waterline restored and livestock behavior is normal.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Fish are stressed or flow is unstable."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Pause the top-off and stabilize the system first. If fish gasp or flow stalls, run a partial water change and restart with smaller additions.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "partial-water-change",
+                    "text": "Run a corrective partial water change.",
+                    "goto": "recover",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "System is stable again and ready for a controlled restart.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recheck temperature and log one reading after stabilization. Only close this quest once you have fresh, stable evidence.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Log the post-top-off verification reading."
+                },
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Buckets refilled and aging.",
-                    "process": "bucket-water-dechlorinated"
+                    "text": "Verification reading logged and bucket replenished for next time.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        },
+                        {
+                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! You've got water aging for the next evaporation top-off.",
+            "text": "Nice control. You protected livestock, handled instability, and left evidence for the next maintenance cycle.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Job done."
+                    "text": "Top-off cycle complete."
                 }
             ]
         }

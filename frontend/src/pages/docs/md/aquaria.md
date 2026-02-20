@@ -61,6 +61,9 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `start` → "Glass is clean and dry" — Walstad aquarium (80 L) ×1, aquarium thermometer (0–50°C) ×1, paper towel ×1
     - `attach` → "Strip is attached and seated" — Walstad aquarium with thermometer (80 L) ×1
     - `check` → "Reading recorded" — Aquarium temperature reading ×1
+    - `interpret` → "Reading is stable in the 24-28°C band" — Aquarium temperature reading ×1
+    - `troubleshoot` → "Strip is re-seated and ready for a fresh reading" — Walstad aquarium with thermometer (80 L) ×1
+    - `recheck` → "Verification reading captured" — Aquarium temperature reading ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -246,8 +249,13 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/water-testing`, `aquaria/heater-install`
 - Dialogue `requiresItems` gates:
-    - `start` → "Tank is at guppy-friendly temperature." — Heated Walstad aquarium (80 L, 26°C) ×1
-    - `release` → "Guppies are now in the tank." — Heated Walstad aquarium with guppies (80 L, 26°C) ×1
+    - `start` → "Tank is warm and the fallback bucket is ready." — Heated Walstad aquarium (80 L, 26°C) ×1, 5 gallon bucket of dechlorinated tap water ×1
+    - `staging` → "Temperature is logged and acclimation time is complete." — Aquarium temperature reading ×1
+    - `release` → "Guppies are in and swimming." — Heated Walstad aquarium with guppies (80 L, 26°C) ×1
+    - `observe` → "Behavior is normal and temperature remains stable." — Heated Walstad aquarium with guppies (80 L, 26°C) ×1, Aquarium temperature reading ×1
+    - `observe` → "Fish look stressed; trigger recovery protocol." — Heated Walstad aquarium with guppies (80 L, 26°C) ×1
+    - `recovery` → "Stability work complete; run the observation cycle again." — Freshly changed aquarium (80 L) ×1
+    - `recheck` → "Post-recovery reading is recorded." — Aquarium temperature reading ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -262,6 +270,14 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Requires: none
         - Consumes: Heated Walstad aquarium (80 L, 26°C) ×1, Guppy group ×1
         - Creates: Heated Walstad aquarium with guppies (80 L, 26°C) ×1
+    - [log-walstad-temperature](/processes/log-walstad-temperature)
+        - Requires: none
+        - Consumes: none
+        - Creates: Aquarium temperature reading ×1
+    - [partial-water-change](/processes/partial-water-change)
+        - Requires: Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
+        - Consumes: 5 gallon bucket of dechlorinated tap water ×0.25
+        - Creates: Freshly changed aquarium (80 L) ×1
 
 ## 10) Log Water Parameters (`aquaria/log-water-parameters`)
 
@@ -544,7 +560,11 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/water-change`
 - Dialogue `requiresItems` gates:
-    - `start` → "Setup done." — gravel vacuum ×1, 5 gallon bucket ×2
+    - `start` → "Safety checks done and tools are staged." — 5 gallon bucket of dechlorinated tap water ×1, 5 gallon bucket ×1
+    - `stage` → "Temperature matches and flow is slow." — 5 gallon bucket of dechlorinated tap water ×1, Aquarium temperature reading ×1
+    - `topoff` → "Waterline restored and livestock behavior is normal." — Freshly changed aquarium (80 L) ×1
+    - `troubleshoot` → "System is stable again and ready for a controlled restart." — Freshly changed aquarium (80 L) ×1
+    - `recover` → "Verification reading logged and bucket replenished for next time." — Aquarium temperature reading ×1, 5 gallon bucket of dechlorinated tap water ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -555,6 +575,14 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Requires: none
         - Consumes: 5 gallon bucket of tap water (chlorinated) ×1
         - Creates: 5 gallon bucket of dechlorinated tap water ×1
+    - [partial-water-change](/processes/partial-water-change)
+        - Requires: Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
+        - Consumes: 5 gallon bucket of dechlorinated tap water ×0.25
+        - Creates: Freshly changed aquarium (80 L) ×1
+    - [log-walstad-temperature](/processes/log-walstad-temperature)
+        - Requires: none
+        - Consumes: none
+        - Creates: Aquarium temperature reading ×1
 
 ## QA flow notes
 
