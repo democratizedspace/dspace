@@ -112,11 +112,11 @@
                 {
                     "type": "goto",
                     "goto": "interpret",
-                    "text": "Post-calibration reading logged (need baseline + verification logs before interpretation).",
+                    "text": "Post-calibration reading logged; interpret against the pass band.",
                     "requiresItems": [
                         {
                             "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
-                            "count": 2
+                            "count": 1
                         }
                     ]
                 }
@@ -133,7 +133,7 @@
                     "requiresItems": [
                         {
                             "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
-                            "count": 2
+                            "count": 1
                         }
                     ]
                 },
