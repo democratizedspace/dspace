@@ -1,51 +1,111 @@
 {
     "id": "hydroponics/tub-scrub",
     "title": "Scrub the Grow Tub",
-    "description": "Remove biofilm from the reservoir walls.",
+    "description": "Capture pre/post scrub evidence and loop through contamination recovery until the tub is clean.",
     "image": "/assets/quests/hydroponics_tub_scrub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Slimy walls restrict nutrient flow. Let's scrub the tub clean.",
+            "text": "Slimy walls choke flow and invite algae. We'll capture a baseline, scrub, and verify a clean post-scrub state before closure.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "scrub",
-                    "text": "Grab the brush."
+                    "goto": "baseline",
+                    "text": "Run tub scrub QA sequence."
                 }
             ]
         },
         {
-            "id": "scrub",
-            "text": "Use a bucket of dechlorinated water and a soft brush to wipe down the reservoir.",
+            "id": "baseline",
+            "text": "Baseline artifact gate: prep dechlorinated water and inspect wall condition before touching the tub.",
             "options": [
                 {
                     "type": "process",
                     "process": "bucket-water-dechlorinated",
-                    "text": "Need to prep water first."
+                    "text": "Prepare pre-scrub rinse bucket."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "scrub",
+                    "text": "Baseline complete; begin scrub pass.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
                             "count": 1
                         }
-                    ],
-                    "text": "Walls are spotless!"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "scrub",
+            "text": "Use a soft brush and controlled pressure so seals stay intact. Focus on corners and return channels where biofilm accumulates.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Run post-scrub rinse and collect post-clean evidence."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Scrub pass complete; verify post-clean state.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Residue still visible or rinse water came off dirty."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Evidence gate: require paired pre/post rinse artifacts and confirm no residue before finishing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pre/post evidence collected and walls are clean.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Still seeing film; route through contamination recovery."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Contamination recovery: drain dirty rinse water, sanitize brush and gloves, then re-run baseline and scrub until verification passes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Recovery done; restart baseline and re-test."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! Clean surfaces deter algae and keep roots healthy.",
+            "text": "Nice! The grow tub passed pre/post scrub verification and is ready for clean circulation.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Back to growing."
+                    "text": "Tub scrub QA complete."
                 }
             ]
         }
@@ -60,7 +120,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

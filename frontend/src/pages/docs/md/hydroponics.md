@@ -98,9 +98,13 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/basil`, `3dprinter/start`
 - Dialogue `requiresItems` gates:
-    - `haul` → "I stacked ten buckets!" — ten-bucket water haul ×1
-    - `check` → "Claim the Hydro Award" — ten-bucket water haul ×1
-    - `check` → "Award in hand!" — Hydro Award ×1
+    - `prep` → "Ten-bucket haul staged; verify before award." — ten-bucket water haul ×1
+    - `verify` → "Run verified handoff and claim the Hydro Award." — ten-bucket water haul ×1
+    - `verify` → "Hydro Award logged from verified haul." — Hydro Award ×1
+- Recovery/troubleshooting branches:
+    - `recover` branch handles spill/contamination cleanup and loops back to `prep`
+- Safety/ops checks:
+    - Lift/stack constraints and splash-hazard controls are explicit in `prep`
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -222,7 +226,15 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/ph-check`
 - Dialogue `requiresItems` gates:
-    - `calibrate` → "Calibration complete" — EC meter ×1, EC calibration solution (1000 ppm) ×1
+    - `precheck` → "EC meter and 1000 ppm solution are ready." — EC meter ×1, EC calibration solution (1000 ppm) ×1
+    - `measure` → "Capture verification EC reading." — EC meter ×1, hydroponics tub (ready) ×1
+    - `measure` → "EC log captured; interpret pass/fail bounds." — hydroponic nutrient solution EC log ×1
+    - `interpret` → "Reading is in range; close calibration QA." — hydroponic nutrient solution EC log ×1
+    - `recover` → "Apply controlled correction before retest." — hydroponic nutrient concentrate (1 L) ×1, nitrile gloves (pair) ×1, safety goggles ×1, submersible water pump ×1, hydroponics tub (ready) ×1
+- Recovery/troubleshooting branches:
+    - `recover` handles probe contamination/out-of-range readings and loops back to `measure`
+- Safety/ops checks:
+    - Clean-cup handling and controlled correction cadence are enforced before retest
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -230,9 +242,8 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - cured compost bucket ×1
 - Processes used:
     - [calibrate-ec-meter](/processes/calibrate-ec-meter)
-        - Requires: EC meter ×1, EC calibration solution (1000 ppm) ×1
-        - Consumes: EC calibration solution (1000 ppm) ×1
-        - Creates: none
+    - [measure-ec-solution](/processes/measure-ec-solution)
+    - [refresh-hydroponic-tub](/processes/refresh-hydroponic-tub)
 
 ## 8) Check Solution EC (`hydroponics/ec-check`)
 
@@ -548,17 +559,21 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/top-off`
 - Dialogue `requiresItems` gates:
-    - `soak` → "They're fully soaked!" — soaked hydroponic starter plug ×10
+    - `prep` → "Water is prepped and tray is sanitized." — 5 gallon bucket of dechlorinated tap water ×1
+    - `soak` → "Soak cycle complete; verify hydration artifact." — soaked hydroponic starter plug ×10
+    - `verify` → "Ten plugs are uniformly hydrated and clean." — soaked hydroponic starter plug ×10
+- Recovery/troubleshooting branches:
+    - `recover` handles contamination or uneven hydration and loops back to `prep`
+- Safety/ops checks:
+    - Sanitized tray and clean-tool handling are required before soak verification
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
+    - [bucket-water-dechlorinated](/processes/bucket-water-dechlorinated)
     - [rockwool-soak](/processes/rockwool-soak)
-        - Requires: 5 gallon bucket of dechlorinated tap water ×1
-        - Consumes: hydroponic starter plug ×10
-        - Creates: soaked hydroponic starter plug ×10
 
 ## 20) Clone Mint Cutting (`hydroponics/mint-cutting`)
 
@@ -615,7 +630,13 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/reservoir-refresh`
 - Dialogue `requiresItems` gates:
-    - `scrub` → "Walls are spotless!" — 5 gallon bucket of dechlorinated tap water ×1
+    - `baseline` → "Baseline complete; begin scrub pass." — 5 gallon bucket of dechlorinated tap water ×1
+    - `scrub` → "Scrub pass complete; verify post-clean state." — 5 gallon bucket of dechlorinated tap water ×2
+    - `verify` → "Pre/post evidence collected and walls are clean." — 5 gallon bucket of dechlorinated tap water ×2
+- Recovery/troubleshooting branches:
+    - `recover` handles persistent biofilm/dirty rinse and loops back to `baseline`
+- Safety/ops checks:
+    - Controlled brush pressure and tool sanitization are required before re-entry
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
