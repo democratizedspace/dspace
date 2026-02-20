@@ -93,7 +93,13 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Key login failed or access is unstable."
+                    "text": "Key login failed or access is unstable.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -132,7 +138,7 @@
         },
         {
             "id": "finish",
-            "text": "SSH is hardened with recovery evidence in hand. Excellent ops hygiene.",
+            "text": "SSH is hardened with verification evidence captured. Excellent ops hygiene.",
             "options": [
                 {
                     "type": "finish",

@@ -106,7 +106,7 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Dialogue `requiresItems` gates:
     - `start` → "Let's stage it safely." — Pi cluster node ×1, Laptop Computer ×1
     - `install` → "Cluster install complete." — Pi cluster node ×1
-    - `verify` → "Nodes healthy and report captured." — journalctl service report ×1
+    - `verify` → "Nodes healthy and report captured." — journalctl report ×1
     - `rollback` → "Rollback complete; retry install with corrected settings." — Pi cluster node ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -121,7 +121,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
         - Requires: Laptop Computer ×1
         - Consumes: none
-        - Creates: journalctl service report ×1
+        - Creates: journalctl report ×1
 
 ## 6) Set Up Monitoring (`devops/monitoring`)
 
@@ -239,7 +239,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - `requiresQuests`: `devops/daily-backups`
 - Dialogue `requiresItems` gates:
     - `start` → "Set the logging policy." — external backup SSD ×1, Laptop Computer ×1
-    - `capture` → "Snapshot passes thresholds." — journalctl service report ×1
+    - `capture` → "Snapshot passes thresholds." — journalctl report ×1
     - `anomaly` → "Corrective action applied; run follow-up verification window." — incident log extract ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -254,9 +254,9 @@ Devops quests build practical progression through the devops skill tree. This pa
     - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
         - Requires: Laptop Computer ×1
         - Consumes: none
-        - Creates: journalctl service report ×1
+        - Creates: journalctl report ×1
     - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
-        - Requires: journalctl service report ×1
+        - Requires: journalctl report ×1
         - Consumes: none
         - Creates: incident log extract ×1
 
@@ -309,7 +309,7 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Dialogue `requiresItems` gates:
     - `start` → "Ready with laptop and node." — Laptop Computer ×1, Pi cluster node ×1
     - `keys` → "Key auth works in a second shell." — Pi cluster node ×1, Laptop Computer ×1
-    - `verify` → "Policy verified with evidence." — journalctl service report ×1
+    - `verify` → "Policy verified with evidence." — journalctl report ×1
     - `recovery` → "Recovery complete; re-run verification." — incident log extract ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -328,9 +328,9 @@ Devops quests build practical progression through the devops skill tree. This pa
     - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
         - Requires: Laptop Computer ×1
         - Consumes: none
-        - Creates: journalctl service report ×1
+        - Creates: journalctl report ×1
     - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
-        - Requires: journalctl service report ×1
+        - Requires: journalctl report ×1
         - Consumes: none
         - Creates: incident log extract ×1
 

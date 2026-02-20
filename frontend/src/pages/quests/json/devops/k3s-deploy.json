@@ -62,7 +62,7 @@
         },
         {
             "id": "verify",
-            "text": "Run `kubectl get nodes -o wide` and export `k3s.service` logs from each node. You must keep a report snapshot as evidence before rollout can close.",
+            "text": "Run `kubectl get nodes -o wide` and export a `k3s.service` log snapshot from the control plane with `journalctl`. You must keep this report snapshot as evidence before rollout can close.",
             "options": [
                 {
                     "type": "process",

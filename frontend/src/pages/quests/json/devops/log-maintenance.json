@@ -45,7 +45,7 @@
         },
         {
             "id": "capture",
-            "text": "Export a journal snapshot after rotation. Pass criteria: no single log file > 200MB and root disk usage remains below 80%.",
+            "text": "Export a journal snapshot after rotation. Pass criteria: report includes timestamp/service/error count fields and no recurring rotation errors in the sampled window.",
             "options": [
                 {
                     "type": "process",
@@ -55,7 +55,13 @@
                 {
                     "type": "goto",
                     "goto": "anomaly",
-                    "text": "Threshold exceeded or report missing fields."
+                    "text": "Threshold exceeded or report missing fields.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
