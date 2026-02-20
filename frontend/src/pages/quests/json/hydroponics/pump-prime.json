@@ -19,7 +19,7 @@
         },
         {
             "id": "precheck",
-            "text": "Before energizing, confirm the pump loop is installed, intake is submerged, and PPE is on around splashing electrical gear.",
+            "text": "Before energizing, confirm the pump loop is installed or already verified, intake is submerged, and PPE is on around splashing electrical gear.",
             "options": [
                 {
                     "type": "goto",
@@ -28,6 +28,25 @@
                     "requiresItems": [
                         {
                             "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "prime",
+                    "text": "Verified loop, submerged intake, and PPE confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
                             "count": 1
                         },
                         {
@@ -73,6 +92,17 @@
                     "requiresItems": [
                         {
                             "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Prime cycle done; use existing verification artifact.",
+                    "requiresItems": [
+                        {
+                            "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
                             "count": 1
                         }
                     ]
@@ -122,6 +152,17 @@
                     "requiresItems": [
                         {
                             "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Hardware is reseated; use verified loop to continue checks.",
+                    "requiresItems": [
+                        {
+                            "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
                             "count": 1
                         }
                     ]
