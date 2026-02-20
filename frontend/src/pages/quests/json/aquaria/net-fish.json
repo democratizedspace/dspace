@@ -1,31 +1,104 @@
 {
     "id": "aquaria/net-fish",
     "title": "Catch a fish with a net",
-    "description": "Use an aquarium net to move a fish safely during cleaning.",
+    "description": "Relocate fish during maintenance with controlled capture, stress recovery branches, and a safe release verification loop.",
     "image": "/assets/quests/catch_fish_with_a_net.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "The tank needs a quick tidy. Let's move a fish to a bucket with the net first.",
+            "text": "Before maintenance, we'll move one fish to a holding bucket. Dim the room, keep the bucket half-filled with tank water, and avoid rapid chasing.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "catch",
-                    "text": "I'll grab the net."
+                    "goto": "prep",
+                    "text": "Net, bucket, and service tank are ready.",
+                    "requiresItems": [
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "catch",
-            "text": "Gently scoop the fish with the net and settle it in a nearby bucket.",
+            "id": "prep",
+            "text": "Lower the net below the waterline and guide the fish gently. If fish dart or gasp, stop pursuit and let stress markers settle.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "release",
-                    "text": "Fish is secure in the bucket.",
-                    "process": "catch-fish",
+                    "goto": "capture",
+                    "text": "Fish behavior is calm; attempt capture.",
+                    "requiresItems": [
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "calm",
+                    "text": "Fish is darting or breathing hard; begin recovery pause.",
+                    "requiresItems": [
+                        {
+                            "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "capture",
+            "text": "Guide into the net and transfer without lifting high above water. Keep net mesh wet to protect slime coat.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "hold",
+                    "text": "Fish transferred to holding bucket with minimal thrashing.",
+                    "requiresItems": [
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "calm",
+                    "text": "Transfer was rough; pause and reset before another attempt.",
+                    "requiresItems": [
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "calm",
+            "text": "Recovery protocol: stop chasing for 5 minutes, reduce light, and confirm bucket water temp matches the tank before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Fish is calm again; retry controlled capture.",
                     "requiresItems": [
                         {
                             "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
@@ -36,24 +109,57 @@
             ]
         },
         {
-            "id": "release",
-            "text": "With the tank clean, return the fish to its home.",
+            "id": "hold",
+            "text": "Complete maintenance and then return the fish only after the tank is stable and clear.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "fin",
-                    "text": "Back in you go!",
-                    "process": "return-fish"
+                    "goto": "verify",
+                    "text": "Maintenance done; fish can be returned.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "fin",
-            "text": "Great job keeping the fish safe during cleanup!",
+            "id": "verify",
+            "text": "Watch behavior for 10 minutes after release. Pass only if swimming is normal and no gasping or flashing appears.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Post-release check passed; fish is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "calm",
+                    "text": "Stress signs appeared; run recovery and retry verification.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great handling. You protected fish welfare and validated recovery before wrapping maintenance.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All done."
+                    "text": "Transfer complete."
                 }
             ]
         }
@@ -66,9 +172,15 @@
     ],
     "requiresQuests": ["aquaria/water-change"],
     "hardening": {
-        "passes": 0,
-        "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
-        "history": []
+        "passes": 1,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2026-02-20",
+                "date": "2026-02-20",
+                "score": 95
+            }
+        ]
     }
 }

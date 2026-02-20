@@ -1,19 +1,19 @@
 {
     "id": "aquaria/walstad",
     "title": "Set up a Walstad tank",
-    "description": "Create a low-tech planted aquarium using the Walstad method.",
+    "description": "Build a low-tech planted tank with staged setup proof, cycle monitoring, and a recovery loop before livestock.",
     "image": "/assets/quests/walstad_setup.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Vega here. We'll build balance first: soil, cap, plants, then patience before livestock.",
+            "text": "Vega here. Walstad systems reward patience: stage clean materials, build layered substrate, then verify stability before any livestock move.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "stage",
-                    "text": "Yes\u2014show me the steps",
+                    "text": "Bench is clear and all components are ready.",
                     "requiresItems": [
                         {
                             "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
@@ -53,17 +53,17 @@
         },
         {
             "id": "stage",
-            "text": "Level the stand, place the tank, and stage soil, gravel, plants, light, and conditioner with a clean bucket. Keep cords dry.",
+            "text": "Condition fill water first so chlorine never touches plant roots. Keep all outlets above splash lines before you start pouring.",
             "options": [
                 {
                     "type": "process",
                     "process": "condition-bucket-water",
-                    "text": "Prep dechlorinated fill water"
+                    "text": "Condition the bucket of replacement water."
                 },
                 {
                     "type": "goto",
                     "goto": "build",
-                    "text": "Bucket is dechlorinated and tools are staged",
+                    "text": "Dechlorinated water and tools are staged.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -75,17 +75,17 @@
         },
         {
             "id": "build",
-            "text": "Add soil, cap with rinsed gravel, tuck in guppy grass and duckweed, then fill gently with dechlorinated water. Set the light to an 8-hour timer.",
+            "text": "Layer soil and gravel carefully, plant densely, then fill gently to avoid disturbing the cap. This build step is your first hard evidence gate.",
             "options": [
                 {
                     "type": "process",
                     "process": "assemble-walstad-tank",
-                    "text": "Layer and plant the Walstad tank"
+                    "text": "Assemble and plant the Walstad tank."
                 },
                 {
                     "type": "goto",
-                    "goto": "thermo",
-                    "text": "Substrate settled and plants look secure",
+                    "goto": "cycle-check",
+                    "text": "Build artifact complete: planted Walstad tank is assembled.",
                     "requiresItems": [
                         {
                             "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
@@ -96,16 +96,75 @@
             ]
         },
         {
-            "id": "thermo",
-            "text": "Dry the glass and mark a spot for the strip thermometer so you can track swings without dunking probes.",
+            "id": "cycle-check",
+            "text": "Now confirm early stability: run a first-day temperature check and inspect for sulfur smell, uprooted stems, or cloudy water before moving on.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Log a stabilization reading for the new setup."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Reading and observation note are recorded.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        },
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Pass if plants stay seated and temperature remains 24-28°C. If water turns cloudy or smells anaerobic, branch to recovery and re-check before closure.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Placement marked and glass is dry",
+                    "text": "Stability checks passed; tank can continue cycling.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Clouding, odor, or temperature drift detected; start recovery loop.",
                     "requiresItems": [
                         {
                             "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Pause stocking plans. Remove decaying plant matter, shorten photoperiod, and keep equipment unplugged while hands are in the tank area; then retake measurements.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Capture a post-recovery stabilization reading."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Recovery actions complete; review a fresh reading.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
                             "count": 1
                         }
                     ]
@@ -114,11 +173,11 @@
         },
         {
             "id": "finish",
-            "text": "Good start. Let it settle, test often, and add fish only after ammonia and nitrite hold at zero.",
+            "text": "Excellent. You now have setup proof and a stability check trail, so follow-on fish quests start from a safer baseline.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll let it cycle cleanly"
+                    "text": "Walstad base established."
                 }
             ]
         }
@@ -131,9 +190,15 @@
     ],
     "requiresQuests": ["welcome/howtodoquests"],
     "hardening": {
-        "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
-        "history": []
+        "passes": 1,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2026-02-20",
+                "date": "2026-02-20",
+                "score": 95
+            }
+        ]
     }
 }

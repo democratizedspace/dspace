@@ -181,8 +181,8 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3613)
 - `3dprinting/benchy_100`
   - [ ] Observed issue: `3dprinting/benchy_100` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0000)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #0000)
 - `3dprinting/benchy_25`
   - [x] Observed issue (addressed): `3dprinting/benchy_25` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3608)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3608)
@@ -237,9 +237,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
 Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature
 
 - `aquaria/aquarium-light`
-  - [ ] Observed issue: `aquaria/aquarium-light` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `aquaria/aquarium-light` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #0000)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0000)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #0000)
 - `aquaria/balance-ph`
   - [x] Observed issue: `aquaria/balance-ph` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3609)
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3609)
@@ -273,9 +273,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [x] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact. (PR #3620)
   - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure. (PR #3620)
 - `aquaria/net-fish`
-  - [ ] Observed issue: `aquaria/net-fish` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `aquaria/net-fish` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #0000)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0000)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #0000)
 - `aquaria/ph-strip-test`
   - [x] Observed issue: `aquaria/ph-strip-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3620)
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3620)
@@ -301,9 +301,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3636)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3636)
 - `aquaria/walstad`
-  - [ ] Observed issue: `aquaria/walstad` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
-  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
-  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
+  - [x] Observed issue (addressed): `aquaria/walstad` was lifecycle-oriented but could read as narration unless staged setup and outcome proofs were separated; this was hardened in this pass. (PR #0000)
+  - [x] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`. (PR #0000)
+  - [x] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming. (PR #0000)
 - `aquaria/water-change`
   - [ ] Observed issue: `aquaria/water-change` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).

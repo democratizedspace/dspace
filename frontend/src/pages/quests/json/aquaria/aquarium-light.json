@@ -1,30 +1,55 @@
 {
     "id": "aquaria/aquarium-light",
     "title": "Install an aquarium light",
-    "description": "Add LED lighting to support plant growth and fish health.",
+    "description": "Install LED lighting with a dry-cable route, verify thermal stability, and recover safely if readings drift.",
     "image": "/assets/quests/aquarium_light.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your Walstad tank is cycling, but plants need steady light. Ready to install the lamp?",
+            "text": "Your Walstad tank is planted, but light discipline keeps algae from taking over. Stage the lamp, dry your hands, and check that cords can run with a drip loop below the outlet.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "mount",
-                    "text": "Let's mount the light."
+                    "text": "Lamp and tank are staged; outlet path is clear.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        },
+                        {
+                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "mount",
-            "text": "Clip the light to the rim and route the cable so it stays dry.",
+            "text": "Clip the light to the rim without pinching cable insulation. Keep splash zones clear and leave enough slack for maintenance.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "schedule",
-                    "text": "Light secured.",
+                    "goto": "verify",
+                    "text": "Light is mounted and cable is routed in a drip loop.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        },
+                        {
+                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Cable crosses a splash path or the clip feels unstable; re-route before power-on.",
                     "requiresItems": [
                         {
                             "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
@@ -35,23 +60,79 @@
             ]
         },
         {
-            "id": "schedule",
-            "text": "Plug it in and set a timer for eight hours of gentle daylight.",
+            "id": "verify",
+            "text": "Run a 30-minute light cycle and capture a thermometer reading. Pass only if the tank stays in 24-28°C and fish behavior remains calm.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Log post-install temperature after the trial cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Temperature reading captured.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the reading and observation note. If temps drift or livestock shows stress, power down and adjust before trying again.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Timer set and lamp glowing."
+                    "text": "Reading stayed in range and livestock behavior is normal.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Heat rise or stress signs observed; enter rollback and re-verify.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rollback",
+            "text": "Unplug with dry hands, raise the fixture, and shorten the photoperiod to 6 hours for the next check. Keep the outlet and power strip dry before re-energizing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Cable path and photoperiod adjusted; run another verification cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Your plants will thrive under consistent lighting.",
+            "text": "Nice work. Keep the timer stable and review algae growth with weekly temperature logs so the tank stays balanced.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Enjoy the glow."
+                    "text": "Lighting routine locked in."
                 }
             ]
         }
@@ -64,9 +145,15 @@
     ],
     "requiresQuests": ["aquaria/sponge-filter"],
     "hardening": {
-        "passes": 0,
-        "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
-        "history": []
+        "passes": 1,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2026-02-20",
+                "date": "2026-02-20",
+                "score": 95
+            }
+        ]
     }
 }

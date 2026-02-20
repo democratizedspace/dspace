@@ -33,10 +33,13 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
-    - `start` → "Yes—show me the steps" — aquarium (150 L) ×1, aquarium stand (80 L) ×1, aquarium gravel (1 kg) ×3, aquarium LED light (20 W) ×1, Guppy grass starter ×1, Duckweed portion ×1, 5 gallon bucket ×1, Water conditioner ×1
-    - `stage` → "Bucket is dechlorinated and tools are staged" — 5 gallon bucket of dechlorinated tap water ×1
-    - `build` → "Substrate settled and plants look secure" — Walstad aquarium (80 L) ×1
-    - `thermo` → "Placement marked and glass is dry" — Walstad aquarium (80 L) ×1
+    - `start` → "Bench is clear and all components are ready." — aquarium (150 L) ×1, aquarium stand (80 L) ×1, aquarium gravel (1 kg) ×3, aquarium LED light (20 W) ×1, Guppy grass starter ×1, Duckweed portion ×1, 5 gallon bucket ×1, Water conditioner ×1
+    - `stage` → "Dechlorinated water and tools are staged." — 5 gallon bucket of dechlorinated tap water ×1
+    - `build` → "Build artifact complete: planted Walstad tank is assembled." — Walstad aquarium (80 L) ×1
+    - `cycle-check` → "Reading and observation note are recorded." — Walstad aquarium (80 L) ×1, Aquarium temperature reading ×1
+    - `interpret` → "Stability checks passed; tank can continue cycling." — Aquarium temperature reading ×1
+    - `interpret` → "Clouding, odor, or temperature drift detected; start recovery loop." — Walstad aquarium (80 L) ×1
+    - `recover` → "Recovery actions complete; review a fresh reading." — Aquarium temperature reading ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -51,6 +54,10 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Requires: aquarium (150 L) ×1, aquarium stand (80 L) ×1, aquarium gravel (1 kg) ×3, aquarium LED light (20 W) ×1, Guppy grass starter ×1, Duckweed portion ×1, 5 gallon bucket of dechlorinated tap water ×1
         - Consumes: aquarium gravel (1 kg) ×3, Guppy grass starter ×1, Duckweed portion ×1, 5 gallon bucket of dechlorinated tap water ×1
         - Creates: Walstad aquarium (80 L) ×1
+    - [log-walstad-temperature](/processes/log-walstad-temperature)
+        - Requires: Walstad aquarium with thermometer (80 L) ×1
+        - Consumes: none
+        - Creates: Aquarium temperature reading ×1
 
 ## 2) Attach Aquarium Thermometer (`aquaria/thermometer`)
 
@@ -137,14 +144,23 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/sponge-filter`
 - Dialogue `requiresItems` gates:
-    - `mount` → "Light secured." — aquarium LED light (20 W) ×1
+    - `start` → "Lamp and tank are staged; outlet path is clear." — aquarium LED light (20 W) ×1, Walstad aquarium with thermometer (80 L) ×1
+    - `mount` → "Light is mounted and cable is routed in a drip loop." — aquarium LED light (20 W) ×1, Walstad aquarium with thermometer (80 L) ×1
+    - `mount` → "Cable crosses a splash path or the clip feels unstable; re-route before power-on." — aquarium LED light (20 W) ×1
+    - `verify` → "Temperature reading captured." — Aquarium temperature reading ×1
+    - `interpret` → "Reading stayed in range and livestock behavior is normal." — Aquarium temperature reading ×1
+    - `interpret` → "Heat rise or stress signs observed; enter rollback and re-verify." — Aquarium temperature reading ×1
+    - `rollback` → "Cable path and photoperiod adjusted; run another verification cycle." — aquarium LED light (20 W) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - Duckweed portion ×1
 - Processes used:
-    - None
+    - [log-walstad-temperature](/processes/log-walstad-temperature)
+        - Requires: Walstad aquarium with thermometer (80 L) ×1
+        - Consumes: none
+        - Creates: Aquarium temperature reading ×1
 
 ## 6) Rinse Sponge Filter (`aquaria/filter-rinse`)
 
@@ -529,21 +545,22 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/water-change`
 - Dialogue `requiresItems` gates:
-    - `catch` → "Fish is secure in the bucket." — aquarium net ×1
+    - `start` → "Net, bucket, and service tank are ready." — aquarium net ×1, 5 gallon bucket ×1, Heated Walstad aquarium with guppies (80 L, 26°C) ×1
+    - `prep` → "Fish behavior is calm; attempt capture." — aquarium net ×1
+    - `prep` → "Fish is darting or breathing hard; begin recovery pause." — Heated Walstad aquarium with guppies (80 L, 26°C) ×1
+    - `capture` → "Fish transferred to holding bucket with minimal thrashing." — aquarium net ×1, 5 gallon bucket ×1
+    - `capture` → "Transfer was rough; pause and reset before another attempt." — 5 gallon bucket ×1
+    - `calm` → "Fish is calm again; retry controlled capture." — aquarium net ×1
+    - `hold` → "Maintenance done; fish can be returned." — Freshly changed aquarium (80 L) ×1
+    - `verify` → "Post-release check passed; fish is stable." — Freshly changed aquarium (80 L) ×1
+    - `verify` → "Stress signs appeared; run recovery and retry verification." — Freshly changed aquarium (80 L) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [catch-fish](/processes/catch-fish)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
-    - [return-fish](/processes/return-fish)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
+    - None
 
 ## 19) Top Off Evaporated Water (`aquaria/top-off`)
 
