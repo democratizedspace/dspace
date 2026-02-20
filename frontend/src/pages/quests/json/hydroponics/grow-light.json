@@ -4,7 +4,7 @@
     "description": "Mount a full-spectrum LED grow lamp and automate a 12 h light cycle with a smart plug and timer.",
     "hardening": {
         "passes": 4,
-        "score": 92,
+        "score": 95,
         "emoji": "💯",
         "history": [
             {
