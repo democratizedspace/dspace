@@ -1,78 +1,142 @@
 {
     "id": "hydroponics/stevia",
     "title": "Grow Stevia Hydroponically",
-    "description": "Cultivate stevia plants for a natural sweetener.",
+    "description": "Stage stevia from germination through harvest with stress checks and recovery loops.",
     "image": "/assets/quests/hydroponic_stevia_starter_tub.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hydro here. Stevia's sweet, and the grow is easy if we keep the rhythm.",
+            "text": "Hydro here. We run stevia in stages: setup proof, growth proof, then harvest. If plants stress, we pause and recover before pushing forward.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "plant",
-                    "text": "Absolutely, let's plant some stevia!"
+                    "goto": "setup",
+                    "text": "Start staged stevia run."
                 }
             ]
         },
         {
-            "id": "plant",
-            "text": "Soak the rockwool plugs, tuck in the seeds, and let them germinate in calm light.",
+            "id": "setup",
+            "text": "Prep plugs and seeds first, then confirm seedling evidence before moving to the grow tub.",
             "options": [
                 {
                     "type": "process",
                     "process": "germinate-stevia",
-                    "text": "Starting the germination process."
+                    "text": "Germinate stevia plugs."
                 },
                 {
                     "type": "goto",
                     "goto": "grow",
-                    "text": "Seedlings look healthy!",
+                    "text": "Seedlings are established and ready for transplant.",
                     "requiresItems": [
                         {
                             "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
                             "count": 10
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Germination looks patchy or moldy; troubleshoot first."
                 }
             ]
         },
         {
             "id": "grow",
-            "text": "Move seedlings to the tub and give them steady light for about a month.",
+            "text": "Run the main growth cycle under steady light and nutrient cadence. We only advance once mature-plant evidence exists.",
             "options": [
                 {
                     "type": "process",
                     "process": "grow-stevia",
-                    "text": "Start growth cycle."
+                    "text": "Start controlled grow cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "harvest",
-                    "text": "They're full grown and smell sweet!",
+                    "text": "Mature plants are ready for harvest.",
                     "requiresItems": [
                         {
                             "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
                             "count": 10
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Leaves are yellowing or growth stalled; route to recovery."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: isolate weak plants, refresh reservoir chemistry, and resume only after a stable setup is restored.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refresh-hydroponic-tub",
+                    "text": "Stabilize reservoir before retrying.",
+                    "requiresItems": [
+                        {
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "count": 1
+                        },
+                        {
+                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Setup is stable again; restart from staged setup gate."
                 }
             ]
         },
         {
             "id": "harvest",
-            "text": "Clip the leaves for sweetener. Keep them under light and they'll regrow.",
+            "text": "Harvest leaves carefully and keep mother plants viable for regrow. If cut quality is poor, loop recovery before another cycle.",
             "options": [
                 {
                     "type": "process",
                     "process": "harvest-stevia",
-                    "text": "Harvesting the leaves."
+                    "text": "Harvest mature stevia leaves."
                 },
                 {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Harvest completed with staged evidence.",
+                    "requiresItems": [
+                        {
+                            "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Harvest quality failed; fix environment before retrying."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great run: setup proof, growth proof, and harvest all closed with a recovery path for stress events.",
+            "options": [
+                {
                     "type": "finish",
-                    "text": "Thanks for the tips, Hydro!"
+                    "text": "Stevia cycle completed safely."
                 }
             ]
         }
@@ -86,7 +150,7 @@
     "requiresQuests": ["hydroponics/lettuce"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
