@@ -567,11 +567,11 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Consumes: 5 gallon bucket of tap water (chlorinated) ×1
         - Creates: 5 gallon bucket of dechlorinated tap water ×1
     - [partial-water-change](/processes/partial-water-change)
-        - Requires: Heated Walstad aquarium with guppies (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
-        - Consumes: Heated Walstad aquarium with guppies (80 L, 26°C) ×1, 5 gallon bucket of dechlorinated tap water ×1
+        - Requires: Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
+        - Consumes: 5 gallon bucket of dechlorinated tap water ×0.25
         - Creates: Freshly changed aquarium (80 L) ×1
     - [log-walstad-temperature](/processes/log-walstad-temperature)
-        - Requires: none
+        - Requires: Walstad aquarium with thermometer (80 L) ×1
         - Consumes: none
         - Creates: Aquarium temperature reading ×1
 

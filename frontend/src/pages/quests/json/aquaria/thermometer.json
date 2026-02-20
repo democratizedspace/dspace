@@ -43,7 +43,7 @@
                 {
                     "type": "goto",
                     "goto": "stabilize",
-                    "text": "Adhesive wrinkled or trapped bubbles formed; reset before taking a reading.",
+                    "text": "Strip attached but wrinkled or bubbled; smooth/reset placement before taking a reading.",
                     "requiresItems": [
                         {
                             "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
