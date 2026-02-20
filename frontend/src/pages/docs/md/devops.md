@@ -104,7 +104,10 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/docker-compose`
 - Dialogue `requiresItems` gates:
-    - `install` → "Token ready." — Pi cluster node ×1
+    - `start` → "Let's stage it safely." — Pi cluster node ×1, Laptop Computer ×1
+    - `install` → "Cluster install complete." — Pi cluster node ×1
+    - `verify` → "Nodes healthy and report captured." — journalctl report ×1
+    - `rollback` → "Rollback complete; retry install with corrected settings." — Pi cluster node ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -115,6 +118,10 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Pi cluster node ×1
         - Consumes: none
         - Creates: none
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
 
 ## 6) Set Up Monitoring (`devops/monitoring`)
 
@@ -231,7 +238,10 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/daily-backups`
 - Dialogue `requiresItems` gates:
-    - `rotate` → "Rotation configured" — external backup SSD ×1
+    - `start` → "Set the logging policy." — external backup SSD ×1, Laptop Computer ×1
+    - `capture` → "Threshold exceeded or report missing fields." — journalctl report ×1
+    - `capture` → "Snapshot passes thresholds." — journalctl report ×1
+    - `anomaly` → "Corrective action applied; run follow-up verification window." — incident log extract ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -242,6 +252,14 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Pi cluster node ×1, external backup SSD ×1
         - Consumes: none
         - Creates: none
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## 12) Run a Private Docker Registry (`devops/private-registry`)
 
@@ -290,8 +308,11 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/firewall-rules`
 - Dialogue `requiresItems` gates:
-    - `keys` → "Key installed." — Pi cluster node ×1, Laptop Computer ×1
-    - `config` → "Service restarted." — Pi cluster node ×1
+    - `start` → "Ready with laptop and node." — Laptop Computer ×1, Pi cluster node ×1
+    - `keys` → "Key auth works in a second shell." — Pi cluster node ×1, Laptop Computer ×1
+    - `verify` → "Key login failed or access is unstable." — journalctl report ×1
+    - `verify` → "Policy verified with evidence." — journalctl report ×1
+    - `recovery` → "Recovery complete; re-run verification." — incident log extract ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -306,6 +327,14 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Pi cluster node ×1
         - Consumes: none
         - Creates: none
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## 15) Block SSH Brute Force (`devops/fail2ban`)
 

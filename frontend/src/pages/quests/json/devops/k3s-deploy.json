@@ -8,23 +8,49 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "If you want high availability, let's turn the cluster into a k3s setup.",
+            "text": "If you want high availability, we need an install plan that includes a safe rollback before any node gets stranded.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "preflight",
+                    "text": "Let's stage it safely.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "preflight",
+            "text": "Record control-plane IP, backup your existing compose manifests, and keep one shell open so rollback commands are ready if a join fails.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "install",
-                    "text": "Sounds good."
+                    "text": "Preflight captured."
                 }
             ]
         },
         {
             "id": "install",
-            "text": "Install k3s on the control plane with `curl -sfL https://get.k3s.io | sh -` and grab the join token from `/var/lib/rancher/k3s/server/node-token`.",
+            "text": "Install k3s on the control plane with `curl -sfL https://get.k3s.io | sh -`, then collect the join token from `/var/lib/rancher/k3s/server/node-token`.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "join-k3s-cluster",
+                    "text": "Install and join worker nodes."
+                },
+                {
                     "type": "goto",
-                    "goto": "join",
-                    "text": "Token ready.",
+                    "goto": "verify",
+                    "text": "Cluster install complete.",
                     "requiresItems": [
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
@@ -35,35 +61,52 @@
             ]
         },
         {
-            "id": "join",
-            "text": "Run the installer on each extra node with `curl -sfL https://get.k3s.io | K3S_URL=https://<CONTROL_PLANE_IP>:6443 K3S_TOKEN=<NODE_TOKEN> sh -`. Verify all nodes with `sudo kubectl get nodes -o wide`.",
+            "id": "verify",
+            "text": "Run `kubectl get nodes -o wide` and export a `k3s.service` log snapshot from the control plane with `journalctl`. You must keep this report snapshot as evidence before rollout can close.",
             "options": [
                 {
                     "type": "process",
-                    "process": "join-k3s-cluster",
-                    "text": "Joining now."
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Capture the k3s service log snapshot."
                 },
                 {
                     "type": "goto",
-                    "goto": "load",
-                    "text": "Nodes joined."
+                    "goto": "rollback",
+                    "text": "Node status is unhealthy or missing."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Nodes healthy and report captured.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "load",
-            "text": "Build the DSPACE image and import it: `docker build -t dspace-app:latest -f frontend/Dockerfile ./frontend && k3s ctr images import dspace-app:latest`. Apply the manifests from `infra/k8s/` to deploy.",
+            "id": "rollback",
+            "text": "Safety stop: if quorum is unstable, pause deploys and roll workers back (`/usr/local/bin/k3s-uninstall.sh`) before retrying with corrected token/IP.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Deployed."
+                    "goto": "install",
+                    "text": "Rollback complete; retry install with corrected settings.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "That's it! Your cluster now runs DSPACE via k3s. Expose the service with a Cloudflare Tunnel and enjoy.",
+            "text": "Great recovery discipline. With verification evidence saved, your k3s cluster is ready for DSPACE workloads.",
             "options": [
                 {
                     "type": "finish",
@@ -82,7 +125,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
