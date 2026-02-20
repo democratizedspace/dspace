@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Software gets old fast. Let's wire unattended-upgrades so your Pi fleet patches itself.",
+            "text": "Software gets old fast. We'll stage unattended-upgrades with a safety-first rollout so the fleet stays reachable.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "stage",
-                    "text": "Prep the nodes.",
+                    "goto": "canary",
+                    "text": "Start with one canary node before fleet rollout.",
                     "requiresItems": [
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
@@ -24,76 +24,126 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stage",
+                    "text": "Roll out directly during a planned maintenance window.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "canary",
+            "text": "Canary path: enable security updates on a single node, set automatic reboot time, and watch one full patch cycle before broad rollout.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stage",
+                    "text": "Canary stayed stable. Proceed to fleet config."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Canary rebooted unexpectedly or held critical packages."
                 }
             ]
         },
         {
             "id": "stage",
-            "text": "Point apt at the security repo, enable automatic reboots in the maintenance window, and pin a cache clean.",
+            "text": "Apply unattended-upgrades policy cluster-wide: security repo enabled, reboot policy pinned to maintenance hours, and cache cleanup scheduled.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "configure-unattended-upgrades",
+                    "text": "Push unattended-upgrades configuration."
+                },
                 {
                     "type": "goto",
                     "goto": "verify",
                     "text": "Config pushed across the cluster.",
-                    "process": "configure-unattended-upgrades",
                     "requiresItems": [
                         {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "id": "d8346735-7f1c-4309-a400-6cf6801534f7",
                             "count": 1
                         },
                         {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "start",
-                    "text": "Pause to confirm maintenance hours."
                 }
             ]
         },
         {
             "id": "verify",
-            "text": "Kick a dry run, watch logs for held packages, and confirm the reboot flag only trips after patches land.",
+            "text": "Verification gate: run a dry update, confirm no held security packages, and capture reboot-window evidence in the health report.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "verify-unattended-upgrades",
+                    "text": "Run unattended-upgrades verification."
+                },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Health check logged.",
-                    "process": "verify-unattended-upgrades",
+                    "text": "Health report meets patch and reboot-window checks.",
                     "requiresItems": [
                         {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "id": "afd6a926-bd21-4242-ba79-d25fc152de03",
                             "count": 1
                         },
                         {
-                            "id": "d8346735-7f1c-4309-a400-6cf6801534f7",
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
                             "count": 1
                         }
                     ]
                 },
                 {
                     "type": "goto",
+                    "goto": "recovery",
+                    "text": "Patch drift or reboot timing mismatch detected.",
+                    "requiresItems": [
+                        {
+                            "id": "d8346735-7f1c-4309-a400-6cf6801534f7",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Safety stop: pause auto-reboots, restore last-known-good apt policy, and re-check maintenance windows before another rollout attempt.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "stage",
-                    "text": "Adjust the reboot cadence."
+                    "text": "Rollback complete. Retry rollout with tighter scope."
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Return to planning and confirm staffing coverage."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Your cluster will stay patched without manual work.",
+            "text": "Great! Your cluster now patches itself with controlled reboot timing and a repeatable recovery path.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Queue the next maintenance window.",
-                    "requiresItems": [
-                        {
-                            "id": "afd6a926-bd21-4242-ba79-d25fc152de03",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Queue the next maintenance window."
                 }
             ]
         }
@@ -108,7 +158,7 @@
     "hardening": {
         "passes": 0,
         "score": 85,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

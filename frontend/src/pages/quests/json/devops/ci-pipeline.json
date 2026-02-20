@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 1,
         "score": 90,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-hardening-2025-08-19",
@@ -20,18 +20,34 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Automation keeps your code reliable. Let's add a CI workflow.",
+            "text": "Automation keeps systems trustworthy. We'll design a pipeline with evidence checks before letting it gate deploys.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "edit",
-                    "text": "Walk me through it."
+                    "goto": "design",
+                    "text": "Plan a strict blocking CI workflow."
                 }
             ]
         },
         {
-            "id": "edit",
-            "text": "Create a `.github/workflows/ci.yml` that installs dependencies and runs `npm run test:pr`. Keep tokens secret and grant minimal permissions.",
+            "id": "design",
+            "text": "Choose your strategy: fast smoke + nightly full suite, or full suite on every pull request. Either way, protect secrets and lock token permissions.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "author",
+                    "text": "Use full checks on every PR."
+                },
+                {
+                    "type": "goto",
+                    "goto": "author",
+                    "text": "Use smoke checks on PRs with scheduled full suite."
+                }
+            ]
+        },
+        {
+            "id": "author",
+            "text": "Create `.github/workflows/ci.yml` with Node setup, deterministic install, and `npm run test:ci` as the quality gate.",
             "options": [
                 {
                     "type": "process",
@@ -40,8 +56,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Workflow added.",
+                    "goto": "verify",
+                    "text": "Workflow added and committed.",
                     "requiresItems": [
                         {
                             "id": "306793ac-e420-4859-9742-9076fff6ab57",
@@ -52,12 +68,61 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Evidence gate: run a test workflow and confirm lint + test jobs both pass with expected runtime and no secret leakage in logs.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "execute-dspace-tests",
+                    "text": "Trigger and inspect a CI test run."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Run passed and evidence captured.",
+                    "requiresItems": [
+                        {
+                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "triage",
+                    "text": "Workflow failed or logs showed unsafe output.",
+                    "requiresItems": [
+                        {
+                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "triage",
+            "text": "Safety stop: disable auto-deploy hooks, fix the failing stage, scrub sensitive output, then re-run CI before any merge.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Fixes applied. Re-run verification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "author",
+                    "text": "Rewrite workflow strategy before retrying."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great! Every push will now trigger tests automatically.",
+            "text": "Great! Your pipeline now enforces deterministic checks and includes a clear recovery path when automation fails.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Nice!"
+                    "text": "CI mission complete."
                 }
             ]
         }

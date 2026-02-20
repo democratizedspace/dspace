@@ -86,7 +86,9 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/docker-compose`
 - Dialogue `requiresItems` gates:
-    - `edit` → "Workflow added." — CI workflow file ×1
+    - `author` → "Workflow added and committed." — CI workflow file ×1
+    - `verify` → "Run passed and evidence captured." — CI workflow file ×1
+    - `verify` → "Workflow failed or logs showed unsafe output." — CI workflow file ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -97,6 +99,10 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: GitHub repository ×1
         - Consumes: none
         - Creates: CI workflow file ×1
+    - [execute-dspace-tests](/processes/execute-dspace-tests)
+        - Requires: CI workflow file ×1
+        - Consumes: none
+        - Creates: none
 
 ## 5) Deploy with k3s (`devops/k3s-deploy`)
 
@@ -149,10 +155,11 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/monitoring`
 - Dialogue `requiresItems` gates:
-    - `start` → "Prep the nodes." — Pi cluster node ×1, Laptop Computer ×1
-    - `stage` → "Config pushed across the cluster." — Pi cluster node ×1, Laptop Computer ×1
-    - `verify` → "Health check logged." — Pi cluster node ×1, unattended-upgrades config ×1
-    - `finish` → "Queue the next maintenance window." — auto-update health report ×1
+    - `start` → "Start with one canary node before fleet rollout." — Pi cluster node ×1, Laptop Computer ×1
+    - `start` → "Roll out directly during a planned maintenance window." — Pi cluster node ×1, Laptop Computer ×1
+    - `stage` → "Config pushed across the cluster." — unattended-upgrades config ×1, Pi cluster node ×1
+    - `verify` → "Health report meets patch and reboot-window checks." — auto-update health report ×1, Pi cluster node ×1
+    - `verify` → "Patch drift or reboot timing mismatch detected." — unattended-upgrades config ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -174,7 +181,12 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/monitoring`
 - Dialogue `requiresItems` gates:
-    - `script` → "Backup script running." — external backup SSD ×1
+    - `start` → "Use daily full backups plus weekly off-site sync." — external backup SSD ×1
+    - `start` → "Use daily incremental backups with monthly restore drill." — external backup SSD ×1
+    - `script` → "Backup automation configured." — external backup SSD ×1
+    - `verify` → "Logs confirm a good backup and successful restore drill." — journalctl report ×1, external backup SSD ×1
+    - `verify` → "Missing dump, checksum mismatch, or restore failure detected." — journalctl report ×1
+    - `recovery` → "Corrective actions complete. Re-run verification window." — incident log extract ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -185,6 +197,14 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Pi cluster node ×1, external backup SSD ×1
         - Consumes: none
         - Creates: none
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## 9) Secure the Cluster with HTTPS (`devops/enable-https`)
 

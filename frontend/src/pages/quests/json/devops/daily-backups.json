@@ -8,28 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's protect your work by backing up the cluster.",
+            "text": "Let's protect your work with backup discipline. First choose a retention plan before writing cron automation.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "script",
-                    "text": "Good plan."
-                }
-            ]
-        },
-        {
-            "id": "script",
-            "text": "Plug an external SSD into the control plane and create a cron job that runs `docker exec dspace-postgres pg_dumpall > /mnt/backup/dspace.sql` each night.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "configure-daily-backups",
-                    "text": "Cron job added."
+                    "text": "Use daily full backups plus weekly off-site sync.",
+                    "requiresItems": [
+                        {
+                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Backup script running.",
+                    "goto": "script",
+                    "text": "Use daily incremental backups with monthly restore drill.",
                     "requiresItems": [
                         {
                             "id": "849eb5e1-9f63-488b-80d3-913492049090",
@@ -40,12 +35,93 @@
             ]
         },
         {
+            "id": "script",
+            "text": "Configure cron for nightly `pg_dumpall`, checksum each archive, and mirror the latest dump to external storage.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "configure-daily-backups",
+                    "text": "Install backup script and cron schedule."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Backup automation configured.",
+                    "requiresItems": [
+                        {
+                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Evidence gate: capture backup logs showing timestamp, checksum status, and restore-test result from the latest archive.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Capture backup verification report."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Logs confirm a good backup and successful restore drill.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        },
+                        {
+                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Missing dump, checksum mismatch, or restore failure detected.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Safety stop: pause pruning jobs, keep the last known-good snapshot read-only, and fix retention scripts before resuming nightly writes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Record the backup incident and corrective actions."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Corrective actions complete. Re-run verification window.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Backups are running daily. Store them off-site for extra safety.",
+            "text": "Backups are now deterministic, verified, and recoverable under failure conditions.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "Backup plan locked in."
                 }
             ]
         }
@@ -60,7 +136,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
