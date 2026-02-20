@@ -107,8 +107,12 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/parachute`
 - Dialogue `requiresItems` gates:
-    - `supplies` → "All set, gear in hand." — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
-    - `arm` → "Launch successful!" — damaged model rocket ×1
+    - `supplies` → "Kit staged and physically checked." — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
+    - `weather-hold` → "Pad is stable now, resume full checklist." — Model rocket launchpad ×1
+    - `safety-brief` → "Checklist complete, safety call made." — rocket launch checklist ×1, launch controller ×1, Model rocket launchpad ×1
+    - `troubleshoot` → "Issue corrected, re-verify and re-arm." — rocket igniter ×1, rocket launch checklist ×1
+    - `verify` → "Artifacts captured and checklist signed off." — damaged model rocket ×1, dLaunch ×1
+    - `verify` → "Recovery needed before next launch window." — damaged model rocket ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -202,9 +206,15 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/parachute`
 - Dialogue `requiresItems` gates:
-    - `burn` → "Data captured" — parachute ×1
+    - `setup` → "Pad stable, motor secured, igniter routed." — Model rocket launchpad ×1, hobbyist solid rocket motor ×1, rocket igniter ×1
+    - `baseline` → "Baseline captured; proceed to remote ignition." — mission logbook ×1
+    - `burn` → "Burn observation logged." — mission logbook ×1
+    - `interpret` → "Profile is in bounds; close test with notes." — mission log entry ×1, parachute ×1
+    - `interpret` → "Profile out of bounds; run corrective branch." — mission log entry ×1
+    - `corrective` → "Corrective action complete; run mandatory re-test." — rocket igniter ×1
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - `baseline` grants mission logbook ×1
+    - `burn` grants mission log entry ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
@@ -251,17 +261,22 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/preflight-check`
 - Dialogue `requiresItems` gates:
-    - None
+    - `baseline` → "Baseline reading captured and written down." — Model rocket launchpad ×1
+    - `interpret` → "Within limits now; proceed to launch-window logging." — dWind ×1
+    - `interpret` → "Out of limits; branch to wind mitigation and re-check." — dWind ×1
+    - `corrective` → "Pad adjusted and hold time complete; run re-test." — Model rocket launchpad ×1
+    - `log-pass` → "Logbook entry complete with pass/fail decision." — mission logbook ×1, dWind ×1
+    - `done` finish gate — mission log entry ×1
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - `start` grants mission logbook ×1
+    - `baseline` grants dWind ×1
+    - `retest` grants dWind ×1
+    - `log-pass` grants mission log entry ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - placeholder reward item (canonical ID: 15e3dd7e-374b-4233-b8c9-117e3057f009) ×1
 - Processes used:
-    - [measure-wind-speed](/processes/measure-wind-speed)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
+    - None (quest uses inventory-gated evidence and log artifacts for deterministic completion)
 
 ## QA flow notes
 

@@ -1,57 +1,158 @@
 {
     "id": "rocketry/wind-check",
     "title": "Check the Launch Winds",
-    "description": "Measure wind speed to ensure safe rocket launches.",
+    "description": "Record wind evidence against launch limits, follow a corrective branch when gusts exceed bounds, and close only after a logged re-check.",
     "image": "/assets/quests/model_rocket_wind_check.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nimbus here. Wind is data, not vibes. Let's make sure it's safe to fly.",
+            "text": "Nimbus here. Wind is data, not vibes. We need two readings, explicit limits, and a log entry before anyone touches the ignition key.",
+            "grantsItems": [
+                {
+                    "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                    "count": 1
+                }
+            ],
             "options": [
                 {
                     "type": "goto",
-                    "goto": "measure",
-                    "text": "Got it, let's check the wind."
+                    "goto": "baseline",
+                    "text": "Open the mission logbook and start baseline capture."
                 }
             ]
         },
         {
-            "id": "measure",
-            "text": "Hold an anemometer at launch height and take a reading. Then take a second one.",
+            "id": "baseline",
+            "text": "Safety setup first: launchpad staked and observer clear of the pad line. Capture the first wind reading at launch height.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "measure-wind-speed",
-                    "goto": "ready",
-                    "text": "Take an anemometer reading."
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "d0758cf9-b5a6-46c7-b4b2-dc24c7d9df67",
+                            "count": 1
+                        }
+                    ],
+                    "goto": "interpret",
+                    "requiresItems": [
+                        {
+                            "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Baseline reading captured and written down."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Apply the launch rule: sustained wind under 20 km/h and no gusts above 25 km/h. If either limit fails, run corrective actions and mandatory re-test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "log-pass",
+                    "requiresItems": [
+                        {
+                            "id": "d0758cf9-b5a6-46c7-b4b2-dc24c7d9df67",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Within limits now; proceed to launch-window logging."
                 },
                 {
                     "type": "goto",
-                    "goto": "ready",
-                    "text": "Reading taken\u2014winds are calm."
+                    "goto": "corrective",
+                    "requiresItems": [
+                        {
+                            "id": "d0758cf9-b5a6-46c7-b4b2-dc24c7d9df67",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Out of limits; branch to wind mitigation and re-check."
                 }
             ]
         },
         {
-            "id": "ready",
-            "text": "Looks good. Winds are within limits, launch window is open.",
+            "id": "corrective",
+            "text": "Corrective branch: pause launch, rotate pad orientation, and delay for a calmer interval. Re-test is mandatory before clearing go/no-go.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "retest",
+                    "requiresItems": [
+                        {
+                            "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Pad adjusted and hold time complete; run re-test."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Capture a second measurement after mitigation and compare against the same limits before closing the checklist.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "d0758cf9-b5a6-46c7-b4b2-dc24c7d9df67",
+                            "count": 1
+                        }
+                    ],
+                    "goto": "log-pass",
+                    "text": "Re-test captured and now within limits."
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Still high; repeat mitigation cycle before launch."
+                }
+            ]
+        },
+        {
+            "id": "log-pass",
+            "text": "Log required fields: timestamp, sustained wind, gust peak, and go/no-go call. This record is your launch authorization artifact.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ],
                     "goto": "done",
-                    "text": "Sweet, let's get this bird in the air!"
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "d0758cf9-b5a6-46c7-b4b2-dc24c7d9df67",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Logbook entry complete with pass/fail decision."
                 }
             ]
         },
         {
             "id": "done",
-            "text": "Good work. Always respect the wind; rockets prefer calm applause.",
+            "text": "Good work. You converted weather uncertainty into a repeatable launch decision with clear operational evidence.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Launch conditions verified."
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Launch conditions verified and logged."
                 }
             ]
         }
@@ -66,7 +167,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
