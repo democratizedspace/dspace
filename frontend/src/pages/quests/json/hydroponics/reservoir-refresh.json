@@ -8,44 +8,147 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The nutrient bath gets gunky over time. Let's replace it to keep your roots happy.",
+            "text": "Reservoir service is a control loop, not a single click. We'll prep, refresh, verify EC, then close with an evidence check.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "drain",
-                    "text": "Ready to refresh."
+                    "goto": "prep",
+                    "text": "Start reservoir service."
                 }
             ]
         },
         {
-            "id": "drain",
-            "text": "Drain the old solution and dispose of it responsibly. Then mix a new batch of nutrients.",
+            "id": "prep",
+            "text": "Set out EC meter, syringe, PPE, and concentrate. Keep power isolated while draining to avoid splash hazards.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "refresh",
+                    "text": "Kit staged and power isolated.",
+                    "requiresItems": [
+                        {
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "count": 1
+                        },
+                        {
+                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Found leaks, cloudy residue, or missing PPE."
+                }
+            ]
+        },
+        {
+            "id": "refresh",
+            "text": "Drain the tired mix, refill in measured steps, and circulate long enough to homogenize before reading EC.",
             "options": [
                 {
                     "type": "process",
                     "process": "refresh-hydroponic-tub",
-                    "text": "Mixing fresh solution."
+                    "text": "Run reservoir refresh.",
+                    "requiresItems": [
+                        {
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "count": 1
+                        },
+                        {
+                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
+                    "text": "Refill completed; verify EC now.",
                     "requiresItems": [
                         {
                             "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                             "count": 1
                         }
-                    ],
-                    "text": "All filled up!"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Capture a post-refresh EC log. If numbers drift, branch to recovery and re-run refresh before closing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ec-solution",
+                    "text": "Capture EC verification log.",
+                    "requiresItems": [
+                        {
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "EC log captured; refresh cycle is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "EC is out of range or circulation looks uneven."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery path: pause dosing, inspect tubing/intake for clogs, and confirm nutrient concentrate was measured correctly before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Issue corrected; restart prep gate."
+                },
+                {
+                    "type": "goto",
+                    "goto": "refresh",
+                    "text": "Hardware stable; run one controlled refresh cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Sweet! Fresh nutrients mean faster growth and fewer pathogens.",
+            "text": "Strong work. You closed this service with staged evidence: refreshed tub plus EC verification artifact.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Back to growing!"
+                    "text": "Reservoir refresh complete."
                 }
             ]
         }
@@ -60,7 +163,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -846,9 +846,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3626)
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3626)
 - `hydroponics/ph-test`
-  - [ ] Observed issue: `hydroponics/ph-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `hydroponics/ph-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #PENDING)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #PENDING)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #PENDING)
 - `hydroponics/plug-soak`
   - [ ] Observed issue: `hydroponics/plug-soak` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -866,17 +866,17 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
   - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
   - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
 - `hydroponics/reservoir-refresh`
-  - [ ] Observed issue: `hydroponics/reservoir-refresh` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue: `hydroponics/reservoir-refresh` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #PENDING)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #PENDING)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #PENDING)
 - `hydroponics/root-rinse`
   - [x] Observed issue: `hydroponics/root-rinse` describes a cleaning cycle without a measurable before/after success definition. (PR #3626)
   - [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #3626)
   - [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #3626)
 - `hydroponics/stevia`
-  - [ ] Observed issue: `hydroponics/stevia` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
-  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
-  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
+  - [x] Observed issue: `hydroponics/stevia` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated. (PR #PENDING)
+  - [x] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`. (PR #PENDING)
+  - [x] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming. (PR #PENDING)
 - `hydroponics/temp-check`
   - [ ] Observed issue: `hydroponics/temp-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.

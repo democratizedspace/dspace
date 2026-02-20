@@ -8,28 +8,82 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hydro here. Stevia's sweet, and the grow is easy if we keep the rhythm.",
+            "text": "Hydro here. Stevia rewards consistency, so we will stage setup proof, then outcome proof, and keep a stress branch ready.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "plant",
-                    "text": "Absolutely, let's plant some stevia!"
+                    "goto": "setup",
+                    "text": "Let's run the stevia grow plan."
                 }
             ]
         },
         {
-            "id": "plant",
-            "text": "Soak the rockwool plugs, tuck in the seeds, and let them germinate in calm light.",
+            "id": "setup",
+            "text": "Prep clean plugs, dechlorinated water, and seed stock before germination. Good setup prevents damping-off later.",
             "options": [
                 {
                     "type": "process",
                     "process": "germinate-stevia",
-                    "text": "Starting the germination process."
+                    "text": "Start germination batch."
                 },
                 {
                     "type": "goto",
-                    "goto": "grow",
-                    "text": "Seedlings look healthy!",
+                    "goto": "transfer",
+                    "text": "Seedlings are healthy and setup artifact is ready.",
+                    "requiresItems": [
+                        {
+                            "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
+                            "count": 10
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stress",
+                    "text": "Seedlings are leggy, moldy, or not germinating evenly."
+                }
+            ]
+        },
+        {
+            "id": "transfer",
+            "text": "Move healthy seedlings into a ready tub with stable light schedule. Verify circulation and nutrient rhythm before long grow run.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "grow-stevia",
+                    "text": "Run full grow cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "text": "Outcome artifact ready: harvestable stevia plants.",
+                    "requiresItems": [
+                        {
+                            "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+                            "count": 10
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stress",
+                    "text": "Wilting, algae bloom, or nutrient burn showed up mid-cycle."
+                }
+            ]
+        },
+        {
+            "id": "stress",
+            "text": "Contingency path: pause feed adjustments, verify pump flow and pH, trim damaged growth, then resume from the most recent stable stage.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Restart from setup with fresh plugs and seeds."
+                },
+                {
+                    "type": "goto",
+                    "goto": "transfer",
+                    "text": "System stabilized; resume grow-out.",
                     "requiresItems": [
                         {
                             "id": "9b440191-a8be-497c-8b5a-7bbac559413b",
@@ -40,21 +94,21 @@
             ]
         },
         {
-            "id": "grow",
-            "text": "Move seedlings to the tub and give them steady light for about a month.",
+            "id": "harvest",
+            "text": "Harvest only after confirming plant vigor and clean leaves. This closes the loop from setup evidence to output evidence.",
             "options": [
                 {
                     "type": "process",
-                    "process": "grow-stevia",
-                    "text": "Start growth cycle."
+                    "process": "harvest-stevia",
+                    "text": "Harvest stevia leaves."
                 },
                 {
                     "type": "goto",
-                    "goto": "harvest",
-                    "text": "They're full grown and smell sweet!",
+                    "goto": "finish",
+                    "text": "Harvest complete and quality checks pass.",
                     "requiresItems": [
                         {
-                            "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+                            "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
                             "count": 10
                         }
                     ]
@@ -62,17 +116,12 @@
             ]
         },
         {
-            "id": "harvest",
-            "text": "Clip the leaves for sweetener. Keep them under light and they'll regrow.",
+            "id": "finish",
+            "text": "Sweet run. You proved setup quality, navigated stress handling, and delivered a verified harvest.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "harvest-stevia",
-                    "text": "Harvesting the leaves."
-                },
-                {
                     "type": "finish",
-                    "text": "Thanks for the tips, Hydro!"
+                    "text": "Stevia cycle closed with evidence."
                 }
             ]
         }
@@ -83,7 +132,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/lettuce"],
+    "requiresQuests": [
+        "hydroponics/lettuce"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

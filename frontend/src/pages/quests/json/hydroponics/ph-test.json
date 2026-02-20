@@ -8,35 +8,186 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A stable pH keeps nutrients available to your plants. We'll test the reservoir and adjust if necessary.",
+            "text": "Hydro here. We are not guessing today: measure, interpret, then log a stable pH before calling it done.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Run the pH checklist."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Safety first. Gloves, goggles, and a clean sample cylinder stay in play any time we dose pH up or down.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Let's test it."
+                    "text": "PPE and sample gear are ready.",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Strips look old or reagent labels are unclear."
                 }
             ]
         },
         {
             "id": "measure",
-            "text": "Use a pH strip or digital meter. Add pH down solution or base slowly until the reading hits 6.5.",
+            "text": "Pull a fresh sample and measure pH. Target range is 5.5-6.5 for leafy crops.",
             "options": [
                 {
                     "type": "process",
                     "process": "measure-ph",
-                    "text": "Checking now."
+                    "text": "Capture pH reading.",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Reading captured.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the result before progressing. In range (5.5-6.5) can be logged. Out of range requires correction and a re-test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "In range; proceed to logging.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Out of range; adjust and re-test.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Dose in small steps with PPE on, stir fully, then branch back to measure. Never stack corrections without a new reading.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "adjust-ph",
+                    "text": "Apply correction.",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Correction mixed; retest now.",
+                    "requiresItems": [
+                        {
+                            "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Readings keep drifting after correction."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery branch: replace expired strips, verify reagent bottles, and check circulation so dead zones are not skewing samples.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Troubleshooting complete; restart prep."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Pump circulation verified; retake sample.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Create an evidence trail for trend review at the next nutrient service window.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-stable-ph",
+                    "text": "Log stable pH reading.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "pH adjusted",
+                    "text": "Stable reading logged and reviewed.",
                     "requiresItems": [
                         {
-                            "id": "6360b1e7-84d6-4256-b085-f36fc53ef299",
-                            "count": 1
-                        },
-                        {
-                            "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+                            "id": "cad7d051-e3fb-4f1c-9d72-358076ee732e",
                             "count": 1
                         }
                     ]
@@ -45,11 +196,11 @@
         },
         {
             "id": "finish",
-            "text": "Great! Monitoring pH will keep your crops thriving and yields high.",
+            "text": "Great pass. You measured, interpreted, corrected when needed, and closed with a log artifact.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll keep an eye on it."
+                    "text": "I'll keep this same QA loop each week."
                 }
             ]
         }
@@ -64,7 +215,7 @@
     "hardening": {
         "passes": 2,
         "score": 90,
-        "emoji": "\u2705",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-14",

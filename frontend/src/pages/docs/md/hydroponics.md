@@ -263,7 +263,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/nutrient-check`
 - Dialogue `requiresItems` gates:
-    - `measure` → "pH adjusted" — digital pH meter ×1, pH down solution (500 mL) ×1
+    - `prep` → "PPE and sample gear are ready." — nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
+    - `measure` → "Reading captured." — hydroponic pH reading ×1
+    - `interpret` → both branches require hydroponic pH reading ×1
+    - `log` → "Stable reading logged and reviewed." — hydroponic pH log ×1
+- Recovery/troubleshooting branches:
+    - `troubleshoot` node handles expired strips/reagent checks/circulation issues and loops back to `prep` or `measure`
+- Safety/ops checks:
+    - PPE gate before measurement and explicit small-step correction in `adjust` before retesting
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -271,9 +278,8 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - cured compost bucket ×1
 - Processes used:
     - [measure-ph](/processes/measure-ph)
-        - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
-        - Consumes: pH strip ×1
-        - Creates: hydroponic pH reading ×1
+    - [adjust-ph](/processes/adjust-ph)
+    - [log-stable-ph](/processes/log-stable-ph)
 
 ## 10) Refresh the Reservoir (`hydroponics/reservoir-refresh`)
 
@@ -281,7 +287,13 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/nutrient-check`
 - Dialogue `requiresItems` gates:
-    - `drain` → "All filled up!" — hydroponics tub (ready) ×1
+    - `prep` → "Kit staged and power isolated." — EC meter ×1, 50 mL measuring syringe ×1, nitrile gloves (pair) ×1, safety goggles ×1
+    - `refresh` → "Refill completed; verify EC now." — hydroponics tub (ready) ×1
+    - `verify` → "EC log captured; refresh cycle is stable." — hydroponic nutrient solution EC log ×1
+- Recovery/troubleshooting branches:
+    - `recover` handles leaks/clogs/dosing mistakes and loops to `prep` or controlled retry at `refresh`
+- Safety/ops checks:
+    - Electrical isolation + PPE before drain/refill and no-closeout path without EC evidence artifact
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -289,9 +301,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - cured compost bucket ×1
 - Processes used:
     - [refresh-hydroponic-tub](/processes/refresh-hydroponic-tub)
-        - Requires: EC meter ×1, 50 mL measuring syringe ×1
-        - Consumes: hydroponics tub (nutrient deficient) ×1, 5 gallon bucket of dechlorinated tap water ×1, hydroponic nutrient concentrate (1 L) ×0.1
-        - Creates: hydroponics tub (ready) ×1
+    - [measure-ec-solution](/processes/measure-ec-solution)
 
 ## 11) Install Submersible Pump (`hydroponics/pump-install`)
 
@@ -346,8 +356,13 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/lettuce`
 - Dialogue `requiresItems` gates:
-    - `plant` → "Seedlings look healthy!" — stevia seedling ×10
-    - `grow` → "They're full grown and smell sweet!" — harvestable stevia plant ×10
+    - `setup` → "Seedlings are healthy and setup artifact is ready." — stevia seedling ×10
+    - `transfer` → "Outcome artifact ready: harvestable stevia plants." — harvestable stevia plant ×10
+    - `harvest` → "Harvest complete and quality checks pass." — bundle of stevia leaves ×10
+- Recovery/troubleshooting branches:
+    - `stress` branch handles mold/wilting/algae contingencies and routes to full restart (`setup`) or controlled resume (`transfer`)
+- Safety/ops checks:
+    - Explicit pause/resume language for contamination and nutrient-burn events before re-entering main flow
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -355,17 +370,8 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - cured compost bucket ×1
 - Processes used:
     - [germinate-stevia](/processes/germinate-stevia)
-        - Requires: hydroponic grow lamp ×1
-        - Consumes: stevia seeds ×10, soaked hydroponic starter plug ×10
-        - Creates: stevia seedling ×10
     - [grow-stevia](/processes/grow-stevia)
-        - Requires: hydroponic grow lamp ×1
-        - Consumes: stevia seedling ×6, hydroponics tub (ready) ×1, dWatt ×16128
-        - Creates: harvestable stevia plant ×6, hydroponics tub (nutrient deficient) ×1
     - [harvest-stevia](/processes/harvest-stevia)
-        - Requires: none
-        - Consumes: harvestable stevia plant ×1
-        - Creates: bundle of stevia leaves ×10, harvested stevia plant ×1
 
 ## 14) Regrow Your Stevia (`hydroponics/regrow-stevia`)
 
