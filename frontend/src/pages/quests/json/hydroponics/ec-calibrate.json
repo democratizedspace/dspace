@@ -40,11 +40,11 @@
         },
         {
             "id": "baseline",
-            "text": "Capture a pre-calibration EC reading and log it. This baseline artifact is required so we can prove improvement instead of guessing.",
+            "text": "Capture a pre-calibration EC reading and note it. Then verify with a post-calibration log artifact before this quest can close.",
             "options": [
                 {
                     "type": "process",
-                    "process": "measure-ec-solution",
+                    "process": "measure-ec",
                     "text": "Record baseline EC reading.",
                     "requiresItems": [
                         {
@@ -60,13 +60,7 @@
                 {
                     "type": "goto",
                     "goto": "calibrate",
-                    "text": "Baseline logged; continue to calibration.",
-                    "requiresItems": [
-                        {
-                            "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Baseline logged; continue to calibration."
                 }
             ]
         },

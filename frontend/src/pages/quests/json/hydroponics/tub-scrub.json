@@ -36,7 +36,7 @@
                             "count": 1
                         },
                         {
-                            "id": "e1a8a5d7-d8df-4fca-b44b-5d0e386f6f6f",
+                            "id": "50f2080e-7dd5-4c8d-a764-dfaa02ca59c3",
                             "count": 1
                         },
                         {
@@ -48,7 +48,7 @@
                             "count": 1
                         },
                         {
-                            "id": "0d030f31-6bd4-4a2f-95a8-52f93389e8f3",
+                            "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
                             "count": 1
                         }
                     ]
@@ -59,7 +59,7 @@
                     "text": "Bath mixed; capture baseline residue state.",
                     "requiresItems": [
                         {
-                            "id": "62787f5a-9e12-43e4-9db9-fb25268f2524",
+                            "id": "68e50400-fa25-4459-9633-2304a67096c9",
                             "count": 1
                         }
                     ]
@@ -76,7 +76,7 @@
                     "text": "Baseline recorded; begin scrub pass.",
                     "requiresItems": [
                         {
-                            "id": "62787f5a-9e12-43e4-9db9-fb25268f2524",
+                            "id": "68e50400-fa25-4459-9633-2304a67096c9",
                             "count": 1
                         }
                     ]
@@ -98,11 +98,11 @@
                     "text": "Run the scrub/sanitize pass.",
                     "requiresItems": [
                         {
-                            "id": "62787f5a-9e12-43e4-9db9-fb25268f2524",
+                            "id": "68e50400-fa25-4459-9633-2304a67096c9",
                             "count": 1
                         },
                         {
-                            "id": "56f2e48f-e9f9-4f3f-9215-844f6f31e6af",
+                            "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
                             "count": 1
                         }
                     ]
@@ -113,7 +113,7 @@
                     "text": "Scrub pass complete; verify post-clean state.",
                     "requiresItems": [
                         {
-                            "id": "645dd873-a4ca-4bbd-b6a8-a78284bf6cf0",
+                            "id": "6498967e-284e-46ff-bee7-10e3907f60fd",
                             "count": 1
                         }
                     ]
@@ -130,7 +130,7 @@
                     "text": "Post-clean artifact confirms a clear tub.",
                     "requiresItems": [
                         {
-                            "id": "645dd873-a4ca-4bbd-b6a8-a78284bf6cf0",
+                            "id": "6498967e-284e-46ff-bee7-10e3907f60fd",
                             "count": 1
                         }
                     ]

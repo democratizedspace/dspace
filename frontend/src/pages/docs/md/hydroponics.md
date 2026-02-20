@@ -234,7 +234,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `requiresQuests`: `hydroponics/ph-check`
 - Dialogue `requiresItems` gates:
     - `prep` → baseline handoff — EC meter ×1, EC calibration solution (1000 ppm) ×1
-    - `baseline`/`verify` → interpretation handoff — hydroponic nutrient solution EC log ×1
+    - `verify`/`interpret` → interpretation handoff — hydroponic nutrient solution EC log ×1
     - `calibrate` → calibration run — EC meter ×1, EC calibration solution (1000 ppm) ×1
 - Recovery/troubleshooting branches:
     - `interpret` routes drift failures to `corrective`, then loops through recalibration + re-test
@@ -246,6 +246,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
+    - [measure-ec](/processes/measure-ec)
     - [measure-ec-solution](/processes/measure-ec-solution)
     - [calibrate-ec-meter](/processes/calibrate-ec-meter)
         - Requires: EC meter ×1, EC calibration solution (1000 ppm) ×1
