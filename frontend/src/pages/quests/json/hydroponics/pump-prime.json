@@ -62,7 +62,7 @@
                 {
                     "type": "goto",
                     "goto": "recover",
-                    "text": "I hear cavitation or see bubbles in the return line."
+                    "text": "I see large air pockets or sections of the return line that are not fully flooded."
                 }
             ]
         },
@@ -81,6 +81,10 @@
                         },
                         {
                             "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
                         }
                     ]

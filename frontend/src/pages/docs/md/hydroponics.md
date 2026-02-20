@@ -329,10 +329,13 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `requiresQuests`: `hydroponics/pump-install`
 - Dialogue `requiresItems` gates:
     - `precheck` → "Installed loop, submerged intake, and PPE confirmed." — installed submersible pump loop ×1, nitrile gloves (pair) ×1, safety goggles ×1
-    - `prime` → "Run controlled prime cycle with wet intake." — submersible water pump ×1, hydroponics tub (ready) ×1
+    - `precheck` → "Verified loop, submerged intake, and PPE confirmed." — verified hydroponic circulation loop ×1, nitrile gloves (pair) ×1, safety goggles ×1
+    - `prime` → "Run controlled prime cycle with wet intake." — submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
     - `prime` → "Prime cycle done; verify circulation artifact." — installed submersible pump loop ×1
+    - `prime` → "Prime cycle done; use existing verification artifact." — verified hydroponic circulation loop ×1
     - `verify` → "Flow is stable after priming." — verified hydroponic circulation loop ×1
     - `recover` → "Hardware is reseated; re-verify now." — installed submersible pump loop ×1
+    - `recover` → "Hardware is reseated; use verified loop to continue checks." — verified hydroponic circulation loop ×1
 - Recovery/troubleshooting branches:
     - `precheck` can route to `recover` when cavitation/air ingress is observed
     - `verify` routes to `recover` for reseat/top-off retry before re-verification
@@ -360,9 +363,10 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `requiresQuests`: `hydroponics/lettuce`
 - Dialogue `requiresItems` gates:
     - `setup` → "Seedlings are established and ready for transplant." — stevia seedling ×10
-    - `grow` → "Start controlled grow cycle." — hydroponics tub (ready) ×1
+    - `grow` → "Start controlled grow cycle." — hydroponic grow lamp ×1
     - `grow` → "Mature plants are ready for harvest." — harvestable stevia plant ×10
-    - `recover` → "Stabilize reservoir before retrying." — hydroponic nutrient concentrate (1 L) ×1, nitrile gloves (pair) ×1, safety goggles ×1, submersible water pump ×1, hydroponics tub (ready) ×1
+    - `recover` → "Stabilize reservoir before retrying." — EC meter ×1, 50 mL measuring syringe ×1
+    - `harvest` → "Harvest completed with staged evidence." — bundle of stevia leaves ×1
 - Recovery/troubleshooting branches:
     - `setup` and `grow` both branch to `recover` for mold, yellowing, or stalled growth before returning to staged setup
 - Safety/ops checks:
@@ -410,12 +414,12 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/nutrient-check`
 - Dialogue `requiresItems` gates:
-    - `attach` → "Attach thermometer for a stable reading." — 7 pH freshwater aquarium (150 L) ×1, aquarium thermometer (0–50°C) ×1
+    - `attach` → "Attach thermometer for a stable reading." — Walstad aquarium (80 L) ×1, aquarium thermometer (0–50°C) ×1, paper towel ×1
     - `attach` → "Thermometer mounted; capture temperature log." — attached aquarium thermometer ×1
     - `measure` → "Record temperature log artifact." — attached aquarium thermometer ×1
     - `measure` → "Temperature log captured." — walstad tank temperature log ×1
     - `interpret` → "In range and stable; close this check." — walstad tank temperature log ×1
-    - `correct` → "Stabilize reservoir before retest." — hydroponic nutrient concentrate (1 L) ×1, nitrile gloves (pair) ×1, safety goggles ×1, submersible water pump ×1, hydroponics tub (ready) ×1
+    - `correct` → "Stabilize reservoir before retest." — EC meter ×1, 50 mL measuring syringe ×1
 - Recovery/troubleshooting branches:
     - `interpret` branches to `correct` for caution/fail thresholds, then loops to `measure` for mandatory re-log
 - Safety/ops checks:

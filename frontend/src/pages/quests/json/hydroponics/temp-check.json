@@ -27,11 +27,15 @@
                     "text": "Attach thermometer for a stable reading.",
                     "requiresItems": [
                         {
-                            "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
                             "count": 1
                         },
                         {
                             "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        },
+                        {
+                            "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
                             "count": 1
                         }
                     ]
@@ -109,23 +113,11 @@
                     "text": "Stabilize reservoir before retest.",
                     "requiresItems": [
                         {
-                            "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
                             "count": 1
                         },
                         {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
-                            "count": 1
-                        },
-                        {
-                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
                             "count": 1
                         }
                     ]

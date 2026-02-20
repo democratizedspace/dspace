@@ -54,7 +54,7 @@
                     "text": "Start controlled grow cycle.",
                     "requiresItems": [
                         {
-                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
                             "count": 1
                         }
                     ]
@@ -87,23 +87,11 @@
                     "text": "Stabilize reservoir before retrying.",
                     "requiresItems": [
                         {
-                            "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
                             "count": 1
                         },
                         {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
-                            "count": 1
-                        },
-                        {
-                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
                             "count": 1
                         }
                     ]
@@ -127,7 +115,13 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Harvest completed with staged evidence."
+                    "text": "Harvest completed with staged evidence.",
+                    "requiresItems": [
+                        {
+                            "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
