@@ -239,6 +239,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - `requiresQuests`: `devops/daily-backups`
 - Dialogue `requiresItems` gates:
     - `start` → "Set the logging policy." — external backup SSD ×1, Laptop Computer ×1
+    - `capture` → "Threshold exceeded or report missing fields." — journalctl report ×1
     - `capture` → "Snapshot passes thresholds." — journalctl report ×1
     - `anomaly` → "Corrective action applied; run follow-up verification window." — incident log extract ×1
 - Grants:
@@ -309,6 +310,7 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Dialogue `requiresItems` gates:
     - `start` → "Ready with laptop and node." — Laptop Computer ×1, Pi cluster node ×1
     - `keys` → "Key auth works in a second shell." — Pi cluster node ×1, Laptop Computer ×1
+    - `verify` → "Key login failed or access is unstable." — journalctl report ×1
     - `verify` → "Policy verified with evidence." — journalctl report ×1
     - `recovery` → "Recovery complete; re-run verification." — incident log extract ×1
 - Grants:
