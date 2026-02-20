@@ -92,7 +92,7 @@
         },
         {
             "id": "verify",
-            "text": "Take a new EC reading after calibration. If drift remains, branch to correction and loop until readings stabilize.",
+            "text": "Take a new EC reading after calibration. Pass only if the 1000 ppm calibration solution reads within 950-1050 ppm; if drift remains outside that band, branch to correction and loop until readings stabilize.",
             "options": [
                 {
                     "type": "process",
@@ -112,11 +112,11 @@
                 {
                     "type": "goto",
                     "goto": "interpret",
-                    "text": "Post-calibration reading logged.",
+                    "text": "Post-calibration reading logged (need baseline + verification logs before interpretation).",
                     "requiresItems": [
                         {
                             "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 }
@@ -124,7 +124,7 @@
         },
         {
             "id": "interpret",
-            "text": "Interpretation gate: if the meter now lands within tolerance, close out. If the value still drifts, clean and recalibrate before trying again.",
+            "text": "Interpretation gate: finish only when the post-calibration reading is within 950-1050 ppm (1000 ppm ±5%). If the value still drifts outside that pass band, clean and recalibrate before trying again.",
             "options": [
                 {
                     "type": "goto",
@@ -133,7 +133,7 @@
                     "requiresItems": [
                         {
                             "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 },

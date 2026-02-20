@@ -234,10 +234,12 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `requiresQuests`: `hydroponics/ph-check`
 - Dialogue `requiresItems` gates:
     - `prep` → baseline handoff — EC meter ×1, EC calibration solution (1000 ppm) ×1
-    - `verify`/`interpret` → interpretation handoff — hydroponic nutrient solution EC log ×1
+    - `verify`/`interpret` → interpretation handoff — hydroponic nutrient solution EC log ×2 (baseline + post-calibration)
     - `calibrate` → calibration run — EC meter ×1, EC calibration solution (1000 ppm) ×1
 - Recovery/troubleshooting branches:
     - `interpret` routes drift failures to `corrective`, then loops through recalibration + re-test
+- Pass/fail bounds:
+    - Post-calibration reading must be within 950-1050 ppm (1000 ppm ±5%) before `finish` unlocks
 - Safety/ops checks:
     - Probe rinsing and fresh-solution handling gate before calibration
 - Grants:
