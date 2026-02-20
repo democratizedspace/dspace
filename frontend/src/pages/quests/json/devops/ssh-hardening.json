@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 1,
         "score": 90,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-hardening-2025-08-18",
@@ -20,18 +20,28 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's secure your Pi cluster node's SSH service. Keep a laptop handy.",
+            "text": "Let's lock down SSH with a safety-first flow: stage keys, verify a second shell, then enforce hardening.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "keys",
-                    "text": "Ready."
+                    "text": "Ready with laptop and node.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        },
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "keys",
-            "text": "On your laptop, run `ssh-keygen -t ed25519` to create a key pair. Use `ssh-copy-id` to add the public key to `~/.ssh/authorized_keys` on the Pi cluster node. Protect the private key with a strong passphrase.",
+            "text": "Run `ssh-keygen -t ed25519`, copy the public key with `ssh-copy-id`, and keep your existing session open as rollback insurance.",
             "options": [
                 {
                     "type": "process",
@@ -41,7 +51,7 @@
                 {
                     "type": "goto",
                     "goto": "config",
-                    "text": "Key installed.",
+                    "text": "Key auth works in a second shell.",
                     "requiresItems": [
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
@@ -57,20 +67,63 @@
         },
         {
             "id": "config",
-            "text": "Back up `/etc/ssh/sshd_config`. Set `PasswordAuthentication no` and `PermitRootLogin no`, then run `sudo systemctl restart ssh`. Confirm your key works before logging out.",
+            "text": "Back up `/etc/ssh/sshd_config`, set `PasswordAuthentication no` and `PermitRootLogin no`, then restart sshd while the backup session remains connected.",
             "options": [
                 {
                     "type": "process",
                     "process": "harden-sshd-config",
-                    "text": "Update sshd_config."
+                    "text": "Apply hardened config."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Config applied; run verification."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Capture `sshd` journal evidence and confirm password login is blocked while key login stays healthy.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Capture sshd verification report."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Key login failed or access is unstable."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Service restarted.",
+                    "text": "Policy verified with evidence.",
                     "requiresItems": [
                         {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Safety stop: do not close the surviving session. Restore the backup config, fix key permissions, then retry verification before finalizing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Log the lockout incident and corrective steps."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Recovery complete; re-run verification.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
                             "count": 1
                         }
                     ]
@@ -79,7 +132,7 @@
         },
         {
             "id": "finish",
-            "text": "SSH is now locked down to your key. Nice work.",
+            "text": "SSH is hardened with recovery evidence in hand. Excellent ops hygiene.",
             "options": [
                 {
                     "type": "finish",
