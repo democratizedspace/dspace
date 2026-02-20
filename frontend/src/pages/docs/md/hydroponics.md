@@ -98,9 +98,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/basil`, `3dprinter/start`
 - Dialogue `requiresItems` gates:
-    - `haul` → "I stacked ten buckets!" — ten-bucket water haul ×1
-    - `check` → "Claim the Hydro Award" — ten-bucket water haul ×1
-    - `check` → "Award in hand!" — Hydro Award ×1
+    - `stage`/`haul` → inspection handoff — ten-bucket water haul ×1
+    - `recover` → inspection retry — ten-bucket water haul ×1
+    - `check` → "Claim the Hydro Award." — ten-bucket water haul ×1
+    - `check` → "Award in hand." — Hydro Award ×1
+- Recovery/troubleshooting branches:
+    - `inspect` routes unstable stacks to `recover`, then loops back to verification
+- Safety/ops checks:
+    - Explicit lifting, spill-control, and aisle-clearance checks before award exchange
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -122,7 +127,13 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/bucket_10`
 - Dialogue `requiresItems` gates:
-    - `install` → "Light installed." — hydroponic grow lamp ×1, smart plug ×1, mechanical outlet timer ×1
+    - `prep`/`install`/`staged-verify` → verification handoff — hydroponic grow lamp ×1, smart plug ×1, mechanical outlet timer ×1
+    - `verify` → "Cycle transitions cleanly; no heat or routing issues." — hydroponic grow lamp ×1
+- Recovery/troubleshooting branches:
+    - `verify` routes flicker/heat/moisture failures to `recover` and loops back through install + verification
+- Safety/ops checks:
+    - Dry-hands + unplugged setup gate before installation
+    - Drip-loop and thermal-risk checks before completion
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -222,13 +233,20 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/ph-check`
 - Dialogue `requiresItems` gates:
-    - `calibrate` → "Calibration complete" — EC meter ×1, EC calibration solution (1000 ppm) ×1
+    - `prep` → baseline handoff — EC meter ×1, EC calibration solution (1000 ppm) ×1
+    - `baseline`/`verify` → interpretation handoff — hydroponic nutrient solution EC log ×1
+    - `calibrate` → calibration run — EC meter ×1, EC calibration solution (1000 ppm) ×1
+- Recovery/troubleshooting branches:
+    - `interpret` routes drift failures to `corrective`, then loops through recalibration + re-test
+- Safety/ops checks:
+    - Probe rinsing and fresh-solution handling gate before calibration
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
+    - [measure-ec-solution](/processes/measure-ec-solution)
     - [calibrate-ec-meter](/processes/calibrate-ec-meter)
         - Requires: EC meter ×1, EC calibration solution (1000 ppm) ×1
         - Consumes: EC calibration solution (1000 ppm) ×1
@@ -615,7 +633,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/reservoir-refresh`
 - Dialogue `requiresItems` gates:
-    - `scrub` → "Walls are spotless!" — 5 gallon bucket of dechlorinated tap water ×1
+    - `mix` → peroxide prep + baseline handoff — 5 gallon bucket of dechlorinated tap water ×1, hydrogen peroxide (3%) ×1, nitrile gloves (pair) ×1, safety goggles ×1, glass stir rod ×1
+    - `mix`/`baseline` → scrub handoff — peroxide rinse bath ×1
+    - `scrub`/`verify` → finish handoff — sanitized net cups ×1
+- Recovery/troubleshooting branches:
+    - `baseline`/`verify` route contamination back to `recover`, which loops to `mix` for a fresh cycle
+- Safety/ops checks:
+    - PPE required before peroxide handling
+    - Electrical no-spray reminder during scrub pass
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -623,9 +648,8 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - cured compost bucket ×1
 - Processes used:
     - [bucket-water-dechlorinated](/processes/bucket-water-dechlorinated)
-        - Requires: none
-        - Consumes: 5 gallon bucket of tap water (chlorinated) ×1
-        - Creates: 5 gallon bucket of dechlorinated tap water ×1
+    - [mix-peroxide-bath](/processes/mix-peroxide-bath)
+    - [sanitize-net-cups](/processes/sanitize-net-cups)
 
 ## 23) Clean Net Cups (`hydroponics/netcup-clean`)
 
