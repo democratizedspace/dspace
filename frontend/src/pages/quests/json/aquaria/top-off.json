@@ -1,19 +1,19 @@
 {
     "id": "aquaria/top-off",
     "title": "Top Off Evaporated Water",
-    "description": "Use a hand pump siphon and aged water to restore aquarium levels.",
+    "description": "Use a siphon and dechlorinated water to restore level safely, then verify stable conditions.",
     "image": "/assets/quests/aquarium_top_off.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "The waterline dropped. Raise two 5 gal buckets above the tank and prime the gravel vacuum.",
+            "text": "The waterline dropped. Stage the gravel vacuum, two buckets, and dry-hand cable routing before opening any valves.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "topoff",
-                    "text": "Setup done.",
+                    "goto": "prep-water",
+                    "text": "Tools staged and power cords are clear of splash zones.",
                     "requiresItems": [
                         {
                             "id": "97317bc3-507a-4e2c-912b-507d586cee87",
@@ -28,35 +28,100 @@
             ]
         },
         {
-            "id": "topoff",
-            "text": "Hand-pump water from the buckets until the tank's level is restored.",
+            "id": "prep-water",
+            "text": "Only add conditioned water. If you only have tap water, dechlorinate and age it before top-off so fish and biofilter are protected.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Condition a fresh bucket for top-off."
+                },
+                {
                     "type": "goto",
-                    "goto": "refill",
-                    "text": "Waterline topped off."
+                    "goto": "topoff",
+                    "text": "Conditioned water is ready.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "refill",
-            "text": "Refill both buckets with a hose. Let them sit 24\u201348 h or condition before the next top-off.",
+            "id": "topoff",
+            "text": "Prime the siphon and add water slowly along the glass to avoid substrate disturbance and livestock shock.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "verify",
+                    "text": "Waterline restored and fish remain calm.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Flow stalled or water clouded; run recovery before finishing.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery path: stop flow, check kinks and intake clogging, then perform a controlled partial change if cloudiness persists.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "partial-water-change",
+                    "text": "Run partial-change recovery and stabilize the tank."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Recovery complete; verify stability before closure."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Log a temperature reading after refill and keep the spare bucket aging for the next evaporation event.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Capture post-top-off verification reading."
+                },
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Buckets refilled and aging.",
-                    "process": "bucket-water-dechlorinated"
+                    "text": "Reading logged and backup bucket is aging.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! You've got water aging for the next evaporation top-off.",
+            "text": "Nice control. Keep the siphon clean, cords dry, and conditioned water ready for the next top-off.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Job done."
+                    "text": "Top-off complete and verified."
                 }
             ]
         }
@@ -70,8 +135,8 @@
     "requiresQuests": ["aquaria/water-change"],
     "hardening": {
         "passes": 0,
-        "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }
