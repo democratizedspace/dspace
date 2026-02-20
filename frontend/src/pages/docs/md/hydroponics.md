@@ -98,9 +98,13 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/basil`, `3dprinter/start`
 - Dialogue `requiresItems` gates:
-    - `haul` → "I stacked ten buckets!" — ten-bucket water haul ×1
-    - `check` → "Claim the Hydro Award" — ten-bucket water haul ×1
-    - `check` → "Award in hand!" — Hydro Award ×1
+    - `haul` → "Haul staged; verify evidence." — ten-bucket water haul ×1
+    - `verify` → "Claim the Hydro Award" — ten-bucket water haul ×1
+    - `verify` → "Award in hand and haul area is clear." — Hydro Award ×1
+- Recovery/troubleshooting branches:
+    - `haul` can route to `recover` when spills/leaks/path hazards are detected, then loops back to `haul`
+- Safety/ops checks:
+    - Strategy split (`plan`) for batch-stack vs buddy-shuttle and mandatory clear-path handling before award step
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -222,7 +226,15 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/ph-check`
 - Dialogue `requiresItems` gates:
-    - `calibrate` → "Calibration complete" — EC meter ×1, EC calibration solution (1000 ppm) ×1
+    - `prep` → "Probe and solution are ready." — EC meter ×1, EC calibration solution (1000 ppm) ×1
+    - `calibrate` → "Calibrate to 1000 ppm." — EC meter ×1, EC calibration solution (1000 ppm) ×1
+    - `calibrate` → "Capture post-calibration EC log." — EC meter ×1, hydroponics tub (ready) ×1
+    - `calibrate` → "Log captured; interpret against the acceptance band." — hydroponic nutrient solution EC log ×1
+    - `interpret` → both interpretation choices require hydroponic nutrient solution EC log ×1
+- Recovery/troubleshooting branches:
+    - `prep` can route to `troubleshoot` for dirty probe/stale solution, and `interpret` loops to `troubleshoot` for out-of-range drift
+- Safety/ops checks:
+    - Probe rinse/blot + fresh-solution verification before calibration, with mandatory retest loop when readings are unstable
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -233,6 +245,10 @@ Hydroponics quests build practical progression through the hydroponics skill tre
         - Requires: EC meter ×1, EC calibration solution (1000 ppm) ×1
         - Consumes: EC calibration solution (1000 ppm) ×1
         - Creates: none
+    - [measure-ec-solution](/processes/measure-ec-solution)
+        - Requires: EC meter ×1, hydroponics tub (ready) ×1
+        - Consumes: none
+        - Creates: hydroponic nutrient solution EC log ×1
 
 ## 8) Check Solution EC (`hydroponics/ec-check`)
 
@@ -566,8 +582,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/plug-soak`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Cut and plant" — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
-    - `prep` → "Cutting is nestled in" — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
+    - `prep` → "Setup artifact ready." — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1, nitrile gloves (pair) ×1
+    - `clone` → "Cut and seat clone." — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
+    - `outcome` → "Capture clone handoff EC log." — EC meter ×1, hydroponics tub (ready) ×1
+    - `outcome` → "Outcome artifact captured; clone can continue rooting." — hydroponic nutrient solution EC log ×1
+- Recovery/troubleshooting branches:
+    - `prep`, `clone`, and `outcome` can route to `recover`; `recover` loops back to `prep` or `clone` after stress correction
+- Safety/ops checks:
+    - Sanitized handling/PPE setup gate before cutting and recovery pause criteria for wilt/foul-plug conditions
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -578,6 +600,10 @@ Hydroponics quests build practical progression through the hydroponics skill tre
         - Requires: 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
         - Consumes: none
         - Creates: none
+    - [measure-ec-solution](/processes/measure-ec-solution)
+        - Requires: EC meter ×1, hydroponics tub (ready) ×1
+        - Consumes: none
+        - Creates: hydroponic nutrient solution EC log ×1
 
 ## 21) Rinse the Roots (`hydroponics/root-rinse`)
 

@@ -1,25 +1,41 @@
 {
     "id": "hydroponics/bucket_10",
     "title": "Bucket, we'll do it live!",
-    "description": "Have 10 buckets of dechlorinated water in your inventory. For some reason.",
+    "description": "Stage a ten-bucket haul with safe lifting checks and recovery if your setup slips.",
     "image": "/assets/quests/benchy_10.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hellooooo adventurer! You know what I find truly fascinating? Water! There's so much of it! I want all of it! Get me water! Lots of water!",
+            "text": "Hellooooo adventurer! Water mission time. We are staging ten dechlorinated buckets, but we do it safely and we prove the haul before we celebrate.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Give me the safe haul plan."
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Two strategies: batch stack near the tub, or shuttle with a buddy. Either way, keep a clear path and do not carry if your grip or back feels wrong.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "haul",
-                    "text": "How many buckets are we talking?"
+                    "text": "Batch stack near the tub."
+                },
+                {
+                    "type": "goto",
+                    "goto": "haul",
+                    "text": "Use buddy-shuttle in short trips."
                 }
             ]
         },
         {
             "id": "haul",
-            "text": "Hauling water isn't glamorous, but it's great practice for future hydroponic adventures. Keep those buckets coming until you've collected ten of them.",
+            "text": "Run the staging process, then verify the evidence item before moving on. If buckets tip or lids leak, branch to recovery first.",
             "options": [
                 {
                     "type": "process",
@@ -28,8 +44,13 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "check",
-                    "text": "I stacked ten buckets!",
+                    "goto": "recover",
+                    "text": "A bucket tipped, leaked, or blocked the walkway."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Haul staged; verify evidence.",
                     "requiresItems": [
                         {
                             "id": "86b5d874-a04e-426f-be77-0f7047789faf",
@@ -40,8 +61,19 @@
             ]
         },
         {
-            "id": "check",
-            "text": "Ten buckets lined up? That's serious commitment. Want your trophy?",
+            "id": "recover",
+            "text": "Recovery branch: restack by weight, clear spills, and reset your carry route. No award step until the ten-bucket haul artifact is rebuilt.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "haul",
+                    "text": "Route is safe again; restage the haul."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Good. The ten-bucket water haul artifact confirms completion of the physical work. Now cash it into the Hydro Award.",
             "options": [
                 {
                     "type": "process",
@@ -56,8 +88,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "congrats",
-                    "text": "Award in hand!",
+                    "goto": "finish",
+                    "text": "Award in hand and haul area is clear.",
                     "requiresItems": [
                         {
                             "id": "978ce094-f4fa-4b55-9e1a-2ea76531989d",
@@ -68,23 +100,12 @@
             ]
         },
         {
-            "id": "congrats",
-            "text": "You managed to wrangle all ten buckets of dechlorinated water. That's a lot of arm work!",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "My arms are tired!"
-                }
-            ]
-        },
-        {
             "id": "finish",
-            "text": "Ahhh, you're the best, adventurer! You're the best! I give you this Hydro Award!",
+            "text": "You did it right: plan, evidence, recovery-ready, then reward. Hydration logistics unlocked!",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Aww, shucks!"
+                    "text": "Bucket operation complete."
                 }
             ]
         }
@@ -99,7 +120,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -1,30 +1,60 @@
 {
     "id": "hydroponics/mint-cutting",
     "title": "Clone Mint Cutting",
-    "description": "Root a mint sprig for endless tea.",
+    "description": "Run a staged mint-clone cycle with setup proof, stress recovery, and outcome verification before closure.",
     "image": "/assets/quests/hydroponics_mint_cutting_clone.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Fancy some mint tea? Let's clone a cutting.",
+            "text": "Fancy mint tea? Great. We do this as a staged clone workflow: prep proof first, then rooted-handoff checks, with a recovery branch if wilt shows up.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Show me how."
+                    "text": "Run staged clone workflow."
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "Trim a healthy stem, pop it into a soaked plug, and set it in a net cup.",
+            "text": "Setup gate: sanitize blade, soak the plug, and keep your handling clean. No cutting until prep evidence is in hand.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clone",
+                    "text": "Setup artifact ready.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Plug dried out or stem wilted during prep."
+                }
+            ]
+        },
+        {
+            "id": "clone",
+            "text": "Cut below a node, seat the stem into the soaked plug, and keep humidity steady. Then verify environment stability before claiming success.",
             "options": [
                 {
                     "type": "process",
                     "process": "clone-mint-cutting",
-                    "text": "Cut and plant",
+                    "text": "Cut and seat clone.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -38,28 +68,76 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Cutting is nestled in",
+                    "goto": "outcome",
+                    "text": "Clone seated; run outcome verification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Stem collapsed or plug turned foul; recover before retry."
+                }
+            ]
+        },
+        {
+            "id": "outcome",
+            "text": "Outcome gate: check tub conditions and capture an EC snapshot so the clone is handed off into a stable environment, not a guess.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ec-solution",
+                    "text": "Capture clone handoff EC log.",
                     "requiresItems": [
                         {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
                             "count": 1
                         },
                         {
-                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Outcome artifact captured; clone can continue rooting.",
+                    "requiresItems": [
+                        {
+                            "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Environment unstable or clone stressed; run recovery loop."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: trim damaged leaf mass, rehydrate the plug, and pause under gentle light for one cycle before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Recovery done; restart setup checks."
+                },
+                {
+                    "type": "goto",
+                    "goto": "clone",
+                    "text": "Clone still viable; retry seating step."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! Keep the cube moist and wait for roots to emerge.",
+            "text": "Nice work: setup evidence, clone execution, and outcome verification with a stress-recovery loop in between.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait for fresh mint!"
+                    "text": "Mint clone cycle complete."
                 }
             ]
         }
@@ -74,7 +152,7 @@
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
