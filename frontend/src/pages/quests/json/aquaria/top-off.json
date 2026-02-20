@@ -135,7 +135,7 @@
     "requiresQuests": ["aquaria/water-change"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }
