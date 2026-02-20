@@ -1,19 +1,19 @@
 {
     "id": "electronics/tin-soldering-iron",
     "title": "Tin a Soldering Iron",
-    "description": "Prepare your soldering iron for clean joints by tinning the tip.",
+    "description": "Prepare your soldering iron for clean joints by tinning the tip, verifying tip condition, and recovering from oxidation safely.",
     "image": "/assets/quests/electronics_tin_soldering_iron_tip.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Good to see you progressing! Before soldering, lay out a silicone mat, secure your work in helping hands, plug in your station, keep a brass tip cleaner nearby, and have a damp sponge ready.",
+            "text": "Before heating anything, set your silicone mat, secure tools in helping hands, and confirm brass cleaner plus damp sponge are in reach. Ventilation on, sleeves clear, and no liquids near the station.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "tin",
-                    "text": "Iron is heating up.",
+                    "goto": "heat",
+                    "text": "Station is staged and safe.",
                     "requiresItems": [
                         {
                             "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
@@ -36,19 +36,85 @@
             ]
         },
         {
-            "id": "tin",
-            "text": "Once the tip is hot, melt a little solder across it, then wipe on the damp sponge to leave a thin, shiny layer that resists oxidation.",
+            "id": "heat",
+            "text": "Heat the iron to working range, then apply a small solder bead to wet the tip. Wipe on brass wool first, sponge second, and inspect for a smooth silver coat.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "Initial tinning pass complete.",
+                    "requiresItems": [
+                        {
+                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                            "count": 1
+                        },
+                        {
+                            "id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "inspect",
+            "text": "If the tip is uniformly shiny, you're ready. If it stays dull, black, or patchy, branch to recovery before attempting any joint work.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Tip looks shiny."
+                    "text": "Tip is smooth and reflective.",
+                    "requiresItems": [
+                        {
+                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Tip shows oxidation or poor wetting.",
+                    "requiresItems": [
+                        {
+                            "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: lower heat slightly, clean with brass wool, re-apply fresh solder, and repeat inspection. If smoke spikes or the tip pits badly, power down and replace the tip before continuing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "heat",
+                    "text": "Recovery applied; retry tinning cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Tip is unsafe; stop and replace hardware.",
+                    "requiresItems": [
+                        {
+                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! A tinned tip makes future joints easier and cleaner. Unplug the iron and let it cool safely.",
+            "text": "Nice work. Park the iron safely, switch off power, and let everything cool before storage. A healthy tip now prevents cold joints in the next quests.",
             "options": [
                 {
                     "type": "finish",
@@ -67,7 +133,7 @@
     "hardening": {
         "passes": 3,
         "score": 75,
-        "emoji": "\u2705",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-14",

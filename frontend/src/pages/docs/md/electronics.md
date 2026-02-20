@@ -76,7 +76,10 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/basic-circuit`
 - Dialogue `requiresItems` gates:
-    - `measure` → "It reads about 12.6 V." — 200 Wh battery pack ×1, digital multimeter ×1, safety goggles ×1
+    - `start` → "Bench and PPE are ready." — 200 Wh battery pack ×1, digital multimeter ×1, safety goggles ×1
+    - `measure` → "Capture the battery voltage reading." — 200 Wh battery pack ×1, digital multimeter ×1, safety goggles ×1
+    - `interpret` → "Voltage is stable within 12.4-13.6 V." — digital multimeter ×1
+    - `corrective` → "No hazard signs; run the verification retest." — 200 Wh battery pack ×1, safety goggles ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -271,6 +274,9 @@ Electronics quests build practical progression through the electronics skill tre
     - `requiresQuests`: `electronics/thermistor-reading`
 - Dialogue `requiresItems` gates:
     - `setup` → "Hardware ready" — USB Cable ×1, Raspberry Pi 5 board ×1, Arduino Uno ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, safety goggles ×1, anti-static wrist strap ×1
+    - `capture` → "Collected a timestamped sample window." — Raspberry Pi 5 board ×1, anti-static wrist strap ×1
+    - `interpret` → "Log is complete and anomaly-free." — Raspberry Pi 5 board ×1
+    - `recover` → "Recovery applied; collect a fresh verification window." — anti-static wrist strap ×1, Raspberry Pi 5 board ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -325,7 +331,10 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/resistor-color-check`
 - Dialogue `requiresItems` gates:
-    - `start` → "Iron is heating up." — soldering iron kit ×1, helping hands ×1, silicone soldering mat ×1, brass tip cleaner ×1
+    - `start` → "Station is staged and safe." — soldering iron kit ×1, helping hands ×1, silicone soldering mat ×1, brass tip cleaner ×1
+    - `heat` → "Initial tinning pass complete." — soldering iron kit ×1, brass tip cleaner ×1
+    - `inspect` → "Tip is smooth and reflective." — soldering iron kit ×1
+    - `recover` → "Recovery applied; retry tinning cycle." — brass tip cleaner ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

@@ -1,35 +1,35 @@
 {
     "id": "electronics/data-logger",
     "title": "Log Temperature Data",
-    "description": "Use a Raspberry Pi to record readings from your thermistor.",
+    "description": "Use a Raspberry Pi to capture timestamped thermistor readings, classify anomalies, and recover with a verification logging window.",
     "image": "/assets/quests/electronics_pi_temperature_data_logger.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your thermistor circuit works. Set it on a dry, static-safe surface, put on safety goggles and an anti-static wrist strap, and keep power disconnected until wiring is double-checked.",
+            "text": "Your thermistor circuit works. Set everything on a dry, static-safe surface, wear goggles and a wrist strap, and keep power disconnected until wiring is verified.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "setup",
-                    "text": "Sounds good!"
+                    "text": "Safety setup complete."
                 }
             ]
         },
         {
             "id": "setup",
-            "text": "Connect the Arduino Uno to the Raspberry Pi with a USB cable. Run `sudo apt update && sudo apt install python3-serial` to add pyserial. Keep cases closed, avoid tugging cables, and keep drinks away.",
+            "text": "Connect the Arduino Uno to the Raspberry Pi by USB. Install serial tooling, confirm cable strain relief, and keep liquids away from powered electronics.",
             "options": [
                 {
                     "type": "process",
                     "process": "pyserial-install",
-                    "text": "Install pyserial"
+                    "text": "Install pyserial on the Raspberry Pi."
                 },
                 {
                     "type": "goto",
-                    "goto": "script",
-                    "text": "Hardware ready",
+                    "goto": "capture",
+                    "text": "Hardware and dependencies are ready.",
                     "requiresItems": [
                         {
                             "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
@@ -64,24 +64,84 @@
             ]
         },
         {
-            "id": "script",
-            "text": "Create `log_temp.py` to read `/dev/ttyACM0` at 9600 baud and append timestamped temperatures to `temps.csv` each minute. Use the Raspberry Pi serial logging process for sample code and run `python3 log_temp.py`.",
+            "id": "capture",
+            "text": "Create `log_temp.py` to read `/dev/ttyACM0` at 9600 baud and append timestamped temperatures to `temps.csv` every minute. Capture at least a 10-minute sample before interpretation.",
             "options": [
                 {
                     "type": "process",
                     "process": "raspberry-pi-serial-log",
-                    "text": "Open the serial logging process"
+                    "text": "Run the serial logging process.",
+                    "goto": "interpret"
                 },
                 {
                     "type": "goto",
+                    "goto": "interpret",
+                    "text": "Collected a timestamped sample window.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Check the log for required fields (timestamp + temperature), cadence (1 minute), and anomalies (flatline, impossible jumps, or missing rows).",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Script is logging data!"
+                    "text": "Log is complete and anomaly-free.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Anomalies detected in the log.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: stop logging, reseat the USB cable, verify serial port permissions, and relaunch the logger. If anomalies persist, halt and inspect wiring before another run.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Recovery applied; collect a fresh verification window.",
+                    "requiresItems": [
+                        {
+                            "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Logs help spot trends. Stop the script with Ctrl+C, shut down the Pi, then unplug the USB cable before moving parts.",
+            "text": "Great work. You now have a validated temperature log that can drive alerting and plotting workflows. Shut down the Pi cleanly before unplugging hardware.",
             "options": [
                 {
                     "type": "finish",
@@ -100,7 +160,7 @@
     "hardening": {
         "passes": 2,
         "score": 90,
-        "emoji": "\u2705",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-refine-2025-08-09",
