@@ -1,42 +1,247 @@
 {
     "id": "hydroponics/ph-test",
     "title": "Test Hydroponic pH",
-    "description": "Check acidity so your plants stay healthy.",
+    "description": "Measure, interpret, and log reservoir pH with explicit correction thresholds.",
     "image": "/assets/quests/hydroponics_reservoir_ph_test.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "A stable pH keeps nutrients available to your plants. We'll test the reservoir and adjust if necessary.",
+            "text": "Stable pH keeps nutrients available. We only close this quest after a measurement artifact is interpreted and logged.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "measure",
-                    "text": "Let's test it."
+                    "goto": "prep",
+                    "text": "Run the pH control loop."
                 }
             ]
         },
         {
-            "id": "measure",
-            "text": "Use a pH strip or digital meter. Add pH down solution or base slowly until the reading hits 6.5.",
+            "id": "prep",
+            "text": "Safety first: stage meter, gloves, and goggles. Target band is 5.5-6.5; anything outside that range triggers correction + retest.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "measure-ph",
-                    "text": "Checking now."
-                },
-                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "pH adjusted",
+                    "goto": "measure",
+                    "text": "PPE and meter are staged.",
                     "requiresItems": [
                         {
                             "id": "6360b1e7-84d6-4256-b085-f36fc53ef299",
                             "count": 1
                         },
                         {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Meter drift or bad strips suspected."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Take a fresh sample and record the pH result as evidence.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ph",
+                    "text": "Capture pH reading artifact."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Reading captured; interpret against target band.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: evaluate only the fresh reading from this loop. 5.5-6.5 passes; out-of-range readings must go through corrective dosing and a mandatory retest.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Reading is within 5.5-6.5; proceed to logging.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Reading is out of range; start correction cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Add small pH corrections, mix thoroughly, and never skip PPE. Then retest before any closure path unlocks.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "adjust-ph",
+                    "text": "Dose and mix corrective adjustment.",
+                    "requiresItems": [
+                        {
                             "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Correction complete; mandatory retest now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Readings are still unstable after correction."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Retest gate: take a fresh measurement after dosing before interpretation can continue.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ph",
+                    "text": "Capture post-adjustment pH reading."
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest-interpret",
+                    "text": "Post-adjustment reading captured; re-interpret latest state.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "retest-interpret",
+            "text": "Retest interpretation gate: only continue once a post-adjustment reading exists alongside the original sample.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Retest is within 5.5-6.5; proceed to logging.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 2
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Retest is still out of range; run another correction cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 2
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Troubleshooting path: replace strips, recalibrate meter, and confirm pump circulation before restarting the measurement loop.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Recovery steps done; re-run prep gate."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Hardware verified; take a fresh reading.",
+                    "requiresItems": [
+                        {
+                            "id": "6360b1e7-84d6-4256-b085-f36fc53ef299",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Log the stable reading with timestamp so the next check can spot drift quickly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-stable-ph",
+                    "text": "Write stable pH log entry.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Stable reading logged and reviewed.",
+                    "requiresItems": [
+                        {
+                            "id": "cad7d051-e3fb-4f1c-9d72-358076ee732e",
                             "count": 1
                         }
                     ]
@@ -45,11 +250,11 @@
         },
         {
             "id": "finish",
-            "text": "Great! Monitoring pH will keep your crops thriving and yields high.",
+            "text": "Excellent control loop: measured, interpreted, corrected when needed, and logged proof before finish.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll keep an eye on it."
+                    "text": "pH routine closed with evidence."
                 }
             ]
         }
