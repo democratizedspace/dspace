@@ -1,46 +1,140 @@
 {
     "id": "hydroponics/pump-prime",
     "title": "Prime Water Pump",
-    "description": "Prep the pump so it doesn't run dry.",
+    "description": "Prime and verify the pump loop so circulation starts without cavitation.",
     "image": "/assets/quests/hydroponics_pump_prime.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "New pumps need a bit of water before they work well.",
+            "text": "Priming is a safety step, not a button mash. We confirm pre-checks, run a wet start, then verify stable flow before we close.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "precheck",
+                    "text": "Run priming checklist."
+                }
+            ]
+        },
+        {
+            "id": "precheck",
+            "text": "Before energizing, confirm the pump loop is installed, intake is submerged, and PPE is on around splashing electrical gear.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prime",
-                    "text": "Show me."
+                    "text": "Installed loop, submerged intake, and PPE confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "I hear cavitation or see bubbles in the return line."
                 }
             ]
         },
         {
             "id": "prime",
-            "text": "Fill the pump housing with nutrient solution and run it a moment to push out air bubbles.",
+            "text": "Fill the housing, purge visible air, and run a short wet-start cycle. Stop immediately if the pump chatters dry.",
             "options": [
                 {
                     "type": "process",
                     "process": "install-submersible-pump",
-                    "goto": "finish",
-                    "text": "Run the priming cycle."
+                    "text": "Run controlled prime cycle with wet intake.",
+                    "requiresItems": [
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Prime cycle done; verify circulation artifact.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Evidence gate: run flow verification and only close when we have a stable-loop proof artifact.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "verify-hydroponic-flow",
+                    "text": "Capture post-prime flow verification."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Pump is primed"
+                    "text": "Flow is stable after priming.",
+                    "requiresItems": [
+                        {
+                            "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Flow still sputters or intake keeps pulling air."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery path: cut power, reseat tubing, top reservoir above intake, then wait one minute before retrying to avoid overheating.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "precheck",
+                    "text": "Corrective actions complete; re-run precheck."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Hardware is reseated; re-verify now.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice. A primed pump circulates nutrients without cavitation.",
+            "text": "Pump is primed and verified with a stable circulation artifact. Keep this checklist for every maintenance restart.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Back to the grow bed."
+                    "text": "Prime + verification logged."
                 }
             ]
         }
@@ -51,7 +145,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/pump-install"],
+    "requiresQuests": [
+        "hydroponics/pump-install"
+    ],
     "hardening": {
         "passes": 0,
         "score": 80,

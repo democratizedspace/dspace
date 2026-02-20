@@ -858,9 +858,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
   - [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3626)
   - [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path. (PR #3626)
 - `hydroponics/pump-prime`
-  - [ ] Observed issue: `hydroponics/pump-prime` describes a cleaning cycle without a measurable before/after success definition.
-  - [ ] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent).
-  - [ ] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop.
+  - [x] Observed issue (addressed): `hydroponics/pump-prime` described a cleaning cycle without a measurable before/after success definition; this is now hardened with verification artifacts and recovery loops. (PR #TBD)
+  - [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #TBD)
+  - [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #TBD)
 - `hydroponics/regrow-stevia`
   - [ ] Observed issue: `hydroponics/regrow-stevia` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
   - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
@@ -874,13 +874,13 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
   - [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #3626)
   - [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #3626)
 - `hydroponics/stevia`
-  - [ ] Observed issue: `hydroponics/stevia` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
-  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
-  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming.
+  - [x] Observed issue (addressed): `hydroponics/stevia` was lifecycle-oriented but read as narration unless staged setup and outcome proofs were separated; staged evidence and recovery are now explicit. (PR #TBD)
+  - [x] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`. (PR #TBD)
+  - [x] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming. (PR #TBD)
 - `hydroponics/temp-check`
-  - [ ] Observed issue: `hydroponics/temp-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue (addressed): `hydroponics/temp-check` centered on a measurement/check action with thin thresholds and recovery handling; the quest now enforces log interpretation and corrective retest loops. (PR #TBD)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #TBD)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #TBD)
 - `hydroponics/top-off`
   - [x] Observed issue: `hydroponics/top-off` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3611)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3611)
