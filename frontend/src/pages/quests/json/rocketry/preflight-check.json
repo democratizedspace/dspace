@@ -1,29 +1,62 @@
 {
     "id": "rocketry/preflight-check",
     "title": "Preflight Checklist",
-    "description": "Confirm gear and run a quick launch sequence.",
+    "description": "Run a full preflight with wind data, safety holds, and a verified launch-ready checklist.",
     "image": "/assets/quests/model_rocket_preflight_checklist.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey friend! Nova here. Before we launch, we need a preflight check. Ready to run through it?",
+            "text": "Hey friend! Nova here. Before we light anything, we run preflight like professionals. Want the short pass or the full range walk?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quick-brief",
+                    "text": "Give me the quick checklist."
+                },
+                {
+                    "type": "goto",
+                    "goto": "range-walk",
+                    "text": "Let's do the full safety walk."
+                }
+            ]
+        },
+        {
+            "id": "quick-brief",
+            "text": "Quick brief: verify launch gear, confirm clear range, and log wind before arming. No data, no launch.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "supplies",
-                    "text": "Let's check the gear."
+                    "text": "Understood. Gear first."
+                }
+            ]
+        },
+        {
+            "id": "range-walk",
+            "text": "Walk the pad perimeter: spectators behind the line, extinguisher nearby, and recovery zone clear of roads and dry brush.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "supplies",
+                    "text": "Range is clear and safety line is set."
+                },
+                {
+                    "type": "goto",
+                    "goto": "scrub",
+                    "text": "Range is not safe. We should scrub and reset."
                 }
             ]
         },
         {
             "id": "supplies",
-            "text": "You'll need a launch pad, an igniter, and a controller. Once you've got them, we can proceed.",
+            "text": "You'll need a launch pad, igniter, and controller, plus the launch checklist card.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "arm",
+                    "goto": "wind-readings",
+                    "text": "All core gear is staged.",
                     "requiresItems": [
                         {
                             "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
@@ -37,40 +70,104 @@
                             "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
                             "count": 1
                         }
-                    ],
-                    "text": "All set, gear in hand."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "wind-readings",
+            "text": "Log two wind readings at launch height. We only fly if gusts stay under 20 knots and trend stable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Both readings logged. Time to interpret.",
+                    "requiresItems": [
+                        {
+                            "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Readings are gusty or inconsistent. Hold the launch."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation check: if both readings are within limits and range is still clear, proceed to arm. If not, scrub and troubleshoot.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "arm",
+                    "text": "Within limits. Continue to arm sequence."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Out of limits. We need corrective actions first."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Good catch. Pause operations, re-seat igniter leads, re-check the safety line, then retake wind readings after conditions settle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wind-readings",
+                    "text": "Corrective actions complete; retest wind and range."
+                },
+                {
+                    "type": "goto",
+                    "goto": "scrub",
+                    "text": "Conditions still unsafe. Scrub this window."
                 }
             ]
         },
         {
             "id": "arm",
-            "text": "Everything looks good. Ready to fire?",
+            "text": "Arming sequence: announce range is hot, confirm continuity, and keep everyone behind the line.",
             "options": [
                 {
                     "type": "process",
                     "process": "launch-rocket",
-                    "text": "Initiate launch!"
+                    "text": "Initiate controlled launch sequence."
                 },
                 {
                     "type": "goto",
                     "goto": "done",
+                    "text": "Launch complete and post-flight check passed.",
                     "requiresItems": [
                         {
                             "id": "63362e5c-9897-4710-8ef6-26540fabd0ca",
                             "count": 1
                         }
-                    ],
-                    "text": "Launch successful!"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "scrub",
+            "text": "Mission scrubbed safely. That's good rocketry discipline: no-go is a valid and professional outcome.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "supplies",
+                    "text": "Reset checklist and prepare for another attempt."
                 }
             ]
         },
         {
             "id": "done",
-            "text": "Nice work! Preflight complete and rocket soaring.",
+            "text": "Excellent. You used data, safety calls, and verification before committing to flight.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Mission accomplished."
+                    "text": "Preflight complete."
                 }
             ]
         }
@@ -81,7 +178,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["rocketry/parachute"],
+    "requiresQuests": [
+        "rocketry/parachute"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
