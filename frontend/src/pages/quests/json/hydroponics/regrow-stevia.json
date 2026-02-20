@@ -1,51 +1,134 @@
 {
     "id": "hydroponics/regrow-stevia",
     "title": "Regrow Your Stevia",
-    "description": "Hydro shows you how to coax another harvest from trimmed plants.",
+    "description": "Run stevia regrowth in staged gates with recovery checks before closure.",
     "image": "/assets/quests/hydroponic_stevia_regrow.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Those stevia stalks you clipped will grow back if we treat them right. Ready to try?",
+            "text": "Regrow is a staged cycle: verify trimmed mother plants, run recovery growth, then confirm fresh leaf output before closing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Start regrow staging."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Setup gate: confirm harvested mother plants and a ready reservoir before running regrowth.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "regrow",
-                    "text": "Absolutely!"
+                    "text": "Mother plants and ready tub are staged.",
+                    "requiresItems": [
+                        {
+                            "id": "b2248af9-151b-4268-989d-4bb408a6147c",
+                            "count": 10
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Plants look stressed or reservoir is not stable."
                 }
             ]
         },
         {
             "id": "regrow",
-            "text": "Place the harvested plants under strong light and keep the tub topped off. We'll trigger the regrow process now.",
+            "text": "Run the regrowth process under strong light and monitor stress signs. Do not close until fresh harvestable growth appears.",
             "options": [
                 {
                     "type": "process",
                     "process": "regrow-stevia",
-                    "text": "Starting regrowth."
+                    "text": "Run controlled regrowth cycle."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "New leaves sprouting!",
+                    "goto": "verify",
+                    "text": "New growth appears; verify outcome evidence.",
                     "requiresItems": [
                         {
                             "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
                             "count": 10
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Wilting or yellowing detected during regrowth."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Outcome gate: verify that at least ten harvestable plants are back and the tub remains stable for the next cycle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Outcome verified; regrow cycle is healthy.",
+                    "requiresItems": [
+                        {
+                            "id": "ec5013d0-0701-4ba2-8fcf-7a5797c718b4",
+                            "count": 10
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Growth count dropped or nutrient stress returned."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: refresh the reservoir, pause harvest pressure, and only re-enter once chemistry is stable again.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refresh-hydroponic-tub",
+                    "text": "Stabilize nutrient solution before retry.",
+                    "requiresItems": [
+                        {
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "count": 1
+                        },
+                        {
+                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Recovery complete; re-check setup artifacts."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Keep them fed and you'll have another bundle of sweet leaves soon.",
+            "text": "Nice work. You cleared staged setup evidence, outcome evidence, and a recovery loop for stress events.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Hydro!"
+                    "text": "Stevia regrowth validated."
                 }
             ]
         }
@@ -56,7 +139,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/stevia"],
+    "requiresQuests": [
+        "hydroponics/stevia"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

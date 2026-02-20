@@ -1,73 +1,165 @@
 {
     "id": "hydroponics/air-stone-soak",
     "title": "Soak Air Stone",
-    "description": "Prime the air stone so bubbles stay even.",
+    "description": "Prime and verify an air stone with safety checks and recovery loops.",
     "image": "/assets/quests/hydroponics_air_stone_soak.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "New air stones shed dust. Give it a soak before it meets the roots.",
+            "text": "New stones shed dust and can channel uneven airflow. We run soak, prime, and verification before roots ever see it.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Run the air-stone prep checklist."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Stage dechlorinated water and PPE first so we can handle residue safely and avoid splashing the eyes during priming.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "soak",
-                    "text": "What's the method?"
+                    "text": "Water, gloves, and goggles are ready.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Water looks cloudy or setup is missing safety gear."
                 }
             ]
         },
         {
             "id": "soak",
-            "text": "Drop the stone in a bucket of dechlorinated water and wait ten minutes.",
+            "text": "Soak the stone in dechlorinated water for a full cycle, then verify the soak artifact before moving on.",
             "options": [
                 {
                     "type": "process",
                     "process": "soak-air-stone",
-                    "text": "Start the soak"
+                    "text": "Start controlled soak cycle."
                 },
                 {
                     "type": "goto",
                     "goto": "prime",
-                    "text": "Stone is hydrated.",
+                    "text": "Soak artifact captured; move to prime test.",
                     "requiresItems": [
                         {
                             "id": "3b094479-ed97-46d6-8cab-ea91752972dd",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Residue is still shedding; run recovery before priming."
                 }
             ]
         },
         {
             "id": "prime",
-            "text": "Hook it to a pump in a test bucket and run it for a minute. You want even bubbles across the face.",
+            "text": "Prime in a test bucket and inspect bubble spread. Only even output counts as pass evidence.",
             "options": [
                 {
                     "type": "process",
                     "process": "prime-air-stone",
-                    "text": "Test the airflow"
+                    "text": "Run prime and bubble spread test.",
+                    "requiresItems": [
+                        {
+                            "id": "3b094479-ed97-46d6-8cab-ea91752972dd",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Bubbles are even",
+                    "goto": "verify",
+                    "text": "Prime completed; verify output artifact.",
                     "requiresItems": [
                         {
                             "id": "bd887124-605d-4268-8a6c-684cb48de1a6",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Bubbles are uneven or one side is dead."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: confirm the primed stone still runs evenly after one minute of continuous airflow.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Even airflow is stable; stone is production ready.",
+                    "requiresItems": [
+                        {
+                            "id": "bd887124-605d-4268-8a6c-684cb48de1a6",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Flow fades during verification; recover and retry."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery path: rinse the stone, clear clogged pores, reseat tubing, and restart from the soak gate before another prime test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "soak",
+                    "text": "Corrective cleanup complete; re-run soak gate."
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Need to restage PPE and test bucket first."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great. A primed stone keeps the reservoir oxygenated.",
+            "text": "Great. You closed soak evidence, prime evidence, and verification with a recovery loop for uneven airflow.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Back to the tub."
+                    "text": "Air stone certified for the reservoir."
                 }
             ]
         }
@@ -78,7 +170,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/filter-clean"],
+    "requiresQuests": [
+        "hydroponics/filter-clean"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

@@ -263,7 +263,17 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/nutrient-check`
 - Dialogue `requiresItems` gates:
-    - `measure` → "pH adjusted" — digital pH meter ×1, pH down solution (500 mL) ×1
+    - `prep` → "PPE and meter are staged." — digital pH meter ×1, nitrile gloves (pair) ×1, safety goggles ×1
+    - `measure` → "Reading captured; interpret against target band." — hydroponic pH reading ×1
+    - `interpret` → "Reading is within 5.5-6.5; proceed to logging." — hydroponic pH reading ×1
+    - `interpret` → "Reading is out of range; start correction cycle." — hydroponic pH reading ×1, pH down solution (500 mL) ×1
+    - `log` → "Stable reading logged and reviewed." — hydroponic pH log ×1
+- Recovery/troubleshooting branches:
+    - `adjust` loops back to `measure` for mandatory retest
+    - `recover` handles strip/meter/circulation faults, then returns to `prep` or `measure`
+- Safety/ops checks:
+    - PPE gate before measurement and before chemical correction
+    - Explicit out-of-range threshold handling (target pH 5.5-6.5)
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -274,6 +284,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
         - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
         - Consumes: pH strip ×1
         - Creates: hydroponic pH reading ×1
+    - [adjust-ph](/processes/adjust-ph)
+        - Requires: hydroponics tub (ready) ×1, pH down solution (500 mL) ×1, nitrile gloves (pair) ×1, safety goggles ×1
+        - Consumes: pH down solution (500 mL) ×0.01
+        - Creates: hydroponics tub (ready) ×1
+    - [log-stable-ph](/processes/log-stable-ph)
+        - Requires: hydroponics tub (ready) ×1, hydroponic pH reading ×1
+        - Consumes: hydroponic pH reading ×1
+        - Creates: hydroponic pH log ×1
 
 ## 10) Refresh the Reservoir (`hydroponics/reservoir-refresh`)
 
@@ -396,7 +414,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/stevia`
 - Dialogue `requiresItems` gates:
-    - `regrow` → "New leaves sprouting!" — harvestable stevia plant ×10
+    - `setup` → "Mother plants and ready tub are staged." — harvested stevia plant ×10, hydroponics tub (ready) ×1
+    - `regrow` → "New growth appears; verify outcome evidence." — harvestable stevia plant ×10
+    - `verify` → "Outcome verified; regrow cycle is healthy." — harvestable stevia plant ×10, hydroponics tub (ready) ×1
+- Recovery/troubleshooting branches:
+    - `recover` refreshes nutrient chemistry and loops back to `setup`
+- Safety/ops checks:
+    - Explicit pause/resume criteria when wilting or yellowing appears
+    - Requires chemistry restabilization before re-entry
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -407,6 +432,10 @@ Hydroponics quests build practical progression through the hydroponics skill tre
         - Requires: none
         - Consumes: harvested stevia plant ×10, hydroponics tub (ready) ×1, dWatt ×8064
         - Creates: harvestable stevia plant ×10, hydroponics tub (nutrient deficient) ×1
+    - [refresh-hydroponic-tub](/processes/refresh-hydroponic-tub)
+        - Requires: EC meter ×1, 50 mL measuring syringe ×1
+        - Consumes: hydroponics tub (nutrient deficient) ×1, 5 gallon bucket of dechlorinated tap water ×1, hydroponic nutrient concentrate (1 L) ×0.1
+        - Creates: hydroponics tub (ready) ×1
 
 ## 15) Check Water Temperature (`hydroponics/temp-check`)
 
@@ -486,8 +515,15 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/filter-clean`
 - Dialogue `requiresItems` gates:
-    - `soak` → "Stone is hydrated." — soaked air stone ×1
-    - `prime` → "Bubbles are even" — primed air stone ×1
+    - `prep` → "Water, gloves, and goggles are ready." — 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1, safety goggles ×1
+    - `soak` → "Soak artifact captured; move to prime test." — soaked air stone ×1
+    - `prime` → "Prime completed; verify output artifact." — primed air stone ×1
+    - `verify` → "Even airflow is stable; stone is production ready." — primed air stone ×1, nitrile gloves (pair) ×1, safety goggles ×1
+- Recovery/troubleshooting branches:
+    - `recover` handles cloudy soak water, residue shedding, and uneven bubble spread before looping to `soak`/`prep`
+- Safety/ops checks:
+    - PPE gate before soak and verification
+    - One-minute stability verification before closure
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -594,10 +630,15 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/tub-scrub`
 - Dialogue `requiresItems` gates:
-    - `mix` → "Water is ready" — 5 gallon bucket of dechlorinated tap water ×1, hydrogen peroxide (3%) ×1
-    - `soak` → "Bath is mixed" — peroxide rinse bath ×1
-    - `scrub` → "Cups look clean" — sanitized net cups ×1
-    - `dry` → "Bone dry and ready" — dried net cups ×1
+    - `mix` → "Water and peroxide are staged for bath mixing." — 5 gallon bucket of dechlorinated tap water ×1, hydrogen peroxide (3%) ×1, nitrile gloves (pair) ×1, safety goggles ×1
+    - `soak` → "Bath artifact confirmed; begin scrub cycle." — peroxide rinse bath ×1
+    - `scrub` → "Sanitized-cup artifact captured." — sanitized net cups ×1
+    - `dry` → "Dry-ready artifact verified; cups safe for next planting." — dried net cups ×1
+- Recovery/troubleshooting branches:
+    - `recover` discards contaminated bath/remixes solution and loops back to `mix` or `soak`
+- Safety/ops checks:
+    - PPE enforced before peroxide handling
+    - Contamination and residual moisture paths require re-entry before completion
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
