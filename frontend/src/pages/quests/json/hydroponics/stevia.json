@@ -147,12 +147,10 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "hydroponics/lettuce"
-    ],
+    "requiresQuests": ["hydroponics/lettuce"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
