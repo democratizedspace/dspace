@@ -108,7 +108,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - `wind-evidence` → "Both readings are documented. Time to interpret." — wind-check placeholder reward item (`15e3dd7e-374b-4233-b8c9-117e3057f009`) ×1
     - `arm` → "Launch complete and post-flight check passed." — damaged model rocket ×1
 - Troubleshooting/safety branches:
-    - `range-walk` and `setup` paths can scrub unsafe range conditions before arming.
+    - `range-walk` and `scrub` paths can halt unsafe range conditions before arming.
     - `troubleshoot` enforces corrective actions and a mandatory re-test loop through `wind-readings`.
 - Grants:
     - Dialogue options/steps grantsItems:

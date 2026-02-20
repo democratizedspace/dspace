@@ -19,17 +19,28 @@
         },
         {
             "id": "measure",
-            "text": "Hold an anemometer at launch height and take a reading. Then take a second one.",
+            "text": "Hold an anemometer at launch height and take the first wind speed reading.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "ready",
+                    "goto": "second-reading",
                     "text": "Log the first anemometer reading."
                 },
                 {
                     "type": "goto",
+                    "goto": "second-reading",
+                    "text": "Reading logged. Take a second sample to confirm the trend."
+                }
+            ]
+        },
+        {
+            "id": "second-reading",
+            "text": "Take a second reading from the same height and note whether the trend stays stable.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "ready",
-                    "text": "Reading taken\u2014winds are calm."
+                    "text": "Second reading logged. Winds are still within limits."
                 }
             ]
         },
