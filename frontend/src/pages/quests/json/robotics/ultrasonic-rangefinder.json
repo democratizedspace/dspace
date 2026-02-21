@@ -12,22 +12,38 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "parts",
-                    "text": "What parts do I need?"
+                    "goto": "approach",
+                    "text": "Let's set up a measurement plan."
                 }
             ]
         },
         {
-            "id": "parts",
-            "text": "Grab an HC-SR04 module, jumper wires, and plug it into pins 2 through 5 on your Arduino.",
+            "id": "approach",
+            "text": "Choose a setup style: bench-test first for clean data, or mount directly on the robot for integration-first testing.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Parts ready. What's next?",
+                    "goto": "bench-setup",
+                    "text": "Bench-test first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "mounted-setup",
+                    "text": "Integrate directly on the robot."
+                }
+            ]
+        },
+        {
+            "id": "bench-setup",
+            "text": "Wire HC-SR04 on pins 2-5 and keep the sensor face clear of cables and sharp edges that can reflect echoes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Bench wiring is complete.",
                     "requiresItems": [
                         {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
                             "count": 1
                         }
                     ]
@@ -35,23 +51,73 @@
             ]
         },
         {
-            "id": "code",
-            "text": "Use the NewPing library to trigger the sensor and print distances to the serial monitor.",
+            "id": "mounted-setup",
+            "text": "Mount the sensor forward-facing, avoid servo horn obstruction, and secure jumper strain relief before power-on.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Uploaded and reading distance!"
+                    "goto": "safety-check",
+                    "text": "Robot-mounted wiring is complete.",
+                    "requiresItems": [
+                        {
+                            "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "finish",
-            "text": "Great! Now your robot knows how far away things are. Add it to obstacle avoidance.",
+            "id": "safety-check",
+            "text": "Safety gate: confirm low-voltage wiring polarity and keep hands clear during ping tests to avoid false readings and accidental collisions.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measurement",
+                    "text": "Safety checks complete; start distance sampling.",
+                    "requiresItems": [
+                        {
+                            "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I need to fix wiring or mounting first."
+                }
+            ]
+        },
+        {
+            "id": "measurement",
+            "text": "Collect repeated measurements at near, mid, and far targets. Accept only runs where values are stable enough for obstacle logic.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Orion!"
+                    "text": "Distance readings are stable across all target ranges.",
+                    "requiresItems": [
+                        {
+                            "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Readings are noisy or inconsistent."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery path: increase target spacing, damp motor vibration, and retest after each change until echoes stabilize.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Corrections applied; repeat safety checks and retry."
                 }
             ]
         }
@@ -65,8 +131,8 @@
     ],
     "hardening": {
         "passes": 0,
-        "score": 85,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 90,
+        "emoji": "🛠️",
         "history": []
     }
 }

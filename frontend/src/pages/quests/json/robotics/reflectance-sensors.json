@@ -44,7 +44,7 @@
         },
         {
             "id": "calibrate",
-            "text": "Stream raw readings while sweeping over dark tape and floor. Capture min/max windows and compute a robust threshold.",
+            "text": "Stream raw readings while sweeping over dark tape and floor. Capture min/max windows and compute a threshold.",
             "options": [
                 {
                     "type": "process",
@@ -53,14 +53,47 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "validate",
-                    "text": "Calibration values are recorded.",
+                    "goto": "interpretation",
+                    "text": "I logged the floor/line min-max values.",
                     "requiresItems": [
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "interpretation",
+            "text": "Interpretation gate: mark your threshold as PASS only if line readings and floor readings keep a stable gap under repeated sweeps.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "validate",
+                    "text": "PASS: thresholds are stable enough for motion tests.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "FAIL: readings overlap or jitter too much."
+                }
+            ]
+        },
+        {
+            "id": "out-of-range",
+            "text": "Out-of-range recovery: clean lens surfaces, lower sensor height, and reduce ambient glare before collecting a fresh sample.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "calibrate",
+                    "text": "Corrective changes complete; re-run calibration."
                 }
             ]
         },
@@ -74,14 +107,36 @@
                     "text": "Run a moving validation pass."
                 },
                 {
-                    "type": "finish",
-                    "text": "Threshold is stable in motion.",
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Validation pass recorded.",
                     "requiresItems": [
                         {
                             "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Final gate: confirm two consecutive passes stay within your threshold bounds before unlocking control quests.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Two consecutive passes succeeded; threshold is stable in motion.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "Bounds failed; apply corrective branch and re-test."
                 }
             ]
         }
