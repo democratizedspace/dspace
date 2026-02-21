@@ -65,7 +65,9 @@ Programming quests build practical progression through the programming skill tre
     - `requiresQuests`: `electronics/thermistor-reading`
 - Dialogue `requiresItems` gates:
     - `wire` → "Rig is wired and sketch uploaded" — thermistor logging rig ×1
-    - `log` → "CSV saved" — temperature log CSV ×1
+    - `log` → "CSV captured for review" — temperature log CSV ×1
+    - `interpret` → "Range and cadence pass review" — temperature log CSV ×1, thermistor logging rig ×1
+    - `recover` → "New CSV ready for re-test" — temperature log CSV ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -273,8 +275,9 @@ Programming quests build practical progression through the programming skill tre
     - `requiresQuests`: `programming/web-server`
 - Dialogue `requiresItems` gates:
     - `start` → "Ready to add an API" — temperature log CSV ×1, thermistor logging rig ×1, Raspberry Pi 5 board ×1
-    - `wire` → "Serial feed is stable" — thermistor logging rig ×1, Raspberry Pi 5 board ×1
-    - `publish` → "Endpoint returns 200 with JSON body" — live temperature JSON endpoint ×1
+    - `wire` → "Three clean reads captured; proceed to endpoint deploy" — thermistor logging rig ×1, Raspberry Pi 5 board ×1, temperature log CSV ×1
+    - `publish` → "Endpoint deployed; run contract checks" — live temperature JSON endpoint ×1
+    - `verify` → "Both healthy and failure-mode checks pass" — live temperature JSON endpoint ×1, temperature log CSV ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -301,8 +304,10 @@ Programming quests build practical progression through the programming skill tre
     - `requiresQuests`: `programming/web-server`, `programming/json-endpoint`, `programming/avg-temp`
 - Dialogue `requiresItems` gates:
     - `start` → "Design the payloads" — live temperature JSON endpoint ×1, temperature log CSV ×1
-    - `stats` → "Stats are returned with each response" — annotated temperature graph ×1
-    - `publish` → "Dashboard and docs are live" — live temperature dashboard ×1, live temperature JSON endpoint ×1
+    - `stats` → "Stats payload passes contract review" — annotated temperature graph ×1, temperature log CSV ×1
+    - `schema-recovery` → "Schema is repaired; re-run stats validation" — temperature log CSV ×1
+    - `publish` → "Dashboard and docs published" — live temperature dashboard ×1, live temperature JSON endpoint ×1
+    - `verify` → "Both happy-path and stale-data checks pass" — live temperature dashboard ×1, annotated temperature graph ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
