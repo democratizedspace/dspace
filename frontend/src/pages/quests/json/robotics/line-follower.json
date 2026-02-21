@@ -146,7 +146,7 @@
     ],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
