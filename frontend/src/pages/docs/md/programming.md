@@ -106,6 +106,10 @@ Programming quests build practical progression through the programming skill tre
         - Requires: temperature line chart ×1, Laptop Computer ×1
         - Consumes: none
         - Creates: annotated temperature graph ×1
+    - [refine-temperature-graph](/processes/refine-temperature-graph)
+        - Requires: temperature line chart ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: annotated temperature graph ×1
     - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
         - Requires: thermistor logging rig ×1, Laptop Computer ×1
         - Consumes: none
@@ -118,7 +122,9 @@ Programming quests build practical progression through the programming skill tre
     - `requiresQuests`: `programming/temp-logger`
 - Dialogue `requiresItems` gates:
     - `start` → "Let's create a graph." — temperature log CSV ×1
-    - `prep` → "My chart looks great!" — temperature line chart ×1
+    - `prep` → "Chart exported for review" — temperature line chart ×1
+    - `interpret` → "Trend and bounds look healthy" — temperature line chart ×1
+    - `triage` → "I corrected wiring and re-ran the graph" — annotated temperature graph ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -129,6 +135,10 @@ Programming quests build practical progression through the programming skill tre
         - Requires: Laptop Computer ×1
         - Consumes: none
         - Creates: temperature line chart ×1
+    - [refine-temperature-graph](/processes/refine-temperature-graph)
+        - Requires: temperature line chart ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: annotated temperature graph ×1
 
 ## 5) Clean and graph your temperature logs (`programming/graph-temp-data`)
 
@@ -155,7 +165,11 @@ Programming quests build practical progression through the programming skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `programming/avg-temp`
 - Dialogue `requiresItems` gates:
-    - `code` → "Median calculated!" — Raspberry Pi 5 board ×1
+    - `start` → "Use my latest logger export" — temperature log CSV ×1
+    - `collect` → "Dataset passes sanity checks" — Raspberry Pi 5 board ×1, temperature log CSV ×1
+    - `repair` → "Cleaned file is ready for re-check" — temperature log CSV ×1
+    - `compute` → "Median report generated" — Raspberry Pi 5 board ×1
+    - `verify` → "Median is within expected range" — Raspberry Pi 5 board ×1, temperature log CSV ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -314,14 +328,20 @@ Programming quests build practical progression through the programming skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `programming/json-api`
 - Dialogue `requiresItems` gates:
-    - `code` → "POST endpoint working!" — Raspberry Pi 5 board ×1
+    - `start` → "I'm ready" — live temperature JSON endpoint ×1, Raspberry Pi 5 board ×1
+    - `schema` → "Server returns 201 for valid payloads" — live temperature JSON endpoint ×1
+    - `recover` → "Hardening patch applied; retest" — Raspberry Pi 5 board ×1
+    - `verify` → "Both tests behave as expected" — live temperature JSON endpoint ×1, Raspberry Pi 5 board ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [deploy-temperature-json-endpoint](/processes/deploy-temperature-json-endpoint)
+        - Requires: thermistor logging rig ×1, temperature log CSV ×1, Raspberry Pi 5 board ×1
+        - Consumes: none
+        - Creates: live temperature JSON endpoint ×1
 
 ## 15) Serve Temperature as JSON (`programming/temp-json-api`)
 

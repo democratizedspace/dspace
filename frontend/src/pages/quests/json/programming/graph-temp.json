@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Now that you've been collecting temperature readings, let's turn that list of numbers into a chart. Visualization makes trends easy to spot.",
+            "text": "Now that you've been collecting temperature readings, let's turn that list of numbers into a chart and verify the signal is believable.",
             "options": [
                 {
                     "type": "goto",
@@ -25,7 +25,7 @@
         },
         {
             "id": "prep",
-            "text": "Point your plotting script at the CSV from your logger. Even a quick CLI run beats eyeballing raw numbers.",
+            "text": "Point your plotting script at the CSV from your logger and note the expected room temperature band before you render.",
             "options": [
                 {
                     "type": "process",
@@ -34,8 +34,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "My chart looks great!",
+                    "goto": "interpret",
+                    "text": "Chart exported for review",
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
@@ -46,8 +46,52 @@
             ]
         },
         {
+            "id": "interpret",
+            "text": "Interpret the graph. Healthy runs stay mostly between 15C and 35C with smooth transitions. Flag sudden cliffs or impossible spikes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Trend and bounds look healthy",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "triage",
+                    "text": "Graph shows spikes or dropouts"
+                }
+            ]
+        },
+        {
+            "id": "triage",
+            "text": "Troubleshoot before publishing: reseat sensor wiring, regenerate an annotated graph that calls out anomalies, then re-check the pass band.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Create an annotated troubleshooting graph"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "I corrected wiring and re-ran the graph",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Excellent work! Graphing your sensor data opens the door to more advanced analytics down the road.",
+            "text": "Excellent work! You produced evidence, interpreted bounds, and handled out-of-range behavior before sign-off.",
             "options": [
                 {
                     "type": "finish",
@@ -64,19 +108,14 @@
     ],
     "requiresQuests": ["programming/temp-logger"],
     "hardening": {
-        "passes": 2,
-        "score": 98,
-        "emoji": "\u2705",
+        "passes": 1,
+        "score": 97,
+        "emoji": "✅",
         "history": [
             {
-                "task": "codex-hardening-2025-12-08",
-                "date": "2025-12-08",
-                "score": 95
-            },
-            {
-                "task": "codex-hardening-2025-12-18",
-                "date": "2025-12-18",
-                "score": 98
+                "task": "codex-hardening-2026-02-21",
+                "date": "2026-02-21",
+                "score": 97
             }
         ]
     }
