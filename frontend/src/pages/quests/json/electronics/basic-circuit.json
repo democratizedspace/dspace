@@ -1,30 +1,73 @@
 {
     "id": "electronics/basic-circuit",
     "title": "Build a basic LED circuit",
-    "description": "Wire a 5 mm LED and 220 \u03a9 resistor on a breadboard to learn basic circuits.",
+    "description": "Wire a 5 mm LED and 220 Ω resistor on a breadboard to learn basic circuits.",
     "image": "/assets/quests/electronics_basic_led_breadboard_circuit.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Orion here. Let's light a 5 mm LED with a 220 \u03a9 resistor. Verify the color code, and keep the 5 V supply unplugged for now.",
+            "text": "Orion here. We are building a safe LED test circuit, not speed-running a spark show. Keep the 5 V supply unplugged, confirm your bench is dry, and pick a wiring strategy.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "materials",
-                    "text": "Sure, what do I need?"
+                    "text": "Use the power-rail layout (faster for future edits)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "materials-alt",
+                    "text": "Use a compact single-row layout (good for tiny builds)."
                 }
             ]
         },
         {
             "id": "materials",
-            "text": "Collect a breadboard, two jumper wires, one 5 mm LED, one 220 \u03a9 resistor, a color chart, and a 5 V supply. Verify the resistor and keep power unplugged while wiring.",
+            "text": "Power-rail plan: collect a breadboard, two jumper wires, one 5 mm LED, one 220 Ω resistor, a resistor color chart, and a 5 V supply. Verify resistor bands before any power-on check.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "assemble",
-                    "text": "Yep, let's assemble it.",
+                    "text": "Parts gathered. Start assembly.",
+                    "process": "verify-resistor-color-code",
+                    "requiresItems": [
+                        {
+                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 2
+                        },
+                        {
+                            "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                            "count": 1
+                        },
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
+                            "count": 1
+                        },
+                        {
+                            "id": "828d6c3b-66a5-4064-b221-97630274502b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "materials-alt",
+            "text": "Compact plan: same parts, but keep the LED and resistor in adjacent rows so polarity checks are obvious. Verify the 220 Ω code first, then wire with power disconnected.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Compact layout staged.",
                     "process": "verify-resistor-color-code",
                     "requiresItems": [
                         {
@@ -57,27 +100,66 @@
         },
         {
             "id": "assemble",
-            "text": "Insert the LED with the long leg toward the positive rail. Place the 220 \u03a9 resistor from that anode row to an empty row. Use jumpers to link the resistor to +5 V and the LED's short leg to ground. Check polarity, confirm series resistance, then plug in the 5 V supply.",
+            "text": "Wire LED long leg (anode) through the resistor to +5 V, short leg to ground. Re-check polarity, verify no bare jumper strands are touching, then connect power for a brief test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "LED lit immediately."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "LED stayed dark or flickered."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Troubleshooting loop: unplug power first. Confirm LED orientation, resistor placement in series (not parallel bypass), and fully seated jumpers. If anything warms unexpectedly, stop and rebuild before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Issues fixed. Re-test safely."
+                },
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "I need to re-check parts and resistor value."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Great. Hold test for 30 seconds; brightness should stay steady with no smell or heat at the resistor. If unstable, drop back to troubleshooting instead of forcing a finish.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "It works!"
+                    "text": "Stable output confirmed."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Brightness drifted. I will debug it."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work. Unplug the 5 V supply before changes and keep metal tools away from the rails.",
+            "text": "Nice build. Disconnect the 5 V supply before touching the breadboard and log your final layout so future quests can reuse it.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Orion!"
+                    "text": "Circuit verified."
                 }
             ]
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "rewards": [
         {
             "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
@@ -87,7 +169,7 @@
     "hardening": {
         "passes": 10,
         "score": 100,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-03",

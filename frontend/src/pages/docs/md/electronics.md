@@ -36,7 +36,11 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
-    - `materials` → "Yep, let's assemble it." — solderless breadboard ×1, Jumper Wires ×2, 5 mm LED ×1, 220 Ohm Resistor ×1, resistor color chart ×1, 5 V Power Supply ×1
+    - `materials` → "Parts gathered. Start assembly." — solderless breadboard ×1, Jumper Wires ×2, 5 mm LED ×1, 220 Ohm Resistor ×1, resistor color chart ×1, 5 V Power Supply ×1
+    - `materials-alt` → "Compact layout staged." — solderless breadboard ×1, Jumper Wires ×2, 5 mm LED ×1, 220 Ohm Resistor ×1, resistor color chart ×1, 5 V Power Supply ×1
+- QA flow notes:
+    - Branching strategy choice: power-rail layout or compact single-row layout.
+    - Troubleshooting loop blocks finish until polarity/series wiring issues are corrected and re-tested.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -76,7 +80,11 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/basic-circuit`
 - Dialogue `requiresItems` gates:
-    - `measure` → "It reads about 12.6 V." — 200 Wh battery pack ×1, digital multimeter ×1, safety goggles ×1
+    - `measure` → "Recorded 12.4 V to 13.6 V (in-range)." — 200 Wh battery pack ×1, digital multimeter ×1, safety goggles ×1
+    - `measure` → "Recorded outside 12.4-13.6 V." — 200 Wh battery pack ×1, digital multimeter ×1, safety goggles ×1
+- QA flow notes:
+    - Includes explicit safety-stop branch for damaged/heated packs before any probing.
+    - Completion requires a recorded reading, interpretation node, and corrective re-test loop when out of range.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -270,7 +278,12 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/thermistor-reading`
 - Dialogue `requiresItems` gates:
-    - `setup` → "Hardware ready" — USB Cable ×1, Raspberry Pi 5 board ×1, Arduino Uno ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, safety goggles ×1, anti-static wrist strap ×1
+    - `setup` → "Dependencies and wiring are ready." — USB Cable ×1, Raspberry Pi 5 board ×1, Arduino Uno ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, safety goggles ×1, anti-static wrist strap ×1
+    - `setup-alt` → "Smoke test passed; continue." — USB Cable ×1, Raspberry Pi 5 board ×1, Arduino Uno ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, safety goggles ×1, anti-static wrist strap ×1
+- QA flow notes:
+    - Supports two setup strategies (standard or staged smoke-test path).
+    - Completion is gated on a structured log artifact (timestamp, sensor ID, raw value, computed °C, anomaly flag).
+    - Includes anomaly classification and corrective re-logging before closure.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
