@@ -8,12 +8,27 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Atlas here. Vega wants the empty 80 L tank on the stand. Clear the path and lift with your legs.",
+            "text": "Atlas here. Vega wants the empty 80 L tank on the stand. Before we lift, clear trip hazards, dry the floor, and decide if we can take the direct path or a staged rest route.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "lift",
-                    "text": "Yes please, it's heavy.",
+                    "text": "Direct path is clear; let's lift and place in one move.",
+                    "requiresItems": [
+                        {
+                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "count": 1
+                        },
+                        {
+                            "id": "98609b23-4811-4275-8d83-ad59a2797753",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "staged-route",
+                    "text": "Let's use a staged route with a rest stop to protect the glass.",
                     "requiresItems": [
                         {
                             "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
@@ -28,6 +43,22 @@
             ]
         },
         {
+            "id": "staged-route",
+            "text": "Good call. We'll pause once to reset grip and keep the rim supported. If either of us loses control, lower immediately and retry after clearing space.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "lift",
+                    "text": "Route is staged and grip points are confirmed."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Stand area still feels unstable or crowded."
+                }
+            ]
+        },
+        {
             "id": "lift",
             "text": "I'll take most of the weight. On three\u2014one, two, three. Keep the tank level and your back straight.",
             "options": [
@@ -35,6 +66,22 @@
                     "type": "goto",
                     "goto": "place",
                     "text": "Heave-ho!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Abort: footing slipped or grip shifted\u2014set it down safely first."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Safety reset: lower the tank to a stable surface, dry the route, and re-center the stand. Do not continue while the path is wet or the stand rocks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "lift",
+                    "text": "Reset complete. Retry the lift with a level carry."
                 }
             ]
         },
@@ -69,8 +116,41 @@
                     ]
                 },
                 {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Heater installed and indicator is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Stop: heater isn't fully submerged or the stand shifted."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Last check before closure: capture a temperature log after warmup and confirm no cable drips near the outlet.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Record warmup verification reading."
+                },
+                {
                     "type": "finish",
-                    "text": "Heater installed, thanks!"
+                    "text": "Lift complete, heater verified, and safety checks passed.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }

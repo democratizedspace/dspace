@@ -8,24 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The tank needs a quick tidy. Let's move a fish to a bucket with the net first.",
+            "text": "The tank needs a quick tidy. We'll do a calm transfer: prep bucket water, dim lights, and avoid chasing fish around decor.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "catch",
-                    "text": "I'll grab the net."
-                }
-            ]
-        },
-        {
-            "id": "catch",
-            "text": "Gently scoop the fish with the net and settle it in a nearby bucket.",
-            "options": [
+                    "goto": "baseline",
+                    "text": "I'll stage a calm transfer lane and prep checks.",
+                    "requiresItems": [
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
+                },
                 {
                     "type": "goto",
-                    "goto": "release",
-                    "text": "Fish is secure in the bucket.",
-                    "process": "catch-fish",
+                    "goto": "alternate-approach",
+                    "text": "Fish are skittish; let's run a slower alternate approach.",
                     "requiresItems": [
                         {
                             "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
@@ -36,24 +35,113 @@
             ]
         },
         {
-            "id": "release",
-            "text": "With the tank clean, return the fish to its home.",
+            "id": "alternate-approach",
+            "text": "Alternate strategy: pause aeration bubbles briefly, use room lighting only, and guide fish with your free hand outside the net path instead of direct pursuit.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "fin",
-                    "text": "Back in you go!",
-                    "process": "return-fish"
+                    "goto": "baseline",
+                    "text": "Fish settled; continue with baseline verification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Fish are still darting or breathing fast."
                 }
             ]
         },
         {
-            "id": "fin",
-            "text": "Great job keeping the fish safe during cleanup!",
+            "id": "baseline",
+            "text": "Before transfer, capture a baseline tank reading so you can verify recovery after reintroduction.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Log pre-transfer baseline reading."
+                },
+                {
+                    "type": "goto",
+                    "goto": "catch",
+                    "text": "Baseline is logged and fish are calm enough to net.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        },
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "catch",
+            "text": "Use one steady scoop, keep the net submerged, and settle the fish in a bucket with matching water. Stop immediately if the fish thrashes against the mesh.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "release",
+                    "text": "Fish transferred cleanly with minimal stress.",
+                    "requiresItems": [
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Fish showed stress signs during transfer."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Recovery branch: pause handling, restore gentle flow, wait five minutes, then capture a fresh reading before retrying. Abort transfer if stress persists.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Log recovery reading before retrying."
+                },
+                {
+                    "type": "goto",
+                    "goto": "catch",
+                    "text": "Recovery reading is logged and fish behavior normalized.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "release",
+            "text": "With cleanup complete, return the fish gently and verify conditions stayed stable after reintroduction.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Capture post-release verification reading."
+                },
+                {
                     "type": "finish",
-                    "text": "All done."
+                    "text": "Transfer complete, fish recovered, and verification logged.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        },
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
