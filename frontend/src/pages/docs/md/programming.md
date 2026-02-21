@@ -33,8 +33,12 @@ Programming quests build practical progression through the programming skill tre
     - `requiresQuests`: `electronics/arduino-blink`
 - Dialogue `requiresItems` gates:
     - `bench` → "Parts are placed and powered" — Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, USB Type-A to Type-B cable ×1, Laptop Computer ×1
+    - `bench-fix` → "Bench is safe and stable now" — Arduino Uno ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
     - `rig` → "Logger is wired and blinking" — thermistor logging rig ×1
+    - `rig-recover` → "Signal is stable; retry the rig step" — thermistor logging rig ×1
     - `log` → "CSV archived for reuse" — temperature log CSV ×1
+    - `verify-log` → "Log passes QA checks" — temperature log CSV ×1, thermistor logging rig ×1
+    - `log-retry` → "Re-test the replacement CSV" — temperature log CSV ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -86,6 +90,8 @@ Programming quests build practical progression through the programming skill tre
     - `start` → "Load the CSV" — temperature log CSV ×1
     - `prep` → "Data looks clean" — temperature line chart ×1
     - `compute` → "Averages plotted and saved" — annotated temperature graph ×1
+    - `interpret` → "Average is within expected range and documented" — temperature line chart ×1, annotated temperature graph ×1
+    - `retest` → "Re-test with fresh log + rebuilt graph artifacts" — temperature log CSV ×2, annotated temperature graph ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -100,6 +106,10 @@ Programming quests build practical progression through the programming skill tre
         - Requires: temperature line chart ×1, Laptop Computer ×1
         - Consumes: none
         - Creates: annotated temperature graph ×1
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
 
 ## 4) Graph Temperature Logs (`programming/graph-temp`)
 
@@ -209,14 +219,22 @@ Programming quests build practical progression through the programming skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `programming/hello-sensor`
 - Dialogue `requiresItems` gates:
-    - `wire` → "Hardware ready" — Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
+    - `wire` → "Hardware ready" — Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, Arduino Uno ×1
+    - `rewire` → "Wiring corrected, retry calibration setup" — Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
+    - `baseline` → "Baseline noted and reference stable" — Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
+    - `adjust` → "Adjusted values look consistent" — Arduino Uno ×1, Thermistor (10k NTC) ×1
+    - `drift` → "Retry coefficient adjustment" — Arduino Uno ×1
+    - `verify` → "Calibration passes repeated verification" — Arduino Uno ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [arduino-thermistor-read](/processes/arduino-thermistor-read)
+        - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
+        - Consumes: none
+        - Creates: none
 
 ## 11) Serve a Web Page (`programming/web-server`)
 

@@ -25,7 +25,7 @@
         },
         {
             "id": "prep",
-            "text": "Parse the CSV, drop any obvious outliers, and keep timestamps intact so you can slice by day or hour.",
+            "text": "Parse the CSV, drop obvious outliers, and keep timestamps intact so you can slice by day or hour.",
             "options": [
                 {
                     "type": "process",
@@ -56,12 +56,69 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "text": "Averages plotted and saved",
                     "requiresItems": [
                         {
                             "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
                             "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the result before you close: average should stay in your expected comfort range, and the line chart should not show obvious sensor drift.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Average is within expected range and documented",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        },
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Average looks suspicious or out of bounds"
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "When readings are out of bounds, validate logger wiring, collect a fresh sample window, then recompute before signing off.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture a replacement log window"
+                },
+                {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Rebuild the annotated graph"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Re-test with fresh log + rebuilt graph artifacts",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 2
+                        },
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 2
                         }
                     ]
                 }
@@ -88,7 +145,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
