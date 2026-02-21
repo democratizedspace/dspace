@@ -124,17 +124,18 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `geothermal/survey-ground-temperature`
 - Dialogue `requiresItems` gates:
-    - None
+    - `measure` → "Pressure snapshot logged" — Arduino Uno ×1
+    - `corrective` → "Retest snapshot ready" — Arduino Uno ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [pressure-gauge-read](/processes/pressure-gauge-read)
-        - Requires: TBD — known gap; process IO not yet specified
-        - Consumes: TBD — known gap; process IO not yet specified
-        - Creates: TBD — known gap; process IO not yet specified
+    - None
+- QA notes:
+    - Completion requires a captured pressure snapshot plus interpretation against the 20–35 psi and <2 psi oscillation targets.
+    - Out-of-range pressure must follow corrective branch (bleed air / inspect fittings) and a mandatory retest loop before finish.
 
 ## 6) Check Loop Temperature Delta (`geothermal/check-loop-temp-delta`)
 
@@ -275,12 +276,12 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `geothermal/log-ground-temperature`
 - Dialogue `requiresItems` gates:
-    - `start` → "Rig and towels are ready" — thermistor logging rig ×1, Laptop Computer ×1
+    - `start` → "Rig and safety checks are complete" — thermistor logging rig ×1, Laptop Computer ×1
     - `stage` → "Capture the warmup trace" — thermistor logging rig ×1, Laptop Computer ×1
-    - `stage` → "Trace exported" — temperature log CSV ×1
-    - `analyze` → "Plot the warmup curve" — temperature log CSV ×1, Laptop Computer ×1
-    - `analyze` → "Annotate compressor ramp" — temperature line chart ×1, Laptop Computer ×1
-    - `analyze` → "Curve annotated" — annotated temperature graph ×1
+    - `stage` → "Warmup log exported" — temperature log CSV ×1
+    - `analyze` → "Plot and inspect warmup curve" — temperature log CSV ×1, Laptop Computer ×1
+    - `analyze` → "Annotate compressor ramp and settle window" — temperature line chart ×1, Laptop Computer ×1
+    - `analyze` → "Curve meets threshold and annotations are saved" — annotated temperature graph ×1
     - `finish` → "Warmup benchmarked" — annotated temperature graph ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -300,6 +301,10 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Requires: temperature line chart ×1, Laptop Computer ×1
         - Consumes: none
         - Creates: annotated temperature graph ×1
+- QA notes:
+    - Required warmup log fields are timestamp, outlet temp, ambient temp, pump mode, and compressor state.
+    - Pass threshold is ≥4°C rise over 15 minutes and ≤1°C oscillation during the final 5-minute settle window.
+    - Threshold misses branch into anomaly classification and mandatory corrective re-log before closure.
 
 ## 12) Monitor Heat Pump Energy Use (`geothermal/monitor-heat-pump-energy`)
 
@@ -365,7 +370,12 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `geothermal/install-backup-thermistor`
 - Dialogue `requiresItems` gates:
-    - `replace` → "Probe replaced and reading logged." — Arduino Uno ×1
+    - `stage` → "Spare probe and logger are ready" — Arduino Uno ×1
+    - `replace` → "Capture post-replacement baseline" — Arduino Uno ×1
+    - `replace` → "Baseline capture saved" — Arduino Uno ×1
+    - `verify` → "Parity holds across the verification window" — Arduino Uno ×1
+    - `troubleshoot` → "Corrective action done, re-run baseline" — Arduino Uno ×1
+    - `finish` → "Replacement thermistor verified" — Arduino Uno ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -376,6 +386,9 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
         - Consumes: none
         - Creates: none
+- QA notes:
+    - Completion now requires post-replacement baseline capture and a 10-minute parity verification window against backup probe data.
+    - Drift/dropouts branch into reseat/moisture troubleshooting with a required recapture loop before finish.
 
 ## QA flow notes
 
