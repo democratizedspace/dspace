@@ -73,7 +73,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `requiresQuests`: `astronomy/basic-telescope`
 - Dialogue `requiresItems` gates:
     - `start` → "Gear ready." — planisphere star chart ×1, red flashlight ×1
-    - `search` → "Galaxy in sight." — basic telescope ×1
+    - `cassiopeia-route` → "I found a faint oval glow." — constellation sketch set ×1, basic telescope ×1
+    - `pegasus-route` → "Andromeda is centered." — constellation sketch set ×1, basic telescope ×1
+    - `troubleshoot` → "Rescheduled with notes for a follow-up session." — planisphere star chart ×1
+    - `log-and-verify` → "Observation verified and logged." — basic telescope ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -84,6 +87,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: basic telescope ×1, planisphere star chart ×1
         - Consumes: none
         - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 4) Spot the ISS (`astronomy/iss-flyover`)
 
@@ -218,6 +225,9 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `forecast` → "Window picked—what should I pack?" — aurora viewing plan ×1
     - `kit` → "Kit is ready—let's step outside." — dark-sky kit packed ×1
     - `observe` → "Entry written with colors and timestamps." — aurora sighting log ×1
+    - `interpret` → "Interpretation added to my logbook." — aurora sighting log ×1, planisphere star chart ×1
+    - `fallback-plan` → "Conditions improved—retry the watch." — aurora viewing plan ×1
+    - `fallback-plan` → "No sighting tonight, but follow-up session is scheduled." — aurora viewing plan ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -352,17 +362,30 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/meteor-shower`
 - Dialogue `requiresItems` gates:
-    - `observe` → "I kept it in sight" — basic telescope ×1
+    - `plan-pass` → "Window logged—stage the scope." — ISS pass window ×1
+    - `stage-scope` → "Station stable and ready." — ISS spotting station ×1
+    - `track-pass` → "I kept it in sight and logged the route." — ISS pass log ×1
+    - `interpret` → "Timing analysis complete." — ISS pass log ×1, ISS pass window ×1
+    - `fallback` → "Conditions improved—retry staging." — ISS pass window ×1
+    - `fallback` → "No lock tonight; follow-up pass is scheduled." — ISS pass window ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [identify-constellations](/processes/identify-constellations)
-        - Requires: basic telescope ×1, planisphere star chart ×1
+    - [check-iss-pass](/processes/check-iss-pass)
+        - Requires: smartphone ×1, mission logbook ×1
         - Consumes: none
-        - Creates: constellation sketch set ×1
+        - Creates: ISS pass window ×1
+    - [stage-iss-spotting-station](/processes/stage-iss-spotting-station)
+        - Requires: ISS pass window ×1, basic telescope ×1, camera tripod ×1, red flashlight ×1
+        - Consumes: none
+        - Creates: ISS spotting station ×1
+    - [log-iss-pass](/processes/log-iss-pass)
+        - Requires: ISS spotting station ×1, ISS pass window ×1, mission logbook ×1
+        - Consumes: none
+        - Creates: ISS pass log ×1
 
 ## 18) Spot Saturn's Rings (`astronomy/saturn-rings`)
 

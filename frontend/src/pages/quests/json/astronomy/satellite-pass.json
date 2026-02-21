@@ -1,38 +1,146 @@
 {
     "id": "astronomy/satellite-pass",
     "title": "Track a Satellite Pass",
-    "description": "Nova helps you follow an overhead satellite using your telescope.",
+    "description": "Nova helps you predict, stage, and verify an overhead satellite pass with clear fallback handling.",
     "image": "/assets/quests/satellite_pass_tracking_scope.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "A bright satellite is passing tonight. Let's try to track it across the sky.",
+            "text": "A bright satellite is passing soon. We'll lock a prediction, stage your optics safely, then verify with a time-stamped log.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "observe",
-                    "text": "I'll set up."
+                    "goto": "plan-pass",
+                    "text": "Let's plan before we set up."
                 }
             ]
         },
         {
-            "id": "observe",
-            "text": "Point your telescope at the predicted path and use slow movements to keep it in view.",
+            "id": "plan-pass",
+            "text": "Use your phone to capture pass time, direction, and peak altitude. If weather shifts, do not force the session in unsafe conditions.",
             "options": [
                 {
                     "type": "process",
-                    "process": "identify-constellations",
-                    "text": "Following now"
+                    "process": "check-iss-pass",
+                    "text": "Predicted pass window captured."
+                },
+                {
+                    "type": "goto",
+                    "goto": "stage-scope",
+                    "text": "Window logged—stage the scope.",
+                    "requiresItems": [
+                        {
+                            "id": "2deff132-6b7f-42ca-a232-3ecf7ac0dd63",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "fallback",
+                    "text": "Clouds and glare are already blocking the route."
+                }
+            ]
+        },
+        {
+            "id": "stage-scope",
+            "text": "Tripod on level ground, cables clear of walkways, and flashlight in red mode. Keep optics away from aircraft lights and never near the Sun.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "stage-iss-spotting-station",
+                    "text": "Scope staged for the pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "track-pass",
+                    "text": "Station stable and ready.",
+                    "requiresItems": [
+                        {
+                            "id": "f2f6a7af-393f-463f-b3ec-b98ab233f800",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "track-pass",
+            "text": "Follow predicted entry point, keep slow smooth movements, and call out heading changes as the satellite crosses the sky.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-iss-pass",
+                    "text": "Recorded time and path in my logbook."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "I kept it in sight and logged the route.",
+                    "requiresItems": [
+                        {
+                            "id": "8e840805-7ff7-4330-8016-3364f4d026ed",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "fallback",
+                    "text": "Lost visual contact during the pass."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Compare planned vs observed timing. If drift is large, note likely causes like low altitude haze or delayed setup so your next pass estimate improves.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Timing analysis complete.",
+                    "requiresItems": [
+                        {
+                            "id": "8e840805-7ff7-4330-8016-3364f4d026ed",
+                            "count": 1
+                        },
+                        {
+                            "id": "2deff132-6b7f-42ca-a232-3ecf7ac0dd63",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "fallback",
+            "text": "Troubleshoot and recover: if clouds are thick, reschedule the next visible pass; if setup drifted, restage and run a dry tracking sweep before retrying.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-iss-pass",
+                    "text": "Book a follow-up pass window."
+                },
+                {
+                    "type": "goto",
+                    "goto": "stage-scope",
+                    "text": "Conditions improved—retry staging.",
+                    "requiresItems": [
+                        {
+                            "id": "2deff132-6b7f-42ca-a232-3ecf7ac0dd63",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "I kept it in sight",
+                    "text": "No lock tonight; follow-up pass is scheduled.",
                     "requiresItems": [
                         {
-                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "id": "2deff132-6b7f-42ca-a232-3ecf7ac0dd63",
                             "count": 1
                         }
                     ]
@@ -41,7 +149,7 @@
         },
         {
             "id": "finish",
-            "text": "Great tracking! Recording the time and path helps refine its orbit.",
+            "text": "Great tracking discipline. Store gear safely, sync your notes, and use the next pass to validate your corrections.",
             "options": [
                 {
                     "type": "finish",
@@ -60,7 +168,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

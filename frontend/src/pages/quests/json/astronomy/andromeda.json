@@ -8,11 +8,11 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here. Choose a dark, open spot away from traffic, check the forecast and let your eyes adjust for 15 minutes. Keep screens dim, secure your basic telescope and use a planisphere star chart with a red flashlight to preserve night vision. Ready?",
+            "text": "Nova here. Choose a dark, open spot away from traffic, check the forecast, and let your eyes adjust for 15 minutes. Keep screens dim, secure your basic telescope, and use a red flashlight to preserve night vision.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "search",
+                    "goto": "plan-route",
                     "text": "Gear ready.",
                     "requiresItems": [
                         {
@@ -28,30 +28,125 @@
             ]
         },
         {
-            "id": "search",
-            "text": "Shield the red flashlight to avoid glare and trace Cassiopeia's W on the star chart. From the midpoint, sweep the basic telescope slowly at low magnification toward a faint smudge\u2014that's Andromeda. Keep footing sure, mind your surroundings and never aim near the Sun or aircraft.",
+            "id": "plan-route",
+            "text": "Pick your star-hop strategy: follow Cassiopeia's W toward the Andromeda chain, or start at the Great Square of Pegasus. Keep tripod legs clear of walkways and never point optics near the Sun or aircraft.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cassiopeia-route",
+                    "text": "Use Cassiopeia as my guide."
+                },
+                {
+                    "type": "goto",
+                    "goto": "pegasus-route",
+                    "text": "Use Pegasus as my guide."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Clouds or glare are making this hard."
+                }
+            ]
+        },
+        {
+            "id": "cassiopeia-route",
+            "text": "Trace Cassiopeia's W on the chart, then sweep low magnification slowly until the faint oval glow appears.",
             "options": [
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Following the chart."
+                    "text": "Chart and sweep from Cassiopeia."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-and-verify",
+                    "text": "I found a faint oval glow.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "pegasus-route",
+            "text": "Use the Great Square of Pegasus to hop to Andromeda's stars, then nudge focus and averted vision until the galaxy haze stabilizes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Chart and sweep from Pegasus."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-and-verify",
+                    "text": "Andromeda is centered.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "If haze, moonlight, or stray lights wash out contrast, pause and recover: shield nearby lights, wait 10 more minutes for dark adaptation, or reschedule for a clearer moonless window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan-route",
+                    "text": "Conditions improved; retry the star hop."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
+                    "text": "Rescheduled with notes for a follow-up session.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log-and-verify",
+            "text": "Record time, sky condition, and guide stars in your mission logbook. Confirm the glow remains after refocusing to avoid false positives.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Write a verified observation entry."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Observation verified and logged.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
                         }
-                    ],
-                    "text": "Galaxy in sight."
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Log the position for next time, cap the telescope, switch off the flashlight and pack your gear before leaving the site.",
+            "text": "Nice work! Cap the telescope, switch off the flashlight, and pack out safely before leaving the site.",
             "options": [
                 {
                     "type": "finish",
@@ -70,7 +165,7 @@
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-06",

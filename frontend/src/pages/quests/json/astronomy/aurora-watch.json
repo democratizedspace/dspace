@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Solar winds may trigger auroras tonight. Let's plan before stepping into the cold.",
+            "text": "Solar winds may trigger auroras tonight. We'll plan first so weather or light pollution does not waste your cold-weather window.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "forecast",
-            "text": "Check an aurora app for Kp, clouds, and a clear hour. Pick a dark spot with safe footing.",
+            "text": "Check Kp forecast, cloud cover, and moon phase. Choose a dark site with safe footing and a buddy check-in plan.",
             "options": [
                 {
                     "type": "process",
@@ -29,19 +29,24 @@
                 {
                     "type": "goto",
                     "goto": "kit",
-                    "text": "Window picked\u2014what should I pack?",
+                    "text": "Window picked—what should I pack?",
                     "requiresItems": [
                         {
                             "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "fallback-plan",
+                    "text": "Clouds or city glow look too strong tonight."
                 }
             ]
         },
         {
             "id": "kit",
-            "text": "Layer up, clip the red flashlight, text a buddy with your spot, and keep the logbook dry.",
+            "text": "Layer up, clip the red flashlight, text a buddy with your site and return time, and keep your logbook in a dry sleeve.",
             "options": [
                 {
                     "type": "process",
@@ -51,7 +56,7 @@
                 {
                     "type": "goto",
                     "goto": "observe",
-                    "text": "Kit is ready\u2014let's step outside.",
+                    "text": "Kit is ready—let's step outside.",
                     "requiresItems": [
                         {
                             "id": "0ce0d0d4-d734-4099-b903-92e9b1c52b05",
@@ -63,7 +68,7 @@
         },
         {
             "id": "observe",
-            "text": "Let eyes adjust, sweep the northern horizon for arcs or curtains, and note color and time while staying aware of your footing.",
+            "text": "Let eyes adjust, sweep the northern horizon for arcs or curtains, and note color, direction, and time while staying aware of icy or uneven ground.",
             "options": [
                 {
                     "type": "process",
@@ -72,11 +77,70 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "text": "Entry written with colors and timestamps.",
                     "requiresItems": [
                         {
                             "id": "682c9b29-b16f-4cf1-aaad-861a4aa133f4",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "fallback-plan",
+                    "text": "No visible aurora yet."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret your observation: green arcs with stable motion suggest moderate activity; fast-moving reds and purples suggest stronger storms. Note confidence and likely uncertainty sources.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Interpretation added to my logbook.",
+                    "requiresItems": [
+                        {
+                            "id": "682c9b29-b16f-4cf1-aaad-861a4aa133f4",
+                            "count": 1
+                        },
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "fallback-plan",
+            "text": "Troubleshoot before ending the session: if cloud cover is high, reschedule for the next clear window; if local lights are bright, move farther from glare. Re-check forecasts and set a follow-up watch time.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-aurora-forecast",
+                    "text": "Schedule a follow-up observation window."
+                },
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Conditions improved—retry the watch.",
+                    "requiresItems": [
+                        {
+                            "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "No sighting tonight, but follow-up session is scheduled.",
+                    "requiresItems": [
+                        {
+                            "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
                             "count": 1
                         }
                     ]
@@ -85,7 +149,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice catch! Your notes help track storms. Warm up, check in with your buddy, and reuse dark sites.",
+            "text": "Nice discipline. Warm up, check in with your buddy, and keep conditions notes so your next aurora run starts stronger.",
             "options": [
                 {
                     "type": "finish",
@@ -104,7 +168,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-15",
