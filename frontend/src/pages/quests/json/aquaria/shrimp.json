@@ -8,15 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your Walstad tank reads 0 ammonia and nitrite when checked with a liquid test kit. Dwarf shrimp graze algae and reveal any stability issues.",
+            "text": "Your Walstad tank has held 0 ammonia and nitrite on recent checks. Dwarf shrimp are sensitive, so we treat this as a staged release, not a single click.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "acquire",
-                    "text": "Sounds good!",
+                    "goto": "setup",
+                    "text": "Let's stage the acclimation tools.",
                     "requiresItems": [
                         {
                             "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                            "count": 1
+                        },
+                        {
+                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
                             "count": 1
                         }
                     ]
@@ -24,19 +32,8 @@
             ]
         },
         {
-            "id": "acquire",
-            "text": "Pick up healthy shrimp in a sealed, shaded bag. Verify the water shows 0 ammonia and nitrite, then float it in your tank for 15 minutes to match temperature.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "acclimate",
-                    "text": "Bag is floating."
-                }
-            ]
-        },
-        {
-            "id": "acclimate",
-            "text": "Set up drip acclimation with airline tubing and a clean 5 gallon bucket reserved for aquarium use. Start a siphon at 2\u20134 drops per second for about an hour until parameters match.",
+            "id": "setup",
+            "text": "Float the transport bag 15 minutes to equalize temperature, then start a drip line at 2-4 drops per second into a clean bucket.",
             "options": [
                 {
                     "type": "process",
@@ -56,23 +53,79 @@
                 {
                     "type": "goto",
                     "goto": "release",
-                    "text": "Water is matched."
+                    "text": "Setup complete and drip line is steady.",
+                    "requiresItems": [
+                        {
+                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "release",
-            "text": "Use an aquarium net to move the shrimp into the tank. Never pour store water into your aquarium; discard it down a drain, rinse the bucket, and wash your hands.",
+            "text": "Net-transfer only: never pour store water into the tank. Discard bag water, rinse tools, and wash hands after handling.",
             "options": [
                 {
-                    "type": "finish",
-                    "text": "Shrimp are in and exploring!",
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Shrimp released with the net.",
                     "requiresItems": [
                         {
                             "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "observe",
+            "text": "Watch for 10-15 minutes. Active grazing and normal posture mean a clean transition; frantic darting or lying on sides means pause and recover.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Shrimp are grazing and behavior is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stabilize",
+                    "text": "Stress signs detected; run stabilization before closing."
+                }
+            ]
+        },
+        {
+            "id": "stabilize",
+            "text": "Dim lights, stop feeding for now, and re-check temperature before re-observing. If stress persists, hold at this stage and do not add more livestock.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Recovery check logged; observe again.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great transfer. You staged setup evidence first, then verified post-release behavior before closure.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Shrimp acclimation complete."
                 }
             ]
         }
@@ -91,7 +144,7 @@
     "hardening": {
         "passes": 4,
         "score": 100,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",

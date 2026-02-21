@@ -87,7 +87,11 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `requiresQuests`: `aquaria/walstad`, `aquaria/thermometer`
 - Dialogue `requiresItems` gates:
     - `start` → "Yes please, it's heavy." — Walstad aquarium with thermometer (80 L) ×1, aquarium stand (80 L) ×1
+    - `route-check` → "Path is clear and stand is stable." — aquarium stand (80 L) ×1
+    - `route-fix` → "Route reset complete. Retry the move." — aquarium stand (80 L) ×1
     - `heat` → "Install the heater and set it to 26°C" — aquarium heater (150 W) ×1, Walstad aquarium with thermometer (80 L) ×1
+    - `heat` → "Heater installed and running." — Heated Walstad aquarium (80 L, 26°C) ×1
+    - `verify` → "Move complete and heater verified." — Heated Walstad aquarium (80 L, 26°C) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -137,7 +141,13 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/sponge-filter`
 - Dialogue `requiresItems` gates:
-    - `mount` → "Light secured." — aquarium LED light (20 W) ×1
+    - `start` → "Safety check done. Let's mount the light." — aquarium LED light (20 W) ×1
+    - `safety-reset` → "Area dried and drip loop verified." — aquarium LED light (20 W) ×1
+    - `mount-plan` → "Use the rim clip path." — aquarium LED light (20 W) ×1
+    - `mount-plan` → "Use a raised mount path." — aquarium LED light (20 W) ×1
+    - `mount` → "Light is seated and stable." — aquarium LED light (20 W) ×1
+    - `remount` → "Mount is stable after rework." — aquarium LED light (20 W) ×1
+    - `schedule` → "Timer programmed and first light cycle started." — aquarium LED light (20 W) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -371,9 +381,12 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/ph-strip-test`, `aquaria/heater-install`, `aquaria/log-water-parameters`
 - Dialogue `requiresItems` gates:
-    - `start` → "Sounds good!" — Aquarium liquid test kit ×1
-    - `acclimate` → "Start drip acclimation" — Airline tubing ×1, 5 gallon bucket ×1
-    - `release` → "Shrimp are in and exploring!" — aquarium net ×1
+    - `start` → "Let's stage the acclimation tools." — Aquarium liquid test kit ×1, Airline tubing ×1, 5 gallon bucket ×1
+    - `setup` → "Start drip acclimation" — Airline tubing ×1, 5 gallon bucket ×1
+    - `setup` → "Setup complete and drip line is steady." — Airline tubing ×1
+    - `release` → "Shrimp released with the net." — aquarium net ×1
+    - `observe` → "Shrimp are grazing and behavior is stable." — Aquarium temperature reading ×1
+    - `stabilize` → "Recovery check logged; observe again." — Aquarium temperature reading ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -529,21 +542,18 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/water-change`
 - Dialogue `requiresItems` gates:
-    - `catch` → "Fish is secure in the bucket." — aquarium net ×1
+    - `start` → "Bucket staged, lid cracked for air, and net ready." — aquarium net ×1, 5 gallon bucket ×1
+    - `catch` → "Run controlled capture" — aquarium net ×1
+    - `catch` → "Fish is secure in the holding bucket." — aquarium net ×1
+    - `cleanup` → "Cleanup complete and fish still calm." — Freshly changed aquarium (80 L) ×1
+    - `return` → "Fish is back in the tank and moving normally." — Heated Walstad aquarium with guppies (80 L, 26°C) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [catch-fish](/processes/catch-fish)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
-    - [return-fish](/processes/return-fish)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
+    - None
 
 ## 19) Top Off Evaporated Water (`aquaria/top-off`)
 

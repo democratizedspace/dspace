@@ -8,24 +8,71 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The tank needs a quick tidy. Let's move a fish to a bucket with the net first.",
+            "text": "The tank needs a quick tidy. We'll prep a covered holding bucket first so the fish is never stranded mid-clean.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "approach",
+                    "text": "Bucket staged, lid cracked for air, and net ready.",
+                    "requiresItems": [
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "approach",
+            "text": "Approach slowly with lights dimmed. Fast chasing stresses fish and can damage fins.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "catch",
-                    "text": "I'll grab the net."
+                    "text": "Fish is calm near the front glass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "calm-fish",
+                    "text": "Fish is darting. Pause and calm the tank first."
+                }
+            ]
+        },
+        {
+            "id": "calm-fish",
+            "text": "Stop moving for a minute, reduce reflections, and guide the fish with two slow passes instead of chasing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "catch",
+                    "text": "Fish settled. Retry the net pass."
                 }
             ]
         },
         {
             "id": "catch",
-            "text": "Gently scoop the fish with the net and settle it in a nearby bucket.",
+            "text": "Gently scoop and transfer the fish to the holding bucket, keeping the net submerged until the last moment.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "release",
-                    "text": "Fish is secure in the bucket.",
-                    "process": "catch-fish",
+                    "text": "Run controlled capture",
+                    "requiresItems": [
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ],
+                    "goto": "cleanup"
+                },
+                {
+                    "type": "goto",
+                    "goto": "cleanup",
+                    "text": "Fish is secure in the holding bucket.",
                     "requiresItems": [
                         {
                             "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
@@ -36,20 +83,52 @@
             ]
         },
         {
-            "id": "release",
-            "text": "With the tank clean, return the fish to its home.",
+            "id": "cleanup",
+            "text": "Complete the quick cleanup and confirm temperature drift stayed small before reintroduction.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "fin",
-                    "text": "Back in you go!",
-                    "process": "return-fish"
+                    "goto": "return",
+                    "text": "Cleanup complete and fish still calm.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "calm-fish",
+                    "text": "Fish shows stress signs; pause and recover before return."
                 }
             ]
         },
         {
-            "id": "fin",
-            "text": "Great job keeping the fish safe during cleanup!",
+            "id": "return",
+            "text": "Return the fish to the tank gently and observe for normal swimming before you close the lid.",
+            "options": [
+                {
+                    "type": "goto",
+                    "text": "Return fish to tank",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Fish is back in the tank and moving normally.",
+                    "requiresItems": [
+                        {
+                            "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Nice work. Minimal chase time, clean transfer, and controlled return reduce injury risk.",
             "options": [
                 {
                     "type": "finish",
@@ -67,7 +146,7 @@
     "requiresQuests": ["aquaria/water-change"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 100,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }

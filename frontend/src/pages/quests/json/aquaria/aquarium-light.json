@@ -8,23 +8,101 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your Walstad tank is cycling, but plants need steady light. Ready to install the lamp?",
+            "text": "Your Walstad tank is cycling, but plants need steady light. Before mounting anything, unplug nearby strips, make a drip loop, and keep a dry towel under the outlet.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount-plan",
+                    "text": "Safety check done. Let's mount the light.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-reset",
+                    "text": "The outlet area is damp. Pause and reset before mounting."
+                }
+            ]
+        },
+        {
+            "id": "safety-reset",
+            "text": "Good catch. Dry the outlet area fully, route the cord below the outlet to form a drip loop, then restart the install.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount-plan",
+                    "text": "Area dried and drip loop verified.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "mount-plan",
+            "text": "Pick a mounting strategy: rim clip for quick setup, or a raised mount to widen spread and reduce glare.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "mount",
-                    "text": "Let's mount the light."
+                    "text": "Use the rim clip path.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Use a raised mount path.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "mount",
-            "text": "Clip the light to the rim and route the cable so it stays dry.",
+            "text": "Seat the lamp, tug-test the cable slack, and confirm no condensation can drip into plugs.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "schedule",
-                    "text": "Light secured.",
+                    "text": "Light is seated and stable.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "remount",
+                    "text": "The light wobbles or shines directly into eyes. Re-mount it."
+                }
+            ]
+        },
+        {
+            "id": "remount",
+            "text": "Reposition the bracket, tighten hardware, and angle the beam toward plants instead of open room glare.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "schedule",
+                    "text": "Mount is stable after rework.",
                     "requiresItems": [
                         {
                             "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
@@ -36,22 +114,28 @@
         },
         {
             "id": "schedule",
-            "text": "Plug it in and set a timer for eight hours of gentle daylight.",
+            "text": "Plug it in and set a timer for 8 hours. Avoid long photoperiods during early cycling to prevent algae blooms.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Timer set and lamp glowing."
+                    "goto": "verify",
+                    "text": "Timer programmed and first light cycle started.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "finish",
-            "text": "Great! Your plants will thrive under consistent lighting.",
+            "id": "verify",
+            "text": "Final check: light covers plants, cable loop hangs below the outlet, and surface fish can still access dim zones.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Enjoy the glow."
+                    "text": "Lighting plan is safe and stable."
                 }
             ]
         }
@@ -65,7 +149,7 @@
     "requiresQuests": ["aquaria/sponge-filter"],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 100,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }

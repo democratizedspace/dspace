@@ -8,11 +8,11 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Atlas here. Vega wants the empty 80 L tank on the stand. Clear the path and lift with your legs.",
+            "text": "Atlas here. Vega wants the empty 80 L tank on the stand. We'll stage the route first so no one twists while carrying glass.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "lift",
+                    "goto": "route-check",
                     "text": "Yes please, it's heavy.",
                     "requiresItems": [
                         {
@@ -28,35 +28,95 @@
             ]
         },
         {
+            "id": "route-check",
+            "text": "Clear cords and wet spots, then check the stand feet and floor are level before lifting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "lift",
+                    "text": "Path is clear and stand is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "98609b23-4811-4275-8d83-ad59a2797753",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "route-fix",
+                    "text": "Route is blocked or the stand rocks; pause and fix it first."
+                }
+            ]
+        },
+        {
+            "id": "route-fix",
+            "text": "Good pause. Dry the path, remove trip hazards, shim the stand, and confirm no wobble before another lift attempt.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "lift",
+                    "text": "Route reset complete. Retry the move.",
+                    "requiresItems": [
+                        {
+                            "id": "98609b23-4811-4275-8d83-ad59a2797753",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "lift",
-            "text": "I'll take most of the weight. On three\u2014one, two, three. Keep the tank level and your back straight.",
+            "text": "On three—one, two, three. Keep the tank level and elbows close so the seams stay supported.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "place",
-                    "text": "Heave-ho!"
+                    "text": "Lift is stable."
+                },
+                {
+                    "type": "goto",
+                    "goto": "grip-reset",
+                    "text": "The grip slipped or glass started to twist. Set down and reset."
+                }
+            ]
+        },
+        {
+            "id": "grip-reset",
+            "text": "Set the tank down on padding, reset hand positions, and only retry once both carriers can hold level.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "lift",
+                    "text": "Grip reset complete. Lift again."
                 }
             ]
         },
         {
             "id": "place",
-            "text": "Set it down gently. Check the stand is level before letting go.",
+            "text": "Set the tank gently on the stand and check all corners are seated with no rocking.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "heat",
-                    "text": "What's next?"
+                    "text": "Tank is seated and level."
+                },
+                {
+                    "type": "goto",
+                    "goto": "route-fix",
+                    "text": "One corner rocks; fix stand level before heater setup."
                 }
             ]
         },
         {
             "id": "heat",
-            "text": "Warm the tank with the heater before livestock. Make sure it's submerged before plugging into a GFCI outlet.",
+            "text": "Warm the tank before livestock. Heater must be submerged and powered from a GFCI outlet with a drip loop.",
             "options": [
                 {
                     "type": "process",
                     "process": "heat-walstad",
-                    "text": "Install the heater and set it to 26\u00b0C",
+                    "text": "Install the heater and set it to 26°C",
                     "requiresItems": [
                         {
                             "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
@@ -69,8 +129,31 @@
                     ]
                 },
                 {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Heater installed and running.",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verify final state: tank level, outlet dry, and heater holding steady before moving on.",
+            "options": [
+                {
                     "type": "finish",
-                    "text": "Heater installed, thanks!"
+                    "text": "Move complete and heater verified.",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -85,7 +168,7 @@
     "hardening": {
         "passes": 1,
         "score": 100,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-07",
