@@ -274,8 +274,9 @@ Programming quests build practical progression through the programming skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `programming/web-server`
 - Dialogue `requiresItems` gates:
-    - `start` → "Ready to add an API" — temperature log CSV ×1, thermistor logging rig ×1, Raspberry Pi 5 board ×1
+    - `start` → "Plan endpoint hardening" — temperature log CSV ×1, thermistor logging rig ×1, Raspberry Pi 5 board ×1
     - `wire` → "Three clean reads captured; proceed to endpoint deploy" — thermistor logging rig ×1, Raspberry Pi 5 board ×1, temperature log CSV ×1
+    - `recover-serial` → "Serial stream is stable again" — temperature log CSV ×2
     - `publish` → "Endpoint deployed; run contract checks" — live temperature JSON endpoint ×1
     - `verify` → "Both healthy and failure-mode checks pass" — live temperature JSON endpoint ×1, temperature log CSV ×1
 - Grants:
@@ -303,9 +304,9 @@ Programming quests build practical progression through the programming skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `programming/web-server`, `programming/json-endpoint`, `programming/avg-temp`
 - Dialogue `requiresItems` gates:
-    - `start` → "Design the payloads" — live temperature JSON endpoint ×1, temperature log CSV ×1
+    - `start` → "Design payload contracts" — live temperature JSON endpoint ×1, temperature log CSV ×1
     - `stats` → "Stats payload passes contract review" — annotated temperature graph ×1, temperature log CSV ×1
-    - `schema-recovery` → "Schema is repaired; re-run stats validation" — temperature log CSV ×1
+    - `schema-recovery` → "Schema is repaired; re-run stats validation" — temperature log CSV ×2
     - `publish` → "Dashboard and docs published" — live temperature dashboard ×1, live temperature JSON endpoint ×1
     - `verify` → "Both happy-path and stale-data checks pass" — live temperature dashboard ×1, annotated temperature graph ×1
 - Grants:
