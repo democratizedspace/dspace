@@ -323,7 +323,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/nutrient-check`
 - Dialogue `requiresItems` gates:
-    - `drain` → "All filled up!" — hydroponics tub (ready) ×1
+    - `prep` → "Tools and PPE are staged." — hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, EC meter ×1, 50 mL measuring syringe ×1
+    - `refresh` → "Fresh mix is circulating; verify readiness artifact." — hydroponics tub (ready) ×1
+    - `verify` → "Reservoir is stable and ready for the next growth cycle." — hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1
+- Recovery/troubleshooting branches:
+    - `recover` branch handles cloudy solution, unstable readings, and tool/PPE restaging before looping to `prep` or `refresh`
+- Safety/ops checks:
+    - PPE + metering tools required before drain/refill
+    - Verification branch enforces stable ready-state evidence before finish
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -569,7 +576,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/top-off`
 - Dialogue `requiresItems` gates:
-    - `soak` → "They're fully soaked!" — soaked hydroponic starter plug ×10
+    - `prep` → "Water and PPE are ready." — 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1, safety goggles ×1
+    - `soak` → "Soak cycle complete; verify saturation." — soaked hydroponic starter plug ×10
+    - `verify` → "All plugs are evenly saturated and seed-ready." — soaked hydroponic starter plug ×10, nitrile gloves (pair) ×1, safety goggles ×1
+- Recovery/troubleshooting branches:
+    - `recover` branch handles dry-core plugs and dirty soak water before looping to `prep`/`soak`
+- Safety/ops checks:
+    - PPE required before handling/squeezing plugs
+    - Verification gate enforces even saturation before finish
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -587,8 +601,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/plug-soak`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Cut and plant" — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
-    - `prep` → "Cutting is nestled in" — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
+    - `setup` → "Setup is stable and sanitized." — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1, nitrile gloves (pair) ×1
+    - `clone` → "Cutting is planted; begin stabilization checks." — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
+    - `stabilize` → "Cutting stayed turgid and setup remained stable." — soaked hydroponic starter plug ×1, hydroponics tub (ready) ×1
+- Recovery/troubleshooting branches:
+    - `recover` branch handles wilted stems/dry plugs and loops to `setup` or `clone` after pause and restaging
+- Safety/ops checks:
+    - PPE required before taking the cutting
+    - Outcome gate requires stabilization evidence before finish
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

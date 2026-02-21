@@ -1,51 +1,140 @@
 {
     "id": "hydroponics/reservoir-refresh",
     "title": "Refresh the Reservoir",
-    "description": "Swap out old nutrient solution for a fresh batch.",
+    "description": "Replace old nutrient solution with staged safety checks, verification, and recovery loops.",
     "image": "/assets/quests/hydroponics_reservoir_refresh.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "The nutrient bath gets gunky over time. Let's replace it to keep your roots happy.",
+            "text": "Old nutrient mix drifts out of spec. We'll run drain → refill → verify and keep a fallback path if the basin is still unstable.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "drain",
-                    "text": "Ready to refresh."
+                    "goto": "prep",
+                    "text": "Start the reservoir refresh checklist."
                 }
             ]
         },
         {
-            "id": "drain",
-            "text": "Drain the old solution and dispose of it responsibly. Then mix a new batch of nutrients.",
+            "id": "prep",
+            "text": "Safety gate: stage EC meter, syringe, gloves, and goggles before draining so dosing stays controlled.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "refresh",
+                    "text": "Tools and PPE are staged.",
+                    "requiresItems": [
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "05dc4020-f223-4f5e-98ba-8f8ff1172641",
+                            "count": 1
+                        },
+                        {
+                            "id": "f9844d82-95f2-430c-a0f5-00af5f4f341f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Missing PPE or measurement tools."
+                }
+            ]
+        },
+        {
+            "id": "refresh",
+            "text": "Drain spent solution, mix a fresh batch, and circulate before reading stability.",
             "options": [
                 {
                     "type": "process",
                     "process": "refresh-hydroponic-tub",
-                    "text": "Mixing fresh solution."
+                    "text": "Run controlled reservoir refresh."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
+                    "text": "Fresh mix is circulating; verify readiness artifact.",
                     "requiresItems": [
                         {
                             "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                             "count": 1
                         }
-                    ],
-                    "text": "All filled up!"
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Cloudy solution or drift persists after refill."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: confirm the tub is back in ready state and PPE stayed in place through dosing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reservoir is stable and ready for the next growth cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Readings still wobble; do corrective refresh cycle."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: pause feeding, flush residue, restage tools, and rerun refresh before attempting closure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Restaged equipment; retry prep gate."
+                },
+                {
+                    "type": "goto",
+                    "goto": "refresh",
+                    "text": "Corrective drain complete; rerun refresh now."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Sweet! Fresh nutrients mean faster growth and fewer pathogens.",
+            "text": "Great. You locked in a stable reservoir with explicit safety checks and a troubleshooting loop for drift conditions.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Back to growing!"
+                    "text": "Reservoir refresh complete."
                 }
             ]
         }
@@ -60,7 +149,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

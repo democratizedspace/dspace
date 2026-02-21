@@ -1,51 +1,132 @@
 {
     "id": "hydroponics/plug-soak",
     "title": "Soak Starter Plugs",
-    "description": "Hydrate rockwool cubes so seeds sprout happily.",
+    "description": "Hydrate starter plugs with safety checks, verification gates, and recovery loops.",
     "image": "/assets/quests/hydroponic_starter_plugs_soaking_tray.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Rockwool cubes arrive dry. They need a good soak before any seeds touch them.",
+            "text": "Rockwool plugs arrive dry and dusty. We stage safe prep, then prove they are fully saturated before seeding.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Run the starter-plug prep checklist."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Prep gate: collect dechlorinated water and put on gloves + eye protection before handling the plugs.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "soak",
-                    "text": "How do I soak them?"
+                    "text": "Water and PPE are ready.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Setup is incomplete or plugs still look brittle."
                 }
             ]
         },
         {
             "id": "soak",
-            "text": "Fill a bucket with dechlorinated water and submerge the starter plugs until saturated.",
+            "text": "Run a full soak cycle, then inspect for dry cores before moving to verification.",
             "options": [
                 {
                     "type": "process",
                     "process": "rockwool-soak",
-                    "text": "Soak the plugs."
+                    "text": "Soak the starter plugs."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
+                    "text": "Soak cycle complete; verify saturation.",
                     "requiresItems": [
                         {
                             "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
                             "count": 10
                         }
-                    ],
-                    "text": "They're fully soaked!"
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Some plugs still have dry spots."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: squeeze-test one sample plug. If moisture is uneven, recover and re-soak before continuing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All plugs are evenly saturated and seed-ready.",
+                    "requiresItems": [
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 10
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Moisture is patchy; run corrective soak."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: discard dusty soak water, remix fresh dechlorinated water, and restart from prep so safety and moisture checks are both re-validated.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Corrective setup complete; retry prep gate."
+                },
+                {
+                    "type": "goto",
+                    "goto": "soak",
+                    "text": "PPE is still on; re-run soak immediately."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great. Moist cubes give seedlings an even start.",
+            "text": "Nice work. You cleared prep evidence, soak evidence, and a troubleshooting path for dry-core plugs.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Ready for seeds."
+                    "text": "Starter plugs are ready for planting."
                 }
             ]
         }
@@ -60,7 +141,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
