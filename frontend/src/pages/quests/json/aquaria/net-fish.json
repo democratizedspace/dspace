@@ -56,8 +56,9 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "log-walstad-temperature",
-                    "text": "Log pre-transfer baseline reading."
+                    "process": "log-freshly-changed-walstad-temperature",
+                    "text": "Log pre-transfer baseline reading.",
+                    "goto": "baseline"
                 },
                 {
                     "type": "goto",
@@ -104,8 +105,9 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "log-walstad-temperature",
-                    "text": "Log recovery reading before retrying."
+                    "process": "log-freshly-changed-walstad-temperature",
+                    "text": "Log recovery reading before retrying.",
+                    "goto": "recovery"
                 },
                 {
                     "type": "goto",
@@ -126,8 +128,9 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "log-walstad-temperature",
-                    "text": "Capture post-release verification reading."
+                    "process": "log-freshly-changed-walstad-temperature",
+                    "text": "Capture post-release verification reading.",
+                    "goto": "release"
                 },
                 {
                     "type": "finish",

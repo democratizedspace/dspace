@@ -139,8 +139,9 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "log-walstad-temperature",
-                    "text": "Record warmup verification reading."
+                    "process": "log-heated-walstad-temperature",
+                    "text": "Record warmup verification reading.",
+                    "goto": "verify"
                 },
                 {
                     "type": "finish",

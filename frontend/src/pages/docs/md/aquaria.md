@@ -76,7 +76,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Consumes: aquarium thermometer (0–50°C) ×1, paper towel ×1
         - Creates: Walstad aquarium with thermometer (80 L) ×1
     - [log-walstad-temperature](/processes/log-walstad-temperature)
-        - Requires: none
+        - Requires: Walstad aquarium with thermometer (80 L) ×1
         - Consumes: none
         - Creates: Aquarium temperature reading ×1
 
@@ -101,8 +101,8 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Requires: none
         - Consumes: Walstad aquarium with thermometer (80 L) ×1, aquarium heater (150 W) ×1
         - Creates: Heated Walstad aquarium (80 L, 26°C) ×1
-    - [log-walstad-temperature](/processes/log-walstad-temperature)
-        - Requires: none
+    - [log-heated-walstad-temperature](/processes/log-heated-walstad-temperature)
+        - Requires: Heated Walstad aquarium (80 L, 26°C) ×1
         - Consumes: none
         - Creates: Aquarium temperature reading ×1
 
@@ -212,7 +212,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Consumes: Walstad aquarium with thermometer (80 L) ×1, aquarium heater (150 W) ×1
         - Creates: Heated Walstad aquarium (80 L, 26°C) ×1
     - [log-walstad-temperature](/processes/log-walstad-temperature)
-        - Requires: none
+        - Requires: Walstad aquarium with thermometer (80 L) ×1
         - Consumes: none
         - Creates: Aquarium temperature reading ×1
 
@@ -393,8 +393,8 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Requires: Airline tubing ×1, 5 gallon bucket ×1, Dwarf shrimp ×1, Walstad aquarium (80 L) ×1
         - Consumes: none
         - Creates: none
-    - [log-walstad-temperature](/processes/log-walstad-temperature)
-        - Requires: none
+    - [log-heated-walstad-temperature](/processes/log-heated-walstad-temperature)
+        - Requires: Heated Walstad aquarium (80 L, 26°C) ×1
         - Consumes: none
         - Creates: Aquarium temperature reading ×1
 
@@ -554,8 +554,8 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [log-walstad-temperature](/processes/log-walstad-temperature)
-        - Requires: none
+    - [log-freshly-changed-walstad-temperature](/processes/log-freshly-changed-walstad-temperature)
+        - Requires: Freshly changed aquarium (80 L) ×1
         - Consumes: none
         - Creates: Aquarium temperature reading ×1
 

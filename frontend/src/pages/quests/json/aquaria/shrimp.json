@@ -76,8 +76,9 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "log-walstad-temperature",
-                    "text": "Log a stability reading before retrying."
+                    "process": "log-heated-walstad-temperature",
+                    "text": "Log a stability reading before retrying.",
+                    "goto": "stress-response"
                 },
                 {
                     "type": "goto",
@@ -115,8 +116,9 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "log-walstad-temperature",
-                    "text": "Capture post-release verification reading."
+                    "process": "log-heated-walstad-temperature",
+                    "text": "Capture post-release verification reading.",
+                    "goto": "verify"
                 },
                 {
                     "type": "goto",
