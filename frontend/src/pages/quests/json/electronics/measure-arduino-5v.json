@@ -96,8 +96,12 @@
                 {
                     "type": "process",
                     "process": "measure-arduino-5v",
-                    "text": "Run re-test and re-evaluate range.",
-                    "goto": "baseline"
+                    "text": "Run re-test."
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Re-evaluate the reading range."
                 }
             ]
         },
@@ -118,12 +122,10 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "electronics/arduino-blink"
-    ],
+    "requiresQuests": ["electronics/arduino-blink"],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 90,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
