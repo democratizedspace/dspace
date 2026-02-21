@@ -8,19 +8,40 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here. Choose a dark, open spot away from traffic, check the forecast and let your eyes adjust for 15 minutes. Keep screens dim, secure your basic telescope and use a planisphere star chart with a red flashlight to preserve night vision. Ready?",
+            "text": "Nova here. Choose a dark, open spot away from traffic, check the forecast and let your eyes adjust for 15 minutes. Keep screens dim, secure your basic telescope and use a planisphere star chart with a red flashlight to preserve night vision. How do you want to run tonight's hunt?",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "site-check",
+                    "text": "I'll stage the safe observing site first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Clouds and porch lights are rough—what's the fallback plan?"
+                }
+            ]
+        },
+        {
+            "id": "site-check",
+            "text": "Good call. Confirm a stable tripod footprint, keep your red flashlight pointed down, and record your target area in the mission logbook before you sweep.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Running a Cassiopeia star-hop rehearsal."
+                },
+                {
+                    "type": "goto",
                     "goto": "search",
-                    "text": "Gear ready.",
+                    "text": "Constellation check complete and logged.",
                     "requiresItems": [
                         {
-                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
                         },
                         {
-                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
                             "count": 1
                         }
                     ]
@@ -28,13 +49,29 @@
             ]
         },
         {
-            "id": "search",
-            "text": "Shield the red flashlight to avoid glare and trace Cassiopeia's W on the star chart. From the midpoint, sweep the basic telescope slowly at low magnification toward a faint smudge\u2014that's Andromeda. Keep footing sure, mind your surroundings and never aim near the Sun or aircraft.",
+            "id": "weather-hold",
+            "text": "If cloud cover blocks the view, pause and reset. Shift to a darker edge, wait for a forecast gap, and never cross unsafe ground in the dark.",
             "options": [
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Following the chart."
+                    "text": "Rechecking landmarks while I wait for clearer sky."
+                },
+                {
+                    "type": "goto",
+                    "goto": "site-check",
+                    "text": "Conditions improved—resume the safe setup."
+                }
+            ]
+        },
+        {
+            "id": "search",
+            "text": "Shield the red flashlight to avoid glare and trace Cassiopeia's W on the chart. Sweep the basic telescope at low magnification toward the faint smudge. Keep footing sure and never aim near the Sun or aircraft.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "I lost the target in haze or glare."
                 },
                 {
                     "type": "goto",
@@ -43,9 +80,24 @@
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
                         }
                     ],
-                    "text": "Galaxy in sight."
+                    "text": "Galaxy in sight and logged with location notes."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Recovery loop: reduce magnification, re-center Cassiopeia, and wait two more minutes for full dark adaptation. If dew forms, cap and wipe optics before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "site-check",
+                    "text": "I'll reset and verify alignment before another sweep."
                 }
             ]
         },
@@ -70,7 +122,7 @@
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-06",

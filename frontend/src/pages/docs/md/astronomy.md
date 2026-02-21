@@ -72,8 +72,8 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/basic-telescope`
 - Dialogue `requiresItems` gates:
-    - `start` → "Gear ready." — planisphere star chart ×1, red flashlight ×1
-    - `search` → "Galaxy in sight." — basic telescope ×1
+    - `site-check` → "Constellation check complete and logged." — constellation sketch set ×1, mission logbook ×1
+    - `search` → "Galaxy in sight and logged with location notes." — constellation sketch set ×1, mission logbook ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -119,8 +119,9 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/iss-flyover`
 - Dialogue `requiresItems` gates:
-    - `plan` → "Pass time noted, gear set." — smartphone ×1, camera tripod ×1
+    - `plan` → "Pass time noted, gear set." — smartphone ×1, camera tripod ×1, ISS pass window ×1
     - `capture` → "Photo saved and logged." — mission logbook ×1
+    - `interpret` → "My capture meets the 5-15 second clarity check." — ISS pass window ×1, mission logbook ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -218,6 +219,8 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `forecast` → "Window picked—what should I pack?" — aurora viewing plan ×1
     - `kit` → "Kit is ready—let's step outside." — dark-sky kit packed ×1
     - `observe` → "Entry written with colors and timestamps." — aurora sighting log ×1
+    - `weather-fallback` → "New clear window found—retry observation." — aurora viewing plan ×1, dark-sky kit packed ×1
+    - `interpret` → "Log includes timestamps, color shifts, and direction notes." — aurora sighting log ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
