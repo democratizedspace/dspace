@@ -76,7 +76,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Consumes: aquarium thermometer (0–50°C) ×1, paper towel ×1
         - Creates: Walstad aquarium with thermometer (80 L) ×1
     - [log-walstad-temperature](/processes/log-walstad-temperature)
-        - Requires: none
+        - Requires: Walstad aquarium with thermometer (80 L) ×1
         - Consumes: none
         - Creates: Aquarium temperature reading ×1
 
@@ -86,8 +86,11 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/walstad`, `aquaria/thermometer`
 - Dialogue `requiresItems` gates:
-    - `start` → "Yes please, it's heavy." — Walstad aquarium with thermometer (80 L) ×1, aquarium stand (80 L) ×1
+    - `start` → "Direct path is clear; let's lift and place in one move." — Walstad aquarium with thermometer (80 L) ×1, aquarium stand (80 L) ×1
+    - `start` → "Let's use a staged route with a rest stop to protect the glass." — Walstad aquarium with thermometer (80 L) ×1, aquarium stand (80 L) ×1
     - `heat` → "Install the heater and set it to 26°C" — aquarium heater (150 W) ×1, Walstad aquarium with thermometer (80 L) ×1
+    - `heat` → "Heater installed and indicator is stable." — Heated Walstad aquarium (80 L, 26°C) ×1
+    - `verify` → "Lift complete, heater verified, and safety checks passed." — Aquarium temperature reading ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -98,6 +101,10 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Requires: none
         - Consumes: Walstad aquarium with thermometer (80 L) ×1, aquarium heater (150 W) ×1
         - Creates: Heated Walstad aquarium (80 L, 26°C) ×1
+    - [log-heated-walstad-temperature](/processes/log-heated-walstad-temperature)
+        - Requires: Heated Walstad aquarium (80 L, 26°C) ×1
+        - Consumes: none
+        - Creates: Aquarium temperature reading ×1
 
 ## 4) Install a sponge filter (`aquaria/sponge-filter`)
 
@@ -205,7 +212,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Consumes: Walstad aquarium with thermometer (80 L) ×1, aquarium heater (150 W) ×1
         - Creates: Heated Walstad aquarium (80 L, 26°C) ×1
     - [log-walstad-temperature](/processes/log-walstad-temperature)
-        - Requires: none
+        - Requires: Walstad aquarium with thermometer (80 L) ×1
         - Consumes: none
         - Creates: Aquarium temperature reading ×1
 
@@ -371,9 +378,11 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/ph-strip-test`, `aquaria/heater-install`, `aquaria/log-water-parameters`
 - Dialogue `requiresItems` gates:
-    - `start` → "Sounds good!" — Aquarium liquid test kit ×1
+    - `start` → "Tank checks passed and I'm ready to stage acclimation gear." — Aquarium liquid test kit ×1
     - `acclimate` → "Start drip acclimation" — Airline tubing ×1, 5 gallon bucket ×1
-    - `release` → "Shrimp are in and exploring!" — aquarium net ×1
+    - `stress-response` → "Reading logged and behavior recovered; resume controlled acclimation." — Aquarium temperature reading ×1
+    - `release` → "Shrimp released without adding store water." — aquarium net ×1
+    - `verify` → "Shrimp are active, temperature is logged, and transfer is stable." — Aquarium temperature reading ×1, aquarium net ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -384,6 +393,10 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Requires: Airline tubing ×1, 5 gallon bucket ×1, Dwarf shrimp ×1, Walstad aquarium (80 L) ×1
         - Consumes: none
         - Creates: none
+    - [log-heated-walstad-temperature](/processes/log-heated-walstad-temperature)
+        - Requires: Heated Walstad aquarium (80 L, 26°C) ×1
+        - Consumes: none
+        - Creates: Aquarium temperature reading ×1
 
 ## 14) Add Floating Plants (`aquaria/floating-plants`)
 
@@ -529,21 +542,22 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/water-change`
 - Dialogue `requiresItems` gates:
-    - `catch` → "Fish is secure in the bucket." — aquarium net ×1
+    - `start` → "I'll stage a calm transfer lane and prep checks." — aquarium net ×1
+    - `start` → "Fish are skittish; let's run a slower alternate approach." — aquarium net ×1
+    - `baseline` → "Baseline is logged and fish are calm enough to net." — Aquarium temperature reading ×1, aquarium net ×1
+    - `catch` → "Fish transferred cleanly with minimal stress." — aquarium net ×1
+    - `recovery` → "Recovery reading is logged and fish behavior normalized." — Aquarium temperature reading ×1
+    - `release` → "Transfer complete, fish recovered, and verification logged." — Aquarium temperature reading ×1, aquarium net ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [catch-fish](/processes/catch-fish)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
-    - [return-fish](/processes/return-fish)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
+    - [log-freshly-changed-walstad-temperature](/processes/log-freshly-changed-walstad-temperature)
+        - Requires: Freshly changed aquarium (80 L) ×1
+        - Consumes: none
+        - Creates: Aquarium temperature reading ×1
 
 ## 19) Top Off Evaporated Water (`aquaria/top-off`)
 

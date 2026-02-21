@@ -6778,6 +6778,56 @@
         }
     },
     {
+        "id": "log-heated-walstad-temperature",
+        "title": "Log a heated Walstad tank temperature reading",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                "count": 1
+            }
+        ],
+        "duration": "30s",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "log-freshly-changed-walstad-temperature",
+        "title": "Log a freshly changed Walstad tank temperature reading",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                "count": 1
+            }
+        ],
+        "duration": "30s",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
         "id": "measure-liquid-parameters",
         "title": "Run ammonia, nitrite, nitrate, and pH tests with a liquid kit and clean vials",
         "image": "/assets/aquarium_liquid_test_kit.jpg",

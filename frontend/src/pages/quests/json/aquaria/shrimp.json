@@ -13,7 +13,7 @@
                 {
                     "type": "goto",
                     "goto": "acquire",
-                    "text": "Sounds good!",
+                    "text": "Tank checks passed and I'm ready to stage acclimation gear.",
                     "requiresItems": [
                         {
                             "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
@@ -30,7 +30,12 @@
                 {
                     "type": "goto",
                     "goto": "acclimate",
-                    "text": "Bag is floating."
+                    "text": "Bag is floating and temperature equalization started."
+                },
+                {
+                    "type": "goto",
+                    "goto": "stress-response",
+                    "text": "Bag temperature drifted or shrimp look stressed during float."
                 }
             ]
         },
@@ -56,7 +61,35 @@
                 {
                     "type": "goto",
                     "goto": "release",
-                    "text": "Water is matched."
+                    "text": "Water is matched and shrimp behavior stayed calm."
+                },
+                {
+                    "type": "goto",
+                    "goto": "stress-response",
+                    "text": "Shrimp are darting, lying still, or breathing rapidly."
+                }
+            ]
+        },
+        {
+            "id": "stress-response",
+            "text": "Pause transfer. Dim lights, recheck heater stability, and extend acclimation in 15-minute blocks until movement normalizes. Never dump bag water into the display tank.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-heated-walstad-temperature",
+                    "text": "Log a stability reading before retrying.",
+                    "goto": "stress-response"
+                },
+                {
+                    "type": "goto",
+                    "goto": "acclimate",
+                    "text": "Reading logged and behavior recovered; resume controlled acclimation.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -65,9 +98,41 @@
             "text": "Use an aquarium net to move the shrimp into the tank. Never pour store water into your aquarium; discard it down a drain, rinse the bucket, and wash your hands.",
             "options": [
                 {
-                    "type": "finish",
-                    "text": "Shrimp are in and exploring!",
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Shrimp released without adding store water.",
                     "requiresItems": [
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Run a post-release observation window and capture a fresh reading before closure. If shrimp hide unusually or gasp at the surface, go back to recovery.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-heated-walstad-temperature",
+                    "text": "Capture post-release verification reading.",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "stress-response",
+                    "text": "Stress signs observed; pause and recover before finishing."
+                },
+                {
+                    "type": "finish",
+                    "text": "Shrimp are active, temperature is logged, and transfer is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        },
                         {
                             "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
                             "count": 1
