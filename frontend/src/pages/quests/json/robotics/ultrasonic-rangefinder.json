@@ -43,7 +43,7 @@
                     "text": "Bench wiring is complete.",
                     "requiresItems": [
                         {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
                             "count": 1
                         }
                     ]
@@ -60,7 +60,7 @@
                     "text": "Robot-mounted wiring is complete.",
                     "requiresItems": [
                         {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
                             "count": 1
                         }
                     ]
@@ -77,7 +77,7 @@
                     "text": "Safety checks complete; start distance sampling.",
                     "requiresItems": [
                         {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
                             "count": 1
                         }
                     ]
@@ -98,7 +98,7 @@
                     "text": "Distance readings are stable across all target ranges.",
                     "requiresItems": [
                         {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
                             "count": 1
                         }
                     ]

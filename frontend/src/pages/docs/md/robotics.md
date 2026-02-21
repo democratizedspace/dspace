@@ -156,10 +156,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/arduino-blink`
 - Dialogue `requiresItems` gates:
-    - `bench-setup` → "Bench wiring is complete." — Servo Motor ×1
-    - `mounted-setup` → "Robot-mounted wiring is complete." — Servo Motor ×1
-    - `safety-check` → "Safety checks complete; start distance sampling." — Servo Motor ×1
-    - `measurement` → "Distance readings are stable across all target ranges." — Servo Motor ×1
+    - `bench-setup` → "Bench wiring is complete." — ultrasonic distance sensor ×1
+    - `mounted-setup` → "Robot-mounted wiring is complete." — ultrasonic distance sensor ×1
+    - `safety-check` → "Safety checks complete; start distance sampling." — ultrasonic distance sensor ×1
+    - `measurement` → "Distance readings are stable across all target ranges." — ultrasonic distance sensor ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
