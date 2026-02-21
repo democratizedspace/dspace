@@ -75,21 +75,13 @@ COPY packages/feature-flags/package.json packages/feature-flags/
 COPY frontend/scripts frontend/scripts
 RUN --mount=type=cache,target=/root/.pnpm-store pnpm install --filter ./frontend... --frozen-lockfile --prod
 
-FROM node:20-bookworm-slim AS runtime
+FROM base AS runtime
 ARG DSPACE_VERSION=dev
 ENV DSPACE_VERSION="${DSPACE_VERSION}"
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        ca-certificates \
-        curl \
         dumb-init \
-        libcairo2 \
         libexpat1 \
-        libfreetype6 \
-        libgif7 \
-        libjpeg62-turbo \
-        libpango-1.0-0 \
-        libpangocairo-1.0-0 \
         libpixman-1-0 \
         libpng16-16 \
     && rm -rf /var/lib/apt/lists/* \
