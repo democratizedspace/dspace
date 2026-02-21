@@ -36,7 +36,9 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
-    - `materials` → "Yep, let's assemble it." — solderless breadboard ×1, Jumper Wires ×2, 5 mm LED ×1, 220 Ohm Resistor ×1, resistor color chart ×1, 5 V Power Supply ×1
+    - `materials` → "I have the parts and goggles." — solderless breadboard ×1, Jumper Wires ×2, 5 mm LED ×1, 220 Ohm Resistor ×1, resistor color chart ×1, 5 V Power Supply ×1, safety goggles ×1
+    - Non-linear flow: main assembly path plus alternate LED-polarity diagnostic path before verification.
+    - Troubleshooting loop: failed light/flicker routes to a power-off correction branch and mandatory retry.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -45,6 +47,10 @@ Electronics quests build practical progression through the electronics skill tre
 - Processes used:
     - [verify-resistor-color-code](/processes/verify-resistor-color-code)
         - Requires: 220 Ohm Resistor ×1, resistor color chart ×1
+        - Consumes: none
+        - Creates: none
+    - [check-led-polarity](/processes/check-led-polarity)
+        - Requires: digital multimeter ×1, 5 mm LED ×1, safety goggles ×1
         - Consumes: none
         - Creates: none
 
@@ -135,7 +141,9 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/arduino-blink`
 - Dialogue `requiresItems` gates:
-    - `materials` → "Gear ready. Let's measure." — Arduino Uno ×1, Laptop Computer ×1, USB Type-A to Type-B cable ×1, digital multimeter ×1
+    - `materials` → "Gear ready. Capture baseline." — Arduino Uno ×1, Laptop Computer ×1, USB Type-A to Type-B cable ×1, digital multimeter ×1, safety goggles ×1
+    - Measurement gate: reading is interpreted against an explicit 4.85-5.15 V pass window.
+    - Out-of-range branch: disconnect-first corrective checks and mandatory re-test loop before completion.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -271,6 +279,8 @@ Electronics quests build practical progression through the electronics skill tre
     - `requiresQuests`: `electronics/thermistor-reading`
 - Dialogue `requiresItems` gates:
     - `setup` → "Hardware ready" — USB Cable ×1, Raspberry Pi 5 board ×1, Arduino Uno ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, safety goggles ×1, anti-static wrist strap ×1
+    - Logging gate: `temps.csv` must include timestamp, sensor_id, temp_c, and status at 1-minute cadence for at least 10 rows.
+    - Anomaly branch: ALERT entries require corrective action and a 5-minute follow-up verification window.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

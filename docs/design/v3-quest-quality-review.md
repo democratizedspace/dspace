@@ -546,9 +546,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, hydr
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/basic-circuit`
-  - [ ] Observed issue: `electronics/basic-circuit` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `electronics/basic-circuit` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3647)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3647)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3647)
 - `electronics/check-battery-voltage`
   - [ ] Observed issue: `electronics/check-battery-voltage` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
@@ -558,9 +558,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, hydr
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
   - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/data-logger`
-  - [ ] Observed issue: `electronics/data-logger` asks for logging/monitoring but pass criteria and anomaly response are not explicit.
-  - [ ] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact.
-  - [ ] Add an anomaly classification branch with corrective action and a follow-up verification window before closure; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `electronics/data-logger` asks for logging/monitoring but pass criteria and anomaly response are not explicit. (PR #3647)
+  - [x] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact. (PR #3647)
+  - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3647)
 - `electronics/desolder-component`
   - [ ] Observed issue: `electronics/desolder-component` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -574,9 +574,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, hydr
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/measure-arduino-5v`
-  - [ ] Observed issue: `electronics/measure-arduino-5v` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `electronics/measure-arduino-5v` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3647)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3647)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3647)
 - `electronics/measure-led-current`
   - [ ] Observed issue: `electronics/measure-led-current` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.

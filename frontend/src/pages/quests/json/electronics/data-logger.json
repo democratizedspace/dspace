@@ -8,18 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your thermistor circuit works. Set it on a dry, static-safe surface, put on safety goggles and an anti-static wrist strap, and keep power disconnected until wiring is double-checked.",
+            "text": "Your thermistor circuit works. We'll produce a usable monitoring log with clear thresholds and anomaly handling.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "setup",
-                    "text": "Sounds good!"
+                    "text": "Let's do it."
                 }
             ]
         },
         {
             "id": "setup",
-            "text": "Connect the Arduino Uno to the Raspberry Pi with a USB cable. Run `sudo apt update && sudo apt install python3-serial` to add pyserial. Keep cases closed, avoid tugging cables, and keep drinks away.",
+            "text": "Set the rig on a dry, static-safe surface. Wear safety goggles and an anti-static wrist strap. Keep power disconnected until wiring is checked.",
             "options": [
                 {
                     "type": "process",
@@ -28,7 +28,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "script",
+                    "goto": "define-log",
                     "text": "Hardware ready",
                     "requiresItems": [
                         {
@@ -64,24 +64,78 @@
             ]
         },
         {
-            "id": "script",
-            "text": "Create `log_temp.py` to read `/dev/ttyACM0` at 9600 baud and append timestamped temperatures to `temps.csv` each minute. Use the Raspberry Pi serial logging process for sample code and run `python3 log_temp.py`.",
+            "id": "define-log",
+            "text": "Log requirements: capture timestamp, sensor_id, temp_c, and status once per minute for at least 10 rows. Mark status=ALERT when temp is <18 C or >30 C.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "raspberry-pi-serial-log",
-                    "text": "Open the serial logging process"
-                },
-                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Script is logging data!"
+                    "goto": "run-log",
+                    "text": "Logging spec documented."
                 }
             ]
         },
         {
-            "id": "finish",
-            "text": "Nice work! Logs help spot trends. Stop the script with Ctrl+C, shut down the Pi, then unplug the USB cable before moving parts.",
+            "id": "run-log",
+            "text": "Create `log_temp.py` for `/dev/ttyACM0` at 9600 baud, emit the required fields, and append to `temps.csv` each minute.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "raspberry-pi-serial-log",
+                    "text": "Collect temps.csv with 10+ rows."
+                },
+                {
+                    "type": "goto",
+                    "goto": "review-log",
+                    "text": "Review collected log data."
+                }
+            ]
+        },
+        {
+            "id": "review-log",
+            "text": "Review the log and classify outcome: all rows NORMAL, intermittent ALERT spikes, or persistent ALERT trend.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "normal-close",
+                    "text": "All rows NORMAL."
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly-branch",
+                    "text": "I observed ALERT entries."
+                }
+            ]
+        },
+        {
+            "id": "anomaly-branch",
+            "text": "Anomaly response: check thermistor seating, confirm reference resistor value, and verify wiring strain relief. Pause if casing gets hot or smell appears.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "follow-up-window",
+                    "text": "Applied corrective action; start follow-up window."
+                }
+            ]
+        },
+        {
+            "id": "follow-up-window",
+            "text": "Run a 5-minute follow-up capture. Completion requires the new window to show stable readings in the expected band and no repeated ALERT trend.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "raspberry-pi-serial-log",
+                    "text": "Collect follow-up window."
+                },
+                {
+                    "type": "goto",
+                    "goto": "review-log",
+                    "text": "Re-classify follow-up readings."
+                }
+            ]
+        },
+        {
+            "id": "normal-close",
+            "text": "Great work. You produced a thresholded monitoring artifact and verified system stability.",
             "options": [
                 {
                     "type": "finish",
