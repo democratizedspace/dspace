@@ -81,12 +81,8 @@
                 {
                     "type": "process",
                     "process": "raspberry-pi-serial-log",
-                    "text": "Use serial logging process"
-                },
-                {
-                    "type": "goto",
-                    "goto": "review-log",
-                    "text": "temps.csv collected with 10+ rows."
+                    "text": "Collect temps.csv with 10+ rows.",
+                    "goto": "review-log"
                 }
             ]
         },
@@ -124,12 +120,8 @@
                 {
                     "type": "process",
                     "process": "raspberry-pi-serial-log",
-                    "text": "Collect follow-up window"
-                },
-                {
-                    "type": "goto",
-                    "goto": "review-log",
-                    "text": "Follow-up collected. Re-classify."
+                    "text": "Collect follow-up window and re-classify.",
+                    "goto": "review-log"
                 }
             ]
         },

@@ -96,12 +96,8 @@
                 {
                     "type": "process",
                     "process": "measure-arduino-5v",
-                    "text": "Run re-test measurement"
-                },
-                {
-                    "type": "goto",
-                    "goto": "baseline",
-                    "text": "Re-test complete. Re-evaluate range."
+                    "text": "Run re-test and re-evaluate range.",
+                    "goto": "baseline"
                 }
             ]
         },

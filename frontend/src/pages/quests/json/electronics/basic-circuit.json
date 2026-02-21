@@ -65,12 +65,8 @@
                 {
                     "type": "process",
                     "process": "verify-resistor-color-code",
-                    "text": "Confirm resistor value before powering"
-                },
-                {
-                    "type": "goto",
-                    "goto": "verify",
-                    "text": "Circuit wired. Ready to verify."
+                    "text": "Confirm resistor value and proceed to verification.",
+                    "goto": "verify"
                 },
                 {
                     "type": "goto",
@@ -86,12 +82,8 @@
                 {
                     "type": "process",
                     "process": "check-led-polarity",
-                    "text": "Run polarity check"
-                },
-                {
-                    "type": "goto",
+                    "text": "Run polarity check and re-test circuit.",
                     "goto": "verify",
-                    "text": "Polarity confirmed. Re-test circuit.",
                     "requiresItems": [
                         {
                             "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
@@ -112,17 +104,7 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "LED stays lit and stable.",
-                    "requiresItems": [
-                        {
-                            "id": "f27d6046-6e72-4e87-b47c-8f0f0f4666e2",
-                            "count": 1
-                        },
-                        {
-                            "id": "77f8dbeb-0f14-4f0a-a42d-a86851826511",
-                            "count": 1
-                        }
-                    ]
+                    "text": "LED stays lit and stable."
                 },
                 {
                     "type": "goto",
