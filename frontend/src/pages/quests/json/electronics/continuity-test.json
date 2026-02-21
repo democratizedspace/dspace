@@ -8,28 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Never test a cable connected to power or equipment. Confirm the USB cable is unplugged from all devices. Check the insulation for cuts or frays. Put on safety goggles, then place the cable, a digital multimeter, wire cutters and electrical tape on a dry, non-conductive surface.",
+            "text": "Never test a cable connected to power or equipment. Confirm the USB cable is unplugged from all devices. Inspect insulation for cuts or frays and stage your meter, cutters, and tape on a dry non-conductive surface.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "probe",
-                    "text": "Ready to test."
+                    "goto": "setup-gate",
+                    "text": "Safety precheck complete."
                 }
             ]
         },
         {
-            "id": "probe",
-            "text": "Set the multimeter to continuity mode. Touch one probe to a pin on one end and the other probe to the matching pin on the opposite end. Keep fingers behind the probe guards and avoid touching other contacts.",
+            "id": "setup-gate",
+            "text": "Set the multimeter to continuity mode and confirm lead placement: black in COM, red in VΩ. Touch probes together once to verify the continuity buzzer works before touching the cable pins.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "test-cable-continuity",
-                    "text": "Run the continuity test."
-                },
-                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "It beeped and read near zero ohms.",
+                    "goto": "measure",
+                    "text": "Meter is validated and ready.",
                     "requiresItems": [
                         {
                             "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
@@ -56,12 +51,80 @@
             ]
         },
         {
+            "id": "measure",
+            "text": "Measure each conductor end-to-end. Record whether each lane beeps and note resistance trend: expected pass is a stable continuity tone with resistance near 0 Ω. Intermittent tone or open circuit means failed conductor.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "test-cable-continuity",
+                    "text": "Run continuity measurements for all lanes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret-pass",
+                    "text": "All lanes beep with near-zero resistance."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret-fail",
+                    "text": "One or more lanes failed or beep is unstable."
+                }
+            ]
+        },
+        {
+            "id": "interpret-pass",
+            "text": "Pass criteria met: every conductor lane has stable continuity and no visible insulation damage. Coil the cable loosely and label it as verified.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Log pass and store safely.",
+                    "requiresItems": [
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret-fail",
+            "text": "Failure branch: quarantine the cable. If the sheath is cut or strain relief is loose, cut into short pieces and tape exposed ends before e-waste recycling. If results looked inconsistent, reseat probes and re-run one full lane sweep.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Re-test after probe/cable repositioning."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Cable failed; disposed safely and logged.",
+                    "requiresItems": [
+                        {
+                            "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                            "count": 1
+                        },
+                        {
+                            "id": "946bc4dd-32ee-434c-a8ed-d70cdce617f4",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Turn off the meter. If every conductor beeps, coil the cable loosely and store it dry. If a conductor fails, cut the cable into short pieces with wire cutters and wrap the ends in electrical tape before recycling. Remove your goggles and take this GFCI outlet tester for future wiring checks.",
+            "text": "Turn off the meter and stow tools dry. Good technicians document both passes and fails, not just wins. Take this GFCI outlet tester for your next electrical safety check.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Orion!"
+                    "text": "Continuity workflow complete."
                 }
             ]
         }
@@ -76,7 +139,7 @@
     "hardening": {
         "passes": 8,
         "score": 100,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-10",

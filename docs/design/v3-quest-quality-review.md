@@ -193,7 +193,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3613)
 - `3dprinting/cable-clip`
   - [ ] Observed issue: `3dprinting/cable-clip` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0000)
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `3dprinting/calibration-cube`
   - [ ] Observed issue: `3dprinting/calibration-cube` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
@@ -359,7 +359,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/lunar-eclipse`
   - [ ] Observed issue: `astronomy/lunar-eclipse` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #0000)
   - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `astronomy/meteor-shower`
   - [ ] Observed issue: `astronomy/meteor-shower` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
@@ -413,7 +413,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/check-temperature,
 - `chemistry/acid-neutralization`
   - [ ] Observed issue: `chemistry/acid-neutralization` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #0000)
 - `chemistry/buffer-solution`
   - [ ] Observed issue: `chemistry/buffer-solution` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -425,7 +425,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/check-temperature,
 - `chemistry/ph-test`
   - [ ] Observed issue: `chemistry/ph-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #0000)
 - `chemistry/precipitation-reaction`
   - [ ] Observed issue: `chemistry/precipitation-reaction` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
@@ -554,17 +554,17 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, hydr
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3660)
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3660)
 - `electronics/continuity-test`
-  - [ ] Observed issue: `electronics/continuity-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `electronics/continuity-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #0000)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #0000)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #0000)
 - `electronics/data-logger`
   - [x] Observed issue: `electronics/data-logger` asks for logging/monitoring but pass criteria and anomaly response are not explicit. (PR #3647)
   - [x] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact. (PR #3647)
   - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3647)
 - `electronics/desolder-component`
-  - [ ] Observed issue: `electronics/desolder-component` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `electronics/desolder-component` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #0000)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0000)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #0000)
 - `electronics/led-polarity`
   - [ ] Observed issue: `electronics/led-polarity` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -614,9 +614,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, hydr
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
   - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/test-gfci-outlet`
-  - [ ] Observed issue: `electronics/test-gfci-outlet` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `electronics/test-gfci-outlet` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #0000)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #0000)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #0000)
 - `electronics/thermistor-reading`
   - [x] Observed issue: `electronics/thermistor-reading` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3660)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3660)

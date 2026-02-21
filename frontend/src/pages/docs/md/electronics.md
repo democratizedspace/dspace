@@ -398,7 +398,9 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/solder-wire`
 - Dialogue `requiresItems` gates:
-    - `probe` → "It beeped and read near zero ohms." — digital multimeter ×1, USB Cable ×1, safety goggles ×1, wire cutters ×1, electrical tape ×1
+    - `setup-gate` → "Meter is validated and ready." — digital multimeter ×1, USB Cable ×1, safety goggles ×1, wire cutters ×1, electrical tape ×1
+    - Measurement interpretation gate: pass requires stable continuity across all lanes with near-zero resistance notes.
+    - Failure/recovery branch: unstable or open lanes route to quarantine/disposal or a mandatory full-lane re-test before closure.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -416,7 +418,9 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/solder-wire`
 - Dialogue `requiresItems` gates:
-    - `desolder` → "Component removed." — soldering iron kit ×1, safety goggles ×1, desoldering pump ×1, solder wick ×1, flux pen ×1
+    - `setup` → "Bench is staged and safe." — soldering iron kit ×1, safety goggles ×1, desoldering pump ×1, solder wick ×1, flux pen ×1
+    - Non-linear flow: pump-first and wick-first removal strategies converge on an inspection gate.
+    - Troubleshooting loop: lifted pad / solder-bridge conditions branch to a cool-down recovery path, then retry before finish.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -434,7 +438,9 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/continuity-test`
 - Dialogue `requiresItems` gates:
-    - `plug` → "Outlet passed." — GFCI outlet tester ×1
+    - `precheck` → "Outlet looks intact; continue testing." — GFCI outlet tester ×1
+    - Safety stop branch: visible damage or burn signs force tag-out/escalation completion path.
+    - Verification gate: completion requires a full trip/reset interpretation branch with re-test handling for mismatch outcomes.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

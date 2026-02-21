@@ -8,35 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A resistor is misplaced on a scrap PCB. Ventilate the area, put on safety goggles, and let the soldering iron warm in its stand before heating.",
+            "text": "A resistor is misplaced on a scrap PCB. Ventilate the area, put on safety goggles, and park the iron in its stand while we do a heat-safe setup check.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "prep",
-                    "text": "What should I grab?"
+                    "goto": "setup",
+                    "text": "Walk me through setup."
                 }
             ]
         },
         {
-            "id": "prep",
-            "text": "Gather the soldering iron kit, desoldering pump, solder wick, flux pen and safety goggles. Keep the iron on its stand and cords clear.",
+            "id": "setup",
+            "text": "Gather the soldering iron kit, desoldering pump, solder wick, flux pen, helping hands, and goggles. Keep a damp sponge nearby and route cords away from your forearm swing.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "desolder",
-                    "text": "Tools ready."
-                }
-            ]
-        },
-        {
-            "id": "desolder",
-            "text": "Apply a little flux, heat one lead, trigger the desoldering pump to pull molten solder, repeat on the other lead, then use solder wick to clear residue and gently wiggle the resistor free.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Component removed.",
-                    "process": "desolder-through-hole",
+                    "goto": "method-choice",
+                    "text": "Bench is staged and safe.",
                     "requiresItems": [
                         {
                             "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
@@ -63,12 +51,127 @@
             ]
         },
         {
+            "id": "method-choice",
+            "text": "Choose your extraction plan. Pump-first is faster on filled barrels; wick-first is gentler on fragile pads. Both require controlled heat and short contact times.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "pump-pass",
+                    "text": "Use pump-first on each lead."
+                },
+                {
+                    "type": "goto",
+                    "goto": "wick-pass",
+                    "text": "Use wick-first for fragile pads."
+                }
+            ]
+        },
+        {
+            "id": "pump-pass",
+            "text": "Add flux, heat one joint just until solder flows, then trigger the desoldering pump. Repeat on the second lead. If solder remains, clear with wick before lifting the resistor.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "desolder-through-hole",
+                    "text": "Run pump-first removal pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-removal",
+                    "text": "Component is free and holes look mostly clear.",
+                    "requiresItems": [
+                        {
+                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                            "count": 1
+                        },
+                        {
+                            "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Pad looks stressed or solder is still bridged."
+                }
+            ]
+        },
+        {
+            "id": "wick-pass",
+            "text": "Apply flux, place wick over the joint, and heat through the braid in short bursts. Reposition wick often so heat does not dwell on one pad.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "desolder-through-hole",
+                    "text": "Run wick-first removal pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-removal",
+                    "text": "Component is free and pads stayed intact.",
+                    "requiresItems": [
+                        {
+                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                            "count": 1
+                        },
+                        {
+                            "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Pad started to lift or joint will not clear."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Safety stop: if a pad is lifting, remove heat immediately and let the board cool. Re-flux, lower iron dwell time, stabilize the board in helping hands, then retry one lead at a time.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "method-choice",
+                    "text": "Board cooled; retry with controlled heat."
+                }
+            ]
+        },
+        {
+            "id": "verify-removal",
+            "text": "Inspection gate: confirm both plated holes are open, no solder bridges remain, and the pad ring is still bonded to the PCB. Clean flux residue before shutdown.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Inspection passed.",
+                    "requiresItems": [
+                        {
+                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Inspection failed; I need another cleanup pass."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice work! Clean the tip, unplug the iron, let it cool, and recycle the scrap PCB.",
+            "text": "Solid rework discipline. Clean the tip, unplug the iron, leave it in-stand until fully cool, and recycle the scrap PCB after confirming no loose solder beads are on the bench.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All cleaned up."
+                    "text": "Desoldering complete and bench is safe."
                 }
             ]
         }
@@ -83,7 +186,7 @@
     "hardening": {
         "passes": 3,
         "score": 80,
-        "emoji": "\u2705",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-desolder-component-hardening-2025-08-13",

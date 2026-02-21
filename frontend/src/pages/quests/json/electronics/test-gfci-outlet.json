@@ -8,28 +8,66 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "GFCI outlets guard against shocks. Make sure your hands are dry and the wall plate is intact before we start.",
+            "text": "GFCI outlets guard against shocks. Dry hands only. Inspect the wall plate for cracks, scorch marks, or looseness before inserting any tester.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "precheck",
+                    "text": "Run precheck."
+                }
+            ]
+        },
+        {
+            "id": "precheck",
+            "text": "Safety gate: if the receptacle is physically damaged or smells burned, stop and tag it for a licensed electrician. If it looks intact, confirm the tester legend and expected light map before continuing.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "plug",
-                    "text": "Tester ready."
+                    "text": "Outlet looks intact; continue testing.",
+                    "requiresItems": [
+                        {
+                            "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Damage present; do not test live."
                 }
             ]
         },
         {
             "id": "plug",
-            "text": "Insert the GFCI tester fully into the outlet. Check the light pattern against the chart. Press the test button; the outlet should trip. Use the reset button to restore power and confirm the lights return to normal.",
+            "text": "Insert the tester fully. Record initial light pattern, then press TEST. Expected behavior: outlet trips and de-energizes. Press RESET and verify lights return to normal pattern.",
             "options": [
                 {
                     "type": "process",
                     "process": "test-gfci-outlet",
-                    "text": "Run the GFCI test."
+                    "text": "Run the GFCI trip/reset test."
                 },
                 {
                     "type": "goto",
+                    "goto": "interpret-pass",
+                    "text": "Trip/reset cycle matched expected pattern."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret-fail",
+                    "text": "Pattern mismatch, no trip, or reset failed."
+                }
+            ]
+        },
+        {
+            "id": "interpret-pass",
+            "text": "Pass criteria: correct wiring pattern, successful trip on TEST, and normal lights after RESET. Add this outlet to a monthly re-test schedule.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Outlet passed.",
+                    "text": "Log pass and close task.",
                     "requiresItems": [
                         {
                             "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
@@ -40,8 +78,34 @@
             ]
         },
         {
+            "id": "interpret-fail",
+            "text": "Failure handling: do not keep cycling TEST/RESET on a faulty outlet. Label the receptacle, disconnect portable loads, and escalate for repair. After corrective work, re-run one full trip/reset verification.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plug",
+                    "text": "Repair done; re-run verification cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Escalate and keep outlet out of service."
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Good call stopping early. Document the fault condition and keep the outlet tagged out until a qualified electrician clears it.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Tagged out and escalated."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice work! The GFCI is wired correctly and trips as expected. Test it monthly and replace damaged outlets.",
+            "text": "Nice work. This outlet passed functional protection checks. Keep monthly tests on calendar and replace any outlet that fails to trip/reset cleanly.",
             "options": [
                 {
                     "type": "finish",
@@ -60,7 +124,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
