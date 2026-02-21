@@ -1,30 +1,46 @@
 {
     "id": "rocketry/guided-rocket-build",
     "title": "Build a Guided Model Rocket",
-    "description": "Print a servo-ready fincan, assemble the avionics, and program guidance for a camera-equipped hop.",
+    "description": "Build and validate a guided rocket stack with branching print strategy, bench diagnostics, and safe-launch readiness checks.",
     "image": "/assets/quests/guided_model_rocket_build_bench.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here! Let's turn your parachute bird into a guided flier. We'll print fresh hardware and wire up the servos together.",
+            "text": "Nova here! Let's turn your parachute bird into a guided flier. We'll print hardware, wire avionics, and clear bench tests before it ever sees the pad.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "print-fincan",
+                    "goto": "print-plan",
                     "text": "Ready to upgrade the airframe."
                 }
             ]
         },
         {
+            "id": "print-plan",
+            "text": "Choose your print strategy. Fast profile gets parts quickly, quality profile reduces warping risk on servo pockets.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print-fincan",
+                    "text": "Run the fast draft profile and monitor layer adhesion."
+                },
+                {
+                    "type": "goto",
+                    "goto": "print-fincan-quality",
+                    "text": "Run the slow quality profile for tighter tolerances."
+                }
+            ]
+        },
+        {
             "id": "print-fincan",
-            "text": "First up is a fincan with servo pockets. Slice the model, babysit the first layer, and let the printer chew through the infill.",
+            "text": "First up is a fincan with servo pockets. Babysit layer one and watch for edge lift.",
             "options": [
                 {
                     "type": "process",
                     "process": "3dprint-guided-fincan",
-                    "text": "Start the servo-ready fincan print"
+                    "text": "Start the servo-ready fincan print."
                 },
                 {
                     "type": "goto",
@@ -36,21 +52,59 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "print-recovery",
+                    "text": "Corners warped or servo pocket is rough. Enter print recovery."
+                }
+            ]
+        },
+        {
+            "id": "print-fincan-quality",
+            "text": "Quality path selected: slower outer walls and extra cooling. This takes longer but can avoid reprints.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-guided-fincan",
+                    "text": "Start the quality fincan print run."
+                },
+                {
+                    "type": "goto",
+                    "goto": "print-sled",
+                    "text": "Quality run complete; fit check passes.",
+                    "requiresItems": [
+                        {
+                            "id": "125eaa46-48f1-4cef-adaa-c200892af437",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "print-recovery",
+            "text": "Recovery branch: dry filament, re-level the bed, and rerun first-layer calibration before another fincan print.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print-plan",
+                    "text": "Printer tuned. Re-select print strategy."
                 }
             ]
         },
         {
             "id": "print-sled",
-            "text": "Nice. Now we need the avionics sled to hold the Arduino, IMU, and wiring bundle inside the fincan.",
+            "text": "Now print the avionics sled that holds the Arduino, IMU, and wiring bundle.",
             "options": [
                 {
                     "type": "process",
                     "process": "3dprint-guidance-sled",
-                    "text": "Print the avionics sled"
+                    "text": "Print the avionics sled."
                 },
                 {
                     "type": "goto",
-                    "goto": "assemble-stack",
+                    "goto": "assemble-safety",
                     "text": "Sled fits cleanly into the fincan.",
                     "requiresItems": [
                         {
@@ -66,13 +120,29 @@
             ]
         },
         {
+            "id": "assemble-safety",
+            "text": "Before assembly: anti-static strap on, servo horns centered, and harness route clear of fin roots.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble-stack",
+                    "text": "Safety checks complete. Proceed with assembly."
+                },
+                {
+                    "type": "goto",
+                    "goto": "bench-troubleshoot",
+                    "text": "Something looks off. Pause for diagnostics."
+                }
+            ]
+        },
+        {
             "id": "assemble-stack",
-            "text": "Time to wire the servos, strap down the Arduino, and route the harness. Double-check throw directions before sealing it up.",
+            "text": "Wire the servos, strap down the Arduino, and route the harness. Double-check throw directions before sealing it up.",
             "options": [
                 {
                     "type": "process",
                     "process": "assemble-guided-flight-stack",
-                    "text": "Assemble the guidance stack"
+                    "text": "Assemble the guidance stack."
                 },
                 {
                     "type": "goto",
@@ -84,22 +154,27 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "bench-troubleshoot",
+                    "text": "Servo jitter or wiring heat detected. Troubleshoot first."
                 }
             ]
         },
         {
             "id": "calibrate",
-            "text": "Let's flash the firmware and tune the servo endpoints so the rocket holds attitude instead of tumbling.",
+            "text": "Flash firmware and tune servo endpoints. Bench tilt test must show stable correction without oscillation.",
             "options": [
                 {
                     "type": "process",
                     "process": "calibrate-guided-flight-stack",
-                    "text": "Upload and tune the stability firmware"
+                    "text": "Upload and tune the stability firmware."
                 },
                 {
                     "type": "goto",
                     "goto": "camera",
-                    "text": "Firmware passes the bench tilt test.",
+                    "text": "Firmware passes tilt test and control response is stable.",
                     "requiresItems": [
                         {
                             "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
@@ -110,17 +185,33 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "bench-troubleshoot",
+                    "text": "Overshoot or drift detected. Rework calibration."
+                }
+            ]
+        },
+        {
+            "id": "bench-troubleshoot",
+            "text": "Troubleshooting loop: re-seat IMU mount, verify servo direction map, and rerun bench tests before continuing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble-safety",
+                    "text": "Diagnostics complete; restart safety checks."
                 }
             ]
         },
         {
             "id": "camera",
-            "text": "One last upgrade: mount the keychain camera so we can replay the hop from onboard footage.",
+            "text": "Last upgrade: mount the keychain camera so we can replay the hop. Keep CG within safe limits after install.",
             "options": [
                 {
                     "type": "process",
                     "process": "install-rocket-camera",
-                    "text": "Install the nosecone camera"
+                    "text": "Install the nosecone camera."
                 },
                 {
                     "type": "goto",
@@ -137,11 +228,11 @@
         },
         {
             "id": "wrap",
-            "text": "Beautiful build! Stow that stack until you're at the pad and we'll plan the guided hop together.",
+            "text": "Beautiful build. You now have a guided stack that passed print, safety, and bench validation gates.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Packed up and ready for launch day!"
+                    "text": "Guided rocket build complete."
                 }
             ]
         }

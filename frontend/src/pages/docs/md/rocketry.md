@@ -72,10 +72,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Rewards:
     - Rocketeer Award ×1
 - Processes used:
-    - [measure-wind-speed](/processes/measure-wind-speed)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
+    - None
 
 ## 3) Add a parachute (`rocketry/parachute`)
 
@@ -107,10 +104,15 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/parachute`
 - Dialogue `requiresItems` gates:
-    - `supplies` → "All set, gear in hand." — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
-    - `arm` → "Launch successful!" — damaged model rocket ×1
+    - `supplies` → "All core gear is staged." — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1, rocket launch checklist ×1
+    - `wind-evidence` → "Both readings are documented. Time to interpret." — wind-check placeholder reward item (`15e3dd7e-374b-4233-b8c9-117e3057f009`) ×1
+    - `arm` → "Launch complete and post-flight check passed." — damaged model rocket ×1
+- Troubleshooting/safety branches:
+    - `range-walk` and `scrub` paths can halt unsafe range conditions before arming.
+    - `troubleshoot` enforces corrective actions and a mandatory re-test loop through `wind-readings`.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems:
+        - `wind-readings` → "Record both readings in the pad log." grants wind-check placeholder reward item (`15e3dd7e-374b-4233-b8c9-117e3057f009`) ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - Rocketeer Award ×1
@@ -126,11 +128,15 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/firstlaunch`, `rocketry/parachute`, `rocketry/preflight-check`
 - Dialogue `requiresItems` gates:
-    - `print-fincan` → "Fincan cooled and off the bed." — servo-ready fincan ×1
+    - `print-fincan`/`print-fincan-quality` → fincan completion confirmations — servo-ready fincan ×1
     - `print-sled` → "Sled fits cleanly into the fincan." — servo-ready fincan ×1, avionics sled ×1
     - `assemble-stack` → "Servos move cleanly and wiring is tidy." — guided flight stack ×1
-    - `calibrate` → "Firmware passes the bench tilt test." — guided flight stack ×1, stability firmware ×1
+    - `calibrate` → firmware stability confirmation — guided flight stack ×1, stability firmware ×1
     - `camera` → "Camera wiring is tucked and hatch secured." — nosecone camera module ×1
+- Troubleshooting/safety branches:
+    - `print-plan` provides non-linear print strategy branches (fast vs quality profile).
+    - `print-recovery` handles warp/adhesion failures before resuming the build path.
+    - `assemble-safety` + `bench-troubleshoot` add anti-static and servo diagnostic loops before closure.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -202,7 +208,10 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/parachute`
 - Dialogue `requiresItems` gates:
-    - `burn` → "Data captured" — parachute ×1
+    - `burn` → "Burn complete; thrust data captured." — parachute ×1
+- Troubleshooting/safety branches:
+    - `setup` and `safety-hold` add explicit abort/resume handling for unsafe static-test conditions.
+    - `interpret` enforces pass/fail bounds and routes out-of-range outcomes into `corrective` re-test loops.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -258,10 +267,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Rewards:
     - placeholder reward item (canonical ID: 15e3dd7e-374b-4233-b8c9-117e3057f009) ×1
 - Processes used:
-    - [measure-wind-speed](/processes/measure-wind-speed)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
+    - None
 
 ## QA flow notes
 
