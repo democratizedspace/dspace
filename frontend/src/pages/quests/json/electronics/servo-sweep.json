@@ -1,30 +1,30 @@
 {
     "id": "electronics/servo-sweep",
     "title": "Sweep a Servo",
-    "description": "Use the Arduino IDE's Servo library 'Sweep' example to rotate a hobby servo from 0\u00b0 to 180\u00b0.",
+    "description": "Use the Arduino IDE's Servo library 'Sweep' example to rotate a hobby servo from 0° to 180°.",
     "image": "/assets/quests/electronics_servo_sweep_arduino.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to move beyond LEDs? Gather an Arduino Uno, USB cable, servo motor, jumper wires, and a 5\u202fV supply to sweep a servo arm back and forth.",
+            "text": "Orion here. We'll run a safe servo sweep with a verify-and-recover loop. Keep power disconnected while wiring so the horn cannot move unexpectedly.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "wire",
-                    "text": "What do I connect?"
+                    "goto": "preflight",
+                    "text": "Start preflight."
                 }
             ]
         },
         {
-            "id": "wire",
-            "text": "Disconnect the USB cable before wiring. Connect the servo signal to digital pin\u202f9, red to 5\u202fV, and brown or black to GND. If it draws over 500\u202fmA, power it from an external 5\u202fV supply and tie the grounds together to avoid brownouts.",
+            "id": "preflight",
+            "text": "Gather Arduino Uno, three jumper wires, USB cable, servo motor, and a 5 V supply. If expected current is above 500 mA, use external 5 V and common ground.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Wired up!",
+                    "goto": "wire",
+                    "text": "Build primary wiring plan.",
                     "requiresItems": [
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -47,29 +47,97 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "ide-path",
+                    "text": "Use laptop-first path to prepare software before wiring.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Reconnect the USB cable, open the Arduino IDE, and load File > Examples > Servo > Sweep. If it's not installed, run the 'Install the Arduino IDE' process. Select the correct board and port, then upload. Secure the servo and keep fingers clear as it sweeps between 0\u00b0 and 180\u00b0.",
+            "id": "wire",
+            "text": "Primary path: signal to pin 9, red to 5 V supply, black/brown to GND. Secure servo horn clearance so it cannot strike hands or tools during motion.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "upload",
+                    "text": "Wiring complete. Continue to upload."
+                }
+            ]
+        },
+        {
+            "id": "ide-path",
+            "text": "Alternate path: install Arduino IDE and open Servo > Sweep sketch first so your code and board settings are ready before energizing hardware.",
             "options": [
                 {
                     "type": "process",
                     "process": "arduino-ide-install",
-                    "text": "Install the Arduino IDE"
+                    "text": "Install the Arduino IDE."
                 },
                 {
                     "type": "goto",
+                    "goto": "wire",
+                    "text": "Software ready. Return to wiring path."
+                }
+            ]
+        },
+        {
+            "id": "upload",
+            "text": "Reconnect USB only after wiring checks pass. Upload the Sweep example and observe movement. Evidence gate: servo must reach both end points without chatter or stall.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-servo-sweep",
+                    "text": "Run servo sweep process."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verified",
+                    "text": "Servo sweeps 0°↔180° smoothly."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Jitter, stall, or reset observed."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery branch: cut power, recheck common ground, confirm supply current headroom, and reseat signal lead on pin 9. If horn binds mechanically, stop and reposition linkage before retry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "upload",
+                    "text": "Apply fixes and re-verify sweep."
+                }
+            ]
+        },
+        {
+            "id": "verified",
+            "text": "Verification complete. Log power source used, observed sweep range, and whether any corrective action was needed.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Servo is moving.",
-                    "process": "arduino-servo-sweep"
+                    "text": "Log saved. Finish quest."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Servos unlock all kinds of robotics projects.",
+            "text": "Great work. You used a branched setup strategy, captured mechanical evidence, and closed with safe recovery handling.",
             "options": [
                 {
                     "type": "finish",
@@ -88,7 +156,7 @@
     "hardening": {
         "passes": 4,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-02",

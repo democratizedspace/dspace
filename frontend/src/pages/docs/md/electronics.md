@@ -221,7 +221,9 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/resistor-color-check`
 - Dialogue `requiresItems` gates:
-    - `measure` → "It reads about what the color bands predicted." — digital multimeter ×1, 220 Ohm Resistor ×1, safety goggles ×1
+    - `setup` → "Start measurement." — digital multimeter ×1, 220 Ohm Resistor ×1, safety goggles ×1
+    - Measurement evidence gate: reading must be logged and interpreted against a 198-242 Ω pass window.
+    - Recovery branch: out-of-range readings force clean/re-range re-test or quarantine branch before finish.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -239,7 +241,10 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/arduino-blink`
 - Dialogue `requiresItems` gates:
-    - `wire` → "Wired up!" — Arduino Uno ×1, Jumper Wires ×3, USB Cable ×1, Servo Motor ×1, 5 V Power Supply ×1
+    - `preflight` → "Build primary wiring plan." — Arduino Uno ×1, Jumper Wires ×3, USB Cable ×1, Servo Motor ×1, 5 V Power Supply ×1
+    - `preflight` alternate strategy → "Use laptop-first path to prepare software before wiring." — Arduino Uno ×1, Servo Motor ×1
+    - Evidence gate: upload phase requires successful 0°↔180° sweep without chatter/stall before completion.
+    - Troubleshooting branch: power-cut, ground/current checks, and linkage safety stop before mandatory retry.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -398,7 +403,9 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/solder-wire`
 - Dialogue `requiresItems` gates:
-    - `probe` → "It beeped and read near zero ohms." — digital multimeter ×1, USB Cable ×1, safety goggles ×1, wire cutters ×1, electrical tape ×1
+    - `setup` → "Gear ready. Run continuity checks." — digital multimeter ×1, USB Cable ×1, safety goggles ×1, wire cutters ×1, electrical tape ×1
+    - Measurement evidence gate: each conductor is classified against 0-1 Ω pass, 1-5 Ω borderline, and >5 Ω fail thresholds.
+    - Troubleshooting/recovery path: clean/reseat and mandatory re-test loop, with retire-and-recycle branch for persistent fails.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

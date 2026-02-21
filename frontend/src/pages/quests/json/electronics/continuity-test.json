@@ -8,28 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Never test a cable connected to power or equipment. Confirm the USB cable is unplugged from all devices. Check the insulation for cuts or frays. Put on safety goggles, then place the cable, a digital multimeter, wire cutters and electrical tape on a dry, non-conductive surface.",
+            "text": "Orion here. First safety gate: verify the USB cable is unplugged from every device, inspect for frayed insulation, and set up on a dry non-conductive surface.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "probe",
-                    "text": "Ready to test."
+                    "goto": "setup",
+                    "text": "Area is safe and cable is isolated."
                 }
             ]
         },
         {
-            "id": "probe",
-            "text": "Set the multimeter to continuity mode. Touch one probe to a pin on one end and the other probe to the matching pin on the opposite end. Keep fingers behind the probe guards and avoid touching other contacts.",
+            "id": "setup",
+            "text": "Gather digital multimeter, USB cable, safety goggles, wire cutters, and electrical tape. Keep fingers behind probe guards and avoid touching two contacts at once.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "test-cable-continuity",
-                    "text": "Run the continuity test."
-                },
-                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "It beeped and read near zero ohms.",
+                    "goto": "measure",
+                    "text": "Gear ready. Run continuity checks.",
                     "requiresItems": [
                         {
                             "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
@@ -56,8 +51,83 @@
             ]
         },
         {
+            "id": "measure",
+            "text": "Test each conductor end-to-end and log the reading. Pass band is a beep with ~0-1 ohm. Borderline is 1-5 ohms. Open or unstable readings above 5 ohms fail.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "test-cable-continuity",
+                    "text": "Capture continuity measurements."
+                },
+                {
+                    "type": "goto",
+                    "goto": "pass",
+                    "text": "All conductors are in the 0-1 ohm pass band."
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly",
+                    "text": "At least one conductor is borderline/open."
+                }
+            ]
+        },
+        {
+            "id": "pass",
+            "text": "Interpretation: low-resistance continuity confirms the cable can stay in service. Coil it loosely and label it tested.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Log complete. Close quest."
+                }
+            ]
+        },
+        {
+            "id": "anomaly",
+            "text": "Safety stop: do NOT connect this cable to powered equipment. Classify the issue as borderline (1-5 ohms) or open (>5 ohms/no beep).",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Run corrective checks and re-test."
+                },
+                {
+                    "type": "goto",
+                    "goto": "retire",
+                    "text": "Retire and recycle the cable now."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Corrective branch: clean connector pins, reseat probe contact, and retest each conductor. If any line remains >5 ohms after retest, retire the cable.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "test-cable-continuity",
+                    "text": "Run mandatory re-test."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Return to thresholds and classify again."
+                }
+            ]
+        },
+        {
+            "id": "retire",
+            "text": "Use wire cutters to chop the failed cable into short segments, wrap exposed ends with electrical tape, and send it to e-waste.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Retirement logged."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Turn off the meter. If every conductor beeps, coil the cable loosely and store it dry. If a conductor fails, cut the cable into short pieces with wire cutters and wrap the ends in electrical tape before recycling. Remove your goggles and take this GFCI outlet tester for future wiring checks.",
+            "text": "Good work. You documented evidence, applied pass/fail bounds, and used a safe anomaly path before closure.",
             "options": [
                 {
                     "type": "finish",
@@ -76,7 +146,7 @@
     "hardening": {
         "passes": 8,
         "score": 100,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-10",

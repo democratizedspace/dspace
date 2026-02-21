@@ -8,24 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Place the loose resistor, digital multimeter, and safety goggles on a dry, non-conductive surface.\nPut on the goggles. Insert the black probe into COM and the red probe into V\u03a9mA, then set the meter to resistance (\u03a9) mode at a range above the resistor's expected value.",
+            "text": "Orion here. We'll verify resistor value with measurable bounds and a recovery loop. Keep all circuits unpowered before touching probes to component leads.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "measure",
-                    "text": "Ready."
+                    "goto": "setup",
+                    "text": "Safe bench ready."
                 }
             ]
         },
         {
-            "id": "measure",
-            "text": "Hold the resistor by its body so fingers stay off the leads. Grip the probes by their insulated handles, touching the black probe to one lead and the red to the other without the probes or your fingers touching.\nWait for the reading to stabilize near the color-band value; stop if the resistor warms, the reading spikes, or the probes slip.",
+            "id": "setup",
+            "text": "Place a loose 220 ohm resistor, digital multimeter, and safety goggles on a dry surface. Black probe goes to COM, red to VΩmA, meter in resistance mode at 2 kΩ or higher range.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "It reads about what the color bands predicted.",
-                    "process": "measure-resistance",
+                    "goto": "measure",
+                    "text": "Start measurement.",
                     "requiresItems": [
                         {
                             "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
@@ -44,8 +43,83 @@
             ]
         },
         {
+            "id": "measure",
+            "text": "Touch probes to opposite leads without finger contact on bare metal. Log the stabilized ohm reading. Pass window for this resistor is 198-242 ohms (±10%).",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-resistance",
+                    "text": "Capture resistor reading."
+                },
+                {
+                    "type": "goto",
+                    "goto": "in-range",
+                    "text": "Reading is between 198 and 242 ohms."
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "Reading is outside 198-242 ohms."
+                }
+            ]
+        },
+        {
+            "id": "in-range",
+            "text": "Interpretation: resistor matches expected tolerance and can be labeled as verified stock.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Value logged and labeled."
+                }
+            ]
+        },
+        {
+            "id": "out-of-range",
+            "text": "Safety stop: do not install this resistor into a live build yet. Classify as probe error, lead contamination, or likely wrong/damaged part.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Clean leads, re-range meter, and re-test."
+                },
+                {
+                    "type": "goto",
+                    "goto": "quarantine",
+                    "text": "Quarantine this resistor for later review."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Corrective branch: wipe resistor leads, confirm meter range, and keep hands on probe insulation. Re-test once; if still out-of-range, quarantine.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-resistance",
+                    "text": "Run mandatory re-test."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Re-evaluate against pass bounds."
+                }
+            ]
+        },
+        {
+            "id": "quarantine",
+            "text": "Bag and label the component as suspect, then use a known-good resistor for powered circuits.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Quarantine complete."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Label the resistor's value, turn off the meter, unplug the probes, and store everything.",
+            "text": "Done. You produced a measurement artifact, interpreted tolerance, and handled out-of-range results safely.",
             "options": [
                 {
                     "type": "finish",
@@ -64,7 +138,7 @@
     "hardening": {
         "passes": 2,
         "score": 80,
-        "emoji": "\u2705",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-refine-2025-08-12",
