@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your web page works. Now let's expose the data that feeds it as a clean JSON response other tools can consume.",
+            "text": "Your web page works. Now expose the feed as JSON other tools can trust. We'll gate launch on stable serial input, explicit HTTP behavior, and a rollback path if reads go stale.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "wire",
-                    "text": "Ready to add an API",
+                    "text": "Plan endpoint hardening",
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
@@ -33,7 +33,7 @@
         },
         {
             "id": "wire",
-            "text": "Mount the logger to your Pi, enable pyserial, and watch a few readings stream in. Keep the USB cable strain-relieved so it doesn't brown out mid-request.",
+            "text": "Mount the logger to your Pi, install serial tooling, and confirm at least three consecutive reads before serving traffic. Keep the USB cable strain-relieved so brownouts don't masquerade as API failures.",
             "options": [
                 {
                     "type": "process",
@@ -43,12 +43,17 @@
                 {
                     "type": "process",
                     "process": "raspberry-pi-serial-log",
-                    "text": "Confirm the Pi can read the sensor"
+                    "text": "Capture serial reads and timestamp them"
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-serial",
+                    "text": "Serial drops packets or stalls"
                 },
                 {
                     "type": "goto",
                     "goto": "publish",
-                    "text": "Serial feed is stable",
+                    "text": "Three clean reads captured; proceed to endpoint deploy",
                     "requiresItems": [
                         {
                             "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
@@ -57,6 +62,32 @@
                         {
                             "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
                             "count": 1
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover-serial",
+            "text": "Treat flaky serial as operational risk: reseat USB, verify board power, then re-run capture before exposing an endpoint.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "raspberry-pi-serial-log",
+                    "text": "Re-run serial capture after cable/power checks"
+                },
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Serial stream is stable again",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 2
                         }
                     ]
                 }
@@ -64,17 +95,17 @@
         },
         {
             "id": "publish",
-            "text": "Add a `/api/temp` route that returns the latest reading, units, and timestamp. Set the content-type header, clamp out-of-range values, and return a helpful 503 if the sensor drops.",
+            "text": "Add `/api/temp` returning value, units, and timestamp. Set `application/json`, clamp impossible values, and return 503 when sensor freshness checks fail.",
             "options": [
                 {
                     "type": "process",
                     "process": "deploy-temperature-json-endpoint",
-                    "text": "Expose the JSON route"
+                    "text": "Deploy the JSON endpoint"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Endpoint returns 200 with JSON body",
+                    "goto": "verify",
+                    "text": "Endpoint deployed; run contract checks",
                     "requiresItems": [
                         {
                             "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
@@ -85,12 +116,38 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Validation gate: confirm `200` + JSON schema when sensor is healthy, then simulate sensor loss and confirm `503` response. Only close once both checks pass.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recover-serial",
+                    "text": "Failure path triggered; repair serial chain then retest"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Both healthy and failure-mode checks pass",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great! Your service now speaks JSON cleanly to dashboards, cron jobs, and teammates alike.",
+            "text": "Great! Your service now speaks JSON cleanly and fails safely when the sensor feed degrades.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "API online."
+                    "text": "API online and hardened."
                 }
             ]
         }

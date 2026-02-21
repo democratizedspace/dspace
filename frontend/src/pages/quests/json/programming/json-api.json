@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your JSON route exists; now let's shape it into a small API with stats, history, and predictable fields.",
+            "text": "Your JSON route exists; now shape it into a reliable mini API with stats, history, and explicit failure handling.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "stats",
-                    "text": "Design the payloads",
+                    "text": "Design payload contracts",
                     "requiresItems": [
                         {
                             "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
@@ -29,20 +29,29 @@
         },
         {
             "id": "stats",
-            "text": "Add `/stats` and `/history` endpoints that reuse your log. Include mean, min/max, sample size, and a note about when the sensor was last seen.",
+            "text": "Implement `/stats` and `/history` from your log with mean, min/max, sample count, and last-seen timestamp. Treat missing timestamps as a blocking defect, not a warning.",
             "options": [
                 {
                     "type": "process",
                     "process": "refine-temperature-graph",
-                    "text": "Annotate averages on the plot"
+                    "text": "Annotate summary metrics for reviewer handoff"
+                },
+                {
+                    "type": "goto",
+                    "goto": "schema-recovery",
+                    "text": "Payload keys drifted or timestamps are missing"
                 },
                 {
                     "type": "goto",
                     "goto": "publish",
-                    "text": "Stats are returned with each response",
+                    "text": "Stats payload passes contract review",
                     "requiresItems": [
                         {
                             "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
                             "count": 1
                         }
                     ]
@@ -50,8 +59,30 @@
             ]
         },
         {
+            "id": "schema-recovery",
+            "text": "Recovery branch: rebuild the payload from a fresh capture, keep field names stable, and rerun route checks before publish.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Collect fresh log rows to revalidate payload fields"
+                },
+                {
+                    "type": "goto",
+                    "goto": "stats",
+                    "text": "Schema is repaired; re-run stats validation",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "publish",
-            "text": "Document the routes, wire basic input validation, and ship a tiny dashboard that fetches both the live reading and stats.",
+            "text": "Document routes, apply input validation, and ship a dashboard that fetches both live readings and stats. Include stale-data banner logic so users know when sensor freshness fails.",
             "options": [
                 {
                     "type": "process",
@@ -60,8 +91,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Dashboard and docs are live",
+                    "goto": "verify",
+                    "text": "Dashboard and docs published",
                     "requiresItems": [
                         {
                             "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
@@ -76,8 +107,34 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Final gate: perform a happy-path request and a stale-sensor simulation. If either check fails, return to recovery before closure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "schema-recovery",
+                    "text": "One of the checks failed; rerun recovery loop"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Both happy-path and stale-data checks pass",
+                    "requiresItems": [
+                        {
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+                            "count": 1
+                        },
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! Your API now has usable routes, clear documentation, and a front-end that proves everything works end-to-end.",
+            "text": "Nice! Your API now has usable routes, stable schema, and operational guardrails proven end-to-end.",
             "options": [
                 {
                     "type": "finish",
