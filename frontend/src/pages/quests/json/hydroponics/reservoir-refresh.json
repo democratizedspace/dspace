@@ -27,15 +27,15 @@
                     "text": "System isolated with PPE in place.",
                     "requiresItems": [
                         {
-                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
                             "count": 1
                         },
                         {
-                            "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
                         },
                         {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
                             "count": 1
                         }
                     ]
@@ -52,7 +52,7 @@
                     "text": "Run reservoir refresh process.",
                     "requiresItems": [
                         {
-                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
                             "count": 1
                         },
                         {
@@ -88,7 +88,7 @@
                             "count": 1
                         },
                         {
-                            "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
                         }
                     ]
@@ -110,7 +110,7 @@
                     "text": "Re-mix and replace solution with corrected ratio.",
                     "requiresItems": [
                         {
-                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
                             "count": 1
                         },
                         {
@@ -126,7 +126,7 @@
                     "requiresItems": [
                         {
                             "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 }
