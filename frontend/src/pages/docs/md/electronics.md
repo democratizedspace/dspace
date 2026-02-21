@@ -60,7 +60,10 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/basic-circuit`
 - Dialogue `requiresItems` gates:
-    - `materials` → "Got it all wired up. What's next?" — Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×2, 5 mm LED ×1, 220 Ohm Resistor ×1, resistor color chart ×1, safety goggles ×1, USB Type-A to Type-B cable ×1, Laptop Computer ×1
+    - `materials` → "Parts are ready and the board is still unplugged." — Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×2, 5 mm LED ×1, 220 Ohm Resistor ×1, resistor color chart ×1, safety goggles ×1, USB Type-A to Type-B cable ×1, Laptop Computer ×1
+    - Non-linear flow: preflight path can branch to a full rewire checkpoint before upload.
+    - Evidence gate: upload must be followed by an observation log confirming stable ~1 s blink cadence.
+    - Troubleshooting loop: wrong cadence routes to disconnect-first diagnostics, then mandatory re-test.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -82,7 +85,9 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/basic-circuit`
 - Dialogue `requiresItems` gates:
-    - `measure` → "It reads about 12.6 V." — 200 Wh battery pack ×1, digital multimeter ×1, safety goggles ×1
+    - `setup` → "Meter setup is confirmed." — 200 Wh battery pack ×1, digital multimeter ×1, safety goggles ×1
+    - Measurement interpretation gate: reading is classified against explicit 12.4-13.6 V pass bounds.
+    - Recovery branch: out-of-range values trigger quarantine + timed re-test or a safety-stop completion path.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -256,7 +261,10 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/potentiometer-dimmer`
 - Dialogue `requiresItems` gates:
-    - `wire` → "Circuit ready." — Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, Laptop Computer ×1
+    - `wire` → "Wiring complete." — Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, Laptop Computer ×1
+    - Safety branch: preflight can route to a rewire checkpoint before any powered sampling.
+    - Evidence gate: capture and log three readings over one minute with an expected 15-35 °C room range.
+    - Troubleshooting loop: unstable/out-of-range readings force disconnect-first corrections and re-test.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

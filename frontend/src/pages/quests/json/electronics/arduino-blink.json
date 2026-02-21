@@ -8,28 +8,28 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey! Orion here. Ready to blink an LED with a microcontroller? Work on a dry, non-conductive surface, discharge static by touching a grounded object, keep liquids away, wear safety goggles, and leave the USB Type-A to Type-B cable unplugged until every wire is double-checked.",
+            "text": "Hey, Orion here. We are going to run Blink like an operator: prep safely, upload, verify behavior, and recover if it fails.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "materials",
-                    "text": "Absolutely! What do I need?"
+                    "text": "Let's do it."
                 }
             ]
         },
         {
             "id": "materials",
-            "text": "Gather an Arduino Uno, Breadboard, two Jumper Wires, a 220 \u03a9 Resistor, a 5 mm LED, Safety Goggles, a USB Type-A to Type-B cable, a Laptop Computer with the Arduino IDE installed, and a Resistor Color Chart. If the IDE isn't installed, run the 'Install the Arduino IDE' process. Use the chart to confirm the resistor bands read red-red-brown (220 \u03a9). Place the LED's long leg (anode) into digital pin 13 through the resistor and its short leg (cathode) to GND. Keep power unplugged while wiring.",
+            "text": "Gather an Arduino Uno, Breadboard, two Jumper Wires, a 220 \u03a9 Resistor, a 5 mm LED, Safety Goggles, a USB Type-A to Type-B cable, a Laptop Computer with the Arduino IDE, and a Resistor Color Chart. Confirm the resistor is red-red-brown, and keep USB unplugged while wiring.",
             "options": [
                 {
                     "type": "process",
                     "process": "arduino-ide-install",
-                    "text": "Install the Arduino IDE"
+                    "text": "Install or update the Arduino IDE"
                 },
                 {
                     "type": "goto",
-                    "goto": "upload",
-                    "text": "Got it all wired up. What's next?",
+                    "goto": "preflight",
+                    "text": "Parts are ready and the board is still unplugged.",
                     "requiresItems": [
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -72,19 +72,83 @@
             ]
         },
         {
+            "id": "preflight",
+            "text": "Preflight check: confirm LED polarity (long leg toward pin 13 path), no bare wires touching, and goggles on. If you smell heat or see smoke at any point, disconnect USB immediately and stop.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "upload",
+                    "text": "Preflight complete. Upload Blink now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire",
+                    "text": "I found a wiring concern. Re-check before powering."
+                }
+            ]
+        },
+        {
             "id": "upload",
-            "text": "Connect the board to the Laptop Computer with the USB Type-A to Type-B cable. In the Arduino IDE open File > Examples > 01.Basics > Blink. Under Tools choose Board: Arduino Uno and the correct Port, then click Upload. Wait for 'Done uploading'; the board resets and the LED blinks once per second. Avoid touching the circuit while it's powered.",
+            "text": "Connect USB, open File > Examples > 01.Basics > Blink, choose Board: Arduino Uno and the correct Port, then upload. Wait for 'Done uploading' and observe 10 seconds of blink behavior.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-led-blink",
+                    "text": "Run Blink upload + board check"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Upload finished. Time to verify behavior."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Evidence gate: your observation log must include blink cadence and any fault signs. Pass target: LED blinks near 1 second on / 1 second off and board stays cool.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Upload complete and the LED is blinking!"
+                    "text": "Cadence is stable and no fault signs."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Blink is wrong, stuck, or inconsistent."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery branch: disconnect USB, check resistor/LED orientation, confirm the selected COM port, then re-upload. If the board gets hot, stop and replace suspect components before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "upload",
+                    "text": "I corrected the setup. Re-test upload."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire",
+                    "text": "Let's fully rewire before another power-on."
+                }
+            ]
+        },
+        {
+            "id": "rewire",
+            "text": "Safe re-entry checkpoint: keep USB unplugged, rebuild the LED path from scratch, and only return to upload when the wiring matches the diagram.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "preflight",
+                    "text": "Rewire complete. Run preflight again."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work\u2014you just programmed a microcontroller. Always unplug the USB Type-A to Type-B cable before adjusting wiring and avoid staring directly into the LED. For a detailed walkthrough, open the 'Blink an LED with Arduino' process. Experiment with new patterns or sensors to build skills for bigger projects.",
+            "text": "Great work. You captured evidence, handled safety checks, and used a deterministic retry loop like a real technician.",
             "options": [
                 {
                     "type": "process",
@@ -93,12 +157,14 @@
                 },
                 {
                     "type": "finish",
-                    "text": "Thanks Orion, that was awesome!"
+                    "text": "Quest complete."
                 }
             ]
         }
     ],
-    "requiresQuests": ["electronics/basic-circuit"],
+    "requiresQuests": [
+        "electronics/basic-circuit"
+    ],
     "rewards": [
         {
             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",

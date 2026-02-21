@@ -8,28 +8,28 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's expand your sensor skills. Pair a 10\u202fk\u03a9 NTC thermistor with a 10\u202fk\u03a9 resistor for an Arduino Uno voltage divider. Work on a non-conductive surface and unplug the USB cable before wiring.",
+            "text": "Let's level up sensor ops. We'll wire a thermistor divider, collect a baseline, and handle unstable readings with a recovery loop.",
             "options": [
                 {
                     "type": "process",
                     "process": "arduino-ide-install",
-                    "text": "Install the Arduino IDE"
+                    "text": "Install/update Arduino IDE"
                 },
                 {
                     "type": "goto",
                     "goto": "wire",
-                    "text": "Show me."
+                    "text": "Guide me through wiring."
                 }
             ]
         },
         {
             "id": "wire",
-            "text": "With the USB cable still unplugged, place the thermistor and 10\u202fk\u03a9 resistor in series on the breadboard between 5\u202fV and GND to form a voltage divider. Use jumper wires to link their junction to A0 on the Arduino Uno. Keep leads separated, verify resistor values and double-check connections before restoring power.",
+            "text": "With USB unplugged, wire a 10k NTC thermistor and 10k resistor as a divider between 5V and GND, with the midpoint to A0. Keep exposed leads separated and verify resistor value before power-on.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "monitor",
-                    "text": "Circuit ready.",
+                    "goto": "preflight",
+                    "text": "Wiring complete.",
                     "requiresItems": [
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -64,20 +64,99 @@
             ]
         },
         {
-            "id": "monitor",
-            "text": "Reconnect the USB cable to your Laptop Computer and upload the sketch from the arduino-thermistor-read process to sample the voltage divider. Open the Arduino IDE's Serial Monitor to watch temperature readings and keep liquids and loose metal away from the powered board.",
+            "id": "preflight",
+            "text": "Safety gate: confirm goggles are on, board is dry, and no wire can short adjacent pins. If anything looks wrong, fix wiring before applying USB power.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Preflight passed."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire",
+                    "text": "I need to correct the wiring first."
+                }
+            ]
+        },
+        {
+            "id": "capture",
+            "text": "Upload the thermistor sketch and open Serial Monitor. Evidence artifact: record three readings over one minute. Expected room-range for this quest is 15-35 \u00b0C with smooth changes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "text": "Run thermistor capture process"
+                },
+                {
+                    "type": "goto",
+                    "goto": "stable",
+                    "text": "Readings are in range and stable."
+                },
+                {
+                    "type": "goto",
+                    "goto": "unstable",
+                    "text": "Readings jump wildly or are out of range."
+                }
+            ]
+        },
+        {
+            "id": "stable",
+            "text": "Interpretation: stable values indicate the divider and sampling path are functioning. Save your notes for later plotting quests.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Readings look good.",
-                    "process": "arduino-thermistor-read"
+                    "text": "Log saved."
+                }
+            ]
+        },
+        {
+            "id": "unstable",
+            "text": "Troubleshooting branch: disconnect USB, reseat thermistor leads, verify 10k resistor, and remove airflow from hands or lamps. If board heats up, stop and inspect before continuing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Apply corrections and retest."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire",
+                    "text": "Rebuild divider from scratch."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Re-test loop: capture another one-minute sample and compare to baseline notes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "text": "Run re-test capture"
+                },
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Return to interpretation with new readings."
+                }
+            ]
+        },
+        {
+            "id": "rewire",
+            "text": "Safe re-entry checkpoint: keep USB disconnected while rebuilding the divider, then repeat preflight before any new measurement.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "preflight",
+                    "text": "Rewire done. Re-run preflight."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice job! Logging data over time will help automate your experiments.",
+            "text": "Excellent. You produced a measurement log, interpreted thresholds, and used a safe retry path.",
             "options": [
                 {
                     "type": "finish",
@@ -92,7 +171,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/potentiometer-dimmer"],
+    "requiresQuests": [
+        "electronics/potentiometer-dimmer"
+    ],
     "hardening": {
         "passes": 5,
         "score": 97,
