@@ -29,18 +29,12 @@
                 {
                     "type": "goto",
                     "text": "Capture manifold pressure",
-                    "goto": "measure"
+                    "goto": "interpret"
                 },
                 {
                     "type": "goto",
                     "goto": "interpret",
-                    "text": "Pressure snapshot logged",
-                    "requiresItems": [
-                        {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Pressure snapshot logged"
                 }
             ]
         },
@@ -67,7 +61,7 @@
                 {
                     "type": "goto",
                     "text": "Re-test after corrective action",
-                    "goto": "corrective"
+                    "goto": "measure"
                 },
                 {
                     "type": "goto",

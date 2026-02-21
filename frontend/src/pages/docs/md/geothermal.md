@@ -277,7 +277,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `requiresQuests`: `geothermal/log-ground-temperature`
 - Dialogue `requiresItems` gates:
     - `start` → "Rig and safety checks are complete" — thermistor logging rig ×1, Laptop Computer ×1
-    - `stage` → "Capture the warmup trace" — thermistor logging rig ×1, Laptop Computer ×1
+    - `stage` → "Capture warmup trace" — thermistor logging rig ×1, Laptop Computer ×1
     - `stage` → "Warmup log exported" — temperature log CSV ×1
     - `analyze` → "Plot and inspect warmup curve" — temperature log CSV ×1, Laptop Computer ×1
     - `analyze` → "Annotate compressor ramp and settle window" — temperature line chart ×1, Laptop Computer ×1
