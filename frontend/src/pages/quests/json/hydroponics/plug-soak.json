@@ -1,51 +1,142 @@
 {
     "id": "hydroponics/plug-soak",
     "title": "Soak Starter Plugs",
-    "description": "Hydrate rockwool cubes so seeds sprout happily.",
+    "description": "Hydrate rockwool cubes so seeds sprout evenly and safely.",
     "image": "/assets/quests/hydroponic_starter_plugs_soaking_tray.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Rockwool cubes arrive dry. They need a good soak before any seeds touch them.",
+            "text": "Dry rockwool is a seedling trap. We soak, verify saturation, and handle contamination before these plugs touch seeds.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "prep",
+                    "text": "Run the soak checklist."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Prep station first: use dechlorinated water plus PPE so skin and eyes stay protected while handling wet mineral fiber.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Prepare dechlorinated soak water."
+                },
+                {
+                    "type": "goto",
                     "goto": "soak",
-                    "text": "How do I soak them?"
+                    "text": "Water and PPE are ready.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Water is cloudy or safety gear is missing."
                 }
             ]
         },
         {
             "id": "soak",
-            "text": "Fill a bucket with dechlorinated water and submerge the starter plugs until saturated.",
+            "text": "Submerge all 10 plugs and let them hydrate fully so internal fibers stop repelling water.",
             "options": [
                 {
                     "type": "process",
                     "process": "rockwool-soak",
-                    "text": "Soak the plugs."
+                    "text": "Start controlled soak cycle."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
+                    "text": "Soak cycle done; verify plug condition.",
                     "requiresItems": [
                         {
                             "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
                             "count": 10
                         }
-                    ],
-                    "text": "They're fully soaked!"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: squeeze-test one sample cube. It should be moist but not dripping. If smell, slime, or uneven saturation appears, branch to recovery.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Uneven saturation or contamination found."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Plugs are evenly saturated and clean.",
+                    "requiresItems": [
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 10
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery path: discard foul water, rinse tray, and run a fresh dechlorinated soak. Re-enter only after contamination risk is gone.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Reset complete; restart prep."
+                },
+                {
+                    "type": "goto",
+                    "goto": "soak",
+                    "text": "PPE and fresh water are ready; rerun soak.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great. Moist cubes give seedlings an even start.",
+            "text": "Perfect. Evidence says your starter plugs are evenly hydrated, clean, and ready for germination.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Ready for seeds."
+                    "text": "Starter plugs certified."
                 }
             ]
         }

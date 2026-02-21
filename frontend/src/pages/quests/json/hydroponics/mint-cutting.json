@@ -1,30 +1,60 @@
 {
     "id": "hydroponics/mint-cutting",
     "title": "Clone Mint Cutting",
-    "description": "Root a mint sprig for endless tea.",
+    "description": "Root a mint sprig with staged evidence and recovery checks.",
     "image": "/assets/quests/hydroponics_mint_cutting_clone.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Fancy some mint tea? Let's clone a cutting.",
+            "text": "Mint clones are fast when prep is clean. We'll prove setup first, then prove the clone station can sustain the cutting.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "prep",
-                    "text": "Show me how."
+                    "goto": "setup",
+                    "text": "Show me the cloning workflow."
                 }
             ]
         },
         {
-            "id": "prep",
-            "text": "Trim a healthy stem, pop it into a soaked plug, and set it in a net cup.",
+            "id": "setup",
+            "text": "Stage dechlorinated water, one soaked plug, gloves, and sanitized scissors before making any cut. Clean setup is your first evidence gate.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clone",
+                    "text": "Setup evidence is ready.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Plug dried out or cutting tools were not sanitized."
+                }
+            ]
+        },
+        {
+            "id": "clone",
+            "text": "Take a healthy 8-10 cm mint tip, trim below a node, and seat it gently in the soaked plug without crushing the stem.",
             "options": [
                 {
                     "type": "process",
                     "process": "clone-mint-cutting",
-                    "text": "Cut and plant",
+                    "text": "Execute controlled cutting + planting step.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -38,11 +68,33 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Cutting is nestled in",
+                    "goto": "stabilize",
+                    "text": "Cutting seated; move to stabilization checks.",
                     "requiresItems": [
                         {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "stabilize",
+            "text": "Outcome evidence gate: place the clone where light and humidity are stable. If wilting or stem darkening appears, branch to recovery before finish.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Leaf droop or stem stress detected."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Cutting is stable in a nutrient-ready station.",
+                    "requiresItems": [
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                             "count": 1
                         },
                         {
@@ -54,12 +106,23 @@
             ]
         },
         {
+            "id": "recover",
+            "text": "Recovery protocol: rehydrate the plug, trim damaged tissue, and pause direct light for one cycle before retrying setup.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Corrective steps complete; restart setup evidence gate."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! Keep the cube moist and wait for roots to emerge.",
+            "text": "Excellent clone discipline. You documented setup and stabilization evidence, then used recovery logic when stress appeared.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait for fresh mint!"
+                    "text": "Mint clone established."
                 }
             ]
         }

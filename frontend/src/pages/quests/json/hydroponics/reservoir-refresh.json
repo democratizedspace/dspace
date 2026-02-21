@@ -1,51 +1,164 @@
 {
     "id": "hydroponics/reservoir-refresh",
     "title": "Refresh the Reservoir",
-    "description": "Swap out old nutrient solution for a fresh batch.",
+    "description": "Swap old nutrient solution for a verified clean refill with recovery branches.",
     "image": "/assets/quests/hydroponics_reservoir_refresh.jpg",
     "npc": "/assets/npc/hydro.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "The nutrient bath gets gunky over time. Let's replace it to keep your roots happy.",
+            "text": "When nutrient broth drifts or biofilm appears, roots suffer fast. We will drain, refill, and verify before closing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Run the reservoir refresh checklist."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Stage PPE and chemistry tools first. If you spot odor, slime, or pump noise, route to recovery before refilling.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "drain",
-                    "text": "Ready to refresh."
+                    "text": "PPE, syringe, nutrients, and pH strips are ready.",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
+                            "count": 1
+                        },
+                        {
+                            "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                            "count": 1
+                        },
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        },
+                        {
+                            "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Biofilm, bad odor, or unstable flow detected."
                 }
             ]
         },
         {
             "id": "drain",
-            "text": "Drain the old solution and dispose of it responsibly. Then mix a new batch of nutrients.",
+            "text": "Drain the depleted reservoir and mix a clean batch. Keep the area dry and isolated so electrical hazards stay controlled.",
             "options": [
                 {
                     "type": "process",
                     "process": "refresh-hydroponic-tub",
-                    "text": "Mixing fresh solution."
+                    "text": "Drain and refill with fresh nutrient solution."
+                },
+                {
+                    "type": "process",
+                    "process": "measure-ec-solution",
+                    "text": "Capture post-refresh EC reading.",
+                    "requiresItems": [
+                        {
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
+                    "text": "Refill complete; verify chemistry and stability.",
                     "requiresItems": [
                         {
                             "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                             "count": 1
                         }
-                    ],
-                    "text": "All filled up!"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: review pH strip and EC reading together. If pH drifts beyond 5.5-6.5 or EC is out of target, branch to recovery and re-test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Values drifted or circulation looks unstable."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Chemistry is in range and flow is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery protocol: stop dosing, clean reservoir walls, inspect pump intake, and remix nutrient concentration. Return to drain and re-verify before closure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Hardware and workspace stabilized; restart prep."
+                },
+                {
+                    "type": "goto",
+                    "goto": "drain",
+                    "text": "Fresh mix prepared; rerun drain/refill and re-test.",
+                    "requiresItems": [
+                        {
+                            "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Sweet! Fresh nutrients mean faster growth and fewer pathogens.",
+            "text": "Reservoir refresh complete: you logged the chemistry, validated stability, and handled contamination risk safely.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Back to growing!"
+                    "text": "Refresh locked in."
                 }
             ]
         }

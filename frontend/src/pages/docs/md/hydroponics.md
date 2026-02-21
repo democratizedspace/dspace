@@ -323,7 +323,15 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/nutrient-check`
 - Dialogue `requiresItems` gates:
-    - `drain` → "All filled up!" — hydroponics tub (ready) ×1
+    - `prep` → "PPE, syringe, nutrients, and pH strips are ready." — nitrile gloves (pair) ×1, safety goggles ×1, 50 mL measuring syringe ×1, hydroponic nutrient concentrate (1 L) ×1, pH strips ×1, hydroponics tub (nutrient deficient) ×1
+    - `drain` → "Capture post-refresh EC reading." — EC meter ×1, hydroponics tub (ready) ×1
+    - `drain` → "Refill complete; verify chemistry and stability." — hydroponics tub (ready) ×1
+    - `verify` → "Chemistry is in range and flow is stable." — EC reading log (hydroponics) ×1, hydroponics tub (ready) ×1
+    - `recover` → "Fresh mix prepared; rerun drain/refill and re-test." — hydroponics tub (nutrient deficient) ×1, 5 gallon bucket of dechlorinated tap water ×1, hydroponic nutrient concentrate (1 L) ×1
+- Recovery/troubleshooting branches:
+    - `prep` and `verify` can route to `recover` for biofilm, odor, circulation instability, or out-of-range chemistry before re-running drain/refill
+- Safety/ops checks:
+    - PPE gate before chemistry work, explicit wet-area/electrical hazard caution, and mandatory re-verify loop before closure
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -334,6 +342,10 @@ Hydroponics quests build practical progression through the hydroponics skill tre
         - Requires: EC meter ×1, 50 mL measuring syringe ×1
         - Consumes: hydroponics tub (nutrient deficient) ×1, 5 gallon bucket of dechlorinated tap water ×1, hydroponic nutrient concentrate (1 L) ×0.1
         - Creates: hydroponics tub (ready) ×1
+    - [measure-ec-solution](/processes/measure-ec-solution)
+        - Requires: EC meter ×1, hydroponics tub (ready) ×1
+        - Consumes: none
+        - Creates: EC reading log (hydroponics) ×1
 
 ## 11) Install Submersible Pump (`hydroponics/pump-install`)
 
@@ -569,13 +581,24 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/top-off`
 - Dialogue `requiresItems` gates:
-    - `soak` → "They're fully soaked!" — soaked hydroponic starter plug ×10
+    - `prep` → "Water and PPE are ready." — 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1, safety goggles ×1
+    - `soak` → "Soak cycle done; verify plug condition." — soaked hydroponic starter plug ×10
+    - `verify` → "Plugs are evenly saturated and clean." — soaked hydroponic starter plug ×10, nitrile gloves (pair) ×1
+    - `recover` → "PPE and fresh water are ready; rerun soak." — 5 gallon bucket of dechlorinated tap water ×1, nitrile gloves (pair) ×1, safety goggles ×1
+- Recovery/troubleshooting branches:
+    - `prep`/`verify` can route to `recover` when water is cloudy, saturation is uneven, or contamination appears before looping back to prep/soak
+- Safety/ops checks:
+    - PPE gate before soaking and explicit foul-water disposal/reset before retry
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
+    - [bucket-water-dechlorinated](/processes/bucket-water-dechlorinated)
+        - Requires: none
+        - Consumes: 5 gallon bucket of tap water (chlorinated) ×1
+        - Creates: 5 gallon bucket of dechlorinated tap water ×1
     - [rockwool-soak](/processes/rockwool-soak)
         - Requires: 5 gallon bucket of dechlorinated tap water ×1
         - Consumes: hydroponic starter plug ×10
@@ -587,8 +610,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/plug-soak`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Cut and plant" — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
-    - `prep` → "Cutting is nestled in" — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
+    - `setup` → "Setup evidence is ready." — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1, nitrile gloves (pair) ×1
+    - `clone` → "Execute controlled cutting + planting step." — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
+    - `clone` → "Cutting seated; move to stabilization checks." — soaked hydroponic starter plug ×1
+    - `stabilize` → "Cutting is stable in a nutrient-ready station." — hydroponics tub (ready) ×1, soaked hydroponic starter plug ×1
+- Recovery/troubleshooting branches:
+    - `setup` and `stabilize` can route to `recover` for dried plugs, unsanitized prep, or stress/wilt signals before repeating setup evidence
+- Safety/ops checks:
+    - Enforces sanitized setup + PPE and a stress-contingency pause before retry
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
