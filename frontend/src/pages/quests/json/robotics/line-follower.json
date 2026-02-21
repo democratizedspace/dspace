@@ -12,35 +12,127 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "parts",
-                    "text": "I'm in! What parts do I need?"
+                    "goto": "strategy",
+                    "text": "I'm in. How should I tune it?"
                 }
             ]
         },
         {
-            "id": "parts",
-            "text": "You'll need two infrared sensors, a pair of continuous-rotation servos, and an Arduino. Mount everything on a small chassis.",
+            "id": "strategy",
+            "text": "Pick your strategy. You can begin with a simple threshold tune for fast setup, or jump straight into a PID loop for smoother tracking.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Hardware assembled.",
+                    "goto": "threshold-setup",
+                    "text": "Start with threshold tuning (quick baseline)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "pid-setup",
+                    "text": "Start with PID tuning (more precise)."
+                }
+            ]
+        },
+        {
+            "id": "threshold-setup",
+            "text": "Mount both drive servos, center wheel alignment, and set a contrast threshold from your reflectance readings.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Baseline tune is ready.",
                     "requiresItems": [
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
                             "count": 2
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "It keeps drifting off the line."
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Upload a simple PID loop that adjusts motor speed based on the sensors. Place the bot on a black line and watch it drive!",
+            "id": "pid-setup",
+            "text": "Load a PID loop and start with conservative P/I/D gains so oscillation is easier to diagnose.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "PID baseline is uploaded.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "The robot oscillates or overshoots."
+                }
+            ]
+        },
+        {
+            "id": "safety-check",
+            "text": "Before full-speed runs, verify cable strain relief and set a low-speed safety cap so the robot does not lunge off the test lane.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Safety checks done; begin timed passes.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I need to fix wiring or speed limits first."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Troubleshoot in this order: re-seat sensors, re-center servo horns, and retune threshold/PID. Run a short pass after each fix.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "strategy",
+                    "text": "Retry with updated tuning strategy."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Stability improved; re-run safety checks."
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Evidence gate: complete three clean laps without leaving the tape and note whether threshold or PID performed better.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "It works!"
+                    "text": "Three clean laps recorded; line follower is ready.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "A lap failed; return to troubleshooting."
                 }
             ]
         }
@@ -55,7 +147,7 @@
     "hardening": {
         "passes": 0,
         "score": 85,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

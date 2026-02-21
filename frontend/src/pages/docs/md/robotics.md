@@ -28,8 +28,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - `requiresQuests`: `electronics/light-sensor`, `programming/hello-sensor`
 - Dialogue `requiresItems` gates:
     - `bench` → "Hardware bench is ready." — Arduino Uno ×1, ultrasonic distance sensor ×1, Wheel Encoder ×1
-    - `calibrate` → "Calibration values are recorded." — Arduino Uno ×1
-    - `validate` → "Threshold is stable in motion." — Wheel Encoder ×1
+    - `calibrate` → "I logged the floor/line min-max values." — Arduino Uno ×1
+    - `interpretation` → "PASS: thresholds are stable enough for motion tests." — Arduino Uno ×1
+    - `validate` → "Validation pass recorded." — Wheel Encoder ×1
+    - `retest` → "Two consecutive passes succeeded; threshold is stable in motion." — Wheel Encoder ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -44,6 +46,9 @@ Robotics quests build practical progression through the robotics skill tree. Thi
         - Requires: Arduino Uno ×1, Wheel Encoder ×1
         - Consumes: none
         - Creates: none
+- QA notes:
+    - Includes an interpretation gate with explicit PASS/FAIL branch before motion validation.
+    - Out-of-range branch loops through corrective actions (cleaning, height/glare adjustments) and mandatory re-test.
 
 ## 2) Control a Servo Motor (`robotics/servo-control`)
 
@@ -75,7 +80,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/servo-control`, `robotics/reflectance-sensors`
 - Dialogue `requiresItems` gates:
-    - `parts` → "Hardware assembled." — Servo Motor ×2
+    - `threshold-setup` → "Baseline tune is ready." — Servo Motor ×2
+    - `pid-setup` → "PID baseline is uploaded." — Servo Motor ×2
+    - `safety-check` → "Safety checks done; begin timed passes." — Servo Motor ×2
+    - `evidence` → "Three clean laps recorded; line follower is ready." — Servo Motor ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -83,6 +91,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - 3D Printed Phone Stand ×1
 - Processes used:
     - None
+- QA notes:
+    - Supports two strategies (threshold-first and PID-first), then converges through safety checks.
+    - Completion is gated on a mechanics-backed evidence step: three clean laps without leaving tape.
+    - Includes a troubleshooting loop for drift, oscillation, and wiring/speed-limit recovery.
 
 ## 4) Make a Pan-Tilt Mount (`robotics/pan-tilt`)
 
@@ -144,7 +156,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/arduino-blink`
 - Dialogue `requiresItems` gates:
-    - `parts` → "Parts ready. What's next?" — Servo Motor ×1
+    - `bench-setup` → "Bench wiring is complete." — Servo Motor ×1
+    - `mounted-setup` → "Robot-mounted wiring is complete." — Servo Motor ×1
+    - `safety-check` → "Safety checks complete; start distance sampling." — Servo Motor ×1
+    - `measurement` → "Distance readings are stable across all target ranges." — Servo Motor ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -152,6 +167,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - 3D Printed Phone Stand ×1
 - Processes used:
     - None
+- QA notes:
+    - Adds non-linear setup paths (bench-first vs integration-first) before measurement collection.
+    - Adds a domain safety gate covering polarity checks and collision-risk handling before ping tests.
+    - Recovery loop handles noisy echoes with required corrective actions and re-validation.
 
 ## 8) Add Obstacle Avoidance (`robotics/obstacle-avoidance`)
 
