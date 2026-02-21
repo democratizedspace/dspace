@@ -72,8 +72,9 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/basic-telescope`
 - Dialogue `requiresItems` gates:
-    - `start` → "Gear ready." — planisphere star chart ×1, red flashlight ×1
-    - `search` → "Galaxy in sight." — basic telescope ×1
+    - `prep` → "Gear ready and lights dimmed." — planisphere star chart ×1, red flashlight ×1
+    - `search` → "I found a faint oval glow to the northwest." — basic telescope ×1, constellation sketch set ×1
+    - `verify` → "Log complete. Ready to close out." — mission logbook ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -84,6 +85,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: basic telescope ×1, planisphere star chart ×1
         - Consumes: none
         - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 4) Spot the ISS (`astronomy/iss-flyover`)
 
@@ -120,7 +125,9 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `requiresQuests`: `astronomy/iss-flyover`
 - Dialogue `requiresItems` gates:
     - `plan` → "Pass time noted, gear set." — smartphone ×1, camera tripod ×1
-    - `capture` → "Photo saved and logged." — mission logbook ×1
+    - `setup` → "Sky is clear and framing is stable." — ISS spotting station ×1
+    - `capture` → "The frame has a clean streak and timestamp." — ISS pass log ×1
+    - `verify` → "Photo saved and logged." — mission logbook ×1, ISS pass log ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -131,6 +138,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: smartphone ×1, mission logbook ×1
         - Consumes: none
         - Creates: ISS pass window ×1
+    - [stage-iss-spotting-station](/processes/stage-iss-spotting-station)
+        - Requires: ISS pass window ×1, basic telescope ×1, camera tripod ×1, red flashlight ×1
+        - Consumes: none
+        - Creates: ISS spotting station ×1
+    - [log-iss-pass](/processes/log-iss-pass)
+        - Requires: ISS spotting station ×1, ISS pass window ×1, mission logbook ×1
+        - Consumes: none
+        - Creates: ISS pass log ×1
 
 ## 6) Track Jupiter's Moons (`astronomy/jupiter-moons`)
 
@@ -370,13 +385,23 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/basic-telescope`
 - Dialogue `requiresItems` gates:
-    - `start` → "Where do I point?" — planisphere star chart ×1, basic telescope ×1
+    - `prep` → "Map done. I'll slew to Saturn." — planisphere star chart ×1, basic telescope ×1, constellation sketch set ×1
+    - `locate` → "I can resolve a ringed disk now." — basic telescope ×1
+    - `verify` → "Observation logged." — mission logbook ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
+    - [identify-constellations](/processes/identify-constellations)
+        - Requires: basic telescope ×1, planisphere star chart ×1
+        - Consumes: none
+        - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
     - None
 
 ## 19) Capture Star Trails (`astronomy/star-trails`)

@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You spotted the ISS before. Ready to capture its trail with a long exposure?",
+            "text": "You spotted the ISS before. Tonight we need a repeatable capture workflow: predict, stabilize, capture, and verify.",
             "options": [
                 {
                     "type": "goto",
@@ -19,16 +19,16 @@
         },
         {
             "id": "plan",
-            "text": "Mount your smartphone on a tripod and check an app for the next pass.",
+            "text": "Check the pass window, then confirm your tripod lane is clear so no one trips when lights are low.",
             "options": [
                 {
                     "type": "process",
                     "process": "check-iss-pass",
-                    "text": "Checking the pass time."
+                    "text": "Pass window captured in my notes."
                 },
                 {
                     "type": "goto",
-                    "goto": "capture",
+                    "goto": "setup",
                     "text": "Pass time noted, gear set.",
                     "requiresItems": [
                         {
@@ -44,8 +44,89 @@
             ]
         },
         {
+            "id": "setup",
+            "text": "Lock exposure settings, brace the tripod, and frame the path. If clouds roll in, do not force a bad run.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "stage-iss-spotting-station",
+                    "text": "Rig stabilized and aimed."
+                },
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Sky is clear and framing is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "bb97e755-4337-4e9d-8063-4a0cff4649b5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "reschedule",
+                    "text": "Cloud deck moved in. I'll run the fallback plan."
+                }
+            ]
+        },
+        {
+            "id": "reschedule",
+            "text": "Abort this pass safely, cap the optics, and queue the next visible pass. Better data beats rushed data.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-iss-pass",
+                    "text": "Next pass window recorded."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Window updated. I'll re-stage and try again."
+                }
+            ]
+        },
+        {
             "id": "capture",
-            "text": "Start a 10-second exposure as the ISS rises and jot the timestamp.",
+            "text": "Start the long exposure as the ISS rises, then immediately review sharpness and streak continuity.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-iss-pass",
+                    "text": "Saved capture metadata and path notes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "The frame has a clean streak and timestamp.",
+                    "requiresItems": [
+                        {
+                            "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Photo is blurred or clipped. Troubleshoot it."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "If blur appears, shorten exposure or tighten tripod joints, then retake only after confirming the path is still clear.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Stability corrected. Retrying capture."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Final check: log timestamp, direction, and settings in your mission logbook so another observer can reproduce the shot.",
             "options": [
                 {
                     "type": "goto",
@@ -55,6 +136,10 @@
                         {
                             "id": "70bb8d86-2c4e-4330-9705-371891934686",
                             "count": 1
+                        },
+                        {
+                            "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
+                            "count": 1
                         }
                     ]
                 }
@@ -62,7 +147,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! You captured humanity's outpost in motion.",
+            "text": "Nice work. You built a verifiable capture trail, not just a lucky snapshot.",
             "options": [
                 {
                     "type": "finish",

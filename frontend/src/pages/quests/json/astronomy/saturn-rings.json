@@ -8,12 +8,28 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here. Saturn is up tonight\u2014let's aim your scope and catch those rings.",
+            "text": "Nova here. Saturn is up tonight. We'll do this as a full observation cycle so your result is repeatable and safe.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "prep",
+                    "text": "Ready for the full cycle."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Confirm a stable tripod lane, keep all white lights off, and map Saturn's position on the planisphere before touching focus.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Chart reference points mapped."
+                },
+                {
+                    "type": "goto",
                     "goto": "locate",
-                    "text": "Where do I point?",
+                    "text": "Map done. I'll slew to Saturn.",
                     "requiresItems": [
                         {
                             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
@@ -22,6 +38,10 @@
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
                         }
                     ]
                 }
@@ -29,22 +49,66 @@
         },
         {
             "id": "locate",
-            "text": "Use the planisphere to spot Saturn near Aquarius. Center it and gently focus until the rings separate from the planet's disk.",
+            "text": "Center Saturn at low power, then refine focus slowly until the ring gap is distinct. If seeing is unstable, switch to recovery mode.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "verify",
+                    "text": "I can resolve a ringed disk now.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Image is wobbling too much."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Pause one minute for vibrations to settle, re-balance the tripod, and refocus from low magnification. Abort if footing becomes unsafe.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "locate",
+                    "text": "Stability restored. Retrying focus."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Log ring orientation and seeing conditions before packing up so you can compare against future sessions.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Logged orientation and sky conditions."
+                },
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "I see the rings!"
+                    "text": "Observation logged.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Log the observation and give the scope a rest.",
+            "text": "Excellent. You verified the observation with notes and a recovery loop, just like a reliable field session.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Observation logged."
+                    "text": "Saturn session complete."
                 }
             ]
         }
