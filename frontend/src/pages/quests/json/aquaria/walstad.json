@@ -1,19 +1,19 @@
 {
     "id": "aquaria/walstad",
     "title": "Set up a Walstad tank",
-    "description": "Create a low-tech planted aquarium using the Walstad method.",
+    "description": "Build a low-tech planted aquarium with staged setup and outcome evidence, plus a recovery branch for cloudy or unstable starts.",
     "image": "/assets/quests/walstad_setup.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Vega here. We'll build balance first: soil, cap, plants, then patience before livestock.",
+            "text": "Vega here. We'll build balance first: stage materials, assemble the ecosystem, then verify a stable first day before livestock.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "stage",
-                    "text": "Yes\u2014show me the steps",
+                    "text": "Stage the full Walstad kit.",
                     "requiresItems": [
                         {
                             "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
@@ -53,17 +53,18 @@
         },
         {
             "id": "stage",
-            "text": "Level the stand, place the tank, and stage soil, gravel, plants, light, and conditioner with a clean bucket. Keep cords dry.",
+            "text": "Level the stand, keep cords above drip lines, and prep dechlorinated water before soil touches glass.",
             "options": [
                 {
                     "type": "process",
                     "process": "condition-bucket-water",
-                    "text": "Prep dechlorinated fill water"
+                    "text": "Prep dechlorinated fill water.",
+                    "goto": "build"
                 },
                 {
                     "type": "goto",
                     "goto": "build",
-                    "text": "Bucket is dechlorinated and tools are staged",
+                    "text": "Bucket is conditioned and tools are staged.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -75,17 +76,18 @@
         },
         {
             "id": "build",
-            "text": "Add soil, cap with rinsed gravel, tuck in guppy grass and duckweed, then fill gently with dechlorinated water. Set the light to an 8-hour timer.",
+            "text": "Add soil, cap with rinsed gravel, plant lightly, and fill gently to avoid substrate bloom.",
             "options": [
                 {
                     "type": "process",
                     "process": "assemble-walstad-tank",
-                    "text": "Layer and plant the Walstad tank"
+                    "text": "Assemble and plant the Walstad tank.",
+                    "goto": "verify"
                 },
                 {
                     "type": "goto",
-                    "goto": "thermo",
-                    "text": "Substrate settled and plants look secure",
+                    "goto": "verify",
+                    "text": "Tank assembled; substrate settled.",
                     "requiresItems": [
                         {
                             "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
@@ -96,16 +98,50 @@
             ]
         },
         {
-            "id": "thermo",
-            "text": "Dry the glass and mark a spot for the strip thermometer so you can track swings without dunking probes.",
+            "id": "verify",
+            "text": "First-day verification: water should clear, plants stay rooted, and cords remain dry. If not, branch to recovery before continuing.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Placement marked and glass is dry",
+                    "text": "Setup is stable and first-day checks pass.",
                     "requiresItems": [
                         {
                             "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Cloudiness, uprooted stems, or splash risk detected; recover first.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Pause stocking. Re-seat floating stems, reduce turbulence, and run a fresh conditioned top-off before re-checking after a full light cycle.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "condition-bucket-water",
+                    "text": "Prepare corrective top-off water.",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Recovery actions complete; repeat first-day verification.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
                             "count": 1
                         }
                     ]
@@ -114,11 +150,11 @@
         },
         {
             "id": "finish",
-            "text": "Good start. Let it settle, test often, and add fish only after ammonia and nitrite hold at zero.",
+            "text": "Good start. You staged safely, built with evidence, and proved recovery before moving on to livestock prep.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll let it cycle cleanly"
+                    "text": "Walstad baseline established."
                 }
             ]
         }
@@ -133,7 +169,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

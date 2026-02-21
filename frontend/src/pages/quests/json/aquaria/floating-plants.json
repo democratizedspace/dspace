@@ -1,25 +1,25 @@
 {
     "id": "aquaria/floating-plants",
     "title": "Add Floating Plants",
-    "description": "Rinse guppy grass in dechlorinated water, then float it so it soaks up excess nutrients and shelters fry.",
+    "description": "Rinse and place floating plants with intake-clearance checks, plus a recovery loop when mats collapse or clog flow.",
     "image": "/assets/quests/floating_plants.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your shrimp are thriving, but nutrient levels creep up fast. Let's rinse some guppy grass and float it to act like a natural nutrient sponge and fry nursery.",
+            "text": "Your shrimp are thriving, but nutrients creep up fast. We'll prep a clean rinse, then choose a placement strategy that keeps the filter intake clear.",
             "options": [
                 {
                     "type": "process",
                     "process": "bucket-water-dechlorinated",
-                    "text": "Prep a bucket of dechlorinated water for rinsing.",
+                    "text": "Prep a dechlorinated rinse bucket.",
                     "goto": "rinse"
                 },
                 {
                     "type": "goto",
                     "goto": "rinse",
-                    "text": "Bucket, net, and guppy grass ready.",
+                    "text": "Bucket, net, and guppy grass are staged.",
                     "requiresItems": [
                         {
                             "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
@@ -43,13 +43,13 @@
         },
         {
             "id": "rinse",
-            "text": "Swirl the guppy grass in dechlorinated water, pick off snails or eggs, and toss any brown stems. Keep the rinsed bundle wet until it hits the tank.",
+            "text": "Swirl the guppy grass, remove pests, and discard melting stems before anything enters the display tank.",
             "options": [
                 {
                     "type": "process",
                     "process": "rinse-floating-plants",
-                    "text": "Rinse and inspect the plants.",
-                    "goto": "place",
+                    "text": "Run the rinse and inspection pass.",
+                    "goto": "place-strategy",
                     "requiresItems": [
                         {
                             "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
@@ -71,8 +71,36 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "place-strategy",
+                    "text": "Rinsed bundle ready for placement.",
+                    "requiresItems": [
+                        {
+                            "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "place-strategy",
+            "text": "Choose your layout: broad shade mat for fry cover, or a ringed opening to keep feeding lanes clear.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "place",
-                    "text": "Rinsed bundle ready for the tank.",
+                    "text": "Build a broad shade mat.",
+                    "requiresItems": [
+                        {
+                            "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "place-ring",
+                    "text": "Build a ring opening near the intake.",
                     "requiresItems": [
                         {
                             "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
@@ -84,13 +112,13 @@
         },
         {
             "id": "place",
-            "text": "Float the rinsed stems under the light, keep them away from the filter intake, and leave a gap so shrimp can reach the surface. Thin them weekly to keep the mat breathable.",
+            "text": "Float stems under the light and keep enough open surface for gas exchange.",
             "options": [
                 {
                     "type": "process",
                     "process": "place-floating-plants",
-                    "text": "Float and spread the guppy grass.",
-                    "goto": "finish",
+                    "text": "Place and spread the mat.",
+                    "goto": "verify",
                     "requiresItems": [
                         {
                             "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
@@ -101,11 +129,79 @@
                             "count": 1
                         }
                     ]
-                },
+                }
+            ]
+        },
+        {
+            "id": "place-ring",
+            "text": "Corral stems so the intake and feeding zone remain open while fry still have shaded cover.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "place-floating-plants",
+                    "text": "Place with a ring opening.",
+                    "goto": "verify",
+                    "requiresItems": [
+                        {
+                            "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
+                            "count": 1
+                        },
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verify that the mat is floating, shrimp can surface, and the filter intake is unobstructed.",
+            "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Mat is floating and clear of the intake.",
+                    "text": "Cover is stable and intake remains clear.",
+                    "requiresItems": [
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Mat collapsed or intake is clogging; start recovery.",
+                    "requiresItems": [
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Thin one-third of the mat, clear the intake lane, and re-rinse any decaying stems before retrying placement.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "rinse-floating-plants",
+                    "text": "Re-rinse and reset the floating bundle.",
+                    "goto": "place-strategy",
+                    "requiresItems": [
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Recovery complete; run intake-clearance verification again.",
                     "requiresItems": [
                         {
                             "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
@@ -117,11 +213,11 @@
         },
         {
             "id": "finish",
-            "text": "Perfect. That mat will soak up nutrients, cast dappled shade, and give future fry a safe ceiling to hide in.",
+            "text": "Perfect. You proved placement, intake safety, and a recovery plan when the mat misbehaved.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll keep it thinned and happy."
+                    "text": "Floating plant workflow stabilized."
                 }
             ]
         }
@@ -136,7 +232,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

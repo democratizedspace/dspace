@@ -1,30 +1,72 @@
 {
     "id": "aquaria/aquarium-light",
     "title": "Install an aquarium light",
-    "description": "Add LED lighting to support plant growth and fish health.",
+    "description": "Add LED lighting with a documented photoperiod check and a recovery loop for algae or stress signs.",
     "image": "/assets/quests/aquarium_light.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your Walstad tank is cycling, but plants need steady light. Ready to install the lamp?",
+            "text": "Your Walstad tank needs steady light, not guesswork. We'll pick a mounting plan, set a safe schedule, and verify livestock response before we call it done.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "mount",
-                    "text": "Let's mount the light."
+                    "goto": "mount-direct",
+                    "text": "Use the direct rim-mount path.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        },
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "mount-drip-loop",
+                    "text": "Use a drip-loop routing plan for extra cable safety.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        },
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "mount",
-            "text": "Clip the light to the rim and route the cable so it stays dry.",
+            "id": "mount-direct",
+            "text": "Clamp the fixture to the rim, keep the housing dry, and keep the cord below the outlet line.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "schedule",
-                    "text": "Light secured.",
+                    "text": "Fixture is secure and splash-safe.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "mount-drip-loop",
+            "text": "Route the cable with a visible drip loop before plugging in. Dry hands and dry outlet face are mandatory.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "schedule",
+                    "text": "Drip loop verified and outlet area dry.",
                     "requiresItems": [
                         {
                             "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
@@ -36,22 +78,85 @@
         },
         {
             "id": "schedule",
-            "text": "Plug it in and set a timer for eight hours of gentle daylight.",
+            "text": "Set an 8-hour photoperiod and note start/end times so algae spikes can be traced.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-aquarium-test-results",
+                    "text": "Log initial light schedule and tank snapshot.",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Schedule is recorded and timer is active.",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "After the first cycle, verify fish behavior and plant posture. If algae film or stress appears, branch to corrective action before closing.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Timer set and lamp glowing."
+                    "text": "Behavior is normal and no algae surge is visible.",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Stress or algae signs detected; start corrective loop.",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Reduce intensity or shorten the photoperiod to 6 hours for one cycle, then run a fresh observation log before reopening the main path.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-aquarium-test-results",
+                    "text": "Record corrective settings and follow-up observations.",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Corrective cycle complete; re-check behavior and algae.",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Your plants will thrive under consistent lighting.",
+            "text": "Nice work. You mounted safely, documented the schedule, and proved stability before calling the install complete.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Enjoy the glow."
+                    "text": "Lighting workflow verified."
                 }
             ]
         }
@@ -66,7 +171,7 @@
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
