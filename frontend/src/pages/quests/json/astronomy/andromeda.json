@@ -12,7 +12,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "search",
+                    "goto": "site-plan",
                     "text": "Gear ready.",
                     "requiresItems": [
                         {
@@ -28,24 +28,105 @@
             ]
         },
         {
-            "id": "search",
-            "text": "Shield the red flashlight to avoid glare and trace Cassiopeia's W on the star chart. From the midpoint, sweep the basic telescope slowly at low magnification toward a faint smudge\u2014that's Andromeda. Keep footing sure, mind your surroundings and never aim near the Sun or aircraft.",
+            "id": "site-plan",
+            "text": "Before you sweep, pick a strategy: stay in your current dark patch or relocate if streetlights or haze are washing out faint targets.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "search-main",
+                    "text": "Stay put and let my eyes adapt longer."
+                },
+                {
+                    "type": "goto",
+                    "goto": "search-relocate",
+                    "text": "Relocate to a darker edge of the field first."
+                }
+            ]
+        },
+        {
+            "id": "search-main",
+            "text": "Shield the red flashlight to avoid glare and trace Cassiopeia's W on the star chart. From the midpoint, sweep the basic telescope slowly at low magnification toward a faint smudge. Keep footing sure and never aim near the Sun or aircraft.",
             "options": [
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Following the chart."
+                    "text": "Follow the Cassiopeia-to-Andromeda hop."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
+                    "text": "I logged a charted sweep.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
                         }
-                    ],
-                    "text": "Galaxy in sight."
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I still can't separate Andromeda from haze."
+                }
+            ]
+        },
+        {
+            "id": "search-relocate",
+            "text": "Good call. Move to a darker line of sight, block nearby light, and repeat the star-hop with the same chart references.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Run a fresh sweep from the darker location."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Relocated sweep logged.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Cloud deck moved in during relocation."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "If contrast is poor, pause 10 minutes, re-check focus on a bright star, and verify no dew on the lens. If footing or visibility becomes unsafe, abort and reschedule.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "site-plan",
+                    "text": "Conditions recovered; retry with a safer setup."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Interpret what you observed: Andromeda should appear as a diffuse oval smudge that stays fixed relative to nearby stars while scanning.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Shape and position match Andromeda.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Not confident yet; I need another pass."
                 }
             ]
         },
@@ -55,7 +136,13 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "Logging observations."
+                    "text": "Logging observations.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }

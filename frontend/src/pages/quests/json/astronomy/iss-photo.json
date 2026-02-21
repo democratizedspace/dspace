@@ -28,11 +28,11 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "capture",
+                    "goto": "setup",
                     "text": "Pass time noted, gear set.",
                     "requiresItems": [
                         {
-                            "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                            "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
                             "count": 1
                         },
                         {
@@ -44,17 +44,114 @@
             ]
         },
         {
+            "id": "setup",
+            "text": "Stage a safe viewing lane with stable footing and no overhead hazards before you start exposure attempts.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "stage-iss-spotting-station",
+                    "text": "Stage the spotting station."
+                },
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Station is stable and aligned.",
+                    "requiresItems": [
+                        {
+                            "id": "bb97e755-4337-4e9d-8063-4a0cff4649b5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "capture",
-            "text": "Start a 10-second exposure as the ISS rises and jot the timestamp.",
+            "text": "Capture a timed pass log with exposure notes. A usable attempt should include timestamp, direction, and a streak that is trackable against stars.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-iss-pass",
+                    "text": "Record this pass attempt."
+                },
+                {
+                    "type": "goto",
+                    "goto": "evaluate",
+                    "text": "Attempt logged; evaluate quality.",
+                    "requiresItems": [
+                        {
+                            "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "evaluate",
+            "text": "Interpret your result: if streak continuity is clear and framing is stable, pass. If blur, clipping, or mistimed exposure dominates, run the corrective loop.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Photo saved and logged.",
+                    "text": "Quality threshold met (clear ISS streak + logged metadata).",
                     "requiresItems": [
                         {
-                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
                             "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Out-of-range result (blurred or mistimed)."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective branch: lower vibration, adjust exposure timing, and wait for the next predicted pass before retrying. Abort if footing becomes unsafe.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-iss-pass",
+                    "text": "Schedule the mandatory re-test window."
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Next pass ready for re-test.",
+                    "requiresItems": [
+                        {
+                            "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+                            "count": 2
+                        },
+                        {
+                            "id": "bb97e755-4337-4e9d-8063-4a0cff4649b5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Run the retest capture and compare against your first logged attempt.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-iss-pass",
+                    "text": "Log the follow-up capture."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Re-test logged with improved streak quality.",
+                    "requiresItems": [
+                        {
+                            "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
+                            "count": 2
                         }
                     ]
                 }
@@ -66,7 +163,13 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait for the next pass."
+                    "text": "Can't wait for the next pass.",
+                    "requiresItems": [
+                        {
+                            "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -81,7 +184,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

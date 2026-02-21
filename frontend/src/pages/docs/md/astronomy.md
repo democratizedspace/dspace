@@ -73,7 +73,12 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `requiresQuests`: `astronomy/basic-telescope`
 - Dialogue `requiresItems` gates:
     - `start` → "Gear ready." — planisphere star chart ×1, red flashlight ×1
-    - `search` → "Galaxy in sight." — basic telescope ×1
+    - `search-main` / `search-relocate` → "I logged a charted sweep." / "Relocated sweep logged." — constellation sketch set ×1
+    - `verify` / `finish` evidence gate — constellation sketch set ×1
+- Branching and recovery:
+    - Main path: `site-plan` → `search-main` → `verify`
+    - Alternate strategy: `site-plan` → `search-relocate` → `verify`
+    - Troubleshooting loop: `troubleshoot` returns to `site-plan` when haze, dew, or safety conditions require a retry
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -119,8 +124,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/iss-flyover`
 - Dialogue `requiresItems` gates:
-    - `plan` → "Pass time noted, gear set." — smartphone ×1, camera tripod ×1
-    - `capture` → "Photo saved and logged." — mission logbook ×1
+    - `plan` → "Pass time noted, gear set." — ISS pass window ×1, camera tripod ×1
+    - `setup` → "Station is stable and aligned." — ISS spotting station ×1
+    - `capture` / `evaluate` / `finish` evidence gates — ISS pass log ×1 (or ×2 after corrective retest)
+    - `corrective` → "Next pass ready for re-test." — ISS pass window ×2, ISS spotting station ×1
+- Branching and recovery:
+    - Measurement interpretation node at `evaluate` with pass/fail thresholds
+    - Out-of-range corrective loop: `evaluate` → `corrective` → `retest` (mandatory follow-up capture)
+    - Safety stop called out in `setup` and `corrective` when footing or overhead hazards are unsafe
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -131,6 +142,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: smartphone ×1, mission logbook ×1
         - Consumes: none
         - Creates: ISS pass window ×1
+    - [stage-iss-spotting-station](/processes/stage-iss-spotting-station)
+        - Requires: ISS pass window ×1, basic telescope ×1, camera tripod ×1, red flashlight ×1
+        - Consumes: none
+        - Creates: ISS spotting station ×1
+    - [log-iss-pass](/processes/log-iss-pass)
+        - Requires: ISS spotting station ×1, ISS pass window ×1, mission logbook ×1
+        - Consumes: none
+        - Creates: ISS pass log ×1
 
 ## 6) Track Jupiter's Moons (`astronomy/jupiter-moons`)
 
@@ -215,9 +234,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/light-pollution`
 - Dialogue `requiresItems` gates:
-    - `forecast` → "Window picked—what should I pack?" — aurora viewing plan ×1
+    - `forecast` → "Forecast captured—review conditions." — aurora viewing plan ×1
+    - `conditions` → go/no-go interpretation gate on the same aurora viewing plan artifact
     - `kit` → "Kit is ready—let's step outside." — dark-sky kit packed ×1
-    - `observe` → "Entry written with colors and timestamps." — aurora sighting log ×1
+    - `observe` / `interpret` / `finish` evidence gates — aurora sighting log ×1
+- Branching and recovery:
+    - Weather/light-pollution fallback branch: `conditions` → `fallback-plan`
+    - Failed-session troubleshooting path: `observe` / `interpret` → `failed-session` → `fallback-plan`
+    - Scheduled follow-up check loops back through `check-aurora-forecast` before retrying go/no-go
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
