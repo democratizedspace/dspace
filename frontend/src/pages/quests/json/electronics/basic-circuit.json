@@ -8,24 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Orion here. Let's light a 5 mm LED with a 220 \u03a9 resistor. Verify the color code, and keep the 5 V supply unplugged for now.",
+            "text": "Orion here. We'll build a basic LED circuit safely and prove it works before we call it done.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "materials",
-                    "text": "Sure, what do I need?"
+                    "text": "What do I need?"
                 }
             ]
         },
         {
             "id": "materials",
-            "text": "Collect a breadboard, two jumper wires, one 5 mm LED, one 220 \u03a9 resistor, a color chart, and a 5 V supply. Verify the resistor and keep power unplugged while wiring.",
+            "text": "Lay out a solderless breadboard, jumper wires, LED, 220 ohm resistor, resistor color chart, 5 V power supply, and safety goggles. Keep power disconnected while wiring.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "assemble",
-                    "text": "Yep, let's assemble it.",
-                    "process": "verify-resistor-color-code",
+                    "goto": "wire-main",
+                    "text": "I have the parts and goggles.",
                     "requiresItems": [
                         {
                             "id": "d1105b87-8185-4a30-ba55-406384be169f",
@@ -50,25 +49,102 @@
                         {
                             "id": "828d6c3b-66a5-4064-b221-97630274502b",
                             "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
                         }
                     ]
                 }
             ]
         },
         {
-            "id": "assemble",
-            "text": "Insert the LED with the long leg toward the positive rail. Place the 220 \u03a9 resistor from that anode row to an empty row. Use jumpers to link the resistor to +5 V and the LED's short leg to ground. Check polarity, confirm series resistance, then plug in the 5 V supply.",
+            "id": "wire-main",
+            "text": "Main path: place the resistor in series with the LED, then wire to 5 V and GND. Double-check LED polarity before power-up.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "verify-resistor-color-code",
+                    "text": "Confirm resistor value before powering"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Circuit wired. Ready to verify."
+                },
+                {
+                    "type": "goto",
+                    "goto": "alt-diagnose",
+                    "text": "I am unsure about LED polarity."
+                }
+            ]
+        },
+        {
+            "id": "alt-diagnose",
+            "text": "Alternative strategy: test LED polarity with the multimeter diode mode first, then reinsert it with the anode toward positive rail.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-led-polarity",
+                    "text": "Run polarity check"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Polarity confirmed. Re-test circuit.",
+                    "requiresItems": [
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Evidence gate: power on and confirm the LED lights steadily for 10 seconds with no heat/smell from parts.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "It works!"
+                    "text": "LED stays lit and stable.",
+                    "requiresItems": [
+                        {
+                            "id": "f27d6046-6e72-4e87-b47c-8f0f0f4666e2",
+                            "count": 1
+                        },
+                        {
+                            "id": "77f8dbeb-0f14-4f0a-a42d-a86851826511",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "LED did not light or flickered."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Power off first. Re-seat wires, verify resistor is in series (not bypassed), and inspect for reversed LED legs. If anything smells hot, stop and let components cool.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire-main",
+                    "text": "I corrected wiring. Retry verification."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work. Unplug the 5 V supply before changes and keep metal tools away from the rails.",
+            "text": "Great work. You built and verified a safe baseline circuit. Remove power before making changes.",
             "options": [
                 {
                     "type": "finish",
@@ -77,7 +153,9 @@
             ]
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "rewards": [
         {
             "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
