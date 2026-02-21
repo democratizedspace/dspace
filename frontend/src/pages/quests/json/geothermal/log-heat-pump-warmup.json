@@ -1,19 +1,19 @@
 {
     "id": "geothermal/log-heat-pump-warmup",
     "title": "Log Heat Pump Warmup",
-    "description": "Track how quickly the loop temperature rises after startup.",
+    "description": "Capture and annotate warmup logs with explicit pass thresholds, then classify anomalies before closing.",
     "image": "/assets/quests/geothermal_log_heat_pump_warmup.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Crack a window near the manifold and keep towels handy\u2014condensation happens fast. Ready to capture the warmup curve?",
+            "text": "Crack a window near the manifold, keep towels by fittings, and confirm circulation valves are fully open. Ready to capture a deterministic warmup log?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "stage",
-                    "text": "Rig and towels are ready",
+                    "text": "Rig and safety checks are complete",
                     "requiresItems": [
                         {
                             "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
@@ -28,18 +28,18 @@
                 {
                     "type": "goto",
                     "goto": "stage",
-                    "text": "Walk me through it"
+                    "text": "Give me the staging checklist"
                 }
             ]
         },
         {
             "id": "stage",
-            "text": "Position the probe at the loop outlet, purge air, and start the pump from cold. We're looking for the first 15 minutes of rise.",
+            "text": "Run from cold start and capture 15 minutes of outlet rise. Required log fields: timestamp, outlet temp, ambient temp, pump mode, and compressor state.",
             "options": [
                 {
                     "type": "process",
                     "process": "capture-hourly-temperature-log",
-                    "text": "Capture the warmup trace",
+                    "text": "Capture warmup trace",
                     "requiresItems": [
                         {
                             "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
@@ -54,7 +54,7 @@
                 {
                     "type": "goto",
                     "goto": "analyze",
-                    "text": "Trace exported",
+                    "text": "Warmup log exported",
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
@@ -66,12 +66,12 @@
         },
         {
             "id": "analyze",
-            "text": "Plot the first 15 minutes and tag when circulation starts, compressor kicks, and when outlet temp flattens. That curve is your seasonal benchmark.",
+            "text": "Pass criteria: outlet rise reaches at least 4°C in the first 15 minutes and settles without more than 1°C oscillation over the final 5 minutes.",
             "options": [
                 {
                     "type": "process",
                     "process": "plot-temperature-data",
-                    "text": "Plot the warmup curve",
+                    "text": "Plot and inspect warmup curve",
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
@@ -86,7 +86,7 @@
                 {
                     "type": "process",
                     "process": "refine-temperature-graph",
-                    "text": "Annotate compressor ramp",
+                    "text": "Annotate compressor ramp and settle window",
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
@@ -101,19 +101,46 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Curve annotated",
+                    "text": "Curve meets threshold and annotations are saved",
                     "requiresItems": [
                         {
                             "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly",
+                    "text": "Threshold miss or unstable warmup detected"
+                }
+            ]
+        },
+        {
+            "id": "anomaly",
+            "text": "Classify anomaly: slow rise suggests low flow/air, high oscillation suggests control tuning, and flat lines suggest sensor faults. Apply one corrective action, then re-log.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stage",
+                    "text": "Corrective action applied, collect a new trace",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Pause and re-run safety setup"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Save that warmup chart with outdoor temp and pump speed. Comparing it monthly will flag air in the loop or a failing circulator early.",
+            "text": "Archive the annotated chart with outdoor conditions and pump mode. That gives you a repeatable baseline for monthly warmup drift checks.",
             "options": [
                 {
                     "type": "finish",
@@ -137,8 +164,8 @@
     "requiresQuests": ["geothermal/log-ground-temperature"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 96,
+        "emoji": "🛠️",
         "history": []
     }
 }

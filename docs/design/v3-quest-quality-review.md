@@ -757,9 +757,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
   - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `geothermal/check-loop-pressure`
-  - [ ] Observed issue: `geothermal/check-loop-pressure` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `geothermal/check-loop-pressure` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3653)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3653)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3653)
 - `geothermal/check-loop-temp-delta`
   - [ ] Observed issue: `geothermal/check-loop-temp-delta` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
@@ -781,9 +781,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
   - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `geothermal/log-heat-pump-warmup`
-  - [ ] Observed issue: `geothermal/log-heat-pump-warmup` asks for logging/monitoring but pass criteria and anomaly response are not explicit.
-  - [ ] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact.
-  - [ ] Add an anomaly classification branch with corrective action and a follow-up verification window before closure.
+  - [x] Observed issue: `geothermal/log-heat-pump-warmup` asks for logging/monitoring but pass criteria and anomaly response are not explicit. (PR #3653)
+  - [x] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact. (PR #3653)
+  - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure. (PR #3653)
 - `geothermal/monitor-heat-pump-energy`
   - [x] Observed issue (addressed): `geothermal/monitor-heat-pump-energy` previously asked for logging/monitoring but pass criteria and anomaly response were not explicit; this was hardened in PR #3628. (PR #3628)
   - [x] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact. (PR #3628)
@@ -793,9 +793,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #3628)
   - [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #3628)
 - `geothermal/replace-faulty-thermistor`
-  - [ ] Observed issue: `geothermal/replace-faulty-thermistor` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue: `geothermal/replace-faulty-thermistor` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3653)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3653)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3653)
 - `geothermal/survey-ground-temperature`
   - [ ] Observed issue: `geothermal/survey-ground-temperature` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.

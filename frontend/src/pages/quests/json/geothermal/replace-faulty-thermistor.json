@@ -1,31 +1,35 @@
 {
     "id": "geothermal/replace-faulty-thermistor",
     "title": "Replace Faulty Thermistor",
-    "description": "Swap out a dead probe and verify readings stay true.",
+    "description": "Swap the failed probe, verify parity against baseline readings, and recover cleanly if drift remains.",
     "image": "/assets/quests/geothermal_replace_faulty_thermistor.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "One probe's gone quiet. Ready to swap in a fresh thermistor?",
+            "text": "Power down the controller, tag the failed lead, and dry all terminals before opening the junction. Ready for a controlled replacement?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "replace",
-                    "text": "Yeah, how do I do that?"
+                    "goto": "stage",
+                    "text": "Safety lockout complete"
+                },
+                {
+                    "type": "goto",
+                    "goto": "stage",
+                    "text": "Remind me what to stage first"
                 }
             ]
         },
         {
-            "id": "replace",
-            "text": "Install the spare and log a reading with arduino-thermistor-read.",
+            "id": "stage",
+            "text": "Stage one Arduino logger and a replacement thermistor. We'll only close this after a post-swap stability check.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Probe replaced and reading logged.",
-                    "process": "arduino-thermistor-read",
+                    "goto": "replace",
+                    "text": "Spare probe and logger are ready",
                     "requiresItems": [
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -36,12 +40,90 @@
             ]
         },
         {
+            "id": "replace",
+            "text": "Install the replacement probe with strain relief and record a baseline capture on the restored channel.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "text": "Capture post-replacement baseline",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Baseline capture saved",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: readings must stay within 1.5°C of the backup probe for a 10-minute run with no dropouts.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Parity holds across the verification window",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Drift or dropouts detected"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Troubleshoot by reseating connectors, checking moisture ingress, and restoring the last-known-good wiring path before another capture.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "replace",
+                    "text": "Corrective action done, re-run baseline",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Stop and repeat lockout before retry"
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great! Your ground data is back online.",
+            "text": "Excellent. Log channel mapping and timestamp so seasonal diagnostics can trust this sensor path.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "On to monitoring."
+                    "text": "Replacement thermistor verified",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -55,8 +137,8 @@
     "requiresQuests": ["geothermal/install-backup-thermistor"],
     "hardening": {
         "passes": 0,
-        "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }
