@@ -8,24 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ensure the pack is disconnected and free of damage. Put on safety goggles, set the battery on a dry, non-conductive surface, then follow the measure-battery-voltage process with your digital multimeter.",
+            "text": "Before measuring, isolate the LiFePO4 pack from loads, inspect for swelling or damage, and put on safety goggles. We'll record a reading, interpret it, and recover safely if it is out of range.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "measure",
-                    "text": "I'm ready."
+                    "goto": "setup",
+                    "text": "Ready for setup."
                 }
             ]
         },
         {
-            "id": "measure",
-            "text": "Set the multimeter to the 20 V DC range and confirm the probes are in the voltage ports. Keep fingers behind the guards, touch red to the positive terminal and black to the negative without letting them touch, and stop if the leads warm or spark. A healthy LiFePO4 pack should read 12.4\u201313.6 V.",
+            "id": "setup",
+            "text": "Set the multimeter to DC volts (20 V range), verify probes are in COM and V\u03a9, and keep fingers behind probe guards. Stop immediately if you see sparks, smell heat, or damaged insulation.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "It reads about 12.6 V.",
-                    "process": "measure-battery-voltage",
+                    "goto": "measure",
+                    "text": "Meter setup is confirmed.",
                     "requiresItems": [
                         {
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
@@ -44,8 +43,82 @@
             ]
         },
         {
+            "id": "measure",
+            "text": "Measure the disconnected pack: red probe to + terminal, black to -. Evidence artifact: record the exact voltage in your notes. Pass window for this quest is 12.4-13.6 V.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-battery-voltage",
+                    "text": "Run measurement procedure"
+                },
+                {
+                    "type": "goto",
+                    "goto": "in-range",
+                    "text": "Logged value is within 12.4-13.6 V."
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "Logged value is outside 12.4-13.6 V."
+                }
+            ]
+        },
+        {
+            "id": "in-range",
+            "text": "Interpretation: this voltage is consistent with a healthy resting LiFePO4 pack. Re-cap terminals safely and store on a dry, fire-safe surface.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Interpretation complete."
+                }
+            ]
+        },
+        {
+            "id": "out-of-range",
+            "text": "Out-of-range recovery: quarantine the pack from chargers/loads, re-check probe polarity, and wait 10 minutes before a second reading. Do not charge or discharge an overheating pack.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Proceed with controlled re-test."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish-safe-stop",
+                    "text": "Pack shows heat/swelling. End with safety stop."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Re-test gate: repeat the measurement process and compare with your first value. If readings remain out of range, escalate to battery maintenance diagnostics.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-battery-voltage",
+                    "text": "Run second measurement"
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Return to pass/fail interpretation with new reading."
+                }
+            ]
+        },
+        {
+            "id": "finish-safe-stop",
+            "text": "Good call stopping early. Safety-first operations are valid outcomes when battery risk signals appear.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Logged and escalated safely."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice work! Disconnect the probes, power down the meter, remove your goggles, and store the battery in a dry, fire-safe spot\u2014your pack looks charged and ready.",
+            "text": "Nice work. You produced a measurement artifact, interpreted thresholds, and followed the corrective branch safely.",
             "options": [
                 {
                     "type": "finish",
