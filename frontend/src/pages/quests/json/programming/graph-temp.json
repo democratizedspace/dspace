@@ -108,10 +108,20 @@
     ],
     "requiresQuests": ["programming/temp-logger"],
     "hardening": {
-        "passes": 1,
+        "passes": 3,
         "score": 97,
-        "emoji": "✅",
+        "emoji": "💯",
         "history": [
+            {
+                "task": "codex-hardening-2025-12-08",
+                "date": "2025-12-08",
+                "score": 95
+            },
+            {
+                "task": "codex-hardening-2025-12-18",
+                "date": "2025-12-18",
+                "score": 98
+            },
             {
                 "task": "codex-hardening-2026-02-21",
                 "date": "2026-02-21",

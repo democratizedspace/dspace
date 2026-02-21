@@ -34,7 +34,7 @@
                 {
                     "type": "process",
                     "process": "deploy-temperature-json-endpoint",
-                    "text": "Ship the schema-aware endpoint"
+                    "text": "Deploy the service with the new POST /submit route and schema validation"
                 },
                 {
                     "type": "goto",
@@ -118,7 +118,7 @@
     "hardening": {
         "passes": 1,
         "score": 96,
-        "emoji": "✅",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-hardening-2026-02-21",
