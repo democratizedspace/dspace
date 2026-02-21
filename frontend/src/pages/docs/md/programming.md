@@ -91,7 +91,7 @@ Programming quests build practical progression through the programming skill tre
     - `prep` → "Data looks clean" — temperature line chart ×1
     - `compute` → "Averages plotted and saved" — annotated temperature graph ×1
     - `interpret` → "Average is within expected range and documented" — temperature line chart ×1, annotated temperature graph ×1
-    - `retest` → "Re-test with updated average artifact" — temperature log CSV ×1, annotated temperature graph ×1
+    - `retest` → "Re-test with fresh log + rebuilt graph artifacts" — temperature log CSV ×2, annotated temperature graph ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

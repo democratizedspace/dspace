@@ -110,15 +110,15 @@
                 {
                     "type": "goto",
                     "goto": "interpret",
-                    "text": "Re-test with updated average artifact",
+                    "text": "Re-test with fresh log + rebuilt graph artifacts",
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
+                            "count": 2
                         },
                         {
                             "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 }
