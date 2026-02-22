@@ -105,7 +105,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `interpret` → "Log has all three fields and conditions notes." — ISS pass log ×1
 - Troubleshooting and safety flow:
     - `plan`, `setup`, and `observe` all branch to `weather-delay` for cloud/haze/glare recovery instead of allowing a dead-end session.
-    - `interpret` enforces a complete observation artifact (time + direction + duration) and routes incomplete entries through `reset-log` to consume the stale log before setup restarts.
+    - `interpret` enforces a complete observation artifact (time + direction + duration) and routes incomplete entries back through setup so the pass can be restaged and re-observed.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -124,10 +124,6 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: ISS spotting station ×1, ISS pass window ×1, mission logbook ×1
         - Consumes: none
         - Creates: ISS pass log ×1
-    - [reset-iss-pass-log](/processes/reset-iss-pass-log)
-        - Requires: ISS pass log ×1
-        - Consumes: ISS pass log ×1
-        - Creates: none
 
 ## 5) Photograph the ISS (`astronomy/iss-photo`)
 
@@ -164,7 +160,6 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - [observe-jupiter-moons](/processes/observe-jupiter-moons)
         - Requires: basic telescope ×1, camera tripod ×1
         - Consumes: none
-        - Creates: none
 
 ## 7) Map the Constellations (`astronomy/constellations`)
 
@@ -281,7 +276,6 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - [photograph-lunar-eclipse](/processes/photograph-lunar-eclipse)
         - Requires: basic telescope ×1, digital camera ×1, camera tripod ×1
         - Consumes: none
-        - Creates: none
 
 ## 12) Document a Meteor Shower (`astronomy/meteor-shower`)
 
@@ -299,7 +293,6 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - [observe-meteor-shower](/processes/observe-meteor-shower)
         - Requires: basic telescope ×1
         - Consumes: none
-        - Creates: none
 
 ## 13) Track a Visiting Comet (`astronomy/comet-tracking`)
 
@@ -317,7 +310,6 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - [observe-meteor-shower](/processes/observe-meteor-shower)
         - Requires: basic telescope ×1
         - Consumes: none
-        - Creates: none
 
 ## 14) Locate the North Star (`astronomy/north-star`)
 
@@ -463,7 +455,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `interpret` → "Measured fraction is within the 20%-60% target band." — Venus phase sketch ×1
 - Troubleshooting and safety flow:
     - `view` now branches to `recheck` when seeing is unstable.
-    - `interpret` enforces pass/fail bounds (20%-60% illuminated fraction) and routes out-of-range results through `reset-sketch` so stale evidence is consumed before corrective re-test loops.
+    - `interpret` enforces pass/fail bounds (20%-60% illuminated fraction) and routes out-of-range results to corrective re-test loops (`recheck` → `plan`/`view`).
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -478,10 +470,6 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: Venus observation window ×1, basic telescope ×1, mission logbook ×1
         - Consumes: none
         - Creates: Venus phase sketch ×1
-    - [reset-venus-phase-sketch](/processes/reset-venus-phase-sketch)
-        - Requires: Venus phase sketch ×1
-        - Consumes: Venus phase sketch ×1
-        - Creates: none
 
 ## QA flow notes
 

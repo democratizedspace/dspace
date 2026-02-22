@@ -93,24 +93,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "reset-sketch",
-                    "text": "Out-of-range result - run corrective checks and retest."
-                }
-            ]
-        },
-        {
-            "id": "reset-sketch",
-            "text": "Mark the out-of-range sketch as superseded so your corrective retest captures a fresh phase record.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "reset-venus-phase-sketch",
-                    "text": "Out-of-range sketch cleared from the active target."
-                },
-                {
-                    "type": "goto",
                     "goto": "recheck",
-                    "text": "Proceed with corrective checks and retest."
+                    "text": "Out-of-range result - run corrective checks and retest."
                 }
             ]
         },
