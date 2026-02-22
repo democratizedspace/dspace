@@ -105,7 +105,10 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/check-battery-voltage`
 - Dialogue `requiresItems` gates:
-    - `test` → "It lights one way only." — 5 mm LED ×1, digital multimeter ×1, safety goggles ×1
+    - `diode-test` → "It lights one way only." — 5 mm LED ×1, digital multimeter ×1, safety goggles ×1
+    - Evidence gate: diode-mode test must produce one-way glow (or 1.7-2.2 V forward drop) before completion unlocks.
+    - Troubleshooting loop: no-glow/OL-both-ways routes through setup diagnostics and retry before closure.
+    - Safety branch: heat/smoke anomalies force an immediate stop path and component quarantine.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -124,7 +127,11 @@ Electronics quests build practical progression through the electronics skill tre
     - `requiresQuests`: `electronics/basic-circuit`
 - Dialogue `requiresItems` gates:
     - `materials` → "Ready to wire!" — Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, Photoresistor ×1, 10k Ohm Resistor ×1, USB Type-A to Type-B cable ×1, digital multimeter ×1, safety goggles ×1, anti-static wrist strap ×1, Laptop Computer ×1
-    - `wire` → "Wired up and measured." — digital multimeter ×1, Photoresistor ×1, safety goggles ×1
+    - `wire` → "Wired and baseline measured." — digital multimeter ×1, Photoresistor ×1, safety goggles ×1
+    - Non-linear validation: branch between room-light shading and controlled flashlight sweep strategies.
+    - Evidence gate: each strategy requires three logged A0 samples with a clear trend before finish.
+    - Troubleshooting loop: unstable or flat readings route to unplug-first rewire/baud diagnostics and retry.
+    - Safety branch: unresolved instability can end via safe-stop with powered-hardware shutdown guidance.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -224,7 +231,10 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/resistor-color-check`
 - Dialogue `requiresItems` gates:
-    - `measure` → "It reads about what the color bands predicted." — digital multimeter ×1, 220 Ohm Resistor ×1, safety goggles ×1
+    - `measure` → "Reading is inside 209-231 Ω." — digital multimeter ×1, 220 Ohm Resistor ×1, safety goggles ×1
+    - `measure` → "Reading is outside 209-231 Ω or keeps drifting." — digital multimeter ×1, 220 Ohm Resistor ×1
+    - Measurement gate: completion requires interpreting a 220 Ω ±5% pass window (209-231 Ω).
+    - Troubleshooting loop: out-of-range or unstable values require cleanup + re-test, with a safe-stop branch if readings remain unsafe.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

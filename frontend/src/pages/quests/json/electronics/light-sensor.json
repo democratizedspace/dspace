@@ -19,7 +19,7 @@
         },
         {
             "id": "materials",
-            "text": "Gather one Arduino Uno, a breadboard, three jumper wires, one photoresistor, one 10 k\u03a9 resistor, one USB Type-A to Type-B cable, a digital multimeter, safety goggles, an anti-static wrist strap, and a laptop with the Arduino IDE installed. Keep components in a tray so leads don't touch or short.",
+            "text": "Gather one Arduino Uno, a breadboard, three jumper wires, one photoresistor, one 10 kΩ resistor, one USB Type-A to Type-B cable, a digital multimeter, safety goggles, an anti-static wrist strap, and a laptop with the Arduino IDE installed. Keep components in a tray so leads don't touch or short.",
             "options": [
                 {
                     "type": "process",
@@ -77,12 +77,12 @@
         },
         {
             "id": "wire",
-            "text": "Disconnect the USB cable. Build a voltage divider by connecting one leg of the photoresistor to 5\u202fV and the other to one side of the 10\u202fk\u03a9 resistor, then connect the resistor's far leg to GND. Measure the photoresistor's resistance in ambient light with the multimeter, run a jumper from the junction to A0, keep your goggles on, and ensure no bare wires touch before powering up.",
+            "text": "Disconnect the USB cable. Build a voltage divider by connecting one leg of the photoresistor to 5 V and the other to one side of the 10 kΩ resistor, then connect the resistor's far leg to GND. Measure the photoresistor's resistance in ambient light with the multimeter, run a jumper from the junction to A0, keep your goggles on, and ensure no bare wires touch before powering up.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Wired up and measured.",
+                    "goto": "sampling-plan",
+                    "text": "Wired and baseline measured.",
                     "process": "measure-photoresistor",
                     "requiresItems": [
                         {
@@ -98,17 +98,107 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire-check",
+                    "text": "Voltage divider seems unstable."
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Plug the USB cable back in and upload a sketch that reads A0 and prints to the serial monitor. Shade and expose the sensor to watch the values shift. Avoid pointing lasers at the sensor, and don't stare into bright lamps during testing.",
+            "id": "rewire-check",
+            "text": "Unplug USB first. Confirm A0 is at the divider midpoint, resistor goes to GND, and no loose jumpers touch 5 V. Re-seat one wire at a time to avoid introducing new faults.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Rewired. Re-test baseline safely."
+                }
+            ]
+        },
+        {
+            "id": "sampling-plan",
+            "text": "Choose a validation strategy: (A) room-light sweep with hand shading, or (B) controlled flashlight sweep from far to near. Both require three logged serial readings that show a clear trend.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code-room",
+                    "text": "Use room-light shading."
+                },
+                {
+                    "type": "goto",
+                    "goto": "code-flashlight",
+                    "text": "Use controlled flashlight sweep."
+                }
+            ]
+        },
+        {
+            "id": "code-room",
+            "text": "Plug the USB cable in and upload a sketch that prints A0 once per second. Record three values: open light, half shade, full shade. Values should move consistently by at least 50 counts across the set.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify-trend",
+                    "text": "Room-light data is logged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot-flat",
+                    "text": "Readings are flat/noisy."
+                }
+            ]
+        },
+        {
+            "id": "code-flashlight",
+            "text": "Plug the USB cable in and upload the same A0 serial sketch. Record three values while moving a flashlight from 30 cm to 10 cm to 5 cm. Keep beam indirect and avoid eye exposure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify-trend",
+                    "text": "Flashlight sweep data is logged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot-flat",
+                    "text": "Readings are flat/noisy."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot-flat",
+            "text": "Troubleshoot with power removed: check jumper seating, confirm serial baud rate matches sketch, and verify the photoresistor is not swapped with the fixed resistor. Re-run one validation strategy after corrections.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "sampling-plan",
+                    "text": "Corrections made. Re-run validation."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safe-stop",
+                    "text": "I cannot get stable behavior safely today."
+                }
+            ]
+        },
+        {
+            "id": "safe-stop",
+            "text": "Good stop. Disconnect USB, label this build as pending diagnostics, and do not leave powered hardware unattended.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Pause and continue after hardware review."
+                }
+            ]
+        },
+        {
+            "id": "verify-trend",
+            "text": "Nice! Your log demonstrates a repeatable light-response trend with at least three observations.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Numbers are changing!"
+                    "text": "Trend verified and documented."
                 }
             ]
         },
@@ -133,7 +223,7 @@
     "hardening": {
         "passes": 6,
         "score": 97,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-05",
