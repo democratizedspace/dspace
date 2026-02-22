@@ -76,7 +76,21 @@
                 {
                     "type": "goto",
                     "goto": "safety-stop",
-                    "text": "I noticed heat/smell/smoke and stopped."
+                    "text": "I noticed heat/smell/smoke and stopped.",
+                    "requiresItems": [
+                        {
+                            "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -92,7 +106,21 @@
                 {
                     "type": "goto",
                     "goto": "safety-stop",
-                    "text": "Results are still unsafe or inconclusive."
+                    "text": "Results are still unsafe or inconclusive.",
+                    "requiresItems": [
+                        {
+                            "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
