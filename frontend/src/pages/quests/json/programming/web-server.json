@@ -114,13 +114,11 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "programming/hello-sensor"
-    ],
+    "requiresQuests": ["programming/hello-sensor"],
     "hardening": {
         "passes": 1,
         "score": 96,
-        "emoji": "\u2705",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-hardening-2026-02-22",
