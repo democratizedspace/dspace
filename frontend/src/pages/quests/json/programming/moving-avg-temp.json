@@ -8,24 +8,17 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your average gives a big picture. Let's watch trends with a moving window.",
+            "text": "Your average gives the big picture. Now show me trend discipline: choose a window, explain why, and prove the smoothed output still tracks reality.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Let's smooth it out."
-                }
-            ]
-        },
-        {
-            "id": "code",
-            "text": "Calculate a moving average over the last N readings in your log.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Moving average computed!",
+                    "goto": "compute",
+                    "text": "I'll compute and document a moving average window.",
                     "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
                         {
                             "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
                             "count": 1
@@ -35,12 +28,80 @@
             ]
         },
         {
+            "id": "compute",
+            "text": "Run your script for a baseline window (for example 5 samples), then compare the result to recent raw readings so trend lag is visible.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Moving-average output generated; begin threshold review.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Acceptance bounds: the smoothed line should reduce noise without masking sustained rises. If the line diverges from raw trend too long, your window is too wide.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Smoothing is stable and trend-consistent.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Trend lag or oversmoothing detected; retune and retest."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Recovery branch: reduce the window size or adjust weighting, rerun against the same CSV, and confirm alert-worthy rises remain visible.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Retuned moving average ready for a second review.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! The moving average reveals trends in real time.",
+            "text": "Nice! Your moving average now has explicit guardrails and a documented fallback when smoothing hides real heat events.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Data looks smoother."
+                    "text": "Data looks smoother and trustworthy."
                 }
             ]
         }
@@ -54,8 +115,8 @@
     "requiresQuests": ["programming/avg-temp"],
     "hardening": {
         "passes": 0,
-        "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 91,
+        "emoji": "🛠️",
         "history": []
     }
 }

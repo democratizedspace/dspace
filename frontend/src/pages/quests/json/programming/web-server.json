@@ -29,7 +29,7 @@
         },
         {
             "id": "prep",
-            "text": "Drop the CSV next to a minimal HTML template. Add a short blurb that explains what the page shows and when the data was last updated.",
+            "text": "Pick a path: generate a quick chart from the current CSV, or continue with a text-only status page if your plotting stack is down.",
             "options": [
                 {
                     "type": "process",
@@ -46,22 +46,55 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "serve",
+                    "text": "Fallback: text-only status page is ready",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "serve",
-            "text": "Start a small HTTP server (Python, Node, or BusyBox) from that folder. Confirm the page loads on another device and that refreshes pick up new CSV data without caching glitches.",
+            "text": "Start a small HTTP server (Python, Node, or BusyBox). Ops checks before finish: test from another device, verify cache headers refresh updated data, and confirm no sensitive file paths are exposed.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Page serves without console errors",
+                    "text": "Cross-device check, cache refresh, and path safety all pass.",
                     "requiresItems": [
                         {
-                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
                             "count": 1
                         },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "I hit a bind-port/caching error; open recovery runbook."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: stop stale server processes, move to an open port, and clear browser cache headers for the latest CSV. Re-run safety checks before publishing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "serve",
+                    "text": "Port and cache issues fixed; re-run server checks.",
+                    "requiresItems": [
                         {
                             "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
                             "count": 1
@@ -72,11 +105,11 @@
         },
         {
             "id": "finish",
-            "text": "Excellent! A clean landing page makes it easy to share logs and spot problems at a glance.",
+            "text": "Excellent! You shipped a resilient status page with verification and rollback habits baked in.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Cool!"
+                    "text": "Server is stable and shareable."
                 }
             ]
         }
@@ -90,8 +123,8 @@
     "requiresQuests": ["programming/hello-sensor"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 92,
+        "emoji": "🛠️",
         "history": []
     }
 }

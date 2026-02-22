@@ -8,13 +8,17 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Nice work gathering data! Let's improve that basic chart by cleaning and annotating the readings.",
+            "text": "Nice work gathering data! Before you graph, capture a baseline reading range so you can prove the cleanup improved signal quality.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "script",
-                    "text": "Show me how.",
+                    "goto": "parse",
+                    "text": "I'll load the latest CSV and mark suspect spikes.",
                     "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
                             "count": 1
@@ -24,21 +28,73 @@
             ]
         },
         {
-            "id": "script",
-            "text": "Parse the log into timestamps and readings, smooth noisy spikes with a rolling average, and label daily highs and lows before plotting the result.",
+            "id": "parse",
+            "text": "Run your cleanup script with a rolling average and outlier clipping. Keep the raw log nearby for safety rollback if the smoothing over-corrects.",
             "options": [
                 {
                     "type": "process",
                     "process": "refine-temperature-graph",
-                    "text": "Clean and annotate"
+                    "text": "Generate cleaned + annotated graph"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Graph generated!",
+                    "goto": "interpret",
+                    "text": "Annotated chart exported; interpret quality",
                     "requiresItems": [
                         {
                             "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        },
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret against explicit bounds: daily swing should stay within your expected band and annotations must flag both peak and trough. If annotations are missing or swings look implausible, do not ship this graph.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Bounds pass and annotations are complete; lock this report.",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Bounds failed or annotations look wrong; run corrective pass."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Recovery mode: tighten smoothing window, regenerate annotations, and compare against the baseline CSV. Document what changed before re-reviewing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Rebuild annotated graph with corrected parameters"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Corrective graph ready; re-check bounds",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
                             "count": 1
                         }
                     ]
@@ -47,11 +103,11 @@
         },
         {
             "id": "finish",
-            "text": "Great! Visuals make patterns easy to spot. Keep logging and graphing for deeper insight.",
+            "text": "Great! This chart is now audit-ready: cleaned, annotated, and interpreted against clear thresholds.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do!"
+                    "text": "Publish the cleaned graph."
                 }
             ]
         }
@@ -64,20 +120,9 @@
     ],
     "requiresQuests": ["programming/graph-temp"],
     "hardening": {
-        "passes": 2,
-        "score": 98,
-        "emoji": "\u2705",
-        "history": [
-            {
-                "task": "codex-hardening-2025-12-08",
-                "date": "2025-12-08",
-                "score": 95
-            },
-            {
-                "task": "codex-hardening-2025-12-18",
-                "date": "2025-12-18",
-                "score": 98
-            }
-        ]
+        "passes": 0,
+        "score": 91,
+        "emoji": "🛠️",
+        "history": []
     }
 }

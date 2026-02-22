@@ -144,8 +144,10 @@ Programming quests build practical progression through the programming skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `programming/graph-temp`
 - Dialogue `requiresItems` gates:
-    - `start` → "Show me how." — temperature line chart ×1
-    - `script` → "Graph generated!" — annotated temperature graph ×1
+    - `start` → "I'll load the latest CSV and mark suspect spikes." — temperature log CSV ×1, temperature line chart ×1
+    - `parse` → "Annotated chart exported; interpret quality" — annotated temperature graph ×1, temperature line chart ×1
+    - `interpret` → "Bounds pass and annotations are complete; lock this report." — annotated temperature graph ×1
+    - `retest` → "Corrective graph ready; re-check bounds" — annotated temperature graph ×1, temperature log CSV ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -182,7 +184,10 @@ Programming quests build practical progression through the programming skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `programming/avg-temp`
 - Dialogue `requiresItems` gates:
-    - `code` → "Moving average computed!" — Raspberry Pi 5 board ×1
+    - `start` → "I'll compute and document a moving average window." — temperature log CSV ×1, Raspberry Pi 5 board ×1
+    - `compute` → "Moving-average output generated; begin threshold review." — Raspberry Pi 5 board ×1, temperature line chart ×1
+    - `interpret` → "Smoothing is stable and trend-consistent." — Raspberry Pi 5 board ×1, temperature log CSV ×1
+    - `retest` → "Retuned moving average ready for a second review." — Raspberry Pi 5 board ×1, temperature line chart ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -256,7 +261,9 @@ Programming quests build practical progression through the programming skill tre
 - Dialogue `requiresItems` gates:
     - `start` → "I'll prep the page assets" — temperature log CSV ×1, Laptop Computer ×1
     - `prep` → "Chart exported beside index.html" — temperature line chart ×1
-    - `serve` → "Page serves without console errors" — temperature line chart ×1, Raspberry Pi 5 board ×1
+    - `prep` → "Fallback: text-only status page is ready" — temperature log CSV ×1
+    - `serve` → "Cross-device check, cache refresh, and path safety all pass." — Raspberry Pi 5 board ×1, temperature log CSV ×1
+    - `recover` → "Port and cache issues fixed; re-run server checks." — Raspberry Pi 5 board ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
