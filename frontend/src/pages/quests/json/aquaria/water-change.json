@@ -199,9 +199,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "aquaria/guppy"
-    ],
+    "requiresQuests": ["aquaria/guppy"],
     "hardening": {
         "passes": 4,
         "score": 100,
