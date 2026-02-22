@@ -56,12 +56,65 @@
         },
         {
             "id": "measure",
-            "text": "Reconnect power. The LED should light as current flows through the meter. Read the display and stop if anything heats or flickers.",
+            "text": "Reconnect power. The LED should light as current flows through the meter. Record the reading in mA. Acceptable operating range for this build is 12-22 mA. Stop immediately if wires heat, smoke appears, or insulation softens.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret-pass",
+                    "text": "Reading is in range (12-22 mA)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "Reading is outside range or unstable."
+                }
+            ]
+        },
+        {
+            "id": "interpret-pass",
+            "text": "Good measurement discipline. In-range current means the resistor is likely matched to the LED and supply. Power down before removing the meter so the circuit is never rewired live.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "It shows about 20 mA."
+                    "text": "Power is off and meter removed safely.",
+                    "requiresItems": [
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 2
+                        },
+                        {
+                            "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                            "count": 1
+                        },
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "828d6c3b-66a5-4064-b221-97630274502b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "out-of-range",
+            "text": "Troubleshoot safely: disconnect power, confirm the meter lead is in the mA jack (not 10A), verify resistor color code, and inspect for a short around the LED legs. If anything overheated, replace damaged parts before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "I corrected the setup and will re-test."
                 }
             ]
         },

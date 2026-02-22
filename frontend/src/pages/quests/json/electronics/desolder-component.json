@@ -33,10 +33,14 @@
             "text": "Apply a little flux, heat one lead, trigger the desoldering pump to pull molten solder, repeat on the other lead, then use solder wick to clear residue and gently wiggle the resistor free.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Component removed.",
+                    "type": "process",
                     "process": "desolder-through-hole",
+                    "text": "Run the desolder sequence."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Pads look clear and the resistor lifted cleanly.",
                     "requiresItems": [
                         {
                             "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
@@ -59,6 +63,33 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rework",
+                    "text": "Pad is still bridged or component won't release."
+                }
+            ]
+        },
+        {
+            "id": "rework",
+            "text": "Pause and recover safely: return the iron to its stand, add fresh flux, and wick only for 2-3 seconds per pass to avoid lifting pads. If a pad starts discoloring, stop heating and let the board cool for one minute before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "desolder",
+                    "text": "Board cooled; retry with shorter heat cycles."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: both pads must be open, no copper trace damage, and no loose solder balls. This before/after state proof is required before cleanup.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verification passed and station is powered down."
                 }
             ]
         },
@@ -83,7 +114,7 @@
     "hardening": {
         "passes": 3,
         "score": 80,
-        "emoji": "\u2705",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-desolder-component-hardening-2025-08-13",

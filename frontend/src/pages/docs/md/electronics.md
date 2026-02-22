@@ -167,6 +167,9 @@ Electronics quests build practical progression through the electronics skill tre
     - `requiresQuests`: `electronics/light-sensor`
 - Dialogue `requiresItems` gates:
     - `setup` → "Meter in series." — digital multimeter ×1, solderless breadboard ×1, Jumper Wires ×2, 5 mm LED ×1, 220 Ohm Resistor ×1, 5 V Power Supply ×1
+    - `interpret-pass` → "Power is off and meter removed safely." — repeats the full meter+circuit toolchain to enforce evidence-backed closeout.
+    - Measurement gate: explicit 12-22 mA pass window before completion.
+    - Troubleshooting loop: out-of-range/unstable current branches to disconnect-first corrective checks and mandatory re-test.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -399,6 +402,8 @@ Electronics quests build practical progression through the electronics skill tre
     - `requiresQuests`: `electronics/solder-wire`
 - Dialogue `requiresItems` gates:
     - `probe` → "It beeped and read near zero ohms." — digital multimeter ×1, USB Cable ×1, safety goggles ×1, wire cutters ×1, electrical tape ×1
+    - `interpret` → "All conductors checked and logged." — repeats continuity tools as completion evidence.
+    - Troubleshooting branch: failed/intermittent continuity routes to safe trim/insulate/retest loop before finish.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -416,7 +421,9 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/solder-wire`
 - Dialogue `requiresItems` gates:
-    - `desolder` → "Component removed." — soldering iron kit ×1, safety goggles ×1, desoldering pump ×1, solder wick ×1, flux pen ×1
+    - `desolder` → "Pads look clear and the resistor lifted cleanly." — soldering iron kit ×1, safety goggles ×1, desoldering pump ×1, solder wick ×1, flux pen ×1
+    - Verification gate: pass requires clean pad/traces inspection before finish.
+    - Troubleshooting branch: bridged pads route through cooldown + short heat-cycle rework loop.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
