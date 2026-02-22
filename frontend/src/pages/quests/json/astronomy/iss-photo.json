@@ -8,28 +8,28 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You spotted the ISS before. Ready to capture its trail with a long exposure?",
+            "text": "You spotted the ISS before. Ready to capture its trail with a long exposure and verify image quality?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "Let's plan the shot."
+                    "text": "Let's plan the shot and safety checks."
                 }
             ]
         },
         {
             "id": "plan",
-            "text": "Mount your smartphone on a tripod and check an app for the next pass.",
+            "text": "Mount your smartphone on a tripod, check the pass app, and choose a stable surface away from traffic glare.",
             "options": [
                 {
                     "type": "process",
                     "process": "check-iss-pass",
-                    "text": "Checking the pass time."
+                    "text": "Checking pass timing and heading."
                 },
                 {
                     "type": "goto",
                     "goto": "capture",
-                    "text": "Pass time noted, gear set.",
+                    "text": "Pass time noted and gear stabilized.",
                     "requiresItems": [
                         {
                             "id": "82577af7-6724-4cb2-8922-f7140e550145",
@@ -38,6 +38,10 @@
                         {
                             "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
                             "count": 1
+                        },
+                        {
+                            "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
+                            "count": 1
                         }
                     ]
                 }
@@ -45,12 +49,62 @@
         },
         {
             "id": "capture",
-            "text": "Start a 10-second exposure as the ISS rises and jot the timestamp.",
+            "text": "Run a 10-second exposure as ISS rises. Keep hands off the tripod and shield screens to preserve adaptation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evaluate",
+                    "text": "Shot captured and logged.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "evaluate",
+            "text": "Quality check: an acceptable shot shows a continuous ISS streak and at least one fixed star point. If not, classify the failure and retry.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Photo saved and logged.",
+                    "text": "Pass criteria met: continuous streak + fixed star reference.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Image failed: blur, overexposure, or missed pass."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective branch: for blur, shorten exposure to 6-8 seconds; for overexposure, lower ISO; for miss-timing, shift setup 2 minutes early. Recheck tripod stability before retest.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Settings adjusted and safe to re-attempt."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Retest window active. Capture another frame and re-run acceptance checks before claiming success.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evaluate",
+                    "text": "Retest captured; evaluate again.",
                     "requiresItems": [
                         {
                             "id": "70bb8d86-2c4e-4330-9705-371891934686",
@@ -62,11 +116,11 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! You captured humanity's outpost in motion.",
+            "text": "Nice work! You captured and validated an ISS trail with reproducible settings logged for next pass.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait for the next pass."
+                    "text": "Image validated and archived."
                 }
             ]
         }
@@ -81,7 +135,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

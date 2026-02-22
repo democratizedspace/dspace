@@ -72,8 +72,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/basic-telescope`
 - Dialogue `requiresItems` gates:
-    - `start` → "Gear ready." — planisphere star chart ×1, red flashlight ×1
-    - `search` → "Galaxy in sight." — basic telescope ×1
+    - `start` → "Site picked and night vision protected." — planisphere star chart ×1, red flashlight ×1, basic telescope ×1
+    - `cassiopeia-hop` → "I located a faint oval and logged the position." — mission logbook ×1
+    - `square-hop` → "Fallback route worked and I logged the target." — mission logbook ×1
+    - `confirm` → "Log includes timestamp, route, and reference stars." — mission logbook ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -119,8 +121,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/iss-flyover`
 - Dialogue `requiresItems` gates:
-    - `plan` → "Pass time noted, gear set." — smartphone ×1, camera tripod ×1
-    - `capture` → "Photo saved and logged." — mission logbook ×1
+    - `plan` → "Pass time noted and gear stabilized." — smartphone ×1, camera tripod ×1, aurora viewing plan ×1
+    - `capture` → "Shot captured and logged." — mission logbook ×1
+    - `evaluate` → "Pass criteria met: continuous streak + fixed star reference." — mission logbook ×1
+    - `retest` → "Retest captured; evaluate again." — mission logbook ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -215,9 +219,12 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/light-pollution`
 - Dialogue `requiresItems` gates:
-    - `forecast` → "Window picked—what should I pack?" — aurora viewing plan ×1
-    - `kit` → "Kit is ready—let's step outside." — dark-sky kit packed ×1
-    - `observe` → "Entry written with colors and timestamps." — aurora sighting log ×1
+    - `forecast` → "Forecast logged; let's choose the observing path." — aurora viewing plan ×1
+    - `kit` → "Kit packed and buddy check-in sent." — dark-sky kit packed ×1
+    - `fallback` → "Fallback plan set; waiting for a better window." — aurora viewing plan ×1
+    - `observe` → "Observation logged with color and direction." — aurora sighting log ×1
+    - `interpret` → "Interpretation added to the log and safety notes updated." — aurora sighting log ×1
+    - `retry-window` → "No safe window tonight; follow-up session is scheduled." — aurora viewing plan ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

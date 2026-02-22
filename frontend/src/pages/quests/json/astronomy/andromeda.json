@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here. Choose a dark, open spot away from traffic, check the forecast and let your eyes adjust for 15 minutes. Keep screens dim, secure your basic telescope and use a planisphere star chart with a red flashlight to preserve night vision. Ready?",
+            "text": "Nova here. Choose a dark, open spot away from traffic, check the forecast, and let your eyes adjust for 15 minutes. Keep screens dim and confirm your telescope is stable before you sweep.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "search",
-                    "text": "Gear ready.",
+                    "goto": "route",
+                    "text": "Site picked and night vision protected.",
                     "requiresItems": [
                         {
                             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
@@ -22,40 +22,120 @@
                         {
                             "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
                             "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
                         }
                     ]
                 }
             ]
         },
         {
-            "id": "search",
-            "text": "Shield the red flashlight to avoid glare and trace Cassiopeia's W on the star chart. From the midpoint, sweep the basic telescope slowly at low magnification toward a faint smudge\u2014that's Andromeda. Keep footing sure, mind your surroundings and never aim near the Sun or aircraft.",
+            "id": "route",
+            "text": "Pick a star-hop route: Cassiopeia's W if that patch is clear, or the Great Square path if trees block Cassiopeia.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cassiopeia-hop",
+                    "text": "Cassiopeia is visible."
+                },
+                {
+                    "type": "goto",
+                    "goto": "square-hop",
+                    "text": "Cassiopeia is blocked; I'll use the Great Square instead."
+                }
+            ]
+        },
+        {
+            "id": "cassiopeia-hop",
+            "text": "Shield your red light, trace Cassiopeia's W on the chart, and sweep low magnification toward the faint oval haze of Andromeda.",
             "options": [
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Following the chart."
+                    "text": "Run the Cassiopeia star-hop."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "confirm",
+                    "text": "I located a faint oval and logged the position.",
                     "requiresItems": [
                         {
-                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
                             "count": 1
                         }
-                    ],
-                    "text": "Galaxy in sight."
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "The sky haze and glare are washing out the target."
+                }
+            ]
+        },
+        {
+            "id": "square-hop",
+            "text": "Use the Great Square of Pegasus as your anchor, then move two finder-field widths toward Andromeda. Keep your footing stable and avoid horizon glare.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Run the Great Square fallback route."
+                },
+                {
+                    "type": "goto",
+                    "goto": "confirm",
+                    "text": "Fallback route worked and I logged the target.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I still can't lock onto the galaxy."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Pause and recover safely: drop to your widest eyepiece, move away from direct lights, wipe dew from optics, and wait five minutes for contrast to return before trying again.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "route",
+                    "text": "Recovered. I'll retry with a cleaner route."
+                }
+            ]
+        },
+        {
+            "id": "confirm",
+            "text": "Before closing out, verify your log has timestamp, route used, and nearby star references so another observer could repeat your sighting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Log includes timestamp, route, and reference stars.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Log the position for next time, cap the telescope, switch off the flashlight and pack your gear before leaving the site.",
+            "text": "Nice work! Cap the telescope, switch off your light, and leave the site as dark as you found it.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Logging observations."
+                    "text": "Andromeda logged and site packed out."
                 }
             ]
         }
@@ -70,7 +150,7 @@
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-06",
